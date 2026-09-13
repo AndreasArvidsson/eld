@@ -3,6 +3,7 @@ b" x
 '
 ' y
 ---
+
 STRING_LITERAL "\"a\nb\"" (1:1-2:3)
 IDENTIFIER "x" (2:4-2:5)
 CHAR_LITERAL "'\n'" (3:1-4:2)

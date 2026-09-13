@@ -4,6 +4,7 @@
 1.2__
 __12
 ---
+
 INTEGER_LITERAL "1__2" (1:1-1:5)
 FLOAT_LITERAL "1___2.3__4" (2:1-2:11)
 INTEGER_LITERAL "12" (3:1-3:3)

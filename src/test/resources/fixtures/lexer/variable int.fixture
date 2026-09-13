@@ -1,5 +1,6 @@
 var foo = 10
 ---
+
 VAR (1:1-1:4)
 IDENTIFIER "foo" (1:5-1:8)
 EQUAL (1:9-1:10)

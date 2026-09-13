@@ -60,7 +60,7 @@ public class LexerTest {
         }
 
         if (updateFixtures) {
-            final String updated = input + DELIMITER + actual + (actual.isEmpty() ? "" : "\n");
+            final String updated = input + DELIMITER + "\n" + actual + (actual.isEmpty() ? "" : "\n");
             Files.writeString(path, updated);
         } else {
             assertEquals(expected, actual, path.toString());

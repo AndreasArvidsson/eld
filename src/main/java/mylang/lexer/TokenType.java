@@ -17,6 +17,7 @@ public enum TokenType {
     IF,
     ELIF,
     ELSE,
+    DO,
     WHILE,
     FOR,
 

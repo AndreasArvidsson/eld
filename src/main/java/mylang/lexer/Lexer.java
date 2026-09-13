@@ -12,6 +12,7 @@ public class Lexer {
             Map.entry("if", TokenType.IF),
             Map.entry("elif", TokenType.ELIF),
             Map.entry("else", TokenType.ELSE),
+            Map.entry("do", TokenType.DO),
             Map.entry("while", TokenType.WHILE),
             Map.entry("for", TokenType.FOR),
             Map.entry("return", TokenType.RETURN),

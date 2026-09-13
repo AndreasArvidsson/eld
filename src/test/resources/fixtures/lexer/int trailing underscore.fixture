@@ -1,4 +1,5 @@
 123_
 ---
+
 INTEGER_LITERAL "123" (1:1-1:4)
 IDENTIFIER "_" (1:4-1:5)

@@ -1,0 +1,9 @@
+while (true) {}
+---
+
+WHILE (1:1-1:6)
+LEFT_PAREN (1:7-1:8)
+BOOLEAN_LITERAL "true" (1:8-1:12)
+RIGHT_PAREN (1:12-1:13)
+LEFT_BRACE (1:14-1:15)
+RIGHT_BRACE (1:15-1:16)
