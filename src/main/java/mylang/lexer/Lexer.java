@@ -35,6 +35,7 @@ public class Lexer {
 
     private final String source;
     private int position, line, column;
+    private Position tokenStart = new Position(1, 1);
 
     public Lexer(final String source) {
         this.source = source;
@@ -44,19 +45,17 @@ public class Lexer {
     }
 
     public @Nullable Token nextToken() {
+        skipWhitespace();
         final Character next = peek();
 
         if (next == null) {
             return null;
         }
 
+        tokenStart = new Position(line, column);
+
         if (Character.isDigit(next)) {
             return readNumberLiteral();
-        }
-
-        if (Character.isWhitespace(next)) {
-            skipWhitespace();
-            return nextToken();
         }
 
         if (next == '_' || Character.isAlphabetic(next)) {
@@ -137,11 +136,6 @@ public class Lexer {
             }
 
             advance();
-
-            if (next == '\n') {
-                line++;
-                column = 1;
-            }
         }
     }
 
@@ -149,7 +143,7 @@ public class Lexer {
         final StringBuilder builder = new StringBuilder();
         while (true) {
             final Character next = peek();
-            if (next == null || !(next == '_' || Character.isAlphabetic(next))) {
+            if (next == null || !(next == '_' || Character.isAlphabetic(next) || Character.isDigit(next))) {
                 break;
             }
             builder.append(next);
@@ -187,10 +181,18 @@ public class Lexer {
                 return;
             }
             if (next == '_') {
-                if (position + 1 >= source.length()
-                        || !Character.isDigit(source.charAt(position + 1))) {
+                int end = position + 1;
+                while (end < source.length() && source.charAt(end) == '_') {
+                    end++;
+                }
+                if (end >= source.length() || !Character.isDigit(source.charAt(end))) {
                     return;
                 }
+                while (position < end) {
+                    builder.append('_');
+                    advance();
+                }
+                continue;
             } else if (!Character.isDigit(next)) {
                 return;
             }
@@ -258,9 +260,8 @@ public class Lexer {
     }
 
     private Token createToken(final TokenType type, final String text) {
-        final Position start = new Position(line, column - text.length());
         final Position end = new Position(line, column);
-        final Range range = new Range(start, end);
+        final Range range = new Range(tokenStart, end);
         return new Token(type, text, range);
     }
 
@@ -280,8 +281,13 @@ public class Lexer {
     }
 
     private void advance() {
-        position++;
-        column++;
+        final char consumed = source.charAt(position++);
+        if (consumed == '\n') {
+            line++;
+            column = 1;
+        } else {
+            column++;
+        }
     }
 
 }

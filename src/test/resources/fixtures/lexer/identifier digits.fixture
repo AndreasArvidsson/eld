@@ -1,0 +1,7 @@
+foo2 _3 if4 5foo
+---
+IDENTIFIER "foo2" (1:1-1:5)
+IDENTIFIER "_3" (1:6-1:8)
+IDENTIFIER "if4" (1:9-1:12)
+INTEGER_LITERAL "5" (1:13-1:14)
+IDENTIFIER "foo" (1:14-1:17)
