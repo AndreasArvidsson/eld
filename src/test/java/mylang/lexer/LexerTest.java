@@ -56,7 +56,7 @@ public class LexerTest {
         try {
             actual = lexerToString(lexer);
         } catch (final Exception e) {
-            actual = e.toString();
+            actual = String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
         }
 
         if (updateFixtures) {

@@ -189,6 +189,7 @@ public class Lexer {
 
     private Token readNumberLiteral() {
         final StringBuilder builder = new StringBuilder();
+
         while (true) {
             final Character next = peek();
             if (next == null || !Character.isDigit(next)) {
@@ -197,8 +198,28 @@ public class Lexer {
             builder.append(next);
             advance();
         }
+
+        TokenType type = TokenType.INTEGER_LITERAL;
+        final Character next = peek();
+
+        if (next != null && next == '.' && position + 1 < source.length()
+                && Character.isDigit(source.charAt(position + 1))) {
+            type = TokenType.FLOAT_LITERAL;
+            builder.append(next);
+            advance();
+
+            while (true) {
+                final Character digit = peek();
+                if (digit == null || !Character.isDigit(digit)) {
+                    break;
+                }
+                builder.append(digit);
+                advance();
+            }
+        }
+
         final String text = Objects.requireNonNull(builder.toString());
-        return createToken(TokenType.INTEGER_LITERAL, text);
+        return createToken(type, text);
     }
 
     private Token readStringLiteral() {
