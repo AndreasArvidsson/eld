@@ -20,11 +20,11 @@ public class Lexer {
 
     private static final Map<Character, TokenType> SYMBOLS = Objects.requireNonNull(Map.ofEntries(
             Map.entry('\0', TokenType.EOF),
-            Map.entry('-', TokenType.MINUS),
-            Map.entry('+', TokenType.PLUS),
             Map.entry('*', TokenType.STAR),
             Map.entry('/', TokenType.SLASH),
+            Map.entry('%', TokenType.PERCENT),
             Map.entry(':', TokenType.COLON),
+            Map.entry(';', TokenType.SEMICOLON),
             Map.entry(',', TokenType.COMMA),
             Map.entry('(', TokenType.LEFT_PAREN),
             Map.entry(')', TokenType.RIGHT_PAREN),
@@ -89,6 +89,26 @@ public class Lexer {
                     }
                 }
                 return createToken(TokenType.EQUAL, next);
+            }
+
+            case '+': {
+                advance();
+                final Character next2 = peek();
+                if (next2 != null && next2 == '+') {
+                    advance();
+                    return createToken(TokenType.PLUS_PLUS, next, next2);
+                }
+                return createToken(TokenType.PLUS, next);
+            }
+
+            case '-': {
+                advance();
+                final Character next2 = peek();
+                if (next2 != null && next2 == '-') {
+                    advance();
+                    return createToken(TokenType.MINUS_MINUS, next, next2);
+                }
+                return createToken(TokenType.MINUS, next);
             }
 
             case '!': {

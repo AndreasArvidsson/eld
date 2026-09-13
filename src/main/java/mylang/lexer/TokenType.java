@@ -22,9 +22,12 @@ public enum TokenType {
 
     // Operators
     PLUS,
+    PLUS_PLUS,
     MINUS,
+    MINUS_MINUS,
     STAR,
     SLASH,
+    PERCENT,
 
     EQUAL,
     EQUAL_EQUAL,
@@ -46,6 +49,7 @@ public enum TokenType {
     LEFT_BRACKET,
     RIGHT_BRACKET,
     COLON,
+    SEMICOLON,
     COMMA,
 
     EOF
