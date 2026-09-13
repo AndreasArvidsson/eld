@@ -1,0 +1,3 @@
+"hi\"
+---
+LexerException: Unterminated string literal at 1:6-1:7

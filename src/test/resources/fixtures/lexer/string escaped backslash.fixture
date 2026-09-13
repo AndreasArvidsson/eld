@@ -1,0 +1,3 @@
+"path\\"
+---
+STRING_LITERAL "\"path\\\\\"" (1:1-1:9)

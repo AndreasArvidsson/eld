@@ -211,6 +211,14 @@ public class Lexer {
             }
             builder.append(next);
             advance();
+            if (next == '\\') {
+                final Character escaped = peek();
+                if (escaped != null && (escaped == '"' || escaped == '\\')) {
+                    // Keep the source spelling while consuming the escaped character.
+                    builder.append(escaped);
+                    advance();
+                }
+            }
         }
 
         if (peek() == null || peek() != '"') {
