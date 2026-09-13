@@ -5,6 +5,7 @@ public enum TokenType {
     IDENTIFIER,
     INTEGER_LITERAL,
     FLOAT_LITERAL,
+    CHAR_LITERAL,
     STRING_LITERAL,
     BOOLEAN_LITERAL,
 
@@ -42,6 +43,8 @@ public enum TokenType {
     RIGHT_PAREN,
     LEFT_BRACE,
     RIGHT_BRACE,
+    LEFT_BRACKET,
+    RIGHT_BRACKET,
     COLON,
     COMMA,
 

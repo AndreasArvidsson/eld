@@ -51,6 +51,23 @@ public class LexerTest {
         final String input = Objects.requireNonNull(fixture.substring(0, delimiter));
         final String expected = fixture.substring(delimiter + DELIMITER.length()).stripTrailing();
         final Lexer lexer = new Lexer(input);
+        String actual = "";
+
+        try {
+            actual = lexerToString(lexer);
+        } catch (final Exception e) {
+            actual = e.toString();
+        }
+
+        if (updateFixtures) {
+            final String updated = input + DELIMITER + actual + (actual.isEmpty() ? "" : "\n");
+            Files.writeString(path, updated);
+        } else {
+            assertEquals(expected, actual, path.toString());
+        }
+    }
+
+    private static String lexerToString(final Lexer lexer) {
         final List<String> tokens = new ArrayList<>();
 
         while (true) {
@@ -61,14 +78,7 @@ public class LexerTest {
             tokens.add(token.toString());
         }
 
-        final String actual = String.join("\n", tokens);
-
-        if (updateFixtures) {
-            final String updated = input + DELIMITER + actual + (actual.isEmpty() ? "" : "\n");
-            Files.writeString(path, updated);
-        } else {
-            assertEquals(expected, actual, path.toString());
-        }
+        return Objects.requireNonNull(String.join("\n", tokens));
     }
 
 }

@@ -1,0 +1,6 @@
+const foo = false
+---
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+BOOLEAN_LITERAL "false" (1:13-1:18)

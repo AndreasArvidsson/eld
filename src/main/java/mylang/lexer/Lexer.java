@@ -21,13 +21,8 @@ public class Lexer {
             return null;
         }
 
-        if (next == '\0') {
-            advance();
-            return createToken(TokenType.EOF, "");
-        }
-
         if (Character.isDigit(next)) {
-            return readNumber();
+            return readNumberLiteral();
         }
 
         if (Character.isWhitespace(next)) {
@@ -40,18 +35,100 @@ public class Lexer {
         }
 
         switch (next) {
-            case '=':
+            case '\0':
+                advance();
+                return createToken(TokenType.EOF, "");
+            case '-':
+                advance();
+                return createToken(TokenType.MINUS, next);
+            case '+':
+                advance();
+                return createToken(TokenType.PLUS, next);
+            case '*':
+                advance();
+                return createToken(TokenType.STAR, next);
+            case '/':
+                advance();
+                return createToken(TokenType.SLASH, next);
+            case '\'':
+                return readCharLiteral();
+            case '"':
+                return readStringLiteral();
+            case ':':
+                advance();
+                return createToken(TokenType.COLON, next);
+            case ',':
+                advance();
+                return createToken(TokenType.COMMA, next);
+            case '(':
+                advance();
+                return createToken(TokenType.LEFT_PAREN, next);
+            case ')':
+                advance();
+                return createToken(TokenType.RIGHT_PAREN, next);
+            case '{':
+                advance();
+                return createToken(TokenType.LEFT_BRACE, next);
+            case '}':
+                advance();
+                return createToken(TokenType.RIGHT_BRACE, next);
+            case '[':
+                advance();
+                return createToken(TokenType.LEFT_BRACKET, next);
+            case ']':
+                advance();
+                return createToken(TokenType.RIGHT_BRACKET, next);
+
+            case '=': {
+                advance();
+                final Character next2 = peek();
+                if (next2 != null) {
+                    if (next2 == '=') {
+                        advance();
+                        return createToken(TokenType.EQUAL_EQUAL, next, next2);
+                    }
+                    if (next2 == '>') {
+                        advance();
+                        return createToken(TokenType.FAT_ARROW, next, next2);
+                    }
+                }
+                return createToken(TokenType.EQUAL, next);
+            }
+
+            case '!': {
                 advance();
                 final Character next2 = peek();
                 if (next2 != null && next2 == '=') {
                     advance();
-                    return createToken(TokenType.EQUAL_EQUAL, "==");
+                    return createToken(TokenType.BANG_EQUAL, next, next2);
                 }
-                return createToken(TokenType.EQUAL, "=");
+                return createToken(TokenType.BANG, next);
+            }
+
+            case '<': {
+                advance();
+                final Character next2 = peek();
+                if (next2 != null && next2 == '=') {
+                    advance();
+                    return createToken(TokenType.LESS_EQUAL, next, next2);
+                }
+                return createToken(TokenType.LESS, next);
+            }
+
+            case '>': {
+                advance();
+                final Character next2 = peek();
+                if (next2 != null && next2 == '=') {
+                    advance();
+                    return createToken(TokenType.GREATER_EQUAL, next, next2);
+                }
+                return createToken(TokenType.GREATER, next);
+            }
         }
 
-        throw new RuntimeException(
-                String.format("Unexpected character '%c' at line %d, column %d", next, line, column));
+        throw new LexerException(
+                new Range(line, column, line, column + 1),
+                "Unexpected character '%c'", next);
     }
 
     private void skipWhitespace() {
@@ -88,6 +165,8 @@ public class Lexer {
                 return createToken(TokenType.CONST, text);
             case "var":
                 return createToken(TokenType.VAR, text);
+            case "func":
+                return createToken(TokenType.FUNC, text);
             case "if":
                 return createToken(TokenType.IF, text);
             case "elif":
@@ -100,12 +179,15 @@ public class Lexer {
                 return createToken(TokenType.FOR, text);
             case "return":
                 return createToken(TokenType.RETURN, text);
+            case "true":
+            case "false":
+                return createToken(TokenType.BOOLEAN_LITERAL, text);
         }
 
         return createToken(TokenType.IDENTIFIER, text);
     }
 
-    private Token readNumber() {
+    private Token readNumberLiteral() {
         final StringBuilder builder = new StringBuilder();
         while (true) {
             final Character next = peek();
@@ -119,11 +201,69 @@ public class Lexer {
         return createToken(TokenType.INTEGER_LITERAL, text);
     }
 
+    private Token readStringLiteral() {
+        // Skip the opening double quote.
+        advance();
+
+        final StringBuilder builder = new StringBuilder();
+        while (true) {
+            final Character next = peek();
+            if (next == null || next == '"') {
+                break;
+            }
+            builder.append(next);
+            advance();
+        }
+
+        if (peek() == null || peek() != '"') {
+            throw new LexerException(new Range(line, column, line, column + 1),
+                    "Unterminated string literal");
+        }
+
+        // Skip the closing double quote.
+        advance();
+
+        final String text = Objects.requireNonNull(String.format("\"%s\"", builder.toString()));
+        return createToken(TokenType.STRING_LITERAL, text);
+    }
+
+    private Token readCharLiteral() {
+        // Skip the opening single quote.
+        advance();
+
+        final Character value = peek();
+
+        if (value == null || value == '\'') {
+            throw new LexerException(new Range(line, column, line, column + 1),
+                    "Empty character literal");
+        }
+
+        advance();
+
+        if (peek() == null || peek() != '\'') {
+            throw new LexerException(new Range(line, column, line, column + 1),
+                    "Character literal must contain exactly one character");
+        }
+
+        advance();
+
+        final String text = Objects.requireNonNull(String.format("'%c'", value));
+        return createToken(TokenType.CHAR_LITERAL, text);
+    }
+
     private Token createToken(final TokenType type, final String text) {
         final Position start = new Position(line, column - text.length());
         final Position end = new Position(line, column);
         final Range range = new Range(start, end);
         return new Token(type, text, range);
+    }
+
+    private Token createToken(final TokenType type, final char c) {
+        return createToken(type, Objects.requireNonNull(String.valueOf(c)));
+    }
+
+    private Token createToken(final TokenType type, final char c, final char c2) {
+        return createToken(type, String.valueOf(c) + String.valueOf(c2));
     }
 
     private @Nullable Character peek() {
