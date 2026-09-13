@@ -1,9 +1,38 @@
 package mylang.lexer;
 
+import java.util.Map;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 public class Lexer {
+    private static final Map<String, TokenType> KEYWORDS = Objects.requireNonNull(Map.ofEntries(
+            Map.entry("const", TokenType.CONST),
+            Map.entry("var", TokenType.VAR),
+            Map.entry("func", TokenType.FUNC),
+            Map.entry("if", TokenType.IF),
+            Map.entry("elif", TokenType.ELIF),
+            Map.entry("else", TokenType.ELSE),
+            Map.entry("while", TokenType.WHILE),
+            Map.entry("for", TokenType.FOR),
+            Map.entry("return", TokenType.RETURN),
+            Map.entry("true", TokenType.BOOLEAN_LITERAL),
+            Map.entry("false", TokenType.BOOLEAN_LITERAL)));
+
+    private static final Map<Character, TokenType> SYMBOLS = Objects.requireNonNull(Map.ofEntries(
+            Map.entry('\0', TokenType.EOF),
+            Map.entry('-', TokenType.MINUS),
+            Map.entry('+', TokenType.PLUS),
+            Map.entry('*', TokenType.STAR),
+            Map.entry('/', TokenType.SLASH),
+            Map.entry(':', TokenType.COLON),
+            Map.entry(',', TokenType.COMMA),
+            Map.entry('(', TokenType.LEFT_PAREN),
+            Map.entry(')', TokenType.RIGHT_PAREN),
+            Map.entry('{', TokenType.LEFT_BRACE),
+            Map.entry('}', TokenType.RIGHT_BRACE),
+            Map.entry('[', TokenType.LEFT_BRACKET),
+            Map.entry(']', TokenType.RIGHT_BRACKET)));
+
     private final String source;
     private int position, line, column;
 
@@ -34,50 +63,18 @@ public class Lexer {
             return readIdentifier();
         }
 
+        final TokenType symbolType = SYMBOLS.get(next);
+
+        if (symbolType != null) {
+            advance();
+            return createToken(symbolType, next);
+        }
+
         switch (next) {
-            case '\0':
-                advance();
-                return createToken(TokenType.EOF, "");
-            case '-':
-                advance();
-                return createToken(TokenType.MINUS, next);
-            case '+':
-                advance();
-                return createToken(TokenType.PLUS, next);
-            case '*':
-                advance();
-                return createToken(TokenType.STAR, next);
-            case '/':
-                advance();
-                return createToken(TokenType.SLASH, next);
             case '\'':
                 return readCharLiteral();
             case '"':
                 return readStringLiteral();
-            case ':':
-                advance();
-                return createToken(TokenType.COLON, next);
-            case ',':
-                advance();
-                return createToken(TokenType.COMMA, next);
-            case '(':
-                advance();
-                return createToken(TokenType.LEFT_PAREN, next);
-            case ')':
-                advance();
-                return createToken(TokenType.RIGHT_PAREN, next);
-            case '{':
-                advance();
-                return createToken(TokenType.LEFT_BRACE, next);
-            case '}':
-                advance();
-                return createToken(TokenType.RIGHT_BRACE, next);
-            case '[':
-                advance();
-                return createToken(TokenType.LEFT_BRACKET, next);
-            case ']':
-                advance();
-                return createToken(TokenType.RIGHT_BRACKET, next);
 
             case '=': {
                 advance();
@@ -159,45 +156,13 @@ public class Lexer {
             advance();
         }
         final String text = Objects.requireNonNull(builder.toString());
-
-        switch (text) {
-            case "const":
-                return createToken(TokenType.CONST, text);
-            case "var":
-                return createToken(TokenType.VAR, text);
-            case "func":
-                return createToken(TokenType.FUNC, text);
-            case "if":
-                return createToken(TokenType.IF, text);
-            case "elif":
-                return createToken(TokenType.ELIF, text);
-            case "else":
-                return createToken(TokenType.ELSE, text);
-            case "while":
-                return createToken(TokenType.WHILE, text);
-            case "for":
-                return createToken(TokenType.FOR, text);
-            case "return":
-                return createToken(TokenType.RETURN, text);
-            case "true":
-            case "false":
-                return createToken(TokenType.BOOLEAN_LITERAL, text);
-        }
-
-        return createToken(TokenType.IDENTIFIER, text);
+        final TokenType type = Objects.requireNonNull(KEYWORDS.getOrDefault(text, TokenType.IDENTIFIER));
+        return createToken(type, text);
     }
 
     private Token readNumberLiteral() {
         final StringBuilder builder = new StringBuilder();
-
-        while (true) {
-            final Character next = peek();
-            if (next == null || !Character.isDigit(next)) {
-                break;
-            }
-            builder.append(next);
-            advance();
-        }
+        readDigits(builder);
 
         TokenType type = TokenType.INTEGER_LITERAL;
         final Character next = peek();
@@ -208,18 +173,30 @@ public class Lexer {
             builder.append(next);
             advance();
 
-            while (true) {
-                final Character digit = peek();
-                if (digit == null || !Character.isDigit(digit)) {
-                    break;
-                }
-                builder.append(digit);
-                advance();
-            }
+            readDigits(builder);
         }
 
         final String text = Objects.requireNonNull(builder.toString());
         return createToken(type, text);
+    }
+
+    private void readDigits(final StringBuilder builder) {
+        while (true) {
+            final Character next = peek();
+            if (next == null) {
+                return;
+            }
+            if (next == '_') {
+                if (position + 1 >= source.length()
+                        || !Character.isDigit(source.charAt(position + 1))) {
+                    return;
+                }
+            } else if (!Character.isDigit(next)) {
+                return;
+            }
+            builder.append(next);
+            advance();
+        }
     }
 
     private Token readStringLiteral() {

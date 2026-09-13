@@ -1,0 +1,5 @@
+1__2
+---
+INTEGER_LITERAL "1" (1:1-1:2)
+IDENTIFIER "__" (1:2-1:4)
+INTEGER_LITERAL "2" (1:4-1:5)
