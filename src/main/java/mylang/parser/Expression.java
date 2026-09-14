@@ -10,5 +10,6 @@ public sealed interface Expression extends AstNode
         CallExpression,
         IndexExpression,
         ArrayExpression,
-        GroupingExpression {
+        GroupingExpression,
+        LambdaExpression {
 }

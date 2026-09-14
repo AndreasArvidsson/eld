@@ -104,6 +104,12 @@ public final class Parser {
                     return new ExpressionStatement(call, call.range());
                 }
                 break;
+            case LEFT_PAREN:
+                if (isLambdaAfterOpenParen()) {
+                    final LambdaExpression lambda = parseLambdaExpression(token);
+                    return new ExpressionStatement(lambda, lambda.range());
+                }
+                break;
             default:
                 break;
         }
@@ -338,6 +344,9 @@ public final class Parser {
     private Expression parsePrimitiveExpression(final Token token) {
         switch (token.type()) {
             case LEFT_PAREN:
+                if (isLambdaAfterOpenParen()) {
+                    return parseLambdaExpression(token);
+                }
                 final Expression expression = parseExpression();
                 final Token close = expect(TokenType.RIGHT_PAREN);
                 return new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
@@ -358,6 +367,41 @@ public final class Parser {
             default:
                 throw new ParserException(token.range(), "Expected expression");
         }
+    }
+
+    // The opening parenthesis has already been consumed. Lookahead leaves position
+    // unchanged.
+    private boolean isLambdaAfterOpenParen() {
+        int depth = 1;
+        for (int offset = 0; position + offset < tokens.size(); offset++) {
+            final TokenType type = tokens.get(position + offset).type();
+            if (type == TokenType.LEFT_PAREN) {
+                depth++;
+            } else if (type == TokenType.RIGHT_PAREN && --depth == 0) {
+                return check(offset + 1, TokenType.FAT_ARROW)
+                        || (check(offset + 1, TokenType.IDENTIFIER) && check(offset + 2, TokenType.FAT_ARROW));
+            }
+        }
+        return false;
+    }
+
+    private LambdaExpression parseLambdaExpression(final Token open) {
+        final List<Parameter> parameters = new ArrayList<>();
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                final Token name = expect(TokenType.IDENTIFIER);
+                final TypeNode type = match(TokenType.COLON) ? parseType() : null;
+                final Position end = type == null ? name.range().end() : type.range().end();
+                final Range range = new Range(name.range().start(), end);
+                parameters.add(new Parameter(name.text(), type, range));
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.RIGHT_PAREN);
+        final TypeNode returnType = check(TokenType.FAT_ARROW) ? null : parseType();
+        expect(TokenType.FAT_ARROW);
+        final AstNode body = check(TokenType.LEFT_BRACE) ? parseBlockStatement() : parseExpression();
+        final Range range = new Range(open.range().start(), body.range().end());
+        return new LambdaExpression(parameters, returnType, body, range);
     }
 
     private PostfixExpression parsePostfixExpression(final Expression operand, final PostfixOperator operator,

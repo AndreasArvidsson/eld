@@ -1,0 +1,26 @@
+() => {}
+
+
+--- TOKENS ---
+
+LEFT_PAREN (1:1-1:2)
+RIGHT_PAREN (1:2-1:3)
+FAT_ARROW (1:4-1:6)
+LEFT_BRACE (1:7-1:8)
+RIGHT_BRACE (1:8-1:9)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:9
+  (ExpressionStatement
+    range: 1:1-1:9
+    (LambdaExpression
+      range: 1:1-1:9
+      returnType: null
+      (BlockStatement
+        range: 1:7-1:9
+      )
+    )
+  )
+)

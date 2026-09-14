@@ -1,0 +1,63 @@
+(a: int, b: int) int => a + b
+
+
+--- TOKENS ---
+
+LEFT_PAREN (1:1-1:2)
+IDENTIFIER "a" (1:2-1:3)
+COLON (1:3-1:4)
+IDENTIFIER "int" (1:5-1:8)
+COMMA (1:8-1:9)
+IDENTIFIER "b" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "int" (1:13-1:16)
+RIGHT_PAREN (1:16-1:17)
+IDENTIFIER "int" (1:18-1:21)
+FAT_ARROW (1:22-1:24)
+IDENTIFIER "a" (1:25-1:26)
+PLUS (1:27-1:28)
+IDENTIFIER "b" (1:29-1:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:30
+  (ExpressionStatement
+    range: 1:1-1:30
+    (LambdaExpression
+      range: 1:1-1:30
+      (Parameter
+        range: 1:2-1:8
+        name: "a"
+        (NamedTypeNode
+          range: 1:5-1:8
+          name: "int"
+        )
+      )
+      (Parameter
+        range: 1:10-1:16
+        name: "b"
+        (NamedTypeNode
+          range: 1:13-1:16
+          name: "int"
+        )
+      )
+      (NamedTypeNode
+        range: 1:18-1:21
+        name: "int"
+      )
+      (BinaryExpression
+        range: 1:25-1:30
+        (IdentifierExpression
+          range: 1:25-1:26
+          name: "a"
+        )
+        operator: ADD
+        (IdentifierExpression
+          range: 1:29-1:30
+          name: "b"
+        )
+      )
+    )
+  )
+)

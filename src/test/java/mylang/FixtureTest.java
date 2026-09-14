@@ -123,6 +123,9 @@ public class FixtureTest {
             final String header,
             final int headerIndex,
             final int nextHeaderIndex) {
+        if (headerIndex == -1) {
+            return "";
+        }
         final int startIndex = headerIndex + header.length();
         int endIndex = nextHeaderIndex == -1 ? fixture.length() : nextHeaderIndex;
         if (nextHeaderIndex == -1 && endIndex > startIndex && fixture.endsWith("\n")) {
