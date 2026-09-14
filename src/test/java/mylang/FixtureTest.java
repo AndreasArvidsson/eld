@@ -26,6 +26,7 @@ public class FixtureTest {
     private final static String SEMANTIC_HEADER = "\n\n--- SEMANTIC ---\n\n";
     // private final static String BYTECODE_HEADER = "\n\n--- BYTECODE ---\n\n";
     // private final static String OUTPUT_HEADER = "\n\n--- OUTPUT ---\n\n";
+    private final static String FIXTURE_EXTENSION = ".fixture";
 
     @TestFactory
     List<DynamicTest> fixtures() throws IOException {
@@ -39,26 +40,33 @@ public class FixtureTest {
             final List<DynamicTest> tests = new ArrayList<>();
             paths
                     .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().endsWith(".fixture"))
+                    .filter(path -> path.getFileName().toString().endsWith(FIXTURE_EXTENSION))
                     .sorted()
                     .forEach(path -> {
                         Objects.requireNonNull(path);
+                        final String filename = path.getFileName().toString();
+                        final String name = Objects
+                                .requireNonNull(filename.substring(0, filename.length() - FIXTURE_EXTENSION.length()));
                         tests.add(DynamicTest.dynamicTest(
-                                Objects.requireNonNull(directory.relativize(path).toString()),
-                                () -> assertFixture(path, updateFixtures)));
+                                name,
+                                () -> assertFixture(path, name, updateFixtures)));
                     });
-            assertFalse(tests.isEmpty(), "No lexer .fixture files found");
+
+            assertFalse(tests.isEmpty(), "No fixture files found");
             return tests;
         }
     }
 
-    private static void assertFixture(final Path path, final boolean updateFixture) throws IOException {
+    private static void assertFixture(
+            final Path path,
+            final String name,
+            final boolean updateFixture)
+            throws IOException {
         final String fixture = Files.readString(path).replaceAll("\r\n", "\n");
         final int tokenHeaderIndex = fixture.indexOf(TOKENS_HEADER);
         final int astHeaderIndex = fixture.indexOf(AST_HEADER);
         final int semanticHeaderIndex = fixture.indexOf(SEMANTIC_HEADER);
         final boolean assertFixture = !updateFixture;
-
         final String source = getContent(fixture, "", 0, tokenHeaderIndex);
         final StringBuilder actualBuilder = new StringBuilder();
         String expected = "";
@@ -68,7 +76,7 @@ public class FixtureTest {
         try {
             actualBuilder.append(TOKENS_HEADER);
             if (assertFixture) {
-                assertTrue(tokenHeaderIndex >= 0, () -> "Missing tokens header delimiter in " + path);
+                assertTrue(tokenHeaderIndex >= 0, () -> "Missing tokens header delimiter in " + name);
             }
             expected = getContent(fixture, TOKENS_HEADER, tokenHeaderIndex, astHeaderIndex);
             final List<Token> tokens = new Lexer(source).getTokens();
@@ -76,27 +84,28 @@ public class FixtureTest {
             actualBuilder.append(tokensActual);
 
             if (assertFixture) {
-                assertEquals(expected, tokensActual, path.toString());
+                assertEquals(expected, tokensActual, name);
             }
 
             actualBuilder.append(AST_HEADER);
             if (assertFixture) {
-                assertTrue(astHeaderIndex >= 0, () -> "Missing AST header delimiter in " + path);
+                assertTrue(astHeaderIndex >= 0, () -> "Missing AST header delimiter in " + name);
             }
-            expected = getContent(fixture, AST_HEADER, astHeaderIndex, semanticHeaderIndex);
+            expected = getContent(fixture, AST_HEADER, astHeaderIndex,
+                    semanticHeaderIndex);
             final AstNode ast = new Parser(tokens).parse();
             final String astActual = ast.toString();
             actualBuilder.append(astActual);
 
             if (assertFixture) {
-                assertEquals(expected, astActual, path.toString());
+                assertEquals(expected, astActual, name);
             }
         } catch (final Exception e) {
             final String message = String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
             actualBuilder.append(message);
 
             if (assertFixture) {
-                assertEquals(expected, message, path.toString());
+                assertEquals(expected, message, name);
             }
         }
 
