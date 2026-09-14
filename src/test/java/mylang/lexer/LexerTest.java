@@ -45,10 +45,10 @@ public class LexerTest {
 
     private static void assertFixture(final Path path, final boolean updateFixtures) throws IOException {
         final String fixture = Files.readString(path).replaceAll("\r\n", "\n");
-        final int delimiter = fixture.indexOf(TOKENS_HEADER);
+        final int delimiter = fixture.indexOf("\n" + TOKENS_HEADER);
         assertTrue(delimiter >= 0, () -> "Missing input/output delimiter in " + path);
 
-        final String input = Objects.requireNonNull(fixture.substring(0, delimiter).strip());
+        final String input = Objects.requireNonNull(fixture.substring(0, delimiter));
         final String expected = fixture.substring(delimiter + TOKENS_HEADER.length()).strip();
         final Lexer lexer = new Lexer(input);
         String actual = "";
