@@ -13,12 +13,12 @@ mvn test
 Run only the lexer tests:
 
 ```bash
-mvn test -Dtest=LexerTest
+mvn test -Dtest=FixtureTest
 ```
 
 ## Lexer fixtures
 
-`LexerTest` discovers all `.fixture` files under `src/test/resources/fixtures`, including subdirectories. Each file contains lexer input followed by a blank line and `--- TOKENS ---` (the delimiter is `\n\n--- TOKENS ---\n`). Both newlines before the header belong to the separator, not the source input. Any additional newlines before that separator remain part of the input. Windows and Unix line endings are supported.
+`FixtureTest` discovers all `.fixture` files under `src/test/resources/fixtures`, including subdirectories. Each file contains lexer input followed by a blank line and `--- TOKENS ---` (the delimiter is `\n\n--- TOKENS ---\n`). Both newlines before the header belong to the separator, not the source input. Any additional newlines before that separator remain part of the input. Windows and Unix line endings are supported.
 
 For example:
 
@@ -42,10 +42,10 @@ INTEGER_LITERAL "10" (1:13-1:15)
    mvn test -DupdateFixtures=true
    ```
 
-   This runs all tests. Currently only `LexerTest` supports fixture updates; other tests run normally. To run only the lexer tests in update mode:
+   This runs all tests. Currently only `FixtureTest` supports fixture updates; other tests run normally. To run only the lexer tests in update mode:
 
    ```bash
-   mvn test -Dtest=LexerTest -DupdateFixtures=true
+   mvn test -Dtest=FixtureTest -DupdateFixtures=true
    ```
 
 3. Review the generated output in the source fixtures, for example with `git diff`. Update mode writes the lexer's actual output instead of asserting that it is correct, so check the results before accepting them.
