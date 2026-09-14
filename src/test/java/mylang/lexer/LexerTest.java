@@ -23,7 +23,7 @@ public class LexerTest {
         // Read source fixtures so updates are saved to the repository, not
         // target/test-classes.
         final Path directory = Path.of(System.getProperty("basedir", "."),
-                "src", "test", "resources", "fixtures", "lexer");
+                "src", "test", "resources", "fixtures");
         final boolean updateFixtures = Boolean.getBoolean("updateFixtures");
 
         try (final var paths = Files.walk(directory)) {
