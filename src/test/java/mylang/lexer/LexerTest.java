@@ -49,7 +49,7 @@ public class LexerTest {
         assertTrue(delimiter >= 0, () -> "Missing input/output delimiter in " + path);
 
         final String input = Objects.requireNonNull(fixture.substring(0, delimiter));
-        final String expected = fixture.substring(delimiter + DELIMITER.length()).stripTrailing();
+        final String expected = fixture.substring(delimiter + DELIMITER.length()).strip();
         final Lexer lexer = new Lexer(input);
         String actual = "";
 

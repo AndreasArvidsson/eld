@@ -40,6 +40,9 @@ public enum TokenType {
     GREATER,
     GREATER_EQUAL,
 
+    AND,
+    OR,
+
     FAT_ARROW,
 
     // Punctuation

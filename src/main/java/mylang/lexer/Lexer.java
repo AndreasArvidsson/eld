@@ -21,6 +21,12 @@ public class Lexer {
 
     private static final Map<Character, TokenType> SYMBOLS = Objects.requireNonNull(Map.ofEntries(
             Map.entry('\0', TokenType.EOF),
+            Map.entry('=', TokenType.EQUAL),
+            Map.entry('+', TokenType.PLUS),
+            Map.entry('-', TokenType.MINUS),
+            Map.entry('!', TokenType.BANG),
+            Map.entry('<', TokenType.LESS),
+            Map.entry('>', TokenType.GREATER),
             Map.entry('*', TokenType.STAR),
             Map.entry('/', TokenType.SLASH),
             Map.entry('%', TokenType.PERCENT),
@@ -33,6 +39,17 @@ public class Lexer {
             Map.entry('}', TokenType.RIGHT_BRACE),
             Map.entry('[', TokenType.LEFT_BRACKET),
             Map.entry(']', TokenType.RIGHT_BRACKET)));
+
+    private static final Map<String, TokenType> TWO_CHARACTER_SYMBOLS = Objects.requireNonNull(Map.ofEntries(
+            Map.entry("==", TokenType.EQUAL_EQUAL),
+            Map.entry("=>", TokenType.FAT_ARROW),
+            Map.entry("++", TokenType.PLUS_PLUS),
+            Map.entry("--", TokenType.MINUS_MINUS),
+            Map.entry("!=", TokenType.BANG_EQUAL),
+            Map.entry("<=", TokenType.LESS_EQUAL),
+            Map.entry(">=", TokenType.GREATER_EQUAL),
+            Map.entry("&&", TokenType.AND),
+            Map.entry("||", TokenType.OR)));
 
     private final String source;
     private int position, line, column;
@@ -47,6 +64,7 @@ public class Lexer {
 
     public @Nullable Token nextToken() {
         skipWhitespace();
+
         final Character next = peek();
 
         if (next == null) {
@@ -59,8 +77,26 @@ public class Lexer {
             return readNumberLiteral();
         }
 
-        if (next == '_' || Character.isAlphabetic(next)) {
+        if (Character.isAlphabetic(next) || next == '_') {
             return readIdentifier();
+        }
+
+        if (next == '\'') {
+            return readCharLiteral();
+        }
+
+        if (next == '"') {
+            return readStringLiteral();
+        }
+
+        if (position + 1 < source.length()) {
+            final String text = Objects.requireNonNull(source.substring(position, position + 2));
+            final TokenType type = TWO_CHARACTER_SYMBOLS.get(text);
+            if (type != null) {
+                advance();
+                advance();
+                return createToken(type, text);
+            }
         }
 
         final TokenType symbolType = SYMBOLS.get(next);
@@ -68,79 +104,6 @@ public class Lexer {
         if (symbolType != null) {
             advance();
             return createToken(symbolType, next);
-        }
-
-        switch (next) {
-            case '\'':
-                return readCharLiteral();
-            case '"':
-                return readStringLiteral();
-
-            case '=': {
-                advance();
-                final Character next2 = peek();
-                if (next2 != null) {
-                    if (next2 == '=') {
-                        advance();
-                        return createToken(TokenType.EQUAL_EQUAL, next, next2);
-                    }
-                    if (next2 == '>') {
-                        advance();
-                        return createToken(TokenType.FAT_ARROW, next, next2);
-                    }
-                }
-                return createToken(TokenType.EQUAL, next);
-            }
-
-            case '+': {
-                advance();
-                final Character next2 = peek();
-                if (next2 != null && next2 == '+') {
-                    advance();
-                    return createToken(TokenType.PLUS_PLUS, next, next2);
-                }
-                return createToken(TokenType.PLUS, next);
-            }
-
-            case '-': {
-                advance();
-                final Character next2 = peek();
-                if (next2 != null && next2 == '-') {
-                    advance();
-                    return createToken(TokenType.MINUS_MINUS, next, next2);
-                }
-                return createToken(TokenType.MINUS, next);
-            }
-
-            case '!': {
-                advance();
-                final Character next2 = peek();
-                if (next2 != null && next2 == '=') {
-                    advance();
-                    return createToken(TokenType.BANG_EQUAL, next, next2);
-                }
-                return createToken(TokenType.BANG, next);
-            }
-
-            case '<': {
-                advance();
-                final Character next2 = peek();
-                if (next2 != null && next2 == '=') {
-                    advance();
-                    return createToken(TokenType.LESS_EQUAL, next, next2);
-                }
-                return createToken(TokenType.LESS, next);
-            }
-
-            case '>': {
-                advance();
-                final Character next2 = peek();
-                if (next2 != null && next2 == '=') {
-                    advance();
-                    return createToken(TokenType.GREATER_EQUAL, next, next2);
-                }
-                return createToken(TokenType.GREATER, next);
-            }
         }
 
         throw new LexerException(
@@ -288,10 +251,6 @@ public class Lexer {
 
     private Token createToken(final TokenType type, final char c) {
         return createToken(type, Objects.requireNonNull(String.valueOf(c)));
-    }
-
-    private Token createToken(final TokenType type, final char c, final char c2) {
-        return createToken(type, String.valueOf(c) + String.valueOf(c2));
     }
 
     private @Nullable Character peek() {

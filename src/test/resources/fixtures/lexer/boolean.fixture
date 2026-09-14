@@ -1,0 +1,13 @@
+value > 2 && (!enabled || disabled)
+---
+
+IDENTIFIER "value" (1:1-1:6)
+GREATER (1:7-1:8)
+INTEGER_LITERAL "2" (1:9-1:10)
+AND (1:11-1:13)
+LEFT_PAREN (1:14-1:15)
+BANG (1:15-1:16)
+IDENTIFIER "enabled" (1:16-1:23)
+OR (1:24-1:26)
+IDENTIFIER "disabled" (1:27-1:35)
+RIGHT_PAREN (1:35-1:36)
