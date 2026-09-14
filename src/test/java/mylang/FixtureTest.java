@@ -62,7 +62,7 @@ public class FixtureTest {
         try {
             appendHeader(actualBuilder, TOKENS_HEADER);
             expected = fixture.substring(tokenHeaderIndex + TOKENS_HEADER.length()).strip();
-            final List<Token> tokens = runLexer(source);
+            final List<Token> tokens = new Lexer(source).getTokens();
             final String tokensString = joinList(tokens);
             appendOutput(actualBuilder, tokensString);
 
@@ -82,21 +82,6 @@ public class FixtureTest {
         if (updateFixture) {
             Files.writeString(path, actualBuilder.toString());
         }
-    }
-
-    private static List<Token> runLexer(final String source) {
-        final Lexer lexer = new Lexer(source);
-        final List<Token> tokens = new ArrayList<>();
-
-        while (true) {
-            final Token token = lexer.nextToken();
-            if (token == null) {
-                break;
-            }
-            tokens.add(token);
-        }
-
-        return tokens;
     }
 
     private static void appendHeader(final StringBuilder actualBuilder, final String headerDelimiter) {

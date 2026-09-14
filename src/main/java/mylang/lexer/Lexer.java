@@ -1,5 +1,7 @@
 package mylang.lexer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
@@ -60,6 +62,20 @@ public class Lexer {
         this.position = 0;
         this.line = 1;
         this.column = 1;
+    }
+
+    public List<Token> getTokens() {
+        final List<Token> tokens = new ArrayList<>();
+
+        while (true) {
+            final Token token = nextToken();
+            if (token == null) {
+                break;
+            }
+            tokens.add(token);
+        }
+
+        return tokens;
     }
 
     public @Nullable Token nextToken() {
