@@ -1,0 +1,50 @@
+for (; i < 10; i++) {}
+
+--- TOKENS ---
+
+FOR (1:1-1:4)
+LEFT_PAREN (1:5-1:6)
+SEMICOLON (1:6-1:7)
+IDENTIFIER "i" (1:8-1:9)
+LESS (1:10-1:11)
+INTEGER_LITERAL "10" (1:12-1:14)
+SEMICOLON (1:14-1:15)
+IDENTIFIER "i" (1:16-1:17)
+PLUS_PLUS (1:17-1:19)
+RIGHT_PAREN (1:19-1:20)
+LEFT_BRACE (1:21-1:22)
+RIGHT_BRACE (1:22-1:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:23
+  (ForStatement
+    range: 1:1-1:23
+    initializer: null
+    (BinaryExpression
+      range: 1:8-1:14
+      (IdentifierExpression
+        range: 1:8-1:9
+        name: "i"
+      )
+      operator: LESS
+      (LiteralExpression
+        range: 1:12-1:14
+        kind: INTEGER
+        text: "10"
+      )
+    )
+    (PostfixExpression
+      range: 1:16-1:19
+      (IdentifierExpression
+        range: 1:16-1:17
+        name: "i"
+      )
+      operator: INCREMENT
+    )
+    (BlockStatement
+      range: 1:21-1:23
+    )
+  )
+)

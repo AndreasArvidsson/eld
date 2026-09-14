@@ -15,7 +15,7 @@ INTEGER_LITERAL "10" (1:13-1:15)
     range: 1:1-1:15
     mutability: CONST
     name: "foo"
-    type: <inferred>
+    type: null
     (LiteralExpression
       range: 1:13-1:15
       kind: INTEGER

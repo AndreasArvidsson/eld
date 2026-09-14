@@ -18,3 +18,50 @@ PLUS_PLUS (1:26-1:28)
 RIGHT_PAREN (1:28-1:29)
 LEFT_BRACE (1:30-1:31)
 RIGHT_BRACE (1:31-1:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:32
+  (ForStatement
+    range: 1:1-1:32
+    (DeclarationStatement
+      range: 1:6-1:15
+      (VariableDeclaration
+        range: 1:6-1:15
+        mutability: VAR
+        name: "i"
+        type: null
+        (LiteralExpression
+          range: 1:14-1:15
+          kind: INTEGER
+          text: "0"
+        )
+      )
+    )
+    (BinaryExpression
+      range: 1:17-1:23
+      (IdentifierExpression
+        range: 1:17-1:18
+        name: "i"
+      )
+      operator: LESS
+      (LiteralExpression
+        range: 1:21-1:23
+        kind: INTEGER
+        text: "10"
+      )
+    )
+    (PostfixExpression
+      range: 1:25-1:28
+      (IdentifierExpression
+        range: 1:25-1:26
+        name: "i"
+      )
+      operator: INCREMENT
+    )
+    (BlockStatement
+      range: 1:30-1:32
+    )
+  )
+)

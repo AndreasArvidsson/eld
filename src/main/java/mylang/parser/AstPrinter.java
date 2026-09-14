@@ -57,11 +57,7 @@ public class AstPrinter {
                     if (!(value instanceof AstNode)) {
                         output.append(component.getName()).append(": ");
                     }
-                    if (value == null && component.getType() == TypeNode.class) {
-                        output.append("<inferred>");
-                    } else {
-                        append(output, value, depth + 1);
-                    }
+                    append(output, value, depth + 1);
                 }
             } catch (final ReflectiveOperationException e) {
                 throw new IllegalStateException("Cannot read " + type.getSimpleName() + "." + component.getName(), e);

@@ -5,7 +5,7 @@ public enum BinaryOperator {
     SUBTRACT,
     MULTIPLY,
     DIVIDE,
-    REMAINDER,
+    MODULO,
     EQUAL,
     NOT_EQUAL,
     LESS,

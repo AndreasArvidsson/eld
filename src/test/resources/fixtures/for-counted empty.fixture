@@ -1,0 +1,26 @@
+for (;;) {}
+
+--- TOKENS ---
+
+FOR (1:1-1:4)
+LEFT_PAREN (1:5-1:6)
+SEMICOLON (1:6-1:7)
+SEMICOLON (1:7-1:8)
+RIGHT_PAREN (1:8-1:9)
+LEFT_BRACE (1:10-1:11)
+RIGHT_BRACE (1:11-1:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:12
+  (ForStatement
+    range: 1:1-1:12
+    initializer: null
+    condition: null
+    update: null
+    (BlockStatement
+      range: 1:10-1:12
+    )
+  )
+)
