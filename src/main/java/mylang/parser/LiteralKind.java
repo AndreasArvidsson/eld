@@ -5,5 +5,6 @@ public enum LiteralKind {
     FLOAT,
     CHAR,
     STRING,
-    BOOLEAN
+    BOOLEAN,
+    NULL
 }

@@ -5,6 +5,10 @@ public sealed interface Expression extends AstNode
         LiteralExpression,
         UnaryExpression,
         PostfixExpression,
-        BinaryExpression, AssignmentExpression, CallExpression, IndexExpression,
-        ArrayExpression, GroupingExpression {
+        BinaryExpression,
+        AssignmentExpression,
+        CallExpression,
+        IndexExpression,
+        ArrayExpression,
+        GroupingExpression {
 }

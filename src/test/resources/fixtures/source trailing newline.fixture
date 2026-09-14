@@ -1,0 +1,26 @@
+const foo = 0
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:14
+  (VariableDeclaration
+    range: 1:1-1:14
+    mutability: CONST
+    name: "foo"
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INTEGER
+      text: "0"
+    )
+  )
+)

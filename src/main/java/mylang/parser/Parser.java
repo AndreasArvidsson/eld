@@ -353,6 +353,8 @@ public final class Parser {
                 return new LiteralExpression(LiteralKind.STRING, token.text(), token.range());
             case CHAR_LITERAL:
                 return new LiteralExpression(LiteralKind.CHAR, token.text(), token.range());
+            case NULL:
+                return new LiteralExpression(LiteralKind.NULL, token.text(), token.range());
             default:
                 throw new ParserException(token.range(), "Expected expression");
         }

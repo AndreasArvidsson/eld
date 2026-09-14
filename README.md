@@ -35,7 +35,7 @@ INTEGER_LITERAL "10" (1:13-1:15)
 
 ## Generating or updating expected output
 
-1. Create a `.fixture` file containing the input and the separator shown above, or edit the input in an existing fixture. Expected output can initially be empty.
+1. Create a `.fixture` file containing just the source code, or edit the input in an existing fixture. The separator and expected output can initially be omitted.
 2. Run update mode to generate or replace expected output:
 
    ```bash
@@ -51,4 +51,4 @@ INTEGER_LITERAL "10" (1:13-1:15)
 3. Review the generated output in the source fixtures, for example with `git diff`. Update mode writes the lexer's actual output instead of asserting that it is correct, so check the results before accepting them.
 4. Run `mvn test` again without the update flag to assert against the reviewed output.
 
-Update mode requires the separator, preserves the source input after normalizing CRLF to LF, and writes to `src/test/resources/fixtures`, not the build output directory. Lexer exceptions are written as expected output. Repeated updates do not add newlines to the input. Normal test runs do not modify fixtures.
+Update mode adds missing separators and expected output, preserves the source input (including trailing newlines) after normalizing CRLF to LF, and writes to `src/test/resources/fixtures`, not the build output directory. Lexer and parser exceptions are written as expected output. Repeated updates do not add newlines to the input. Normal test runs require generated expectations and do not modify fixtures.

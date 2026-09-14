@@ -69,7 +69,7 @@ public class FixtureTest {
         final int astHeaderIndex = fixture.indexOf(AST_HEADER);
         final int semanticHeaderIndex = fixture.indexOf(SEMANTIC_HEADER);
         final boolean assertFixture = !updateFixture;
-        final String source = getContent(fixture, "", 0, tokenHeaderIndex);
+        final String source = tokenHeaderIndex < 0 ? fixture : getContent(fixture, "", 0, tokenHeaderIndex);
         final StringBuilder actualBuilder = new StringBuilder();
         String expected = "";
 
@@ -118,10 +118,17 @@ public class FixtureTest {
         }
     }
 
-    private static String getContent(final String fixture, final String header, final int headerIndex,
+    private static String getContent(
+            final String fixture,
+            final String header,
+            final int headerIndex,
             final int nextHeaderIndex) {
-        final int endIndex = nextHeaderIndex == -1 ? fixture.length() - 1 : nextHeaderIndex;
-        final String result = fixture.substring(headerIndex + header.length(), endIndex);
+        final int startIndex = headerIndex + header.length();
+        int endIndex = nextHeaderIndex == -1 ? fixture.length() : nextHeaderIndex;
+        if (nextHeaderIndex == -1 && endIndex > startIndex && fixture.endsWith("\n")) {
+            endIndex--;
+        }
+        final String result = fixture.substring(startIndex, endIndex);
         return Objects.requireNonNull(result);
     }
 
