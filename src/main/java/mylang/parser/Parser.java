@@ -104,6 +104,8 @@ public final class Parser {
                     return new ExpressionStatement(call, call.range());
                 }
                 break;
+            default:
+                break;
         }
 
         throw new ParserException(token.range(), "Expected declaration or statement");
@@ -271,43 +273,74 @@ public final class Parser {
     }
 
     private Expression parseExpression() {
+        return parseBinaryExpression(1);
+    }
+
+    private Expression parseBinaryExpression(final int minimumPrecedence) {
+        Expression left = parseUnaryExpression();
+        while (!isAtEnd()) {
+            final BinaryOperator operator = BINARY_OPERATORS.get(current().type());
+            if (operator == null || precedence(operator) < minimumPrecedence) {
+                break;
+            }
+            advance();
+            final Expression right = parseBinaryExpression(precedence(operator) + 1);
+            left = new BinaryExpression(left, operator, right,
+                    new Range(left.range().start(), right.range().end()));
+        }
+        return left;
+    }
+
+    private static int precedence(final BinaryOperator operator) {
+        return switch (operator) {
+            case OR -> 1;
+            case AND -> 2;
+            case EQUAL, NOT_EQUAL -> 3;
+            case LESS, LESS_EQUAL, GREATER, GREATER_EQUAL -> 4;
+            case ADD, SUBTRACT -> 5;
+            case MULTIPLY, DIVIDE, MODULO -> 6;
+        };
+    }
+
+    private Expression parseUnaryExpression() {
         if (isAtEnd()) {
             final Position end = tokens.get(tokens.size() - 1).range().end();
             throw new ParserException(new Range(end, end), "Expected expression, but reached end of input");
         }
         final Token token = advance();
-
-        final Expression left = parsePrimitiveExpression(token);
-
-        if (isAtEnd()) {
-            return left;
+        final UnaryOperator operator = switch (token.type()) {
+            case PLUS -> UnaryOperator.PLUS;
+            case MINUS -> UnaryOperator.MINUS;
+            case BANG -> UnaryOperator.NOT;
+            default -> null;
+        };
+        if (operator != null) {
+            final Expression operand = parseUnaryExpression();
+            return new UnaryExpression(operator, operand,
+                    new Range(token.range().start(), operand.range().end()));
         }
-
-        final Token next = current();
-        final BinaryOperator binaryOperator = BINARY_OPERATORS.get(next.type());
-
-        if (binaryOperator != null) {
-            advance();
-            return parseBinaryExpression(left, binaryOperator);
+        Expression left = parsePrimitiveExpression(token);
+        while (!isAtEnd()) {
+            final Token next = current();
+            final PostfixOperator postfix = POSTFIX_OPERATORS.get(next.type());
+            if (postfix != null) {
+                advance();
+                left = parsePostfixExpression(left, postfix, next);
+            } else if (check(TokenType.LEFT_PAREN)) {
+                left = parseCallExpression(left);
+            } else {
+                break;
+            }
         }
-
-        final PostfixOperator unaryOperator = POSTFIX_OPERATORS.get(next.type());
-
-        if (unaryOperator != null) {
-            advance();
-            return parsePostfixExpression(left, unaryOperator, next);
-        }
-
-        if (next.type() == TokenType.LEFT_PAREN) {
-            final IdentifierExpression callee = new IdentifierExpression(token.text(), token.range());
-            return parseCallExpression(callee);
-        }
-
         return left;
     }
 
     private Expression parsePrimitiveExpression(final Token token) {
         switch (token.type()) {
+            case LEFT_PAREN:
+                final Expression expression = parseExpression();
+                final Token close = expect(TokenType.RIGHT_PAREN);
+                return new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
             case IDENTIFIER:
                 return new IdentifierExpression(token.text(), token.range());
             case BOOLEAN_LITERAL:
@@ -323,12 +356,6 @@ public final class Parser {
             default:
                 throw new ParserException(token.range(), "Expected expression");
         }
-    }
-
-    private Expression parseBinaryExpression(final Expression left, final BinaryOperator operator) {
-        final Expression right = parseExpression();
-        final Range range = new Range(left.range().start(), right.range().end());
-        return new BinaryExpression(left, operator, right, range);
     }
 
     private PostfixExpression parsePostfixExpression(final Expression operand, final PostfixOperator operator,
@@ -372,16 +399,6 @@ public final class Parser {
 
         return advance();
     }
-
-    // private @Nullable Token matchToken(final @NonNull TokenType... types) {
-    // for (final @NonNull TokenType type : types) {
-    // final Token token = matchToken(type);
-    // if (token != null) {
-    // return token;
-    // }
-    // }
-    // return null;
-    // }
 
     private Token expect(final TokenType type) {
         if (isAtEnd()) {
