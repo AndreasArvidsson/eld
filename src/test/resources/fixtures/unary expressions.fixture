@@ -1,0 +1,10 @@
+!enabled
+
+--- TOKENS ---
+
+BANG (1:1-1:2)
+IDENTIFIER "enabled" (1:2-1:9)
+
+--- AST ---
+
+ParserException: Expected declaration or statement at 1:1-1:2

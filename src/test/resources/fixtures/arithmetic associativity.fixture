@@ -1,0 +1,47 @@
+const result = 10 - 3 - 2
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "result" (1:7-1:13)
+EQUAL (1:14-1:15)
+INTEGER_LITERAL "10" (1:16-1:18)
+MINUS (1:19-1:20)
+INTEGER_LITERAL "3" (1:21-1:22)
+MINUS (1:23-1:24)
+INTEGER_LITERAL "2" (1:25-1:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:26
+  (VariableDeclaration
+    range: 1:1-1:26
+    mutability: CONST
+    name: "result"
+    type: null
+    (BinaryExpression
+      range: 1:16-1:26
+      (BinaryExpression
+        range: 1:16-1:22
+        (LiteralExpression
+          range: 1:16-1:18
+          kind: INTEGER
+          text: "10"
+        )
+        operator: SUBTRACT
+        (LiteralExpression
+          range: 1:21-1:22
+          kind: INTEGER
+          text: "3"
+        )
+      )
+      operator: SUBTRACT
+      (LiteralExpression
+        range: 1:25-1:26
+        kind: INTEGER
+        text: "2"
+      )
+    )
+  )
+)

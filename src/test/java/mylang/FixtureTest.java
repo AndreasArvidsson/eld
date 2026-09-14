@@ -15,9 +15,11 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import mylang.lexer.Lexer;
+import mylang.lexer.LexerException;
 import mylang.lexer.Token;
 import mylang.parser.AstNode;
 import mylang.parser.Parser;
+import mylang.parser.ParserException;
 
 public class FixtureTest {
 
@@ -100,7 +102,7 @@ public class FixtureTest {
             if (assertFixture) {
                 assertEquals(expected, astActual, name);
             }
-        } catch (final Exception e) {
+        } catch (final LexerException | ParserException e) {
             final String message = String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
             actualBuilder.append(message);
 

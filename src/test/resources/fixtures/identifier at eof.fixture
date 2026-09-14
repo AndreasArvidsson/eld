@@ -1,0 +1,9 @@
+foo
+
+--- TOKENS ---
+
+IDENTIFIER "foo" (1:1-1:4)
+
+--- AST ---
+
+ParserException: Expected declaration or statement at 1:1-1:4

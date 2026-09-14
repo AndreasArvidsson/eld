@@ -1,0 +1,13 @@
+const x = 1 +
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "x" (1:7-1:8)
+EQUAL (1:9-1:10)
+INTEGER_LITERAL "1" (1:11-1:12)
+PLUS (1:13-1:14)
+
+--- AST ---
+
+ParserException: Expected expression, but reached end of input at 1:14-1:14

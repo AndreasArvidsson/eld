@@ -1,0 +1,11 @@
+const x =
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "x" (1:7-1:8)
+EQUAL (1:9-1:10)
+
+--- AST ---
+
+ParserException: Expected expression, but reached end of input at 1:10-1:10

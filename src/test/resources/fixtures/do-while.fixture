@@ -13,9 +13,9 @@ RIGHT_PAREN (1:18-1:19)
 --- AST ---
 
 (Program
-  range: 1:1-1:18
+  range: 1:1-1:19
   (DoWhileStatement
-    range: 1:1-1:18
+    range: 1:1-1:19
     (BlockStatement
       range: 1:4-1:6
     )

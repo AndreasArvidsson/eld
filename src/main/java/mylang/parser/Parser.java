@@ -98,7 +98,7 @@ public final class Parser {
             case RETURN:
                 return parseReturnStatement(token);
             case IDENTIFIER:
-                if (current().type() == TokenType.LEFT_PAREN) {
+                if (check(TokenType.LEFT_PAREN)) {
                     final IdentifierExpression callee = new IdentifierExpression(token.text(), token.range());
                     final CallExpression call = parseCallExpression(callee);
                     return new ExpressionStatement(call, call.range());
@@ -110,9 +110,10 @@ public final class Parser {
     }
 
     private ReturnStatement parseReturnStatement(final Token keyword) {
-        final Expression value = current().range().start().line() == keyword.range().start().line()
-                ? parseExpression()
-                : null;
+        final Expression value = !isAtEnd() && !check(TokenType.RIGHT_BRACE)
+                && current().range().start().line() == keyword.range().start().line()
+                        ? parseExpression()
+                        : null;
         final Range range = value != null
                 ? new Range(keyword.range().start(), value.range().end())
                 : keyword.range();
@@ -139,7 +140,7 @@ public final class Parser {
         return new FunctionDeclaration(name.text(), parameters, returnType, body, range);
     }
 
-    private CallExpression parseCallExpression(final IdentifierExpression callee) {
+    private CallExpression parseCallExpression(final Expression callee) {
         expect(TokenType.LEFT_PAREN);
         final List<Expression> arguments = new ArrayList<>();
 
@@ -222,8 +223,8 @@ public final class Parser {
         expect(TokenType.WHILE);
         expect(TokenType.LEFT_PAREN);
         final Expression condition = parseExpression();
-        expect(TokenType.RIGHT_PAREN);
-        final Range range = new Range(keyword.range().start(), condition.range().end());
+        final Token close = expect(TokenType.RIGHT_PAREN);
+        final Range range = new Range(keyword.range().start(), close.range().end());
         return new DoWhileStatement(body, condition, range);
     }
 
@@ -246,8 +247,12 @@ public final class Parser {
 
         final BlockStatement elseBranch = match(TokenType.ELSE) ? parseBlockStatement() : null;
 
-        final Range range = new Range(keyword.range().start(),
-                (elseBranch != null ? elseBranch.range().end() : thenBranch.range().end()));
+        final Position end = elseBranch != null
+                ? elseBranch.range().end()
+                : elifBranches.isEmpty()
+                        ? thenBranch.range().end()
+                        : elifBranches.getLast().range().end();
+        final Range range = new Range(keyword.range().start(), end);
         return new IfStatement(condition, thenBranch, elifBranches, elseBranch, range);
     }
 

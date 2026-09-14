@@ -1,0 +1,15 @@
+return
+
+--- TOKENS ---
+
+RETURN (1:1-1:7)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:7
+  (ReturnStatement
+    range: 1:1-1:7
+    value: null
+  )
+)

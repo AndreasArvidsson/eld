@@ -1,0 +1,10 @@
+foo(
+
+--- TOKENS ---
+
+IDENTIFIER "foo" (1:1-1:4)
+LEFT_PAREN (1:4-1:5)
+
+--- AST ---
+
+ParserException: Expected expression, but reached end of input at 1:5-1:5

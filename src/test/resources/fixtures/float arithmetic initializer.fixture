@@ -1,0 +1,52 @@
+const result = -0.5 + 12.34 - 10
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "result" (1:7-1:13)
+EQUAL (1:14-1:15)
+MINUS (1:16-1:17)
+FLOAT_LITERAL "0.5" (1:17-1:20)
+PLUS (1:21-1:22)
+FLOAT_LITERAL "12.34" (1:23-1:28)
+MINUS (1:29-1:30)
+INTEGER_LITERAL "10" (1:31-1:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:33
+  (VariableDeclaration
+    range: 1:1-1:33
+    mutability: CONST
+    name: "result"
+    type: null
+    (BinaryExpression
+      range: 1:16-1:33
+      (BinaryExpression
+        range: 1:16-1:28
+        (UnaryExpression
+          range: 1:16-1:20
+          operator: MINUS
+          (LiteralExpression
+            range: 1:17-1:20
+            kind: FLOAT
+            text: "0.5"
+          )
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 1:23-1:28
+          kind: FLOAT
+          text: "12.34"
+        )
+      )
+      operator: SUBTRACT
+      (LiteralExpression
+        range: 1:31-1:33
+        kind: INTEGER
+        text: "10"
+      )
+    )
+  )
+)
