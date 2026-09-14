@@ -93,6 +93,10 @@ public final class Parser {
                 return parseIfStatement(token);
             case FOR:
                 return parseForStatement(token);
+            case FUNC:
+                return parseFunctionDeclaration(token);
+            case RETURN:
+                return parseReturnStatement(token);
             case IDENTIFIER:
                 if (current().type() == TokenType.LEFT_PAREN) {
                     final IdentifierExpression callee = new IdentifierExpression(token.text(), token.range());
@@ -103,6 +107,36 @@ public final class Parser {
         }
 
         throw new ParserException(token.range(), "Expected declaration or statement");
+    }
+
+    private ReturnStatement parseReturnStatement(final Token keyword) {
+        final Expression value = current().range().start().line() == keyword.range().start().line()
+                ? parseExpression()
+                : null;
+        final Range range = value != null
+                ? new Range(keyword.range().start(), value.range().end())
+                : keyword.range();
+        return new ReturnStatement(value, range);
+    }
+
+    private FunctionDeclaration parseFunctionDeclaration(final Token keyword) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        expect(TokenType.LEFT_PAREN);
+        final List<Parameter> parameters = new ArrayList<>();
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                final Token paramName = expect(TokenType.IDENTIFIER);
+                expect(TokenType.COLON);
+                final TypeNode type = parseType();
+                final Range paramRange = new Range(paramName.range().start(), type.range().end());
+                parameters.add(new Parameter(paramName.text(), type, paramRange));
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.RIGHT_PAREN);
+        final TypeNode returnType = check(TokenType.LEFT_BRACE) ? null : parseType();
+        final BlockStatement body = parseBlockStatement();
+        final Range range = new Range(keyword.range().start(), body.range().end());
+        return new FunctionDeclaration(name.text(), parameters, returnType, body, range);
     }
 
     private CallExpression parseCallExpression(final IdentifierExpression callee) {

@@ -1,4 +1,4 @@
-func sum(a: int, i: int) int {
+func sum(a: int, b: int) int {
     return a + b
 }
 
@@ -11,7 +11,7 @@ IDENTIFIER "a" (1:10-1:11)
 COLON (1:11-1:12)
 IDENTIFIER "int" (1:13-1:16)
 COMMA (1:16-1:17)
-IDENTIFIER "i" (1:18-1:19)
+IDENTIFIER "b" (1:18-1:19)
 COLON (1:19-1:20)
 IDENTIFIER "int" (1:21-1:24)
 RIGHT_PAREN (1:24-1:25)
@@ -22,3 +22,51 @@ IDENTIFIER "a" (2:12-2:13)
 PLUS (2:14-2:15)
 IDENTIFIER "b" (2:16-2:17)
 RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:2
+  (FunctionDeclaration
+    range: 1:1-3:2
+    name: "sum"
+    (Parameter
+      range: 1:10-1:16
+      name: "a"
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "int"
+      )
+    )
+    (Parameter
+      range: 1:18-1:24
+      name: "b"
+      (NamedTypeNode
+        range: 1:21-1:24
+        name: "int"
+      )
+    )
+    (NamedTypeNode
+      range: 1:26-1:29
+      name: "int"
+    )
+    (BlockStatement
+      range: 1:30-3:2
+      (ReturnStatement
+        range: 2:5-2:17
+        (BinaryExpression
+          range: 2:12-2:17
+          (IdentifierExpression
+            range: 2:12-2:13
+            name: "a"
+          )
+          operator: ADD
+          (IdentifierExpression
+            range: 2:16-2:17
+            name: "b"
+          )
+        )
+      )
+    )
+  )
+)
