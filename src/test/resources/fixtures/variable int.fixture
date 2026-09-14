@@ -15,7 +15,7 @@ INTEGER_LITERAL "10" (1:11-1:13)
     range: 1:1-1:13
     mutability: VAR
     name: "foo"
-    type: <inferred>
+    type: null
     (LiteralExpression
       range: 1:11-1:13
       kind: INTEGER

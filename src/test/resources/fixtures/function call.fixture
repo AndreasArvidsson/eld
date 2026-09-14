@@ -5,3 +5,19 @@ foo()
 IDENTIFIER "foo" (1:1-1:4)
 LEFT_PAREN (1:4-1:5)
 RIGHT_PAREN (1:5-1:6)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:6
+  (ExpressionStatement
+    range: 1:1-1:6
+    (CallExpression
+      range: 1:1-1:6
+      (IdentifierExpression
+        range: 1:1-1:4
+        name: "foo"
+      )
+    )
+  )
+)

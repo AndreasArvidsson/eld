@@ -74,8 +74,7 @@ public final class Parser {
     }
 
     private BlockItem parseBlockItem() {
-        Token token = current();
-        advance();
+        final Token token = advance();
 
         switch (token.type()) {
             case CONST:
@@ -94,9 +93,31 @@ public final class Parser {
                 return parseIfStatement(token);
             case FOR:
                 return parseForStatement(token);
+            case IDENTIFIER:
+                if (current().type() == TokenType.LEFT_PAREN) {
+                    final IdentifierExpression callee = new IdentifierExpression(token.text(), token.range());
+                    final CallExpression call = parseCallExpression(callee);
+                    return new ExpressionStatement(call, call.range());
+                }
+                break;
         }
 
         throw new ParserException(token.range(), "Expected declaration or statement");
+    }
+
+    private CallExpression parseCallExpression(final IdentifierExpression callee) {
+        expect(TokenType.LEFT_PAREN);
+        final List<Expression> arguments = new ArrayList<>();
+
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                arguments.add(parseExpression());
+            } while (match(TokenType.COMMA));
+        }
+
+        final Token close = expect(TokenType.RIGHT_PAREN);
+        final Range range = new Range(callee.range().start(), close.range().end());
+        return new CallExpression(callee, arguments, range);
     }
 
     private Statement parseForStatement(final Token keyword) {
@@ -223,7 +244,7 @@ public final class Parser {
             return left;
         }
 
-        final Token next = peek(0);
+        final Token next = current();
         final BinaryOperator binaryOperator = BINARY_OPERATORS.get(next.type());
 
         if (binaryOperator != null) {
@@ -236,6 +257,11 @@ public final class Parser {
         if (unaryOperator != null) {
             advance();
             return parsePostfixExpression(left, unaryOperator, next);
+        }
+
+        if (next.type() == TokenType.LEFT_PAREN) {
+            final IdentifierExpression callee = new IdentifierExpression(token.text(), token.range());
+            return parseCallExpression(callee);
         }
 
         return left;
@@ -280,9 +306,9 @@ public final class Parser {
         return Objects.requireNonNull(tokens.get(position++));
     }
 
-    private Token peek(final int offset) {
-        return Objects.requireNonNull(tokens.get(position + offset));
-    }
+    // private Token peek(final int offset) {
+    // return Objects.requireNonNull(tokens.get(position + offset));
+    // }
 
     private boolean isAtEnd() {
         return position >= tokens.size();

@@ -11,3 +11,36 @@ COMMA (1:12-1:13)
 INTEGER_LITERAL "2" (1:14-1:15)
 RIGHT_PAREN (1:15-1:16)
 RIGHT_PAREN (1:16-1:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:17
+  (ExpressionStatement
+    range: 1:1-1:17
+    (CallExpression
+      range: 1:1-1:17
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:16
+        (IdentifierExpression
+          range: 1:7-1:10
+          name: "sum"
+        )
+        (LiteralExpression
+          range: 1:11-1:12
+          kind: INTEGER
+          text: "1"
+        )
+        (LiteralExpression
+          range: 1:14-1:15
+          kind: INTEGER
+          text: "2"
+        )
+      )
+    )
+  )
+)
