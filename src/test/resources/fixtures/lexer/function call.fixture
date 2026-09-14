@@ -1,0 +1,6 @@
+foo()
+---
+
+IDENTIFIER "foo" (1:1-1:4)
+LEFT_PAREN (1:4-1:5)
+RIGHT_PAREN (1:5-1:6)
