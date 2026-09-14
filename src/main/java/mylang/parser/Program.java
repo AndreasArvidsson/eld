@@ -1,7 +1,8 @@
 package mylang.parser;
 
 import java.util.List;
-import mylang.lexer.Range;
+
+import mylang.Range;
 
 public record Program(
         List<Declaration> declarations,

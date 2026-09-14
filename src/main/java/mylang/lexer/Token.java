@@ -2,6 +2,8 @@ package mylang.lexer;
 
 import java.util.Objects;
 
+import mylang.Range;
+
 public record Token(TokenType type, String text, Range range) {
 
     @Override

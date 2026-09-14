@@ -1,6 +1,6 @@
 package mylang.parser;
 
-import mylang.lexer.Range;
+import mylang.Range;
 
 public sealed interface AstNode
         permits Declaration, Statement, Expression, TypeNode, Parameter, Program {

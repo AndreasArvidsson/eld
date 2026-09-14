@@ -1,4 +1,4 @@
-package mylang.lexer;
+package mylang;
 
 import java.util.Objects;
 

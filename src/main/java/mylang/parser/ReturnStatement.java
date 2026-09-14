@@ -1,7 +1,8 @@
 package mylang.parser;
 
 import org.jspecify.annotations.Nullable;
-import mylang.lexer.Range;
+
+import mylang.Range;
 
 public record ReturnStatement(
         @Nullable Expression value,

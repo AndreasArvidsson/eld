@@ -1,6 +1,6 @@
 package mylang.parser;
 
-import mylang.lexer.Range;
+import mylang.Range;
 
 public record IdentifierExpression(
         String name,

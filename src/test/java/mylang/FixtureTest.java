@@ -16,10 +16,16 @@ import org.junit.jupiter.api.TestFactory;
 
 import mylang.lexer.Lexer;
 import mylang.lexer.Token;
+import mylang.parser.AstNode;
+import mylang.parser.Parser;
 
 public class FixtureTest {
 
-    private final static String TOKENS_HEADER = "\n--- TOKENS ---\n";
+    private final static String TOKENS_HEADER = "\n\n--- TOKENS ---\n\n";
+    private final static String AST_HEADER = "\n\n--- AST ---\n\n";
+    private final static String SEMANTIC_HEADER = "\n\n--- SEMANTIC ---\n\n";
+    // private final static String BYTECODE_HEADER = "\n\n--- BYTECODE ---\n\n";
+    // private final static String OUTPUT_HEADER = "\n\n--- OUTPUT ---\n\n";
 
     @TestFactory
     List<DynamicTest> fixtures() throws IOException {
@@ -48,48 +54,64 @@ public class FixtureTest {
 
     private static void assertFixture(final Path path, final boolean updateFixture) throws IOException {
         final String fixture = Files.readString(path).replaceAll("\r\n", "\n");
-        final int tokenHeaderIndex = fixture.indexOf("\n" + TOKENS_HEADER);
+        final int tokenHeaderIndex = fixture.indexOf(TOKENS_HEADER);
+        final int astHeaderIndex = fixture.indexOf(AST_HEADER);
+        final int semanticHeaderIndex = fixture.indexOf(SEMANTIC_HEADER);
         final boolean assertFixture = !updateFixture;
 
-        assertTrue(tokenHeaderIndex >= 0, () -> "Missing tokens header delimiter in " + path);
-
-        final String source = Objects.requireNonNull(fixture.substring(0, tokenHeaderIndex));
+        final String source = getContent(fixture, "", 0, tokenHeaderIndex);
         final StringBuilder actualBuilder = new StringBuilder();
         String expected = "";
 
         actualBuilder.append(source);
 
         try {
-            appendHeader(actualBuilder, TOKENS_HEADER);
-            expected = fixture.substring(tokenHeaderIndex + TOKENS_HEADER.length()).strip();
+            actualBuilder.append(TOKENS_HEADER);
+            if (assertFixture) {
+                assertTrue(tokenHeaderIndex >= 0, () -> "Missing tokens header delimiter in " + path);
+            }
+            expected = getContent(fixture, TOKENS_HEADER, tokenHeaderIndex, astHeaderIndex);
             final List<Token> tokens = new Lexer(source).getTokens();
-            final String tokensString = joinList(tokens);
-            appendOutput(actualBuilder, tokensString);
+            final String tokensActual = joinList(tokens);
+            actualBuilder.append(tokensActual);
 
             if (assertFixture) {
-                assertEquals(expected, tokensString, path.toString());
+                assertEquals(expected, tokensActual, path.toString());
             }
 
+            actualBuilder.append(AST_HEADER);
+            if (assertFixture) {
+                assertTrue(astHeaderIndex >= 0, () -> "Missing AST header delimiter in " + path);
+            }
+            expected = getContent(fixture, AST_HEADER, astHeaderIndex, semanticHeaderIndex);
+            final AstNode ast = new Parser(tokens).parse();
+            final String astActual = ast.toString();
+            actualBuilder.append(astActual);
+
+            if (assertFixture) {
+                assertEquals(expected, astActual, path.toString());
+            }
         } catch (final Exception e) {
             final String message = String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
-            appendOutput(actualBuilder, Objects.requireNonNull(message));
+            actualBuilder.append(message);
 
             if (assertFixture) {
                 assertEquals(expected, message, path.toString());
             }
         }
 
+        actualBuilder.append("\n");
+
         if (updateFixture) {
             Files.writeString(path, actualBuilder.toString());
         }
     }
 
-    private static void appendHeader(final StringBuilder actualBuilder, final String headerDelimiter) {
-        actualBuilder.append("\n").append(headerDelimiter).append("\n");
-    }
-
-    private static void appendOutput(final StringBuilder actualBuilder, final String output) {
-        actualBuilder.append(output).append("\n");
+    private static String getContent(final String fixture, final String header, final int headerIndex,
+            final int nextHeaderIndex) {
+        final int endIndex = nextHeaderIndex == -1 ? fixture.length() - 1 : nextHeaderIndex;
+        final String result = fixture.substring(headerIndex + header.length(), endIndex);
+        return Objects.requireNonNull(result);
     }
 
     private static String joinList(final List<?> tokens) {

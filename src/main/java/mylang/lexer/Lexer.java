@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
+import mylang.Position;
+import mylang.Range;
+
 public class Lexer {
     private static final Map<String, TokenType> KEYWORDS = Objects.requireNonNull(Map.ofEntries(
             Map.entry("const", TokenType.CONST),
