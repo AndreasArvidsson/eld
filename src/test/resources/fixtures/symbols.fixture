@@ -27,3 +27,7 @@ RIGHT_BRACKET (1:50-1:51)
 COLON (1:52-1:53)
 SEMICOLON (1:54-1:55)
 COMMA (1:56-1:57)
+
+--- AST ---
+
+ParserException: Expected declaration at 1:1-1:2

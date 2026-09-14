@@ -20,6 +20,9 @@ public enum TokenType {
     DO,
     WHILE,
     FOR,
+    NULL,
+    BREAK,
+    CONTINUE,
 
     // Operators
     PLUS,

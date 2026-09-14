@@ -4,3 +4,7 @@
 
 INTEGER_LITERAL "123" (1:1-1:4)
 IDENTIFIER "_" (1:4-1:5)
+
+--- AST ---
+
+ParserException: Expected declaration at 1:1-1:4

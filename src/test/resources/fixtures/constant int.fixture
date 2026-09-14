@@ -1,8 +1,0 @@
-const foo = 10
-
---- TOKENS ---
-
-CONST (1:1-1:6)
-IDENTIFIER "foo" (1:7-1:10)
-EQUAL (1:11-1:12)
-INTEGER_LITERAL "10" (1:13-1:15)

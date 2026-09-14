@@ -8,3 +8,7 @@ PLUS (1:5-1:6)
 FLOAT_LITERAL "12.34" (1:6-1:11)
 MINUS (1:11-1:12)
 INTEGER_LITERAL "10" (1:12-1:14)
+
+--- AST ---
+
+ParserException: Expected declaration at 1:1-1:2

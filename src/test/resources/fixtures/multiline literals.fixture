@@ -9,3 +9,7 @@ STRING_LITERAL "\"a\nb\"" (1:1-2:3)
 IDENTIFIER "x" (2:4-2:5)
 CHAR_LITERAL "'\n'" (3:1-4:2)
 IDENTIFIER "y" (4:3-4:4)
+
+--- AST ---
+
+ParserException: Expected declaration at 1:1-2:3

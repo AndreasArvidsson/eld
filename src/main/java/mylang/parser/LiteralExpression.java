@@ -3,7 +3,7 @@ package mylang.parser;
 import mylang.Range;
 
 public record LiteralExpression(
-        LiteralKind type,
+        LiteralKind kind,
         String text,
         Range range) implements Expression {
 }

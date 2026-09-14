@@ -1,8 +1,0 @@
-const foo = 'A'
-
---- TOKENS ---
-
-CONST (1:1-1:6)
-IDENTIFIER "foo" (1:7-1:10)
-EQUAL (1:11-1:12)
-CHAR_LITERAL "'A'" (1:13-1:16)

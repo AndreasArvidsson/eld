@@ -1,0 +1,30 @@
+const foo: int = 10
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "int" (1:12-1:15)
+EQUAL (1:16-1:17)
+INTEGER_LITERAL "10" (1:18-1:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:20
+  (VariableDeclaration
+    range: 1:1-1:20
+    mutability: CONST
+    name: "foo"
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "int"
+    )
+    (LiteralExpression
+      range: 1:18-1:20
+      kind: INTEGER
+      text: "10"
+    )
+  )
+)

@@ -21,12 +21,12 @@ import mylang.parser.Parser;
 
 public class FixtureTest {
 
+    private final static String FIXTURE_EXTENSION = ".fixture";
     private final static String TOKENS_HEADER = "\n\n--- TOKENS ---\n\n";
     private final static String AST_HEADER = "\n\n--- AST ---\n\n";
     private final static String SEMANTIC_HEADER = "\n\n--- SEMANTIC ---\n\n";
     // private final static String BYTECODE_HEADER = "\n\n--- BYTECODE ---\n\n";
     // private final static String OUTPUT_HEADER = "\n\n--- OUTPUT ---\n\n";
-    private final static String FIXTURE_EXTENSION = ".fixture";
 
     @TestFactory
     List<DynamicTest> fixtures() throws IOException {
@@ -94,7 +94,7 @@ public class FixtureTest {
             expected = getContent(fixture, AST_HEADER, astHeaderIndex,
                     semanticHeaderIndex);
             final AstNode ast = new Parser(tokens).parse();
-            final String astActual = ast.toString();
+            final String astActual = ast.toAstString();
             actualBuilder.append(astActual);
 
             if (assertFixture) {

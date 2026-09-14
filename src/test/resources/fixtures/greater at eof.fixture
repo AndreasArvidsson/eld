@@ -3,3 +3,7 @@
 --- TOKENS ---
 
 GREATER (1:1-1:2)
+
+--- AST ---
+
+ParserException: Expected declaration at 1:1-1:2

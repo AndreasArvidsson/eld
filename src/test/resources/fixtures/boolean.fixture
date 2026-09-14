@@ -12,3 +12,7 @@ IDENTIFIER "enabled" (1:16-1:23)
 OR (1:24-1:26)
 IDENTIFIER "disabled" (1:27-1:35)
 RIGHT_PAREN (1:35-1:36)
+
+--- AST ---
+
+ParserException: Expected declaration at 1:1-1:6
