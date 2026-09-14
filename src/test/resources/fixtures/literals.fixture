@@ -18,4 +18,4 @@ NULL (7:1-7:5)
 
 --- AST ---
 
-ParserException: Expected declaration at 1:1-1:4
+ParserException: Expected declaration or statement at 1:1-1:4

@@ -9,3 +9,20 @@ WHILE (1:7-1:12)
 LEFT_PAREN (1:13-1:14)
 BOOLEAN_LITERAL "true" (1:14-1:18)
 RIGHT_PAREN (1:18-1:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:18
+  (DoWhileStatement
+    range: 1:1-1:18
+    (BlockStatement
+      range: 1:4-1:6
+    )
+    (LiteralExpression
+      range: 1:14-1:18
+      kind: BOOLEAN
+      text: "true"
+    )
+  )
+)

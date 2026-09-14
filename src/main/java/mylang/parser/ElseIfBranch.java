@@ -1,10 +1,9 @@
 package mylang.parser;
 
-import java.util.List;
-
 import mylang.Range;
 
-public record Program(
-        List<BlockItem> items,
+public record ElseIfBranch(
+        Expression condition,
+        BlockStatement branch,
         Range range) implements AstNode {
 }

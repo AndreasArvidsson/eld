@@ -15,4 +15,4 @@ RIGHT_PAREN (1:35-1:36)
 
 --- AST ---
 
-ParserException: Expected declaration at 1:1-1:6
+ParserException: Expected declaration or statement at 1:1-1:6

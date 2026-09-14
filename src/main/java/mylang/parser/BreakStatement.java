@@ -1,10 +1,7 @@
 package mylang.parser;
 
-import java.util.List;
-
 import mylang.Range;
 
-public record BlockStatement(
-        List<BlockItem> items,
+public record BreakStatement(
         Range range) implements Statement {
 }

@@ -11,3 +11,23 @@ RIGHT_PAREN (1:12-1:13)
 LEFT_BRACE (1:14-1:15)
 BREAK (2:5-2:10)
 RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:2
+  (WhileStatement
+    range: 1:1-3:2
+    (LiteralExpression
+      range: 1:8-1:12
+      kind: BOOLEAN
+      text: "true"
+    )
+    (BlockStatement
+      range: 1:14-3:2
+      (BreakStatement
+        range: 2:5-2:10
+      )
+    )
+  )
+)

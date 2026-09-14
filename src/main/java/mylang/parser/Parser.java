@@ -22,51 +22,110 @@ public final class Parser {
     }
 
     public Program parse() {
-        if (tokens.isEmpty()) {
-            return new Program(new ArrayList<>(), new Range(0, 0, 0, 0));
-        }
-
-        final List<Declaration> declarations = new ArrayList<>();
+        final List<BlockItem> items = new ArrayList<>();
 
         while (!isAtEnd()) {
-            declarations.add(parseDeclaration());
+            items.add(parseBlockItem());
         }
 
-        if (declarations.isEmpty()) {
-            return new Program(declarations, new Range(0, 0, 0, 0));
+        if (items.isEmpty()) {
+            return new Program(items, new Range(0, 0, 0, 0));
         }
 
-        final Position start = declarations.get(0).range().start();
-        final Position end = declarations.get(declarations.size() - 1).range().end();
+        final Position start = items.get(0).range().start();
+        final Position end = items.get(items.size() - 1).range().end();
         final Range range = new Range(start, end);
 
-        return new Program(declarations, range);
+        return new Program(items, range);
     }
 
-    private Declaration parseDeclaration() {
-        Token token = matchToken(TokenType.CONST);
-        if (token != null) {
-            return parseVariableDeclaration(token, Mutability.CONST);
+    private BlockStatement parseBlockStatement() {
+        final Token open = expect(TokenType.LEFT_BRACE);
+        final List<BlockItem> items = new ArrayList<>();
+
+        while (!isAtEnd() && !check(TokenType.RIGHT_BRACE)) {
+            items.add(parseBlockItem());
         }
 
-        token = matchToken(TokenType.VAR);
-        if (token != null) {
-            return parseVariableDeclaration(token, Mutability.VAR);
-        }
+        final Token close = expect(TokenType.RIGHT_BRACE);
+        final Range range = new Range(open.range().start(), close.range().end());
 
-        // if (isMatch(TokenType.FUNC)) {
-        // return parseFunctionDeclaration();
-        // }
-
-        throw new ParserException(current().range(), "Expected declaration");
+        return new BlockStatement(items, range);
     }
 
-    private VariableDeclaration parseVariableDeclaration(final Token mutableKeyword, final Mutability mutability) {
+    private BlockItem parseBlockItem() {
+        Token token = current();
+        advance();
+
+        switch (token.type()) {
+            case CONST:
+                return parseVariableDeclaration(token, Mutability.CONST);
+            case VAR:
+                return parseVariableDeclaration(token, Mutability.VAR);
+            case BREAK:
+                return new BreakStatement(token.range());
+            case CONTINUE:
+                return new ContinueStatement(token.range());
+            case WHILE:
+                return parseWhileStatement(token);
+            case DO:
+                return parseDoWhileStatement(token);
+            case IF:
+                return parseIfStatement(token);
+        }
+
+        throw new ParserException(token.range(), "Expected declaration or statement");
+    }
+
+    private WhileStatement parseWhileStatement(final Token keyword) {
+        expect(TokenType.LEFT_PAREN);
+        final Expression condition = parseExpression();
+        expect(TokenType.RIGHT_PAREN);
+        final BlockStatement body = parseBlockStatement();
+        final Range range = new Range(keyword.range().start(), body.range().end());
+        return new WhileStatement(condition, body, range);
+    }
+
+    private DoWhileStatement parseDoWhileStatement(final Token keyword) {
+        final BlockStatement body = parseBlockStatement();
+        expect(TokenType.WHILE);
+        expect(TokenType.LEFT_PAREN);
+        final Expression condition = parseExpression();
+        expect(TokenType.RIGHT_PAREN);
+        final Range range = new Range(keyword.range().start(), condition.range().end());
+        return new DoWhileStatement(body, condition, range);
+    }
+
+    private IfStatement parseIfStatement(final Token keyword) {
+        expect(TokenType.LEFT_PAREN);
+        final Expression condition = parseExpression();
+        expect(TokenType.RIGHT_PAREN);
+        final BlockStatement thenBranch = parseBlockStatement();
+        final List<ElseIfBranch> elifBranches = new ArrayList<>();
+
+        while (check(TokenType.ELIF)) {
+            final Token elifKeyword = expect(TokenType.ELIF);
+            expect(TokenType.LEFT_PAREN);
+            final Expression elifCondition = parseExpression();
+            expect(TokenType.RIGHT_PAREN);
+            final BlockStatement elifBranch = parseBlockStatement();
+            final Range elifRange = new Range(elifKeyword.range().start(), elifBranch.range().end());
+            elifBranches.add(new ElseIfBranch(elifCondition, elifBranch, elifRange));
+        }
+
+        final BlockStatement elseBranch = match(TokenType.ELSE) ? parseBlockStatement() : null;
+
+        final Range range = new Range(keyword.range().start(),
+                (elseBranch != null ? elseBranch.range().end() : thenBranch.range().end()));
+        return new IfStatement(condition, thenBranch, elifBranches, elseBranch, range);
+    }
+
+    private VariableDeclaration parseVariableDeclaration(final Token keyword, final Mutability mutability) {
         final Token name = expect(TokenType.IDENTIFIER);
         final @Nullable TypeNode type = match(TokenType.COLON) ? parseType() : null;
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
-        final Range range = new Range(mutableKeyword.range().start(), initializer.range().end());
+        final Range range = new Range(keyword.range().start(), initializer.range().end());
         return new VariableDeclaration(mutability, name.text(), type, initializer, range);
     }
 
@@ -112,9 +171,9 @@ public final class Parser {
         return position >= tokens.size();
     }
 
-    // public boolean isMatch(final TokenType type) {
-    // return !isAtEnd() && current().type() == type;
-    // }
+    public boolean check(final TokenType type) {
+        return !isAtEnd() && current().type() == type;
+    }
 
     private boolean match(final TokenType type) {
         return matchToken(type) != null;

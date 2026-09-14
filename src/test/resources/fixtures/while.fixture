@@ -8,3 +8,20 @@ BOOLEAN_LITERAL "true" (1:8-1:12)
 RIGHT_PAREN (1:12-1:13)
 LEFT_BRACE (1:14-1:15)
 RIGHT_BRACE (1:15-1:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:16
+  (WhileStatement
+    range: 1:1-1:16
+    (LiteralExpression
+      range: 1:8-1:12
+      kind: BOOLEAN
+      text: "true"
+    )
+    (BlockStatement
+      range: 1:14-1:16
+    )
+  )
+)

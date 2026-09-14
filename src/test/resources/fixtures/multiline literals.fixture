@@ -12,4 +12,4 @@ IDENTIFIER "y" (4:3-4:4)
 
 --- AST ---
 
-ParserException: Expected declaration at 1:1-2:3
+ParserException: Expected declaration or statement at 1:1-2:3

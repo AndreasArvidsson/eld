@@ -10,4 +10,4 @@ IDENTIFIER "foo" (1:14-1:17)
 
 --- AST ---
 
-ParserException: Expected declaration at 1:1-1:5
+ParserException: Expected declaration or statement at 1:1-1:5

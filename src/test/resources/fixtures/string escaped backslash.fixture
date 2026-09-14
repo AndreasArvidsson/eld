@@ -6,4 +6,4 @@ STRING_LITERAL "\"path\\\\\"" (1:1-1:9)
 
 --- AST ---
 
-ParserException: Expected declaration at 1:1-1:9
+ParserException: Expected declaration or statement at 1:1-1:9
