@@ -1,5 +1,6 @@
 value > 2 && (!enabled || disabled)
----
+
+--- TOKENS ---
 
 IDENTIFIER "value" (1:1-1:6)
 GREATER (1:7-1:8)

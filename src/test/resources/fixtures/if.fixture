@@ -1,7 +1,8 @@
 if (true) {}
 elif (false) {}
 else {}
----
+
+--- TOKENS ---
 
 IF (1:1-1:3)
 LEFT_PAREN (1:4-1:5)

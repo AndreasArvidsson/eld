@@ -1,7 +1,8 @@
 func sum(a: int, i: int) int {
     return a + b
 }
----
+
+--- TOKENS ---
 
 FUNC (1:1-1:5)
 IDENTIFIER "sum" (1:6-1:9)

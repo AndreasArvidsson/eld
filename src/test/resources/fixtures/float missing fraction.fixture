@@ -1,4 +1,5 @@
 12.
----
+
+--- TOKENS ---
 
 LexerException: Unexpected character '.' at 1:3-1:4

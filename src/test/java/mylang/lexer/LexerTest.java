@@ -16,7 +16,7 @@ import org.junit.jupiter.api.TestFactory;
 
 public class LexerTest {
 
-    private final static String DELIMITER = "\n---\n";
+    private final static String TOKENS_HEADER = "\n--- TOKENS ---\n";
 
     @TestFactory
     List<DynamicTest> fixtures() throws IOException {
@@ -43,13 +43,13 @@ public class LexerTest {
         }
     }
 
-    private static void assertFixture(Path path, boolean updateFixtures) throws IOException {
+    private static void assertFixture(final Path path, final boolean updateFixtures) throws IOException {
         final String fixture = Files.readString(path).replaceAll("\r\n", "\n");
-        final int delimiter = fixture.indexOf(DELIMITER);
+        final int delimiter = fixture.indexOf(TOKENS_HEADER);
         assertTrue(delimiter >= 0, () -> "Missing input/output delimiter in " + path);
 
-        final String input = Objects.requireNonNull(fixture.substring(0, delimiter));
-        final String expected = fixture.substring(delimiter + DELIMITER.length()).strip();
+        final String input = Objects.requireNonNull(fixture.substring(0, delimiter).strip());
+        final String expected = fixture.substring(delimiter + TOKENS_HEADER.length()).strip();
         final Lexer lexer = new Lexer(input);
         String actual = "";
 
@@ -60,7 +60,7 @@ public class LexerTest {
         }
 
         if (updateFixtures) {
-            final String updated = input + DELIMITER + "\n" + actual + (actual.isEmpty() ? "" : "\n");
+            final String updated = input + "\n" + TOKENS_HEADER + "\n" + actual + (actual.isEmpty() ? "" : "\n");
             Files.writeString(path, updated);
         } else {
             assertEquals(expected, actual, path.toString());

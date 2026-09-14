@@ -1,5 +1,6 @@
 "a
 b
----
+
+--- TOKENS ---
 
 LexerException: Unterminated string literal at 2:2-2:3

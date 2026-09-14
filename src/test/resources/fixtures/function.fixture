@@ -1,5 +1,6 @@
 func foo() {}
----
+
+--- TOKENS ---
 
 FUNC (1:1-1:5)
 IDENTIFIER "foo" (1:6-1:9)

@@ -1,5 +1,6 @@
 foo2 _3 if4 5foo
----
+
+--- TOKENS ---
 
 IDENTIFIER "foo2" (1:1-1:5)
 IDENTIFIER "_3" (1:6-1:8)

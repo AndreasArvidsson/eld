@@ -1,5 +1,6 @@
 const foo = "Hello world"
----
+
+--- TOKENS ---
 
 CONST (1:1-1:6)
 IDENTIFIER "foo" (1:7-1:10)

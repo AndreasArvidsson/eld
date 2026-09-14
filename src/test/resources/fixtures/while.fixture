@@ -1,5 +1,6 @@
 while (true) {}
----
+
+--- TOKENS ---
 
 WHILE (1:1-1:6)
 LEFT_PAREN (1:7-1:8)

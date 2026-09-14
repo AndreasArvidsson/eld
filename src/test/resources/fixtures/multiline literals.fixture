@@ -2,7 +2,8 @@
 b" x
 '
 ' y
----
+
+--- TOKENS ---
 
 STRING_LITERAL "\"a\nb\"" (1:1-2:3)
 IDENTIFIER "x" (2:4-2:5)

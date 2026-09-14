@@ -1,5 +1,6 @@
 for (var i = 0; i < 10; i++) {}
----
+
+--- TOKENS ---
 
 FOR (1:1-1:4)
 LEFT_PAREN (1:5-1:6)
