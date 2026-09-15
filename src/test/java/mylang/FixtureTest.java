@@ -141,7 +141,7 @@ public class FixtureTest {
         return Objects.requireNonNull(result);
     }
 
-    private static String joinList(final List<? extends Object> tokens) {
+    private static String joinList(final List<? extends @NonNull Object> tokens) {
         final List<String> tokenStrings = tokens.stream().map(o -> o.toString()).toList();
         return Objects.requireNonNull(String.join("\n", tokenStrings));
     }

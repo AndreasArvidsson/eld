@@ -2,17 +2,16 @@ package mylang;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import java.util.regex.Pattern;
 
 public class Fixtures {
     private final static String FIXTURE_EXTENSION = ".fixture";

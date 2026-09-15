@@ -375,16 +375,22 @@ public final class Parser {
             case LEFT_PAREN -> {
                 if (isLambdaAfterOpenParen()) {
                     yield parseLambdaExpression(token);
+                } else {
+                    yield parseGroupingExpression(token);
                 }
-                final Expression expression = parseExpression();
-                final Token close = expect(TokenType.RIGHT_PAREN);
-                yield new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
             }
             case LEFT_BRACKET ->
                 parseArrayExpression(token);
             default ->
                 throw new ParserException(token.range(), "Expected expression, but found %s", token.type());
         };
+    }
+
+    private GroupingExpression parseGroupingExpression(final Token open) {
+        final Expression expression = parseExpression();
+        final Token close = expect(TokenType.RIGHT_PAREN);
+        final Range range = new Range(open.range().start(), close.range().end());
+        return new GroupingExpression(expression, range);
     }
 
     private ArrayExpression parseArrayExpression(final Token open) {
@@ -458,7 +464,8 @@ public final class Parser {
     }
 
     private boolean check(final int offset, final TokenType type) {
-        return position + offset < tokens.size() && tokens.get(position + offset).type() == type;
+        return position + offset < tokens.size()
+                && Objects.requireNonNull(tokens.get(position + offset)).type() == type;
     }
 
     private boolean match(final TokenType type) {
@@ -475,7 +482,7 @@ public final class Parser {
 
     private Token expect(final TokenType type) {
         if (isAtEnd()) {
-            final Position position = tokens.get(tokens.size() - 1).range().end();
+            final Position position = Objects.requireNonNull(tokens.get(tokens.size() - 1)).range().end();
             throw new ParserException(
                     new Range(position, position),
                     "Expected %s but reached end of input", type);

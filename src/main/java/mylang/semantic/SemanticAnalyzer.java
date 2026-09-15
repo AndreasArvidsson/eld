@@ -26,7 +26,6 @@ import mylang.parser.FunctionDeclaration;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.IfStatement;
-import mylang.parser.LambdaExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.Mutability;
 import mylang.parser.NamedTypeNode;
