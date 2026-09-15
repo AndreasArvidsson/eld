@@ -2,9 +2,11 @@ package mylang.parser;
 
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import mylang.Range;
 
 public record Program(
-        List<BlockItem> items,
+        List<@NonNull BlockItem> items,
         Range range) implements AstNode {
 }

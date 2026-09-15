@@ -11,52 +11,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import mylang.lexer.Lexer;
 import mylang.lexer.LexerException;
 import mylang.lexer.Token;
-import mylang.parser.AstNode;
 import mylang.parser.Parser;
 import mylang.parser.ParserException;
+import mylang.parser.Program;
+import mylang.semantic.SemanticAnalyzer;
+import mylang.semantic.SemanticException;
+import mylang.semantic.SemanticModel;
 
 public class FixtureTest {
 
-    private final static String FIXTURE_EXTENSION = ".fixture";
     private final static String TOKENS_HEADER = "\n\n--- TOKENS ---\n\n";
     private final static String AST_HEADER = "\n\n--- AST ---\n\n";
     private final static String SEMANTIC_HEADER = "\n\n--- SEMANTIC ---\n\n";
-    // private final static String BYTECODE_HEADER = "\n\n--- BYTECODE ---\n\n";
+    private final static String BYTECODE_HEADER = "\n\n--- BYTECODE ---\n\n";
     // private final static String OUTPUT_HEADER = "\n\n--- OUTPUT ---\n\n";
 
     @TestFactory
     List<DynamicTest> fixtures() throws IOException {
-        // Read source fixtures so updates are saved to the repository, not
-        // target/test-classes.
-        final Path directory = Path.of(System.getProperty("basedir", "."),
-                "src", "test", "resources", "fixtures");
         final boolean updateFixtures = Boolean.getBoolean("updateFixtures");
+        final List<DynamicTest> tests = new ArrayList<>();
+        final List<@NonNull Fixture> fixtures = Fixtures.getFixtures();
 
-        try (final var paths = Files.walk(directory)) {
-            final List<DynamicTest> tests = new ArrayList<>();
-            paths
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.getFileName().toString().endsWith(FIXTURE_EXTENSION))
-                    .sorted()
-                    .forEach(path -> {
-                        Objects.requireNonNull(path);
-                        final String filename = path.getFileName().toString();
-                        final String name = Objects
-                                .requireNonNull(filename.substring(0, filename.length() - FIXTURE_EXTENSION.length()));
-                        tests.add(DynamicTest.dynamicTest(
-                                name,
-                                () -> assertFixture(path, name, updateFixtures)));
-                    });
+        assertFalse(fixtures.isEmpty(), "No fixture files found");
 
-            assertFalse(tests.isEmpty(), "No fixture files found");
-            return tests;
+        for (final Fixture fixture : fixtures) {
+            final Path path = fixture.path();
+            final String name = fixture.name();
+            tests.add(DynamicTest.dynamicTest(
+                    name,
+                    () -> assertFixture(path, name, updateFixtures)));
         }
+
+        return tests;
     }
 
     private static void assertFixture(
@@ -68,6 +61,7 @@ public class FixtureTest {
         final int tokenHeaderIndex = fixture.indexOf(TOKENS_HEADER);
         final int astHeaderIndex = fixture.indexOf(AST_HEADER);
         final int semanticHeaderIndex = fixture.indexOf(SEMANTIC_HEADER);
+        final int bytecodeHeaderIndex = fixture.indexOf(BYTECODE_HEADER);
         final boolean assertFixture = !updateFixture;
         final String source = tokenHeaderIndex < 0 ? fixture : getContent(fixture, "", 0, tokenHeaderIndex);
         final StringBuilder actualBuilder = new StringBuilder();
@@ -81,7 +75,7 @@ public class FixtureTest {
                 assertTrue(tokenHeaderIndex >= 0, () -> "Missing tokens header delimiter in " + name);
             }
             expected = getContent(fixture, TOKENS_HEADER, tokenHeaderIndex, astHeaderIndex);
-            final List<Token> tokens = new Lexer(source).getTokens();
+            final List<@NonNull Token> tokens = new Lexer(source).getTokens();
             final String tokensActual = joinList(tokens);
             actualBuilder.append(tokensActual);
 
@@ -93,16 +87,28 @@ public class FixtureTest {
             if (assertFixture) {
                 assertTrue(astHeaderIndex >= 0, () -> "Missing AST header delimiter in " + name);
             }
-            expected = getContent(fixture, AST_HEADER, astHeaderIndex,
-                    semanticHeaderIndex);
-            final AstNode ast = new Parser(tokens).parse();
+            expected = getContent(fixture, AST_HEADER, astHeaderIndex, semanticHeaderIndex);
+            final Program ast = new Parser(tokens).parse();
             final String astActual = ast.toAstString();
             actualBuilder.append(astActual);
 
             if (assertFixture) {
                 assertEquals(expected, astActual, name);
             }
-        } catch (final LexerException | ParserException e) {
+
+            actualBuilder.append(SEMANTIC_HEADER);
+            if (assertFixture) {
+                assertTrue(semanticHeaderIndex >= 0, () -> "Missing semantic header delimiter in " + name);
+            }
+            expected = getContent(fixture, SEMANTIC_HEADER, semanticHeaderIndex, bytecodeHeaderIndex);
+            final SemanticModel semanticModel = new SemanticAnalyzer().analyze(ast);
+            final String semanticActual = semanticModel.toString();
+            actualBuilder.append(semanticActual);
+
+            if (assertFixture) {
+                assertEquals(expected, semanticActual, name);
+            }
+        } catch (final LexerException | ParserException | SemanticException e) {
             final String message = String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
             actualBuilder.append(message);
 
@@ -135,8 +141,8 @@ public class FixtureTest {
         return Objects.requireNonNull(result);
     }
 
-    private static String joinList(final List<?> tokens) {
-        final List<String> tokenStrings = tokens.stream().map(o -> Objects.requireNonNull(o).toString()).toList();
+    private static String joinList(final List<? extends @NonNull Object> tokens) {
+        final List<String> tokenStrings = tokens.stream().map(o -> o.toString()).toList();
         return Objects.requireNonNull(String.join("\n", tokenStrings));
     }
 

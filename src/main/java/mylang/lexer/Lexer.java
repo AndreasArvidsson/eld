@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import mylang.Position;
@@ -70,8 +72,8 @@ public class Lexer {
         this.column = 1;
     }
 
-    public List<Token> getTokens() {
-        final List<Token> tokens = new ArrayList<>();
+    public List<@NonNull Token> getTokens() {
+        final List<@NonNull Token> tokens = new ArrayList<>();
 
         while (true) {
             final Token token = nextToken();

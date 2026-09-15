@@ -39,16 +39,32 @@ INTEGER_LITERAL "10" (1:13-1:15)
 2. Run update mode to generate or replace expected output:
 
    ```bash
-   mvn test -DupdateFixtures=true
+   mvn test -DupdateFixtures
    ```
 
    This runs all tests. Currently only `FixtureTest` supports fixture updates; other tests run normally. To run only the lexer tests in update mode:
 
    ```bash
-   mvn test -Dtest=FixtureTest -DupdateFixtures=true
+   mvn test -Dtest=FixtureTest -DupdateFixtures
    ```
 
 3. Review the generated output in the source fixtures, for example with `git diff`. Update mode writes the lexer's actual output instead of asserting that it is correct, so check the results before accepting them.
 4. Run `mvn test` again without the update flag to assert against the reviewed output.
 
 Update mode adds missing separators and expected output, preserves the source input (including trailing newlines) after normalizing CRLF to LF, and writes to `src/test/resources/fixtures`, not the build output directory. Lexer and parser exceptions are written as expected output. Repeated updates do not add newlines to the input. Normal test runs require generated expectations and do not modify fixtures.
+
+## Running a subset of fixtures
+
+The `testSubset` flag is intended to use the contents of `src/test/resources/testSubsetGrep.properties` as a grep pattern to select a subset of fixtures. Put the desired pattern in that file, then run:
+
+```bash
+mvn test -DtestSubset
+```
+
+Combine it with `updateFixtures` to update the selected fixtures:
+
+```bash
+mvn test -DupdateFixtures -DtestSubset
+```
+
+These boolean Maven flags do not need `=true`. Without `-DtestSubset`, all fixtures run.
