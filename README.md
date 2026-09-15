@@ -16,6 +16,27 @@ Run only the lexer tests:
 mvn test -Dtest=FixtureTest
 ```
 
+## Running and debugging tests in VS Code
+
+Open the project folder in VS Code with the Extension Pack for Java installed and Maven available on your PATH.
+
+1. Open **Run and Debug** (`Ctrl+Shift+D`).
+2. Select a launch configuration from the dropdown:
+
+   | Configuration | Behavior |
+   | --- | --- |
+   | Run tests | Run all tests and check fixture expectations. |
+   | Run tests (subset) | Run tests with fixture selection controlled by `testSubsetGrep.properties`. |
+   | Update fixtures | Run tests and regenerate expectations for all fixtures. |
+   | Update fixtures (subset) | Run tests and regenerate expectations for the selected fixtures. |
+
+3. Set breakpoints in the test or application code, then press **F5**. Each configuration starts Maven and automatically attaches the Java debugger before tests execute.
+4. When paused, use **F10** to step over, **F11** to step into, **Shift+F11** to step out, and **F5** to continue.
+
+For either subset configuration, set the pattern in `src/test/resources/testSubsetGrep.properties` before launching. Other tests still run normally. Review fixture changes after using either update configuration.
+
+The launch entries are defined in [`.vscode/launch.json`](.vscode/launch.json), with Maven commands in [`.vscode/tasks.json`](.vscode/tasks.json). Test output appears in the task terminal.
+
 ## Lexer fixtures
 
 `FixtureTest` discovers all `.fixture` files under `src/test/resources/fixtures`, including subdirectories. Each file contains lexer input followed by a blank line and `--- TOKENS ---` (the delimiter is `\n\n--- TOKENS ---\n`). Both newlines before the header belong to the separator, not the source input. Any additional newlines before that separator remain part of the input. Windows and Unix line endings are supported.

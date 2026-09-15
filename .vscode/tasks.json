@@ -1,0 +1,197 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Maven: Run tests",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        {
+          "quoting": "strong",
+          "value": "--batch-mode"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dstyle.color=never"
+        },
+        {
+          "quoting": "strong",
+          "value": "test"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dmaven.surefire.debug"
+        }
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "maven",
+        "pattern": {
+          "regexp": "^\\[ERROR\\] (.+):\\[(\\d+),(\\d+)\\] (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^\\[INFO\\] Scanning for projects",
+          "endsPattern": "Listening for transport dt_socket at address: 5005"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Maven: Run tests (subset)",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        {
+          "quoting": "strong",
+          "value": "--batch-mode"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dstyle.color=never"
+        },
+        {
+          "quoting": "strong",
+          "value": "test"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dmaven.surefire.debug"
+        },
+        {
+          "quoting": "strong",
+          "value": "-DtestSubset=true"
+        }
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "maven",
+        "pattern": {
+          "regexp": "^\\[ERROR\\] (.+):\\[(\\d+),(\\d+)\\] (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^\\[INFO\\] Scanning for projects",
+          "endsPattern": "Listening for transport dt_socket at address: 5005"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Maven: Update fixtures",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        {
+          "quoting": "strong",
+          "value": "--batch-mode"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dstyle.color=never"
+        },
+        {
+          "quoting": "strong",
+          "value": "test"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dmaven.surefire.debug"
+        },
+        {
+          "quoting": "strong",
+          "value": "-DupdateFixtures=true"
+        }
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "maven",
+        "pattern": {
+          "regexp": "^\\[ERROR\\] (.+):\\[(\\d+),(\\d+)\\] (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^\\[INFO\\] Scanning for projects",
+          "endsPattern": "Listening for transport dt_socket at address: 5005"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Maven: Update fixtures (subset)",
+      "type": "shell",
+      "command": "mvn",
+      "args": [
+        {
+          "quoting": "strong",
+          "value": "--batch-mode"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dstyle.color=never"
+        },
+        {
+          "quoting": "strong",
+          "value": "test"
+        },
+        {
+          "quoting": "strong",
+          "value": "-Dmaven.surefire.debug"
+        },
+        {
+          "quoting": "strong",
+          "value": "-DupdateFixtures=true"
+        },
+        {
+          "quoting": "strong",
+          "value": "-DtestSubset=true"
+        }
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "maven",
+        "pattern": {
+          "regexp": "^\\[ERROR\\] (.+):\\[(\\d+),(\\d+)\\] (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^\\[INFO\\] Scanning for projects",
+          "endsPattern": "Listening for transport dt_socket at address: 5005"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ]
+}
