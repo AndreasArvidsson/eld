@@ -1,0 +1,10 @@
+var foo
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "foo" (1:5-1:8)
+
+--- AST ---
+
+ParserException: Expected EQUAL but reached end of input at 1:8-1:8

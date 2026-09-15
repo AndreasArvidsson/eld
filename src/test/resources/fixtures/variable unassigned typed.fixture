@@ -1,0 +1,24 @@
+var foo: int
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "foo" (1:5-1:8)
+COLON (1:8-1:9)
+IDENTIFIER "int" (1:10-1:13)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:13
+  (VariableDeclaration
+    range: 1:1-1:13
+    mutability: VAR
+    name: "foo"
+    (NamedTypeNode
+      range: 1:10-1:13
+      name: "int"
+    )
+    initializer: null
+  )
+)

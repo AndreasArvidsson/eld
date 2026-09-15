@@ -8,6 +8,6 @@ public record VariableDeclaration(
         Mutability mutability,
         String name,
         @Nullable TypeNode type,
-        Expression initializer,
+        @Nullable Expression initializer,
         Range range) implements Declaration {
 }

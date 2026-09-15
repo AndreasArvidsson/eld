@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import mylang.Position;
@@ -33,16 +34,16 @@ public final class Parser {
             Map.entry(TokenType.PLUS_PLUS, PostfixOperator.INCREMENT),
             Map.entry(TokenType.MINUS_MINUS, PostfixOperator.DECREMENT)));
 
-    private final List<Token> tokens;
+    private final List<@NonNull Token> tokens;
     private int position;
 
-    public Parser(final List<Token> tokens) {
+    public Parser(final List<@NonNull Token> tokens) {
         this.tokens = tokens;
         this.position = 0;
     }
 
     public Program parse() {
-        final List<BlockItem> items = new ArrayList<>();
+        final List<@NonNull BlockItem> items = new ArrayList<>();
 
         while (!isAtEnd()) {
             items.add(parseBlockItem());
@@ -52,8 +53,8 @@ public final class Parser {
             return new Program(items, new Range(0, 0, 0, 0));
         }
 
-        final Position start = items.get(0).range().start();
-        final Position end = items.get(items.size() - 1).range().end();
+        final Position start = Objects.requireNonNull(items.get(0)).range().start();
+        final Position end = Objects.requireNonNull(items.get(items.size() - 1)).range().end();
         final Range range = new Range(start, end);
 
         return new Program(items, range);
@@ -61,7 +62,7 @@ public final class Parser {
 
     private BlockStatement parseBlockStatement() {
         final Token open = expect(TokenType.LEFT_BRACE);
-        final List<BlockItem> items = new ArrayList<>();
+        final List<@NonNull BlockItem> items = new ArrayList<>();
 
         while (!isAtEnd() && !check(TokenType.RIGHT_BRACE)) {
             items.add(parseBlockItem());
@@ -131,7 +132,7 @@ public final class Parser {
     private FunctionDeclaration parseFunctionDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
         expect(TokenType.LEFT_PAREN);
-        final List<Parameter> parameters = new ArrayList<>();
+        final List<@NonNull Parameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
                 final Token paramName = expect(TokenType.IDENTIFIER);
@@ -150,7 +151,7 @@ public final class Parser {
 
     private CallExpression parseCallExpression(final Expression callee) {
         expect(TokenType.LEFT_PAREN);
-        final List<Expression> arguments = new ArrayList<>();
+        final List<@NonNull Expression> arguments = new ArrayList<>();
 
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
@@ -241,7 +242,7 @@ public final class Parser {
         final Expression condition = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement thenBranch = parseBlockStatement();
-        final List<ElseIfBranch> elifBranches = new ArrayList<>();
+        final List<@NonNull ElseIfBranch> elifBranches = new ArrayList<>();
 
         while (check(TokenType.ELIF)) {
             final Token elifKeyword = expect(TokenType.ELIF);
@@ -259,7 +260,7 @@ public final class Parser {
                 ? elseBranch.range().end()
                 : elifBranches.isEmpty()
                         ? thenBranch.range().end()
-                        : elifBranches.getLast().range().end();
+                        : Objects.requireNonNull(elifBranches.getLast()).range().end();
         final Range range = new Range(keyword.range().start(), end);
         return new IfStatement(condition, thenBranch, elifBranches, elseBranch, range);
     }
@@ -267,6 +268,14 @@ public final class Parser {
     private VariableDeclaration parseVariableDeclaration(final Token keyword, final Mutability mutability) {
         final Token name = expect(TokenType.IDENTIFIER);
         final @Nullable TypeNode type = match(TokenType.COLON) ? parseType() : null;
+
+        // var with no initializer
+        if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
+            final Position end = type != null ? type.range().end() : name.range().end();
+            final Range range = new Range(keyword.range().start(), end);
+            return new VariableDeclaration(mutability, name.text(), type, null, range);
+        }
+
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
         final Range range = new Range(keyword.range().start(), initializer.range().end());
@@ -386,7 +395,7 @@ public final class Parser {
     }
 
     private LambdaExpression parseLambdaExpression(final Token open) {
-        final List<Parameter> parameters = new ArrayList<>();
+        final List<@NonNull Parameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
                 final Token name = expect(TokenType.IDENTIFIER);
@@ -417,10 +426,6 @@ public final class Parser {
     private Token advance() {
         return Objects.requireNonNull(tokens.get(position++));
     }
-
-    // private Token peek(final int offset) {
-    // return Objects.requireNonNull(tokens.get(position + offset));
-    // }
 
     private boolean isAtEnd() {
         return position >= tokens.size();
