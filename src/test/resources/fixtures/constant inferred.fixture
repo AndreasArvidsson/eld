@@ -14,7 +14,10 @@ INTEGER_LITERAL "10" (1:13-1:15)
   (VariableDeclaration
     range: 1:1-1:15
     mutability: CONST
-    name: "foo"
+    (Identifier
+      range: 1:7-1:10
+      name: "foo"
+    )
     type: null
     (LiteralExpression
       range: 1:13-1:15

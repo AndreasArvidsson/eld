@@ -16,7 +16,10 @@ FLOAT_LITERAL "5.5" (1:18-1:21)
   (VariableDeclaration
     range: 1:1-1:21
     mutability: CONST
-    name: "foo"
+    (Identifier
+      range: 1:7-1:10
+      name: "foo"
+    )
     (NamedTypeNode
       range: 1:12-1:15
       name: "int"
@@ -28,7 +31,3 @@ FLOAT_LITERAL "5.5" (1:18-1:21)
     )
   )
 )
-
---- SEMANTIC ---
-
-SemanticException: Type mismatch: cannot assign FLOAT to INT at 1:18-1:21

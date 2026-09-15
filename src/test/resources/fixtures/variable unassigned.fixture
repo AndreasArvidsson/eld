@@ -7,4 +7,16 @@ IDENTIFIER "foo" (1:5-1:8)
 
 --- AST ---
 
-ParserException: Expected EQUAL but reached end of input at 1:8-1:8
+(Program
+  range: 1:1-1:8
+  (VariableDeclaration
+    range: 1:1-1:8
+    mutability: VAR
+    (Identifier
+      range: 1:5-1:8
+      name: "foo"
+    )
+    type: null
+    initializer: null
+  )
+)

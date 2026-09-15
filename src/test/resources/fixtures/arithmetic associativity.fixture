@@ -18,7 +18,10 @@ INTEGER_LITERAL "2" (1:25-1:26)
   (VariableDeclaration
     range: 1:1-1:26
     mutability: CONST
-    name: "result"
+    (Identifier
+      range: 1:7-1:13
+      name: "result"
+    )
     type: null
     (BinaryExpression
       range: 1:16-1:26

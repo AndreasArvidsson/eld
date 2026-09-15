@@ -14,7 +14,10 @@ IDENTIFIER "int" (1:10-1:13)
   (VariableDeclaration
     range: 1:1-1:13
     mutability: VAR
-    name: "foo"
+    (Identifier
+      range: 1:5-1:8
+      name: "foo"
+    )
     (NamedTypeNode
       range: 1:10-1:13
       name: "int"

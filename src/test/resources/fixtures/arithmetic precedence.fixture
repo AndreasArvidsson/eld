@@ -27,7 +27,10 @@ INTEGER_LITERAL "4" (2:29-2:30)
   (VariableDeclaration
     range: 1:1-1:31
     mutability: CONST
-    name: "productFirst"
+    (Identifier
+      range: 1:7-1:19
+      name: "productFirst"
+    )
     type: null
     (BinaryExpression
       range: 1:22-1:31
@@ -56,7 +59,10 @@ INTEGER_LITERAL "4" (2:29-2:30)
   (VariableDeclaration
     range: 2:1-2:30
     mutability: CONST
-    name: "productLast"
+    (Identifier
+      range: 2:7-2:18
+      name: "productLast"
+    )
     type: null
     (BinaryExpression
       range: 2:21-2:30
