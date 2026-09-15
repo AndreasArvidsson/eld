@@ -1,4 +1,4 @@
-for (value, index : values) {}
+for (value, index : [1]) {}
 
 --- TOKENS ---
 
@@ -8,25 +8,47 @@ IDENTIFIER "value" (1:6-1:11)
 COMMA (1:11-1:12)
 IDENTIFIER "index" (1:13-1:18)
 COLON (1:19-1:20)
-IDENTIFIER "values" (1:21-1:27)
-RIGHT_PAREN (1:27-1:28)
-LEFT_BRACE (1:29-1:30)
-RIGHT_BRACE (1:30-1:31)
+LEFT_BRACKET (1:21-1:22)
+INTEGER_LITERAL "1" (1:22-1:23)
+RIGHT_BRACKET (1:23-1:24)
+RIGHT_PAREN (1:24-1:25)
+LEFT_BRACE (1:26-1:27)
+RIGHT_BRACE (1:27-1:28)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:31
+  range: 1:1-1:28
   (ForEachStatement
-    range: 1:1-1:31
-    valueName: "value"
-    indexName: "index"
-    (IdentifierExpression
-      range: 1:21-1:27
-      name: "values"
+    range: 1:1-1:28
+    (IdentifierDeclaration
+      range: 1:6-1:11
+      name: "value"
+    )
+    (IdentifierDeclaration
+      range: 1:13-1:18
+      name: "index"
+    )
+    (ArrayExpression
+      range: 1:21-1:24
+      (LiteralExpression
+        range: 1:22-1:23
+        kind: int
+        text: "1"
+      )
     )
     (BlockStatement
-      range: 1:29-1:31
+      range: 1:26-1:28
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:21-1:24 -> ArrayType[elementType=int]
+  1:22-1:23 -> int
+
+Declarations:
+  1:6-1:11 -> VariableSymbol(name=value, type=int, mutability=CONST)
+  1:13-1:18 -> VariableSymbol(name=index, type=int, mutability=CONST)

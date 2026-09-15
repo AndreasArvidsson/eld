@@ -1,6 +1,7 @@
 package mylang.semantic;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,17 +9,19 @@ import java.util.Objects;
 
 import org.jspecify.annotations.Nullable;
 
+import mylang.parser.AstNode;
 import mylang.parser.Expression;
-import mylang.parser.Identifier;
+import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.TypeNode;
 
 public final class SemanticModel {
 
+    private static final String ARROW = " -> ";
     private final Map<Expression, Type> expressionTypes = new IdentityHashMap<>();
     private final Map<TypeNode, Type> resolvedTypes = new IdentityHashMap<>();
-    private final Map<IdentifierExpression, Symbol> symbols = new IdentityHashMap<>();
-    private final Map<Identifier, Symbol> declarations = new IdentityHashMap<>();
+    private final Map<IdentifierDeclaration, Symbol> declarations = new IdentityHashMap<>();
+    private final Map<IdentifierExpression, Symbol> references = new IdentityHashMap<>();
 
     public void setExpressionType(final Expression expression, final Type type) {
         expressionTypes.put(expression, type);
@@ -37,57 +40,58 @@ public final class SemanticModel {
     }
 
     public void setSymbol(
-            final IdentifierExpression expression,
-            final Symbol symbol) {
-        symbols.put(expression, symbol);
-    }
-
-    public void setSymbol(
-            final Identifier declaration,
+            final IdentifierDeclaration declaration,
             final Symbol symbol) {
         declarations.put(declaration, symbol);
     }
 
-    public @Nullable Symbol getSymbol(final IdentifierExpression expression) {
-        return symbols.get(expression);
+    public @Nullable Symbol getSymbol(final IdentifierDeclaration declaration) {
+        return declarations.get(declaration);
     }
 
-    public @Nullable Symbol getSymbol(final Identifier declaration) {
-        return declarations.get(declaration);
+    public void setReference(
+            final IdentifierExpression expression,
+            final Symbol symbol) {
+        references.put(expression, symbol);
+    }
+
+    public @Nullable Symbol getReference(final IdentifierExpression expression) {
+        return references.get(expression);
     }
 
     @Override
     public String toString() {
-        final String indent = "  ";
         final List<String> lines = new ArrayList<>();
-        if (!expressionTypes.isEmpty()) {
-            lines.add("Expression types:");
-            for (final var entry : expressionTypes.entrySet()) {
-                lines.add(indent + entry.getKey().range() + " -> " + entry.getValue());
-            }
+        appendSection(lines, "Expression types:", expressionTypes);
+        appendSection(lines, "Resolved types:", resolvedTypes);
+        appendSection(lines, "Declarations:", declarations);
+
+        if (!references.isEmpty()) {
+            lines.add("References:");
+            references.entrySet().stream()
+                    .sorted(Comparator.comparing(entry -> Objects.requireNonNull(entry.getKey()).range()))
+                    .forEach(entry -> lines
+                            .add("  " + Objects.requireNonNull(entry.getKey()).range() + ARROW
+                                    + entry.getValue().range()));
             lines.add("");
         }
-        if (!resolvedTypes.isEmpty()) {
-            lines.add("Resolved types:");
-            for (final var entry : resolvedTypes.entrySet()) {
-                lines.add(indent + entry.getKey().range() + " -> " + entry.getValue());
-            }
-            lines.add("");
-        }
-        if (!symbols.isEmpty()) {
-            lines.add("Symbols:");
-            for (final var entry : symbols.entrySet()) {
-                lines.add(indent + entry.getKey().range() + " ->  " + entry.getValue());
-            }
-            lines.add("");
-        }
-        if (!declarations.isEmpty()) {
-            lines.add("Declarations:");
-            for (final var entry : declarations.entrySet()) {
-                lines.add(indent + entry.getKey().range() + " -> " + entry.getValue());
-            }
-            lines.add("");
-        }
+
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
     }
+
+    private static void appendSection(
+            final List<String> lines,
+            final String heading,
+            final Map<? extends AstNode, ?> entries) {
+        if (entries.isEmpty()) {
+            return;
+        }
+        lines.add(heading);
+        entries.entrySet().stream()
+                .sorted(Comparator.comparing(entry -> Objects.requireNonNull(entry.getKey()).range()))
+                .forEach(entry -> lines
+                        .add("  " + Objects.requireNonNull(entry.getKey()).range() + ARROW + entry.getValue()));
+        lines.add("");
+    }
+
 }

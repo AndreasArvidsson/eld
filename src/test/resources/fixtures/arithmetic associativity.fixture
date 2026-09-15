@@ -18,7 +18,7 @@ INTEGER_LITERAL "2" (1:25-1:26)
   (VariableDeclaration
     range: 1:1-1:26
     mutability: CONST
-    (Identifier
+    (IdentifierDeclaration
       range: 1:7-1:13
       name: "result"
     )
@@ -48,3 +48,15 @@ INTEGER_LITERAL "2" (1:25-1:26)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:18 -> int
+  1:16-1:22 -> int
+  1:16-1:26 -> int
+  1:21-1:22 -> int
+  1:25-1:26 -> int
+
+Declarations:
+  1:7-1:13 -> VariableSymbol(name=result, type=int, mutability=CONST)

@@ -14,7 +14,7 @@ IDENTIFIER "int" (1:10-1:13)
   (VariableDeclaration
     range: 1:1-1:13
     mutability: VAR
-    (Identifier
+    (IdentifierDeclaration
       range: 1:5-1:8
       name: "foo"
     )
@@ -32,4 +32,4 @@ Resolved types:
   1:10-1:13 -> int
 
 Declarations:
-  1:5-1:8 -> VariableSymbol[name=foo, type=int, mutability=VAR]
+  1:5-1:8 -> VariableSymbol(name=foo, type=int, mutability=VAR)

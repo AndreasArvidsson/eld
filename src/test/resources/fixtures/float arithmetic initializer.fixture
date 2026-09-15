@@ -19,7 +19,7 @@ INTEGER_LITERAL "10" (1:31-1:33)
   (VariableDeclaration
     range: 1:1-1:33
     mutability: CONST
-    (Identifier
+    (IdentifierDeclaration
       range: 1:7-1:13
       name: "result"
     )

@@ -16,7 +16,10 @@ RIGHT_BRACE (1:21-1:22)
   range: 1:1-1:22
   (FunctionDeclaration
     range: 1:1-1:22
-    name: "foo"
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
     returnType: null
     (BlockStatement
       range: 1:12-1:22

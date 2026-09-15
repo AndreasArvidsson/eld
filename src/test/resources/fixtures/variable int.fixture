@@ -14,7 +14,7 @@ INTEGER_LITERAL "10" (1:11-1:13)
   (VariableDeclaration
     range: 1:1-1:13
     mutability: VAR
-    (Identifier
+    (IdentifierDeclaration
       range: 1:5-1:8
       name: "foo"
     )
@@ -33,4 +33,4 @@ Expression types:
   1:11-1:13 -> int
 
 Declarations:
-  1:5-1:8 -> VariableSymbol[name=foo, type=int, mutability=VAR]
+  1:5-1:8 -> VariableSymbol(name=foo, type=int, mutability=VAR)

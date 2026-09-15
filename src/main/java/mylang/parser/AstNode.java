@@ -8,7 +8,6 @@ public sealed interface AstNode
         TypeNode,
         Parameter,
         Program,
-        Identifier,
         ElseIfBranch {
 
     Range range();

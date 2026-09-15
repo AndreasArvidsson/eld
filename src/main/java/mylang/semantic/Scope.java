@@ -23,8 +23,8 @@ public final class Scope {
         symbols.put(symbol.name(), symbol);
     }
 
-    public Symbol resolve(final String name) {
-        Symbol symbol = symbols.get(name);
+    public @Nullable Symbol resolve(final String name) {
+        final Symbol symbol = symbols.get(name);
 
         if (symbol != null) {
             return symbol;
@@ -34,6 +34,6 @@ public final class Scope {
             return parent.resolve(name);
         }
 
-        throw new SemanticException("Unknown symbol: %s", name);
+        return null;
     }
 }

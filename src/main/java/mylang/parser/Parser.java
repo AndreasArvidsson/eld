@@ -131,6 +131,7 @@ public final class Parser {
 
     private FunctionDeclaration parseFunctionDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
+        final IdentifierDeclaration nameId = new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
         final List<@NonNull Parameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
@@ -146,7 +147,7 @@ public final class Parser {
         final TypeNode returnType = check(TokenType.LEFT_BRACE) ? null : parseType();
         final BlockStatement body = parseBlockStatement();
         final Range range = new Range(keyword.range().start(), body.range().end());
-        return new FunctionDeclaration(name.text(), parameters, returnType, body, range);
+        return new FunctionDeclaration(nameId, parameters, returnType, body, range);
     }
 
     private CallExpression parseCallExpression(final Expression callee) {
@@ -208,14 +209,17 @@ public final class Parser {
     }
 
     private ForEachStatement parseForEachStatement(final Token keyword) {
-        final String valueName = expect(TokenType.IDENTIFIER).text();
-        final String indexName = match(TokenType.COMMA) ? expect(TokenType.IDENTIFIER).text() : null;
+        final Token value = expect(TokenType.IDENTIFIER);
+        final Token index = match(TokenType.COMMA) ? expect(TokenType.IDENTIFIER) : null;
+        final IdentifierDeclaration valueId = new IdentifierDeclaration(value.text(), value.range());
+        final IdentifierDeclaration indexId = index != null ? new IdentifierDeclaration(index.text(), index.range())
+                : null;
         expect(TokenType.COLON);
         final Expression iterable = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
         final Range range = new Range(keyword.range().start(), body.range().end());
-        return new ForEachStatement(valueName, indexName, iterable, body, range);
+        return new ForEachStatement(valueId, indexId, iterable, body, range);
     }
 
     private WhileStatement parseWhileStatement(final Token keyword) {
@@ -268,7 +272,7 @@ public final class Parser {
     private VariableDeclaration parseVariableDeclaration(final Token keyword, final Mutability mutability) {
         final Token name = expect(TokenType.IDENTIFIER);
         final @Nullable TypeNode type = match(TokenType.COLON) ? parseType() : null;
-        final Identifier identifier = new Identifier(name.text(), name.range());
+        final IdentifierDeclaration identifier = new IdentifierDeclaration(name.text(), name.range());
 
         // var with no initializer
         if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
@@ -320,7 +324,7 @@ public final class Parser {
 
     private Expression parseUnaryExpression() {
         if (isAtEnd()) {
-            final Position end = tokens.get(tokens.size() - 1).range().end();
+            final Position end = Objects.requireNonNull(tokens.get(tokens.size() - 1)).range().end();
             throw new ParserException(new Range(end, end), "Expected expression, but reached end of input");
         }
         final Token token = advance();
@@ -353,13 +357,6 @@ public final class Parser {
 
     private Expression parsePrimitiveExpression(final Token token) {
         switch (token.type()) {
-            case LEFT_PAREN:
-                if (isLambdaAfterOpenParen()) {
-                    return parseLambdaExpression(token);
-                }
-                final Expression expression = parseExpression();
-                final Token close = expect(TokenType.RIGHT_PAREN);
-                return new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
             case IDENTIFIER:
                 return new IdentifierExpression(token.text(), token.range());
             case BOOLEAN_LITERAL:
@@ -374,9 +371,30 @@ public final class Parser {
                 return new LiteralExpression(LiteralKind.CHAR, token.text(), token.range());
             case NULL:
                 return new LiteralExpression(LiteralKind.NULL, token.text(), token.range());
+            case LEFT_PAREN:
+                if (isLambdaAfterOpenParen()) {
+                    return parseLambdaExpression(token);
+                }
+                final Expression expression = parseExpression();
+                final Token close = expect(TokenType.RIGHT_PAREN);
+                return new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
+            case LEFT_BRACKET:
+                return parseArrayExpression(token);
             default:
-                throw new ParserException(token.range(), "Expected expression");
+                throw new ParserException(token.range(), "Expected expression, but found %s", token.type());
         }
+    }
+
+    private ArrayExpression parseArrayExpression(final Token open) {
+        final List<@NonNull Expression> elements = new ArrayList<>();
+        if (!check(TokenType.RIGHT_BRACKET)) {
+            do {
+                elements.add(parseExpression());
+            } while (match(TokenType.COMMA));
+        }
+        final Token close = expect(TokenType.RIGHT_BRACKET);
+        final Range range = new Range(open.range().start(), close.range().end());
+        return new ArrayExpression(elements, range);
     }
 
     // The opening parenthesis has already been consumed. Lookahead leaves position
@@ -384,7 +402,7 @@ public final class Parser {
     private boolean isLambdaAfterOpenParen() {
         int depth = 1;
         for (int offset = 0; position + offset < tokens.size(); offset++) {
-            final TokenType type = tokens.get(position + offset).type();
+            final TokenType type = Objects.requireNonNull(tokens.get(position + offset)).type();
             if (type == TokenType.LEFT_PAREN) {
                 depth++;
             } else if (type == TokenType.RIGHT_PAREN && --depth == 0) {

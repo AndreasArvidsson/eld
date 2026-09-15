@@ -24,7 +24,7 @@ INTEGER_LITERAL "3" (1:34-1:35)
   (VariableDeclaration
     range: 1:1-1:35
     mutability: CONST
-    (Identifier
+    (IdentifierDeclaration
       range: 1:7-1:13
       name: "result"
     )

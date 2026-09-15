@@ -5,8 +5,8 @@ import org.jspecify.annotations.Nullable;
 import mylang.Range;
 
 public record ForEachStatement(
-        String valueName,
-        @Nullable String indexName,
+        IdentifierDeclaration value,
+        @Nullable IdentifierDeclaration index,
         Expression iterable,
         BlockStatement body,
         Range range) implements Statement {

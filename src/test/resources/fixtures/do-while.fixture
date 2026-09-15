@@ -26,3 +26,8 @@ RIGHT_PAREN (1:18-1:19)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:18 -> bool

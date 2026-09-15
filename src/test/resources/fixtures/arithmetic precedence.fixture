@@ -27,7 +27,7 @@ INTEGER_LITERAL "4" (2:29-2:30)
   (VariableDeclaration
     range: 1:1-1:31
     mutability: CONST
-    (Identifier
+    (IdentifierDeclaration
       range: 1:7-1:19
       name: "productFirst"
     )
@@ -59,7 +59,7 @@ INTEGER_LITERAL "4" (2:29-2:30)
   (VariableDeclaration
     range: 2:1-2:30
     mutability: CONST
-    (Identifier
+    (IdentifierDeclaration
       range: 2:7-2:18
       name: "productLast"
     )
@@ -89,3 +89,21 @@ INTEGER_LITERAL "4" (2:29-2:30)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:22-1:23 -> int
+  1:22-1:27 -> int
+  1:22-1:31 -> int
+  1:26-1:27 -> int
+  1:30-1:31 -> int
+  2:21-2:22 -> int
+  2:21-2:30 -> int
+  2:25-2:26 -> int
+  2:25-2:30 -> int
+  2:29-2:30 -> int
+
+Declarations:
+  1:7-1:19 -> VariableSymbol(name=productFirst, type=int, mutability=CONST)
+  2:7-2:18 -> VariableSymbol(name=productLast, type=int, mutability=CONST)
