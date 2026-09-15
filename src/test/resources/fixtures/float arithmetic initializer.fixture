@@ -53,3 +53,19 @@ INTEGER_LITERAL "10" (1:31-1:33)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:20 -> float
+  1:16-1:28 -> float
+  1:16-1:33 -> float
+  1:17-1:20 -> float
+  1:23-1:28 -> float
+  1:31-1:33 -> int
+
+Conversions:
+  1:31-1:33 -> int -> float
+
+Declarations:
+  1:7-1:13 -> VariableSymbol(name=result, type=float, mutability=CONST)

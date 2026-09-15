@@ -6,8 +6,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import org.jspecify.annotations.Nullable;
+import java.util.function.BiFunction;
 
 import mylang.parser.AstNode;
 import mylang.parser.Expression;
@@ -19,6 +18,7 @@ public final class SemanticModel {
 
     private static final String ARROW = " -> ";
     private final Map<Expression, Type> expressionTypes = new IdentityHashMap<>();
+    private final Map<Expression, Type> conversionTypes = new IdentityHashMap<>();
     private final Map<TypeNode, Type> resolvedTypes = new IdentityHashMap<>();
     private final Map<IdentifierDeclaration, Symbol> declarations = new IdentityHashMap<>();
     private final Map<IdentifierExpression, Symbol> references = new IdentityHashMap<>();
@@ -27,16 +27,24 @@ public final class SemanticModel {
         expressionTypes.put(expression, type);
     }
 
-    public @Nullable Type getExpressionType(final Expression expression) {
-        return expressionTypes.get(expression);
+    public Type getExpressionType(final Expression expression) {
+        return Objects.requireNonNull(expressionTypes.get(expression));
+    }
+
+    public void setConversionType(final Expression expression, final Type type) {
+        conversionTypes.put(expression, type);
+    }
+
+    public Type getConversionType(final Expression expression) {
+        return Objects.requireNonNull(conversionTypes.get(expression));
     }
 
     public void setResolvedType(final TypeNode typeNode, final Type type) {
         resolvedTypes.put(typeNode, type);
     }
 
-    public @Nullable Type getResolvedType(final TypeNode typeNode) {
-        return resolvedTypes.get(typeNode);
+    public Type getResolvedType(final TypeNode typeNode) {
+        return Objects.requireNonNull(resolvedTypes.get(typeNode));
     }
 
     public void setSymbol(
@@ -45,8 +53,8 @@ public final class SemanticModel {
         declarations.put(declaration, symbol);
     }
 
-    public @Nullable Symbol getSymbol(final IdentifierDeclaration declaration) {
-        return declarations.get(declaration);
+    public Symbol getSymbol(final IdentifierDeclaration declaration) {
+        return Objects.requireNonNull(declarations.get(declaration));
     }
 
     public void setReference(
@@ -55,8 +63,8 @@ public final class SemanticModel {
         references.put(expression, symbol);
     }
 
-    public @Nullable Symbol getReference(final IdentifierExpression expression) {
-        return references.get(expression);
+    public Symbol getReference(final IdentifierExpression expression) {
+        return Objects.requireNonNull(references.get(expression));
     }
 
     @Override
@@ -64,18 +72,12 @@ public final class SemanticModel {
         final List<String> lines = new ArrayList<>();
         appendSection(lines, "Expression types:", expressionTypes);
         appendSection(lines, "Resolved types:", resolvedTypes);
+
+        appendSection(lines, "Conversions:", conversionTypes,
+                (expression, type) -> expressionTypes.get(expression) + ARROW + type);
         appendSection(lines, "Declarations:", declarations);
-
-        if (!references.isEmpty()) {
-            lines.add("References:");
-            references.entrySet().stream()
-                    .sorted(Comparator.comparing(entry -> Objects.requireNonNull(entry.getKey()).range()))
-                    .forEach(entry -> lines
-                            .add("  " + Objects.requireNonNull(entry.getKey()).range() + ARROW
-                                    + entry.getValue().range()));
-            lines.add("");
-        }
-
+        appendSection(lines, "References:", references,
+                (expression, symbol) -> symbol.range().toString());
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
     }
 
@@ -83,6 +85,14 @@ public final class SemanticModel {
             final List<String> lines,
             final String heading,
             final Map<? extends AstNode, ?> entries) {
+        appendSection(lines, heading, entries, (node, value) -> String.valueOf(value));
+    }
+
+    private static <K extends AstNode, V> void appendSection(
+            final List<String> lines,
+            final String heading,
+            final Map<K, V> entries,
+            final BiFunction<K, V, String> formatValue) {
         if (entries.isEmpty()) {
             return;
         }
@@ -90,7 +100,8 @@ public final class SemanticModel {
         entries.entrySet().stream()
                 .sorted(Comparator.comparing(entry -> Objects.requireNonNull(entry.getKey()).range()))
                 .forEach(entry -> lines
-                        .add("  " + Objects.requireNonNull(entry.getKey()).range() + ARROW + entry.getValue()));
+                        .add("  " + Objects.requireNonNull(entry.getKey()).range() + ARROW
+                                + formatValue.apply(entry.getKey(), entry.getValue())));
         lines.add("");
     }
 

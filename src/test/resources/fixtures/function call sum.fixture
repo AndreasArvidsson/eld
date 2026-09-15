@@ -44,3 +44,7 @@ RIGHT_PAREN (1:16-1:17)
     )
   )
 )
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'print' at 1:1-1:6

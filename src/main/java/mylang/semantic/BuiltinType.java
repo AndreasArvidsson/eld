@@ -6,7 +6,8 @@ public enum BuiltinType implements Type {
     BOOL("bool"),
     CHAR("char"),
     STRING("string"),
-    NULL("null");
+    NULL("null"),
+    VOID("void");
 
     private final String name;
 

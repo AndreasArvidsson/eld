@@ -12,23 +12,28 @@ import mylang.parser.BinaryExpression;
 import mylang.parser.BlockItem;
 import mylang.parser.BlockStatement;
 import mylang.parser.BreakStatement;
+import mylang.parser.CallExpression;
 import mylang.parser.ContinueStatement;
 import mylang.parser.Declaration;
 import mylang.parser.DeclarationStatement;
 import mylang.parser.DoWhileStatement;
 import mylang.parser.Expression;
+import mylang.parser.ExpressionStatement;
 import mylang.parser.ForEachStatement;
 import mylang.parser.ForStatement;
+import mylang.parser.FunctionDeclaration;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.Mutability;
 import mylang.parser.NamedTypeNode;
+import mylang.parser.Parameter;
 import mylang.parser.PostfixExpression;
 import mylang.parser.Program;
 import mylang.parser.ReturnStatement;
 import mylang.parser.Statement;
 import mylang.parser.TypeNode;
+import mylang.parser.UnaryExpression;
 import mylang.parser.VariableDeclaration;
 import mylang.parser.WhileStatement;
 
@@ -63,6 +68,8 @@ public final class SemanticAnalyzer {
         switch (declaration) {
             case VariableDeclaration variableDeclaration ->
                 analyzeVariableDeclaration(variableDeclaration, context);
+            case FunctionDeclaration functionDeclaration ->
+                analyzeFunctionDeclaration(functionDeclaration, context);
             default -> throw new SemanticException(
                     declaration.range(),
                     "Unsupported declaration: %s",
@@ -88,6 +95,8 @@ public final class SemanticAnalyzer {
                 analyzeReturnStatement(returnStatement, context);
             case DeclarationStatement declarationStatement ->
                 analyzeDeclaration(declarationStatement.declaration(), context);
+            case ExpressionStatement expressionStatement ->
+                analyzeExpression(expressionStatement.expression(), context);
             default -> throw new SemanticException(
                     statement.range(),
                     "Unsupported statement: %s",
@@ -164,11 +173,7 @@ public final class SemanticAnalyzer {
     }
 
     private void analyzeWhileStatement(final WhileStatement statement, final SemanticContext context) {
-        final SemanticContext loopContext = new SemanticContext(
-                context.scope(),
-                context.function(),
-                context.loopDepth() + 1);
-        final Type conditionType = analyzeExpression(statement.condition(), loopContext);
+        final Type conditionType = analyzeExpression(statement.condition(), context);
 
         if (conditionType != BuiltinType.BOOL) {
             throw new SemanticException(
@@ -177,15 +182,16 @@ public final class SemanticAnalyzer {
                     statement.condition().range());
         }
 
-        analyzeBlockStatement(statement.body(), loopContext);
-    }
-
-    private void analyzeDoWhileStatement(final DoWhileStatement statement, final SemanticContext context) {
         final SemanticContext loopContext = new SemanticContext(
                 context.scope(),
                 context.function(),
                 context.loopDepth() + 1);
-        final Type conditionType = analyzeExpression(statement.condition(), loopContext);
+
+        analyzeBlockStatement(statement.body(), loopContext);
+    }
+
+    private void analyzeDoWhileStatement(final DoWhileStatement statement, final SemanticContext context) {
+        final Type conditionType = analyzeExpression(statement.condition(), context);
 
         if (conditionType != BuiltinType.BOOL) {
             throw new SemanticException(
@@ -193,6 +199,11 @@ public final class SemanticAnalyzer {
                     conditionType,
                     statement.condition().range());
         }
+
+        final SemanticContext loopContext = new SemanticContext(
+                context.scope(),
+                context.function(),
+                context.loopDepth() + 1);
 
         analyzeBlockStatement(statement.body(), loopContext);
     }
@@ -214,10 +225,36 @@ public final class SemanticAnalyzer {
     }
 
     private void analyzeReturnStatement(final ReturnStatement statement, final SemanticContext context) {
-        if (!context.isWithinFunction()) {
+        final FunctionSymbol function = context.function();
+
+        if (function == null) {
             throw new SemanticException(
                     statement.range(),
                     "A 'return' statement can only be used within an enclosing function");
+        }
+
+        final @Nullable Expression value = statement.value();
+        final Type returnType = function.type().returnType();
+
+        if (value == null) {
+            if (returnType.equals(BuiltinType.VOID)) {
+                return;
+            }
+            throw new SemanticException(
+                    statement.range(),
+                    "Return statement must return a value of type %s",
+                    returnType);
+        }
+
+        final Type valueType = analyzeExpression(value, context);
+        final @Nullable Type resolvedType = resolveAssignType(valueType, returnType, value, context);
+
+        if (resolvedType == null) {
+            throw new SemanticException(
+                    statement.range(),
+                    "Type mismatch: cannot return %s from function with return type %s",
+                    valueType,
+                    returnType);
         }
     }
 
@@ -231,7 +268,7 @@ public final class SemanticAnalyzer {
         final TypeNode typeNode = declaration.type();
         final Expression initializer = declaration.initializer();
         final Type declaredType = typeNode != null ? resolveType(typeNode) : null;
-        final Type initializerType = initializer != null ? analyzeExpression(initializer, context) : null;
+        Type initializerType = initializer != null ? analyzeExpression(initializer, context) : null;
 
         if (declaredType == null && initializerType == null) {
             throw new SemanticException(
@@ -240,12 +277,20 @@ public final class SemanticAnalyzer {
                     declaration.name().name());
         }
 
-        if (declaredType != null && initializerType != null && !isAssignable(initializerType, declaredType)) {
-            throw new SemanticException(
-                    Objects.requireNonNull(initializer).range(),
-                    "Type mismatch: cannot assign %s to %s",
+        if (declaredType != null && initializer != null && initializerType != null) {
+            final @Nullable Type resolvedInitializerType = resolveAssignType(
                     initializerType,
-                    declaredType);
+                    declaredType,
+                    initializer,
+                    context);
+            if (resolvedInitializerType == null) {
+                throw new SemanticException(
+                        initializer.range(),
+                        "Type mismatch: cannot assign %s to %s",
+                        initializerType,
+                        declaredType);
+            }
+            initializerType = resolvedInitializerType;
         }
 
         final VariableSymbol symbol = new VariableSymbol(
@@ -257,10 +302,41 @@ public final class SemanticAnalyzer {
         model.setSymbol(declaration.name(), symbol);
     }
 
-    private boolean isAssignable(final Type from, final Type to) {
-        // Implementation for type assignability check goes here
-        // For simplicity, we assume exact type match is required
-        return from.equals(to);
+    private void analyzeFunctionDeclaration(final FunctionDeclaration declaration, final SemanticContext context) {
+        // TODO: Verify that the parent is program or class body
+
+        final List<@NonNull Type> parameterTypes = new ArrayList<>();
+
+        for (final Parameter param : declaration.parameters()) {
+            final TypeNode typeNode = Objects.requireNonNull(param.type());
+            final Type paramType = resolveType(typeNode);
+            final VariableSymbol paramSymbol = new VariableSymbol(
+                    param.name(),
+                    paramType,
+                    Mutability.CONST);
+            model.setResolvedType(typeNode, paramType);
+            model.setSymbol(param.name(), paramSymbol);
+            context.scope().declare(paramSymbol);
+            parameterTypes.add(paramType);
+        }
+
+        final Type returnType = declaration.returnType() != null
+                ? resolveType(Objects.requireNonNull(declaration.returnType()))
+                : BuiltinType.VOID;
+
+        final FunctionSymbol symbol = new FunctionSymbol(
+                declaration.name(),
+                new FunctionType(Objects.requireNonNull(parameterTypes), returnType));
+
+        context.scope().declare(symbol);
+        model.setSymbol(declaration.name(), symbol);
+
+        final SemanticContext functionContext = new SemanticContext(
+                context.scope(),
+                symbol,
+                context.loopDepth());
+
+        analyzeBlockStatement(declaration.body(), functionContext);
     }
 
     private Type resolveType(final TypeNode typeNode) {
@@ -272,6 +348,27 @@ public final class SemanticAnalyzer {
                     "Unsupported type: %s",
                     typeNode);
         };
+    }
+
+    private @Nullable Type resolveAssignType(
+            final Type from,
+            final Type to,
+            final Expression fromExpression,
+            final SemanticContext context) {
+
+        // TODO: Extend this to handle more complex type assignability rules, such as
+        // subtyping and type coercion.
+
+        if (from.equals(to)) {
+            return from;
+        }
+
+        if (from.equals(BuiltinType.INT) && to.equals(BuiltinType.FLOAT)) {
+            model.setConversionType(fromExpression, to);
+            return to;
+        }
+
+        return null;
     }
 
     private Type resolveNamedType(final NamedTypeNode named) {
@@ -306,17 +403,15 @@ public final class SemanticAnalyzer {
                 analyzeArrayExpression(array, context);
             case BinaryExpression binary ->
                 analyzeBinaryExpression(binary, context);
+            case UnaryExpression unary ->
+                analyzeUnaryExpression(unary, context);
             case PostfixExpression postfix ->
                 analyzePostfixExpression(postfix, context);
-
-            // case UnaryExpression unary ->
-            // analyzeUnary(unary, scope);
-
-            // case CallExpression call ->
-            // analyzeCall(call, scope);
+            case CallExpression call ->
+                analyzeCallExpression(call, context);
 
             // case LambdaExpression lambda ->
-            // analyzeLambda(lambda, scope);
+            // analyzeLambdaExpression(lambda, context);
 
             default ->
                 throw new SemanticException(expression.range(), "Unsupported expression: %s", expression);
@@ -324,6 +419,14 @@ public final class SemanticAnalyzer {
 
         model.setExpressionType(expression, type);
 
+        return type;
+    }
+
+    private Type analyzeCallExpression(final CallExpression call, final SemanticContext context) {
+        // TODO: Verify that the callee is a callable type and with the correct
+        // arguments
+        final Type type = analyzeExpression(call.callee(), context);
+        model.setExpressionType(call, type);
         return type;
     }
 
@@ -339,15 +442,33 @@ public final class SemanticAnalyzer {
     private Type analyzeBinaryExpression(final BinaryExpression binary, final SemanticContext context) {
         final Type leftType = analyzeExpression(binary.left(), context);
         final Type rightType = analyzeExpression(binary.right(), context);
+        Type resolvedType = leftType;
 
-        if (!isAssignable(rightType, leftType)) {
-            throw new SemanticException(binary.range(), "Type mismatch in binary expression");
+        // TODO: Extend this to handle more complex type assignability rules, such as
+        // subtyping and type coercion.
+
+        if (leftType.equals(BuiltinType.FLOAT) && rightType.equals(BuiltinType.INT)) {
+            model.setConversionType(binary.right(), leftType);
+            resolvedType = leftType;
+        } else if (leftType.equals(BuiltinType.INT) && rightType.equals(BuiltinType.FLOAT)) {
+            model.setConversionType(binary.left(), rightType);
+            resolvedType = rightType;
         }
 
         // TODO: Verify that the binary operator and operands work together
 
-        final Type resultType = binary.operator().isBool() ? BuiltinType.BOOL : leftType;
+        final Type resultType = binary.operator().isBool() ? BuiltinType.BOOL : resolvedType;
         model.setExpressionType(binary, resultType);
+        return resultType;
+    }
+
+    private Type analyzeUnaryExpression(final UnaryExpression unary, final SemanticContext context) {
+        final Type operandType = analyzeExpression(unary.operand(), context);
+
+        // TODO: Verify that the unary operator is applicable to the operand type
+
+        final Type resultType = operandType;
+        model.setExpressionType(unary, resultType);
         return resultType;
     }
 
@@ -355,7 +476,7 @@ public final class SemanticAnalyzer {
         final @Nullable Symbol symbol = context.scope().resolve(identifier.name());
 
         if (symbol == null) {
-            throw new SemanticException(identifier.range(), "Undefined identifier: %s", identifier.name());
+            throw new SemanticException(identifier.range(), "Undefined identifier: '%s'", identifier.name());
         }
 
         final Type type = symbol.type();
@@ -391,7 +512,7 @@ public final class SemanticAnalyzer {
                 : Objects.requireNonNull(elementTypes.get(0));
 
         for (final Type type : elementTypes) {
-            if (!isAssignable(type, elementType)) {
+            if (!type.equals(elementType)) {
                 throw new SemanticException(array.range(), "Array elements must have the same type");
             }
         }

@@ -66,3 +66,7 @@ RIGHT_PAREN (1:50-1:51)
     )
   )
 )
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'value' at 1:16-1:21

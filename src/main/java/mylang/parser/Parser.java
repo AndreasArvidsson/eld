@@ -140,7 +140,8 @@ public final class Parser {
                 expect(TokenType.COLON);
                 final TypeNode type = parseType();
                 final Range paramRange = new Range(paramName.range().start(), type.range().end());
-                parameters.add(new Parameter(paramName.text(), type, paramRange));
+                final IdentifierDeclaration id = new IdentifierDeclaration(paramName.text(), paramName.range());
+                parameters.add(new Parameter(id, type, paramRange));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
@@ -421,7 +422,8 @@ public final class Parser {
                 final TypeNode type = match(TokenType.COLON) ? parseType() : null;
                 final Position end = type == null ? name.range().end() : type.range().end();
                 final Range range = new Range(name.range().start(), end);
-                parameters.add(new Parameter(name.text(), type, range));
+                final IdentifierDeclaration id = new IdentifierDeclaration(name.text(), name.range());
+                parameters.add(new Parameter(id, type, range));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);

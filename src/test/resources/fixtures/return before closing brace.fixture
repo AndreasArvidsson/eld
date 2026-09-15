@@ -30,3 +30,8 @@ RIGHT_BRACE (1:21-1:22)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Declarations:
+  1:6-1:9 -> FunctionSymbol(name=foo, parameterTypes=[], returnType=void)

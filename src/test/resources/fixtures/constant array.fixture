@@ -1,0 +1,51 @@
+const foo = [1, 2]
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+LEFT_BRACKET (1:13-1:14)
+INTEGER_LITERAL "1" (1:14-1:15)
+COMMA (1:15-1:16)
+INTEGER_LITERAL "2" (1:17-1:18)
+RIGHT_BRACKET (1:18-1:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:19
+  (VariableDeclaration
+    range: 1:1-1:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:13-1:19
+      (LiteralExpression
+        range: 1:14-1:15
+        kind: int
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:17-1:18
+        kind: int
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:19 -> ArrayType[elementType=int]
+  1:14-1:15 -> int
+  1:17-1:18 -> int
+
+Declarations:
+  1:7-1:10 -> VariableSymbol(name=foo, type=ArrayType[elementType=int], mutability=CONST)

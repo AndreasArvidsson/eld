@@ -2,7 +2,9 @@ package mylang.semantic;
 
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 public record FunctionType(
-        List<Type> parameterTypes,
+        List<@NonNull Type> parameterTypes,
         Type returnType) implements Type {
 }
