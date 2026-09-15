@@ -39,12 +39,12 @@ INTEGER_LITERAL "3" (1:34-1:35)
         )
         (LiteralExpression
           range: 1:20-1:21
-          kind: INTEGER
+          kind: int
           text: "1"
         )
         (LiteralExpression
           range: 1:23-1:24
-          kind: INTEGER
+          kind: int
           text: "2"
         )
       )
@@ -62,7 +62,7 @@ INTEGER_LITERAL "3" (1:34-1:35)
         operator: MULTIPLY
         (LiteralExpression
           range: 1:34-1:35
-          kind: INTEGER
+          kind: int
           text: "3"
         )
       )

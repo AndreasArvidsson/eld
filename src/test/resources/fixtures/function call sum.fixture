@@ -32,12 +32,12 @@ RIGHT_PAREN (1:16-1:17)
         )
         (LiteralExpression
           range: 1:11-1:12
-          kind: INTEGER
+          kind: int
           text: "1"
         )
         (LiteralExpression
           range: 1:14-1:15
-          kind: INTEGER
+          kind: int
           text: "2"
         )
       )

@@ -26,8 +26,12 @@ FLOAT_LITERAL "5.5" (1:18-1:21)
     )
     (LiteralExpression
       range: 1:18-1:21
-      kind: FLOAT
+      kind: float
       text: "5.5"
     )
   )
 )
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign float to int at 1:18-1:21

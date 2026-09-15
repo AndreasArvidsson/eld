@@ -5,10 +5,12 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 import mylang.parser.BlockItem;
+import mylang.parser.BlockStatement;
 import mylang.parser.Declaration;
 import mylang.parser.Statement;
 import mylang.parser.TypeNode;
 import mylang.parser.VariableDeclaration;
+import mylang.parser.WhileStatement;
 import mylang.parser.Expression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.NamedTypeNode;
@@ -25,17 +27,13 @@ public final class SemanticAnalyzer {
         return model;
     }
 
-    private void analyzeProgram(
-            final Program program,
-            final Scope scope) {
+    private void analyzeProgram(final Program program, final Scope scope) {
         for (final @NonNull BlockItem item : program.items()) {
             analyzeBlockItem(item, scope);
         }
     }
 
-    private void analyzeBlockItem(
-            final BlockItem item,
-            final Scope scope) {
+    private void analyzeBlockItem(final BlockItem item, final Scope scope) {
         switch (item) {
             case Declaration declaration ->
                 analyzeDeclaration(declaration, scope);
@@ -44,9 +42,7 @@ public final class SemanticAnalyzer {
         }
     }
 
-    private void analyzeDeclaration(
-            final Declaration declaration,
-            final Scope scope) {
+    private void analyzeDeclaration(final Declaration declaration, final Scope scope) {
         switch (declaration) {
             case VariableDeclaration variableDeclaration ->
                 analyzeVariable(variableDeclaration, scope);
@@ -57,13 +53,34 @@ public final class SemanticAnalyzer {
         }
     }
 
-    private Type analyzeStatement(
-            final Statement statement,
-            final Scope scope) {
-        throw new SemanticException(
-                statement.range(),
-                "Unsupported statement: %s",
-                statement);
+    private void analyzeStatement(final Statement statement, final Scope scope) {
+        switch (statement) {
+            case WhileStatement whileStatement ->
+                analyzeWhileStatement(whileStatement, scope);
+            default -> throw new SemanticException(
+                    statement.range(),
+                    "Unsupported statement: %s",
+                    statement);
+        }
+    }
+
+    private void analyzeWhileStatement(final WhileStatement statement, final Scope scope) {
+        final Type conditionType = analyzeExpression(statement.condition(), scope);
+
+        if (conditionType != BuiltinType.BOOL) {
+            throw new SemanticException(
+                    "While condition must be BOOLEAN, found %s",
+                    conditionType,
+                    statement.condition().range());
+        }
+
+        analyzeBlockStatement(statement.body(), scope);
+    }
+
+    private void analyzeBlockStatement(final BlockStatement block, final Scope scope) {
+        for (final BlockItem item : block.items()) {
+            analyzeBlockItem(item, scope);
+        }
     }
 
     private void analyzeVariable(final VariableDeclaration declaration, final Scope scope) {
@@ -74,9 +91,9 @@ public final class SemanticAnalyzer {
 
         if (declaredType == null && initializerType == null) {
             throw new SemanticException(
-                    declaration.range(),
+                    declaration.name().range(),
                     "Cannot infer type for variable '%s' without an initializer",
-                    declaration.name());
+                    declaration.name().name());
         }
 
         if (declaredType != null && initializerType != null && !isAssignable(initializerType, declaredType)) {
@@ -118,7 +135,7 @@ public final class SemanticAnalyzer {
             case "int" -> BuiltinType.INT;
             case "float" -> BuiltinType.FLOAT;
             case "char" -> BuiltinType.CHAR;
-            case "boolean" -> BuiltinType.BOOLEAN;
+            case "boolean" -> BuiltinType.BOOL;
             case "string" -> BuiltinType.STRING;
             case "null" -> BuiltinType.NULL;
             default -> throw new SemanticException(
@@ -165,10 +182,10 @@ public final class SemanticAnalyzer {
 
     private Type analyzeLiteral(final LiteralExpression literal) {
         Type type = switch (literal.kind()) {
-            case INTEGER -> BuiltinType.INT;
+            case INT -> BuiltinType.INT;
             case FLOAT -> BuiltinType.FLOAT;
             case CHAR -> BuiltinType.CHAR;
-            case BOOLEAN -> BuiltinType.BOOLEAN;
+            case BOOL -> BuiltinType.BOOL;
             case STRING -> BuiltinType.STRING;
             case NULL -> BuiltinType.NULL;
         };

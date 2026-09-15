@@ -20,3 +20,7 @@ IDENTIFIER "foo" (1:5-1:8)
     initializer: null
   )
 )
+
+--- SEMANTIC ---
+
+SemanticException: Cannot infer type for variable 'foo' without an initializer at 1:5-1:8

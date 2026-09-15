@@ -17,7 +17,7 @@ RIGHT_BRACE (1:15-1:16)
     range: 1:1-1:16
     (LiteralExpression
       range: 1:8-1:12
-      kind: BOOLEAN
+      kind: bool
       text: "true"
     )
     (BlockStatement
@@ -25,3 +25,8 @@ RIGHT_BRACE (1:15-1:16)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:8-1:12 -> bool

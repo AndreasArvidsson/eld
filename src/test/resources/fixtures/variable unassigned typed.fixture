@@ -25,3 +25,11 @@ IDENTIFIER "int" (1:10-1:13)
     initializer: null
   )
 )
+
+--- SEMANTIC ---
+
+Resolved types:
+  1:10-1:13 -> int
+
+Declarations:
+  1:5-1:8 -> VariableSymbol[name=foo, type=int, mutability=VAR]

@@ -31,7 +31,7 @@ RIGHT_BRACE (1:22-1:23)
       operator: LESS
       (LiteralExpression
         range: 1:12-1:14
-        kind: INTEGER
+        kind: int
         text: "10"
       )
     )

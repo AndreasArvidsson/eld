@@ -38,20 +38,20 @@ INTEGER_LITERAL "4" (2:29-2:30)
         range: 1:22-1:27
         (LiteralExpression
           range: 1:22-1:23
-          kind: INTEGER
+          kind: int
           text: "2"
         )
         operator: MULTIPLY
         (LiteralExpression
           range: 1:26-1:27
-          kind: INTEGER
+          kind: int
           text: "3"
         )
       )
       operator: ADD
       (LiteralExpression
         range: 1:30-1:31
-        kind: INTEGER
+        kind: int
         text: "4"
       )
     )
@@ -68,7 +68,7 @@ INTEGER_LITERAL "4" (2:29-2:30)
       range: 2:21-2:30
       (LiteralExpression
         range: 2:21-2:22
-        kind: INTEGER
+        kind: int
         text: "2"
       )
       operator: ADD
@@ -76,13 +76,13 @@ INTEGER_LITERAL "4" (2:29-2:30)
         range: 2:25-2:30
         (LiteralExpression
           range: 2:25-2:26
-          kind: INTEGER
+          kind: int
           text: "3"
         )
         operator: MULTIPLY
         (LiteralExpression
           range: 2:29-2:30
-          kind: INTEGER
+          kind: int
           text: "4"
         )
       )

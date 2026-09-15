@@ -26,7 +26,7 @@ INTEGER_LITERAL "10" (1:18-1:20)
     )
     (LiteralExpression
       range: 1:18-1:20
-      kind: INTEGER
+      kind: int
       text: "10"
     )
   )
@@ -35,10 +35,10 @@ INTEGER_LITERAL "10" (1:18-1:20)
 --- SEMANTIC ---
 
 Expression types:
-  1:18-1:20 -> INT
+  1:18-1:20 -> int
 
 Resolved types:
-  1:12-1:15 -> INT
+  1:12-1:15 -> int
 
 Declarations:
-  1:7-1:10 -> VariableSymbol[name=foo, type=INT, mutability=CONST]
+  1:7-1:10 -> VariableSymbol[name=foo, type=int, mutability=CONST]

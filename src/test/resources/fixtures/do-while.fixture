@@ -21,7 +21,7 @@ RIGHT_PAREN (1:18-1:19)
     )
     (LiteralExpression
       range: 1:14-1:18
-      kind: BOOLEAN
+      kind: bool
       text: "true"
     )
   )

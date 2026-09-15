@@ -33,21 +33,21 @@ INTEGER_LITERAL "10" (1:31-1:33)
           operator: MINUS
           (LiteralExpression
             range: 1:17-1:20
-            kind: FLOAT
+            kind: float
             text: "0.5"
           )
         )
         operator: ADD
         (LiteralExpression
           range: 1:23-1:28
-          kind: FLOAT
+          kind: float
           text: "12.34"
         )
       )
       operator: SUBTRACT
       (LiteralExpression
         range: 1:31-1:33
-        kind: INTEGER
+        kind: int
         text: "10"
       )
     )

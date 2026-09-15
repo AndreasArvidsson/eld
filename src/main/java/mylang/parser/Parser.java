@@ -363,9 +363,9 @@ public final class Parser {
             case IDENTIFIER:
                 return new IdentifierExpression(token.text(), token.range());
             case BOOLEAN_LITERAL:
-                return new LiteralExpression(LiteralKind.BOOLEAN, token.text(), token.range());
+                return new LiteralExpression(LiteralKind.BOOL, token.text(), token.range());
             case INTEGER_LITERAL:
-                return new LiteralExpression(LiteralKind.INTEGER, token.text(), token.range());
+                return new LiteralExpression(LiteralKind.INT, token.text(), token.range());
             case FLOAT_LITERAL:
                 return new LiteralExpression(LiteralKind.FLOAT, token.text(), token.range());
             case STRING_LITERAL:

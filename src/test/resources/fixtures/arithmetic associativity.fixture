@@ -29,20 +29,20 @@ INTEGER_LITERAL "2" (1:25-1:26)
         range: 1:16-1:22
         (LiteralExpression
           range: 1:16-1:18
-          kind: INTEGER
+          kind: int
           text: "10"
         )
         operator: SUBTRACT
         (LiteralExpression
           range: 1:21-1:22
-          kind: INTEGER
+          kind: int
           text: "3"
         )
       )
       operator: SUBTRACT
       (LiteralExpression
         range: 1:25-1:26
-        kind: INTEGER
+        kind: int
         text: "2"
       )
     )

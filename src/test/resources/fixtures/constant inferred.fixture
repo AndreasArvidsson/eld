@@ -21,8 +21,16 @@ INTEGER_LITERAL "10" (1:13-1:15)
     type: null
     (LiteralExpression
       range: 1:13-1:15
-      kind: INTEGER
+      kind: int
       text: "10"
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:15 -> int
+
+Declarations:
+  1:7-1:10 -> VariableSymbol[name=foo, type=int, mutability=CONST]
