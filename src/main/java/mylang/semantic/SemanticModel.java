@@ -8,8 +8,8 @@ import java.util.Objects;
 
 import org.jspecify.annotations.Nullable;
 
-import mylang.parser.Declaration;
 import mylang.parser.Expression;
+import mylang.parser.Identifier;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.TypeNode;
 
@@ -18,7 +18,7 @@ public final class SemanticModel {
     private final Map<Expression, Type> expressionTypes = new IdentityHashMap<>();
     private final Map<TypeNode, Type> resolvedTypes = new IdentityHashMap<>();
     private final Map<IdentifierExpression, Symbol> symbols = new IdentityHashMap<>();
-    private final Map<Declaration, Symbol> declarations = new IdentityHashMap<>();
+    private final Map<Identifier, Symbol> declarations = new IdentityHashMap<>();
 
     public void setExpressionType(final Expression expression, final Type type) {
         expressionTypes.put(expression, type);
@@ -43,7 +43,7 @@ public final class SemanticModel {
     }
 
     public void setSymbol(
-            final Declaration declaration,
+            final Identifier declaration,
             final Symbol symbol) {
         declarations.put(declaration, symbol);
     }
@@ -52,7 +52,7 @@ public final class SemanticModel {
         return symbols.get(expression);
     }
 
-    public @Nullable Symbol getSymbol(final Declaration declaration) {
+    public @Nullable Symbol getSymbol(final Identifier declaration) {
         return declarations.get(declaration);
     }
 

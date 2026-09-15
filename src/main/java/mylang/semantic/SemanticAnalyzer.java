@@ -81,19 +81,19 @@ public final class SemanticAnalyzer {
 
         if (declaredType != null && initializerType != null && !isAssignable(initializerType, declaredType)) {
             throw new SemanticException(
-                    declaration.range(),
+                    Objects.requireNonNull(initializer).range(),
                     "Type mismatch: cannot assign %s to %s",
                     initializerType,
                     declaredType);
         }
 
         final VariableSymbol symbol = new VariableSymbol(
-                declaration.name(),
+                declaration.name().name(),
                 declaredType != null ? declaredType : Objects.requireNonNull(initializerType),
                 declaration.mutability());
 
         scope.declare(symbol);
-        model.setSymbol(declaration, symbol);
+        model.setSymbol(declaration.name(), symbol);
     }
 
     private boolean isAssignable(final Type from, final Type to) {

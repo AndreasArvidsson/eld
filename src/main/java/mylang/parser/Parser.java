@@ -268,18 +268,19 @@ public final class Parser {
     private VariableDeclaration parseVariableDeclaration(final Token keyword, final Mutability mutability) {
         final Token name = expect(TokenType.IDENTIFIER);
         final @Nullable TypeNode type = match(TokenType.COLON) ? parseType() : null;
+        final Identifier identifier = new Identifier(name.text(), name.range());
 
         // var with no initializer
         if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
             final Position end = type != null ? type.range().end() : name.range().end();
             final Range range = new Range(keyword.range().start(), end);
-            return new VariableDeclaration(mutability, name.text(), type, null, range);
+            return new VariableDeclaration(mutability, identifier, type, null, range);
         }
 
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
         final Range range = new Range(keyword.range().start(), initializer.range().end());
-        return new VariableDeclaration(mutability, name.text(), type, initializer, range);
+        return new VariableDeclaration(mutability, identifier, type, initializer, range);
     }
 
     private TypeNode parseType() {
