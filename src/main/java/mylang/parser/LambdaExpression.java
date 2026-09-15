@@ -8,8 +8,7 @@ import org.jspecify.annotations.Nullable;
 import mylang.Range;
 
 public record LambdaExpression(
-        List<@NonNull Parameter> parameters,
-        @Nullable TypeNode returnType,
-        AstNode body,
-        Range range) implements Expression {
+    List<@NonNull Parameter> parameters, @Nullable TypeNode returnType,
+    AstNode body, Range range
+) implements Expression {
 }

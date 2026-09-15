@@ -7,9 +7,8 @@ import mylang.parser.IdentifierDeclaration;
 import mylang.parser.Mutability;
 
 public record VariableSymbol(
-        IdentifierDeclaration declaration,
-        Type type,
-        Mutability mutability) implements Symbol {
+    IdentifierDeclaration declaration, Type type, Mutability mutability
+) implements Symbol {
 
     @Override
     public String name() {
@@ -24,10 +23,12 @@ public record VariableSymbol(
     @Override
     public String toString() {
         return Objects.requireNonNull(
-                String.format(
-                        "VariableSymbol(name=%s, type=%s, mutability=%s)",
-                        name(),
-                        type,
-                        mutability));
+            String.format(
+                "VariableSymbol(name=%s, type=%s, mutability=%s)",
+                name(),
+                type,
+                mutability
+            )
+        );
     }
 }

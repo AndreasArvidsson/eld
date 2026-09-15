@@ -4,9 +4,18 @@ import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
 
-public record Range(Position start, Position end) implements Comparable<@NonNull Range> {
-    public Range(final int startLine, final int startColumn, final int endLine, final int endColumn) {
-        this(new Position(startLine, startColumn), new Position(endLine, endColumn));
+public record Range(Position start, Position end)
+    implements Comparable<@NonNull Range> {
+    public Range(
+        final int startLine,
+        final int startColumn,
+        final int endLine,
+        final int endColumn
+    ) {
+        this(
+            new Position(startLine, startColumn),
+            new Position(endLine, endColumn)
+        );
     }
 
     @Override

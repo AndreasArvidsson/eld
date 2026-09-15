@@ -12,54 +12,66 @@ import mylang.Position;
 import mylang.Range;
 
 public class Lexer {
-    private static final Map<String, TokenType> KEYWORDS = Objects.requireNonNull(Map.ofEntries(
-            Map.entry("const", TokenType.CONST),
-            Map.entry("var", TokenType.VAR),
-            Map.entry("func", TokenType.FUNC),
-            Map.entry("if", TokenType.IF),
-            Map.entry("elif", TokenType.ELIF),
-            Map.entry("else", TokenType.ELSE),
-            Map.entry("do", TokenType.DO),
-            Map.entry("while", TokenType.WHILE),
-            Map.entry("for", TokenType.FOR),
-            Map.entry("return", TokenType.RETURN),
-            Map.entry("break", TokenType.BREAK),
-            Map.entry("continue", TokenType.CONTINUE),
-            Map.entry("null", TokenType.NULL),
-            Map.entry("true", TokenType.BOOLEAN_LITERAL),
-            Map.entry("false", TokenType.BOOLEAN_LITERAL)));
+    private static final Map<String, TokenType> KEYWORDS =
+        Objects.requireNonNull(
+            Map.ofEntries(
+                Map.entry("const", TokenType.CONST),
+                Map.entry("var", TokenType.VAR),
+                Map.entry("func", TokenType.FUNC),
+                Map.entry("if", TokenType.IF),
+                Map.entry("elif", TokenType.ELIF),
+                Map.entry("else", TokenType.ELSE),
+                Map.entry("do", TokenType.DO),
+                Map.entry("while", TokenType.WHILE),
+                Map.entry("for", TokenType.FOR),
+                Map.entry("return", TokenType.RETURN),
+                Map.entry("break", TokenType.BREAK),
+                Map.entry("continue", TokenType.CONTINUE),
+                Map.entry("null", TokenType.NULL),
+                Map.entry("true", TokenType.BOOLEAN_LITERAL),
+                Map.entry("false", TokenType.BOOLEAN_LITERAL)
+            )
+        );
 
-    private static final Map<Character, TokenType> SYMBOLS = Objects.requireNonNull(Map.ofEntries(
-            Map.entry('\0', TokenType.EOF),
-            Map.entry('=', TokenType.EQUAL),
-            Map.entry('+', TokenType.PLUS),
-            Map.entry('-', TokenType.MINUS),
-            Map.entry('!', TokenType.BANG),
-            Map.entry('<', TokenType.LESS),
-            Map.entry('>', TokenType.GREATER),
-            Map.entry('*', TokenType.STAR),
-            Map.entry('/', TokenType.SLASH),
-            Map.entry('%', TokenType.PERCENT),
-            Map.entry(':', TokenType.COLON),
-            Map.entry(';', TokenType.SEMICOLON),
-            Map.entry(',', TokenType.COMMA),
-            Map.entry('(', TokenType.LEFT_PAREN),
-            Map.entry(')', TokenType.RIGHT_PAREN),
-            Map.entry('{', TokenType.LEFT_BRACE),
-            Map.entry('}', TokenType.RIGHT_BRACE),
-            Map.entry('[', TokenType.LEFT_BRACKET),
-            Map.entry(']', TokenType.RIGHT_BRACKET)));
+    private static final Map<Character, TokenType> SYMBOLS =
+        Objects.requireNonNull(
+            Map.ofEntries(
+                Map.entry('\0', TokenType.EOF),
+                Map.entry('=', TokenType.EQUAL),
+                Map.entry('+', TokenType.PLUS),
+                Map.entry('-', TokenType.MINUS),
+                Map.entry('!', TokenType.BANG),
+                Map.entry('<', TokenType.LESS),
+                Map.entry('>', TokenType.GREATER),
+                Map.entry('*', TokenType.STAR),
+                Map.entry('/', TokenType.SLASH),
+                Map.entry('%', TokenType.PERCENT),
+                Map.entry(':', TokenType.COLON),
+                Map.entry(';', TokenType.SEMICOLON),
+                Map.entry(',', TokenType.COMMA),
+                Map.entry('(', TokenType.LEFT_PAREN),
+                Map.entry(')', TokenType.RIGHT_PAREN),
+                Map.entry('{', TokenType.LEFT_BRACE),
+                Map.entry('}', TokenType.RIGHT_BRACE),
+                Map.entry('[', TokenType.LEFT_BRACKET),
+                Map.entry(']', TokenType.RIGHT_BRACKET)
+            )
+        );
 
-    private static final Map<String, TokenType> TWO_CHARACTER_SYMBOLS = Objects.requireNonNull(Map.ofEntries(
-            Map.entry("==", TokenType.EQUAL_EQUAL),
-            Map.entry("=>", TokenType.FAT_ARROW),
-            Map.entry("++", TokenType.PLUS_PLUS),
-            Map.entry("--", TokenType.MINUS_MINUS),
-            Map.entry("!=", TokenType.BANG_EQUAL),
-            Map.entry("<=", TokenType.LESS_EQUAL),
-            Map.entry(">=", TokenType.GREATER_EQUAL),
-            Map.entry("&&", TokenType.AND),
-            Map.entry("||", TokenType.OR)));
+    private static final Map<String, TokenType> TWO_CHARACTER_SYMBOLS =
+        Objects.requireNonNull(
+            Map.ofEntries(
+                Map.entry("==", TokenType.EQUAL_EQUAL),
+                Map.entry("=>", TokenType.FAT_ARROW),
+                Map.entry("++", TokenType.PLUS_PLUS),
+                Map.entry("--", TokenType.MINUS_MINUS),
+                Map.entry("!=", TokenType.BANG_EQUAL),
+                Map.entry("<=", TokenType.LESS_EQUAL),
+                Map.entry(">=", TokenType.GREATER_EQUAL),
+                Map.entry("&&", TokenType.AND),
+                Map.entry("||", TokenType.OR)
+            )
+        );
 
     private final String source;
     private int position, line, column;
@@ -114,7 +126,9 @@ public class Lexer {
         }
 
         if (position + 1 < source.length()) {
-            final String text = Objects.requireNonNull(source.substring(position, position + 2));
+            final String text =
+                Objects
+                    .requireNonNull(source.substring(position, position + 2));
             final TokenType type = TWO_CHARACTER_SYMBOLS.get(text);
             if (type != null) {
                 advance();
@@ -131,8 +145,10 @@ public class Lexer {
         }
 
         throw new LexerException(
-                new Range(line, column, line, column + 1),
-                "Unexpected character '%c'", next);
+            new Range(line, column, line, column + 1),
+            "Unexpected character '%c'",
+            next
+        );
     }
 
     private void skipWhitespace() {
@@ -151,14 +167,20 @@ public class Lexer {
         final StringBuilder builder = new StringBuilder();
         while (true) {
             final Character next = peek();
-            if (next == null || !(next == '_' || Character.isAlphabetic(next) || Character.isDigit(next))) {
+            if (
+                next == null || !(next == '_' || Character.isAlphabetic(next)
+                    || Character.isDigit(next))
+            ) {
                 break;
             }
             builder.append(next);
             advance();
         }
         final String text = Objects.requireNonNull(builder.toString());
-        final TokenType type = Objects.requireNonNull(KEYWORDS.getOrDefault(text, TokenType.IDENTIFIER));
+        final TokenType type =
+            Objects.requireNonNull(
+                KEYWORDS.getOrDefault(text, TokenType.IDENTIFIER)
+            );
         return createToken(type, text);
     }
 
@@ -169,8 +191,11 @@ public class Lexer {
         TokenType type = TokenType.INTEGER_LITERAL;
         final Character next = peek();
 
-        if (next != null && next == '.' && position + 1 < source.length()
-                && Character.isDigit(source.charAt(position + 1))) {
+        if (
+            next != null && next == '.'
+                && position + 1 < source.length()
+                && Character.isDigit(source.charAt(position + 1))
+        ) {
             type = TokenType.FLOAT_LITERAL;
             builder.append(next);
             advance();
@@ -193,7 +218,10 @@ public class Lexer {
                 while (end < source.length() && source.charAt(end) == '_') {
                     end++;
                 }
-                if (end >= source.length() || !Character.isDigit(source.charAt(end))) {
+                if (
+                    end >= source.length()
+                        || !Character.isDigit(source.charAt(end))
+                ) {
                     return;
                 }
                 while (position < end) {
@@ -201,7 +229,8 @@ public class Lexer {
                     advance();
                 }
                 continue;
-            } else if (!Character.isDigit(next)) {
+            }
+            else if (!Character.isDigit(next)) {
                 return;
             }
             builder.append(next);
@@ -232,14 +261,17 @@ public class Lexer {
         }
 
         if (peek() == null || peek() != '"') {
-            throw new LexerException(new Range(line, column, line, column + 1),
-                    "Unterminated string literal");
+            throw new LexerException(
+                new Range(line, column, line, column + 1),
+                "Unterminated string literal"
+            );
         }
 
         // Skip the closing double quote.
         advance();
 
-        final String text = Objects.requireNonNull(String.format("\"%s\"", builder.toString()));
+        final String text =
+            Objects.requireNonNull(String.format("\"%s\"", builder.toString()));
         return createToken(TokenType.STRING_LITERAL, text);
     }
 
@@ -250,20 +282,25 @@ public class Lexer {
         final Character value = peek();
 
         if (value == null || value == '\'') {
-            throw new LexerException(new Range(line, column, line, column + 1),
-                    "Empty character literal");
+            throw new LexerException(
+                new Range(line, column, line, column + 1),
+                "Empty character literal"
+            );
         }
 
         advance();
 
         if (peek() == null || peek() != '\'') {
-            throw new LexerException(new Range(line, column, line, column + 1),
-                    "Character literal must contain exactly one character");
+            throw new LexerException(
+                new Range(line, column, line, column + 1),
+                "Character literal must contain exactly one character"
+            );
         }
 
         advance();
 
-        final String text = Objects.requireNonNull(String.format("'%c'", value));
+        final String text =
+            Objects.requireNonNull(String.format("'%c'", value));
         return createToken(TokenType.CHAR_LITERAL, text);
     }
 
@@ -289,7 +326,8 @@ public class Lexer {
         if (consumed == '\n') {
             line++;
             column = 1;
-        } else {
+        }
+        else {
             column++;
         }
     }

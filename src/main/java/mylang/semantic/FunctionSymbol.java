@@ -6,8 +6,8 @@ import mylang.Range;
 import mylang.parser.IdentifierDeclaration;
 
 public record FunctionSymbol(
-        IdentifierDeclaration declaration,
-        FunctionType type) implements Symbol {
+    IdentifierDeclaration declaration, FunctionType type
+) implements Symbol {
 
     @Override
     public String name() {
@@ -22,10 +22,12 @@ public record FunctionSymbol(
     @Override
     public String toString() {
         return Objects.requireNonNull(
-                String.format(
-                        "FunctionSymbol(name=%s, parameterTypes=%s, returnType=%s)",
-                        name(),
-                        type.parameterTypes(),
-                        type.returnType()));
+            String.format(
+                "FunctionSymbol(name=%s, parameterTypes=%s, returnType=%s)",
+                name(),
+                type.parameterTypes(),
+                type.returnType()
+            )
+        );
     }
 }

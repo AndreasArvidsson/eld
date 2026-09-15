@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jspecify.annotations.NonNull;
 
-public record FunctionType(
-        List<@NonNull Type> parameterTypes,
-        Type returnType) implements Type {
+public record FunctionType(List<@NonNull Type> parameterTypes, Type returnType)
+    implements Type {
 }

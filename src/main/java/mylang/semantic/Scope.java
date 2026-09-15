@@ -17,7 +17,11 @@ public final class Scope {
 
     public void declare(final Symbol symbol) {
         if (symbols.containsKey(symbol.name())) {
-            throw new SemanticException(symbol.range(), "Symbol already declared: %s", symbol.name());
+            throw new SemanticException(
+                symbol.range(),
+                "Symbol already declared: %s",
+                symbol.name()
+            );
         }
 
         symbols.put(symbol.name(), symbol);

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles version="21">
+    <profile kind="CodeFormatterProfile" name="Andreas" version="21">
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space" />
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4" />
+        <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4" />
+        <setting id="org.eclipse.jdt.core.formatter.continuation_indentation" value="1" />
+        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="80" />
+        <setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="80" />
+        <setting id="org.eclipse.jdt.core.formatter.blank_lines_between_import_groups" value="0" />
+
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_method_delcaration"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_method_invocation"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_annotation"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_catch_clause"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_for_statement"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_if_while_statement"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_switch_statement"
+            value="separate_lines_if_wrapped" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.parentheses_positions_in_enum_constant_declaration"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_lambda_declaration"
+            value="separate_lines_if_wrapped" />
+        <setting id="org.eclipse.jdt.core.formatter.parentheses_positions_in_record_declaration"
+            value="separate_lines_if_wrapped" />
+
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_annotation"
+            value="16" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_method_invocation"
+            value="48" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_allocation_expression"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_enum_constant"
+            value="48" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_explicit_constructor_call"
+            value="48" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_arguments_in_qualified_allocation_expression"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_selector_in_method_invocation"
+            value="80" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_parameters_in_method_declaration"
+            value="48" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_parameters_in_constructor_declaration"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_type_arguments"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_type_parameters"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_assignment" value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_union_type_in_multicatch"
+            value="48" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_throws_clause_in_method_declaration"
+            value="48" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_throws_clause_in_constructor_declaration"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_conditional_expression"
+            value="48" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_enum_constants" value="49" />
+        <setting id="org.eclipse.jdt.core.formatter.alignment_for_logical_operator" value="80"
+        />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_superclass_in_type_declaration"
+            value="16" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_superinterfaces_in_type_declaration"
+            value="16" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.alignment_for_superinterfaces_in_record_declaration"
+            value="16" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_new_line_before_else_in_if_statement"
+            value="insert" />
+        <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_catch_in_try_statement"
+            value="insert" />
+        <setting id="org.eclipse.jdt.core.formatter.insert_new_line_before_finally_in_try_statement"
+            value="insert" />
+
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_javadoc_comments" value="false" />
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_block_comments" value="false" />
+        <setting id="org.eclipse.jdt.core.formatter.comment.format_line_comments" value="false" />
+
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_case"
+            value="do not insert" />
+        <setting id="org.eclipse.jdt.core.formatter.insert_space_before_colon_in_default"
+            value="do not insert" />
+
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_space_before_opening_brace_in_array_initializer"
+            value="insert" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_space_after_opening_brace_in_array_initializer"
+            value="do not insert" />
+        <setting
+            id="org.eclipse.jdt.core.formatter.insert_space_before_closing_brace_in_array_initializer"
+            value="do not insert" />
+
+        <setting id="org.eclipse.jdt.core.formatter.keep_code_block_on_one_line"
+            value="one_line_if_empty" />
+        <setting id="org.eclipse.jdt.core.formatter.keep_method_body_on_one_line"
+            value="one_line_if_empty" />
+
+        <setting id="org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_switch"
+            value="true" />
+
+    </profile>
+</profiles>
+
+<!--
+https://help.eclipse.org/latest/index.jsp?topic=%2Forg.eclipse.jdt.doc.isv%2Freference%2Fapi%2Forg%2Feclipse%2Fjdt%2Fcore%2Fformatter%2FDefaultCodeFormatterConstants.html
+https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml
+
+Alignment value mapping:
+value = wrap + indent + force
+
+force:
+0 = false
+1 = true
+
+indent:
+0 = INDENT_DEFAULT
+2 = INDENT_ON_COLUMN
+4 = INDENT_BY_ONE
+
+wrap:
+0 = WRAP_NO_SPLIT
+16 = WRAP_COMPACT
+32 = WRAP_COMPACT_FIRST_BREAK
+48 = WRAP_ONE_PER_LINE
+64 = WRAP_NEXT_SHIFTED
+80 = WRAP_NEXT_PER_LINE
+
+Common values:
+0  = false, WRAP_NO_SPLIT, INDENT_DEFAULT
+16 = false, WRAP_COMPACT, INDENT_DEFAULT
+32 = false, WRAP_COMPACT_FIRST_BREAK, INDENT_DEFAULT
+48 = false, WRAP_ONE_PER_LINE, INDENT_DEFAULT
+64 = false, WRAP_NEXT_SHIFTED, INDENT_DEFAULT
+80 = false, WRAP_NEXT_PER_LINE, INDENT_DEFAULT
+
+Add 1 for forceSplit=true, 2 for INDENT_ON_COLUMN, and 4 for INDENT_BY_ONE.
+Examples:
+49 = true, WRAP_ONE_PER_LINE, INDENT_DEFAULT
+50 = false, WRAP_ONE_PER_LINE, INDENT_ON_COLUMN
+52 = false, WRAP_ONE_PER_LINE, INDENT_BY_ONE
+81 = true, WRAP_NEXT_PER_LINE, INDENT_DEFAULT
+-->

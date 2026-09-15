@@ -9,18 +9,17 @@ public record Token(TokenType type, String text, Range range) {
     @Override
     public String toString() {
         final String typeText = switch (type()) {
-            case IDENTIFIER,
-                    INTEGER_LITERAL,
-                    FLOAT_LITERAL,
-                    CHAR_LITERAL,
-                    STRING_LITERAL,
-                    BOOLEAN_LITERAL ->
-                String.format("%s \"%s\"", type(), text()
-                        .replace("\\", "\\\\")
+            case IDENTIFIER, INTEGER_LITERAL, FLOAT_LITERAL, CHAR_LITERAL,
+                STRING_LITERAL,
+                BOOLEAN_LITERAL -> String.format(
+                    "%s \"%s\"",
+                    type(),
+                    text().replace("\\", "\\\\")
                         .replace("\"", "\\\"")
                         .replace("\n", "\\n")
                         .replace("\r", "\\r")
-                        .replace("\t", "\\t"));
+                        .replace("\t", "\\t")
+                );
 
             default -> type().name();
         };

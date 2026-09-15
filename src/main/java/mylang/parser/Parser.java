@@ -15,24 +15,35 @@ import mylang.lexer.TokenType;
 
 public final class Parser {
 
-    private static final Map<TokenType, BinaryOperator> BINARY_OPERATORS = Objects.requireNonNull(Map.ofEntries(
-            Map.entry(TokenType.PLUS, BinaryOperator.ADD),
-            Map.entry(TokenType.MINUS, BinaryOperator.SUBTRACT),
-            Map.entry(TokenType.STAR, BinaryOperator.MULTIPLY),
-            Map.entry(TokenType.SLASH, BinaryOperator.DIVIDE),
-            Map.entry(TokenType.PERCENT, BinaryOperator.MODULO),
-            Map.entry(TokenType.EQUAL_EQUAL, BinaryOperator.EQUAL),
-            Map.entry(TokenType.BANG_EQUAL, BinaryOperator.NOT_EQUAL),
-            Map.entry(TokenType.LESS, BinaryOperator.LESS),
-            Map.entry(TokenType.LESS_EQUAL, BinaryOperator.LESS_EQUAL),
-            Map.entry(TokenType.GREATER, BinaryOperator.GREATER),
-            Map.entry(TokenType.GREATER_EQUAL, BinaryOperator.GREATER_EQUAL),
-            Map.entry(TokenType.AND, BinaryOperator.AND),
-            Map.entry(TokenType.OR, BinaryOperator.OR)));
+    private static final Map<TokenType, BinaryOperator> BINARY_OPERATORS =
+        Objects.requireNonNull(
+            Map.ofEntries(
+                Map.entry(TokenType.PLUS, BinaryOperator.ADD),
+                Map.entry(TokenType.MINUS, BinaryOperator.SUBTRACT),
+                Map.entry(TokenType.STAR, BinaryOperator.MULTIPLY),
+                Map.entry(TokenType.SLASH, BinaryOperator.DIVIDE),
+                Map.entry(TokenType.PERCENT, BinaryOperator.MODULO),
+                Map.entry(TokenType.EQUAL_EQUAL, BinaryOperator.EQUAL),
+                Map.entry(TokenType.BANG_EQUAL, BinaryOperator.NOT_EQUAL),
+                Map.entry(TokenType.LESS, BinaryOperator.LESS),
+                Map.entry(TokenType.LESS_EQUAL, BinaryOperator.LESS_EQUAL),
+                Map.entry(TokenType.GREATER, BinaryOperator.GREATER),
+                Map.entry(
+                    TokenType.GREATER_EQUAL,
+                    BinaryOperator.GREATER_EQUAL
+                ),
+                Map.entry(TokenType.AND, BinaryOperator.AND),
+                Map.entry(TokenType.OR, BinaryOperator.OR)
+            )
+        );
 
-    private static final Map<TokenType, PostfixOperator> POSTFIX_OPERATORS = Objects.requireNonNull(Map.ofEntries(
-            Map.entry(TokenType.PLUS_PLUS, PostfixOperator.INCREMENT),
-            Map.entry(TokenType.MINUS_MINUS, PostfixOperator.DECREMENT)));
+    private static final Map<TokenType, PostfixOperator> POSTFIX_OPERATORS =
+        Objects.requireNonNull(
+            Map.ofEntries(
+                Map.entry(TokenType.PLUS_PLUS, PostfixOperator.INCREMENT),
+                Map.entry(TokenType.MINUS_MINUS, PostfixOperator.DECREMENT)
+            )
+        );
 
     private final List<@NonNull Token> tokens;
     private int position;
@@ -53,8 +64,10 @@ public final class Parser {
             return new Program(items, new Range(0, 0, 0, 0));
         }
 
-        final Position start = Objects.requireNonNull(items.get(0)).range().start();
-        final Position end = Objects.requireNonNull(items.get(items.size() - 1)).range().end();
+        final Position start =
+            Objects.requireNonNull(items.get(0)).range().start();
+        final Position end =
+            Objects.requireNonNull(items.get(items.size() - 1)).range().end();
         final Range range = new Range(start, end);
 
         return new Program(items, range);
@@ -69,7 +82,8 @@ public final class Parser {
         }
 
         final Token close = expect(TokenType.RIGHT_BRACE);
-        final Range range = new Range(open.range().start(), close.range().end());
+        final Range range =
+            new Range(open.range().start(), close.range().end());
 
         return new BlockStatement(items, range);
     }
@@ -100,14 +114,16 @@ public final class Parser {
                 return parseReturnStatement(token);
             case IDENTIFIER:
                 if (check(TokenType.LEFT_PAREN)) {
-                    final IdentifierExpression callee = new IdentifierExpression(token.text(), token.range());
+                    final IdentifierExpression callee =
+                        new IdentifierExpression(token.text(), token.range());
                     final CallExpression call = parseCallExpression(callee);
                     return new ExpressionStatement(call, call.range());
                 }
                 break;
             case LEFT_PAREN:
                 if (isLambdaAfterOpenParen()) {
-                    final LambdaExpression lambda = parseLambdaExpression(token);
+                    final LambdaExpression lambda =
+                        parseLambdaExpression(token);
                     return new ExpressionStatement(lambda, lambda.range());
                 }
                 break;
@@ -115,15 +131,20 @@ public final class Parser {
                 break;
         }
 
-        throw new ParserException(token.range(), "Expected declaration or statement");
+        throw new ParserException(
+            token.range(),
+            "Expected declaration or statement"
+        );
     }
 
     private ReturnStatement parseReturnStatement(final Token keyword) {
-        final Expression value = !isAtEnd() && !check(TokenType.RIGHT_BRACE)
-                && current().range().start().line() == keyword.range().start().line()
-                        ? parseExpression()
-                        : null;
-        final Range range = value != null
+        final Expression value =
+            !isAtEnd() && !check(TokenType.RIGHT_BRACE)
+                && current().range().start().line() == keyword.range()
+                    .start()
+                    .line() ? parseExpression() : null;
+        final Range range =
+            value != null
                 ? new Range(keyword.range().start(), value.range().end())
                 : keyword.range();
         return new ReturnStatement(value, range);
@@ -131,7 +152,8 @@ public final class Parser {
 
     private FunctionDeclaration parseFunctionDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
-        final IdentifierDeclaration nameId = new IdentifierDeclaration(name.text(), name.range());
+        final IdentifierDeclaration nameId =
+            new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
         final List<@NonNull Parameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
@@ -139,16 +161,29 @@ public final class Parser {
                 final Token paramName = expect(TokenType.IDENTIFIER);
                 expect(TokenType.COLON);
                 final TypeNode type = parseType();
-                final Range paramRange = new Range(paramName.range().start(), type.range().end());
-                final IdentifierDeclaration id = new IdentifierDeclaration(paramName.text(), paramName.range());
+                final Range paramRange =
+                    new Range(paramName.range().start(), type.range().end());
+                final IdentifierDeclaration id =
+                    new IdentifierDeclaration(
+                        paramName.text(),
+                        paramName.range()
+                    );
                 parameters.add(new Parameter(id, type, paramRange));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
-        final TypeNode returnType = check(TokenType.LEFT_BRACE) ? null : parseType();
+        final TypeNode returnType =
+            check(TokenType.LEFT_BRACE) ? null : parseType();
         final BlockStatement body = parseBlockStatement();
-        final Range range = new Range(keyword.range().start(), body.range().end());
-        return new FunctionDeclaration(nameId, parameters, returnType, body, range);
+        final Range range =
+            new Range(keyword.range().start(), body.range().end());
+        return new FunctionDeclaration(
+            nameId,
+            parameters,
+            returnType,
+            body,
+            range
+        );
     }
 
     private CallExpression parseCallExpression(final Expression callee) {
@@ -162,7 +197,8 @@ public final class Parser {
         }
 
         final Token close = expect(TokenType.RIGHT_PAREN);
-        final Range range = new Range(callee.range().start(), close.range().end());
+        final Range range =
+            new Range(callee.range().start(), close.range().end());
         return new CallExpression(callee, arguments, range);
     }
 
@@ -176,50 +212,62 @@ public final class Parser {
     }
 
     private boolean isForEachHeader() {
-        return check(TokenType.IDENTIFIER)
-                && (check(1, TokenType.COLON)
-                        || (check(1, TokenType.COMMA)
-                                && check(2, TokenType.IDENTIFIER)
-                                && check(3, TokenType.COLON)));
+        return check(TokenType.IDENTIFIER) && (check(1, TokenType.COLON)
+            || (check(1, TokenType.COMMA) && check(2, TokenType.IDENTIFIER)
+                && check(3, TokenType.COLON)));
     }
 
     private ForStatement parseCountedForStatement(final Token keyword) {
         final @Nullable Statement initializer;
         if (check(TokenType.SEMICOLON)) {
             initializer = null;
-        } else if (check(TokenType.VAR) || check(TokenType.CONST)) {
+        }
+        else if (check(TokenType.VAR) || check(TokenType.CONST)) {
             final Token declarationKeyword = advance();
-            final Mutability mutability = declarationKeyword.type() == TokenType.VAR
+            final Mutability mutability =
+                declarationKeyword.type() == TokenType.VAR
                     ? Mutability.VAR
                     : Mutability.CONST;
-            final VariableDeclaration declaration = parseVariableDeclaration(declarationKeyword, mutability);
-            initializer = new DeclarationStatement(declaration, declaration.range());
-        } else {
+            final VariableDeclaration declaration =
+                parseVariableDeclaration(declarationKeyword, mutability);
+            initializer =
+                new DeclarationStatement(declaration, declaration.range());
+        }
+        else {
             final Expression expression = parseExpression();
-            initializer = new ExpressionStatement(expression, expression.range());
+            initializer =
+                new ExpressionStatement(expression, expression.range());
         }
         expect(TokenType.SEMICOLON);
 
-        final @Nullable Expression condition = check(TokenType.SEMICOLON) ? null : parseExpression();
+        final @Nullable Expression condition =
+            check(TokenType.SEMICOLON) ? null : parseExpression();
         expect(TokenType.SEMICOLON);
-        final @Nullable Expression update = check(TokenType.RIGHT_PAREN) ? null : parseExpression();
+        final @Nullable Expression update =
+            check(TokenType.RIGHT_PAREN) ? null : parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
-        final Range range = new Range(keyword.range().start(), body.range().end());
+        final Range range =
+            new Range(keyword.range().start(), body.range().end());
         return new ForStatement(initializer, condition, update, body, range);
     }
 
     private ForEachStatement parseForEachStatement(final Token keyword) {
         final Token value = expect(TokenType.IDENTIFIER);
-        final Token index = match(TokenType.COMMA) ? expect(TokenType.IDENTIFIER) : null;
-        final IdentifierDeclaration valueId = new IdentifierDeclaration(value.text(), value.range());
-        final IdentifierDeclaration indexId = index != null ? new IdentifierDeclaration(index.text(), index.range())
+        final Token index =
+            match(TokenType.COMMA) ? expect(TokenType.IDENTIFIER) : null;
+        final IdentifierDeclaration valueId =
+            new IdentifierDeclaration(value.text(), value.range());
+        final IdentifierDeclaration indexId =
+            index != null
+                ? new IdentifierDeclaration(index.text(), index.range())
                 : null;
         expect(TokenType.COLON);
         final Expression iterable = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
-        final Range range = new Range(keyword.range().start(), body.range().end());
+        final Range range =
+            new Range(keyword.range().start(), body.range().end());
         return new ForEachStatement(valueId, indexId, iterable, body, range);
     }
 
@@ -228,7 +276,8 @@ public final class Parser {
         final Expression condition = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
-        final Range range = new Range(keyword.range().start(), body.range().end());
+        final Range range =
+            new Range(keyword.range().start(), body.range().end());
         return new WhileStatement(condition, body, range);
     }
 
@@ -238,7 +287,8 @@ public final class Parser {
         expect(TokenType.LEFT_PAREN);
         final Expression condition = parseExpression();
         final Token close = expect(TokenType.RIGHT_PAREN);
-        final Range range = new Range(keyword.range().start(), close.range().end());
+        final Range range =
+            new Range(keyword.range().start(), close.range().end());
         return new DoWhileStatement(body, condition, range);
     }
 
@@ -255,37 +305,71 @@ public final class Parser {
             final Expression elifCondition = parseExpression();
             expect(TokenType.RIGHT_PAREN);
             final BlockStatement elifBranch = parseBlockStatement();
-            final Range elifRange = new Range(elifKeyword.range().start(), elifBranch.range().end());
-            elifBranches.add(new ElseIfBranch(elifCondition, elifBranch, elifRange));
+            final Range elifRange =
+                new Range(
+                    elifKeyword.range().start(),
+                    elifBranch.range().end()
+                );
+            elifBranches
+                .add(new ElseIfBranch(elifCondition, elifBranch, elifRange));
         }
 
-        final BlockStatement elseBranch = match(TokenType.ELSE) ? parseBlockStatement() : null;
+        final BlockStatement elseBranch =
+            match(TokenType.ELSE) ? parseBlockStatement() : null;
 
-        final Position end = elseBranch != null
+        final Position end =
+            elseBranch != null
                 ? elseBranch.range().end()
                 : elifBranches.isEmpty()
-                        ? thenBranch.range().end()
-                        : Objects.requireNonNull(elifBranches.getLast()).range().end();
+                    ? thenBranch.range().end()
+                    : Objects.requireNonNull(elifBranches.getLast())
+                        .range()
+                        .end();
         final Range range = new Range(keyword.range().start(), end);
-        return new IfStatement(condition, thenBranch, elifBranches, elseBranch, range);
+        return new IfStatement(
+            condition,
+            thenBranch,
+            elifBranches,
+            elseBranch,
+            range
+        );
     }
 
-    private VariableDeclaration parseVariableDeclaration(final Token keyword, final Mutability mutability) {
+    private VariableDeclaration parseVariableDeclaration(
+        final Token keyword,
+        final Mutability mutability
+    ) {
         final Token name = expect(TokenType.IDENTIFIER);
-        final @Nullable TypeNode type = match(TokenType.COLON) ? parseType() : null;
-        final IdentifierDeclaration identifier = new IdentifierDeclaration(name.text(), name.range());
+        final @Nullable TypeNode type =
+            match(TokenType.COLON) ? parseType() : null;
+        final IdentifierDeclaration identifier =
+            new IdentifierDeclaration(name.text(), name.range());
 
         // var with no initializer
         if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
-            final Position end = type != null ? type.range().end() : name.range().end();
+            final Position end =
+                type != null ? type.range().end() : name.range().end();
             final Range range = new Range(keyword.range().start(), end);
-            return new VariableDeclaration(mutability, identifier, type, null, range);
+            return new VariableDeclaration(
+                mutability,
+                identifier,
+                type,
+                null,
+                range
+            );
         }
 
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
-        final Range range = new Range(keyword.range().start(), initializer.range().end());
-        return new VariableDeclaration(mutability, identifier, type, initializer, range);
+        final Range range =
+            new Range(keyword.range().start(), initializer.range().end());
+        return new VariableDeclaration(
+            mutability,
+            identifier,
+            type,
+            initializer,
+            range
+        );
     }
 
     private TypeNode parseType() {
@@ -300,14 +384,21 @@ public final class Parser {
     private Expression parseBinaryExpression(final int minimumPrecedence) {
         Expression left = parseUnaryExpression();
         while (!isAtEnd()) {
-            final BinaryOperator operator = BINARY_OPERATORS.get(current().type());
+            final BinaryOperator operator =
+                BINARY_OPERATORS.get(current().type());
             if (operator == null || precedence(operator) < minimumPrecedence) {
                 break;
             }
             advance();
-            final Expression right = parseBinaryExpression(precedence(operator) + 1);
-            left = new BinaryExpression(left, operator, right,
-                    new Range(left.range().start(), right.range().end()));
+            final Expression right =
+                parseBinaryExpression(precedence(operator) + 1);
+            left =
+                new BinaryExpression(
+                    left,
+                    operator,
+                    right,
+                    new Range(left.range().start(), right.range().end())
+                );
         }
         return left;
     }
@@ -325,8 +416,14 @@ public final class Parser {
 
     private Expression parseUnaryExpression() {
         if (isAtEnd()) {
-            final Position end = Objects.requireNonNull(tokens.get(tokens.size() - 1)).range().end();
-            throw new ParserException(new Range(end, end), "Expected expression, but reached end of input");
+            final Position end =
+                Objects.requireNonNull(tokens.get(tokens.size() - 1))
+                    .range()
+                    .end();
+            throw new ParserException(
+                new Range(end, end),
+                "Expected expression, but reached end of input"
+            );
         }
         final Token token = advance();
         final UnaryOperator operator = switch (token.type()) {
@@ -337,8 +434,11 @@ public final class Parser {
         };
         if (operator != null) {
             final Expression operand = parseUnaryExpression();
-            return new UnaryExpression(operator, operand,
-                    new Range(token.range().start(), operand.range().end()));
+            return new UnaryExpression(
+                operator,
+                operand,
+                new Range(token.range().start(), operand.range().end())
+            );
         }
         Expression left = parsePrimitiveExpression(token);
         while (!isAtEnd()) {
@@ -347,9 +447,11 @@ public final class Parser {
             if (postfix != null) {
                 advance();
                 left = parsePostfixExpression(left, postfix, next);
-            } else if (check(TokenType.LEFT_PAREN)) {
+            }
+            else if (check(TokenType.LEFT_PAREN)) {
                 left = parseCallExpression(left);
-            } else {
+            }
+            else {
                 break;
             }
         }
@@ -360,36 +462,58 @@ public final class Parser {
         return switch (token.type()) {
             case IDENTIFIER ->
                 new IdentifierExpression(token.text(), token.range());
-            case BOOLEAN_LITERAL ->
-                new LiteralExpression(LiteralKind.BOOL, token.text(), token.range());
-            case INTEGER_LITERAL ->
-                new LiteralExpression(LiteralKind.INT, token.text(), token.range());
-            case FLOAT_LITERAL ->
-                new LiteralExpression(LiteralKind.FLOAT, token.text(), token.range());
-            case STRING_LITERAL ->
-                new LiteralExpression(LiteralKind.STRING, token.text(), token.range());
-            case CHAR_LITERAL ->
-                new LiteralExpression(LiteralKind.CHAR, token.text(), token.range());
-            case NULL ->
-                new LiteralExpression(LiteralKind.NULL, token.text(), token.range());
+            case BOOLEAN_LITERAL -> new LiteralExpression(
+                LiteralKind.BOOL,
+                token.text(),
+                token.range()
+            );
+            case INTEGER_LITERAL -> new LiteralExpression(
+                LiteralKind.INT,
+                token.text(),
+                token.range()
+            );
+            case FLOAT_LITERAL -> new LiteralExpression(
+                LiteralKind.FLOAT,
+                token.text(),
+                token.range()
+            );
+            case STRING_LITERAL -> new LiteralExpression(
+                LiteralKind.STRING,
+                token.text(),
+                token.range()
+            );
+            case CHAR_LITERAL -> new LiteralExpression(
+                LiteralKind.CHAR,
+                token.text(),
+                token.range()
+            );
+            case NULL -> new LiteralExpression(
+                LiteralKind.NULL,
+                token.text(),
+                token.range()
+            );
             case LEFT_PAREN -> {
                 if (isLambdaAfterOpenParen()) {
                     yield parseLambdaExpression(token);
-                } else {
+                }
+                else {
                     yield parseGroupingExpression(token);
                 }
             }
-            case LEFT_BRACKET ->
-                parseArrayExpression(token);
-            default ->
-                throw new ParserException(token.range(), "Expected expression, but found %s", token.type());
+            case LEFT_BRACKET -> parseArrayExpression(token);
+            default -> throw new ParserException(
+                token.range(),
+                "Expected expression, but found %s",
+                token.type()
+            );
         };
     }
 
     private GroupingExpression parseGroupingExpression(final Token open) {
         final Expression expression = parseExpression();
         final Token close = expect(TokenType.RIGHT_PAREN);
-        final Range range = new Range(open.range().start(), close.range().end());
+        final Range range =
+            new Range(open.range().start(), close.range().end());
         return new GroupingExpression(expression, range);
     }
 
@@ -401,7 +525,8 @@ public final class Parser {
             } while (match(TokenType.COMMA));
         }
         final Token close = expect(TokenType.RIGHT_BRACKET);
-        final Range range = new Range(open.range().start(), close.range().end());
+        final Range range =
+            new Range(open.range().start(), close.range().end());
         return new ArrayExpression(elements, range);
     }
 
@@ -410,12 +535,15 @@ public final class Parser {
     private boolean isLambdaAfterOpenParen() {
         int depth = 1;
         for (int offset = 0; position + offset < tokens.size(); offset++) {
-            final TokenType type = Objects.requireNonNull(tokens.get(position + offset)).type();
+            final TokenType type =
+                Objects.requireNonNull(tokens.get(position + offset)).type();
             if (type == TokenType.LEFT_PAREN) {
                 depth++;
-            } else if (type == TokenType.RIGHT_PAREN && --depth == 0) {
+            }
+            else if (type == TokenType.RIGHT_PAREN && --depth == 0) {
                 return check(offset + 1, TokenType.FAT_ARROW)
-                        || (check(offset + 1, TokenType.IDENTIFIER) && check(offset + 2, TokenType.FAT_ARROW));
+                    || (check(offset + 1, TokenType.IDENTIFIER)
+                        && check(offset + 2, TokenType.FAT_ARROW));
             }
         }
         return false;
@@ -426,24 +554,35 @@ public final class Parser {
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
                 final Token name = expect(TokenType.IDENTIFIER);
-                final TypeNode type = match(TokenType.COLON) ? parseType() : null;
-                final Position end = type == null ? name.range().end() : type.range().end();
+                final TypeNode type =
+                    match(TokenType.COLON) ? parseType() : null;
+                final Position end =
+                    type == null ? name.range().end() : type.range().end();
                 final Range range = new Range(name.range().start(), end);
-                final IdentifierDeclaration id = new IdentifierDeclaration(name.text(), name.range());
+                final IdentifierDeclaration id =
+                    new IdentifierDeclaration(name.text(), name.range());
                 parameters.add(new Parameter(id, type, range));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
-        final TypeNode returnType = check(TokenType.FAT_ARROW) ? null : parseType();
+        final TypeNode returnType =
+            check(TokenType.FAT_ARROW) ? null : parseType();
         expect(TokenType.FAT_ARROW);
-        final AstNode body = check(TokenType.LEFT_BRACE) ? parseBlockStatement() : parseExpression();
+        final AstNode body =
+            check(TokenType.LEFT_BRACE)
+                ? parseBlockStatement()
+                : parseExpression();
         final Range range = new Range(open.range().start(), body.range().end());
         return new LambdaExpression(parameters, returnType, body, range);
     }
 
-    private PostfixExpression parsePostfixExpression(final Expression operand, final PostfixOperator operator,
-            final Token operatorToken) {
-        final Range range = new Range(operand.range().start(), operatorToken.range().end());
+    private PostfixExpression parsePostfixExpression(
+        final Expression operand,
+        final PostfixOperator operator,
+        final Token operatorToken
+    ) {
+        final Range range =
+            new Range(operand.range().start(), operatorToken.range().end());
         return new PostfixExpression(operand, operator, range);
     }
 
@@ -465,7 +604,8 @@ public final class Parser {
 
     private boolean check(final int offset, final TokenType type) {
         return position + offset < tokens.size()
-                && Objects.requireNonNull(tokens.get(position + offset)).type() == type;
+            && Objects.requireNonNull(tokens.get(position + offset))
+                .type() == type;
     }
 
     private boolean match(final TokenType type) {
@@ -482,17 +622,26 @@ public final class Parser {
 
     private Token expect(final TokenType type) {
         if (isAtEnd()) {
-            final Position position = Objects.requireNonNull(tokens.get(tokens.size() - 1)).range().end();
+            final Position position =
+                Objects.requireNonNull(tokens.get(tokens.size() - 1))
+                    .range()
+                    .end();
             throw new ParserException(
-                    new Range(position, position),
-                    "Expected %s but reached end of input", type);
+                new Range(position, position),
+                "Expected %s but reached end of input",
+                type
+            );
         }
 
         final Token token = current();
 
         if (token.type() != type) {
-            throw new ParserException(token.range(),
-                    "Expected %s but found %s", type, token.type());
+            throw new ParserException(
+                token.range(),
+                "Expected %s but found %s",
+                type,
+                token.type()
+            );
         }
 
         advance();

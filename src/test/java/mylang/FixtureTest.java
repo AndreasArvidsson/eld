@@ -44,26 +44,33 @@ public class FixtureTest {
         for (final Fixture fixture : fixtures) {
             final Path path = fixture.path();
             final String name = fixture.name();
-            tests.add(DynamicTest.dynamicTest(
+            tests.add(
+                DynamicTest.dynamicTest(
                     name,
-                    () -> assertFixture(path, name, updateFixtures)));
+                    () -> assertFixture(path, name, updateFixtures)
+                )
+            );
         }
 
         return tests;
     }
 
     private static void assertFixture(
-            final Path path,
-            final String name,
-            final boolean updateFixture)
-            throws IOException {
+        final Path path,
+        final String name,
+        final boolean updateFixture
+    )
+        throws IOException {
         final String fixture = Files.readString(path).replaceAll("\r\n", "\n");
         final int tokenHeaderIndex = fixture.indexOf(TOKENS_HEADER);
         final int astHeaderIndex = fixture.indexOf(AST_HEADER);
         final int semanticHeaderIndex = fixture.indexOf(SEMANTIC_HEADER);
         final int bytecodeHeaderIndex = fixture.indexOf(BYTECODE_HEADER);
         final boolean assertFixture = !updateFixture;
-        final String source = tokenHeaderIndex < 0 ? fixture : getContent(fixture, "", 0, tokenHeaderIndex);
+        final String source =
+            tokenHeaderIndex < 0
+                ? fixture
+                : getContent(fixture, "", 0, tokenHeaderIndex);
         final StringBuilder actualBuilder = new StringBuilder();
         String expected = "";
 
@@ -72,9 +79,18 @@ public class FixtureTest {
         try {
             actualBuilder.append(TOKENS_HEADER);
             if (assertFixture) {
-                assertTrue(tokenHeaderIndex >= 0, () -> "Missing tokens header delimiter in " + name);
+                assertTrue(
+                    tokenHeaderIndex >= 0,
+                    () -> "Missing tokens header delimiter in " + name
+                );
             }
-            expected = getContent(fixture, TOKENS_HEADER, tokenHeaderIndex, astHeaderIndex);
+            expected =
+                getContent(
+                    fixture,
+                    TOKENS_HEADER,
+                    tokenHeaderIndex,
+                    astHeaderIndex
+                );
             final List<@NonNull Token> tokens = new Lexer(source).getTokens();
             final String tokensActual = joinList(tokens);
             actualBuilder.append(tokensActual);
@@ -85,9 +101,18 @@ public class FixtureTest {
 
             actualBuilder.append(AST_HEADER);
             if (assertFixture) {
-                assertTrue(astHeaderIndex >= 0, () -> "Missing AST header delimiter in " + name);
+                assertTrue(
+                    astHeaderIndex >= 0,
+                    () -> "Missing AST header delimiter in " + name
+                );
             }
-            expected = getContent(fixture, AST_HEADER, astHeaderIndex, semanticHeaderIndex);
+            expected =
+                getContent(
+                    fixture,
+                    AST_HEADER,
+                    astHeaderIndex,
+                    semanticHeaderIndex
+                );
             final Program ast = new Parser(tokens).parse();
             final String astActual = ast.toAstString();
             actualBuilder.append(astActual);
@@ -98,18 +123,34 @@ public class FixtureTest {
 
             actualBuilder.append(SEMANTIC_HEADER);
             if (assertFixture) {
-                assertTrue(semanticHeaderIndex >= 0, () -> "Missing semantic header delimiter in " + name);
+                assertTrue(
+                    semanticHeaderIndex >= 0,
+                    () -> "Missing semantic header delimiter in " + name
+                );
             }
-            expected = getContent(fixture, SEMANTIC_HEADER, semanticHeaderIndex, bytecodeHeaderIndex);
-            final SemanticModel semanticModel = new SemanticAnalyzer().analyze(ast);
+            expected =
+                getContent(
+                    fixture,
+                    SEMANTIC_HEADER,
+                    semanticHeaderIndex,
+                    bytecodeHeaderIndex
+                );
+            final SemanticModel semanticModel =
+                new SemanticAnalyzer().analyze(ast);
             final String semanticActual = semanticModel.toString();
             actualBuilder.append(semanticActual);
 
             if (assertFixture) {
                 assertEquals(expected, semanticActual, name);
             }
-        } catch (final LexerException | ParserException | SemanticException e) {
-            final String message = String.format("%s: %s", e.getClass().getSimpleName(), e.getMessage());
+        }
+        catch (final LexerException | ParserException | SemanticException e) {
+            final String message =
+                String.format(
+                    "%s: %s",
+                    e.getClass().getSimpleName(),
+                    e.getMessage()
+                );
             actualBuilder.append(message);
 
             if (assertFixture) {
@@ -125,24 +166,32 @@ public class FixtureTest {
     }
 
     private static String getContent(
-            final String fixture,
-            final String header,
-            final int headerIndex,
-            final int nextHeaderIndex) {
+        final String fixture,
+        final String header,
+        final int headerIndex,
+        final int nextHeaderIndex
+    ) {
         if (headerIndex == -1) {
             return "";
         }
         final int startIndex = headerIndex + header.length();
-        int endIndex = nextHeaderIndex == -1 ? fixture.length() : nextHeaderIndex;
-        if (nextHeaderIndex == -1 && endIndex > startIndex && fixture.endsWith("\n")) {
+        int endIndex =
+            nextHeaderIndex == -1 ? fixture.length() : nextHeaderIndex;
+        if (
+            nextHeaderIndex == -1 && endIndex > startIndex
+                && fixture.endsWith("\n")
+        ) {
             endIndex--;
         }
         final String result = fixture.substring(startIndex, endIndex);
         return Objects.requireNonNull(result);
     }
 
-    private static String joinList(final List<? extends @NonNull Object> tokens) {
-        final List<String> tokenStrings = tokens.stream().map(o -> o.toString()).toList();
+    private static String joinList(
+        final List<? extends @NonNull Object> tokens
+    ) {
+        final List<String> tokenStrings =
+            tokens.stream().map(o -> o.toString()).toList();
         return Objects.requireNonNull(String.join("\n", tokenStrings));
     }
 

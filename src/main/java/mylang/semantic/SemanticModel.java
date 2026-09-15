@@ -17,13 +17,20 @@ import mylang.parser.TypeNode;
 public final class SemanticModel {
 
     private static final String ARROW = " -> ";
-    private final Map<Expression, Type> expressionTypes = new IdentityHashMap<>();
-    private final Map<Expression, Type> conversionTypes = new IdentityHashMap<>();
+    private final Map<Expression, Type> expressionTypes =
+        new IdentityHashMap<>();
+    private final Map<Expression, Type> conversionTypes =
+        new IdentityHashMap<>();
     private final Map<TypeNode, Type> resolvedTypes = new IdentityHashMap<>();
-    private final Map<IdentifierDeclaration, Symbol> declarations = new IdentityHashMap<>();
-    private final Map<IdentifierExpression, Symbol> references = new IdentityHashMap<>();
+    private final Map<IdentifierDeclaration, Symbol> declarations =
+        new IdentityHashMap<>();
+    private final Map<IdentifierExpression, Symbol> references =
+        new IdentityHashMap<>();
 
-    public void setExpressionType(final Expression expression, final Type type) {
+    public void setExpressionType(
+        final Expression expression,
+        final Type type
+    ) {
         expressionTypes.put(expression, type);
     }
 
@@ -31,7 +38,10 @@ public final class SemanticModel {
         return Objects.requireNonNull(expressionTypes.get(expression));
     }
 
-    public void setConversionType(final Expression expression, final Type type) {
+    public void setConversionType(
+        final Expression expression,
+        final Type type
+    ) {
         conversionTypes.put(expression, type);
     }
 
@@ -48,8 +58,9 @@ public final class SemanticModel {
     }
 
     public void setSymbol(
-            final IdentifierDeclaration declaration,
-            final Symbol symbol) {
+        final IdentifierDeclaration declaration,
+        final Symbol symbol
+    ) {
         declarations.put(declaration, symbol);
     }
 
@@ -58,8 +69,9 @@ public final class SemanticModel {
     }
 
     public void setReference(
-            final IdentifierExpression expression,
-            final Symbol symbol) {
+        final IdentifierExpression expression,
+        final Symbol symbol
+    ) {
         references.put(expression, symbol);
     }
 
@@ -73,35 +85,61 @@ public final class SemanticModel {
         appendSection(lines, "Expression types:", expressionTypes);
         appendSection(lines, "Resolved types:", resolvedTypes);
 
-        appendSection(lines, "Conversions:", conversionTypes,
-                (expression, type) -> expressionTypes.get(expression) + ARROW + type);
+        appendSection(
+            lines,
+            "Conversions:",
+            conversionTypes,
+            (expression, type) -> expressionTypes.get(expression) + ARROW + type
+        );
         appendSection(lines, "Declarations:", declarations);
-        appendSection(lines, "References:", references,
-                (expression, symbol) -> symbol.range().toString());
+        appendSection(
+            lines,
+            "References:",
+            references,
+            (expression, symbol) -> symbol.range().toString()
+        );
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
     }
 
     private static void appendSection(
-            final List<String> lines,
-            final String heading,
-            final Map<? extends AstNode, ?> entries) {
-        appendSection(lines, heading, entries, (node, value) -> String.valueOf(value));
+        final List<String> lines,
+        final String heading,
+        final Map<? extends AstNode, ?> entries
+    ) {
+        appendSection(
+            lines,
+            heading,
+            entries,
+            (node, value) -> String.valueOf(value)
+        );
     }
 
     private static <K extends AstNode, V> void appendSection(
-            final List<String> lines,
-            final String heading,
-            final Map<K, V> entries,
-            final BiFunction<K, V, String> formatValue) {
+        final List<String> lines,
+        final String heading,
+        final Map<K, V> entries,
+        final BiFunction<K, V, String> formatValue
+    ) {
         if (entries.isEmpty()) {
             return;
         }
         lines.add(heading);
-        entries.entrySet().stream()
-                .sorted(Comparator.comparing(entry -> Objects.requireNonNull(entry.getKey()).range()))
-                .forEach(entry -> lines
-                        .add("  " + Objects.requireNonNull(entry.getKey()).range() + ARROW
-                                + formatValue.apply(entry.getKey(), entry.getValue())));
+        entries.entrySet()
+            .stream()
+            .sorted(
+                Comparator.comparing(
+                    entry -> Objects.requireNonNull(entry.getKey()).range()
+                )
+            )
+            .forEach(
+                entry -> lines
+                    .add(
+                        "  " + Objects.requireNonNull(entry.getKey()).range()
+                            + ARROW
+                            + formatValue
+                                .apply(entry.getKey(), entry.getValue())
+                    )
+            );
         lines.add("");
     }
 

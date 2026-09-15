@@ -12,7 +12,11 @@ import mylang.Range;
 
 public class ParserException extends BaseException {
     @FormatMethod
-    public ParserException(final Range range, @FormatString final String format, final @Nullable Object... args) {
+    public ParserException(
+        final Range range,
+        @FormatString final String format,
+        final @Nullable Object... args
+    ) {
         super(range, Objects.requireNonNull(String.format(format, args)));
     }
 }

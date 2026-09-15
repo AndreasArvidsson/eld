@@ -4,7 +4,8 @@ import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
 
-public record Position(int line, int column) implements Comparable<@NonNull Position> {
+public record Position(int line, int column)
+    implements Comparable<@NonNull Position> {
 
     @Override
     public int compareTo(final Position other) {

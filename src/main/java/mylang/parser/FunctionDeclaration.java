@@ -8,9 +8,7 @@ import org.jspecify.annotations.Nullable;
 import mylang.Range;
 
 public record FunctionDeclaration(
-        IdentifierDeclaration name,
-        List<@NonNull Parameter> parameters,
-        @Nullable TypeNode returnType,
-        BlockStatement body,
-        Range range) implements Declaration {
+    IdentifierDeclaration name, List<@NonNull Parameter> parameters,
+    @Nullable TypeNode returnType, BlockStatement body, Range range
+) implements Declaration {
 }

@@ -23,12 +23,12 @@ Open the project folder in VS Code with the Extension Pack for Java installed an
 1. Open **Run and Debug** (`Ctrl+Shift+D`).
 2. Select a launch configuration from the dropdown:
 
-   | Configuration | Behavior |
-   | --- | --- |
-   | Run tests | Run all tests and check fixture expectations. |
-   | Run tests (subset) | Run tests with fixture selection controlled by `testSubsetGrep.properties`. |
-   | Update fixtures | Run tests and regenerate expectations for all fixtures. |
-   | Update fixtures (subset) | Run tests and regenerate expectations for the selected fixtures. |
+   | Configuration            | Behavior                                                                    |
+   | ------------------------ | --------------------------------------------------------------------------- |
+   | Run tests                | Run all tests and check fixture expectations.                               |
+   | Run tests (subset)       | Run tests with fixture selection controlled by `testSubsetGrep.properties`. |
+   | Update fixtures          | Run tests and regenerate expectations for all fixtures.                     |
+   | Update fixtures (subset) | Run tests and regenerate expectations for the selected fixtures.            |
 
 3. Set breakpoints in the test or application code, then press **F5**. Each configuration starts Maven and automatically attaches the Java debugger before tests execute.
 4. When paused, use **F10** to step over, **F11** to step into, **Shift+F11** to step out, and **F5** to continue.
@@ -89,3 +89,10 @@ mvn test -DupdateFixtures -DtestSubset
 ```
 
 These boolean Maven flags do not need `=true`. Without `-DtestSubset`, all fixtures run.
+
+## Format Java code
+
+```bash
+mvn -N -q spotless:check
+mvn -N -q spotless:apply
+```
