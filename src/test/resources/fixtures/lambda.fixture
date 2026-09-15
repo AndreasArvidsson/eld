@@ -24,3 +24,7 @@ RIGHT_BRACE (1:8-1:9)
     )
   )
 )
+
+--- SEMANTIC ---
+
+SemanticException: Unsupported expression: LambdaExpression[parameters=[], returnType=null, body=BlockStatement[items=[], range=1:7-1:9], range=1:1-1:9] at 1:1-1:9

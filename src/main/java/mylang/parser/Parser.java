@@ -357,33 +357,34 @@ public final class Parser {
     }
 
     private Expression parsePrimitiveExpression(final Token token) {
-        switch (token.type()) {
-            case IDENTIFIER:
-                return new IdentifierExpression(token.text(), token.range());
-            case BOOLEAN_LITERAL:
-                return new LiteralExpression(LiteralKind.BOOL, token.text(), token.range());
-            case INTEGER_LITERAL:
-                return new LiteralExpression(LiteralKind.INT, token.text(), token.range());
-            case FLOAT_LITERAL:
-                return new LiteralExpression(LiteralKind.FLOAT, token.text(), token.range());
-            case STRING_LITERAL:
-                return new LiteralExpression(LiteralKind.STRING, token.text(), token.range());
-            case CHAR_LITERAL:
-                return new LiteralExpression(LiteralKind.CHAR, token.text(), token.range());
-            case NULL:
-                return new LiteralExpression(LiteralKind.NULL, token.text(), token.range());
-            case LEFT_PAREN:
+        return switch (token.type()) {
+            case IDENTIFIER ->
+                new IdentifierExpression(token.text(), token.range());
+            case BOOLEAN_LITERAL ->
+                new LiteralExpression(LiteralKind.BOOL, token.text(), token.range());
+            case INTEGER_LITERAL ->
+                new LiteralExpression(LiteralKind.INT, token.text(), token.range());
+            case FLOAT_LITERAL ->
+                new LiteralExpression(LiteralKind.FLOAT, token.text(), token.range());
+            case STRING_LITERAL ->
+                new LiteralExpression(LiteralKind.STRING, token.text(), token.range());
+            case CHAR_LITERAL ->
+                new LiteralExpression(LiteralKind.CHAR, token.text(), token.range());
+            case NULL ->
+                new LiteralExpression(LiteralKind.NULL, token.text(), token.range());
+            case LEFT_PAREN -> {
                 if (isLambdaAfterOpenParen()) {
-                    return parseLambdaExpression(token);
+                    yield parseLambdaExpression(token);
                 }
                 final Expression expression = parseExpression();
                 final Token close = expect(TokenType.RIGHT_PAREN);
-                return new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
-            case LEFT_BRACKET:
-                return parseArrayExpression(token);
-            default:
+                yield new GroupingExpression(expression, new Range(token.range().start(), close.range().end()));
+            }
+            case LEFT_BRACKET ->
+                parseArrayExpression(token);
+            default ->
                 throw new ParserException(token.range(), "Expected expression, but found %s", token.type());
-        }
+        };
     }
 
     private ArrayExpression parseArrayExpression(final Token open) {

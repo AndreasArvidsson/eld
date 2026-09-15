@@ -17,6 +17,7 @@ import mylang.parser.ContinueStatement;
 import mylang.parser.Declaration;
 import mylang.parser.DeclarationStatement;
 import mylang.parser.DoWhileStatement;
+import mylang.parser.ElseIfBranch;
 import mylang.parser.Expression;
 import mylang.parser.ExpressionStatement;
 import mylang.parser.ForEachStatement;
@@ -24,6 +25,8 @@ import mylang.parser.ForStatement;
 import mylang.parser.FunctionDeclaration;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
+import mylang.parser.IfStatement;
+import mylang.parser.LambdaExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.Mutability;
 import mylang.parser.NamedTypeNode;
@@ -55,6 +58,12 @@ public final class SemanticAnalyzer {
         }
     }
 
+    private void analyzeBlockStatement(final BlockStatement block, final SemanticContext context) {
+        for (final BlockItem item : block.items()) {
+            analyzeBlockItem(item, context);
+        }
+    }
+
     private void analyzeBlockItem(final BlockItem item, final SemanticContext context) {
         switch (item) {
             case Declaration declaration ->
@@ -79,6 +88,10 @@ public final class SemanticAnalyzer {
 
     private void analyzeStatement(final Statement statement, final SemanticContext context) {
         switch (statement) {
+            case DeclarationStatement declarationStatement ->
+                analyzeDeclaration(declarationStatement.declaration(), context);
+            case ExpressionStatement expressionStatement ->
+                analyzeExpression(expressionStatement.expression(), context);
             case WhileStatement whileStatement ->
                 analyzeWhileStatement(whileStatement, context);
             case DoWhileStatement doWhileStatement ->
@@ -87,16 +100,16 @@ public final class SemanticAnalyzer {
                 analyzeForStatement(forStatement, context);
             case ForEachStatement forStatement ->
                 analyzeForEachStatement(forStatement, context);
+            case IfStatement ifStatement ->
+                analyzeIfStatement(ifStatement, context);
             case ContinueStatement continueStatement ->
                 analyzeContinueStatement(continueStatement, context);
             case BreakStatement breakStatement ->
                 analyzeBreakStatement(breakStatement, context);
             case ReturnStatement returnStatement ->
                 analyzeReturnStatement(returnStatement, context);
-            case DeclarationStatement declarationStatement ->
-                analyzeDeclaration(declarationStatement.declaration(), context);
-            case ExpressionStatement expressionStatement ->
-                analyzeExpression(expressionStatement.expression(), context);
+            case BlockStatement blockStatement ->
+                analyzeBlockStatement(blockStatement, context);
             default -> throw new SemanticException(
                     statement.range(),
                     "Unsupported statement: %s",
@@ -122,9 +135,9 @@ public final class SemanticAnalyzer {
             final Type conditionType = analyzeExpression(condition, loopContext);
             if (conditionType != BuiltinType.BOOL) {
                 throw new SemanticException(
+                        condition.range(),
                         "For condition must be bool, found %s",
-                        conditionType,
-                        condition.range());
+                        conditionType);
             }
         }
 
@@ -177,9 +190,9 @@ public final class SemanticAnalyzer {
 
         if (conditionType != BuiltinType.BOOL) {
             throw new SemanticException(
+                    statement.condition().range(),
                     "While condition must be bool, found %s",
-                    conditionType,
-                    statement.condition().range());
+                    conditionType);
         }
 
         final SemanticContext loopContext = new SemanticContext(
@@ -195,9 +208,9 @@ public final class SemanticAnalyzer {
 
         if (conditionType != BuiltinType.BOOL) {
             throw new SemanticException(
+                    statement.condition().range(),
                     "Do-while condition must be bool, found %s",
-                    conditionType,
-                    statement.condition().range());
+                    conditionType);
         }
 
         final SemanticContext loopContext = new SemanticContext(
@@ -206,6 +219,38 @@ public final class SemanticAnalyzer {
                 context.loopDepth() + 1);
 
         analyzeBlockStatement(statement.body(), loopContext);
+    }
+
+    private void analyzeIfStatement(final IfStatement statement, final SemanticContext context) {
+        final Type conditionType = analyzeExpression(statement.condition(), context);
+
+        if (conditionType != BuiltinType.BOOL) {
+            throw new SemanticException(
+                    statement.condition().range(),
+                    "If condition must be bool, found %s",
+                    conditionType);
+        }
+
+        analyzeBlockStatement(statement.thenBranch(), context);
+
+        for (final ElseIfBranch branch : statement.elifBranches()) {
+            final Type branchConditionType = analyzeExpression(branch.condition(), context);
+
+            if (branchConditionType != BuiltinType.BOOL) {
+                throw new SemanticException(
+                        branch.condition().range(),
+                        "Else-if condition must be bool, found %s",
+                        branchConditionType);
+            }
+
+            analyzeBlockStatement(branch.branch(), context);
+        }
+
+        final @Nullable Statement elseBranch = statement.elseBranch();
+
+        if (elseBranch != null) {
+            analyzeStatement(elseBranch, context);
+        }
     }
 
     private void analyzeContinueStatement(final ContinueStatement statement, final SemanticContext context) {
@@ -255,12 +300,6 @@ public final class SemanticAnalyzer {
                     "Type mismatch: cannot return %s from function with return type %s",
                     valueType,
                     returnType);
-        }
-    }
-
-    private void analyzeBlockStatement(final BlockStatement block, final SemanticContext context) {
-        for (final BlockItem item : block.items()) {
-            analyzeBlockItem(item, context);
         }
     }
 
@@ -409,10 +448,9 @@ public final class SemanticAnalyzer {
                 analyzePostfixExpression(postfix, context);
             case CallExpression call ->
                 analyzeCallExpression(call, context);
-
+            // TODO: Implement lambda expression analysis
             // case LambdaExpression lambda ->
             // analyzeLambdaExpression(lambda, context);
-
             default ->
                 throw new SemanticException(expression.range(), "Unsupported expression: %s", expression);
         };

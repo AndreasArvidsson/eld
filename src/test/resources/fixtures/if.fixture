@@ -50,3 +50,9 @@ RIGHT_BRACE (3:7-3:8)
     )
   )
 )
+
+--- SEMANTIC ---
+
+Expression types:
+  1:5-1:9 -> bool
+  2:7-2:12 -> bool

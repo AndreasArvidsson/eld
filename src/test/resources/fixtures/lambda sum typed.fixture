@@ -28,7 +28,10 @@ IDENTIFIER "b" (1:29-1:30)
       range: 1:1-1:30
       (Parameter
         range: 1:2-1:8
-        name: "a"
+        (IdentifierDeclaration
+          range: 1:2-1:3
+          name: "a"
+        )
         (NamedTypeNode
           range: 1:5-1:8
           name: "int"
@@ -36,7 +39,10 @@ IDENTIFIER "b" (1:29-1:30)
       )
       (Parameter
         range: 1:10-1:16
-        name: "b"
+        (IdentifierDeclaration
+          range: 1:10-1:11
+          name: "b"
+        )
         (NamedTypeNode
           range: 1:13-1:16
           name: "int"
@@ -61,3 +67,7 @@ IDENTIFIER "b" (1:29-1:30)
     )
   )
 )
+
+--- SEMANTIC ---
+
+SemanticException: Unsupported expression: LambdaExpression[parameters=[Parameter[name=IdentifierDeclaration[name=a, range=1:2-1:3], type=NamedTypeNode[name=int, range=1:5-1:8], range=1:2-1:8], Parameter[name=IdentifierDeclaration[name=b, range=1:10-1:11], type=NamedTypeNode[name=int, range=1:13-1:16], range=1:10-1:16]], returnType=NamedTypeNode[name=int, range=1:18-1:21], body=BinaryExpression[left=IdentifierExpression[name=a, range=1:25-1:26], operator=ADD, right=IdentifierExpression[name=b, range=1:29-1:30], range=1:25-1:30], range=1:1-1:30] at 1:1-1:30

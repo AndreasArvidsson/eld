@@ -15,9 +15,4 @@ public final class SemanticException extends BaseException {
     public SemanticException(final Range range, @FormatString final String format, final @Nullable Object... args) {
         super(range, Objects.requireNonNull(String.format(format, args)));
     }
-
-    @FormatMethod
-    public SemanticException(@FormatString final String format, final @Nullable Object... args) {
-        super(Objects.requireNonNull(String.format(format, args)));
-    }
 }
