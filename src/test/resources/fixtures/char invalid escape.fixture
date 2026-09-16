@@ -1,0 +1,5 @@
+'\q';
+
+--- TOKENS ---
+
+LexerException: Invalid character escape at 1:3-1:4

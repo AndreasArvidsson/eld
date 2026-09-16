@@ -1,9 +1,9 @@
 class Counter {
-    const initial = 10
-    var count = initial
-    func next() int { return count++ }
-    const callback = next
-    func invoke() int { return callback() }
+    const initial = 10;
+    var count = initial;
+    func next() int { return count++; }
+    const callback = next;
+    func invoke() int { return callback(); }
 }
 
 
@@ -16,10 +16,12 @@ CONST (2:5-2:10)
 IDENTIFIER "initial" (2:11-2:18)
 EQUAL (2:19-2:20)
 INTEGER_LITERAL "10" (2:21-2:23)
+SEMICOLON (2:23-2:24)
 VAR (3:5-3:8)
 IDENTIFIER "count" (3:9-3:14)
 EQUAL (3:15-3:16)
 IDENTIFIER "initial" (3:17-3:24)
+SEMICOLON (3:24-3:25)
 FUNC (4:5-4:9)
 IDENTIFIER "next" (4:10-4:14)
 LEFT_PAREN (4:14-4:15)
@@ -29,11 +31,13 @@ LEFT_BRACE (4:21-4:22)
 RETURN (4:23-4:29)
 IDENTIFIER "count" (4:30-4:35)
 PLUS_PLUS (4:35-4:37)
-RIGHT_BRACE (4:38-4:39)
+SEMICOLON (4:37-4:38)
+RIGHT_BRACE (4:39-4:40)
 CONST (5:5-5:10)
 IDENTIFIER "callback" (5:11-5:19)
 EQUAL (5:20-5:21)
 IDENTIFIER "next" (5:22-5:26)
+SEMICOLON (5:26-5:27)
 FUNC (6:5-6:9)
 IDENTIFIER "invoke" (6:10-6:16)
 LEFT_PAREN (6:16-6:17)
@@ -44,7 +48,8 @@ RETURN (6:25-6:31)
 IDENTIFIER "callback" (6:32-6:40)
 LEFT_PAREN (6:40-6:41)
 RIGHT_PAREN (6:41-6:42)
-RIGHT_BRACE (6:43-6:44)
+SEMICOLON (6:42-6:43)
+RIGHT_BRACE (6:44-6:45)
 RIGHT_BRACE (7:1-7:2)
 
 --- AST ---
@@ -58,7 +63,7 @@ RIGHT_BRACE (7:1-7:2)
       name: "Counter"
     )
     (VariableDeclaration
-      range: 2:5-2:23
+      range: 2:5-2:24
       mutability: CONST
       (IdentifierDeclaration
         range: 2:11-2:18
@@ -72,7 +77,7 @@ RIGHT_BRACE (7:1-7:2)
       )
     )
     (VariableDeclaration
-      range: 3:5-3:24
+      range: 3:5-3:25
       mutability: VAR
       (IdentifierDeclaration
         range: 3:9-3:14
@@ -85,7 +90,7 @@ RIGHT_BRACE (7:1-7:2)
       )
     )
     (FunctionDeclaration
-      range: 4:5-4:39
+      range: 4:5-4:40
       (IdentifierDeclaration
         range: 4:10-4:14
         name: "next"
@@ -95,9 +100,9 @@ RIGHT_BRACE (7:1-7:2)
         name: "int"
       )
       (BlockStatement
-        range: 4:21-4:39
+        range: 4:21-4:40
         (ReturnStatement
-          range: 4:23-4:37
+          range: 4:23-4:38
           (PostfixExpression
             range: 4:30-4:37
             (IdentifierExpression
@@ -110,7 +115,7 @@ RIGHT_BRACE (7:1-7:2)
       )
     )
     (VariableDeclaration
-      range: 5:5-5:26
+      range: 5:5-5:27
       mutability: CONST
       (IdentifierDeclaration
         range: 5:11-5:19
@@ -123,7 +128,7 @@ RIGHT_BRACE (7:1-7:2)
       )
     )
     (FunctionDeclaration
-      range: 6:5-6:44
+      range: 6:5-6:45
       (IdentifierDeclaration
         range: 6:10-6:16
         name: "invoke"
@@ -133,9 +138,9 @@ RIGHT_BRACE (7:1-7:2)
         name: "int"
       )
       (BlockStatement
-        range: 6:23-6:44
+        range: 6:23-6:45
         (ReturnStatement
-          range: 6:25-6:42
+          range: 6:25-6:43
           (CallExpression
             range: 6:32-6:42
             (IdentifierExpression

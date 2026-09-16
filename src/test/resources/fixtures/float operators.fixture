@@ -1,4 +1,4 @@
--0.5+12.34-10
+-0.5+12.34-10;
 
 --- TOKENS ---
 
@@ -8,7 +8,79 @@ PLUS (1:5-1:6)
 FLOAT_LITERAL "12.34" (1:6-1:11)
 MINUS (1:11-1:12)
 INTEGER_LITERAL "10" (1:12-1:14)
+SEMICOLON (1:14-1:15)
 
 --- AST ---
 
-ParserException: Expected declaration or statement at 1:1-1:2
+(Program
+  range: 1:1-1:15
+  (ExpressionStatement
+    range: 1:1-1:15
+    (BinaryExpression
+      range: 1:1-1:14
+      (BinaryExpression
+        range: 1:1-1:11
+        (UnaryExpression
+          range: 1:1-1:5
+          operator: MINUS
+          (LiteralExpression
+            range: 1:2-1:5
+            kind: float
+            text: "0.5"
+          )
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 1:6-1:11
+          kind: float
+          text: "12.34"
+        )
+      )
+      operator: SUBTRACT
+      (LiteralExpression
+        range: 1:12-1:14
+        kind: int
+        text: "10"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:5 -> float
+  1:1-1:11 -> float
+  1:1-1:14 -> float
+  1:2-1:5 -> float
+  1:6-1:11 -> float
+  1:12-1:14 -> int
+
+Conversions:
+  1:12-1:14 -> int -> float
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 0.5F
+    FNEG
+    LDC 12.34F
+    FADD
+    LDC 10
+    I2F
+    FSUB
+    POP
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

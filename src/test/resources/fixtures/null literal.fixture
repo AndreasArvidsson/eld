@@ -1,0 +1,45 @@
+null;
+
+--- TOKENS ---
+
+NULL (1:1-1:5)
+SEMICOLON (1:5-1:6)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:6
+  (ExpressionStatement
+    range: 1:1-1:6
+    (LiteralExpression
+      range: 1:1-1:5
+      kind: null
+      text: "null"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:5 -> null
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    ACONST_NULL
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

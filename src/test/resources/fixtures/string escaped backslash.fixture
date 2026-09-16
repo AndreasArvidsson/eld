@@ -1,9 +1,45 @@
-"path\\"
+"path\\";
 
 --- TOKENS ---
 
 STRING_LITERAL "\"path\\\\\"" (1:1-1:9)
+SEMICOLON (1:9-1:10)
 
 --- AST ---
 
-ParserException: Expected declaration or statement at 1:1-1:9
+(Program
+  range: 1:1-1:10
+  (ExpressionStatement
+    range: 1:1-1:10
+    (LiteralExpression
+      range: 1:1-1:9
+      kind: string
+      text: "\"path\\\\\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:9 -> string
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC "path\\"
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

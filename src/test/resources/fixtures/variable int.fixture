@@ -1,4 +1,4 @@
-var foo = 10
+var foo = 10;
 
 --- TOKENS ---
 
@@ -6,13 +6,14 @@ VAR (1:1-1:4)
 IDENTIFIER "foo" (1:5-1:8)
 EQUAL (1:9-1:10)
 INTEGER_LITERAL "10" (1:11-1:13)
+SEMICOLON (1:13-1:14)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:13
+  range: 1:1-1:14
   (VariableDeclaration
-    range: 1:1-1:13
+    range: 1:1-1:14
     mutability: VAR
     (IdentifierDeclaration
       range: 1:5-1:8

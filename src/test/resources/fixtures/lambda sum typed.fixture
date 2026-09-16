@@ -1,4 +1,4 @@
-(a: int, b: int) int => a + b
+(a: int, b: int) int => a + b;
 
 
 --- TOKENS ---
@@ -17,13 +17,14 @@ FAT_ARROW (1:22-1:24)
 IDENTIFIER "a" (1:25-1:26)
 PLUS (1:27-1:28)
 IDENTIFIER "b" (1:29-1:30)
+SEMICOLON (1:30-1:31)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:30
+  range: 1:1-1:31
   (ExpressionStatement
-    range: 1:1-1:30
+    range: 1:1-1:31
     (LambdaExpression
       range: 1:1-1:30
       (Parameter

@@ -1,0 +1,59 @@
+123;
+123_456;
+
+--- TOKENS ---
+
+INTEGER_LITERAL "123" (1:1-1:4)
+SEMICOLON (1:4-1:5)
+INTEGER_LITERAL "123_456" (2:1-2:8)
+SEMICOLON (2:8-2:9)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:9
+  (ExpressionStatement
+    range: 1:1-1:5
+    (LiteralExpression
+      range: 1:1-1:4
+      kind: int
+      text: "123"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:9
+    (LiteralExpression
+      range: 2:1-2:8
+      kind: int
+      text: "123_456"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:4 -> int
+  2:1-2:8 -> int
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 123
+    POP
+    LDC 123456
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

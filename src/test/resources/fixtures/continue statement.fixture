@@ -1,19 +1,20 @@
-continue
+continue;
 
 
 --- TOKENS ---
 
 CONTINUE (1:1-1:9)
+SEMICOLON (1:9-1:10)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:9
+  range: 1:1-1:10
   (ContinueStatement
-    range: 1:1-1:9
+    range: 1:1-1:10
   )
 )
 
 --- SEMANTIC ---
 
-SemanticException: A 'continue' statement can only be used within an enclosing loop at 1:1-1:9
+SemanticException: A 'continue' statement can only be used within an enclosing loop at 1:1-1:10

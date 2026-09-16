@@ -1,0 +1,52 @@
+-1_234.5_67;
+
+--- TOKENS ---
+
+MINUS (1:1-1:2)
+FLOAT_LITERAL "1_234.5_67" (1:2-1:12)
+SEMICOLON (1:12-1:13)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:13
+  (ExpressionStatement
+    range: 1:1-1:13
+    (UnaryExpression
+      range: 1:1-1:12
+      operator: MINUS
+      (LiteralExpression
+        range: 1:2-1:12
+        kind: float
+        text: "1_234.5_67"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:12 -> float
+  1:2-1:12 -> float
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1234.567F
+    FNEG
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

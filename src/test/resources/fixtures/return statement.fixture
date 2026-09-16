@@ -1,20 +1,21 @@
-return
+return;
 
 
 --- TOKENS ---
 
 RETURN (1:1-1:7)
+SEMICOLON (1:7-1:8)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:7
+  range: 1:1-1:8
   (ReturnStatement
-    range: 1:1-1:7
+    range: 1:1-1:8
     value: null
   )
 )
 
 --- SEMANTIC ---
 
-SemanticException: A 'return' statement can only be used within an enclosing function at 1:1-1:7
+SemanticException: A 'return' statement can only be used within an enclosing function at 1:1-1:8

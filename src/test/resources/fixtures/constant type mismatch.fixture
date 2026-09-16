@@ -1,4 +1,4 @@
-const foo: int = 5.5
+const foo: int = 5.5;
 
 --- TOKENS ---
 
@@ -8,13 +8,14 @@ COLON (1:10-1:11)
 IDENTIFIER "int" (1:12-1:15)
 EQUAL (1:16-1:17)
 FLOAT_LITERAL "5.5" (1:18-1:21)
+SEMICOLON (1:21-1:22)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:21
+  range: 1:1-1:22
   (VariableDeclaration
-    range: 1:1-1:21
+    range: 1:1-1:22
     mutability: CONST
     (IdentifierDeclaration
       range: 1:7-1:10

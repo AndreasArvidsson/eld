@@ -1,4 +1,4 @@
-const result = -0.5 + 12.34 - 10
+const result = -0.5 + 12.34 - 10;
 
 --- TOKENS ---
 
@@ -11,13 +11,14 @@ PLUS (1:21-1:22)
 FLOAT_LITERAL "12.34" (1:23-1:28)
 MINUS (1:29-1:30)
 INTEGER_LITERAL "10" (1:31-1:33)
+SEMICOLON (1:33-1:34)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:33
+  range: 1:1-1:34
   (VariableDeclaration
-    range: 1:1-1:33
+    range: 1:1-1:34
     mutability: CONST
     (IdentifierDeclaration
       range: 1:7-1:13

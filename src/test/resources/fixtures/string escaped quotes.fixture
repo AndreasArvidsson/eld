@@ -1,9 +1,45 @@
-"say \"hi\""
+"say \"hi\"";
 
 --- TOKENS ---
 
 STRING_LITERAL "\"say \\\"hi\\\"\"" (1:1-1:13)
+SEMICOLON (1:13-1:14)
 
 --- AST ---
 
-ParserException: Expected declaration or statement at 1:1-1:13
+(Program
+  range: 1:1-1:14
+  (ExpressionStatement
+    range: 1:1-1:14
+    (LiteralExpression
+      range: 1:1-1:13
+      kind: string
+      text: "\"say \\\"hi\\\"\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:13 -> string
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC "say \"hi\""
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

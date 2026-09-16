@@ -1,0 +1,6 @@
+'
+'
+
+--- TOKENS ---
+
+LexerException: Character literal must be on a single line at 1:2-1:3

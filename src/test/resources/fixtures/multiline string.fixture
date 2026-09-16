@@ -1,0 +1,46 @@
+"a
+b";
+
+--- TOKENS ---
+
+STRING_LITERAL "\"a\nb\"" (1:1-2:3)
+SEMICOLON (2:3-2:4)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:4
+  (ExpressionStatement
+    range: 1:1-2:4
+    (LiteralExpression
+      range: 1:1-2:3
+      kind: string
+      text: "\"a\nb\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-2:3 -> string
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC "a\nb"
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

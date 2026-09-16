@@ -89,9 +89,57 @@ public final class Parser {
     }
 
     private BlockItem parseBlockItem() {
+        final BlockItem item = parseUnterminatedBlockItem();
+        if (
+            item instanceof VariableDeclaration
+                || item instanceof ExpressionStatement
+                || item instanceof ReturnStatement
+                || item instanceof BreakStatement
+                || item instanceof ContinueStatement
+                || item instanceof DoWhileStatement
+        ) {
+            return terminate(item);
+        }
+        return item;
+    }
+
+    // TODO: Should we remove the terminate method and handle semicolons in each separate statement funk?
+    private BlockItem terminate(final BlockItem item) {
+        final Token semicolon = expect(TokenType.SEMICOLON);
+        final Range range =
+            new Range(item.range().start(), semicolon.range().end());
+        return switch (item) {
+            case VariableDeclaration declaration -> new VariableDeclaration(
+                declaration.mutability(),
+                declaration.name(),
+                declaration.type(),
+                declaration.initializer(),
+                range
+            );
+            case ExpressionStatement statement ->
+                new ExpressionStatement(statement.expression(), range);
+            case ReturnStatement statement ->
+                new ReturnStatement(statement.value(), range);
+            case BreakStatement ignored -> new BreakStatement(range);
+            case ContinueStatement ignored -> new ContinueStatement(range);
+            case DoWhileStatement statement -> new DoWhileStatement(
+                statement.body(),
+                statement.condition(),
+                range
+            );
+            default -> throw new IllegalArgumentException(
+                "Statement does not take a semicolon: " + item
+            );
+        };
+    }
+
+    private BlockItem parseUnterminatedBlockItem() {
         final Token token = advance();
 
         switch (token.type()) {
+            case LEFT_BRACE:
+                position--;
+                return parseBlockStatement();
             case CONST:
                 return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
@@ -114,29 +162,11 @@ public final class Parser {
                 return parseFunctionDeclaration(token);
             case RETURN:
                 return parseReturnStatement(token);
-            case IDENTIFIER:
-                if (check(TokenType.LEFT_PAREN)) {
-                    final IdentifierExpression callee =
-                        new IdentifierExpression(token.text(), token.range());
-                    final CallExpression call = parseCallExpression(callee);
-                    return new ExpressionStatement(call, call.range());
-                }
-                break;
-            case LEFT_PAREN:
-                if (isLambdaAfterOpenParen()) {
-                    final LambdaExpression lambda =
-                        parseLambdaExpression(token);
-                    return new ExpressionStatement(lambda, lambda.range());
-                }
-                break;
             default:
-                break;
+                position--;
+                final Expression expression = parseExpression();
+                return new ExpressionStatement(expression, expression.range());
         }
-
-        throw new ParserException(
-            token.range(),
-            "Expected declaration or statement"
-        );
     }
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
@@ -155,10 +185,7 @@ public final class Parser {
 
     private ReturnStatement parseReturnStatement(final Token keyword) {
         final Expression value =
-            !isAtEnd() && !check(TokenType.RIGHT_BRACE)
-                && current().range().start().line() == keyword.range()
-                    .start()
-                    .line() ? parseExpression() : null;
+            check(TokenType.SEMICOLON) ? null : parseExpression();
         final Range range =
             value != null
                 ? new Range(keyword.range().start(), value.range().end())
@@ -235,7 +262,7 @@ public final class Parser {
 
     private ForStatement parseCountedForStatement(final Token keyword) {
         final @Nullable Statement initializer;
-        if (check(TokenType.SEMICOLON)) {
+        if (match(TokenType.SEMICOLON)) {
             initializer = null;
         }
         else if (check(TokenType.VAR) || check(TokenType.CONST)) {
@@ -245,16 +272,19 @@ public final class Parser {
                     ? Mutability.VAR
                     : Mutability.CONST;
             final VariableDeclaration declaration =
-                parseVariableDeclaration(declarationKeyword, mutability);
+                (VariableDeclaration) terminate(
+                    parseVariableDeclaration(declarationKeyword, mutability)
+                );
             initializer =
                 new DeclarationStatement(declaration, declaration.range());
         }
         else {
             final Expression expression = parseExpression();
             initializer =
-                new ExpressionStatement(expression, expression.range());
+                (ExpressionStatement) terminate(
+                    new ExpressionStatement(expression, expression.range())
+                );
         }
-        expect(TokenType.SEMICOLON);
 
         final @Nullable Expression condition =
             check(TokenType.SEMICOLON) ? null : parseExpression();
@@ -394,7 +424,16 @@ public final class Parser {
     }
 
     private Expression parseExpression() {
-        return parseBinaryExpression(1);
+        final Expression left = parseBinaryExpression(1);
+        if (match(TokenType.EQUAL)) {
+            final Expression value = parseExpression();
+            return new AssignmentExpression(
+                left,
+                value,
+                new Range(left.range().start(), value.range().end())
+            );
+        }
+        return left;
     }
 
     private Expression parseBinaryExpression(final int minimumPrecedence) {

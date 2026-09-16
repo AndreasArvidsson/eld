@@ -195,6 +195,15 @@ public class Lexer {
         if (
             next != null && next == '.'
                 && position + 1 < source.length()
+                && source.charAt(position + 1) == '_'
+        ) {
+            advance();
+            throw invalidNumericLiteral();
+        }
+
+        if (
+            next != null && next == '.'
+                && position + 1 < source.length()
                 && Character.isDigit(source.charAt(position + 1))
         ) {
             type = TokenType.FLOAT_LITERAL;
@@ -204,8 +213,32 @@ public class Lexer {
             readDigits(builder);
         }
 
+        final Character suffix = peek();
+        if (
+            suffix != null && (suffix == '_' || Character.isAlphabetic(suffix))
+        ) {
+            throw invalidNumericLiteral();
+        }
+
         final String text = Objects.requireNonNull(builder.toString());
         return createToken(type, text);
+    }
+
+    private LexerException invalidNumericLiteral() {
+        while (true) {
+            final Character next = peek();
+            if (
+                next == null || !(next == '_' || Character.isAlphabetic(next)
+                    || Character.isDigit(next))
+            ) {
+                break;
+            }
+            advance();
+        }
+        return new LexerException(
+            new Range(tokenStart, new Position(line, column)),
+            "Invalid numeric literal"
+        );
     }
 
     private void readDigits(final StringBuilder builder) {
@@ -219,15 +252,15 @@ public class Lexer {
                 while (end < source.length() && source.charAt(end) == '_') {
                     end++;
                 }
+                while (position < end) {
+                    builder.append('_');
+                    advance();
+                }
                 if (
                     end >= source.length()
                         || !Character.isDigit(source.charAt(end))
                 ) {
-                    return;
-                }
-                while (position < end) {
-                    builder.append('_');
-                    advance();
+                    throw invalidNumericLiteral();
                 }
                 continue;
             }
@@ -277,6 +310,7 @@ public class Lexer {
     }
 
     private Token readCharLiteral() {
+        final int start = position;
         // Skip the opening single quote.
         advance();
 
@@ -289,7 +323,31 @@ public class Lexer {
             );
         }
 
+        if (value == '\n' || value == '\r') {
+            throw new LexerException(
+                new Range(line, column, line, column + 1),
+                "Character literal must be on a single line"
+            );
+        }
+
         advance();
+
+        if (value == '\\') {
+            final Character escaped = peek();
+            if (escaped != null && (escaped == '\n' || escaped == '\r')) {
+                throw new LexerException(
+                    new Range(line, column, line, column + 1),
+                    "Character literal must be on a single line"
+                );
+            }
+            if (escaped == null || "btnfr'\"\\".indexOf(escaped) < 0) {
+                throw new LexerException(
+                    new Range(line, column, line, column + 1),
+                    "Invalid character escape"
+                );
+            }
+            advance();
+        }
 
         if (peek() == null || peek() != '\'') {
             throw new LexerException(
@@ -301,7 +359,7 @@ public class Lexer {
         advance();
 
         final String text =
-            Objects.requireNonNull(String.format("'%c'", value));
+            Objects.requireNonNull(source.substring(start, position));
         return createToken(TokenType.CHAR_LITERAL, text);
     }
 

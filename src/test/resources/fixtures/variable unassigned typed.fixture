@@ -1,4 +1,4 @@
-var foo: int
+var foo: int;
 
 --- TOKENS ---
 
@@ -6,13 +6,14 @@ VAR (1:1-1:4)
 IDENTIFIER "foo" (1:5-1:8)
 COLON (1:8-1:9)
 IDENTIFIER "int" (1:10-1:13)
+SEMICOLON (1:13-1:14)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:13
+  range: 1:1-1:14
   (VariableDeclaration
-    range: 1:1-1:13
+    range: 1:1-1:14
     mutability: VAR
     (IdentifierDeclaration
       range: 1:5-1:8

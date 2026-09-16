@@ -1,10 +1,28 @@
-!enabled
+!enabled;
 
 --- TOKENS ---
 
 BANG (1:1-1:2)
 IDENTIFIER "enabled" (1:2-1:9)
+SEMICOLON (1:9-1:10)
 
 --- AST ---
 
-ParserException: Expected declaration or statement at 1:1-1:2
+(Program
+  range: 1:1-1:10
+  (ExpressionStatement
+    range: 1:1-1:10
+    (UnaryExpression
+      range: 1:1-1:9
+      operator: NOT
+      (IdentifierExpression
+        range: 1:2-1:9
+        name: "enabled"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'enabled' at 1:2-1:9

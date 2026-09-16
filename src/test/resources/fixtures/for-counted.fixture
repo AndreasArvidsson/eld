@@ -26,9 +26,9 @@ RIGHT_BRACE (1:31-1:32)
   (ForStatement
     range: 1:1-1:32
     (DeclarationStatement
-      range: 1:6-1:15
+      range: 1:6-1:16
       (VariableDeclaration
-        range: 1:6-1:15
+        range: 1:6-1:16
         mutability: VAR
         (IdentifierDeclaration
           range: 1:10-1:11

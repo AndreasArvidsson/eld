@@ -1,5 +1,5 @@
 func sum() int {
-    return
+    return;
 }
 
 --- TOKENS ---
@@ -11,6 +11,7 @@ RIGHT_PAREN (1:10-1:11)
 IDENTIFIER "int" (1:12-1:15)
 LEFT_BRACE (1:16-1:17)
 RETURN (2:5-2:11)
+SEMICOLON (2:11-2:12)
 RIGHT_BRACE (3:1-3:2)
 
 --- AST ---
@@ -30,7 +31,7 @@ RIGHT_BRACE (3:1-3:2)
     (BlockStatement
       range: 1:16-3:2
       (ReturnStatement
-        range: 2:5-2:11
+        range: 2:5-2:12
         value: null
       )
     )
@@ -39,4 +40,4 @@ RIGHT_BRACE (3:1-3:2)
 
 --- SEMANTIC ---
 
-SemanticException: Return statement must return a value of type int at 2:5-2:11
+SemanticException: Return statement must return a value of type int at 2:5-2:12

@@ -29,7 +29,9 @@ import mylang.semantic.Type;
 
 /** Generates a Java 21 module named Test and its declared classes. */
 public final class BytecodeGenerator {
-    private static final String CLASS_NAME = "Test";
+    private final String moduleName;
+    private final String parentName;
+    private final int previousItems;
     private final Program program;
     private final SemanticModel semanticModel;
 
@@ -37,8 +39,21 @@ public final class BytecodeGenerator {
         final Program program,
         final SemanticModel semanticModel
     ) {
+        this(program, semanticModel, "Test", "java/lang/Object", 0);
+    }
+
+    BytecodeGenerator(
+        final Program program,
+        final SemanticModel semanticModel,
+        final String moduleName,
+        final String parentName,
+        final int previousItems
+    ) {
         this.program = program;
         this.semanticModel = semanticModel;
+        this.moduleName = moduleName;
+        this.parentName = parentName;
+        this.previousItems = previousItems;
     }
 
     /** Generates a module without class declarations; otherwise use generateClasses(). */
@@ -64,8 +79,9 @@ public final class BytecodeGenerator {
      */
     public Map<String, byte[]> generateClasses() {
         final Map<String, byte[]> classes = new LinkedHashMap<>();
-        classes.put(CLASS_NAME, generateModule());
-        for (final BlockItem item : program.items()) {
+        classes.put(moduleName, generateModule());
+        for (final BlockItem item : program.items()
+            .subList(previousItems, program.items().size())) {
             if (item instanceof ClassDeclaration declaration) {
                 final String name = className(declaration);
                 if (
@@ -82,8 +98,8 @@ public final class BytecodeGenerator {
         return Collections.unmodifiableMap(classes);
     }
 
-    private static String className(final ClassDeclaration declaration) {
-        return CLASS_NAME + "$" + declaration.name().name();
+    private String className(final ClassDeclaration declaration) {
+        return moduleName + "$" + declaration.name().name();
     }
 
     private byte[] generateClass(final ClassDeclaration declaration) {
@@ -100,10 +116,10 @@ public final class BytecodeGenerator {
             "java/lang/Object",
             null
         );
-        writer.visitNestHost(CLASS_NAME);
+        writer.visitNestHost(moduleName);
         writer.visitInnerClass(
             name,
-            CLASS_NAME,
+            moduleName,
             declaration.name().name(),
             ACC_PUBLIC | ACC_STATIC
         );
@@ -220,15 +236,23 @@ public final class BytecodeGenerator {
             );
         writer.visit(
             V21,
-            ACC_PUBLIC | ACC_FINAL | ACC_SUPER,
-            CLASS_NAME,
+            ACC_PUBLIC | ACC_SUPER
+                | (moduleName.equals("Test") ? ACC_FINAL : 0),
+            moduleName,
             null,
-            "java/lang/Object",
+            parentName,
             null
         );
         final IdentityHashMap<Symbol, String> globals = new IdentityHashMap<>();
         final List<BlockItem> initializers = new ArrayList<>();
-        for (final BlockItem item : program.items()) {
+        for (final BlockItem item : program.items().subList(0, previousItems)) {
+            if (item instanceof VariableDeclaration variable) {
+                final Symbol symbol = semanticModel.getSymbol(variable.name());
+                globals.put(symbol, symbol.name());
+            }
+        }
+        for (final BlockItem item : program.items()
+            .subList(previousItems, program.items().size())) {
             if (item instanceof VariableDeclaration variable) {
                 final Symbol symbol = semanticModel.getSymbol(variable.name());
                 final Expression initializer = variable.initializer();
@@ -244,9 +268,10 @@ public final class BytecodeGenerator {
                 writer
                     .visitField(
                         ACC_PUBLIC | ACC_STATIC
-                            | (variable.mutability() == Mutability.CONST
-                                ? ACC_FINAL
-                                : 0),
+                            | (moduleName.equals("Test")
+                                && variable.mutability() == Mutability.CONST
+                                    ? ACC_FINAL
+                                    : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
                         null,
@@ -259,7 +284,7 @@ public final class BytecodeGenerator {
                 writer.visitNestMember(name);
                 writer.visitInnerClass(
                     name,
-                    CLASS_NAME,
+                    moduleName,
                     declaration.name().name(),
                     ACC_PUBLIC | ACC_STATIC
                 );
@@ -268,14 +293,23 @@ public final class BytecodeGenerator {
                 initializers.add(item);
             }
         }
-        for (final BlockItem item : program.items()) {
+        for (final BlockItem item : program.items()
+            .subList(previousItems, program.items().size())) {
             if (item instanceof FunctionDeclaration function) {
                 generateFunction(writer, function, globals, null);
             }
         }
-        if (!initializers.isEmpty()) {
+        if (!initializers.isEmpty() || !moduleName.equals("Test")) {
             final MethodVisitor method =
-                writer.visitMethod(ACC_STATIC, "<clinit>", "()V", null, null);
+                writer.visitMethod(
+                    moduleName.equals("Test")
+                        ? ACC_STATIC
+                        : ACC_PUBLIC | ACC_STATIC,
+                    moduleName.equals("Test") ? "<clinit>" : "$eval",
+                    "()V",
+                    null,
+                    null
+                );
             final MethodGenerator generator =
                 new MethodGenerator(method, globals, BuiltinType.VOID);
             method.visitCode();
@@ -283,6 +317,37 @@ public final class BytecodeGenerator {
             for (final BlockItem item : initializers) {
                 if (!reachable) {
                     break;
+                }
+                if (
+                    !moduleName.equals("Test")
+                        && item instanceof ExpressionStatement statement
+                        && semanticModel.getEffectiveType(
+                            statement.expression()
+                        ) != BuiltinType.VOID
+                ) {
+                    method.visitFieldInsn(
+                        GETSTATIC,
+                        "java/lang/System",
+                        "out",
+                        "Ljava/io/PrintStream;"
+                    );
+                    generator.expression(statement.expression());
+                    final Type type =
+                        semanticModel.getEffectiveType(statement.expression());
+                    final String argument =
+                        type instanceof ArrayType
+                            || type instanceof FunctionType
+                            || type instanceof ClassType
+                                ? "Ljava/lang/Object;"
+                                : descriptor(type);
+                    method.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "java/io/PrintStream",
+                        "println",
+                        "(" + argument + ")V",
+                        false
+                    );
+                    continue;
                 }
                 reachable = generator.item(item);
             }
@@ -300,7 +365,7 @@ public final class BytecodeGenerator {
                 case INT -> Integer.parseInt(literal.text().replace("_", ""));
                 case FLOAT -> Float.parseFloat(literal.text().replace("_", ""));
                 case BOOL -> Boolean.parseBoolean(literal.text()) ? 1 : 0;
-                case CHAR -> (int) literal.text().charAt(1);
+                case CHAR -> (int) decodeChar(literal.text());
                 case STRING -> decodeString(literal.text());
                 case NULL -> null;
             };
@@ -395,6 +460,12 @@ public final class BytecodeGenerator {
             };
         }
         return null;
+    }
+
+    private static char decodeChar(final String text) {
+        return text.substring(1, text.length() - 1)
+            .translateEscapes()
+            .charAt(0);
     }
 
     private static String decodeString(final String text) {
@@ -796,7 +867,7 @@ public final class BytecodeGenerator {
                         instanceMethod ? H_INVOKEVIRTUAL : H_INVOKESTATIC,
                         instanceMethod
                             ? Objects.requireNonNull(instance).owner()
-                            : CLASS_NAME,
+                            : moduleName,
                         symbol.name(),
                         methodDescriptor(function.type()),
                         false
@@ -827,7 +898,7 @@ public final class BytecodeGenerator {
             else if (globals.containsKey(symbol)) {
                 method.visitFieldInsn(
                     GETSTATIC,
-                    CLASS_NAME,
+                    moduleName,
                     Objects.requireNonNull(globals.get(symbol)),
                     descriptor(symbol.type())
                 );
@@ -864,7 +935,7 @@ public final class BytecodeGenerator {
             else if (globals.containsKey(symbol)) {
                 method.visitFieldInsn(
                     PUTSTATIC,
-                    CLASS_NAME,
+                    moduleName,
                     Objects.requireNonNull(globals.get(symbol)),
                     descriptor(symbol.type())
                 );
@@ -966,7 +1037,7 @@ public final class BytecodeGenerator {
                     Boolean.parseBoolean(text) ? ICONST_1 : ICONST_0
                 );
                 case NULL -> method.visitInsn(ACONST_NULL);
-                case CHAR -> method.visitLdcInsn((int) text.charAt(1));
+                case CHAR -> method.visitLdcInsn((int) decodeChar(text));
                 case STRING -> method.visitLdcInsn(decodeString(text));
             }
         }
@@ -977,9 +1048,8 @@ public final class BytecodeGenerator {
             final Expression callee = unwrap(call.callee());
             if (
                 callee instanceof IdentifierExpression identifier
-                    && BuiltinFunctionSymbol.PRINT.equals(
-                        semanticModel.getReference(identifier)
-                    )
+                    && BuiltinFunctionSymbol.PRINT
+                        .equals(semanticModel.getReference(identifier))
             ) {
                 method.visitFieldInsn(
                     GETSTATIC,
@@ -1017,7 +1087,7 @@ public final class BytecodeGenerator {
                     instanceMethod ? INVOKEVIRTUAL : INVOKESTATIC,
                     instanceMethod
                         ? Objects.requireNonNull(instance).owner()
-                        : CLASS_NAME,
+                        : moduleName,
                     function.name(),
                     methodDescriptor(type),
                     false

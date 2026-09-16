@@ -1,0 +1,59 @@
+true;
+false;
+
+--- TOKENS ---
+
+BOOLEAN_LITERAL "true" (1:1-1:5)
+SEMICOLON (1:5-1:6)
+BOOLEAN_LITERAL "false" (2:1-2:6)
+SEMICOLON (2:6-2:7)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:7
+  (ExpressionStatement
+    range: 1:1-1:6
+    (LiteralExpression
+      range: 1:1-1:5
+      kind: bool
+      text: "true"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:7
+    (LiteralExpression
+      range: 2:1-2:6
+      kind: bool
+      text: "false"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:5 -> bool
+  2:1-2:6 -> bool
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    ICONST_1
+    POP
+    ICONST_0
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

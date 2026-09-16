@@ -1,4 +1,4 @@
-const foo = 10
+const foo = 10;
 
 --- TOKENS ---
 
@@ -6,13 +6,14 @@ CONST (1:1-1:6)
 IDENTIFIER "foo" (1:7-1:10)
 EQUAL (1:11-1:12)
 INTEGER_LITERAL "10" (1:13-1:15)
+SEMICOLON (1:15-1:16)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:15
+  range: 1:1-1:16
   (VariableDeclaration
-    range: 1:1-1:15
+    range: 1:1-1:16
     mutability: CONST
     (IdentifierDeclaration
       range: 1:7-1:10

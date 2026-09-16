@@ -1,0 +1,45 @@
+"Hello world";
+
+--- TOKENS ---
+
+STRING_LITERAL "\"Hello world\"" (1:1-1:14)
+SEMICOLON (1:14-1:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:15
+  (ExpressionStatement
+    range: 1:1-1:15
+    (LiteralExpression
+      range: 1:1-1:14
+      kind: string
+      text: "\"Hello world\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:14 -> string
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC "Hello world"
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

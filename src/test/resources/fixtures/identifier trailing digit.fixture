@@ -1,0 +1,23 @@
+foo2;
+
+--- TOKENS ---
+
+IDENTIFIER "foo2" (1:1-1:5)
+SEMICOLON (1:5-1:6)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:6
+  (ExpressionStatement
+    range: 1:1-1:6
+    (IdentifierExpression
+      range: 1:1-1:5
+      name: "foo2"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'foo2' at 1:1-1:5

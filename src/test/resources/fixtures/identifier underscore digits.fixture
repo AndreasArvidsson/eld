@@ -1,0 +1,23 @@
+_123;
+
+--- TOKENS ---
+
+IDENTIFIER "_123" (1:1-1:5)
+SEMICOLON (1:5-1:6)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:6
+  (ExpressionStatement
+    range: 1:1-1:6
+    (IdentifierExpression
+      range: 1:1-1:5
+      name: "_123"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: '_123' at 1:1-1:5

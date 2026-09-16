@@ -1,4 +1,4 @@
-const result = value > 2 && (!enabled || disabled)
+const result = value > 2 && (!enabled || disabled);
 
 --- TOKENS ---
 
@@ -15,13 +15,14 @@ IDENTIFIER "enabled" (1:31-1:38)
 OR (1:39-1:41)
 IDENTIFIER "disabled" (1:42-1:50)
 RIGHT_PAREN (1:50-1:51)
+SEMICOLON (1:51-1:52)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:51
+  range: 1:1-1:52
   (VariableDeclaration
-    range: 1:1-1:51
+    range: 1:1-1:52
     mutability: CONST
     (IdentifierDeclaration
       range: 1:7-1:13

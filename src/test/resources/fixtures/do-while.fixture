@@ -1,4 +1,4 @@
-do {} while (false)
+do {} while (false);
 
 --- TOKENS ---
 
@@ -9,13 +9,14 @@ WHILE (1:7-1:12)
 LEFT_PAREN (1:13-1:14)
 BOOLEAN_LITERAL "false" (1:14-1:19)
 RIGHT_PAREN (1:19-1:20)
+SEMICOLON (1:20-1:21)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:20
+  range: 1:1-1:21
   (DoWhileStatement
-    range: 1:1-1:20
+    range: 1:1-1:21
     (BlockStatement
       range: 1:4-1:6
     )

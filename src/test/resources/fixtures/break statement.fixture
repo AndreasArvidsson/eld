@@ -1,19 +1,20 @@
-break
+break;
 
 
 --- TOKENS ---
 
 BREAK (1:1-1:6)
+SEMICOLON (1:6-1:7)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:6
+  range: 1:1-1:7
   (BreakStatement
-    range: 1:1-1:6
+    range: 1:1-1:7
   )
 )
 
 --- SEMANTIC ---
 
-SemanticException: A 'break' statement can only be used within an enclosing loop at 1:1-1:6
+SemanticException: A 'break' statement can only be used within an enclosing loop at 1:1-1:7

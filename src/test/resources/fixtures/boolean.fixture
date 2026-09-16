@@ -1,4 +1,4 @@
-value > 2 && (!enabled || disabled)
+value > 2 && (!enabled || disabled);
 
 --- TOKENS ---
 
@@ -12,7 +12,53 @@ IDENTIFIER "enabled" (1:16-1:23)
 OR (1:24-1:26)
 IDENTIFIER "disabled" (1:27-1:35)
 RIGHT_PAREN (1:35-1:36)
+SEMICOLON (1:36-1:37)
 
 --- AST ---
 
-ParserException: Expected declaration or statement at 1:1-1:6
+(Program
+  range: 1:1-1:37
+  (ExpressionStatement
+    range: 1:1-1:37
+    (BinaryExpression
+      range: 1:1-1:36
+      (BinaryExpression
+        range: 1:1-1:10
+        (IdentifierExpression
+          range: 1:1-1:6
+          name: "value"
+        )
+        operator: GREATER
+        (LiteralExpression
+          range: 1:9-1:10
+          kind: int
+          text: "2"
+        )
+      )
+      operator: AND
+      (GroupingExpression
+        range: 1:14-1:36
+        (BinaryExpression
+          range: 1:15-1:35
+          (UnaryExpression
+            range: 1:15-1:23
+            operator: NOT
+            (IdentifierExpression
+              range: 1:16-1:23
+              name: "enabled"
+            )
+          )
+          operator: OR
+          (IdentifierExpression
+            range: 1:27-1:35
+            name: "disabled"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'value' at 1:1-1:6

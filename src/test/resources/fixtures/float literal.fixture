@@ -1,0 +1,60 @@
+123.456;
+123_456.789_000;
+
+
+--- TOKENS ---
+
+FLOAT_LITERAL "123.456" (1:1-1:8)
+SEMICOLON (1:8-1:9)
+FLOAT_LITERAL "123_456.789_000" (2:1-2:16)
+SEMICOLON (2:16-2:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:17
+  (ExpressionStatement
+    range: 1:1-1:9
+    (LiteralExpression
+      range: 1:1-1:8
+      kind: float
+      text: "123.456"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (LiteralExpression
+      range: 2:1-2:16
+      kind: float
+      text: "123_456.789_000"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:8 -> float
+  2:1-2:16 -> float
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 123.456F
+    POP
+    LDC 123456.79F
+    POP
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

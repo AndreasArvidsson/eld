@@ -1,4 +1,4 @@
-const foo = [1, 2.5]
+const foo = [1, 2.5];
 
 
 --- TOKENS ---
@@ -11,13 +11,14 @@ INTEGER_LITERAL "1" (1:14-1:15)
 COMMA (1:15-1:16)
 FLOAT_LITERAL "2.5" (1:17-1:20)
 RIGHT_BRACKET (1:20-1:21)
+SEMICOLON (1:21-1:22)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:21
+  range: 1:1-1:22
   (VariableDeclaration
-    range: 1:1-1:21
+    range: 1:1-1:22
     mutability: CONST
     (IdentifierDeclaration
       range: 1:7-1:10

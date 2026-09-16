@@ -1,13 +1,23 @@
-foo2 _3 if4 5foo
+a1b2;
 
 --- TOKENS ---
 
-IDENTIFIER "foo2" (1:1-1:5)
-IDENTIFIER "_3" (1:6-1:8)
-IDENTIFIER "if4" (1:9-1:12)
-INTEGER_LITERAL "5" (1:13-1:14)
-IDENTIFIER "foo" (1:14-1:17)
+IDENTIFIER "a1b2" (1:1-1:5)
+SEMICOLON (1:5-1:6)
 
 --- AST ---
 
-ParserException: Expected declaration or statement at 1:1-1:5
+(Program
+  range: 1:1-1:6
+  (ExpressionStatement
+    range: 1:1-1:6
+    (IdentifierExpression
+      range: 1:1-1:5
+      name: "a1b2"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'a1b2' at 1:1-1:5

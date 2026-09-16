@@ -1,4 +1,4 @@
-print(sum(1, 2))
+print(sum(1, 2));
 
 --- TOKENS ---
 
@@ -11,13 +11,14 @@ COMMA (1:12-1:13)
 INTEGER_LITERAL "2" (1:14-1:15)
 RIGHT_PAREN (1:15-1:16)
 RIGHT_PAREN (1:16-1:17)
+SEMICOLON (1:17-1:18)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:17
+  range: 1:1-1:18
   (ExpressionStatement
-    range: 1:1-1:17
+    range: 1:1-1:18
     (CallExpression
       range: 1:1-1:17
       (IdentifierExpression
