@@ -193,10 +193,12 @@ public class FixtureTest {
                     outputHeaderIndex,
                     -1
                 );
-            final String outputActual = BytecodeRunner.run(classes);
-            actualBuilder.append(outputActual);
-            if (assertFixture) {
-                assertEquals(expected, outputActual, name);
+            if (!expected.isEmpty() || updateFixture) {
+                final String outputActual = BytecodeRunner.run(classes);
+                actualBuilder.append(outputActual);
+                if (assertFixture) {
+                    assertEquals(expected, outputActual, name);
+                }
             }
         }
         catch (
