@@ -49,6 +49,11 @@ public final class SemanticModel {
         return Objects.requireNonNull(conversionTypes.get(expression));
     }
 
+    public Type getEffectiveType(final Expression expression) {
+        return conversionTypes
+            .getOrDefault(expression, getExpressionType(expression));
+    }
+
     public void setResolvedType(final TypeNode typeNode, final Type type) {
         resolvedTypes.put(typeNode, type);
     }

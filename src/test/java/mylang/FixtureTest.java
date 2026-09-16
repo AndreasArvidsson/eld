@@ -3,18 +3,15 @@ package mylang;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
-
 import mylang.lexer.Lexer;
 import mylang.lexer.LexerException;
 import mylang.lexer.Token;
@@ -31,7 +28,7 @@ public class FixtureTest {
     private final static String AST_HEADER = "\n\n--- AST ---\n\n";
     private final static String SEMANTIC_HEADER = "\n\n--- SEMANTIC ---\n\n";
     private final static String BYTECODE_HEADER = "\n\n--- BYTECODE ---\n\n";
-    // private final static String OUTPUT_HEADER = "\n\n--- OUTPUT ---\n\n";
+    private final static String OUTPUT_HEADER = "\n\n--- OUTPUT ---\n\n";
 
     @TestFactory
     List<DynamicTest> fixtures() throws IOException {
@@ -66,6 +63,7 @@ public class FixtureTest {
         final int astHeaderIndex = fixture.indexOf(AST_HEADER);
         final int semanticHeaderIndex = fixture.indexOf(SEMANTIC_HEADER);
         final int bytecodeHeaderIndex = fixture.indexOf(BYTECODE_HEADER);
+        final int outputHeaderIndex = fixture.indexOf(OUTPUT_HEADER);
         final boolean assertFixture = !updateFixture;
         final String source =
             tokenHeaderIndex < 0
@@ -77,6 +75,8 @@ public class FixtureTest {
         actualBuilder.append(source);
 
         try {
+            // --- TOKENS ---
+
             actualBuilder.append(TOKENS_HEADER);
             if (assertFixture) {
                 assertTrue(
@@ -94,10 +94,11 @@ public class FixtureTest {
             final List<@NonNull Token> tokens = new Lexer(source).getTokens();
             final String tokensActual = joinList(tokens);
             actualBuilder.append(tokensActual);
-
             if (assertFixture) {
                 assertEquals(expected, tokensActual, name);
             }
+
+            // --- AST ---
 
             actualBuilder.append(AST_HEADER);
             if (assertFixture) {
@@ -116,10 +117,11 @@ public class FixtureTest {
             final Program ast = new Parser(tokens).parse();
             final String astActual = ast.toAstString();
             actualBuilder.append(astActual);
-
             if (assertFixture) {
                 assertEquals(expected, astActual, name);
             }
+
+            // --- SEMANTIC ---
 
             actualBuilder.append(SEMANTIC_HEADER);
             if (assertFixture) {
@@ -139,9 +141,35 @@ public class FixtureTest {
                 new SemanticAnalyzer().analyze(ast);
             final String semanticActual = semanticModel.toString();
             actualBuilder.append(semanticActual);
-
             if (assertFixture) {
                 assertEquals(expected, semanticActual, name);
+            }
+
+            // --- BYTECODE ---
+
+            actualBuilder.append(BYTECODE_HEADER);
+            if (assertFixture) {
+                assertTrue(
+                    bytecodeHeaderIndex >= 0,
+                    () -> "Missing bytecode header delimiter in " + name
+                );
+            }
+            expected =
+                getContent(
+                    fixture,
+                    BYTECODE_HEADER,
+                    bytecodeHeaderIndex,
+                    outputHeaderIndex
+                );
+            final byte[] bytecode =
+                new BytecodeGenerator(ast, semanticModel).generate();
+            if (assertFixture) {
+                BytecodeUtil.verify(bytecode);
+            }
+            final String bytecodeActual = BytecodeUtil.toString(bytecode);
+            actualBuilder.append(bytecodeActual);
+            if (assertFixture) {
+                assertEquals(expected, bytecodeActual, name);
             }
         }
         catch (final LexerException | ParserException | SemanticException e) {
