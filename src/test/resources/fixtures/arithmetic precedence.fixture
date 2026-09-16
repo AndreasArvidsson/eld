@@ -107,3 +107,17 @@ Expression types:
 Declarations:
   1:7-1:19 -> VariableSymbol(name=productFirst, type=int, mutability=CONST)
   2:7-2:18 -> VariableSymbol(name=productLast, type=int, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static I productFirst = 10
+
+  // access flags 0x19
+  public final static I productLast = 14
+}

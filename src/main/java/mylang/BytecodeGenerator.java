@@ -161,12 +161,13 @@ public final class BytecodeGenerator {
             "()V",
             false
         );
+        boolean reachable = true;
         for (final BlockItem member : declaration.members()) {
-            if (!(member instanceof FunctionDeclaration)) {
-                initializer.item(member);
+            if (reachable && !(member instanceof FunctionDeclaration)) {
+                reachable = initializer.item(member);
             }
         }
-        initializer.finish(true);
+        initializer.finish(reachable);
         for (final BlockItem member : declaration.members()) {
             if (member instanceof FunctionDeclaration function) {
                 generateFunction(writer, function, globals, instance);
@@ -208,8 +209,7 @@ public final class BytecodeGenerator {
         for (final Parameter parameter : function.parameters()) {
             generator.local(semanticModel.getSymbol(parameter.name()));
         }
-        generator.block(function.body());
-        generator.finish(completesNormally(function.body()));
+        generator.finish(generator.block(function.body()));
     }
 
     private byte[] generateModule() {
@@ -236,7 +236,7 @@ public final class BytecodeGenerator {
                         && initializer != null
                             ? constantValue(initializer)
                             : null;
-                if (constantValue == null) {
+                if (initializer != null && constantValue == null) {
                     initializers.add(item);
                 }
                 globals.put(symbol, symbol.name());
@@ -278,10 +278,14 @@ public final class BytecodeGenerator {
             final MethodGenerator generator =
                 new MethodGenerator(method, globals, BuiltinType.VOID);
             method.visitCode();
+            boolean reachable = true;
             for (final BlockItem item : initializers) {
-                generator.item(item);
+                if (!reachable) {
+                    break;
+                }
+                reachable = generator.item(item);
             }
-            generator.finish(true);
+            generator.finish(reachable);
         }
         writer.visitEnd();
         return writer.toByteArray();
@@ -364,6 +368,8 @@ public final class BytecodeGenerator {
             };
         }
         if (left instanceof Float a && right instanceof Float b) {
+            // Round each AST operation as JVM float arithmetic does; computing
+            // in double and narrowing only the final result changes the value.
             return switch (binary.operator()) {
                 case ADD -> a + b;
                 case SUBTRACT -> a - b;
@@ -485,27 +491,16 @@ public final class BytecodeGenerator {
         return new IllegalArgumentException(message + " at " + node.range());
     }
 
-    private record Loop(Label continueTarget, Label breakTarget) {
-    }
+    private static final class Loop {
+        private final Label continueTarget;
+        private final Label breakTarget;
+        private boolean hasContinue;
+        private boolean hasBreak;
 
-    private static boolean completesNormally(final BlockItem item) {
-        return switch (item) {
-            case ReturnStatement ignored -> false;
-            case BreakStatement ignored -> false;
-            case ContinueStatement ignored -> false;
-            case BlockStatement block -> block.items()
-                .stream()
-                .allMatch(BytecodeGenerator::completesNormally);
-            case IfStatement conditional -> {
-                final BlockStatement otherwise = conditional.elseBranch();
-                yield otherwise == null || completesNormally(otherwise)
-                    || completesNormally(conditional.thenBranch())
-                    || conditional.elifBranches()
-                        .stream()
-                        .anyMatch(branch -> completesNormally(branch.branch()));
-            }
-            default -> true;
-        };
+        private Loop(final Label continueTarget, final Label breakTarget) {
+            this.continueTarget = continueTarget;
+            this.breakTarget = breakTarget;
+        }
     }
 
     private final class MethodGenerator {
@@ -568,20 +563,21 @@ public final class BytecodeGenerator {
             method.visitEnd();
         }
 
-        private void block(final BlockStatement block) {
+        private boolean block(final BlockStatement block) {
             for (final BlockItem child : block.items()) {
-                item(child);
-                if (!completesNormally(child)) {
-                    break;
+                if (!item(child)) {
+                    return false;
                 }
             }
+            return true;
         }
 
-        private void item(final BlockItem item) {
+        private boolean item(final BlockItem item) {
             switch (item) {
                 case VariableDeclaration variable -> {
                     final Symbol symbol =
                         semanticModel.getSymbol(variable.name());
+                    prepareStore(symbol);
                     final Expression initializer = variable.initializer();
                     if (initializer == null) {
                         method.visitInsn(
@@ -597,9 +593,12 @@ public final class BytecodeGenerator {
                     }
                     store(symbol);
                 }
-                case DeclarationStatement declaration ->
-                    item(declaration.declaration());
-                case BlockStatement block -> block(block);
+                case DeclarationStatement declaration -> {
+                    return item(declaration.declaration());
+                }
+                case BlockStatement block -> {
+                    return block(block);
+                }
                 case ExpressionStatement statement ->
                     discard(statement.expression());
                 case ReturnStatement statement -> {
@@ -608,18 +607,26 @@ public final class BytecodeGenerator {
                         expression(value);
                     }
                     method.visitInsn(returnOpcode(returnType));
+                    return false;
                 }
                 case IfStatement statement -> {
                     final Label end = new Label();
-                    branch(statement.condition(), statement.thenBranch(), end);
+                    boolean reachable =
+                        branch(
+                            statement.condition(),
+                            statement.thenBranch(),
+                            end
+                        );
                     for (final ElseIfBranch branch : statement.elifBranches()) {
-                        branch(branch.condition(), branch.branch(), end);
+                        reachable |=
+                            branch(branch.condition(), branch.branch(), end);
                     }
                     final BlockStatement otherwise = statement.elseBranch();
                     if (otherwise != null) {
-                        block(otherwise);
+                        reachable |= block(otherwise);
                     }
                     method.visitLabel(end);
+                    return otherwise == null || reachable;
                 }
                 case WhileStatement statement -> {
                     final Label condition = new Label();
@@ -627,8 +634,9 @@ public final class BytecodeGenerator {
                     method.visitLabel(condition);
                     expression(statement.condition());
                     method.visitJumpInsn(IFEQ, end);
-                    loopBody(statement.body(), condition, end);
-                    method.visitJumpInsn(GOTO, condition);
+                    if (loopBody(statement.body(), new Loop(condition, end))) {
+                        method.visitJumpInsn(GOTO, condition);
+                    }
                     method.visitLabel(end);
                 }
                 case DoWhileStatement statement -> {
@@ -636,11 +644,16 @@ public final class BytecodeGenerator {
                     final Label condition = new Label();
                     final Label end = new Label();
                     method.visitLabel(start);
-                    loopBody(statement.body(), condition, end);
-                    method.visitLabel(condition);
-                    expression(statement.condition());
-                    method.visitJumpInsn(IFNE, start);
+                    final Loop loop = new Loop(condition, end);
+                    final boolean reachesCondition =
+                        loopBody(statement.body(), loop) || loop.hasContinue;
+                    if (reachesCondition) {
+                        method.visitLabel(condition);
+                        expression(statement.condition());
+                        method.visitJumpInsn(IFNE, start);
+                    }
                     method.visitLabel(end);
+                    return reachesCondition || loop.hasBreak;
                 }
                 case ForStatement statement -> {
                     final Statement initializer = statement.initializer();
@@ -657,33 +670,40 @@ public final class BytecodeGenerator {
                         expression(condition);
                         method.visitJumpInsn(IFEQ, end);
                     }
-                    loopBody(statement.body(), next, end);
-                    method.visitLabel(next);
-                    if (update != null) {
-                        discard(update);
+                    final Loop loop = new Loop(next, end);
+                    if (loopBody(statement.body(), loop) || loop.hasContinue) {
+                        method.visitLabel(next);
+                        if (update != null) {
+                            discard(update);
+                        }
+                        method.visitJumpInsn(GOTO, start);
                     }
-                    method.visitJumpInsn(GOTO, start);
                     method.visitLabel(end);
+                    return condition != null || loop.hasBreak;
                 }
                 case ForEachStatement statement -> forEach(statement);
                 case BreakStatement statement -> {
                     if (loops.isEmpty()) {
                         throw unsupported(statement, "Break outside a loop");
                     }
-                    method.visitJumpInsn(GOTO, loops.element().breakTarget());
+                    loops.element().hasBreak = true;
+                    method.visitJumpInsn(GOTO, loops.element().breakTarget);
+                    return false;
                 }
                 case ContinueStatement statement -> {
                     if (loops.isEmpty()) {
                         throw unsupported(statement, "Continue outside a loop");
                     }
-                    method
-                        .visitJumpInsn(GOTO, loops.element().continueTarget());
+                    loops.element().hasContinue = true;
+                    method.visitJumpInsn(GOTO, loops.element().continueTarget);
+                    return false;
                 }
                 default -> throw unsupported(item, "Unsupported declaration");
             }
+            return true;
         }
 
-        private void branch(
+        private boolean branch(
             final Expression condition,
             final BlockStatement body,
             final Label end
@@ -691,21 +711,19 @@ public final class BytecodeGenerator {
             final Label next = new Label();
             expression(condition);
             method.visitJumpInsn(IFEQ, next);
-            block(body);
-            if (completesNormally(body)) {
+            final boolean reachable = block(body);
+            if (reachable) {
                 method.visitJumpInsn(GOTO, end);
             }
             method.visitLabel(next);
+            return reachable;
         }
 
-        private void loopBody(
-            final BlockStatement body,
-            final Label next,
-            final Label end
-        ) {
-            loops.push(new Loop(next, end));
-            block(body);
+        private boolean loopBody(final BlockStatement body, final Loop loop) {
+            loops.push(loop);
+            final boolean reachable = block(body);
             loops.pop();
+            return reachable;
         }
 
         private void forEach(final ForEachStatement statement) {
@@ -730,13 +748,17 @@ public final class BytecodeGenerator {
             store(value);
             final IdentifierDeclaration indexName = statement.index();
             if (indexName != null) {
+                // Copy into the source-level const binding; only the hidden
+                // loop counter is incremented by compiler-generated code.
                 method.visitVarInsn(ILOAD, index);
                 store(semanticModel.getSymbol(indexName));
             }
-            loopBody(statement.body(), next, end);
-            method.visitLabel(next);
-            method.visitIincInsn(index, 1);
-            method.visitJumpInsn(GOTO, start);
+            final Loop loop = new Loop(next, end);
+            if (loopBody(statement.body(), loop) || loop.hasContinue) {
+                method.visitLabel(next);
+                method.visitIincInsn(index, 1);
+                method.visitJumpInsn(GOTO, start);
+            }
             method.visitLabel(end);
         }
 
@@ -796,11 +818,17 @@ public final class BytecodeGenerator {
             }
         }
 
+        private boolean prepareStore(final Symbol symbol) {
+            if (instance != null && instance.members().containsKey(symbol)) {
+                method.visitVarInsn(ALOAD, 0);
+                return true;
+            }
+            return false;
+        }
+
+        // Instance stores expect the receiver below the value on the stack.
         private void store(final Symbol symbol) {
             if (instance != null && instance.members().containsKey(symbol)) {
-                // All current language values occupy one JVM stack slot.
-                method.visitVarInsn(ALOAD, 0);
-                method.visitInsn(SWAP);
                 method.visitFieldInsn(
                     PUTFIELD,
                     instance.owner(),
@@ -1003,9 +1031,11 @@ public final class BytecodeGenerator {
         private void assign(final AssignmentExpression assignment) {
             final Expression target = unwrap(assignment.target());
             if (target instanceof IdentifierExpression identifier) {
+                final Symbol symbol = semanticModel.getReference(identifier);
+                final boolean instanceField = prepareStore(symbol);
                 expression(assignment.value());
-                method.visitInsn(DUP);
-                store(semanticModel.getReference(identifier));
+                method.visitInsn(instanceField ? DUP_X1 : DUP);
+                store(symbol);
             }
             else if (target instanceof IndexExpression index) {
                 expression(index.target());
@@ -1030,13 +1060,14 @@ public final class BytecodeGenerator {
             final Type type = semanticModel.getExpressionType(target);
             if (target instanceof IdentifierExpression identifier) {
                 final Symbol symbol = semanticModel.getReference(identifier);
+                final boolean instanceField = prepareStore(symbol);
                 load(symbol);
                 if (postfix) {
-                    method.visitInsn(DUP);
+                    method.visitInsn(instanceField ? DUP_X1 : DUP);
                 }
                 addOne(type, increase);
                 if (!postfix) {
-                    method.visitInsn(DUP);
+                    method.visitInsn(instanceField ? DUP_X1 : DUP);
                 }
                 store(symbol);
             }

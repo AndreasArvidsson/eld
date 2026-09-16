@@ -47,8 +47,42 @@ RIGHT_BRACE (3:1-3:2)
 --- SEMANTIC ---
 
 Expression types:
-  1:14-1:17 -> ArrayType[elementType=int]
+  1:14-1:17 -> ArrayType<int>
   1:15-1:16 -> int
 
 Declarations:
   1:6-1:11 -> VariableSymbol(name=value, type=int, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    ASTORE 0
+    ICONST_0
+    ISTORE 1
+    ILOAD 1
+    ALOAD 0
+    ARRAYLENGTH
+    IF_ICMPGE L0
+    ALOAD 0
+    ILOAD 1
+    IALOAD
+    ISTORE 2
+    GOTO L0
+   L0
+   FRAME APPEND [[I I]
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 3
+}

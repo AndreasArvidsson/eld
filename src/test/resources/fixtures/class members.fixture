@@ -1,0 +1,251 @@
+class Counter {
+    const initial = 10
+    var count = initial
+    func next() int { return count++ }
+    const callback = next
+    func invoke() int { return callback() }
+}
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+CONST (2:5-2:10)
+IDENTIFIER "initial" (2:11-2:18)
+EQUAL (2:19-2:20)
+INTEGER_LITERAL "10" (2:21-2:23)
+VAR (3:5-3:8)
+IDENTIFIER "count" (3:9-3:14)
+EQUAL (3:15-3:16)
+IDENTIFIER "initial" (3:17-3:24)
+FUNC (4:5-4:9)
+IDENTIFIER "next" (4:10-4:14)
+LEFT_PAREN (4:14-4:15)
+RIGHT_PAREN (4:15-4:16)
+IDENTIFIER "int" (4:17-4:20)
+LEFT_BRACE (4:21-4:22)
+RETURN (4:23-4:29)
+IDENTIFIER "count" (4:30-4:35)
+PLUS_PLUS (4:35-4:37)
+RIGHT_BRACE (4:38-4:39)
+CONST (5:5-5:10)
+IDENTIFIER "callback" (5:11-5:19)
+EQUAL (5:20-5:21)
+IDENTIFIER "next" (5:22-5:26)
+FUNC (6:5-6:9)
+IDENTIFIER "invoke" (6:10-6:16)
+LEFT_PAREN (6:16-6:17)
+RIGHT_PAREN (6:17-6:18)
+IDENTIFIER "int" (6:19-6:22)
+LEFT_BRACE (6:23-6:24)
+RETURN (6:25-6:31)
+IDENTIFIER "callback" (6:32-6:40)
+LEFT_PAREN (6:40-6:41)
+RIGHT_PAREN (6:41-6:42)
+RIGHT_BRACE (6:43-6:44)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    (VariableDeclaration
+      range: 2:5-2:23
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:18
+        name: "initial"
+      )
+      type: null
+      (LiteralExpression
+        range: 2:21-2:23
+        kind: int
+        text: "10"
+      )
+    )
+    (VariableDeclaration
+      range: 3:5-3:24
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 3:9-3:14
+        name: "count"
+      )
+      type: null
+      (IdentifierExpression
+        range: 3:17-3:24
+        name: "initial"
+      )
+    )
+    (FunctionDeclaration
+      range: 4:5-4:39
+      (IdentifierDeclaration
+        range: 4:10-4:14
+        name: "next"
+      )
+      (NamedTypeNode
+        range: 4:17-4:20
+        name: "int"
+      )
+      (BlockStatement
+        range: 4:21-4:39
+        (ReturnStatement
+          range: 4:23-4:37
+          (PostfixExpression
+            range: 4:30-4:37
+            (IdentifierExpression
+              range: 4:30-4:35
+              name: "count"
+            )
+            operator: INCREMENT
+          )
+        )
+      )
+    )
+    (VariableDeclaration
+      range: 5:5-5:26
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 5:11-5:19
+        name: "callback"
+      )
+      type: null
+      (IdentifierExpression
+        range: 5:22-5:26
+        name: "next"
+      )
+    )
+    (FunctionDeclaration
+      range: 6:5-6:44
+      (IdentifierDeclaration
+        range: 6:10-6:16
+        name: "invoke"
+      )
+      (NamedTypeNode
+        range: 6:19-6:22
+        name: "int"
+      )
+      (BlockStatement
+        range: 6:23-6:44
+        (ReturnStatement
+          range: 6:25-6:42
+          (CallExpression
+            range: 6:32-6:42
+            (IdentifierExpression
+              range: 6:32-6:40
+              name: "callback"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:21-2:23 -> int
+  3:17-3:24 -> int
+  4:30-4:35 -> int
+  4:30-4:37 -> int
+  5:22-5:26 -> FunctionType[parameterTypes=[], returnType=int]
+  6:32-6:40 -> FunctionType[parameterTypes=[], returnType=int]
+  6:32-6:42 -> int
+
+Resolved types:
+  4:17-4:20 -> int
+  6:19-6:22 -> int
+
+Declarations:
+  1:7-1:14 -> ClassSymbol(name=Counter, type=ClassType(name=Counter))
+  2:11-2:18 -> VariableSymbol(name=initial, type=int, mutability=CONST)
+  3:9-3:14 -> VariableSymbol(name=count, type=int, mutability=VAR)
+  4:10-4:14 -> FunctionSymbol(name=next, parameterTypes=[], returnType=int)
+  5:11-5:19 -> VariableSymbol(name=callback, type=FunctionType[parameterTypes=[], returnType=int], mutability=CONST)
+  6:10-6:16 -> FunctionSymbol(name=invoke, parameterTypes=[], returnType=int)
+
+References:
+  3:17-3:24 -> 2:11-2:18
+  4:30-4:35 -> 3:9-3:14
+  5:22-5:26 -> 4:10-4:14
+  6:32-6:40 -> 5:11-5:19
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Counter
+  // access flags 0x9
+  public static INNERCLASS Test$Counter Test Counter
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Counter {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Counter Test Counter
+
+  // access flags 0x11
+  public final I initial
+
+  // access flags 0x1
+  public I count
+
+  // access flags 0x11
+  public final Ljava/lang/invoke/MethodHandle; callback
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 10
+    PUTFIELD Test$Counter.initial : I
+    ALOAD 0
+    ALOAD 0
+    GETFIELD Test$Counter.initial : I
+    PUTFIELD Test$Counter.count : I
+    ALOAD 0
+    // handle kind 0x5 : INVOKEVIRTUAL
+    LDC Test$Counter.next()I
+    ALOAD 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTFIELD Test$Counter.callback : Ljava/lang/invoke/MethodHandle;
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public next()I
+    ALOAD 0
+    ALOAD 0
+    GETFIELD Test$Counter.count : I
+    DUP_X1
+    ICONST_1
+    IADD
+    PUTFIELD Test$Counter.count : I
+    IRETURN
+    MAXSTACK = 4
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public invoke()I
+    ALOAD 0
+    GETFIELD Test$Counter.callback : Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}

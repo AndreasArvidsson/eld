@@ -37,3 +37,24 @@ RIGHT_PAREN (3:14-3:15)
 
 Expression types:
   3:10-3:14 -> bool
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+   L0
+   FRAME SAME
+    GOTO L1
+   L1
+   FRAME SAME
+    ICONST_1
+    IFNE L0
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}

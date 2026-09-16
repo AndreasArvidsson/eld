@@ -35,3 +35,17 @@ RIGHT_BRACE (1:21-1:22)
 
 Declarations:
   1:6-1:9 -> FunctionSymbol(name=foo, parameterTypes=[], returnType=void)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x9
+  public static foo()V
+    RETURN
+    MAXSTACK = 0
+    MAXLOCALS = 0
+}

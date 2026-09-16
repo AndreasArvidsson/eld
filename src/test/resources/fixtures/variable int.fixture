@@ -34,3 +34,22 @@ Expression types:
 
 Declarations:
   1:5-1:8 -> VariableSymbol(name=foo, type=int, mutability=VAR)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x9
+  public static I foo
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 10
+    PUTSTATIC Test.foo : I
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}

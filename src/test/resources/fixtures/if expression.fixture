@@ -69,3 +69,44 @@ Expression types:
   1:9-1:10 -> int
   2:7-2:12 -> bool
   2:8-2:12 -> bool
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    LDC 2
+    IF_ICMPLT L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME SAME
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IFEQ L2
+    GOTO L3
+   L2
+   FRAME SAME
+    ICONST_1
+    IFEQ L4
+    ICONST_0
+    GOTO L5
+   L4
+   FRAME SAME
+    ICONST_1
+   L5
+   FRAME SAME1 I
+    IFEQ L3
+    GOTO L3
+   L3
+   FRAME SAME
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}

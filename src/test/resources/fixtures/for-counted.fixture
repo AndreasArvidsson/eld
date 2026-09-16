@@ -85,3 +85,41 @@ Declarations:
 References:
   1:17-1:18 -> 1:10-1:11
   1:25-1:26 -> 1:10-1:11
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 0
+    ISTORE 0
+   L0
+   FRAME APPEND [I]
+    ILOAD 0
+    LDC 10
+    IF_ICMPLT L1
+    ICONST_0
+    GOTO L2
+   L1
+   FRAME SAME
+    ICONST_1
+   L2
+   FRAME SAME1 I
+    IFEQ L3
+    ILOAD 0
+    DUP
+    ICONST_1
+    IADD
+    ISTORE 0
+    POP
+    GOTO L0
+   L3
+   FRAME SAME
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 1
+}

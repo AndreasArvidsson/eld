@@ -13,3 +13,11 @@
 --- SEMANTIC ---
 
 
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+}

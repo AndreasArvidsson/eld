@@ -84,10 +84,8 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         switch (item) {
-            case Declaration declaration -> analyzeDeclaration(
-                declaration,
-                context
-            );
+            case Declaration declaration ->
+                analyzeDeclaration(declaration, context);
             case Statement statement -> analyzeStatement(statement, context);
         }
     }
@@ -97,18 +95,12 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         switch (declaration) {
-            case VariableDeclaration variableDeclaration -> analyzeVariableDeclaration(
-                variableDeclaration,
-                context
-            );
-            case FunctionDeclaration functionDeclaration -> analyzeFunctionDeclaration(
-                functionDeclaration,
-                context
-            );
-            case ClassDeclaration classDeclaration -> analyzeClassDeclaration(
-                classDeclaration,
-                context
-            );
+            case VariableDeclaration variableDeclaration ->
+                analyzeVariableDeclaration(variableDeclaration, context);
+            case FunctionDeclaration functionDeclaration ->
+                analyzeFunctionDeclaration(functionDeclaration, context);
+            case ClassDeclaration classDeclaration ->
+                analyzeClassDeclaration(classDeclaration, context);
             default -> throw new SemanticException(
                 declaration.range(),
                 "Unsupported declaration: %s",
@@ -122,50 +114,28 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         switch (statement) {
-            case DeclarationStatement declarationStatement -> analyzeDeclaration(
-                declarationStatement.declaration(),
-                context
-            );
-            case ExpressionStatement expressionStatement -> analyzeExpression(
-                expressionStatement.expression(),
-                context
-            );
-            case WhileStatement whileStatement -> analyzeWhileStatement(
-                whileStatement,
-                context
-            );
-            case DoWhileStatement doWhileStatement -> analyzeDoWhileStatement(
-                doWhileStatement,
-                context
-            );
-            case ForStatement forStatement -> analyzeForStatement(
-                forStatement,
-                context
-            );
-            case ForEachStatement forStatement -> analyzeForEachStatement(
-                forStatement,
-                context
-            );
-            case IfStatement ifStatement -> analyzeIfStatement(
-                ifStatement,
-                context
-            );
-            case ContinueStatement continueStatement -> analyzeContinueStatement(
-                continueStatement,
-                context
-            );
-            case BreakStatement breakStatement -> analyzeBreakStatement(
-                breakStatement,
-                context
-            );
-            case ReturnStatement returnStatement -> analyzeReturnStatement(
-                returnStatement,
-                context
-            );
-            case BlockStatement blockStatement -> analyzeBlockStatement(
-                blockStatement,
-                context
-            );
+            case DeclarationStatement declarationStatement ->
+                analyzeDeclaration(declarationStatement.declaration(), context);
+            case ExpressionStatement expressionStatement ->
+                analyzeExpression(expressionStatement.expression(), context);
+            case WhileStatement whileStatement ->
+                analyzeWhileStatement(whileStatement, context);
+            case DoWhileStatement doWhileStatement ->
+                analyzeDoWhileStatement(doWhileStatement, context);
+            case ForStatement forStatement ->
+                analyzeForStatement(forStatement, context);
+            case ForEachStatement forStatement ->
+                analyzeForEachStatement(forStatement, context);
+            case IfStatement ifStatement ->
+                analyzeIfStatement(ifStatement, context);
+            case ContinueStatement continueStatement ->
+                analyzeContinueStatement(continueStatement, context);
+            case BreakStatement breakStatement ->
+                analyzeBreakStatement(breakStatement, context);
+            case ReturnStatement returnStatement ->
+                analyzeReturnStatement(returnStatement, context);
+            case BlockStatement blockStatement ->
+                analyzeBlockStatement(blockStatement, context);
             default -> throw new SemanticException(
                 statement.range(),
                 "Unsupported statement: %s",
@@ -595,39 +565,23 @@ public final class SemanticAnalyzer {
 
         final Type type = switch (expression) {
             case LiteralExpression literal -> analyzeLiteralExpression(literal);
-            case IdentifierExpression identifier -> analyzeIdentifierExpression(
-                identifier,
-                context
-            );
-            case ArrayExpression array -> analyzeArrayExpression(
-                array,
-                context
-            );
-            case BinaryExpression binary -> analyzeBinaryExpression(
-                binary,
-                context
-            );
-            case UnaryExpression unary -> analyzeUnaryExpression(
-                unary,
-                context
-            );
-            case PostfixExpression postfix -> analyzePostfixExpression(
-                postfix,
-                context
-            );
+            case IdentifierExpression identifier ->
+                analyzeIdentifierExpression(identifier, context);
+            case ArrayExpression array ->
+                analyzeArrayExpression(array, context);
+            case BinaryExpression binary ->
+                analyzeBinaryExpression(binary, context);
+            case UnaryExpression unary ->
+                analyzeUnaryExpression(unary, context);
+            case PostfixExpression postfix ->
+                analyzePostfixExpression(postfix, context);
             case CallExpression call -> analyzeCallExpression(call, context);
-            case GroupingExpression grouping -> analyzeExpression(
-                grouping.expression(),
-                context
-            );
-            case IndexExpression index -> analyzeIndexExpression(
-                index,
-                context
-            );
-            case AssignmentExpression assignment -> analyzeAssignmentExpression(
-                assignment,
-                context
-            );
+            case GroupingExpression grouping ->
+                analyzeExpression(grouping.expression(), context);
+            case IndexExpression index ->
+                analyzeIndexExpression(index, context);
+            case AssignmentExpression assignment ->
+                analyzeAssignmentExpression(assignment, context);
             // TODO: Implement lambda expression analysis
             // case LambdaExpression lambda ->
             // analyzeLambdaExpression(lambda, context);
@@ -769,8 +723,8 @@ public final class SemanticAnalyzer {
                     || (leftType == BuiltinType.FLOAT
                         && rightType == BuiltinType.INT));
         final boolean valid = switch (binary.operator()) {
-            case AND, OR -> leftType == BuiltinType.BOOL
-                && rightType == BuiltinType.BOOL;
+            case AND, OR ->
+                leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
             case EQUAL, NOT_EQUAL -> compatibleNumbers
                 || (leftType.equals(rightType) && leftType != BuiltinType.VOID);
             case ADD -> compatibleNumbers || (leftType == BuiltinType.STRING

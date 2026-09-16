@@ -56,3 +56,27 @@ RIGHT_BRACE (3:7-3:8)
 Expression types:
   1:5-1:9 -> bool
   2:7-2:12 -> bool
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    ICONST_1
+    IFEQ L0
+    GOTO L1
+   L0
+   FRAME SAME
+    ICONST_0
+    IFEQ L1
+    GOTO L1
+   L1
+   FRAME SAME
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}

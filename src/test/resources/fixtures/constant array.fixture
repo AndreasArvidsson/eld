@@ -43,9 +43,37 @@ RIGHT_BRACKET (1:18-1:19)
 --- SEMANTIC ---
 
 Expression types:
-  1:13-1:19 -> ArrayType[elementType=int]
+  1:13-1:19 -> ArrayType<int>
   1:14-1:15 -> int
   1:17-1:18 -> int
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=foo, type=ArrayType[elementType=int], mutability=CONST)
+  1:7-1:10 -> VariableSymbol(name=foo, type=ArrayType<int>, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static [I foo
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 2
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    PUTSTATIC Test.foo : [I
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}

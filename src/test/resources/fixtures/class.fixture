@@ -25,3 +25,31 @@ RIGHT_BRACE (1:12-1:13)
 
 Declarations:
   1:7-1:10 -> ClassSymbol(name=Foo, type=ClassType(name=Foo))
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Foo
+  // access flags 0x9
+  public static INNERCLASS Test$Foo Test Foo
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Foo {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}

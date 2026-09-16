@@ -69,3 +69,14 @@ Conversions:
 
 Declarations:
   1:7-1:13 -> VariableSymbol(name=result, type=float, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static F result = 1.8400002F
+}

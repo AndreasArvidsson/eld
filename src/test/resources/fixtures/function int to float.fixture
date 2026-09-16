@@ -55,3 +55,19 @@ Conversions:
 
 Declarations:
   1:6-1:9 -> FunctionSymbol(name=sum, parameterTypes=[], returnType=float)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x9
+  public static sum()F
+    LDC 1
+    I2F
+    FRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}

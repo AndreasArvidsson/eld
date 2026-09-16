@@ -18,6 +18,117 @@ import mylang.semantic.SemanticException;
 
 class BytecodeGeneratorTest {
 
+    @Test
+    void storesInstanceFieldsInReceiverValueOrder() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            class Counter {
+                const initial = 10
+                var count = initial
+                var floating = 1.5
+                var text = "hello"
+                func postfix() int { return count++ }
+                func next() int { return count++ }
+                func decrement() float { return floating-- }
+            }
+            """).getTokens()).parse();
+        final var classes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses();
+        final var node = new org.objectweb.asm.tree.ClassNode();
+        new ClassReader(classes.get("Test$Counter")).accept(node, 0);
+        for (final var method : node.methods) {
+            for (final var instruction : method.instructions) {
+                assertNotEquals(
+                    org.objectweb.asm.Opcodes.SWAP,
+                    instruction.getOpcode()
+                );
+            }
+        }
+        final Class<?> type = loadClass(classes, "Test$Counter");
+        final Object instance = type.getConstructor().newInstance();
+        assertEquals(10, type.getField("count").get(instance));
+        assertEquals("hello", type.getField("text").get(instance));
+        assertEquals(10, type.getMethod("postfix").invoke(instance));
+        assertEquals(11, type.getMethod("next").invoke(instance));
+        assertEquals(12, type.getField("count").get(instance));
+        assertEquals(1.5f, type.getMethod("decrement").invoke(instance));
+        assertEquals(0.5f, type.getField("floating").get(instance));
+    }
+
+    @Test
+    void omitsUnreachableInstructionsAfterTerminatingPaths() throws Exception {
+        for (final String body : List.of(
+            "while (true) { break } return 7",
+            "do { break } while (true) return 7",
+            "for (var i = 0; i < 3; i++) { break } return 7",
+            "for (value : [1]) { break } return 7",
+            "do { return 7 } while (true)",
+            "for (;;) { return 7 }",
+            "if (true) { return 7 } elif (false) { return 8 } else { return 9 }",
+            "return 7 var unused = 99"
+        )) {
+            final String source = "func result() int { " + body + " }";
+            final var node = inspect(source);
+            for (final var method : node.methods) {
+                for (final var instruction : method.instructions) {
+                    assertNotEquals(
+                        org.objectweb.asm.Opcodes.NOP,
+                        instruction.getOpcode(),
+                        body
+                    );
+                    assertNotEquals(
+                        org.objectweb.asm.Opcodes.ATHROW,
+                        instruction.getOpcode(),
+                        body
+                    );
+                }
+            }
+            assertEquals(
+                7,
+                compile(source).getMethod("result").invoke(null),
+                body
+            );
+        }
+    }
+
+    @Test
+    void retainsContinueTargetsAndNestedLoopExits() throws Exception {
+        final String source = """
+            func result() int {
+                var count = 0
+                for (var i = 0; i < 3; i++) {
+                    while (true) { break }
+                    var old = count++
+                    continue
+                }
+                do {
+                    var old = count++
+                    continue
+                } while (count < 5)
+                for (value : [1, 2]) {
+                    var old = count++
+                    continue
+                }
+                return count
+            }
+            """;
+        assertEquals(7, compile(source).getMethod("result").invoke(null));
+        for (final var method : inspect(source).methods) {
+            for (final var instruction : method.instructions) {
+                assertNotEquals(
+                    org.objectweb.asm.Opcodes.NOP,
+                    instruction.getOpcode()
+                );
+                assertNotEquals(
+                    org.objectweb.asm.Opcodes.ATHROW,
+                    instruction.getOpcode()
+                );
+            }
+        }
+    }
+
     private static Class<?> loadClass(
         final java.util.Map<String, byte[]> classes,
         final String name
@@ -295,6 +406,48 @@ class BytecodeGeneratorTest {
     }
 
     @Test
+    void foldsFloatsWithTheSameBitsAsRuntimeArithmetic() throws Exception {
+        for (final String expression : List.of(
+            "-0.5 + 12.34 - 10",
+            "(16777216.0 + 1.0) - 16777216.0",
+            "16777217 - 16777216.0",
+            "(2147483647 + 1) + 0.0",
+            "(1.0 / 3.0) * 3.0",
+            "5.5 % 2.0",
+            "-0.0 * 2.0",
+            "1.0 / 0.0"
+        )) {
+            final String source =
+                "const folded = " + expression + "\nvar evaluated = "
+                    + expression;
+            final var node = inspect(source);
+            final float constant =
+                assertInstanceOf(Float.class, field(node, "folded").value);
+            assertEquals("F", field(node, "folded").desc);
+            assertNull(field(node, "evaluated").value);
+            final Class<?> type = compile(source);
+            assertEquals(
+                Float.floatToRawIntBits(
+                    type.getField("evaluated").getFloat(null)
+                ),
+                Float.floatToRawIntBits(constant),
+                expression
+            );
+            assertEquals(
+                Float.floatToRawIntBits(constant),
+                Float.floatToRawIntBits(type.getField("folded").getFloat(null)),
+                expression
+            );
+        }
+        final var node = inspect("const result = -0.5 + 12.34 - 10");
+        assertEquals(1.8400002f, field(node, "result").value);
+        assertTrue(
+            node.methods.stream()
+                .noneMatch(method -> method.name.equals("<clinit>"))
+        );
+    }
+
+    @Test
     void emitsConstantValuesWithoutClassInitializer() throws Exception {
         final String source = """
             const integer: int = 10
@@ -517,6 +670,49 @@ class BytecodeGeneratorTest {
     }
 
     @Test
+    void reliesOnJvmDefaultsForUninitializedStaticFields() throws Exception {
+        final String source = """
+            var number: int
+            var floating: float
+            var flag: boolean
+            var text: string
+            """;
+        assertTrue(
+            inspect(source).methods.stream()
+                .noneMatch(method -> method.name.equals("<clinit>"))
+        );
+        final Class<?> type = compile(source);
+        assertEquals(0, type.getField("number").get(null));
+        assertEquals(0.0f, type.getField("floating").get(null));
+        assertEquals(false, type.getField("flag").get(null));
+        assertNull(type.getField("text").get(null));
+    }
+
+    @Test
+    void initializesOnlyExplicitStaticInitializers() {
+        final var node = inspect("""
+            var untouched: int
+            var explicit = 0
+            var text: string
+            """);
+        final var initializer =
+            node.methods.stream()
+                .filter(method -> method.name.equals("<clinit>"))
+                .findFirst()
+                .orElseThrow();
+        final var stores = new java.util.ArrayList<String>();
+        for (final var instruction : initializer.instructions) {
+            if (
+                instruction instanceof org.objectweb.asm.tree.FieldInsnNode field
+                    && field.getOpcode() == org.objectweb.asm.Opcodes.PUTSTATIC
+            ) {
+                stores.add(field.name);
+            }
+        }
+        assertEquals(List.of("explicit"), stores);
+    }
+
+    @Test
     void generatesGlobalsAndInitializersInOrder() throws Exception {
         final Class<?> type = compile("""
             var start = 3
@@ -597,6 +793,44 @@ class BytecodeGeneratorTest {
         assertEquals(3, type.getMethod("counted").invoke(null));
         assertEquals(3, type.getMethod("postTest").invoke(null));
         assertEquals(3, type.getMethod("preTest").invoke(null));
+    }
+
+    @Test
+    void preservesExposedForEachIndexAcrossContinueAndNestedLoops()
+        throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    func result() int {
+                        var total = 0
+                        for (value, index : [10, 20, 30]) {
+                            if (index == 1) { continue }
+                            for (inner, innerIndex : [1, 2]) {
+                                for (var step = 0; step < value + index + inner + innerIndex; step++) { var old = total++ }
+                            }
+                        }
+                        return total
+                    }
+                    """
+            );
+        assertEquals(92, type.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void rejectsMutationOfExposedForEachIndex() {
+        for (final String mutation : List.of("index++", "index--")) {
+            final Program program =
+                new Parser(
+                    new Lexer(
+                        "for (value, index : [1]) { var old = " + mutation
+                            + " }"
+                    ).getTokens()
+                ).parse();
+            assertThrows(
+                SemanticException.class,
+                () -> new SemanticAnalyzer().analyze(program)
+            );
+        }
     }
 
     @Test

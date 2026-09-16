@@ -42,3 +42,14 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> VariableSymbol(name=foo, type=int, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static I foo = 10
+}
