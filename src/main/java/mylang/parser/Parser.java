@@ -89,51 +89,6 @@ public final class Parser {
     }
 
     private BlockItem parseBlockItem() {
-        final BlockItem item = parseUnterminatedBlockItem();
-        if (
-            item instanceof VariableDeclaration
-                || item instanceof ExpressionStatement
-                || item instanceof ReturnStatement
-                || item instanceof BreakStatement
-                || item instanceof ContinueStatement
-                || item instanceof DoWhileStatement
-        ) {
-            return terminate(item);
-        }
-        return item;
-    }
-
-    // TODO: Should we remove the terminate method and handle semicolons in each separate statement funk?
-    private BlockItem terminate(final BlockItem item) {
-        final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(item.range().start(), semicolon.range().end());
-        return switch (item) {
-            case VariableDeclaration declaration -> new VariableDeclaration(
-                declaration.mutability(),
-                declaration.name(),
-                declaration.type(),
-                declaration.initializer(),
-                range
-            );
-            case ExpressionStatement statement ->
-                new ExpressionStatement(statement.expression(), range);
-            case ReturnStatement statement ->
-                new ReturnStatement(statement.value(), range);
-            case BreakStatement ignored -> new BreakStatement(range);
-            case ContinueStatement ignored -> new ContinueStatement(range);
-            case DoWhileStatement statement -> new DoWhileStatement(
-                statement.body(),
-                statement.condition(),
-                range
-            );
-            default -> throw new IllegalArgumentException(
-                "Statement does not take a semicolon: " + item
-            );
-        };
-    }
-
-    private BlockItem parseUnterminatedBlockItem() {
         final Token token = advance();
 
         switch (token.type()) {
@@ -147,9 +102,9 @@ public final class Parser {
             case CLASS:
                 return parseClassDeclaration(token);
             case BREAK:
-                return new BreakStatement(token.range());
+                return parseBreakStatement(token);
             case CONTINUE:
-                return new ContinueStatement(token.range());
+                return parseContinueStatement(token);
             case WHILE:
                 return parseWhileStatement(token);
             case DO:
@@ -164,9 +119,30 @@ public final class Parser {
                 return parseReturnStatement(token);
             default:
                 position--;
-                final Expression expression = parseExpression();
-                return new ExpressionStatement(expression, expression.range());
+                return parseExpressionStatement();
         }
+    }
+
+    private BreakStatement parseBreakStatement(final Token keyword) {
+        final Token semicolon = expect(TokenType.SEMICOLON);
+        final Range range =
+            new Range(keyword.range().start(), semicolon.range().end());
+        return new BreakStatement(range);
+    }
+
+    private ContinueStatement parseContinueStatement(final Token keyword) {
+        final Token semicolon = expect(TokenType.SEMICOLON);
+        final Range range =
+            new Range(keyword.range().start(), semicolon.range().end());
+        return new ContinueStatement(range);
+    }
+
+    private ExpressionStatement parseExpressionStatement() {
+        final Expression expression = parseExpression();
+        final Token semicolon = expect(TokenType.SEMICOLON);
+        final Range range =
+            new Range(expression.range().start(), semicolon.range().end());
+        return new ExpressionStatement(expression, range);
     }
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
@@ -186,10 +162,9 @@ public final class Parser {
     private ReturnStatement parseReturnStatement(final Token keyword) {
         final Expression value =
             check(TokenType.SEMICOLON) ? null : parseExpression();
+        final Token semicolon = expect(TokenType.SEMICOLON);
         final Range range =
-            value != null
-                ? new Range(keyword.range().start(), value.range().end())
-                : keyword.range();
+            new Range(keyword.range().start(), semicolon.range().end());
         return new ReturnStatement(value, range);
     }
 
@@ -272,18 +247,12 @@ public final class Parser {
                     ? Mutability.VAR
                     : Mutability.CONST;
             final VariableDeclaration declaration =
-                (VariableDeclaration) terminate(
-                    parseVariableDeclaration(declarationKeyword, mutability)
-                );
+                parseVariableDeclaration(declarationKeyword, mutability);
             initializer =
                 new DeclarationStatement(declaration, declaration.range());
         }
         else {
-            final Expression expression = parseExpression();
-            initializer =
-                (ExpressionStatement) terminate(
-                    new ExpressionStatement(expression, expression.range())
-                );
+            initializer = parseExpressionStatement();
         }
 
         final @Nullable Expression condition =
@@ -332,9 +301,10 @@ public final class Parser {
         expect(TokenType.WHILE);
         expect(TokenType.LEFT_PAREN);
         final Expression condition = parseExpression();
-        final Token close = expect(TokenType.RIGHT_PAREN);
+        expect(TokenType.RIGHT_PAREN);
+        final Token semicolon = expect(TokenType.SEMICOLON);
         final Range range =
-            new Range(keyword.range().start(), close.range().end());
+            new Range(keyword.range().start(), semicolon.range().end());
         return new DoWhileStatement(body, condition, range);
     }
 
@@ -393,9 +363,9 @@ public final class Parser {
 
         // var with no initializer
         if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
-            final Position end =
-                type != null ? type.range().end() : name.range().end();
-            final Range range = new Range(keyword.range().start(), end);
+            final Token semicolon = expect(TokenType.SEMICOLON);
+            final Range range =
+                new Range(keyword.range().start(), semicolon.range().end());
             return new VariableDeclaration(
                 mutability,
                 identifier,
@@ -407,8 +377,9 @@ public final class Parser {
 
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
+        final Token semicolon = expect(TokenType.SEMICOLON);
         final Range range =
-            new Range(keyword.range().start(), initializer.range().end());
+            new Range(keyword.range().start(), semicolon.range().end());
         return new VariableDeclaration(
             mutability,
             identifier,

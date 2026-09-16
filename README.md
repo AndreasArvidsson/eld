@@ -2,6 +2,53 @@
 
 Run these commands from the project root with Java 21 or later and Maven 3.9 or later.
 
+## Command line and REPL
+
+Build the executable application, then use the launcher in Git Bash:
+
+```bash
+mvn package
+./bin.sh compile foo.iz
+./bin.sh run foo.iz
+./bin.sh repl
+```
+
+PowerShell and Command Prompt can use `bin.cmd` (for example, `./bin.cmd repl`).
+You can also run `java -jar target/mylang-1.0-SNAPSHOT.jar repl`.
+Rebuild with `mvn package` after changing the application.
+
+`compile` writes an executable `foo.jar` next to the source, without executing it.
+Run the compiled program with `java -jar foo.jar`. `run` compiles in memory and
+executes the source's top-level statements. Exit codes are 0 for success, 1 for
+compilation or execution errors, and 2 for invalid command-line arguments.
+
+The REPL uses [JLine](https://jline.org/docs/intro/) for editing, session history,
+keyword completion, and multiline input inside brackets or quotes. Variables,
+constants, and functions persist across submissions; expressions display their
+values. Earlier statements are not rerun.
+
+```text
+iz> var count = 1;
+iz> func next() int { count = count + 1; return count; }
+iz> next();
+2
+iz> count;
+2
+```
+
+Use `:help`, `:reset`, or `:quit`. Ctrl-D exits and Ctrl-C cancels the current
+input. Compile errors leave the session unchanged. Runtime errors retain
+declarations and any mutations already performed. Redeclaring a name is an
+error; use assignment for mutable variables or `:reset` to start over.
+
+Statements require explicit terminators in files and in the REPL. Variable
+declarations, expressions, `return`, `break`, and `continue` end with `;`,
+including immediately before `}`. Classes, functions, and block statements
+end with their closing `}`. A do-while loop ends with `while (condition);`.
+Newlines do not terminate statements, so expressions and return values can
+span lines. A lambda initializer still needs a semicolon after its closing
+brace: `const action = () => {};`. REPL commands such as `:quit` do not need one.
+
 ## Running tests
 
 Run all tests:
@@ -44,7 +91,7 @@ The launch entries are defined in [`.vscode/launch.json`](.vscode/launch.json), 
 For example:
 
 ```text
-const foo = 10
+const foo = 10;
 
 --- TOKENS ---
 
@@ -52,6 +99,7 @@ CONST (1:1-1:6)
 IDENTIFIER "foo" (1:7-1:10)
 EQUAL (1:11-1:12)
 INTEGER_LITERAL "10" (1:13-1:15)
+SEMICOLON (1:15-1:16)
 ```
 
 ## Generating or updating expected output
