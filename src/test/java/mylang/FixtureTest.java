@@ -57,7 +57,8 @@ public class FixtureTest {
         final String name,
         final boolean updateFixture
     )
-        throws IOException {
+        throws IOException,
+        InterruptedException {
         final String fixture = Files.readString(path).replaceAll("\r\n", "\n");
         final int tokenHeaderIndex = fixture.indexOf(TOKENS_HEADER);
         final int astHeaderIndex = fixture.indexOf(AST_HEADER);
@@ -92,7 +93,7 @@ public class FixtureTest {
                     astHeaderIndex
                 );
             final List<@NonNull Token> tokens = new Lexer(source).getTokens();
-            final String tokensActual = joinList(tokens);
+            final String tokensActual = tokensToString(tokens);
             actualBuilder.append(tokensActual);
             if (assertFixture) {
                 assertEquals(expected, tokensActual, name);
@@ -175,8 +176,36 @@ public class FixtureTest {
             if (assertFixture) {
                 assertEquals(expected, bytecodeActual, name);
             }
+
+            // --- OUTPUT ---
+
+            actualBuilder.append(OUTPUT_HEADER);
+            if (assertFixture) {
+                assertTrue(
+                    outputHeaderIndex >= 0,
+                    () -> "Missing output header delimiter in " + name
+                );
+            }
+            expected =
+                getContent(
+                    fixture,
+                    OUTPUT_HEADER,
+                    outputHeaderIndex,
+                    -1
+                );
+            final String outputActual = BytecodeRunner.run(classes);
+            actualBuilder.append(outputActual);
+            if (assertFixture) {
+                assertEquals(expected, outputActual, name);
+            }
         }
-        catch (final LexerException | ParserException | SemanticException e) {
+        catch (
+            final
+                LexerException
+                | ParserException
+                | SemanticException
+                | BytecodeException e
+        ) {
             final String message =
                 String.format(
                     "%s: %s",
@@ -219,8 +248,8 @@ public class FixtureTest {
         return Objects.requireNonNull(result);
     }
 
-    private static String joinList(
-        final List<? extends @NonNull Object> tokens
+    private static String tokensToString(
+        final List<@NonNull Token> tokens
     ) {
         final List<String> tokenStrings =
             tokens.stream().map(o -> o.toString()).toList();

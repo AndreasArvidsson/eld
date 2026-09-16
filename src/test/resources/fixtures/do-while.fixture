@@ -1,4 +1,4 @@
-do {} while (true)
+do {} while (false)
 
 --- TOKENS ---
 
@@ -7,22 +7,22 @@ LEFT_BRACE (1:4-1:5)
 RIGHT_BRACE (1:5-1:6)
 WHILE (1:7-1:12)
 LEFT_PAREN (1:13-1:14)
-BOOLEAN_LITERAL "true" (1:14-1:18)
-RIGHT_PAREN (1:18-1:19)
+BOOLEAN_LITERAL "false" (1:14-1:19)
+RIGHT_PAREN (1:19-1:20)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:19
+  range: 1:1-1:20
   (DoWhileStatement
-    range: 1:1-1:19
+    range: 1:1-1:20
     (BlockStatement
       range: 1:4-1:6
     )
     (LiteralExpression
-      range: 1:14-1:18
+      range: 1:14-1:19
       kind: bool
-      text: "true"
+      text: "false"
     )
   )
 )
@@ -30,7 +30,7 @@ RIGHT_PAREN (1:18-1:19)
 --- SEMANTIC ---
 
 Expression types:
-  1:14-1:18 -> bool
+  1:14-1:19 -> bool
 
 --- BYTECODE ---
 
@@ -43,9 +43,13 @@ public final class Test {
   static <clinit>()V
    L0
    FRAME SAME
-    ICONST_1
+    ICONST_0
     IFNE L0
     RETURN
     MAXSTACK = 1
     MAXLOCALS = 0
 }
+
+--- OUTPUT ---
+
+

@@ -18,6 +18,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import mylang.parser.*;
 import mylang.semantic.ArrayType;
+import mylang.semantic.BuiltinFunctionSymbol;
 import mylang.semantic.BuiltinType;
 import mylang.semantic.ClassType;
 import mylang.semantic.FunctionSymbol;
@@ -763,7 +764,31 @@ public final class BytecodeGenerator {
         }
 
         private void load(final Symbol symbol) {
-            if (symbol instanceof FunctionSymbol function) {
+            if (BuiltinFunctionSymbol.PRINT.equals(symbol)) {
+                method.visitLdcInsn(
+                    new Handle(
+                        H_INVOKEVIRTUAL,
+                        "java/io/PrintStream",
+                        "println",
+                        "(Ljava/lang/String;)V",
+                        false
+                    )
+                );
+                method.visitFieldInsn(
+                    GETSTATIC,
+                    "java/lang/System",
+                    "out",
+                    "Ljava/io/PrintStream;"
+                );
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    "java/lang/invoke/MethodHandle",
+                    "bindTo",
+                    "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
+                    false
+                );
+            }
+            else if (symbol instanceof FunctionSymbol function) {
                 final boolean instanceMethod =
                     instance != null && instance.members().containsKey(symbol);
                 method.visitLdcInsn(
@@ -951,6 +976,29 @@ public final class BytecodeGenerator {
                 (FunctionType) semanticModel.getExpressionType(call.callee());
             final Expression callee = unwrap(call.callee());
             if (
+                callee instanceof IdentifierExpression identifier
+                    && BuiltinFunctionSymbol.PRINT.equals(
+                        semanticModel.getReference(identifier)
+                    )
+            ) {
+                method.visitFieldInsn(
+                    GETSTATIC,
+                    "java/lang/System",
+                    "out",
+                    "Ljava/io/PrintStream;"
+                );
+                for (final Expression argument : call.arguments()) {
+                    expression(argument);
+                }
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    "java/io/PrintStream",
+                    "println",
+                    "(Ljava/lang/String;)V",
+                    false
+                );
+            }
+            else if (
                 callee instanceof IdentifierExpression identifier
                     && semanticModel.getReference(
                         identifier

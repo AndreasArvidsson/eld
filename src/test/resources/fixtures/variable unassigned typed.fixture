@@ -44,3 +44,7 @@ public final class Test {
   // access flags 0x9
   public static I foo
 }
+
+--- OUTPUT ---
+
+

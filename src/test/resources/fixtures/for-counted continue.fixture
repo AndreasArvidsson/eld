@@ -1,4 +1,4 @@
-for (;;) {
+for (var i = 0; i < 10; i++) {
     continue
 }
 
@@ -6,10 +6,19 @@ for (;;) {
 
 FOR (1:1-1:4)
 LEFT_PAREN (1:5-1:6)
-SEMICOLON (1:6-1:7)
-SEMICOLON (1:7-1:8)
-RIGHT_PAREN (1:8-1:9)
-LEFT_BRACE (1:10-1:11)
+VAR (1:6-1:9)
+IDENTIFIER "i" (1:10-1:11)
+EQUAL (1:12-1:13)
+INTEGER_LITERAL "0" (1:14-1:15)
+SEMICOLON (1:15-1:16)
+IDENTIFIER "i" (1:17-1:18)
+LESS (1:19-1:20)
+INTEGER_LITERAL "10" (1:21-1:23)
+SEMICOLON (1:23-1:24)
+IDENTIFIER "i" (1:25-1:26)
+PLUS_PLUS (1:26-1:28)
+RIGHT_PAREN (1:28-1:29)
+LEFT_BRACE (1:30-1:31)
 CONTINUE (2:5-2:13)
 RIGHT_BRACE (3:1-3:2)
 
@@ -19,11 +28,46 @@ RIGHT_BRACE (3:1-3:2)
   range: 1:1-3:2
   (ForStatement
     range: 1:1-3:2
-    initializer: null
-    condition: null
-    update: null
+    (DeclarationStatement
+      range: 1:6-1:15
+      (VariableDeclaration
+        range: 1:6-1:15
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 1:10-1:11
+          name: "i"
+        )
+        type: null
+        (LiteralExpression
+          range: 1:14-1:15
+          kind: int
+          text: "0"
+        )
+      )
+    )
+    (BinaryExpression
+      range: 1:17-1:23
+      (IdentifierExpression
+        range: 1:17-1:18
+        name: "i"
+      )
+      operator: LESS
+      (LiteralExpression
+        range: 1:21-1:23
+        kind: int
+        text: "10"
+      )
+    )
+    (PostfixExpression
+      range: 1:25-1:28
+      (IdentifierExpression
+        range: 1:25-1:26
+        name: "i"
+      )
+      operator: INCREMENT
+    )
     (BlockStatement
-      range: 1:10-3:2
+      range: 1:30-3:2
       (ContinueStatement
         range: 2:5-2:13
       )
@@ -33,7 +77,20 @@ RIGHT_BRACE (3:1-3:2)
 
 --- SEMANTIC ---
 
+Expression types:
+  1:14-1:15 -> int
+  1:17-1:18 -> int
+  1:17-1:23 -> bool
+  1:21-1:23 -> int
+  1:25-1:26 -> int
+  1:25-1:28 -> int
 
+Declarations:
+  1:10-1:11 -> VariableSymbol(name=i, type=int, mutability=VAR)
+
+References:
+  1:17-1:18 -> 1:10-1:11
+  1:25-1:26 -> 1:10-1:11
 
 --- BYTECODE ---
 
@@ -44,12 +101,38 @@ public final class Test {
 
   // access flags 0x8
   static <clinit>()V
+    LDC 0
+    ISTORE 0
    L0
-   FRAME SAME
-    GOTO L1
+   FRAME APPEND [I]
+    ILOAD 0
+    LDC 10
+    IF_ICMPLT L1
+    ICONST_0
+    GOTO L2
    L1
    FRAME SAME
+    ICONST_1
+   L2
+   FRAME SAME1 I
+    IFEQ L3
+    GOTO L4
+   L4
+   FRAME SAME
+    ILOAD 0
+    DUP
+    ICONST_1
+    IADD
+    ISTORE 0
+    POP
     GOTO L0
-    MAXSTACK = 0
-    MAXLOCALS = 0
+   L3
+   FRAME SAME
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 1
 }
+
+--- OUTPUT ---
+
+

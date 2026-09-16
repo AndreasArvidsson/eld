@@ -156,8 +156,8 @@ Expression types:
   3:17-3:24 -> int
   4:30-4:35 -> int
   4:30-4:37 -> int
-  5:22-5:26 -> FunctionType[parameterTypes=[], returnType=int]
-  6:32-6:40 -> FunctionType[parameterTypes=[], returnType=int]
+  5:22-5:26 -> FunctionType([], int)
+  6:32-6:40 -> FunctionType([], int)
   6:32-6:42 -> int
 
 Resolved types:
@@ -169,7 +169,7 @@ Declarations:
   2:11-2:18 -> VariableSymbol(name=initial, type=int, mutability=CONST)
   3:9-3:14 -> VariableSymbol(name=count, type=int, mutability=VAR)
   4:10-4:14 -> FunctionSymbol(name=next, parameterTypes=[], returnType=int)
-  5:11-5:19 -> VariableSymbol(name=callback, type=FunctionType[parameterTypes=[], returnType=int], mutability=CONST)
+  5:11-5:19 -> VariableSymbol(name=callback, type=FunctionType([], int), mutability=CONST)
   6:10-6:16 -> FunctionSymbol(name=invoke, parameterTypes=[], returnType=int)
 
 References:
@@ -249,3 +249,7 @@ public class Test$Counter {
     MAXSTACK = 1
     MAXLOCALS = 1
 }
+
+--- OUTPUT ---
+
+

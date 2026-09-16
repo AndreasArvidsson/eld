@@ -53,3 +53,7 @@ public class Test$Foo {
     MAXSTACK = 1
     MAXLOCALS = 1
 }
+
+--- OUTPUT ---
+
+

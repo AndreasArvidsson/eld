@@ -80,3 +80,7 @@ public final class Test {
   // access flags 0x19
   public final static F result = 1.8400002F
 }
+
+--- OUTPUT ---
+
+

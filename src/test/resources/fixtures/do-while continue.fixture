@@ -1,6 +1,6 @@
 do {
     continue
-} while (true)
+} while (false)
 
 --- TOKENS ---
 
@@ -10,15 +10,15 @@ CONTINUE (2:5-2:13)
 RIGHT_BRACE (3:1-3:2)
 WHILE (3:3-3:8)
 LEFT_PAREN (3:9-3:10)
-BOOLEAN_LITERAL "true" (3:10-3:14)
-RIGHT_PAREN (3:14-3:15)
+BOOLEAN_LITERAL "false" (3:10-3:15)
+RIGHT_PAREN (3:15-3:16)
 
 --- AST ---
 
 (Program
-  range: 1:1-3:15
+  range: 1:1-3:16
   (DoWhileStatement
-    range: 1:1-3:15
+    range: 1:1-3:16
     (BlockStatement
       range: 1:4-3:2
       (ContinueStatement
@@ -26,9 +26,9 @@ RIGHT_PAREN (3:14-3:15)
       )
     )
     (LiteralExpression
-      range: 3:10-3:14
+      range: 3:10-3:15
       kind: bool
-      text: "true"
+      text: "false"
     )
   )
 )
@@ -36,7 +36,7 @@ RIGHT_PAREN (3:14-3:15)
 --- SEMANTIC ---
 
 Expression types:
-  3:10-3:14 -> bool
+  3:10-3:15 -> bool
 
 --- BYTECODE ---
 
@@ -52,9 +52,13 @@ public final class Test {
     GOTO L1
    L1
    FRAME SAME
-    ICONST_1
+    ICONST_0
     IFNE L0
     RETURN
     MAXSTACK = 1
     MAXLOCALS = 0
 }
+
+--- OUTPUT ---
+
+

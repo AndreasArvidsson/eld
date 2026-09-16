@@ -46,7 +46,10 @@ public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
 
     public SemanticModel analyze(final Program program) {
-        final Scope globalScope = new Scope(null);
+        final Scope builtinScope = new Scope(null);
+        builtinScope.declare(BuiltinFunctionSymbol.PRINT);
+
+        final Scope globalScope = new Scope(builtinScope);
         final SemanticContext context =
             new SemanticContext(globalScope, null, 0);
 

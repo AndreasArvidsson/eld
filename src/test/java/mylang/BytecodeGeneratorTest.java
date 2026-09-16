@@ -1,7 +1,15 @@
 package mylang;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -10,13 +18,59 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.CheckClassAdapter;
-import mylang.Range;
 import mylang.lexer.Lexer;
-import mylang.parser.*;
+import mylang.parser.ArrayExpression;
+import mylang.parser.AssignmentExpression;
+import mylang.parser.ExpressionStatement;
+import mylang.parser.IdentifierDeclaration;
+import mylang.parser.IdentifierExpression;
+import mylang.parser.IndexExpression;
+import mylang.parser.LiteralExpression;
+import mylang.parser.LiteralKind;
+import mylang.parser.Mutability;
+import mylang.parser.Parser;
+import mylang.parser.PostfixExpression;
+import mylang.parser.PostfixOperator;
+import mylang.parser.Program;
+import mylang.parser.UnaryExpression;
+import mylang.parser.UnaryOperator;
+import mylang.parser.VariableDeclaration;
 import mylang.semantic.SemanticAnalyzer;
 import mylang.semantic.SemanticException;
 
 class BytecodeGeneratorTest {
+
+    @Test
+    void executesBuiltinPrintAndFunctionReferences() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            print("direct")
+            const log = print
+            log("reference")
+            func greet() { print("nested") }
+            greet()
+            """).getTokens()).parse();
+        final var classes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses();
+        for (final byte[] bytecode : classes.values()) {
+            BytecodeUtil.verify(bytecode);
+        }
+        assertEquals(
+            "direct\nreference\nnested\n",
+            BytecodeRunner.run(classes)
+        );
+    }
+
+    @Test
+    void userFunctionCanShadowBuiltinPrint() throws Exception {
+        final Class<?> type = compile("""
+            func print(value: int) int { return value + 1 }
+            func result() int { return print(41) }
+            """);
+        assertEquals(42, type.getMethod("result").invoke(null));
+    }
 
     @Test
     void storesInstanceFieldsInReceiverValueOrder() throws Exception {

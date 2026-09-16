@@ -71,3 +71,7 @@ public final class Test {
     MAXSTACK = 1
     MAXLOCALS = 0
 }
+
+--- OUTPUT ---
+
+

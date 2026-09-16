@@ -1,0 +1,62 @@
+print("Hello world")
+
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"Hello world\"" (1:7-1:20)
+RIGHT_PAREN (1:20-1:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:21
+  (ExpressionStatement
+    range: 1:1-1:21
+    (CallExpression
+      range: 1:1-1:21
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 1:7-1:20
+        kind: string
+        text: "\"Hello world\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> FunctionType([string], void)
+  1:1-1:21 -> void
+  1:7-1:20 -> string
+
+References:
+  1:1-1:6 -> builtin print
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC "Hello world"
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+Hello world
+

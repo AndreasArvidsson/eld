@@ -100,7 +100,9 @@ public final class SemanticModel {
             lines,
             "References:",
             references,
-            (expression, symbol) -> symbol.range().toString()
+            (expression, symbol) -> symbol instanceof BuiltinFunctionSymbol
+                ? "builtin " + symbol.name()
+                : symbol.range().toString()
         );
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
     }
