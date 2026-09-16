@@ -18,6 +18,257 @@ import mylang.semantic.SemanticException;
 
 class BytecodeGeneratorTest {
 
+    private static Class<?> loadClass(
+        final java.util.Map<String, byte[]> classes,
+        final String name
+    )
+        throws ClassNotFoundException {
+        for (final byte[] bytecode : classes.values()) {
+            BytecodeUtil.verify(bytecode);
+        }
+        return new ClassLoader() {
+            @Override
+            protected Class<?> findClass(final String binaryName)
+                throws ClassNotFoundException {
+                final byte[] bytecode = classes.get(binaryName);
+                if (bytecode == null) {
+                    throw new ClassNotFoundException(binaryName);
+                }
+                return defineClass(binaryName, bytecode, 0, bytecode.length);
+            }
+        }.loadClass(name);
+    }
+
+    private static Class<?> compileClass(final String source, final String name)
+        throws ClassNotFoundException {
+        final Program program =
+            new Parser(new Lexer(source).getTokens()).parse();
+        return loadClass(
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses(),
+            name
+        );
+    }
+
+    @Test
+    void initializesFieldsPerInstanceAndUsesModuleFunctions() throws Exception {
+        final Class<?> type = compileClass("""
+            var seed = 2
+            func next() int { return seed++ }
+            class Counter {
+                const first = next()
+                const second = next()
+                var count = first
+                var widened: float = count
+                var values = [1, 2]
+                var zero: int
+                var text: string
+                func increment() int { return count++ }
+                func add(delta: int) int { return count + delta }
+                func shadow(count: int) int { return count }
+            }
+            """, "Test$Counter");
+        final Object first = type.getConstructor().newInstance();
+        final Object second = type.getConstructor().newInstance();
+        assertEquals(2, type.getField("first").get(first));
+        assertEquals(3, type.getField("second").get(first));
+        assertEquals(4, type.getField("first").get(second));
+        assertEquals(5, type.getField("second").get(second));
+        assertEquals(2.0f, type.getField("widened").get(first));
+        assertEquals(0, type.getField("zero").get(first));
+        assertNull(type.getField("text").get(first));
+        assertNotSame(
+            type.getField("values").get(first),
+            type.getField("values").get(second)
+        );
+        assertEquals(2, type.getMethod("increment").invoke(first));
+        assertEquals(3, type.getField("count").get(first));
+        assertEquals(4, type.getField("count").get(second));
+        assertEquals(8, type.getMethod("add", int.class).invoke(first, 5));
+        assertEquals(9, type.getMethod("shadow", int.class).invoke(first, 9));
+        assertFalse(
+            Modifier.isStatic(type.getMethod("increment").getModifiers())
+        );
+        assertEquals(6, type.getDeclaringClass().getField("seed").get(null));
+    }
+
+    @Test
+    void invokesInstanceMethodsAndBindsMethodReferences() throws Exception {
+        final Class<?> type = compileClass("""
+            class Counter {
+                var count = 10
+                func step() int { return count++ }
+                const initial = step()
+                const callback = step
+                func direct() int { return step() }
+                func indirect() int { return callback() }
+                func recursive(n: int) int {
+                    if (n <= 1) { return count }
+                    return recursive(n - 1) + 1
+                }
+            }
+            """, "Test$Counter");
+        final Object first = type.getConstructor().newInstance();
+        final Object second = type.getConstructor().newInstance();
+        assertEquals(10, type.getField("initial").get(first));
+        assertEquals(11, type.getMethod("direct").invoke(first));
+        assertEquals(12, type.getMethod("indirect").invoke(first));
+        assertEquals(11, type.getMethod("indirect").invoke(second));
+        assertEquals(
+            15,
+            type.getMethod("recursive", int.class).invoke(first, 3)
+        );
+    }
+
+    @Test
+    void emitsControlFlowInConstructorsAndInstanceMethods() throws Exception {
+        final Class<?> type = compileClass("""
+            class Counter {
+                var count = 0
+                for (var i = 0; i < 3; i++) { var ignored = count++ }
+                func advance(limit: int) int {
+                    for (var i = 0; i < limit; i++) {
+                        if (i == 1) { continue }
+                        var ignored = count++
+                    }
+                    return count
+                }
+                var floating = 1.5
+                func floatStep() float { return floating++ }
+            }
+            """, "Test$Counter");
+        final Object instance = type.getConstructor().newInstance();
+        assertEquals(3, type.getField("count").get(instance));
+        assertEquals(
+            6,
+            type.getMethod("advance", int.class).invoke(instance, 4)
+        );
+        assertEquals(1.5f, type.getMethod("floatStep").invoke(instance));
+        assertEquals(2.5f, type.getField("floating").get(instance));
+    }
+
+    @Test
+    void resolvesSameNamedMembersOnTheirOwnClass() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            const value = 100
+            func read() int { return value }
+            class First {
+                var value = 1
+                func read() int { return value }
+                func call() int { return read() }
+            }
+            class Second {
+                var value = 2
+                func read() int { return value }
+                func call() int { return read() }
+            }
+            """).getTokens()).parse();
+        final var classes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses();
+        final Class<?> first = loadClass(classes, "Test$First");
+        final Class<?> second = loadClass(classes, "Test$Second");
+        assertEquals(
+            1,
+            first.getMethod("call").invoke(first.getConstructor().newInstance())
+        );
+        assertEquals(
+            2,
+            second.getMethod("call")
+                .invoke(second.getConstructor().newInstance())
+        );
+        assertEquals(
+            100,
+            first.getDeclaringClass().getMethod("read").invoke(null)
+        );
+    }
+
+    @Test
+    void generatesLoadableDeclaredClassesAlongsideModule() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            class Foo {}
+            class Bar {}
+            const value = 7
+            func result() int { return value }
+            """).getTokens()).parse();
+        final BytecodeGenerator generator =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            );
+        final var classes = generator.generateClasses();
+        assertEquals(
+            List.of("Test", "Test$Foo", "Test$Bar"),
+            new java.util.ArrayList<>(classes.keySet())
+        );
+        for (final byte[] bytecode : classes.values()) {
+            BytecodeUtil.verify(bytecode);
+        }
+        final ClassLoader loader = new ClassLoader() {
+            @Override
+            protected Class<?> findClass(final String name)
+                throws ClassNotFoundException {
+                final byte[] bytecode = classes.get(name);
+                if (bytecode == null) {
+                    throw new ClassNotFoundException(name);
+                }
+                return defineClass(name, bytecode, 0, bytecode.length);
+            }
+        };
+        final Class<?> module = loader.loadClass("Test");
+        assertEquals(7, module.getMethod("result").invoke(null));
+        for (final String name : List.of("Test$Foo", "Test$Bar")) {
+            final Class<?> type = loader.loadClass(name);
+            assertInstanceOf(type, type.getConstructor().newInstance());
+            assertEquals(module, type.getDeclaringClass());
+            assertEquals(module, type.getNestHost());
+            assertTrue(Modifier.isStatic(type.getModifiers()));
+        }
+        assertEquals(2, module.getDeclaredClasses().length);
+        assertThrows(IllegalStateException.class, generator::generate);
+        final var again = generator.generateClasses();
+        for (final String name : classes.keySet()) {
+            assertArrayEquals(classes.get(name), again.get(name));
+        }
+    }
+
+    @Test
+    void generatesFinalInstanceFields() throws Exception {
+        final Program program =
+            new Parser(new Lexer("class Foo { const field = 10 }").getTokens())
+                .parse();
+        final var model = new SemanticAnalyzer().analyze(program);
+        final var generator = new BytecodeGenerator(program, model);
+        final var classes = generator.generateClasses();
+        final var node = new org.objectweb.asm.tree.ClassNode();
+        new ClassReader(classes.get("Test$Foo")).accept(node, 0);
+        assertNull(field(node, "field").value);
+        final Class<?> type = loadClass(classes, "Test$Foo");
+        final Object instance = type.getConstructor().newInstance();
+        assertEquals(10, type.getField("field").get(instance));
+        assertTrue(Modifier.isFinal(type.getField("field").getModifiers()));
+        assertFalse(Modifier.isStatic(type.getField("field").getModifiers()));
+    }
+
+    @Test
+    void classOutputRetainsSingleClassCompatibility() {
+        final Program program =
+            new Parser(new Lexer("const value = 7").getTokens()).parse();
+        final BytecodeGenerator generator =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            );
+        assertArrayEquals(
+            generator.generate(),
+            generator.generateClasses().get("Test")
+        );
+    }
+
     private static org.objectweb.asm.tree.ClassNode inspect(
         final String source
     ) {

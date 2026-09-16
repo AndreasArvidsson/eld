@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
-
 import mylang.parser.AstNode;
 import mylang.parser.Expression;
 import mylang.parser.IdentifierDeclaration;
@@ -17,14 +15,15 @@ import mylang.parser.TypeNode;
 public final class SemanticModel {
 
     private static final String ARROW = " -> ";
-    private final Map<Expression, Type> expressionTypes =
+    private final IdentityHashMap<Expression, Type> expressionTypes =
         new IdentityHashMap<>();
-    private final Map<Expression, Type> conversionTypes =
+    private final IdentityHashMap<Expression, Type> conversionTypes =
         new IdentityHashMap<>();
-    private final Map<TypeNode, Type> resolvedTypes = new IdentityHashMap<>();
-    private final Map<IdentifierDeclaration, Symbol> declarations =
+    private final IdentityHashMap<TypeNode, Type> resolvedTypes =
         new IdentityHashMap<>();
-    private final Map<IdentifierExpression, Symbol> references =
+    private final IdentityHashMap<IdentifierDeclaration, Symbol> declarations =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierExpression, Symbol> references =
         new IdentityHashMap<>();
 
     public void setExpressionType(
@@ -109,7 +108,7 @@ public final class SemanticModel {
     private static void appendSection(
         final List<String> lines,
         final String heading,
-        final Map<? extends AstNode, ?> entries
+        final IdentityHashMap<? extends AstNode, ?> entries
     ) {
         appendSection(
             lines,
@@ -122,7 +121,7 @@ public final class SemanticModel {
     private static <K extends AstNode, V> void appendSection(
         final List<String> lines,
         final String heading,
-        final Map<K, V> entries,
+        final IdentityHashMap<K, V> entries,
         final BiFunction<K, V, String> formatValue
     ) {
         if (entries.isEmpty()) {

@@ -161,12 +161,16 @@ public class FixtureTest {
                     bytecodeHeaderIndex,
                     outputHeaderIndex
                 );
-            final byte[] bytecode =
-                new BytecodeGenerator(ast, semanticModel).generate();
-            if (assertFixture) {
-                BytecodeUtil.verify(bytecode);
+            final var classes =
+                new BytecodeGenerator(ast, semanticModel).generateClasses();
+            final List<String> classListings = new ArrayList<>();
+            for (final byte[] bytecode : classes.values()) {
+                if (assertFixture) {
+                    BytecodeUtil.verify(bytecode);
+                }
+                classListings.add(BytecodeUtil.toString(bytecode));
             }
-            final String bytecodeActual = BytecodeUtil.toString(bytecode);
+            final String bytecodeActual = String.join("\n\n", classListings);
             actualBuilder.append(bytecodeActual);
             if (assertFixture) {
                 assertEquals(expected, bytecodeActual, name);

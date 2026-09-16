@@ -12,6 +12,7 @@ public enum TokenType {
     // Keywords
     CONST,
     VAR,
+    CLASS,
     FUNC,
     RETURN,
     IF,

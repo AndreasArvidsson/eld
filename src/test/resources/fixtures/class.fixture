@@ -1,0 +1,27 @@
+class Foo {}
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+RIGHT_BRACE (1:12-1:13)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:13
+  (ClassDeclaration
+    range: 1:1-1:13
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Declarations:
+  1:7-1:10 -> ClassSymbol(name=Foo, type=ClassType(name=Foo))

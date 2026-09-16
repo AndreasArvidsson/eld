@@ -1,5 +1,6 @@
 package mylang.parser;
 
 public sealed interface Declaration extends BlockItem
-    permits VariableDeclaration, FunctionDeclaration, IdentifierDeclaration {
+    permits VariableDeclaration, ClassDeclaration, FunctionDeclaration,
+    IdentifierDeclaration {
 }

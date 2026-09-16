@@ -96,6 +96,8 @@ public final class Parser {
                 return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
+            case CLASS:
+                return parseClassDeclaration(token);
             case BREAK:
                 return new BreakStatement(token.range());
             case CONTINUE:
@@ -135,6 +137,20 @@ public final class Parser {
             token.range(),
             "Expected declaration or statement"
         );
+    }
+
+    private ClassDeclaration parseClassDeclaration(final Token keyword) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        expect(TokenType.LEFT_BRACE);
+        final List<@NonNull BlockItem> members = new ArrayList<>();
+        while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            members.add(parseBlockItem());
+        }
+        final Token close = expect(TokenType.RIGHT_BRACE);
+        final Range range =
+            new Range(keyword.range().start(), close.range().end());
+        final var id = new IdentifierDeclaration(name.text(), name.range());
+        return new ClassDeclaration(id, members, range);
     }
 
     private ReturnStatement parseReturnStatement(final Token keyword) {

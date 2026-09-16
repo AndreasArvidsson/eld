@@ -4,9 +4,12 @@ import static org.objectweb.asm.Opcodes.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.ClassWriter;
@@ -16,13 +19,14 @@ import org.objectweb.asm.MethodVisitor;
 import mylang.parser.*;
 import mylang.semantic.ArrayType;
 import mylang.semantic.BuiltinType;
+import mylang.semantic.ClassType;
 import mylang.semantic.FunctionSymbol;
 import mylang.semantic.FunctionType;
 import mylang.semantic.SemanticModel;
 import mylang.semantic.Symbol;
 import mylang.semantic.Type;
 
-/** Generates a self-contained Java 21 class named Test. */
+/** Generates a Java 21 module named Test and its declared classes. */
 public final class BytecodeGenerator {
     private static final String CLASS_NAME = "Test";
     private final Program program;
@@ -36,7 +40,179 @@ public final class BytecodeGenerator {
         this.semanticModel = semanticModel;
     }
 
+    /** Generates a module without class declarations; otherwise use generateClasses(). */
     public byte[] generate() {
+        if (
+            program.items()
+                .stream()
+                .anyMatch(ClassDeclaration.class::isInstance)
+        ) {
+            throw new IllegalStateException(
+                "This program declares classes; use generateClasses()"
+            );
+        }
+        return generateModule();
+    }
+
+    /**
+     * Returns class files keyed by JVM binary name, in module-first order.
+     * Top-level class Foo is emitted as Test$Foo, a static member of Test.
+     * Load or write every returned class file, not just the module.
+     * Class fields and methods are instance members. Field initializers run in
+     * source order in the public no-argument constructor; const fields are final.
+     */
+    public Map<String, byte[]> generateClasses() {
+        final Map<String, byte[]> classes = new LinkedHashMap<>();
+        classes.put(CLASS_NAME, generateModule());
+        for (final BlockItem item : program.items()) {
+            if (item instanceof ClassDeclaration declaration) {
+                final String name = className(declaration);
+                if (
+                    classes
+                        .putIfAbsent(name, generateClass(declaration)) != null
+                ) {
+                    throw unsupported(
+                        declaration,
+                        "Duplicate class " + declaration.name().name()
+                    );
+                }
+            }
+        }
+        return Collections.unmodifiableMap(classes);
+    }
+
+    private static String className(final ClassDeclaration declaration) {
+        return CLASS_NAME + "$" + declaration.name().name();
+    }
+
+    private byte[] generateClass(final ClassDeclaration declaration) {
+        final String name = className(declaration);
+        final ClassWriter writer =
+            new ClassWriter(
+                ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
+            );
+        writer.visit(
+            V21,
+            ACC_PUBLIC | ACC_SUPER,
+            name,
+            null,
+            "java/lang/Object",
+            null
+        );
+        writer.visitNestHost(CLASS_NAME);
+        writer.visitInnerClass(
+            name,
+            CLASS_NAME,
+            declaration.name().name(),
+            ACC_PUBLIC | ACC_STATIC
+        );
+        final IdentityHashMap<Symbol, String> globals = new IdentityHashMap<>();
+        for (final BlockItem item : program.items()) {
+            if (item instanceof VariableDeclaration variable) {
+                final Symbol symbol = semanticModel.getSymbol(variable.name());
+                globals.put(symbol, symbol.name());
+            }
+        }
+        final IdentityHashMap<Symbol, String> members = new IdentityHashMap<>();
+        for (final BlockItem member : declaration.members()) {
+            if (member instanceof VariableDeclaration variable) {
+                final Symbol symbol = semanticModel.getSymbol(variable.name());
+                members.put(symbol, symbol.name());
+                // Instance constants must be assigned by each constructor.
+                writer
+                    .visitField(
+                        ACC_PUBLIC | (variable.mutability() == Mutability.CONST
+                            ? ACC_FINAL
+                            : 0),
+                        symbol.name(),
+                        descriptor(symbol.type()),
+                        null,
+                        null
+                    )
+                    .visitEnd();
+            }
+            else if (member instanceof FunctionDeclaration function) {
+                final Symbol symbol = semanticModel.getSymbol(function.name());
+                members.put(symbol, symbol.name());
+            }
+            else if (member instanceof ClassDeclaration) {
+                throw unsupported(
+                    member,
+                    "Nested class generation is not supported yet"
+                );
+            }
+        }
+        final InstanceContext instance = new InstanceContext(name, members);
+        final MethodVisitor constructor =
+            writer.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+        final MethodGenerator initializer =
+            new MethodGenerator(
+                constructor,
+                globals,
+                BuiltinType.VOID,
+                instance
+            );
+        constructor.visitCode();
+        constructor.visitVarInsn(ALOAD, 0);
+        constructor.visitMethodInsn(
+            INVOKESPECIAL,
+            "java/lang/Object",
+            "<init>",
+            "()V",
+            false
+        );
+        for (final BlockItem member : declaration.members()) {
+            if (!(member instanceof FunctionDeclaration)) {
+                initializer.item(member);
+            }
+        }
+        initializer.finish(true);
+        for (final BlockItem member : declaration.members()) {
+            if (member instanceof FunctionDeclaration function) {
+                generateFunction(writer, function, globals, instance);
+            }
+        }
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
+    private record InstanceContext(
+        String owner, IdentityHashMap<Symbol, String> members
+    ) {
+    }
+
+    private void generateFunction(
+        final ClassWriter writer,
+        final FunctionDeclaration function,
+        final IdentityHashMap<Symbol, String> globals,
+        final @Nullable InstanceContext instance
+    ) {
+        final FunctionSymbol symbol =
+            (FunctionSymbol) semanticModel.getSymbol(function.name());
+        final MethodVisitor method =
+            writer.visitMethod(
+                ACC_PUBLIC | (instance == null ? ACC_STATIC : 0),
+                symbol.name(),
+                methodDescriptor(symbol.type()),
+                null,
+                null
+            );
+        final MethodGenerator generator =
+            new MethodGenerator(
+                method,
+                globals,
+                symbol.type().returnType(),
+                instance
+            );
+        method.visitCode();
+        for (final Parameter parameter : function.parameters()) {
+            generator.local(semanticModel.getSymbol(parameter.name()));
+        }
+        generator.block(function.body());
+        generator.finish(completesNormally(function.body()));
+    }
+
+    private byte[] generateModule() {
         final ClassWriter writer =
             new ClassWriter(
                 ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
@@ -77,34 +253,23 @@ public final class BytecodeGenerator {
                     )
                     .visitEnd();
             }
+            else if (item instanceof ClassDeclaration declaration) {
+                final String name = className(declaration);
+                writer.visitNestMember(name);
+                writer.visitInnerClass(
+                    name,
+                    CLASS_NAME,
+                    declaration.name().name(),
+                    ACC_PUBLIC | ACC_STATIC
+                );
+            }
             else if (!(item instanceof FunctionDeclaration)) {
                 initializers.add(item);
             }
         }
         for (final BlockItem item : program.items()) {
             if (item instanceof FunctionDeclaration function) {
-                final FunctionSymbol symbol =
-                    (FunctionSymbol) semanticModel.getSymbol(function.name());
-                final MethodVisitor method =
-                    writer.visitMethod(
-                        ACC_PUBLIC | ACC_STATIC,
-                        symbol.name(),
-                        methodDescriptor(symbol.type()),
-                        null,
-                        null
-                    );
-                final MethodGenerator generator =
-                    new MethodGenerator(
-                        method,
-                        globals,
-                        symbol.type().returnType()
-                    );
-                method.visitCode();
-                for (final Parameter parameter : function.parameters()) {
-                    generator.local(semanticModel.getSymbol(parameter.name()));
-                }
-                generator.block(function.body());
-                generator.finish(completesNormally(function.body()));
+                generateFunction(writer, function, globals, null);
             }
         }
         if (!initializers.isEmpty()) {
@@ -134,9 +299,8 @@ public final class BytecodeGenerator {
                 case STRING -> decodeString(literal.text());
                 case NULL -> null;
             };
-            case GroupingExpression grouping -> constantValue(
-                grouping.expression()
-            );
+            case GroupingExpression grouping ->
+                constantValue(grouping.expression());
             case UnaryExpression unary -> constantUnary(unary);
             case BinaryExpression binary -> constantBinary(binary);
             default -> null;
@@ -255,6 +419,7 @@ public final class BytecodeGenerator {
             };
             case ArrayType array -> "[" + descriptor(array.elementType());
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
+            case ClassType ignored -> "Ljava/lang/Object;";
         };
     }
 
@@ -346,6 +511,7 @@ public final class BytecodeGenerator {
     private final class MethodGenerator {
         private final MethodVisitor method;
         private final IdentityHashMap<Symbol, String> globals;
+        private final @Nullable InstanceContext instance;
         private final IdentityHashMap<Symbol, Integer> locals =
             new IdentityHashMap<>();
         private final Deque<Loop> loops = new ArrayDeque<>();
@@ -357,9 +523,20 @@ public final class BytecodeGenerator {
             final IdentityHashMap<Symbol, String> globals,
             final Type returnType
         ) {
+            this(method, globals, returnType, null);
+        }
+
+        private MethodGenerator(
+            final MethodVisitor method,
+            final IdentityHashMap<Symbol, String> globals,
+            final Type returnType,
+            final @Nullable InstanceContext instance
+        ) {
             this.method = method;
             this.globals = globals;
             this.returnType = returnType;
+            this.instance = instance;
+            this.nextLocal = instance == null ? 0 : 1;
         }
 
         private int local(final Symbol symbol) {
@@ -420,13 +597,11 @@ public final class BytecodeGenerator {
                     }
                     store(symbol);
                 }
-                case DeclarationStatement declaration -> item(
-                    declaration.declaration()
-                );
+                case DeclarationStatement declaration ->
+                    item(declaration.declaration());
                 case BlockStatement block -> block(block);
-                case ExpressionStatement statement -> discard(
-                    statement.expression()
-                );
+                case ExpressionStatement statement ->
+                    discard(statement.expression());
                 case ReturnStatement statement -> {
                     final Expression value = statement.value();
                     if (value != null) {
@@ -567,14 +742,39 @@ public final class BytecodeGenerator {
 
         private void load(final Symbol symbol) {
             if (symbol instanceof FunctionSymbol function) {
+                final boolean instanceMethod =
+                    instance != null && instance.members().containsKey(symbol);
                 method.visitLdcInsn(
                     new Handle(
-                        H_INVOKESTATIC,
-                        CLASS_NAME,
+                        instanceMethod ? H_INVOKEVIRTUAL : H_INVOKESTATIC,
+                        instanceMethod
+                            ? Objects.requireNonNull(instance).owner()
+                            : CLASS_NAME,
                         symbol.name(),
                         methodDescriptor(function.type()),
                         false
                     )
+                );
+                if (instanceMethod) {
+                    method.visitVarInsn(ALOAD, 0);
+                    method.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "java/lang/invoke/MethodHandle",
+                        "bindTo",
+                        "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
+                        false
+                    );
+                }
+            }
+            else if (
+                instance != null && instance.members().containsKey(symbol)
+            ) {
+                method.visitVarInsn(ALOAD, 0);
+                method.visitFieldInsn(
+                    GETFIELD,
+                    instance.owner(),
+                    Objects.requireNonNull(instance.members().get(symbol)),
+                    descriptor(symbol.type())
                 );
             }
             else if (globals.containsKey(symbol)) {
@@ -597,7 +797,18 @@ public final class BytecodeGenerator {
         }
 
         private void store(final Symbol symbol) {
-            if (globals.containsKey(symbol)) {
+            if (instance != null && instance.members().containsKey(symbol)) {
+                // All current language values occupy one JVM stack slot.
+                method.visitVarInsn(ALOAD, 0);
+                method.visitInsn(SWAP);
+                method.visitFieldInsn(
+                    PUTFIELD,
+                    instance.owner(),
+                    Objects.requireNonNull(instance.members().get(symbol)),
+                    descriptor(symbol.type())
+                );
+            }
+            else if (globals.containsKey(symbol)) {
                 method.visitFieldInsn(
                     PUTSTATIC,
                     CLASS_NAME,
@@ -622,20 +833,19 @@ public final class BytecodeGenerator {
         private void expression(final Expression expression) {
             switch (expression) {
                 case LiteralExpression literal -> literal(literal);
-                case IdentifierExpression identifier -> load(
-                    semanticModel.getReference(identifier)
-                );
-                case GroupingExpression grouping -> expression(
-                    grouping.expression()
-                );
+                case IdentifierExpression identifier ->
+                    load(semanticModel.getReference(identifier));
+                case GroupingExpression grouping ->
+                    expression(grouping.expression());
                 case BinaryExpression binary -> binary(binary);
                 case UnaryExpression unary -> {
                     switch (unary.operator()) {
-                        case INCREMENT, DECREMENT -> increment(
-                            unary.operand(),
-                            unary.operator() == UnaryOperator.INCREMENT,
-                            false
-                        );
+                        case INCREMENT,
+                            DECREMENT -> increment(
+                                unary.operand(),
+                                unary.operator() == UnaryOperator.INCREMENT,
+                                false
+                            );
                         case PLUS -> expression(unary.operand());
                         case MINUS -> {
                             if (
@@ -718,12 +928,20 @@ public final class BytecodeGenerator {
                         identifier
                     ) instanceof FunctionSymbol function
             ) {
+                final boolean instanceMethod =
+                    instance != null
+                        && instance.members().containsKey(function);
+                if (instanceMethod) {
+                    method.visitVarInsn(ALOAD, 0);
+                }
                 for (final Expression argument : call.arguments()) {
                     expression(argument);
                 }
                 method.visitMethodInsn(
-                    INVOKESTATIC,
-                    CLASS_NAME,
+                    instanceMethod ? INVOKEVIRTUAL : INVOKESTATIC,
+                    instanceMethod
+                        ? Objects.requireNonNull(instance).owner()
+                        : CLASS_NAME,
                     function.name(),
                     methodDescriptor(type),
                     false
@@ -926,10 +1144,8 @@ public final class BytecodeGenerator {
                         case LESS_EQUAL -> IF_ICMPLE;
                         case GREATER -> IF_ICMPGT;
                         case GREATER_EQUAL -> IF_ICMPGE;
-                        default -> throw unsupported(
-                            binary,
-                            "Unsupported comparison"
-                        );
+                        default ->
+                            throw unsupported(binary, "Unsupported comparison");
                     };
                     if (type == BuiltinType.FLOAT) {
                         // Choose the NaN result so ordered comparisons remain false.

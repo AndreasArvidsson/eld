@@ -17,6 +17,7 @@ public class Lexer {
             Map.ofEntries(
                 Map.entry("const", TokenType.CONST),
                 Map.entry("var", TokenType.VAR),
+                Map.entry("class", TokenType.CLASS),
                 Map.entry("func", TokenType.FUNC),
                 Map.entry("if", TokenType.IF),
                 Map.entry("elif", TokenType.ELIF),

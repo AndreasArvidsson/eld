@@ -3,20 +3,17 @@ package mylang.semantic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-
 import mylang.parser.ArrayExpression;
 import mylang.parser.ArrayTypeNode;
 import mylang.parser.AssignmentExpression;
-import mylang.parser.GroupingExpression;
-import mylang.parser.IndexExpression;
 import mylang.parser.BinaryExpression;
 import mylang.parser.BlockItem;
 import mylang.parser.BlockStatement;
 import mylang.parser.BreakStatement;
 import mylang.parser.CallExpression;
+import mylang.parser.ClassDeclaration;
 import mylang.parser.ContinueStatement;
 import mylang.parser.Declaration;
 import mylang.parser.DeclarationStatement;
@@ -27,9 +24,11 @@ import mylang.parser.ExpressionStatement;
 import mylang.parser.ForEachStatement;
 import mylang.parser.ForStatement;
 import mylang.parser.FunctionDeclaration;
+import mylang.parser.GroupingExpression;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.IfStatement;
+import mylang.parser.IndexExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.Mutability;
 import mylang.parser.NamedTypeNode;
@@ -106,6 +105,10 @@ public final class SemanticAnalyzer {
                 functionDeclaration,
                 context
             );
+            case ClassDeclaration classDeclaration -> analyzeClassDeclaration(
+                classDeclaration,
+                context
+            );
             default -> throw new SemanticException(
                 declaration.range(),
                 "Unsupported declaration: %s",
@@ -169,6 +172,28 @@ public final class SemanticAnalyzer {
                 statement
             );
         }
+    }
+
+    private void analyzeClassDeclaration(
+        final ClassDeclaration declaration,
+        final SemanticContext context
+    ) {
+        final SemanticContext classContext =
+            new SemanticContext(
+                new Scope(context.scope()),
+                context.function(),
+                context.loopDepth()
+            );
+
+        for (final var member : declaration.members()) {
+            analyzeBlockItem(member, classContext);
+        }
+
+        final ClassType classType = new ClassType(declaration.name().name());
+        final ClassSymbol classSymbol =
+            new ClassSymbol(declaration.name(), classType);
+        model.setSymbol(declaration.name(), classSymbol);
+        classContext.scope().declare(classSymbol);
     }
 
     private void analyzeForStatement(
