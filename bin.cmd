@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set "jar=%~dp0target\mylang-1.0-SNAPSHOT.jar"
+set "jar=%~dp0target\eld-1.0-SNAPSHOT.jar"
 
 if not exist "%jar%" (
     echo Build first with: mvn package 1>&2

@@ -93,14 +93,14 @@ public final class Test {
 
 
   // access flags 0x19
-  public final static Lmylang/runtime/EldIntArray; foo
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; foo
 
   // access flags 0x19
-  public final static Lmylang/runtime/EldIntArray; bar
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; bar
 
   // access flags 0x8
   static <clinit>()V
-    NEW mylang/runtime/EldIntArray
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 2
     NEWARRAY T_INT
@@ -112,12 +112,12 @@ public final class Test {
     LDC 1
     LDC 2
     IASTORE
-    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ([I)V
-    PUTSTATIC Test.foo : Lmylang/runtime/EldIntArray;
-    NEW mylang/runtime/EldIntArray
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    PUTSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
-    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ()V
-    PUTSTATIC Test.bar : Lmylang/runtime/EldIntArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ()V
+    PUTSTATIC Test.bar : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     RETURN
     MAXSTACK = 6
     MAXLOCALS = 0

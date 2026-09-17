@@ -4,8 +4,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.example</groupId>
-    <artifactId>mylang</artifactId>
+    <groupId>com.github.andreasarvidsson</groupId>
+    <artifactId>eld</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -100,7 +100,7 @@
                                 <!-- Include the main class in the manifest -->
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>mylang.Main</mainClass>
+                                    <mainClass>com.github.andreasarvidsson.eld.Main</mainClass>
                                 </transformer>
                                 <!-- Include service provider configuration files -->
                                 <transformer

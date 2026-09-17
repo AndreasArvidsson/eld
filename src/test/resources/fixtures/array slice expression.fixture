@@ -378,11 +378,11 @@ public final class Test {
 
 
   // access flags 0x19
-  public final static Lmylang/runtime/EldIntArray; values
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; values
 
   // access flags 0x8
   static <clinit>()V
-    NEW mylang/runtime/EldIntArray
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 3
     NEWARRAY T_INT
@@ -398,43 +398,43 @@ public final class Test {
     LDC 2
     LDC 3
     IASTORE
-    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ([I)V
-    PUTSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    PUTSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.copy ()Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy ()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 1
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceFrom (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sliceFrom (I)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 2
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceTo (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sliceTo (I)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 1
     LDC 2
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.slice (II)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.slice (II)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC -1
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceTo (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sliceTo (I)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC -2
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceFrom (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sliceFrom (I)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC -2
     LDC -1
-    INVOKEVIRTUAL mylang/runtime/EldIntArray.slice (II)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.slice (II)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     RETURN
     MAXSTACK = 6

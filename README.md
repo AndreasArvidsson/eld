@@ -1,4 +1,4 @@
-# my-lang
+# Eld
 
 Run these commands from the project root with Java 21 or later and Maven 3.9 or later.
 
@@ -8,13 +8,13 @@ Build the executable application, then use the launcher in Git Bash:
 
 ```bash
 mvn package
-./bin.sh compile foo.iz
-./bin.sh run foo.iz
+./bin.sh compile foo.eld
+./bin.sh run foo.eld
 ./bin.sh repl
 ```
 
 PowerShell and Command Prompt can use `bin.cmd` (for example, `./bin.cmd repl`).
-You can also run `java -jar target/mylang-1.0-SNAPSHOT.jar repl`.
+You can also run `java -jar target/eld-1.0-SNAPSHOT.jar repl`.
 Rebuild with `mvn package` after changing the application.
 
 `compile` writes an executable `foo.jar` next to the source, without executing it.
@@ -28,11 +28,11 @@ constants, and functions persist across submissions; expressions display their
 values. Earlier statements are not rerun.
 
 ```text
-iz> var count = 1;
-iz> func next() i32 { count = count + 1; return count; }
-iz> next();
+eld> var count = 1;
+eld> func next() i32 { count = count + 1; return count; }
+eld> next();
 2
-iz> count;
+eld> count;
 2
 ```
 
@@ -81,7 +81,7 @@ lose precision, just as in Java.
 
 ## Array runtime
 
-`[i32]` values use the growable `mylang.runtime.EldIntArray` runtime class,
+`[i32]` values use the growable `com.github.andreasarvidsson.eld.runtime.EldIntArray` runtime class,
 with primitive `int[]` storage and a separate logical size. They print as
 `[1, 2, 3]`. The runtime provides `add(int)` for growth; source-level append
 syntax is not yet implemented. Other element types retain their JVM-array
