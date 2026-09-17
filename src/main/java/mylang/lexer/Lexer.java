@@ -67,7 +67,7 @@ public class Lexer {
         Objects.requireNonNull(
             Map.ofEntries(
                 Map.entry("==", TokenType.EQUAL_EQUAL),
-                Map.entry("=>", TokenType.FAT_ARROW),
+                Map.entry("=>", TokenType.ARROW),
                 Map.entry("++", TokenType.PLUS_PLUS),
                 Map.entry("--", TokenType.MINUS_MINUS),
                 Map.entry("!=", TokenType.BANG_EQUAL),

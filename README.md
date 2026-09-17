@@ -144,3 +144,9 @@ These boolean Maven flags do not need `=true`. Without `-DtestSubset`, all fixtu
 mvn -N -q spotless:check
 mvn -N -q spotless:apply
 ```
+
+## For consideration
+
+### Lambda syntax
+
+`() => 0` and `() => {}` works fine, but the example with the braces doesn't really need the arrow. It's only really there for the parser to identify this as a lambda. It also needs to lookahead to do this. A prefix would be simpler. eg: `fn() => 0` and `fn() {}`

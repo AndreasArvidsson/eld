@@ -333,7 +333,7 @@ public final class Parser {
                 }
             }
             final SwitchBranchBody body;
-            if (match(TokenType.FAT_ARROW)) {
+            if (match(TokenType.ARROW)) {
                 final Expression value = parseExpression();
                 body = new SwitchBranchExpressionBody(value, value.range());
             }
@@ -622,9 +622,9 @@ public final class Parser {
                 depth++;
             }
             else if (type == TokenType.RIGHT_PAREN && --depth == 0) {
-                return check(offset + 1, TokenType.FAT_ARROW)
+                return check(offset + 1, TokenType.ARROW)
                     || (check(offset + 1, TokenType.IDENTIFIER)
-                        && check(offset + 2, TokenType.FAT_ARROW));
+                        && check(offset + 2, TokenType.ARROW));
             }
         }
         return false;
@@ -648,8 +648,8 @@ public final class Parser {
         }
         expect(TokenType.RIGHT_PAREN);
         final TypeNode returnType =
-            check(TokenType.FAT_ARROW) ? null : parseType();
-        expect(TokenType.FAT_ARROW);
+            check(TokenType.ARROW) ? null : parseType();
+        expect(TokenType.ARROW);
         final AstNode body =
             check(TokenType.LEFT_BRACE)
                 ? parseBlockStatement()

@@ -50,7 +50,7 @@ public enum TokenType {
     AND,
     OR,
 
-    FAT_ARROW,
+    ARROW,
 
     // Punctuation
     LEFT_PAREN,
