@@ -3,9 +3,14 @@ package mylang;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import mylang.lexer.Lexer;
+import mylang.lexer.Token;
 import mylang.parser.BlockItem;
+import mylang.parser.Parser;
 import mylang.parser.Program;
 import mylang.semantic.SemanticAnalyzer;
+import mylang.semantic.SemanticModel;
 
 /** Compiles each submission into a subclass of the previous module.
  * Inherited static fields and methods retain their identity and state. */
@@ -17,19 +22,17 @@ public final class ReplSession {
 
     public void evaluate(final String source)
         throws ReflectiveOperationException {
-        final Program submission =
-            new mylang.parser.Parser(
-                new mylang.lexer.Lexer(source).getTokens()
-            ).parse();
+        final List<Token> tokens = new Lexer(source).getTokens();
+        final Program submission = new Parser(tokens).parse();
         if (submission.items().isEmpty()) {
             return;
         }
         final List<BlockItem> combined = new ArrayList<>(items);
         combined.addAll(submission.items());
         final Program program = new Program(combined, submission.range());
-        final var model = new SemanticAnalyzer().analyze(program);
+        final SemanticModel model = new SemanticAnalyzer().analyze(program);
         final String name = "Repl" + sequence++;
-        final var classes =
+        final Map<String, byte[]> classes =
             new BytecodeGenerator(program, model, name, parent, items.size())
                 .generateClasses();
         loader.add(classes);

@@ -187,12 +187,7 @@ public class FixtureTest {
                 );
             }
             expected =
-                getContent(
-                    fixture,
-                    OUTPUT_HEADER,
-                    outputHeaderIndex,
-                    -1
-                );
+                getContent(fixture, OUTPUT_HEADER, outputHeaderIndex, -1);
             if (!expected.isEmpty() || updateFixture) {
                 final String outputActual = BytecodeRunner.run(classes);
                 actualBuilder.append(outputActual);
@@ -250,9 +245,7 @@ public class FixtureTest {
         return Objects.requireNonNull(result);
     }
 
-    private static String tokensToString(
-        final List<@NonNull Token> tokens
-    ) {
+    private static String tokensToString(final List<@NonNull Token> tokens) {
         final List<String> tokenStrings =
             tokens.stream().map(o -> o.toString()).toList();
         return Objects.requireNonNull(String.join("\n", tokenStrings));

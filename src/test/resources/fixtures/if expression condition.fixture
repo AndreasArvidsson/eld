@@ -1,0 +1,116 @@
+if (1 < 2) {}
+elif (!true) {}
+
+--- TOKENS ---
+
+IF (1:1-1:3)
+LEFT_PAREN (1:4-1:5)
+INTEGER_LITERAL "1" (1:5-1:6)
+LESS (1:7-1:8)
+INTEGER_LITERAL "2" (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+ELIF (2:1-2:5)
+LEFT_PAREN (2:6-2:7)
+BANG (2:7-2:8)
+BOOLEAN_LITERAL "true" (2:8-2:12)
+RIGHT_PAREN (2:12-2:13)
+LEFT_BRACE (2:14-2:15)
+RIGHT_BRACE (2:15-2:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:16
+  (IfStatement
+    range: 1:1-2:16
+    (BinaryExpression
+      range: 1:5-1:10
+      (LiteralExpression
+        range: 1:5-1:6
+        kind: int
+        text: "1"
+      )
+      operator: LESS
+      (LiteralExpression
+        range: 1:9-1:10
+        kind: int
+        text: "2"
+      )
+    )
+    (BlockStatement
+      range: 1:12-1:14
+    )
+    (ElseIfBranch
+      range: 2:1-2:16
+      (UnaryExpression
+        range: 2:7-2:12
+        operator: NOT
+        (LiteralExpression
+          range: 2:8-2:12
+          kind: bool
+          text: "true"
+        )
+      )
+      (BlockStatement
+        range: 2:14-2:16
+      )
+    )
+    elseBranch: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:5-1:6 -> int
+  1:5-1:10 -> bool
+  1:9-1:10 -> int
+  2:7-2:12 -> bool
+  2:8-2:12 -> bool
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    LDC 2
+    IF_ICMPLT L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME SAME
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IFEQ L2
+    GOTO L3
+   L2
+   FRAME SAME
+    ICONST_1
+    IFEQ L4
+    ICONST_0
+    GOTO L5
+   L4
+   FRAME SAME
+    ICONST_1
+   L5
+   FRAME SAME1 I
+    IFEQ L3
+    GOTO L3
+   L3
+   FRAME SAME
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

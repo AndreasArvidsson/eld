@@ -14,9 +14,15 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.util.CheckClassAdapter;
 import mylang.lexer.Lexer;
 import mylang.parser.ArrayExpression;
@@ -141,14 +147,11 @@ class BytecodeGeneratorTest {
                 program,
                 new SemanticAnalyzer().analyze(program)
             ).generateClasses();
-        final var node = new org.objectweb.asm.tree.ClassNode();
+        final var node = new ClassNode();
         new ClassReader(classes.get("Test$Counter")).accept(node, 0);
         for (final var method : node.methods) {
             for (final var instruction : method.instructions) {
-                assertNotEquals(
-                    org.objectweb.asm.Opcodes.SWAP,
-                    instruction.getOpcode()
-                );
+                assertNotEquals(Opcodes.SWAP, instruction.getOpcode());
             }
         }
         final Class<?> type = loadClass(classes, "Test$Counter");
@@ -178,13 +181,9 @@ class BytecodeGeneratorTest {
             final var node = inspect(source);
             for (final var method : node.methods) {
                 for (final var instruction : method.instructions) {
+                    assertNotEquals(Opcodes.NOP, instruction.getOpcode(), body);
                     assertNotEquals(
-                        org.objectweb.asm.Opcodes.NOP,
-                        instruction.getOpcode(),
-                        body
-                    );
-                    assertNotEquals(
-                        org.objectweb.asm.Opcodes.ATHROW,
+                        Opcodes.ATHROW,
                         instruction.getOpcode(),
                         body
                     );
@@ -222,20 +221,14 @@ class BytecodeGeneratorTest {
         assertEquals(7, compile(source).getMethod("result").invoke(null));
         for (final var method : inspect(source).methods) {
             for (final var instruction : method.instructions) {
-                assertNotEquals(
-                    org.objectweb.asm.Opcodes.NOP,
-                    instruction.getOpcode()
-                );
-                assertNotEquals(
-                    org.objectweb.asm.Opcodes.ATHROW,
-                    instruction.getOpcode()
-                );
+                assertNotEquals(Opcodes.NOP, instruction.getOpcode());
+                assertNotEquals(Opcodes.ATHROW, instruction.getOpcode());
             }
         }
     }
 
     private static Class<?> loadClass(
-        final java.util.Map<String, byte[]> classes,
+        final Map<String, byte[]> classes,
         final String name
     )
         throws ClassNotFoundException {
@@ -419,7 +412,7 @@ class BytecodeGeneratorTest {
         final var classes = generator.generateClasses();
         assertEquals(
             List.of("Test", "Test$Foo", "Test$Bar"),
-            new java.util.ArrayList<>(classes.keySet())
+            new ArrayList<>(classes.keySet())
         );
         for (final byte[] bytecode : classes.values()) {
             BytecodeUtil.verify(bytecode);
@@ -460,7 +453,7 @@ class BytecodeGeneratorTest {
         final var model = new SemanticAnalyzer().analyze(program);
         final var generator = new BytecodeGenerator(program, model);
         final var classes = generator.generateClasses();
-        final var node = new org.objectweb.asm.tree.ClassNode();
+        final var node = new ClassNode();
         new ClassReader(classes.get("Test$Foo")).accept(node, 0);
         assertNull(field(node, "field").value);
         final Class<?> type = loadClass(classes, "Test$Foo");
@@ -485,9 +478,7 @@ class BytecodeGeneratorTest {
         );
     }
 
-    private static org.objectweb.asm.tree.ClassNode inspect(
-        final String source
-    ) {
+    private static ClassNode inspect(final String source) {
         final Program program =
             new Parser(new Lexer(source).getTokens()).parse();
         final byte[] bytes =
@@ -495,15 +486,12 @@ class BytecodeGeneratorTest {
                 program,
                 new SemanticAnalyzer().analyze(program)
             ).generate();
-        final var node = new org.objectweb.asm.tree.ClassNode();
+        final var node = new ClassNode();
         new ClassReader(bytes).accept(node, 0);
         return node;
     }
 
-    private static org.objectweb.asm.tree.FieldNode field(
-        final org.objectweb.asm.tree.ClassNode node,
-        final String name
-    ) {
+    private static FieldNode field(final ClassNode node, final String name) {
         return node.fields.stream()
             .filter(field -> field.name.equals(name))
             .findFirst()
@@ -621,11 +609,11 @@ class BytecodeGeneratorTest {
                 .filter(method -> method.name.equals("<clinit>"))
                 .findFirst()
                 .orElseThrow();
-        final var writes = new java.util.ArrayList<String>();
+        final var writes = new ArrayList<String>();
         for (final var instruction : initializer.instructions) {
             if (
-                instruction instanceof org.objectweb.asm.tree.FieldInsnNode field
-                    && field.getOpcode() == org.objectweb.asm.Opcodes.PUTSTATIC
+                instruction instanceof FieldInsnNode field
+                    && field.getOpcode() == Opcodes.PUTSTATIC
             ) {
                 writes.add(field.name);
             }
@@ -805,11 +793,11 @@ class BytecodeGeneratorTest {
                 .filter(method -> method.name.equals("<clinit>"))
                 .findFirst()
                 .orElseThrow();
-        final var stores = new java.util.ArrayList<String>();
+        final var stores = new ArrayList<String>();
         for (final var instruction : initializer.instructions) {
             if (
-                instruction instanceof org.objectweb.asm.tree.FieldInsnNode field
-                    && field.getOpcode() == org.objectweb.asm.Opcodes.PUTSTATIC
+                instruction instanceof FieldInsnNode field
+                    && field.getOpcode() == Opcodes.PUTSTATIC
             ) {
                 stores.add(field.name);
             }

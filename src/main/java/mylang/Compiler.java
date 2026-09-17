@@ -22,10 +22,7 @@ public abstract class Compiler {
         final SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
         final SemanticModel semanticModel = semanticAnalyzer.analyze(program);
         final BytecodeGenerator bytecodeGenerator =
-            new BytecodeGenerator(
-                program,
-                semanticModel
-            );
+            new BytecodeGenerator(program, semanticModel);
         return bytecodeGenerator.generateClasses();
     }
 

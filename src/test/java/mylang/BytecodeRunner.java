@@ -21,18 +21,14 @@ public final class BytecodeRunner {
         try {
             for (final var entry : classes.entrySet()) {
                 final Path file =
-                    directory.resolve(
-                        entry.getKey().replace('.', '/') + ".class"
-                    );
+                    directory
+                        .resolve(entry.getKey().replace('.', '/') + ".class");
                 Files.createDirectories(file.getParent());
                 Files.write(file, entry.getValue());
             }
             final String java =
-                Path.of(
-                    System.getProperty("java.home"),
-                    "bin",
-                    "java"
-                ).toString();
+                Path.of(System.getProperty("java.home"), "bin", "java")
+                    .toString();
             final String classpath =
                 directory + File.pathSeparator
                     + System.getProperty("java.class.path");
@@ -45,13 +41,13 @@ public final class BytecodeRunner {
                     "-cp",
                     classpath,
                     BytecodeRunner.class.getName()
-                ).redirectErrorStream(true)
-                    .start();
-            try (final var reader = Executors.newVirtualThreadPerTaskExecutor()) {
+                ).redirectErrorStream(true).start();
+            try (final var reader =
+                Executors.newVirtualThreadPerTaskExecutor()) {
                 // Drain the pipe while waiting so large output cannot block the child.
-                final var output = reader.submit(
-                    () -> process.getInputStream().readAllBytes()
-                );
+                final var output =
+                    reader
+                        .submit(() -> process.getInputStream().readAllBytes());
                 try {
                     process.getOutputStream().close();
                     if (!process.waitFor(500, TimeUnit.MILLISECONDS)) {
@@ -61,13 +57,13 @@ public final class BytecodeRunner {
                     }
                     final String captured;
                     try {
-                        captured = new String(
-                            output.get(), StandardCharsets.UTF_8
-                        );
+                        captured =
+                            new String(output.get(), StandardCharsets.UTF_8);
                     }
                     catch (final ExecutionException e) {
                         throw new IOException(
-                            "Failed to capture fixture output", e.getCause()
+                            "Failed to capture fixture output",
+                            e.getCause()
                         );
                     }
                     if (process.exitValue() != 0) {

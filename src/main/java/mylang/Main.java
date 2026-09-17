@@ -29,12 +29,8 @@ public final class Main {
     ) {
         final CommandLine command =
             new CommandLine(new Commands(out))
-                .setOut(
-                    new PrintWriter(out, true, out.charset())
-                )
-                .setErr(
-                    new PrintWriter(err, true, err.charset())
-                )
+                .setOut(new PrintWriter(out, true, out.charset()))
+                .setErr(new PrintWriter(err, true, err.charset()))
                 .setExecutionExceptionHandler((error, cli, result) -> {
                     cli.getErr().println("Error: " + diagnostic(error));
                     return 1;
@@ -72,8 +68,7 @@ public final class Main {
             ) final Path source
         )
             throws IOException {
-            final Map<String, byte[]> classes =
-                Compiler.compile(source);
+            final Map<String, byte[]> classes = Compiler.compile(source);
             final String filename = source.getFileName().toString();
             final int dot = filename.lastIndexOf('.');
             final Path output =
