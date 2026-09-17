@@ -1,7 +1,6 @@
 const value = 1 < 2 ? 5 : 0;
 print(value);
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

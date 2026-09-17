@@ -1,6 +1,5 @@
 (a, b) => a + b;
 
-
 --- TOKENS ---
 
 LEFT_PAREN (1:1-1:2)

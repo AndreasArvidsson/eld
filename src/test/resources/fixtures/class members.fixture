@@ -6,7 +6,6 @@ class Counter {
     func invoke() i32 { return callback(); }
 }
 
-
 --- TOKENS ---
 
 CLASS (1:1-1:6)

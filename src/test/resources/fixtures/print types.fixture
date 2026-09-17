@@ -10,7 +10,6 @@ log(7);
 log(false);
 log(['o', 'k']);
 
-
 --- TOKENS ---
 
 IDENTIFIER "print" (1:1-1:6)

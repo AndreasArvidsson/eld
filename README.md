@@ -241,12 +241,35 @@ items.sort();
 - Remove `[T, T]` and replace it with `(T, T)`.
 - Arrays should only support `T[]`.
 
+### Immutable collections and objects
+
+Mutable by default with `readonly` keyword
+
+| Type                      | Array mutable? | Elements mutable through array? |
+| ------------------------- | -------------: | ------------------------------: |
+| `[Foo]`                   |            yes |                             yes |
+| `readonly [Foo]`          |             no |                             yes |
+| `(readonly Foo]`          |            yes |                              no |
+| `readonly [readonly Foo]` |             no |                              no |
+
+Immutable by default with `mut` keyword
+
+| Type            | Array mutable? | Elements mutable through array? |
+| --------------- | -------------: | ------------------------------: |
+| `[Foo]`         |             no |                              no |
+| `mut [Foo]`     |            yes |                              no |
+| `(mut Foo]`     |             no |                             yes |
+| `mut [mut Foo]` |            yes |                             yes |
+
 ### Miscellaneous
 
-- Ubiquitous class toString and equals methods.
-- Optional arguments (value?: i32)
-- Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
 - Do we want to keep the subscript `[]` operator? And if so do want to support ranges?
-- To be wont to support operation overloading? eg defining add/mult etc for custom classes.
+- Optional arguments: `foo?: i32`
+- Default argument values: `foo: i32 = 0`
+- Array: [T]. Can grow internally
+- Union types: `T | null`
+- Ubiquitous class toString and equals methods.
 - Named arguments? With support for pythons \* syntax
+- Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
+- To be wont to support operation overloading? eg defining add/mult etc for custom classes.
 - Class variables and methods are private by default. Only need the public modifier.

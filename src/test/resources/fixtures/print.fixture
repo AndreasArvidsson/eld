@@ -1,6 +1,5 @@
 print("Hello world");
 
-
 --- TOKENS ---
 
 IDENTIFIER "print" (1:1-1:6)

@@ -702,13 +702,10 @@ public final class Parser {
 
     private Token expect(final TokenType type) {
         if (isAtEnd()) {
-            final Position position =
-                Objects.requireNonNull(tokens.get(tokens.size() - 1))
-                    .range()
-                    .end();
+            final Position position = tokens.getLast().range().end();
             throw new ParserException(
                 new Range(position, position),
-                "Expected %s but reached end of input",
+                "Expected %s, but reached end of input",
                 type
             );
         }
@@ -718,7 +715,7 @@ public final class Parser {
         if (token.type() != type) {
             throw new ParserException(
                 token.range(),
-                "Expected %s but found %s",
+                "Expected %s, but found %s",
                 type,
                 token.type()
             );

@@ -1,6 +1,5 @@
 const foo = 0;
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)
