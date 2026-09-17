@@ -31,13 +31,13 @@ RIGHT_BRACE (2:15-2:16)
         range: 1:5-1:10
         (LiteralExpression
           range: 1:5-1:6
-          kind: int
+          kind: INT
           text: "1"
         )
         operator: LESS
         (LiteralExpression
           range: 1:9-1:10
-          kind: int
+          kind: INT
           text: "2"
         )
       )
@@ -51,7 +51,7 @@ RIGHT_BRACE (2:15-2:16)
           operator: NOT
           (LiteralExpression
             range: 2:8-2:12
-            kind: bool
+            kind: BOOL
             text: "true"
           )
         )

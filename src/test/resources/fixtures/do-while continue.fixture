@@ -29,7 +29,7 @@ SEMICOLON (3:16-3:17)
     )
     (LiteralExpression
       range: 3:10-3:15
-      kind: bool
+      kind: BOOL
       text: "false"
     )
   )

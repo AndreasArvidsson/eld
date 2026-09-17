@@ -16,7 +16,7 @@ SEMICOLON (2:6-2:7)
     range: 1:1-1:6
     (LiteralExpression
       range: 1:1-1:5
-      kind: bool
+      kind: BOOL
       text: "true"
     )
   )
@@ -24,7 +24,7 @@ SEMICOLON (2:6-2:7)
     range: 2:1-2:7
     (LiteralExpression
       range: 2:1-2:6
-      kind: bool
+      kind: BOOL
       text: "false"
     )
   )

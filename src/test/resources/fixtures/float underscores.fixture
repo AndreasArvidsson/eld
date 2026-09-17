@@ -17,7 +17,7 @@ SEMICOLON (1:12-1:13)
       operator: MINUS
       (LiteralExpression
         range: 1:2-1:12
-        kind: float
+        kind: FLOAT
         text: "1_234.5_67"
       )
     )

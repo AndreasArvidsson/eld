@@ -27,7 +27,7 @@ SEMICOLON (1:21-1:22)
     )
     (LiteralExpression
       range: 1:18-1:21
-      kind: float
+      kind: FLOAT
       text: "5.5"
     )
   )

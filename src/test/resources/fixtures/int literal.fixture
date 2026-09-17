@@ -16,7 +16,7 @@ SEMICOLON (2:8-2:9)
     range: 1:1-1:5
     (LiteralExpression
       range: 1:1-1:4
-      kind: int
+      kind: INT
       text: "123"
     )
   )
@@ -24,7 +24,7 @@ SEMICOLON (2:8-2:9)
     range: 2:1-2:9
     (LiteralExpression
       range: 2:1-2:8
-      kind: int
+      kind: INT
       text: "123_456"
     )
   )

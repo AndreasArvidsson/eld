@@ -13,7 +13,7 @@ SEMICOLON (1:5-1:6)
     range: 1:1-1:6
     (LiteralExpression
       range: 1:1-1:5
-      kind: null
+      kind: NULL
       text: "null"
     )
   )

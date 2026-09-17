@@ -35,7 +35,7 @@ RIGHT_BRACE (3:1-3:2)
         range: 2:5-2:14
         (LiteralExpression
           range: 2:12-2:13
-          kind: int
+          kind: INT
           text: "1"
         )
       )

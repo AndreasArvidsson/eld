@@ -33,12 +33,12 @@ SEMICOLON (1:17-1:18)
         )
         (LiteralExpression
           range: 1:11-1:12
-          kind: int
+          kind: INT
           text: "1"
         )
         (LiteralExpression
           range: 1:14-1:15
-          kind: int
+          kind: INT
           text: "2"
         )
       )

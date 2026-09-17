@@ -33,7 +33,7 @@ RIGHT_BRACE (3:14-3:15)
       range: 1:1-3:15
       (LiteralExpression
         range: 1:5-1:9
-        kind: bool
+        kind: BOOL
         text: "true"
       )
       (BlockStatement
@@ -43,7 +43,7 @@ RIGHT_BRACE (3:14-3:15)
         range: 2:1-2:16
         (LiteralExpression
           range: 2:7-2:12
-          kind: bool
+          kind: BOOL
           text: "false"
         )
         (BlockStatement
@@ -54,7 +54,7 @@ RIGHT_BRACE (3:14-3:15)
         range: 3:1-3:15
         (LiteralExpression
           range: 3:7-3:11
-          kind: bool
+          kind: BOOL
           text: "true"
         )
         (BlockStatement

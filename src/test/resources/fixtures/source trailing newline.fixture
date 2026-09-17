@@ -23,7 +23,7 @@ SEMICOLON (1:14-1:15)
     type: null
     (LiteralExpression
       range: 1:13-1:14
-      kind: int
+      kind: INT
       text: "0"
     )
   )

@@ -44,14 +44,14 @@ SEMICOLON (6:2-6:3)
       range: 1:13-6:2
       (LiteralExpression
         range: 1:21-1:22
-        kind: int
+        kind: INT
         text: "1"
       )
       (SwitchBranch
         range: 2:5-4:6
         (LiteralExpression
           range: 2:10-2:11
-          kind: int
+          kind: INT
           text: "1"
         )
         (SwitchBranchBlockBody
@@ -62,7 +62,7 @@ SEMICOLON (6:2-6:3)
               range: 3:9-3:17
               (LiteralExpression
                 range: 3:15-3:16
-                kind: int
+                kind: INT
                 text: "5"
               )
             )
@@ -75,7 +75,7 @@ SEMICOLON (6:2-6:3)
           range: 5:13-5:17
           (LiteralExpression
             range: 5:13-5:17
-            kind: float
+            kind: FLOAT
             text: "10.5"
           )
         )

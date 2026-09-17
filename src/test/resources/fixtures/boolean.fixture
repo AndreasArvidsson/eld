@@ -31,7 +31,7 @@ SEMICOLON (1:36-1:37)
         operator: GREATER
         (LiteralExpression
           range: 1:9-1:10
-          kind: int
+          kind: INT
           text: "2"
         )
       )

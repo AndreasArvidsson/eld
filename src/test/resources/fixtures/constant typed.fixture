@@ -27,7 +27,7 @@ SEMICOLON (1:20-1:21)
     )
     (LiteralExpression
       range: 1:18-1:20
-      kind: int
+      kind: INT
       text: "10"
     )
   )

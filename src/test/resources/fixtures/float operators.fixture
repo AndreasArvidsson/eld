@@ -25,21 +25,21 @@ SEMICOLON (1:14-1:15)
           operator: MINUS
           (LiteralExpression
             range: 1:2-1:5
-            kind: float
+            kind: FLOAT
             text: "0.5"
           )
         )
         operator: ADD
         (LiteralExpression
           range: 1:6-1:11
-          kind: float
+          kind: FLOAT
           text: "12.34"
         )
       )
       operator: SUBTRACT
       (LiteralExpression
         range: 1:12-1:14
-        kind: int
+        kind: INT
         text: "10"
       )
     )

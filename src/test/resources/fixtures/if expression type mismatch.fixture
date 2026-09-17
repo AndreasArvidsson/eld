@@ -48,13 +48,13 @@ SEMICOLON (6:2-6:3)
         range: 1:19-1:24
         (LiteralExpression
           range: 1:19-1:20
-          kind: int
+          kind: INT
           text: "1"
         )
         operator: LESS
         (LiteralExpression
           range: 1:23-1:24
-          kind: int
+          kind: INT
           text: "2"
         )
       )
@@ -64,7 +64,7 @@ SEMICOLON (6:2-6:3)
           range: 2:5-2:13
           (LiteralExpression
             range: 2:11-2:12
-            kind: int
+            kind: INT
             text: "5"
           )
         )
@@ -75,7 +75,7 @@ SEMICOLON (6:2-6:3)
           range: 5:5-5:15
           (LiteralExpression
             range: 5:11-5:14
-            kind: float
+            kind: FLOAT
             text: "0.5"
           )
         )

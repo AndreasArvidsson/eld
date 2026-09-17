@@ -31,14 +31,14 @@ RIGHT_BRACE (4:1-4:2)
       range: 1:1-4:2
       (LiteralExpression
         range: 1:9-1:10
-        kind: int
+        kind: INT
         text: "1"
       )
       (SwitchBranch
         range: 2:5-2:14
         (LiteralExpression
           range: 2:10-2:11
-          kind: int
+          kind: INT
           text: "1"
         )
         (SwitchBranchBlockBody
@@ -52,7 +52,7 @@ RIGHT_BRACE (4:1-4:2)
         range: 3:5-3:17
         (LiteralExpression
           range: 3:10-3:14
-          kind: int
+          kind: INT
           text: "1000"
         )
         (SwitchBranchBlockBody

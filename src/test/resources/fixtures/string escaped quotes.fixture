@@ -13,7 +13,7 @@ SEMICOLON (1:13-1:14)
     range: 1:1-1:14
     (LiteralExpression
       range: 1:1-1:13
-      kind: string
+      kind: STRING
       text: "\"say \\\"hi\\\"\""
     )
   )

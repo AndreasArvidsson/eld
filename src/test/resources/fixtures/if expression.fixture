@@ -55,13 +55,13 @@ SEMICOLON (8:13-8:14)
         range: 1:19-1:24
         (LiteralExpression
           range: 1:19-1:20
-          kind: int
+          kind: INT
           text: "1"
         )
         operator: LESS
         (LiteralExpression
           range: 1:23-1:24
-          kind: int
+          kind: INT
           text: "2"
         )
       )
@@ -71,7 +71,7 @@ SEMICOLON (8:13-8:14)
           range: 2:5-2:13
           (LiteralExpression
             range: 2:11-2:12
-            kind: int
+            kind: INT
             text: "5"
           )
         )
@@ -82,7 +82,7 @@ SEMICOLON (8:13-8:14)
           range: 5:5-5:13
           (LiteralExpression
             range: 5:11-5:12
-            kind: int
+            kind: INT
             text: "0"
           )
         )

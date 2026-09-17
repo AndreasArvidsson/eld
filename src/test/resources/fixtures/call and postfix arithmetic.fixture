@@ -40,12 +40,12 @@ SEMICOLON (1:35-1:36)
         )
         (LiteralExpression
           range: 1:20-1:21
-          kind: int
+          kind: INT
           text: "1"
         )
         (LiteralExpression
           range: 1:23-1:24
-          kind: int
+          kind: INT
           text: "2"
         )
       )
@@ -63,7 +63,7 @@ SEMICOLON (1:35-1:36)
         operator: MULTIPLY
         (LiteralExpression
           range: 1:34-1:35
-          kind: int
+          kind: INT
           text: "3"
         )
       )

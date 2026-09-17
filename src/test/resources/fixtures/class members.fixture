@@ -72,7 +72,7 @@ RIGHT_BRACE (7:1-7:2)
       type: null
       (LiteralExpression
         range: 2:21-2:23
-        kind: int
+        kind: INT
         text: "10"
       )
     )

@@ -13,7 +13,7 @@ SEMICOLON (1:9-1:10)
     range: 1:1-1:10
     (LiteralExpression
       range: 1:1-1:9
-      kind: string
+      kind: STRING
       text: "\"path\\\\\""
     )
   )

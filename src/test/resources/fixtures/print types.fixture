@@ -90,7 +90,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 1:7-1:9
-        kind: int
+        kind: INT
         text: "42"
       )
     )
@@ -105,7 +105,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 2:7-2:10
-        kind: float
+        kind: FLOAT
         text: "1.5"
       )
     )
@@ -120,7 +120,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 3:7-3:11
-        kind: bool
+        kind: BOOL
         text: "true"
       )
     )
@@ -135,7 +135,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 4:7-4:10
-        kind: char
+        kind: CHAR
         text: "'x'"
       )
     )
@@ -150,7 +150,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 5:7-5:11
-        kind: null
+        kind: NULL
         text: "null"
       )
     )
@@ -167,12 +167,12 @@ SEMICOLON (11:16-11:17)
         range: 6:7-6:17
         (LiteralExpression
           range: 6:8-6:11
-          kind: char
+          kind: CHAR
           text: "'h'"
         )
         (LiteralExpression
           range: 6:13-6:16
-          kind: char
+          kind: CHAR
           text: "'i'"
         )
       )
@@ -211,7 +211,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 9:5-9:6
-        kind: int
+        kind: INT
         text: "7"
       )
     )
@@ -226,7 +226,7 @@ SEMICOLON (11:16-11:17)
       )
       (LiteralExpression
         range: 10:5-10:10
-        kind: bool
+        kind: BOOL
         text: "false"
       )
     )
@@ -243,12 +243,12 @@ SEMICOLON (11:16-11:17)
         range: 11:5-11:15
         (LiteralExpression
           range: 11:6-11:9
-          kind: char
+          kind: CHAR
           text: "'o'"
         )
         (LiteralExpression
           range: 11:11-11:14
-          kind: char
+          kind: CHAR
           text: "'k'"
         )
       )
