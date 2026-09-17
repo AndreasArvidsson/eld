@@ -1300,6 +1300,8 @@ public final class BytecodeGenerator {
                 case SwitchExpression selection -> selection(selection);
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
+                case NamedArgumentExpression named ->
+                    throw unsupported(named, "Named argument outside a call");
                 case ArrayExpression array -> array(array);
                 case SubscriptExpression index -> {
                     arrayIndex(index);
@@ -1457,9 +1459,7 @@ public final class BytecodeGenerator {
                 if (instanceMethod) {
                     method.visitVarInsn(ALOAD, 0);
                 }
-                for (final Expression argument : call.arguments()) {
-                    expression(argument);
-                }
+                callArguments(call);
                 method.visitMethodInsn(
                     instanceMethod ? INVOKEVIRTUAL : INVOKESTATIC,
                     instanceMethod
@@ -1472,15 +1472,53 @@ public final class BytecodeGenerator {
             }
             else {
                 expression(call.callee());
-                for (final Expression argument : call.arguments()) {
-                    expression(argument);
-                }
+                callArguments(call);
                 method.visitMethodInsn(
                     INVOKEVIRTUAL,
                     "java/lang/invoke/MethodHandle",
                     "invokeExact",
                     methodDescriptor(type),
                     false
+                );
+            }
+        }
+
+        private void callArguments(final CallExpression call) {
+            if (
+                call.arguments()
+                    .stream()
+                    .noneMatch(
+                        argument -> argument instanceof NamedArgumentExpression
+                    )
+            ) {
+                for (final Expression argument : call.arguments()) {
+                    expression(argument);
+                }
+                return;
+            }
+            final FunctionType type =
+                (FunctionType) semanticModel.getExpressionType(call.callee());
+            final List<Integer> parameters =
+                semanticModel.getArgumentParameters(call);
+            final int[] locals = new int[parameters.size()];
+            for (int i = 0; i < parameters.size(); i++) {
+                final Expression supplied = call.arguments().get(i);
+                final Expression value =
+                    supplied instanceof NamedArgumentExpression named
+                        ? named.value()
+                        : supplied;
+                final int parameter = parameters.get(i);
+                final Type parameterType = type.parameterTypes().get(parameter);
+                final int slot = nextLocal;
+                nextLocal += slots(parameterType);
+                locals[parameter] = slot;
+                expression(value);
+                method.visitVarInsn(storeOpcode(parameterType), slot);
+            }
+            for (int i = 0; i < locals.length; i++) {
+                method.visitVarInsn(
+                    loadOpcode(type.parameterTypes().get(i)),
+                    locals[i]
                 );
             }
         }

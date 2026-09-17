@@ -16,6 +16,7 @@ import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
+import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
@@ -771,6 +772,11 @@ public final class SemanticAnalyzer {
         context.scope().declare(symbol);
         model.setSymbol(declaration.name(), symbol);
 
+        model.setFunctionParameters(
+            symbol,
+            declaration.parameters().stream().map(Parameter::name).toList()
+        );
+
         final SemanticContext functionContext =
             new SemanticContext(functionScope, symbol, 0);
 
@@ -1023,6 +1029,10 @@ public final class SemanticAnalyzer {
                 analyzeUnaryExpression(unary, context);
             case PostfixExpression postfix ->
                 analyzePostfixExpression(postfix, context);
+            case NamedArgumentExpression named -> throw new SemanticException(
+                named.range(),
+                "Named arguments are only valid in function calls"
+            );
             case CallExpression call -> analyzeCallExpression(call, context);
             case GroupingExpression grouping ->
                 analyzeExpression(grouping.expression(), context);
@@ -1090,9 +1100,69 @@ public final class SemanticAnalyzer {
                 call.arguments().size()
             );
         }
+        Expression callee = call.callee();
+        while (callee instanceof GroupingExpression grouping) {
+            callee = grouping.expression();
+        }
+        final List<IdentifierDeclaration> declarations =
+            callee instanceof IdentifierExpression identifier && model
+                .getReference(identifier) instanceof FunctionSymbol symbol
+                    ? model.getFunctionParameters(symbol)
+                    : List.of();
+        final List<String> names =
+            declarations.stream().map(IdentifierDeclaration::name).toList();
+        final List<Integer> parameters = new ArrayList<>();
+        final boolean[] assigned =
+            new boolean[function.parameterTypes().size()];
+        boolean seenNamed = false;
         for (int i = 0; i < call.arguments().size(); i++) {
-            final Expression argument = call.arguments().get(i);
-            final Type expected = function.parameterTypes().get(i);
+            final Expression supplied = call.arguments().get(i);
+            final Expression argument;
+            final int parameter;
+            if (supplied instanceof NamedArgumentExpression named) {
+                seenNamed = true;
+                if (names.isEmpty()) {
+                    throw new SemanticException(
+                        named.range(),
+                        "Named arguments require a declared function"
+                    );
+                }
+                parameter = names.indexOf(named.name().name());
+                if (parameter < 0) {
+                    throw new SemanticException(
+                        named.name().range(),
+                        "Unknown parameter: %s",
+                        named.name().name()
+                    );
+                }
+                argument = named.value();
+            }
+            else {
+                if (seenNamed) {
+                    throw new SemanticException(
+                        supplied.range(),
+                        "Positional arguments must precede named arguments"
+                    );
+                }
+                parameter = i;
+                argument = supplied;
+            }
+            if (assigned[parameter]) {
+                throw new SemanticException(
+                    supplied.range(),
+                    "Argument supplied more than once for parameter: %s",
+                    names.get(parameter)
+                );
+            }
+            assigned[parameter] = true;
+            parameters.add(parameter);
+            if (supplied instanceof NamedArgumentExpression named) {
+                model.setNamedArgument(
+                    named.name(),
+                    declarations.get(parameter)
+                );
+            }
+            final Type expected = function.parameterTypes().get(parameter);
             final Type actual = analyzeExpression(argument, context, expected);
             if (resolveAssignType(actual, expected, argument) == null) {
                 throw new SemanticException(
@@ -1103,6 +1173,7 @@ public final class SemanticAnalyzer {
                 );
             }
         }
+        model.setArgumentParameters(call, parameters);
         return function.returnType();
     }
 

@@ -209,7 +209,23 @@ public final class Parser {
 
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
-                arguments.add(parseExpression());
+                if (check(TokenType.IDENTIFIER) && check(1, TokenType.EQUAL)) {
+                    final Token name = advance();
+                    advance();
+                    final Expression value = parseExpression();
+                    arguments.add(
+                        new NamedArgumentExpression(
+                            new IdentifierDeclaration(
+                                name.text(),
+                                name.range()
+                            ),
+                            value
+                        )
+                    );
+                }
+                else {
+                    arguments.add(parseExpression());
+                }
             } while (match(TokenType.COMMA));
         }
 

@@ -333,8 +333,8 @@ Immutable by default with `mut` keyword
 
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
+- overloaded functions
 - Ubiquitous class toString and equals methods.
-- Named arguments? With support for pythons \* syntax
 - Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
 - To be wont to support operation overloading? eg defining add/mult etc for custom classes.
 - Class variables and methods are private by default. Only need the public modifier.

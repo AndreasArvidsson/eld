@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,65 @@ import com.github.andreasarvidsson.eld.runtime.EldCharArray;
 import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
+    @Test
+    void namedArgumentsBindByNameAndEvaluateInSourceOrder() throws Exception {
+        final Class<?> type = compile("""
+            func isLess(a: i32, b: i32) bool { return a < b; }
+            func positional() bool { return isLess(5, 2); }
+            func named() bool { return isLess(b=5, a=2); }
+            func mixed() bool { return isLess(2, b=5); }
+            func grouped() bool { return (isLess)(b=5, a=2); }
+            func combine(a: i64, b: f64) f64 { return a * 10 + b; }
+            func converted() f64 { return combine(b=2, a=3); }
+            func next(value: i32) i32 { print(value); return value; }
+            func pair(a: i32, b: i32) i32 { return a * 10 + b; }
+            func ordered() i32 {
+                return pair(b=next(1), a=next(2));
+            }
+            """);
+        assertEquals(false, type.getMethod("positional").invoke(null));
+        assertEquals(true, type.getMethod("named").invoke(null));
+        assertEquals(true, type.getMethod("mixed").invoke(null));
+        assertEquals(true, type.getMethod("grouped").invoke(null));
+        assertEquals(32.0, type.getMethod("converted").invoke(null));
+        final var output = new java.io.ByteArrayOutputStream();
+        final var previousOut = System.out;
+        try (final var capture = new java.io.PrintStream(output)) {
+            System.setOut(capture);
+            assertEquals(21, type.getMethod("ordered").invoke(null));
+        }
+        finally {
+            System.setOut(previousOut);
+        }
+        assertEquals(
+            "1\n2\n",
+            output.toString(Charset.defaultCharset()).replace("\r\n", "\n")
+        );
+    }
+
+    @Test
+    void rejectsInvalidNamedArguments() {
+        for (final String call : List.of(
+            "f(a=1, unknown=2);",
+            "f(a=1, a=2);",
+            "f(1, a=2);",
+            "f(a=1, 2);",
+            "f(a=1);",
+            "f(a=true, b=2);"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile("func f(a: i32, b: i32) {}\n" + call),
+                call
+            );
+        }
+        assertThrows(SemanticException.class, () -> compile("print(value=1);"));
+        assertThrows(
+            SemanticException.class,
+            () -> compile("func f(a: i32) {}\nconst alias = f;\nalias(a=1);")
+        );
+    }
+
     @Test
     void nullableConversionsOnlyCastNullValuesLoadedAsObjects()
         throws Exception {

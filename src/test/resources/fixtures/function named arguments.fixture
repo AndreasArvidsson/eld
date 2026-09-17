@@ -1,0 +1,268 @@
+func isLess(a: i32, b: i32) bool {
+    return a < b;
+}
+
+print(isLess(5, 2));
+print(isLess(b=5, a=2));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "isLess" (1:6-1:12)
+LEFT_PAREN (1:12-1:13)
+IDENTIFIER "a" (1:13-1:14)
+COLON (1:14-1:15)
+IDENTIFIER "i32" (1:16-1:19)
+COMMA (1:19-1:20)
+IDENTIFIER "b" (1:21-1:22)
+COLON (1:22-1:23)
+IDENTIFIER "i32" (1:24-1:27)
+RIGHT_PAREN (1:27-1:28)
+IDENTIFIER "bool" (1:29-1:33)
+LEFT_BRACE (1:34-1:35)
+RETURN (2:5-2:11)
+IDENTIFIER "a" (2:12-2:13)
+LESS (2:14-2:15)
+IDENTIFIER "b" (2:16-2:17)
+SEMICOLON (2:17-2:18)
+RIGHT_BRACE (3:1-3:2)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "isLess" (5:7-5:13)
+LEFT_PAREN (5:13-5:14)
+INTEGER_LITERAL "5" (5:14-5:15)
+COMMA (5:15-5:16)
+INTEGER_LITERAL "2" (5:17-5:18)
+RIGHT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+SEMICOLON (5:20-5:21)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "isLess" (6:7-6:13)
+LEFT_PAREN (6:13-6:14)
+IDENTIFIER "b" (6:14-6:15)
+EQUAL (6:15-6:16)
+INTEGER_LITERAL "5" (6:16-6:17)
+COMMA (6:17-6:18)
+IDENTIFIER "a" (6:19-6:20)
+EQUAL (6:20-6:21)
+INTEGER_LITERAL "2" (6:21-6:22)
+RIGHT_PAREN (6:22-6:23)
+RIGHT_PAREN (6:23-6:24)
+SEMICOLON (6:24-6:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:25
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:12
+      name: "isLess"
+    )
+    (Parameter
+      range: 1:13-1:19
+      (IdentifierDeclaration
+        range: 1:13-1:14
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:16-1:19
+        name: "i32"
+      )
+    )
+    (Parameter
+      range: 1:21-1:27
+      (IdentifierDeclaration
+        range: 1:21-1:22
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:24-1:27
+        name: "i32"
+      )
+    )
+    (NamedTypeNode
+      range: 1:29-1:33
+      name: "bool"
+    )
+    (BlockStatement
+      range: 1:34-3:2
+      (ReturnStatement
+        range: 2:5-2:18
+        (BinaryExpression
+          range: 2:12-2:17
+          (IdentifierExpression
+            range: 2:12-2:13
+            name: "a"
+          )
+          operator: LESS
+          (IdentifierExpression
+            range: 2:16-2:17
+            name: "b"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:21
+    (CallExpression
+      range: 5:1-5:20
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:19
+        (IdentifierExpression
+          range: 5:7-5:13
+          name: "isLess"
+        )
+        (LiteralExpression
+          range: 5:14-5:15
+          kind: INT
+          text: "5"
+        )
+        (LiteralExpression
+          range: 5:17-5:18
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:25
+    (CallExpression
+      range: 6:1-6:24
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:23
+        (IdentifierExpression
+          range: 6:7-6:13
+          name: "isLess"
+        )
+        (NamedArgumentExpression
+          range: 6:14-6:17
+          (IdentifierDeclaration
+            range: 6:14-6:15
+            name: "b"
+          )
+          (LiteralExpression
+            range: 6:16-6:17
+            kind: INT
+            text: "5"
+          )
+        )
+        (NamedArgumentExpression
+          range: 6:19-6:22
+          (IdentifierDeclaration
+            range: 6:19-6:20
+            name: "a"
+          )
+          (LiteralExpression
+            range: 6:21-6:22
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:13 -> i32
+  2:12-2:17 -> bool
+  2:16-2:17 -> i32
+  5:1-5:6 -> BuiltinFunctionType(print)
+  5:1-5:20 -> void
+  5:7-5:13 -> FunctionType([i32, i32], bool)
+  5:7-5:19 -> bool
+  5:14-5:15 -> i32
+  5:17-5:18 -> i32
+  6:1-6:6 -> BuiltinFunctionType(print)
+  6:1-6:24 -> void
+  6:7-6:13 -> FunctionType([i32, i32], bool)
+  6:7-6:23 -> bool
+  6:16-6:17 -> i32
+  6:21-6:22 -> i32
+
+Resolved types:
+  1:16-1:19 -> i32
+  1:24-1:27 -> i32
+  1:29-1:33 -> bool
+
+Declarations:
+  1:6-1:12 -> FunctionSymbol(name=isLess, parameterTypes=[i32, i32], returnType=bool)
+  1:13-1:14 -> VariableSymbol(name=a, type=i32, mutability=CONST)
+  1:21-1:22 -> VariableSymbol(name=b, type=i32, mutability=CONST)
+
+References:
+  2:12-2:13 -> 1:13-1:14
+  2:16-2:17 -> 1:21-1:22
+  5:1-5:6 -> builtin print
+  5:7-5:13 -> 1:6-1:12
+  6:1-6:6 -> builtin print
+  6:7-6:13 -> 1:6-1:12
+
+Named arguments:
+  6:14-6:15 -> parameter 1:21-1:22
+  6:19-6:20 -> parameter 1:13-1:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x9
+  public static isLess(II)Z
+    ILOAD 0
+    ILOAD 1
+    IF_ICMPLT L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME SAME
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x8
+  static <clinit>()V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 5
+    LDC 2
+    INVOKESTATIC Test.isLess (II)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 5
+    ISTORE 0
+    LDC 2
+    ISTORE 1
+    ILOAD 1
+    ILOAD 0
+    INVOKESTATIC Test.isLess (II)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+false
+true
+

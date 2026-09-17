@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import com.github.andreasarvidsson.eld.parser.AstNode;
+import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
@@ -26,6 +27,12 @@ public final class SemanticModel {
     private final IdentityHashMap<IdentifierDeclaration, Symbol> declarations =
         new IdentityHashMap<>();
     private final IdentityHashMap<IdentifierExpression, Symbol> references =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierDeclaration, IdentifierDeclaration> namedArguments =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
 
     public void setExpressionType(
@@ -99,6 +106,37 @@ public final class SemanticModel {
         return Objects.requireNonNull(references.get(expression));
     }
 
+    public void setFunctionParameters(
+        final FunctionSymbol function,
+        final List<IdentifierDeclaration> parameters
+    ) {
+        functionParameters.put(function, List.copyOf(parameters));
+    }
+
+    public List<IdentifierDeclaration> getFunctionParameters(
+        final FunctionSymbol function
+    ) {
+        return Objects.requireNonNull(functionParameters.get(function));
+    }
+
+    public void setNamedArgument(
+        final IdentifierDeclaration argument,
+        final IdentifierDeclaration parameter
+    ) {
+        namedArguments.put(argument, parameter);
+    }
+
+    public void setArgumentParameters(
+        final CallExpression call,
+        final List<Integer> parameters
+    ) {
+        argumentParameters.put(call, List.copyOf(parameters));
+    }
+
+    public List<Integer> getArgumentParameters(final CallExpression call) {
+        return Objects.requireNonNull(argumentParameters.get(call));
+    }
+
     @Override
     public String toString() {
         final List<String> lines = new ArrayList<>();
@@ -119,6 +157,12 @@ public final class SemanticModel {
             (expression, symbol) -> symbol instanceof BuiltinFunctionSymbol
                 ? "builtin " + symbol.name()
                 : symbol.range().toString()
+        );
+        appendSection(
+            lines,
+            "Named arguments:",
+            namedArguments,
+            (argument, parameter) -> "parameter " + parameter.range()
         );
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
     }
