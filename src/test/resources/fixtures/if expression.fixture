@@ -1,74 +1,129 @@
-if (1 < 2) {}
-elif (!true) {}
+const value = if (1 < 2) {
+    yield 5;
+}
+else {
+    yield 0;
+};
+
+print(value);
+
 
 --- TOKENS ---
 
-IF (1:1-1:3)
-LEFT_PAREN (1:4-1:5)
-INTEGER_LITERAL "1" (1:5-1:6)
-LESS (1:7-1:8)
-INTEGER_LITERAL "2" (1:9-1:10)
-RIGHT_PAREN (1:10-1:11)
-LEFT_BRACE (1:12-1:13)
-RIGHT_BRACE (1:13-1:14)
-ELIF (2:1-2:5)
-LEFT_PAREN (2:6-2:7)
-BANG (2:7-2:8)
-BOOLEAN_LITERAL "true" (2:8-2:12)
-RIGHT_PAREN (2:12-2:13)
-LEFT_BRACE (2:14-2:15)
-RIGHT_BRACE (2:15-2:16)
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+IF (1:15-1:17)
+LEFT_PAREN (1:18-1:19)
+INTEGER_LITERAL "1" (1:19-1:20)
+LESS (1:21-1:22)
+INTEGER_LITERAL "2" (1:23-1:24)
+RIGHT_PAREN (1:24-1:25)
+LEFT_BRACE (1:26-1:27)
+YIELD (2:5-2:10)
+INTEGER_LITERAL "5" (2:11-2:12)
+SEMICOLON (2:12-2:13)
+RIGHT_BRACE (3:1-3:2)
+ELSE (4:1-4:5)
+LEFT_BRACE (4:6-4:7)
+YIELD (5:5-5:10)
+INTEGER_LITERAL "0" (5:11-5:12)
+SEMICOLON (5:12-5:13)
+RIGHT_BRACE (6:1-6:2)
+SEMICOLON (6:2-6:3)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "value" (8:7-8:12)
+RIGHT_PAREN (8:12-8:13)
+SEMICOLON (8:13-8:14)
 
 --- AST ---
 
 (Program
-  range: 1:1-2:16
-  (IfStatement
-    range: 1:1-2:16
-    (BinaryExpression
-      range: 1:5-1:10
-      (LiteralExpression
-        range: 1:5-1:6
-        kind: int
-        text: "1"
-      )
-      operator: LESS
-      (LiteralExpression
-        range: 1:9-1:10
-        kind: int
-        text: "2"
-      )
+  range: 1:1-8:14
+  (VariableDeclaration
+    range: 1:1-6:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
     )
-    (BlockStatement
-      range: 1:12-1:14
-    )
-    (ElseIfBranch
-      range: 2:1-2:16
-      (UnaryExpression
-        range: 2:7-2:12
-        operator: NOT
+    type: null
+    (IfExpression
+      range: 1:15-6:2
+      (BinaryExpression
+        range: 1:19-1:24
         (LiteralExpression
-          range: 2:8-2:12
-          kind: bool
-          text: "true"
+          range: 1:19-1:20
+          kind: int
+          text: "1"
+        )
+        operator: LESS
+        (LiteralExpression
+          range: 1:23-1:24
+          kind: int
+          text: "2"
         )
       )
       (BlockStatement
-        range: 2:14-2:16
+        range: 1:26-3:2
+        (YieldStatement
+          range: 2:5-2:13
+          (LiteralExpression
+            range: 2:11-2:12
+            kind: int
+            text: "5"
+          )
+        )
+      )
+      (BlockStatement
+        range: 4:6-6:2
+        (YieldStatement
+          range: 5:5-5:13
+          (LiteralExpression
+            range: 5:11-5:12
+            kind: int
+            text: "0"
+          )
+        )
       )
     )
-    elseBranch: null
+  )
+  (ExpressionStatement
+    range: 8:1-8:14
+    (CallExpression
+      range: 8:1-8:13
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:12
+        name: "value"
+      )
+    )
   )
 )
 
 --- SEMANTIC ---
 
 Expression types:
-  1:5-1:6 -> int
-  1:5-1:10 -> bool
-  1:9-1:10 -> int
-  2:7-2:12 -> bool
-  2:8-2:12 -> bool
+  1:15-6:2 -> int
+  1:19-1:20 -> int
+  1:19-1:24 -> bool
+  1:23-1:24 -> int
+  2:11-2:12 -> int
+  5:11-5:12 -> int
+  8:1-8:6 -> BuiltinFunctionType(print)
+  8:1-8:13 -> void
+  8:7-8:12 -> int
+
+Declarations:
+  1:7-1:12 -> VariableSymbol(name=value, type=int, mutability=CONST)
+
+References:
+  8:1-8:6 -> builtin print
+  8:7-8:12 -> 1:7-1:12
 
 --- BYTECODE ---
 
@@ -76,6 +131,9 @@ Expression types:
 // access flags 0x31
 public final class Test {
 
+
+  // access flags 0x19
+  public final static I value
 
   // access flags 0x8
   static <clinit>()V
@@ -90,22 +148,18 @@ public final class Test {
    L1
    FRAME SAME1 I
     IFEQ L2
+    LDC 5
     GOTO L3
    L2
    FRAME SAME
-    ICONST_1
-    IFEQ L4
-    ICONST_0
-    GOTO L5
-   L4
-   FRAME SAME
-    ICONST_1
-   L5
-   FRAME SAME1 I
-    IFEQ L3
+    LDC 0
     GOTO L3
    L3
-   FRAME SAME
+   FRAME SAME1 I
+    PUTSTATIC Test.value : I
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
     RETURN
     MAXSTACK = 2
     MAXLOCALS = 0
@@ -113,4 +167,5 @@ public final class Test {
 
 --- OUTPUT ---
 
+5
 

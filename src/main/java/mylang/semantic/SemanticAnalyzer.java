@@ -7,6 +7,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import mylang.parser.ArrayExpression;
 import mylang.parser.ArrayTypeNode;
+import mylang.parser.AstNode;
 import mylang.parser.AssignmentExpression;
 import mylang.parser.BinaryExpression;
 import mylang.parser.BlockItem;
@@ -27,7 +28,7 @@ import mylang.parser.FunctionDeclaration;
 import mylang.parser.GroupingExpression;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
-import mylang.parser.IfStatement;
+import mylang.parser.IfExpression;
 import mylang.parser.IndexExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.Mutability;
@@ -37,10 +38,12 @@ import mylang.parser.PostfixExpression;
 import mylang.parser.Program;
 import mylang.parser.ReturnStatement;
 import mylang.parser.Statement;
+import mylang.parser.TernaryExpression;
 import mylang.parser.TypeNode;
 import mylang.parser.UnaryExpression;
 import mylang.parser.VariableDeclaration;
 import mylang.parser.WhileStatement;
+import mylang.parser.YieldStatement;
 
 public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
@@ -75,7 +78,8 @@ public final class SemanticAnalyzer {
             new SemanticContext(
                 new Scope(context.scope()),
                 context.function(),
-                context.loopDepth()
+                context.loopDepth(),
+                context.yields()
             );
         for (final BlockItem item : block.items()) {
             analyzeBlockItem(item, blockContext);
@@ -119,8 +123,21 @@ public final class SemanticAnalyzer {
         switch (statement) {
             case DeclarationStatement declarationStatement ->
                 analyzeDeclaration(declarationStatement.declaration(), context);
-            case ExpressionStatement expressionStatement ->
-                analyzeExpression(expressionStatement.expression(), context);
+            case ExpressionStatement expressionStatement -> {
+                if (
+                    expressionStatement
+                        .expression() instanceof IfExpression ifExpression
+                ) {
+                    analyzeIfExpressionBranches(ifExpression, context);
+                    model.setExpressionType(ifExpression, BuiltinType.VOID);
+                }
+                else {
+                    analyzeExpression(
+                        expressionStatement.expression(),
+                        context
+                    );
+                }
+            }
             case WhileStatement whileStatement ->
                 analyzeWhileStatement(whileStatement, context);
             case DoWhileStatement doWhileStatement ->
@@ -129,12 +146,12 @@ public final class SemanticAnalyzer {
                 analyzeForStatement(forStatement, context);
             case ForEachStatement forStatement ->
                 analyzeForEachStatement(forStatement, context);
-            case IfStatement ifStatement ->
-                analyzeIfStatement(ifStatement, context);
             case ContinueStatement continueStatement ->
                 analyzeContinueStatement(continueStatement, context);
             case BreakStatement breakStatement ->
                 analyzeBreakStatement(breakStatement, context);
+            case YieldStatement yieldStatement ->
+                analyzeYieldStatement(yieldStatement, context);
             case ReturnStatement returnStatement ->
                 analyzeReturnStatement(returnStatement, context);
             case BlockStatement blockStatement ->
@@ -155,7 +172,7 @@ public final class SemanticAnalyzer {
             new SemanticContext(
                 new Scope(context.scope()),
                 context.function(),
-                context.loopDepth()
+                0
             );
 
         for (final var member : declaration.members()) {
@@ -177,7 +194,8 @@ public final class SemanticAnalyzer {
             new SemanticContext(
                 new Scope(context.scope()),
                 context.function(),
-                context.loopDepth() + 1
+                context.loopDepth() + 1,
+                context.yields()
             );
 
         final Statement initializer = statement.initializer();
@@ -215,7 +233,8 @@ public final class SemanticAnalyzer {
             new SemanticContext(
                 new Scope(context.scope()),
                 context.function(),
-                context.loopDepth() + 1
+                context.loopDepth() + 1,
+                context.yields()
             );
         final Type iterableType =
             analyzeExpression(statement.iterable(), loopContext);
@@ -267,7 +286,8 @@ public final class SemanticAnalyzer {
             new SemanticContext(
                 context.scope(),
                 context.function(),
-                context.loopDepth() + 1
+                context.loopDepth() + 1,
+                context.yields()
             );
 
         analyzeBlockStatement(statement.body(), loopContext);
@@ -292,14 +312,15 @@ public final class SemanticAnalyzer {
             new SemanticContext(
                 context.scope(),
                 context.function(),
-                context.loopDepth() + 1
+                context.loopDepth() + 1,
+                context.yields()
             );
 
         analyzeBlockStatement(statement.body(), loopContext);
     }
 
-    private void analyzeIfStatement(
-        final IfStatement statement,
+    private void analyzeIfExpressionBranches(
+        final IfExpression statement,
         final SemanticContext context
     ) {
         final Type conditionType =
@@ -361,6 +382,135 @@ public final class SemanticAnalyzer {
         }
     }
 
+    private void analyzeYieldStatement(
+        final YieldStatement statement,
+        final SemanticContext context
+    ) {
+        final List<YieldStatement> yields = context.yields();
+        if (yields == null) {
+            throw new SemanticException(
+                statement.range(),
+                "A 'yield' statement can only be used within an enclosing if expression"
+            );
+        }
+        if (analyzeExpression(statement.value(), context) == BuiltinType.VOID) {
+            throw new SemanticException(
+                statement.range(),
+                "A yield statement must produce a value"
+            );
+        }
+        yields.add(statement);
+    }
+
+    private Type analyzeIfExpression(
+        final IfExpression expression,
+        final SemanticContext context
+    ) {
+        final List<YieldStatement> yields = new ArrayList<>();
+        final SemanticContext branchContext =
+            new SemanticContext(context.scope(), context.function(), 0, yields);
+        final BlockStatement otherwise = expression.elseBranch();
+        if (otherwise == null) {
+            throw new SemanticException(
+                expression.range(),
+                "An if expression requires an else branch"
+            );
+        }
+        analyzeIfExpressionBranches(expression, branchContext);
+        if (
+            !producesValue(expression.thenBranch()) || !producesValue(otherwise)
+                || expression.elifBranches()
+                    .stream()
+                    .anyMatch(branch -> !producesValue(branch.branch()))
+                || yields.isEmpty()
+        ) {
+            throw new SemanticException(
+                expression.range(),
+                "Every branch of an if expression must yield a value"
+            );
+        }
+        Type result = model.getExpressionType(yields.getFirst().value());
+        for (final YieldStatement statement : yields) {
+            final Type type = model.getExpressionType(statement.value());
+            result = commonBranchType(result, type, statement.value());
+        }
+        return result;
+    }
+
+    private Type analyzeTernaryExpression(
+        final TernaryExpression expression,
+        final SemanticContext context
+    ) {
+        final Type condition =
+            analyzeExpression(expression.condition(), context);
+        if (condition != BuiltinType.BOOL) {
+            throw new SemanticException(
+                expression.condition().range(),
+                "Ternary condition must be bool, found %s",
+                condition
+            );
+        }
+        final Type thenType =
+            analyzeExpression(expression.thenBranch(), context);
+        final Type elseType =
+            analyzeExpression(expression.elseBranch(), context);
+        if (thenType == BuiltinType.VOID || elseType == BuiltinType.VOID) {
+            throw new SemanticException(
+                expression.range(),
+                "Ternary branches must produce values"
+            );
+        }
+        return commonBranchType(thenType, elseType, expression.elseBranch());
+    }
+
+    private Type commonBranchType(
+        final Type left,
+        final Type right,
+        final AstNode node
+    ) {
+        if (left.equals(right))
+            return left;
+        throw new SemanticException(
+            node.range(),
+            "Incompatible branch types: %s and %s",
+            left,
+            right
+        );
+    }
+
+    private boolean producesValue(final BlockItem item) {
+        return switch (item) {
+            case YieldStatement ignored -> true;
+            case ReturnStatement ignored -> true;
+            case BlockStatement block -> {
+                boolean produced = false;
+                for (final BlockItem child : block.items()) {
+                    if (
+                        child instanceof BreakStatement
+                            || child instanceof ContinueStatement
+                    )
+                        break;
+                    if (producesValue(child)) {
+                        produced = true;
+                        break;
+                    }
+                }
+                yield produced;
+            }
+            case ExpressionStatement statement when statement
+                .expression() instanceof IfExpression conditional ->
+                conditional.elseBranch() != null
+                    && producesValue(conditional.thenBranch())
+                    && producesValue(
+                        Objects.requireNonNull(conditional.elseBranch())
+                    )
+                    && conditional.elifBranches()
+                        .stream()
+                        .allMatch(branch -> producesValue(branch.branch()));
+            default -> false;
+        };
+    }
+
     private void analyzeReturnStatement(
         final ReturnStatement statement,
         final SemanticContext context
@@ -410,18 +560,7 @@ public final class SemanticAnalyzer {
         final Expression initializer = declaration.initializer();
         final Type declaredType =
             typeNode != null ? resolveType(typeNode) : null;
-        Type initializerType =
-            initializer != null
-                ? analyzeExpression(initializer, context)
-                : null;
-
-        if (declaredType == null && initializerType == null) {
-            throw new SemanticException(
-                declaration.name().range(),
-                "Cannot infer type for variable '%s' without an initializer",
-                declaration.name().name()
-            );
-        }
+        Type initializerType = analyzeExpression(initializer, context);
 
         if (initializerType == BuiltinType.VOID) {
             throw new SemanticException(
@@ -430,10 +569,7 @@ public final class SemanticAnalyzer {
             );
         }
 
-        if (
-            declaredType != null && initializer != null
-                && initializerType != null
-        ) {
+        if (declaredType != null) {
             final @Nullable Type resolvedInitializerType =
                 resolveAssignType(initializerType, declaredType, initializer);
             if (resolvedInitializerType == null) {
@@ -585,6 +721,10 @@ public final class SemanticAnalyzer {
                 analyzeIndexExpression(index, context);
             case AssignmentExpression assignment ->
                 analyzeAssignmentExpression(assignment, context);
+            case TernaryExpression ternary ->
+                analyzeTernaryExpression(ternary, context);
+            case IfExpression conditional ->
+                analyzeIfExpression(conditional, context);
             // TODO: Implement lambda expression analysis
             // case LambdaExpression lambda ->
             // analyzeLambdaExpression(lambda, context);
@@ -605,6 +745,24 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         final Type type = analyzeExpression(call.callee(), context);
+        if (type == BuiltinFunctionType.PRINT) {
+            if (call.arguments().size() > 1) {
+                throw new SemanticException(
+                    call.range(),
+                    "Print expects zero or one argument, found %s",
+                    call.arguments().size()
+                );
+            }
+            for (final Expression argument : call.arguments()) {
+                if (analyzeExpression(argument, context) == BuiltinType.VOID) {
+                    throw new SemanticException(
+                        argument.range(),
+                        "A print argument must produce a value"
+                    );
+                }
+            }
+            return BuiltinType.VOID;
+        }
         if (!(type instanceof FunctionType function)) {
             throw new SemanticException(
                 call.callee().range(),

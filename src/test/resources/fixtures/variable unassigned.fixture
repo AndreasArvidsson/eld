@@ -8,20 +8,4 @@ SEMICOLON (1:8-1:9)
 
 --- AST ---
 
-(Program
-  range: 1:1-1:9
-  (VariableDeclaration
-    range: 1:1-1:9
-    mutability: VAR
-    (IdentifierDeclaration
-      range: 1:5-1:8
-      name: "foo"
-    )
-    type: null
-    initializer: null
-  )
-)
-
---- SEMANTIC ---
-
-SemanticException: Cannot infer type for variable 'foo' without an initializer at 1:5-1:8
+ParserException: Expected EQUAL but found SEMICOLON at 1:8-1:9

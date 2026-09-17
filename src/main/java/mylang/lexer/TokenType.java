@@ -15,6 +15,7 @@ public enum TokenType {
     CLASS,
     FUNC,
     RETURN,
+    YIELD,
     IF,
     ELIF,
     ELSE,
@@ -57,6 +58,7 @@ public enum TokenType {
     LEFT_BRACKET,
     RIGHT_BRACKET,
     COLON,
+    QUESTION,
     SEMICOLON,
     COMMA,
 

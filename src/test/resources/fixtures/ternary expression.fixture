@@ -1,0 +1,142 @@
+const value = 1 < 2 ? 5 : 0;
+print(value);
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+INTEGER_LITERAL "1" (1:15-1:16)
+LESS (1:17-1:18)
+INTEGER_LITERAL "2" (1:19-1:20)
+QUESTION (1:21-1:22)
+INTEGER_LITERAL "5" (1:23-1:24)
+COLON (1:25-1:26)
+INTEGER_LITERAL "0" (1:27-1:28)
+SEMICOLON (1:28-1:29)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "value" (2:7-2:12)
+RIGHT_PAREN (2:12-2:13)
+SEMICOLON (2:13-2:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:14
+  (VariableDeclaration
+    range: 1:1-1:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    type: null
+    (TernaryExpression
+      range: 1:15-1:28
+      (BinaryExpression
+        range: 1:15-1:20
+        (LiteralExpression
+          range: 1:15-1:16
+          kind: int
+          text: "1"
+        )
+        operator: LESS
+        (LiteralExpression
+          range: 1:19-1:20
+          kind: int
+          text: "2"
+        )
+      )
+      (LiteralExpression
+        range: 1:23-1:24
+        kind: int
+        text: "5"
+      )
+      (LiteralExpression
+        range: 1:27-1:28
+        kind: int
+        text: "0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:14
+    (CallExpression
+      range: 2:1-2:13
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 2:7-2:12
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:15-1:16 -> int
+  1:15-1:20 -> bool
+  1:15-1:28 -> int
+  1:19-1:20 -> int
+  1:23-1:24 -> int
+  1:27-1:28 -> int
+  2:1-2:6 -> BuiltinFunctionType(print)
+  2:1-2:13 -> void
+  2:7-2:12 -> int
+
+Declarations:
+  1:7-1:12 -> VariableSymbol(name=value, type=int, mutability=CONST)
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:12 -> 1:7-1:12
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static I value
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    LDC 2
+    IF_ICMPLT L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME SAME
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IFEQ L2
+    LDC 5
+    GOTO L3
+   L2
+   FRAME SAME
+    LDC 0
+   L3
+   FRAME SAME1 I
+    PUTSTATIC Test.value : I
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+5
+

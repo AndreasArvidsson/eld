@@ -47,6 +47,47 @@ import mylang.semantic.SemanticException;
 class BytecodeGeneratorTest {
 
     @Test
+    void conditionalBranchesRequireMatchingTypesBeforeAssignmentConversion()
+        throws Exception {
+        for (final String expression : List.of(
+            "true ? 1 : 2.5",
+            "false ? 1.5 : 2",
+            "if (true) { yield 1; } else { yield 2.5; }",
+            "if (true) { yield 1.5; } else { yield 2; }",
+            "if (true) { yield 1; } elif (false) { yield 2.5; } else { yield 3; }",
+            "if (true) { if (false) { yield 1.5; } yield 1; } else { yield 2; }"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile("const value = " + expression + ";")
+            );
+            assertThrows(
+                SemanticException.class,
+                () -> compile("const value: float = " + expression + ";")
+            );
+        }
+        final Class<?> type =
+            compile(
+                """
+                    const ternary: float = true ? 1 : 2;
+                    const conditional: float = if (false) { yield 3; } else { yield 4; };
+                    var assigned: float = 0;
+                    assigned = true ? 5 : 6;
+                    func result() float {
+                        assigned = if (true) { yield 7; } else { yield 8; };
+                        return assigned;
+                    }
+                    const floating = true ? 1.5 : 2.5;
+                    """
+            );
+        assertEquals(1.0f, type.getField("ternary").get(null));
+        assertEquals(4.0f, type.getField("conditional").get(null));
+        assertEquals(5.0f, type.getField("assigned").get(null));
+        assertEquals(7.0f, type.getMethod("result").invoke(null));
+        assertEquals(1.5f, type.getField("floating").get(null));
+    }
+
+    @Test
     void decodesCharacterEscapesInConstantsAndRuntimeExpressions()
         throws Exception {
         final Class<?> type = compile("""
@@ -103,6 +144,20 @@ class BytecodeGeneratorTest {
             print("direct");
             const log = print;
             log("reference");
+            print(42);
+            print(1.5);
+            print(true);
+            print('x');
+            print(null);
+            print(['h', 'i']);
+            print();
+            log(7);
+            log(2.5);
+            log(false);
+            log('z');
+            log(null);
+            log(['o', 'k']);
+            log();
             func greet() { print("nested"); }
             greet();
             """).getTokens()).parse();
@@ -115,8 +170,44 @@ class BytecodeGeneratorTest {
             BytecodeUtil.verify(bytecode);
         }
         assertEquals(
-            "direct\nreference\nnested\n",
+            "direct\nreference\n42\n1.5\ntrue\nx\nnull\nhi\n\n7\n2.5\nfalse\nz\nnull\nok\n\nnested\n",
             BytecodeRunner.run(classes)
+        );
+    }
+
+    @Test
+    void printAcceptsObjectsAndRejectsInvalidArguments() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            const log = print;
+            print([1, 2]);
+            log([true, false]);
+            func value() int { return 1; }
+            print(value);
+            """).getTokens()).parse();
+        final var classes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses();
+        for (final byte[] bytecode : classes.values()) {
+            BytecodeUtil.verify(bytecode);
+        }
+        final String output = BytecodeRunner.run(classes);
+        assertTrue(
+            output.matches(
+                "\\[I@[0-9a-f]+\n\\[Z@[0-9a-f]+\nMethodHandle\\(\\)int\n"
+            ),
+            output
+        );
+        assertThrows(SemanticException.class, () -> compile("print(1, 2);"));
+        assertThrows(SemanticException.class, () -> compile("print(print());"));
+        assertThrows(
+            SemanticException.class,
+            () -> compile("const log = print; log(1, 2);")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compile("const log = print; log(print());")
         );
     }
 
@@ -272,8 +363,8 @@ class BytecodeGeneratorTest {
                 var count = first;
                 var widened: float = count;
                 var values = [1, 2];
-                var zero: int;
-                var text: string;
+                var zero: int = 0;
+                var text: string = "";
                 func increment() int { return count++; }
                 func add(delta: int) int { return count + delta; }
                 func shadow(count: int) int { return count; }
@@ -287,7 +378,7 @@ class BytecodeGeneratorTest {
         assertEquals(5, type.getField("second").get(second));
         assertEquals(2.0f, type.getField("widened").get(first));
         assertEquals(0, type.getField("zero").get(first));
-        assertNull(type.getField("text").get(first));
+        assertEquals("", type.getField("text").get(first));
         assertNotSame(
             type.getField("values").get(first),
             type.getField("values").get(second)
@@ -763,57 +854,14 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void reliesOnJvmDefaultsForUninitializedStaticFields() throws Exception {
-        final String source = """
-            var number: int;
-            var floating: float;
-            var flag: boolean;
-            var text: string;
-            """;
-        assertTrue(
-            inspect(source).methods.stream()
-                .noneMatch(method -> method.name.equals("<clinit>"))
-        );
-        final Class<?> type = compile(source);
-        assertEquals(0, type.getField("number").get(null));
-        assertEquals(0.0f, type.getField("floating").get(null));
-        assertEquals(false, type.getField("flag").get(null));
-        assertNull(type.getField("text").get(null));
-    }
-
-    @Test
-    void initializesOnlyExplicitStaticInitializers() {
-        final var node = inspect("""
-            var untouched: int;
-            var explicit = 0;
-            var text: string;
-            """);
-        final var initializer =
-            node.methods.stream()
-                .filter(method -> method.name.equals("<clinit>"))
-                .findFirst()
-                .orElseThrow();
-        final var stores = new ArrayList<String>();
-        for (final var instruction : initializer.instructions) {
-            if (
-                instruction instanceof FieldInsnNode field
-                    && field.getOpcode() == Opcodes.PUTSTATIC
-            ) {
-                stores.add(field.name);
-            }
-        }
-        assertEquals(List.of("explicit"), stores);
-    }
-
-    @Test
     void generatesGlobalsAndInitializersInOrder() throws Exception {
         final Class<?> type = compile("""
             var start = 3;
             func next() int { return start++; }
             const old = next();
             var widened: float = start;
-            var zero: int;
-            var text: string;
+            var zero: int = 0;
+            var text: string = "";
             """);
         assertEquals(3, type.getField("old").get(null));
         assertTrue(Modifier.isFinal(type.getField("old").getModifiers()));
@@ -821,7 +869,7 @@ class BytecodeGeneratorTest {
         assertEquals(4, type.getField("start").get(null));
         assertEquals(4.0f, type.getField("widened").get(null));
         assertEquals(0, type.getField("zero").get(null));
-        assertNull(type.getField("text").get(null));
+        assertEquals("", type.getField("text").get(null));
     }
 
     @Test

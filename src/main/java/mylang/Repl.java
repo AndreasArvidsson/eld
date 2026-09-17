@@ -39,7 +39,8 @@ final class Repl {
                             "if",
                             "while",
                             "for",
-                            "return"
+                            "return",
+                            "yield"
                         )
                     )
                     .build();

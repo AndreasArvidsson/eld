@@ -19,6 +19,7 @@ import org.objectweb.asm.MethodVisitor;
 import mylang.parser.*;
 import mylang.semantic.ArrayType;
 import mylang.semantic.BuiltinFunctionSymbol;
+import mylang.semantic.BuiltinFunctionType;
 import mylang.semantic.BuiltinType;
 import mylang.semantic.ClassType;
 import mylang.semantic.FunctionSymbol;
@@ -258,10 +259,9 @@ public final class BytecodeGenerator {
                 final Expression initializer = variable.initializer();
                 final Object constantValue =
                     variable.mutability() == Mutability.CONST
-                        && initializer != null
-                            ? constantValue(initializer)
-                            : null;
-                if (initializer != null && constantValue == null) {
+                        ? constantValue(initializer)
+                        : null;
+                if (constantValue == null) {
                     initializers.add(item);
                 }
                 globals.put(symbol, symbol.name());
@@ -334,12 +334,7 @@ public final class BytecodeGenerator {
                     generator.expression(statement.expression());
                     final Type type =
                         semanticModel.getEffectiveType(statement.expression());
-                    final String argument =
-                        type instanceof ArrayType
-                            || type instanceof FunctionType
-                            || type instanceof ClassType
-                                ? "Ljava/lang/Object;"
-                                : descriptor(type);
+                    final String argument = printArgumentDescriptor(type);
                     method.visitMethodInsn(
                         INVOKEVIRTUAL,
                         "java/io/PrintStream",
@@ -497,8 +492,26 @@ public final class BytecodeGenerator {
             };
             case ArrayType array -> "[" + descriptor(array.elementType());
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
+            case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
             case ClassType ignored -> "Ljava/lang/Object;";
         };
+    }
+
+    private static String printArgumentDescriptor(final Type type) {
+        if (
+            type instanceof ArrayType array
+                && array.elementType() == BuiltinType.CHAR
+        ) {
+            return "[C";
+        }
+        if (
+            type instanceof ArrayType || type instanceof FunctionType
+                || type instanceof BuiltinFunctionType
+                || type instanceof ClassType
+        ) {
+            return "Ljava/lang/Object;";
+        }
+        return descriptor(type);
     }
 
     private static String methodDescriptor(final FunctionType type) {
@@ -511,7 +524,8 @@ public final class BytecodeGenerator {
     }
 
     private static boolean reference(final Type type) {
-        return type instanceof ArrayType || type instanceof FunctionType
+        return type instanceof BuiltinFunctionType || type instanceof ArrayType
+            || type instanceof FunctionType
             || type == BuiltinType.STRING
             || type == BuiltinType.NULL;
     }
@@ -582,6 +596,7 @@ public final class BytecodeGenerator {
         private final IdentityHashMap<Symbol, Integer> locals =
             new IdentityHashMap<>();
         private final Deque<Loop> loops = new ArrayDeque<>();
+        private final Deque<Label> yieldTargets = new ArrayDeque<>();
         private final Type returnType;
         private int nextLocal;
 
@@ -651,18 +666,7 @@ public final class BytecodeGenerator {
                         semanticModel.getSymbol(variable.name());
                     prepareStore(symbol);
                     final Expression initializer = variable.initializer();
-                    if (initializer == null) {
-                        method.visitInsn(
-                            reference(symbol.type())
-                                ? ACONST_NULL
-                                : symbol.type() == BuiltinType.FLOAT
-                                    ? FCONST_0
-                                    : ICONST_0
-                        );
-                    }
-                    else {
-                        expression(initializer);
-                    }
+                    expression(initializer);
                     store(symbol);
                 }
                 case DeclarationStatement declaration -> {
@@ -671,8 +675,20 @@ public final class BytecodeGenerator {
                 case BlockStatement block -> {
                     return block(block);
                 }
-                case ExpressionStatement statement ->
+                case ExpressionStatement statement -> {
+                    if (
+                        statement
+                            .expression() instanceof IfExpression conditional
+                    ) {
+                        return conditional(conditional, new Label());
+                    }
                     discard(statement.expression());
+                }
+                case YieldStatement statement -> {
+                    expression(statement.value());
+                    method.visitJumpInsn(GOTO, yieldTargets.element());
+                    return false;
+                }
                 case ReturnStatement statement -> {
                     final Expression value = statement.value();
                     if (value != null) {
@@ -680,25 +696,6 @@ public final class BytecodeGenerator {
                     }
                     method.visitInsn(returnOpcode(returnType));
                     return false;
-                }
-                case IfStatement statement -> {
-                    final Label end = new Label();
-                    boolean reachable =
-                        branch(
-                            statement.condition(),
-                            statement.thenBranch(),
-                            end
-                        );
-                    for (final ElseIfBranch branch : statement.elifBranches()) {
-                        reachable |=
-                            branch(branch.condition(), branch.branch(), end);
-                    }
-                    final BlockStatement otherwise = statement.elseBranch();
-                    if (otherwise != null) {
-                        reachable |= block(otherwise);
-                    }
-                    method.visitLabel(end);
-                    return otherwise == null || reachable;
                 }
                 case WhileStatement statement -> {
                     final Label condition = new Label();
@@ -775,6 +772,23 @@ public final class BytecodeGenerator {
             return true;
         }
 
+        private boolean conditional(
+            final IfExpression conditional,
+            final Label end
+        ) {
+            boolean reachable =
+                branch(conditional.condition(), conditional.thenBranch(), end);
+            for (final ElseIfBranch branch : conditional.elifBranches()) {
+                reachable |= branch(branch.condition(), branch.branch(), end);
+            }
+            final BlockStatement otherwise = conditional.elseBranch();
+            if (otherwise != null) {
+                reachable |= block(otherwise);
+            }
+            method.visitLabel(end);
+            return otherwise == null || reachable;
+        }
+
         private boolean branch(
             final Expression condition,
             final BlockStatement body,
@@ -836,27 +850,11 @@ public final class BytecodeGenerator {
 
         private void load(final Symbol symbol) {
             if (BuiltinFunctionSymbol.PRINT.equals(symbol)) {
-                method.visitLdcInsn(
-                    new Handle(
-                        H_INVOKEVIRTUAL,
-                        "java/io/PrintStream",
-                        "println",
-                        "(Ljava/lang/String;)V",
-                        false
-                    )
-                );
                 method.visitFieldInsn(
                     GETSTATIC,
                     "java/lang/System",
                     "out",
                     "Ljava/io/PrintStream;"
-                );
-                method.visitMethodInsn(
-                    INVOKEVIRTUAL,
-                    "java/lang/invoke/MethodHandle",
-                    "bindTo",
-                    "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
-                    false
                 );
             }
             else if (symbol instanceof FunctionSymbol function) {
@@ -1002,6 +1000,23 @@ public final class BytecodeGenerator {
                     postfix.operator() == PostfixOperator.INCREMENT,
                     true
                 );
+                case TernaryExpression ternary -> {
+                    final Label otherwise = new Label();
+                    final Label end = new Label();
+                    expression(ternary.condition());
+                    method.visitJumpInsn(IFEQ, otherwise);
+                    expression(ternary.thenBranch());
+                    method.visitJumpInsn(GOTO, end);
+                    method.visitLabel(otherwise);
+                    expression(ternary.elseBranch());
+                    method.visitLabel(end);
+                }
+                case IfExpression conditional -> {
+                    final Label end = new Label();
+                    yieldTargets.push(end);
+                    conditional(conditional, end);
+                    yieldTargets.pop();
+                }
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case ArrayExpression array -> array(array);
@@ -1043,32 +1058,32 @@ public final class BytecodeGenerator {
         }
 
         private void call(final CallExpression call) {
-            final FunctionType type =
-                (FunctionType) semanticModel.getExpressionType(call.callee());
-            final Expression callee = unwrap(call.callee());
-            if (
-                callee instanceof IdentifierExpression identifier
-                    && BuiltinFunctionSymbol.PRINT
-                        .equals(semanticModel.getReference(identifier))
-            ) {
-                method.visitFieldInsn(
-                    GETSTATIC,
-                    "java/lang/System",
-                    "out",
-                    "Ljava/io/PrintStream;"
-                );
+            final Type calleeType =
+                semanticModel.getExpressionType(call.callee());
+            if (calleeType == BuiltinFunctionType.PRINT) {
+                expression(call.callee());
                 for (final Expression argument : call.arguments()) {
                     expression(argument);
                 }
+                final String argumentDescriptor =
+                    call.arguments().isEmpty()
+                        ? ""
+                        : printArgumentDescriptor(
+                            semanticModel
+                                .getEffectiveType(call.arguments().getFirst())
+                        );
                 method.visitMethodInsn(
                     INVOKEVIRTUAL,
                     "java/io/PrintStream",
                     "println",
-                    "(Ljava/lang/String;)V",
+                    "(" + argumentDescriptor + ")V",
                     false
                 );
+                return;
             }
-            else if (
+            final FunctionType type = (FunctionType) calleeType;
+            final Expression callee = unwrap(call.callee());
+            if (
                 callee instanceof IdentifierExpression identifier
                     && semanticModel.getReference(
                         identifier

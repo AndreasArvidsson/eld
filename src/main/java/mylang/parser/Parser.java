@@ -105,14 +105,25 @@ public final class Parser {
                 return parseWhileStatement(token);
             case DO:
                 return parseDoWhileStatement(token);
-            case IF:
-                return parseIfStatement(token);
             case FOR:
                 return parseForStatement(token);
             case FUNC:
                 return parseFunctionDeclaration(token);
             case RETURN:
                 return parseReturnStatement(token);
+            case YIELD:
+                final Expression value = parseExpression();
+                final Token end = expect(TokenType.SEMICOLON);
+                return new YieldStatement(
+                    value,
+                    token.range().union(end.range())
+                );
+            case IF:
+                final IfExpression conditional = parseIfExpression(token);
+                return new ExpressionStatement(
+                    conditional,
+                    conditional.range()
+                );
             default:
                 position--;
                 return parseExpressionStatement();
@@ -292,7 +303,7 @@ public final class Parser {
         return new DoWhileStatement(body, condition, range);
     }
 
-    private IfStatement parseIfStatement(final Token keyword) {
+    private IfExpression parseIfExpression(final Token keyword) {
         expect(TokenType.LEFT_PAREN);
         final Expression condition = parseExpression();
         expect(TokenType.RIGHT_PAREN);
@@ -321,7 +332,7 @@ public final class Parser {
                     ? thenBranch.range()
                     : Objects.requireNonNull(elifBranches.getLast()).range();
         final Range range = keyword.range().union(lastBranchRange);
-        return new IfStatement(
+        return new IfExpression(
             condition,
             thenBranch,
             elifBranches,
@@ -339,19 +350,6 @@ public final class Parser {
             match(TokenType.COLON) ? parseType() : null;
         final IdentifierDeclaration identifier =
             new IdentifierDeclaration(name.text(), name.range());
-
-        // var with no initializer
-        if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
-            final Token semicolon = expect(TokenType.SEMICOLON);
-            final Range range = keyword.range().union(semicolon.range());
-            return new VariableDeclaration(
-                mutability,
-                identifier,
-                type,
-                null,
-                range
-            );
-        }
 
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
@@ -372,7 +370,7 @@ public final class Parser {
     }
 
     private Expression parseExpression() {
-        final Expression left = parseBinaryExpression(1);
+        final Expression left = parseTernaryExpression();
         if (match(TokenType.EQUAL)) {
             final Expression value = parseExpression();
             return new AssignmentExpression(
@@ -382,6 +380,22 @@ public final class Parser {
             );
         }
         return left;
+    }
+
+    private Expression parseTernaryExpression() {
+        final Expression condition = parseBinaryExpression(1);
+        if (!match(TokenType.QUESTION)) {
+            return condition;
+        }
+        final Expression thenBranch = parseExpression();
+        expect(TokenType.COLON);
+        final Expression elseBranch = parseExpression();
+        return new TernaryExpression(
+            condition,
+            thenBranch,
+            elseBranch,
+            condition.range().union(elseBranch.range())
+        );
     }
 
     private Expression parseBinaryExpression(final int minimumPrecedence) {
@@ -495,6 +509,7 @@ public final class Parser {
                 token.text(),
                 token.range()
             );
+            case IF -> parseIfExpression(token);
             case LEFT_PAREN -> {
                 if (isLambdaAfterOpenParen()) {
                     yield parseLambdaExpression(token);

@@ -1,5 +1,5 @@
 package mylang.semantic;
 
-public sealed interface Type
-    permits BuiltinType, ArrayType, FunctionType, ClassType {
+public sealed interface Type permits BuiltinFunctionType, BuiltinType,
+    ArrayType, FunctionType, ClassType {
 }

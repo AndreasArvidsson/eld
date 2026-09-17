@@ -6,6 +6,6 @@ import mylang.Range;
 
 public record VariableDeclaration(
     Mutability mutability, IdentifierDeclaration name, @Nullable TypeNode type,
-    @Nullable Expression initializer, Range range
+    Expression initializer, Range range
 ) implements Declaration {
 }

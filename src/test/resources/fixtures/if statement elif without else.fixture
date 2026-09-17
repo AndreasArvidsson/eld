@@ -20,34 +20,38 @@ RIGHT_BRACE (2:15-2:16)
 
 (Program
   range: 1:1-2:16
-  (IfStatement
+  (ExpressionStatement
     range: 1:1-2:16
-    (LiteralExpression
-      range: 1:5-1:9
-      kind: bool
-      text: "true"
-    )
-    (BlockStatement
-      range: 1:11-1:13
-    )
-    (ElseIfBranch
-      range: 2:1-2:16
+    (IfExpression
+      range: 1:1-2:16
       (LiteralExpression
-        range: 2:7-2:12
+        range: 1:5-1:9
         kind: bool
-        text: "false"
+        text: "true"
       )
       (BlockStatement
-        range: 2:14-2:16
+        range: 1:11-1:13
       )
+      (ElseIfBranch
+        range: 2:1-2:16
+        (LiteralExpression
+          range: 2:7-2:12
+          kind: bool
+          text: "false"
+        )
+        (BlockStatement
+          range: 2:14-2:16
+        )
+      )
+      elseBranch: null
     )
-    elseBranch: null
   )
 )
 
 --- SEMANTIC ---
 
 Expression types:
+  1:1-2:16 -> void
   1:5-1:9 -> bool
   2:7-2:12 -> bool
 

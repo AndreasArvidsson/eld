@@ -1,16 +1,12 @@
 package mylang.semantic;
 
-import java.util.List;
 import mylang.Range;
 
-public record BuiltinFunctionSymbol(String name, FunctionType type)
+public record BuiltinFunctionSymbol(String name, BuiltinFunctionType type)
     implements Symbol {
 
     public static final BuiltinFunctionSymbol PRINT =
-        new BuiltinFunctionSymbol(
-            "print",
-            new FunctionType(List.of(BuiltinType.STRING), BuiltinType.VOID)
-        );
+        new BuiltinFunctionSymbol("print", BuiltinFunctionType.PRINT);
 
     @Override
     public Range range() {
