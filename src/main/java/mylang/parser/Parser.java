@@ -64,11 +64,8 @@ public final class Parser {
             return new Program(items, new Range(0, 0, 0, 0));
         }
 
-        final Position start =
-            Objects.requireNonNull(items.get(0)).range().start();
-        final Position end =
-            Objects.requireNonNull(items.get(items.size() - 1)).range().end();
-        final Range range = new Range(start, end);
+        final Range range =
+            items.getFirst().range().union(items.getLast().range());
 
         return new Program(items, range);
     }
@@ -82,8 +79,7 @@ public final class Parser {
         }
 
         final Token close = expect(TokenType.RIGHT_BRACE);
-        final Range range =
-            new Range(open.range().start(), close.range().end());
+        final Range range = open.range().union(close.range());
 
         return new BlockStatement(items, range);
     }
@@ -125,23 +121,20 @@ public final class Parser {
 
     private BreakStatement parseBreakStatement(final Token keyword) {
         final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(keyword.range().start(), semicolon.range().end());
+        final Range range = keyword.range().union(semicolon.range());
         return new BreakStatement(range);
     }
 
     private ContinueStatement parseContinueStatement(final Token keyword) {
         final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(keyword.range().start(), semicolon.range().end());
+        final Range range = keyword.range().union(semicolon.range());
         return new ContinueStatement(range);
     }
 
     private ExpressionStatement parseExpressionStatement() {
         final Expression expression = parseExpression();
         final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(expression.range().start(), semicolon.range().end());
+        final Range range = expression.range().union(semicolon.range());
         return new ExpressionStatement(expression, range);
     }
 
@@ -153,8 +146,7 @@ public final class Parser {
             members.add(parseBlockItem());
         }
         final Token close = expect(TokenType.RIGHT_BRACE);
-        final Range range =
-            new Range(keyword.range().start(), close.range().end());
+        final Range range = keyword.range().union(close.range());
         final var id = new IdentifierDeclaration(name.text(), name.range());
         return new ClassDeclaration(id, members, range);
     }
@@ -163,8 +155,7 @@ public final class Parser {
         final Expression value =
             check(TokenType.SEMICOLON) ? null : parseExpression();
         final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(keyword.range().start(), semicolon.range().end());
+        final Range range = keyword.range().union(semicolon.range());
         return new ReturnStatement(value, range);
     }
 
@@ -179,8 +170,7 @@ public final class Parser {
                 final Token paramName = expect(TokenType.IDENTIFIER);
                 expect(TokenType.COLON);
                 final TypeNode type = parseType();
-                final Range paramRange =
-                    new Range(paramName.range().start(), type.range().end());
+                final Range paramRange = paramName.range().union(type.range());
                 final IdentifierDeclaration id =
                     new IdentifierDeclaration(
                         paramName.text(),
@@ -193,8 +183,7 @@ public final class Parser {
         final TypeNode returnType =
             check(TokenType.LEFT_BRACE) ? null : parseType();
         final BlockStatement body = parseBlockStatement();
-        final Range range =
-            new Range(keyword.range().start(), body.range().end());
+        final Range range = keyword.range().union(body.range());
         return new FunctionDeclaration(
             nameId,
             parameters,
@@ -215,8 +204,7 @@ public final class Parser {
         }
 
         final Token close = expect(TokenType.RIGHT_PAREN);
-        final Range range =
-            new Range(callee.range().start(), close.range().end());
+        final Range range = callee.range().union(close.range());
         return new CallExpression(callee, arguments, range);
     }
 
@@ -262,8 +250,7 @@ public final class Parser {
             check(TokenType.RIGHT_PAREN) ? null : parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
-        final Range range =
-            new Range(keyword.range().start(), body.range().end());
+        final Range range = keyword.range().union(body.range());
         return new ForStatement(initializer, condition, update, body, range);
     }
 
@@ -281,8 +268,7 @@ public final class Parser {
         final Expression iterable = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
-        final Range range =
-            new Range(keyword.range().start(), body.range().end());
+        final Range range = keyword.range().union(body.range());
         return new ForEachStatement(valueId, indexId, iterable, body, range);
     }
 
@@ -291,8 +277,7 @@ public final class Parser {
         final Expression condition = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
-        final Range range =
-            new Range(keyword.range().start(), body.range().end());
+        final Range range = keyword.range().union(body.range());
         return new WhileStatement(condition, body, range);
     }
 
@@ -303,8 +288,7 @@ public final class Parser {
         final Expression condition = parseExpression();
         expect(TokenType.RIGHT_PAREN);
         final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(keyword.range().start(), semicolon.range().end());
+        final Range range = keyword.range().union(semicolon.range());
         return new DoWhileStatement(body, condition, range);
     }
 
@@ -322,10 +306,7 @@ public final class Parser {
             expect(TokenType.RIGHT_PAREN);
             final BlockStatement elifBranch = parseBlockStatement();
             final Range elifRange =
-                new Range(
-                    elifKeyword.range().start(),
-                    elifBranch.range().end()
-                );
+                elifKeyword.range().union(elifBranch.range());
             elifBranches
                 .add(new ElseIfBranch(elifCondition, elifBranch, elifRange));
         }
@@ -333,15 +314,13 @@ public final class Parser {
         final BlockStatement elseBranch =
             match(TokenType.ELSE) ? parseBlockStatement() : null;
 
-        final Position end =
+        final Range lastBranchRange =
             elseBranch != null
-                ? elseBranch.range().end()
+                ? elseBranch.range()
                 : elifBranches.isEmpty()
-                    ? thenBranch.range().end()
-                    : Objects.requireNonNull(elifBranches.getLast())
-                        .range()
-                        .end();
-        final Range range = new Range(keyword.range().start(), end);
+                    ? thenBranch.range()
+                    : Objects.requireNonNull(elifBranches.getLast()).range();
+        final Range range = keyword.range().union(lastBranchRange);
         return new IfStatement(
             condition,
             thenBranch,
@@ -364,8 +343,7 @@ public final class Parser {
         // var with no initializer
         if (mutability == Mutability.VAR && !check(TokenType.EQUAL)) {
             final Token semicolon = expect(TokenType.SEMICOLON);
-            final Range range =
-                new Range(keyword.range().start(), semicolon.range().end());
+            final Range range = keyword.range().union(semicolon.range());
             return new VariableDeclaration(
                 mutability,
                 identifier,
@@ -378,8 +356,7 @@ public final class Parser {
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
         final Token semicolon = expect(TokenType.SEMICOLON);
-        final Range range =
-            new Range(keyword.range().start(), semicolon.range().end());
+        final Range range = keyword.range().union(semicolon.range());
         return new VariableDeclaration(
             mutability,
             identifier,
@@ -401,7 +378,7 @@ public final class Parser {
             return new AssignmentExpression(
                 left,
                 value,
-                new Range(left.range().start(), value.range().end())
+                left.range().union(value.range())
             );
         }
         return left;
@@ -423,7 +400,7 @@ public final class Parser {
                     left,
                     operator,
                     right,
-                    new Range(left.range().start(), right.range().end())
+                    left.range().union(right.range())
                 );
         }
         return left;
@@ -463,7 +440,7 @@ public final class Parser {
             return new UnaryExpression(
                 operator,
                 operand,
-                new Range(token.range().start(), operand.range().end())
+                token.range().union(operand.range())
             );
         }
         Expression left = parsePrimitiveExpression(token);
@@ -538,8 +515,7 @@ public final class Parser {
     private GroupingExpression parseGroupingExpression(final Token open) {
         final Expression expression = parseExpression();
         final Token close = expect(TokenType.RIGHT_PAREN);
-        final Range range =
-            new Range(open.range().start(), close.range().end());
+        final Range range = open.range().union(close.range());
         return new GroupingExpression(expression, range);
     }
 
@@ -551,8 +527,7 @@ public final class Parser {
             } while (match(TokenType.COMMA));
         }
         final Token close = expect(TokenType.RIGHT_BRACKET);
-        final Range range =
-            new Range(open.range().start(), close.range().end());
+        final Range range = open.range().union(close.range());
         return new ArrayExpression(elements, range);
     }
 
@@ -582,9 +557,10 @@ public final class Parser {
                 final Token name = expect(TokenType.IDENTIFIER);
                 final TypeNode type =
                     match(TokenType.COLON) ? parseType() : null;
-                final Position end =
-                    type == null ? name.range().end() : type.range().end();
-                final Range range = new Range(name.range().start(), end);
+                final Range range =
+                    type == null
+                        ? name.range()
+                        : name.range().union(type.range());
                 final IdentifierDeclaration id =
                     new IdentifierDeclaration(name.text(), name.range());
                 parameters.add(new Parameter(id, type, range));
@@ -598,7 +574,7 @@ public final class Parser {
             check(TokenType.LEFT_BRACE)
                 ? parseBlockStatement()
                 : parseExpression();
-        final Range range = new Range(open.range().start(), body.range().end());
+        final Range range = open.range().union(body.range());
         return new LambdaExpression(parameters, returnType, body, range);
     }
 
@@ -607,8 +583,7 @@ public final class Parser {
         final PostfixOperator operator,
         final Token operatorToken
     ) {
-        final Range range =
-            new Range(operand.range().start(), operatorToken.range().end());
+        final Range range = operand.range().union(operatorToken.range());
         return new PostfixExpression(operand, operator, range);
     }
 

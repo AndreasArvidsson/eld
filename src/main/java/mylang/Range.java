@@ -6,6 +6,7 @@ import org.jspecify.annotations.NonNull;
 
 public record Range(Position start, Position end)
     implements Comparable<@NonNull Range> {
+
     public Range(
         final int startLine,
         final int startColumn,
@@ -15,6 +16,13 @@ public record Range(Position start, Position end)
         this(
             new Position(startLine, startColumn),
             new Position(endLine, endColumn)
+        );
+    }
+
+    public Range union(final Range other) {
+        return new Range(
+            this.start().isBefore(other.start()) ? this.start() : other.start(),
+            this.end().isAfter(other.end()) ? this.end() : other.end()
         );
     }
 
@@ -31,4 +39,5 @@ public record Range(Position start, Position end)
         }
         return this.end().compareTo(other.end());
     }
+
 }
