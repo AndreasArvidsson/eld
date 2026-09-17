@@ -1,11 +1,13 @@
 package mylang;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
@@ -134,7 +136,7 @@ public final class Main {
             .put(Attributes.Name.MAIN_CLASS, "Launcher");
         try (final JarOutputStream jar =
             new JarOutputStream(Files.newOutputStream(output), manifest)) {
-            for (final var entry : classes.entrySet()) {
+            for (final Entry<String, byte[]> entry : classes.entrySet()) {
                 jar.putNextEntry(
                     new JarEntry(entry.getKey().replace('.', '/') + ".class")
                 );
@@ -144,6 +146,19 @@ public final class Main {
             jar.putNextEntry(new JarEntry("Launcher.class"));
             jar.write(launcher());
             jar.closeEntry();
+            final String runtimePath = RuntimeAbi.INT_ARRAY_OWNER + ".class";
+            try (final InputStream runtime =
+                RuntimeAbi.INT_ARRAY_CLASS
+                    .getResourceAsStream("/" + runtimePath)) {
+                if (runtime == null) {
+                    throw new IOException(
+                        "Missing runtime class: " + runtimePath
+                    );
+                }
+                jar.putNextEntry(new JarEntry(runtimePath));
+                runtime.transferTo(jar);
+                jar.closeEntry();
+            }
         }
     }
 

@@ -57,9 +57,12 @@ class CommandLineTest {
     @Test
     void compileProducesExecutableJarAndRunExecutesSource() throws Exception {
         final Path source = directory.resolve("hello world.iz");
-        Files.writeString(source, "print(\"hello\");");
+        Files.writeString(
+            source,
+            "print(\"hello\"); const values = [1, 2, 3]; print(values[-2:]);"
+        );
         assertEquals(
-            "hello\n",
+            "hello\n[2, 3]\n",
             capture(
                 () -> assertEquals(
                     0,
@@ -94,7 +97,19 @@ class CommandLineTest {
                 StandardCharsets.UTF_8
             );
         assertEquals(0, process.waitFor(), output);
-        assertEquals("hello\n", output.replace("\r\n", "\n"));
+        assertEquals("hello\n[2, 3]\n", output.replace("\r\n", "\n"));
+    }
+
+    @Test
+    void replRetainsRuntimeArraysAcrossSubmissions() throws Exception {
+        final String output = capture(() -> {
+            final ReplSession session = new ReplSession();
+            session.evaluate("const values = [1, 2, 3];");
+            session.evaluate("values[-1];");
+            session.evaluate("values[-1] = 4;");
+            session.evaluate("values[:];");
+        });
+        assertEquals("3\n4\n[1, 2, 4]\n", output);
     }
 
     @Test

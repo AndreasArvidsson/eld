@@ -369,3 +369,85 @@ References:
   7:7-7:13 -> 1:7-1:13
   8:1-8:6 -> builtin print
   8:7-8:13 -> 1:7-1:13
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Lmylang/runtime/EldIntArray; values
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW mylang/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 3
+    IASTORE
+    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ([I)V
+    PUTSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.copy ()Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    LDC 1
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceFrom (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    LDC 2
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceTo (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    LDC 1
+    LDC 2
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.slice (II)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    LDC -1
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceTo (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    LDC -2
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.sliceFrom (I)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
+    LDC -2
+    LDC -1
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.slice (II)Lmylang/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 6
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+[1, 2, 3]
+[2, 3]
+[1, 2]
+[2]
+[1, 2]
+[2, 3]
+[2]
+

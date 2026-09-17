@@ -46,8 +46,50 @@ import mylang.parser.UnaryOperator;
 import mylang.parser.VariableDeclaration;
 import mylang.semantic.SemanticAnalyzer;
 import mylang.semantic.SemanticException;
+import mylang.runtime.EldIntArray;
 
 class BytecodeGeneratorTest {
+    private static int[] intValues(final Object value) {
+        final EldIntArray array = assertInstanceOf(EldIntArray.class, value);
+        final int[] result = new int[array.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = array.get(i);
+        }
+        return result;
+    }
+
+    @Test
+    void grownArraysKeepTheirRuntimeTypeAcrossCallsAndIteration()
+        throws Exception {
+        final Class<?> type = compile("""
+            var values: [i32] = [];
+            func identity(items: [i32]) [i32] { return items; }
+            func total() i32 {
+                var sum = 0;
+                for (value : values) { sum = sum + value; }
+                return sum;
+            }
+            func last() i32 { return values[-1]; }
+            func copy() [i32] { return values[:]; }
+            """);
+        assertEquals(EldIntArray.class, type.getField("values").getType());
+        final EldIntArray values =
+            (EldIntArray) type.getField("values").get(null);
+        for (int i = 0; i < 101; i++) {
+            values.add(i);
+        }
+        assertSame(
+            values,
+            type.getMethod("identity", EldIntArray.class).invoke(null, values)
+        );
+        assertEquals(5050, type.getMethod("total").invoke(null));
+        assertEquals(100, type.getMethod("last").invoke(null));
+        final EldIntArray copy =
+            (EldIntArray) type.getMethod("copy").invoke(null);
+        assertEquals(101, copy.size());
+        assertNotSame(values, copy);
+        assertEquals(values.toString(), copy.toString());
+    }
 
     @Test
     void slicesCopyArraysWithOptionalAndNegativeBounds() throws Exception {
@@ -60,10 +102,9 @@ class BytecodeGeneratorTest {
             var negativeEnd = values[:-1];
             var negativeStart = values[-2:];
             var negativeBoth = values[-2:-1];
-            var clamped = values[-2147483648:2147483647];
-            var reversed = values[2:1];
-            var pastEnd = values[99:];
-            var beforeStart = values[:-99];
+            var full = values[0:3];
+            var endEmpty = values[3:];
+            var startEmpty = values[:0];
             var empty: [i32] = [];
             var emptyCopy = empty[:];
             func copy(input: [i32]) [i32] { return input[:]; }
@@ -72,43 +113,68 @@ class BytecodeGeneratorTest {
             """);
         assertArrayEquals(
             new int[] {1, 2, 3},
-            (int[]) type.getField("values").get(null)
+            intValues(type.getField("values").get(null))
         );
         assertArrayEquals(
             new int[] {99, 2, 3},
-            (int[]) type.getField("all").get(null)
+            intValues(type.getField("all").get(null))
         );
         for (final String name : List.of("tail", "negativeStart")) {
             assertArrayEquals(
                 new int[] {2, 3},
-                (int[]) type.getField(name).get(null)
+                intValues(type.getField(name).get(null))
             );
         }
         for (final String name : List.of("head", "negativeEnd")) {
             assertArrayEquals(
                 new int[] {1, 2},
-                (int[]) type.getField(name).get(null)
+                intValues(type.getField(name).get(null))
             );
         }
         for (final String name : List.of("middle", "negativeBoth")) {
             assertArrayEquals(
                 new int[] {2},
-                (int[]) type.getField(name).get(null)
+                intValues(type.getField(name).get(null))
             );
         }
-        for (final String name : List.of("clamped", "returned")) {
+        for (final String name : List.of("full", "returned")) {
             assertArrayEquals(
                 new int[] {1, 2, 3},
-                (int[]) type.getField(name).get(null)
+                intValues(type.getField(name).get(null))
             );
         }
         for (final String name : List
-            .of("reversed", "pastEnd", "beforeStart", "emptyCopy")) {
+            .of("endEmpty", "startEmpty", "emptyCopy")) {
             assertArrayEquals(
                 new int[0],
-                (int[]) type.getField(name).get(null)
+                intValues(type.getField(name).get(null))
             );
         }
+    }
+
+    @Test
+    void intArraySlicesRejectInvalidBoundsAtRuntime() throws Exception {
+        for (final String bounds : List.of(
+            "-2147483648:2147483647", "99:", ":-99", "0:4", "-4:2"
+        )) {
+            final Class<?> type = compile(
+                "func invalid() [i32] { var values = [1, 2, 3]; return values["
+                    + bounds + "]; }"
+            );
+            final InvocationTargetException error = assertThrows(
+                InvocationTargetException.class,
+                () -> type.getMethod("invalid").invoke(null)
+            );
+            assertInstanceOf(IndexOutOfBoundsException.class, error.getCause());
+        }
+        final Class<?> reversed = compile(
+            "func invalid() [i32] { var values = [1, 2, 3]; return values[2:1]; }"
+        );
+        final InvocationTargetException error = assertThrows(
+            InvocationTargetException.class,
+            () -> reversed.getMethod("invalid").invoke(null)
+        );
+        assertInstanceOf(IndexOutOfBoundsException.class, error.getCause());
     }
 
     @Test
@@ -129,19 +195,27 @@ class BytecodeGeneratorTest {
             final Object sliced = type.getField("sliced").get(null);
             assertEquals(original.getClass(), sliced.getClass());
             assertNotSame(original, sliced);
-            assertEquals(1, java.lang.reflect.Array.getLength(sliced));
-            assertEquals(
-                java.lang.reflect.Array.get(original, 1),
-                java.lang.reflect.Array.get(sliced, 0)
-            );
+            if (sliced instanceof EldIntArray ints) {
+                assertEquals(1, ints.size());
+                assertEquals(((EldIntArray) original).get(1), ints.get(0));
+            }
+            else {
+                assertEquals(1, java.lang.reflect.Array.getLength(sliced));
+                assertEquals(
+                    java.lang.reflect.Array.get(original, 1),
+                    java.lang.reflect.Array.get(sliced, 0)
+                );
+            }
         }
         final Class<?> type = compile("""
             var row = [1, 2];
             var matrix = [row];
             var copy = matrix[:];
             """);
-        final int[][] original = (int[][]) type.getField("matrix").get(null);
-        final int[][] copy = (int[][]) type.getField("copy").get(null);
+        final EldIntArray[] original =
+            (EldIntArray[]) type.getField("matrix").get(null);
+        final EldIntArray[] copy =
+            (EldIntArray[]) type.getField("copy").get(null);
         assertNotSame(original, copy);
         assertSame(original[0], copy[0]);
     }
@@ -162,7 +236,7 @@ class BytecodeGeneratorTest {
         assertEquals(12, type.getField("calls").get(null));
         assertArrayEquals(
             new int[] {2, 3},
-            (int[]) type.getField("sliced").get(null)
+            intValues(type.getField("sliced").get(null))
         );
     }
 
@@ -209,7 +283,7 @@ class BytecodeGeneratorTest {
                     () -> type.getMethod("read", int.class).invoke(null, index)
                 );
             assertInstanceOf(
-                ArrayIndexOutOfBoundsException.class,
+                IndexOutOfBoundsException.class,
                 exception.getCause()
             );
         }
@@ -220,7 +294,7 @@ class BytecodeGeneratorTest {
                     () -> type.getMethod("empty", int.class).invoke(null, index)
                 );
             assertInstanceOf(
-                ArrayIndexOutOfBoundsException.class,
+                IndexOutOfBoundsException.class,
                 exception.getCause()
             );
         }
@@ -250,7 +324,7 @@ class BytecodeGeneratorTest {
         assertEquals(41, type.getField("updated").get(null));
         assertArrayEquals(
             new int[] {10, 40},
-            (int[]) type.getField("values").get(null)
+            intValues(type.getField("values").get(null))
         );
         assertEquals(9000000000L, type.getField("wideOld").get(null));
         assertEquals(9000000001L, type.getField("wideUpdated").get(null));
@@ -1053,9 +1127,8 @@ class BytecodeGeneratorTest {
         }
         final String output = BytecodeRunner.run(classes);
         assertTrue(
-            output.matches(
-                "\\[I@[0-9a-f]+\n\\[Z@[0-9a-f]+\nMethodHandle\\(\\)int\n"
-            ),
+            output
+                .matches("\\[1, 2\\]\n\\[Z@[0-9a-f]+\nMethodHandle\\(\\)int\n"),
             output
         );
         assertThrows(SemanticException.class, () -> compile("print(1, 2);"));
@@ -1582,7 +1655,7 @@ class BytecodeGeneratorTest {
         assertFalse(Modifier.isFinal(type.getField("state").getModifiers()));
         assertArrayEquals(
             new int[] {1, 2},
-            (int[]) type.getField("values").get(null)
+            intValues(type.getField("values").get(null))
         );
         assertNull(type.getField("absent").get(null));
     }
@@ -1854,7 +1927,7 @@ class BytecodeGeneratorTest {
             """);
         assertArrayEquals(
             new int[] {1, 2, 3},
-            (int[]) type.getField("ints").get(null)
+            intValues(type.getField("ints").get(null))
         );
         assertArrayEquals(
             new double[] {1.5, 2.5},
@@ -1874,7 +1947,7 @@ class BytecodeGeneratorTest {
         );
         assertArrayEquals(
             new int[] {2},
-            ((int[][]) type.getField("nested").get(null))[1]
+            intValues(((EldIntArray[]) type.getField("nested").get(null))[1])
         );
         assertEquals(0, ((Object[]) type.getField("empty").get(null)).length);
         assertEquals(2, type.getMethod("find").invoke(null));
@@ -2034,7 +2107,7 @@ class BytecodeGeneratorTest {
         assertEquals(6, type.getField("updated").get(null));
         assertArrayEquals(
             new int[] {12},
-            (int[]) type.getField("values").get(null)
+            intValues(type.getField("values").get(null))
         );
     }
 }

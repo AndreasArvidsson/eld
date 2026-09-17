@@ -547,11 +547,18 @@ public final class BytecodeGenerator {
                 case NULL -> "Ljava/lang/Object;";
                 case VOID -> "V";
             };
-            case ArrayType array -> "[" + descriptor(array.elementType());
+            case ArrayType array -> intArray(array)
+                ? RuntimeAbi.INT_ARRAY_DESCRIPTOR
+                : "[" + descriptor(array.elementType());
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
             case ClassType ignored -> "Ljava/lang/Object;";
         };
+    }
+
+    private static boolean intArray(final Type type) {
+        return type instanceof ArrayType array
+            && array.elementType() == BuiltinType.I32;
     }
 
     private static String printArgumentDescriptor(final Type type) {
@@ -1035,6 +1042,8 @@ public final class BytecodeGenerator {
         }
 
         private void forEach(final ForEachStatement statement) {
+            final boolean runtimeArray =
+                intArray(semanticModel.getExpressionType(statement.iterable()));
             final int array = nextLocal++;
             final int index = nextLocal++;
             final Symbol value = semanticModel.getSymbol(statement.value());
@@ -1048,11 +1057,11 @@ public final class BytecodeGenerator {
             method.visitLabel(start);
             method.visitVarInsn(ILOAD, index);
             method.visitVarInsn(ALOAD, array);
-            method.visitInsn(ARRAYLENGTH);
+            arraySize(runtimeArray);
             method.visitJumpInsn(IF_ICMPGE, end);
             method.visitVarInsn(ALOAD, array);
             method.visitVarInsn(ILOAD, index);
-            method.visitInsn(arrayLoadOpcode(value.type()));
+            arrayGet(value.type(), runtimeArray);
             store(value);
             final IdentifierDeclaration indexName = statement.index();
             if (indexName != null) {
@@ -1247,8 +1256,11 @@ public final class BytecodeGenerator {
                 case ArrayExpression array -> array(array);
                 case SubscriptExpression index -> {
                     arrayIndex(index);
-                    method.visitInsn(
-                        arrayLoadOpcode(semanticModel.getExpressionType(index))
+                    arrayGet(
+                        semanticModel.getExpressionType(index),
+                        intArray(
+                            semanticModel.getExpressionType(index.target())
+                        )
                     );
                 }
                 case SliceExpression slice -> slice(slice);
@@ -1394,6 +1406,20 @@ public final class BytecodeGenerator {
             final Type element =
                 ((ArrayType) semanticModel.getEffectiveType(array))
                     .elementType();
+            if (element == BuiltinType.I32) {
+                method.visitTypeInsn(NEW, RuntimeAbi.INT_ARRAY_OWNER);
+                method.visitInsn(DUP);
+                if (array.elements().isEmpty()) {
+                    method.visitMethodInsn(
+                        INVOKESPECIAL,
+                        RuntimeAbi.INT_ARRAY_OWNER,
+                        "<init>",
+                        RuntimeAbi.INT_ARRAY_EMPTY_CONSTRUCTOR,
+                        false
+                    );
+                    return;
+                }
+            }
             method.visitLdcInsn(array.elements().size());
             if (reference(element)) {
                 final String desc = descriptor(element);
@@ -1422,9 +1448,39 @@ public final class BytecodeGenerator {
                 expression(array.elements().get(i));
                 method.visitInsn(arrayStoreOpcode(element));
             }
+            if (element == BuiltinType.I32) {
+                method.visitMethodInsn(
+                    INVOKESPECIAL,
+                    RuntimeAbi.INT_ARRAY_OWNER,
+                    "<init>",
+                    RuntimeAbi.INT_ARRAY_CONSTRUCTOR,
+                    false
+                );
+            }
         }
 
         private void slice(final SliceExpression slice) {
+            if (intArray(semanticModel.getExpressionType(slice))) {
+                expression(slice.target());
+                final Expression start = slice.startIndex();
+                final Expression end = slice.endIndex();
+                if (start != null) {
+                    expression(start);
+                }
+                if (end != null) {
+                    expression(end);
+                }
+                intArrayCall(
+                    start == null
+                        ? (end == null
+                            ? RuntimeAbi.IntArrayMethod.COPY
+                            : RuntimeAbi.IntArrayMethod.SLICE_TO)
+                        : (end == null
+                            ? RuntimeAbi.IntArrayMethod.SLICE_FROM
+                            : RuntimeAbi.IntArrayMethod.SLICE)
+                );
+                return;
+            }
             final int array = nextLocal++;
             final int start = nextLocal++;
             expression(slice.target());
@@ -1508,6 +1564,9 @@ public final class BytecodeGenerator {
         private void arrayIndex(final SubscriptExpression index) {
             expression(index.target());
             expression(index.index());
+            if (intArray(semanticModel.getExpressionType(index.target()))) {
+                return;
+            }
             if (
                 constantValue(index.index()) instanceof Integer value
                     && value >= 0
@@ -1523,6 +1582,43 @@ public final class BytecodeGenerator {
             method.visitInsn(ARRAYLENGTH);
             method.visitInsn(IADD);
             method.visitLabel(nonNegative);
+        }
+
+        private void intArrayCall(final RuntimeAbi.IntArrayMethod operation) {
+            method.visitMethodInsn(
+                INVOKEVIRTUAL,
+                RuntimeAbi.INT_ARRAY_OWNER,
+                operation.methodName,
+                operation.descriptor,
+                false
+            );
+        }
+
+        private void arraySize(final boolean runtimeArray) {
+            if (runtimeArray) {
+                intArrayCall(RuntimeAbi.IntArrayMethod.SIZE);
+            }
+            else {
+                method.visitInsn(ARRAYLENGTH);
+            }
+        }
+
+        private void arrayGet(final Type element, final boolean runtimeArray) {
+            if (runtimeArray) {
+                intArrayCall(RuntimeAbi.IntArrayMethod.GET);
+            }
+            else {
+                method.visitInsn(arrayLoadOpcode(element));
+            }
+        }
+
+        private void arraySet(final Type element, final boolean runtimeArray) {
+            if (runtimeArray) {
+                intArrayCall(RuntimeAbi.IntArrayMethod.SET);
+            }
+            else {
+                method.visitInsn(arrayStoreOpcode(element));
+            }
         }
 
         private Expression unwrap(final Expression expression) {
@@ -1552,8 +1648,9 @@ public final class BytecodeGenerator {
                         ? DUP2_X2
                         : DUP_X2
                 );
-                method.visitInsn(
-                    arrayStoreOpcode(semanticModel.getExpressionType(index))
+                arraySet(
+                    semanticModel.getExpressionType(index),
+                    intArray(semanticModel.getExpressionType(index.target()))
                 );
             }
             else {
@@ -1592,7 +1689,10 @@ public final class BytecodeGenerator {
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);
                 method.visitInsn(DUP2);
-                method.visitInsn(arrayLoadOpcode(type));
+                arrayGet(
+                    type,
+                    intArray(semanticModel.getExpressionType(index.target()))
+                );
                 if (postfix) {
                     method.visitInsn(
                         slots(semanticModel.getExpressionType(index)) == 2
@@ -1608,7 +1708,10 @@ public final class BytecodeGenerator {
                             : DUP_X2
                     );
                 }
-                method.visitInsn(arrayStoreOpcode(type));
+                arraySet(
+                    type,
+                    intArray(semanticModel.getExpressionType(index.target()))
+                );
             }
             else {
                 throw unsupported(operand, "Invalid increment target");

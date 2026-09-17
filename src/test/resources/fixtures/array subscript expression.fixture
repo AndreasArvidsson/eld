@@ -150,10 +150,12 @@ public final class Test {
 
 
   // access flags 0x19
-  public final static [I values
+  public final static Lmylang/runtime/EldIntArray; values
 
   // access flags 0x8
   static <clinit>()V
+    NEW mylang/runtime/EldIntArray
+    DUP
     LDC 3
     NEWARRAY T_INT
     DUP
@@ -168,27 +170,20 @@ public final class Test {
     LDC 2
     LDC 3
     IASTORE
-    PUTSTATIC Test.values : [I
+    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ([I)V
+    PUTSTATIC Test.values : Lmylang/runtime/EldIntArray;
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : [I
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
     LDC 1
-    IALOAD
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.get (I)I
     INVOKEVIRTUAL java/io/PrintStream.println (I)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : [I
+    GETSTATIC Test.values : Lmylang/runtime/EldIntArray;
     LDC -1
-    DUP
-    IFGE L0
-    DUP2
-    POP
-    ARRAYLENGTH
-    IADD
-   L0
-   FRAME FULL [] [java/io/PrintStream [I I]
-    IALOAD
+    INVOKEVIRTUAL mylang/runtime/EldIntArray.get (I)I
     INVOKEVIRTUAL java/io/PrintStream.println (I)V
     RETURN
-    MAXSTACK = 5
+    MAXSTACK = 6
     MAXLOCALS = 0
 }
 

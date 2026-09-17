@@ -93,13 +93,15 @@ public final class Test {
 
 
   // access flags 0x19
-  public final static [I foo
+  public final static Lmylang/runtime/EldIntArray; foo
 
   // access flags 0x19
-  public final static [I bar
+  public final static Lmylang/runtime/EldIntArray; bar
 
   // access flags 0x8
   static <clinit>()V
+    NEW mylang/runtime/EldIntArray
+    DUP
     LDC 2
     NEWARRAY T_INT
     DUP
@@ -110,15 +112,16 @@ public final class Test {
     LDC 1
     LDC 2
     IASTORE
-    PUTSTATIC Test.foo : [I
-    LDC 0
-    NEWARRAY T_INT
-    PUTSTATIC Test.bar : [I
+    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ([I)V
+    PUTSTATIC Test.foo : Lmylang/runtime/EldIntArray;
+    NEW mylang/runtime/EldIntArray
+    DUP
+    INVOKESPECIAL mylang/runtime/EldIntArray.<init> ()V
+    PUTSTATIC Test.bar : Lmylang/runtime/EldIntArray;
     RETURN
-    MAXSTACK = 4
+    MAXSTACK = 6
     MAXLOCALS = 0
 }
 
 --- OUTPUT ---
-
 

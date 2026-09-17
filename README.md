@@ -79,6 +79,22 @@ the operand's type. Integer arithmetic wraps at the promoted width; increments
 and decrements wrap at the operand's width. Widening to floating point can
 lose precision, just as in Java.
 
+## Array runtime
+
+`[i32]` values use the growable `mylang.runtime.EldIntArray` runtime class,
+with primitive `int[]` storage and a separate logical size. They print as
+`[1, 2, 3]`. The runtime provides `add(int)` for growth; source-level append
+syntax is not yet implemented. Other element types retain their JVM-array
+representation for now. Compiled executable JARs include the runtime class.
+
+Subscripting accepts negative indices relative to the end and rejects
+out-of-range indices. Slices use an inclusive start and exclusive end
+and return independent copies. Omitted bounds default to zero and the
+logical length. For `[i32]`, normalized slice bounds must be between zero
+and the logical length (inclusive); invalid bounds and reversed ranges throw.
+Other element types currently clamp slice bounds and return empty arrays
+for reversed ranges.
+
 ## Running tests
 
 Run all tests:
