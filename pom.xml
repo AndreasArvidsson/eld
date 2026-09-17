@@ -170,7 +170,7 @@
                     </upToDateChecking>
                     <java>
                         <includes>
-                            <include>src/**/*.java</include>
+                            <include>**/*.java</include>
                         </includes>
                         <eclipse>
                             <file>${project.basedir}/.vscode/eclipse-java-formatter.xml</file>

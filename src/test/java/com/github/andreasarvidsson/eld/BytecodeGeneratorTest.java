@@ -57,6 +57,79 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void tupleEqualityComparesValues() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    func equal() bool { const value = (1, true); return value == (1, true); }
+                    func different() bool { return (1, true) == (2, true); }
+                    func unequal() bool { return (1, true) != (2, true); }
+                    func same() bool { return (1, true) != (1, true); }
+                    func nested() bool { return ((1, "hello"), false) == ((1, "hello"), false); }
+                    func nullable() bool {
+                        const left: (i32 | null, string | null) = (null, null);
+                        const right: (i32 | null, string | null) = (null, null);
+                        return left == right;
+                    }
+                    """
+            );
+        assertEquals(true, type.getMethod("equal").invoke(null));
+        assertEquals(false, type.getMethod("different").invoke(null));
+        assertEquals(true, type.getMethod("unequal").invoke(null));
+        assertEquals(false, type.getMethod("same").invoke(null));
+        assertEquals(true, type.getMethod("nested").invoke(null));
+        assertEquals(true, type.getMethod("nullable").invoke(null));
+    }
+
+    @Test
+    void tuplesCompileWithTypedElementsAndNestedAccess() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    func pair(value: i32) (i64, string) { return (value, "hello"); }
+                    func first() i64 { return pair(7)[0]; }
+                    func second() string { return pair(7)[1]; }
+                    func nested() f64 {
+                        const value: (bool, (f64, [i32])) = (true, (2, [3, 4]));
+                        return value[1][0] + value[1][1][1];
+                    }
+                    func tiny() i8 { const value: (i8, f32) = (127, 1.5); return value[0]; }
+                    func nullable() i32 | null { const value: (i32 | null, string) = (null, "x"); return value[0]; }
+                    func array() string { const values = [(1, "one"), (2, "two")]; return values[1][1]; }
+                    func inferred() bool { const value = (true, 'a', 3.0); return value[0]; }
+                    func grouped() i64 { const value: (i64, string) = ((3, "x")); return value[0]; }
+                    """
+            );
+        assertEquals(7L, type.getMethod("first").invoke(null));
+        assertEquals("hello", type.getMethod("second").invoke(null));
+        assertEquals(6.0, type.getMethod("nested").invoke(null));
+        assertEquals((byte) 127, type.getMethod("tiny").invoke(null));
+        assertNull(type.getMethod("nullable").invoke(null));
+        assertEquals("two", type.getMethod("array").invoke(null));
+        assertEquals(true, type.getMethod("inferred").invoke(null));
+        assertEquals(3L, type.getMethod("grouped").invoke(null));
+    }
+
+    @Test
+    void tuplesRejectInvalidTypesIndicesAndMutation() {
+        for (final String source : List.of(
+            "const value: (i32, string) = (1, false);",
+            "const value: (i32, i32) = (1, 2, 3);",
+            "const value = (1, 2); value[2];",
+            "const value = (1, 2); value[-1];",
+            "const value = (1, 2); var index = 0; value[index];",
+            "const value = (1, 2); value[0] = 3;",
+            "const value = (1, 2); value[0]++;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
     void namedArgumentsBindByNameAndEvaluateInSourceOrder() throws Exception {
         final Class<?> type = compile("""
             func isLess(a: i32, b: i32) bool { return a < b; }

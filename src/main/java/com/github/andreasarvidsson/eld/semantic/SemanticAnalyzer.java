@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
+import com.github.andreasarvidsson.eld.parser.TupleExpression;
+import com.github.andreasarvidsson.eld.parser.TupleTypeNode;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
@@ -786,6 +788,17 @@ public final class SemanticAnalyzer {
     private Type resolveType(final TypeNode typeNode) {
         return switch (typeNode) {
             case NamedTypeNode named -> resolveNamedType(named);
+            case TupleTypeNode tuple -> {
+                final Type type =
+                    new TupleType(
+                        tuple.elementTypes()
+                            .stream()
+                            .map(this::resolveType)
+                            .toList()
+                    );
+                model.setResolvedType(tuple, type);
+                yield type;
+            }
             case ArrayTypeNode array -> {
                 final Type type =
                     new ArrayType(resolveType(array.elementType()));
@@ -827,6 +840,28 @@ public final class SemanticAnalyzer {
         // TODO: Extend this to handle more complex type assignability rules, such as
         // subtyping and type coercion.
 
+        if (
+            fromExpression instanceof TupleExpression tuple
+                && to instanceof TupleType target
+        ) {
+            if (tuple.elements().size() != target.elementTypes().size()) {
+                return null;
+            }
+            for (int i = 0; i < tuple.elements().size(); i++) {
+                final Expression element = tuple.elements().get(i);
+                if (
+                    resolveAssignType(
+                        model.getExpressionType(element),
+                        target.elementTypes().get(i),
+                        element
+                    ) == null
+                ) {
+                    return null;
+                }
+            }
+            model.setExpressionType(tuple, to);
+            return to;
+        }
         if (from.equals(to)) {
             return from;
         }
@@ -939,6 +974,13 @@ public final class SemanticAnalyzer {
         final @Nullable Type expected
     ) {
         if (
+            expected instanceof TupleType target
+                && expression instanceof TupleExpression tuple
+                && tuple.elements().size() == target.elementTypes().size()
+        ) {
+            return analyzeTupleExpression(tuple, context, target);
+        }
+        if (
             expected instanceof UnionType
                 && expression instanceof TernaryExpression ternary
         ) {
@@ -1007,9 +1049,35 @@ public final class SemanticAnalyzer {
         return analyzeExpression(expression, context);
     }
 
+    private Type analyzeTupleExpression(
+        final TupleExpression tuple,
+        final SemanticContext context,
+        final TupleType target
+    ) {
+        for (int i = 0; i < tuple.elements().size(); i++) {
+            final Expression element = tuple.elements().get(i);
+            final Type wanted = target.elementTypes().get(i);
+            final Type actual = analyzeExpression(element, context, wanted);
+            if (resolveAssignType(actual, wanted, element) == null) {
+                throw new SemanticException(
+                    element.range(),
+                    "Cannot assign %s to %s",
+                    actual,
+                    wanted
+                );
+            }
+        }
+        model.setExpressionType(tuple, target);
+        return target;
+    }
+
     private static boolean containsUnion(final Type type) {
-        return type instanceof UnionType || (type instanceof ArrayType array
-            && containsUnion(array.elementType()));
+        return (type instanceof TupleType tuple && tuple.elementTypes()
+            .stream()
+            .anyMatch(SemanticAnalyzer::containsUnion))
+            || type instanceof UnionType
+            || (type instanceof ArrayType array
+                && containsUnion(array.elementType()));
     }
 
     private Type analyzeExpression(
@@ -1021,6 +1089,12 @@ public final class SemanticAnalyzer {
             case LiteralExpression literal -> analyzeLiteralExpression(literal);
             case IdentifierExpression identifier ->
                 analyzeIdentifierExpression(identifier, context);
+            case TupleExpression tuple -> new TupleType(
+                tuple.elements()
+                    .stream()
+                    .map(element -> analyzeExpression(element, context))
+                    .toList()
+            );
             case ArrayExpression array ->
                 analyzeArrayExpression(array, context);
             case BinaryExpression binary ->
@@ -1182,6 +1256,23 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         final Type target = analyzeExpression(subscript.target(), context);
+        if (target instanceof TupleType tuple) {
+            analyzeExpression(subscript.index(), context);
+            final BigInteger index = integerLiteral(subscript.index());
+            if (
+                index == null || index.signum() < 0
+                    || index.compareTo(
+                        BigInteger.valueOf(tuple.elementTypes().size())
+                    ) >= 0
+            ) {
+                throw new SemanticException(
+                    subscript.index().range(),
+                    "Tuple index must be an integer literal between 0 and %s",
+                    tuple.elementTypes().size() - 1
+                );
+            }
+            return tuple.elementTypes().get(index.intValue());
+        }
         if (!(target instanceof ArrayType array)) {
             throw new SemanticException(
                 subscript.range(),
@@ -1259,7 +1350,15 @@ public final class SemanticAnalyzer {
             requireWritable(grouping.expression());
             return;
         }
-        if (expression instanceof SubscriptExpression) {
+        if (expression instanceof SubscriptExpression subscript) {
+            if (
+                model.getExpressionType(subscript.target()) instanceof TupleType
+            ) {
+                throw new SemanticException(
+                    expression.range(),
+                    "Tuple elements are not writable"
+                );
+            }
             return;
         }
         if (

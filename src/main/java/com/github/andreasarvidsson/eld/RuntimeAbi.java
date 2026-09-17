@@ -9,6 +9,7 @@ import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.runtime.EldArray;
 import com.github.andreasarvidsson.eld.runtime.EldByteArray;
 import com.github.andreasarvidsson.eld.runtime.EldShortArray;
+import com.github.andreasarvidsson.eld.runtime.EldTuple;
 import com.github.andreasarvidsson.eld.runtime.EldIntArray;
 import com.github.andreasarvidsson.eld.runtime.EldLongArray;
 import com.github.andreasarvidsson.eld.runtime.EldFloatArray;
@@ -115,6 +116,7 @@ final class RuntimeAbi {
     static List<Class<?>> runtimeClasses() {
         final ArrayList<Class<?>> classes = new ArrayList<>();
         classes.add(EldArray.class);
+        classes.add(EldTuple.class);
         for (final ArrayKind array : ArrayKind.values()) {
             classes.add(array.runtimeClass);
         }

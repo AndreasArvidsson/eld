@@ -20,6 +20,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import com.github.andreasarvidsson.eld.parser.*;
 import com.github.andreasarvidsson.eld.semantic.ArrayType;
+import com.github.andreasarvidsson.eld.semantic.TupleType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
@@ -553,6 +554,8 @@ public final class BytecodeGenerator {
             };
             case ArrayType array ->
                 RuntimeAbi.array(array.elementType()).descriptor;
+            case TupleType ignored ->
+                "Lcom/github/andreasarvidsson/eld/runtime/EldTuple;";
             case UnionType union -> unionDescriptor(union);
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
@@ -597,7 +600,8 @@ public final class BytecodeGenerator {
 
     private static String printArgumentDescriptor(final Type type) {
         if (
-            type instanceof ArrayType || type instanceof FunctionType
+            type instanceof ArrayType || type instanceof TupleType
+                || type instanceof FunctionType
                 || type instanceof BuiltinFunctionType
                 || type instanceof ClassType
                 || type instanceof UnionType
@@ -621,6 +625,7 @@ public final class BytecodeGenerator {
     private static boolean reference(final Type type) {
         return type instanceof UnionType || type instanceof BuiltinFunctionType
             || type instanceof ArrayType
+            || type instanceof TupleType
             || type instanceof FunctionType
             || type == BuiltinType.STRING
             || type == BuiltinType.NULL;
@@ -1302,10 +1307,20 @@ public final class BytecodeGenerator {
                 case CallExpression call -> call(call);
                 case NamedArgumentExpression named ->
                     throw unsupported(named, "Named argument outside a call");
+                case TupleExpression tuple -> tuple(tuple);
                 case ArrayExpression array -> array(array);
                 case SubscriptExpression index -> {
-                    arrayIndex(index);
-                    arrayGet(semanticModel.getExpressionType(index));
+                    if (
+                        semanticModel.getExpressionType(
+                            index.target()
+                        ) instanceof TupleType
+                    ) {
+                        tupleGet(index);
+                    }
+                    else {
+                        arrayIndex(index);
+                        arrayGet(semanticModel.getExpressionType(index));
+                    }
                 }
                 case SliceExpression slice -> slice(slice);
                 case LambdaExpression lambda -> throw unsupported(
@@ -1519,6 +1534,80 @@ public final class BytecodeGenerator {
                 method.visitVarInsn(
                     loadOpcode(type.parameterTypes().get(i)),
                     locals[i]
+                );
+            }
+        }
+
+        private void tuple(final TupleExpression tuple) {
+            final String owner =
+                "com/github/andreasarvidsson/eld/runtime/EldTuple";
+            method.visitTypeInsn(NEW, owner);
+            method.visitInsn(DUP);
+            method.visitLdcInsn(tuple.elements().size());
+            method.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+            for (int i = 0; i < tuple.elements().size(); i++) {
+                final Expression element = tuple.elements().get(i);
+                method.visitInsn(DUP);
+                method.visitLdcInsn(i);
+                expression(element);
+                box(semanticModel.getEffectiveType(element));
+                method.visitInsn(AASTORE);
+            }
+            method.visitMethodInsn(
+                INVOKESPECIAL,
+                owner,
+                "<init>",
+                "([Ljava/lang/Object;)V",
+                false
+            );
+        }
+
+        private void tupleGet(final SubscriptExpression index) {
+            expression(index.target());
+            method.visitLdcInsn(
+                Objects
+                    .requireNonNull(
+                        SemanticAnalyzer.integerLiteral(index.index())
+                    )
+                    .intValue()
+            );
+            method.visitMethodInsn(
+                INVOKEVIRTUAL,
+                "com/github/andreasarvidsson/eld/runtime/EldTuple",
+                "get",
+                "(I)Ljava/lang/Object;",
+                false
+            );
+            final Type element = semanticModel.getExpressionType(index);
+            final String owner = boxedOwner(element);
+            if (owner != null) {
+                method.visitTypeInsn(CHECKCAST, owner);
+                final String valueMethod = switch ((BuiltinType) element) {
+                    case I8 -> "byteValue";
+                    case I16 -> "shortValue";
+                    case I32 -> "intValue";
+                    case I64 -> "longValue";
+                    case F32 -> "floatValue";
+                    case F64 -> "doubleValue";
+                    case BOOL -> "booleanValue";
+                    case CHAR -> "charValue";
+                    default -> throw new IllegalArgumentException(
+                        "Not a primitive tuple element"
+                    );
+                };
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    owner,
+                    valueMethod,
+                    "()" + descriptor(element),
+                    false
+                );
+            }
+            else if (!descriptor(element).equals("Ljava/lang/Object;")) {
+                method.visitTypeInsn(
+                    CHECKCAST,
+                    org.objectweb.asm.Type.getType(descriptor(element))
+                        .getInternalName()
                 );
             }
         }
@@ -1772,6 +1861,7 @@ public final class BytecodeGenerator {
                     }
                     if (
                         type == BuiltinType.STRING || type instanceof UnionType
+                            || type instanceof TupleType
                     ) {
                         method.visitMethodInsn(
                             INVOKESTATIC,

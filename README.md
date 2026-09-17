@@ -84,6 +84,24 @@ the operand's type. Integer arithmetic wraps at the promoted width; increments
 and decrements wrap at the operand's width. Widening to floating point can
 lose precision, just as in Java.
 
+## Tuples
+
+Tuples use parentheses for both types and values, with two or more elements.
+Elements can have different types, including nested tuples and arrays.
+
+```text
+const pair: (i64, string) = (42, "answer");
+print(pair); // (42, answer)
+print(pair[0]); // 42
+func point() (f64, f64) { return (1.0, 2.0); }
+```
+
+Tuple types can be inferred. Literal elements support the same conversions as
+variable initializers. Access uses a nonnegative integer literal index; invalid
+indices are rejected at compile time. Tuple elements cannot be reassigned, but
+mutable arrays stored inside tuples can still be modified. Tuple variables can
+be reassigned when declared with `var`.
+
 ## Array runtime
 
 Union types use `|`, for example `var value: i32 | null = null;`.
@@ -303,11 +321,6 @@ Invalid
 var items: Foo[];
 items.sort();
 ```
-
-### Support tuples
-
-- Remove `[T, T]` and replace it with `(T, T)`.
-- Arrays should only support `T[]`.
 
 ### Immutable collections and objects
 

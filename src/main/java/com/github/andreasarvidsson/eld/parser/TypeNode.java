@@ -1,5 +1,5 @@
 package com.github.andreasarvidsson.eld.parser;
 
-public sealed interface TypeNode extends AstNode
-    permits NamedTypeNode, ArrayTypeNode, FunctionTypeNode, UnionTypeNode {
+public sealed interface TypeNode extends AstNode permits NamedTypeNode,
+    ArrayTypeNode, FunctionTypeNode, UnionTypeNode, TupleTypeNode {
 }

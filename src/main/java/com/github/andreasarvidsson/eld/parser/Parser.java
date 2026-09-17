@@ -446,11 +446,25 @@ public final class Parser {
             members.add(parseTypeMember());
         }
         return members.size() == 1
-            ? members.getFirst()
+            ? members.get(0)
             : new UnionTypeNode(members);
     }
 
     private TypeNode parseTypeMember() {
+        final Token open = matchToken(TokenType.LEFT_PAREN);
+        if (open != null) {
+            final List<TypeNode> elementTypes = new ArrayList<>();
+            elementTypes.add(parseType());
+            expect(TokenType.COMMA);
+            do {
+                elementTypes.add(parseType());
+            } while (match(TokenType.COMMA));
+            final Token close = expect(TokenType.RIGHT_PAREN);
+            return new TupleTypeNode(
+                elementTypes,
+                open.range().union(close.range())
+            );
+        }
         final Token leftBracket = matchToken(TokenType.LEFT_BRACKET);
         if (leftBracket != null) {
             final TypeNode elementType = parseType();
@@ -543,6 +557,9 @@ public final class Parser {
                 advance();
                 left = parsePostfixExpression(left, postfix, next);
             }
+            else if (check(TokenType.LEFT_BRACKET)) {
+                left = parseSubscriptExpression(left);
+            }
             else if (check(TokenType.LEFT_PAREN)) {
                 left = parseCallExpression(left);
             }
@@ -555,14 +572,8 @@ public final class Parser {
 
     private Expression parsePrimitiveExpression(final Token token) {
         return switch (token.type()) {
-            case IDENTIFIER -> {
-                if (check(TokenType.LEFT_BRACKET)) {
-                    yield parseSubscriptExpression(token);
-                }
-                else {
-                    yield new IdentifierExpression(token.text(), token.range());
-                }
-            }
+            case IDENTIFIER ->
+                new IdentifierExpression(token.text(), token.range());
             case BOOLEAN_LITERAL -> new LiteralExpression(
                 LiteralKind.BOOL,
                 token.text(),
@@ -612,8 +623,20 @@ public final class Parser {
         };
     }
 
-    private GroupingExpression parseGroupingExpression(final Token open) {
+    private Expression parseGroupingExpression(final Token open) {
         final Expression expression = parseExpression();
+        if (match(TokenType.COMMA)) {
+            final List<Expression> elements = new ArrayList<>();
+            elements.add(expression);
+            do {
+                elements.add(parseExpression());
+            } while (match(TokenType.COMMA));
+            final Token close = expect(TokenType.RIGHT_PAREN);
+            return new TupleExpression(
+                elements,
+                open.range().union(close.range())
+            );
+        }
         final Token close = expect(TokenType.RIGHT_PAREN);
         final Range range = open.range().union(close.range());
         return new GroupingExpression(expression, range);
@@ -631,7 +654,7 @@ public final class Parser {
         return new ArrayExpression(elements, range);
     }
 
-    private Expression parseSubscriptExpression(final Token identifier) {
+    private Expression parseSubscriptExpression(final Expression target) {
         expect(TokenType.LEFT_BRACKET);
         boolean isSlice = false;
         Expression startIndex, endIndex;
@@ -657,9 +680,7 @@ public final class Parser {
         }
 
         final Token rightBracket = expect(TokenType.RIGHT_BRACKET);
-        final Expression target =
-            new IdentifierExpression(identifier.text(), identifier.range());
-        final Range range = identifier.range().union(rightBracket.range());
+        final Range range = target.range().union(rightBracket.range());
         if (isSlice) {
             return new SliceExpression(target, startIndex, endIndex, range);
         }
