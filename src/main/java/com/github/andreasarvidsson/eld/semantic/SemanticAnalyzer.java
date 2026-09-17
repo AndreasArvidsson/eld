@@ -1015,13 +1015,13 @@ public final class SemanticAnalyzer {
         }
         if (startIndex != null && !isValidSubscriptIndex(startIndex)) {
             throw new SemanticException(
-                start.range(),
+                Objects.requireNonNull(start).range(),
                 "Slice start index must be an i8, i16, or i32"
             );
         }
         if (endIndex != null && !isValidSubscriptIndex(endIndex)) {
             throw new SemanticException(
-                end.range(),
+                Objects.requireNonNull(end).range(),
                 "Slice end index must be an i8, i16, or i32"
             );
         }

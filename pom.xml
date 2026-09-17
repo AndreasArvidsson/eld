@@ -7,6 +7,9 @@
     <groupId>com.github.andreasarvidsson</groupId>
     <artifactId>eld</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Eld</name>
+    <description>Eld programming language</description>
+    <url>https://github.com/AndreasArvidsson/eld</url>
 
     <properties>
         <maven.compiler.release>21</maven.compiler.release>

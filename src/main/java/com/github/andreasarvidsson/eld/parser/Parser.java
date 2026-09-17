@@ -652,7 +652,11 @@ public final class Parser {
         if (isSlice) {
             return new SliceExpression(target, startIndex, endIndex, range);
         }
-        return new SubscriptExpression(target, startIndex, range);
+        return new SubscriptExpression(
+            target,
+            Objects.requireNonNull(startIndex),
+            range
+        );
     }
 
     // The opening parenthesis has already been consumed. Lookahead leaves position

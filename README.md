@@ -81,18 +81,41 @@ lose precision, just as in Java.
 
 ## Array runtime
 
-`[i32]` values use the growable `com.github.andreasarvidsson.eld.runtime.EldIntArray` runtime class,
-with primitive `int[]` storage and a separate logical size. They print as
-`[1, 2, 3]`. The runtime provides `add(int)` for growth; source-level append
-syntax is not yet implemented. Other element types retain their JVM-array
-representation for now. Compiled executable JARs include the runtime class.
+Primitive arrays use specialized growable classes in
+`com.github.andreasarvidsson.eld.runtime`, with primitive backing storage
+and a separate logical size. The `EldArray` base class shares size, bounds
+validation, capacity management, copying and slicing logic, and formatting.
+The base's self-type parameter describes the array class, not its primitive
+elements, so sharing this logic requires no boxing. Thin covariant overrides
+preserve specialized copy/slice return types
+and let generated code call their specialized JVM descriptors directly.
+Each specialization
+keeps primitive storage, element access, and small hooks for copying,
+resizing, and appending an element without boxing.
+
+| Element type | Runtime class | Storage |
+| --- | --- | --- |
+| `i8` | `EldByteArray` | `byte[]` |
+| `i16` | `EldShortArray` | `short[]` |
+| `i32` | `EldIntArray` | `int[]` |
+| `i64` | `EldLongArray` | `long[]` |
+| `f32` | `EldFloatArray` | `float[]` |
+| `f64` | `EldDoubleArray` | `double[]` |
+| `boolean` | `EldBooleanArray` | `boolean[]` |
+| `char` | `EldCharArray` | `char[]` |
+
+They print their logical contents, such as `[1, 2, 3]`, `[true, false]`,
+or `[h, i]`. Each runtime class provides `add(primitive)` for growth;
+source-level append syntax is not yet implemented. Reference and nested
+arrays retain their JVM-array representation. Compiled executable JARs
+include the primitive array runtime classes and their base class.
 
 Subscripting accepts negative indices relative to the end and rejects
 out-of-range indices. Slices use an inclusive start and exclusive end
 and return independent copies. Omitted bounds default to zero and the
-logical length. For `[i32]`, normalized slice bounds must be between zero
+logical length. For primitive arrays, normalized slice bounds must be between zero
 and the logical length (inclusive); invalid bounds and reversed ranges throw.
-Other element types currently clamp slice bounds and return empty arrays
+Reference arrays currently clamp slice bounds and return empty arrays
 for reversed ranges.
 
 ## Running tests
@@ -185,6 +208,12 @@ mvn test -DupdateFixtures -DtestSubset
 These boolean Maven flags do not need `=true`. Without `-DtestSubset`, all fixtures run.
 
 ## Format Java code
+
+Maven runs `spotless:check` during `validate`, before compilation, including
+when running `mvn compile`, `mvn test`, or `mvn package`. Incremental checking
+skips unchanged files that already passed. `mvn clean` removes the cache,
+so the next check processes all Java files. Formatting violations fail the
+build; use `spotless:apply` to fix them.
 
 ```bash
 mvn -N -q spotless:check

@@ -17,8 +17,10 @@ final class ModuleLoader extends ClassLoader {
     @Override
     protected Class<?> findClass(final String name)
         throws ClassNotFoundException {
-        if (name.equals(RuntimeAbi.INT_ARRAY_CLASS.getName())) {
-            return RuntimeAbi.INT_ARRAY_CLASS;
+        for (final Class<?> runtimeClass : RuntimeAbi.runtimeClasses()) {
+            if (name.equals(runtimeClass.getName())) {
+                return runtimeClass;
+            }
         }
         final byte[] bytes = definitions.remove(name);
         if (bytes == null) {

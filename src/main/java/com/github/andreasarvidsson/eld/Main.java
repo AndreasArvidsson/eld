@@ -146,18 +146,20 @@ public final class Main {
             jar.putNextEntry(new JarEntry("Launcher.class"));
             jar.write(launcher());
             jar.closeEntry();
-            final String runtimePath = RuntimeAbi.INT_ARRAY_OWNER + ".class";
-            try (final InputStream runtime =
-                RuntimeAbi.INT_ARRAY_CLASS
-                    .getResourceAsStream("/" + runtimePath)) {
-                if (runtime == null) {
-                    throw new IOException(
-                        "Missing runtime class: " + runtimePath
-                    );
+            for (final Class<?> runtimeClass : RuntimeAbi.runtimeClasses()) {
+                final String runtimePath =
+                    runtimeClass.getName().replace('.', '/') + ".class";
+                try (final InputStream runtime =
+                    runtimeClass.getResourceAsStream("/" + runtimePath)) {
+                    if (runtime == null) {
+                        throw new IOException(
+                            "Missing runtime class: " + runtimePath
+                        );
+                    }
+                    jar.putNextEntry(new JarEntry(runtimePath));
+                    runtime.transferTo(jar);
+                    jar.closeEntry();
                 }
-                jar.putNextEntry(new JarEntry(runtimePath));
-                runtime.transferTo(jar);
-                jar.closeEntry();
             }
         }
     }

@@ -2,58 +2,58 @@ package com.github.andreasarvidsson.eld.runtime;
 
 import java.util.Arrays;
 
-public final class EldIntArray extends EldArray<EldIntArray> {
-    private int[] elements;
+public final class EldShortArray extends EldArray<EldShortArray> {
+    private short[] elements;
 
-    public EldIntArray() {
+    public EldShortArray() {
         // Initialize the array with zero elements initially to save memory on arrays that never grow.
-        elements = new int[0];
+        elements = new short[0];
     }
 
     // Doesn't need to copy the array; it is only used for:
     // 1. Literal arrays, where the array is already fully constructed and won't be modified externally.
     // 2. Internally in this class.
-    public EldIntArray(final int[] elements) {
+    public EldShortArray(final short[] elements) {
         this.elements = elements;
         size = elements.length;
     }
 
-    public int get(final int index) {
+    public short get(final int index) {
         return elements[normalizeIndex(index)];
     }
 
-    public void set(final int index, final int value) {
+    public void set(final int index, final short value) {
         elements[normalizeIndex(index)] = value;
     }
 
-    public void add(final int value) {
+    public void add(final short value) {
         ensureCapacity(size + 1);
         elements[size++] = value;
     }
 
     @Override
-    public EldIntArray copy() {
+    public EldShortArray copy() {
         return super.copy();
     }
 
     @Override
-    public EldIntArray sliceFrom(final int start) {
+    public EldShortArray sliceFrom(final int start) {
         return super.sliceFrom(start);
     }
 
     @Override
-    public EldIntArray sliceTo(final int end) {
+    public EldShortArray sliceTo(final int end) {
         return super.sliceTo(end);
     }
 
     @Override
-    public EldIntArray slice(final int start, final int end) {
+    public EldShortArray slice(final int start, final int end) {
         return super.slice(start, end);
     }
 
     @Override
-    protected EldIntArray copyRange(final int from, final int to) {
-        return new EldIntArray(Arrays.copyOfRange(elements, from, to));
+    protected EldShortArray copyRange(final int from, final int to) {
+        return new EldShortArray(Arrays.copyOfRange(elements, from, to));
     }
 
     @Override

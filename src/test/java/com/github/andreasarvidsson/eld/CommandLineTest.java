@@ -57,12 +57,20 @@ class CommandLineTest {
     @Test
     void compileProducesExecutableJarAndRunExecutesSource() throws Exception {
         final Path source = directory.resolve("hello world.eld");
-        Files.writeString(
-            source,
-            "print(\"hello\"); const values = [1, 2, 3]; print(values[-2:]);"
-        );
+        Files.writeString(source, """
+            print("hello"); const values = [1, 2, 3]; print(values[-2:]);
+            const bytes: [i8] = [7]; print(bytes);
+            const shorts: [i16] = [7]; print(shorts);
+            const longs: [i64] = [9000000000]; print(longs);
+            const floats: [f32] = [1.5]; print(floats);
+            const doubles: [f64] = [2.5]; print(doubles);
+            const flags: [boolean] = [true, false]; print(flags);
+            const chars: [char] = ['h', 'i']; print(chars);
+            """);
+        final String expected =
+            "hello\n[2, 3]\n[7]\n[7]\n[9000000000]\n[1.5]\n[2.5]\n[true, false]\n[h, i]\n";
         assertEquals(
-            "hello\n[2, 3]\n",
+            expected,
             capture(
                 () -> assertEquals(
                     0,
@@ -97,7 +105,7 @@ class CommandLineTest {
                 StandardCharsets.UTF_8
             );
         assertEquals(0, process.waitFor(), output);
-        assertEquals("hello\n[2, 3]\n", output.replace("\r\n", "\n"));
+        assertEquals(expected, output.replace("\r\n", "\n"));
     }
 
     @Test

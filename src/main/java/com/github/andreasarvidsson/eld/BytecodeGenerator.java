@@ -547,8 +547,9 @@ public final class BytecodeGenerator {
                 case NULL -> "Ljava/lang/Object;";
                 case VOID -> "V";
             };
-            case ArrayType array -> intArray(array)
-                ? RuntimeAbi.INT_ARRAY_DESCRIPTOR
+            case ArrayType array -> primitiveArray(array)
+                ? RuntimeAbi
+                    .requirePrimitiveArray(array.elementType()).descriptor
                 : "[" + descriptor(array.elementType());
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
@@ -556,18 +557,12 @@ public final class BytecodeGenerator {
         };
     }
 
-    private static boolean intArray(final Type type) {
+    private static boolean primitiveArray(final Type type) {
         return type instanceof ArrayType array
-            && array.elementType() == BuiltinType.I32;
+            && RuntimeAbi.primitiveArray(array.elementType()) != null;
     }
 
     private static String printArgumentDescriptor(final Type type) {
-        if (
-            type instanceof ArrayType array
-                && array.elementType() == BuiltinType.CHAR
-        ) {
-            return "[C";
-        }
         if (
             type instanceof ArrayType || type instanceof FunctionType
                 || type instanceof BuiltinFunctionType
@@ -1043,7 +1038,9 @@ public final class BytecodeGenerator {
 
         private void forEach(final ForEachStatement statement) {
             final boolean runtimeArray =
-                intArray(semanticModel.getExpressionType(statement.iterable()));
+                primitiveArray(
+                    semanticModel.getExpressionType(statement.iterable())
+                );
             final int array = nextLocal++;
             final int index = nextLocal++;
             final Symbol value = semanticModel.getSymbol(statement.value());
@@ -1057,7 +1054,7 @@ public final class BytecodeGenerator {
             method.visitLabel(start);
             method.visitVarInsn(ILOAD, index);
             method.visitVarInsn(ALOAD, array);
-            arraySize(runtimeArray);
+            arraySize(value.type(), runtimeArray);
             method.visitJumpInsn(IF_ICMPGE, end);
             method.visitVarInsn(ALOAD, array);
             method.visitVarInsn(ILOAD, index);
@@ -1258,7 +1255,7 @@ public final class BytecodeGenerator {
                     arrayIndex(index);
                     arrayGet(
                         semanticModel.getExpressionType(index),
-                        intArray(
+                        primitiveArray(
                             semanticModel.getExpressionType(index.target())
                         )
                     );
@@ -1406,15 +1403,18 @@ public final class BytecodeGenerator {
             final Type element =
                 ((ArrayType) semanticModel.getEffectiveType(array))
                     .elementType();
-            if (element == BuiltinType.I32) {
-                method.visitTypeInsn(NEW, RuntimeAbi.INT_ARRAY_OWNER);
+            if (RuntimeAbi.primitiveArray(element) != null) {
+                method.visitTypeInsn(
+                    NEW,
+                    RuntimeAbi.requirePrimitiveArray(element).owner
+                );
                 method.visitInsn(DUP);
                 if (array.elements().isEmpty()) {
                     method.visitMethodInsn(
                         INVOKESPECIAL,
-                        RuntimeAbi.INT_ARRAY_OWNER,
+                        RuntimeAbi.requirePrimitiveArray(element).owner,
                         "<init>",
-                        RuntimeAbi.INT_ARRAY_EMPTY_CONSTRUCTOR,
+                        RuntimeAbi.EMPTY_ARRAY_CONSTRUCTOR,
                         false
                     );
                     return;
@@ -1431,16 +1431,10 @@ public final class BytecodeGenerator {
                 );
             }
             else {
-                method.visitIntInsn(NEWARRAY, switch ((BuiltinType) element) {
-                    case I8 -> T_BYTE;
-                    case I16 -> T_SHORT;
-                    case I64 -> T_LONG;
-                    case F32 -> T_FLOAT;
-                    case F64 -> T_DOUBLE;
-                    case BOOL -> T_BOOLEAN;
-                    case CHAR -> T_CHAR;
-                    default -> T_INT;
-                });
+                method.visitIntInsn(
+                    NEWARRAY,
+                    RuntimeAbi.requirePrimitiveArray(element).creationOpcode
+                );
             }
             for (int i = 0; i < array.elements().size(); i++) {
                 method.visitInsn(DUP);
@@ -1448,19 +1442,20 @@ public final class BytecodeGenerator {
                 expression(array.elements().get(i));
                 method.visitInsn(arrayStoreOpcode(element));
             }
-            if (element == BuiltinType.I32) {
+            if (RuntimeAbi.primitiveArray(element) != null) {
                 method.visitMethodInsn(
                     INVOKESPECIAL,
-                    RuntimeAbi.INT_ARRAY_OWNER,
+                    RuntimeAbi.requirePrimitiveArray(element).owner,
                     "<init>",
-                    RuntimeAbi.INT_ARRAY_CONSTRUCTOR,
+                    RuntimeAbi
+                        .requirePrimitiveArray(element).constructorDescriptor,
                     false
                 );
             }
         }
 
         private void slice(final SliceExpression slice) {
-            if (intArray(semanticModel.getExpressionType(slice))) {
+            if (primitiveArray(semanticModel.getExpressionType(slice))) {
                 expression(slice.target());
                 final Expression start = slice.startIndex();
                 final Expression end = slice.endIndex();
@@ -1470,14 +1465,16 @@ public final class BytecodeGenerator {
                 if (end != null) {
                     expression(end);
                 }
-                intArrayCall(
+                primitiveArrayCall(
+                    ((ArrayType) semanticModel.getExpressionType(slice))
+                        .elementType(),
                     start == null
                         ? (end == null
-                            ? RuntimeAbi.IntArrayMethod.COPY
-                            : RuntimeAbi.IntArrayMethod.SLICE_TO)
+                            ? RuntimeAbi.ArrayMethod.COPY
+                            : RuntimeAbi.ArrayMethod.SLICE_TO)
                         : (end == null
-                            ? RuntimeAbi.IntArrayMethod.SLICE_FROM
-                            : RuntimeAbi.IntArrayMethod.SLICE)
+                            ? RuntimeAbi.ArrayMethod.SLICE_FROM
+                            : RuntimeAbi.ArrayMethod.SLICE)
                 );
                 return;
             }
@@ -1564,7 +1561,9 @@ public final class BytecodeGenerator {
         private void arrayIndex(final SubscriptExpression index) {
             expression(index.target());
             expression(index.index());
-            if (intArray(semanticModel.getExpressionType(index.target()))) {
+            if (
+                primitiveArray(semanticModel.getExpressionType(index.target()))
+            ) {
                 return;
             }
             if (
@@ -1584,19 +1583,24 @@ public final class BytecodeGenerator {
             method.visitLabel(nonNegative);
         }
 
-        private void intArrayCall(final RuntimeAbi.IntArrayMethod operation) {
+        private void primitiveArrayCall(
+            final Type element,
+            final RuntimeAbi.ArrayMethod operation
+        ) {
+            final RuntimeAbi.PrimitiveArray array =
+                RuntimeAbi.requirePrimitiveArray(element);
             method.visitMethodInsn(
                 INVOKEVIRTUAL,
-                RuntimeAbi.INT_ARRAY_OWNER,
+                array.owner,
                 operation.methodName,
-                operation.descriptor,
+                array.methodDescriptor(operation),
                 false
             );
         }
 
-        private void arraySize(final boolean runtimeArray) {
+        private void arraySize(final Type element, final boolean runtimeArray) {
             if (runtimeArray) {
-                intArrayCall(RuntimeAbi.IntArrayMethod.SIZE);
+                primitiveArrayCall(element, RuntimeAbi.ArrayMethod.SIZE);
             }
             else {
                 method.visitInsn(ARRAYLENGTH);
@@ -1605,7 +1609,7 @@ public final class BytecodeGenerator {
 
         private void arrayGet(final Type element, final boolean runtimeArray) {
             if (runtimeArray) {
-                intArrayCall(RuntimeAbi.IntArrayMethod.GET);
+                primitiveArrayCall(element, RuntimeAbi.ArrayMethod.GET);
             }
             else {
                 method.visitInsn(arrayLoadOpcode(element));
@@ -1614,7 +1618,7 @@ public final class BytecodeGenerator {
 
         private void arraySet(final Type element, final boolean runtimeArray) {
             if (runtimeArray) {
-                intArrayCall(RuntimeAbi.IntArrayMethod.SET);
+                primitiveArrayCall(element, RuntimeAbi.ArrayMethod.SET);
             }
             else {
                 method.visitInsn(arrayStoreOpcode(element));
@@ -1650,7 +1654,9 @@ public final class BytecodeGenerator {
                 );
                 arraySet(
                     semanticModel.getExpressionType(index),
-                    intArray(semanticModel.getExpressionType(index.target()))
+                    primitiveArray(
+                        semanticModel.getExpressionType(index.target())
+                    )
                 );
             }
             else {
@@ -1691,7 +1697,9 @@ public final class BytecodeGenerator {
                 method.visitInsn(DUP2);
                 arrayGet(
                     type,
-                    intArray(semanticModel.getExpressionType(index.target()))
+                    primitiveArray(
+                        semanticModel.getExpressionType(index.target())
+                    )
                 );
                 if (postfix) {
                     method.visitInsn(
@@ -1710,7 +1718,9 @@ public final class BytecodeGenerator {
                 }
                 arraySet(
                     type,
-                    intArray(semanticModel.getExpressionType(index.target()))
+                    primitiveArray(
+                        semanticModel.getExpressionType(index.target())
+                    )
                 );
             }
             else {

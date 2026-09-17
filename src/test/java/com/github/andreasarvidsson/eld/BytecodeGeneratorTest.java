@@ -47,6 +47,11 @@ import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
 import com.github.andreasarvidsson.eld.semantic.SemanticException;
 import com.github.andreasarvidsson.eld.runtime.EldIntArray;
+import com.github.andreasarvidsson.eld.runtime.EldArray;
+import com.github.andreasarvidsson.eld.runtime.EldLongArray;
+import com.github.andreasarvidsson.eld.runtime.EldDoubleArray;
+import com.github.andreasarvidsson.eld.runtime.EldCharArray;
+import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     private static int[] intValues(final Object value) {
@@ -154,26 +159,29 @@ class BytecodeGeneratorTest {
 
     @Test
     void intArraySlicesRejectInvalidBoundsAtRuntime() throws Exception {
-        for (final String bounds : List.of(
-            "-2147483648:2147483647", "99:", ":-99", "0:4", "-4:2"
-        )) {
-            final Class<?> type = compile(
-                "func invalid() [i32] { var values = [1, 2, 3]; return values["
-                    + bounds + "]; }"
-            );
-            final InvocationTargetException error = assertThrows(
-                InvocationTargetException.class,
-                () -> type.getMethod("invalid").invoke(null)
-            );
+        for (final String bounds : List
+            .of("-2147483648:2147483647", "99:", ":-99", "0:4", "-4:2")) {
+            final Class<?> type =
+                compile(
+                    "func invalid() [i32] { var values = [1, 2, 3]; return values["
+                        + bounds + "]; }"
+                );
+            final InvocationTargetException error =
+                assertThrows(
+                    InvocationTargetException.class,
+                    () -> type.getMethod("invalid").invoke(null)
+                );
             assertInstanceOf(IndexOutOfBoundsException.class, error.getCause());
         }
-        final Class<?> reversed = compile(
-            "func invalid() [i32] { var values = [1, 2, 3]; return values[2:1]; }"
-        );
-        final InvocationTargetException error = assertThrows(
-            InvocationTargetException.class,
-            () -> reversed.getMethod("invalid").invoke(null)
-        );
+        final Class<?> reversed =
+            compile(
+                "func invalid() [i32] { var values = [1, 2, 3]; return values[2:1]; }"
+            );
+        final InvocationTargetException error =
+            assertThrows(
+                InvocationTargetException.class,
+                () -> reversed.getMethod("invalid").invoke(null)
+            );
         assertInstanceOf(IndexOutOfBoundsException.class, error.getCause());
     }
 
@@ -195,9 +203,16 @@ class BytecodeGeneratorTest {
             final Object sliced = type.getField("sliced").get(null);
             assertEquals(original.getClass(), sliced.getClass());
             assertNotSame(original, sliced);
-            if (sliced instanceof EldIntArray ints) {
-                assertEquals(1, ints.size());
-                assertEquals(((EldIntArray) original).get(1), ints.get(0));
+            if (sliced instanceof EldArray<?> primitive) {
+                assertEquals(1, primitive.size());
+                assertEquals(
+                    original.getClass()
+                        .getMethod("get", int.class)
+                        .invoke(original, 1),
+                    sliced.getClass()
+                        .getMethod("get", int.class)
+                        .invoke(sliced, 0)
+                );
             }
             else {
                 assertEquals(1, java.lang.reflect.Array.getLength(sliced));
@@ -329,10 +344,10 @@ class BytecodeGeneratorTest {
         assertEquals(9000000000L, type.getField("wideOld").get(null));
         assertEquals(9000000001L, type.getField("wideUpdated").get(null));
         assertEquals(8000000000L, type.getField("wideAssigned").get(null));
-        assertArrayEquals(
-            new long[] {8000000000L},
-            (long[]) type.getField("longs").get(null)
-        );
+        final EldLongArray longs =
+            (EldLongArray) type.getField("longs").get(null);
+        assertEquals(1, longs.size());
+        assertEquals(8000000000L, longs.get(0));
     }
 
     @Test
@@ -614,8 +629,10 @@ class BytecodeGeneratorTest {
             assertEquals(newValues[i], type.getField("updated").get(null));
             assertEquals(
                 finalValues[i],
-                java.lang.reflect.Array
-                    .get(type.getField("values").get(null), 0)
+                type.getField("values")
+                    .getType()
+                    .getMethod("get", int.class)
+                    .invoke(type.getField("values").get(null), 0)
             );
         }
     }
@@ -1103,7 +1120,7 @@ class BytecodeGeneratorTest {
             BytecodeUtil.verify(bytecode);
         }
         assertEquals(
-            "direct\nreference\n42\n1.5\ntrue\nx\nnull\nhi\n\n7\n2.5\nfalse\nz\nnull\nok\n\nnested\n",
+            "direct\nreference\n42\n1.5\ntrue\nx\nnull\n[h, i]\n\n7\n2.5\nfalse\nz\nnull\n[o, k]\n\nnested\n",
             BytecodeRunner.run(classes)
         );
     }
@@ -1126,11 +1143,7 @@ class BytecodeGeneratorTest {
             BytecodeUtil.verify(bytecode);
         }
         final String output = BytecodeRunner.run(classes);
-        assertTrue(
-            output
-                .matches("\\[1, 2\\]\n\\[Z@[0-9a-f]+\nMethodHandle\\(\\)int\n"),
-            output
-        );
+        assertEquals("[1, 2]\n[true, false]\nMethodHandle()int\n", output);
         assertThrows(SemanticException.class, () -> compile("print(1, 2);"));
         assertThrows(SemanticException.class, () -> compile("print(print());"));
         assertThrows(
@@ -1929,18 +1942,21 @@ class BytecodeGeneratorTest {
             new int[] {1, 2, 3},
             intValues(type.getField("ints").get(null))
         );
-        assertArrayEquals(
-            new double[] {1.5, 2.5},
-            (double[]) type.getField("floats").get(null)
-        );
-        assertArrayEquals(
-            new char[] {'a', 'b'},
-            (char[]) type.getField("chars").get(null)
-        );
-        assertArrayEquals(
-            new boolean[] {true, false},
-            (boolean[]) type.getField("flags").get(null)
-        );
+        final EldDoubleArray floats =
+            (EldDoubleArray) type.getField("floats").get(null);
+        assertEquals(2, floats.size());
+        assertEquals(1.5, floats.get(0));
+        assertEquals(2.5, floats.get(1));
+        final EldCharArray chars =
+            (EldCharArray) type.getField("chars").get(null);
+        assertEquals(2, chars.size());
+        assertEquals('a', chars.get(0));
+        assertEquals('b', chars.get(1));
+        final EldBooleanArray flags =
+            (EldBooleanArray) type.getField("flags").get(null);
+        assertEquals(2, flags.size());
+        assertTrue(flags.get(0));
+        assertFalse(flags.get(1));
         assertArrayEquals(
             new String[] {"a", "b"},
             (String[]) type.getField("strings").get(null)
