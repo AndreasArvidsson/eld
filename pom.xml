@@ -203,6 +203,7 @@
                         <arg>
                             -Xplugin:ErrorProne
                             -Xep:NullAway:ERROR
+                            -Xep:MissingBraces:ERROR
                             -XepOpt:NullAway:OnlyNullMarked=true
                             -XepOpt:NullAway:JSpecifyMode=true
                             -Xep:StatementSwitchToExpressionSwitch:OFF

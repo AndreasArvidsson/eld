@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,6 +24,8 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.util.CheckClassAdapter;
 import mylang.lexer.Lexer;
 import mylang.parser.ArrayExpression;
@@ -45,6 +48,287 @@ import mylang.semantic.SemanticAnalyzer;
 import mylang.semantic.SemanticException;
 
 class BytecodeGeneratorTest {
+
+    @Test
+    void integerSwitchUsesTableForDenseKeys() throws Exception {
+        final String source =
+            """
+                var calls = 0;
+                func subject() int { calls++; return 2; }
+                func choose(value: int) int {
+                    return switch (value) {
+                        case 2, 3 { yield 20; }
+                        case -1 => 10
+                        case 0 => 11
+                        case 2 => 99
+                        else => 50
+                    };
+                }
+                var selected = 0;
+                switch (subject()) { case 1 => selected = 1 case 2, 3 => selected = 2 }
+                switch (99) { case 1, 2 => selected = 99 }
+                """;
+        final var node = inspect(source);
+        final var choose =
+            node.methods.stream()
+                .filter(m -> m.name.equals("choose"))
+                .findFirst()
+                .orElseThrow();
+        final var table =
+            java.util.Arrays.stream(choose.instructions.toArray())
+                .filter(TableSwitchInsnNode.class::isInstance)
+                .map(TableSwitchInsnNode.class::cast)
+                .findFirst()
+                .orElseThrow();
+        assertEquals(-1, table.min);
+        assertEquals(3, table.max);
+        assertSame(table.dflt, table.labels.get(2));
+        assertSame(table.labels.get(3), table.labels.get(4));
+        final Class<?> type = compile(source);
+        assertEquals(20, type.getMethod("choose", int.class).invoke(null, 2));
+        assertEquals(20, type.getMethod("choose", int.class).invoke(null, 3));
+        assertEquals(10, type.getMethod("choose", int.class).invoke(null, -1));
+        assertEquals(50, type.getMethod("choose", int.class).invoke(null, 1));
+        assertEquals(50, type.getMethod("choose", int.class).invoke(null, 99));
+        assertEquals(1, type.getField("calls").get(null));
+        assertEquals(2, type.getField("selected").get(null));
+    }
+
+    @Test
+    void integerSwitchUsesLookupForSparseAndExtremeKeys() throws Exception {
+        final String source = """
+            func choose(value: int) int {
+                return switch (value) {
+                    case 2147483647 => 1
+                    case -2147483648 => 2
+                    case (500 + 500), -1_000 => 3
+                    else { yield 4; }
+                };
+            }
+            """;
+        final var choose =
+            inspect(source).methods.stream()
+                .filter(m -> m.name.equals("choose"))
+                .findFirst()
+                .orElseThrow();
+        final var lookup =
+            java.util.Arrays.stream(choose.instructions.toArray())
+                .filter(LookupSwitchInsnNode.class::isInstance)
+                .map(LookupSwitchInsnNode.class::cast)
+                .findFirst()
+                .orElseThrow();
+        assertEquals(
+            List.of(Integer.MIN_VALUE, -1000, 1000, Integer.MAX_VALUE),
+            lookup.keys
+        );
+        final Class<?> type = compile(source);
+        assertEquals(
+            1,
+            type.getMethod("choose", int.class).invoke(null, Integer.MAX_VALUE)
+        );
+        assertEquals(
+            2,
+            type.getMethod("choose", int.class).invoke(null, Integer.MIN_VALUE)
+        );
+        assertEquals(3, type.getMethod("choose", int.class).invoke(null, 1000));
+        assertEquals(
+            3,
+            type.getMethod("choose", int.class).invoke(null, -1000)
+        );
+        assertEquals(4, type.getMethod("choose", int.class).invoke(null, 0));
+    }
+
+    @Test
+    void integerSwitchRetainsOrderedEvaluationForRuntimeMatches()
+        throws Exception {
+        final String source =
+            """
+                var calls = 0;
+                func match() int { calls++; return 2; }
+                func choose(value: int) int {
+                    return switch (value) {
+                        case 1 => 10
+                        case match(), match() => 20
+                        else => 30
+                    };
+                }
+                func throwing(value: int) int {
+                    return switch (value) { case 1 => 10 case 1 / 0 => 20 else => 30 };
+                }
+                """;
+        for (final var method : inspect(source).methods) {
+            for (final var instruction : method.instructions) {
+                assertFalse(instruction instanceof TableSwitchInsnNode);
+                assertFalse(instruction instanceof LookupSwitchInsnNode);
+            }
+        }
+        final Class<?> type = compile(source);
+        assertEquals(10, type.getMethod("choose", int.class).invoke(null, 1));
+        assertEquals(0, type.getField("calls").get(null));
+        assertEquals(20, type.getMethod("choose", int.class).invoke(null, 2));
+        assertEquals(1, type.getField("calls").get(null));
+        assertEquals(30, type.getMethod("choose", int.class).invoke(null, 9));
+        assertEquals(3, type.getField("calls").get(null));
+        assertEquals(10, type.getMethod("throwing", int.class).invoke(null, 1));
+        final var error =
+            assertThrows(
+                InvocationTargetException.class,
+                () -> type.getMethod("throwing", int.class).invoke(null, 9)
+            );
+        assertInstanceOf(ArithmeticException.class, error.getCause());
+    }
+
+    @Test
+    void switchEvaluatesSubjectOnceAndNeverFallsThrough() throws Exception {
+        final Class<?> type = compile("""
+            var calls = 0;
+            var matches = 0;
+            func subject() int { calls++; return 2; }
+            func match() int { matches++; return 2; }
+            const result = switch (subject()) {
+                case 1, match(), match() => 20
+                case 2 => 99
+                else => 0
+            };
+            var side = 0;
+            switch (2) {
+                case 1 => print()
+                case 2 => side++
+                case 3 => "unused"
+            }
+            switch (9) { case 1 => side++ }
+            (switch (9) { case 1 => side++ });
+            const text = switch ("a" + "b") { case "ab" => "yes" else => "no" };
+            const floating = switch (1.5) { case 1.5 => 2.5 else => 0.5 };
+            const boolean = switch (true) { case true => 7 else => 8 };
+            const character = switch ('a') { case 'a' => 9 else => 0 };
+            var updates = 0;
+            for (; updates < 2; switch (updates) { case 0, 1 => updates++ }) {}
+            """);
+        assertEquals(1, type.getField("calls").get(null));
+        assertEquals(1, type.getField("matches").get(null));
+        assertEquals(20, type.getField("result").get(null));
+        assertEquals(1, type.getField("side").get(null));
+        assertEquals("yes", type.getField("text").get(null));
+        assertEquals(2.5f, type.getField("floating").get(null));
+        assertEquals(7, type.getField("boolean").get(null));
+        assertEquals(9, type.getField("character").get(null));
+        assertEquals(2, type.getField("updates").get(null));
+    }
+
+    @Test
+    void switchBlocksYieldToTheirOwnExpression() throws Exception {
+        final Class<?> type = compile("""
+            const result = 10 + switch (2) {
+                case 1 => 0
+                else {
+                    const inner = switch (1) { case 1 { yield 3; } else => 4 };
+                    switch (1) { case 1 { yield "discarded"; } }
+                    if (inner == 3) { yield inner + 2; }
+                    else { yield 0; }
+                }
+            };
+            const widened: float = switch (0) { else => 4 };
+            func early(value: int) int {
+                const n = switch (value) { case 1 { return 8; } else => 2 };
+                return n;
+            }
+            var count = 0;
+            for (var i = 0; i < 4; i++) {
+                switch (i) {
+                    case 0 { continue; }
+                    case 2 { break; }
+                    else => count++
+                }
+            }
+            """);
+        assertEquals(15, type.getField("result").get(null));
+        assertEquals(4.0f, type.getField("widened").get(null));
+        assertEquals(8, type.getMethod("early", int.class).invoke(null, 1));
+        assertEquals(2, type.getMethod("early", int.class).invoke(null, 0));
+        assertEquals(1, type.getField("count").get(null));
+    }
+
+    @Test
+    void switchRejectsInvalidValuePathsAndStillChecksDiscardedBranches() {
+        for (final String source : List.of(
+            "const x = switch (1) { case 1 => 2 };",
+            "const x = switch (1) { case 1 => 2 else => 2.5 };",
+            "const x: float = switch (1) { case 1 => 2 else => 2.5 };",
+            "const x = switch (1) { case 1 { 2; } else => 3 };",
+            "const x = switch (1) { case 1 { if (true) { yield 2; } } else => 3 };",
+            "const x = switch (1) { case 1 => print() else => 3 };",
+            "switch (1) { case 1 => missing }",
+            "switch (1) { case true => 0 }",
+            "switch (print()) {}",
+            "yield 1;",
+            "const x = switch (1) { else { switch (1) { else { yield 1; } } } };"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+        for (final String source : List.of(
+            "switch (1) { else => 0 else => 1 }",
+            "switch (1) { else => 0 case 1 => 1 }",
+            "switch (1) { case 1 2; }",
+            "switch (1) { case 1 => { yield 2; } }",
+            "switch (1) { else => { yield 2; } }",
+            "switch (1) { case 1 => 2"
+        )) {
+            assertThrows(
+                mylang.parser.ParserException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
+    void switchSupportsBlockBranchesWithoutArrows() throws Exception {
+        final Class<?> type = compile("""
+            func choose(value: int) int {
+                return switch (value) {
+                    case 1, 2 { yield 10; }
+                    else { yield 20; }
+                };
+            }
+            var side = 0;
+            switch (9) { else { side++; } }
+            """);
+        assertEquals(10, type.getMethod("choose", int.class).invoke(null, 2));
+        assertEquals(20, type.getMethod("choose", int.class).invoke(null, 9));
+        assertEquals(1, type.getField("side").get(null));
+    }
+
+    @Test
+    void switchExpressionBranchesDoNotRequireSemicolons() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    func choose(value: int) int {
+                        return switch (value) {
+                            case 1, 2 => 10 +
+                                2
+                            case 3 { yield 30; }
+                            case 4 => 40
+                            else => 50
+                        };
+                    }
+                    var side = 0;
+                    switch (2) { case 1 {} else => side++ }
+                    const nested = switch (0) { else => switch (1) { case 1 => 7 else => 8 } };
+                    """
+            );
+        assertEquals(12, type.getMethod("choose", int.class).invoke(null, 2));
+        assertEquals(30, type.getMethod("choose", int.class).invoke(null, 3));
+        assertEquals(40, type.getMethod("choose", int.class).invoke(null, 4));
+        assertEquals(50, type.getMethod("choose", int.class).invoke(null, 9));
+        assertEquals(1, type.getField("side").get(null));
+        assertEquals(7, type.getField("nested").get(null));
+    }
 
     @Test
     void conditionalBranchesRequireMatchingTypesBeforeAssignmentConversion()

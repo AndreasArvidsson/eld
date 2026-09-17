@@ -7,8 +7,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import mylang.parser.ArrayExpression;
 import mylang.parser.ArrayTypeNode;
-import mylang.parser.AstNode;
 import mylang.parser.AssignmentExpression;
+import mylang.parser.AstNode;
 import mylang.parser.BinaryExpression;
 import mylang.parser.BlockItem;
 import mylang.parser.BlockStatement;
@@ -38,6 +38,12 @@ import mylang.parser.PostfixExpression;
 import mylang.parser.Program;
 import mylang.parser.ReturnStatement;
 import mylang.parser.Statement;
+import mylang.parser.SwitchBranch;
+import mylang.parser.SwitchBranchBlockBody;
+import mylang.parser.SwitchBranchBody;
+import mylang.parser.SwitchBranchExpressionBody;
+import mylang.parser.SwitchElseBranch;
+import mylang.parser.SwitchExpression;
 import mylang.parser.TernaryExpression;
 import mylang.parser.TypeNode;
 import mylang.parser.UnaryExpression;
@@ -132,7 +138,7 @@ public final class SemanticAnalyzer {
                     model.setExpressionType(ifExpression, BuiltinType.VOID);
                 }
                 else {
-                    analyzeExpression(
+                    analyzeDiscardedExpression(
                         expressionStatement.expression(),
                         context
                     );
@@ -219,7 +225,7 @@ public final class SemanticAnalyzer {
         }
 
         if (update != null) {
-            analyzeExpression(update, loopContext);
+            analyzeDiscardedExpression(update, loopContext);
         }
 
         analyzeBlockStatement(statement.body(), loopContext);
@@ -390,7 +396,7 @@ public final class SemanticAnalyzer {
         if (yields == null) {
             throw new SemanticException(
                 statement.range(),
-                "A 'yield' statement can only be used within an enclosing if expression"
+                "A 'yield' statement can only be used within an enclosing if or switch expression"
             );
         }
         if (analyzeExpression(statement.value(), context) == BuiltinType.VOID) {
@@ -400,6 +406,124 @@ public final class SemanticAnalyzer {
             );
         }
         yields.add(statement);
+    }
+
+    private void analyzeDiscardedExpression(
+        final Expression expression,
+        final SemanticContext context
+    ) {
+        if (expression instanceof SwitchExpression selection) {
+            analyzeSwitchExpression(selection, context, false);
+            model.setExpressionType(selection, BuiltinType.VOID);
+        }
+        else if (expression instanceof GroupingExpression grouping) {
+            analyzeDiscardedExpression(grouping.expression(), context);
+            model.setExpressionType(
+                grouping,
+                model.getExpressionType(grouping.expression())
+            );
+        }
+        else {
+            analyzeExpression(expression, context);
+        }
+    }
+
+    private Type analyzeSwitchExpression(
+        final SwitchExpression expression,
+        final SemanticContext context,
+        final boolean requireValue
+    ) {
+        final Type subjectType =
+            analyzeExpression(expression.subject(), context);
+        if (subjectType == BuiltinType.VOID) {
+            throw new SemanticException(
+                expression.subject().range(),
+                "A switch subject must produce a value"
+            );
+        }
+        if (requireValue && expression.elseBranch() == null) {
+            throw new SemanticException(
+                expression.range(),
+                "A switch expression requires an else branch"
+            );
+        }
+        final List<SwitchBranchBody> bodies = new ArrayList<>();
+        for (final SwitchBranch branch : expression.branches()) {
+            for (final Expression match : branch.matches()) {
+                final Type matchType = analyzeExpression(match, context);
+                if (!subjectType.equals(matchType)) {
+                    throw new SemanticException(
+                        match.range(),
+                        "Switch match type %s does not match subject type %s",
+                        matchType,
+                        subjectType
+                    );
+                }
+            }
+            bodies.add(branch.body());
+        }
+        final SwitchElseBranch elseBranch = expression.elseBranch();
+        if (elseBranch != null) {
+            bodies.add(elseBranch.body());
+        }
+        Type result = BuiltinType.VOID;
+        for (final SwitchBranchBody body : bodies) {
+            final List<YieldStatement> yields = new ArrayList<>();
+            final SemanticContext branchContext =
+                new SemanticContext(
+                    context.scope(),
+                    context.function(),
+                    requireValue ? 0 : context.loopDepth(),
+                    yields
+                );
+            final List<Expression> values = new ArrayList<>();
+            if (body instanceof SwitchBranchExpressionBody compact) {
+                if (requireValue) {
+                    analyzeExpression(compact.expression(), branchContext);
+                    values.add(compact.expression());
+                }
+                else {
+                    analyzeDiscardedExpression(
+                        compact.expression(),
+                        branchContext
+                    );
+                }
+            }
+            else if (body instanceof SwitchBranchBlockBody block) {
+                analyzeStatement(block.block(), branchContext);
+                if (requireValue && !producesValue(block.block())) {
+                    throw new SemanticException(
+                        body.range(),
+                        "Every branch of a switch expression must yield a value"
+                    );
+                }
+            }
+            for (final YieldStatement statement : yields) {
+                values.add(statement.value());
+            }
+            if (requireValue) {
+                for (final Expression value : values) {
+                    final Type type = model.getExpressionType(value);
+                    if (type == BuiltinType.VOID) {
+                        throw new SemanticException(
+                            value.range(),
+                            "Every branch of a switch expression must produce a value"
+                        );
+                    }
+                    result =
+                        result == BuiltinType.VOID
+                            ? type
+                            : commonBranchType(result, type, value);
+                }
+            }
+        }
+        if (requireValue && result == BuiltinType.VOID) {
+            throw new SemanticException(
+                expression.range(),
+                "A switch expression must produce a value"
+            );
+        }
+        return result;
     }
 
     private Type analyzeIfExpression(
@@ -468,8 +592,9 @@ public final class SemanticAnalyzer {
         final Type right,
         final AstNode node
     ) {
-        if (left.equals(right))
+        if (left.equals(right)) {
             return left;
+        }
         throw new SemanticException(
             node.range(),
             "Incompatible branch types: %s and %s",
@@ -488,8 +613,9 @@ public final class SemanticAnalyzer {
                     if (
                         child instanceof BreakStatement
                             || child instanceof ContinueStatement
-                    )
+                    ) {
                         break;
+                    }
                     if (producesValue(child)) {
                         produced = true;
                         break;
@@ -725,6 +851,8 @@ public final class SemanticAnalyzer {
                 analyzeTernaryExpression(ternary, context);
             case IfExpression conditional ->
                 analyzeIfExpression(conditional, context);
+            case SwitchExpression selection ->
+                analyzeSwitchExpression(selection, context, true);
             // TODO: Implement lambda expression analysis
             // case LambdaExpression lambda ->
             // analyzeLambdaExpression(lambda, context);

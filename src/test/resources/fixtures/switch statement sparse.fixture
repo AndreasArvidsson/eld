@@ -1,0 +1,107 @@
+switch (1) {
+    case 1 {}
+    case 1000 {}
+}
+
+
+--- TOKENS ---
+
+SWITCH (1:1-1:7)
+LEFT_PAREN (1:8-1:9)
+INTEGER_LITERAL "1" (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+LEFT_BRACE (1:12-1:13)
+CASE (2:5-2:9)
+INTEGER_LITERAL "1" (2:10-2:11)
+LEFT_BRACE (2:12-2:13)
+RIGHT_BRACE (2:13-2:14)
+CASE (3:5-3:9)
+INTEGER_LITERAL "1000" (3:10-3:14)
+LEFT_BRACE (3:15-3:16)
+RIGHT_BRACE (3:16-3:17)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:2
+  (ExpressionStatement
+    range: 1:1-4:2
+    (SwitchExpression
+      range: 1:1-4:2
+      (LiteralExpression
+        range: 1:9-1:10
+        kind: int
+        text: "1"
+      )
+      (SwitchBranch
+        range: 2:5-2:14
+        (LiteralExpression
+          range: 2:10-2:11
+          kind: int
+          text: "1"
+        )
+        (SwitchBranchBlockBody
+          range: 2:12-2:14
+          (BlockStatement
+            range: 2:12-2:14
+          )
+        )
+      )
+      (SwitchBranch
+        range: 3:5-3:17
+        (LiteralExpression
+          range: 3:10-3:14
+          kind: int
+          text: "1000"
+        )
+        (SwitchBranchBlockBody
+          range: 3:15-3:17
+          (BlockStatement
+            range: 3:15-3:17
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-4:2 -> void
+  1:9-1:10 -> int
+  2:10-2:11 -> int
+  3:10-3:14 -> int
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    LOOKUPSWITCH
+      1: L0
+      1000: L1
+      default: L2
+   L0
+   FRAME SAME
+    GOTO L2
+   L1
+   FRAME SAME
+    GOTO L2
+   L2
+   FRAME SAME
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

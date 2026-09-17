@@ -124,6 +124,9 @@ public final class Parser {
                     conditional,
                     conditional.range()
                 );
+            case SWITCH:
+                final SwitchExpression selection = parseSwitchExpression(token);
+                return new ExpressionStatement(selection, selection.range());
             default:
                 position--;
                 return parseExpressionStatement();
@@ -301,6 +304,67 @@ public final class Parser {
         final Token semicolon = expect(TokenType.SEMICOLON);
         final Range range = keyword.range().union(semicolon.range());
         return new DoWhileStatement(body, condition, range);
+    }
+
+    private SwitchExpression parseSwitchExpression(final Token keyword) {
+        expect(TokenType.LEFT_PAREN);
+        final Expression subject = parseExpression();
+        expect(TokenType.RIGHT_PAREN);
+        expect(TokenType.LEFT_BRACE);
+        final List<SwitchBranch> branches = new ArrayList<>();
+        SwitchElseBranch elseBranch = null;
+        while (!isAtEnd() && !check(TokenType.RIGHT_BRACE)) {
+            final List<Expression> matches = new ArrayList<>();
+            final Token start = current();
+            final boolean isElseBranch = match(TokenType.ELSE);
+            if (elseBranch != null) {
+                throw new ParserException(
+                    start.range(),
+                    isElseBranch
+                        ? "An else branch has already been defined"
+                        : "The else branch must be last"
+                );
+            }
+            if (!isElseBranch) {
+                expect(TokenType.CASE);
+                matches.add(parseExpression());
+                while (match(TokenType.COMMA)) {
+                    matches.add(parseExpression());
+                }
+            }
+            final SwitchBranchBody body;
+            if (match(TokenType.FAT_ARROW)) {
+                final Expression value = parseExpression();
+                body = new SwitchBranchExpressionBody(value, value.range());
+            }
+            else {
+                final BlockStatement block = parseBlockStatement();
+                body = new SwitchBranchBlockBody(block, block.range());
+            }
+            if (isElseBranch) {
+                elseBranch =
+                    new SwitchElseBranch(
+                        body,
+                        start.range().union(body.range())
+                    );
+            }
+            else {
+                branches.add(
+                    new SwitchBranch(
+                        matches,
+                        body,
+                        start.range().union(body.range())
+                    )
+                );
+            }
+        }
+        final Token close = expect(TokenType.RIGHT_BRACE);
+        return new SwitchExpression(
+            subject,
+            branches,
+            elseBranch,
+            keyword.range().union(close.range())
+        );
     }
 
     private IfExpression parseIfExpression(final Token keyword) {
@@ -510,6 +574,7 @@ public final class Parser {
                 token.range()
             );
             case IF -> parseIfExpression(token);
+            case SWITCH -> parseSwitchExpression(token);
             case LEFT_PAREN -> {
                 if (isLambdaAfterOpenParen()) {
                     yield parseLambdaExpression(token);

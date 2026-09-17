@@ -37,6 +37,7 @@ final class Repl {
                             "class",
                             "print",
                             "if",
+                            "switch",
                             "while",
                             "for",
                             "return",

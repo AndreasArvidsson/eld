@@ -1,0 +1,164 @@
+const foo = switch (1) {
+    case 1 {
+        yield 5;
+    }
+    else => 10
+};
+
+print(foo);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+SWITCH (1:13-1:19)
+LEFT_PAREN (1:20-1:21)
+INTEGER_LITERAL "1" (1:21-1:22)
+RIGHT_PAREN (1:22-1:23)
+LEFT_BRACE (1:24-1:25)
+CASE (2:5-2:9)
+INTEGER_LITERAL "1" (2:10-2:11)
+LEFT_BRACE (2:12-2:13)
+YIELD (3:9-3:14)
+INTEGER_LITERAL "5" (3:15-3:16)
+SEMICOLON (3:16-3:17)
+RIGHT_BRACE (4:5-4:6)
+ELSE (5:5-5:9)
+FAT_ARROW (5:10-5:12)
+INTEGER_LITERAL "10" (5:13-5:15)
+RIGHT_BRACE (6:1-6:2)
+SEMICOLON (6:2-6:3)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "foo" (8:7-8:10)
+RIGHT_PAREN (8:10-8:11)
+SEMICOLON (8:11-8:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:12
+  (VariableDeclaration
+    range: 1:1-6:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    type: null
+    (SwitchExpression
+      range: 1:13-6:2
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: int
+        text: "1"
+      )
+      (SwitchBranch
+        range: 2:5-4:6
+        (LiteralExpression
+          range: 2:10-2:11
+          kind: int
+          text: "1"
+        )
+        (SwitchBranchBlockBody
+          range: 2:12-4:6
+          (BlockStatement
+            range: 2:12-4:6
+            (YieldStatement
+              range: 3:9-3:17
+              (LiteralExpression
+                range: 3:15-3:16
+                kind: int
+                text: "5"
+              )
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 5:5-5:15
+        (SwitchBranchExpressionBody
+          range: 5:13-5:15
+          (LiteralExpression
+            range: 5:13-5:15
+            kind: int
+            text: "10"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:12
+    (CallExpression
+      range: 8:1-8:11
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:10
+        name: "foo"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-6:2 -> int
+  1:21-1:22 -> int
+  2:10-2:11 -> int
+  3:15-3:16 -> int
+  5:13-5:15 -> int
+  8:1-8:6 -> BuiltinFunctionType(print)
+  8:1-8:11 -> void
+  8:7-8:10 -> int
+
+Declarations:
+  1:7-1:10 -> VariableSymbol(name=foo, type=int, mutability=CONST)
+
+References:
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> 1:7-1:10
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static I foo
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    TABLESWITCH
+      1: L0
+      default: L1
+   L0
+   FRAME SAME
+    LDC 5
+    GOTO L2
+   L1
+   FRAME SAME
+    LDC 10
+   L2
+   FRAME SAME1 I
+    PUTSTATIC Test.foo : I
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+5
+

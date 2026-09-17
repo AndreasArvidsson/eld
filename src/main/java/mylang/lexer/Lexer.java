@@ -20,6 +20,8 @@ public class Lexer {
                 Map.entry("class", TokenType.CLASS),
                 Map.entry("func", TokenType.FUNC),
                 Map.entry("if", TokenType.IF),
+                Map.entry("switch", TokenType.SWITCH),
+                Map.entry("case", TokenType.CASE),
                 Map.entry("elif", TokenType.ELIF),
                 Map.entry("else", TokenType.ELSE),
                 Map.entry("do", TokenType.DO),

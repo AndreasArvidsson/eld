@@ -1,0 +1,76 @@
+const foo = switch (1) {
+    case 1 => 5
+    else {}
+};
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+SWITCH (1:13-1:19)
+LEFT_PAREN (1:20-1:21)
+INTEGER_LITERAL "1" (1:21-1:22)
+RIGHT_PAREN (1:22-1:23)
+LEFT_BRACE (1:24-1:25)
+CASE (2:5-2:9)
+INTEGER_LITERAL "1" (2:10-2:11)
+FAT_ARROW (2:12-2:14)
+INTEGER_LITERAL "5" (2:15-2:16)
+ELSE (3:5-3:9)
+LEFT_BRACE (3:10-3:11)
+RIGHT_BRACE (3:11-3:12)
+RIGHT_BRACE (4:1-4:2)
+SEMICOLON (4:2-4:3)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:3
+  (VariableDeclaration
+    range: 1:1-4:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    type: null
+    (SwitchExpression
+      range: 1:13-4:2
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: int
+        text: "1"
+      )
+      (SwitchBranch
+        range: 2:5-2:16
+        (LiteralExpression
+          range: 2:10-2:11
+          kind: int
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 2:15-2:16
+          (LiteralExpression
+            range: 2:15-2:16
+            kind: int
+            text: "5"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 3:5-3:12
+        (SwitchBranchBlockBody
+          range: 3:10-3:12
+          (BlockStatement
+            range: 3:10-3:12
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Every branch of a switch expression must yield a value at 3:10-3:12

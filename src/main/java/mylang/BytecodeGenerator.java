@@ -4,6 +4,7 @@ import static org.objectweb.asm.Opcodes.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.IdentityHashMap;
@@ -11,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Handle;
@@ -596,7 +598,11 @@ public final class BytecodeGenerator {
         private final IdentityHashMap<Symbol, Integer> locals =
             new IdentityHashMap<>();
         private final Deque<Loop> loops = new ArrayDeque<>();
-        private final Deque<Label> yieldTargets = new ArrayDeque<>();
+
+        private record YieldTarget(Label label, boolean discarded) {
+        }
+
+        private final Deque<YieldTarget> yieldTargets = new ArrayDeque<>();
         private final Type returnType;
         private int nextLocal;
 
@@ -685,8 +691,14 @@ public final class BytecodeGenerator {
                     discard(statement.expression());
                 }
                 case YieldStatement statement -> {
-                    expression(statement.value());
-                    method.visitJumpInsn(GOTO, yieldTargets.element());
+                    final YieldTarget target = yieldTargets.element();
+                    if (target.discarded()) {
+                        discard(statement.value());
+                    }
+                    else {
+                        expression(statement.value());
+                    }
+                    method.visitJumpInsn(GOTO, target.label());
                     return false;
                 }
                 case ReturnStatement statement -> {
@@ -770,6 +782,156 @@ public final class BytecodeGenerator {
                 default -> throw unsupported(item, "Unsupported declaration");
             }
             return true;
+        }
+
+        private void selection(final SwitchExpression selection) {
+            final boolean discarded =
+                semanticModel.getExpressionType(selection) == BuiltinType.VOID;
+            final Type subjectType =
+                semanticModel.getEffectiveType(selection.subject());
+            if (
+                subjectType == BuiltinType.INT
+                    && integerSelection(selection, discarded)
+            ) {
+                return;
+            }
+            final int subject = nextLocal++;
+            expression(selection.subject());
+            method.visitVarInsn(storeOpcode(subjectType), subject);
+            final Label end = new Label();
+            yieldTargets.push(new YieldTarget(end, discarded));
+            for (final SwitchBranch branch : selection.branches()) {
+                final Label body = new Label();
+                final Label next = new Label();
+                final List<Expression> matches = branch.matches();
+                if (matches != null) {
+                    for (final Expression match : matches) {
+                        method.visitVarInsn(loadOpcode(subjectType), subject);
+                        expression(match);
+                        if (subjectType == BuiltinType.STRING) {
+                            method.visitMethodInsn(
+                                INVOKESTATIC,
+                                "java/util/Objects",
+                                "equals",
+                                "(Ljava/lang/Object;Ljava/lang/Object;)Z",
+                                false
+                            );
+                            method.visitJumpInsn(IFNE, body);
+                        }
+                        else if (subjectType == BuiltinType.FLOAT) {
+                            method.visitInsn(FCMPL);
+                            method.visitJumpInsn(IFEQ, body);
+                        }
+                        else {
+                            method.visitJumpInsn(
+                                reference(subjectType) ? IF_ACMPEQ : IF_ICMPEQ,
+                                body
+                            );
+                        }
+                    }
+                }
+                method.visitJumpInsn(GOTO, next);
+                method.visitLabel(body);
+                if (selectionBody(branch.body(), discarded)) {
+                    method.visitJumpInsn(GOTO, end);
+                }
+                method.visitLabel(next);
+            }
+            final SwitchElseBranch otherwise = selection.elseBranch();
+            if (otherwise != null) {
+                selectionBody(otherwise.body(), discarded);
+            }
+            method.visitLabel(end);
+            yieldTargets.pop();
+        }
+
+        private boolean integerSelection(
+            final SwitchExpression selection,
+            final boolean discarded
+        ) {
+            final TreeMap<Integer, Label> targets = new TreeMap<>();
+            final List<Label> bodies = new ArrayList<>();
+            for (final SwitchBranch branch : selection.branches()) {
+                final Label body = new Label();
+                bodies.add(body);
+                for (final Expression match : branch.matches()) {
+                    final Object value = constantValue(match);
+                    if (!(value instanceof Integer key)) {
+                        return false;
+                    }
+                    // Duplicate matches still select the first branch in source order.
+                    targets.putIfAbsent(key, body);
+                }
+            }
+            if (targets.isEmpty()) {
+                return false;
+            }
+            final Label end = new Label();
+            final Label otherwise = new Label();
+            expression(selection.subject());
+            final int low = targets.firstKey();
+            final int high = targets.lastKey();
+            final long span = (long) high - low + 1;
+            // Both instructions have the same padding. Choose the smaller encoding,
+            // using long arithmetic so extreme integer keys cannot overflow the range.
+            if (12L + 4L * span <= 8L + 8L * targets.size()) {
+                final Label[] labels = new Label[(int) span];
+                Arrays.fill(labels, otherwise);
+                targets.forEach(
+                    (key, label) -> labels[(int) ((long) key - low)] = label
+                );
+                method.visitTableSwitchInsn(low, high, otherwise, labels);
+            }
+            else {
+                final int[] keys =
+                    targets.keySet()
+                        .stream()
+                        .mapToInt(Integer::intValue)
+                        .toArray();
+                method.visitLookupSwitchInsn(
+                    otherwise,
+                    keys,
+                    targets.values().toArray(Label[]::new)
+                );
+            }
+            yieldTargets.push(new YieldTarget(end, discarded));
+            for (int index = 0; index < selection.branches().size(); index++) {
+                method.visitLabel(bodies.get(index));
+                if (
+                    selectionBody(
+                        selection.branches().get(index).body(),
+                        discarded
+                    )
+                ) {
+                    method.visitJumpInsn(GOTO, end);
+                }
+            }
+            method.visitLabel(otherwise);
+            final SwitchElseBranch elseBranch = selection.elseBranch();
+            if (elseBranch != null) {
+                selectionBody(elseBranch.body(), discarded);
+            }
+            method.visitLabel(end);
+            yieldTargets.pop();
+            return true;
+        }
+
+        private boolean selectionBody(
+            final SwitchBranchBody body,
+            final boolean discarded
+        ) {
+            return switch (body) {
+                case SwitchBranchExpressionBody compact -> {
+                    if (discarded) {
+                        discard(compact.expression());
+                    }
+                    else {
+                        expression(compact.expression());
+                    }
+                    yield true;
+                }
+                case SwitchBranchBlockBody block -> item(block.block());
+            };
         }
 
         private boolean conditional(
@@ -1013,10 +1175,11 @@ public final class BytecodeGenerator {
                 }
                 case IfExpression conditional -> {
                     final Label end = new Label();
-                    yieldTargets.push(end);
+                    yieldTargets.push(new YieldTarget(end, false));
                     conditional(conditional, end);
                     yieldTargets.pop();
                 }
+                case SwitchExpression selection -> selection(selection);
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case ArrayExpression array -> array(array);

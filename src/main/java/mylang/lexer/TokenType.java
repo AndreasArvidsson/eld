@@ -17,6 +17,8 @@ public enum TokenType {
     RETURN,
     YIELD,
     IF,
+    SWITCH,
+    CASE,
     ELIF,
     ELSE,
     DO,
