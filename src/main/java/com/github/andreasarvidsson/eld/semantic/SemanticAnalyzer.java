@@ -11,6 +11,7 @@ import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
+import com.github.andreasarvidsson.eld.parser.BinaryOperator;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
@@ -26,10 +27,12 @@ import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.ForEachStatement;
 import com.github.andreasarvidsson.eld.parser.ForStatement;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
+import com.github.andreasarvidsson.eld.parser.FunctionTypeNode;
 import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
+import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 import com.github.andreasarvidsson.eld.parser.Mutability;
@@ -51,6 +54,7 @@ import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.UnaryExpression;
 import com.github.andreasarvidsson.eld.parser.UnaryOperator;
+import com.github.andreasarvidsson.eld.parser.UnionTypeNode;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.WhileStatement;
 import com.github.andreasarvidsson.eld.parser.YieldStatement;
@@ -118,9 +122,9 @@ public final class SemanticAnalyzer {
                 analyzeFunctionDeclaration(functionDeclaration, context);
             case ClassDeclaration classDeclaration ->
                 analyzeClassDeclaration(classDeclaration, context);
-            default -> throw new SemanticException(
+            case IdentifierDeclaration ignored -> throw new SemanticException(
                 declaration.range(),
-                "Unsupported declaration: %s",
+                "Unexpected declaration: %s",
                 declaration
             );
         }
@@ -166,11 +170,6 @@ public final class SemanticAnalyzer {
                 analyzeReturnStatement(returnStatement, context);
             case BlockStatement blockStatement ->
                 analyzeBlockStatement(blockStatement, context);
-            default -> throw new SemanticException(
-                statement.range(),
-                "Unsupported statement: %s",
-                statement
-            );
         }
     }
 
@@ -455,7 +454,15 @@ public final class SemanticAnalyzer {
         for (final SwitchBranch branch : expression.branches()) {
             for (final Expression match : branch.matches()) {
                 final Type matchType = analyzeExpression(match, context);
-                if (!subjectType.equals(matchType)) {
+                if (
+                    !subjectType.equals(matchType)
+                        && !(subjectType instanceof UnionType
+                            && resolveAssignType(
+                                matchType,
+                                subjectType,
+                                match
+                            ) != null)
+                ) {
                     throw new SemanticException(
                         match.range(),
                         "Switch match type %s does not match subject type %s",
@@ -668,7 +675,7 @@ public final class SemanticAnalyzer {
             );
         }
 
-        final Type valueType = analyzeExpression(value, context);
+        final Type valueType = analyzeExpression(value, context, returnType);
         final @Nullable Type resolvedType =
             resolveAssignType(valueType, returnType, value);
 
@@ -690,7 +697,8 @@ public final class SemanticAnalyzer {
         final Expression initializer = declaration.initializer();
         final Type declaredType =
             typeNode != null ? resolveType(typeNode) : null;
-        Type initializerType = analyzeExpression(initializer, context);
+        Type initializerType =
+            analyzeExpression(initializer, context, declaredType);
 
         if (initializerType == BuiltinType.VOID) {
             throw new SemanticException(
@@ -778,11 +786,29 @@ public final class SemanticAnalyzer {
                 model.setResolvedType(array, type);
                 yield type;
             }
-            default -> throw new SemanticException(
-                typeNode.range(),
-                "Unsupported type: %s",
-                typeNode
-            );
+            case FunctionTypeNode function -> {
+                final TypeNode returnTypeNode = function.returnType();
+                final Type returnType =
+                    returnTypeNode == null
+                        ? BuiltinType.VOID
+                        : resolveType(returnTypeNode);
+                final List<Type> parameterTypes = new ArrayList<>();
+                for (final TypeNode paramTypeNode : function.parameterTypes()) {
+                    parameterTypes.add(resolveType(paramTypeNode));
+                }
+                final Type type = new FunctionType(parameterTypes, returnType);
+                model.setResolvedType(function, type);
+                yield type;
+            }
+            case UnionTypeNode union -> {
+                final List<Type> memberTypes = new ArrayList<>();
+                for (final TypeNode memberTypeNode : union.memberTypes()) {
+                    memberTypes.add(resolveType(memberTypeNode));
+                }
+                final Type type = UnionType.of(memberTypes);
+                model.setResolvedType(union, type);
+                yield type;
+            }
         };
     }
 
@@ -797,6 +823,33 @@ public final class SemanticAnalyzer {
 
         if (from.equals(to)) {
             return from;
+        }
+
+        if (to instanceof UnionType union) {
+            if (union.contains(from)) {
+                model.setUnionConversion(fromExpression, from, union);
+                return to;
+            }
+            // Converting individual members of an existing union would require runtime dispatch.
+            if (from instanceof UnionType) {
+                return null;
+            }
+            // Exact members take priority above; numeric alternatives use a stable order.
+            for (final BuiltinType member : BuiltinType.values()) {
+                if (
+                    from instanceof BuiltinType
+                        && union.memberTypes().contains(member)
+                        && resolveAssignType(
+                            from,
+                            member,
+                            fromExpression
+                        ) != null
+                ) {
+                    model.setUnionConversion(fromExpression, member, union);
+                    return to;
+                }
+            }
+            return null;
         }
 
         if (
@@ -876,6 +929,85 @@ public final class SemanticAnalyzer {
 
     private Type analyzeExpression(
         final Expression expression,
+        final SemanticContext context,
+        final @Nullable Type expected
+    ) {
+        if (
+            expected instanceof UnionType
+                && expression instanceof TernaryExpression ternary
+        ) {
+            if (
+                analyzeExpression(
+                    ternary.condition(),
+                    context
+                ) != BuiltinType.BOOL
+            ) {
+                throw new SemanticException(
+                    ternary.condition().range(),
+                    "Ternary condition must be bool"
+                );
+            }
+            for (final Expression branch : List
+                .of(ternary.thenBranch(), ternary.elseBranch())) {
+                final Type actual =
+                    analyzeExpression(branch, context, expected);
+                if (resolveAssignType(actual, expected, branch) == null) {
+                    throw new SemanticException(
+                        branch.range(),
+                        "Cannot assign %s to %s",
+                        actual,
+                        expected
+                    );
+                }
+            }
+            model.setExpressionType(ternary, expected);
+            return expected;
+        }
+        if (
+            expected instanceof ArrayType target
+                && expression instanceof ArrayExpression array
+                && containsUnion(target.elementType())
+        ) {
+            for (final Expression element : array.elements()) {
+                final Type actual =
+                    analyzeExpression(element, context, target.elementType());
+                if (
+                    resolveAssignType(
+                        actual,
+                        target.elementType(),
+                        element
+                    ) == null
+                ) {
+                    throw new SemanticException(
+                        element.range(),
+                        "Cannot assign %s to %s",
+                        actual,
+                        target.elementType()
+                    );
+                }
+            }
+            model.setExpressionType(array, target);
+            return target;
+        }
+        if (
+            expression instanceof GroupingExpression grouping
+                && expected != null
+        ) {
+            final Type type =
+                analyzeExpression(grouping.expression(), context, expected);
+            model.setExpressionType(grouping, type);
+            return type;
+        }
+        return analyzeExpression(expression, context);
+    }
+
+    private static boolean containsUnion(final Type type) {
+        return type instanceof UnionType || (type instanceof ArrayType array
+            && containsUnion(array.elementType()));
+    }
+
+    private Type analyzeExpression(
+        final Expression expression,
         final SemanticContext context
     ) {
 
@@ -907,13 +1039,12 @@ public final class SemanticAnalyzer {
             case SwitchExpression selection ->
                 analyzeSwitchExpression(selection, context, true);
             // TODO: Implement lambda expression analysis
-            // case LambdaExpression lambda ->
-            // analyzeLambdaExpression(lambda, context);
-            default -> throw new SemanticException(
-                expression.range(),
-                "Unsupported expression: %s",
-                expression
-            );
+            case LambdaExpression lambda ->
+                // analyzeLambdaExpression(lambda, context);
+                throw new SemanticException(
+                    lambda.range(),
+                    "Lambda expressions are not yet supported"
+                );
         };
 
         model.setExpressionType(expression, type);
@@ -961,8 +1092,8 @@ public final class SemanticAnalyzer {
         }
         for (int i = 0; i < call.arguments().size(); i++) {
             final Expression argument = call.arguments().get(i);
-            final Type actual = analyzeExpression(argument, context);
             final Type expected = function.parameterTypes().get(i);
+            final Type actual = analyzeExpression(argument, context, expected);
             if (resolveAssignType(actual, expected, argument) == null) {
                 throw new SemanticException(
                     argument.range(),
@@ -1039,7 +1170,8 @@ public final class SemanticAnalyzer {
     ) {
         final Type target = analyzeExpression(assignment.target(), context);
         requireWritable(assignment.target());
-        final Type value = analyzeExpression(assignment.value(), context);
+        final Type value =
+            analyzeExpression(assignment.value(), context, target);
         if (resolveAssignType(value, target, assignment.value()) == null) {
             throw new SemanticException(
                 assignment.range(),
@@ -1097,13 +1229,35 @@ public final class SemanticAnalyzer {
     ) {
         final Type leftType = analyzeExpression(binary.left(), context);
         final Type rightType = analyzeExpression(binary.right(), context);
+        boolean unionEquality = false;
+        if (
+            binary.operator() == BinaryOperator.EQUAL
+                || binary.operator() == BinaryOperator.NOT_EQUAL
+        ) {
+            if (leftType instanceof UnionType) {
+                unionEquality =
+                    resolveAssignType(
+                        rightType,
+                        leftType,
+                        binary.right()
+                    ) != null;
+            }
+            if (!unionEquality && rightType instanceof UnionType) {
+                unionEquality =
+                    resolveAssignType(
+                        leftType,
+                        rightType,
+                        binary.left()
+                    ) != null;
+            }
+        }
         Type resolvedType = leftType;
         final boolean compatibleNumbers =
             numeric(leftType) && numeric(rightType);
         final boolean valid = switch (binary.operator()) {
             case AND, OR ->
                 leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
-            case EQUAL, NOT_EQUAL -> compatibleNumbers
+            case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
                 || (leftType.equals(rightType) && leftType != BuiltinType.VOID);
             case ADD -> compatibleNumbers || (leftType == BuiltinType.STRING
                 && rightType == BuiltinType.STRING);

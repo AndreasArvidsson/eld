@@ -68,9 +68,11 @@ class CommandLineTest {
             const chars: [char] = ['h', 'i']; print(chars);
             const strings = ["foo", "bar"]; print(strings); print(strings[-1]);
             const nulls: [null] = [null, null]; print(nulls[:]);
+            var optional: i32 | null = null; print(optional);
+            optional = 10; print(optional);
             """);
         final String expected =
-            "hello\n[2, 3]\n[7]\n[7]\n[9000000000]\n[1.5]\n[2.5]\n[true, false]\n[h, i]\n[foo, bar]\nbar\n[null, null]\n";
+            "hello\n[2, 3]\n[7]\n[7]\n[9000000000]\n[1.5]\n[2.5]\n[true, false]\n[h, i]\n[foo, bar]\nbar\n[null, null]\nnull\n10\n";
         assertEquals(
             expected,
             capture(

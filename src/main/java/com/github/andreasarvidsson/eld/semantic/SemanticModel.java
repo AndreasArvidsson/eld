@@ -19,6 +19,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> conversionTypes =
         new IdentityHashMap<>();
+    private final IdentityHashMap<Expression, Type> unionMemberTypes =
+        new IdentityHashMap<>();
     private final IdentityHashMap<TypeNode, Type> resolvedTypes =
         new IdentityHashMap<>();
     private final IdentityHashMap<IdentifierDeclaration, Symbol> declarations =
@@ -55,6 +57,20 @@ public final class SemanticModel {
 
     public void setResolvedType(final TypeNode typeNode, final Type type) {
         resolvedTypes.put(typeNode, type);
+    }
+
+    public void setUnionConversion(
+        final Expression expression,
+        final Type member,
+        final UnionType union
+    ) {
+        unionMemberTypes.put(expression, member);
+        setConversionType(expression, union);
+    }
+
+    public Type getUnionMemberType(final Expression expression) {
+        return unionMemberTypes
+            .getOrDefault(expression, getExpressionType(expression));
     }
 
     public Type getResolvedType(final TypeNode typeNode) {

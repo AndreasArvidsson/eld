@@ -30,6 +30,7 @@ import com.github.andreasarvidsson.eld.semantic.SemanticModel;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
 import com.github.andreasarvidsson.eld.semantic.Symbol;
 import com.github.andreasarvidsson.eld.semantic.Type;
+import com.github.andreasarvidsson.eld.semantic.UnionType;
 
 /** Generates a Java 21 module named Test and its declared classes. */
 public final class BytecodeGenerator {
@@ -358,6 +359,9 @@ public final class BytecodeGenerator {
     // null means this expression must be evaluated at runtime. In particular,
     // JVM ConstantValue cannot represent null, arrays, or function references.
     private @Nullable Object constantValue(final Expression expression) {
+        if (semanticModel.getEffectiveType(expression) instanceof UnionType) {
+            return null;
+        }
         final Object value = switch (expression) {
             case LiteralExpression literal -> switch (literal.kind()) {
                 case INT -> integerConstant(literal);
@@ -549,9 +553,45 @@ public final class BytecodeGenerator {
             };
             case ArrayType array ->
                 RuntimeAbi.array(array.elementType()).descriptor;
+            case UnionType union -> unionDescriptor(union);
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
             case ClassType ignored -> "Ljava/lang/Object;";
+        };
+    }
+
+    private static String unionDescriptor(final UnionType union) {
+        final List<Type> members =
+            union.memberTypes()
+                .stream()
+                .filter(member -> member != BuiltinType.NULL)
+                .distinct()
+                .toList();
+        if (members.size() != 1) {
+            return "Ljava/lang/Object;";
+        }
+        return boxedDescriptor(members.getFirst());
+    }
+
+    private static String boxedDescriptor(final Type type) {
+        final String boxed = boxedOwner(type);
+        return boxed == null ? descriptor(type) : "L" + boxed + ";";
+    }
+
+    private static @Nullable String boxedOwner(final Type type) {
+        if (!(type instanceof BuiltinType builtin)) {
+            return null;
+        }
+        return switch (builtin) {
+            case I8 -> "java/lang/Byte";
+            case I16 -> "java/lang/Short";
+            case I32 -> "java/lang/Integer";
+            case I64 -> "java/lang/Long";
+            case F32 -> "java/lang/Float";
+            case F64 -> "java/lang/Double";
+            case BOOL -> "java/lang/Boolean";
+            case CHAR -> "java/lang/Character";
+            default -> null;
         };
     }
 
@@ -560,6 +600,7 @@ public final class BytecodeGenerator {
             type instanceof ArrayType || type instanceof FunctionType
                 || type instanceof BuiltinFunctionType
                 || type instanceof ClassType
+                || type instanceof UnionType
         ) {
             return "Ljava/lang/Object;";
         }
@@ -578,7 +619,8 @@ public final class BytecodeGenerator {
     }
 
     private static boolean reference(final Type type) {
-        return type instanceof BuiltinFunctionType || type instanceof ArrayType
+        return type instanceof UnionType || type instanceof BuiltinFunctionType
+            || type instanceof ArrayType
             || type instanceof FunctionType
             || type == BuiltinType.STRING
             || type == BuiltinType.NULL;
@@ -849,7 +891,10 @@ public final class BytecodeGenerator {
                     for (final Expression match : matches) {
                         method.visitVarInsn(loadOpcode(subjectType), subject);
                         expression(match);
-                        if (subjectType == BuiltinType.STRING) {
+                        if (
+                            subjectType == BuiltinType.STRING
+                                || subjectType instanceof UnionType
+                        ) {
                             method.visitMethodInsn(
                                 INVOKESTATIC,
                                 "java/util/Objects",
@@ -1174,6 +1219,26 @@ public final class BytecodeGenerator {
                 expression instanceof UnaryExpression unary
                     && SemanticAnalyzer.integerLiteral(unary) != null
             ) {
+                if (
+                    semanticModel
+                        .getEffectiveType(expression) instanceof UnionType
+                ) {
+                    final var value =
+                        Objects.requireNonNull(
+                            SemanticAnalyzer.integerLiteral(unary)
+                        );
+                    if (
+                        semanticModel
+                            .getExpressionType(expression) == BuiltinType.I64
+                    ) {
+                        method.visitLdcInsn(value.longValueExact());
+                    }
+                    else {
+                        method.visitLdcInsn(value.intValueExact());
+                    }
+                    convertExpression(expression);
+                    return;
+                }
                 method
                     .visitLdcInsn(Objects.requireNonNull(constantValue(unary)));
                 return;
@@ -1246,10 +1311,51 @@ public final class BytecodeGenerator {
                     "Lambda generation requires closure analysis"
                 );
             }
-            convert(
-                semanticModel.getExpressionType(expression),
-                semanticModel.getEffectiveType(expression)
-            );
+            convertExpression(expression);
+        }
+
+        private void convertExpression(final Expression expression) {
+            final Type from = semanticModel.getExpressionType(expression);
+            final Type to = semanticModel.getEffectiveType(expression);
+            if (to instanceof UnionType) {
+                final Type member =
+                    semanticModel.getUnionMemberType(expression);
+                if (!(from instanceof UnionType)) {
+                    convert(from, member);
+                    box(member);
+                }
+                final String target = descriptor(to);
+                if (
+                    !target.equals("Ljava/lang/Object;")
+                        && !boxedDescriptor(member).equals(target)
+                        && !(unwrap(
+                            expression
+                        ) instanceof LiteralExpression literal
+                            && literal.kind() == LiteralKind.NULL)
+                ) {
+                    // A null-typed variable has an Object descriptor even though its only value is null.
+                    method.visitTypeInsn(
+                        CHECKCAST,
+                        org.objectweb.asm.Type.getType(target).getInternalName()
+                    );
+                }
+            }
+            else {
+                convert(from, to);
+            }
+        }
+
+        private void box(final Type type) {
+            final String owner = boxedOwner(type);
+            if (owner != null) {
+                method.visitMethodInsn(
+                    INVOKESTATIC,
+                    owner,
+                    "valueOf",
+                    "(" + descriptor(type) + ")L" + owner + ";",
+                    false
+                );
+            }
         }
 
         private void narrow(final Type type) {
@@ -1381,7 +1487,7 @@ public final class BytecodeGenerator {
 
         private void array(final ArrayExpression array) {
             final Type element =
-                ((ArrayType) semanticModel.getEffectiveType(array))
+                ((ArrayType) semanticModel.getExpressionType(array))
                     .elementType();
             final RuntimeAbi.ArrayKind runtime = RuntimeAbi.array(element);
             method.visitTypeInsn(NEW, runtime.owner);
@@ -1626,7 +1732,9 @@ public final class BytecodeGenerator {
                             "Unsupported reference comparison"
                         );
                     }
-                    if (type == BuiltinType.STRING) {
+                    if (
+                        type == BuiltinType.STRING || type instanceof UnionType
+                    ) {
                         method.visitMethodInsn(
                             INVOKESTATIC,
                             "java/util/Objects",

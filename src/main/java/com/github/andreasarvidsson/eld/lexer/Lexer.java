@@ -54,6 +54,7 @@ public class Lexer {
                 Map.entry('?', TokenType.QUESTION),
                 Map.entry(';', TokenType.SEMICOLON),
                 Map.entry(',', TokenType.COMMA),
+                Map.entry('|', TokenType.PIPE),
                 Map.entry('(', TokenType.LEFT_PAREN),
                 Map.entry(')', TokenType.RIGHT_PAREN),
                 Map.entry('{', TokenType.LEFT_BRACE),

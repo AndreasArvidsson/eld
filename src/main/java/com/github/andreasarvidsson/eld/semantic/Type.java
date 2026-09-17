@@ -1,5 +1,5 @@
 package com.github.andreasarvidsson.eld.semantic;
 
 public sealed interface Type permits BuiltinFunctionType, BuiltinType,
-    ArrayType, FunctionType, ClassType {
+    ArrayType, FunctionType, ClassType, UnionType {
 }

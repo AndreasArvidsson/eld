@@ -63,6 +63,7 @@ public enum TokenType {
     QUESTION,
     SEMICOLON,
     COMMA,
+    PIPE,
 
     EOF
 }

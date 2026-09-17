@@ -55,6 +55,128 @@ import com.github.andreasarvidsson.eld.runtime.EldCharArray;
 import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
+    @Test
+    void nullableConversionsOnlyCastNullValuesLoadedAsObjects()
+        throws Exception {
+        final String source = """
+            const nothing = null;
+            func literal() i32 | null { return null; }
+            func grouped() i32 | null { return ((null)); }
+            func loaded() i32 | null { return nothing; }
+            """;
+        final var program = new Parser(new Lexer(source).getTokens()).parse();
+        final byte[] bytes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generate();
+        BytecodeUtil.verify(bytes);
+        final ClassNode node = new ClassNode();
+        new ClassReader(bytes).accept(node, 0);
+        for (final var method : node.methods) {
+            if (
+                !List.of("literal", "grouped", "loaded").contains(method.name)
+            ) {
+                continue;
+            }
+            int casts = 0;
+            for (final var instruction : method.instructions) {
+                if (instruction.getOpcode() == Opcodes.CHECKCAST) {
+                    casts++;
+                }
+            }
+            assertEquals(
+                method.name.equals("loaded") ? 1 : 0,
+                casts,
+                method.name
+            );
+        }
+        final Class<?> type = compile(program);
+        assertNull(type.getMethod("literal").invoke(null));
+        assertNull(type.getMethod("grouped").invoke(null));
+        assertNull(type.getMethod("loaded").invoke(null));
+    }
+
+    @Test
+    void nullableUnionsUsePreciseReferenceDescriptors() throws Exception {
+        final String[] members =
+            {"i8", "i16", "i32", "i64", "f32", "f64", "bool", "char", "string",
+                    "[i32]", "[string]"};
+        final String[] literals =
+            {"7", "7", "7", "7", "1.5", "2.5", "true", "'x'", "\"hi\"",
+                    "[1, 2]", "[\"hi\"]"};
+        final Class<?>[] representations =
+            {Byte.class, Short.class, Integer.class, Long.class, Float.class,
+                    Double.class, Boolean.class, Character.class, String.class,
+                    EldIntArray.class, EldObjectArray.class};
+        for (int i = 0; i < members.length; i++) {
+            final Class<?> type =
+                compile(
+                    """
+                        const nothing = null;
+                        var absent: %s | null = nothing;
+                        var value: %s | null = %s;
+                        var reordered: null | %s = value;
+                        func identity(input: %s | null) %s | null { return input; }
+                        const callback = identity;
+                        var called = callback(value);
+                        var calledNull = identity(nothing);
+                        var elements: [%s | null] = [value, nothing];
+                        var loaded = elements[0];
+                        var loadedNull = elements[1];
+                        var last: %s | null = nothing;
+                        for (element : elements) { last = element; }
+                        """
+                        .formatted(
+                            members[i],
+                            members[i],
+                            literals[i],
+                            members[i],
+                            members[i],
+                            members[i],
+                            members[i],
+                            members[i]
+                        )
+                );
+            final Class<?> representation = representations[i];
+            for (final String field : new String[] {"absent", "value",
+                    "reordered", "called", "calledNull", "loaded", "loadedNull",
+                    "last"}) {
+                assertEquals(
+                    representation,
+                    type.getField(field).getType(),
+                    field
+                );
+            }
+            assertEquals(
+                representation,
+                type.getMethod("identity", representation).getReturnType()
+            );
+            assertNull(type.getField("absent").get(null));
+            assertNull(type.getField("calledNull").get(null));
+            assertNull(type.getField("loadedNull").get(null));
+            assertNull(type.getField("last").get(null));
+            final Object value = type.getField("value").get(null);
+            assertInstanceOf(representation, value);
+            assertSame(value, type.getField("called").get(null));
+            assertSame(value, type.getField("loaded").get(null));
+        }
+        final Class<?> type = compile("""
+            var value: i32 | null = 1000;
+            var general: i32 | string | null = value;
+            var numbers: i32 | i64 | null = value;
+            var onlyNull: null | null = null;
+            var text: string | null = onlyNull;
+            var equal = general == value;
+            """);
+        assertEquals(Object.class, type.getField("general").getType());
+        assertEquals(Object.class, type.getField("numbers").getType());
+        assertEquals(1000, type.getField("general").get(null));
+        assertEquals(String.class, type.getField("text").getType());
+        assertNull(type.getField("text").get(null));
+        assertEquals(true, type.getField("equal").get(null));
+    }
+
     private static int[] intValues(final Object value) {
         final EldIntArray array = assertInstanceOf(EldIntArray.class, value);
         final int[] result = new int[array.size()];
@@ -588,8 +710,7 @@ class BytecodeGeneratorTest {
                             i == 3 ? LiteralKind.FLOAT : LiteralKind.INT,
                             assigned[i],
                             range
-                        ),
-                        range
+                        )
                     ),
                     range
                 )
@@ -2100,8 +2221,7 @@ class BytecodeGeneratorTest {
         final AssignmentExpression assignment =
             new AssignmentExpression(
                 first,
-                new LiteralExpression(LiteralKind.INT, "12", range),
-                range
+                new LiteralExpression(LiteralKind.INT, "12", range)
             );
         final Program program =
             new Program(

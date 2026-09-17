@@ -181,13 +181,12 @@ public final class Parser {
                 final Token paramName = expect(TokenType.IDENTIFIER);
                 expect(TokenType.COLON);
                 final TypeNode type = parseType();
-                final Range paramRange = paramName.range().union(type.range());
                 final IdentifierDeclaration id =
                     new IdentifierDeclaration(
                         paramName.text(),
                         paramName.range()
                     );
-                parameters.add(new Parameter(id, type, paramRange));
+                parameters.add(new Parameter(id, type));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
@@ -247,8 +246,7 @@ public final class Parser {
                     : Mutability.CONST;
             final VariableDeclaration declaration =
                 parseVariableDeclaration(declarationKeyword, mutability);
-            initializer =
-                new DeclarationStatement(declaration, declaration.range());
+            initializer = new DeclarationStatement(declaration);
         }
         else {
             initializer = parseExpressionStatement();
@@ -332,11 +330,11 @@ public final class Parser {
             final SwitchBranchBody body;
             if (match(TokenType.ARROW)) {
                 final Expression value = parseExpression();
-                body = new SwitchBranchExpressionBody(value, value.range());
+                body = new SwitchBranchExpressionBody(value);
             }
             else {
                 final BlockStatement block = parseBlockStatement();
-                body = new SwitchBranchBlockBody(block, block.range());
+                body = new SwitchBranchBlockBody(block);
             }
             if (isElseBranch) {
                 elseBranch =
@@ -426,6 +424,17 @@ public final class Parser {
     }
 
     private TypeNode parseType() {
+        final List<TypeNode> members = new ArrayList<>();
+        members.add(parseTypeMember());
+        while (match(TokenType.PIPE)) {
+            members.add(parseTypeMember());
+        }
+        return members.size() == 1
+            ? members.getFirst()
+            : new UnionTypeNode(members);
+    }
+
+    private TypeNode parseTypeMember() {
         final Token leftBracket = matchToken(TokenType.LEFT_BRACKET);
         if (leftBracket != null) {
             final TypeNode elementType = parseType();
@@ -444,11 +453,7 @@ public final class Parser {
         final Expression left = parseTernaryExpression();
         if (match(TokenType.EQUAL)) {
             final Expression value = parseExpression();
-            return new AssignmentExpression(
-                left,
-                value,
-                left.range().union(value.range())
-            );
+            return new AssignmentExpression(left, value);
         }
         return left;
     }
@@ -461,12 +466,7 @@ public final class Parser {
         final Expression thenBranch = parseExpression();
         expect(TokenType.COLON);
         final Expression elseBranch = parseExpression();
-        return new TernaryExpression(
-            condition,
-            thenBranch,
-            elseBranch,
-            condition.range().union(elseBranch.range())
-        );
+        return new TernaryExpression(condition, thenBranch, elseBranch);
     }
 
     private Expression parseBinaryExpression(final int minimumPrecedence) {
@@ -480,13 +480,7 @@ public final class Parser {
             advance();
             final Expression right =
                 parseBinaryExpression(precedence(operator) + 1);
-            left =
-                new BinaryExpression(
-                    left,
-                    operator,
-                    right,
-                    left.range().union(right.range())
-                );
+            left = new BinaryExpression(left, operator, right);
         }
         return left;
     }
@@ -686,13 +680,9 @@ public final class Parser {
                 final Token name = expect(TokenType.IDENTIFIER);
                 final TypeNode type =
                     match(TokenType.COLON) ? parseType() : null;
-                final Range range =
-                    type == null
-                        ? name.range()
-                        : name.range().union(type.range());
                 final IdentifierDeclaration id =
                     new IdentifierDeclaration(name.text(), name.range());
-                parameters.add(new Parameter(id, type, range));
+                parameters.add(new Parameter(id, type));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);

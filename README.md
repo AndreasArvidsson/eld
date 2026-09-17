@@ -81,6 +81,23 @@ lose precision, just as in Java.
 
 ## Array runtime
 
+Union types use `|`, for example `var value: i32 | null = null;`.
+A member value can be assigned to its union, and a union can widen to another
+union containing all its members. Member order and duplicates do not change
+type identity. Primitive members are boxed at union boundaries; reference
+members retain their runtime representation. Equality compares boxed values
+with their runtime types, so an `i32` member and an `i64` member remain distinct.
+Unions work in parameters, return types, and array elements such as
+`[i32 | null]`; `[i32] | null` instead describes an optional array.
+Nullable unions use the member's reference representation: `string | null`
+uses `String`, `[i32] | null` uses `EldIntArray`, and `i32 | null` uses
+`Integer`. Unions with multiple distinct non-null members use `Object`.
+Mutable arrays remain invariant. Union values cannot implicitly narrow to one
+member, and flow-sensitive narrowing is not implemented. Arithmetic still
+requires a statically numeric type. Heterogeneous array literals require an
+explicit union element type; unrelated branch types are not automatically
+combined into inferred unions.
+
 Primitive arrays use specialized growable classes in
 `com.github.andreasarvidsson.eld.runtime`, with primitive backing storage
 and a separate logical size. The `EldArray` base class shares size, bounds
@@ -309,7 +326,6 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Union types: `T | null`
 - Comments
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
