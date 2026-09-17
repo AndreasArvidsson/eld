@@ -1,0 +1,434 @@
+const aaa: [i8] = [];
+const bbb: [i16] = [];
+const ccc: [i32] = [];
+const ddd: [i64] = [];
+const eee: [f32] = [];
+const fff: [f64] = [];
+const ggg: [bool] = [];
+const hhh: [char] = [];
+const iii: [string] = [];
+const jjj: [null] = [];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "aaa" (1:7-1:10)
+COLON (1:10-1:11)
+LEFT_BRACKET (1:12-1:13)
+IDENTIFIER "i8" (1:13-1:15)
+RIGHT_BRACKET (1:15-1:16)
+EQUAL (1:17-1:18)
+LEFT_BRACKET (1:19-1:20)
+RIGHT_BRACKET (1:20-1:21)
+SEMICOLON (1:21-1:22)
+CONST (2:1-2:6)
+IDENTIFIER "bbb" (2:7-2:10)
+COLON (2:10-2:11)
+LEFT_BRACKET (2:12-2:13)
+IDENTIFIER "i16" (2:13-2:16)
+RIGHT_BRACKET (2:16-2:17)
+EQUAL (2:18-2:19)
+LEFT_BRACKET (2:20-2:21)
+RIGHT_BRACKET (2:21-2:22)
+SEMICOLON (2:22-2:23)
+CONST (3:1-3:6)
+IDENTIFIER "ccc" (3:7-3:10)
+COLON (3:10-3:11)
+LEFT_BRACKET (3:12-3:13)
+IDENTIFIER "i32" (3:13-3:16)
+RIGHT_BRACKET (3:16-3:17)
+EQUAL (3:18-3:19)
+LEFT_BRACKET (3:20-3:21)
+RIGHT_BRACKET (3:21-3:22)
+SEMICOLON (3:22-3:23)
+CONST (4:1-4:6)
+IDENTIFIER "ddd" (4:7-4:10)
+COLON (4:10-4:11)
+LEFT_BRACKET (4:12-4:13)
+IDENTIFIER "i64" (4:13-4:16)
+RIGHT_BRACKET (4:16-4:17)
+EQUAL (4:18-4:19)
+LEFT_BRACKET (4:20-4:21)
+RIGHT_BRACKET (4:21-4:22)
+SEMICOLON (4:22-4:23)
+CONST (5:1-5:6)
+IDENTIFIER "eee" (5:7-5:10)
+COLON (5:10-5:11)
+LEFT_BRACKET (5:12-5:13)
+IDENTIFIER "f32" (5:13-5:16)
+RIGHT_BRACKET (5:16-5:17)
+EQUAL (5:18-5:19)
+LEFT_BRACKET (5:20-5:21)
+RIGHT_BRACKET (5:21-5:22)
+SEMICOLON (5:22-5:23)
+CONST (6:1-6:6)
+IDENTIFIER "fff" (6:7-6:10)
+COLON (6:10-6:11)
+LEFT_BRACKET (6:12-6:13)
+IDENTIFIER "f64" (6:13-6:16)
+RIGHT_BRACKET (6:16-6:17)
+EQUAL (6:18-6:19)
+LEFT_BRACKET (6:20-6:21)
+RIGHT_BRACKET (6:21-6:22)
+SEMICOLON (6:22-6:23)
+CONST (7:1-7:6)
+IDENTIFIER "ggg" (7:7-7:10)
+COLON (7:10-7:11)
+LEFT_BRACKET (7:12-7:13)
+IDENTIFIER "bool" (7:13-7:17)
+RIGHT_BRACKET (7:17-7:18)
+EQUAL (7:19-7:20)
+LEFT_BRACKET (7:21-7:22)
+RIGHT_BRACKET (7:22-7:23)
+SEMICOLON (7:23-7:24)
+CONST (8:1-8:6)
+IDENTIFIER "hhh" (8:7-8:10)
+COLON (8:10-8:11)
+LEFT_BRACKET (8:12-8:13)
+IDENTIFIER "char" (8:13-8:17)
+RIGHT_BRACKET (8:17-8:18)
+EQUAL (8:19-8:20)
+LEFT_BRACKET (8:21-8:22)
+RIGHT_BRACKET (8:22-8:23)
+SEMICOLON (8:23-8:24)
+CONST (9:1-9:6)
+IDENTIFIER "iii" (9:7-9:10)
+COLON (9:10-9:11)
+LEFT_BRACKET (9:12-9:13)
+IDENTIFIER "string" (9:13-9:19)
+RIGHT_BRACKET (9:19-9:20)
+EQUAL (9:21-9:22)
+LEFT_BRACKET (9:23-9:24)
+RIGHT_BRACKET (9:24-9:25)
+SEMICOLON (9:25-9:26)
+CONST (10:1-10:6)
+IDENTIFIER "jjj" (10:7-10:10)
+COLON (10:10-10:11)
+LEFT_BRACKET (10:12-10:13)
+NULL (10:13-10:17)
+RIGHT_BRACKET (10:17-10:18)
+EQUAL (10:19-10:20)
+LEFT_BRACKET (10:21-10:22)
+RIGHT_BRACKET (10:22-10:23)
+SEMICOLON (10:23-10:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:24
+  (VariableDeclaration
+    range: 1:1-1:22
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "aaa"
+    )
+    (ArrayTypeNode
+      range: 1:12-1:16
+      (NamedTypeNode
+        range: 1:13-1:15
+        name: "i8"
+      )
+    )
+    (ArrayExpression
+      range: 1:19-1:21
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "bbb"
+    )
+    (ArrayTypeNode
+      range: 2:12-2:17
+      (NamedTypeNode
+        range: 2:13-2:16
+        name: "i16"
+      )
+    )
+    (ArrayExpression
+      range: 2:20-2:22
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "ccc"
+    )
+    (ArrayTypeNode
+      range: 3:12-3:17
+      (NamedTypeNode
+        range: 3:13-3:16
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 3:20-3:22
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "ddd"
+    )
+    (ArrayTypeNode
+      range: 4:12-4:17
+      (NamedTypeNode
+        range: 4:13-4:16
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 4:20-4:22
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "eee"
+    )
+    (ArrayTypeNode
+      range: 5:12-5:17
+      (NamedTypeNode
+        range: 5:13-5:16
+        name: "f32"
+      )
+    )
+    (ArrayExpression
+      range: 5:20-5:22
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:10
+      name: "fff"
+    )
+    (ArrayTypeNode
+      range: 6:12-6:17
+      (NamedTypeNode
+        range: 6:13-6:16
+        name: "f64"
+      )
+    )
+    (ArrayExpression
+      range: 6:20-6:22
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "ggg"
+    )
+    (ArrayTypeNode
+      range: 7:12-7:18
+      (NamedTypeNode
+        range: 7:13-7:17
+        name: "bool"
+      )
+    )
+    (ArrayExpression
+      range: 7:21-7:23
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:10
+      name: "hhh"
+    )
+    (ArrayTypeNode
+      range: 8:12-8:18
+      (NamedTypeNode
+        range: 8:13-8:17
+        name: "char"
+      )
+    )
+    (ArrayExpression
+      range: 8:21-8:23
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:10
+      name: "iii"
+    )
+    (ArrayTypeNode
+      range: 9:12-9:20
+      (NamedTypeNode
+        range: 9:13-9:19
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 9:23-9:25
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:10
+      name: "jjj"
+    )
+    (ArrayTypeNode
+      range: 10:12-10:18
+      (NamedTypeNode
+        range: 10:13-10:17
+        name: "null"
+      )
+    )
+    (ArrayExpression
+      range: 10:21-10:23
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:21 -> ArrayType<i8>
+  2:20-2:22 -> ArrayType<i16>
+  3:20-3:22 -> ArrayType<i32>
+  4:20-4:22 -> ArrayType<i64>
+  5:20-5:22 -> ArrayType<f32>
+  6:20-6:22 -> ArrayType<f64>
+  7:21-7:23 -> ArrayType<bool>
+  8:21-8:23 -> ArrayType<char>
+  9:23-9:25 -> ArrayType<string>
+  10:21-10:23 -> ArrayType<null>
+
+Resolved types:
+  1:12-1:16 -> ArrayType<i8>
+  1:13-1:15 -> i8
+  2:12-2:17 -> ArrayType<i16>
+  2:13-2:16 -> i16
+  3:12-3:17 -> ArrayType<i32>
+  3:13-3:16 -> i32
+  4:12-4:17 -> ArrayType<i64>
+  4:13-4:16 -> i64
+  5:12-5:17 -> ArrayType<f32>
+  5:13-5:16 -> f32
+  6:12-6:17 -> ArrayType<f64>
+  6:13-6:16 -> f64
+  7:12-7:18 -> ArrayType<bool>
+  7:13-7:17 -> bool
+  8:12-8:18 -> ArrayType<char>
+  8:13-8:17 -> char
+  9:12-9:20 -> ArrayType<string>
+  9:13-9:19 -> string
+  10:12-10:18 -> ArrayType<null>
+  10:13-10:17 -> null
+
+Declarations:
+  1:7-1:10 -> VariableSymbol(name=aaa, type=ArrayType<i8>, mutability=CONST)
+  2:7-2:10 -> VariableSymbol(name=bbb, type=ArrayType<i16>, mutability=CONST)
+  3:7-3:10 -> VariableSymbol(name=ccc, type=ArrayType<i32>, mutability=CONST)
+  4:7-4:10 -> VariableSymbol(name=ddd, type=ArrayType<i64>, mutability=CONST)
+  5:7-5:10 -> VariableSymbol(name=eee, type=ArrayType<f32>, mutability=CONST)
+  6:7-6:10 -> VariableSymbol(name=fff, type=ArrayType<f64>, mutability=CONST)
+  7:7-7:10 -> VariableSymbol(name=ggg, type=ArrayType<bool>, mutability=CONST)
+  8:7-8:10 -> VariableSymbol(name=hhh, type=ArrayType<char>, mutability=CONST)
+  9:7-9:10 -> VariableSymbol(name=iii, type=ArrayType<string>, mutability=CONST)
+  10:7-10:10 -> VariableSymbol(name=jjj, type=ArrayType<null>, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; aaa
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; bbb
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; ccc
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; ddd
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; eee
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; fff
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; ggg
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; hhh
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; iii
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; jjj
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init> ()V
+    PUTSTATIC Test.aaa : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init> ()V
+    PUTSTATIC Test.bbb : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ()V
+    PUTSTATIC Test.ccc : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init> ()V
+    PUTSTATIC Test.ddd : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init> ()V
+    PUTSTATIC Test.eee : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init> ()V
+    PUTSTATIC Test.fff : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init> ()V
+    PUTSTATIC Test.ggg : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ()V
+    PUTSTATIC Test.hhh : Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ()V
+    PUTSTATIC Test.iii : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ()V
+    PUTSTATIC Test.jjj : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+

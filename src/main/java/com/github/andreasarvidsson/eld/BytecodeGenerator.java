@@ -547,19 +547,12 @@ public final class BytecodeGenerator {
                 case NULL -> "Ljava/lang/Object;";
                 case VOID -> "V";
             };
-            case ArrayType array -> primitiveArray(array)
-                ? RuntimeAbi
-                    .requirePrimitiveArray(array.elementType()).descriptor
-                : "[" + descriptor(array.elementType());
+            case ArrayType array ->
+                RuntimeAbi.array(array.elementType()).descriptor;
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
             case ClassType ignored -> "Ljava/lang/Object;";
         };
-    }
-
-    private static boolean primitiveArray(final Type type) {
-        return type instanceof ArrayType array
-            && RuntimeAbi.primitiveArray(array.elementType()) != null;
     }
 
     private static String printArgumentDescriptor(final Type type) {
@@ -609,10 +602,6 @@ public final class BytecodeGenerator {
 
     private static int returnOpcode(final Type type) {
         return opcode(type, IRETURN);
-    }
-
-    private static int arrayLoadOpcode(final Type type) {
-        return opcode(type, IALOAD);
     }
 
     private static int arrayStoreOpcode(final Type type) {
@@ -1037,10 +1026,6 @@ public final class BytecodeGenerator {
         }
 
         private void forEach(final ForEachStatement statement) {
-            final boolean runtimeArray =
-                primitiveArray(
-                    semanticModel.getExpressionType(statement.iterable())
-                );
             final int array = nextLocal++;
             final int index = nextLocal++;
             final Symbol value = semanticModel.getSymbol(statement.value());
@@ -1054,11 +1039,11 @@ public final class BytecodeGenerator {
             method.visitLabel(start);
             method.visitVarInsn(ILOAD, index);
             method.visitVarInsn(ALOAD, array);
-            arraySize(value.type(), runtimeArray);
+            arrayCall(value.type(), RuntimeAbi.ArrayMethod.SIZE);
             method.visitJumpInsn(IF_ICMPGE, end);
             method.visitVarInsn(ALOAD, array);
             method.visitVarInsn(ILOAD, index);
-            arrayGet(value.type(), runtimeArray);
+            arrayGet(value.type());
             store(value);
             final IdentifierDeclaration indexName = statement.index();
             if (indexName != null) {
@@ -1253,12 +1238,7 @@ public final class BytecodeGenerator {
                 case ArrayExpression array -> array(array);
                 case SubscriptExpression index -> {
                     arrayIndex(index);
-                    arrayGet(
-                        semanticModel.getExpressionType(index),
-                        primitiveArray(
-                            semanticModel.getExpressionType(index.target())
-                        )
-                    );
+                    arrayGet(semanticModel.getExpressionType(index));
                 }
                 case SliceExpression slice -> slice(slice);
                 case LambdaExpression lambda -> throw unsupported(
@@ -1403,38 +1383,25 @@ public final class BytecodeGenerator {
             final Type element =
                 ((ArrayType) semanticModel.getEffectiveType(array))
                     .elementType();
-            if (RuntimeAbi.primitiveArray(element) != null) {
-                method.visitTypeInsn(
-                    NEW,
-                    RuntimeAbi.requirePrimitiveArray(element).owner
+            final RuntimeAbi.ArrayKind runtime = RuntimeAbi.array(element);
+            method.visitTypeInsn(NEW, runtime.owner);
+            method.visitInsn(DUP);
+            if (array.elements().isEmpty()) {
+                method.visitMethodInsn(
+                    INVOKESPECIAL,
+                    runtime.owner,
+                    "<init>",
+                    RuntimeAbi.EMPTY_ARRAY_CONSTRUCTOR,
+                    false
                 );
-                method.visitInsn(DUP);
-                if (array.elements().isEmpty()) {
-                    method.visitMethodInsn(
-                        INVOKESPECIAL,
-                        RuntimeAbi.requirePrimitiveArray(element).owner,
-                        "<init>",
-                        RuntimeAbi.EMPTY_ARRAY_CONSTRUCTOR,
-                        false
-                    );
-                    return;
-                }
+                return;
             }
             method.visitLdcInsn(array.elements().size());
-            if (reference(element)) {
-                final String desc = descriptor(element);
-                method.visitTypeInsn(
-                    ANEWARRAY,
-                    desc.startsWith("[")
-                        ? desc
-                        : desc.substring(1, desc.length() - 1)
-                );
+            if (runtime == RuntimeAbi.ArrayKind.OBJECT) {
+                method.visitTypeInsn(ANEWARRAY, "java/lang/Object");
             }
             else {
-                method.visitIntInsn(
-                    NEWARRAY,
-                    RuntimeAbi.requirePrimitiveArray(element).creationOpcode
-                );
+                method.visitIntInsn(NEWARRAY, runtime.creationOpcode);
             }
             for (int i = 0; i < array.elements().size(); i++) {
                 method.visitInsn(DUP);
@@ -1442,153 +1409,48 @@ public final class BytecodeGenerator {
                 expression(array.elements().get(i));
                 method.visitInsn(arrayStoreOpcode(element));
             }
-            if (RuntimeAbi.primitiveArray(element) != null) {
-                method.visitMethodInsn(
-                    INVOKESPECIAL,
-                    RuntimeAbi.requirePrimitiveArray(element).owner,
-                    "<init>",
-                    RuntimeAbi
-                        .requirePrimitiveArray(element).constructorDescriptor,
-                    false
-                );
-            }
+            method.visitMethodInsn(
+                INVOKESPECIAL,
+                runtime.owner,
+                "<init>",
+                runtime.constructorDescriptor,
+                false
+            );
         }
 
         private void slice(final SliceExpression slice) {
-            if (primitiveArray(semanticModel.getExpressionType(slice))) {
-                expression(slice.target());
-                final Expression start = slice.startIndex();
-                final Expression end = slice.endIndex();
-                if (start != null) {
-                    expression(start);
-                }
-                if (end != null) {
-                    expression(end);
-                }
-                primitiveArrayCall(
-                    ((ArrayType) semanticModel.getExpressionType(slice))
-                        .elementType(),
-                    start == null
-                        ? (end == null
-                            ? RuntimeAbi.ArrayMethod.COPY
-                            : RuntimeAbi.ArrayMethod.SLICE_TO)
-                        : (end == null
-                            ? RuntimeAbi.ArrayMethod.SLICE_FROM
-                            : RuntimeAbi.ArrayMethod.SLICE)
-                );
-                return;
-            }
-            final int array = nextLocal++;
-            final int start = nextLocal++;
             expression(slice.target());
-            method.visitVarInsn(ASTORE, array);
-            sliceBound(slice.startIndex(), array, false);
-            method.visitVarInsn(ISTORE, start);
-            method.visitVarInsn(ALOAD, array);
-            method.visitVarInsn(ILOAD, start);
-            sliceBound(slice.endIndex(), array, true);
-            // A reversed range produces an empty array.
-            method.visitVarInsn(ILOAD, start);
-            method.visitMethodInsn(
-                INVOKESTATIC,
-                "java/lang/Math",
-                "max",
-                "(II)I",
-                false
-            );
-            final ArrayType type =
-                (ArrayType) semanticModel.getExpressionType(slice);
-            final String arrayDescriptor = descriptor(type);
-            final boolean referenceElements =
-                arrayDescriptor.charAt(1) == '['
-                    || arrayDescriptor.charAt(1) == 'L';
-            final String copyDescriptor =
-                referenceElements ? "[Ljava/lang/Object;" : arrayDescriptor;
-            method.visitMethodInsn(
-                INVOKESTATIC,
-                "java/util/Arrays",
-                "copyOfRange",
-                "(" + copyDescriptor + "II)" + copyDescriptor,
-                false
-            );
-            if (referenceElements) {
-                method.visitTypeInsn(CHECKCAST, arrayDescriptor);
+            final Expression start = slice.startIndex();
+            final Expression end = slice.endIndex();
+            if (start != null) {
+                expression(start);
             }
-        }
-
-        private void sliceBound(
-            final @Nullable Expression bound,
-            final int array,
-            final boolean end
-        ) {
-            if (bound == null) {
-                if (end) {
-                    method.visitVarInsn(ALOAD, array);
-                    method.visitInsn(ARRAYLENGTH);
-                }
-                else {
-                    method.visitInsn(ICONST_0);
-                }
-                return;
+            if (end != null) {
+                expression(end);
             }
-            expression(bound);
-            final Label nonNegative = new Label();
-            method.visitInsn(DUP);
-            method.visitJumpInsn(IFGE, nonNegative);
-            method.visitVarInsn(ALOAD, array);
-            method.visitInsn(ARRAYLENGTH);
-            method.visitInsn(IADD);
-            method.visitLabel(nonNegative);
-            method.visitInsn(ICONST_0);
-            method.visitMethodInsn(
-                INVOKESTATIC,
-                "java/lang/Math",
-                "max",
-                "(II)I",
-                false
-            );
-            method.visitVarInsn(ALOAD, array);
-            method.visitInsn(ARRAYLENGTH);
-            method.visitMethodInsn(
-                INVOKESTATIC,
-                "java/lang/Math",
-                "min",
-                "(II)I",
-                false
+            arrayCall(
+                ((ArrayType) semanticModel.getExpressionType(slice))
+                    .elementType(),
+                start == null
+                    ? (end == null
+                        ? RuntimeAbi.ArrayMethod.COPY
+                        : RuntimeAbi.ArrayMethod.SLICE_TO)
+                    : (end == null
+                        ? RuntimeAbi.ArrayMethod.SLICE_FROM
+                        : RuntimeAbi.ArrayMethod.SLICE)
             );
         }
 
         private void arrayIndex(final SubscriptExpression index) {
             expression(index.target());
             expression(index.index());
-            if (
-                primitiveArray(semanticModel.getExpressionType(index.target()))
-            ) {
-                return;
-            }
-            if (
-                constantValue(index.index()) instanceof Integer value
-                    && value >= 0
-            ) {
-                return;
-            }
-            final Label nonNegative = new Label();
-            method.visitInsn(DUP);
-            method.visitJumpInsn(IFGE, nonNegative);
-            // Keep the array and index on the stack while obtaining its length.
-            method.visitInsn(DUP2);
-            method.visitInsn(POP);
-            method.visitInsn(ARRAYLENGTH);
-            method.visitInsn(IADD);
-            method.visitLabel(nonNegative);
         }
 
-        private void primitiveArrayCall(
+        private void arrayCall(
             final Type element,
             final RuntimeAbi.ArrayMethod operation
         ) {
-            final RuntimeAbi.PrimitiveArray array =
-                RuntimeAbi.requirePrimitiveArray(element);
+            final RuntimeAbi.ArrayKind array = RuntimeAbi.array(element);
             method.visitMethodInsn(
                 INVOKEVIRTUAL,
                 array.owner,
@@ -1598,31 +1460,22 @@ public final class BytecodeGenerator {
             );
         }
 
-        private void arraySize(final Type element, final boolean runtimeArray) {
-            if (runtimeArray) {
-                primitiveArrayCall(element, RuntimeAbi.ArrayMethod.SIZE);
-            }
-            else {
-                method.visitInsn(ARRAYLENGTH);
-            }
-        }
-
-        private void arrayGet(final Type element, final boolean runtimeArray) {
-            if (runtimeArray) {
-                primitiveArrayCall(element, RuntimeAbi.ArrayMethod.GET);
-            }
-            else {
-                method.visitInsn(arrayLoadOpcode(element));
+        private void arrayGet(final Type element) {
+            arrayCall(element, RuntimeAbi.ArrayMethod.GET);
+            if (
+                RuntimeAbi.array(element) == RuntimeAbi.ArrayKind.OBJECT
+                    && !descriptor(element).equals("Ljava/lang/Object;")
+            ) {
+                method.visitTypeInsn(
+                    CHECKCAST,
+                    org.objectweb.asm.Type.getType(descriptor(element))
+                        .getInternalName()
+                );
             }
         }
 
-        private void arraySet(final Type element, final boolean runtimeArray) {
-            if (runtimeArray) {
-                primitiveArrayCall(element, RuntimeAbi.ArrayMethod.SET);
-            }
-            else {
-                method.visitInsn(arrayStoreOpcode(element));
-            }
+        private void arraySet(final Type element) {
+            arrayCall(element, RuntimeAbi.ArrayMethod.SET);
         }
 
         private Expression unwrap(final Expression expression) {
@@ -1652,12 +1505,7 @@ public final class BytecodeGenerator {
                         ? DUP2_X2
                         : DUP_X2
                 );
-                arraySet(
-                    semanticModel.getExpressionType(index),
-                    primitiveArray(
-                        semanticModel.getExpressionType(index.target())
-                    )
-                );
+                arraySet(semanticModel.getExpressionType(index));
             }
             else {
                 throw unsupported(target, "Invalid assignment target");
@@ -1695,12 +1543,7 @@ public final class BytecodeGenerator {
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);
                 method.visitInsn(DUP2);
-                arrayGet(
-                    type,
-                    primitiveArray(
-                        semanticModel.getExpressionType(index.target())
-                    )
-                );
+                arrayGet(type);
                 if (postfix) {
                     method.visitInsn(
                         slots(semanticModel.getExpressionType(index)) == 2
@@ -1716,12 +1559,7 @@ public final class BytecodeGenerator {
                             : DUP_X2
                     );
                 }
-                arraySet(
-                    type,
-                    primitiveArray(
-                        semanticModel.getExpressionType(index.target())
-                    )
-                );
+                arraySet(type);
             }
             else {
                 throw unsupported(operand, "Invalid increment target");

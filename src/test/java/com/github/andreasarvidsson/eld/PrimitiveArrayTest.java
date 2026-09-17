@@ -9,6 +9,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.parser.Parser;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -20,7 +21,7 @@ class PrimitiveArrayTest {
     private record ArrayExample(String literal, Object value) {
     }
 
-    private static ArrayExample example(final RuntimeAbi.PrimitiveArray kind) {
+    private static ArrayExample example(final RuntimeAbi.ArrayKind kind) {
         return switch (kind) {
             case BYTE -> new ArrayExample("7", (byte) 7);
             case SHORT -> new ArrayExample("7", (short) 7);
@@ -29,6 +30,9 @@ class PrimitiveArrayTest {
             case FLOAT -> new ArrayExample("7.5", 7.5f);
             case DOUBLE -> new ArrayExample("7.5", 7.5);
             case BOOLEAN -> new ArrayExample("true", true);
+            case OBJECT -> throw new IllegalArgumentException(
+                "Expected a primitive array"
+            );
             case CHAR -> new ArrayExample("'x'", 'x');
         };
     }
@@ -36,9 +40,11 @@ class PrimitiveArrayTest {
     @Test
     void runtimeSpecializationsPreservePrimitiveStorageAndStrictBounds()
         throws Exception {
-        for (final RuntimeAbi.PrimitiveArray kind : RuntimeAbi.PrimitiveArray
-            .values()) {
-            final Class<? extends EldArray<?>> type = kind.runtimeClass;
+        for (final RuntimeAbi.ArrayKind kind : RuntimeAbi.ArrayKind.values()) {
+            if (kind == RuntimeAbi.ArrayKind.OBJECT) {
+                continue;
+            }
+            final Class<?> type = kind.runtimeClass;
             final Class<?> primitive =
                 type.getMethod("get", int.class).getReturnType();
             assertTrue(primitive.isPrimitive());
@@ -47,7 +53,8 @@ class PrimitiveArrayTest {
                 type.getDeclaredField("elements").getType().componentType()
             );
             final Object value = example(kind).value();
-            final EldArray<?> array = type.getConstructor().newInstance();
+            final EldArray<?> array =
+                (EldArray<?>) type.getConstructor().newInstance();
             final Method get = type.getMethod("get", int.class);
             final Method set = type.getMethod("set", int.class, primitive);
             final Method add = type.getMethod("add", primitive);
@@ -118,7 +125,8 @@ class PrimitiveArrayTest {
                 java.lang.reflect.Array.newInstance(primitive, 1);
             java.lang.reflect.Array.set(backing, 0, value);
             final EldArray<?> literal =
-                type.getConstructor(backing.getClass()).newInstance(backing);
+                (EldArray<?>) type.getConstructor(backing.getClass())
+                    .newInstance(backing);
             assertEquals(1, literal.size());
             assertEquals(value, get.invoke(literal, 0));
         }
@@ -140,12 +148,14 @@ class PrimitiveArrayTest {
     @Test
     void compilerUsesSpecializationsWithoutChangingSemanticArrayTypes()
         throws Exception {
-        for (final RuntimeAbi.PrimitiveArray kind : RuntimeAbi.PrimitiveArray
-            .values()) {
+        for (final RuntimeAbi.ArrayKind kind : RuntimeAbi.ArrayKind.values()) {
+            if (kind == RuntimeAbi.ArrayKind.OBJECT) {
+                continue;
+            }
             final String element =
-                kind == RuntimeAbi.PrimitiveArray.BOOLEAN
-                    ? "boolean"
-                    : kind.element.toString();
+                kind == RuntimeAbi.ArrayKind.BOOLEAN
+                    ? "bool"
+                    : java.util.Objects.requireNonNull(kind.element).toString();
             final ArrayExample example = example(kind);
             final String literal = example.literal();
             final String source =
@@ -202,12 +212,15 @@ class PrimitiveArrayTest {
             final var declaration =
                 (VariableDeclaration) program.items().get(1);
             assertEquals(
-                new ArrayType(kind.element),
+                new ArrayType(java.util.Objects.requireNonNull(kind.element)),
                 semantic.getExpressionType(declaration.initializer())
             );
             final Map<String, byte[]> classes =
                 new BytecodeGenerator(program, semantic).generateClasses();
             for (final byte[] bytes : classes.values()) {
+                if (kind == RuntimeAbi.ArrayKind.OBJECT) {
+                    continue;
+                }
                 BytecodeUtil.verify(bytes);
             }
             final ClassNode node = new ClassNode();
@@ -229,7 +242,24 @@ class PrimitiveArrayTest {
                         Opcodes.ARRAYLENGTH,
                         instruction.getOpcode()
                     );
-                    assertNotEquals(Opcodes.CHECKCAST, instruction.getOpcode());
+                    if (
+                        instruction instanceof TypeInsnNode cast
+                            && cast.getOpcode() == Opcodes.CHECKCAST
+                    ) {
+                        // Only reading the primitive row from a reference-backed nested array needs a cast.
+                        assertEquals(kind.owner, cast.desc);
+                        final MethodInsnNode get =
+                            assertInstanceOf(
+                                MethodInsnNode.class,
+                                cast.getPrevious()
+                            );
+                        assertEquals(
+                            RuntimeAbi.ArrayKind.OBJECT.owner,
+                            get.owner
+                        );
+                        assertEquals("get", get.name);
+                    }
+
                 }
             }
             assertTrue(emptyConstructor, element);

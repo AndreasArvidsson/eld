@@ -47,6 +47,7 @@ import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
 import com.github.andreasarvidsson.eld.semantic.SemanticException;
 import com.github.andreasarvidsson.eld.runtime.EldIntArray;
+import com.github.andreasarvidsson.eld.runtime.EldObjectArray;
 import com.github.andreasarvidsson.eld.runtime.EldArray;
 import com.github.andreasarvidsson.eld.runtime.EldLongArray;
 import com.github.andreasarvidsson.eld.runtime.EldDoubleArray;
@@ -189,8 +190,7 @@ class BytecodeGeneratorTest {
     void slicesPreserveElementTypesAndCopyReferencesShallowly()
         throws Exception {
         final String[] types =
-            {"i8", "i16", "i32", "i64", "f32", "f64", "boolean", "char",
-                    "string"};
+            {"i8", "i16", "i32", "i64", "f32", "f64", "bool", "char", "string"};
         final String[] values =
             {"7", "7", "7", "7", "7.5", "7.5", "true", "'x'", "\"text\""};
         for (int i = 0; i < types.length; i++) {
@@ -203,36 +203,25 @@ class BytecodeGeneratorTest {
             final Object sliced = type.getField("sliced").get(null);
             assertEquals(original.getClass(), sliced.getClass());
             assertNotSame(original, sliced);
-            if (sliced instanceof EldArray<?> primitive) {
-                assertEquals(1, primitive.size());
-                assertEquals(
-                    original.getClass()
-                        .getMethod("get", int.class)
-                        .invoke(original, 1),
-                    sliced.getClass()
-                        .getMethod("get", int.class)
-                        .invoke(sliced, 0)
-                );
-            }
-            else {
-                assertEquals(1, java.lang.reflect.Array.getLength(sliced));
-                assertEquals(
-                    java.lang.reflect.Array.get(original, 1),
-                    java.lang.reflect.Array.get(sliced, 0)
-                );
-            }
+            assertEquals(1, assertInstanceOf(EldArray.class, sliced).size());
+            assertEquals(
+                original.getClass()
+                    .getMethod("get", int.class)
+                    .invoke(original, 1),
+                sliced.getClass().getMethod("get", int.class).invoke(sliced, 0)
+            );
         }
         final Class<?> type = compile("""
             var row = [1, 2];
             var matrix = [row];
             var copy = matrix[:];
             """);
-        final EldIntArray[] original =
-            (EldIntArray[]) type.getField("matrix").get(null);
-        final EldIntArray[] copy =
-            (EldIntArray[]) type.getField("copy").get(null);
+        final EldObjectArray<?> original =
+            (EldObjectArray<?>) type.getField("matrix").get(null);
+        final EldObjectArray<?> copy =
+            (EldObjectArray<?>) type.getField("copy").get(null);
         assertNotSame(original, copy);
-        assertSame(original[0], copy[0]);
+        assertSame(original.get(0), copy.get(0));
     }
 
     @Test
@@ -1839,9 +1828,9 @@ class BytecodeGeneratorTest {
     void shortCircuitsBooleanOperators() throws Exception {
         final Class<?> type = compile("""
             var counter = 0;
-            func tick() boolean { return counter++ > 0; }
-            func conjunction() boolean { return false && tick(); }
-            func disjunction() boolean { return true || tick(); }
+            func tick() bool { return counter++ > 0; }
+            func conjunction() bool { return false && tick(); }
+            func disjunction() bool { return true || tick(); }
             """);
         assertEquals(false, type.getMethod("conjunction").invoke(null));
         assertEquals(true, type.getMethod("disjunction").invoke(null));
@@ -1957,15 +1946,21 @@ class BytecodeGeneratorTest {
         assertEquals(2, flags.size());
         assertTrue(flags.get(0));
         assertFalse(flags.get(1));
-        assertArrayEquals(
-            new String[] {"a", "b"},
-            (String[]) type.getField("strings").get(null)
-        );
+        final EldObjectArray<?> strings =
+            (EldObjectArray<?>) type.getField("strings").get(null);
+        assertEquals(2, strings.size());
+        assertEquals("a", strings.get(0));
+        assertEquals("b", strings.get(1));
         assertArrayEquals(
             new int[] {2},
-            intValues(((EldIntArray[]) type.getField("nested").get(null))[1])
+            intValues(
+                ((EldObjectArray<?>) type.getField("nested").get(null)).get(1)
+            )
         );
-        assertEquals(0, ((Object[]) type.getField("empty").get(null)).length);
+        assertEquals(
+            0,
+            ((EldObjectArray<?>) type.getField("empty").get(null)).size()
+        );
         assertEquals(2, type.getMethod("find").invoke(null));
     }
 
@@ -1984,12 +1979,12 @@ class BytecodeGeneratorTest {
     @Test
     void handlesFloatNaNComparisons() throws Exception {
         final Class<?> type = compile("""
-            func less(a: f32, b: f32) boolean { return a < b; }
-            func lessEqual(a: f32, b: f32) boolean { return a <= b; }
-            func greater(a: f32, b: f32) boolean { return a > b; }
-            func greaterEqual(a: f32, b: f32) boolean { return a >= b; }
-            func equal(a: f32, b: f32) boolean { return a == b; }
-            func different(a: f32, b: f32) boolean { return a != b; }
+            func less(a: f32, b: f32) bool { return a < b; }
+            func lessEqual(a: f32, b: f32) bool { return a <= b; }
+            func greater(a: f32, b: f32) bool { return a > b; }
+            func greaterEqual(a: f32, b: f32) bool { return a >= b; }
+            func equal(a: f32, b: f32) bool { return a == b; }
+            func different(a: f32, b: f32) bool { return a != b; }
             """);
         for (final String name : List
             .of("less", "lessEqual", "greater", "greaterEqual", "equal")) {
@@ -2015,10 +2010,10 @@ class BytecodeGeneratorTest {
                 elif (x == 0) { return (2 + 3) * 4 / 2 % 7; }
                 else { return +1_000; }
             }
-            func same(a: string, b: string) boolean { return a == b; }
+            func same(a: string, b: string) bool { return a == b; }
             func joined() string { return "hello " + "world"; }
             func letter() char { return 'x'; }
-            func invert(a: boolean) boolean { return !a; }
+            func invert(a: bool) bool { return !a; }
             """);
         assertEquals(-1, type.getMethod("choose", int.class).invoke(null, -5));
         assertEquals(3, type.getMethod("choose", int.class).invoke(null, 0));

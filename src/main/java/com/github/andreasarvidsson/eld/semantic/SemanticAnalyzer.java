@@ -859,7 +859,7 @@ public final class SemanticAnalyzer {
             case "f32" -> BuiltinType.F32;
             case "f64" -> BuiltinType.F64;
             case "char" -> BuiltinType.CHAR;
-            case "boolean" -> BuiltinType.BOOL;
+            case "bool" -> BuiltinType.BOOL;
             case "string" -> BuiltinType.STRING;
             case "null" -> BuiltinType.NULL;
             default -> throw new SemanticException(

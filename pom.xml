@@ -159,14 +159,14 @@
                 </executions>
             </plugin>
 
-            <!-- Format Java files -->
+            <!-- Check changed Java files before compilation -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>3.10.2</version>
                 <configuration>
                     <upToDateChecking>
-                        <enabled>false</enabled>
+                        <enabled>true</enabled>
                     </upToDateChecking>
                     <java>
                         <includes>
@@ -177,6 +177,15 @@
                         </eclipse>
                     </java>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>check-formatting</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Run nullness validation for JSpecify @NullMarked code -->

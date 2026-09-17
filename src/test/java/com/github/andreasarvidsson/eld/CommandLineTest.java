@@ -64,11 +64,13 @@ class CommandLineTest {
             const longs: [i64] = [9000000000]; print(longs);
             const floats: [f32] = [1.5]; print(floats);
             const doubles: [f64] = [2.5]; print(doubles);
-            const flags: [boolean] = [true, false]; print(flags);
+            const flags: [bool] = [true, false]; print(flags);
             const chars: [char] = ['h', 'i']; print(chars);
+            const strings = ["foo", "bar"]; print(strings); print(strings[-1]);
+            const nulls: [null] = [null, null]; print(nulls[:]);
             """);
         final String expected =
-            "hello\n[2, 3]\n[7]\n[7]\n[9000000000]\n[1.5]\n[2.5]\n[true, false]\n[h, i]\n";
+            "hello\n[2, 3]\n[7]\n[7]\n[9000000000]\n[1.5]\n[2.5]\n[true, false]\n[h, i]\n[foo, bar]\nbar\n[null, null]\n";
         assertEquals(
             expected,
             capture(
@@ -116,8 +118,14 @@ class CommandLineTest {
             session.evaluate("values[-1];");
             session.evaluate("values[-1] = 4;");
             session.evaluate("values[:];");
+            session.evaluate("const strings = [\"a\", \"b\"]; ");
+            session.evaluate("strings[-1];");
+            session.evaluate("strings[-1] = \"c\";");
+            session.evaluate("strings[:];");
+            session.evaluate("const nulls: [null] = [null, null];");
+            session.evaluate("nulls[:];");
         });
-        assertEquals("3\n4\n[1, 2, 4]\n", output);
+        assertEquals("3\n4\n[1, 2, 4]\nb\nc\n[a, c]\n[null, null]\n", output);
     }
 
     @Test

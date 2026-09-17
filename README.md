@@ -93,30 +93,31 @@ Each specialization
 keeps primitive storage, element access, and small hooks for copying,
 resizing, and appending an element without boxing.
 
-| Element type | Runtime class | Storage |
-| --- | --- | --- |
-| `i8` | `EldByteArray` | `byte[]` |
-| `i16` | `EldShortArray` | `short[]` |
-| `i32` | `EldIntArray` | `int[]` |
-| `i64` | `EldLongArray` | `long[]` |
-| `f32` | `EldFloatArray` | `float[]` |
-| `f64` | `EldDoubleArray` | `double[]` |
-| `boolean` | `EldBooleanArray` | `boolean[]` |
-| `char` | `EldCharArray` | `char[]` |
+| Element type                 | Runtime class       | Storage     |
+| ---------------------------- | ------------------- | ----------- |
+| `i8`                         | `EldByteArray`      | `byte[]`    |
+| `i16`                        | `EldShortArray`     | `short[]`   |
+| `i32`                        | `EldIntArray`       | `int[]`     |
+| `i64`                        | `EldLongArray`      | `long[]`    |
+| `f32`                        | `EldFloatArray`     | `float[]`   |
+| `f64`                        | `EldDoubleArray`    | `double[]`  |
+| `bool`                       | `EldBooleanArray`   | `boolean[]` |
+| `char`                       | `EldCharArray`      | `char[]`    |
+| `string`, `null`, references | `EldObjectArray<T>` | `Object[]`  |
 
 They print their logical contents, such as `[1, 2, 3]`, `[true, false]`,
-or `[h, i]`. Each runtime class provides `add(primitive)` for growth;
+or `[h, i]`. Each runtime class provides `add(value)` for growth;
 source-level append syntax is not yet implemented. Reference and nested
-arrays retain their JVM-array representation. Compiled executable JARs
-include the primitive array runtime classes and their base class.
+arrays use `EldObjectArray<T>` and share the same base-class behavior.
+Strings remain Java strings, and null is a valid element type. Reference
+element reads use JVM casts where required by the Eld semantic type.
+Compiled executable JARs include all array runtime classes and their base class.
 
 Subscripting accepts negative indices relative to the end and rejects
 out-of-range indices. Slices use an inclusive start and exclusive end
 and return independent copies. Omitted bounds default to zero and the
-logical length. For primitive arrays, normalized slice bounds must be between zero
+logical length. For all arrays, normalized slice bounds must be between zero
 and the logical length (inclusive); invalid bounds and reversed ranges throw.
-Reference arrays currently clamp slice bounds and return empty arrays
-for reversed ranges.
 
 ## Running tests
 
@@ -308,11 +309,10 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
+- Union types: `T | null`
 - Comments
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
-- Array should grow internally
-- Union types: `T | null`
 - Ubiquitous class toString and equals methods.
 - Named arguments? With support for pythons \* syntax
 - Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;

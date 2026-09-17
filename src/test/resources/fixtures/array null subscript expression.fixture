@@ -1,0 +1,194 @@
+const values = [null, null, null];
+print(values[1]);
+print(values[-1]);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+NULL (1:17-1:21)
+COMMA (1:21-1:22)
+NULL (1:23-1:27)
+COMMA (1:27-1:28)
+NULL (1:29-1:33)
+RIGHT_BRACKET (1:33-1:34)
+SEMICOLON (1:34-1:35)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "values" (2:7-2:13)
+LEFT_BRACKET (2:13-2:14)
+INTEGER_LITERAL "1" (2:14-2:15)
+RIGHT_BRACKET (2:15-2:16)
+RIGHT_PAREN (2:16-2:17)
+SEMICOLON (2:17-2:18)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "values" (3:7-3:13)
+LEFT_BRACKET (3:13-3:14)
+MINUS (3:14-3:15)
+INTEGER_LITERAL "1" (3:15-3:16)
+RIGHT_BRACKET (3:16-3:17)
+RIGHT_PAREN (3:17-3:18)
+SEMICOLON (3:18-3:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:19
+  (VariableDeclaration
+    range: 1:1-1:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:34
+      (LiteralExpression
+        range: 1:17-1:21
+        kind: NULL
+        text: "null"
+      )
+      (LiteralExpression
+        range: 1:23-1:27
+        kind: NULL
+        text: "null"
+      )
+      (LiteralExpression
+        range: 1:29-1:33
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:18
+    (CallExpression
+      range: 2:1-2:17
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 2:7-2:16
+        (IdentifierExpression
+          range: 2:7-2:13
+          name: "values"
+        )
+        (LiteralExpression
+          range: 2:14-2:15
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:19
+    (CallExpression
+      range: 3:1-3:18
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 3:7-3:17
+        (IdentifierExpression
+          range: 3:7-3:13
+          name: "values"
+        )
+        (UnaryExpression
+          range: 3:14-3:16
+          operator: MINUS
+          (LiteralExpression
+            range: 3:15-3:16
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:34 -> ArrayType<null>
+  1:17-1:21 -> null
+  1:23-1:27 -> null
+  1:29-1:33 -> null
+  2:1-2:6 -> BuiltinFunctionType(print)
+  2:1-2:17 -> void
+  2:7-2:13 -> ArrayType<null>
+  2:7-2:16 -> null
+  2:14-2:15 -> i32
+  3:1-3:6 -> BuiltinFunctionType(print)
+  3:1-3:18 -> void
+  3:7-3:13 -> ArrayType<null>
+  3:7-3:17 -> null
+  3:14-3:16 -> i32
+  3:15-3:16 -> i32
+
+Declarations:
+  1:7-1:13 -> VariableSymbol(name=values, type=ArrayType<null>, mutability=CONST)
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:13 -> 1:7-1:13
+  3:1-3:6 -> builtin print
+  3:7-3:13 -> 1:7-1:13
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; values
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    ACONST_NULL
+    AASTORE
+    DUP
+    LDC 1
+    ACONST_NULL
+    AASTORE
+    DUP
+    LDC 2
+    ACONST_NULL
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC -1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 6
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+null
+null
+

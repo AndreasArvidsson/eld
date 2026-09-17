@@ -337,6 +337,8 @@ public final class Test {
     ACONST_NULL
     INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
     LDC 2
     NEWARRAY T_CHAR
     DUP
@@ -347,7 +349,8 @@ public final class Test {
     LDC 1
     LDC 105
     CASTORE
-    INVOKEVIRTUAL java/io/PrintStream.println ([C)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
     INVOKEVIRTUAL java/io/PrintStream.println ()V
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
@@ -359,6 +362,8 @@ public final class Test {
     ICONST_0
     INVOKEVIRTUAL java/io/PrintStream.println (Z)V
     GETSTATIC Test.log : Ljava/io/PrintStream;
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
     LDC 2
     NEWARRAY T_CHAR
     DUP
@@ -369,9 +374,10 @@ public final class Test {
     LDC 1
     LDC 107
     CASTORE
-    INVOKEVIRTUAL java/io/PrintStream.println ([C)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 5
+    MAXSTACK = 7
     MAXLOCALS = 0
 }
 
@@ -382,9 +388,9 @@ public final class Test {
 true
 x
 null
-hi
+[h, i]
 
 7
 false
-ok
+[o, k]
 

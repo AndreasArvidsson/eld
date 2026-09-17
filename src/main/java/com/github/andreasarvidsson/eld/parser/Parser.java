@@ -435,7 +435,8 @@ public final class Parser {
                 leftBracket.range().union(rightBracket.range())
             );
         }
-        final Token name = expect(TokenType.IDENTIFIER);
+        final Token name =
+            check(TokenType.NULL) ? advance() : expect(TokenType.IDENTIFIER);
         return new NamedTypeNode(name.text(), name.range());
     }
 

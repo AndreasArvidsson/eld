@@ -2,7 +2,6 @@ package com.github.andreasarvidsson.eld;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
@@ -16,11 +15,12 @@ import com.github.andreasarvidsson.eld.runtime.EldFloatArray;
 import com.github.andreasarvidsson.eld.runtime.EldDoubleArray;
 import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 import com.github.andreasarvidsson.eld.runtime.EldCharArray;
+import com.github.andreasarvidsson.eld.runtime.EldObjectArray;
 
 final class RuntimeAbi {
     static final String EMPTY_ARRAY_CONSTRUCTOR = "()V";
 
-    enum PrimitiveArray {
+    enum ArrayKind {
         BYTE(BuiltinType.I8, EldByteArray.class, "B", Opcodes.T_BYTE),
         SHORT(BuiltinType.I16, EldShortArray.class, "S", Opcodes.T_SHORT),
         INT(BuiltinType.I32, EldIntArray.class, "I", Opcodes.T_INT),
@@ -33,29 +33,30 @@ final class RuntimeAbi {
             "Z",
             Opcodes.T_BOOLEAN
         ),
-        CHAR(BuiltinType.CHAR, EldCharArray.class, "C", Opcodes.T_CHAR);
+        CHAR(BuiltinType.CHAR, EldCharArray.class, "C", Opcodes.T_CHAR),
+        OBJECT(null, EldObjectArray.class, "Ljava/lang/Object;", 0);
 
-        final BuiltinType element;
-        final Class<? extends EldArray<?>> runtimeClass;
+        final @Nullable BuiltinType element;
+        final Class<?> runtimeClass;
         final String owner;
         final String descriptor;
-        final String primitiveDescriptor;
+        final String elementDescriptor;
         final String backingDescriptor;
         final String constructorDescriptor;
         final int creationOpcode;
 
-        PrimitiveArray(
-            final BuiltinType element,
-            final Class<? extends EldArray<?>> runtimeClass,
-            final String primitiveDescriptor,
+        ArrayKind(
+            final @Nullable BuiltinType element,
+            final Class<?> runtimeClass,
+            final String elementDescriptor,
             final int creationOpcode
         ) {
             this.element = element;
             this.runtimeClass = runtimeClass;
             this.owner = runtimeClass.getName().replace('.', '/');
             this.descriptor = "L" + owner + ";";
-            this.primitiveDescriptor = primitiveDescriptor;
-            this.backingDescriptor = "[" + primitiveDescriptor;
+            this.elementDescriptor = elementDescriptor;
+            this.backingDescriptor = "[" + elementDescriptor;
             this.constructorDescriptor = "(" + backingDescriptor + ")V";
             this.creationOpcode = creationOpcode;
         }
@@ -63,9 +64,9 @@ final class RuntimeAbi {
         String methodDescriptor(final ArrayMethod method) {
             return switch (method) {
                 case SIZE -> "()I";
-                case GET -> "(I)" + primitiveDescriptor;
-                case SET -> "(I" + primitiveDescriptor + ")V";
-                case ADD -> "(" + primitiveDescriptor + ")V";
+                case GET -> "(I)" + elementDescriptor;
+                case SET -> "(I" + elementDescriptor + ")V";
+                case ADD -> "(" + elementDescriptor + ")V";
                 case COPY -> "()" + descriptor;
                 case SLICE_FROM, SLICE_TO -> "(I)" + descriptor;
                 case SLICE -> "(II)" + descriptor;
@@ -91,31 +92,30 @@ final class RuntimeAbi {
 
     }
 
-    static @Nullable PrimitiveArray primitiveArray(final Type element) {
+    static ArrayKind array(final Type element) {
         if (!(element instanceof BuiltinType builtin)) {
-            return null;
+            return ArrayKind.OBJECT;
         }
         return switch (builtin) {
-            case I8 -> PrimitiveArray.BYTE;
-            case I16 -> PrimitiveArray.SHORT;
-            case I32 -> PrimitiveArray.INT;
-            case I64 -> PrimitiveArray.LONG;
-            case F32 -> PrimitiveArray.FLOAT;
-            case F64 -> PrimitiveArray.DOUBLE;
-            case BOOL -> PrimitiveArray.BOOLEAN;
-            case CHAR -> PrimitiveArray.CHAR;
-            default -> null;
+            case I8 -> ArrayKind.BYTE;
+            case I16 -> ArrayKind.SHORT;
+            case I32 -> ArrayKind.INT;
+            case I64 -> ArrayKind.LONG;
+            case F32 -> ArrayKind.FLOAT;
+            case F64 -> ArrayKind.DOUBLE;
+            case BOOL -> ArrayKind.BOOLEAN;
+            case CHAR -> ArrayKind.CHAR;
+            case STRING, NULL -> ArrayKind.OBJECT;
+            case VOID -> throw new IllegalArgumentException(
+                "void is not an array element type"
+            );
         };
-    }
-
-    static PrimitiveArray requirePrimitiveArray(final Type element) {
-        return Objects.requireNonNull(primitiveArray(element));
     }
 
     static List<Class<?>> runtimeClasses() {
         final ArrayList<Class<?>> classes = new ArrayList<>();
         classes.add(EldArray.class);
-        for (final PrimitiveArray array : PrimitiveArray.values()) {
+        for (final ArrayKind array : ArrayKind.values()) {
             classes.add(array.runtimeClass);
         }
         return List.copyOf(classes);
