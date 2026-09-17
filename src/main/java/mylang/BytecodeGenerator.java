@@ -1283,6 +1283,9 @@ public final class BytecodeGenerator {
                     method.visitInsn(L2I);
                 }
             }
+            else if (from == BuiltinType.F64 && to == BuiltinType.F32) {
+                method.visitInsn(D2F);
+            }
             else if (from == BuiltinType.F32 && to == BuiltinType.F64) {
                 method.visitInsn(F2D);
             }

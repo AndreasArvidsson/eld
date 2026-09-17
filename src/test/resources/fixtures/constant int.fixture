@@ -1,0 +1,176 @@
+const aaa = 10;
+const bbb = 3_000_000_000;
+const ccc: i8 = 10;
+const ddd: i32 = 10;
+const eee: i64 = 10;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "aaa" (1:7-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "10" (1:13-1:15)
+SEMICOLON (1:15-1:16)
+CONST (2:1-2:6)
+IDENTIFIER "bbb" (2:7-2:10)
+EQUAL (2:11-2:12)
+INTEGER_LITERAL "3_000_000_000" (2:13-2:26)
+SEMICOLON (2:26-2:27)
+CONST (3:1-3:6)
+IDENTIFIER "ccc" (3:7-3:10)
+COLON (3:10-3:11)
+IDENTIFIER "i8" (3:12-3:14)
+EQUAL (3:15-3:16)
+INTEGER_LITERAL "10" (3:17-3:19)
+SEMICOLON (3:19-3:20)
+CONST (4:1-4:6)
+IDENTIFIER "ddd" (4:7-4:10)
+COLON (4:10-4:11)
+IDENTIFIER "i32" (4:12-4:15)
+EQUAL (4:16-4:17)
+INTEGER_LITERAL "10" (4:18-4:20)
+SEMICOLON (4:20-4:21)
+CONST (5:1-5:6)
+IDENTIFIER "eee" (5:7-5:10)
+COLON (5:10-5:11)
+IDENTIFIER "i64" (5:12-5:15)
+EQUAL (5:16-5:17)
+INTEGER_LITERAL "10" (5:18-5:20)
+SEMICOLON (5:20-5:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:21
+  (VariableDeclaration
+    range: 1:1-1:16
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "aaa"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:15
+      kind: INT
+      text: "10"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "bbb"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:13-2:26
+      kind: INT
+      text: "3_000_000_000"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:20
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "ccc"
+    )
+    (NamedTypeNode
+      range: 3:12-3:14
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 3:17-3:19
+      kind: INT
+      text: "10"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "ddd"
+    )
+    (NamedTypeNode
+      range: 4:12-4:15
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 4:18-4:20
+      kind: INT
+      text: "10"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "eee"
+    )
+    (NamedTypeNode
+      range: 5:12-5:15
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 5:18-5:20
+      kind: INT
+      text: "10"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:15 -> i32
+  2:13-2:26 -> i64
+  3:17-3:19 -> i32
+  4:18-4:20 -> i32
+  5:18-5:20 -> i32
+
+Resolved types:
+  3:12-3:14 -> i8
+  4:12-4:15 -> i32
+  5:12-5:15 -> i64
+
+Conversions:
+  3:17-3:19 -> i32 -> i8
+  5:18-5:20 -> i32 -> i64
+
+Declarations:
+  1:7-1:10 -> VariableSymbol(name=aaa, type=i32, mutability=CONST)
+  2:7-2:10 -> VariableSymbol(name=bbb, type=i64, mutability=CONST)
+  3:7-3:10 -> VariableSymbol(name=ccc, type=i8, mutability=CONST)
+  4:7-4:10 -> VariableSymbol(name=ddd, type=i32, mutability=CONST)
+  5:7-5:10 -> VariableSymbol(name=eee, type=i64, mutability=CONST)
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static I aaa = 10
+
+  // access flags 0x19
+  public final static J bbb = 3000000000L
+
+  // access flags 0x19
+  public final static B ccc = 10
+
+  // access flags 0x19
+  public final static I ddd = 10
+
+  // access flags 0x19
+  public final static J eee = 10L
+}
+
+--- OUTPUT ---
+
+

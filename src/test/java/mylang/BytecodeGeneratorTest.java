@@ -50,6 +50,39 @@ import mylang.semantic.SemanticException;
 class BytecodeGeneratorTest {
 
     @Test
+    void floatLiteralNarrowingKeepsDoubleExpressionTypeAndConvertsAtRuntime()
+        throws Exception {
+        final Program program =
+            new Parser(new Lexer("var value: f32 = 1.5;").getTokens()).parse();
+        final var model = new SemanticAnalyzer().analyze(program);
+        final var initializer =
+            ((VariableDeclaration) program.items().getFirst()).initializer();
+        assertEquals(
+            mylang.semantic.BuiltinType.F64,
+            model.getExpressionType(initializer)
+        );
+        assertEquals(
+            mylang.semantic.BuiltinType.F32,
+            model.getConversionType(initializer)
+        );
+        final Class<?> type = compile("""
+            const folded: f32 = 1.0000000596046448;
+            var runtime: f32 = 1.0000000596046448;
+            var grouped: f32 = -(1.0000000596046448);
+            func identity(value: f32) f32 { return value; }
+            var argument = identity(1.0000000596046448);
+            func result() f32 { return +(1.0000000596046448); }
+            """);
+        // Parsing as f64 first rounds to the f32 midpoint, then D2F rounds to even.
+        // Parsing the original decimal directly as f32 would round upward.
+        assertEquals(1.0f, type.getField("folded").get(null));
+        assertEquals(1.0f, type.getField("runtime").get(null));
+        assertEquals(-1.0f, type.getField("grouped").get(null));
+        assertEquals(1.0f, type.getField("argument").get(null));
+        assertEquals(1.0f, type.getMethod("result").invoke(null));
+    }
+
+    @Test
     void decimalLiteralsDefaultToDoubleAndHonorExplicitFloatTypes()
         throws Exception {
         final Class<?> type = compile("""

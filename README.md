@@ -65,8 +65,8 @@ func twice(value: i64) i64 { return value * 2; }
 ```
 
 Integer literals infer `i32` when they fit, otherwise `i64`. Decimal literals
-infer `f64`; an explicit `f32` variable or parameter type makes a literal
-use single precision instead (including signed and parenthesized literals). Signed integer literals can initialize any integer size that can
+infer `f64`; an explicit `f32` variable or parameter type converts the
+`f64` literal to `f32` (including signed and parenthesized literals). Signed integer literals can initialize any integer size that can
 hold their value. Out-of-range literals are rejected.
 
 Integer values widen implicitly to larger integers or floating-point types;
@@ -249,5 +249,4 @@ items.sort();
 - Do we want to keep the subscript `[]` operator? And if so do want to support ranges?
 - To be wont to support operation overloading? eg defining add/mult etc for custom classes.
 - Named arguments? With support for pythons \* syntax
-- Multiple returns?
 - Class variables and methods are private by default. Only need the public modifier.

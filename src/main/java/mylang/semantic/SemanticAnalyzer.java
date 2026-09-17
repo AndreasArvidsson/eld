@@ -823,7 +823,7 @@ public final class SemanticAnalyzer {
                 && (target.isInteger() || target.isFloating())
         ) {
             if (target.isFloating() && isFloatingLiteral(fromExpression)) {
-                setLiteralType(fromExpression, target);
+                model.setConversionType(fromExpression, target);
                 return target;
             }
             final BigInteger literal = integerLiteral(fromExpression);
