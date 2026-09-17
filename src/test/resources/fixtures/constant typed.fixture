@@ -1,11 +1,11 @@
-const foo: int = 10;
+const foo: i32 = 10;
 
 --- TOKENS ---
 
 CONST (1:1-1:6)
 IDENTIFIER "foo" (1:7-1:10)
 COLON (1:10-1:11)
-IDENTIFIER "int" (1:12-1:15)
+IDENTIFIER "i32" (1:12-1:15)
 EQUAL (1:16-1:17)
 INTEGER_LITERAL "10" (1:18-1:20)
 SEMICOLON (1:20-1:21)
@@ -23,7 +23,7 @@ SEMICOLON (1:20-1:21)
     )
     (NamedTypeNode
       range: 1:12-1:15
-      name: "int"
+      name: "i32"
     )
     (LiteralExpression
       range: 1:18-1:20
@@ -36,13 +36,13 @@ SEMICOLON (1:20-1:21)
 --- SEMANTIC ---
 
 Expression types:
-  1:18-1:20 -> int
+  1:18-1:20 -> i32
 
 Resolved types:
-  1:12-1:15 -> int
+  1:12-1:15 -> i32
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=foo, type=int, mutability=CONST)
+  1:7-1:10 -> VariableSymbol(name=foo, type=i32, mutability=CONST)
 
 --- BYTECODE ---
 

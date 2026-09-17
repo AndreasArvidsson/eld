@@ -1,9 +1,9 @@
 class Counter {
     const initial = 10;
     var count = initial;
-    func next() int { return count++; }
+    func next() i32 { return count++; }
     const callback = next;
-    func invoke() int { return callback(); }
+    func invoke() i32 { return callback(); }
 }
 
 
@@ -26,7 +26,7 @@ FUNC (4:5-4:9)
 IDENTIFIER "next" (4:10-4:14)
 LEFT_PAREN (4:14-4:15)
 RIGHT_PAREN (4:15-4:16)
-IDENTIFIER "int" (4:17-4:20)
+IDENTIFIER "i32" (4:17-4:20)
 LEFT_BRACE (4:21-4:22)
 RETURN (4:23-4:29)
 IDENTIFIER "count" (4:30-4:35)
@@ -42,7 +42,7 @@ FUNC (6:5-6:9)
 IDENTIFIER "invoke" (6:10-6:16)
 LEFT_PAREN (6:16-6:17)
 RIGHT_PAREN (6:17-6:18)
-IDENTIFIER "int" (6:19-6:22)
+IDENTIFIER "i32" (6:19-6:22)
 LEFT_BRACE (6:23-6:24)
 RETURN (6:25-6:31)
 IDENTIFIER "callback" (6:32-6:40)
@@ -97,7 +97,7 @@ RIGHT_BRACE (7:1-7:2)
       )
       (NamedTypeNode
         range: 4:17-4:20
-        name: "int"
+        name: "i32"
       )
       (BlockStatement
         range: 4:21-4:40
@@ -135,7 +135,7 @@ RIGHT_BRACE (7:1-7:2)
       )
       (NamedTypeNode
         range: 6:19-6:22
-        name: "int"
+        name: "i32"
       )
       (BlockStatement
         range: 6:23-6:45
@@ -157,25 +157,25 @@ RIGHT_BRACE (7:1-7:2)
 --- SEMANTIC ---
 
 Expression types:
-  2:21-2:23 -> int
-  3:17-3:24 -> int
-  4:30-4:35 -> int
-  4:30-4:37 -> int
-  5:22-5:26 -> FunctionType([], int)
-  6:32-6:40 -> FunctionType([], int)
-  6:32-6:42 -> int
+  2:21-2:23 -> i32
+  3:17-3:24 -> i32
+  4:30-4:35 -> i32
+  4:30-4:37 -> i32
+  5:22-5:26 -> FunctionType([], i32)
+  6:32-6:40 -> FunctionType([], i32)
+  6:32-6:42 -> i32
 
 Resolved types:
-  4:17-4:20 -> int
-  6:19-6:22 -> int
+  4:17-4:20 -> i32
+  6:19-6:22 -> i32
 
 Declarations:
   1:7-1:14 -> ClassSymbol(name=Counter, type=ClassType(name=Counter))
-  2:11-2:18 -> VariableSymbol(name=initial, type=int, mutability=CONST)
-  3:9-3:14 -> VariableSymbol(name=count, type=int, mutability=VAR)
-  4:10-4:14 -> FunctionSymbol(name=next, parameterTypes=[], returnType=int)
-  5:11-5:19 -> VariableSymbol(name=callback, type=FunctionType([], int), mutability=CONST)
-  6:10-6:16 -> FunctionSymbol(name=invoke, parameterTypes=[], returnType=int)
+  2:11-2:18 -> VariableSymbol(name=initial, type=i32, mutability=CONST)
+  3:9-3:14 -> VariableSymbol(name=count, type=i32, mutability=VAR)
+  4:10-4:14 -> FunctionSymbol(name=next, parameterTypes=[], returnType=i32)
+  5:11-5:19 -> VariableSymbol(name=callback, type=FunctionType([], i32), mutability=CONST)
+  6:10-6:16 -> FunctionSymbol(name=invoke, parameterTypes=[], returnType=i32)
 
 References:
   3:17-3:24 -> 2:11-2:18

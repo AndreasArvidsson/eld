@@ -49,15 +49,15 @@ SEMICOLON (1:14-1:15)
 --- SEMANTIC ---
 
 Expression types:
-  1:1-1:5 -> float
-  1:1-1:11 -> float
-  1:1-1:14 -> float
-  1:2-1:5 -> float
-  1:6-1:11 -> float
-  1:12-1:14 -> int
+  1:1-1:5 -> f64
+  1:1-1:11 -> f64
+  1:1-1:14 -> f64
+  1:2-1:5 -> f64
+  1:6-1:11 -> f64
+  1:12-1:14 -> i32
 
 Conversions:
-  1:12-1:14 -> int -> float
+  1:12-1:14 -> i32 -> f64
 
 --- BYTECODE ---
 
@@ -68,16 +68,16 @@ public final class Test {
 
   // access flags 0x8
   static <clinit>()V
-    LDC 0.5F
-    FNEG
-    LDC 12.34F
-    FADD
+    LDC 0.5D
+    DNEG
+    LDC 12.34D
+    DADD
     LDC 10
-    I2F
-    FSUB
-    POP
+    I2D
+    DSUB
+    POP2
     RETURN
-    MAXSTACK = 2
+    MAXSTACK = 4
     MAXLOCALS = 0
 }
 

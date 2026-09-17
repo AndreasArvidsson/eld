@@ -108,18 +108,18 @@ SEMICOLON (8:13-8:14)
 --- SEMANTIC ---
 
 Expression types:
-  1:15-6:2 -> int
-  1:19-1:20 -> int
+  1:15-6:2 -> i32
+  1:19-1:20 -> i32
   1:19-1:24 -> bool
-  1:23-1:24 -> int
-  2:11-2:12 -> int
-  5:11-5:12 -> int
+  1:23-1:24 -> i32
+  2:11-2:12 -> i32
+  5:11-5:12 -> i32
   8:1-8:6 -> BuiltinFunctionType(print)
   8:1-8:13 -> void
-  8:7-8:12 -> int
+  8:7-8:12 -> i32
 
 Declarations:
-  1:7-1:12 -> VariableSymbol(name=value, type=int, mutability=CONST)
+  1:7-1:12 -> VariableSymbol(name=value, type=i32, mutability=CONST)
 
 References:
   8:1-8:6 -> builtin print

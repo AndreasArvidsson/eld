@@ -1,5 +1,6 @@
 package mylang.semantic;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +32,8 @@ import mylang.parser.IdentifierExpression;
 import mylang.parser.IfExpression;
 import mylang.parser.IndexExpression;
 import mylang.parser.LiteralExpression;
+import mylang.parser.LiteralKind;
+import mylang.parser.UnaryOperator;
 import mylang.parser.Mutability;
 import mylang.parser.NamedTypeNode;
 import mylang.parser.Parameter;
@@ -265,7 +268,7 @@ public final class SemanticAnalyzer {
 
         if (index != null) {
             final VariableSymbol indexSymbol =
-                new VariableSymbol(index, BuiltinType.INT, Mutability.CONST);
+                new VariableSymbol(index, BuiltinType.I32, Mutability.CONST);
             model.setSymbol(index, indexSymbol);
             loopContext.scope().declare(indexSymbol);
         }
@@ -795,7 +798,50 @@ public final class SemanticAnalyzer {
             return from;
         }
 
-        if (from.equals(BuiltinType.INT) && to.equals(BuiltinType.FLOAT)) {
+        if (
+            fromExpression instanceof ArrayExpression array
+                && to instanceof ArrayType target
+        ) {
+            for (final Expression element : array.elements()) {
+                if (
+                    resolveAssignType(
+                        model.getExpressionType(element),
+                        target.elementType(),
+                        element
+                    ) == null
+                ) {
+                    return null;
+                }
+            }
+            model.setExpressionType(array, to);
+            return to;
+        }
+        if (
+            from instanceof BuiltinType source
+                && to instanceof BuiltinType target
+                && (source.isInteger() || source.isFloating())
+                && (target.isInteger() || target.isFloating())
+        ) {
+            if (target.isFloating() && isFloatingLiteral(fromExpression)) {
+                setLiteralType(fromExpression, target);
+                return target;
+            }
+            final BigInteger literal = integerLiteral(fromExpression);
+            if (literal != null && target.isInteger()) {
+                if (literal.bitLength() >= target.bits()) {
+                    return null;
+                }
+                model.setConversionType(fromExpression, to);
+                return to;
+            }
+            if (
+                !((source.isInteger()
+                    && (target.isFloating() || target.bits() >= source.bits()))
+                    || (source.isFloating() && target.isFloating()
+                        && target.bits() >= source.bits()))
+            ) {
+                return null;
+            }
             model.setConversionType(fromExpression, to);
             return to;
         }
@@ -805,8 +851,12 @@ public final class SemanticAnalyzer {
 
     private Type resolveNamedType(final NamedTypeNode named) {
         final Type type = switch (named.name()) {
-            case "int" -> BuiltinType.INT;
-            case "float" -> BuiltinType.FLOAT;
+            case "i8" -> BuiltinType.I8;
+            case "i16" -> BuiltinType.I16;
+            case "i32" -> BuiltinType.I32;
+            case "i64" -> BuiltinType.I64;
+            case "f32" -> BuiltinType.F32;
+            case "f64" -> BuiltinType.F64;
             case "char" -> BuiltinType.CHAR;
             case "boolean" -> BuiltinType.BOOL;
             case "string" -> BuiltinType.STRING;
@@ -929,11 +979,14 @@ public final class SemanticAnalyzer {
         final Type target = analyzeExpression(index.target(), context);
         final Type subscript = analyzeExpression(index.index(), context);
         if (
-            !(target instanceof ArrayType array) || subscript != BuiltinType.INT
+            !(target instanceof ArrayType array)
+                || !(subscript instanceof BuiltinType builtin
+                    && builtin.isInteger()
+                    && builtin != BuiltinType.I64)
         ) {
             throw new SemanticException(
                 index.range(),
-                "Indexing requires an array and an int index"
+                "Indexing requires an array and an i8, i16, or i32 index"
             );
         }
         return array.elementType();
@@ -1005,12 +1058,7 @@ public final class SemanticAnalyzer {
         final Type rightType = analyzeExpression(binary.right(), context);
         Type resolvedType = leftType;
         final boolean compatibleNumbers =
-            numeric(leftType) && numeric(rightType)
-                && (leftType.equals(rightType)
-                    || (leftType == BuiltinType.INT
-                        && rightType == BuiltinType.FLOAT)
-                    || (leftType == BuiltinType.FLOAT
-                        && rightType == BuiltinType.INT));
+            numeric(leftType) && numeric(rightType);
         final boolean valid = switch (binary.operator()) {
             case AND, OR ->
                 leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
@@ -1033,19 +1081,14 @@ public final class SemanticAnalyzer {
         // TODO: Extend this to handle more complex type assignability rules, such as
         // subtyping and type coercion.
 
-        if (
-            leftType.equals(BuiltinType.FLOAT)
-                && rightType.equals(BuiltinType.INT)
-        ) {
-            model.setConversionType(binary.right(), leftType);
-            resolvedType = leftType;
-        }
-        else if (
-            leftType.equals(BuiltinType.INT)
-                && rightType.equals(BuiltinType.FLOAT)
-        ) {
-            model.setConversionType(binary.left(), rightType);
-            resolvedType = rightType;
+        if (compatibleNumbers) {
+            resolvedType = promotedNumericType(leftType, rightType);
+            if (!leftType.equals(resolvedType)) {
+                model.setConversionType(binary.left(), resolvedType);
+            }
+            if (!rightType.equals(resolvedType)) {
+                model.setConversionType(binary.right(), resolvedType);
+            }
         }
 
         final Type resultType =
@@ -1058,6 +1101,12 @@ public final class SemanticAnalyzer {
         final UnaryExpression unary,
         final SemanticContext context
     ) {
+        final BigInteger signedLiteral = integerLiteral(unary);
+        if (signedLiteral != null) {
+            final Type type = integerType(signedLiteral, unary);
+            setLiteralType(unary.operand(), type);
+            return type;
+        }
         final Type operandType = analyzeExpression(unary.operand(), context);
         switch (unary.operator()) {
             case INCREMENT, DECREMENT -> {
@@ -1087,7 +1136,14 @@ public final class SemanticAnalyzer {
             }
         }
 
-        final Type resultType = operandType;
+        final Type resultType =
+            unary.operator() == UnaryOperator.PLUS
+                || unary.operator() == UnaryOperator.MINUS
+                    ? promotedNumericType(operandType, BuiltinType.I32)
+                    : operandType;
+        if (!operandType.equals(resultType)) {
+            model.setConversionType(unary.operand(), resultType);
+        }
         model.setExpressionType(unary, resultType);
         return resultType;
     }
@@ -1113,15 +1169,102 @@ public final class SemanticAnalyzer {
         return type;
     }
 
+    // Java binary numeric promotion: double, float, long, otherwise int.
+    private static BuiltinType promotedNumericType(
+        final Type left,
+        final Type right
+    ) {
+        if (left == BuiltinType.F64 || right == BuiltinType.F64) {
+            return BuiltinType.F64;
+        }
+        if (left == BuiltinType.F32 || right == BuiltinType.F32) {
+            return BuiltinType.F32;
+        }
+        if (left == BuiltinType.I64 || right == BuiltinType.I64) {
+            return BuiltinType.I64;
+        }
+        return BuiltinType.I32;
+    }
+
     private static boolean numeric(final Type type) {
-        return type == BuiltinType.INT || type == BuiltinType.FLOAT
-            || type == BuiltinType.CHAR;
+        return type instanceof BuiltinType builtin
+            && (builtin.isInteger() || builtin.isFloating()
+                || builtin == BuiltinType.CHAR);
+    }
+
+    private static boolean isFloatingLiteral(final Expression expression) {
+        if (expression instanceof LiteralExpression literal) {
+            return literal.kind() == LiteralKind.FLOAT;
+        }
+        if (expression instanceof GroupingExpression grouping) {
+            return isFloatingLiteral(grouping.expression());
+        }
+        return expression instanceof UnaryExpression unary
+            && (unary.operator() == UnaryOperator.PLUS
+                || unary.operator() == UnaryOperator.MINUS)
+            && isFloatingLiteral(unary.operand());
+    }
+
+    public static @Nullable BigInteger integerLiteral(
+        final Expression expression
+    ) {
+        if (
+            expression instanceof LiteralExpression literal
+                && literal.kind() == LiteralKind.INT
+        ) {
+            return new BigInteger(literal.text().replace("_", ""));
+        }
+        if (expression instanceof GroupingExpression grouping) {
+            return integerLiteral(grouping.expression());
+        }
+        if (
+            expression instanceof UnaryExpression unary
+                && (unary.operator() == UnaryOperator.MINUS
+                    || unary.operator() == UnaryOperator.PLUS)
+        ) {
+            final BigInteger value = integerLiteral(unary.operand());
+            return value == null
+                ? null
+                : unary.operator() == UnaryOperator.MINUS
+                    ? value.negate()
+                    : value;
+        }
+        return null;
+    }
+
+    private static Type integerType(
+        final BigInteger value,
+        final Expression expression
+    ) {
+        if (value.bitLength() < 32) {
+            return BuiltinType.I32;
+        }
+        if (value.bitLength() < 64) {
+            return BuiltinType.I64;
+        }
+        throw new SemanticException(
+            expression.range(),
+            "Integer literal is outside the i64 range"
+        );
+    }
+
+    private void setLiteralType(final Expression expression, final Type type) {
+        model.setExpressionType(expression, type);
+        if (expression instanceof GroupingExpression grouping) {
+            setLiteralType(grouping.expression(), type);
+        }
+        if (expression instanceof UnaryExpression unary) {
+            setLiteralType(unary.operand(), type);
+        }
     }
 
     private Type analyzeLiteralExpression(final LiteralExpression literal) {
         final Type type = switch (literal.kind()) {
-            case INT -> BuiltinType.INT;
-            case FLOAT -> BuiltinType.FLOAT;
+            case INT -> integerType(
+                new BigInteger(literal.text().replace("_", "")),
+                literal
+            );
+            case FLOAT -> BuiltinType.F64;
             case CHAR -> BuiltinType.CHAR;
             case BOOL -> BuiltinType.BOOL;
             case STRING -> BuiltinType.STRING;

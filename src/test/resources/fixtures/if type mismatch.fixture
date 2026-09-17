@@ -56,4 +56,4 @@ RIGHT_BRACE (3:7-3:8)
 
 --- SEMANTIC ---
 
-SemanticException: Else-if condition must be bool, found int at 2:7-2:8
+SemanticException: Else-if condition must be bool, found i32 at 2:7-2:8

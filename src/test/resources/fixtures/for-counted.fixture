@@ -72,15 +72,15 @@ RIGHT_BRACE (1:31-1:32)
 --- SEMANTIC ---
 
 Expression types:
-  1:14-1:15 -> int
-  1:17-1:18 -> int
+  1:14-1:15 -> i32
+  1:17-1:18 -> i32
   1:17-1:23 -> bool
-  1:21-1:23 -> int
-  1:25-1:26 -> int
-  1:25-1:28 -> int
+  1:21-1:23 -> i32
+  1:25-1:26 -> i32
+  1:25-1:28 -> i32
 
 Declarations:
-  1:10-1:11 -> VariableSymbol(name=i, type=int, mutability=VAR)
+  1:10-1:11 -> VariableSymbol(name=i, type=i32, mutability=VAR)
 
 References:
   1:17-1:18 -> 1:10-1:11

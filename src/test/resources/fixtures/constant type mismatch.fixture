@@ -1,11 +1,11 @@
-const foo: int = 5.5;
+const foo: i32 = 5.5;
 
 --- TOKENS ---
 
 CONST (1:1-1:6)
 IDENTIFIER "foo" (1:7-1:10)
 COLON (1:10-1:11)
-IDENTIFIER "int" (1:12-1:15)
+IDENTIFIER "i32" (1:12-1:15)
 EQUAL (1:16-1:17)
 FLOAT_LITERAL "5.5" (1:18-1:21)
 SEMICOLON (1:21-1:22)
@@ -23,7 +23,7 @@ SEMICOLON (1:21-1:22)
     )
     (NamedTypeNode
       range: 1:12-1:15
-      name: "int"
+      name: "i32"
     )
     (LiteralExpression
       range: 1:18-1:21
@@ -35,4 +35,4 @@ SEMICOLON (1:21-1:22)
 
 --- SEMANTIC ---
 
-SemanticException: Type mismatch: cannot assign float to int at 1:18-1:21
+SemanticException: Type mismatch: cannot assign f64 to i32 at 1:18-1:21

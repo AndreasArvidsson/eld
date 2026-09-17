@@ -95,20 +95,20 @@ SEMICOLON (2:30-2:31)
 --- SEMANTIC ---
 
 Expression types:
-  1:22-1:23 -> int
-  1:22-1:27 -> int
-  1:22-1:31 -> int
-  1:26-1:27 -> int
-  1:30-1:31 -> int
-  2:21-2:22 -> int
-  2:21-2:30 -> int
-  2:25-2:26 -> int
-  2:25-2:30 -> int
-  2:29-2:30 -> int
+  1:22-1:23 -> i32
+  1:22-1:27 -> i32
+  1:22-1:31 -> i32
+  1:26-1:27 -> i32
+  1:30-1:31 -> i32
+  2:21-2:22 -> i32
+  2:21-2:30 -> i32
+  2:25-2:26 -> i32
+  2:25-2:30 -> i32
+  2:29-2:30 -> i32
 
 Declarations:
-  1:7-1:19 -> VariableSymbol(name=productFirst, type=int, mutability=CONST)
-  2:7-2:18 -> VariableSymbol(name=productLast, type=int, mutability=CONST)
+  1:7-1:19 -> VariableSymbol(name=productFirst, type=i32, mutability=CONST)
+  2:7-2:18 -> VariableSymbol(name=productLast, type=i32, mutability=CONST)
 
 --- BYTECODE ---
 

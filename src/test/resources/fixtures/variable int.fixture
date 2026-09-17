@@ -31,10 +31,10 @@ SEMICOLON (1:13-1:14)
 --- SEMANTIC ---
 
 Expression types:
-  1:11-1:13 -> int
+  1:11-1:13 -> i32
 
 Declarations:
-  1:5-1:8 -> VariableSymbol(name=foo, type=int, mutability=VAR)
+  1:5-1:8 -> VariableSymbol(name=foo, type=i32, mutability=VAR)
 
 --- BYTECODE ---
 

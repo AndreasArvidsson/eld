@@ -86,4 +86,4 @@ SEMICOLON (6:2-6:3)
 
 --- SEMANTIC ---
 
-SemanticException: Incompatible branch types: int and float at 5:11-5:14
+SemanticException: Incompatible branch types: i32 and f64 at 5:11-5:14

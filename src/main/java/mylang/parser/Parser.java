@@ -647,8 +647,7 @@ public final class Parser {
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
-        final TypeNode returnType =
-            check(TokenType.ARROW) ? null : parseType();
+        final TypeNode returnType = check(TokenType.ARROW) ? null : parseType();
         expect(TokenType.ARROW);
         final AstNode body =
             check(TokenType.LEFT_BRACE)

@@ -58,18 +58,18 @@ SEMICOLON (1:33-1:34)
 --- SEMANTIC ---
 
 Expression types:
-  1:16-1:20 -> float
-  1:16-1:28 -> float
-  1:16-1:33 -> float
-  1:17-1:20 -> float
-  1:23-1:28 -> float
-  1:31-1:33 -> int
+  1:16-1:20 -> f64
+  1:16-1:28 -> f64
+  1:16-1:33 -> f64
+  1:17-1:20 -> f64
+  1:23-1:28 -> f64
+  1:31-1:33 -> i32
 
 Conversions:
-  1:31-1:33 -> int -> float
+  1:31-1:33 -> i32 -> f64
 
 Declarations:
-  1:7-1:13 -> VariableSymbol(name=result, type=float, mutability=CONST)
+  1:7-1:13 -> VariableSymbol(name=result, type=f64, mutability=CONST)
 
 --- BYTECODE ---
 
@@ -79,7 +79,7 @@ public final class Test {
 
 
   // access flags 0x19
-  public final static F result = 1.8400002F
+  public final static D result = 1.8399999999999999D
 }
 
 --- OUTPUT ---

@@ -29,7 +29,7 @@ values. Earlier statements are not rerun.
 
 ```text
 iz> var count = 1;
-iz> func next() int { count = count + 1; return count; }
+iz> func next() i32 { count = count + 1; return count; }
 iz> next();
 2
 iz> count;
@@ -48,6 +48,36 @@ end with their closing `}`. A do-while loop ends with `while (condition);`.
 Newlines do not terminate statements, so expressions and return values can
 span lines. A lambda initializer still needs a semicolon after its closing
 brace: `const action = () => {};`. REPL commands such as `:quit` do not need one.
+
+## Numeric types
+
+The signed integer types are `i8`, `i16`, `i32`, and `i64` (8, 16, 32, and
+64 bits). The floating-point types are `f32` and `f64` (IEEE 754 single and
+double precision). `i32` replaces `int`, and `f32` replaces `float`; the old
+names are no longer accepted as types.
+
+```text
+var small: i8 = 127;
+var count: i64 = 9000000000;
+var ratio: f32 = 0.5;
+var precise: f64 = 1.23456789012345;
+func twice(value: i64) i64 { return value * 2; }
+```
+
+Integer literals infer `i32` when they fit, otherwise `i64`. Decimal literals
+infer `f64`; an explicit `f32` variable or parameter type makes a literal
+use single precision instead (including signed and parenthesized literals). Signed integer literals can initialize any integer size that can
+hold their value. Out-of-range literals are rejected.
+
+Integer values widen implicitly to larger integers or floating-point types;
+`f32` also widens to `f64`. Other narrowing conversions are rejected. Arithmetic and numeric comparisons follow Java's binary numeric promotion:
+use `f64` if either operand is `f64`, otherwise `f32`, otherwise `i64`,
+otherwise `i32`. This includes `char`: operations on `i8`, `i16`, and `char`
+produce `i32`, even when both operands have the same small type. Unary `+`
+and `-` also promote these types to `i32`. Increments and decrements retain
+the operand's type. Integer arithmetic wraps at the promoted width; increments
+and decrements wrap at the operand's width. Widening to floating point can
+lose precision, just as in Java.
 
 ## Running tests
 
@@ -147,6 +177,77 @@ mvn -N -q spotless:apply
 
 ## For consideration
 
+### Export & import
+
+- Remove default exports. All exports must be named.
+- Imports are always named and do not use braces.
+- Aliasing and wildcard imports are supported.
+
+Valid
+
+```ts
+// foo and bar are named imports
+import foo, bar from "lib"
+// Aliasing is supported
+import foo as bar from "lib"
+// Wildcard is supported
+import * as lib from "lib"
+
+export const foo = 0;
+```
+
+Invalid
+
+```ts
+import { foo } from "lib";
+// foo here is a default export
+import foo from "lib";
+
+export default foo;
+```
+
 ### Lambda syntax
 
 `() => 0` and `() => {}` works fine, but the example with the braces doesn't really need the arrow. It's only really there for the parser to identify this as a lambda. It also needs to lookahead to do this. A prefix would be simpler. eg: `fn() => 0` and `fn() {}`
+
+### More default libraries should return null
+
+- Methods like `indexOf` should return `null` instead of `-1` on failure. Force the user to deal with this scenario.
+
+### Support Comparable interface
+
+- Add a `Comparable` interface. Classes that implement it can be sorted without a callback.
+- Non-primitive types that do not implement `Comparable` cannot be sorted without a callback.
+
+Valid
+
+```ts
+// Foo implements Comparable
+var items: Foo[];
+items.sort();
+items.sort((a, b) -> a.value - b.value);
+```
+
+Invalid
+
+```ts
+// Foo does not implement Comparable
+var items: Foo[];
+items.sort();
+```
+
+### Support tuples
+
+- Remove `[T, T]` and replace it with `(T, T)`.
+- Arrays should only support `T[]`.
+
+### Miscellaneous
+
+- Ubiquitous class toString and equals methods.
+- Optional arguments (value?: i32)
+- Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
+- Do we want to keep the subscript `[]` operator? And if so do want to support ranges?
+- To be wont to support operation overloading? eg defining add/mult etc for custom classes.
+- Named arguments? With support for pythons \* syntax
+- Multiple returns?
+- Class variables and methods are private by default. Only need the public modifier.

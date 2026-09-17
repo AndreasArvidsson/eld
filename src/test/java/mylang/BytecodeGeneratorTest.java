@@ -50,12 +50,345 @@ import mylang.semantic.SemanticException;
 class BytecodeGeneratorTest {
 
     @Test
+    void decimalLiteralsDefaultToDoubleAndHonorExplicitFloatTypes()
+        throws Exception {
+        final Class<?> type = compile("""
+            const inferred = 1.23456789012345;
+            var runtime = 1.23456789012345;
+            var single: f32 = 1.23456789012345;
+            const signed: f32 = -(1.23456789012345);
+            func identity(value: f32) f32 { return value; }
+            func literal() f32 { return +(1.23456789012345); }
+            var argument = identity(-(1.23456789012345));
+            var returned = literal();
+            var mixed = single + 0.1;
+            """);
+        assertEquals(double.class, type.getField("inferred").getType());
+        assertEquals(1.23456789012345, type.getField("inferred").get(null));
+        assertEquals(1.23456789012345, type.getField("runtime").get(null));
+        assertEquals(1.2345679f, type.getField("single").get(null));
+        assertEquals(-1.2345679f, type.getField("signed").get(null));
+        assertEquals(-1.2345679f, type.getField("argument").get(null));
+        assertEquals(1.2345679f, type.getField("returned").get(null));
+        assertEquals(double.class, type.getField("mixed").getType());
+        assertEquals(
+            (double) 1.2345679f + 0.1,
+            type.getField("mixed").get(null)
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compile("var a = 1.25; var b: f32 = a;")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compile("func f(a: f32) {} var a = 1.25; f(a);")
+        );
+    }
+
+    @Test
+    void numericOperatorsUseJavaPromotionForEveryTypePair() throws Exception {
+        final String[] types =
+            {"i8", "i16", "i32", "i64", "f32", "f64", "char"};
+        for (final String left : types) {
+            for (final String right : types) {
+                final String a = left.equals("char") ? "'A'" : "2";
+                final String b = right.equals("char") ? "'A'" : "2";
+                final Class<?> type =
+                    compile(
+                        "var a: " + left + " = " + a + "; var b: " + right
+                            + " = " + b
+                            + "; var sum = a + b; var difference = a - b; var product = a * b;"
+                            + " var quotient = a / b; var remainder = a % b; var equal = a == b; var less = a < b;"
+                    );
+                final Class<?> expectedType =
+                    left.equals("f64") || right.equals("f64")
+                        ? double.class
+                        : left.equals("f32") || right.equals("f32")
+                            ? float.class
+                            : left.equals("i64") || right.equals("i64")
+                                ? long.class
+                                : int.class;
+                for (final String field : List.of(
+                    "sum",
+                    "difference",
+                    "product",
+                    "quotient",
+                    "remainder"
+                )) {
+                    assertEquals(
+                        expectedType,
+                        type.getField(field).getType(),
+                        left + " / " + right
+                    );
+                }
+                final int av = left.equals("char") ? 65 : 2;
+                final int bv = right.equals("char") ? 65 : 2;
+                assertEquals(
+                    (double) (av + bv),
+                    ((Number) type.getField("sum").get(null)).doubleValue()
+                );
+                assertEquals(
+                    (double) (av - bv),
+                    ((Number) type.getField("difference").get(null))
+                        .doubleValue()
+                );
+                assertEquals(
+                    (double) (av * bv),
+                    ((Number) type.getField("product").get(null)).doubleValue()
+                );
+                assertEquals(av == bv, type.getField("equal").get(null));
+                assertEquals(av < bv, type.getField("less").get(null));
+            }
+        }
+    }
+
+    @Test
+    void smallUnaryOperandsPromoteAndFloatingPromotionPreservesRounding()
+        throws Exception {
+        final Class<?> type = compile("""
+            var small: i8 = -128;
+            var shortValue: i16 = -32768;
+            var character = 'A';
+            var negated = -small;
+            var positive = +shortValue;
+            var code = +character;
+            var negatedCharacter = -character;
+            var sum = small + small;
+            var old = small++;
+            var wide: f64 = 0;
+            var promoted = wide + 0.1;
+            const folded = 'A' + 0.1;
+            var runtime = character + 0.1;
+            var large: i64 = 16777217;
+            var single: f32 = 0;
+            var rounded = large + single;
+            """);
+        assertEquals(128, type.getField("negated").get(null));
+        assertEquals(-32768, type.getField("positive").get(null));
+        assertEquals(65, type.getField("code").get(null));
+        assertEquals(-65, type.getField("negatedCharacter").get(null));
+        assertEquals(-256, type.getField("sum").get(null));
+        assertEquals((byte) -128, type.getField("old").get(null));
+        assertEquals((byte) -127, type.getField("small").get(null));
+        assertEquals(0.1, type.getField("promoted").get(null));
+        assertEquals(65 + 0.1, type.getField("folded").get(null));
+        assertEquals(
+            type.getField("folded").get(null),
+            type.getField("runtime").get(null)
+        );
+        assertEquals(16777216f, type.getField("rounded").get(null));
+        assertThrows(
+            SemanticException.class,
+            () -> compile("var a: i8 = 1; var b: i8 = a + a;")
+        );
+    }
+
+    @Test
+    void sizedNumbersUseTheirJvmTypesAndSupportWidening() throws Exception {
+        final Class<?> type = compile("""
+            const smallest: i8 = -128;
+            const small: i16 = 32767;
+            const wide: i64 = 9223372036854775807;
+            const minimum: i64 = -(9223372036854775808);
+            var inferred = 2147483648;
+            var single: f32 = 1.25;
+            var precise: f64 = 1.23456789012345;
+            func mix(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64) f64 {
+                var local: i64 = d + c;
+                var real: f64 = f + e;
+                local++;
+                real++;
+                return local + real + a + b;
+            }
+            var result = mix(1, 2, 3, 4, 5.0, 6.0);
+            """);
+        assertEquals(byte.class, type.getField("smallest").getType());
+        assertEquals((byte) -128, type.getField("smallest").get(null));
+        assertEquals((short) 32767, type.getField("small").get(null));
+        assertEquals(Long.MAX_VALUE, type.getField("wide").get(null));
+        assertEquals(Long.MIN_VALUE, type.getField("minimum").get(null));
+        assertEquals(2147483648L, type.getField("inferred").get(null));
+        assertEquals(1.25f, type.getField("single").get(null));
+        assertEquals(1.23456789012345, type.getField("precise").get(null));
+        assertEquals(23.0, type.getField("result").get(null));
+    }
+
+    @Test
+    void sizedArraysAssignmentsAndOverflowVerifyAndExecute() throws Exception {
+        final String[] types = {"i8", "i16", "i64", "f64"};
+        final String[] initial = {"127", "32767", "2147483648", "1.25"};
+        final String[] assigned = {"126", "32766", "9000000000", "4.5"};
+        final Object[] oldValues =
+            {(byte) 127, (short) 32767, 2147483648L, 1.25};
+        final Object[] newValues =
+            {(byte) 127, (short) 32767, 9000000001L, 5.5};
+        final Object[] finalValues =
+            {(byte) -128, (short) -32768, 9000000002L, 6.5};
+        final Range range = new Range(1, 1, 1, 2);
+        for (int i = 0; i < types.length; i++) {
+            final Program declarations =
+                new Parser(
+                    new Lexer(
+                        "var value: " + types[i] + " = " + initial[i]
+                            + "; var values = [value];"
+                    ).getTokens()
+                ).parse();
+            final List<mylang.parser.BlockItem> items =
+                new ArrayList<>(declarations.items());
+            final IndexExpression index =
+                new IndexExpression(
+                    new IdentifierExpression("values", range),
+                    new LiteralExpression(LiteralKind.INT, "0", range),
+                    range
+                );
+            items.add(
+                new VariableDeclaration(
+                    Mutability.CONST,
+                    new IdentifierDeclaration("old", range),
+                    null,
+                    new PostfixExpression(
+                        index,
+                        PostfixOperator.INCREMENT,
+                        range
+                    ),
+                    range
+                )
+            );
+            items.add(
+                new VariableDeclaration(
+                    Mutability.CONST,
+                    new IdentifierDeclaration("assigned", range),
+                    null,
+                    new AssignmentExpression(
+                        index,
+                        new LiteralExpression(
+                            i == 3 ? LiteralKind.FLOAT : LiteralKind.INT,
+                            assigned[i],
+                            range
+                        ),
+                        range
+                    ),
+                    range
+                )
+            );
+            items.add(
+                new VariableDeclaration(
+                    Mutability.CONST,
+                    new IdentifierDeclaration("updated", range),
+                    null,
+                    new UnaryExpression(UnaryOperator.INCREMENT, index, range),
+                    range
+                )
+            );
+            items.add(
+                new ExpressionStatement(
+                    new PostfixExpression(
+                        index,
+                        PostfixOperator.INCREMENT,
+                        range
+                    ),
+                    range
+                )
+            );
+            final Class<?> type = compile(new Program(items, range));
+            assertEquals(oldValues[i], type.getField("old").get(null));
+            assertEquals(newValues[i], type.getField("updated").get(null));
+            assertEquals(
+                finalValues[i],
+                java.lang.reflect.Array
+                    .get(type.getField("values").get(null), 0)
+            );
+        }
+    }
+
+    @Test
+    void wideNumbersWorkInLoopsSwitchesAndInstanceFields() throws Exception {
+        final Class<?> type = compile("""
+            var longs = [2147483648, 9000000000];
+            var total: i64 = 0;
+            for (value : longs) { total = total + value; }
+            func update() i64 { var x: i64 = 1; x = 4; x++; return -x; }
+            var negative = update();
+            var comparison = total > 9000000000;
+            var selected = switch (total) { case 11147483648 => 7 else => 9 };
+            var real: f64 = 2.25;
+            var matchValue: f64 = 2.25;
+            var decimal = switch (real) { case matchValue => 3 else => 5 };
+            var precise: f64 = -(1.23456789012345);
+            """);
+        assertEquals(11147483648L, type.getField("total").get(null));
+        assertEquals(-5L, type.getField("negative").get(null));
+        assertEquals(true, type.getField("comparison").get(null));
+        assertEquals(7, type.getField("selected").get(null));
+        assertEquals(3, type.getField("decimal").get(null));
+        assertEquals(-1.23456789012345, type.getField("precise").get(null));
+        final Class<?> counter = compileClass("""
+            class Counter {
+                var count: i64 = 1;
+                var real: f64 = 1.25;
+                func old() i64 { return count++; }
+                func next() f64 { real++; return real; }
+                func set() i64 { return count = 9000000000; }
+            }
+            """, "Test$Counter");
+        final Object instance = counter.getConstructor().newInstance();
+        assertEquals(1L, counter.getMethod("old").invoke(instance));
+        assertEquals(2.25, counter.getMethod("next").invoke(instance));
+        assertEquals(9000000000L, counter.getMethod("set").invoke(instance));
+    }
+
+    @Test
+    void printsEveryNumericSize() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            var a: i8 = -128;
+            var b: i16 = 32767;
+            var c: i32 = 123;
+            var d: i64 = 9223372036854775807;
+            var e: f32 = 1.25;
+            var f: f64 = 1.23456789012345;
+            print(a); print(b); print(c); print(d); print(e); print(f);
+            """).getTokens()).parse();
+        final var classes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses();
+        assertEquals(
+            "-128\n32767\n123\n9223372036854775807\n1.25\n1.23456789012345\n",
+            BytecodeRunner.run(classes)
+        );
+    }
+
+    @Test
+    void rejectsNumericOverflowNarrowingAndOldTypeNames() {
+        for (final String source : List.of(
+            "var x: i8 = 128;",
+            "var x: i8 = -129;",
+            "var x: i16 = 32768;",
+            "var x: i16 = -32769;",
+            "var x: i32 = 2147483648;",
+            "var x = 9223372036854775808;",
+            "var x = -9223372036854775809;",
+            "var x: i64 = 1; var y: i32 = x;",
+            "var x: f64 = 1.0; var y: f32 = x;",
+            "var x: int = 1;",
+            "var x: float = 1.0;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
     void integerSwitchUsesTableForDenseKeys() throws Exception {
         final String source =
             """
                 var calls = 0;
-                func subject() int { calls++; return 2; }
-                func choose(value: int) int {
+                func subject() i32 { calls++; return 2; }
+                func choose(value: i32) i32 {
                     return switch (value) {
                         case 2, 3 { yield 20; }
                         case -1 => 10
@@ -97,7 +430,7 @@ class BytecodeGeneratorTest {
     @Test
     void integerSwitchUsesLookupForSparseAndExtremeKeys() throws Exception {
         final String source = """
-            func choose(value: int) int {
+            func choose(value: i32) i32 {
                 return switch (value) {
                     case 2147483647 => 1
                     case -2147483648 => 2
@@ -144,15 +477,15 @@ class BytecodeGeneratorTest {
         final String source =
             """
                 var calls = 0;
-                func match() int { calls++; return 2; }
-                func choose(value: int) int {
+                func match() i32 { calls++; return 2; }
+                func choose(value: i32) i32 {
                     return switch (value) {
                         case 1 => 10
                         case match(), match() => 20
                         else => 30
                     };
                 }
-                func throwing(value: int) int {
+                func throwing(value: i32) i32 {
                     return switch (value) { case 1 => 10 case 1 / 0 => 20 else => 30 };
                 }
                 """;
@@ -183,8 +516,8 @@ class BytecodeGeneratorTest {
         final Class<?> type = compile("""
             var calls = 0;
             var matches = 0;
-            func subject() int { calls++; return 2; }
-            func match() int { matches++; return 2; }
+            func subject() i32 { calls++; return 2; }
+            func match() i32 { matches++; return 2; }
             const result = switch (subject()) {
                 case 1, match(), match() => 20
                 case 2 => 99
@@ -210,7 +543,7 @@ class BytecodeGeneratorTest {
         assertEquals(20, type.getField("result").get(null));
         assertEquals(1, type.getField("side").get(null));
         assertEquals("yes", type.getField("text").get(null));
-        assertEquals(2.5f, type.getField("floating").get(null));
+        assertEquals(2.5, type.getField("floating").get(null));
         assertEquals(7, type.getField("boolean").get(null));
         assertEquals(9, type.getField("character").get(null));
         assertEquals(2, type.getField("updates").get(null));
@@ -228,8 +561,8 @@ class BytecodeGeneratorTest {
                     else { yield 0; }
                 }
             };
-            const widened: float = switch (0) { else => 4 };
-            func early(value: int) int {
+            const widened: f32 = switch (0) { else => 4 };
+            func early(value: i32) i32 {
                 const n = switch (value) { case 1 { return 8; } else => 2 };
                 return n;
             }
@@ -254,7 +587,7 @@ class BytecodeGeneratorTest {
         for (final String source : List.of(
             "const x = switch (1) { case 1 => 2 };",
             "const x = switch (1) { case 1 => 2 else => 2.5 };",
-            "const x: float = switch (1) { case 1 => 2 else => 2.5 };",
+            "const x: f32 = switch (1) { case 1 => 2 else => 2.5 };",
             "const x = switch (1) { case 1 { 2; } else => 3 };",
             "const x = switch (1) { case 1 { if (true) { yield 2; } } else => 3 };",
             "const x = switch (1) { case 1 => print() else => 3 };",
@@ -289,7 +622,7 @@ class BytecodeGeneratorTest {
     @Test
     void switchSupportsBlockBranchesWithoutArrows() throws Exception {
         final Class<?> type = compile("""
-            func choose(value: int) int {
+            func choose(value: i32) i32 {
                 return switch (value) {
                     case 1, 2 { yield 10; }
                     else { yield 20; }
@@ -308,7 +641,7 @@ class BytecodeGeneratorTest {
         final Class<?> type =
             compile(
                 """
-                    func choose(value: int) int {
+                    func choose(value: i32) i32 {
                         return switch (value) {
                             case 1, 2 => 10 +
                                 2
@@ -347,28 +680,25 @@ class BytecodeGeneratorTest {
             );
             assertThrows(
                 SemanticException.class,
-                () -> compile("const value: float = " + expression + ";")
+                () -> compile("const value: f32 = " + expression + ";")
             );
         }
-        final Class<?> type =
-            compile(
-                """
-                    const ternary: float = true ? 1 : 2;
-                    const conditional: float = if (false) { yield 3; } else { yield 4; };
-                    var assigned: float = 0;
-                    assigned = true ? 5 : 6;
-                    func result() float {
-                        assigned = if (true) { yield 7; } else { yield 8; };
-                        return assigned;
-                    }
-                    const floating = true ? 1.5 : 2.5;
-                    """
-            );
+        final Class<?> type = compile("""
+            const ternary: f32 = true ? 1 : 2;
+            const conditional: f32 = if (false) { yield 3; } else { yield 4; };
+            var assigned: f32 = 0;
+            assigned = true ? 5 : 6;
+            func result() f32 {
+                assigned = if (true) { yield 7; } else { yield 8; };
+                return assigned;
+            }
+            const floating = true ? 1.5 : 2.5;
+            """);
         assertEquals(1.0f, type.getField("ternary").get(null));
         assertEquals(4.0f, type.getField("conditional").get(null));
         assertEquals(5.0f, type.getField("assigned").get(null));
         assertEquals(7.0f, type.getMethod("result").invoke(null));
-        assertEquals(1.5f, type.getField("floating").get(null));
+        assertEquals(1.5, type.getField("floating").get(null));
     }
 
     @Test
@@ -405,10 +735,10 @@ class BytecodeGeneratorTest {
             1 + 2;
             count;
             count = count + 1;
-            func next() int { count++; return count; }
+            func next() i32 { count++; return count; }
             (next());
             next() + 10;
-            func result() int { return count; }
+            func result() i32 { return count; }
             """);
         assertEquals(4, type.getMethod("result").invoke(null));
     }
@@ -465,7 +795,7 @@ class BytecodeGeneratorTest {
             const log = print;
             print([1, 2]);
             log([true, false]);
-            func value() int { return 1; }
+            func value() i32 { return 1; }
             print(value);
             """).getTokens()).parse();
         final var classes =
@@ -498,8 +828,8 @@ class BytecodeGeneratorTest {
     @Test
     void userFunctionCanShadowBuiltinPrint() throws Exception {
         final Class<?> type = compile("""
-            func print(value: int) int { return value + 1; }
-            func result() int { return print(41); }
+            func print(value: i32) i32 { return value + 1; }
+            func result() i32 { return print(41); }
             """);
         assertEquals(42, type.getMethod("result").invoke(null));
     }
@@ -510,11 +840,11 @@ class BytecodeGeneratorTest {
             class Counter {
                 const initial = 10;
                 var count = initial;
-                var floating = 1.5;
+                var floating: f32 = 1.5;
                 var text = "hello";
-                func postfix() int { return count++; }
-                func next() int { return count++; }
-                func decrement() float { return floating--; }
+                func postfix() i32 { return count++; }
+                func next() i32 { return count++; }
+                func decrement() f32 { return floating--; }
             }
             """).getTokens()).parse();
         final var classes =
@@ -552,7 +882,7 @@ class BytecodeGeneratorTest {
             "if (true) { return 7; } elif (false) { return 8; } else { return 9; }",
             "return 7; var unused = 99;"
         )) {
-            final String source = "func result() int { " + body + " }";
+            final String source = "func result() i32 { " + body + " }";
             final var node = inspect(source);
             for (final var method : node.methods) {
                 for (final var instruction : method.instructions) {
@@ -575,7 +905,7 @@ class BytecodeGeneratorTest {
     @Test
     void retainsContinueTargetsAndNestedLoopExits() throws Exception {
         final String source = """
-            func result() int {
+            func result() i32 {
                 var count = 0;
                 for (var i = 0; i < 3; i++) {
                     while (true) { break; }
@@ -640,18 +970,18 @@ class BytecodeGeneratorTest {
     void initializesFieldsPerInstanceAndUsesModuleFunctions() throws Exception {
         final Class<?> type = compileClass("""
             var seed = 2;
-            func next() int { return seed++; }
+            func next() i32 { return seed++; }
             class Counter {
                 const first = next();
                 const second = next();
                 var count = first;
-                var widened: float = count;
+                var widened: f32 = count;
                 var values = [1, 2];
-                var zero: int = 0;
+                var zero: i32 = 0;
                 var text: string = "";
-                func increment() int { return count++; }
-                func add(delta: int) int { return count + delta; }
-                func shadow(count: int) int { return count; }
+                func increment() i32 { return count++; }
+                func add(delta: i32) i32 { return count + delta; }
+                func shadow(count: i32) i32 { return count; }
             }
             """, "Test$Counter");
         final Object first = type.getConstructor().newInstance();
@@ -683,12 +1013,12 @@ class BytecodeGeneratorTest {
         final Class<?> type = compileClass("""
             class Counter {
                 var count = 10;
-                func step() int { return count++; }
+                func step() i32 { return count++; }
                 const initial = step();
                 const callback = step;
-                func direct() int { return step(); }
-                func indirect() int { return callback(); }
-                func recursive(n: int) int {
+                func direct() i32 { return step(); }
+                func indirect() i32 { return callback(); }
+                func recursive(n: i32) i32 {
                     if (n <= 1) { return count; }
                     return recursive(n - 1) + 1;
                 }
@@ -712,15 +1042,15 @@ class BytecodeGeneratorTest {
             class Counter {
                 var count = 0;
                 for (var i = 0; i < 3; i++) { var ignored = count++; }
-                func advance(limit: int) int {
+                func advance(limit: i32) i32 {
                     for (var i = 0; i < limit; i++) {
                         if (i == 1) { continue; }
                         var ignored = count++;
                     }
                     return count;
                 }
-                var floating = 1.5;
-                func floatStep() float { return floating++; }
+                var floating: f32 = 1.5;
+                func floatStep() f32 { return floating++; }
             }
             """, "Test$Counter");
         final Object instance = type.getConstructor().newInstance();
@@ -737,16 +1067,16 @@ class BytecodeGeneratorTest {
     void resolvesSameNamedMembersOnTheirOwnClass() throws Exception {
         final Program program = new Parser(new Lexer("""
             const value = 100;
-            func read() int { return value; }
+            func read() i32 { return value; }
             class First {
                 var value = 1;
-                func read() int { return value; }
-                func call() int { return read(); }
+                func read() i32 { return value; }
+                func call() i32 { return read(); }
             }
             class Second {
                 var value = 2;
-                func read() int { return value; }
-                func call() int { return read(); }
+                func read() i32 { return value; }
+                func call() i32 { return read(); }
             }
             """).getTokens()).parse();
         final var classes =
@@ -777,7 +1107,7 @@ class BytecodeGeneratorTest {
             class Foo {}
             class Bar {}
             const value = 7;
-            func result() int { return value; }
+            func result() i32 { return value; }
             """).getTokens()).parse();
         final BytecodeGenerator generator =
             new BytecodeGenerator(
@@ -874,7 +1204,7 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void foldsFloatsWithTheSameBitsAsRuntimeArithmetic() throws Exception {
+    void foldsDoublesWithTheSameBitsAsRuntimeArithmetic() throws Exception {
         for (final String expression : List.of(
             "-0.5 + 12.34 - 10",
             "(16777216.0 + 1.0) - 16777216.0",
@@ -889,26 +1219,28 @@ class BytecodeGeneratorTest {
                 "const folded = " + expression + ";\nvar evaluated = "
                     + expression + ";";
             final var node = inspect(source);
-            final float constant =
-                assertInstanceOf(Float.class, field(node, "folded").value);
-            assertEquals("F", field(node, "folded").desc);
+            final double constant =
+                assertInstanceOf(Double.class, field(node, "folded").value);
+            assertEquals("D", field(node, "folded").desc);
             assertNull(field(node, "evaluated").value);
             final Class<?> type = compile(source);
             assertEquals(
-                Float.floatToRawIntBits(
-                    type.getField("evaluated").getFloat(null)
+                Double.doubleToRawLongBits(
+                    type.getField("evaluated").getDouble(null)
                 ),
-                Float.floatToRawIntBits(constant),
+                Double.doubleToRawLongBits(constant),
                 expression
             );
             assertEquals(
-                Float.floatToRawIntBits(constant),
-                Float.floatToRawIntBits(type.getField("folded").getFloat(null)),
+                Double.doubleToRawLongBits(constant),
+                Double.doubleToRawLongBits(
+                    type.getField("folded").getDouble(null)
+                ),
                 expression
             );
         }
         final var node = inspect("const result = -0.5 + 12.34 - 10;");
-        assertEquals(1.8400002f, field(node, "result").value);
+        assertEquals(-0.5 + 12.34 - 10, field(node, "result").value);
         assertTrue(
             node.methods.stream()
                 .noneMatch(method -> method.name.equals("<clinit>"))
@@ -918,9 +1250,9 @@ class BytecodeGeneratorTest {
     @Test
     void emitsConstantValuesWithoutClassInitializer() throws Exception {
         final String source = """
-            const integer: int = 10;
+            const integer: i32 = 10;
             const floating = 1.5;
-            const widened: float = 3;
+            const widened: f32 = 3;
             const yes = true;
             const no = false;
             const letter = 'x';
@@ -936,7 +1268,7 @@ class BytecodeGeneratorTest {
             """;
         final var node = inspect(source);
         assertEquals(10, field(node, "integer").value);
-        assertEquals(1.5f, field(node, "floating").value);
+        assertEquals(1.5, field(node, "floating").value);
         assertEquals(3.0f, field(node, "widened").value);
         assertEquals(1, field(node, "yes").value);
         assertEquals(0, field(node, "no").value);
@@ -944,10 +1276,10 @@ class BytecodeGeneratorTest {
         assertEquals("hello", field(node, "text").value);
         assertEquals(Integer.MIN_VALUE, field(node, "negative").value);
         assertEquals(20, field(node, "grouped").value);
-        assertEquals(3.5f, field(node, "mixed").value);
+        assertEquals(3.5, field(node, "mixed").value);
         assertEquals(1, field(node, "predicate").value);
         assertEquals("hello world", field(node, "joined").value);
-        assertEquals(-0.0f, field(node, "signedZero").value);
+        assertEquals(-0.0, field(node, "signedZero").value);
         assertEquals(Integer.MIN_VALUE, field(node, "overflow").value);
         assertEquals(0, field(node, "nanComparison").value);
         assertTrue(
@@ -966,7 +1298,7 @@ class BytecodeGeneratorTest {
     void keepsRuntimeInitializationForNonConstantValues() throws Exception {
         final String source = """
             var state = 0;
-            func next() int { return state++; }
+            func next() i32 { return state++; }
             const first = next();
             const literal = 10;
             const second = next();
@@ -1026,7 +1358,7 @@ class BytecodeGeneratorTest {
     @Test
     void preservesNestedLoopTargetsAndShadowedLocals() throws Exception {
         final Class<?> type = compile("""
-            func count() int {
+            func count() i32 {
                 var result = 0;
                 for (var i = 0; i < 3; i++) {
                     for (var i = 0; i < 4; i++) {
@@ -1037,7 +1369,7 @@ class BytecodeGeneratorTest {
                 }
                 return result;
             }
-            func shadow() int {
+            func shadow() i32 {
                 var x = 3;
                 if (true) { var x = 9; }
                 return x;
@@ -1050,13 +1382,13 @@ class BytecodeGeneratorTest {
     @Test
     void handlesFloatUpdatesAndIntegerMinimum() throws Exception {
         final Class<?> type = compile("""
-            func bump() float {
-                var value = 1.5;
+            func bump() f32 {
+                var value: f32 = 1.5;
                 var old = value++;
                 var ignored = value--;
                 return old + value;
             }
-            func minimum() int { return -2_147_483_648; }
+            func minimum() i32 { return -2_147_483_648; }
             """);
         assertEquals(3.0f, type.getMethod("bump").invoke(null));
         assertEquals(Integer.MIN_VALUE, type.getMethod("minimum").invoke(null));
@@ -1068,7 +1400,7 @@ class BytecodeGeneratorTest {
             "const bad = true + 1;",
             "func nothing() {}\nconst bad = nothing();",
             "func nothing() {}\nconst bad = [nothing()];",
-            "func f() int { if (false) { var x = 1; } return x; }",
+            "func f() i32 { if (false) { var x = 1; } return x; }",
             "for (value : 1) {}",
             "const x = 1;\nconst bad = x++;"
         )) {
@@ -1085,7 +1417,7 @@ class BytecodeGeneratorTest {
         final Program program =
             new Parser(
                 new Lexer(
-                    "var value = 1;\nfunc increment() int { return value++; }"
+                    "var value = 1;\nfunc increment() i32 { return value++; }"
                 ).getTokens()
             ).parse();
         final BytecodeGenerator generator =
@@ -1126,9 +1458,9 @@ class BytecodeGeneratorTest {
     @Test
     void generatesFunctionsAndNumericConversions() throws Exception {
         final Class<?> type = compile("""
-            func sum(a: int, b: int) int { return a + b; }
-            func half(a: float) float { return a / 2; }
-            func result() float { return half(sum(3, 4)); }
+            func sum(a: i32, b: i32) i32 { return a + b; }
+            func half(a: f32) f32 { return a / 2; }
+            func result() f32 { return half(sum(3, 4)); }
             """);
         assertEquals(
             7,
@@ -1141,10 +1473,10 @@ class BytecodeGeneratorTest {
     void generatesGlobalsAndInitializersInOrder() throws Exception {
         final Class<?> type = compile("""
             var start = 3;
-            func next() int { return start++; }
+            func next() i32 { return start++; }
             const old = next();
-            var widened: float = start;
-            var zero: int = 0;
+            var widened: f32 = start;
+            var zero: i32 = 0;
             var text: string = "";
             """);
         assertEquals(3, type.getField("old").get(null));
@@ -1159,11 +1491,11 @@ class BytecodeGeneratorTest {
     @Test
     void supportsRecursionAndIndependentLocalScopes() throws Exception {
         final Class<?> type = compile("""
-            func factorial(n: int) int {
+            func factorial(n: i32) i32 {
                 if (n <= 1) { return 1; }
                 return n * factorial(n - 1);
             }
-            func identity(n: int) int { return n; }
+            func identity(n: i32) i32 { return n; }
             """);
         assertEquals(
             120,
@@ -1188,7 +1520,7 @@ class BytecodeGeneratorTest {
     @Test
     void generatesLoopsWithCorrectContinueAndBreakTargets() throws Exception {
         final Class<?> type = compile("""
-            func counted() int {
+            func counted() i32 {
                 var result = 0;
                 for (var i = 0; i < 8; i++) {
                     if (i < 2) { continue; }
@@ -1197,7 +1529,7 @@ class BytecodeGeneratorTest {
                 }
                 return result;
             }
-            func postTest() int {
+            func postTest() i32 {
                 var i = 0;
                 do {
                     var ignored = i++;
@@ -1205,7 +1537,7 @@ class BytecodeGeneratorTest {
                 } while (i < 3);
                 return i;
             }
-            func preTest() int {
+            func preTest() i32 {
                 var i = 0;
                 while (i < 9) {
                     var ignored = i++;
@@ -1226,7 +1558,7 @@ class BytecodeGeneratorTest {
         final Class<?> type =
             compile(
                 """
-                    func result() int {
+                    func result() i32 {
                         var total = 0;
                         for (value, index : [10, 20, 30]) {
                             if (index == 1) { continue; }
@@ -1268,7 +1600,7 @@ class BytecodeGeneratorTest {
             const strings = ["a", "b"];
             const nested = [[1], [2]];
             const empty = [];
-            func find() int {
+            func find() i32 {
                 for (value, index : ints) {
                     if (value == 3) { return index; }
                 }
@@ -1280,8 +1612,8 @@ class BytecodeGeneratorTest {
             (int[]) type.getField("ints").get(null)
         );
         assertArrayEquals(
-            new float[] {1.5f, 2.5f},
-            (float[]) type.getField("floats").get(null)
+            new double[] {1.5, 2.5},
+            (double[]) type.getField("floats").get(null)
         );
         assertArrayEquals(
             new char[] {'a', 'b'},
@@ -1318,12 +1650,12 @@ class BytecodeGeneratorTest {
     @Test
     void handlesFloatNaNComparisons() throws Exception {
         final Class<?> type = compile("""
-            func less(a: float, b: float) boolean { return a < b; }
-            func lessEqual(a: float, b: float) boolean { return a <= b; }
-            func greater(a: float, b: float) boolean { return a > b; }
-            func greaterEqual(a: float, b: float) boolean { return a >= b; }
-            func equal(a: float, b: float) boolean { return a == b; }
-            func different(a: float, b: float) boolean { return a != b; }
+            func less(a: f32, b: f32) boolean { return a < b; }
+            func lessEqual(a: f32, b: f32) boolean { return a <= b; }
+            func greater(a: f32, b: f32) boolean { return a > b; }
+            func greaterEqual(a: f32, b: f32) boolean { return a >= b; }
+            func equal(a: f32, b: f32) boolean { return a == b; }
+            func different(a: f32, b: f32) boolean { return a != b; }
             """);
         for (final String name : List
             .of("less", "lessEqual", "greater", "greaterEqual", "equal")) {
@@ -1344,7 +1676,7 @@ class BytecodeGeneratorTest {
     @Test
     void generatesLiteralsArithmeticAndBranches() throws Exception {
         final Class<?> type = compile("""
-            func choose(x: int) int {
+            func choose(x: i32) i32 {
                 if (x < 0) { return -1; }
                 elif (x == 0) { return (2 + 3) * 4 / 2 % 7; }
                 else { return +1_000; }
@@ -1372,7 +1704,7 @@ class BytecodeGeneratorTest {
 
     @Test
     void missingReturnFailsExplicitlyAtRuntime() throws Exception {
-        final Class<?> type = compile("func missing() int {}");
+        final Class<?> type = compile("func missing() i32 {}");
         final InvocationTargetException exception =
             assertThrows(
                 InvocationTargetException.class,
@@ -1389,11 +1721,11 @@ class BytecodeGeneratorTest {
         );
         assertThrows(
             SemanticException.class,
-            () -> compile("func f(x: int) {}\nf();")
+            () -> compile("func f(x: i32) {}\nf();")
         );
         assertThrows(
             SemanticException.class,
-            () -> compile("func f(x: int) {}\nf(true);")
+            () -> compile("func f(x: i32) {}\nf(true);")
         );
     }
 

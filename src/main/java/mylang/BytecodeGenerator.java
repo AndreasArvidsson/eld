@@ -27,6 +27,7 @@ import mylang.semantic.ClassType;
 import mylang.semantic.FunctionSymbol;
 import mylang.semantic.FunctionType;
 import mylang.semantic.SemanticModel;
+import mylang.semantic.SemanticAnalyzer;
 import mylang.semantic.Symbol;
 import mylang.semantic.Type;
 
@@ -359,8 +360,8 @@ public final class BytecodeGenerator {
     private @Nullable Object constantValue(final Expression expression) {
         final Object value = switch (expression) {
             case LiteralExpression literal -> switch (literal.kind()) {
-                case INT -> Integer.parseInt(literal.text().replace("_", ""));
-                case FLOAT -> Float.parseFloat(literal.text().replace("_", ""));
+                case INT -> integerConstant(literal);
+                case FLOAT -> floatingConstant(literal);
                 case BOOL -> Boolean.parseBoolean(literal.text()) ? 1 : 0;
                 case CHAR -> (int) decodeChar(literal.text());
                 case STRING -> decodeString(literal.text());
@@ -372,23 +373,51 @@ public final class BytecodeGenerator {
             case BinaryExpression binary -> constantBinary(binary);
             default -> null;
         };
-        if (
-            value instanceof Integer integer && semanticModel
-                .getEffectiveType(expression) == BuiltinType.FLOAT
-        ) {
-            return integer.floatValue();
+        if (value instanceof Number number) {
+            final Type type = semanticModel.getEffectiveType(expression);
+            if (type == BuiltinType.I8) {
+                return (int) number.byteValue();
+            }
+            if (type == BuiltinType.I16) {
+                return (int) number.shortValue();
+            }
+            if (type == BuiltinType.I64) {
+                return number.longValue();
+            }
+            if (type == BuiltinType.F32) {
+                return number.floatValue();
+            }
+            if (type == BuiltinType.F64) {
+                return number.doubleValue();
+            }
         }
         return value;
     }
 
+    private Object integerConstant(final LiteralExpression literal) {
+        final String text = literal.text().replace("_", "");
+        if (semanticModel.getExpressionType(literal) == BuiltinType.I64) {
+            return Long.parseLong(text);
+        }
+        return Integer.parseInt(text);
+    }
+
+    private Object floatingConstant(final LiteralExpression literal) {
+        final String text = literal.text().replace("_", "");
+        if (semanticModel.getExpressionType(literal) == BuiltinType.F64) {
+            return Double.parseDouble(text);
+        }
+        return Float.parseFloat(text);
+    }
+
     private @Nullable Object constantUnary(final UnaryExpression unary) {
-        if (
-            unary.operator() == UnaryOperator.MINUS
-                && unary.operand() instanceof LiteralExpression literal
-                && literal.kind() == LiteralKind.INT
-                && literal.text().replace("_", "").equals("2147483648")
-        ) {
-            return Integer.MIN_VALUE;
+        final java.math.BigInteger value =
+            SemanticAnalyzer.integerLiteral(unary);
+        if (value != null) {
+            if (semanticModel.getExpressionType(unary) == BuiltinType.I64) {
+                return value.longValueExact();
+            }
+            return value.intValueExact();
         }
         final Object operand = constantValue(unary.operand());
         return switch (unary.operator()) {
@@ -396,6 +425,12 @@ public final class BytecodeGenerator {
             case MINUS -> {
                 if (operand instanceof Integer integer) {
                     yield -integer;
+                }
+                if (operand instanceof Long integer) {
+                    yield -integer;
+                }
+                if (operand instanceof Double floating) {
+                    yield -floating;
                 }
                 if (operand instanceof Float floating) {
                     yield -floating;
@@ -448,6 +483,22 @@ public final class BytecodeGenerator {
                 default -> null;
             };
         }
+        if (left instanceof Double a && right instanceof Double b) {
+            return switch (binary.operator()) {
+                case ADD -> a + b;
+                case SUBTRACT -> a - b;
+                case MULTIPLY -> a * b;
+                case DIVIDE -> a / b;
+                case MODULO -> a % b;
+                case EQUAL -> a.doubleValue() == b.doubleValue() ? 1 : 0;
+                case NOT_EQUAL -> a.doubleValue() != b.doubleValue() ? 1 : 0;
+                case LESS -> a < b ? 1 : 0;
+                case LESS_EQUAL -> a <= b ? 1 : 0;
+                case GREATER -> a > b ? 1 : 0;
+                case GREATER_EQUAL -> a >= b ? 1 : 0;
+                default -> null;
+            };
+        }
         if (left instanceof String a && right instanceof String b) {
             return switch (binary.operator()) {
                 case ADD -> a + b;
@@ -484,8 +535,12 @@ public final class BytecodeGenerator {
     private static String descriptor(final Type type) {
         return switch (type) {
             case BuiltinType builtin -> switch (builtin) {
-                case INT -> "I";
-                case FLOAT -> "F";
+                case I8 -> "B";
+                case I16 -> "S";
+                case I32 -> "I";
+                case I64 -> "J";
+                case F32 -> "F";
+                case F64 -> "D";
                 case BOOL -> "Z";
                 case CHAR -> "C";
                 case STRING -> "Ljava/lang/String;";
@@ -513,7 +568,9 @@ public final class BytecodeGenerator {
         ) {
             return "Ljava/lang/Object;";
         }
-        return descriptor(type);
+        return type == BuiltinType.I8 || type == BuiltinType.I16
+            ? "I"
+            : descriptor(type);
     }
 
     private static String methodDescriptor(final FunctionType type) {
@@ -532,44 +589,28 @@ public final class BytecodeGenerator {
             || type == BuiltinType.NULL;
     }
 
+    private static int opcode(final Type type, final int base) {
+        return org.objectweb.asm.Type.getType(descriptor(type)).getOpcode(base);
+    }
+
+    private static int slots(final Type type) {
+        return type == BuiltinType.I64 || type == BuiltinType.F64 ? 2 : 1;
+    }
+
     private static int loadOpcode(final Type type) {
-        return reference(type)
-            ? ALOAD
-            : type == BuiltinType.FLOAT ? FLOAD : ILOAD;
+        return opcode(type, ILOAD);
     }
-
     private static int storeOpcode(final Type type) {
-        return reference(type)
-            ? ASTORE
-            : type == BuiltinType.FLOAT ? FSTORE : ISTORE;
+        return opcode(type, ISTORE);
     }
-
     private static int returnOpcode(final Type type) {
-        return type == BuiltinType.VOID
-            ? RETURN
-            : reference(type)
-                ? ARETURN
-                : type == BuiltinType.FLOAT ? FRETURN : IRETURN;
+        return opcode(type, IRETURN);
     }
-
     private static int arrayLoadOpcode(final Type type) {
-        return reference(type)
-            ? AALOAD
-            : type == BuiltinType.FLOAT
-                ? FALOAD
-                : type == BuiltinType.BOOL
-                    ? BALOAD
-                    : type == BuiltinType.CHAR ? CALOAD : IALOAD;
+        return opcode(type, IALOAD);
     }
-
     private static int arrayStoreOpcode(final Type type) {
-        return reference(type)
-            ? AASTORE
-            : type == BuiltinType.FLOAT
-                ? FASTORE
-                : type == BuiltinType.BOOL
-                    ? BASTORE
-                    : type == BuiltinType.CHAR ? CASTORE : IASTORE;
+        return opcode(type, IASTORE);
     }
 
     private static IllegalArgumentException unsupported(
@@ -628,7 +669,11 @@ public final class BytecodeGenerator {
         }
 
         private int local(final Symbol symbol) {
-            return locals.computeIfAbsent(symbol, ignored -> nextLocal++);
+            return locals.computeIfAbsent(symbol, ignored -> {
+                final int slot = nextLocal;
+                nextLocal += slots(symbol.type());
+                return slot;
+            });
         }
 
         private void finish(final boolean reachable) {
@@ -790,12 +835,13 @@ public final class BytecodeGenerator {
             final Type subjectType =
                 semanticModel.getEffectiveType(selection.subject());
             if (
-                subjectType == BuiltinType.INT
+                subjectType == BuiltinType.I32
                     && integerSelection(selection, discarded)
             ) {
                 return;
             }
-            final int subject = nextLocal++;
+            final int subject = nextLocal;
+            nextLocal += slots(subjectType);
             expression(selection.subject());
             method.visitVarInsn(storeOpcode(subjectType), subject);
             final Label end = new Label();
@@ -818,8 +864,18 @@ public final class BytecodeGenerator {
                             );
                             method.visitJumpInsn(IFNE, body);
                         }
-                        else if (subjectType == BuiltinType.FLOAT) {
-                            method.visitInsn(FCMPL);
+                        else if (
+                            subjectType == BuiltinType.F32
+                                || subjectType == BuiltinType.F64
+                                || subjectType == BuiltinType.I64
+                        ) {
+                            method.visitInsn(
+                                subjectType == BuiltinType.I64
+                                    ? LCMP
+                                    : subjectType == BuiltinType.F64
+                                        ? DCMPL
+                                        : FCMPL
+                            );
                             method.visitJumpInsn(IFEQ, body);
                         }
                         else {
@@ -1110,11 +1166,23 @@ public final class BytecodeGenerator {
             if (
                 semanticModel.getEffectiveType(expression) != BuiltinType.VOID
             ) {
-                method.visitInsn(POP);
+                method.visitInsn(
+                    slots(semanticModel.getEffectiveType(expression)) == 2
+                        ? POP2
+                        : POP
+                );
             }
         }
 
         private void expression(final Expression expression) {
+            if (
+                expression instanceof UnaryExpression unary
+                    && SemanticAnalyzer.integerLiteral(unary) != null
+            ) {
+                method
+                    .visitLdcInsn(Objects.requireNonNull(constantValue(unary)));
+                return;
+            }
             switch (expression) {
                 case LiteralExpression literal -> literal(literal);
                 case IdentifierExpression identifier ->
@@ -1132,24 +1200,14 @@ public final class BytecodeGenerator {
                             );
                         case PLUS -> expression(unary.operand());
                         case MINUS -> {
-                            if (
-                                unary
-                                    .operand() instanceof LiteralExpression literal
-                                    && literal.kind() == LiteralKind.INT
-                                    && literal.text()
-                                        .replace("_", "")
-                                        .equals("2147483648")
-                            ) {
-                                method.visitLdcInsn(Integer.MIN_VALUE);
-                            }
-                            else {
-                                expression(unary.operand());
-                                method.visitInsn(
-                                    semanticModel.getExpressionType(
-                                        unary
-                                    ) == BuiltinType.FLOAT ? FNEG : INEG
-                                );
-                            }
+                            expression(unary.operand());
+                            method.visitInsn(
+                                opcode(
+                                    semanticModel.getExpressionType(unary),
+                                    INEG
+                                )
+                            );
+                            narrow(semanticModel.getExpressionType(unary));
                         }
                         case NOT -> {
                             expression(unary.operand());
@@ -1195,22 +1253,61 @@ public final class BytecodeGenerator {
                     "Lambda generation requires closure analysis"
                 );
             }
-            if (
-                semanticModel.getExpressionType(expression) == BuiltinType.INT
-                    && semanticModel
-                        .getEffectiveType(expression) == BuiltinType.FLOAT
-            ) {
-                method.visitInsn(I2F);
+            convert(
+                semanticModel.getExpressionType(expression),
+                semanticModel.getEffectiveType(expression)
+            );
+        }
+
+        private void narrow(final Type type) {
+            if (type == BuiltinType.I8) {
+                method.visitInsn(I2B);
             }
+            if (type == BuiltinType.I16) {
+                method.visitInsn(I2S);
+            }
+        }
+
+        private void convert(final Type from, final Type to) {
+            if (from.equals(to)) {
+                return;
+            }
+            if (from == BuiltinType.I64) {
+                if (to == BuiltinType.F32) {
+                    method.visitInsn(L2F);
+                }
+                else if (to == BuiltinType.F64) {
+                    method.visitInsn(L2D);
+                }
+                else {
+                    method.visitInsn(L2I);
+                }
+            }
+            else if (from == BuiltinType.F32 && to == BuiltinType.F64) {
+                method.visitInsn(F2D);
+            }
+            else if (
+                from instanceof BuiltinType builtin
+                    && (builtin.isInteger() || builtin == BuiltinType.CHAR)
+            ) {
+                if (to == BuiltinType.I64) {
+                    method.visitInsn(I2L);
+                }
+                if (to == BuiltinType.F32) {
+                    method.visitInsn(I2F);
+                }
+                if (to == BuiltinType.F64) {
+                    method.visitInsn(I2D);
+                }
+            }
+            narrow(to);
         }
 
         private void literal(final LiteralExpression literal) {
             final String text = literal.text();
             switch (literal.kind()) {
-                case INT -> method
-                    .visitLdcInsn(Integer.parseInt(text.replace("_", "")));
-                case FLOAT -> method
-                    .visitLdcInsn(Float.parseFloat(text.replace("_", "")));
+                case INT -> method.visitLdcInsn(integerConstant(literal));
+                case FLOAT -> method.visitLdcInsn(floatingConstant(literal));
                 case BOOL -> method.visitInsn(
                     Boolean.parseBoolean(text) ? ICONST_1 : ICONST_0
                 );
@@ -1288,7 +1385,7 @@ public final class BytecodeGenerator {
 
         private void array(final ArrayExpression array) {
             final Type element =
-                ((ArrayType) semanticModel.getExpressionType(array))
+                ((ArrayType) semanticModel.getEffectiveType(array))
                     .elementType();
             method.visitLdcInsn(array.elements().size());
             if (reference(element)) {
@@ -1301,14 +1398,16 @@ public final class BytecodeGenerator {
                 );
             }
             else {
-                method.visitIntInsn(
-                    NEWARRAY,
-                    element == BuiltinType.FLOAT
-                        ? T_FLOAT
-                        : element == BuiltinType.BOOL
-                            ? T_BOOLEAN
-                            : element == BuiltinType.CHAR ? T_CHAR : T_INT
-                );
+                method.visitIntInsn(NEWARRAY, switch ((BuiltinType) element) {
+                    case I8 -> T_BYTE;
+                    case I16 -> T_SHORT;
+                    case I64 -> T_LONG;
+                    case F32 -> T_FLOAT;
+                    case F64 -> T_DOUBLE;
+                    case BOOL -> T_BOOLEAN;
+                    case CHAR -> T_CHAR;
+                    default -> T_INT;
+                });
             }
             for (int i = 0; i < array.elements().size(); i++) {
                 method.visitInsn(DUP);
@@ -1330,14 +1429,22 @@ public final class BytecodeGenerator {
                 final Symbol symbol = semanticModel.getReference(identifier);
                 final boolean instanceField = prepareStore(symbol);
                 expression(assignment.value());
-                method.visitInsn(instanceField ? DUP_X1 : DUP);
+                method.visitInsn(
+                    slots(symbol.type()) == 2
+                        ? (instanceField ? DUP2_X1 : DUP2)
+                        : (instanceField ? DUP_X1 : DUP)
+                );
                 store(symbol);
             }
             else if (target instanceof IndexExpression index) {
                 expression(index.target());
                 expression(index.index());
                 expression(assignment.value());
-                method.visitInsn(DUP_X2);
+                method.visitInsn(
+                    slots(semanticModel.getExpressionType(index)) == 2
+                        ? DUP2_X2
+                        : DUP_X2
+                );
                 method.visitInsn(
                     arrayStoreOpcode(semanticModel.getExpressionType(index))
                 );
@@ -1359,11 +1466,19 @@ public final class BytecodeGenerator {
                 final boolean instanceField = prepareStore(symbol);
                 load(symbol);
                 if (postfix) {
-                    method.visitInsn(instanceField ? DUP_X1 : DUP);
+                    method.visitInsn(
+                        slots(symbol.type()) == 2
+                            ? (instanceField ? DUP2_X1 : DUP2)
+                            : (instanceField ? DUP_X1 : DUP)
+                    );
                 }
                 addOne(type, increase);
                 if (!postfix) {
-                    method.visitInsn(instanceField ? DUP_X1 : DUP);
+                    method.visitInsn(
+                        slots(symbol.type()) == 2
+                            ? (instanceField ? DUP2_X1 : DUP2)
+                            : (instanceField ? DUP_X1 : DUP)
+                    );
                 }
                 store(symbol);
             }
@@ -1373,11 +1488,19 @@ public final class BytecodeGenerator {
                 method.visitInsn(DUP2);
                 method.visitInsn(arrayLoadOpcode(type));
                 if (postfix) {
-                    method.visitInsn(DUP_X2);
+                    method.visitInsn(
+                        slots(semanticModel.getExpressionType(index)) == 2
+                            ? DUP2_X2
+                            : DUP_X2
+                    );
                 }
                 addOne(type, increase);
                 if (!postfix) {
-                    method.visitInsn(DUP_X2);
+                    method.visitInsn(
+                        slots(semanticModel.getExpressionType(index)) == 2
+                            ? DUP2_X2
+                            : DUP_X2
+                    );
                 }
                 method.visitInsn(arrayStoreOpcode(type));
             }
@@ -1387,11 +1510,15 @@ public final class BytecodeGenerator {
         }
 
         private void addOne(final Type type, final boolean increase) {
-            final boolean floating = type == BuiltinType.FLOAT;
-            method.visitInsn(floating ? FCONST_1 : ICONST_1);
             method.visitInsn(
-                floating ? increase ? FADD : FSUB : increase ? IADD : ISUB
+                type == BuiltinType.F64
+                    ? DCONST_1
+                    : type == BuiltinType.I64
+                        ? LCONST_1
+                        : type == BuiltinType.F32 ? FCONST_1 : ICONST_1
             );
+            method.visitInsn(opcode(type, increase ? IADD : ISUB));
+            narrow(type);
             if (type == BuiltinType.CHAR) {
                 method.visitInsn(I2C);
             }
@@ -1474,13 +1601,19 @@ public final class BytecodeGenerator {
                         default ->
                             throw unsupported(binary, "Unsupported comparison");
                     };
-                    if (type == BuiltinType.FLOAT) {
+                    if (type == BuiltinType.I64) {
+                        method.visitInsn(LCMP);
+                        booleanResult(opcode - IF_ICMPEQ + IFEQ);
+                    }
+                    else if (
+                        type == BuiltinType.F32 || type == BuiltinType.F64
+                    ) {
                         // Choose the NaN result so ordered comparisons remain false.
                         method.visitInsn(
                             operator == BinaryOperator.LESS
                                 || operator == BinaryOperator.LESS_EQUAL
-                                    ? FCMPG
-                                    : FCMPL
+                                    ? (type == BuiltinType.F64 ? DCMPG : FCMPG)
+                                    : (type == BuiltinType.F64 ? DCMPL : FCMPL)
                         );
                         booleanResult(opcode - IF_ICMPEQ + IFEQ);
                     }
@@ -1490,18 +1623,18 @@ public final class BytecodeGenerator {
                 }
                 return;
             }
-            final boolean floating = type == BuiltinType.FLOAT;
-            method.visitInsn(switch (operator) {
-                case ADD -> floating ? FADD : IADD;
-                case SUBTRACT -> floating ? FSUB : ISUB;
-                case MULTIPLY -> floating ? FMUL : IMUL;
-                case DIVIDE -> floating ? FDIV : IDIV;
-                case MODULO -> floating ? FREM : IREM;
+            method.visitInsn(opcode(type, switch (operator) {
+                case ADD -> IADD;
+                case SUBTRACT -> ISUB;
+                case MULTIPLY -> IMUL;
+                case DIVIDE -> IDIV;
+                case MODULO -> IREM;
                 default -> throw unsupported(
                     binary,
                     "Unsupported arithmetic operator"
                 );
-            });
+            }));
+            narrow(type);
         }
 
         private void booleanResult(final int opcode) {

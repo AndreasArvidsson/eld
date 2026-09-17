@@ -1,4 +1,4 @@
-func sum() float {
+func sum() f32 {
     return 1;
 }
 
@@ -8,8 +8,8 @@ FUNC (1:1-1:5)
 IDENTIFIER "sum" (1:6-1:9)
 LEFT_PAREN (1:9-1:10)
 RIGHT_PAREN (1:10-1:11)
-IDENTIFIER "float" (1:12-1:17)
-LEFT_BRACE (1:18-1:19)
+IDENTIFIER "f32" (1:12-1:15)
+LEFT_BRACE (1:16-1:17)
 RETURN (2:5-2:11)
 INTEGER_LITERAL "1" (2:12-2:13)
 SEMICOLON (2:13-2:14)
@@ -26,11 +26,11 @@ RIGHT_BRACE (3:1-3:2)
       name: "sum"
     )
     (NamedTypeNode
-      range: 1:12-1:17
-      name: "float"
+      range: 1:12-1:15
+      name: "f32"
     )
     (BlockStatement
-      range: 1:18-3:2
+      range: 1:16-3:2
       (ReturnStatement
         range: 2:5-2:14
         (LiteralExpression
@@ -46,16 +46,16 @@ RIGHT_BRACE (3:1-3:2)
 --- SEMANTIC ---
 
 Expression types:
-  2:12-2:13 -> int
+  2:12-2:13 -> i32
 
 Resolved types:
-  1:12-1:17 -> float
+  1:12-1:15 -> f32
 
 Conversions:
-  2:12-2:13 -> int -> float
+  2:12-2:13 -> i32 -> f32
 
 Declarations:
-  1:6-1:9 -> FunctionSymbol(name=sum, parameterTypes=[], returnType=float)
+  1:6-1:9 -> FunctionSymbol(name=sum, parameterTypes=[], returnType=f32)
 
 --- BYTECODE ---
 

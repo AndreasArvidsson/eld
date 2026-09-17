@@ -68,9 +68,9 @@ RIGHT_BRACE (2:15-2:16)
 
 Expression types:
   1:1-2:16 -> void
-  1:5-1:6 -> int
+  1:5-1:6 -> i32
   1:5-1:10 -> bool
-  1:9-1:10 -> int
+  1:9-1:10 -> i32
   2:7-2:12 -> bool
   2:8-2:12 -> bool
 

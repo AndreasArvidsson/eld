@@ -1,11 +1,11 @@
-var foo: int;
+var foo: i32;
 
 --- TOKENS ---
 
 VAR (1:1-1:4)
 IDENTIFIER "foo" (1:5-1:8)
 COLON (1:8-1:9)
-IDENTIFIER "int" (1:10-1:13)
+IDENTIFIER "i32" (1:10-1:13)
 SEMICOLON (1:13-1:14)
 
 --- AST ---

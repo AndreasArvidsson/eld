@@ -34,8 +34,8 @@ SEMICOLON (2:16-2:17)
 --- SEMANTIC ---
 
 Expression types:
-  1:1-1:8 -> float
-  2:1-2:16 -> float
+  1:1-1:8 -> f64
+  2:1-2:16 -> f64
 
 --- BYTECODE ---
 
@@ -46,12 +46,12 @@ public final class Test {
 
   // access flags 0x8
   static <clinit>()V
-    LDC 123.456F
-    POP
-    LDC 123456.79F
-    POP
+    LDC 123.456D
+    POP2
+    LDC 123456.789D
+    POP2
     RETURN
-    MAXSTACK = 1
+    MAXSTACK = 2
     MAXLOCALS = 0
 }
 

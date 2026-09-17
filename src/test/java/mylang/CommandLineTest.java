@@ -19,7 +19,7 @@ class CommandLineTest {
             final ReplSession session = new ReplSession();
             session.evaluate("var count = 1;\nprint(\"once\");");
             session.evaluate(
-                "func next() int { count = count + 1; return count; }"
+                "func next() i32 { count = count + 1; return count; }"
             );
             session.evaluate("next();");
             session.evaluate("count;");
