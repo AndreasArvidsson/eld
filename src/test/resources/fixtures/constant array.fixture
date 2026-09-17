@@ -26,7 +26,7 @@ SEMICOLON (2:22-2:23)
 --- AST ---
 
 (Program
-  range: 1:1-1:20
+  range: 1:1-2:23
   (VariableDeclaration
     range: 1:1-1:20
     mutability: CONST
@@ -49,6 +49,24 @@ SEMICOLON (2:22-2:23)
       )
     )
   )
+  (VariableDeclaration
+    range: 2:1-2:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "bar"
+    )
+    (ArrayTypeNode
+      range: 2:12-2:17
+      (NamedTypeNode
+        range: 2:13-2:16
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 2:20-2:22
+    )
+  )
 )
 
 --- SEMANTIC ---
@@ -57,9 +75,15 @@ Expression types:
   1:13-1:19 -> ArrayType<i32>
   1:14-1:15 -> i32
   1:17-1:18 -> i32
+  2:20-2:22 -> ArrayType<i32>
+
+Resolved types:
+  2:12-2:17 -> ArrayType<i32>
+  2:13-2:16 -> i32
 
 Declarations:
   1:7-1:10 -> VariableSymbol(name=foo, type=ArrayType<i32>, mutability=CONST)
+  2:7-2:10 -> VariableSymbol(name=bar, type=ArrayType<i32>, mutability=CONST)
 
 --- BYTECODE ---
 
@@ -70,6 +94,9 @@ public final class Test {
 
   // access flags 0x19
   public final static [I foo
+
+  // access flags 0x19
+  public final static [I bar
 
   // access flags 0x8
   static <clinit>()V
@@ -84,6 +111,9 @@ public final class Test {
     LDC 2
     IASTORE
     PUTSTATIC Test.foo : [I
+    LDC 0
+    NEWARRAY T_INT
+    PUTSTATIC Test.bar : [I
     RETURN
     MAXSTACK = 4
     MAXLOCALS = 0

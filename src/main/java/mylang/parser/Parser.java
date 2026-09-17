@@ -429,6 +429,15 @@ public final class Parser {
     }
 
     private TypeNode parseType() {
+        final Token leftBracket = matchToken(TokenType.LEFT_BRACKET);
+        if (leftBracket != null) {
+            final TypeNode elementType = parseType();
+            final Token rightBracket = expect(TokenType.RIGHT_BRACKET);
+            return new ArrayTypeNode(
+                elementType,
+                leftBracket.range().union(rightBracket.range())
+            );
+        }
         final Token name = expect(TokenType.IDENTIFIER);
         return new NamedTypeNode(name.text(), name.range());
     }
@@ -497,10 +506,7 @@ public final class Parser {
 
     private Expression parseUnaryExpression() {
         if (isAtEnd()) {
-            final Position end =
-                Objects.requireNonNull(tokens.get(tokens.size() - 1))
-                    .range()
-                    .end();
+            final Position end = tokens.getLast().range().end();
             throw new ParserException(
                 new Range(end, end),
                 "Expected expression, but reached end of input"
