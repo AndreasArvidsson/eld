@@ -1,0 +1,238 @@
+// Line comment before a declaration.
+const/* between tokens */value = 12 / 3;
+/*
+ * Block comment with // and ignored tokens: @ " '
+ */
+print(value); // Trailing line comment.
+print("// and /* */ stay inside strings");
+print('/');
+print('*');
+/**//**/print(8/* inline */ / 2);
+// Final comment.
+
+--- TOKENS ---
+
+CONST (2:1-2:6)
+IDENTIFIER "value" (2:26-2:31)
+EQUAL (2:32-2:33)
+INTEGER_LITERAL "12" (2:34-2:36)
+SLASH (2:37-2:38)
+INTEGER_LITERAL "3" (2:39-2:40)
+SEMICOLON (2:40-2:41)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "value" (6:7-6:12)
+RIGHT_PAREN (6:12-6:13)
+SEMICOLON (6:13-6:14)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"// and /* */ stay inside strings\"" (7:7-7:41)
+RIGHT_PAREN (7:41-7:42)
+SEMICOLON (7:42-7:43)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+CHAR_LITERAL "'/'" (8:7-8:10)
+RIGHT_PAREN (8:10-8:11)
+SEMICOLON (8:11-8:12)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+CHAR_LITERAL "'*'" (9:7-9:10)
+RIGHT_PAREN (9:10-9:11)
+SEMICOLON (9:11-9:12)
+IDENTIFIER "print" (10:9-10:14)
+LEFT_PAREN (10:14-10:15)
+INTEGER_LITERAL "8" (10:15-10:16)
+SLASH (10:29-10:30)
+INTEGER_LITERAL "2" (10:31-10:32)
+RIGHT_PAREN (10:32-10:33)
+SEMICOLON (10:33-10:34)
+
+--- AST ---
+
+(Program
+  range: 2:1-10:34
+  (VariableDeclaration
+    range: 2:1-2:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:26-2:31
+      name: "value"
+    )
+    type: null
+    (BinaryExpression
+      range: 2:34-2:40
+      (LiteralExpression
+        range: 2:34-2:36
+        kind: INT
+        text: "12"
+      )
+      operator: DIVIDE
+      (LiteralExpression
+        range: 2:39-2:40
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:14
+    (CallExpression
+      range: 6:1-6:13
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 6:7-6:12
+        name: "value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:43
+    (CallExpression
+      range: 7:1-7:42
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 7:7-7:41
+        kind: STRING
+        text: "\"// and /* */ stay inside strings\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:12
+    (CallExpression
+      range: 8:1-8:11
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 8:7-8:10
+        kind: CHAR
+        text: "'/'"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:12
+    (CallExpression
+      range: 9:1-9:11
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 9:7-9:10
+        kind: CHAR
+        text: "'*'"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:9-10:34
+    (CallExpression
+      range: 10:9-10:33
+      (IdentifierExpression
+        range: 10:9-10:14
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:15-10:32
+        (LiteralExpression
+          range: 10:15-10:16
+          kind: INT
+          text: "8"
+        )
+        operator: DIVIDE
+        (LiteralExpression
+          range: 10:31-10:32
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:34-2:36 -> i32
+  2:34-2:40 -> i32
+  2:39-2:40 -> i32
+  6:1-6:6 -> BuiltinFunctionType(print)
+  6:1-6:13 -> void
+  6:7-6:12 -> i32
+  7:1-7:6 -> BuiltinFunctionType(print)
+  7:1-7:42 -> void
+  7:7-7:41 -> string
+  8:1-8:6 -> BuiltinFunctionType(print)
+  8:1-8:11 -> void
+  8:7-8:10 -> char
+  9:1-9:6 -> BuiltinFunctionType(print)
+  9:1-9:11 -> void
+  9:7-9:10 -> char
+  10:9-10:14 -> BuiltinFunctionType(print)
+  10:9-10:33 -> void
+  10:15-10:16 -> i32
+  10:15-10:32 -> i32
+  10:31-10:32 -> i32
+
+Declarations:
+  2:26-2:31 -> VariableSymbol(name=value, type=i32, mutability=CONST)
+
+References:
+  6:1-6:6 -> builtin print
+  6:7-6:12 -> 2:26-2:31
+  7:1-7:6 -> builtin print
+  8:1-8:6 -> builtin print
+  9:1-9:6 -> builtin print
+  10:9-10:14 -> builtin print
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static I value = 4
+
+  // access flags 0x8
+  static <clinit>()V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC "// and /* */ stay inside strings"
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 47
+    INVOKEVIRTUAL java/io/PrintStream.println (C)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 42
+    INVOKEVIRTUAL java/io/PrintStream.println (C)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 8
+    LDC 2
+    IDIV
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+4
+// and /* */ stay inside strings
+/
+*
+4
+

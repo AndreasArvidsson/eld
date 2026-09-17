@@ -105,7 +105,7 @@ public class Lexer {
     }
 
     public @Nullable Token nextToken() {
-        skipWhitespace();
+        skipWhitespaceAndComments();
 
         final Character next = peek();
 
@@ -157,16 +157,57 @@ public class Lexer {
         );
     }
 
-    private void skipWhitespace() {
+    private void skipWhitespaceAndComments() {
         while (true) {
             final Character next = peek();
-
-            if (next == null || !Character.isWhitespace(next)) {
-                return;
+            if (next == null) {
+                break;
             }
+            if (Character.isWhitespace(next)) {
+                advance();
+                continue;
+            }
+            if (next == '/') {
+                final Character nextNext = peek(1);
+                if (nextNext != null) {
+                    if (nextNext == '/') {
+                        skipLineComment();
+                        continue;
+                    }
+                    if (nextNext == '*') {
+                        skipBlockComment();
+                        continue;
+                    }
+                }
+            }
+            break;
+        }
+    }
 
+    public void skipLineComment() {
+        while (
+            position < source.length() && source.charAt(position) != '\n'
+                && source.charAt(position) != '\r'
+        ) {
             advance();
         }
+    }
+
+    private void skipBlockComment() {
+        final Position start = new Position(line, column);
+        advance();
+        advance();
+        while (!source.startsWith("*/", position)) {
+            if (position >= source.length()) {
+                throw new LexerException(
+                    new Range(start, new Position(line, column)),
+                    "Unterminated block comment"
+                );
+            }
+            advance();
+        }
+        advance();
+        advance();
     }
 
     private Token readIdentifier() {
@@ -383,6 +424,14 @@ public class Lexer {
             return null;
         }
         return source.charAt(position);
+    }
+
+    private @Nullable Character peek(final int offset) {
+        final int targetPosition = position + offset;
+        if (targetPosition >= source.length()) {
+            return null;
+        }
+        return source.charAt(targetPosition);
     }
 
     private void advance() {

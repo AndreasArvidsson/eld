@@ -49,6 +49,11 @@ Newlines do not terminate statements, so expressions and return values can
 span lines. A lambda initializer still needs a semicolon after its closing
 brace: `const action = () => {};`. REPL commands such as `:quit` do not need one.
 
+Comments use `//` to the end of the line or `/* ... */` across lines.
+They act as whitespace between tokens. Block comments do not nest; an
+unterminated block comment is a lexer error. Comment markers inside string
+and character literals remain literal text.
+
 ## Numeric types
 
 The signed integer types are `i8`, `i16`, `i32`, and `i64` (8, 16, 32, and
@@ -326,7 +331,6 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Comments
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
 - Ubiquitous class toString and equals methods.

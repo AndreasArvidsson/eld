@@ -22,6 +22,9 @@ final class Repl {
             );
             parser.setEofOnUnclosedQuote(true);
             parser.setLineCommentDelims(new String[] {"//"});
+            parser.setBlockCommentDelims(
+                new DefaultParser.BlockCommentDelims("/*", "*/")
+            );
             final var reader =
                 LineReaderBuilder.builder()
                     .terminal(terminal)
