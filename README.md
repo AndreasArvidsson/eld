@@ -263,7 +263,7 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Do we want to keep the subscript `[]` operator? And if so do want to support ranges?
+- Comments
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
 - Array should grow internally

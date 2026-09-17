@@ -617,11 +617,11 @@ public final class BytecodeGenerator {
         return opcode(type, IASTORE);
     }
 
-    private static IllegalArgumentException unsupported(
+    private static BytecodeException unsupported(
         final AstNode node,
         final String message
     ) {
-        return new IllegalArgumentException(message + " at " + node.range());
+        return new BytecodeException(message + " at " + node.range());
     }
 
     private static final class Loop {
@@ -1246,12 +1246,12 @@ public final class BytecodeGenerator {
                 case CallExpression call -> call(call);
                 case ArrayExpression array -> array(array);
                 case SubscriptExpression index -> {
-                    expression(index.target());
-                    expression(index.index());
+                    arrayIndex(index);
                     method.visitInsn(
                         arrayLoadOpcode(semanticModel.getExpressionType(index))
                     );
                 }
+                case SliceExpression slice -> slice(slice);
                 case LambdaExpression lambda -> throw unsupported(
                     lambda,
                     "Lambda generation requires closure analysis"
@@ -1424,6 +1424,107 @@ public final class BytecodeGenerator {
             }
         }
 
+        private void slice(final SliceExpression slice) {
+            final int array = nextLocal++;
+            final int start = nextLocal++;
+            expression(slice.target());
+            method.visitVarInsn(ASTORE, array);
+            sliceBound(slice.startIndex(), array, false);
+            method.visitVarInsn(ISTORE, start);
+            method.visitVarInsn(ALOAD, array);
+            method.visitVarInsn(ILOAD, start);
+            sliceBound(slice.endIndex(), array, true);
+            // A reversed range produces an empty array.
+            method.visitVarInsn(ILOAD, start);
+            method.visitMethodInsn(
+                INVOKESTATIC,
+                "java/lang/Math",
+                "max",
+                "(II)I",
+                false
+            );
+            final ArrayType type =
+                (ArrayType) semanticModel.getExpressionType(slice);
+            final String arrayDescriptor = descriptor(type);
+            final boolean referenceElements =
+                arrayDescriptor.charAt(1) == '['
+                    || arrayDescriptor.charAt(1) == 'L';
+            final String copyDescriptor =
+                referenceElements ? "[Ljava/lang/Object;" : arrayDescriptor;
+            method.visitMethodInsn(
+                INVOKESTATIC,
+                "java/util/Arrays",
+                "copyOfRange",
+                "(" + copyDescriptor + "II)" + copyDescriptor,
+                false
+            );
+            if (referenceElements) {
+                method.visitTypeInsn(CHECKCAST, arrayDescriptor);
+            }
+        }
+
+        private void sliceBound(
+            final @Nullable Expression bound,
+            final int array,
+            final boolean end
+        ) {
+            if (bound == null) {
+                if (end) {
+                    method.visitVarInsn(ALOAD, array);
+                    method.visitInsn(ARRAYLENGTH);
+                }
+                else {
+                    method.visitInsn(ICONST_0);
+                }
+                return;
+            }
+            expression(bound);
+            final Label nonNegative = new Label();
+            method.visitInsn(DUP);
+            method.visitJumpInsn(IFGE, nonNegative);
+            method.visitVarInsn(ALOAD, array);
+            method.visitInsn(ARRAYLENGTH);
+            method.visitInsn(IADD);
+            method.visitLabel(nonNegative);
+            method.visitInsn(ICONST_0);
+            method.visitMethodInsn(
+                INVOKESTATIC,
+                "java/lang/Math",
+                "max",
+                "(II)I",
+                false
+            );
+            method.visitVarInsn(ALOAD, array);
+            method.visitInsn(ARRAYLENGTH);
+            method.visitMethodInsn(
+                INVOKESTATIC,
+                "java/lang/Math",
+                "min",
+                "(II)I",
+                false
+            );
+        }
+
+        private void arrayIndex(final SubscriptExpression index) {
+            expression(index.target());
+            expression(index.index());
+            if (
+                constantValue(index.index()) instanceof Integer value
+                    && value >= 0
+            ) {
+                return;
+            }
+            final Label nonNegative = new Label();
+            method.visitInsn(DUP);
+            method.visitJumpInsn(IFGE, nonNegative);
+            // Keep the array and index on the stack while obtaining its length.
+            method.visitInsn(DUP2);
+            method.visitInsn(POP);
+            method.visitInsn(ARRAYLENGTH);
+            method.visitInsn(IADD);
+            method.visitLabel(nonNegative);
+        }
+
         private Expression unwrap(final Expression expression) {
             return expression instanceof GroupingExpression grouping
                 ? unwrap(grouping.expression())
@@ -1444,8 +1545,7 @@ public final class BytecodeGenerator {
                 store(symbol);
             }
             else if (target instanceof SubscriptExpression index) {
-                expression(index.target());
-                expression(index.index());
+                arrayIndex(index);
                 expression(assignment.value());
                 method.visitInsn(
                     slots(semanticModel.getExpressionType(index)) == 2
@@ -1490,8 +1590,7 @@ public final class BytecodeGenerator {
                 store(symbol);
             }
             else if (target instanceof SubscriptExpression index) {
-                expression(index.target());
-                expression(index.index());
+                arrayIndex(index);
                 method.visitInsn(DUP2);
                 method.visitInsn(arrayLoadOpcode(type));
                 if (postfix) {

@@ -30,17 +30,17 @@ import mylang.parser.GroupingExpression;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.IfExpression;
-import mylang.parser.SubscriptExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.LiteralKind;
-import mylang.parser.UnaryOperator;
 import mylang.parser.Mutability;
 import mylang.parser.NamedTypeNode;
 import mylang.parser.Parameter;
 import mylang.parser.PostfixExpression;
 import mylang.parser.Program;
 import mylang.parser.ReturnStatement;
+import mylang.parser.SliceExpression;
 import mylang.parser.Statement;
+import mylang.parser.SubscriptExpression;
 import mylang.parser.SwitchBranch;
 import mylang.parser.SwitchBranchBlockBody;
 import mylang.parser.SwitchBranchBody;
@@ -50,6 +50,7 @@ import mylang.parser.SwitchExpression;
 import mylang.parser.TernaryExpression;
 import mylang.parser.TypeNode;
 import mylang.parser.UnaryExpression;
+import mylang.parser.UnaryOperator;
 import mylang.parser.VariableDeclaration;
 import mylang.parser.WhileStatement;
 import mylang.parser.YieldStatement;
@@ -895,6 +896,8 @@ public final class SemanticAnalyzer {
                 analyzeExpression(grouping.expression(), context);
             case SubscriptExpression index ->
                 analyzeIndexExpression(index, context);
+            case SliceExpression slice ->
+                analyzeSliceExpression(slice, context);
             case AssignmentExpression assignment ->
                 analyzeAssignmentExpression(assignment, context);
             case TernaryExpression ternary ->
@@ -973,23 +976,61 @@ public final class SemanticAnalyzer {
     }
 
     private Type analyzeIndexExpression(
-        final SubscriptExpression index,
+        final SubscriptExpression subscript,
         final SemanticContext context
     ) {
-        final Type target = analyzeExpression(index.target(), context);
-        final Type subscript = analyzeExpression(index.index(), context);
-        if (
-            !(target instanceof ArrayType array)
-                || !(subscript instanceof BuiltinType builtin
-                    && builtin.isInteger()
-                    && builtin != BuiltinType.I64)
-        ) {
+        final Type target = analyzeExpression(subscript.target(), context);
+        if (!(target instanceof ArrayType array)) {
             throw new SemanticException(
-                index.range(),
-                "Indexing requires an array and an i8, i16, or i32 index"
+                subscript.range(),
+                "Subscript requires an array target"
+            );
+        }
+        final Type index = analyzeExpression(subscript.index(), context);
+        if (!isValidSubscriptIndex(index)) {
+            throw new SemanticException(
+                subscript.range(),
+                "Subscript requires an i8, i16, or i32 index"
             );
         }
         return array.elementType();
+    }
+
+    private Type analyzeSliceExpression(
+        final SliceExpression slice,
+        final SemanticContext context
+    ) {
+        final Type target = analyzeExpression(slice.target(), context);
+        final Expression start = slice.startIndex();
+        final Expression end = slice.endIndex();
+        final Type startIndex =
+            start == null ? null : analyzeExpression(start, context);
+        final Type endIndex =
+            end == null ? null : analyzeExpression(end, context);
+        if (!(target instanceof ArrayType array)) {
+            throw new SemanticException(
+                slice.range(),
+                "Slicing requires an array target"
+            );
+        }
+        if (startIndex != null && !isValidSubscriptIndex(startIndex)) {
+            throw new SemanticException(
+                start.range(),
+                "Slice start index must be an i8, i16, or i32"
+            );
+        }
+        if (endIndex != null && !isValidSubscriptIndex(endIndex)) {
+            throw new SemanticException(
+                end.range(),
+                "Slice end index must be an i8, i16, or i32"
+            );
+        }
+        return array;
+    }
+
+    private boolean isValidSubscriptIndex(final Type index) {
+        return index instanceof BuiltinType builtin && builtin.isInteger()
+            && builtin != BuiltinType.I64;
     }
 
     private Type analyzeAssignmentExpression(

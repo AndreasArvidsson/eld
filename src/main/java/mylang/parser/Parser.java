@@ -620,16 +620,39 @@ public final class Parser {
         return new ArrayExpression(elements, range);
     }
 
-    private SubscriptExpression parseSubscriptExpression(
-        final Token identifier
-    ) {
-        final Expression array =
-            new IdentifierExpression(identifier.text(), identifier.range());
+    private Expression parseSubscriptExpression(final Token identifier) {
         expect(TokenType.LEFT_BRACKET);
-        final Expression index = parseExpression();
+        boolean isSlice = false;
+        Expression startIndex, endIndex;
+
+        // [:] or [:i]
+        if (match(TokenType.COLON)) {
+            isSlice = true;
+            startIndex = null;
+            endIndex =
+                check(TokenType.RIGHT_BRACKET) ? null : parseExpression();
+        }
+        // [i:] or [i:j]
+        else {
+            startIndex = parseExpression();
+            if (match(TokenType.COLON)) {
+                isSlice = true;
+                endIndex =
+                    check(TokenType.RIGHT_BRACKET) ? null : parseExpression();
+            }
+            else {
+                endIndex = null;
+            }
+        }
+
         final Token rightBracket = expect(TokenType.RIGHT_BRACKET);
+        final Expression target =
+            new IdentifierExpression(identifier.text(), identifier.range());
         final Range range = identifier.range().union(rightBracket.range());
-        return new SubscriptExpression(array, index, range);
+        if (isSlice) {
+            return new SliceExpression(target, startIndex, endIndex, range);
+        }
+        return new SubscriptExpression(target, startIndex, range);
     }
 
     // The opening parenthesis has already been consumed. Lookahead leaves position

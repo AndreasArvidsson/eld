@@ -4,5 +4,5 @@ public sealed interface Expression extends AstNode
     permits TernaryExpression, SwitchExpression, IfExpression,
     IdentifierExpression, LiteralExpression, UnaryExpression, PostfixExpression,
     BinaryExpression, AssignmentExpression, CallExpression, SubscriptExpression,
-    ArrayExpression, GroupingExpression, LambdaExpression {
+    SliceExpression, ArrayExpression, GroupingExpression, LambdaExpression {
 }

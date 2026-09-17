@@ -50,6 +50,218 @@ import mylang.semantic.SemanticException;
 class BytecodeGeneratorTest {
 
     @Test
+    void slicesCopyArraysWithOptionalAndNegativeBounds() throws Exception {
+        final Class<?> type = compile("""
+            var values = [1, 2, 3];
+            var all = values[:];
+            var tail = values[1:];
+            var head = values[:2];
+            var middle = values[1:2];
+            var negativeEnd = values[:-1];
+            var negativeStart = values[-2:];
+            var negativeBoth = values[-2:-1];
+            var clamped = values[-2147483648:2147483647];
+            var reversed = values[2:1];
+            var pastEnd = values[99:];
+            var beforeStart = values[:-99];
+            var empty: [i32] = [];
+            var emptyCopy = empty[:];
+            func copy(input: [i32]) [i32] { return input[:]; }
+            var returned = copy(values);
+            all[0] = 99;
+            """);
+        assertArrayEquals(
+            new int[] {1, 2, 3},
+            (int[]) type.getField("values").get(null)
+        );
+        assertArrayEquals(
+            new int[] {99, 2, 3},
+            (int[]) type.getField("all").get(null)
+        );
+        for (final String name : List.of("tail", "negativeStart")) {
+            assertArrayEquals(
+                new int[] {2, 3},
+                (int[]) type.getField(name).get(null)
+            );
+        }
+        for (final String name : List.of("head", "negativeEnd")) {
+            assertArrayEquals(
+                new int[] {1, 2},
+                (int[]) type.getField(name).get(null)
+            );
+        }
+        for (final String name : List.of("middle", "negativeBoth")) {
+            assertArrayEquals(
+                new int[] {2},
+                (int[]) type.getField(name).get(null)
+            );
+        }
+        for (final String name : List.of("clamped", "returned")) {
+            assertArrayEquals(
+                new int[] {1, 2, 3},
+                (int[]) type.getField(name).get(null)
+            );
+        }
+        for (final String name : List
+            .of("reversed", "pastEnd", "beforeStart", "emptyCopy")) {
+            assertArrayEquals(
+                new int[0],
+                (int[]) type.getField(name).get(null)
+            );
+        }
+    }
+
+    @Test
+    void slicesPreserveElementTypesAndCopyReferencesShallowly()
+        throws Exception {
+        final String[] types =
+            {"i8", "i16", "i32", "i64", "f32", "f64", "boolean", "char",
+                    "string"};
+        final String[] values =
+            {"7", "7", "7", "7", "7.5", "7.5", "true", "'x'", "\"text\""};
+        for (int i = 0; i < types.length; i++) {
+            final Class<?> type =
+                compile(
+                    "var element: " + types[i] + " = " + values[i]
+                        + "; var original = [element, element]; var sliced = original[-1:];"
+                );
+            final Object original = type.getField("original").get(null);
+            final Object sliced = type.getField("sliced").get(null);
+            assertEquals(original.getClass(), sliced.getClass());
+            assertNotSame(original, sliced);
+            assertEquals(1, java.lang.reflect.Array.getLength(sliced));
+            assertEquals(
+                java.lang.reflect.Array.get(original, 1),
+                java.lang.reflect.Array.get(sliced, 0)
+            );
+        }
+        final Class<?> type = compile("""
+            var row = [1, 2];
+            var matrix = [row];
+            var copy = matrix[:];
+            """);
+        final int[][] original = (int[][]) type.getField("matrix").get(null);
+        final int[][] copy = (int[][]) type.getField("copy").get(null);
+        assertNotSame(original, copy);
+        assertSame(original[0], copy[0]);
+    }
+
+    @Test
+    void sliceBoundsRunOnceInOrderAndKeepTheOriginalTarget() throws Exception {
+        final Class<?> type = compile("""
+            var values = [1, 2, 3];
+            var calls = 0;
+            func start() i32 {
+                calls = calls * 10 + 1;
+                values = [9, 8, 7];
+                return 1;
+            }
+            func end() i32 { calls = calls * 10 + 2; return 3; }
+            var sliced = values[start():end()];
+            """);
+        assertEquals(12, type.getField("calls").get(null));
+        assertArrayEquals(
+            new int[] {2, 3},
+            (int[]) type.getField("sliced").get(null)
+        );
+    }
+
+    @Test
+    void slicesRejectInvalidTargetsAndBounds() {
+        for (final String source : List.of(
+            "var values = 1; var result = values[:];",
+            "var values = [1]; var result = values[true:];",
+            "var values = [1]; var result = values[:1.5];",
+            "var values = [1]; var index: i64 = 0; var result = values[index:];"
+        )) {
+            assertThrows(SemanticException.class, () -> compile(source));
+        }
+    }
+
+    @Test
+    void negativeIndicesReadFromTheEndAndKeepBoundsChecks() throws Exception {
+        final Class<?> type = compile("""
+            var values = [10, 20, 30];
+            func read(index: i32) i32 { return values[index]; }
+            func empty(index: i32) i32 {
+                var values: [i32] = [];
+                return values[index];
+            }
+            var strings = ["first", "last"];
+            var last = strings[-1];
+            var matrix = [[1, 2], [3, 4]];
+            var row = matrix[-1];
+            var nested = row[-2];
+            """);
+        for (int index = -3; index < 3; index++) {
+            assertEquals(
+                (index < 0 ? index + 3 : index) * 10 + 10,
+                type.getMethod("read", int.class).invoke(null, index)
+            );
+        }
+        assertEquals("last", type.getField("last").get(null));
+        assertEquals(3, type.getField("nested").get(null));
+        for (final int index : new int[] {-4, 3, Integer.MIN_VALUE,
+                Integer.MAX_VALUE}) {
+            final InvocationTargetException exception =
+                assertThrows(
+                    InvocationTargetException.class,
+                    () -> type.getMethod("read", int.class).invoke(null, index)
+                );
+            assertInstanceOf(
+                ArrayIndexOutOfBoundsException.class,
+                exception.getCause()
+            );
+        }
+        for (final int index : new int[] {-1, 0}) {
+            final InvocationTargetException exception =
+                assertThrows(
+                    InvocationTargetException.class,
+                    () -> type.getMethod("empty", int.class).invoke(null, index)
+                );
+            assertInstanceOf(
+                ArrayIndexOutOfBoundsException.class,
+                exception.getCause()
+            );
+        }
+    }
+
+    @Test
+    void negativeIndexUpdatesEvaluateOperandsOnceInOrder() throws Exception {
+        final Class<?> type = compile("""
+            var values = [10, 20];
+            var calls = 0;
+            func index() i32 { calls = calls * 10 + 2; return -1; }
+            func value() i32 { calls = calls * 10 + 3; return 40; }
+            var read = values[index()];
+            var assigned = values[index()] = value();
+            var old = values[index()]++;
+            var updated = values[index()]--;
+            var wide: i64 = 9000000000;
+            var longs = [wide];
+            var wideOld = longs[-1]++;
+            var wideUpdated = longs[-1]--;
+            var wideAssigned = longs[-1] = 8000000000;
+            """);
+        assertEquals(22322, type.getField("calls").get(null));
+        assertEquals(20, type.getField("read").get(null));
+        assertEquals(40, type.getField("assigned").get(null));
+        assertEquals(40, type.getField("old").get(null));
+        assertEquals(41, type.getField("updated").get(null));
+        assertArrayEquals(
+            new int[] {10, 40},
+            (int[]) type.getField("values").get(null)
+        );
+        assertEquals(9000000000L, type.getField("wideOld").get(null));
+        assertEquals(9000000001L, type.getField("wideUpdated").get(null));
+        assertEquals(8000000000L, type.getField("wideAssigned").get(null));
+        assertArrayEquals(
+            new long[] {8000000000L},
+            (long[]) type.getField("longs").get(null)
+        );
+    }
+
+    @Test
     void floatLiteralNarrowingKeepsDoubleExpressionTypeAndConvertsAtRuntime()
         throws Exception {
         final Program program =
