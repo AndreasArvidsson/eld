@@ -8,4 +8,4 @@ SEMICOLON (1:8-1:9)
 
 --- AST ---
 
-ParserException: Expected EQUAL but found SEMICOLON at 1:8-1:9
+ParserException: Expected EQUAL, but found SEMICOLON at 1:8-1:9

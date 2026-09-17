@@ -88,9 +88,6 @@ public final class Parser {
         final Token token = advance();
 
         switch (token.type()) {
-            case LEFT_BRACE:
-                position--;
-                return parseBlockStatement();
             case CONST:
                 return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
@@ -547,8 +544,14 @@ public final class Parser {
 
     private Expression parsePrimitiveExpression(final Token token) {
         return switch (token.type()) {
-            case IDENTIFIER ->
-                new IdentifierExpression(token.text(), token.range());
+            case IDENTIFIER -> {
+                if (check(TokenType.LEFT_BRACKET)) {
+                    yield parseSubscriptExpression(token);
+                }
+                else {
+                    yield new IdentifierExpression(token.text(), token.range());
+                }
+            }
             case BOOLEAN_LITERAL -> new LiteralExpression(
                 LiteralKind.BOOL,
                 token.text(),
@@ -615,6 +618,18 @@ public final class Parser {
         final Token close = expect(TokenType.RIGHT_BRACKET);
         final Range range = open.range().union(close.range());
         return new ArrayExpression(elements, range);
+    }
+
+    private SubscriptExpression parseSubscriptExpression(
+        final Token identifier
+    ) {
+        final Expression array =
+            new IdentifierExpression(identifier.text(), identifier.range());
+        expect(TokenType.LEFT_BRACKET);
+        final Expression index = parseExpression();
+        final Token rightBracket = expect(TokenType.RIGHT_BRACKET);
+        final Range range = identifier.range().union(rightBracket.range());
+        return new SubscriptExpression(array, index, range);
     }
 
     // The opening parenthesis has already been consumed. Lookahead leaves position

@@ -30,7 +30,7 @@ import mylang.parser.GroupingExpression;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
 import mylang.parser.IfExpression;
-import mylang.parser.IndexExpression;
+import mylang.parser.SubscriptExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.LiteralKind;
 import mylang.parser.UnaryOperator;
@@ -893,7 +893,7 @@ public final class SemanticAnalyzer {
             case CallExpression call -> analyzeCallExpression(call, context);
             case GroupingExpression grouping ->
                 analyzeExpression(grouping.expression(), context);
-            case IndexExpression index ->
+            case SubscriptExpression index ->
                 analyzeIndexExpression(index, context);
             case AssignmentExpression assignment ->
                 analyzeAssignmentExpression(assignment, context);
@@ -973,7 +973,7 @@ public final class SemanticAnalyzer {
     }
 
     private Type analyzeIndexExpression(
-        final IndexExpression index,
+        final SubscriptExpression index,
         final SemanticContext context
     ) {
         final Type target = analyzeExpression(index.target(), context);
@@ -1015,7 +1015,7 @@ public final class SemanticAnalyzer {
             requireWritable(grouping.expression());
             return;
         }
-        if (expression instanceof IndexExpression) {
+        if (expression instanceof SubscriptExpression) {
             return;
         }
         if (

@@ -33,7 +33,7 @@ import mylang.parser.AssignmentExpression;
 import mylang.parser.ExpressionStatement;
 import mylang.parser.IdentifierDeclaration;
 import mylang.parser.IdentifierExpression;
-import mylang.parser.IndexExpression;
+import mylang.parser.SubscriptExpression;
 import mylang.parser.LiteralExpression;
 import mylang.parser.LiteralKind;
 import mylang.parser.Mutability;
@@ -268,8 +268,8 @@ class BytecodeGeneratorTest {
                 ).parse();
             final List<mylang.parser.BlockItem> items =
                 new ArrayList<>(declarations.items());
-            final IndexExpression index =
-                new IndexExpression(
+            final SubscriptExpression index =
+                new SubscriptExpression(
                     new IdentifierExpression("values", range),
                     new LiteralExpression(LiteralKind.INT, "0", range),
                     range
@@ -1779,8 +1779,8 @@ class BytecodeGeneratorTest {
                 ),
                 range
             );
-        final IndexExpression first =
-            new IndexExpression(
+        final SubscriptExpression first =
+            new SubscriptExpression(
                 new IdentifierExpression("values", range),
                 new LiteralExpression(LiteralKind.INT, "0", range),
                 range

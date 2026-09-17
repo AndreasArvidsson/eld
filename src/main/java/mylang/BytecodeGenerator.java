@@ -600,15 +600,19 @@ public final class BytecodeGenerator {
     private static int loadOpcode(final Type type) {
         return opcode(type, ILOAD);
     }
+
     private static int storeOpcode(final Type type) {
         return opcode(type, ISTORE);
     }
+
     private static int returnOpcode(final Type type) {
         return opcode(type, IRETURN);
     }
+
     private static int arrayLoadOpcode(final Type type) {
         return opcode(type, IALOAD);
     }
+
     private static int arrayStoreOpcode(final Type type) {
         return opcode(type, IASTORE);
     }
@@ -1241,7 +1245,7 @@ public final class BytecodeGenerator {
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case ArrayExpression array -> array(array);
-                case IndexExpression index -> {
+                case SubscriptExpression index -> {
                     expression(index.target());
                     expression(index.index());
                     method.visitInsn(
@@ -1439,7 +1443,7 @@ public final class BytecodeGenerator {
                 );
                 store(symbol);
             }
-            else if (target instanceof IndexExpression index) {
+            else if (target instanceof SubscriptExpression index) {
                 expression(index.target());
                 expression(index.index());
                 expression(assignment.value());
@@ -1485,7 +1489,7 @@ public final class BytecodeGenerator {
                 }
                 store(symbol);
             }
-            else if (target instanceof IndexExpression index) {
+            else if (target instanceof SubscriptExpression index) {
                 expression(index.target());
                 expression(index.index());
                 method.visitInsn(DUP2);

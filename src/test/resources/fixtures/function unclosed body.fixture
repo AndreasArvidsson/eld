@@ -10,4 +10,4 @@ LEFT_BRACE (1:12-1:13)
 
 --- AST ---
 
-ParserException: Expected RIGHT_BRACE but reached end of input at 1:13-1:13
+ParserException: Expected RIGHT_BRACE, but reached end of input at 1:13-1:13

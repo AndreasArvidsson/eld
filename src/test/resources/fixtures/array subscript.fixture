@@ -1,0 +1,141 @@
+const values = [1, 2, 3];
+print(values[1]);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+INTEGER_LITERAL "1" (1:17-1:18)
+COMMA (1:18-1:19)
+INTEGER_LITERAL "2" (1:20-1:21)
+COMMA (1:21-1:22)
+INTEGER_LITERAL "3" (1:23-1:24)
+RIGHT_BRACKET (1:24-1:25)
+SEMICOLON (1:25-1:26)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "values" (2:7-2:13)
+LEFT_BRACKET (2:13-2:14)
+INTEGER_LITERAL "1" (2:14-2:15)
+RIGHT_BRACKET (2:15-2:16)
+RIGHT_PAREN (2:16-2:17)
+SEMICOLON (2:17-2:18)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:18
+  (VariableDeclaration
+    range: 1:1-1:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:25
+      (LiteralExpression
+        range: 1:17-1:18
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:20-1:21
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:23-1:24
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:18
+    (CallExpression
+      range: 2:1-2:17
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 2:7-2:16
+        (IdentifierExpression
+          range: 2:7-2:13
+          name: "values"
+        )
+        (LiteralExpression
+          range: 2:14-2:15
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:25 -> ArrayType<i32>
+  1:17-1:18 -> i32
+  1:20-1:21 -> i32
+  1:23-1:24 -> i32
+  2:1-2:6 -> BuiltinFunctionType(print)
+  2:1-2:17 -> void
+  2:7-2:13 -> ArrayType<i32>
+  2:7-2:16 -> i32
+  2:14-2:15 -> i32
+
+Declarations:
+  1:7-1:13 -> VariableSymbol(name=values, type=ArrayType<i32>, mutability=CONST)
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:13 -> 1:7-1:13
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static [I values
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 3
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 3
+    IASTORE
+    PUTSTATIC Test.values : [I
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : [I
+    LDC 1
+    IALOAD
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+2
+

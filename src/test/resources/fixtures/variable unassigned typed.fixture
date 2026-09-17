@@ -10,4 +10,4 @@ SEMICOLON (1:13-1:14)
 
 --- AST ---
 
-ParserException: Expected EQUAL but found SEMICOLON at 1:13-1:14
+ParserException: Expected EQUAL, but found SEMICOLON at 1:13-1:14
