@@ -106,7 +106,7 @@ final class RuntimeAbi {
             case F64 -> ArrayKind.DOUBLE;
             case BOOL -> ArrayKind.BOOLEAN;
             case CHAR -> ArrayKind.CHAR;
-            case STRING, NULL -> ArrayKind.OBJECT;
+            case STRING, NULL, ANY -> ArrayKind.OBJECT;
             case VOID -> throw new IllegalArgumentException(
                 "void is not an array element type"
             );

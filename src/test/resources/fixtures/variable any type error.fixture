@@ -1,0 +1,63 @@
+var foo: any = 5;
+const bar: i32 = foo;
+
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "foo" (1:5-1:8)
+COLON (1:8-1:9)
+IDENTIFIER "any" (1:10-1:13)
+EQUAL (1:14-1:15)
+INTEGER_LITERAL "5" (1:16-1:17)
+SEMICOLON (1:17-1:18)
+CONST (2:1-2:6)
+IDENTIFIER "bar" (2:7-2:10)
+COLON (2:10-2:11)
+IDENTIFIER "i32" (2:12-2:15)
+EQUAL (2:16-2:17)
+IDENTIFIER "foo" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:22
+  (VariableDeclaration
+    range: 1:1-1:18
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:8
+      name: "foo"
+    )
+    (NamedTypeNode
+      range: 1:10-1:13
+      name: "any"
+    )
+    (LiteralExpression
+      range: 1:16-1:17
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:22
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "bar"
+    )
+    (NamedTypeNode
+      range: 2:12-2:15
+      name: "i32"
+    )
+    (IdentifierExpression
+      range: 2:18-2:21
+      name: "foo"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign any to i32 at 2:18-2:21

@@ -57,6 +57,113 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void anyUsesObjectAndBoxesPrimitiveValues() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    const integer: any = 42;
+                    const text: any = "hello";
+                    const empty: any = null;
+                    func identity(value: any) any { return value; }
+                    func number() any { return identity(9000000000); }
+                    func primitives() (any, any, any, any, any, any, any, any) {
+                        const b: i8 = 1; const s: i16 = 2; const i: i32 = 3;
+                        const l: i64 = 4; const f: f32 = 1.5; const d: f64 = 2.5;
+                        return (b, s, i, l, f, d, true, 'x');
+                    }
+                    func union() any { const value: i32 | null = 7; return value; }
+                    func changed() any { var value: any = 1; value = "changed"; return value; }
+                    func collapsed() any | string | null { return true; }
+                    """
+            );
+        assertEquals(Object.class, type.getField("integer").getType());
+        assertEquals(42, type.getField("integer").get(null));
+        assertEquals("hello", type.getField("text").get(null));
+        assertNull(type.getField("empty").get(null));
+        assertEquals(
+            Object.class,
+            type.getMethod("identity", Object.class).getReturnType()
+        );
+        assertEquals(9000000000L, type.getMethod("number").invoke(null));
+        final var tuple =
+            (com.github.andreasarvidsson.eld.runtime.EldTuple) type
+                .getMethod("primitives")
+                .invoke(null);
+        assertEquals(
+            List.of((byte) 1, (short) 2, 3, 4L, 1.5f, 2.5, true, 'x'),
+            java.util.stream.IntStream.range(0, 8).mapToObj(tuple::get).toList()
+        );
+        assertEquals(7, type.getMethod("union").invoke(null));
+        assertEquals("changed", type.getMethod("changed").invoke(null));
+        assertEquals(Object.class, type.getMethod("collapsed").getReturnType());
+        assertEquals(true, type.getMethod("collapsed").invoke(null));
+    }
+
+    @Test
+    void anySupportsCollectionsEqualityAndBranches() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    func values() [any] {
+                        var values: [any] = [1, "two", true, null, (3, false), [4]];
+                        values[0] = 5.0;
+                        return values;
+                    }
+                    func same() bool { const value: any = 1; return value == 1; }
+                    func reverse() bool { const value: any = 1; return 1 == value; }
+                    func different() bool { const value: any = 1; return value != "1"; }
+                    func empty() bool { const value: any = null; return value == null; }
+                    func tuple() bool { const value: any = (1, true); return value == (1, true); }
+                    func branch(flag: bool) any { return flag ? 2 : "two"; }
+                    func nested() [[any]] { return [[1, "two"], [null, false]]; }
+                    func selection() string { const value: any = 1; return switch (value) { case 1 => "one" else => "other" }; }
+                    """
+            );
+        final var values =
+            (EldObjectArray) type.getMethod("values").invoke(null);
+        assertEquals(5.0, values.get(0));
+        assertEquals("two", values.get(1));
+        assertEquals(true, values.get(2));
+        assertNull(values.get(3));
+        assertEquals("(3, false)", values.get(4).toString());
+        assertEquals(true, type.getMethod("same").invoke(null));
+        assertEquals(true, type.getMethod("reverse").invoke(null));
+        assertEquals(true, type.getMethod("different").invoke(null));
+        assertEquals(true, type.getMethod("empty").invoke(null));
+        assertEquals(true, type.getMethod("tuple").invoke(null));
+        assertEquals(
+            2,
+            type.getMethod("branch", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            "two",
+            type.getMethod("branch", boolean.class).invoke(null, false)
+        );
+        final var nested =
+            (EldObjectArray) type.getMethod("nested").invoke(null);
+        assertEquals("two", ((EldObjectArray) nested.get(0)).get(1));
+        assertEquals("one", type.getMethod("selection").invoke(null));
+    }
+
+    @Test
+    void anyRejectsImplicitNarrowingAndTypeSpecificOperations() {
+        for (final String source : List.of(
+            "const value: any = 1; const narrow: i32 = value;",
+            "const value: any = 1; value + 1;",
+            "const value: any = true; if (value) { print(1); }",
+            "const value: any = [1]; value[0];",
+            "func empty() {} const value: any = empty();",
+            "const values: [i32] = [1]; const objects: [any] = values;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
     void tupleEqualityComparesValues() throws Exception {
         final Class<?> type =
             compile(

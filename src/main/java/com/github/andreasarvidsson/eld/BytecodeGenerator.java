@@ -360,7 +360,10 @@ public final class BytecodeGenerator {
     // null means this expression must be evaluated at runtime. In particular,
     // JVM ConstantValue cannot represent null, arrays, or function references.
     private @Nullable Object constantValue(final Expression expression) {
-        if (semanticModel.getEffectiveType(expression) instanceof UnionType) {
+        if (
+            semanticModel.getEffectiveType(expression) instanceof UnionType
+                || semanticModel.getEffectiveType(expression) == BuiltinType.ANY
+        ) {
             return null;
         }
         final Object value = switch (expression) {
@@ -549,7 +552,7 @@ public final class BytecodeGenerator {
                 case BOOL -> "Z";
                 case CHAR -> "C";
                 case STRING -> "Ljava/lang/String;";
-                case NULL -> "Ljava/lang/Object;";
+                case NULL, ANY -> "Ljava/lang/Object;";
                 case VOID -> "V";
             };
             case ArrayType array ->
@@ -628,7 +631,8 @@ public final class BytecodeGenerator {
             || type instanceof TupleType
             || type instanceof FunctionType
             || type == BuiltinType.STRING
-            || type == BuiltinType.NULL;
+            || type == BuiltinType.NULL
+            || type == BuiltinType.ANY;
     }
 
     private static int opcode(final Type type, final int base) {
@@ -899,6 +903,7 @@ public final class BytecodeGenerator {
                         if (
                             subjectType == BuiltinType.STRING
                                 || subjectType instanceof UnionType
+                                || subjectType == BuiltinType.ANY
                         ) {
                             method.visitMethodInsn(
                                 INVOKESTATIC,
@@ -1334,7 +1339,10 @@ public final class BytecodeGenerator {
         private void convertExpression(final Expression expression) {
             final Type from = semanticModel.getExpressionType(expression);
             final Type to = semanticModel.getEffectiveType(expression);
-            if (to instanceof UnionType) {
+            if (to == BuiltinType.ANY) {
+                box(from);
+            }
+            else if (to instanceof UnionType) {
                 final Type member =
                     semanticModel.getUnionMemberType(expression);
                 if (!(from instanceof UnionType)) {
@@ -1862,6 +1870,7 @@ public final class BytecodeGenerator {
                     if (
                         type == BuiltinType.STRING || type instanceof UnionType
                             || type instanceof TupleType
+                            || type == BuiltinType.ANY
                     ) {
                         method.visitMethodInsn(
                             INVOKESTATIC,

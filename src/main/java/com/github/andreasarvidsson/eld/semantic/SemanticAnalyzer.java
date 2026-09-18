@@ -459,7 +459,8 @@ public final class SemanticAnalyzer {
                 final Type matchType = analyzeExpression(match, context);
                 if (
                     !subjectType.equals(matchType)
-                        && !(subjectType instanceof UnionType
+                        && !((subjectType instanceof UnionType
+                            || subjectType == BuiltinType.ANY)
                             && resolveAssignType(
                                 matchType,
                                 subjectType,
@@ -862,6 +863,10 @@ public final class SemanticAnalyzer {
             model.setExpressionType(tuple, to);
             return to;
         }
+        if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
+            model.setConversionType(fromExpression, to);
+            return to;
+        }
         if (from.equals(to)) {
             return from;
         }
@@ -956,6 +961,7 @@ public final class SemanticAnalyzer {
             case "bool" -> BuiltinType.BOOL;
             case "string" -> BuiltinType.STRING;
             case "null" -> BuiltinType.NULL;
+            case "any" -> BuiltinType.ANY;
             default -> throw new SemanticException(
                 named.range(),
                 "Unknown type: %s",
@@ -981,7 +987,7 @@ public final class SemanticAnalyzer {
             return analyzeTupleExpression(tuple, context, target);
         }
         if (
-            expected instanceof UnionType
+            (expected instanceof UnionType || expected == BuiltinType.ANY)
                 && expression instanceof TernaryExpression ternary
         ) {
             if (
@@ -1014,7 +1020,7 @@ public final class SemanticAnalyzer {
         if (
             expected instanceof ArrayType target
                 && expression instanceof ArrayExpression array
-                && containsUnion(target.elementType())
+                && requiresContextualElements(target.elementType())
         ) {
             for (final Expression element : array.elements()) {
                 final Type actual =
@@ -1071,13 +1077,14 @@ public final class SemanticAnalyzer {
         return target;
     }
 
-    private static boolean containsUnion(final Type type) {
+    private static boolean requiresContextualElements(final Type type) {
         return (type instanceof TupleType tuple && tuple.elementTypes()
             .stream()
-            .anyMatch(SemanticAnalyzer::containsUnion))
+            .anyMatch(SemanticAnalyzer::requiresContextualElements))
             || type instanceof UnionType
+            || type == BuiltinType.ANY
             || (type instanceof ArrayType array
-                && containsUnion(array.elementType()));
+                && requiresContextualElements(array.elementType()));
     }
 
     private Type analyzeExpression(
@@ -1404,7 +1411,7 @@ public final class SemanticAnalyzer {
             binary.operator() == BinaryOperator.EQUAL
                 || binary.operator() == BinaryOperator.NOT_EQUAL
         ) {
-            if (leftType instanceof UnionType) {
+            if (leftType instanceof UnionType || leftType == BuiltinType.ANY) {
                 unionEquality =
                     resolveAssignType(
                         rightType,
@@ -1412,7 +1419,10 @@ public final class SemanticAnalyzer {
                         binary.right()
                     ) != null;
             }
-            if (!unionEquality && rightType instanceof UnionType) {
+            if (
+                !unionEquality && (rightType instanceof UnionType
+                    || rightType == BuiltinType.ANY)
+            ) {
                 unionEquality =
                     resolveAssignType(
                         leftType,

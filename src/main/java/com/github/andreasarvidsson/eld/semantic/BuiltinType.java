@@ -11,6 +11,7 @@ public enum BuiltinType implements Type {
     CHAR("char"),
     STRING("string"),
     NULL("null"),
+    ANY("any"),
     VOID("void");
 
     private final String name;

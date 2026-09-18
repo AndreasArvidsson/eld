@@ -84,6 +84,23 @@ the operand's type. Integer arithmetic wraps at the promoted width; increments
 and decrements wrap at the operand's width. Widening to floating point can
 lose precision, just as in Java.
 
+## Any type
+
+`any` is an unknown value type represented by Java's `Object`. Every value
+can be assigned to it, including `null`; primitive values are boxed.
+
+```text
+var value: any = 42;
+value = "hello";
+const values: [any] = [1, "two", true, null];
+func identity(value: any) any { return value; }
+```
+
+An `any` value cannot implicitly narrow to a concrete type or be used for
+arithmetic, conditions, calls, or indexing. Equality uses the contained values'
+`equals` methods. Arrays remain invariant: an existing `[i32]` cannot be
+assigned to `[any]`. A union containing `any` simplifies to `any`.
+
 ## Tuples
 
 Tuples use parentheses for both types and values, with two or more elements.
