@@ -1,5 +1,6 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.util.Locale;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
@@ -20,7 +21,10 @@ public record VariableSymbol(
 
     @Override
     public String toString() {
-        return "%s %s: %s"
-            .formatted(mutability.toString().toLowerCase(), name(), type);
+        return "%s %s: %s".formatted(
+            mutability.toString().toLowerCase(Locale.ROOT),
+            name(),
+            type
+        );
     }
 }

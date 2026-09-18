@@ -20,13 +20,7 @@ public class Fixtures {
 
     static public List<@NonNull Fixture> getFixtures() throws IOException {
         final Path directory =
-            Path.of(
-                System.getProperty("basedir", "."),
-                "src",
-                "test",
-                "resources",
-                "fixtures"
-            );
+            Path.of(System.getProperty("basedir", "."), "fixtures");
 
         final List<@NonNull Fixture> fixtures = new ArrayList<>();
 
