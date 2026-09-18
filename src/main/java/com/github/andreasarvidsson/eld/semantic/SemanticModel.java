@@ -163,6 +163,36 @@ public final class SemanticModel {
         return false;
     }
 
+    public boolean hasNaturalOrder(final Type type) {
+        return JavaTypes.hasNaturalOrder(type) || hasNaturalOrder(type, type);
+    }
+
+    private boolean hasNaturalOrder(final Type type, final Type element) {
+        if (type instanceof InterfaceType contract) {
+            if (contract.javaClass() == Comparable.class) {
+                final Type argument = contract.typeArguments().getFirst();
+                return argument == BuiltinType.ANY
+                    || isSubtype(element, argument);
+            }
+            return getInterface(contract).superInterfaces()
+                .stream()
+                .anyMatch(parent -> hasNaturalOrder(parent, element));
+        }
+        if (type instanceof ClassType cls) {
+            for (ClassType current = cls; current != null; current =
+                getSuperclass(current)) {
+                for (final InterfaceType contract : getImplementedInterfaces(
+                    current
+                )) {
+                    if (hasNaturalOrder(contract, element)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public void setJavaConstructor(
         final NewExpression expression,
         final Constructor<?> constructor

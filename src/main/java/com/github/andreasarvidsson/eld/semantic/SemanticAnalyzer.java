@@ -2279,10 +2279,8 @@ public final class SemanticAnalyzer {
                         );
                     }
                     if (
-                        element == BuiltinType.BOOL || !model.isSubtype(
-                            element,
-                            JavaTypes.type("Comparable", List.of(element))
-                        )
+                        element == BuiltinType.BOOL
+                            || !model.hasNaturalOrder(element)
                     ) {
                         throw new SemanticException(
                             member.range(),
@@ -2339,12 +2337,7 @@ public final class SemanticAnalyzer {
                     ) {
                         final Type element =
                             javaTarget.typeArguments().getFirst();
-                        if (
-                            !model.isSubtype(
-                                element,
-                                JavaTypes.type("Comparable", List.of(element))
-                            )
-                        ) {
+                        if (!model.hasNaturalOrder(element)) {
                             throw new SemanticException(
                                 member.range(),
                                 "Natural sorting requires %s to implement Comparable<%s>",
@@ -2491,7 +2484,10 @@ public final class SemanticAnalyzer {
                     ) {
                         final Expression argument =
                             unwrap(creation.arguments().getFirst());
-                        if (argument instanceof LambdaExpression) {
+                        if (
+                            argument instanceof LambdaExpression
+                                || argument instanceof ObjectExpression
+                        ) {
                             candidates.removeIf(
                                 constructor -> constructor
                                     .getParameterTypes()[0] != java.util.Comparator.class
@@ -2511,6 +2507,19 @@ public final class SemanticAnalyzer {
                                 )
                             );
                         }
+                        final var applicable = List.copyOf(candidates);
+                        candidates.removeIf(
+                            constructor -> applicable.stream()
+                                .anyMatch(
+                                    other -> constructor
+                                        .getParameterTypes()[0] != other
+                                            .getParameterTypes()[0]
+                                        && constructor.getParameterTypes()[0]
+                                            .isAssignableFrom(
+                                                other.getParameterTypes()[0]
+                                            )
+                                )
+                        );
                     }
                     if (candidates.size() != 1) {
                         throw new SemanticException(

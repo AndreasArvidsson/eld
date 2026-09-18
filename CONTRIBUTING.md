@@ -219,9 +219,9 @@ Immutable by default with `mut` keyword
 ### Miscellaneous
 
 - ... operator when constructing objects/arrays
+- Regular expressions from `regex`.
 - Export & import
 - Exceptions
-- Regular expressions from `regex`.
 - Ubiquitous toString and equals methods
 - Immutable collections and objects
 - Overloaded functions
