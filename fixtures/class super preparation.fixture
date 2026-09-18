@@ -1,0 +1,156 @@
+class Base {}
+class Child extends Base {
+    public constructor() {
+        const value = 1;
+        super();
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+CLASS (2:1-2:6)
+IDENTIFIER "Child" (2:7-2:12)
+EXTENDS (2:13-2:20)
+IDENTIFIER "Base" (2:21-2:25)
+LEFT_BRACE (2:26-2:27)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+CONST (4:9-4:14)
+IDENTIFIER "value" (4:15-4:20)
+EQUAL (4:21-4:22)
+INTEGER_LITERAL "1" (4:23-4:24)
+SEMICOLON (4:24-4:25)
+SUPER (5:9-5:14)
+LEFT_PAREN (5:14-5:15)
+RIGHT_PAREN (5:15-5:16)
+SEMICOLON (5:16-5:17)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-7:2
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 2:21-2:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 3:5-6:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-6:6
+        (BlockStatement
+          range: 3:26-6:6
+          (VariableDeclaration
+            range: 4:9-4:25
+            mutability: CONST
+            (IdentifierDeclaration
+              range: 4:15-4:20
+              name: "value"
+            )
+            type: null
+            (LiteralExpression
+              range: 4:23-4:24
+              kind: INT
+              text: "1"
+            )
+          )
+          (SuperConstructorCall
+            range: 5:9-5:17
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:21-2:25 -> Base
+  4:23-4:24 -> i32
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:7-2:12 -> class Child
+  3:12-6:6 -> constructor()
+  4:15-4:20 -> const value: i32
+
+References:
+  2:21-2:25 -> 1:7-1:11
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Child extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x1
+  public <init>()V
+    LDC 1
+    ISTORE 1
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+

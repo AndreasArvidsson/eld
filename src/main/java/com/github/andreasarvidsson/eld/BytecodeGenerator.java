@@ -135,7 +135,7 @@ public final class BytecodeGenerator {
                 final String left,
                 final String right
             ) {
-                // Generated classes extend Object and are not available to ASM's class loader.
+                // Generated classes are not available to ASM's class loader.
                 if (left.equals(right)) {
                     return left;
                 }
@@ -145,6 +145,15 @@ public final class BytecodeGenerator {
                         || classOwners.containsValue(left)
                         || classOwners.containsValue(right)
                 ) {
+                    final ClassType leftType = generatedClassType(left);
+                    final ClassType rightType = generatedClassType(right);
+                    if (leftType != null && rightType != null) {
+                        final ClassType common =
+                            semanticModel.commonClassType(leftType, rightType);
+                        if (common != null) {
+                            return classOwner(common);
+                        }
+                    }
                     return "java/lang/Object";
                 }
                 return super.getCommonSuperClass(left, right);
@@ -156,8 +165,22 @@ public final class BytecodeGenerator {
         return moduleName + "$" + declaration.name().name();
     }
 
+    private @Nullable ClassType generatedClassType(final String owner) {
+        for (final ClassType type : semanticModel.getClassTypes()) {
+            if (classOwner(type).equals(owner)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
     private byte[] generateClass(final ClassDeclaration declaration) {
         final String name = className(declaration);
+        final ClassType classType =
+            (ClassType) semanticModel.getSymbol(declaration.name()).type();
+        final ClassType superclass = semanticModel.getSuperclass(classType);
+        final String superclassOwner =
+            superclass == null ? "java/lang/Object" : classOwner(superclass);
         final ClassWriter writer = classWriter();
         currentWriter = writer;
         writer.visit(
@@ -165,7 +188,7 @@ public final class BytecodeGenerator {
             ACC_PUBLIC | ACC_SUPER,
             name,
             null,
-            "java/lang/Object",
+            superclassOwner,
             null
         );
         writer.visitNestHost(moduleName);
@@ -264,26 +287,25 @@ public final class BytecodeGenerator {
                 instance
             );
         constructor.visitCode();
-        constructor.visitVarInsn(ALOAD, 0);
-        constructor.visitMethodInsn(
-            INVOKESPECIAL,
-            "java/lang/Object",
-            "<init>",
-            "()V",
-            false
-        );
         if (declarationConstructor != null) {
             for (final FunctionParameter parameter : declarationConstructor
                 .parameters()) {
                 initializer.local(semanticModel.getSymbol(parameter.name()));
             }
         }
-        for (final MemberDeclaration memberDeclaration : declaration
-            .members()) {
-            final Declaration member = memberDeclaration.declaration();
-            if (member instanceof VariableDeclaration field) {
-                initializer.item(field);
-            }
+        initializer.constructorSuperclass = superclass;
+        initializer.constructorFields =
+            declaration.members()
+                .stream()
+                .map(MemberDeclaration::declaration)
+                .filter(VariableDeclaration.class::isInstance)
+                .map(VariableDeclaration.class::cast)
+                .toList();
+        final boolean explicitSuper =
+            declarationConstructor != null
+                && declarationConstructor.hasExplicitSuperCall();
+        if (!explicitSuper) {
+            initializer.initializeBase(List.of());
         }
         final boolean reachable =
             declarationConstructor == null
@@ -399,6 +421,7 @@ public final class BytecodeGenerator {
             );
         final MethodGenerator generator =
             new MethodGenerator(method, globals, type.returnType(), instance);
+        generator.beforeBaseInitialization = name.equals("<init>");
         method.visitCode();
         for (final FunctionParameter parameter : parameters) {
             generator.local(semanticModel.getSymbol(parameter.name()));
@@ -812,6 +835,25 @@ public final class BytecodeGenerator {
         return boxed == null ? descriptor(type) : "L" + boxed + ";";
     }
 
+    private boolean referenceAssignable(
+        final String source,
+        final String target
+    ) {
+        if (source.equals(target) || target.equals("Ljava/lang/Object;")) {
+            return true;
+        }
+        final ClassType sourceClass =
+            generatedClassType(
+                org.objectweb.asm.Type.getType(source).getInternalName()
+            );
+        final ClassType targetClass =
+            generatedClassType(
+                org.objectweb.asm.Type.getType(target).getInternalName()
+            );
+        return sourceClass != null && targetClass != null
+            && semanticModel.isSubclassOf(sourceClass, targetClass);
+    }
+
     private static @Nullable String boxedOwner(final Type type) {
         if (!(type instanceof BuiltinType builtin)) {
             return null;
@@ -921,6 +963,10 @@ public final class BytecodeGenerator {
         private final Deque<YieldTarget> yieldTargets = new ArrayDeque<>();
         private final Type returnType;
         private int nextLocal;
+        private boolean beforeBaseInitialization;
+        private String lambdaOwner;
+        private @Nullable ClassType constructorSuperclass;
+        private List<VariableDeclaration> constructorFields = List.of();
 
         private MethodGenerator(
             final MethodVisitor method,
@@ -940,6 +986,7 @@ public final class BytecodeGenerator {
             this.globals = globals;
             this.returnType = returnType;
             this.instance = instance;
+            this.lambdaOwner = instance == null ? moduleName : instance.owner();
             this.nextLocal = instance == null ? 0 : 1;
         }
 
@@ -985,8 +1032,51 @@ public final class BytecodeGenerator {
             return true;
         }
 
+        private void initializeBase(final List<Expression> arguments) {
+            method.visitVarInsn(ALOAD, 0);
+            final boolean previous = beforeBaseInitialization;
+            beforeBaseInitialization = true;
+            for (final Expression argument : arguments) {
+                expression(argument);
+            }
+            beforeBaseInitialization = previous;
+            final FunctionType type =
+                constructorSuperclass == null
+                    ? null
+                    : semanticModel.getConstructor(constructorSuperclass);
+            final boolean omitted =
+                type != null && arguments.size() < type.parameterTypes().size();
+            if (type != null && omitted) {
+                final boolean[] assigned =
+                    new boolean[type.parameterTypes().size()];
+                for (int i = 0; i < assigned.length; i++) {
+                    assigned[i] = i < arguments.size();
+                    if (!assigned[i]) {
+                        omittedValue(type.parameterTypes().get(i));
+                    }
+                }
+                omissionMask(assigned);
+            }
+            method.visitMethodInsn(
+                INVOKESPECIAL,
+                constructorSuperclass == null
+                    ? "java/lang/Object"
+                    : classOwner(constructorSuperclass),
+                "<init>",
+                omitted
+                    ? defaultDescriptor(Objects.requireNonNull(type))
+                    : type == null ? "()V" : methodDescriptor(type),
+                false
+            );
+            for (final VariableDeclaration field : constructorFields) {
+                item(field);
+            }
+        }
+
         private boolean item(final BlockItem item) {
             switch (item) {
+                case SuperConstructorCall call ->
+                    initializeBase(call.arguments());
                 case VariableDeclaration variable -> {
                     final Symbol symbol =
                         semanticModel.getSymbol(variable.name());
@@ -1043,15 +1133,28 @@ public final class BytecodeGenerator {
                     return false;
                 }
                 case WhileStatement statement -> {
+                    if (
+                        constructorSuperclass != null
+                            && isBooleanLiteral(statement.condition(), false)
+                    ) {
+                        return true;
+                    }
+                    final boolean alwaysTrue =
+                        constructorSuperclass != null
+                            && isBooleanLiteral(statement.condition(), true);
                     final Label condition = new Label();
                     final Label end = new Label();
                     method.visitLabel(condition);
-                    expression(statement.condition());
-                    method.visitJumpInsn(IFEQ, end);
-                    if (loopBody(statement.body(), new Loop(condition, end))) {
+                    if (!alwaysTrue) {
+                        expression(statement.condition());
+                        method.visitJumpInsn(IFEQ, end);
+                    }
+                    final Loop loop = new Loop(condition, end);
+                    if (loopBody(statement.body(), loop)) {
                         method.visitJumpInsn(GOTO, condition);
                     }
                     method.visitLabel(end);
+                    return !alwaysTrue || loop.hasBreak;
                 }
                 case DoWhileStatement statement -> {
                     final Label start = new Label();
@@ -1063,11 +1166,27 @@ public final class BytecodeGenerator {
                         loopBody(statement.body(), loop) || loop.hasContinue;
                     if (reachesCondition) {
                         method.visitLabel(condition);
-                        expression(statement.condition());
-                        method.visitJumpInsn(IFNE, start);
+                        if (
+                            constructorSuperclass != null
+                                && isBooleanLiteral(statement.condition(), true)
+                        ) {
+                            method.visitJumpInsn(GOTO, start);
+                        }
+                        else if (
+                            constructorSuperclass == null || !isBooleanLiteral(
+                                statement.condition(),
+                                false
+                            )
+                        ) {
+                            expression(statement.condition());
+                            method.visitJumpInsn(IFNE, start);
+                        }
                     }
                     method.visitLabel(end);
-                    return reachesCondition || loop.hasBreak;
+                    return reachesCondition
+                        && !(constructorSuperclass != null
+                            && isBooleanLiteral(statement.condition(), true))
+                        || loop.hasBreak;
                 }
                 case ForStatement statement -> {
                     final Statement initializer = statement.initializer();
@@ -1076,11 +1195,20 @@ public final class BytecodeGenerator {
                     if (initializer != null) {
                         item(initializer);
                     }
+                    if (
+                        constructorSuperclass != null && condition != null
+                            && isBooleanLiteral(condition, false)
+                    ) {
+                        return true;
+                    }
+                    final boolean alwaysTrue =
+                        condition == null || constructorSuperclass != null
+                            && isBooleanLiteral(condition, true);
                     final Label start = new Label();
                     final Label next = new Label();
                     final Label end = new Label();
                     method.visitLabel(start);
-                    if (condition != null) {
+                    if (condition != null && !alwaysTrue) {
                         expression(condition);
                         method.visitJumpInsn(IFEQ, end);
                     }
@@ -1093,7 +1221,7 @@ public final class BytecodeGenerator {
                         method.visitJumpInsn(GOTO, start);
                     }
                     method.visitLabel(end);
-                    return condition != null || loop.hasBreak;
+                    return !alwaysTrue || loop.hasBreak;
                 }
                 case ForEachStatement statement -> forEach(statement);
                 case BreakStatement statement -> {
@@ -1687,8 +1815,7 @@ public final class BytecodeGenerator {
                 }
                 final String target = descriptor(to);
                 if (
-                    !target.equals("Ljava/lang/Object;")
-                        && !boxedDescriptor(member).equals(target)
+                    !referenceAssignable(boxedDescriptor(member), target)
                         && !(unwrap(
                             expression
                         ) instanceof LiteralExpression literal
@@ -1769,20 +1896,30 @@ public final class BytecodeGenerator {
                 signature.append(descriptor(parameter));
             }
             signature.append(")").append(descriptor(type.returnType()));
-            final String owner =
-                instance == null ? moduleName : instance.owner();
+            final String owner = lambdaOwner;
+            final InstanceContext lambdaInstance =
+                beforeBaseInitialization
+                    || semanticModel.isReceiverlessLambda(lambda)
+                        ? null
+                        : instance;
             final MethodVisitor body =
                 Objects.requireNonNull(currentWriter)
                     .visitMethod(
                         ACC_PRIVATE | ACC_SYNTHETIC
-                            | (instance == null ? ACC_STATIC : 0),
+                            | (lambdaInstance == null ? ACC_STATIC : 0),
                         name,
                         signature.toString(),
                         null,
                         null
                     );
             final MethodGenerator generator =
-                new MethodGenerator(body, globals, type.returnType(), instance);
+                new MethodGenerator(
+                    body,
+                    globals,
+                    type.returnType(),
+                    lambdaInstance
+                );
+            generator.lambdaOwner = owner;
             body.visitCode();
             for (final Symbol capture : captures) {
                 generator.local(capture);
@@ -1801,14 +1938,14 @@ public final class BytecodeGenerator {
             }
             method.visitLdcInsn(
                 new Handle(
-                    instance == null ? H_INVOKESTATIC : H_INVOKEVIRTUAL,
+                    lambdaInstance == null ? H_INVOKESTATIC : H_INVOKEVIRTUAL,
                     owner,
                     name,
                     signature.toString(),
                     false
                 )
             );
-            if (instance != null) {
+            if (lambdaInstance != null) {
                 method.visitVarInsn(ALOAD, 0);
                 method.visitMethodInsn(
                     INVOKEVIRTUAL,
@@ -2259,6 +2396,15 @@ public final class BytecodeGenerator {
             return expression instanceof GroupingExpression grouping
                 ? unwrap(grouping.expression())
                 : expression;
+        }
+
+        private boolean isBooleanLiteral(
+            final Expression expression,
+            final boolean value
+        ) {
+            return unwrap(expression) instanceof LiteralExpression literal
+                && literal.kind() == LiteralKind.BOOL
+                && Boolean.parseBoolean(literal.text()) == value;
         }
 
         private String memberOwner(final MemberExpression member) {

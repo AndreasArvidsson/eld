@@ -31,6 +31,61 @@ class CommandLineTest {
     }
 
     @Test
+    void replSupportsInheritanceAcrossSubmissions() throws Exception {
+        final String output = capture(() -> {
+            final ReplSession session = new ReplSession();
+            session.evaluate(
+                """
+                    class Base {
+                        protected var value: i32;
+                        protected constructor(value: i32 = 4) { this.value = value; }
+                        public func read() i32 { return this.value; }
+                    }
+                    """
+            );
+            session.evaluate("""
+                class Child extends Base {
+                    public func read() i32 { return this.value + 2; }
+                }
+                const child = new Child();
+                """);
+            session.evaluate("const base: Base = child; base.read();");
+            session.evaluate(
+                """
+                    class Other extends Base {}
+                    func choose(flag: bool) Base { return flag ? child : new Other(); }
+                    choose(false).read();
+                    """
+            );
+        });
+        assertEquals("6\n4\n", output);
+    }
+
+    @Test
+    void replSupportsExplicitSuperAcrossSubmissions() throws Exception {
+        final String output = capture(() -> {
+            final ReplSession session = new ReplSession();
+            session.evaluate("""
+                class Base {
+                    protected var value: i32;
+                    protected constructor(callback: () => i32, extra: i32 = 2) {
+                        this.value = callback() + extra;
+                    }
+                    public func read() i32 { return this.value; }
+                }
+                """);
+            session.evaluate("""
+                class Child extends Base {
+                    public constructor(value: i32 = 4) { super(() => value); }
+                }
+                const child = new Child();
+                """);
+            session.evaluate("child.read(); new Child(7).read();");
+        });
+        assertEquals("6\n9\n", output);
+    }
+
+    @Test
     void replRecoversFromCompileAndRuntimeErrors() throws Exception {
         final String output = capture(() -> {
             final ReplSession session = new ReplSession();

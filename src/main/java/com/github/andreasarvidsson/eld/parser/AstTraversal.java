@@ -1,9 +1,43 @@
 package com.github.andreasarvidsson.eld.parser;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /** Visits AST children in source order, including nested lambdas. */
 public final class AstTraversal {
+    public static boolean anyMatch(
+        final AstNode node,
+        final Predicate<AstNode> predicate
+    ) {
+        if (predicate.test(node)) {
+            return true;
+        }
+        for (final var component : node.getClass().getRecordComponents()) {
+            try {
+                final Object value = component.getAccessor().invoke(node);
+                if (
+                    value instanceof AstNode child && anyMatch(child, predicate)
+                ) {
+                    return true;
+                }
+                if (value instanceof Iterable<?> children) {
+                    for (final Object child : children) {
+                        if (
+                            child instanceof AstNode ast
+                                && anyMatch(ast, predicate)
+                        ) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (final ReflectiveOperationException e) {
+                throw new IllegalStateException("Cannot walk AST", e);
+            }
+        }
+        return false;
+    }
+
     public static void walk(
         final AstNode node,
         final Consumer<AstNode> visitor

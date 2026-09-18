@@ -27,6 +27,8 @@ import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
+import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
+import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
@@ -84,6 +86,7 @@ public final class SemanticAnalyzer {
     private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
     private boolean analyzingConstructorDefault;
+    private boolean analyzingSuperArguments;
     private final IdentityHashMap<FunctionSymbol, List<ReturnStatement>> lambdaReturns =
         new IdentityHashMap<>();
 
@@ -171,6 +174,40 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         switch (statement) {
+            case SuperConstructorCall call -> {
+                if (
+                    currentConstructor == null || context.function() != null
+                        || currentInstance == null
+                        || analyzingSuperArguments
+                        || analyzingConstructorDefault
+                ) {
+                    throw new SemanticException(
+                        call.range(),
+                        "'super(...)' is only allowed in a subclass constructor"
+                    );
+                }
+                final ClassType superclass =
+                    model.getSuperclass(currentInstance);
+                if (superclass == null) {
+                    throw new SemanticException(
+                        call.range(),
+                        "'super(...)' requires a superclass"
+                    );
+                }
+                final boolean previous = analyzingSuperArguments;
+                analyzingSuperArguments = true;
+                try {
+                    analyzeConstructorArguments(
+                        superclass,
+                        call.arguments(),
+                        call.range(),
+                        context
+                    );
+                }
+                finally {
+                    analyzingSuperArguments = previous;
+                }
+            }
             case DeclarationStatement declarationStatement ->
                 analyzeDeclaration(declarationStatement.declaration(), context);
             case ExpressionStatement expressionStatement -> {
@@ -232,6 +269,42 @@ public final class SemanticAnalyzer {
             new ClassSymbol(declaration.name(), classType);
         model.setSymbol(declaration.name(), classSymbol);
         context.scope().declare(classSymbol);
+        final IdentifierExpression superclassName = declaration.superClass();
+        if (superclassName != null) {
+            final Type base =
+                analyzeIdentifierExpression(superclassName, context);
+            if (
+                !(model.getReference(superclassName) instanceof ClassSymbol)
+                    || !(base instanceof ClassType superclass)
+            ) {
+                throw new SemanticException(
+                    superclassName.range(),
+                    "'extends' requires a class name"
+                );
+            }
+            if (
+                superclass.equals(classType)
+                    || model.isSubclassOf(superclass, classType)
+            ) {
+                throw new SemanticException(
+                    superclassName.range(),
+                    "Class inheritance cannot be cyclic"
+                );
+            }
+            model.setSuperclass(classType, superclass);
+            if (
+                !canAccess(
+                    superclass,
+                    model.getConstructorVisibility(superclass)
+                )
+            ) {
+                throw new SemanticException(
+                    superclassName.range(),
+                    "Base constructor of class %s is private",
+                    superclass.name()
+                );
+            }
+        }
         final Scope members = new Scope(null);
         classScopes.put(classType, members);
         ConstructorDeclaration constructor = null;
@@ -261,6 +334,27 @@ public final class SemanticAnalyzer {
                     member.range(),
                     "Class bodies may only contain fields, methods, and constructors"
                 );
+            }
+        }
+        final boolean explicitSuper =
+            constructor != null && constructor.hasExplicitSuperCall();
+        final ClassType superclass = model.getSuperclass(classType);
+        if (explicitSuper && superclass == null) {
+            throw new SemanticException(
+                Objects.requireNonNull(constructor).range(),
+                "'super(...)' requires a superclass"
+            );
+        }
+        if (superclass != null && !explicitSuper) {
+            for (final FunctionParameter parameter : model
+                .getConstructorParameters(superclass)) {
+                if (!parameter.omittable()) {
+                    throw new SemanticException(
+                        Objects.requireNonNull(superclassName).range(),
+                        "Base constructor requires argument: %s",
+                        parameter.name().name()
+                    );
+                }
             }
         }
         final List<Type> parameterTypes = new ArrayList<>();
@@ -318,6 +412,7 @@ public final class SemanticAnalyzer {
                     model.getSymbol(name),
                     memberDeclaration.visibility()
                 );
+                validateInheritedMember(classType, model.getSymbol(name));
             }
         }
         final ClassType previousInstance = currentInstance;
@@ -353,6 +448,87 @@ public final class SemanticAnalyzer {
         finally {
             currentInstance = previousInstance;
             currentConstructor = previousConstructor;
+        }
+    }
+
+    private boolean canAccess(
+        final ClassType owner,
+        final Visibility visibility
+    ) {
+        return visibility == Visibility.PUBLIC
+            || owner.equals(currentAccessClass)
+            || (visibility == Visibility.PROTECTED && currentAccessClass != null
+                && model.isSubclassOf(currentAccessClass, owner));
+    }
+
+    private @Nullable ClassType memberOwner(
+        final ClassType type,
+        final String name
+    ) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope scope = classScopes.get(current);
+            if (scope != null && scope.resolveLocal(name) != null) {
+                return current;
+            }
+        }
+        return null;
+    }
+
+    private void validateInheritedMember(
+        final ClassType type,
+        final Symbol symbol
+    ) {
+        final ClassType base = model.getSuperclass(type);
+        if (base == null) {
+            return;
+        }
+        final ClassType owner = memberOwner(base, symbol.name());
+        if (owner == null) {
+            return;
+        }
+        final Symbol inherited =
+            Objects.requireNonNull(
+                Objects.requireNonNull(classScopes.get(owner))
+                    .resolveLocal(symbol.name())
+            );
+        final Visibility visibility = model.getMemberVisibility(inherited);
+        if (visibility == Visibility.PRIVATE) {
+            return;
+        }
+        if (
+            symbol instanceof FunctionSymbol
+                && inherited instanceof FunctionSymbol
+        ) {
+            if (!symbol.type().equals(inherited.type())) {
+                throw new SemanticException(
+                    symbol.range(),
+                    "Overriding method '%s' must have the same signature",
+                    symbol.name()
+                );
+            }
+            final Visibility declared = model.getMemberVisibility(symbol);
+            if (
+                declared == Visibility.PRIVATE
+                    || (visibility == Visibility.PUBLIC
+                        && declared != Visibility.PUBLIC)
+            ) {
+                throw new SemanticException(
+                    symbol.range(),
+                    "Overriding method '%s' cannot reduce visibility",
+                    symbol.name()
+                );
+            }
+        }
+        else if (
+            symbol instanceof FunctionSymbol
+                || inherited instanceof FunctionSymbol
+        ) {
+            throw new SemanticException(
+                symbol.range(),
+                "Inherited member '%s' has a different declaration kind",
+                symbol.name()
+            );
         }
     }
 
@@ -832,6 +1008,16 @@ public final class SemanticAnalyzer {
         if (left.equals(right)) {
             return left;
         }
+        if (
+            left instanceof ClassType leftClass
+                && right instanceof ClassType rightClass
+        ) {
+            final ClassType common =
+                model.commonClassType(leftClass, rightClass);
+            if (common != null) {
+                return common;
+            }
+        }
         throw new SemanticException(
             node.range(),
             "Incompatible branch types: %s and %s",
@@ -1203,6 +1389,13 @@ public final class SemanticAnalyzer {
         if (from.equals(to)) {
             return from;
         }
+        if (
+            from instanceof ClassType fromClass
+                && to instanceof ClassType toClass
+                && model.isSubclassOf(fromClass, toClass)
+        ) {
+            return to;
+        }
         if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
             model.setConversionType(fromExpression, to);
             return to;
@@ -1213,9 +1406,31 @@ public final class SemanticAnalyzer {
                 model.setUnionConversion(fromExpression, from, union);
                 return to;
             }
-            // Converting individual members of an existing union would require runtime dispatch.
-            if (from instanceof UnionType) {
-                return null;
+            if (from instanceof UnionType source) {
+                for (final Type sourceMember : source.memberTypes()) {
+                    final boolean assignable =
+                        union.contains(
+                            sourceMember
+                        ) || sourceMember instanceof ClassType sourceClass && union.memberTypes().stream().anyMatch(member -> member instanceof ClassType targetClass && model.isSubclassOf(sourceClass, targetClass));
+                    if (!assignable) {
+                        // Numeric coercions between union members still require runtime dispatch.
+                        return null;
+                    }
+                }
+                model.setConversionType(fromExpression, to);
+                return to;
+            }
+            for (final Type member : union.memberTypes()) {
+                if (
+                    member instanceof ClassType && resolveAssignType(
+                        from,
+                        member,
+                        fromExpression
+                    ) != null
+                ) {
+                    model.setUnionConversion(fromExpression, member, union);
+                    return to;
+                }
             }
             // Exact members take priority above; numeric alternatives use a stable order.
             for (final BuiltinType member : BuiltinType.values()) {
@@ -1467,7 +1682,10 @@ public final class SemanticAnalyzer {
                         "Member access requires a class instance"
                     );
                 }
-                final Scope scope = classScopes.get(classType);
+                final ClassType owner =
+                    memberOwner(classType, member.member().name());
+                final Scope scope =
+                    owner == null ? null : classScopes.get(owner);
                 final Symbol symbol =
                     scope == null
                         ? null
@@ -1480,16 +1698,18 @@ public final class SemanticAnalyzer {
                         classType.name()
                     );
                 }
-                model.setMemberOwner(member, classType);
+                model.setMemberOwner(member, Objects.requireNonNull(owner));
                 if (
-                    !classType.equals(currentAccessClass) && model
-                        .getMemberVisibility(symbol) != Visibility.PUBLIC
+                    !canAccess(
+                        Objects.requireNonNull(owner),
+                        model.getMemberVisibility(symbol)
+                    )
                 ) {
                     throw new SemanticException(
                         member.member().range(),
                         "Member '%s' of class %s is %s",
                         member.member().name(),
-                        classType.name(),
+                        owner.name(),
                         model
                             .getMemberVisibility(symbol) == Visibility.PROTECTED
                                 ? "protected"
@@ -1514,10 +1734,10 @@ public final class SemanticAnalyzer {
                     );
                 }
                 if (
-                    !classType.equals(currentAccessClass)
-                        && model.getConstructorVisibility(
-                            (ClassType) classType
-                        ) != Visibility.PUBLIC
+                    !canAccess(
+                        (ClassType) classType,
+                        model.getConstructorVisibility((ClassType) classType)
+                    )
                 ) {
                     throw new SemanticException(
                         creation.className().range(),
@@ -1528,55 +1748,21 @@ public final class SemanticAnalyzer {
                         ) == Visibility.PROTECTED ? "protected" : "private"
                     );
                 }
-                final FunctionType constructor =
-                    model.getConstructor((ClassType) classType);
-                if (
-                    creation.arguments().size() > constructor.parameterTypes()
-                        .size()
-                ) {
-                    throw new SemanticException(
-                        creation.range(),
-                        "Expected %s constructor arguments, found %s",
-                        constructor.parameterTypes().size(),
-                        creation.arguments().size()
-                    );
-                }
-                for (int i = 0; i < creation.arguments().size(); i++) {
-                    final Expression argument = creation.arguments().get(i);
-                    final Type expectedType =
-                        constructor.parameterTypes().get(i);
-                    final Type actual =
-                        analyzeExpression(argument, context, expectedType);
-                    if (
-                        resolveAssignType(
-                            actual,
-                            expectedType,
-                            argument
-                        ) == null
-                    ) {
-                        throw new SemanticException(
-                            argument.range(),
-                            "Cannot assign %s to %s",
-                            actual,
-                            expectedType
-                        );
-                    }
-                }
-                final List<FunctionParameter> parameters =
-                    model.getConstructorParameters((ClassType) classType);
-                for (int i = creation.arguments().size(); i < parameters
-                    .size(); i++) {
-                    if (!parameters.get(i).omittable()) {
-                        throw new SemanticException(
-                            creation.range(),
-                            "Missing required constructor argument: %s",
-                            parameters.get(i).name().name()
-                        );
-                    }
-                }
+                analyzeConstructorArguments(
+                    (ClassType) classType,
+                    creation.arguments(),
+                    creation.range(),
+                    context
+                );
                 yield classType;
             }
             case ThisExpression self -> {
+                if (analyzingSuperArguments) {
+                    throw new SemanticException(
+                        self.range(),
+                        "Super constructor arguments cannot access 'this' before base initialization"
+                    );
+                }
                 if (analyzingConstructorDefault) {
                     throw new SemanticException(
                         self.range(),
@@ -1645,6 +1831,48 @@ public final class SemanticAnalyzer {
         model.setExpressionType(expression, type);
 
         return type;
+    }
+
+    private void analyzeConstructorArguments(
+        final ClassType classType,
+        final List<Expression> arguments,
+        final Range range,
+        final SemanticContext context
+    ) {
+        final FunctionType constructor = model.getConstructor(classType);
+        if (arguments.size() > constructor.parameterTypes().size()) {
+            throw new SemanticException(
+                range,
+                "Expected %s constructor arguments, found %s",
+                constructor.parameterTypes().size(),
+                arguments.size()
+            );
+        }
+        for (int i = 0; i < arguments.size(); i++) {
+            final Expression argument = arguments.get(i);
+            final Type expectedType = constructor.parameterTypes().get(i);
+            final Type actual =
+                analyzeExpression(argument, context, expectedType);
+            if (resolveAssignType(actual, expectedType, argument) == null) {
+                throw new SemanticException(
+                    argument.range(),
+                    "Cannot assign %s to %s",
+                    actual,
+                    expectedType
+                );
+            }
+        }
+        final List<FunctionParameter> parameters =
+            model.getConstructorParameters(classType);
+        for (int i = arguments.size(); i < parameters.size(); i++) {
+            if (!parameters.get(i).omittable()) {
+                throw new SemanticException(
+                    range,
+                    "Missing required constructor argument: %s",
+                    parameters.get(i).name().name()
+                );
+            }
+        }
     }
 
     private Type analyzeLambdaExpression(
@@ -1996,6 +2224,7 @@ public final class SemanticAnalyzer {
                     assignment.target()
                 ) instanceof MemberExpression member
                 && unwrap(member.target()) instanceof ThisExpression
+                && model.getMemberOwner(member).equals(currentInstance)
                 && model
                     .getReference(member.member()) instanceof VariableSymbol)
         ) {
@@ -2111,10 +2340,15 @@ public final class SemanticAnalyzer {
         Type resolvedType = leftType;
         final boolean compatibleNumbers =
             numeric(leftType) && numeric(rightType);
+        final boolean relatedClasses =
+            leftType instanceof ClassType leftClass
+                && rightType instanceof ClassType rightClass
+                && model.commonClassType(leftClass, rightClass) != null;
         final boolean valid = switch (binary.operator()) {
             case AND, OR ->
                 leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
             case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
+                || relatedClasses
                 || (leftType.equals(rightType) && leftType != BuiltinType.VOID);
             case ADD -> compatibleNumbers || (leftType == BuiltinType.STRING
                 && rightType == BuiltinType.STRING);
@@ -2338,8 +2572,8 @@ public final class SemanticAnalyzer {
             elementTypes.add(analyzeExpression(element, context));
         }
 
-        // For simplicity, we assume all elements must have the same type
-        final Type elementType =
+        // Elements must share a type; class instances can share a base type.
+        Type elementType =
             elementTypes.isEmpty()
                 ? BuiltinType.NULL
                 : Objects.requireNonNull(elementTypes.get(0));
@@ -2353,6 +2587,16 @@ public final class SemanticAnalyzer {
 
         for (final Type type : elementTypes) {
             if (!type.equals(elementType)) {
+                if (
+                    elementType instanceof ClassType left
+                        && type instanceof ClassType right
+                ) {
+                    final ClassType common = model.commonClassType(left, right);
+                    if (common != null) {
+                        elementType = common;
+                        continue;
+                    }
+                }
                 throw new SemanticException(
                     array.range(),
                     "Array elements must have the same type"

@@ -1,0 +1,631 @@
+class Base {
+    protected var value: i32;
+    protected constructor(value: i32 = 4) {
+        this.value = value;
+    }
+    public func read() i32 {
+        return this.value;
+    }
+}
+class Child extends Base {
+    public func read() i32 {
+        return this.value + 2;
+    }
+    public func reference() () => i32 {
+        return () => this.read();
+    }
+}
+const instance: Base = new Child();
+print(instance.read());
+print(new Child().reference()());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PROTECTED (2:5-2:14)
+VAR (2:15-2:18)
+IDENTIFIER "value" (2:19-2:24)
+COLON (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+SEMICOLON (2:29-2:30)
+PROTECTED (3:5-3:14)
+CONSTRUCTOR (3:15-3:26)
+LEFT_PAREN (3:26-3:27)
+IDENTIFIER "value" (3:27-3:32)
+COLON (3:32-3:33)
+IDENTIFIER "i32" (3:34-3:37)
+EQUAL (3:38-3:39)
+INTEGER_LITERAL "4" (3:40-3:41)
+RIGHT_PAREN (3:41-3:42)
+LEFT_BRACE (3:43-3:44)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+EQUAL (4:20-4:21)
+IDENTIFIER "value" (4:22-4:27)
+SEMICOLON (4:27-4:28)
+RIGHT_BRACE (5:5-5:6)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "read" (6:17-6:21)
+LEFT_PAREN (6:21-6:22)
+RIGHT_PAREN (6:22-6:23)
+IDENTIFIER "i32" (6:24-6:27)
+LEFT_BRACE (6:28-6:29)
+RETURN (7:9-7:15)
+THIS (7:16-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "value" (7:21-7:26)
+SEMICOLON (7:26-7:27)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CLASS (10:1-10:6)
+IDENTIFIER "Child" (10:7-10:12)
+EXTENDS (10:13-10:20)
+IDENTIFIER "Base" (10:21-10:25)
+LEFT_BRACE (10:26-10:27)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "read" (11:17-11:21)
+LEFT_PAREN (11:21-11:22)
+RIGHT_PAREN (11:22-11:23)
+IDENTIFIER "i32" (11:24-11:27)
+LEFT_BRACE (11:28-11:29)
+RETURN (12:9-12:15)
+THIS (12:16-12:20)
+DOT (12:20-12:21)
+IDENTIFIER "value" (12:21-12:26)
+PLUS (12:27-12:28)
+INTEGER_LITERAL "2" (12:29-12:30)
+SEMICOLON (12:30-12:31)
+RIGHT_BRACE (13:5-13:6)
+PUBLIC (14:5-14:11)
+FUNC (14:12-14:16)
+IDENTIFIER "reference" (14:17-14:26)
+LEFT_PAREN (14:26-14:27)
+RIGHT_PAREN (14:27-14:28)
+LEFT_PAREN (14:29-14:30)
+RIGHT_PAREN (14:30-14:31)
+ARROW (14:32-14:34)
+IDENTIFIER "i32" (14:35-14:38)
+LEFT_BRACE (14:39-14:40)
+RETURN (15:9-15:15)
+LEFT_PAREN (15:16-15:17)
+RIGHT_PAREN (15:17-15:18)
+ARROW (15:19-15:21)
+THIS (15:22-15:26)
+DOT (15:26-15:27)
+IDENTIFIER "read" (15:27-15:31)
+LEFT_PAREN (15:31-15:32)
+RIGHT_PAREN (15:32-15:33)
+SEMICOLON (15:33-15:34)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+CONST (18:1-18:6)
+IDENTIFIER "instance" (18:7-18:15)
+COLON (18:15-18:16)
+IDENTIFIER "Base" (18:17-18:21)
+EQUAL (18:22-18:23)
+NEW (18:24-18:27)
+IDENTIFIER "Child" (18:28-18:33)
+LEFT_PAREN (18:33-18:34)
+RIGHT_PAREN (18:34-18:35)
+SEMICOLON (18:35-18:36)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "instance" (19:7-19:15)
+DOT (19:15-19:16)
+IDENTIFIER "read" (19:16-19:20)
+LEFT_PAREN (19:20-19:21)
+RIGHT_PAREN (19:21-19:22)
+RIGHT_PAREN (19:22-19:23)
+SEMICOLON (19:23-19:24)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+NEW (20:7-20:10)
+IDENTIFIER "Child" (20:11-20:16)
+LEFT_PAREN (20:16-20:17)
+RIGHT_PAREN (20:17-20:18)
+DOT (20:18-20:19)
+IDENTIFIER "reference" (20:19-20:28)
+LEFT_PAREN (20:28-20:29)
+RIGHT_PAREN (20:29-20:30)
+LEFT_PAREN (20:30-20:31)
+RIGHT_PAREN (20:31-20:32)
+RIGHT_PAREN (20:32-20:33)
+SEMICOLON (20:33-20:34)
+
+--- AST ---
+
+(Program
+  range: 1:1-20:34
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:30
+      visibility: PROTECTED
+      (UninitializedVariableDeclaration
+        range: 2:15-2:30
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:19-2:24
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:26-2:29
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-5:6
+      visibility: PROTECTED
+      (ConstructorDeclaration
+        range: 3:15-5:6
+        (FunctionParameter
+          range: 3:27-3:41
+          (IdentifierDeclaration
+            range: 3:27-3:32
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:34-3:37
+            name: "i32"
+          )
+          optional: false
+          (LiteralExpression
+            range: 3:40-3:41
+            kind: INT
+            text: "4"
+          )
+        )
+        (BlockStatement
+          range: 3:43-5:6
+          (ExpressionStatement
+            range: 4:9-4:28
+            (AssignmentExpression
+              range: 4:9-4:27
+              (MemberExpression
+                range: 4:9-4:19
+                (ThisExpression
+                  range: 4:9-4:13
+                )
+                (IdentifierExpression
+                  range: 4:14-4:19
+                  name: "value"
+                )
+              )
+              (IdentifierExpression
+                range: 4:22-4:27
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:21
+          name: "read"
+        )
+        (NamedTypeNode
+          range: 6:24-6:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:28-8:6
+          (ReturnStatement
+            range: 7:9-7:27
+            (MemberExpression
+              range: 7:16-7:26
+              (ThisExpression
+                range: 7:16-7:20
+              )
+              (IdentifierExpression
+                range: 7:21-7:26
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 10:1-17:2
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 10:21-10:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 11:5-13:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-13:6
+        (IdentifierDeclaration
+          range: 11:17-11:21
+          name: "read"
+        )
+        (NamedTypeNode
+          range: 11:24-11:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 11:28-13:6
+          (ReturnStatement
+            range: 12:9-12:31
+            (BinaryExpression
+              range: 12:16-12:30
+              (MemberExpression
+                range: 12:16-12:26
+                (ThisExpression
+                  range: 12:16-12:20
+                )
+                (IdentifierExpression
+                  range: 12:21-12:26
+                  name: "value"
+                )
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 12:29-12:30
+                kind: INT
+                text: "2"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 14:5-16:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 14:12-16:6
+        (IdentifierDeclaration
+          range: 14:17-14:26
+          name: "reference"
+        )
+        (FunctionTypeNode
+          range: 14:29-14:38
+          (NamedTypeNode
+            range: 14:35-14:38
+            name: "i32"
+          )
+        )
+        (BlockStatement
+          range: 14:39-16:6
+          (ReturnStatement
+            range: 15:9-15:34
+            (LambdaExpression
+              range: 15:16-15:33
+              (CallExpression
+                range: 15:22-15:33
+                (MemberExpression
+                  range: 15:22-15:31
+                  (ThisExpression
+                    range: 15:22-15:26
+                  )
+                  (IdentifierExpression
+                    range: 15:27-15:31
+                    name: "read"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:15
+      name: "instance"
+    )
+    (NamedTypeNode
+      range: 18:17-18:21
+      name: "Base"
+    )
+    (NewExpression
+      range: 18:24-18:35
+      (IdentifierExpression
+        range: 18:28-18:33
+        name: "Child"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:24
+    (CallExpression
+      range: 19:1-19:23
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (CallExpression
+        range: 19:7-19:22
+        (MemberExpression
+          range: 19:7-19:20
+          (IdentifierExpression
+            range: 19:7-19:15
+            name: "instance"
+          )
+          (IdentifierExpression
+            range: 19:16-19:20
+            name: "read"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:34
+    (CallExpression
+      range: 20:1-20:33
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (CallExpression
+        range: 20:7-20:32
+        (CallExpression
+          range: 20:7-20:30
+          (MemberExpression
+            range: 20:7-20:28
+            (NewExpression
+              range: 20:7-20:18
+              (IdentifierExpression
+                range: 20:11-20:16
+                name: "Child"
+              )
+            )
+            (IdentifierExpression
+              range: 20:19-20:28
+              name: "reference"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:40-3:41 -> i32
+  4:9-4:13 -> Base
+  4:9-4:19 -> i32
+  4:9-4:27 -> i32
+  4:14-4:19 -> i32
+  4:22-4:27 -> i32
+  7:16-7:20 -> Base
+  7:16-7:26 -> i32
+  7:21-7:26 -> i32
+  10:21-10:25 -> Base
+  12:16-12:20 -> Child
+  12:16-12:26 -> i32
+  12:16-12:30 -> i32
+  12:21-12:26 -> i32
+  12:29-12:30 -> i32
+  15:16-15:33 -> () => i32
+  15:22-15:26 -> Child
+  15:22-15:31 -> () => i32
+  15:22-15:33 -> i32
+  15:27-15:31 -> () => i32
+  18:24-18:35 -> Child
+  18:28-18:33 -> Child
+  19:1-19:6 -> (any) => void
+  19:1-19:23 -> void
+  19:7-19:15 -> Base
+  19:7-19:20 -> () => i32
+  19:7-19:22 -> i32
+  19:16-19:20 -> () => i32
+  20:1-20:6 -> (any) => void
+  20:1-20:33 -> void
+  20:7-20:18 -> Child
+  20:7-20:28 -> () => () => i32
+  20:7-20:30 -> () => i32
+  20:7-20:32 -> i32
+  20:11-20:16 -> Child
+  20:19-20:28 -> () => () => i32
+
+Resolved types:
+  2:26-2:29 -> i32
+  3:34-3:37 -> i32
+  6:24-6:27 -> i32
+  11:24-11:27 -> i32
+  14:29-14:38 -> () => i32
+  14:35-14:38 -> i32
+  18:17-18:21 -> Base
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:19-2:24 -> var value: i32
+  3:15-5:6 -> constructor(value: i32)
+  3:27-3:32 -> const value: i32
+  6:17-6:21 -> read() => i32
+  10:7-10:12 -> class Child
+  11:17-11:21 -> read() => i32
+  14:17-14:26 -> reference() => () => i32
+  18:7-18:15 -> const instance: Base
+
+References:
+  4:14-4:19 -> 2:19-2:24
+  4:22-4:27 -> 3:27-3:32
+  7:21-7:26 -> 2:19-2:24
+  10:21-10:25 -> 1:7-1:11
+  12:21-12:26 -> 2:19-2:24
+  15:27-15:31 -> 11:17-11:21
+  18:28-18:33 -> 10:7-10:12
+  19:1-19:6 -> builtin print
+  19:7-19:15 -> 18:7-18:15
+  19:16-19:20 -> 6:17-6:21
+  20:1-20:6 -> builtin print
+  20:11-20:16 -> 10:7-10:12
+  20:19-20:28 -> 14:17-14:26
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x19
+  public final static LTest$Base; instance
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init> ()V
+    PUTSTATIC Test.instance : LTest$Base;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.instance : LTest$Base;
+    INVOKEVIRTUAL Test$Base.read ()I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init> ()V
+    INVOKEVIRTUAL Test$Child.reference ()Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x4
+  protected I value
+
+  // access flags 0x4
+  protected <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    DUP_X1
+    PUTFIELD Test$Base.value : I
+    POP
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+
+  // access flags 0x1004
+  protected synthetic <init>(I[Z)V
+    ALOAD 2
+    LDC 0
+    BALOAD
+    IFEQ L0
+    LDC 4
+    ISTORE 1
+   L0
+   FRAME SAME
+    ALOAD 0
+    ILOAD 1
+    INVOKESPECIAL Test$Base.<init> (I)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+
+  // access flags 0x1
+  public read()I
+    ALOAD 0
+    GETFIELD Test$Base.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Child extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    ICONST_0
+    LDC 1
+    NEWARRAY T_BOOLEAN
+    DUP
+    LDC 0
+    ICONST_1
+    BASTORE
+    INVOKESPECIAL Test$Base.<init> (I[Z)V
+    RETURN
+    MAXSTACK = 6
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public read()I
+    ALOAD 0
+    GETFIELD Test$Base.value : I
+    LDC 2
+    IADD
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public reference()Ljava/lang/invoke/MethodHandle;
+    // handle kind 0x5 : INVOKEVIRTUAL
+    LDC Test$Child.$lambda0()I
+    ALOAD 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    ARETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x1002
+  private synthetic $lambda0()I
+    ALOAD 0
+    INVOKEVIRTUAL Test$Child.read ()I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+6
+6
+

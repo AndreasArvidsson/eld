@@ -79,6 +79,7 @@ RIGHT_BRACE (12:1-12:2)
       range: 1:7-1:14
       name: "Counter"
     )
+    superClass: null
     (MemberDeclaration
       range: 2:5-2:28
       visibility: PUBLIC

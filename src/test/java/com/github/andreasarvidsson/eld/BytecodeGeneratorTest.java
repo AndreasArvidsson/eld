@@ -58,6 +58,448 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void nullableInheritanceOnlyCastsObjectStoredUnions() {
+        final String source =
+            """
+                class Base {}
+                class Child extends Base {}
+                class Sibling extends Base {}
+                var child: Child | null = new Child();
+                const base: Base | null = child;
+                func widen(value: Child | null) Base | null { return value; }
+                func plain(value: Child) Base | null { return value; }
+                func multi(value: Child | Sibling | null) Base | null { return value; }
+                """;
+        final Program program =
+            new Parser(new Lexer(source).getTokens()).parse();
+        final byte[] bytes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses().get("Test");
+        final ClassNode module = new ClassNode();
+        new ClassReader(bytes).accept(module, 0);
+        int casts = 0;
+        for (final var method : module.methods) {
+            for (final var instruction : method.instructions) {
+                if (instruction.getOpcode() == Opcodes.CHECKCAST) {
+                    assertEquals("multi", method.name);
+                    assertEquals(
+                        "Test$Base",
+                        ((org.objectweb.asm.tree.TypeInsnNode) instruction).desc
+                    );
+                    casts++;
+                }
+            }
+        }
+        assertEquals(1, casts);
+    }
+
+    @Test
+    void inheritedFieldsCanInitializeSubclassFieldsAfterSuper()
+        throws Exception {
+        final Class<?> module = compileClass("""
+            class Base {
+                protected var value = 7;
+                protected const fixed = 2;
+            }
+            class Child extends Base {
+                public const own: i32;
+                public constructor() {
+                    super();
+                    this.value++;
+                    this.own = this.value + this.fixed;
+                }
+            }
+            func result() i32 { return new Child().own; }
+            """, "Test");
+        assertEquals(10, module.getMethod("result").invoke(null));
+        for (final String body : List.of(
+            "this.own = this.value; super();",
+            "super(); this.own = this.own;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(
+                    "class Base { protected var value = 7; } class Child extends Base { public const own: i32; public constructor() { "
+                        + body + " } }",
+                    "Test"
+                )
+            );
+        }
+    }
+
+    @Test
+    void nullableSubclassUnionsWidenToNullableBaseTypes() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    class Base {}
+                    class Child extends Base {}
+                    class Sibling extends Base {}
+                    func widen(value: Child | null) Base | null { return value; }
+                    func accepts(value: Base | null) bool { return value != null; }
+                    func result(present: bool) bool {
+                        var child: Child | null = null;
+                        if (present) { child = new Child(); }
+                        const base: Base | null = child;
+                        return base == child && widen(child) == base && accepts(child) == present;
+                    }
+                    func multi(choice: i32) Base | null {
+                        var value: Child | Sibling | null = null;
+                        if (choice == 1) { value = new Child(); }
+                        elif (choice == 2) { value = new Sibling(); }
+                        return value;
+                    }
+                    """,
+                "Test"
+            );
+        assertEquals(
+            true,
+            module.getMethod("result", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            true,
+            module.getMethod("result", boolean.class).invoke(null, false)
+        );
+        final Class<?> base = module.getClassLoader().loadClass("Test$Base");
+        assertNull(module.getMethod("multi", int.class).invoke(null, 0));
+        assertTrue(
+            base.isInstance(
+                module.getMethod("multi", int.class).invoke(null, 1)
+            )
+        );
+        assertTrue(
+            base.isInstance(
+                module.getMethod("multi", int.class).invoke(null, 2)
+            )
+        );
+        for (final String source : List.of(
+            "class Base {} class Child extends Base {} const base: Base | null = new Base(); const child: Child | null = base;",
+            "class Base {} class Other {} const other: Other | null = new Other(); const base: Base | null = other;",
+            "const value: i32 | null = 1; const widened: i64 | null = value;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(source, "Test")
+            );
+        }
+    }
+
+    @Test
+    void constructorsAllowPreparationBeforeSuper() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    var order = 0;
+                    func next() i32 { order++; return order; }
+                    class Base {
+                        public var first = next();
+                        protected var value: i32;
+                        protected constructor(value: i32) { this.value = value; }
+                    }
+                    class Child extends Base {
+                        public var second = next();
+                        public const third: i32;
+                        public constructor(value: i32) {
+                            const before = next();
+                            var prepared = value;
+                            for (var i = 0; i < 2; i++) { prepared++; }
+                            const adjust = () => { prepared++; return prepared; };
+                            const result = adjust();
+                            super(result);
+                            this.third = before;
+                        }
+                        public func result() i32 { return this.third * 1000 + this.first * 100 + this.second * 10 + this.value; }
+                    }
+                    func result() i32 { return new Child(4).result(); }
+                    """,
+                "Test"
+            );
+        assertEquals(1237, module.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void constructorsInitializeSuperOnEachBranch() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    class Base {
+                        protected var value: i32;
+                        protected constructor(value: i32) { this.value = value; }
+                    }
+                    class Child extends Base {
+                        public var initialized = 3;
+                        public constructor(flag: bool) {
+                            var value = 4;
+                            if (flag) { value++; super(value); }
+                            else { super(value + 2); }
+                        }
+                        public func result() i32 { return this.value + this.initialized; }
+                    }
+                    class Once extends Base {
+                        public constructor() { while (true) { super(7); break; } }
+                        public func result() i32 { return this.value; }
+                    }
+                    class OnceFor extends Base {
+                        public constructor() { for (; true;) { super(8); break; } }
+                        public func result() i32 { return this.value; }
+                    }
+                    class OnceDo extends Base {
+                        public constructor() { do { super(9); } while (false); }
+                        public func result() i32 { return this.value; }
+                    }
+                    func result() i32 {
+                        return new Child(true).result() + new Child(false).result() + new Once().result()
+                            + new OnceFor().result() + new OnceDo().result();
+                    }
+                    """,
+                "Test"
+            );
+        assertEquals(41, module.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void constructorsRejectReceiverUseAndInvalidSuperPaths() {
+        final String prefix = """
+            class Base { protected constructor(value: i32 = 1) {} }
+            class Child extends Base {
+                public var value = 1;
+                public func read() i32 { return this.value; }
+                public constructor(flag: bool) {
+            """;
+        for (final String body : List.of(
+            "this.value; super();",
+            "this.value = 2; super();",
+            "this.read(); super();",
+            "const self = this; super();",
+            "const read = () => this.value; super();",
+            "if (flag) { return; } super();",
+            "if (flag) { super(); }",
+            "if (flag) { super(); } super();",
+            "while (flag) { super(); }",
+            "super(); if (flag) { super(); }",
+            "if (flag) { super(); } this.value++;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(prefix + body + " } }", "Test"),
+                body
+            );
+        }
+    }
+
+    @Test
+    void superPassesArgumentsBeforeSubclassInitialization() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    var order = 0;
+                    func next() i32 { order++; return order; }
+                    class Base {
+                        protected var value: i64;
+                        public var initialized = next();
+                        protected constructor(value: i64, extra: i64 = value + 1, optional?: i32) {
+                            this.value = value + extra;
+                        }
+                    }
+                    class Child extends Base {
+                        public var own = next();
+                        public constructor(value: i32 = 4) { super(value); }
+                        public func read() i64 { return this.value + this.initialized * 10 + this.own; }
+                    }
+                    class GrandChild extends Child {
+                        public constructor(value: i32) { super(value + 1); }
+                    }
+                    func result() i64 { return new Child().read(); }
+                    func chained() i64 { return new GrandChild(5).read(); }
+                    """,
+                "Test"
+            );
+        assertEquals(21L, module.getMethod("result").invoke(null));
+        assertEquals(47L, module.getMethod("chained").invoke(null));
+    }
+
+    @Test
+    void superSupportsExpressionsAndReceiverlessLambdas() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    class Base {
+                        protected var value: i32;
+                        protected constructor(callback: () => i32) { this.value = callback(); }
+                    }
+                    class Child extends Base {
+                        public constructor(value: i32) { super(() => (() => value + 1)()); }
+                        public func read() i32 { return this.value; }
+                    }
+                    class DefaultChild extends Base {
+                        public constructor(callback: () => i32 = () => 9) { super(callback); }
+                        public func read() i32 { return this.value; }
+                    }
+                    func result() i32 { return new Child(6).read() + new DefaultChild().read(); }
+                    """,
+                "Test"
+            );
+        assertEquals(16, module.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void superRejectsInvalidPlacementArgumentsAndReceiverAccess() {
+        final String base =
+            "class Base { protected constructor(value: i32) {} } ";
+        for (final String source : List.of(
+            "super();",
+            "func f() { super(); }",
+            "class Root { public constructor() { super(); } }",
+            "class Base {} class Child extends Base { public func f() { super(); } }",
+            base + "class Child extends Base { public constructor() { super(); } }",
+            base + "class Child extends Base { public constructor() { super(true); } }",
+            base + "class Child extends Base { public constructor() { super(1, 2); } }",
+            base + "class Child extends Base { public constructor() { if (true) { super(1); } } }",
+            base + "class Child extends Base { public constructor() { super(1); super(2); } }",
+            base + "class Child extends Base { public var v = 1; public constructor() { super(this.v); } }",
+            base + "class Child extends Base { public func f() i32 { return 1; } public constructor() { super((() => this.f())()); } }",
+            base + "class Child extends Base { public constructor() { super(1); const f = () => { super(2); }; } }",
+            "class Base { constructor(value: i32) {} } class Child extends Base { public constructor() { super(1); } }"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(source, "Test"),
+                source
+            );
+        }
+    }
+
+    @Test
+    void classesInheritMembersAndOverrideMethods() throws Exception {
+        final String source =
+            """
+                class Base {
+                    protected var value: i32;
+                    public const factor = 3;
+                    protected constructor(value: i32 = 2) { this.value = value; }
+                    protected func helper() i32 { return this.value; }
+                    public func compute(amount: i32 = 1) i32 { return this.value + amount; }
+                    public func dispatch() i32 { return this.compute(); }
+                    public func reference() (i32) => i32 { return this.compute; }
+                }
+                class Child extends Base {
+                    public var own = 4;
+                    public func compute(amount: i32 = 5) i32 { return this.helper() + amount + 10; }
+                    public func increase() i32 {
+                        const update = () => { this.value++; return this.helper(); };
+                        return update();
+                    }
+                }
+                class GrandChild extends Child {}
+                func read(base: Base) i32 { return base.compute(3); }
+                func result() i32 {
+                    const child = new GrandChild();
+                    var base: Base = child;
+                    const inherited = child.reference();
+                    return child.increase() + child.compute() + base.dispatch()
+                        + inherited(2) + read(child) + child.factor + child.own;
+                }
+                """;
+        final Class<?> module = compileClass(source, "Test");
+        assertEquals(77, module.getMethod("result").invoke(null));
+        final Class<?> base = module.getClassLoader().loadClass("Test$Base");
+        final Class<?> child = module.getClassLoader().loadClass("Test$Child");
+        final Class<?> grandchild =
+            module.getClassLoader().loadClass("Test$GrandChild");
+        assertEquals(base, child.getSuperclass());
+        assertEquals(child, grandchild.getSuperclass());
+        assertTrue(base.isInstance(grandchild.getConstructor().newInstance()));
+    }
+
+    @Test
+    void inheritancePreservesInitializationAndDeclaringFieldOwners()
+        throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    var order = 0;
+                    func next() i32 { order++; return order; }
+                    class Base {
+                        public var value = next();
+                        protected const fixed: i32;
+                        public constructor() { this.fixed = next(); }
+                        public func read() i32 { return this.value + this.fixed; }
+                    }
+                    class Child extends Base {
+                        public var value = next();
+                        public const own: i32;
+                        public constructor() { this.own = next(); }
+                        public func result() i32 { return this.value * 10 + this.read() + this.own; }
+                    }
+                    func result() i32 { return new Child().result(); }
+                    """,
+                "Test"
+            );
+        assertEquals(37, module.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void inheritanceFindsCommonTypesAcrossBranchesAndContainers()
+        throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    class Base { public func value() i32 { return 1; } }
+                    class Left extends Base { public func value() i32 { return 2; } }
+                    class Right extends Base { public func value() i32 { return 3; } }
+                    func choose(flag: bool) Base { return flag ? new Left() : new Right(); }
+                    func identity() bool {
+                        const child = new Left();
+                        const base: Base = child;
+                        return base == child && child != new Right();
+                    }
+                    func result() i32 {
+                        const inferred = true ? new Left() : new Right();
+                        const values: [Base] = [new Left(), new Right()];
+                        const pair: (Base, Base) = (new Left(), new Right());
+                        const nullable: Base | null = new Left();
+                        return inferred.value() + choose(false).value() + values[0].value()
+                            + values[1].value() + pair[0].value() + pair[1].value();
+                    }
+                    """,
+                "Test"
+            );
+        assertEquals(15, module.getMethod("result").invoke(null));
+        assertEquals(true, module.getMethod("identity").invoke(null));
+    }
+
+    @Test
+    void inheritanceRejectsInvalidBasesOverridesAndAccess() {
+        for (final String source : List.of(
+            "class C extends C {}",
+            "class C extends Missing {}",
+            "const value = 1; class C extends value {}",
+            "func value() {} class C extends value {}",
+            "class Base { constructor() {} } class Child extends Base {}",
+            "class Base { public constructor(value: i32) {} } class Child extends Base {}",
+            "class Base { public func f() i32 { return 1; } } class Child extends Base { func f() i32 { return 2; } }",
+            "class Base { public func f() i32 { return 1; } } class Child extends Base { protected func f() i32 { return 2; } }",
+            "class Base { protected func f() i32 { return 1; } } class Child extends Base { public func f(value: i32) i32 { return value; } }",
+            "class Base { public func f() i32 { return 1; } } class Child extends Base { public var f = 1; }",
+            "class Base { var value = 1; } class Child extends Base { public func f() i32 { return this.value; } }",
+            "class Base { func f() i32 { return 1; } } class Child extends Base { public func g() i32 { return this.f(); } }",
+            "class Base { protected var value = 1; } class Child extends Base {} new Child().value;",
+            "class Base { protected func f() {} } class Child extends Base {} new Child().f;",
+            "class Base { protected const value = 1; } class Child extends Base { public constructor() { this.value = 2; } }",
+            "class Base {} class Child extends Base {} const child: Child = new Base();",
+            "class Base {} class Child extends Base {} const children = [new Child()]; const bases: [Base] = children;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(source, "Test"),
+                source
+            );
+        }
+    }
+
+    @Test
     void classMembersArePrivateUnlessPublic() throws Exception {
         final String source =
             """

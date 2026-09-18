@@ -32,6 +32,7 @@ SEMICOLON (4:10-4:11)
       range: 1:7-1:10
       name: "Foo"
     )
+    superClass: null
     (MemberDeclaration
       range: 2:5-2:31
       visibility: PROTECTED

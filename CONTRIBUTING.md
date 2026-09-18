@@ -239,9 +239,10 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
+- Inheritance
+- Interfaces
 - overloaded functions
 - Exceptions
-- Inheritance
 - Ubiquitous class toString and equals methods.
 - Class variables and methods are private by default. Only need the public modifier.
 - Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;

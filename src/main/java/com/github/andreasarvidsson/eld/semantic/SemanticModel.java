@@ -26,6 +26,55 @@ import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
+    private final Set<LambdaExpression> receiverlessLambdas =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+
+    public void setReceiverlessLambda(final LambdaExpression lambda) {
+        receiverlessLambdas.add(lambda);
+    }
+
+    public boolean isReceiverlessLambda(final LambdaExpression lambda) {
+        return receiverlessLambdas.contains(lambda);
+    }
+    private final Map<ClassType, ClassType> superclasses = new HashMap<>();
+
+    public void setSuperclass(
+        final ClassType type,
+        final ClassType superclass
+    ) {
+        superclasses.put(type, superclass);
+    }
+
+    public @Nullable ClassType getSuperclass(final ClassType type) {
+        return superclasses.get(type);
+    }
+
+    public Set<ClassType> getClassTypes() {
+        return Collections.unmodifiableSet(constructors.keySet());
+    }
+
+    public boolean isSubclassOf(final ClassType type, final ClassType base) {
+        for (ClassType current = type; current != null; current =
+            getSuperclass(current)) {
+            if (current.equals(base)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public @Nullable ClassType commonClassType(
+        final ClassType left,
+        final ClassType right
+    ) {
+        for (ClassType current = left; current != null; current =
+            getSuperclass(current)) {
+            if (isSubclassOf(right, current)) {
+                return current;
+            }
+        }
+        return null;
+    }
     private final IdentityHashMap<Symbol, Visibility> memberVisibility =
         new IdentityHashMap<>();
 

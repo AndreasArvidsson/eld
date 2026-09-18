@@ -1,0 +1,109 @@
+class Base {}
+class Child extends Base {
+    public constructor(flag: bool) {
+        if (flag) {
+            super();
+        }
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+CLASS (2:1-2:6)
+IDENTIFIER "Child" (2:7-2:12)
+EXTENDS (2:13-2:20)
+IDENTIFIER "Base" (2:21-2:25)
+LEFT_BRACE (2:26-2:27)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "flag" (3:24-3:28)
+COLON (3:28-3:29)
+IDENTIFIER "bool" (3:30-3:34)
+RIGHT_PAREN (3:34-3:35)
+LEFT_BRACE (3:36-3:37)
+IF (4:9-4:11)
+LEFT_PAREN (4:12-4:13)
+IDENTIFIER "flag" (4:13-4:17)
+RIGHT_PAREN (4:17-4:18)
+LEFT_BRACE (4:19-4:20)
+SUPER (5:13-5:18)
+LEFT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+SEMICOLON (5:20-5:21)
+RIGHT_BRACE (6:9-6:10)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-8:2
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 2:21-2:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 3:5-7:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-7:6
+        (FunctionParameter
+          range: 3:24-3:34
+          (IdentifierDeclaration
+            range: 3:24-3:28
+            name: "flag"
+          )
+          (NamedTypeNode
+            range: 3:30-3:34
+            name: "bool"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:36-7:6
+          (ExpressionStatement
+            range: 4:9-6:10
+            (IfExpression
+              range: 4:9-6:10
+              (IdentifierExpression
+                range: 4:13-4:17
+                name: "flag"
+              )
+              (BlockStatement
+                range: 4:19-6:10
+                (SuperConstructorCall
+                  range: 5:13-5:21
+                )
+              )
+              elseBranch: null
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Base constructor must execute before using 'this' or completing the constructor at 3:12-7:6

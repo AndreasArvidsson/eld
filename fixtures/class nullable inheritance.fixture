@@ -1,0 +1,1284 @@
+class Base {}
+class Child extends Base {}
+class Sibling extends Base {}
+
+func widen(value: Child | null) Base | null {
+    return value;
+}
+func accepts(value: Base | null) bool {
+    return value != null;
+}
+func multi(choice: i32) Base | null {
+    var value: Child | Sibling | null = null;
+    if (choice == 1) {
+        value = new Child();
+    }
+    elif (choice == 2) {
+        value = new Sibling();
+    }
+    return value;
+}
+
+var child: Child | null = new Child();
+const base: Base | null = child;
+print(base == child);
+print(widen(child) == base);
+print(accepts(child));
+child = null;
+const absent: Base | null = child;
+print(absent == null);
+print(widen(child) == null);
+print(accepts(child));
+print(multi(0) == null);
+print(multi(1) != null);
+print(multi(2) != null);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+CLASS (2:1-2:6)
+IDENTIFIER "Child" (2:7-2:12)
+EXTENDS (2:13-2:20)
+IDENTIFIER "Base" (2:21-2:25)
+LEFT_BRACE (2:26-2:27)
+RIGHT_BRACE (2:27-2:28)
+CLASS (3:1-3:6)
+IDENTIFIER "Sibling" (3:7-3:14)
+EXTENDS (3:15-3:22)
+IDENTIFIER "Base" (3:23-3:27)
+LEFT_BRACE (3:28-3:29)
+RIGHT_BRACE (3:29-3:30)
+FUNC (5:1-5:5)
+IDENTIFIER "widen" (5:6-5:11)
+LEFT_PAREN (5:11-5:12)
+IDENTIFIER "value" (5:12-5:17)
+COLON (5:17-5:18)
+IDENTIFIER "Child" (5:19-5:24)
+PIPE (5:25-5:26)
+NULL (5:27-5:31)
+RIGHT_PAREN (5:31-5:32)
+IDENTIFIER "Base" (5:33-5:37)
+PIPE (5:38-5:39)
+NULL (5:40-5:44)
+LEFT_BRACE (5:45-5:46)
+RETURN (6:5-6:11)
+IDENTIFIER "value" (6:12-6:17)
+SEMICOLON (6:17-6:18)
+RIGHT_BRACE (7:1-7:2)
+FUNC (8:1-8:5)
+IDENTIFIER "accepts" (8:6-8:13)
+LEFT_PAREN (8:13-8:14)
+IDENTIFIER "value" (8:14-8:19)
+COLON (8:19-8:20)
+IDENTIFIER "Base" (8:21-8:25)
+PIPE (8:26-8:27)
+NULL (8:28-8:32)
+RIGHT_PAREN (8:32-8:33)
+IDENTIFIER "bool" (8:34-8:38)
+LEFT_BRACE (8:39-8:40)
+RETURN (9:5-9:11)
+IDENTIFIER "value" (9:12-9:17)
+BANG_EQUAL (9:18-9:20)
+NULL (9:21-9:25)
+SEMICOLON (9:25-9:26)
+RIGHT_BRACE (10:1-10:2)
+FUNC (11:1-11:5)
+IDENTIFIER "multi" (11:6-11:11)
+LEFT_PAREN (11:11-11:12)
+IDENTIFIER "choice" (11:12-11:18)
+COLON (11:18-11:19)
+IDENTIFIER "i32" (11:20-11:23)
+RIGHT_PAREN (11:23-11:24)
+IDENTIFIER "Base" (11:25-11:29)
+PIPE (11:30-11:31)
+NULL (11:32-11:36)
+LEFT_BRACE (11:37-11:38)
+VAR (12:5-12:8)
+IDENTIFIER "value" (12:9-12:14)
+COLON (12:14-12:15)
+IDENTIFIER "Child" (12:16-12:21)
+PIPE (12:22-12:23)
+IDENTIFIER "Sibling" (12:24-12:31)
+PIPE (12:32-12:33)
+NULL (12:34-12:38)
+EQUAL (12:39-12:40)
+NULL (12:41-12:45)
+SEMICOLON (12:45-12:46)
+IF (13:5-13:7)
+LEFT_PAREN (13:8-13:9)
+IDENTIFIER "choice" (13:9-13:15)
+EQUAL_EQUAL (13:16-13:18)
+INTEGER_LITERAL "1" (13:19-13:20)
+RIGHT_PAREN (13:20-13:21)
+LEFT_BRACE (13:22-13:23)
+IDENTIFIER "value" (14:9-14:14)
+EQUAL (14:15-14:16)
+NEW (14:17-14:20)
+IDENTIFIER "Child" (14:21-14:26)
+LEFT_PAREN (14:26-14:27)
+RIGHT_PAREN (14:27-14:28)
+SEMICOLON (14:28-14:29)
+RIGHT_BRACE (15:5-15:6)
+ELIF (16:5-16:9)
+LEFT_PAREN (16:10-16:11)
+IDENTIFIER "choice" (16:11-16:17)
+EQUAL_EQUAL (16:18-16:20)
+INTEGER_LITERAL "2" (16:21-16:22)
+RIGHT_PAREN (16:22-16:23)
+LEFT_BRACE (16:24-16:25)
+IDENTIFIER "value" (17:9-17:14)
+EQUAL (17:15-17:16)
+NEW (17:17-17:20)
+IDENTIFIER "Sibling" (17:21-17:28)
+LEFT_PAREN (17:28-17:29)
+RIGHT_PAREN (17:29-17:30)
+SEMICOLON (17:30-17:31)
+RIGHT_BRACE (18:5-18:6)
+RETURN (19:5-19:11)
+IDENTIFIER "value" (19:12-19:17)
+SEMICOLON (19:17-19:18)
+RIGHT_BRACE (20:1-20:2)
+VAR (22:1-22:4)
+IDENTIFIER "child" (22:5-22:10)
+COLON (22:10-22:11)
+IDENTIFIER "Child" (22:12-22:17)
+PIPE (22:18-22:19)
+NULL (22:20-22:24)
+EQUAL (22:25-22:26)
+NEW (22:27-22:30)
+IDENTIFIER "Child" (22:31-22:36)
+LEFT_PAREN (22:36-22:37)
+RIGHT_PAREN (22:37-22:38)
+SEMICOLON (22:38-22:39)
+CONST (23:1-23:6)
+IDENTIFIER "base" (23:7-23:11)
+COLON (23:11-23:12)
+IDENTIFIER "Base" (23:13-23:17)
+PIPE (23:18-23:19)
+NULL (23:20-23:24)
+EQUAL (23:25-23:26)
+IDENTIFIER "child" (23:27-23:32)
+SEMICOLON (23:32-23:33)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "base" (24:7-24:11)
+EQUAL_EQUAL (24:12-24:14)
+IDENTIFIER "child" (24:15-24:20)
+RIGHT_PAREN (24:20-24:21)
+SEMICOLON (24:21-24:22)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+IDENTIFIER "widen" (25:7-25:12)
+LEFT_PAREN (25:12-25:13)
+IDENTIFIER "child" (25:13-25:18)
+RIGHT_PAREN (25:18-25:19)
+EQUAL_EQUAL (25:20-25:22)
+IDENTIFIER "base" (25:23-25:27)
+RIGHT_PAREN (25:27-25:28)
+SEMICOLON (25:28-25:29)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+IDENTIFIER "accepts" (26:7-26:14)
+LEFT_PAREN (26:14-26:15)
+IDENTIFIER "child" (26:15-26:20)
+RIGHT_PAREN (26:20-26:21)
+RIGHT_PAREN (26:21-26:22)
+SEMICOLON (26:22-26:23)
+IDENTIFIER "child" (27:1-27:6)
+EQUAL (27:7-27:8)
+NULL (27:9-27:13)
+SEMICOLON (27:13-27:14)
+CONST (28:1-28:6)
+IDENTIFIER "absent" (28:7-28:13)
+COLON (28:13-28:14)
+IDENTIFIER "Base" (28:15-28:19)
+PIPE (28:20-28:21)
+NULL (28:22-28:26)
+EQUAL (28:27-28:28)
+IDENTIFIER "child" (28:29-28:34)
+SEMICOLON (28:34-28:35)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "absent" (29:7-29:13)
+EQUAL_EQUAL (29:14-29:16)
+NULL (29:17-29:21)
+RIGHT_PAREN (29:21-29:22)
+SEMICOLON (29:22-29:23)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "widen" (30:7-30:12)
+LEFT_PAREN (30:12-30:13)
+IDENTIFIER "child" (30:13-30:18)
+RIGHT_PAREN (30:18-30:19)
+EQUAL_EQUAL (30:20-30:22)
+NULL (30:23-30:27)
+RIGHT_PAREN (30:27-30:28)
+SEMICOLON (30:28-30:29)
+IDENTIFIER "print" (31:1-31:6)
+LEFT_PAREN (31:6-31:7)
+IDENTIFIER "accepts" (31:7-31:14)
+LEFT_PAREN (31:14-31:15)
+IDENTIFIER "child" (31:15-31:20)
+RIGHT_PAREN (31:20-31:21)
+RIGHT_PAREN (31:21-31:22)
+SEMICOLON (31:22-31:23)
+IDENTIFIER "print" (32:1-32:6)
+LEFT_PAREN (32:6-32:7)
+IDENTIFIER "multi" (32:7-32:12)
+LEFT_PAREN (32:12-32:13)
+INTEGER_LITERAL "0" (32:13-32:14)
+RIGHT_PAREN (32:14-32:15)
+EQUAL_EQUAL (32:16-32:18)
+NULL (32:19-32:23)
+RIGHT_PAREN (32:23-32:24)
+SEMICOLON (32:24-32:25)
+IDENTIFIER "print" (33:1-33:6)
+LEFT_PAREN (33:6-33:7)
+IDENTIFIER "multi" (33:7-33:12)
+LEFT_PAREN (33:12-33:13)
+INTEGER_LITERAL "1" (33:13-33:14)
+RIGHT_PAREN (33:14-33:15)
+BANG_EQUAL (33:16-33:18)
+NULL (33:19-33:23)
+RIGHT_PAREN (33:23-33:24)
+SEMICOLON (33:24-33:25)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+IDENTIFIER "multi" (34:7-34:12)
+LEFT_PAREN (34:12-34:13)
+INTEGER_LITERAL "2" (34:13-34:14)
+RIGHT_PAREN (34:14-34:15)
+BANG_EQUAL (34:16-34:18)
+NULL (34:19-34:23)
+RIGHT_PAREN (34:23-34:24)
+SEMICOLON (34:24-34:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-34:25
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-2:28
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 2:21-2:25
+      name: "Base"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-3:30
+    (IdentifierDeclaration
+      range: 3:7-3:14
+      name: "Sibling"
+    )
+    (IdentifierExpression
+      range: 3:23-3:27
+      name: "Base"
+    )
+  )
+  (FunctionDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:6-5:11
+      name: "widen"
+    )
+    (FunctionParameter
+      range: 5:12-5:31
+      (IdentifierDeclaration
+        range: 5:12-5:17
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 5:19-5:31
+        (NamedTypeNode
+          range: 5:19-5:24
+          name: "Child"
+        )
+        (NamedTypeNode
+          range: 5:27-5:31
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (UnionTypeNode
+      range: 5:33-5:44
+      (NamedTypeNode
+        range: 5:33-5:37
+        name: "Base"
+      )
+      (NamedTypeNode
+        range: 5:40-5:44
+        name: "null"
+      )
+    )
+    (BlockStatement
+      range: 5:45-7:2
+      (ReturnStatement
+        range: 6:5-6:18
+        (IdentifierExpression
+          range: 6:12-6:17
+          name: "value"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 8:1-10:2
+    (IdentifierDeclaration
+      range: 8:6-8:13
+      name: "accepts"
+    )
+    (FunctionParameter
+      range: 8:14-8:32
+      (IdentifierDeclaration
+        range: 8:14-8:19
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 8:21-8:32
+        (NamedTypeNode
+          range: 8:21-8:25
+          name: "Base"
+        )
+        (NamedTypeNode
+          range: 8:28-8:32
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 8:34-8:38
+      name: "bool"
+    )
+    (BlockStatement
+      range: 8:39-10:2
+      (ReturnStatement
+        range: 9:5-9:26
+        (BinaryExpression
+          range: 9:12-9:25
+          (IdentifierExpression
+            range: 9:12-9:17
+            name: "value"
+          )
+          operator: NOT_EQUAL
+          (LiteralExpression
+            range: 9:21-9:25
+            kind: NULL
+            text: "null"
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 11:1-20:2
+    (IdentifierDeclaration
+      range: 11:6-11:11
+      name: "multi"
+    )
+    (FunctionParameter
+      range: 11:12-11:23
+      (IdentifierDeclaration
+        range: 11:12-11:18
+        name: "choice"
+      )
+      (NamedTypeNode
+        range: 11:20-11:23
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (UnionTypeNode
+      range: 11:25-11:36
+      (NamedTypeNode
+        range: 11:25-11:29
+        name: "Base"
+      )
+      (NamedTypeNode
+        range: 11:32-11:36
+        name: "null"
+      )
+    )
+    (BlockStatement
+      range: 11:37-20:2
+      (VariableDeclaration
+        range: 12:5-12:46
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 12:9-12:14
+          name: "value"
+        )
+        (UnionTypeNode
+          range: 12:16-12:38
+          (NamedTypeNode
+            range: 12:16-12:21
+            name: "Child"
+          )
+          (NamedTypeNode
+            range: 12:24-12:31
+            name: "Sibling"
+          )
+          (NamedTypeNode
+            range: 12:34-12:38
+            name: "null"
+          )
+        )
+        (LiteralExpression
+          range: 12:41-12:45
+          kind: NULL
+          text: "null"
+        )
+      )
+      (ExpressionStatement
+        range: 13:5-18:6
+        (IfExpression
+          range: 13:5-18:6
+          (BinaryExpression
+            range: 13:9-13:20
+            (IdentifierExpression
+              range: 13:9-13:15
+              name: "choice"
+            )
+            operator: EQUAL
+            (LiteralExpression
+              range: 13:19-13:20
+              kind: INT
+              text: "1"
+            )
+          )
+          (BlockStatement
+            range: 13:22-15:6
+            (ExpressionStatement
+              range: 14:9-14:29
+              (AssignmentExpression
+                range: 14:9-14:28
+                (IdentifierExpression
+                  range: 14:9-14:14
+                  name: "value"
+                )
+                (NewExpression
+                  range: 14:17-14:28
+                  (IdentifierExpression
+                    range: 14:21-14:26
+                    name: "Child"
+                  )
+                )
+              )
+            )
+          )
+          (ElseIfBranch
+            range: 16:5-18:6
+            (BinaryExpression
+              range: 16:11-16:22
+              (IdentifierExpression
+                range: 16:11-16:17
+                name: "choice"
+              )
+              operator: EQUAL
+              (LiteralExpression
+                range: 16:21-16:22
+                kind: INT
+                text: "2"
+              )
+            )
+            (BlockStatement
+              range: 16:24-18:6
+              (ExpressionStatement
+                range: 17:9-17:31
+                (AssignmentExpression
+                  range: 17:9-17:30
+                  (IdentifierExpression
+                    range: 17:9-17:14
+                    name: "value"
+                  )
+                  (NewExpression
+                    range: 17:17-17:30
+                    (IdentifierExpression
+                      range: 17:21-17:28
+                      name: "Sibling"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          elseBranch: null
+        )
+      )
+      (ReturnStatement
+        range: 19:5-19:18
+        (IdentifierExpression
+          range: 19:12-19:17
+          name: "value"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:39
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 22:5-22:10
+      name: "child"
+    )
+    (UnionTypeNode
+      range: 22:12-22:24
+      (NamedTypeNode
+        range: 22:12-22:17
+        name: "Child"
+      )
+      (NamedTypeNode
+        range: 22:20-22:24
+        name: "null"
+      )
+    )
+    (NewExpression
+      range: 22:27-22:38
+      (IdentifierExpression
+        range: 22:31-22:36
+        name: "Child"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 23:1-23:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 23:7-23:11
+      name: "base"
+    )
+    (UnionTypeNode
+      range: 23:13-23:24
+      (NamedTypeNode
+        range: 23:13-23:17
+        name: "Base"
+      )
+      (NamedTypeNode
+        range: 23:20-23:24
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 23:27-23:32
+      name: "child"
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:22
+    (CallExpression
+      range: 24:1-24:21
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 24:7-24:20
+        (IdentifierExpression
+          range: 24:7-24:11
+          name: "base"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 24:15-24:20
+          name: "child"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:29
+    (CallExpression
+      range: 25:1-25:28
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 25:7-25:27
+        (CallExpression
+          range: 25:7-25:19
+          (IdentifierExpression
+            range: 25:7-25:12
+            name: "widen"
+          )
+          (IdentifierExpression
+            range: 25:13-25:18
+            name: "child"
+          )
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 25:23-25:27
+          name: "base"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:23
+    (CallExpression
+      range: 26:1-26:22
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (CallExpression
+        range: 26:7-26:21
+        (IdentifierExpression
+          range: 26:7-26:14
+          name: "accepts"
+        )
+        (IdentifierExpression
+          range: 26:15-26:20
+          name: "child"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 27:1-27:14
+    (AssignmentExpression
+      range: 27:1-27:13
+      (IdentifierExpression
+        range: 27:1-27:6
+        name: "child"
+      )
+      (LiteralExpression
+        range: 27:9-27:13
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 28:1-28:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 28:7-28:13
+      name: "absent"
+    )
+    (UnionTypeNode
+      range: 28:15-28:26
+      (NamedTypeNode
+        range: 28:15-28:19
+        name: "Base"
+      )
+      (NamedTypeNode
+        range: 28:22-28:26
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 28:29-28:34
+      name: "child"
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:23
+    (CallExpression
+      range: 29:1-29:22
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 29:7-29:21
+        (IdentifierExpression
+          range: 29:7-29:13
+          name: "absent"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 29:17-29:21
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:29
+    (CallExpression
+      range: 30:1-30:28
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 30:7-30:27
+        (CallExpression
+          range: 30:7-30:19
+          (IdentifierExpression
+            range: 30:7-30:12
+            name: "widen"
+          )
+          (IdentifierExpression
+            range: 30:13-30:18
+            name: "child"
+          )
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 30:23-30:27
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 31:1-31:23
+    (CallExpression
+      range: 31:1-31:22
+      (IdentifierExpression
+        range: 31:1-31:6
+        name: "print"
+      )
+      (CallExpression
+        range: 31:7-31:21
+        (IdentifierExpression
+          range: 31:7-31:14
+          name: "accepts"
+        )
+        (IdentifierExpression
+          range: 31:15-31:20
+          name: "child"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 32:1-32:25
+    (CallExpression
+      range: 32:1-32:24
+      (IdentifierExpression
+        range: 32:1-32:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 32:7-32:23
+        (CallExpression
+          range: 32:7-32:15
+          (IdentifierExpression
+            range: 32:7-32:12
+            name: "multi"
+          )
+          (LiteralExpression
+            range: 32:13-32:14
+            kind: INT
+            text: "0"
+          )
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 32:19-32:23
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 33:1-33:25
+    (CallExpression
+      range: 33:1-33:24
+      (IdentifierExpression
+        range: 33:1-33:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 33:7-33:23
+        (CallExpression
+          range: 33:7-33:15
+          (IdentifierExpression
+            range: 33:7-33:12
+            name: "multi"
+          )
+          (LiteralExpression
+            range: 33:13-33:14
+            kind: INT
+            text: "1"
+          )
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 33:19-33:23
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 34:1-34:25
+    (CallExpression
+      range: 34:1-34:24
+      (IdentifierExpression
+        range: 34:1-34:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 34:7-34:23
+        (CallExpression
+          range: 34:7-34:15
+          (IdentifierExpression
+            range: 34:7-34:12
+            name: "multi"
+          )
+          (LiteralExpression
+            range: 34:13-34:14
+            kind: INT
+            text: "2"
+          )
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 34:19-34:23
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:21-2:25 -> Base
+  3:23-3:27 -> Base
+  6:12-6:17 -> Child | null
+  9:12-9:17 -> Base | null
+  9:12-9:25 -> bool
+  9:21-9:25 -> null
+  12:41-12:45 -> null
+  13:5-18:6 -> void
+  13:9-13:15 -> i32
+  13:9-13:20 -> bool
+  13:19-13:20 -> i32
+  14:9-14:14 -> Child | Sibling | null
+  14:9-14:28 -> Child | Sibling | null
+  14:17-14:28 -> Child
+  14:21-14:26 -> Child
+  16:11-16:17 -> i32
+  16:11-16:22 -> bool
+  16:21-16:22 -> i32
+  17:9-17:14 -> Child | Sibling | null
+  17:9-17:30 -> Child | Sibling | null
+  17:17-17:30 -> Sibling
+  17:21-17:28 -> Sibling
+  19:12-19:17 -> Child | Sibling | null
+  22:27-22:38 -> Child
+  22:31-22:36 -> Child
+  23:27-23:32 -> Child | null
+  24:1-24:6 -> (any) => void
+  24:1-24:21 -> void
+  24:7-24:11 -> Base | null
+  24:7-24:20 -> bool
+  24:15-24:20 -> Child | null
+  25:1-25:6 -> (any) => void
+  25:1-25:28 -> void
+  25:7-25:12 -> (Child | null) => Base | null
+  25:7-25:19 -> Base | null
+  25:7-25:27 -> bool
+  25:13-25:18 -> Child | null
+  25:23-25:27 -> Base | null
+  26:1-26:6 -> (any) => void
+  26:1-26:22 -> void
+  26:7-26:14 -> (Base | null) => bool
+  26:7-26:21 -> bool
+  26:15-26:20 -> Child | null
+  27:1-27:6 -> Child | null
+  27:1-27:13 -> Child | null
+  27:9-27:13 -> null
+  28:29-28:34 -> Child | null
+  29:1-29:6 -> (any) => void
+  29:1-29:22 -> void
+  29:7-29:13 -> Base | null
+  29:7-29:21 -> bool
+  29:17-29:21 -> null
+  30:1-30:6 -> (any) => void
+  30:1-30:28 -> void
+  30:7-30:12 -> (Child | null) => Base | null
+  30:7-30:19 -> Base | null
+  30:7-30:27 -> bool
+  30:13-30:18 -> Child | null
+  30:23-30:27 -> null
+  31:1-31:6 -> (any) => void
+  31:1-31:22 -> void
+  31:7-31:14 -> (Base | null) => bool
+  31:7-31:21 -> bool
+  31:15-31:20 -> Child | null
+  32:1-32:6 -> (any) => void
+  32:1-32:24 -> void
+  32:7-32:12 -> (i32) => Base | null
+  32:7-32:15 -> Base | null
+  32:7-32:23 -> bool
+  32:13-32:14 -> i32
+  32:19-32:23 -> null
+  33:1-33:6 -> (any) => void
+  33:1-33:24 -> void
+  33:7-33:12 -> (i32) => Base | null
+  33:7-33:15 -> Base | null
+  33:7-33:23 -> bool
+  33:13-33:14 -> i32
+  33:19-33:23 -> null
+  34:1-34:6 -> (any) => void
+  34:1-34:24 -> void
+  34:7-34:12 -> (i32) => Base | null
+  34:7-34:15 -> Base | null
+  34:7-34:23 -> bool
+  34:13-34:14 -> i32
+  34:19-34:23 -> null
+
+Resolved types:
+  5:19-5:24 -> Child
+  5:19-5:31 -> Child | null
+  5:27-5:31 -> null
+  5:33-5:37 -> Base
+  5:33-5:44 -> Base | null
+  5:40-5:44 -> null
+  8:21-8:25 -> Base
+  8:21-8:32 -> Base | null
+  8:28-8:32 -> null
+  8:34-8:38 -> bool
+  11:20-11:23 -> i32
+  11:25-11:29 -> Base
+  11:25-11:36 -> Base | null
+  11:32-11:36 -> null
+  12:16-12:21 -> Child
+  12:16-12:38 -> Child | Sibling | null
+  12:24-12:31 -> Sibling
+  12:34-12:38 -> null
+  22:12-22:17 -> Child
+  22:12-22:24 -> Child | null
+  22:20-22:24 -> null
+  23:13-23:17 -> Base
+  23:13-23:24 -> Base | null
+  23:20-23:24 -> null
+  28:15-28:19 -> Base
+  28:15-28:26 -> Base | null
+  28:22-28:26 -> null
+
+Conversions:
+  6:12-6:17 -> Child | null -> Base | null
+  9:21-9:25 -> null -> Base | null
+  12:41-12:45 -> null -> Child | Sibling | null
+  14:17-14:28 -> Child -> Child | Sibling | null
+  17:17-17:30 -> Sibling -> Child | Sibling | null
+  19:12-19:17 -> Child | Sibling | null -> Base | null
+  22:27-22:38 -> Child -> Child | null
+  23:27-23:32 -> Child | null -> Base | null
+  24:15-24:20 -> Child | null -> Base | null
+  26:15-26:20 -> Child | null -> Base | null
+  27:9-27:13 -> null -> Child | null
+  28:29-28:34 -> Child | null -> Base | null
+  29:17-29:21 -> null -> Base | null
+  30:23-30:27 -> null -> Base | null
+  31:15-31:20 -> Child | null -> Base | null
+  32:19-32:23 -> null -> Base | null
+  33:19-33:23 -> null -> Base | null
+  34:19-34:23 -> null -> Base | null
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:7-2:12 -> class Child
+  3:7-3:14 -> class Sibling
+  5:6-5:11 -> widen(Child | null) => Base | null
+  5:12-5:17 -> const value: Child | null
+  8:6-8:13 -> accepts(Base | null) => bool
+  8:14-8:19 -> const value: Base | null
+  11:6-11:11 -> multi(i32) => Base | null
+  11:12-11:18 -> const choice: i32
+  12:9-12:14 -> var value: Child | Sibling | null
+  22:5-22:10 -> var child: Child | null
+  23:7-23:11 -> const base: Base | null
+  28:7-28:13 -> const absent: Base | null
+
+References:
+  2:21-2:25 -> 1:7-1:11
+  3:23-3:27 -> 1:7-1:11
+  6:12-6:17 -> 5:12-5:17
+  9:12-9:17 -> 8:14-8:19
+  13:9-13:15 -> 11:12-11:18
+  14:9-14:14 -> 12:9-12:14
+  14:21-14:26 -> 2:7-2:12
+  16:11-16:17 -> 11:12-11:18
+  17:9-17:14 -> 12:9-12:14
+  17:21-17:28 -> 3:7-3:14
+  19:12-19:17 -> 12:9-12:14
+  22:31-22:36 -> 2:7-2:12
+  23:27-23:32 -> 22:5-22:10
+  24:1-24:6 -> builtin print
+  24:7-24:11 -> 23:7-23:11
+  24:15-24:20 -> 22:5-22:10
+  25:1-25:6 -> builtin print
+  25:7-25:12 -> 5:6-5:11
+  25:13-25:18 -> 22:5-22:10
+  25:23-25:27 -> 23:7-23:11
+  26:1-26:6 -> builtin print
+  26:7-26:14 -> 8:6-8:13
+  26:15-26:20 -> 22:5-22:10
+  27:1-27:6 -> 22:5-22:10
+  28:29-28:34 -> 22:5-22:10
+  29:1-29:6 -> builtin print
+  29:7-29:13 -> 28:7-28:13
+  30:1-30:6 -> builtin print
+  30:7-30:12 -> 5:6-5:11
+  30:13-30:18 -> 22:5-22:10
+  31:1-31:6 -> builtin print
+  31:7-31:14 -> 8:6-8:13
+  31:15-31:20 -> 22:5-22:10
+  32:1-32:6 -> builtin print
+  32:7-32:12 -> 11:6-11:11
+  33:1-33:6 -> builtin print
+  33:7-33:12 -> 11:6-11:11
+  34:1-34:6 -> builtin print
+  34:7-34:12 -> 11:6-11:11
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  NESTMEMBER Test$Sibling
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+  // access flags 0x9
+  public static INNERCLASS Test$Sibling Test Sibling
+
+  // access flags 0x9
+  public static LTest$Child; child
+
+  // access flags 0x19
+  public final static LTest$Base; base
+
+  // access flags 0x19
+  public final static LTest$Base; absent
+
+  // access flags 0x9
+  public static widen(LTest$Child;)LTest$Base;
+    ALOAD 0
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static accepts(LTest$Base;)Z
+    ALOAD 0
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1
+    IXOR
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static multi(I)LTest$Base;
+    ACONST_NULL
+    ASTORE 1
+    ILOAD 0
+    LDC 1
+    IF_ICMPEQ L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME APPEND [N]
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IFEQ L2
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init> ()V
+    DUP
+    ASTORE 1
+    POP
+    GOTO L3
+   L2
+   FRAME SAME
+    ILOAD 0
+    LDC 2
+    IF_ICMPEQ L4
+    ICONST_0
+    GOTO L5
+   L4
+   FRAME SAME
+    ICONST_1
+   L5
+   FRAME SAME1 I
+    IFEQ L3
+    NEW Test$Sibling
+    DUP
+    INVOKESPECIAL Test$Sibling.<init> ()V
+    DUP
+    ASTORE 1
+    POP
+    GOTO L3
+   L3
+   FRAME FULL [I Test$Base] []
+    ALOAD 1
+    CHECKCAST Test$Base
+    ARETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init> ()V
+    PUTSTATIC Test.child : LTest$Child;
+    GETSTATIC Test.child : LTest$Child;
+    PUTSTATIC Test.base : LTest$Base;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.base : LTest$Base;
+    GETSTATIC Test.child : LTest$Child;
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.child : LTest$Child;
+    INVOKESTATIC Test.widen (LTest$Child;)LTest$Base;
+    GETSTATIC Test.base : LTest$Base;
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.child : LTest$Child;
+    INVOKESTATIC Test.accepts (LTest$Base;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    ACONST_NULL
+    DUP
+    PUTSTATIC Test.child : LTest$Child;
+    POP
+    GETSTATIC Test.child : LTest$Child;
+    PUTSTATIC Test.absent : LTest$Base;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.absent : LTest$Base;
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.child : LTest$Child;
+    INVOKESTATIC Test.widen (LTest$Child;)LTest$Base;
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.child : LTest$Child;
+    INVOKESTATIC Test.accepts (LTest$Base;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 0
+    INVOKESTATIC Test.multi (I)LTest$Base;
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 1
+    INVOKESTATIC Test.multi (I)LTest$Base;
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    LDC 2
+    INVOKESTATIC Test.multi (I)LTest$Base;
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Child extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Sibling extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Sibling Test Sibling
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+true
+false
+true
+true
+true
+

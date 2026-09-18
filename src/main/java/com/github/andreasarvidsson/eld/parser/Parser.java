@@ -96,6 +96,16 @@ public final class Parser {
                 return parseClassDeclaration(token);
             case CONSTRUCTOR:
                 return parseConstructorDeclaration(token);
+            case SUPER:
+                final CallExpression superCall =
+                    parseCallExpression(
+                        new IdentifierExpression(token.text(), token.range())
+                    );
+                final Token superEnd = expect(TokenType.SEMICOLON);
+                return new SuperConstructorCall(
+                    superCall.arguments(),
+                    token.range().union(superEnd.range())
+                );
             case BREAK:
                 return parseBreakStatement(token);
             case CONTINUE:
@@ -153,6 +163,14 @@ public final class Parser {
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
+        final IdentifierExpression superclass;
+        if (match(TokenType.EXTENDS)) {
+            final Token base = expect(TokenType.IDENTIFIER);
+            superclass = new IdentifierExpression(base.text(), base.range());
+        }
+        else {
+            superclass = null;
+        }
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull MemberDeclaration> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
@@ -205,7 +223,7 @@ public final class Parser {
         final Token close = expect(TokenType.RIGHT_BRACE);
         final Range range = keyword.range().union(close.range());
         final var id = new IdentifierDeclaration(name.text(), name.range());
-        return new ClassDeclaration(id, members, range);
+        return new ClassDeclaration(id, superclass, members, range);
     }
 
     private ReturnStatement parseReturnStatement(final Token keyword) {

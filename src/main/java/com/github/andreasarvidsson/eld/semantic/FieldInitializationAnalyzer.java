@@ -18,9 +18,18 @@ final class FieldInitializationAnalyzer {
         YIELD
     }
 
-    private record Path(Set<Symbol> definite, Set<Symbol> possible, Exit exit) {
+    private record Path(
+        Set<Symbol> definite, Set<Symbol> possible, Exit exit,
+        boolean baseDefinite, boolean basePossible
+    ) {
         Path withExit(final Exit exit) {
-            return new Path(definite, possible, exit);
+            return new Path(
+                definite,
+                possible,
+                exit,
+                baseDefinite,
+                basePossible
+            );
         }
     }
 
@@ -50,7 +59,10 @@ final class FieldInitializationAnalyzer {
     }
 
     void analyze(final @Nullable ConstructorDeclaration constructor) {
-        final Path initial = new Path(defaults, defaults, Exit.NORMAL);
+        final boolean initialized =
+            constructor == null || !constructor.hasExplicitSuperCall();
+        final Path initial =
+            new Path(defaults, defaults, Exit.NORMAL, initialized, initialized);
         if (constructor == null) {
             for (final MemberDeclaration memberDeclaration : declaration
                 .members()) {
@@ -73,6 +85,7 @@ final class FieldInitializationAnalyzer {
     }
 
     private void requireComplete(final Path path, final AstNode node) {
+        requireBaseInitialized(path, node);
         for (final Symbol field : fields) {
             if (!path.definite().contains(field)) {
                 throw new SemanticException(
@@ -81,6 +94,15 @@ final class FieldInitializationAnalyzer {
                     field.name()
                 );
             }
+        }
+    }
+
+    private void requireBaseInitialized(final Path path, final AstNode node) {
+        if (!path.baseDefinite()) {
+            throw new SemanticException(
+                node.range(),
+                "Base constructor must execute before using 'this' or completing the constructor"
+            );
         }
     }
 
@@ -143,6 +165,32 @@ final class FieldInitializationAnalyzer {
                 return walk(variable.initializer(), paths);
             case ExpressionStatement statement:
                 return walk(statement.expression(), paths);
+            case SuperConstructorCall call: {
+                if (path.basePossible()) {
+                    throw new SemanticException(
+                        call.range(),
+                        "Base constructor may already have executed"
+                    );
+                }
+                final List<Path> result = new ArrayList<>();
+                for (final Path argumentPath : sequence(
+                    call.arguments(),
+                    paths
+                )) {
+                    result.add(
+                        argumentPath.exit() == Exit.NORMAL
+                            ? new Path(
+                                argumentPath.definite(),
+                                argumentPath.possible(),
+                                Exit.NORMAL,
+                                true,
+                                true
+                            )
+                            : argumentPath
+                    );
+                }
+                return result;
+            }
             case ReturnStatement statement:
                 requireComplete(path, statement);
                 return List.of(path.withExit(Exit.RETURN));
@@ -162,6 +210,9 @@ final class FieldInitializationAnalyzer {
                 requireComplete(path, self);
                 return paths;
             case LambdaExpression lambda:
+                if (!path.baseDefinite()) {
+                    model.setReceiverlessLambda(lambda);
+                }
                 // Capturing the receiver exposes it to code outside the constructor.
                 // Do not execute the deferred body or count its field assignments.
                 AstTraversal.walk(lambda.body(), child -> {
@@ -173,8 +224,18 @@ final class FieldInitializationAnalyzer {
             case MemberExpression member: {
                 final Symbol field = ownField(member);
                 if (field == null) {
+                    if (
+                        unwrap(member.target()) instanceof ThisExpression
+                            && model.getReference(
+                                member.member()
+                            ) instanceof VariableSymbol
+                    ) {
+                        requireBaseInitialized(path, member);
+                        return paths;
+                    }
                     return walk(member.target(), paths);
                 }
+                requireBaseInitialized(path, member);
                 if (!path.definite().contains(field)) {
                     throw new SemanticException(
                         member.range(),
@@ -192,6 +253,7 @@ final class FieldInitializationAnalyzer {
                         walk(assignment.target(), paths)
                     );
                 }
+                requireBaseInitialized(path, assignment);
                 final List<Path> values = walk(assignment.value(), paths);
                 final List<Path> assigned = new ArrayList<>();
                 for (final Path value : values) {
@@ -216,7 +278,15 @@ final class FieldInitializationAnalyzer {
                         new HashSet<>(value.possible());
                     definite.add(field);
                     possible.add(field);
-                    assigned.add(new Path(definite, possible, Exit.NORMAL));
+                    assigned.add(
+                        new Path(
+                            definite,
+                            possible,
+                            Exit.NORMAL,
+                            value.baseDefinite(),
+                            value.basePossible()
+                        )
+                    );
                 }
                 return assigned;
             }
@@ -457,7 +527,13 @@ final class FieldInitializationAnalyzer {
                 possible.addAll(path.possible());
                 merged.put(
                     path.exit(),
-                    new Path(definite, possible, path.exit())
+                    new Path(
+                        definite,
+                        possible,
+                        path.exit(),
+                        previous.baseDefinite() && path.baseDefinite(),
+                        previous.basePossible() || path.basePossible()
+                    )
                 );
             }
         }
