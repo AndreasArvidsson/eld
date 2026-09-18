@@ -1,37 +1,43 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Run tests",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 5005,
-            "preLaunchTask": "Maven: Run tests"
-        },
-        {
-            "type": "java",
-            "name": "Run tests (subset)",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 5005,
-            "preLaunchTask": "Maven: Run tests (subset)"
-        },
-        {
-            "type": "java",
-            "name": "Update fixtures",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 5005,
-            "preLaunchTask": "Maven: Update fixtures"
-        },
-        {
-            "type": "java",
-            "name": "Update fixtures (subset)",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 5005,
-            "preLaunchTask": "Maven: Update fixtures (subset)"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run program",
+      "request": "launch",
+      "mainClass": "com.github.andreasarvidsson.eld.Main"
+    },
+    {
+      "type": "java",
+      "name": "Run tests",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Maven: Run tests"
+    },
+    {
+      "type": "java",
+      "name": "Run tests (subset)",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Maven: Run tests (subset)"
+    },
+    {
+      "type": "java",
+      "name": "Update fixtures",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Maven: Update fixtures"
+    },
+    {
+      "type": "java",
+      "name": "Update fixtures (subset)",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Maven: Update fixtures (subset)"
+    }
+  ]
 }
