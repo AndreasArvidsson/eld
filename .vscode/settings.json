@@ -8,6 +8,8 @@
     "editor.detectIndentation": false,
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
+    // Keep the Java extension from overwriting Maven's compiled classes.
+    "java.autobuild.enabled": false,
     "java.compile.nullAnalysis.mode": "disabled",
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.format.settings.url": ".vscode/eclipse-java-formatter.xml",

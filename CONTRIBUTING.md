@@ -76,6 +76,11 @@ mvn test -Dtest=FixtureTest
 
 Open the project folder in VS Code with the Extension Pack for Java installed and Maven available on your PATH.
 
+Automatic Java builds are disabled in the workspace settings so VS Code and
+Maven do not overwrite each other's compiled classes. Use `mvn compile` or
+`mvn test` to compile changes. If an earlier build reports a missing generated
+class such as `PrimitiveArrayTest$1`, run `mvn clean test` to rebuild the output.
+
 1. Open **Run and Debug** (`Ctrl+Shift+D`).
 2. Select a launch configuration from the dropdown:
 
