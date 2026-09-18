@@ -206,66 +206,51 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Ljava/lang/invoke/MethodHandle; foo
-
-  // access flags 0x8
-  static <clinit>()V
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    PUTSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
-    LDC 1
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
-    LDC 2
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-
-  // access flags 0x100A
-  private static synthetic $lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-   L0
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method $lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PRIVATE, STATIC, SYNTHETIC]
+   L0:
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
     LDC 2
     ANEWARRAY java/lang/Object
     DUP
     LDC 0
-    ILOAD 0
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    ILOAD_0 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     AASTORE
     DUP
     LDC 1
-    ILOAD 0
+    ILOAD_0 0
     LDC 2
     IREM
     LDC 0
     IF_ICMPEQ L1
-    ICONST_0
+    ICONST_0 0
     GOTO L2
-   L1
-   FRAME FULL [I] [L0 L0 [Ljava/lang/Object; [Ljava/lang/Object; I]
-    ICONST_1
-   L2
-   FRAME FULL [I] [L0 L0 [Ljava/lang/Object; [Ljava/lang/Object; I I]
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+   L1:
+    ICONST_1 1
+   L2:
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
     ARETURN
-    MAXSTACK = 7
-    MAXLOCALS = 1
-}
+    max stack 7 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int)EldTuple]
+    PUTSTATIC Test.foo Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/invoke/MethodHandle;
+    LDC 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/invoke/MethodHandle;
+    LDC 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

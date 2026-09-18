@@ -323,88 +323,56 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Renamable
-  NESTMEMBER Test$Person
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Renamable Test Renamable
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x19
-  public final static LTest$Person; person
-
-  // access flags 0x19
-  public final static LTest$Renamable; action
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Renamable
+  nest member Test$Person
+  inner class Test$Renamable flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field person LTest$Person; flags [PUBLIC, STATIC, FINAL]
+  field action LTest$Renamable; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Person
     DUP
-    INVOKESPECIAL Test$Person.<init> ()V
-    PUTSTATIC Test.person : LTest$Person;
-    GETSTATIC Test.person : LTest$Person;
-    PUTSTATIC Test.action : LTest$Renamable;
-    GETSTATIC Test.action : LTest$Renamable;
+    INVOKESPECIAL Test$Person.<init>()V
+    PUTSTATIC Test.person LTest$Person;
+    GETSTATIC Test.person LTest$Person;
+    PUTSTATIC Test.action LTest$Renamable;
+    GETSTATIC Test.action LTest$Renamable;
     LDC "Alice"
-    INVOKEINTERFACE Test$Renamable.rename (Ljava/lang/String;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.person : LTest$Person;
-    GETFIELD Test$Person.name : Ljava/lang/String;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKEINTERFACE Test$Renamable.rename(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.person LTest$Person;
+    GETFIELD Test$Person.name Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Renamable {
+class Test$Renamable extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Renamable flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method rename(Ljava/lang/String;)V flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Renamable Test Renamable
-
-  // access flags 0x401
-  public abstract rename(Ljava/lang/String;)V
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Person implements Test$Renamable {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x1
-  public Ljava/lang/String; name
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Renamable
+  nest host Test
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field name Ljava/lang/String; flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC "Bob"
-    PUTFIELD Test$Person.name : Ljava/lang/String;
+    PUTFIELD Test$Person.name Ljava/lang/String;
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public rename(Ljava/lang/String;)V
-    ALOAD 0
-    ALOAD 1
+    max stack 2 max locals 1
+  method rename(Ljava/lang/String;)V flags [PUBLIC]
+    ALOAD_0 0
+    ALOAD_1 1
     DUP_X1
-    PUTFIELD Test$Person.name : Ljava/lang/String;
+    PUTFIELD Test$Person.name Ljava/lang/String;
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 2
 
 --- OUTPUT ---
 

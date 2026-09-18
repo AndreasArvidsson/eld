@@ -311,36 +311,29 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Ljava/io/PrintStream; log
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field log Ljava/io/PrintStream; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 42
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    LDC 1.5D
-    INVOKEVIRTUAL java/io/PrintStream.println (D)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    ICONST_1
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 1.5
+    INVOKEVIRTUAL java/io/PrintStream.println(D)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_1 1
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 120
-    INVOKEVIRTUAL java/io/PrintStream.println (C)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    ACONST_NULL
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println(C)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
     DUP
     LDC 2
-    NEWARRAY T_CHAR
+    NEWARRAY CHAR
     DUP
     LDC 0
     LDC 104
@@ -349,23 +342,23 @@ public final class Test {
     LDC 1
     LDC 105
     CASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    INVOKEVIRTUAL java/io/PrintStream.println ()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    PUTSTATIC Test.log : Ljava/io/PrintStream;
-    GETSTATIC Test.log : Ljava/io/PrintStream;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println()V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    PUTSTATIC Test.log Ljava/io/PrintStream;
+    GETSTATIC Test.log Ljava/io/PrintStream;
     LDC 7
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC Test.log : Ljava/io/PrintStream;
-    ICONST_0
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC Test.log : Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.log Ljava/io/PrintStream;
+    ICONST_0 0
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.log Ljava/io/PrintStream;
     NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
     DUP
     LDC 2
-    NEWARRAY T_CHAR
+    NEWARRAY CHAR
     DUP
     LDC 0
     LDC 111
@@ -374,12 +367,10 @@ public final class Test {
     LDC 1
     LDC 107
     CASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 7
-    MAXLOCALS = 0
-}
+    max stack 7 max locals 0
 
 --- OUTPUT ---
 

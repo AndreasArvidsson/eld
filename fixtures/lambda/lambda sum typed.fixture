@@ -153,38 +153,25 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Ljava/lang/invoke/MethodHandle; sum
-
-  // access flags 0x8
-  static <clinit>()V
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda0(II)I
-    PUTSTATIC Test.sum : Ljava/lang/invoke/MethodHandle;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.sum : Ljava/lang/invoke/MethodHandle;
-    LDC 1
-    LDC 3
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (II)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-
-  // access flags 0x100A
-  private static synthetic $lambda0(II)I
-    ILOAD 0
-    ILOAD 1
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field sum Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method $lambda0(II)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ILOAD_0 0
+    ILOAD_1 1
     IADD
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int,int)int]
+    PUTSTATIC Test.sum Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.sum Ljava/lang/invoke/MethodHandle;
+    LDC 1
+    LDC 3
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(II)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 4 max locals 0
 
 --- OUTPUT ---
 

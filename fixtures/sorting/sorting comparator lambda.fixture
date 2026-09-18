@@ -861,165 +861,133 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Person
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x19
-  // signature Ljava/util/List<LTest$Person;>;
-  // declaration: people extends java.util.List<Test$Person>
-  public final static Ljava/util/List; people
-
-  // access flags 0x19
-  // signature Ljava/util/Comparator<LTest$Person;>;
-  // declaration: byAge extends java.util.Comparator<Test$Person>
-  public final static Ljava/util/Comparator; byAge
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Person
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field people Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<LTest$Person;>;
+  field byAge Ljava/util/Comparator; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Comparator<LTest$Person;>;
+  method $lambda0(LTest$Person;LTest$Person;)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ALOAD_1 1
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    IRETURN
+    max stack 2 max locals 2
+  method $lambda1(LTest$Person;LTest$Person;)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ALOAD_1 1
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ALOAD_0 0
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    IRETURN
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     NEW Test$Person
     DUP
     LDC 30
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     NEW Test$Person
     DUP
     LDC 10
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     NEW Test$Person
     DUP
     LDC 20
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.people : Ljava/util/List;
-    LDC Ljava/util/Comparator;.class
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda0(LTest$Person;LTest$Person;)I
-    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    PUTSTATIC Test.people Ljava/util/List;
+    LDC ClassOrInterfaceDesc[Comparator]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(Test$Person,Test$Person)int]
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
     CHECKCAST java/util/Comparator
-    PUTSTATIC Test.byAge : Ljava/util/Comparator;
-    GETSTATIC Test.people : Ljava/util/List;
-    GETSTATIC Test.byAge : Ljava/util/Comparator;
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    PUTSTATIC Test.byAge Ljava/util/Comparator;
+    GETSTATIC Test.people Ljava/util/List;
+    GETSTATIC Test.byAge Ljava/util/Comparator;
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 0
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 1
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 2
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC Test.people : Ljava/util/List;
-    LDC Ljava/util/Comparator;.class
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda1(LTest$Person;LTest$Person;)I
-    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.people Ljava/util/List;
+    LDC ClassOrInterfaceDesc[Comparator]
+    LDC MethodHandleDesc[STATIC/Test::$lambda1(Test$Person,Test$Person)int]
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
     CHECKCAST java/util/Comparator
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 0
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 1
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 2
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 5
-    MAXLOCALS = 0
+    max stack 5 max locals 0
 
-  // access flags 0x100A
-  private static synthetic $lambda0(LTest$Person;LTest$Person;)I
-    ALOAD 0
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ALOAD 1
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
-    IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x100A
-  private static synthetic $lambda1(LTest$Person;LTest$Person;)I
-    ALOAD 1
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ALOAD 0
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
-    IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Person {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x11
-  public final I age
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
+class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field age I flags [PUBLIC, FINAL]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
     DUP_X1
-    PUTFIELD Test$Person.age : I
+    PUTFIELD Test$Person.age I
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 2
 
 --- OUTPUT ---
 

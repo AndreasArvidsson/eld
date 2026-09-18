@@ -112,17 +112,9 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static I productFirst = 10
-
-  // access flags 0x19
-  public final static I productLast = 14
-}
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field productFirst I flags [PUBLIC, STATIC, FINAL] = 10
+  field productLast I flags [PUBLIC, STATIC, FINAL] = 14
 
 --- OUTPUT ---
 

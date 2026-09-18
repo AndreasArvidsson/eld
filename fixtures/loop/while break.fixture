@@ -40,22 +40,14 @@ Expression types:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
-    ICONST_1
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    ICONST_1 1
     IFEQ L0
     GOTO L0
-   L0
-   FRAME SAME
+   L0:
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 0
-}
+    max stack 1 max locals 0
 
 --- OUTPUT ---
 

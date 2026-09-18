@@ -381,129 +381,81 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Reader
-  NESTMEMBER Test$Base
-  NESTMEMBER Test$Child
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x19
-  public final static LTest$Child; child
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Reader
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field child LTest$Child; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Child
     DUP
     LDC 7
-    INVOKESPECIAL Test$Child.<init> (I)V
-    PUTSTATIC Test.child : LTest$Child;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.child : LTest$Child;
-    GETFIELD Test$Base.value : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$Child.<init>(I)V
+    PUTSTATIC Test.child LTest$Child;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    GETFIELD Test$Base.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Reader {
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-
-  // access flags 0x401
-  public abstract read()I
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-
-  // access flags 0x1
-  public I value
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
     DUP_X1
-    PUTFIELD Test$Base.value : I
+    PUTFIELD Test$Base.value I
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 2
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x1
-  public <init>(I)V
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>(I)V flags [PUBLIC]
     NEW Test$$object0
     DUP
-    ILOAD 1
-    INVOKESPECIAL Test$$object0.<init> (I)V
-    ASTORE 2
-    ALOAD 0
-    ALOAD 2
-    INVOKEINTERFACE Test$Reader.read ()I (itf)
-    INVOKESPECIAL Test$Base.<init> (I)V
+    ILOAD_1 1
+    INVOKESPECIAL Test$$object0.<init>(I)V
+    ASTORE_2 2
+    ALOAD_0 0
+    ALOAD_2 2
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKESPECIAL Test$Base.<init>(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-}
+    max stack 3 max locals 3
 
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Reader {
-
-  NESTHOST Test
-
-  // access flags 0x1012
-  private final synthetic I $capture0
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.$capture0 : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Reader
+  nest host Test
+  field $capture0 I flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.$capture0 I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : I
+    max stack 2 max locals 2
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
 --- OUTPUT ---
 

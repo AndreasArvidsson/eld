@@ -176,41 +176,32 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static Ljava/lang/Object; foo
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Object; flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    PUTSTATIC Test.foo : Ljava/lang/Object;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.foo Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     DUP
-    PUTSTATIC Test.foo : Ljava/lang/Object;
+    PUTSTATIC Test.foo Ljava/lang/Object;
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    ACONST_NULL
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     DUP
-    PUTSTATIC Test.foo : Ljava/lang/Object;
+    PUTSTATIC Test.foo Ljava/lang/Object;
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

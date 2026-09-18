@@ -244,100 +244,74 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Integer;>;
-  // declaration: values extends java.util.List<java.lang.Integer>
-  public final static Ljava/util/List; values
-
-  // access flags 0x19
-  // signature Ljava/util/Comparator<Ljava/lang/Integer;>;
-  // declaration: reverse extends java.util.Comparator<java.lang.Integer>
-  public final static Ljava/util/Comparator; reverse
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  field values Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field reverse Ljava/util/Comparator; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Comparator<Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.values : Ljava/util/List;
+    PUTSTATIC Test.values Ljava/util/List;
     NEW Test$$object0
     DUP
-    INVOKESPECIAL Test$$object0.<init> ()V
-    PUTSTATIC Test.reverse : Ljava/util/Comparator;
-    GETSTATIC Test.values : Ljava/util/List;
-    GETSTATIC Test.reverse : Ljava/util/Comparator;
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKESPECIAL Test$$object0.<init>()V
+    PUTSTATIC Test.reverse Ljava/util/Comparator;
+    GETSTATIC Test.values Ljava/util/List;
+    GETSTATIC Test.reverse Ljava/util/Comparator;
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x1030
-// signature Ljava/lang/Object;Ljava/util/Comparator<Ljava/lang/Integer;>;
-// declaration: Test$$object0 implements java.util.Comparator<java.lang.Integer>
-final synthetic class Test$$object0 implements java/util/Comparator {
-
-  NESTHOST Test
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements java/util/Comparator
+  signature Ljava/lang/Object;Ljava/util/Comparator<Ljava/lang/Integer;>;
+  nest host Test
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public compare(II)I
-    ILOAD 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ILOAD 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    max stack 1 max locals 1
+  method compare(II)I flags [PUBLIC]
+    ILOAD_2 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ILOAD_1 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-
-  // access flags 0x1041
-  public synthetic bridge compare(Ljava/lang/Object;Ljava/lang/Object;)I
-    ALOAD 0
-    ALOAD 1
+    max stack 2 max locals 3
+  method compare(Ljava/lang/Object;Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
     CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue ()I
-    ALOAD 2
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ALOAD_2 2
     CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue ()I
-    INVOKEVIRTUAL Test$$object0.compare (II)I
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    INVOKEVIRTUAL Test$$object0.compare(II)I
     IRETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-}
+    max stack 3 max locals 3
 
 --- OUTPUT ---
 

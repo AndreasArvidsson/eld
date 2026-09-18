@@ -3,7 +3,7 @@ package com.github.andreasarvidsson.eld;
 import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
-import org.objectweb.asm.Opcodes;
+import java.lang.classfile.TypeKind;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
 import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.runtime.EldArray;
@@ -22,20 +22,20 @@ final class RuntimeAbi {
     static final String EMPTY_ARRAY_CONSTRUCTOR = "()V";
 
     enum ArrayKind {
-        BYTE(BuiltinType.I8, EldByteArray.class, "B", Opcodes.T_BYTE),
-        SHORT(BuiltinType.I16, EldShortArray.class, "S", Opcodes.T_SHORT),
-        INT(BuiltinType.I32, EldIntArray.class, "I", Opcodes.T_INT),
-        LONG(BuiltinType.I64, EldLongArray.class, "J", Opcodes.T_LONG),
-        FLOAT(BuiltinType.F32, EldFloatArray.class, "F", Opcodes.T_FLOAT),
-        DOUBLE(BuiltinType.F64, EldDoubleArray.class, "D", Opcodes.T_DOUBLE),
-        BOOLEAN(
-            BuiltinType.BOOL,
-            EldBooleanArray.class,
-            "Z",
-            Opcodes.T_BOOLEAN
-        ),
-        CHAR(BuiltinType.CHAR, EldCharArray.class, "C", Opcodes.T_CHAR),
-        OBJECT(null, EldObjectArray.class, "Ljava/lang/Object;", 0);
+        BYTE(BuiltinType.I8, EldByteArray.class, "B", TypeKind.BYTE),
+        SHORT(BuiltinType.I16, EldShortArray.class, "S", TypeKind.SHORT),
+        INT(BuiltinType.I32, EldIntArray.class, "I", TypeKind.INT),
+        LONG(BuiltinType.I64, EldLongArray.class, "J", TypeKind.LONG),
+        FLOAT(BuiltinType.F32, EldFloatArray.class, "F", TypeKind.FLOAT),
+        DOUBLE(BuiltinType.F64, EldDoubleArray.class, "D", TypeKind.DOUBLE),
+        BOOLEAN(BuiltinType.BOOL, EldBooleanArray.class, "Z", TypeKind.BOOLEAN),
+        CHAR(BuiltinType.CHAR, EldCharArray.class, "C", TypeKind.CHAR),
+        OBJECT(
+            null,
+            EldObjectArray.class,
+            "Ljava/lang/Object;",
+            TypeKind.REFERENCE
+        );
 
         final @Nullable BuiltinType element;
         final Class<?> runtimeClass;
@@ -44,13 +44,13 @@ final class RuntimeAbi {
         final String elementDescriptor;
         final String backingDescriptor;
         final String constructorDescriptor;
-        final int creationOpcode;
+        final TypeKind creationKind;
 
         ArrayKind(
             final @Nullable BuiltinType element,
             final Class<?> runtimeClass,
             final String elementDescriptor,
-            final int creationOpcode
+            final TypeKind creationKind
         ) {
             this.element = element;
             this.runtimeClass = runtimeClass;
@@ -59,7 +59,7 @@ final class RuntimeAbi {
             this.elementDescriptor = elementDescriptor;
             this.backingDescriptor = "[" + elementDescriptor;
             this.constructorDescriptor = "(" + backingDescriptor + ")V";
-            this.creationOpcode = creationOpcode;
+            this.creationKind = creationKind;
         }
 
         String methodDescriptor(final ArrayMethod method) {

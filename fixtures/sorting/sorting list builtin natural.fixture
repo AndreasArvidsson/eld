@@ -1037,305 +1037,271 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Byte;>;
-  // declaration: bytes extends java.util.List<java.lang.Byte>
-  public final static Ljava/util/List; bytes
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Short;>;
-  // declaration: shorts extends java.util.List<java.lang.Short>
-  public final static Ljava/util/List; shorts
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Integer;>;
-  // declaration: ints extends java.util.List<java.lang.Integer>
-  public final static Ljava/util/List; ints
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Long;>;
-  // declaration: longs extends java.util.List<java.lang.Long>
-  public final static Ljava/util/List; longs
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Float;>;
-  // declaration: floats extends java.util.List<java.lang.Float>
-  public final static Ljava/util/List; floats
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Double;>;
-  // declaration: doubles extends java.util.List<java.lang.Double>
-  public final static Ljava/util/List; doubles
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Character;>;
-  // declaration: chars extends java.util.List<java.lang.Character>
-  public final static Ljava/util/List; chars
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/String;>;
-  // declaration: strings extends java.util.List<java.lang.String>
-  public final static Ljava/util/List; strings
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Boolean;>;
-  // declaration: bools extends java.util.List<java.lang.Boolean>
-  public final static Ljava/util/List; bools
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field bytes Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Byte;>;
+  field shorts Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Short;>;
+  field ints Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field longs Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Long;>;
+  field floats Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Float;>;
+  field doubles Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Double;>;
+  field chars Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Character;>;
+  field strings Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/String;>;
+  field bools Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Boolean;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
     I2B
-    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
     I2B
-    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
     I2B
-    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.bytes : Ljava/util/List;
+    PUTSTATIC Test.bytes Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
     I2S
-    INVOKESTATIC java/lang/Short.valueOf (S)Ljava/lang/Short;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Short.valueOf(S)Ljava/lang/Short;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
     I2S
-    INVOKESTATIC java/lang/Short.valueOf (S)Ljava/lang/Short;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Short.valueOf(S)Ljava/lang/Short;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
     I2S
-    INVOKESTATIC java/lang/Short.valueOf (S)Ljava/lang/Short;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Short.valueOf(S)Ljava/lang/Short;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.shorts : Ljava/util/List;
+    PUTSTATIC Test.shorts Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.ints : Ljava/util/List;
+    PUTSTATIC Test.ints Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
     I2L
-    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
     I2L
-    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
     I2L
-    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.longs : Ljava/util/List;
+    PUTSTATIC Test.longs Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
-    LDC 3.0D
+    LDC2_W 3.0
     D2F
-    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC 1.0D
+    LDC2_W 1.0
     D2F
-    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC 2.0D
+    LDC2_W 2.0
     D2F
-    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.floats : Ljava/util/List;
+    PUTSTATIC Test.floats Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
-    LDC 3.0D
-    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    LDC2_W 3.0
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC 1.0D
-    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    LDC2_W 1.0
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC 2.0D
-    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    LDC2_W 2.0
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.doubles : Ljava/util/List;
+    PUTSTATIC Test.doubles Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 99
-    INVOKESTATIC java/lang/Character.valueOf (C)Ljava/lang/Character;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Character.valueOf(C)Ljava/lang/Character;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 97
-    INVOKESTATIC java/lang/Character.valueOf (C)Ljava/lang/Character;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Character.valueOf(C)Ljava/lang/Character;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 98
-    INVOKESTATIC java/lang/Character.valueOf (C)Ljava/lang/Character;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Character.valueOf(C)Ljava/lang/Character;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.chars : Ljava/util/List;
+    PUTSTATIC Test.chars Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC "c"
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC "a"
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC "b"
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.strings : Ljava/util/List;
+    PUTSTATIC Test.strings Ljava/util/List;
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    ICONST_0
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    ICONST_0 0
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.bools : Ljava/util/List;
-    GETSTATIC Test.bytes : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.shorts : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.ints : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.longs : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.floats : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.doubles : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.chars : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.strings : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.bools : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.bytes : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.shorts : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.ints : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.longs : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.floats : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.doubles : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.chars : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.strings : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.bools : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    PUTSTATIC Test.bools Ljava/util/List;
+    GETSTATIC Test.bytes Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.shorts Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.ints Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.longs Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.floats Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.doubles Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.chars Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.strings Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.bools Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bytes Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.shorts Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ints Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.longs Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floats Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.doubles Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.chars Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bools Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
 --- OUTPUT ---
 

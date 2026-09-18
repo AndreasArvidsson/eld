@@ -260,85 +260,54 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Operation
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Operation Test Operation
-
-  // access flags 0x19
-  public final static LTest$Operation; operation
-
-  // access flags 0x9
-  public static createOperation(I)LTest$Operation;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Operation
+  inner class Test$Operation flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field operation LTest$Operation; flags [PUBLIC, STATIC, FINAL]
+  method createOperation(I)LTest$Operation; flags [PUBLIC, STATIC]
     NEW Test$$object0
     DUP
-    ILOAD 0
-    INVOKESPECIAL Test$$object0.<init> (I)V
+    ILOAD_0 0
+    INVOKESPECIAL Test$$object0.<init>(I)V
     ARETURN
-    MAXSTACK = 3
-    MAXLOCALS = 1
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
     LDC 10
-    INVOKESTATIC Test.createOperation (I)LTest$Operation;
-    PUTSTATIC Test.operation : LTest$Operation;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.operation : LTest$Operation;
+    INVOKESTATIC Test.createOperation(I)LTest$Operation;
+    PUTSTATIC Test.operation LTest$Operation;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.operation LTest$Operation;
     LDC 5
-    INVOKEINTERFACE Test$Operation.apply (I)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEINTERFACE Test$Operation.apply(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Operation {
+class Test$Operation extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Operation flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method apply(I)I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Operation Test Operation
-
-  // access flags 0x401
-  public abstract apply(I)I
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Operation {
-
-  NESTHOST Test
-
-  // access flags 0x1012
-  private final synthetic I $capture0
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.$capture0 : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Operation
+  nest host Test
+  field $capture0 I flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.$capture0 I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public apply(I)I
-    ILOAD 1
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : I
+    max stack 2 max locals 2
+  method apply(I)I flags [PUBLIC]
+    ILOAD_1 1
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 I
     IADD
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

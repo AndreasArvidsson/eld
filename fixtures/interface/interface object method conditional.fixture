@@ -341,94 +341,65 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Calculator
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Calculator Test Calculator
-
-  // access flags 0x19
-  public final static LTest$Calculator; calculator
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Calculator
+  inner class Test$Calculator flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field calculator LTest$Calculator; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$$object0
     DUP
-    INVOKESPECIAL Test$$object0.<init> ()V
-    PUTSTATIC Test.calculator : LTest$Calculator;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.calculator : LTest$Calculator;
+    INVOKESPECIAL Test$$object0.<init>()V
+    PUTSTATIC Test.calculator LTest$Calculator;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calculator LTest$Calculator;
     LDC 16
-    INVOKEINTERFACE Test$Calculator.calculate (I)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.calculator : LTest$Calculator;
+    INVOKEINTERFACE Test$Calculator.calculate(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calculator LTest$Calculator;
     LDC 8
-    INVOKEINTERFACE Test$Calculator.calculate (I)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEINTERFACE Test$Calculator.calculate(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Calculator {
+class Test$Calculator extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Calculator flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method calculate(I)I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Calculator Test Calculator
-
-  // access flags 0x401
-  public abstract calculate(I)I
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Calculator {
-
-  NESTHOST Test
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Calculator
+  nest host Test
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public calculate(I)I
-    ILOAD 1
-    ISTORE 2
-    ILOAD 2
+    max stack 1 max locals 1
+  method calculate(I)I flags [PUBLIC]
+    ILOAD_1 1
+    ISTORE_2 2
+    ILOAD_2 2
     LDC 10
     IF_ICMPGT L0
-    ICONST_0
+    ICONST_0 0
     GOTO L1
-   L0
-   FRAME APPEND [I]
-    ICONST_1
-   L1
-   FRAME SAME1 I
+   L0:
+    ICONST_1 1
+   L1:
     IFEQ L2
-    ILOAD 2
+    ILOAD_2 2
     LDC 1
     ISUB
     DUP
-    ISTORE 2
+    ISTORE_2 2
     POP
     GOTO L2
-   L2
-   FRAME SAME
-    ILOAD 2
+   L2:
+    ILOAD_2 2
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-}
+    max stack 2 max locals 3
 
 --- OUTPUT ---
 

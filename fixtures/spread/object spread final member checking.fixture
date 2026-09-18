@@ -317,183 +317,121 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$$object1
-  NESTMEMBER Test$$object2
-  NESTMEMBER Test$Number
-  NESTMEMBER Test$Text
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Number Test Number
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Text Test Text
-
-  // access flags 0x19
-  public final static LTest$Text; text
-
-  // access flags 0x19
-  public final static LTest$Number; number
-
-  // access flags 0x19
-  public final static LTest$Number; previous
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$$object1
+  nest member Test$$object2
+  nest member Test$Number
+  nest member Test$Text
+  inner class Test$Number flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Text flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field text LTest$Text; flags [PUBLIC, STATIC, FINAL]
+  field number LTest$Number; flags [PUBLIC, STATIC, FINAL]
+  field previous LTest$Number; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$$object0
     DUP
     LDC "text"
-    INVOKESPECIAL Test$$object0.<init> (Ljava/lang/String;)V
-    PUTSTATIC Test.text : LTest$Text;
-    GETSTATIC Test.text : LTest$Text;
-    ASTORE 0
-    ALOAD 0
-    INVOKEINTERFACE Test$Text.$get$value ()Ljava/lang/String; (itf)
-    ASTORE 1
+    INVOKESPECIAL Test$$object0.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.text LTest$Text;
+    GETSTATIC Test.text LTest$Text;
+    ASTORE_0 0
+    ALOAD_0 0
+    INVOKEINTERFACE Test$Text.$get$value()Ljava/lang/String;
+    ASTORE_1 1
     LDC 5
-    ISTORE 2
+    ISTORE_2 2
     NEW Test$$object1
     DUP
-    ILOAD 2
-    INVOKESPECIAL Test$$object1.<init> (I)V
-    PUTSTATIC Test.number : LTest$Number;
+    ILOAD_2 2
+    INVOKESPECIAL Test$$object1.<init>(I)V
+    PUTSTATIC Test.number LTest$Number;
     LDC "overridden"
-    ASTORE 3
-    GETSTATIC Test.number : LTest$Number;
+    ASTORE_3 3
+    GETSTATIC Test.number LTest$Number;
     ASTORE 4
     ALOAD 4
-    INVOKEINTERFACE Test$Number.$get$value ()I (itf)
+    INVOKEINTERFACE Test$Number.$get$value()I
     ISTORE 5
     NEW Test$$object2
     DUP
     ILOAD 5
-    INVOKESPECIAL Test$$object2.<init> (I)V
-    PUTSTATIC Test.previous : LTest$Number;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.number : LTest$Number;
-    INVOKEINTERFACE Test$Number.$get$value ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.previous : LTest$Number;
-    INVOKEINTERFACE Test$Number.$get$value ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$$object2.<init>(I)V
+    PUTSTATIC Test.previous LTest$Number;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.number LTest$Number;
+    INVOKEINTERFACE Test$Number.$get$value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.previous LTest$Number;
+    INVOKEINTERFACE Test$Number.$get$value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 6
-}
+    max stack 3 max locals 6
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Number {
+class Test$Number extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Number flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$value()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Number Test Number
+class Test$Text extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Text flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$value()Ljava/lang/String; flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  // access flags 0x1401
-  public abstract synthetic $get$value()I
-}
-
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Text {
-
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Text Test Text
-
-  // access flags 0x1401
-  public abstract synthetic $get$value()Ljava/lang/String;
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Text {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final Ljava/lang/String; value
-
-  // access flags 0x1001
-  public synthetic $get$value()Ljava/lang/String;
-    ALOAD 0
-    GETFIELD Test$$object0.value : Ljava/lang/String;
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Text
+  nest host Test
+  field value Ljava/lang/String; flags [PRIVATE, FINAL]
+  method $get$value()Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.value Ljava/lang/String;
     ARETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(Ljava/lang/String;)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ALOAD 1
-    PUTFIELD Test$$object0.value : Ljava/lang/String;
+    max stack 1 max locals 1
+  method <init>(Ljava/lang/String;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$$object0.value Ljava/lang/String;
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object1 implements Test$Number {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final I value
-
-  // access flags 0x1001
-  public synthetic $get$value()I
-    ALOAD 0
-    GETFIELD Test$$object1.value : I
+class Test$$object1 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Number
+  nest host Test
+  field value I flags [PRIVATE, FINAL]
+  method $get$value()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object1.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object1.value : I
+    max stack 1 max locals 1
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object1.value I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object2 implements Test$Number {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final I value
-
-  // access flags 0x1001
-  public synthetic $get$value()I
-    ALOAD 0
-    GETFIELD Test$$object2.value : I
+class Test$$object2 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Number
+  nest host Test
+  field value I flags [PRIVATE, FINAL]
+  method $get$value()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object2.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object2.value : I
+    max stack 1 max locals 1
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object2.value I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

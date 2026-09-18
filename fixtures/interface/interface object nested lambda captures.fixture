@@ -389,136 +389,99 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Reader
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-
-  // access flags 0x19
-  public final static LTest$Reader; reader
-
-  // access flags 0x9
-  public static make(I)LTest$Reader;
-    ICONST_1
-    NEWARRAY T_INT
-    ASTORE 1
-    ILOAD 0
-    ISTORE 2
-    ALOAD 1
-    ICONST_0
-    ILOAD 2
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Reader
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field reader LTest$Reader; flags [PUBLIC, STATIC, FINAL]
+  method make(I)LTest$Reader; flags [PUBLIC, STATIC]
+    ICONST_1 1
+    NEWARRAY INT
+    ASTORE_1 1
+    ILOAD_0 0
+    ISTORE_2 2
+    ALOAD_1 1
+    ICONST_0 0
+    ILOAD_2 2
     IASTORE
     LDC 2
-    ISTORE 3
+    ISTORE_3 3
     NEW Test$$object0
     DUP
-    ALOAD 1
-    ILOAD 3
-    INVOKESPECIAL Test$$object0.<init> ([II)V
+    ALOAD_1 1
+    ILOAD_3 3
+    INVOKESPECIAL Test$$object0.<init>([II)V
     ARETURN
-    MAXSTACK = 4
-    MAXLOCALS = 4
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 4 max locals 4
+  method <clinit>()V flags [STATIC]
     LDC 13
-    INVOKESTATIC Test.make (I)LTest$Reader;
-    PUTSTATIC Test.reader : LTest$Reader;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.reader : LTest$Reader;
-    INVOKEINTERFACE Test$Reader.read ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.reader : LTest$Reader;
-    INVOKEINTERFACE Test$Reader.read ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESTATIC Test.make(I)LTest$Reader;
+    PUTSTATIC Test.reader LTest$Reader;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Reader {
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-
-  // access flags 0x401
-  public abstract read()I
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Reader {
-
-  NESTHOST Test
-
-  // access flags 0x1012
-  private final synthetic [I $capture0
-
-  // access flags 0x1012
-  private final synthetic I $capture1
-
-  // access flags 0x1
-  public <init>([II)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ALOAD 1
-    PUTFIELD Test$$object0.$capture0 : [I
-    ALOAD 0
-    ILOAD 2
-    PUTFIELD Test$$object0.$capture1 : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Reader
+  nest host Test
+  field $capture0 [I flags [PRIVATE, FINAL, SYNTHETIC]
+  field $capture1 I flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>([II)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$$object0.$capture0 [I
+    ALOAD_0 0
+    ILOAD_2 2
+    PUTFIELD Test$$object0.$capture1 I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
+    max stack 2 max locals 3
+  method $lambda0()I flags [PRIVATE, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
+    IALOAD
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture1 I
+    IADD
+    IRETURN
+    max stack 2 max locals 1
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
     IALOAD
     DUP
-    ICONST_1
+    ICONST_1 1
     IADD
-    ISTORE 1
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
-    ILOAD 1
+    ISTORE_1 1
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
+    ILOAD_1 1
     IASTORE
     POP
-    // handle kind 0x5 : INVOKEVIRTUAL
-    LDC Test$$object0.$lambda0()I
-    ALOAD 0
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    ASTORE 2
-    ALOAD 2
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
+    LDC MethodHandleDesc[VIRTUAL/Test$$object0::$lambda0(Test$$object0)int]
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    ASTORE_2 2
+    ALOAD_2 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
     IRETURN
-    MAXSTACK = 4
-    MAXLOCALS = 3
-
-  // access flags 0x1002
-  private synthetic $lambda0()I
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
-    IALOAD
-    ALOAD 0
-    GETFIELD Test$$object0.$capture1 : I
-    IADD
-    IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-}
+    max stack 4 max locals 3
 
 --- OUTPUT ---
 

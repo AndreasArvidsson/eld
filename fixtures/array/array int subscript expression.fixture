@@ -144,20 +144,13 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; values
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 3
-    NEWARRAY T_INT
+    NEWARRAY INT
     DUP
     LDC 0
     LDC 1
@@ -170,22 +163,20 @@ public final class Test {
     LDC 2
     LDC 3
     IASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
-    PUTSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get (I)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC -1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get (I)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 6
-    MAXLOCALS = 0
-}
+    max stack 6 max locals 0
 
 --- OUTPUT ---
 

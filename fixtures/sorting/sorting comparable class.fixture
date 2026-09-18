@@ -661,124 +661,97 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Person
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x19
-  // signature Ljava/util/ArrayList<LTest$Person;>;
-  // declaration: people extends java.util.ArrayList<Test$Person>
-  public final static Ljava/util/ArrayList; people
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Person
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field people Ljava/util/ArrayList; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/ArrayList<LTest$Person;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
-    INVOKESPECIAL java/util/ArrayList.<init> ()V
-    PUTSTATIC Test.people : Ljava/util/ArrayList;
-    GETSTATIC Test.people : Ljava/util/ArrayList;
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.people Ljava/util/ArrayList;
+    GETSTATIC Test.people Ljava/util/ArrayList;
     NEW Test$Person
     DUP
     LDC 30
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC Test.people : Ljava/util/ArrayList;
+    GETSTATIC Test.people Ljava/util/ArrayList;
     NEW Test$Person
     DUP
     LDC 10
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC Test.people : Ljava/util/ArrayList;
+    GETSTATIC Test.people Ljava/util/ArrayList;
     NEW Test$Person
     DUP
     LDC 20
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC Test.people : Ljava/util/ArrayList;
-    ACONST_NULL
-    INVOKEVIRTUAL java/util/ArrayList.sort (Ljava/util/Comparator;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/ArrayList;
+    GETSTATIC Test.people Ljava/util/ArrayList;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEVIRTUAL java/util/ArrayList.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/ArrayList;
     LDC 0
-    INVOKEVIRTUAL java/util/ArrayList.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL java/util/ArrayList.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/ArrayList;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/ArrayList;
     LDC 1
-    INVOKEVIRTUAL java/util/ArrayList.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL java/util/ArrayList.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/ArrayList;
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/ArrayList;
     LDC 2
-    INVOKEVIRTUAL java/util/ArrayList.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL java/util/ArrayList.get(I)Ljava/lang/Object;
     CHECKCAST Test$Person
-    GETFIELD Test$Person.age : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETFIELD Test$Person.age I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-// signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Person;>;
-// declaration: Test$Person implements java.lang.Comparable<Test$Person>
-public class Test$Person implements java/lang/Comparable {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x11
-  public final I age
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
+class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements java/lang/Comparable
+  signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Person;>;
+  nest host Test
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field age I flags [PUBLIC, FINAL]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
     DUP_X1
-    PUTFIELD Test$Person.age : I
+    PUTFIELD Test$Person.age I
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public compareTo(LTest$Person;)I
-    ALOAD 0
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ALOAD 1
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    max stack 3 max locals 2
+  method compareTo(LTest$Person;)I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ALOAD_1 1
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1041
-  public synthetic bridge compareTo(Ljava/lang/Object;)I
-    ALOAD 0
-    ALOAD 1
+    max stack 2 max locals 2
+  method compareTo(Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
     CHECKCAST Test$Person
-    INVOKEVIRTUAL Test$Person.compareTo (LTest$Person;)I
+    INVOKEVIRTUAL Test$Person.compareTo(LTest$Person;)I
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

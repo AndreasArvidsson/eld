@@ -508,64 +508,47 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static I calls
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; source
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; result
-
-  // access flags 0x9
-  public static spread()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    GETSTATIC Test.calls : I
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field calls I flags [PUBLIC, STATIC]
+  field source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field result Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  method spread()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC]
+    GETSTATIC Test.calls I
     LDC 10
     IMUL
     LDC 2
     IADD
     DUP
-    PUTSTATIC Test.calls : I
+    PUTSTATIC Test.calls I
     POP
-    GETSTATIC Test.source : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     ARETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-
-  // access flags 0x9
-  public static value(I)I
-    GETSTATIC Test.calls : I
+    max stack 2 max locals 0
+  method value(I)I flags [PUBLIC, STATIC]
+    GETSTATIC Test.calls I
     LDC 10
     IMUL
-    ILOAD 0
+    ILOAD_0 0
     IADD
     DUP
-    PUTSTATIC Test.calls : I
+    PUTSTATIC Test.calls I
     POP
-    GETSTATIC Test.source : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 0
-    ILOAD 0
+    ILOAD_0 0
     DUP_X2
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set (II)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
     POP
-    ILOAD 0
+    ILOAD_0 0
     IRETURN
-    MAXSTACK = 4
-    MAXLOCALS = 1
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 4 max locals 1
+  method <clinit>()V flags [STATIC]
     LDC 0
-    PUTSTATIC Test.calls : I
+    PUTSTATIC Test.calls I
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 2
-    NEWARRAY T_INT
+    NEWARRAY INT
     DUP
     LDC 0
     LDC 1
@@ -574,68 +557,68 @@ public final class Test {
     LDC 1
     LDC 2
     IASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
-    PUTSTATIC Test.source : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    ICONST_0
-    ISTORE 0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    ICONST_0 0
+    ISTORE_0 0
     LDC 1
-    INVOKESTATIC Test.value (I)I
-    ISTORE 1
-    ILOAD 0
-    ICONST_1
+    INVOKESTATIC Test.value(I)I
+    ISTORE_1 1
+    ILOAD_0 0
+    ICONST_1 1
     IADD
-    ISTORE 0
-    INVOKESTATIC Test.spread ()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy ()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    ASTORE 2
-    ALOAD 2
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size ()I
-    ISTORE 3
-    ILOAD 0
-    ILOAD 3
+    ISTORE_0 0
+    INVOKESTATIC Test.spread()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    ASTORE_2 2
+    ALOAD_2 2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    ISTORE_3 3
+    ILOAD_0 0
+    ILOAD_3 3
     IADD
-    ISTORE 0
+    ISTORE_0 0
     LDC 3
-    INVOKESTATIC Test.value (I)I
+    INVOKESTATIC Test.value(I)I
     ISTORE 4
-    ILOAD 0
-    ICONST_1
+    ILOAD_0 0
+    ICONST_1 1
     IADD
-    ISTORE 0
-    INVOKESTATIC Test.spread ()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy ()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    ISTORE_0 0
+    INVOKESTATIC Test.spread()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     ASTORE 5
     ALOAD 5
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
     ISTORE 6
-    ILOAD 0
+    ILOAD_0 0
     ILOAD 6
     IADD
-    ISTORE 0
+    ISTORE_0 0
     LDC 4
-    INVOKESTATIC Test.value (I)I
+    INVOKESTATIC Test.value(I)I
     ISTORE 7
-    ILOAD 0
-    ICONST_1
+    ILOAD_0 0
+    ICONST_1 1
     IADD
-    ISTORE 0
-    ILOAD 0
-    NEWARRAY T_INT
+    ISTORE_0 0
+    ILOAD_0 0
+    NEWARRAY INT
     ASTORE 8
-    ICONST_0
+    ICONST_0 0
     ISTORE 9
     ALOAD 8
     ILOAD 9
-    ILOAD 1
+    ILOAD_1 1
     IASTORE
     IINC 9 1
-    ALOAD 2
+    ALOAD_2 2
     ALOAD 8
     ILOAD 9
-    ILOAD 3
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copyTo ([III)V
+    ILOAD_3 3
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copyTo([III)V
     ILOAD 9
-    ILOAD 3
+    ILOAD_3 3
     IADD
     ISTORE 9
     ALOAD 8
@@ -647,7 +630,7 @@ public final class Test {
     ALOAD 8
     ILOAD 9
     ILOAD 6
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copyTo ([III)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copyTo([III)V
     ILOAD 9
     ILOAD 6
     IADD
@@ -660,21 +643,19 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     ALOAD 8
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
-    PUTSTATIC Test.result : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.calls : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.result : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.source : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.result Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calls I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.result Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 6
-    MAXLOCALS = 10
-}
+    max stack 6 max locals 10
 
 --- OUTPUT ---
 

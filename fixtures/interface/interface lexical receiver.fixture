@@ -365,152 +365,97 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$$object1
-  NESTMEMBER Test$Reader
-  NESTMEMBER Test$Box
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-  // access flags 0x9
-  public static INNERCLASS Test$Box Test Box
-
-  // access flags 0x19
-  public final static LTest$Box; box
-
-  // access flags 0x19
-  public final static LTest$Reader; reader
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$$object1
+  nest member Test$Reader
+  nest member Test$Box
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field box LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field reader LTest$Reader; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Box
     DUP
-    INVOKESPECIAL Test$Box.<init> ()V
-    PUTSTATIC Test.box : LTest$Box;
-    GETSTATIC Test.box : LTest$Box;
-    INVOKEVIRTUAL Test$Box.make ()LTest$Reader;
-    PUTSTATIC Test.reader : LTest$Reader;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.reader : LTest$Reader;
-    INVOKEINTERFACE Test$Reader.read ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.box LTest$Box;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEVIRTUAL Test$Box.make()LTest$Reader;
+    PUTSTATIC Test.reader LTest$Reader;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Reader {
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-
-  // access flags 0x401
-  public abstract read()I
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Box {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Box Test Box
-
-  // access flags 0x2
-  private I value
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field value I flags [PRIVATE]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC 9
-    PUTFIELD Test$Box.value : I
+    PUTFIELD Test$Box.value I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public make()LTest$Reader;
+    max stack 2 max locals 1
+  method make()LTest$Reader; flags [PUBLIC]
     NEW Test$$object0
     DUP
-    ALOAD 0
-    INVOKESPECIAL Test$$object0.<init> (LTest$Box;)V
+    ALOAD_0 0
+    INVOKESPECIAL Test$$object0.<init>(LTest$Box;)V
     ARETURN
-    MAXSTACK = 3
-    MAXLOCALS = 1
-}
+    max stack 3 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object1 implements Test$Reader {
-
-  NESTHOST Test
-
-  // access flags 0x1012
-  private final synthetic LTest$Box; $receiver
-
-  // access flags 0x1
-  public <init>(LTest$Box;)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ALOAD 1
-    PUTFIELD Test$$object1.$receiver : LTest$Box;
+class Test$$object1 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Reader
+  nest host Test
+  field $receiver LTest$Box; flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>(LTest$Box;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$$object1.$receiver LTest$Box;
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$$object1.$receiver : LTest$Box;
-    GETFIELD Test$Box.value : I
+    max stack 2 max locals 2
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$$object1.$receiver LTest$Box;
+    GETFIELD Test$Box.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Reader {
-
-  NESTHOST Test
-
-  // access flags 0x1012
-  private final synthetic LTest$Box; $receiver
-
-  // access flags 0x1
-  public <init>(LTest$Box;)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ALOAD 1
-    PUTFIELD Test$$object0.$receiver : LTest$Box;
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Reader
+  nest host Test
+  field $receiver LTest$Box; flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>(LTest$Box;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$$object0.$receiver LTest$Box;
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public read()I
+    max stack 2 max locals 2
+  method read()I flags [PUBLIC]
     NEW Test$$object1
     DUP
-    ALOAD 0
-    GETFIELD Test$$object0.$receiver : LTest$Box;
-    INVOKESPECIAL Test$$object1.<init> (LTest$Box;)V
-    ASTORE 1
-    ALOAD 1
-    INVOKEINTERFACE Test$Reader.read ()I (itf)
+    ALOAD_0 0
+    GETFIELD Test$$object0.$receiver LTest$Box;
+    INVOKESPECIAL Test$$object1.<init>(LTest$Box;)V
+    ASTORE_1 1
+    ALOAD_1 1
+    INVOKEINTERFACE Test$Reader.read()I
     IRETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 2
 
 --- OUTPUT ---
 

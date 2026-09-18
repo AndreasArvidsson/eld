@@ -609,167 +609,130 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Direction
-  // access flags 0x9
-  public static INNERCLASS Test$Direction Test Direction
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Integer;>;
-  // declaration: values extends java.util.List<java.lang.Integer>
-  public final static Ljava/util/List; values
-
-  // access flags 0x9
-  // signature ()Ljava/util/Comparator<Ljava/lang/Integer;>;
-  // declaration: java.util.Comparator<java.lang.Integer> comparator()
-  public static comparator()Ljava/util/Comparator;
-    ICONST_1
-    NEWARRAY T_INT
-    ASTORE 0
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Direction
+  inner class Test$Direction flags [PUBLIC, STATIC]
+  field values Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  method $lambda0([III)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ALOAD_0 0
+    ICONST_0 0
+    IALOAD
+    ILOAD_1 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ILOAD_2 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    IMUL
+    IRETURN
+    max stack 3 max locals 3
+  method comparator()Ljava/util/Comparator; flags [PUBLIC, STATIC]
+    signature ()Ljava/util/Comparator<Ljava/lang/Integer;>;
+    ICONST_1 1
+    NEWARRAY INT
+    ASTORE_0 0
     LDC 1
-    ISTORE 1
-    ALOAD 0
-    ICONST_0
-    ILOAD 1
+    ISTORE_1 1
+    ALOAD_0 0
+    ICONST_0 0
+    ILOAD_1 1
     IASTORE
-    LDC Ljava/util/Comparator;.class
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda0([III)I
-    ICONST_0
+    LDC ClassOrInterfaceDesc[Comparator]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int[],int,int)int]
+    ICONST_0 0
     LDC 1
     ANEWARRAY java/lang/Object
     DUP
     LDC 0
-    ALOAD 0
+    ALOAD_0 0
     AASTORE
-    INVOKESTATIC java/lang/invoke/MethodHandles.insertArguments (Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    INVOKESTATIC java/lang/invoke/MethodHandles.insertArguments(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
     CHECKCAST java/util/Comparator
-    ASTORE 2
+    ASTORE_2 2
     LDC -1
     DUP
-    ISTORE 3
-    ALOAD 0
-    ICONST_0
-    ILOAD 3
+    ISTORE_3 3
+    ALOAD_0 0
+    ICONST_0 0
+    ILOAD_3 3
     IASTORE
     POP
-    ALOAD 2
+    ALOAD_2 2
     ARETURN
-    MAXSTACK = 7
-    MAXLOCALS = 4
-
-  // access flags 0x100A
-  private static synthetic $lambda0([III)I
-    ALOAD 0
-    ICONST_0
-    IALOAD
-    ILOAD 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ILOAD 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
-    IMUL
-    IRETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 7 max locals 4
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.values : Ljava/util/List;
-    GETSTATIC Test.values : Ljava/util/List;
-    INVOKESTATIC Test.comparator ()Ljava/util/Comparator;
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC Test.values : Ljava/util/List;
+    PUTSTATIC Test.values Ljava/util/List;
+    GETSTATIC Test.values Ljava/util/List;
+    INVOKESTATIC Test.comparator()Ljava/util/Comparator;
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.values Ljava/util/List;
     NEW Test$Direction
     DUP
-    INVOKESPECIAL Test$Direction.<init> ()V
-    INVOKEVIRTUAL Test$Direction.comparator ()Ljava/util/Comparator;
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKESPECIAL Test$Direction.<init>()V
+    INVOKEVIRTUAL Test$Direction.comparator()Ljava/util/Comparator;
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Direction {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Direction Test Direction
-
-  // access flags 0x12
-  private final I multiplier
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Direction extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Direction flags [PUBLIC, STATIC]
+  field multiplier I flags [PRIVATE, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC 1
-    PUTFIELD Test$Direction.multiplier : I
+    PUTFIELD Test$Direction.multiplier I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  // signature ()Ljava/util/Comparator<Ljava/lang/Integer;>;
-  // declaration: java.util.Comparator<java.lang.Integer> comparator()
-  public comparator()Ljava/util/Comparator;
-    LDC Ljava/util/Comparator;.class
-    // handle kind 0x5 : INVOKEVIRTUAL
-    LDC Test$Direction.$lambda1(II)I
-    ALOAD 0
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
-    CHECKCAST java/util/Comparator
-    ARETURN
-    MAXSTACK = 3
-    MAXLOCALS = 1
-
-  // access flags 0x1002
-  private synthetic $lambda1(II)I
-    ALOAD 0
-    GETFIELD Test$Direction.multiplier : I
-    ILOAD 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ILOAD 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    max stack 2 max locals 1
+  method $lambda1(II)I flags [PRIVATE, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Direction.multiplier I
+    ILOAD_1 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ILOAD_2 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
     IMUL
     IRETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-}
+    max stack 3 max locals 3
+  method comparator()Ljava/util/Comparator; flags [PUBLIC]
+    signature ()Ljava/util/Comparator<Ljava/lang/Integer;>;
+    LDC ClassOrInterfaceDesc[Comparator]
+    LDC MethodHandleDesc[VIRTUAL/Test$Direction::$lambda1(Test$Direction,int,int)int]
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    CHECKCAST java/util/Comparator
+    ARETURN
+    max stack 3 max locals 1
 
 --- OUTPUT ---
 

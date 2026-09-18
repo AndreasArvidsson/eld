@@ -13,8 +13,9 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
+import java.lang.classfile.ClassFile;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import picocli.CommandLine;
 
 public final class Main {
@@ -165,37 +166,26 @@ public final class Main {
     }
 
     private static byte[] launcher() {
-        final ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        writer.visit(
-            Opcodes.V21,
-            Opcodes.ACC_PUBLIC,
-            "Launcher",
-            null,
-            "java/lang/Object",
-            null
-        );
-        final var method =
-            writer.visitMethod(
-                Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+        return ClassFile.of().build(ClassDesc.of("Launcher"), writer -> {
+            writer.withVersion(ClassFile.JAVA_25_VERSION, 0);
+            writer.withFlags(ClassFile.ACC_PUBLIC);
+            writer.withMethodBody(
                 "main",
-                "([Ljava/lang/String;)V",
-                null,
-                null
+                MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"),
+                ClassFile.ACC_PUBLIC | ClassFile.ACC_STATIC,
+                method -> {
+                    method.ldc("Test");
+                    method.invokestatic(
+                        ClassDesc.of("java.lang.Class"),
+                        "forName",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/String;)Ljava/lang/Class;"
+                        )
+                    );
+                    method.pop();
+                    method.return_();
+                }
             );
-        method.visitCode();
-        method.visitLdcInsn("Test");
-        method.visitMethodInsn(
-            Opcodes.INVOKESTATIC,
-            "java/lang/Class",
-            "forName",
-            "(Ljava/lang/String;)Ljava/lang/Class;",
-            false
-        );
-        method.visitInsn(Opcodes.POP);
-        method.visitInsn(Opcodes.RETURN);
-        method.visitMaxs(0, 0);
-        method.visitEnd();
-        writer.visitEnd();
-        return writer.toByteArray();
+        });
     }
 }

@@ -308,130 +308,81 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Value
-  NESTMEMBER Test$Flag
-  NESTMEMBER Test$Combined
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Value Test Value
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Flag Test Flag
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Combined Test Combined
-
-  // access flags 0x19
-  public final static LTest$Combined; combined
-
-  // access flags 0x19
-  public final static LTest$Value; value
-
-  // access flags 0x19
-  public final static LTest$Flag; flag
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Value
+  nest member Test$Flag
+  nest member Test$Combined
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Flag flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Combined flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field combined LTest$Combined; flags [PUBLIC, STATIC, FINAL]
+  field value LTest$Value; flags [PUBLIC, STATIC, FINAL]
+  field flag LTest$Flag; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$$object0
     DUP
     LDC 7
-    ICONST_1
-    INVOKESPECIAL Test$$object0.<init> (IZ)V
-    PUTSTATIC Test.combined : LTest$Combined;
-    GETSTATIC Test.combined : LTest$Combined;
-    PUTSTATIC Test.value : LTest$Value;
-    GETSTATIC Test.combined : LTest$Combined;
-    PUTSTATIC Test.flag : LTest$Flag;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : LTest$Value;
-    INVOKEINTERFACE Test$Value.$get$value ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.flag : LTest$Flag;
-    INVOKEINTERFACE Test$Flag.$get$flag ()Z (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    ICONST_1 1
+    INVOKESPECIAL Test$$object0.<init>(IZ)V
+    PUTSTATIC Test.combined LTest$Combined;
+    GETSTATIC Test.combined LTest$Combined;
+    PUTSTATIC Test.value LTest$Value;
+    GETSTATIC Test.combined LTest$Combined;
+    PUTSTATIC Test.flag LTest$Flag;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.flag LTest$Flag;
+    INVOKEINTERFACE Test$Flag.$get$flag()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Value {
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$value()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Value Test Value
+class Test$Flag extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Flag flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$flag()Z flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  // access flags 0x1401
-  public abstract synthetic $get$value()I
-}
+class Test$Combined extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  implements Test$Value
+  implements Test$Flag
+  nest host Test
+  inner class Test$Combined flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Flag {
-
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Flag Test Flag
-
-  // access flags 0x1401
-  public abstract synthetic $get$flag()Z
-}
-
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Combined implements Test$Value Test$Flag {
-
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Combined Test Combined
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Combined {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final I value
-
-  // access flags 0x12
-  private final Z flag
-
-  // access flags 0x1001
-  public synthetic $get$value()I
-    ALOAD 0
-    GETFIELD Test$$object0.value : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Combined
+  nest host Test
+  field value I flags [PRIVATE, FINAL]
+  field flag Z flags [PRIVATE, FINAL]
+  method $get$value()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1001
-  public synthetic $get$flag()Z
-    ALOAD 0
-    GETFIELD Test$$object0.flag : Z
+    max stack 1 max locals 1
+  method $get$flag()Z flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.flag Z
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(IZ)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.value : I
-    ALOAD 0
-    ILOAD 2
-    PUTFIELD Test$$object0.flag : Z
+    max stack 1 max locals 1
+  method <init>(IZ)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.value I
+    ALOAD_0 0
+    ILOAD_2 2
+    PUTFIELD Test$$object0.flag Z
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-}
+    max stack 2 max locals 3
 
 --- OUTPUT ---
 

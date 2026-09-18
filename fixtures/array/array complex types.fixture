@@ -152,19 +152,10 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; nested
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; mixed
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field nested Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field mixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
     LDC 2
@@ -174,7 +165,7 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 2
-    NEWARRAY T_INT
+    NEWARRAY INT
     DUP
     LDC 0
     LDC 1
@@ -183,14 +174,14 @@ public final class Test {
     LDC 1
     LDC 2
     IASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
     AASTORE
     DUP
     LDC 1
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 2
-    NEWARRAY T_INT
+    NEWARRAY INT
     DUP
     LDC 0
     LDC 3
@@ -199,10 +190,10 @@ public final class Test {
     LDC 1
     LDC 4
     IASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
-    PUTSTATIC Test.nested : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.nested Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
     LDC 4
@@ -210,7 +201,7 @@ public final class Test {
     DUP
     LDC 0
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     AASTORE
     DUP
     LDC 1
@@ -218,19 +209,17 @@ public final class Test {
     AASTORE
     DUP
     LDC 2
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
     DUP
     LDC 3
-    ACONST_NULL
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
-    PUTSTATIC Test.mixed : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.mixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     RETURN
-    MAXSTACK = 11
-    MAXLOCALS = 0
-}
+    max stack 11 max locals 0
 
 --- OUTPUT ---
 

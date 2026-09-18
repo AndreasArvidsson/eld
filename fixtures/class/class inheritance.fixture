@@ -486,143 +486,97 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Base
-  NESTMEMBER Test$Child
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x19
-  public final static LTest$Base; instance
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field instance LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Child
     DUP
-    INVOKESPECIAL Test$Child.<init> ()V
-    PUTSTATIC Test.instance : LTest$Base;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.instance : LTest$Base;
-    INVOKEVIRTUAL Test$Base.read ()I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.instance LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.instance LTest$Base;
+    INVOKEVIRTUAL Test$Base.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Child
     DUP
-    INVOKESPECIAL Test$Child.<init> ()V
-    INVOKEVIRTUAL Test$Child.reference ()Ljava/lang/invoke/MethodHandle;
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$Child.<init>()V
+    INVOKEVIRTUAL Test$Child.reference()Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-
-  // access flags 0x4
-  protected I value
-
-  // access flags 0x4
-  protected <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  field value I flags [PROTECTED]
+  method <init>(I)V flags [PROTECTED]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
     DUP_X1
-    PUTFIELD Test$Base.value : I
+    PUTFIELD Test$Base.value I
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-
-  // access flags 0x1004
-  protected synthetic <init>(I[Z)V
-    ALOAD 2
+    max stack 3 max locals 2
+  method <init>(I[Z)V flags [PROTECTED, SYNTHETIC]
+    ALOAD_2 2
     LDC 0
     BALOAD
     IFEQ L0
     LDC 4
-    ISTORE 1
-   L0
-   FRAME SAME
-    ALOAD 0
-    ILOAD 1
-    INVOKESPECIAL Test$Base.<init> (I)V
+    ISTORE_1 1
+   L0:
+    ALOAD_0 0
+    ILOAD_1 1
+    INVOKESPECIAL Test$Base.<init>(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$Base.value : I
+    max stack 2 max locals 3
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Base.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    ICONST_0
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    ICONST_0 0
     LDC 1
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 0
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESPECIAL Test$Base.<init> (I[Z)V
+    INVOKESPECIAL Test$Base.<init>(I[Z)V
     RETURN
-    MAXSTACK = 6
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$Base.value : I
+    max stack 6 max locals 1
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Base.value I
     LDC 2
     IADD
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public reference()Ljava/lang/invoke/MethodHandle;
-    // handle kind 0x5 : INVOKEVIRTUAL
-    LDC Test$Child.$lambda0()I
-    ALOAD 0
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    ARETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1002
-  private synthetic $lambda0()I
-    ALOAD 0
-    INVOKEVIRTUAL Test$Child.read ()I
+    max stack 2 max locals 1
+  method $lambda0()I flags [PRIVATE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Child.read()I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
+  method reference()Ljava/lang/invoke/MethodHandle; flags [PUBLIC]
+    LDC MethodHandleDesc[VIRTUAL/Test$Child::$lambda0(Test$Child)int]
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    ARETURN
+    max stack 2 max locals 1
 
 --- OUTPUT ---
 

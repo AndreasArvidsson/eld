@@ -301,114 +301,74 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Data
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Data Test Data
-
-  // access flags 0x9
-  public static I order
-
-  // access flags 0x19
-  public final static LTest$Data; data
-
-  // access flags 0x9
-  public static next()I
-    GETSTATIC Test.order : I
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Data
+  inner class Test$Data flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field order I flags [PUBLIC, STATIC]
+  field data LTest$Data; flags [PUBLIC, STATIC, FINAL]
+  method next()I flags [PUBLIC, STATIC]
+    GETSTATIC Test.order I
     DUP
-    ICONST_1
+    ICONST_1 1
     IADD
-    PUTSTATIC Test.order : I
+    PUTSTATIC Test.order I
     POP
-    GETSTATIC Test.order : I
+    GETSTATIC Test.order I
     IRETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 3 max locals 0
+  method <clinit>()V flags [STATIC]
     LDC 0
-    PUTSTATIC Test.order : I
+    PUTSTATIC Test.order I
     NEW Test$$object0
     DUP
-    INVOKESTATIC Test.next ()I
-    INVOKESTATIC Test.next ()I
-    INVOKESPECIAL Test$$object0.<init> (II)V
-    PUTSTATIC Test.data : LTest$Data;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.data : LTest$Data;
-    INVOKEINTERFACE Test$Data.$get$first ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.data : LTest$Data;
-    INVOKEINTERFACE Test$Data.$get$second ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESTATIC Test.next()I
+    INVOKESTATIC Test.next()I
+    INVOKESPECIAL Test$$object0.<init>(II)V
+    PUTSTATIC Test.data LTest$Data;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.data LTest$Data;
+    INVOKEINTERFACE Test$Data.$get$first()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.data LTest$Data;
+    INVOKEINTERFACE Test$Data.$get$second()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Data {
+class Test$Data extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Data flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$first()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method $get$second()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Data Test Data
-
-  // access flags 0x1401
-  public abstract synthetic $get$first()I
-
-  // access flags 0x1401
-  public abstract synthetic $get$second()I
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Data {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final I second
-
-  // access flags 0x12
-  private final I first
-
-  // access flags 0x1001
-  public synthetic $get$second()I
-    ALOAD 0
-    GETFIELD Test$$object0.second : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Data
+  nest host Test
+  field second I flags [PRIVATE, FINAL]
+  field first I flags [PRIVATE, FINAL]
+  method $get$second()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.second I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1001
-  public synthetic $get$first()I
-    ALOAD 0
-    GETFIELD Test$$object0.first : I
+    max stack 1 max locals 1
+  method $get$first()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.first I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(II)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.second : I
-    ALOAD 0
-    ILOAD 2
-    PUTFIELD Test$$object0.first : I
+    max stack 1 max locals 1
+  method <init>(II)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.second I
+    ALOAD_0 0
+    ILOAD_2 2
+    PUTFIELD Test$$object0.first I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-}
+    max stack 2 max locals 3
 
 --- OUTPUT ---
 

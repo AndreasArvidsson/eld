@@ -1,15 +1,15 @@
 package com.github.andreasarvidsson.eld;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.FieldModel;
+import java.lang.classfile.Opcode;
+import java.lang.classfile.instruction.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.TypeInsnNode;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.parser.Parser;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -223,41 +223,41 @@ class PrimitiveArrayTest {
                 }
                 BytecodeUtil.verify(bytes);
             }
-            final ClassNode node = new ClassNode();
-            new ClassReader(classes.get("Test")).accept(node, 0);
+            final ClassModel node = ClassFile.of().parse(classes.get("Test"));
             boolean emptyConstructor = false;
             boolean backingConstructor = false;
-            for (final var method : node.methods) {
-                for (final var instruction : method.instructions) {
+            for (final var method : node.methods()) {
+                final var instructions = BytecodeUtil.instructions(method);
+                for (final var instruction : instructions) {
                     if (
-                        instruction instanceof MethodInsnNode call
-                            && call.owner.equals(kind.owner)
-                            && call.name.equals("<init>")
+                        instruction instanceof InvokeInstruction call
+                            && call.owner().asInternalName().equals(kind.owner)
+                            && call.name().stringValue().equals("<init>")
                     ) {
-                        emptyConstructor |= call.desc.equals("()V");
+                        emptyConstructor |=
+                            call.type().stringValue().equals("()V");
                         backingConstructor |=
-                            call.desc.equals(kind.constructorDescriptor);
+                            call.type()
+                                .stringValue()
+                                .equals(kind.constructorDescriptor);
                     }
-                    assertNotEquals(
-                        Opcodes.ARRAYLENGTH,
-                        instruction.getOpcode()
-                    );
+                    assertNotEquals(Opcode.ARRAYLENGTH, instruction.opcode());
                     if (
-                        instruction instanceof TypeInsnNode cast
-                            && cast.getOpcode() == Opcodes.CHECKCAST
+                        instruction instanceof TypeCheckInstruction cast
+                            && cast.opcode() == Opcode.CHECKCAST
                     ) {
                         // Only reading the primitive row from a reference-backed nested array needs a cast.
-                        assertEquals(kind.owner, cast.desc);
-                        final MethodInsnNode get =
+                        assertEquals(kind.owner, cast.type().asInternalName());
+                        final InvokeInstruction get =
                             assertInstanceOf(
-                                MethodInsnNode.class,
-                                cast.getPrevious()
+                                InvokeInstruction.class,
+                                instructions.get(instructions.indexOf(cast) - 1)
                             );
                         assertEquals(
                             RuntimeAbi.ArrayKind.OBJECT.owner,
-                            get.owner
+                            get.owner().asInternalName()
                         );
-                        assertEquals("get", get.name);
+                        assertEquals("get", get.name().stringValue());
                     }
 
                 }

@@ -61,25 +61,18 @@ Conversions:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
-    LDC 0.5D
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    LDC2_W 0.5
     DNEG
-    LDC 12.34D
+    LDC2_W 12.34
     DADD
     LDC 10
     I2D
     DSUB
     POP2
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
 --- OUTPUT ---
 

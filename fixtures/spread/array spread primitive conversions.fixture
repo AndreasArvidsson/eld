@@ -861,53 +861,24 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; bytes
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; shorts
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; longs
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; doubles
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; floats
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; floating
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; chars
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; flags
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; copiedBytes
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; copiedShorts
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; copiedFloats
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; boxed
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; flags [PUBLIC, STATIC, FINAL]
+  field shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; flags [PUBLIC, STATIC, FINAL]
+  field longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; flags [PUBLIC, STATIC, FINAL]
+  field doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; flags [PUBLIC, STATIC, FINAL]
+  field floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; flags [PUBLIC, STATIC, FINAL]
+  field floating Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; flags [PUBLIC, STATIC, FINAL]
+  field chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; flags [PUBLIC, STATIC, FINAL]
+  field flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; flags [PUBLIC, STATIC, FINAL]
+  field copiedBytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; flags [PUBLIC, STATIC, FINAL]
+  field copiedShorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; flags [PUBLIC, STATIC, FINAL]
+  field copiedFloats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; flags [PUBLIC, STATIC, FINAL]
+  field boxed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
     DUP
     LDC 2
-    NEWARRAY T_BYTE
+    NEWARRAY BYTE
     DUP
     LDC 0
     LDC 1
@@ -918,79 +889,76 @@ public final class Test {
     LDC 2
     I2B
     BASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init> ([B)V
-    PUTSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init>([B)V
+    PUTSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
     DUP
     LDC 1
-    NEWARRAY T_SHORT
+    NEWARRAY SHORT
     DUP
     LDC 0
     LDC 3
     I2S
     SASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init> ([S)V
-    PUTSTATIC Test.shorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
-    ICONST_0
-    ISTORE 0
-    GETSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
-    ASTORE 1
-    ALOAD 1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size ()I
-    ISTORE 2
-    ILOAD 0
-    ILOAD 2
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init>([S)V
+    PUTSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ICONST_0 0
+    ISTORE_0 0
+    GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    ASTORE_1 1
+    ALOAD_1 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size()I
+    ISTORE_2 2
+    ILOAD_0 0
+    ILOAD_2 2
     IADD
-    ISTORE 0
-    GETSTATIC Test.shorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
-    ASTORE 3
-    ALOAD 3
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size ()I
+    ISTORE_0 0
+    GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ASTORE_3 3
+    ALOAD_3 3
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size()I
     ISTORE 4
-    ILOAD 0
+    ILOAD_0 0
     ILOAD 4
     IADD
-    ISTORE 0
+    ISTORE_0 0
     LDC 4
     I2L
     LSTORE 5
-    ILOAD 0
-    ICONST_1
+    ILOAD_0 0
+    ICONST_1 1
     IADD
-    ISTORE 0
-    ILOAD 0
-    NEWARRAY T_LONG
+    ISTORE_0 0
+    ILOAD_0 0
+    NEWARRAY LONG
     ASTORE 7
-    ICONST_0
+    ICONST_0 0
     ISTORE 8
-    ICONST_0
+    ICONST_0 0
     ISTORE 9
-   L0
-   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I] []
+   L0:
     ILOAD 9
-    ILOAD 2
+    ILOAD_2 2
     IF_ICMPGE L1
     ALOAD 7
     ILOAD 8
     ILOAD 9
     IADD
-    ALOAD 1
+    ALOAD_1 1
     ILOAD 9
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.get (I)B
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.get(I)B
     I2L
     LASTORE
     IINC 9 1
     GOTO L0
-   L1
-   FRAME SAME
+   L1:
     ILOAD 8
-    ILOAD 2
+    ILOAD_2 2
     IADD
     ISTORE 8
-    ICONST_0
+    ICONST_0 0
     ISTORE 10
-   L2
-   FRAME APPEND [I]
+   L2:
     ILOAD 10
     ILOAD 4
     IF_ICMPGE L3
@@ -998,15 +966,14 @@ public final class Test {
     ILOAD 8
     ILOAD 10
     IADD
-    ALOAD 3
+    ALOAD_3 3
     ILOAD 10
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.get (I)S
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.get(I)S
     I2L
     LASTORE
     IINC 10 1
     GOTO L2
-   L3
-   FRAME SAME
+   L3:
     ILOAD 8
     ILOAD 4
     IADD
@@ -1019,34 +986,33 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
     DUP
     ALOAD 7
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init> ([J)V
-    PUTSTATIC Test.longs : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
+    PUTSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    ICONST_0 0
     ISTORE 11
-    GETSTATIC Test.longs : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
     ASTORE 12
     ALOAD 12
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.size()I
     ISTORE 13
     ILOAD 11
     ILOAD 13
     IADD
     ISTORE 11
-    LDC 5.0D
+    LDC2_W 5.0
     DSTORE 14
     ILOAD 11
-    ICONST_1
+    ICONST_1 1
     IADD
     ISTORE 11
     ILOAD 11
-    NEWARRAY T_DOUBLE
+    NEWARRAY DOUBLE
     ASTORE 16
-    ICONST_0
+    ICONST_0 0
     ISTORE 17
-    ICONST_0
+    ICONST_0 0
     ISTORE 18
-   L4
-   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I I I com/github/andreasarvidsson/eld/runtime/EldLongArray I D [D I I] []
+   L4:
     ILOAD 18
     ILOAD 13
     IF_ICMPGE L5
@@ -1056,13 +1022,12 @@ public final class Test {
     IADD
     ALOAD 12
     ILOAD 18
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.get (I)J
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.get(I)J
     L2D
     DASTORE
     IINC 18 1
     GOTO L4
-   L5
-   FRAME SAME
+   L5:
     ILOAD 17
     ILOAD 13
     IADD
@@ -1072,59 +1037,56 @@ public final class Test {
     DLOAD 14
     DASTORE
     IINC 17 1
-   L6
     NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
     DUP
     ALOAD 16
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init> ([D)V
-    PUTSTATIC Test.doubles : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init>([D)V
+    PUTSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
     DUP
     LDC 1
-    NEWARRAY T_FLOAT
+    NEWARRAY FLOAT
     DUP
     LDC 0
-    LDC 1.0D
+    LDC2_W 1.0
     D2F
     FASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init> ([F)V
-    PUTSTATIC Test.floats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
+    PUTSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    ICONST_0 0
     ISTORE 19
-    GETSTATIC Test.floats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
     ASTORE 20
     ALOAD 20
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size()I
     ISTORE 21
     ILOAD 19
     ILOAD 21
     IADD
     ISTORE 19
     ILOAD 19
-    NEWARRAY T_DOUBLE
+    NEWARRAY DOUBLE
     ASTORE 22
-    ICONST_0
+    ICONST_0 0
     ISTORE 23
-    ICONST_0
+    ICONST_0 0
     ISTORE 24
-   L7
-   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I I I com/github/andreasarvidsson/eld/runtime/EldLongArray I D [D I I I com/github/andreasarvidsson/eld/runtime/EldFloatArray I [D I I] []
+   L6:
     ILOAD 24
     ILOAD 21
-    IF_ICMPGE L8
+    IF_ICMPGE L7
     ALOAD 22
     ILOAD 23
     ILOAD 24
     IADD
     ALOAD 20
     ILOAD 24
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.get (I)F
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.get(I)F
     F2D
     DASTORE
     IINC 24 1
-    GOTO L7
-   L8
-   FRAME SAME
+    GOTO L6
+   L7:
     ILOAD 23
     ILOAD 21
     IADD
@@ -1132,22 +1094,22 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
     DUP
     ALOAD 22
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init> ([D)V
-    PUTSTATIC Test.floating : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init>([D)V
+    PUTSTATIC Test.floating Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    ICONST_0 0
     ISTORE 25
     NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
     DUP
     LDC 1
-    NEWARRAY T_CHAR
+    NEWARRAY CHAR
     DUP
     LDC 0
     LDC 97
     CASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
     ASTORE 26
     ALOAD 26
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.size()I
     ISTORE 27
     ILOAD 25
     ILOAD 27
@@ -1156,19 +1118,19 @@ public final class Test {
     LDC 98
     ISTORE 28
     ILOAD 25
-    ICONST_1
+    ICONST_1 1
     IADD
     ISTORE 25
     ILOAD 25
-    NEWARRAY T_CHAR
+    NEWARRAY CHAR
     ASTORE 29
-    ICONST_0
+    ICONST_0 0
     ISTORE 30
     ALOAD 26
     ALOAD 29
     ILOAD 30
     ILOAD 27
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.copyTo ([CII)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.copyTo([CII)V
     ILOAD 30
     ILOAD 27
     IADD
@@ -1181,43 +1143,43 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
     DUP
     ALOAD 29
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
-    PUTSTATIC Test.chars : Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
+    PUTSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    ICONST_0 0
     ISTORE 31
     NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
     DUP
     LDC 1
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 0
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init> ([Z)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>([Z)V
     ASTORE 32
     ALOAD 32
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size()I
     ISTORE 33
     ILOAD 31
     ILOAD 33
     IADD
     ISTORE 31
-    ICONST_0
+    ICONST_0 0
     ISTORE 34
     ILOAD 31
-    ICONST_1
+    ICONST_1 1
     IADD
     ISTORE 31
     ILOAD 31
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     ASTORE 35
-    ICONST_0
+    ICONST_0 0
     ISTORE 36
     ALOAD 32
     ALOAD 35
     ILOAD 36
     ILOAD 33
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.copyTo ([ZII)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.copyTo([ZII)V
     ILOAD 36
     ILOAD 33
     IADD
@@ -1230,29 +1192,29 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
     DUP
     ALOAD 35
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init> ([Z)V
-    PUTSTATIC Test.flags : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>([Z)V
+    PUTSTATIC Test.flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    ICONST_0 0
     ISTORE 37
-    GETSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     ASTORE 38
     ALOAD 38
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size()I
     ISTORE 39
     ILOAD 37
     ILOAD 39
     IADD
     ISTORE 37
     ILOAD 37
-    NEWARRAY T_BYTE
+    NEWARRAY BYTE
     ASTORE 40
-    ICONST_0
+    ICONST_0 0
     ISTORE 41
     ALOAD 38
     ALOAD 40
     ILOAD 41
     ILOAD 39
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.copyTo ([BII)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.copyTo([BII)V
     ILOAD 41
     ILOAD 39
     IADD
@@ -1260,29 +1222,29 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
     DUP
     ALOAD 40
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init> ([B)V
-    PUTSTATIC Test.copiedBytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init>([B)V
+    PUTSTATIC Test.copiedBytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    ICONST_0 0
     ISTORE 42
-    GETSTATIC Test.shorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
     ASTORE 43
     ALOAD 43
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size()I
     ISTORE 44
     ILOAD 42
     ILOAD 44
     IADD
     ISTORE 42
     ILOAD 42
-    NEWARRAY T_SHORT
+    NEWARRAY SHORT
     ASTORE 45
-    ICONST_0
+    ICONST_0 0
     ISTORE 46
     ALOAD 43
     ALOAD 45
     ILOAD 46
     ILOAD 44
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.copyTo ([SII)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.copyTo([SII)V
     ILOAD 46
     ILOAD 44
     IADD
@@ -1290,29 +1252,29 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
     DUP
     ALOAD 45
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init> ([S)V
-    PUTSTATIC Test.copiedShorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init>([S)V
+    PUTSTATIC Test.copiedShorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ICONST_0 0
     ISTORE 47
-    GETSTATIC Test.floats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
     ASTORE 48
     ALOAD 48
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size()I
     ISTORE 49
     ILOAD 47
     ILOAD 49
     IADD
     ISTORE 47
     ILOAD 47
-    NEWARRAY T_FLOAT
+    NEWARRAY FLOAT
     ASTORE 50
-    ICONST_0
+    ICONST_0 0
     ISTORE 51
     ALOAD 48
     ALOAD 50
     ILOAD 51
     ILOAD 49
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.copyTo ([FII)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.copyTo([FII)V
     ILOAD 51
     ILOAD 49
     IADD
@@ -1320,23 +1282,23 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
     DUP
     ALOAD 50
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init> ([F)V
-    PUTSTATIC Test.copiedFloats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
-    ICONST_0
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
+    PUTSTATIC Test.copiedFloats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    ICONST_0 0
     ISTORE 52
-    GETSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     ASTORE 53
     ALOAD 53
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size()I
     ISTORE 54
     ILOAD 52
     ILOAD 54
     IADD
     ISTORE 52
-    GETSTATIC Test.flags : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    GETSTATIC Test.flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
     ASTORE 55
     ALOAD 55
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size ()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size()I
     ISTORE 56
     ILOAD 52
     ILOAD 56
@@ -1345,52 +1307,48 @@ public final class Test {
     ILOAD 52
     ANEWARRAY java/lang/Object
     ASTORE 57
-    ICONST_0
+    ICONST_0 0
     ISTORE 58
-    ICONST_0
+    ICONST_0 0
     ISTORE 59
-   L9
-   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I I I com/github/andreasarvidsson/eld/runtime/EldLongArray I D [D I I I com/github/andreasarvidsson/eld/runtime/EldFloatArray I [D I I I com/github/andreasarvidsson/eld/runtime/EldCharArray I I [C I I com/github/andreasarvidsson/eld/runtime/EldBooleanArray I I [Z I I com/github/andreasarvidsson/eld/runtime/EldByteArray I [B I I com/github/andreasarvidsson/eld/runtime/EldShortArray I [S I I com/github/andreasarvidsson/eld/runtime/EldFloatArray I [F I I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldBooleanArray I [Ljava/lang/Object; I I] []
+   L8:
     ILOAD 59
     ILOAD 54
-    IF_ICMPGE L10
+    IF_ICMPGE L9
     ALOAD 57
     ILOAD 58
     ILOAD 59
     IADD
     ALOAD 53
     ILOAD 59
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.get (I)B
-    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.get(I)B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
     AASTORE
     IINC 59 1
-    GOTO L9
-   L10
-   FRAME SAME
+    GOTO L8
+   L9:
     ILOAD 58
     ILOAD 54
     IADD
     ISTORE 58
-    ICONST_0
+    ICONST_0 0
     ISTORE 60
-   L11
-   FRAME APPEND [I]
+   L10:
     ILOAD 60
     ILOAD 56
-    IF_ICMPGE L12
+    IF_ICMPGE L11
     ALOAD 57
     ILOAD 58
     ILOAD 60
     IADD
     ALOAD 55
     ILOAD 60
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.get (I)Z
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.get(I)Z
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
     IINC 60 1
-    GOTO L11
-   L12
-   FRAME SAME
+    GOTO L10
+   L11:
     ILOAD 58
     ILOAD 56
     IADD
@@ -1398,39 +1356,37 @@ public final class Test {
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
     ALOAD 57
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
-    PUTSTATIC Test.boxed : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.longs : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.doubles : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.floating : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.chars : Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.flags : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.copiedBytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.copiedShorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.copiedFloats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.boxed : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.boxed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floating Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.copiedBytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.copiedShorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.copiedFloats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.boxed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 7
-    MAXLOCALS = 61
-}
+    max stack 7 max locals 61
 
 --- OUTPUT ---
 

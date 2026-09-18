@@ -28,31 +28,18 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
 
-  NESTMEMBER Test$Foo
-  // access flags 0x9
-  public static INNERCLASS Test$Foo Test Foo
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Foo {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
 --- OUTPUT ---
 

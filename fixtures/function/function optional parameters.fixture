@@ -352,109 +352,91 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static getDefault()I
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method getDefault()I flags [PUBLIC, STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "getDefault"
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     LDC 5
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-
-  // access flags 0x9
-  public static foo(ILjava/lang/Integer;I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    max stack 2 max locals 0
+  method foo(ILjava/lang/Integer;I)V flags [PUBLIC, STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW java/lang/StringBuilder
     DUP
-    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
-    ILOAD 0
-    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    ILOAD_0 0
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
     LDC " "
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-    ALOAD 1
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
     LDC " "
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-    ILOAD 2
-    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
-    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ILOAD_2 2
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-
-  // access flags 0x1009
-  public static synthetic foo(ILjava/lang/Integer;I[Z)V
-    ALOAD 3
+    max stack 3 max locals 3
+  method foo(ILjava/lang/Integer;I[Z)V flags [PUBLIC, STATIC, SYNTHETIC]
+    ALOAD_3 3
     LDC 1
     BALOAD
     IFEQ L0
-    ACONST_NULL
-    ASTORE 1
-   L0
-   FRAME SAME
-    ALOAD 3
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_1 1
+   L0:
+    ALOAD_3 3
     LDC 2
     BALOAD
     IFEQ L1
-    INVOKESTATIC Test.getDefault ()I
-    ISTORE 2
-   L1
-   FRAME SAME
-    ILOAD 0
-    ALOAD 1
-    ILOAD 2
-    INVOKESTATIC Test.foo (ILjava/lang/Integer;I)V
+    INVOKESTATIC Test.getDefault()I
+    ISTORE_2 2
+   L1:
+    ILOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 4
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 3 max locals 4
+  method <clinit>()V flags [STATIC]
     LDC 1
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     LDC 3
-    INVOKESTATIC Test.foo (ILjava/lang/Integer;I)V
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;I)V
     LDC 1
-    ISTORE 0
+    ISTORE_0 0
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ASTORE 1
-    ILOAD 0
-    ALOAD 1
-    ICONST_0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE_1 1
+    ILOAD_0 0
+    ALOAD_1 1
+    ICONST_0 0
     LDC 3
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 2
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESTATIC Test.foo (ILjava/lang/Integer;I[Z)V
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;I[Z)V
     LDC 1
-    ISTORE 2
-    ACONST_NULL
-    ASTORE 3
-    ILOAD 2
-    ALOAD 3
-    ICONST_0
+    ISTORE_2 2
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_3 3
+    ILOAD_2 2
+    ALOAD_3 3
+    ICONST_0 0
     LDC 3
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 2
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESTATIC Test.foo (ILjava/lang/Integer;I[Z)V
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;I[Z)V
     RETURN
-    MAXSTACK = 7
-    MAXLOCALS = 4
-}
+    max stack 7 max locals 4
 
 --- OUTPUT ---
 

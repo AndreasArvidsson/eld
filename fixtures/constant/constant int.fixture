@@ -150,26 +150,12 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static I aaa = 10
-
-  // access flags 0x19
-  public final static J bbb = 3000000000L
-
-  // access flags 0x19
-  public final static B ccc = 10
-
-  // access flags 0x19
-  public final static I ddd = 10
-
-  // access flags 0x19
-  public final static J eee = 10L
-}
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field aaa I flags [PUBLIC, STATIC, FINAL] = 10
+  field bbb J flags [PUBLIC, STATIC, FINAL] = 3000000000
+  field ccc B flags [PUBLIC, STATIC, FINAL] = 10
+  field ddd I flags [PUBLIC, STATIC, FINAL] = 10
+  field eee J flags [PUBLIC, STATIC, FINAL] = 10
 
 --- OUTPUT ---
 

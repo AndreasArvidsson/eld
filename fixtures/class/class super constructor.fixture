@@ -428,142 +428,104 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Base
-  NESTMEMBER Test$Child
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Child
     DUP
-    ICONST_0
+    ICONST_0 0
     LDC 1
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 0
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESPECIAL Test$Child.<init> (I[Z)V
-    INVOKEVIRTUAL Test$Base.read ()J
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKESPECIAL Test$Child.<init>(I[Z)V
+    INVOKEVIRTUAL Test$Base.read()J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Child
     DUP
     LDC 6
-    INVOKESPECIAL Test$Child.<init> (I)V
-    INVOKEVIRTUAL Test$Base.read ()J
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
+    INVOKESPECIAL Test$Child.<init>(I)V
+    INVOKEVIRTUAL Test$Base.read()J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
     RETURN
-    MAXSTACK = 8
-    MAXLOCALS = 0
-}
+    max stack 8 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-
-  // access flags 0x4
-  protected J value
-
-  // access flags 0x4
-  protected <init>(JJ)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    LLOAD 1
-    LLOAD 3
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  field value J flags [PROTECTED]
+  method <init>(JJ)V flags [PROTECTED]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LLOAD_1 1
+    LLOAD_3 3
     LADD
     DUP2_X1
-    PUTFIELD Test$Base.value : J
+    PUTFIELD Test$Base.value J
     POP2
     RETURN
-    MAXSTACK = 5
-    MAXLOCALS = 5
-
-  // access flags 0x1004
-  protected synthetic <init>(JJ[Z)V
+    max stack 5 max locals 5
+  method <init>(JJ[Z)V flags [PROTECTED, SYNTHETIC]
     ALOAD 5
     LDC 1
     BALOAD
     IFEQ L0
-    LLOAD 1
+    LLOAD_1 1
     LDC 1
     I2L
     LADD
-    LSTORE 3
-   L0
-   FRAME SAME
-    ALOAD 0
-    LLOAD 1
-    LLOAD 3
-    INVOKESPECIAL Test$Base.<init> (JJ)V
+    LSTORE_3 3
+   L0:
+    ALOAD_0 0
+    LLOAD_1 1
+    LLOAD_3 3
+    INVOKESPECIAL Test$Base.<init>(JJ)V
     RETURN
-    MAXSTACK = 5
-    MAXLOCALS = 6
-
-  // access flags 0x1
-  public read()J
-    ALOAD 0
-    GETFIELD Test$Base.value : J
+    max stack 5 max locals 6
+  method read()J flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Base.value J
     LRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-}
+    max stack 2 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    ILOAD 1
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    ILOAD_1 1
     I2L
-    LCONST_0
+    LCONST_0 0
     LDC 2
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 1
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESPECIAL Test$Base.<init> (JJ[Z)V
+    INVOKESPECIAL Test$Base.<init>(JJ[Z)V
     RETURN
-    MAXSTACK = 9
-    MAXLOCALS = 2
-
-  // access flags 0x1001
-  public synthetic <init>(I[Z)V
-    ALOAD 2
+    max stack 9 max locals 2
+  method <init>(I[Z)V flags [PUBLIC, SYNTHETIC]
+    ALOAD_2 2
     LDC 0
     BALOAD
     IFEQ L0
     LDC 4
-    ISTORE 1
-   L0
-   FRAME SAME
-    ALOAD 0
-    ILOAD 1
-    INVOKESPECIAL Test$Child.<init> (I)V
+    ISTORE_1 1
+   L0:
+    ALOAD_0 0
+    ILOAD_1 1
+    INVOKESPECIAL Test$Child.<init>(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-}
+    max stack 2 max locals 3
 
 --- OUTPUT ---
 

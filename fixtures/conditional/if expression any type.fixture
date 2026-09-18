@@ -239,53 +239,38 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Ljava/lang/Object; foo
-
-  // access flags 0x19
-  public final static Ljava/lang/Object; bar
-
-  // access flags 0x8
-  static <clinit>()V
-    ICONST_1
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field bar Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    ICONST_1 1
     IFEQ L0
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     GOTO L1
-   L0
-   FRAME SAME
+   L0:
     LDC "hello"
     GOTO L1
-   L1
-   FRAME SAME1 java/lang/Object
-    PUTSTATIC Test.foo : Ljava/lang/Object;
-    ICONST_0
+   L1:
+    PUTSTATIC Test.foo Ljava/lang/Object;
+    ICONST_0 0
     IFEQ L2
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     GOTO L3
-   L2
-   FRAME SAME
+   L2:
     LDC "hello"
     GOTO L3
-   L3
-   FRAME SAME1 java/lang/Object
-    PUTSTATIC Test.bar : Ljava/lang/Object;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.bar : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+   L3:
+    PUTSTATIC Test.bar Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bar Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

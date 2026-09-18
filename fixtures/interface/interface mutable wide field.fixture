@@ -312,116 +312,83 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Value
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Value Test Value
-
-  // access flags 0x19
-  public final static LTest$Value; value
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Value
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field value LTest$Value; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$$object0
     DUP
     LDC 1
     I2L
-    INVOKESPECIAL Test$$object0.<init> (J)V
-    PUTSTATIC Test.value : LTest$Value;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : LTest$Value;
+    INVOKESPECIAL Test$$object0.<init>(J)V
+    PUTSTATIC Test.value LTest$Value;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
     LDC 7
     I2L
     DUP2_X1
-    INVOKEINTERFACE Test$Value.$set$value (J)V (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : LTest$Value;
+    INVOKEINTERFACE Test$Value.$set$value(J)V
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
     DUP
-    INVOKEINTERFACE Test$Value.$get$value ()J (itf)
+    INVOKEINTERFACE Test$Value.$get$value()J
     DUP2_X1
-    LCONST_1
+    LCONST_1 1
     LADD
-    INVOKEINTERFACE Test$Value.$set$value (J)V (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : LTest$Value;
-    INVOKEINTERFACE Test$Value.$get$value ()J (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : LTest$Value;
+    INVOKEINTERFACE Test$Value.$set$value(J)V
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value()J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
     DUP
-    INVOKEINTERFACE Test$Value.$get$value ()J (itf)
+    INVOKEINTERFACE Test$Value.$get$value()J
     DUP2_X1
-    LCONST_1
+    LCONST_1 1
     LSUB
-    INVOKEINTERFACE Test$Value.$set$value (J)V (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : LTest$Value;
-    INVOKEINTERFACE Test$Value.$get$value ()J (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (J)V
+    INVOKEINTERFACE Test$Value.$set$value(J)V
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value()J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
     RETURN
-    MAXSTACK = 8
-    MAXLOCALS = 0
-}
+    max stack 8 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Value {
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$value()J flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method $set$value(J)V flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Value Test Value
-
-  // access flags 0x1401
-  public abstract synthetic $get$value()J
-
-  // access flags 0x1401
-  public abstract synthetic $set$value(J)V
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Value {
-
-  NESTHOST Test
-
-  // access flags 0x2
-  private J value
-
-  // access flags 0x1001
-  public synthetic $get$value()J
-    ALOAD 0
-    GETFIELD Test$$object0.value : J
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Value
+  nest host Test
+  field value J flags [PRIVATE]
+  method $get$value()J flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.value J
     LRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1001
-  public synthetic $set$value(J)V
-    ALOAD 0
-    LLOAD 1
-    PUTFIELD Test$$object0.value : J
+    max stack 2 max locals 1
+  method $set$value(J)V flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    LLOAD_1 1
+    PUTFIELD Test$$object0.value J
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-
-  // access flags 0x1
-  public <init>(J)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    LLOAD 1
-    PUTFIELD Test$$object0.value : J
+    max stack 3 max locals 3
+  method <init>(J)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LLOAD_1 1
+    PUTFIELD Test$$object0.value J
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-}
+    max stack 3 max locals 3
 
 --- OUTPUT ---
 

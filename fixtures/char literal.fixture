@@ -62,13 +62,8 @@ Expression types:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
     LDC 65
     POP
     LDC 97
@@ -78,9 +73,7 @@ public final class Test {
     LDC 13
     POP
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 0
-}
+    max stack 1 max locals 0
 
 --- OUTPUT ---
 

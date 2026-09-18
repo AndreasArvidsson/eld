@@ -177,77 +177,48 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Value
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Value Test Value
-
-  // access flags 0x9
-  public static read(LTest$Value;)I
-    ALOAD 0
-    INVOKEINTERFACE Test$Value.$get$value ()I (itf)
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Value
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read(LTest$Value;)I flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    INVOKEINTERFACE Test$Value.$get$value()I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$$object0
     DUP
     LDC 7
-    INVOKESPECIAL Test$$object0.<init> (I)V
-    INVOKESTATIC Test.read (LTest$Value;)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$$object0.<init>(I)V
+    INVOKESTATIC Test.read(LTest$Value;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Value {
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$value()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Value Test Value
-
-  // access flags 0x1401
-  public abstract synthetic $get$value()I
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Value {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final I value
-
-  // access flags 0x1001
-  public synthetic $get$value()I
-    ALOAD 0
-    GETFIELD Test$$object0.value : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Value
+  nest host Test
+  field value I flags [PRIVATE, FINAL]
+  method $get$value()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.value : I
+    max stack 1 max locals 1
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.value I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

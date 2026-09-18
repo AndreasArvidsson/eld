@@ -139,16 +139,9 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldTuple; value
-
-  // access flags 0x9
-  public static get()Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC, FINAL]
+  method get()Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
     LDC 2
@@ -156,29 +149,24 @@ public final class Test {
     DUP
     LDC 0
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     AASTORE
     DUP
     LDC 1
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
     ARETURN
-    MAXSTACK = 6
-    MAXLOCALS = 0
-
-  // access flags 0x8
-  static <clinit>()V
-    INVOKESTATIC Test.get ()Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    PUTSTATIC Test.value : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    max stack 6 max locals 0
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test.get()Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    PUTSTATIC Test.value Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

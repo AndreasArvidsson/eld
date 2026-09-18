@@ -683,177 +683,128 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Order
-  NESTMEMBER Test$Person
-  NESTMEMBER Test$Child
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Order Test Order
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x19
-  // signature Ljava/util/List<LTest$Order;>;
-  // declaration: people extends java.util.List<Test$Order>
-  public final static Ljava/util/List; people
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Order
+  nest member Test$Person
+  nest member Test$Child
+  inner class Test$Order flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Person flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field people Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<LTest$Order;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 3
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     NEW Test$Person
     DUP
     LDC 30
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     NEW Test$Child
     DUP
     LDC 10
-    INVOKESPECIAL Test$Child.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Child.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     NEW Test$Person
     DUP
     LDC 20
-    INVOKESPECIAL Test$Person.<init> (I)V
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESPECIAL Test$Person.<init>(I)V
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.people : Ljava/util/List;
-    GETSTATIC Test.people : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    PUTSTATIC Test.people Ljava/util/List;
+    GETSTATIC Test.people Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 0
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Order
-    INVOKEINTERFACE Test$Order.$get$age ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    INVOKEINTERFACE Test$Order.$get$age()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 1
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Order
-    INVOKEINTERFACE Test$Order.$get$age ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.people : Ljava/util/List;
+    INVOKEINTERFACE Test$Order.$get$age()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.people Ljava/util/List;
     LDC 2
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST Test$Order
-    INVOKEINTERFACE Test$Order.$get$age ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEINTERFACE Test$Order.$get$age()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 5
-    MAXLOCALS = 0
-}
+    max stack 5 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-// signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Order;>;
-// declaration: Test$Order extends java.lang.Comparable<Test$Order>
-public abstract interface Test$Order implements java/lang/Comparable {
+class Test$Order extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  implements java/lang/Comparable
+  signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Order;>;
+  nest host Test
+  inner class Test$Order flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$age()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Order Test Order
-
-  // access flags 0x1401
-  public abstract synthetic $get$age()I
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Person implements Test$Order {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x11
-  public final I age
-
-  // access flags 0x1001
-  public synthetic $get$age()I
-    ALOAD 0
-    GETFIELD Test$Person.age : I
+class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Order
+  nest host Test
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field age I flags [PUBLIC, FINAL]
+  method $get$age()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Person.age I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
+    max stack 1 max locals 1
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
     DUP_X1
-    PUTFIELD Test$Person.age : I
+    PUTFIELD Test$Person.age I
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public compareTo(LTest$Order;)I
-    ALOAD 0
-    GETFIELD Test$Person.age : I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ALOAD 1
-    INVOKEINTERFACE Test$Order.$get$age ()I (itf)
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    max stack 3 max locals 2
+  method compareTo(LTest$Order;)I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Person.age I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ALOAD_1 1
+    INVOKEINTERFACE Test$Order.$get$age()I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1041
-  public synthetic bridge compareTo(Ljava/lang/Object;)I
-    ALOAD 0
-    ALOAD 1
+    max stack 2 max locals 2
+  method compareTo(Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
     CHECKCAST Test$Order
-    INVOKEVIRTUAL Test$Person.compareTo (LTest$Order;)I
+    INVOKEVIRTUAL Test$Person.compareTo(LTest$Order;)I
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Person {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x1001
-  public synthetic $get$age()I
-    ALOAD 0
-    GETFIELD Test$Person.age : I
+class Test$Child extends Test$Person version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method $get$age()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Person.age I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    ILOAD 1
-    INVOKESPECIAL Test$Person.<init> (I)V
+    max stack 1 max locals 1
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    ILOAD_1 1
+    INVOKESPECIAL Test$Person.<init>(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

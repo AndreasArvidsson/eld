@@ -412,99 +412,66 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Reader
-  NESTMEMBER Test$Box
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-  // access flags 0x9
-  public static INNERCLASS Test$Box Test Box
-
-  // access flags 0x9
-  public static LTest$Reader; reader
-
-  // access flags 0x19
-  public final static Ljava/lang/invoke/MethodHandle; read
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Reader
+  nest member Test$Box
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field reader LTest$Reader; flags [PUBLIC, STATIC]
+  field read Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Box
     DUP
     LDC 1
-    INVOKESPECIAL Test$Box.<init> (I)V
-    PUTSTATIC Test.reader : LTest$Reader;
-    // handle kind 0x9 : INVOKEINTERFACE
-    LDC Test$Reader.read()I itf
-    GETSTATIC Test.reader : LTest$Reader;
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    PUTSTATIC Test.read : Ljava/lang/invoke/MethodHandle;
+    INVOKESPECIAL Test$Box.<init>(I)V
+    PUTSTATIC Test.reader LTest$Reader;
+    LDC MethodHandleDesc[INTERFACE_VIRTUAL/Test$Reader::read(Test$Reader)int]
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.read Ljava/lang/invoke/MethodHandle;
     NEW Test$Box
     DUP
     LDC 2
-    INVOKESPECIAL Test$Box.<init> (I)V
+    INVOKESPECIAL Test$Box.<init>(I)V
     DUP
-    PUTSTATIC Test.reader : LTest$Reader;
+    PUTSTATIC Test.reader LTest$Reader;
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.read : Ljava/lang/invoke/MethodHandle;
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.reader : LTest$Reader;
-    INVOKEINTERFACE Test$Reader.read ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.read Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Reader {
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Reader Test Reader
-
-  // access flags 0x401
-  public abstract read()I
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Box implements Test$Reader {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Box Test Box
-
-  // access flags 0x1
-  public I value
-
-  // access flags 0x1
-  public <init>(I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Reader
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
     DUP_X1
-    PUTFIELD Test$Box.value : I
+    PUTFIELD Test$Box.value I
     POP
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$Box.value : I
+    max stack 3 max locals 2
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Box.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
 --- OUTPUT ---
 

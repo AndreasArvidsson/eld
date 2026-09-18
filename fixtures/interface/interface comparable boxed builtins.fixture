@@ -454,85 +454,63 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
-  // declaration: value extends java.lang.Comparable<java.lang.Integer>
-  public final static Ljava/lang/Comparable; value
-
-  // access flags 0x19
-  // signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
-  // declaration: optional extends java.lang.Comparable<java.lang.Integer>
-  public final static Ljava/lang/Comparable; optional
-
-  // access flags 0x19
-  public final static Ljava/lang/invoke/MethodHandle; compare
-
-  // access flags 0x19
-  // signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
-  // declaration: negative extends java.lang.Comparable<java.lang.Integer>
-  public final static Ljava/lang/Comparable; negative
-
-  // access flags 0x19
-  // signature Ljava/lang/Comparable<Ljava/lang/String;>;
-  // declaration: text extends java.lang.Comparable<java.lang.String>
-  public final static Ljava/lang/Comparable; text
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
+  field optional Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
+  field compare Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field negative Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
+  field text Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    PUTSTATIC Test.value : Ljava/lang/Comparable;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : Ljava/lang/Comparable;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.value Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/Comparable;
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/lang/Comparable.compareTo (Ljava/lang/Object;)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    PUTSTATIC Test.optional : Ljava/lang/Comparable;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.optional : Ljava/lang/Comparable;
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    // handle kind 0x9 : INVOKEINTERFACE
-    LDC java/lang/Comparable.compareTo(Ljava/lang/Object;)I itf
-    GETSTATIC Test.value : Ljava/lang/Comparable;
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    LDC (I)I.class
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType (Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
-    PUTSTATIC Test.compare : Ljava/lang/invoke/MethodHandle;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.compare : Ljava/lang/invoke/MethodHandle;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.optional Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.optional Ljava/lang/Comparable;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC MethodHandleDesc[INTERFACE_VIRTUAL/Comparable::compareTo(Comparable,Object)int]
+    GETSTATIC Test.value Ljava/lang/Comparable;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[(int)int]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.compare Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.compare Ljava/lang/invoke/MethodHandle;
     LDC 3
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     LDC -3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    PUTSTATIC Test.negative : Ljava/lang/Comparable;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.negative : Ljava/lang/Comparable;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.negative Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.negative Ljava/lang/Comparable;
     LDC -2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/lang/Comparable.compareTo (Ljava/lang/Object;)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     LDC "a"
-    PUTSTATIC Test.text : Ljava/lang/Comparable;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.text : Ljava/lang/Comparable;
+    PUTSTATIC Test.text Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.text Ljava/lang/Comparable;
     LDC "b"
-    INVOKEINTERFACE java/lang/Comparable.compareTo (Ljava/lang/Object;)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

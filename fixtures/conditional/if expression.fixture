@@ -113,34 +113,23 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static I value
-
-  // access flags 0x8
-  static <clinit>()V
-    ICONST_1
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    ICONST_1 1
     IFEQ L0
     LDC 5
     GOTO L1
-   L0
-   FRAME SAME
+   L0:
     LDC 0
     GOTO L1
-   L1
-   FRAME SAME1 I
-    PUTSTATIC Test.value : I
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.value : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+   L1:
+    PUTSTATIC Test.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

@@ -38,20 +38,12 @@ RIGHT_BRACE (3:1-3:2)
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
     GOTO L0
-   L0
-   FRAME SAME
+   L0:
     RETURN
-    MAXSTACK = 0
-    MAXLOCALS = 0
-}
+    max stack 0 max locals 0
 
 --- OUTPUT ---
 

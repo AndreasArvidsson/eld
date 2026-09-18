@@ -103,53 +103,31 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
 
-  NESTMEMBER Test$Base
-  NESTMEMBER Test$Child
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x1
-  public <init>()V
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
     LDC 1
-    ISTORE 1
-    ALOAD 0
-    INVOKESPECIAL Test$Base.<init> ()V
+    ISTORE_1 1
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 2
-}
+    max stack 1 max locals 2
 
 --- OUTPUT ---
 

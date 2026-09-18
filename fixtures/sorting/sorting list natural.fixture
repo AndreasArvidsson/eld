@@ -248,73 +248,60 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/lang/Integer;>;
-  // declaration: values extends java.util.List<java.lang.Integer>
-  public final static Ljava/util/List; values
-
-  // access flags 0x19
-  // signature Ljava/util/ArrayList<Ljava/lang/Integer;>;
-  // declaration: empty extends java.util.ArrayList<java.lang.Integer>
-  public final static Ljava/util/ArrayList; empty
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field values Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field empty Ljava/util/ArrayList; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/ArrayList<Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 5
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC -2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.values : Ljava/util/List;
-    GETSTATIC Test.values : Ljava/util/List;
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    PUTSTATIC Test.values Ljava/util/List;
+    GETSTATIC Test.values Ljava/util/List;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     NEW java/util/ArrayList
     DUP
-    INVOKESPECIAL java/util/ArrayList.<init> ()V
-    PUTSTATIC Test.empty : Ljava/util/ArrayList;
-    GETSTATIC Test.empty : Ljava/util/ArrayList;
-    ACONST_NULL
-    INVOKEVIRTUAL java/util/ArrayList.sort (Ljava/util/Comparator;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.empty : Ljava/util/ArrayList;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.empty Ljava/util/ArrayList;
+    GETSTATIC Test.empty Ljava/util/ArrayList;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEVIRTUAL java/util/ArrayList.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.empty Ljava/util/ArrayList;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

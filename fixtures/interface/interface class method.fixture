@@ -248,84 +248,54 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Greeting
-  NESTMEMBER Test$Person
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Greeting Test Greeting
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x19
-  public final static LTest$Greeting; person
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Greeting
+  nest member Test$Person
+  inner class Test$Greeting flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field person LTest$Greeting; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Person
     DUP
-    INVOKESPECIAL Test$Person.<init> ()V
-    PUTSTATIC Test.person : LTest$Greeting;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.person : LTest$Greeting;
-    INVOKEINTERFACE Test$Greeting.greeting ()Ljava/lang/String; (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKESPECIAL Test$Person.<init>()V
+    PUTSTATIC Test.person LTest$Greeting;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.person LTest$Greeting;
+    INVOKEINTERFACE Test$Greeting.greeting()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Greeting {
+class Test$Greeting extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Greeting flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method greeting()Ljava/lang/String; flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Greeting Test Greeting
-
-  // access flags 0x401
-  public abstract greeting()Ljava/lang/String;
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Person implements Test$Greeting {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Person Test Person
-
-  // access flags 0x11
-  public final Ljava/lang/String; name
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Greeting
+  nest host Test
+  inner class Test$Person flags [PUBLIC, STATIC]
+  field name Ljava/lang/String; flags [PUBLIC, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC "Bob"
-    PUTFIELD Test$Person.name : Ljava/lang/String;
+    PUTFIELD Test$Person.name Ljava/lang/String;
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public greeting()Ljava/lang/String;
+    max stack 2 max locals 1
+  method greeting()Ljava/lang/String; flags [PUBLIC]
     NEW java/lang/StringBuilder
     DUP
-    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
     LDC "Hello "
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-    ALOAD 0
-    GETFIELD Test$Person.name : Ljava/lang/String;
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD_0 0
+    GETFIELD Test$Person.name Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
     ARETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-}
+    max stack 2 max locals 1
 
 --- OUTPUT ---
 

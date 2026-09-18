@@ -54,22 +54,15 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "hello "
     LDC "world"
-    INVOKEVIRTUAL java/lang/String.concat (Ljava/lang/String;)Ljava/lang/String;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

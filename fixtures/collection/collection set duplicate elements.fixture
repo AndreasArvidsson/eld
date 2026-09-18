@@ -189,40 +189,30 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/util/Set<Ljava/lang/Integer;>;
-  // declaration: set extends java.util.Set<java.lang.Integer>
-  public final static Ljava/util/Set; set
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field set Ljava/util/Set; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Set<Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/HashSet
     DUP
-    INVOKESPECIAL java/util/HashSet.<init> ()V
-    PUTSTATIC Test.set : Ljava/util/Set;
-    GETSTATIC Test.set : Ljava/util/Set;
+    INVOKESPECIAL java/util/HashSet.<init>()V
+    PUTSTATIC Test.set Ljava/util/Set;
+    GETSTATIC Test.set Ljava/util/Set;
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC Test.set : Ljava/util/Set;
+    GETSTATIC Test.set Ljava/util/Set;
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.set : Ljava/util/Set;
-    INVOKEINTERFACE java/util/Set.size ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.set Ljava/util/Set;
+    INVOKEINTERFACE java/util/Set.size()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

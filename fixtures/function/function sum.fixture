@@ -155,31 +155,21 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static sum(II)I
-    ILOAD 0
-    ILOAD 1
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method sum(II)I flags [PUBLIC, STATIC]
+    ILOAD_0 0
+    ILOAD_1 1
     IADD
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 5
     LDC 2
-    INVOKESTATIC Test.sum (II)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESTATIC Test.sum(II)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

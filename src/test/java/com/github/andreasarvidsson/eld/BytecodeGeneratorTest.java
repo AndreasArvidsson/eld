@@ -12,8 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.FieldModel;
+import java.lang.classfile.Opcode;
+import java.lang.classfile.instruction.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
@@ -21,14 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.TableSwitchInsnNode;
-import org.objectweb.asm.tree.LookupSwitchInsnNode;
-import org.objectweb.asm.util.CheckClassAdapter;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
@@ -77,16 +72,16 @@ class BytecodeGeneratorTest {
                 program,
                 new SemanticAnalyzer().analyze(program)
             ).generateClasses().get("Test");
-        final ClassNode module = new ClassNode();
-        new ClassReader(bytes).accept(module, 0);
+        final ClassModel module = ClassFile.of().parse(bytes);
         int casts = 0;
-        for (final var method : module.methods) {
-            for (final var instruction : method.instructions) {
-                if (instruction.getOpcode() == Opcodes.CHECKCAST) {
-                    assertEquals("multi", method.name);
+        for (final var method : module.methods()) {
+            for (final var instruction : BytecodeUtil.instructions(method)) {
+                if (instruction.opcode() == Opcode.CHECKCAST) {
+                    assertEquals("multi", method.methodName().stringValue());
                     assertEquals(
                         "Test$Base",
-                        ((org.objectweb.asm.tree.TypeInsnNode) instruction).desc
+                        ((TypeCheckInstruction) instruction).type()
+                            .asInternalName()
                     );
                     casts++;
                 }
@@ -795,21 +790,24 @@ class BytecodeGeneratorTest {
             """;
         final Class<?> type = compile(source);
         assertEquals(2001, type.getMethod("result").invoke(null));
-        final ClassNode node = inspect(source);
+        final ClassModel node = inspect(source);
         assertTrue(
-            node.methods.stream()
+            node.methods()
+                .stream()
                 .anyMatch(
-                    method -> method.name.startsWith("$lambda")
-                        && method.desc.equals("([I)I")
+                    method -> method.methodName()
+                        .stringValue()
+                        .startsWith("$lambda")
+                        && method.methodType().stringValue().equals("([I)I")
                 )
         );
-        for (final var method : node.methods) {
-            for (final var instruction : method.instructions) {
-                if (
-                    instruction instanceof org.objectweb.asm.tree.MethodInsnNode call
-                ) {
+        for (final var method : node.methods()) {
+            for (final var instruction : BytecodeUtil.instructions(method)) {
+                if (instruction instanceof InvokeInstruction call) {
                     assertFalse(
-                        call.owner.equals("java/lang/Integer"),
+                        call.owner()
+                            .asInternalName()
+                            .equals("java/lang/Integer"),
                         "Captured i32 must not box or unbox"
                     );
                 }
@@ -1484,94 +1482,115 @@ class BytecodeGeneratorTest {
         assertTrue(model.toString().contains("const foo: Foo"));
         assertTrue(model.toString().contains("class Foo"));
         assertFalse(model.toString().contains("ClassType("));
-        final ClassNode node = new ClassNode();
-        new ClassReader(classes.get("Test")).accept(node, 0);
+        final ClassModel node = ClassFile.of().parse(classes.get("Test"));
         final var use =
-            node.methods.stream()
-                .filter(method -> method.name.equals("use"))
+            node.methods()
+                .stream()
+                .filter(
+                    method -> method.methodName().stringValue().equals("use")
+                )
                 .findFirst()
                 .orElseThrow();
-        assertEquals("(LTest$Foo;)I", use.desc);
-        for (final var instruction : use.instructions) {
-            assertNotEquals(Opcodes.CHECKCAST, instruction.getOpcode());
-            if (
-                instruction instanceof org.objectweb.asm.tree.MethodInsnNode call
-            ) {
-                assertEquals("Test$Foo", call.owner);
-                assertEquals("getValue", call.name);
-                assertEquals(Opcodes.INVOKEVIRTUAL, call.getOpcode());
-                assertEquals("()I", call.desc);
+        assertEquals("(LTest$Foo;)I", use.methodType().stringValue());
+        for (final var instruction : BytecodeUtil.instructions(use)) {
+            assertNotEquals(Opcode.CHECKCAST, instruction.opcode());
+            if (instruction instanceof InvokeInstruction call) {
+                assertEquals("Test$Foo", call.owner().asInternalName());
+                assertEquals("getValue", call.name().stringValue());
+                assertEquals(Opcode.INVOKEVIRTUAL, call.opcode());
+                assertEquals("()I", call.type().stringValue());
             }
         }
         final var clinit =
-            node.methods.stream()
-                .filter(method -> method.name.equals("<clinit>"))
+            node.methods()
+                .stream()
+                .filter(
+                    method -> method.methodName()
+                        .stringValue()
+                        .equals("<clinit>")
+                )
                 .findFirst()
                 .orElseThrow();
         final var calls =
-            java.util.Arrays.stream(clinit.instructions.toArray())
-                .filter(org.objectweb.asm.tree.MethodInsnNode.class::isInstance)
-                .map(org.objectweb.asm.tree.MethodInsnNode.class::cast)
+            BytecodeUtil.instructions(clinit)
+                .stream()
+                .filter(InvokeInstruction.class::isInstance)
+                .map(InvokeInstruction.class::cast)
                 .toList();
         assertTrue(
             calls.stream()
                 .anyMatch(
-                    call -> call.owner.equals("Test$Foo")
-                        && call.name.equals("compare")
-                        && call.desc.equals("(JD)Z")
-                        && call.getOpcode() == Opcodes.INVOKEVIRTUAL
+                    call -> call.owner().asInternalName().equals("Test$Foo")
+                        && call.name().stringValue().equals("compare")
+                        && call.type().stringValue().equals("(JD)Z")
+                        && call.opcode() == Opcode.INVOKEVIRTUAL
                 )
         );
         assertTrue(
             calls.stream()
                 .anyMatch(
-                    call -> call.owner.equals("Test$Foo")
-                        && call.name.equals("identity")
-                        && call.desc.equals("(LTest$Foo;)LTest$Foo;")
+                    call -> call.owner().asInternalName().equals("Test$Foo")
+                        && call.name().stringValue().equals("identity")
+                        && call.type()
+                            .stringValue()
+                            .equals("(LTest$Foo;)LTest$Foo;")
                 )
         );
         assertTrue(
             calls.stream()
                 .anyMatch(
-                    call -> call.owner.equals("java/lang/invoke/MethodHandle")
-                        && call.name.equals("bindTo")
+                    call -> call.owner()
+                        .asInternalName()
+                        .equals("java/lang/invoke/MethodHandle")
+                        && call.name().stringValue().equals("bindTo")
                 )
         );
         assertTrue(
             calls.stream()
                 .anyMatch(
-                    call -> call.owner.equals("java/lang/invoke/MethodHandle")
-                        && call.name.equals("invokeExact")
+                    call -> call.owner()
+                        .asInternalName()
+                        .equals("java/lang/invoke/MethodHandle")
+                        && call.name().stringValue().equals("invokeExact")
                 )
         );
         final var direct =
-            node.methods.stream()
-                .filter(method -> method.name.equals("direct"))
+            node.methods()
+                .stream()
+                .filter(
+                    method -> method.methodName().stringValue().equals("direct")
+                )
                 .findFirst()
                 .orElseThrow();
         final var directCall =
-            java.util.Arrays.stream(direct.instructions.toArray())
-                .filter(org.objectweb.asm.tree.MethodInsnNode.class::isInstance)
-                .map(org.objectweb.asm.tree.MethodInsnNode.class::cast)
+            BytecodeUtil.instructions(direct)
+                .stream()
+                .filter(InvokeInstruction.class::isInstance)
+                .map(InvokeInstruction.class::cast)
                 .findFirst()
                 .orElseThrow();
-        assertEquals(Opcodes.INVOKESTATIC, directCall.getOpcode());
-        assertEquals("Test", directCall.owner);
-        assertEquals("value", directCall.name);
-        final ClassNode classNode = new ClassNode();
-        new ClassReader(classes.get("Test$Foo")).accept(classNode, 0);
+        assertEquals(Opcode.INVOKESTATIC, directCall.opcode());
+        assertEquals("Test", directCall.owner().asInternalName());
+        assertEquals("value", directCall.name().stringValue());
+        final ClassModel classNode =
+            ClassFile.of().parse(classes.get("Test$Foo"));
         final var getValue =
-            classNode.methods.stream()
-                .filter(method -> method.name.equals("getValue"))
+            classNode.methods()
+                .stream()
+                .filter(
+                    method -> method.methodName()
+                        .stringValue()
+                        .equals("getValue")
+                )
                 .findFirst()
                 .orElseThrow();
         assertEquals(
-            Opcodes.ALOAD,
-            getValue.instructions.getFirst().getOpcode()
+            Opcode.ALOAD_0,
+            BytecodeUtil.instructions(getValue).getFirst().opcode()
         );
         assertEquals(
-            Opcodes.GETFIELD,
-            getValue.instructions.getFirst().getNext().getOpcode()
+            Opcode.GETFIELD,
+            BytecodeUtil.instructions(getValue).get(1).opcode()
         );
     }
 
@@ -2093,24 +2112,24 @@ class BytecodeGeneratorTest {
                 new SemanticAnalyzer().analyze(program)
             ).generate();
         BytecodeUtil.verify(bytes);
-        final ClassNode node = new ClassNode();
-        new ClassReader(bytes).accept(node, 0);
-        for (final var method : node.methods) {
+        final ClassModel node = ClassFile.of().parse(bytes);
+        for (final var method : node.methods()) {
             if (
-                !List.of("literal", "grouped", "loaded").contains(method.name)
+                !List.of("literal", "grouped", "loaded")
+                    .contains(method.methodName().stringValue())
             ) {
                 continue;
             }
             int casts = 0;
-            for (final var instruction : method.instructions) {
-                if (instruction.getOpcode() == Opcodes.CHECKCAST) {
+            for (final var instruction : BytecodeUtil.instructions(method)) {
+                if (instruction.opcode() == Opcode.CHECKCAST) {
                     casts++;
                 }
             }
             assertEquals(
-                method.name.equals("loaded") ? 1 : 0,
+                method.methodName().stringValue().equals("loaded") ? 1 : 0,
                 casts,
-                method.name
+                method.methodName().stringValue()
             );
         }
         final Class<?> type = compile(program);
@@ -2872,20 +2891,28 @@ class BytecodeGeneratorTest {
                 """;
         final var node = inspect(source);
         final var choose =
-            node.methods.stream()
-                .filter(m -> m.name.equals("choose"))
+            node.methods()
+                .stream()
+                .filter(m -> m.methodName().stringValue().equals("choose"))
                 .findFirst()
                 .orElseThrow();
         final var table =
-            java.util.Arrays.stream(choose.instructions.toArray())
-                .filter(TableSwitchInsnNode.class::isInstance)
-                .map(TableSwitchInsnNode.class::cast)
+            BytecodeUtil.instructions(choose)
+                .stream()
+                .filter(TableSwitchInstruction.class::isInstance)
+                .map(TableSwitchInstruction.class::cast)
                 .findFirst()
                 .orElseThrow();
-        assertEquals(-1, table.min);
-        assertEquals(3, table.max);
-        assertSame(table.dflt, table.labels.get(2));
-        assertSame(table.labels.get(3), table.labels.get(4));
+        assertEquals(-1, table.lowValue());
+        assertEquals(3, table.highValue());
+        assertSame(
+            table.defaultTarget(),
+            BytecodeUtil.switchTarget(table, table.lowValue() + 2)
+        );
+        assertSame(
+            BytecodeUtil.switchTarget(table, table.lowValue() + 3),
+            BytecodeUtil.switchTarget(table, table.lowValue() + 4)
+        );
         final Class<?> type = compile(source);
         assertEquals(20, type.getMethod("choose", int.class).invoke(null, 2));
         assertEquals(20, type.getMethod("choose", int.class).invoke(null, 3));
@@ -2909,19 +2936,21 @@ class BytecodeGeneratorTest {
             }
             """;
         final var choose =
-            inspect(source).methods.stream()
-                .filter(m -> m.name.equals("choose"))
+            inspect(source).methods()
+                .stream()
+                .filter(m -> m.methodName().stringValue().equals("choose"))
                 .findFirst()
                 .orElseThrow();
         final var lookup =
-            java.util.Arrays.stream(choose.instructions.toArray())
-                .filter(LookupSwitchInsnNode.class::isInstance)
-                .map(LookupSwitchInsnNode.class::cast)
+            BytecodeUtil.instructions(choose)
+                .stream()
+                .filter(LookupSwitchInstruction.class::isInstance)
+                .map(LookupSwitchInstruction.class::cast)
                 .findFirst()
                 .orElseThrow();
         assertEquals(
             List.of(Integer.MIN_VALUE, -1000, 1000, Integer.MAX_VALUE),
-            lookup.keys
+            lookup.cases().stream().map(SwitchCase::caseValue).toList()
         );
         final Class<?> type = compile(source);
         assertEquals(
@@ -2958,10 +2987,10 @@ class BytecodeGeneratorTest {
                     return switch (value) { case 1 => 10 case 1 / 0 => 20 else => 30 };
                 }
                 """;
-        for (final var method : inspect(source).methods) {
-            for (final var instruction : method.instructions) {
-                assertFalse(instruction instanceof TableSwitchInsnNode);
-                assertFalse(instruction instanceof LookupSwitchInsnNode);
+        for (final var method : inspect(source).methods()) {
+            for (final var instruction : BytecodeUtil.instructions(method)) {
+                assertFalse(instruction instanceof TableSwitchInstruction);
+                assertFalse(instruction instanceof LookupSwitchInstruction);
             }
         }
         final Class<?> type = compile(source);
@@ -3317,11 +3346,11 @@ class BytecodeGeneratorTest {
                 program,
                 new SemanticAnalyzer().analyze(program)
             ).generateClasses();
-        final var node = new ClassNode();
-        new ClassReader(classes.get("Test$Counter")).accept(node, 0);
-        for (final var method : node.methods) {
-            for (final var instruction : method.instructions) {
-                assertNotEquals(Opcodes.SWAP, instruction.getOpcode());
+        final ClassModel node =
+            ClassFile.of().parse(classes.get("Test$Counter"));
+        for (final var method : node.methods()) {
+            for (final var instruction : BytecodeUtil.instructions(method)) {
+                assertNotEquals(Opcode.SWAP, instruction.opcode());
             }
         }
         final Class<?> type = loadClass(classes, "Test$Counter");
@@ -3349,14 +3378,11 @@ class BytecodeGeneratorTest {
         )) {
             final String source = "func result() i32 { " + body + " }";
             final var node = inspect(source);
-            for (final var method : node.methods) {
-                for (final var instruction : method.instructions) {
-                    assertNotEquals(Opcodes.NOP, instruction.getOpcode(), body);
-                    assertNotEquals(
-                        Opcodes.ATHROW,
-                        instruction.getOpcode(),
-                        body
-                    );
+            for (final var method : node.methods()) {
+                for (final var instruction : BytecodeUtil
+                    .instructions(method)) {
+                    assertNotEquals(Opcode.NOP, instruction.opcode(), body);
+                    assertNotEquals(Opcode.ATHROW, instruction.opcode(), body);
                 }
             }
             assertEquals(
@@ -3389,10 +3415,10 @@ class BytecodeGeneratorTest {
             }
             """;
         assertEquals(7, compile(source).getMethod("result").invoke(null));
-        for (final var method : inspect(source).methods) {
-            for (final var instruction : method.instructions) {
-                assertNotEquals(Opcodes.NOP, instruction.getOpcode());
-                assertNotEquals(Opcodes.ATHROW, instruction.getOpcode());
+        for (final var method : inspect(source).methods()) {
+            for (final var instruction : BytecodeUtil.instructions(method)) {
+                assertNotEquals(Opcode.NOP, instruction.opcode());
+                assertNotEquals(Opcode.ATHROW, instruction.opcode());
             }
         }
     }
@@ -3634,9 +3660,8 @@ class BytecodeGeneratorTest {
         final var model = new SemanticAnalyzer().analyze(program);
         final var generator = new BytecodeGenerator(program, model);
         final var classes = generator.generateClasses();
-        final var node = new ClassNode();
-        new ClassReader(classes.get("Test$Foo")).accept(node, 0);
-        assertNull(field(node, "field").value);
+        final ClassModel node = ClassFile.of().parse(classes.get("Test$Foo"));
+        assertNull(BytecodeUtil.constantValue(field(node, "field")));
         final Class<?> type = loadClass(classes, "Test$Foo");
         final Object instance = type.getConstructor().newInstance();
         assertEquals(10, type.getField("field").get(instance));
@@ -3659,7 +3684,7 @@ class BytecodeGeneratorTest {
         );
     }
 
-    private static ClassNode inspect(final String source) {
+    private static ClassModel inspect(final String source) {
         final Program program =
             new Parser(new Lexer(source).getTokens()).parse();
         final byte[] bytes =
@@ -3667,14 +3692,14 @@ class BytecodeGeneratorTest {
                 program,
                 new SemanticAnalyzer().analyze(program)
             ).generate();
-        final var node = new ClassNode();
-        new ClassReader(bytes).accept(node, 0);
+        final ClassModel node = ClassFile.of().parse(bytes);
         return node;
     }
 
-    private static FieldNode field(final ClassNode node, final String name) {
-        return node.fields.stream()
-            .filter(field -> field.name.equals(name))
+    private static FieldModel field(final ClassModel node, final String name) {
+        return node.fields()
+            .stream()
+            .filter(field -> field.fieldName().stringValue().equals(name))
             .findFirst()
             .orElseThrow();
     }
@@ -3696,9 +3721,12 @@ class BytecodeGeneratorTest {
                     + expression + ";";
             final var node = inspect(source);
             final double constant =
-                assertInstanceOf(Double.class, field(node, "folded").value);
-            assertEquals("D", field(node, "folded").desc);
-            assertNull(field(node, "evaluated").value);
+                assertInstanceOf(
+                    Double.class,
+                    BytecodeUtil.constantValue(field(node, "folded"))
+                );
+            assertEquals("D", field(node, "folded").fieldType().stringValue());
+            assertNull(BytecodeUtil.constantValue(field(node, "evaluated")));
             final Class<?> type = compile(source);
             assertEquals(
                 Double.doubleToRawLongBits(
@@ -3716,10 +3744,18 @@ class BytecodeGeneratorTest {
             );
         }
         final var node = inspect("const result = -0.5 + 12.34 - 10;");
-        assertEquals(-0.5 + 12.34 - 10, field(node, "result").value);
+        assertEquals(
+            -0.5 + 12.34 - 10,
+            BytecodeUtil.constantValue(field(node, "result"))
+        );
         assertTrue(
-            node.methods.stream()
-                .noneMatch(method -> method.name.equals("<clinit>"))
+            node.methods()
+                .stream()
+                .noneMatch(
+                    method -> method.methodName()
+                        .stringValue()
+                        .equals("<clinit>")
+                )
         );
     }
 
@@ -3743,24 +3779,47 @@ class BytecodeGeneratorTest {
             const nanComparison = (0.0 / 0.0) == 0.0;
             """;
         final var node = inspect(source);
-        assertEquals(10, field(node, "integer").value);
-        assertEquals(1.5, field(node, "floating").value);
-        assertEquals(3.0f, field(node, "widened").value);
-        assertEquals(1, field(node, "yes").value);
-        assertEquals(0, field(node, "no").value);
-        assertEquals((int) 'x', field(node, "letter").value);
-        assertEquals("hello", field(node, "text").value);
-        assertEquals(Integer.MIN_VALUE, field(node, "negative").value);
-        assertEquals(20, field(node, "grouped").value);
-        assertEquals(3.5, field(node, "mixed").value);
-        assertEquals(1, field(node, "predicate").value);
-        assertEquals("hello world", field(node, "joined").value);
-        assertEquals(-0.0, field(node, "signedZero").value);
-        assertEquals(Integer.MIN_VALUE, field(node, "overflow").value);
-        assertEquals(0, field(node, "nanComparison").value);
+        assertEquals(10, BytecodeUtil.constantValue(field(node, "integer")));
+        assertEquals(1.5, BytecodeUtil.constantValue(field(node, "floating")));
+        assertEquals(3.0f, BytecodeUtil.constantValue(field(node, "widened")));
+        assertEquals(1, BytecodeUtil.constantValue(field(node, "yes")));
+        assertEquals(0, BytecodeUtil.constantValue(field(node, "no")));
+        assertEquals(
+            (int) 'x',
+            BytecodeUtil.constantValue(field(node, "letter"))
+        );
+        assertEquals("hello", BytecodeUtil.constantValue(field(node, "text")));
+        assertEquals(
+            Integer.MIN_VALUE,
+            BytecodeUtil.constantValue(field(node, "negative"))
+        );
+        assertEquals(20, BytecodeUtil.constantValue(field(node, "grouped")));
+        assertEquals(3.5, BytecodeUtil.constantValue(field(node, "mixed")));
+        assertEquals(1, BytecodeUtil.constantValue(field(node, "predicate")));
+        assertEquals(
+            "hello world",
+            BytecodeUtil.constantValue(field(node, "joined"))
+        );
+        assertEquals(
+            -0.0,
+            BytecodeUtil.constantValue(field(node, "signedZero"))
+        );
+        assertEquals(
+            Integer.MIN_VALUE,
+            BytecodeUtil.constantValue(field(node, "overflow"))
+        );
+        assertEquals(
+            0,
+            BytecodeUtil.constantValue(field(node, "nanComparison"))
+        );
         assertTrue(
-            node.methods.stream()
-                .noneMatch(method -> method.name.equals("<clinit>"))
+            node.methods()
+                .stream()
+                .noneMatch(
+                    method -> method.methodName()
+                        .stringValue()
+                        .equals("<clinit>")
+                )
         );
         final Class<?> type = compile(source);
         assertEquals(10, type.getField("integer").get(null));
@@ -3782,23 +3841,28 @@ class BytecodeGeneratorTest {
             const absent = null;
             """;
         final var node = inspect(source);
-        assertEquals(10, field(node, "literal").value);
+        assertEquals(10, BytecodeUtil.constantValue(field(node, "literal")));
         for (final String name : List
             .of("state", "first", "second", "values", "absent")) {
-            assertNull(field(node, name).value, name);
+            assertNull(BytecodeUtil.constantValue(field(node, name)), name);
         }
         final var initializer =
-            node.methods.stream()
-                .filter(method -> method.name.equals("<clinit>"))
+            node.methods()
+                .stream()
+                .filter(
+                    method -> method.methodName()
+                        .stringValue()
+                        .equals("<clinit>")
+                )
                 .findFirst()
                 .orElseThrow();
         final var writes = new ArrayList<String>();
-        for (final var instruction : initializer.instructions) {
+        for (final var instruction : BytecodeUtil.instructions(initializer)) {
             if (
-                instruction instanceof FieldInsnNode field
-                    && field.getOpcode() == Opcodes.PUTSTATIC
+                instruction instanceof FieldInstruction field
+                    && field.opcode() == Opcode.PUTSTATIC
             ) {
-                writes.add(field.name);
+                writes.add(field.name().stringValue());
             }
         }
         assertEquals(
@@ -3821,7 +3885,7 @@ class BytecodeGeneratorTest {
     @Test
     void preservesRuntimeDivisionByZero() {
         final String source = "const bad = 1 / 0;";
-        assertNull(field(inspect(source), "bad").value);
+        assertNull(BytecodeUtil.constantValue(field(inspect(source), "bad")));
         final Class<?> type = compile(source);
         final ExceptionInInitializerError error =
             assertThrows(
@@ -3914,13 +3978,7 @@ class BytecodeGeneratorTest {
                 program,
                 new SemanticAnalyzer().analyze(program)
             ).generate();
-        final StringWriter diagnostics = new StringWriter();
-        CheckClassAdapter.verify(
-            new ClassReader(bytes),
-            false,
-            new PrintWriter(diagnostics)
-        );
-        assertEquals("", diagnostics.toString());
+        BytecodeUtil.verify(bytes);
         final Class<?> generated = new ClassLoader() {
             Class<?> define() {
                 return defineClass(null, bytes, 0, bytes.length);

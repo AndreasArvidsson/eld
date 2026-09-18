@@ -87,23 +87,14 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; foo
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; bar
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field bar Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
     LDC 2
-    NEWARRAY T_INT
+    NEWARRAY INT
     DUP
     LDC 0
     LDC 1
@@ -112,16 +103,14 @@ public final class Test {
     LDC 1
     LDC 2
     IASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
-    PUTSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ()V
-    PUTSTATIC Test.bar : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>()V
+    PUTSTATIC Test.bar Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     RETURN
-    MAXSTACK = 6
-    MAXLOCALS = 0
-}
+    max stack 6 max locals 0
 
 --- OUTPUT ---
 

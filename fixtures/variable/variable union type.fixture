@@ -252,51 +252,40 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static Ljava/lang/Integer; foo
-
-  // access flags 0x9
-  public static Ljava/lang/Object; bar
-
-  // access flags 0x8
-  static <clinit>()V
-    ACONST_NULL
-    PUTSTATIC Test.foo : Ljava/lang/Integer;
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
-    PUTSTATIC Test.bar : Ljava/lang/Object;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Integer;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Integer; flags [PUBLIC, STATIC]
+  field bar Ljava/lang/Object; flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.foo Ljava/lang/Integer;
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    PUTSTATIC Test.bar Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     LDC 10
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     DUP
-    PUTSTATIC Test.foo : Ljava/lang/Integer;
+    PUTSTATIC Test.foo Ljava/lang/Integer;
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Integer;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.bar : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    LDC 5.5D
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bar Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    LDC2_W 5.5
     D2F
-    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
     DUP
-    PUTSTATIC Test.bar : Ljava/lang/Object;
+    PUTSTATIC Test.bar Ljava/lang/Object;
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.bar : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bar Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

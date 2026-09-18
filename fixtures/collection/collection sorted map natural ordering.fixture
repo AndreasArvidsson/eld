@@ -201,43 +201,33 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/util/SortedMap<Ljava/lang/String;Ljava/lang/Integer;>;
-  // declaration: map extends java.util.SortedMap<java.lang.String, java.lang.Integer>
-  public final static Ljava/util/SortedMap; map
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field map Ljava/util/SortedMap; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/SortedMap<Ljava/lang/String;Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/TreeMap
     DUP
-    INVOKESPECIAL java/util/TreeMap.<init> ()V
-    PUTSTATIC Test.map : Ljava/util/SortedMap;
-    GETSTATIC Test.map : Ljava/util/SortedMap;
+    INVOKESPECIAL java/util/TreeMap.<init>()V
+    PUTSTATIC Test.map Ljava/util/SortedMap;
+    GETSTATIC Test.map Ljava/util/SortedMap;
     LDC "b"
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Map.put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
     CHECKCAST java/lang/Integer
     POP
-    GETSTATIC Test.map : Ljava/util/SortedMap;
+    GETSTATIC Test.map Ljava/util/SortedMap;
     LDC "a"
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Map.put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
     CHECKCAST java/lang/Integer
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.map : Ljava/util/SortedMap;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.map Ljava/util/SortedMap;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

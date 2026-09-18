@@ -230,89 +230,74 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static foo(II)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method foo(II)V flags [PUBLIC, STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW java/lang/StringBuilder
     DUP
-    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
-    ILOAD 0
-    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    ILOAD_0 0
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
     LDC " "
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-    ILOAD 1
-    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
-    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ILOAD_1 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-
-  // access flags 0x1009
-  public static synthetic foo(II[Z)V
-    ALOAD 2
+    max stack 3 max locals 2
+  method foo(II[Z)V flags [PUBLIC, STATIC, SYNTHETIC]
+    ALOAD_2 2
     LDC 0
     BALOAD
     IFEQ L0
     LDC 1
-    ISTORE 0
-   L0
-   FRAME SAME
-    ALOAD 2
+    ISTORE_0 0
+   L0:
+    ALOAD_2 2
     LDC 1
     BALOAD
     IFEQ L1
-    ILOAD 0
+    ILOAD_0 0
     LDC 1
     IADD
-    ISTORE 1
-   L1
-   FRAME SAME
-    ILOAD 0
-    ILOAD 1
-    INVOKESTATIC Test.foo (II)V
+    ISTORE_1 1
+   L1:
+    ILOAD_0 0
+    ILOAD_1 1
+    INVOKESTATIC Test.foo(II)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-
-  // access flags 0x8
-  static <clinit>()V
-    ICONST_0
-    ICONST_0
+    max stack 2 max locals 3
+  method <clinit>()V flags [STATIC]
+    ICONST_0 0
+    ICONST_0 0
     LDC 2
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 0
-    ICONST_1
+    ICONST_1 1
     BASTORE
     DUP
     LDC 1
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESTATIC Test.foo (II[Z)V
+    INVOKESTATIC Test.foo(II[Z)V
     LDC 5
-    ISTORE 0
-    ILOAD 0
-    ICONST_0
+    ISTORE_0 0
+    ILOAD_0 0
+    ICONST_0 0
     LDC 2
-    NEWARRAY T_BOOLEAN
+    NEWARRAY BOOLEAN
     DUP
     LDC 1
-    ICONST_1
+    ICONST_1 1
     BASTORE
-    INVOKESTATIC Test.foo (II[Z)V
+    INVOKESTATIC Test.foo(II[Z)V
     LDC 5
     LDC 10
-    INVOKESTATIC Test.foo (II)V
+    INVOKESTATIC Test.foo(II)V
     RETURN
-    MAXSTACK = 6
-    MAXLOCALS = 1
-}
+    max stack 6 max locals 1
 
 --- OUTPUT ---
 

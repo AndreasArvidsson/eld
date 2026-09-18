@@ -348,87 +348,60 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; aaa
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; bbb
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; ccc
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; ddd
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; eee
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; fff
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; ggg
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; hhh
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; iii
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; jjj
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field aaa Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; flags [PUBLIC, STATIC, FINAL]
+  field bbb Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; flags [PUBLIC, STATIC, FINAL]
+  field ccc Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field ddd Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; flags [PUBLIC, STATIC, FINAL]
+  field eee Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; flags [PUBLIC, STATIC, FINAL]
+  field fff Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; flags [PUBLIC, STATIC, FINAL]
+  field ggg Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; flags [PUBLIC, STATIC, FINAL]
+  field hhh Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; flags [PUBLIC, STATIC, FINAL]
+  field iii Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field jjj Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init> ()V
-    PUTSTATIC Test.aaa : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init>()V
+    PUTSTATIC Test.aaa Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init> ()V
-    PUTSTATIC Test.bbb : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init>()V
+    PUTSTATIC Test.bbb Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ()V
-    PUTSTATIC Test.ccc : Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>()V
+    PUTSTATIC Test.ccc Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init> ()V
-    PUTSTATIC Test.ddd : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>()V
+    PUTSTATIC Test.ddd Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init> ()V
-    PUTSTATIC Test.eee : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>()V
+    PUTSTATIC Test.eee Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init> ()V
-    PUTSTATIC Test.fff : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init>()V
+    PUTSTATIC Test.fff Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init> ()V
-    PUTSTATIC Test.ggg : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>()V
+    PUTSTATIC Test.ggg Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ()V
-    PUTSTATIC Test.hhh : Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>()V
+    PUTSTATIC Test.hhh Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ()V
-    PUTSTATIC Test.iii : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>()V
+    PUTSTATIC Test.iii Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ()V
-    PUTSTATIC Test.jjj : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>()V
+    PUTSTATIC Test.jjj Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

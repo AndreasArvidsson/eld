@@ -76,44 +76,31 @@ Expression types:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
     LDC 1
     LDC 2
     IF_ICMPLT L0
-    ICONST_0
+    ICONST_0 0
     GOTO L1
-   L0
-   FRAME SAME
-    ICONST_1
-   L1
-   FRAME SAME1 I
+   L0:
+    ICONST_1 1
+   L1:
     IFEQ L2
-    GOTO L3
-   L2
-   FRAME SAME
-    ICONST_1
-    IFEQ L4
-    ICONST_0
     GOTO L5
-   L4
-   FRAME SAME
-    ICONST_1
-   L5
-   FRAME SAME1 I
+   L2:
+    ICONST_1 1
     IFEQ L3
-    GOTO L3
-   L3
-   FRAME SAME
+    ICONST_0 0
+    GOTO L4
+   L3:
+    ICONST_1 1
+   L4:
+    IFEQ L5
+    GOTO L5
+   L5:
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

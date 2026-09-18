@@ -1,14 +1,14 @@
 package com.github.andreasarvidsson.eld;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.FieldModel;
+import java.lang.classfile.Opcode;
+import java.lang.classfile.instruction.*;
 import java.lang.reflect.InvocationTargetException;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.TypeInsnNode;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.parser.Parser;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -191,47 +191,59 @@ class ObjectArrayTest {
             for (final byte[] bytes : classes.values()) {
                 BytecodeUtil.verify(bytes);
             }
-            final ClassNode node = new ClassNode();
-            new ClassReader(classes.get("Test")).accept(node, 0);
+            final ClassModel node = ClassFile.of().parse(classes.get("Test"));
             boolean emptyConstructor = false;
             boolean backingConstructor = false;
             boolean elementCast = false;
-            for (final var method : node.methods) {
-                for (final var instruction : method.instructions) {
-                    assertNotEquals(
-                        Opcodes.ARRAYLENGTH,
-                        instruction.getOpcode()
-                    );
-                    assertNotEquals(Opcodes.AALOAD, instruction.getOpcode());
+            for (final var method : node.methods()) {
+                final var instructions = BytecodeUtil.instructions(method);
+                for (final var instruction : instructions) {
+                    assertNotEquals(Opcode.ARRAYLENGTH, instruction.opcode());
+                    assertNotEquals(Opcode.AALOAD, instruction.opcode());
                     if (
-                        instruction instanceof MethodInsnNode call && call.owner
-                            .equals(RuntimeAbi.ArrayKind.OBJECT.owner)
+                        instruction instanceof InvokeInstruction call
+                            && call.owner()
+                                .asInternalName()
+                                .equals(RuntimeAbi.ArrayKind.OBJECT.owner)
                     ) {
-                        if (call.name.equals("<init>")) {
-                            emptyConstructor |= call.desc.equals("()V");
+                        if (call.name().stringValue().equals("<init>")) {
+                            emptyConstructor |=
+                                call.type().stringValue().equals("()V");
                             backingConstructor |=
-                                call.desc.equals("([Ljava/lang/Object;)V");
+                                call.type()
+                                    .stringValue()
+                                    .equals("([Ljava/lang/Object;)V");
                         }
                         if (
-                            call.name.equals("copy")
-                                || call.name.startsWith("slice")
+                            call.name().stringValue().equals("copy")
+                                || call.name().stringValue().startsWith("slice")
                         ) {
                             assertTrue(
-                                call.desc.endsWith(
-                                    RuntimeAbi.ArrayKind.OBJECT.descriptor
-                                )
+                                call.type()
+                                    .stringValue()
+                                    .endsWith(
+                                        RuntimeAbi.ArrayKind.OBJECT.descriptor
+                                    )
                             );
                             assertNotEquals(
-                                Opcodes.CHECKCAST,
-                                instruction.getNext().getOpcode()
+                                Opcode.CHECKCAST,
+                                BytecodeUtil.instructions(method)
+                                    .get(
+                                        BytecodeUtil.instructions(method)
+                                            .indexOf(instruction) + 1
+                                    )
+                                    .opcode()
                             );
                         }
                     }
                     if (
-                        instruction instanceof TypeInsnNode cast
-                            && cast.getOpcode() == Opcodes.CHECKCAST
+                        instruction instanceof TypeCheckInstruction cast
+                            && cast.opcode() == Opcode.CHECKCAST
                     ) {
-                        elementCast |= cast.desc.equals("java/lang/String");
+                        elementCast |=
+                            cast.type()
+                                .asInternalName()
+                                .equals("java/lang/String");
                     }
                 }
             }

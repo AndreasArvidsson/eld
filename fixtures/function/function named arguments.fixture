@@ -223,47 +223,35 @@ Named arguments:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static isLess(II)Z
-    ILOAD 0
-    ILOAD 1
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method isLess(II)Z flags [PUBLIC, STATIC]
+    ILOAD_0 0
+    ILOAD_1 1
     IF_ICMPLT L0
-    ICONST_0
+    ICONST_0 0
     GOTO L1
-   L0
-   FRAME SAME
-    ICONST_1
-   L1
-   FRAME SAME1 I
+   L0:
+    ICONST_1 1
+   L1:
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 5
     LDC 2
-    INVOKESTATIC Test.isLess (II)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKESTATIC Test.isLess(II)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 5
-    ISTORE 0
+    ISTORE_0 0
     LDC 2
-    ISTORE 1
-    ILOAD 1
-    ILOAD 0
-    INVOKESTATIC Test.isLess (II)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    ISTORE_1 1
+    ILOAD_1 1
+    ILOAD_0 0
+    INVOKESTATIC Test.isLess(II)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 2
 
 --- OUTPUT ---
 

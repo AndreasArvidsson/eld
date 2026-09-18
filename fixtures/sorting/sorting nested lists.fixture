@@ -324,96 +324,82 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/util/List<Ljava/util/List<Ljava/lang/Integer;>;>;
-  // declaration: rows extends java.util.List<java.util.List<java.lang.Integer>>
-  public final static Ljava/util/List; rows
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field rows Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/util/List<Ljava/lang/Integer;>;>;
+  method $lambda0(Ljava/util/List;Ljava/util/List;)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ALOAD_0 0
+    LDC 0
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ALOAD_1 1
+    LDC 0
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    IRETURN
+    max stack 3 max locals 2
+  method <clinit>()V flags [STATIC]
     NEW java/util/ArrayList
     DUP
     LDC 2
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     NEW java/util/ArrayList
     DUP
     LDC 2
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     NEW java/util/ArrayList
     DUP
     LDC 2
-    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
-    PUTSTATIC Test.rows : Ljava/util/List;
-    GETSTATIC Test.rows : Ljava/util/List;
+    PUTSTATIC Test.rows Ljava/util/List;
+    GETSTATIC Test.rows Ljava/util/List;
     LDC 0
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST java/util/List
-    ACONST_NULL
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC Test.rows : Ljava/util/List;
-    LDC Ljava/util/Comparator;.class
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda0(Ljava/util/List;Ljava/util/List;)I
-    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC Test.rows Ljava/util/List;
+    LDC ClassOrInterfaceDesc[Comparator]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(List,List)int]
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
     CHECKCAST java/util/Comparator
-    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.rows : Ljava/util/List;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.rows Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 5
-    MAXLOCALS = 0
-
-  // access flags 0x100A
-  private static synthetic $lambda0(Ljava/util/List;Ljava/util/List;)I
-    ALOAD 0
-    LDC 0
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
-    CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue ()I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    ALOAD 1
-    LDC 0
-    INVOKEINTERFACE java/util/List.get (I)Ljava/lang/Object; (itf)
-    CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue ()I
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
-    IRETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 5 max locals 0
 
 --- OUTPUT ---
 

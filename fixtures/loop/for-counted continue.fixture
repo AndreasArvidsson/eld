@@ -95,44 +95,32 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
     LDC 0
-    ISTORE 0
-   L0
-   FRAME APPEND [I]
-    ILOAD 0
+    ISTORE_0 0
+   L0:
+    ILOAD_0 0
     LDC 10
     IF_ICMPLT L1
-    ICONST_0
+    ICONST_0 0
     GOTO L2
-   L1
-   FRAME SAME
-    ICONST_1
-   L2
-   FRAME SAME1 I
-    IFEQ L3
-    GOTO L4
-   L4
-   FRAME SAME
-    ILOAD 0
+   L1:
+    ICONST_1 1
+   L2:
+    IFEQ L4
+    GOTO L3
+   L3:
+    ILOAD_0 0
     DUP
-    ICONST_1
+    ICONST_1 1
     IADD
-    ISTORE 0
+    ISTORE_0 0
     POP
     GOTO L0
-   L3
-   FRAME SAME
+   L4:
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 1
-}
+    max stack 3 max locals 1
 
 --- OUTPUT ---
 

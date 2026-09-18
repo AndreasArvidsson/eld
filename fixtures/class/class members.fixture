@@ -246,69 +246,45 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC]
 
-  NESTMEMBER Test$Counter
-  // access flags 0x9
-  public static INNERCLASS Test$Counter Test Counter
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Counter {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Counter Test Counter
-
-  // access flags 0x12
-  private final I initial
-
-  // access flags 0x4
-  protected I count
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field initial I flags [PRIVATE, FINAL]
+  field count I flags [PROTECTED]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC 10
-    PUTFIELD Test$Counter.initial : I
-    ALOAD 0
+    PUTFIELD Test$Counter.initial I
+    ALOAD_0 0
     LDC 10
-    PUTFIELD Test$Counter.count : I
+    PUTFIELD Test$Counter.count I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public next()I
-    ALOAD 0
+    max stack 2 max locals 1
+  method next()I flags [PUBLIC]
+    ALOAD_0 0
     DUP
-    GETFIELD Test$Counter.count : I
+    GETFIELD Test$Counter.count I
     DUP_X1
-    ICONST_1
+    ICONST_1 1
     IADD
-    PUTFIELD Test$Counter.count : I
+    PUTFIELD Test$Counter.count I
     IRETURN
-    MAXSTACK = 4
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public invoke()I
-    // handle kind 0x5 : INVOKEVIRTUAL
-    LDC Test$Counter.next()I
-    ALOAD 0
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    ASTORE 1
-    ALOAD 1
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
+    max stack 4 max locals 1
+  method invoke()I flags [PUBLIC]
+    LDC MethodHandleDesc[VIRTUAL/Test$Counter::next(Test$Counter)int]
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    ASTORE_1 1
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

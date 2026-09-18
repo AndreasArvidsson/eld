@@ -191,86 +191,54 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Callback
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Callback Test Callback
-
-  // access flags 0x19
-  public final static LTest$Callback; callback
-
-  // access flags 0x8
-  static <clinit>()V
-    NEW Test$$object0
-    DUP
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.$lambda0(I)I
-    INVOKESPECIAL Test$$object0.<init> (Ljava/lang/invoke/MethodHandle;)V
-    PUTSTATIC Test.callback : LTest$Callback;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.callback : LTest$Callback;
-    INVOKEINTERFACE Test$Callback.$get$callback ()Ljava/lang/invoke/MethodHandle; (itf)
-    LDC 5
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-
-  // access flags 0x100A
-  private static synthetic $lambda0(I)I
-    ILOAD 0
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Callback
+  inner class Test$Callback flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field callback LTest$Callback; flags [PUBLIC, STATIC, FINAL]
+  method $lambda0(I)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ILOAD_0 0
     LDC 1
     IADD
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-}
-
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Callback {
-
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Callback Test Callback
-
-  // access flags 0x1401
-  public abstract synthetic $get$callback()Ljava/lang/invoke/MethodHandle;
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Callback {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final Ljava/lang/invoke/MethodHandle; callback
-
-  // access flags 0x1001
-  public synthetic $get$callback()Ljava/lang/invoke/MethodHandle;
-    ALOAD 0
-    GETFIELD Test$$object0.callback : Ljava/lang/invoke/MethodHandle;
-    ARETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public <init>(Ljava/lang/invoke/MethodHandle;)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ALOAD 1
-    PUTFIELD Test$$object0.callback : Ljava/lang/invoke/MethodHandle;
+    max stack 2 max locals 1
+  method <clinit>()V flags [STATIC]
+    NEW Test$$object0
+    DUP
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int)int]
+    INVOKESPECIAL Test$$object0.<init>(Ljava/lang/invoke/MethodHandle;)V
+    PUTSTATIC Test.callback LTest$Callback;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.callback LTest$Callback;
+    INVOKEINTERFACE Test$Callback.$get$callback()Ljava/lang/invoke/MethodHandle;
+    LDC 5
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 0
+
+class Test$Callback extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Callback flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$callback()Ljava/lang/invoke/MethodHandle; flags [PUBLIC, ABSTRACT, SYNTHETIC]
+
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Callback
+  nest host Test
+  field callback Ljava/lang/invoke/MethodHandle; flags [PRIVATE, FINAL]
+  method $get$callback()Ljava/lang/invoke/MethodHandle; flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.callback Ljava/lang/invoke/MethodHandle;
+    ARETURN
+    max stack 1 max locals 1
+  method <init>(Ljava/lang/invoke/MethodHandle;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$$object0.callback Ljava/lang/invoke/MethodHandle;
+    RETURN
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

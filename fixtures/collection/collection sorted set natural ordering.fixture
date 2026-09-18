@@ -208,44 +208,34 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  // signature Ljava/util/SortedSet<Ljava/lang/Integer;>;
-  // declaration: values extends java.util.SortedSet<java.lang.Integer>
-  public final static Ljava/util/SortedSet; values
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field values Ljava/util/SortedSet; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/SortedSet<Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
     NEW java/util/TreeSet
     DUP
-    INVOKESPECIAL java/util/TreeSet.<init> ()V
-    PUTSTATIC Test.values : Ljava/util/SortedSet;
-    GETSTATIC Test.values : Ljava/util/SortedSet;
+    INVOKESPECIAL java/util/TreeSet.<init>()V
+    PUTSTATIC Test.values Ljava/util/SortedSet;
+    GETSTATIC Test.values Ljava/util/SortedSet;
     LDC 3
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC Test.values : Ljava/util/SortedSet;
+    GETSTATIC Test.values Ljava/util/SortedSet;
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC Test.values : Ljava/util/SortedSet;
+    GETSTATIC Test.values Ljava/util/SortedSet;
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add(Ljava/lang/Object;)Z
     POP
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.values : Ljava/util/SortedSet;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/SortedSet;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

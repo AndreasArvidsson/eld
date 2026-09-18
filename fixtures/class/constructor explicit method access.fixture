@@ -269,73 +269,49 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Foo
-  // access flags 0x9
-  public static INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Foo
     DUP
-    INVOKESPECIAL Test$Foo.<init> ()V
-    INVOKEVIRTUAL Test$Foo.other ()I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$Foo.<init>()V
+    INVOKEVIRTUAL Test$Foo.other()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Foo {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x2
-  private I value
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field value I flags [PRIVATE]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC 5
-    PUTFIELD Test$Foo.value : I
-    ALOAD 0
+    PUTFIELD Test$Foo.value I
+    ALOAD_0 0
     DUP
-    GETFIELD Test$Foo.value : I
+    GETFIELD Test$Foo.value I
     DUP_X1
-    ICONST_1
+    ICONST_1 1
     IADD
-    PUTFIELD Test$Foo.value : I
+    PUTFIELD Test$Foo.value I
     POP
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 1
-
-  // access flags 0x2
-  private getValue()I
-    ALOAD 0
-    GETFIELD Test$Foo.value : I
+    max stack 4 max locals 1
+  method getValue()I flags [PRIVATE]
+    ALOAD_0 0
+    GETFIELD Test$Foo.value I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public other()I
-    ALOAD 0
-    INVOKEVIRTUAL Test$Foo.getValue ()I
+    max stack 1 max locals 1
+  method other()I flags [PUBLIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Foo.getValue()I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
 --- OUTPUT ---
 

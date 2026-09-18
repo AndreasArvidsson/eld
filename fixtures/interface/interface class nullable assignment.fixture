@@ -164,66 +164,41 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Marker
-  NESTMEMBER Test$Box
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Marker Test Marker
-  // access flags 0x9
-  public static INNERCLASS Test$Box Test Box
-
-  // access flags 0x19
-  public final static LTest$Box; box
-
-  // access flags 0x19
-  public final static LTest$Marker; marker
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Marker
+  nest member Test$Box
+  inner class Test$Marker flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field box LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field marker LTest$Marker; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$Box
     DUP
-    INVOKESPECIAL Test$Box.<init> ()V
-    PUTSTATIC Test.box : LTest$Box;
-    GETSTATIC Test.box : LTest$Box;
-    PUTSTATIC Test.marker : LTest$Marker;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.marker : LTest$Marker;
-    GETSTATIC Test.box : LTest$Box;
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.box LTest$Box;
+    GETSTATIC Test.box LTest$Box;
+    PUTSTATIC Test.marker LTest$Marker;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.marker LTest$Marker;
+    GETSTATIC Test.box LTest$Box;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Marker {
+class Test$Marker extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Marker flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Marker Test Marker
-}
-
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Box implements Test$Marker {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Box Test Box
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Marker
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
 --- OUTPUT ---
 

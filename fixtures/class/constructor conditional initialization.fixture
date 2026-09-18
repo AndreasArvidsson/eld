@@ -298,71 +298,51 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Foo
-  // access flags 0x9
-  public static INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Foo
     DUP
-    ICONST_1
-    INVOKESPECIAL Test$Foo.<init> (Z)V
-    GETFIELD Test$Foo.value : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    ICONST_1 1
+    INVOKESPECIAL Test$Foo.<init>(Z)V
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Foo
     DUP
-    ICONST_0
-    INVOKESPECIAL Test$Foo.<init> (Z)V
-    GETFIELD Test$Foo.value : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    ICONST_0 0
+    INVOKESPECIAL Test$Foo.<init>(Z)V
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 0
-}
+    max stack 4 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Foo {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x11
-  public final I value
-
-  // access flags 0x1
-  public <init>(Z)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ILOAD 1
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, FINAL]
+  method <init>(Z)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ILOAD_1 1
     IFEQ L0
-    ALOAD 0
+    ALOAD_0 0
     LDC 1
     DUP_X1
-    PUTFIELD Test$Foo.value : I
+    PUTFIELD Test$Foo.value I
     POP
     GOTO L1
-   L0
-   FRAME FULL [Test$Foo I] []
-    ALOAD 0
+   L0:
+    ALOAD_0 0
     LDC 2
     DUP_X1
-    PUTFIELD Test$Foo.value : I
+    PUTFIELD Test$Foo.value I
     POP
-   L1
-   FRAME SAME
+   L1:
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-}
+    max stack 3 max locals 2
 
 --- OUTPUT ---
 

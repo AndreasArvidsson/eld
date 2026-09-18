@@ -242,59 +242,38 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Ljava/lang/Object; foo
-
-  // access flags 0x19
-  public final static Ljava/lang/Object; bar
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field bar Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     LDC 1
-    TABLESWITCH
-      1: L0
-      default: L1
-   L0
-   FRAME SAME
+    TABLESWITCH 1..1 default L1 1:L0
+   L0:
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     GOTO L2
-   L1
-   FRAME SAME
+   L1:
     LDC "hello"
-   L2
-   FRAME SAME1 java/lang/Object
-    PUTSTATIC Test.foo : Ljava/lang/Object;
+   L2:
+    PUTSTATIC Test.foo Ljava/lang/Object;
     LDC 2
-    TABLESWITCH
-      1: L3
-      default: L4
-   L3
-   FRAME SAME
+    TABLESWITCH 1..1 default L4 1:L3
+   L3:
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     GOTO L5
-   L4
-   FRAME SAME
+   L4:
     LDC "hello"
-   L5
-   FRAME SAME1 java/lang/Object
-    PUTSTATIC Test.bar : Ljava/lang/Object;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.bar : Ljava/lang/Object;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+   L5:
+    PUTSTATIC Test.bar Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bar Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

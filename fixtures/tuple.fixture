@@ -272,16 +272,9 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Lcom/github/andreasarvidsson/eld/runtime/EldTuple; foo
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
     LDC 2
@@ -289,36 +282,36 @@ public final class Test {
     DUP
     LDC 0
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     AASTORE
     DUP
     LDC 1
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
-    PUTSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
     LDC 0
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
     CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue ()I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
     LDC 1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get (I)Ljava/lang/Object;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
     CHECKCAST java/lang/Boolean
-    INVOKEVIRTUAL java/lang/Boolean.booleanValue ()Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    GETSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/lang/Boolean.booleanValue()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
     LDC 2
@@ -326,18 +319,18 @@ public final class Test {
     DUP
     LDC 0
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     AASTORE
     DUP
     LDC 1
-    ICONST_1
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
     LDC 2
@@ -345,20 +338,18 @@ public final class Test {
     DUP
     LDC 0
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     AASTORE
     DUP
     LDC 1
-    ICONST_0
-    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    ICONST_0 0
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
-    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    MAXSTACK = 8
-    MAXLOCALS = 0
-}
+    max stack 8 max locals 0
 
 --- OUTPUT ---
 

@@ -113,34 +113,21 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static Ljava/lang/invoke/MethodHandle; foo
-
-  // access flags 0x9
-  public static value()Ljava/lang/String;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method value()Ljava/lang/String; flags [PUBLIC, STATIC]
     LDC "hello"
     ARETURN
-    MAXSTACK = 1
-    MAXLOCALS = 0
-
-  // access flags 0x8
-  static <clinit>()V
-    // handle kind 0x6 : INVOKESTATIC
-    LDC Test.value()Ljava/lang/String;
-    PUTSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()Ljava/lang/String;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    max stack 1 max locals 0
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::value()String]
+    PUTSTATIC Test.foo Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

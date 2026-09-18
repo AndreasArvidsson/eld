@@ -73,14 +73,8 @@ Declarations:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x19
-  public final static D result = 1.8399999999999999D
-}
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field result D flags [PUBLIC, STATIC, FINAL] = 1.8399999999999999
 
 --- OUTPUT ---
 

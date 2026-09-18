@@ -453,130 +453,94 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Counter
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Counter Test Counter
-
-  // access flags 0x19
-  public final static LTest$Counter; counter
-
-  // access flags 0x9
-  public static make(I)LTest$Counter;
-    ICONST_1
-    NEWARRAY T_INT
-    ASTORE 1
-    ILOAD 0
-    ISTORE 2
-    ALOAD 1
-    ICONST_0
-    ILOAD 2
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field counter LTest$Counter; flags [PUBLIC, STATIC, FINAL]
+  method make(I)LTest$Counter; flags [PUBLIC, STATIC]
+    ICONST_1 1
+    NEWARRAY INT
+    ASTORE_1 1
+    ILOAD_0 0
+    ISTORE_2 2
+    ALOAD_1 1
+    ICONST_0 0
+    ILOAD_2 2
     IASTORE
     NEW Test$$object0
     DUP
-    ALOAD 1
-    INVOKESPECIAL Test$$object0.<init> ([I)V
+    ALOAD_1 1
+    INVOKESPECIAL Test$$object0.<init>([I)V
     ARETURN
-    MAXSTACK = 3
-    MAXLOCALS = 3
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 3 max locals 3
+  method <clinit>()V flags [STATIC]
     LDC 10
-    INVOKESTATIC Test.make (I)LTest$Counter;
-    PUTSTATIC Test.counter : LTest$Counter;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.counter : LTest$Counter;
+    INVOKESTATIC Test.make(I)LTest$Counter;
+    PUTSTATIC Test.counter LTest$Counter;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
     LDC 3
-    INVOKEINTERFACE Test$Counter.add (I)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.counter : LTest$Counter;
-    INVOKEINTERFACE Test$Counter.read ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.counter : LTest$Counter;
+    INVOKEINTERFACE Test$Counter.add(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
+    INVOKEINTERFACE Test$Counter.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
     LDC 4
-    INVOKEINTERFACE Test$Counter.add (I)I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEINTERFACE Test$Counter.add(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Counter {
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method add(I)I flags [PUBLIC, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Counter Test Counter
-
-  // access flags 0x401
-  public abstract add(I)I
-
-  // access flags 0x401
-  public abstract read()I
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Counter {
-
-  NESTHOST Test
-
-  // access flags 0x1012
-  private final synthetic [I $capture0
-
-  // access flags 0x1
-  public <init>([I)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ALOAD 1
-    PUTFIELD Test$$object0.$capture0 : [I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Counter
+  nest host Test
+  field $capture0 [I flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>([I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$$object0.$capture0 [I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public add(I)I
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
+    max stack 2 max locals 2
+  method add(I)I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
     IALOAD
-    ILOAD 1
+    ILOAD_1 1
     IADD
     DUP
-    ISTORE 2
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
-    ILOAD 2
+    ISTORE_2 2
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
+    ILOAD_2 2
     IASTORE
     POP
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
     IALOAD
     IRETURN
-    MAXSTACK = 4
-    MAXLOCALS = 3
-
-  // access flags 0x1
-  public read()I
-    ALOAD 0
-    GETFIELD Test$$object0.$capture0 : [I
-    ICONST_0
+    max stack 4 max locals 3
+  method read()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.$capture0 [I
+    ICONST_0 0
     IALOAD
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-}
+    max stack 2 max locals 1
 
 --- OUTPUT ---
 

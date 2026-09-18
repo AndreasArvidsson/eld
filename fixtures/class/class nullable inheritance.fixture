@@ -1057,218 +1057,163 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Base
-  NESTMEMBER Test$Child
-  NESTMEMBER Test$Sibling
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-  // access flags 0x9
-  public static INNERCLASS Test$Sibling Test Sibling
-
-  // access flags 0x9
-  public static LTest$Child; child
-
-  // access flags 0x19
-  public final static LTest$Base; base
-
-  // access flags 0x19
-  public final static LTest$Base; absent
-
-  // access flags 0x9
-  public static widen(LTest$Child;)LTest$Base;
-    ALOAD 0
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  nest member Test$Sibling
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  inner class Test$Sibling flags [PUBLIC, STATIC]
+  field child LTest$Child; flags [PUBLIC, STATIC]
+  field base LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  field absent LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method widen(LTest$Child;)LTest$Base; flags [PUBLIC, STATIC]
+    ALOAD_0 0
     ARETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x9
-  public static accepts(LTest$Base;)Z
-    ALOAD 0
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    ICONST_1
+    max stack 1 max locals 1
+  method accepts(LTest$Base;)Z flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1 1
     IXOR
     IRETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x9
-  public static multi(I)LTest$Base;
-    ACONST_NULL
-    ASTORE 1
-    ILOAD 0
+    max stack 2 max locals 1
+  method multi(I)LTest$Base; flags [PUBLIC, STATIC]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_1 1
+    ILOAD_0 0
     LDC 1
     IF_ICMPEQ L0
-    ICONST_0
+    ICONST_0 0
     GOTO L1
-   L0
-   FRAME APPEND [N]
-    ICONST_1
-   L1
-   FRAME SAME1 I
+   L0:
+    ICONST_1 1
+   L1:
     IFEQ L2
     NEW Test$Child
     DUP
-    INVOKESPECIAL Test$Child.<init> ()V
+    INVOKESPECIAL Test$Child.<init>()V
     DUP
-    ASTORE 1
+    ASTORE_1 1
     POP
-    GOTO L3
-   L2
-   FRAME SAME
-    ILOAD 0
-    LDC 2
-    IF_ICMPEQ L4
-    ICONST_0
     GOTO L5
-   L4
-   FRAME SAME
-    ICONST_1
-   L5
-   FRAME SAME1 I
-    IFEQ L3
+   L2:
+    ILOAD_0 0
+    LDC 2
+    IF_ICMPEQ L3
+    ICONST_0 0
+    GOTO L4
+   L3:
+    ICONST_1 1
+   L4:
+    IFEQ L5
     NEW Test$Sibling
     DUP
-    INVOKESPECIAL Test$Sibling.<init> ()V
+    INVOKESPECIAL Test$Sibling.<init>()V
     DUP
-    ASTORE 1
+    ASTORE_1 1
     POP
-    GOTO L3
-   L3
-   FRAME FULL [I Test$Base] []
-    ALOAD 1
+    GOTO L5
+   L5:
+    ALOAD_1 1
     CHECKCAST Test$Base
     ARETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
     NEW Test$Child
     DUP
-    INVOKESPECIAL Test$Child.<init> ()V
-    PUTSTATIC Test.child : LTest$Child;
-    GETSTATIC Test.child : LTest$Child;
-    PUTSTATIC Test.base : LTest$Base;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.base : LTest$Base;
-    GETSTATIC Test.child : LTest$Child;
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.child : LTest$Child;
-    INVOKESTATIC Test.widen (LTest$Child;)LTest$Base;
-    GETSTATIC Test.base : LTest$Base;
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.child : LTest$Child;
-    INVOKESTATIC Test.accepts (LTest$Base;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    ACONST_NULL
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.child LTest$Child;
+    GETSTATIC Test.child LTest$Child;
+    PUTSTATIC Test.base LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.base LTest$Base;
+    GETSTATIC Test.child LTest$Child;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    INVOKESTATIC Test.widen(LTest$Child;)LTest$Base;
+    GETSTATIC Test.base LTest$Base;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    INVOKESTATIC Test.accepts(LTest$Base;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     DUP
-    PUTSTATIC Test.child : LTest$Child;
+    PUTSTATIC Test.child LTest$Child;
     POP
-    GETSTATIC Test.child : LTest$Child;
-    PUTSTATIC Test.absent : LTest$Base;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.absent : LTest$Base;
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.child : LTest$Child;
-    INVOKESTATIC Test.widen (LTest$Child;)LTest$Base;
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.child : LTest$Child;
-    INVOKESTATIC Test.accepts (LTest$Base;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    PUTSTATIC Test.absent LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.absent LTest$Base;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    INVOKESTATIC Test.widen(LTest$Child;)LTest$Base;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    INVOKESTATIC Test.accepts(LTest$Base;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 0
-    INVOKESTATIC Test.multi (I)LTest$Base;
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKESTATIC Test.multi(I)LTest$Base;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 1
-    INVOKESTATIC Test.multi (I)LTest$Base;
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    ICONST_1
+    INVOKESTATIC Test.multi(I)LTest$Base;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1 1
     IXOR
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 2
-    INVOKESTATIC Test.multi (I)LTest$Base;
-    ACONST_NULL
-    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
-    ICONST_1
+    INVOKESTATIC Test.multi(I)LTest$Base;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1 1
     IXOR
-    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL Test$Base.<init> ()V
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Sibling extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Sibling Test Sibling
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL Test$Base.<init> ()V
+class Test$Sibling extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Sibling flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
     RETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
+    max stack 1 max locals 1
 
 --- OUTPUT ---
 

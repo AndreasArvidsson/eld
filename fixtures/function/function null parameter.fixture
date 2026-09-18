@@ -208,42 +208,32 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-
-  // access flags 0x9
-  public static foo(ILjava/lang/Integer;)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method foo(ILjava/lang/Integer;)V flags [PUBLIC, STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW java/lang/StringBuilder
     DUP
-    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
-    ILOAD 0
-    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    ILOAD_0 0
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
     LDC " "
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
-    ALOAD 1
-    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/Object;)Ljava/lang/StringBuilder;
-    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
-    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 2
-
-  // access flags 0x8
-  static <clinit>()V
+    max stack 3 max locals 2
+  method <clinit>()V flags [STATIC]
     LDC 1
     LDC 5
-    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
-    INVOKESTATIC Test.foo (ILjava/lang/Integer;)V
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;)V
     LDC 1
-    ACONST_NULL
-    INVOKESTATIC Test.foo (ILjava/lang/Integer;)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;)V
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 0
-}
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

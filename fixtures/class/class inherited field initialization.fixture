@@ -302,95 +302,64 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$Base
-  NESTMEMBER Test$Child
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x8
-  static <clinit>()V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW Test$Child
     DUP
-    INVOKESPECIAL Test$Child.<init> ()V
-    GETFIELD Test$Child.own : I
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKESPECIAL Test$Child.<init>()V
+    GETFIELD Test$Child.own I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 3
-    MAXLOCALS = 0
-}
+    max stack 3 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Base Test Base
-
-  // access flags 0x4
-  protected I value
-
-  // access flags 0x14
-  protected final I fixed
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  field value I flags [PROTECTED]
+  field fixed I flags [PROTECTED, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
     LDC 7
-    PUTFIELD Test$Base.value : I
-    ALOAD 0
+    PUTFIELD Test$Base.value I
+    ALOAD_0 0
     LDC 2
-    PUTFIELD Test$Base.fixed : I
+    PUTFIELD Test$Base.fixed I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
-}
+    max stack 2 max locals 1
 
-// class version 65.0 (65)
-// access flags 0x21
-public class Test$Child extends Test$Base {
-
-  NESTHOST Test
-  // access flags 0x9
-  public static INNERCLASS Test$Child Test Child
-
-  // access flags 0x11
-  public final I own
-
-  // access flags 0x1
-  public <init>()V
-    ALOAD 0
-    INVOKESPECIAL Test$Base.<init> ()V
-    ALOAD 0
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field own I flags [PUBLIC, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    ALOAD_0 0
     DUP
-    GETFIELD Test$Base.value : I
+    GETFIELD Test$Base.value I
     DUP_X1
-    ICONST_1
+    ICONST_1 1
     IADD
-    PUTFIELD Test$Base.value : I
+    PUTFIELD Test$Base.value I
     POP
-    ALOAD 0
-    ALOAD 0
-    GETFIELD Test$Base.value : I
-    ALOAD 0
-    GETFIELD Test$Base.fixed : I
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$Base.value I
+    ALOAD_0 0
+    GETFIELD Test$Base.fixed I
     IADD
     DUP_X1
-    PUTFIELD Test$Child.own : I
+    PUTFIELD Test$Child.own I
     POP
     RETURN
-    MAXSTACK = 4
-    MAXLOCALS = 1
-}
+    max stack 4 max locals 1
 
 --- OUTPUT ---
 

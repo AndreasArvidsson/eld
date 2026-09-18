@@ -383,136 +383,96 @@ References:
 
 --- BYTECODE ---
 
-// class version 65.0 (65)
-// access flags 0x31
-public final class Test {
-
-  NESTMEMBER Test$$object0
-  NESTMEMBER Test$Foo
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x19
-  public final static LTest$Foo; foo
-
-  // access flags 0x8
-  static <clinit>()V
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$object0
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field foo LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
     NEW Test$$object0
     DUP
     LDC 1
     LDC 2
-    INVOKESPECIAL Test$$object0.<init> (II)V
-    PUTSTATIC Test.foo : LTest$Foo;
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : LTest$Foo;
+    INVOKESPECIAL Test$$object0.<init>(II)V
+    PUTSTATIC Test.foo LTest$Foo;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
     LDC 3
     DUP_X1
-    INVOKEINTERFACE Test$Foo.$set$mutable (I)V (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$set$mutable(I)V
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
     DUP
-    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
+    INVOKEINTERFACE Test$Foo.$get$mutable()I
     DUP_X1
-    ICONST_1
+    ICONST_1 1
     IADD
-    INVOKEINTERFACE Test$Foo.$set$mutable (I)V (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : LTest$Foo;
-    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$set$mutable(I)V
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$get$mutable()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
     DUP
-    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
+    INVOKEINTERFACE Test$Foo.$get$mutable()I
     DUP_X1
-    ICONST_1
+    ICONST_1 1
     ISUB
-    INVOKEINTERFACE Test$Foo.$set$mutable (I)V (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : LTest$Foo;
-    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
-    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
-    GETSTATIC Test.foo : LTest$Foo;
-    INVOKEINTERFACE Test$Foo.$get$immutable ()I (itf)
-    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    INVOKEINTERFACE Test$Foo.$set$mutable(I)V
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$get$mutable()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$get$immutable()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    MAXSTACK = 5
-    MAXLOCALS = 0
-}
+    max stack 5 max locals 0
 
-// class version 65.0 (65)
-// access flags 0x601
-public abstract interface Test$Foo {
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$immutable()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method $get$mutable()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method $set$mutable(I)V flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
-  NESTHOST Test
-  // access flags 0x609
-  public static abstract INNERCLASS Test$Foo Test Foo
-
-  // access flags 0x1401
-  public abstract synthetic $get$immutable()I
-
-  // access flags 0x1401
-  public abstract synthetic $get$mutable()I
-
-  // access flags 0x1401
-  public abstract synthetic $set$mutable(I)V
-}
-
-// class version 65.0 (65)
-// access flags 0x1030
-final synthetic class Test$$object0 implements Test$Foo {
-
-  NESTHOST Test
-
-  // access flags 0x12
-  private final I immutable
-
-  // access flags 0x2
-  private I mutable
-
-  // access flags 0x1001
-  public synthetic $get$immutable()I
-    ALOAD 0
-    GETFIELD Test$$object0.immutable : I
+class Test$$object0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  implements Test$Foo
+  nest host Test
+  field immutable I flags [PRIVATE, FINAL]
+  field mutable I flags [PRIVATE]
+  method $get$immutable()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.immutable I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1001
-  public synthetic $get$mutable()I
-    ALOAD 0
-    GETFIELD Test$$object0.mutable : I
+    max stack 1 max locals 1
+  method $get$mutable()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$$object0.mutable I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1001
-  public synthetic $set$mutable(I)V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.mutable : I
+    max stack 1 max locals 1
+  method $set$mutable(I)V flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.mutable I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 2
-
-  // access flags 0x1
-  public <init>(II)V
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    ALOAD 0
-    ILOAD 1
-    PUTFIELD Test$$object0.immutable : I
-    ALOAD 0
-    ILOAD 2
-    PUTFIELD Test$$object0.mutable : I
+    max stack 2 max locals 2
+  method <init>(II)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$$object0.immutable I
+    ALOAD_0 0
+    ILOAD_2 2
+    PUTFIELD Test$$object0.mutable I
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 3
-}
+    max stack 2 max locals 3
 
 --- OUTPUT ---
 
