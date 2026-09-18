@@ -1,0 +1,96 @@
+class Foo implements Comparable<Foo> {
+    public func compareTo(other: string) i32 {
+        return 0;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+IMPLEMENTS (1:11-1:21)
+IDENTIFIER "Comparable" (1:22-1:32)
+LESS (1:32-1:33)
+IDENTIFIER "Foo" (1:33-1:36)
+GREATER (1:36-1:37)
+LEFT_BRACE (1:38-1:39)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "compareTo" (2:17-2:26)
+LEFT_PAREN (2:26-2:27)
+IDENTIFIER "other" (2:27-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "string" (2:34-2:40)
+RIGHT_PAREN (2:40-2:41)
+IDENTIFIER "i32" (2:42-2:45)
+LEFT_BRACE (2:46-2:47)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "0" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 1:22-1:37
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:33-1:36
+        name: "Foo"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 2:27-2:40
+          (IdentifierDeclaration
+            range: 2:27-2:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:34-2:40
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:42-2:45
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:46-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Interface member 'compareTo' expects (Foo) => i32, found (string) => i32 at 2:17-2:26

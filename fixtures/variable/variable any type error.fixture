@@ -1,7 +1,6 @@
 var foo: any = 5;
 const bar: i32 = foo;
 
-
 --- TOKENS ---
 
 VAR (1:1-1:4)

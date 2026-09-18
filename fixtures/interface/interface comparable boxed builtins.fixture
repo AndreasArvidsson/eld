@@ -1,0 +1,544 @@
+const value: Comparable<i32> = 3;
+print(value.compareTo(2));
+const optional: Comparable<i32> | null = 3;
+print(optional == null);
+const compare = value.compareTo;
+print(compare(3));
+const negative: Comparable<i32> = -3;
+print(negative.compareTo(-2));
+const text: Comparable<string> = "a";
+print(text.compareTo("b"));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "Comparable" (1:14-1:24)
+LESS (1:24-1:25)
+IDENTIFIER "i32" (1:25-1:28)
+GREATER (1:28-1:29)
+EQUAL (1:30-1:31)
+INTEGER_LITERAL "3" (1:32-1:33)
+SEMICOLON (1:33-1:34)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "value" (2:7-2:12)
+DOT (2:12-2:13)
+IDENTIFIER "compareTo" (2:13-2:22)
+LEFT_PAREN (2:22-2:23)
+INTEGER_LITERAL "2" (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+RIGHT_PAREN (2:25-2:26)
+SEMICOLON (2:26-2:27)
+CONST (3:1-3:6)
+IDENTIFIER "optional" (3:7-3:15)
+COLON (3:15-3:16)
+IDENTIFIER "Comparable" (3:17-3:27)
+LESS (3:27-3:28)
+IDENTIFIER "i32" (3:28-3:31)
+GREATER (3:31-3:32)
+PIPE (3:33-3:34)
+NULL (3:35-3:39)
+EQUAL (3:40-3:41)
+INTEGER_LITERAL "3" (3:42-3:43)
+SEMICOLON (3:43-3:44)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "optional" (4:7-4:15)
+EQUAL_EQUAL (4:16-4:18)
+NULL (4:19-4:23)
+RIGHT_PAREN (4:23-4:24)
+SEMICOLON (4:24-4:25)
+CONST (5:1-5:6)
+IDENTIFIER "compare" (5:7-5:14)
+EQUAL (5:15-5:16)
+IDENTIFIER "value" (5:17-5:22)
+DOT (5:22-5:23)
+IDENTIFIER "compareTo" (5:23-5:32)
+SEMICOLON (5:32-5:33)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "compare" (6:7-6:14)
+LEFT_PAREN (6:14-6:15)
+INTEGER_LITERAL "3" (6:15-6:16)
+RIGHT_PAREN (6:16-6:17)
+RIGHT_PAREN (6:17-6:18)
+SEMICOLON (6:18-6:19)
+CONST (7:1-7:6)
+IDENTIFIER "negative" (7:7-7:15)
+COLON (7:15-7:16)
+IDENTIFIER "Comparable" (7:17-7:27)
+LESS (7:27-7:28)
+IDENTIFIER "i32" (7:28-7:31)
+GREATER (7:31-7:32)
+EQUAL (7:33-7:34)
+MINUS (7:35-7:36)
+INTEGER_LITERAL "3" (7:36-7:37)
+SEMICOLON (7:37-7:38)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "negative" (8:7-8:15)
+DOT (8:15-8:16)
+IDENTIFIER "compareTo" (8:16-8:25)
+LEFT_PAREN (8:25-8:26)
+MINUS (8:26-8:27)
+INTEGER_LITERAL "2" (8:27-8:28)
+RIGHT_PAREN (8:28-8:29)
+RIGHT_PAREN (8:29-8:30)
+SEMICOLON (8:30-8:31)
+CONST (9:1-9:6)
+IDENTIFIER "text" (9:7-9:11)
+COLON (9:11-9:12)
+IDENTIFIER "Comparable" (9:13-9:23)
+LESS (9:23-9:24)
+IDENTIFIER "string" (9:24-9:30)
+GREATER (9:30-9:31)
+EQUAL (9:32-9:33)
+STRING_LITERAL "\"a\"" (9:34-9:37)
+SEMICOLON (9:37-9:38)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "text" (10:7-10:11)
+DOT (10:11-10:12)
+IDENTIFIER "compareTo" (10:12-10:21)
+LEFT_PAREN (10:21-10:22)
+STRING_LITERAL "\"b\"" (10:22-10:25)
+RIGHT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+SEMICOLON (10:27-10:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:28
+  (VariableDeclaration
+    range: 1:1-1:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:14-1:29
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:25-1:28
+        name: "i32"
+      )
+    )
+    (LiteralExpression
+      range: 1:32-1:33
+      kind: INT
+      text: "3"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:27
+    (CallExpression
+      range: 2:1-2:26
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:25
+        (MemberExpression
+          range: 2:7-2:22
+          (IdentifierExpression
+            range: 2:7-2:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 2:13-2:22
+            name: "compareTo"
+          )
+        )
+        (LiteralExpression
+          range: 2:23-2:24
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "optional"
+    )
+    (UnionTypeNode
+      range: 3:17-3:39
+      (NamedTypeNode
+        range: 3:17-3:32
+        name: "Comparable"
+        (NamedTypeNode
+          range: 3:28-3:31
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 3:35-3:39
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 3:42-3:43
+      kind: INT
+      text: "3"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:25
+    (CallExpression
+      range: 4:1-4:24
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 4:7-4:23
+        (IdentifierExpression
+          range: 4:7-4:15
+          name: "optional"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 4:19-4:23
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "compare"
+    )
+    type: null
+    (MemberExpression
+      range: 5:17-5:32
+      (IdentifierExpression
+        range: 5:17-5:22
+        name: "value"
+      )
+      (IdentifierExpression
+        range: 5:23-5:32
+        name: "compareTo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:19
+    (CallExpression
+      range: 6:1-6:18
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:17
+        (IdentifierExpression
+          range: 6:7-6:14
+          name: "compare"
+        )
+        (LiteralExpression
+          range: 6:15-6:16
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:15
+      name: "negative"
+    )
+    (NamedTypeNode
+      range: 7:17-7:32
+      name: "Comparable"
+      (NamedTypeNode
+        range: 7:28-7:31
+        name: "i32"
+      )
+    )
+    (UnaryExpression
+      range: 7:35-7:37
+      operator: MINUS
+      (LiteralExpression
+        range: 7:36-7:37
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:31
+    (CallExpression
+      range: 8:1-8:30
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:29
+        (MemberExpression
+          range: 8:7-8:25
+          (IdentifierExpression
+            range: 8:7-8:15
+            name: "negative"
+          )
+          (IdentifierExpression
+            range: 8:16-8:25
+            name: "compareTo"
+          )
+        )
+        (UnaryExpression
+          range: 8:26-8:28
+          operator: MINUS
+          (LiteralExpression
+            range: 8:27-8:28
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:11
+      name: "text"
+    )
+    (NamedTypeNode
+      range: 9:13-9:31
+      name: "Comparable"
+      (NamedTypeNode
+        range: 9:24-9:30
+        name: "string"
+      )
+    )
+    (LiteralExpression
+      range: 9:34-9:37
+      kind: STRING
+      text: "\"a\""
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:28
+    (CallExpression
+      range: 10:1-10:27
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:26
+        (MemberExpression
+          range: 10:7-10:21
+          (IdentifierExpression
+            range: 10:7-10:11
+            name: "text"
+          )
+          (IdentifierExpression
+            range: 10:12-10:21
+            name: "compareTo"
+          )
+        )
+        (LiteralExpression
+          range: 10:22-10:25
+          kind: STRING
+          text: "\"b\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:32-1:33 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:26 -> void
+  2:7-2:12 -> Comparable<i32>
+  2:7-2:22 -> (i32) => i32
+  2:7-2:25 -> i32
+  2:13-2:22 -> (i32) => i32
+  2:23-2:24 -> i32
+  3:42-3:43 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:24 -> void
+  4:7-4:15 -> Comparable<i32> | null
+  4:7-4:23 -> bool
+  4:19-4:23 -> null
+  5:17-5:22 -> Comparable<i32>
+  5:17-5:32 -> (i32) => i32
+  5:23-5:32 -> (i32) => i32
+  6:1-6:6 -> (any) => void
+  6:1-6:18 -> void
+  6:7-6:14 -> (i32) => i32
+  6:7-6:17 -> i32
+  6:15-6:16 -> i32
+  7:35-7:37 -> i32
+  7:36-7:37 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:30 -> void
+  8:7-8:15 -> Comparable<i32>
+  8:7-8:25 -> (i32) => i32
+  8:7-8:29 -> i32
+  8:16-8:25 -> (i32) => i32
+  8:26-8:28 -> i32
+  8:27-8:28 -> i32
+  9:34-9:37 -> string
+  10:1-10:6 -> (any) => void
+  10:1-10:27 -> void
+  10:7-10:11 -> Comparable<string>
+  10:7-10:21 -> (string) => i32
+  10:7-10:26 -> i32
+  10:12-10:21 -> (string) => i32
+  10:22-10:25 -> string
+
+Resolved types:
+  1:14-1:29 -> Comparable<i32>
+  1:25-1:28 -> i32
+  3:17-3:32 -> Comparable<i32>
+  3:17-3:39 -> Comparable<i32> | null
+  3:28-3:31 -> i32
+  3:35-3:39 -> null
+  7:17-7:32 -> Comparable<i32>
+  7:28-7:31 -> i32
+  9:13-9:31 -> Comparable<string>
+  9:24-9:30 -> string
+
+Conversions:
+  1:32-1:33 -> i32 -> Comparable<i32>
+  3:42-3:43 -> i32 -> Comparable<i32> | null
+  4:19-4:23 -> null -> Comparable<i32> | null
+  7:35-7:37 -> i32 -> Comparable<i32>
+  9:34-9:37 -> string -> Comparable<string>
+
+Declarations:
+  1:7-1:12 -> const value: Comparable<i32>
+  3:7-3:15 -> const optional: Comparable<i32> | null
+  5:7-5:14 -> const compare: (i32) => i32
+  7:7-7:15 -> const negative: Comparable<i32>
+  9:7-9:11 -> const text: Comparable<string>
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:12 -> 1:7-1:12
+  2:13-2:22 -> 2:7-2:22
+  4:1-4:6 -> builtin print
+  4:7-4:15 -> 3:7-3:15
+  5:17-5:22 -> 1:7-1:12
+  5:23-5:32 -> 5:17-5:32
+  6:1-6:6 -> builtin print
+  6:7-6:14 -> 5:7-5:14
+  8:1-8:6 -> builtin print
+  8:7-8:15 -> 7:7-7:15
+  8:16-8:25 -> 8:7-8:25
+  10:1-10:6 -> builtin print
+  10:7-10:11 -> 9:7-9:11
+  10:12-10:21 -> 10:7-10:21
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  // signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
+  // declaration: value extends java.lang.Comparable<java.lang.Integer>
+  public final static Ljava/lang/Comparable; value
+
+  // access flags 0x19
+  // signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
+  // declaration: optional extends java.lang.Comparable<java.lang.Integer>
+  public final static Ljava/lang/Comparable; optional
+
+  // access flags 0x19
+  public final static Ljava/lang/invoke/MethodHandle; compare
+
+  // access flags 0x19
+  // signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
+  // declaration: negative extends java.lang.Comparable<java.lang.Integer>
+  public final static Ljava/lang/Comparable; negative
+
+  // access flags 0x19
+  // signature Ljava/lang/Comparable<Ljava/lang/String;>;
+  // declaration: text extends java.lang.Comparable<java.lang.String>
+  public final static Ljava/lang/Comparable; text
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    PUTSTATIC Test.value : Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : Ljava/lang/Comparable;
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/lang/Comparable.compareTo (Ljava/lang/Object;)I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    PUTSTATIC Test.optional : Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.optional : Ljava/lang/Comparable;
+    ACONST_NULL
+    INVOKESTATIC java/util/Objects.equals (Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    // handle kind 0x9 : INVOKEINTERFACE
+    LDC java/lang/Comparable.compareTo(Ljava/lang/Object;)I itf
+    GETSTATIC Test.value : Ljava/lang/Comparable;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC (I)I.class
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType (Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.compare : Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.compare : Ljava/lang/invoke/MethodHandle;
+    LDC 3
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    LDC -3
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    PUTSTATIC Test.negative : Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.negative : Ljava/lang/Comparable;
+    LDC -2
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/lang/Comparable.compareTo (Ljava/lang/Object;)I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    LDC "a"
+    PUTSTATIC Test.text : Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.text : Ljava/lang/Comparable;
+    LDC "b"
+    INVOKEINTERFACE java/lang/Comparable.compareTo (Ljava/lang/Object;)I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+1
+false
+0
+-1
+-1
+

@@ -1,0 +1,291 @@
+const map: SortedMap<string, i32> = new TreeMap<string, i32>();
+map.put("a", 1);
+print(map.put("a", 4));
+print(map.get("missing"));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "map" (1:7-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "SortedMap" (1:12-1:21)
+LESS (1:21-1:22)
+IDENTIFIER "string" (1:22-1:28)
+COMMA (1:28-1:29)
+IDENTIFIER "i32" (1:30-1:33)
+GREATER (1:33-1:34)
+EQUAL (1:35-1:36)
+NEW (1:37-1:40)
+IDENTIFIER "TreeMap" (1:41-1:48)
+LESS (1:48-1:49)
+IDENTIFIER "string" (1:49-1:55)
+COMMA (1:55-1:56)
+IDENTIFIER "i32" (1:57-1:60)
+GREATER (1:60-1:61)
+LEFT_PAREN (1:61-1:62)
+RIGHT_PAREN (1:62-1:63)
+SEMICOLON (1:63-1:64)
+IDENTIFIER "map" (2:1-2:4)
+DOT (2:4-2:5)
+IDENTIFIER "put" (2:5-2:8)
+LEFT_PAREN (2:8-2:9)
+STRING_LITERAL "\"a\"" (2:9-2:12)
+COMMA (2:12-2:13)
+INTEGER_LITERAL "1" (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+SEMICOLON (2:16-2:17)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "map" (3:7-3:10)
+DOT (3:10-3:11)
+IDENTIFIER "put" (3:11-3:14)
+LEFT_PAREN (3:14-3:15)
+STRING_LITERAL "\"a\"" (3:15-3:18)
+COMMA (3:18-3:19)
+INTEGER_LITERAL "4" (3:20-3:21)
+RIGHT_PAREN (3:21-3:22)
+RIGHT_PAREN (3:22-3:23)
+SEMICOLON (3:23-3:24)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "map" (4:7-4:10)
+DOT (4:10-4:11)
+IDENTIFIER "get" (4:11-4:14)
+LEFT_PAREN (4:14-4:15)
+STRING_LITERAL "\"missing\"" (4:15-4:24)
+RIGHT_PAREN (4:24-4:25)
+RIGHT_PAREN (4:25-4:26)
+SEMICOLON (4:26-4:27)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:27
+  (VariableDeclaration
+    range: 1:1-1:64
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "map"
+    )
+    (NamedTypeNode
+      range: 1:12-1:34
+      name: "SortedMap"
+      (NamedTypeNode
+        range: 1:22-1:28
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:30-1:33
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 1:37-1:63
+      (IdentifierExpression
+        range: 1:41-1:48
+        name: "TreeMap"
+      )
+      (NamedTypeNode
+        range: 1:49-1:55
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:57-1:60
+        name: "i32"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (CallExpression
+      range: 2:1-2:16
+      (MemberExpression
+        range: 2:1-2:8
+        (IdentifierExpression
+          range: 2:1-2:4
+          name: "map"
+        )
+        (IdentifierExpression
+          range: 2:5-2:8
+          name: "put"
+        )
+      )
+      (LiteralExpression
+        range: 2:9-2:12
+        kind: STRING
+        text: "\"a\""
+      )
+      (LiteralExpression
+        range: 2:14-2:15
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:24
+    (CallExpression
+      range: 3:1-3:23
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:22
+        (MemberExpression
+          range: 3:7-3:14
+          (IdentifierExpression
+            range: 3:7-3:10
+            name: "map"
+          )
+          (IdentifierExpression
+            range: 3:11-3:14
+            name: "put"
+          )
+        )
+        (LiteralExpression
+          range: 3:15-3:18
+          kind: STRING
+          text: "\"a\""
+        )
+        (LiteralExpression
+          range: 3:20-3:21
+          kind: INT
+          text: "4"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:27
+    (CallExpression
+      range: 4:1-4:26
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:25
+        (MemberExpression
+          range: 4:7-4:14
+          (IdentifierExpression
+            range: 4:7-4:10
+            name: "map"
+          )
+          (IdentifierExpression
+            range: 4:11-4:14
+            name: "get"
+          )
+        )
+        (LiteralExpression
+          range: 4:15-4:24
+          kind: STRING
+          text: "\"missing\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:37-1:63 -> TreeMap<string, i32>
+  1:41-1:48 -> TreeMap<string, i32>
+  2:1-2:4 -> SortedMap<string, i32>
+  2:1-2:8 -> (string, i32) => i32 | null
+  2:1-2:16 -> i32 | null
+  2:5-2:8 -> (string, i32) => i32 | null
+  2:9-2:12 -> string
+  2:14-2:15 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:23 -> void
+  3:7-3:10 -> SortedMap<string, i32>
+  3:7-3:14 -> (string, i32) => i32 | null
+  3:7-3:22 -> i32 | null
+  3:11-3:14 -> (string, i32) => i32 | null
+  3:15-3:18 -> string
+  3:20-3:21 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:26 -> void
+  4:7-4:10 -> SortedMap<string, i32>
+  4:7-4:14 -> (any) => i32 | null
+  4:7-4:25 -> i32 | null
+  4:11-4:14 -> (any) => i32 | null
+  4:15-4:24 -> string
+
+Resolved types:
+  1:12-1:34 -> SortedMap<string, i32>
+  1:22-1:28 -> string
+  1:30-1:33 -> i32
+  1:37-1:63 -> TreeMap<string, i32>
+  1:49-1:55 -> string
+  1:57-1:60 -> i32
+
+Conversions:
+  4:15-4:24 -> string -> any
+
+Declarations:
+  1:7-1:10 -> const map: SortedMap<string, i32>
+
+References:
+  1:41-1:48 -> 1:37-1:63
+  2:1-2:4 -> 1:7-1:10
+  2:5-2:8 -> 2:1-2:8
+  3:1-3:6 -> builtin print
+  3:7-3:10 -> 1:7-1:10
+  3:11-3:14 -> 3:7-3:14
+  4:1-4:6 -> builtin print
+  4:7-4:10 -> 1:7-1:10
+  4:11-4:14 -> 4:7-4:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  // signature Ljava/util/SortedMap<Ljava/lang/String;Ljava/lang/Integer;>;
+  // declaration: map extends java.util.SortedMap<java.lang.String, java.lang.Integer>
+  public final static Ljava/util/SortedMap; map
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW java/util/TreeMap
+    DUP
+    INVOKESPECIAL java/util/TreeMap.<init> ()V
+    PUTSTATIC Test.map : Ljava/util/SortedMap;
+    GETSTATIC Test.map : Ljava/util/SortedMap;
+    LDC "a"
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; (itf)
+    CHECKCAST java/lang/Integer
+    POP
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.map : Ljava/util/SortedMap;
+    LDC "a"
+    LDC 4
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object; (itf)
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.map : Ljava/util/SortedMap;
+    LDC "missing"
+    INVOKEINTERFACE java/util/Map.get (Ljava/lang/Object;)Ljava/lang/Object; (itf)
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+1
+null
+

@@ -40,6 +40,10 @@ public final class EldObjectArray<T extends @Nullable Object>
         return super.copy();
     }
 
+    public void sort() {
+        Arrays.sort(elements, 0, size);
+    }
+
     @Override
     public EldObjectArray<T> sliceFrom(final int start) {
         return super.sliceFrom(start);

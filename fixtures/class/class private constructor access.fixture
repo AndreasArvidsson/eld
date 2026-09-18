@@ -3,7 +3,6 @@ class Secret {
 }
 new Secret();
 
-
 --- TOKENS ---
 
 CLASS (1:1-1:6)

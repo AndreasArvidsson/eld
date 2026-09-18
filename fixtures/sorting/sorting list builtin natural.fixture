@@ -1,0 +1,1351 @@
+const bytes: List<i8> = [3, 1, 2];
+const shorts: List<i16> = [3, 1, 2];
+const ints: List<i32> = [3, 1, 2];
+const longs: List<i64> = [3, 1, 2];
+const floats: List<f32> = [3.0, 1.0, 2.0];
+const doubles: List<f64> = [3.0, 1.0, 2.0];
+const chars: List<char> = ['c', 'a', 'b'];
+const strings: List<string> = ["c", "a", "b"];
+const bools: List<bool> = [true, false, true];
+bytes.sort(); shorts.sort(); ints.sort(); longs.sort();
+floats.sort(); doubles.sort(); chars.sort(); strings.sort(); bools.sort();
+print(bytes); print(shorts); print(ints); print(longs);
+print(floats); print(doubles); print(chars); print(strings); print(bools);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "bytes" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "List" (1:14-1:18)
+LESS (1:18-1:19)
+IDENTIFIER "i8" (1:19-1:21)
+GREATER (1:21-1:22)
+EQUAL (1:23-1:24)
+LEFT_BRACKET (1:25-1:26)
+INTEGER_LITERAL "3" (1:26-1:27)
+COMMA (1:27-1:28)
+INTEGER_LITERAL "1" (1:29-1:30)
+COMMA (1:30-1:31)
+INTEGER_LITERAL "2" (1:32-1:33)
+RIGHT_BRACKET (1:33-1:34)
+SEMICOLON (1:34-1:35)
+CONST (2:1-2:6)
+IDENTIFIER "shorts" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "List" (2:15-2:19)
+LESS (2:19-2:20)
+IDENTIFIER "i16" (2:20-2:23)
+GREATER (2:23-2:24)
+EQUAL (2:25-2:26)
+LEFT_BRACKET (2:27-2:28)
+INTEGER_LITERAL "3" (2:28-2:29)
+COMMA (2:29-2:30)
+INTEGER_LITERAL "1" (2:31-2:32)
+COMMA (2:32-2:33)
+INTEGER_LITERAL "2" (2:34-2:35)
+RIGHT_BRACKET (2:35-2:36)
+SEMICOLON (2:36-2:37)
+CONST (3:1-3:6)
+IDENTIFIER "ints" (3:7-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "List" (3:13-3:17)
+LESS (3:17-3:18)
+IDENTIFIER "i32" (3:18-3:21)
+GREATER (3:21-3:22)
+EQUAL (3:23-3:24)
+LEFT_BRACKET (3:25-3:26)
+INTEGER_LITERAL "3" (3:26-3:27)
+COMMA (3:27-3:28)
+INTEGER_LITERAL "1" (3:29-3:30)
+COMMA (3:30-3:31)
+INTEGER_LITERAL "2" (3:32-3:33)
+RIGHT_BRACKET (3:33-3:34)
+SEMICOLON (3:34-3:35)
+CONST (4:1-4:6)
+IDENTIFIER "longs" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "List" (4:14-4:18)
+LESS (4:18-4:19)
+IDENTIFIER "i64" (4:19-4:22)
+GREATER (4:22-4:23)
+EQUAL (4:24-4:25)
+LEFT_BRACKET (4:26-4:27)
+INTEGER_LITERAL "3" (4:27-4:28)
+COMMA (4:28-4:29)
+INTEGER_LITERAL "1" (4:30-4:31)
+COMMA (4:31-4:32)
+INTEGER_LITERAL "2" (4:33-4:34)
+RIGHT_BRACKET (4:34-4:35)
+SEMICOLON (4:35-4:36)
+CONST (5:1-5:6)
+IDENTIFIER "floats" (5:7-5:13)
+COLON (5:13-5:14)
+IDENTIFIER "List" (5:15-5:19)
+LESS (5:19-5:20)
+IDENTIFIER "f32" (5:20-5:23)
+GREATER (5:23-5:24)
+EQUAL (5:25-5:26)
+LEFT_BRACKET (5:27-5:28)
+FLOAT_LITERAL "3.0" (5:28-5:31)
+COMMA (5:31-5:32)
+FLOAT_LITERAL "1.0" (5:33-5:36)
+COMMA (5:36-5:37)
+FLOAT_LITERAL "2.0" (5:38-5:41)
+RIGHT_BRACKET (5:41-5:42)
+SEMICOLON (5:42-5:43)
+CONST (6:1-6:6)
+IDENTIFIER "doubles" (6:7-6:14)
+COLON (6:14-6:15)
+IDENTIFIER "List" (6:16-6:20)
+LESS (6:20-6:21)
+IDENTIFIER "f64" (6:21-6:24)
+GREATER (6:24-6:25)
+EQUAL (6:26-6:27)
+LEFT_BRACKET (6:28-6:29)
+FLOAT_LITERAL "3.0" (6:29-6:32)
+COMMA (6:32-6:33)
+FLOAT_LITERAL "1.0" (6:34-6:37)
+COMMA (6:37-6:38)
+FLOAT_LITERAL "2.0" (6:39-6:42)
+RIGHT_BRACKET (6:42-6:43)
+SEMICOLON (6:43-6:44)
+CONST (7:1-7:6)
+IDENTIFIER "chars" (7:7-7:12)
+COLON (7:12-7:13)
+IDENTIFIER "List" (7:14-7:18)
+LESS (7:18-7:19)
+IDENTIFIER "char" (7:19-7:23)
+GREATER (7:23-7:24)
+EQUAL (7:25-7:26)
+LEFT_BRACKET (7:27-7:28)
+CHAR_LITERAL "'c'" (7:28-7:31)
+COMMA (7:31-7:32)
+CHAR_LITERAL "'a'" (7:33-7:36)
+COMMA (7:36-7:37)
+CHAR_LITERAL "'b'" (7:38-7:41)
+RIGHT_BRACKET (7:41-7:42)
+SEMICOLON (7:42-7:43)
+CONST (8:1-8:6)
+IDENTIFIER "strings" (8:7-8:14)
+COLON (8:14-8:15)
+IDENTIFIER "List" (8:16-8:20)
+LESS (8:20-8:21)
+IDENTIFIER "string" (8:21-8:27)
+GREATER (8:27-8:28)
+EQUAL (8:29-8:30)
+LEFT_BRACKET (8:31-8:32)
+STRING_LITERAL "\"c\"" (8:32-8:35)
+COMMA (8:35-8:36)
+STRING_LITERAL "\"a\"" (8:37-8:40)
+COMMA (8:40-8:41)
+STRING_LITERAL "\"b\"" (8:42-8:45)
+RIGHT_BRACKET (8:45-8:46)
+SEMICOLON (8:46-8:47)
+CONST (9:1-9:6)
+IDENTIFIER "bools" (9:7-9:12)
+COLON (9:12-9:13)
+IDENTIFIER "List" (9:14-9:18)
+LESS (9:18-9:19)
+IDENTIFIER "bool" (9:19-9:23)
+GREATER (9:23-9:24)
+EQUAL (9:25-9:26)
+LEFT_BRACKET (9:27-9:28)
+BOOLEAN_LITERAL "true" (9:28-9:32)
+COMMA (9:32-9:33)
+BOOLEAN_LITERAL "false" (9:34-9:39)
+COMMA (9:39-9:40)
+BOOLEAN_LITERAL "true" (9:41-9:45)
+RIGHT_BRACKET (9:45-9:46)
+SEMICOLON (9:46-9:47)
+IDENTIFIER "bytes" (10:1-10:6)
+DOT (10:6-10:7)
+IDENTIFIER "sort" (10:7-10:11)
+LEFT_PAREN (10:11-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+IDENTIFIER "shorts" (10:15-10:21)
+DOT (10:21-10:22)
+IDENTIFIER "sort" (10:22-10:26)
+LEFT_PAREN (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+SEMICOLON (10:28-10:29)
+IDENTIFIER "ints" (10:30-10:34)
+DOT (10:34-10:35)
+IDENTIFIER "sort" (10:35-10:39)
+LEFT_PAREN (10:39-10:40)
+RIGHT_PAREN (10:40-10:41)
+SEMICOLON (10:41-10:42)
+IDENTIFIER "longs" (10:43-10:48)
+DOT (10:48-10:49)
+IDENTIFIER "sort" (10:49-10:53)
+LEFT_PAREN (10:53-10:54)
+RIGHT_PAREN (10:54-10:55)
+SEMICOLON (10:55-10:56)
+IDENTIFIER "floats" (11:1-11:7)
+DOT (11:7-11:8)
+IDENTIFIER "sort" (11:8-11:12)
+LEFT_PAREN (11:12-11:13)
+RIGHT_PAREN (11:13-11:14)
+SEMICOLON (11:14-11:15)
+IDENTIFIER "doubles" (11:16-11:23)
+DOT (11:23-11:24)
+IDENTIFIER "sort" (11:24-11:28)
+LEFT_PAREN (11:28-11:29)
+RIGHT_PAREN (11:29-11:30)
+SEMICOLON (11:30-11:31)
+IDENTIFIER "chars" (11:32-11:37)
+DOT (11:37-11:38)
+IDENTIFIER "sort" (11:38-11:42)
+LEFT_PAREN (11:42-11:43)
+RIGHT_PAREN (11:43-11:44)
+SEMICOLON (11:44-11:45)
+IDENTIFIER "strings" (11:46-11:53)
+DOT (11:53-11:54)
+IDENTIFIER "sort" (11:54-11:58)
+LEFT_PAREN (11:58-11:59)
+RIGHT_PAREN (11:59-11:60)
+SEMICOLON (11:60-11:61)
+IDENTIFIER "bools" (11:62-11:67)
+DOT (11:67-11:68)
+IDENTIFIER "sort" (11:68-11:72)
+LEFT_PAREN (11:72-11:73)
+RIGHT_PAREN (11:73-11:74)
+SEMICOLON (11:74-11:75)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "bytes" (12:7-12:12)
+RIGHT_PAREN (12:12-12:13)
+SEMICOLON (12:13-12:14)
+IDENTIFIER "print" (12:15-12:20)
+LEFT_PAREN (12:20-12:21)
+IDENTIFIER "shorts" (12:21-12:27)
+RIGHT_PAREN (12:27-12:28)
+SEMICOLON (12:28-12:29)
+IDENTIFIER "print" (12:30-12:35)
+LEFT_PAREN (12:35-12:36)
+IDENTIFIER "ints" (12:36-12:40)
+RIGHT_PAREN (12:40-12:41)
+SEMICOLON (12:41-12:42)
+IDENTIFIER "print" (12:43-12:48)
+LEFT_PAREN (12:48-12:49)
+IDENTIFIER "longs" (12:49-12:54)
+RIGHT_PAREN (12:54-12:55)
+SEMICOLON (12:55-12:56)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "floats" (13:7-13:13)
+RIGHT_PAREN (13:13-13:14)
+SEMICOLON (13:14-13:15)
+IDENTIFIER "print" (13:16-13:21)
+LEFT_PAREN (13:21-13:22)
+IDENTIFIER "doubles" (13:22-13:29)
+RIGHT_PAREN (13:29-13:30)
+SEMICOLON (13:30-13:31)
+IDENTIFIER "print" (13:32-13:37)
+LEFT_PAREN (13:37-13:38)
+IDENTIFIER "chars" (13:38-13:43)
+RIGHT_PAREN (13:43-13:44)
+SEMICOLON (13:44-13:45)
+IDENTIFIER "print" (13:46-13:51)
+LEFT_PAREN (13:51-13:52)
+IDENTIFIER "strings" (13:52-13:59)
+RIGHT_PAREN (13:59-13:60)
+SEMICOLON (13:60-13:61)
+IDENTIFIER "print" (13:62-13:67)
+LEFT_PAREN (13:67-13:68)
+IDENTIFIER "bools" (13:68-13:73)
+RIGHT_PAREN (13:73-13:74)
+SEMICOLON (13:74-13:75)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:75
+  (VariableDeclaration
+    range: 1:1-1:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "bytes"
+    )
+    (NamedTypeNode
+      range: 1:14-1:22
+      name: "List"
+      (NamedTypeNode
+        range: 1:19-1:21
+        name: "i8"
+      )
+    )
+    (ArrayExpression
+      range: 1:25-1:34
+      (LiteralExpression
+        range: 1:26-1:27
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 1:29-1:30
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:32-1:33
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "shorts"
+    )
+    (NamedTypeNode
+      range: 2:15-2:24
+      name: "List"
+      (NamedTypeNode
+        range: 2:20-2:23
+        name: "i16"
+      )
+    )
+    (ArrayExpression
+      range: 2:27-2:36
+      (LiteralExpression
+        range: 2:28-2:29
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 2:31-2:32
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 2:34-2:35
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:11
+      name: "ints"
+    )
+    (NamedTypeNode
+      range: 3:13-3:22
+      name: "List"
+      (NamedTypeNode
+        range: 3:18-3:21
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 3:25-3:34
+      (LiteralExpression
+        range: 3:26-3:27
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 3:29-3:30
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 3:32-3:33
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "longs"
+    )
+    (NamedTypeNode
+      range: 4:14-4:23
+      name: "List"
+      (NamedTypeNode
+        range: 4:19-4:22
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 4:26-4:35
+      (LiteralExpression
+        range: 4:27-4:28
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 4:30-4:31
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 4:33-4:34
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "floats"
+    )
+    (NamedTypeNode
+      range: 5:15-5:24
+      name: "List"
+      (NamedTypeNode
+        range: 5:20-5:23
+        name: "f32"
+      )
+    )
+    (ArrayExpression
+      range: 5:27-5:42
+      (LiteralExpression
+        range: 5:28-5:31
+        kind: FLOAT
+        text: "3.0"
+      )
+      (LiteralExpression
+        range: 5:33-5:36
+        kind: FLOAT
+        text: "1.0"
+      )
+      (LiteralExpression
+        range: 5:38-5:41
+        kind: FLOAT
+        text: "2.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:14
+      name: "doubles"
+    )
+    (NamedTypeNode
+      range: 6:16-6:25
+      name: "List"
+      (NamedTypeNode
+        range: 6:21-6:24
+        name: "f64"
+      )
+    )
+    (ArrayExpression
+      range: 6:28-6:43
+      (LiteralExpression
+        range: 6:29-6:32
+        kind: FLOAT
+        text: "3.0"
+      )
+      (LiteralExpression
+        range: 6:34-6:37
+        kind: FLOAT
+        text: "1.0"
+      )
+      (LiteralExpression
+        range: 6:39-6:42
+        kind: FLOAT
+        text: "2.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "chars"
+    )
+    (NamedTypeNode
+      range: 7:14-7:24
+      name: "List"
+      (NamedTypeNode
+        range: 7:19-7:23
+        name: "char"
+      )
+    )
+    (ArrayExpression
+      range: 7:27-7:42
+      (LiteralExpression
+        range: 7:28-7:31
+        kind: CHAR
+        text: "'c'"
+      )
+      (LiteralExpression
+        range: 7:33-7:36
+        kind: CHAR
+        text: "'a'"
+      )
+      (LiteralExpression
+        range: 7:38-7:41
+        kind: CHAR
+        text: "'b'"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "strings"
+    )
+    (NamedTypeNode
+      range: 8:16-8:28
+      name: "List"
+      (NamedTypeNode
+        range: 8:21-8:27
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 8:31-8:46
+      (LiteralExpression
+        range: 8:32-8:35
+        kind: STRING
+        text: "\"c\""
+      )
+      (LiteralExpression
+        range: 8:37-8:40
+        kind: STRING
+        text: "\"a\""
+      )
+      (LiteralExpression
+        range: 8:42-8:45
+        kind: STRING
+        text: "\"b\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "bools"
+    )
+    (NamedTypeNode
+      range: 9:14-9:24
+      name: "List"
+      (NamedTypeNode
+        range: 9:19-9:23
+        name: "bool"
+      )
+    )
+    (ArrayExpression
+      range: 9:27-9:46
+      (LiteralExpression
+        range: 9:28-9:32
+        kind: BOOL
+        text: "true"
+      )
+      (LiteralExpression
+        range: 9:34-9:39
+        kind: BOOL
+        text: "false"
+      )
+      (LiteralExpression
+        range: 9:41-9:45
+        kind: BOOL
+        text: "true"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:1-10:13
+      (MemberExpression
+        range: 10:1-10:11
+        (IdentifierExpression
+          range: 10:1-10:6
+          name: "bytes"
+        )
+        (IdentifierExpression
+          range: 10:7-10:11
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:15-10:29
+    (CallExpression
+      range: 10:15-10:28
+      (MemberExpression
+        range: 10:15-10:26
+        (IdentifierExpression
+          range: 10:15-10:21
+          name: "shorts"
+        )
+        (IdentifierExpression
+          range: 10:22-10:26
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:30-10:42
+    (CallExpression
+      range: 10:30-10:41
+      (MemberExpression
+        range: 10:30-10:39
+        (IdentifierExpression
+          range: 10:30-10:34
+          name: "ints"
+        )
+        (IdentifierExpression
+          range: 10:35-10:39
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:43-10:56
+    (CallExpression
+      range: 10:43-10:55
+      (MemberExpression
+        range: 10:43-10:53
+        (IdentifierExpression
+          range: 10:43-10:48
+          name: "longs"
+        )
+        (IdentifierExpression
+          range: 10:49-10:53
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:15
+    (CallExpression
+      range: 11:1-11:14
+      (MemberExpression
+        range: 11:1-11:12
+        (IdentifierExpression
+          range: 11:1-11:7
+          name: "floats"
+        )
+        (IdentifierExpression
+          range: 11:8-11:12
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:16-11:31
+    (CallExpression
+      range: 11:16-11:30
+      (MemberExpression
+        range: 11:16-11:28
+        (IdentifierExpression
+          range: 11:16-11:23
+          name: "doubles"
+        )
+        (IdentifierExpression
+          range: 11:24-11:28
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:32-11:45
+    (CallExpression
+      range: 11:32-11:44
+      (MemberExpression
+        range: 11:32-11:42
+        (IdentifierExpression
+          range: 11:32-11:37
+          name: "chars"
+        )
+        (IdentifierExpression
+          range: 11:38-11:42
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:46-11:61
+    (CallExpression
+      range: 11:46-11:60
+      (MemberExpression
+        range: 11:46-11:58
+        (IdentifierExpression
+          range: 11:46-11:53
+          name: "strings"
+        )
+        (IdentifierExpression
+          range: 11:54-11:58
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:62-11:75
+    (CallExpression
+      range: 11:62-11:74
+      (MemberExpression
+        range: 11:62-11:72
+        (IdentifierExpression
+          range: 11:62-11:67
+          name: "bools"
+        )
+        (IdentifierExpression
+          range: 11:68-11:72
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:14
+    (CallExpression
+      range: 12:1-12:13
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:7-12:12
+        name: "bytes"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:15-12:29
+    (CallExpression
+      range: 12:15-12:28
+      (IdentifierExpression
+        range: 12:15-12:20
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:21-12:27
+        name: "shorts"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:30-12:42
+    (CallExpression
+      range: 12:30-12:41
+      (IdentifierExpression
+        range: 12:30-12:35
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:36-12:40
+        name: "ints"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:43-12:56
+    (CallExpression
+      range: 12:43-12:55
+      (IdentifierExpression
+        range: 12:43-12:48
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:49-12:54
+        name: "longs"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:15
+    (CallExpression
+      range: 13:1-13:14
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:7-13:13
+        name: "floats"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:16-13:31
+    (CallExpression
+      range: 13:16-13:30
+      (IdentifierExpression
+        range: 13:16-13:21
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:22-13:29
+        name: "doubles"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:32-13:45
+    (CallExpression
+      range: 13:32-13:44
+      (IdentifierExpression
+        range: 13:32-13:37
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:38-13:43
+        name: "chars"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:46-13:61
+    (CallExpression
+      range: 13:46-13:60
+      (IdentifierExpression
+        range: 13:46-13:51
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:52-13:59
+        name: "strings"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:62-13:75
+    (CallExpression
+      range: 13:62-13:74
+      (IdentifierExpression
+        range: 13:62-13:67
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:68-13:73
+        name: "bools"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:25-1:34 -> List<i8>
+  1:26-1:27 -> i32
+  1:29-1:30 -> i32
+  1:32-1:33 -> i32
+  2:27-2:36 -> List<i16>
+  2:28-2:29 -> i32
+  2:31-2:32 -> i32
+  2:34-2:35 -> i32
+  3:25-3:34 -> List<i32>
+  3:26-3:27 -> i32
+  3:29-3:30 -> i32
+  3:32-3:33 -> i32
+  4:26-4:35 -> List<i64>
+  4:27-4:28 -> i32
+  4:30-4:31 -> i32
+  4:33-4:34 -> i32
+  5:27-5:42 -> List<f32>
+  5:28-5:31 -> f64
+  5:33-5:36 -> f64
+  5:38-5:41 -> f64
+  6:28-6:43 -> List<f64>
+  6:29-6:32 -> f64
+  6:34-6:37 -> f64
+  6:39-6:42 -> f64
+  7:27-7:42 -> List<char>
+  7:28-7:31 -> char
+  7:33-7:36 -> char
+  7:38-7:41 -> char
+  8:31-8:46 -> List<string>
+  8:32-8:35 -> string
+  8:37-8:40 -> string
+  8:42-8:45 -> string
+  9:27-9:46 -> List<bool>
+  9:28-9:32 -> bool
+  9:34-9:39 -> bool
+  9:41-9:45 -> bool
+  10:1-10:6 -> List<i8>
+  10:1-10:11 -> () => void
+  10:1-10:13 -> void
+  10:7-10:11 -> () => void
+  10:15-10:21 -> List<i16>
+  10:15-10:26 -> () => void
+  10:15-10:28 -> void
+  10:22-10:26 -> () => void
+  10:30-10:34 -> List<i32>
+  10:30-10:39 -> () => void
+  10:30-10:41 -> void
+  10:35-10:39 -> () => void
+  10:43-10:48 -> List<i64>
+  10:43-10:53 -> () => void
+  10:43-10:55 -> void
+  10:49-10:53 -> () => void
+  11:1-11:7 -> List<f32>
+  11:1-11:12 -> () => void
+  11:1-11:14 -> void
+  11:8-11:12 -> () => void
+  11:16-11:23 -> List<f64>
+  11:16-11:28 -> () => void
+  11:16-11:30 -> void
+  11:24-11:28 -> () => void
+  11:32-11:37 -> List<char>
+  11:32-11:42 -> () => void
+  11:32-11:44 -> void
+  11:38-11:42 -> () => void
+  11:46-11:53 -> List<string>
+  11:46-11:58 -> () => void
+  11:46-11:60 -> void
+  11:54-11:58 -> () => void
+  11:62-11:67 -> List<bool>
+  11:62-11:72 -> () => void
+  11:62-11:74 -> void
+  11:68-11:72 -> () => void
+  12:1-12:6 -> (any) => void
+  12:1-12:13 -> void
+  12:7-12:12 -> List<i8>
+  12:15-12:20 -> (any) => void
+  12:15-12:28 -> void
+  12:21-12:27 -> List<i16>
+  12:30-12:35 -> (any) => void
+  12:30-12:41 -> void
+  12:36-12:40 -> List<i32>
+  12:43-12:48 -> (any) => void
+  12:43-12:55 -> void
+  12:49-12:54 -> List<i64>
+  13:1-13:6 -> (any) => void
+  13:1-13:14 -> void
+  13:7-13:13 -> List<f32>
+  13:16-13:21 -> (any) => void
+  13:16-13:30 -> void
+  13:22-13:29 -> List<f64>
+  13:32-13:37 -> (any) => void
+  13:32-13:44 -> void
+  13:38-13:43 -> List<char>
+  13:46-13:51 -> (any) => void
+  13:46-13:60 -> void
+  13:52-13:59 -> List<string>
+  13:62-13:67 -> (any) => void
+  13:62-13:74 -> void
+  13:68-13:73 -> List<bool>
+
+Resolved types:
+  1:14-1:22 -> List<i8>
+  1:19-1:21 -> i8
+  2:15-2:24 -> List<i16>
+  2:20-2:23 -> i16
+  3:13-3:22 -> List<i32>
+  3:18-3:21 -> i32
+  4:14-4:23 -> List<i64>
+  4:19-4:22 -> i64
+  5:15-5:24 -> List<f32>
+  5:20-5:23 -> f32
+  6:16-6:25 -> List<f64>
+  6:21-6:24 -> f64
+  7:14-7:24 -> List<char>
+  7:19-7:23 -> char
+  8:16-8:28 -> List<string>
+  8:21-8:27 -> string
+  9:14-9:24 -> List<bool>
+  9:19-9:23 -> bool
+
+Conversions:
+  1:26-1:27 -> i32 -> i8
+  1:29-1:30 -> i32 -> i8
+  1:32-1:33 -> i32 -> i8
+  2:28-2:29 -> i32 -> i16
+  2:31-2:32 -> i32 -> i16
+  2:34-2:35 -> i32 -> i16
+  4:27-4:28 -> i32 -> i64
+  4:30-4:31 -> i32 -> i64
+  4:33-4:34 -> i32 -> i64
+  5:28-5:31 -> f64 -> f32
+  5:33-5:36 -> f64 -> f32
+  5:38-5:41 -> f64 -> f32
+
+Declarations:
+  1:7-1:12 -> const bytes: List<i8>
+  2:7-2:13 -> const shorts: List<i16>
+  3:7-3:11 -> const ints: List<i32>
+  4:7-4:12 -> const longs: List<i64>
+  5:7-5:13 -> const floats: List<f32>
+  6:7-6:14 -> const doubles: List<f64>
+  7:7-7:12 -> const chars: List<char>
+  8:7-8:14 -> const strings: List<string>
+  9:7-9:12 -> const bools: List<bool>
+
+References:
+  10:1-10:6 -> 1:7-1:12
+  10:7-10:11 -> 10:1-10:11
+  10:15-10:21 -> 2:7-2:13
+  10:22-10:26 -> 10:15-10:26
+  10:30-10:34 -> 3:7-3:11
+  10:35-10:39 -> 10:30-10:39
+  10:43-10:48 -> 4:7-4:12
+  10:49-10:53 -> 10:43-10:53
+  11:1-11:7 -> 5:7-5:13
+  11:8-11:12 -> 11:1-11:12
+  11:16-11:23 -> 6:7-6:14
+  11:24-11:28 -> 11:16-11:28
+  11:32-11:37 -> 7:7-7:12
+  11:38-11:42 -> 11:32-11:42
+  11:46-11:53 -> 8:7-8:14
+  11:54-11:58 -> 11:46-11:58
+  11:62-11:67 -> 9:7-9:12
+  11:68-11:72 -> 11:62-11:72
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 1:7-1:12
+  12:15-12:20 -> builtin print
+  12:21-12:27 -> 2:7-2:13
+  12:30-12:35 -> builtin print
+  12:36-12:40 -> 3:7-3:11
+  12:43-12:48 -> builtin print
+  12:49-12:54 -> 4:7-4:12
+  13:1-13:6 -> builtin print
+  13:7-13:13 -> 5:7-5:13
+  13:16-13:21 -> builtin print
+  13:22-13:29 -> 6:7-6:14
+  13:32-13:37 -> builtin print
+  13:38-13:43 -> 7:7-7:12
+  13:46-13:51 -> builtin print
+  13:52-13:59 -> 8:7-8:14
+  13:62-13:67 -> builtin print
+  13:68-13:73 -> 9:7-9:12
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Byte;>;
+  // declaration: bytes extends java.util.List<java.lang.Byte>
+  public final static Ljava/util/List; bytes
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Short;>;
+  // declaration: shorts extends java.util.List<java.lang.Short>
+  public final static Ljava/util/List; shorts
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Integer;>;
+  // declaration: ints extends java.util.List<java.lang.Integer>
+  public final static Ljava/util/List; ints
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Long;>;
+  // declaration: longs extends java.util.List<java.lang.Long>
+  public final static Ljava/util/List; longs
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Float;>;
+  // declaration: floats extends java.util.List<java.lang.Float>
+  public final static Ljava/util/List; floats
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Double;>;
+  // declaration: doubles extends java.util.List<java.lang.Double>
+  public final static Ljava/util/List; doubles
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Character;>;
+  // declaration: chars extends java.util.List<java.lang.Character>
+  public final static Ljava/util/List; chars
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/String;>;
+  // declaration: strings extends java.util.List<java.lang.String>
+  public final static Ljava/util/List; strings
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Boolean;>;
+  // declaration: bools extends java.util.List<java.lang.Boolean>
+  public final static Ljava/util/List; bools
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3
+    I2B
+    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1
+    I2B
+    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2
+    I2B
+    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.bytes : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3
+    I2S
+    INVOKESTATIC java/lang/Short.valueOf (S)Ljava/lang/Short;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1
+    I2S
+    INVOKESTATIC java/lang/Short.valueOf (S)Ljava/lang/Short;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2
+    I2S
+    INVOKESTATIC java/lang/Short.valueOf (S)Ljava/lang/Short;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.shorts : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.ints : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf (J)Ljava/lang/Long;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.longs : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3.0D
+    D2F
+    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1.0D
+    D2F
+    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2.0D
+    D2F
+    INVOKESTATIC java/lang/Float.valueOf (F)Ljava/lang/Float;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.floats : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3.0D
+    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1.0D
+    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2.0D
+    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.doubles : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 99
+    INVOKESTATIC java/lang/Character.valueOf (C)Ljava/lang/Character;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 97
+    INVOKESTATIC java/lang/Character.valueOf (C)Ljava/lang/Character;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 98
+    INVOKESTATIC java/lang/Character.valueOf (C)Ljava/lang/Character;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.chars : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC "c"
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC "a"
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC "b"
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.strings : Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    ICONST_1
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    ICONST_0
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    ICONST_1
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.bools : Ljava/util/List;
+    GETSTATIC Test.bytes : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.shorts : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.ints : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.longs : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.floats : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.doubles : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.chars : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.strings : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC Test.bools : Ljava/util/List;
+    ACONST_NULL
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.bytes : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.shorts : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.ints : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.longs : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.floats : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.doubles : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.chars : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.strings : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.bools : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+[1, 2, 3]
+[1, 2, 3]
+[1, 2, 3]
+[1, 2, 3]
+[1.0, 2.0, 3.0]
+[1.0, 2.0, 3.0]
+[a, b, c]
+[a, b, c]
+[false, true, true]
+

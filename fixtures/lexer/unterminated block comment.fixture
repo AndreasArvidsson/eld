@@ -2,7 +2,6 @@ const value = 1;
 /* This block never closes.
 print(value);
 
-
 --- TOKENS ---
 
 LexerException: Unterminated block comment at 2:1-4:1

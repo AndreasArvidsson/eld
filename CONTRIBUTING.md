@@ -221,11 +221,10 @@ Immutable by default with `mut` keyword
 - ... operator when constructing objects/arrays
 - Export & import
 - Exceptions
+- Regular expressions from `regex`.
 - Ubiquitous toString and equals methods
-- Comparable interface and .sort() method
 - Immutable collections and objects
-- Mutable interface objects?
 - Overloaded functions
 - Operator overloading
-- Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
+- Regex literals: `const re: regex = /^\d+$`;
 - Methods like `indexOf` should return `null` instead of `-1` on failure.

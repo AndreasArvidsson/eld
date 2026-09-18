@@ -1,0 +1,74 @@
+const values: List<i32> = [];
+values.add("wrong");
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+IDENTIFIER "List" (1:15-1:19)
+LESS (1:19-1:20)
+IDENTIFIER "i32" (1:20-1:23)
+GREATER (1:23-1:24)
+EQUAL (1:25-1:26)
+LEFT_BRACKET (1:27-1:28)
+RIGHT_BRACKET (1:28-1:29)
+SEMICOLON (1:29-1:30)
+IDENTIFIER "values" (2:1-2:7)
+DOT (2:7-2:8)
+IDENTIFIER "add" (2:8-2:11)
+LEFT_PAREN (2:11-2:12)
+STRING_LITERAL "\"wrong\"" (2:12-2:19)
+RIGHT_PAREN (2:19-2:20)
+SEMICOLON (2:20-2:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:21
+  (VariableDeclaration
+    range: 1:1-1:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 1:15-1:24
+      name: "List"
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 1:27-1:29
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:21
+    (CallExpression
+      range: 2:1-2:20
+      (MemberExpression
+        range: 2:1-2:11
+        (IdentifierExpression
+          range: 2:1-2:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 2:8-2:11
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 2:12-2:19
+        kind: STRING
+        text: "\"wrong\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot pass string as i32 at 2:12-2:19

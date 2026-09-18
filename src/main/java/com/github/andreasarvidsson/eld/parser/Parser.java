@@ -730,7 +730,31 @@ public final class Parser {
         }
         final Token name =
             check(TokenType.NULL) ? advance() : expect(TokenType.IDENTIFIER);
-        return new NamedTypeNode(name.text(), name.range());
+        final List<TypeNode> arguments = parseTypeArguments();
+        TypeNode result =
+            new NamedTypeNode(
+                name.text(),
+                arguments,
+                name.range().union(tokens.get(position - 1).range())
+            );
+        while (match(TokenType.LEFT_BRACKET)) {
+            final Token close = expect(TokenType.RIGHT_BRACKET);
+            result =
+                new ArrayTypeNode(result, result.range().union(close.range()));
+        }
+        return result;
+    }
+
+    private List<TypeNode> parseTypeArguments() {
+        if (!match(TokenType.LESS)) {
+            return List.of();
+        }
+        final List<TypeNode> arguments = new ArrayList<>();
+        do {
+            arguments.add(parseType());
+        } while (match(TokenType.COMMA));
+        expect(TokenType.GREATER);
+        return List.copyOf(arguments);
     }
 
     private Expression parseExpression() {
@@ -876,9 +900,11 @@ public final class Parser {
                 final Token name = expect(TokenType.IDENTIFIER);
                 final IdentifierExpression className =
                     new IdentifierExpression(name.text(), name.range());
+                final List<TypeNode> typeArguments = parseTypeArguments();
                 final CallExpression call = parseCallExpression(className);
                 yield new NewExpression(
                     className,
+                    typeArguments,
                     call.arguments(),
                     token.range().union(call.range())
                 );

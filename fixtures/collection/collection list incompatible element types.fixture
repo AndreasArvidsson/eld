@@ -1,0 +1,57 @@
+const values: List<i32> = new ArrayList<string>();
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+IDENTIFIER "List" (1:15-1:19)
+LESS (1:19-1:20)
+IDENTIFIER "i32" (1:20-1:23)
+GREATER (1:23-1:24)
+EQUAL (1:25-1:26)
+NEW (1:27-1:30)
+IDENTIFIER "ArrayList" (1:31-1:40)
+LESS (1:40-1:41)
+IDENTIFIER "string" (1:41-1:47)
+GREATER (1:47-1:48)
+LEFT_PAREN (1:48-1:49)
+RIGHT_PAREN (1:49-1:50)
+SEMICOLON (1:50-1:51)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:51
+  (VariableDeclaration
+    range: 1:1-1:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 1:15-1:24
+      name: "List"
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 1:27-1:50
+      (IdentifierExpression
+        range: 1:31-1:40
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 1:41-1:47
+        name: "string"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign ArrayList<string> to List<i32> at 1:27-1:50

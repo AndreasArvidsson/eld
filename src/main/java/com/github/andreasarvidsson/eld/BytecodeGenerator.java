@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Handle;
@@ -35,6 +37,8 @@ import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
 import com.github.andreasarvidsson.eld.semantic.Symbol;
 import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.semantic.UnionType;
+import com.github.andreasarvidsson.eld.semantic.JavaMethodSymbol;
+import com.github.andreasarvidsson.eld.semantic.JavaTypes;
 
 /** Generates a Java 21 module named Test and its declared classes. */
 public final class BytecodeGenerator {
@@ -55,6 +59,7 @@ public final class BytecodeGenerator {
     private final Map<String, InterfaceType> objectTypes =
         new LinkedHashMap<>();
     private final List<String> objectNameOrder = new ArrayList<>();
+
     private record ObjectInfo(
         String owner, List<Symbol> captures, boolean receiver,
         String constructorDescriptor
@@ -260,7 +265,10 @@ public final class BytecodeGenerator {
             V21,
             ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT,
             owner,
-            null,
+            classSignature(
+                "java/lang/Object",
+                semanticModel.getInterface(type).superInterfaces()
+            ),
             "java/lang/Object",
             semanticModel.getInterface(type)
                 .superInterfaces()
@@ -413,7 +421,10 @@ public final class BytecodeGenerator {
             V21,
             ACC_PUBLIC | ACC_SUPER,
             name,
-            null,
+            classSignature(
+                superclassOwner,
+                semanticModel.getImplementedInterfaces(classType)
+            ),
             superclassOwner,
             semanticModel.getImplementedInterfaces(classType)
                 .stream()
@@ -450,7 +461,7 @@ public final class BytecodeGenerator {
                                 : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
-                        null,
+                        fieldSignature(symbol.type()),
                         null
                     )
                     .visitEnd();
@@ -470,7 +481,7 @@ public final class BytecodeGenerator {
                                 : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
-                        null,
+                        fieldSignature(symbol.type()),
                         null
                     )
                     .visitEnd();
@@ -579,6 +590,11 @@ public final class BytecodeGenerator {
                 generateFunction(writer, function, globals, instance);
             }
         }
+        generateJavaBridges(
+            writer,
+            name,
+            semanticModel.getImplementedInterfaces(classType)
+        );
         writer.visitEnd();
         return writer.toByteArray();
     }
@@ -605,7 +621,7 @@ public final class BytecodeGenerator {
                 ) | (instance == null ? ACC_STATIC : 0),
                 symbol.name(),
                 methodDescriptor(symbol.type()),
-                null,
+                methodSignature(symbol.type()),
                 null
             );
         final MethodGenerator generator =
@@ -769,7 +785,7 @@ public final class BytecodeGenerator {
                                     : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
-                        null,
+                        fieldSignature(symbol.type()),
                         constantValue
                     )
                     .visitEnd();
@@ -866,6 +882,8 @@ public final class BytecodeGenerator {
     private @Nullable Object constantValue(final Expression expression) {
         if (
             semanticModel.getEffectiveType(expression) instanceof UnionType
+                || semanticModel
+                    .getEffectiveType(expression) instanceof InterfaceType
                 || semanticModel.getEffectiveType(expression) == BuiltinType.ANY
         ) {
             return null;
@@ -1060,14 +1078,19 @@ public final class BytecodeGenerator {
     }
 
     private String interfaceOwner(final InterfaceType type) {
+        if (type.javaClass() != null) {
+            return org.objectweb.asm.Type.getInternalName(type.javaClass());
+        }
         return classOwners
             .getOrDefault(type.name(), moduleName + "$" + type.name());
     }
+
     private String typeOwner(final Type type) {
         return type instanceof ClassType cls
             ? classOwner(cls)
             : interfaceOwner((InterfaceType) type);
     }
+
     private @Nullable Type generatedReferenceType(final String owner) {
         final ClassType cls = generatedClassType(owner);
         if (cls != null) {
@@ -1083,6 +1106,7 @@ public final class BytecodeGenerator {
         }
         return null;
     }
+
     private boolean interfaceOwnerName(final String owner) {
         return generatedReferenceType(owner) instanceof InterfaceType
             && !objectTypes.containsKey(owner);
@@ -1131,6 +1155,147 @@ public final class BytecodeGenerator {
     private String boxedDescriptor(final Type type) {
         final String boxed = boxedOwner(type);
         return boxed == null ? descriptor(type) : "L" + boxed + ";";
+    }
+
+    private String genericSignature(final Type type) {
+        if (
+            type instanceof InterfaceType contract
+                && !contract.typeArguments().isEmpty()
+        ) {
+            return "L" + interfaceOwner(contract)
+                + contract.typeArguments()
+                    .stream()
+                    .map(this::genericSignature)
+                    .collect(Collectors.joining("", "<", ">;"));
+        }
+        return boxedDescriptor(type);
+    }
+
+    private @Nullable String classSignature(
+        final String superclass,
+        final List<InterfaceType> interfaces
+    ) {
+        if (
+            interfaces.stream()
+                .noneMatch(type -> !type.typeArguments().isEmpty())
+        ) {
+            return null;
+        }
+        return "L" + superclass + ";"
+            + interfaces.stream()
+                .map(this::genericSignature)
+                .collect(Collectors.joining());
+    }
+
+    private @Nullable String fieldSignature(final Type type) {
+        if (
+            type instanceof InterfaceType contract
+                && !contract.typeArguments().isEmpty()
+        ) {
+            return genericSignature(type);
+        }
+        if (type instanceof UnionType union) {
+            final List<Type> members =
+                union.memberTypes()
+                    .stream()
+                    .filter(member -> member != BuiltinType.NULL)
+                    .toList();
+            if (members.size() == 1) {
+                return fieldSignature(members.getFirst());
+            }
+        }
+        return null;
+    }
+
+    private @Nullable String methodSignature(final FunctionType type) {
+        if (
+            fieldSignature(type.returnType()) == null && type.parameterTypes()
+                .stream()
+                .allMatch(parameter -> fieldSignature(parameter) == null)
+        ) {
+            return null;
+        }
+        return "("
+            + type.parameterTypes()
+                .stream()
+                .map(
+                    parameter -> Objects.requireNonNullElse(
+                        fieldSignature(parameter),
+                        descriptor(parameter)
+                    )
+                )
+                .collect(java.util.stream.Collectors.joining())
+            + ")"
+            + Objects.requireNonNullElse(
+                fieldSignature(type.returnType()),
+                descriptor(type.returnType())
+            );
+    }
+
+    /** Supply the erased methods required by Java's generic ordering interfaces. */
+    private void generateJavaBridges(
+        final ClassWriter writer,
+        final String owner,
+        final List<InterfaceType> interfaces
+    ) {
+        final Map<String, FunctionSymbol> bridges = new LinkedHashMap<>();
+        collectJavaBridges(interfaces, bridges);
+        for (final FunctionSymbol function : bridges.values()) {
+            final FunctionType type = function.type();
+            final String erased =
+                "(" + "Ljava/lang/Object;".repeat(type.parameterTypes().size())
+                    + ")I";
+            if (erased.equals(methodDescriptor(type))) {
+                continue;
+            }
+            final MethodVisitor method =
+                writer.visitMethod(
+                    ACC_PUBLIC | ACC_BRIDGE | ACC_SYNTHETIC,
+                    function.name(),
+                    erased,
+                    null,
+                    null
+                );
+            method.visitCode();
+            method.visitVarInsn(ALOAD, 0);
+            final MethodGenerator generator =
+                new MethodGenerator(
+                    method,
+                    new IdentityHashMap<>(),
+                    BuiltinType.I32,
+                    null
+                );
+            for (int i = 0; i < type.parameterTypes().size(); i++) {
+                method.visitVarInsn(ALOAD, i + 1);
+                generator.readObject(type.parameterTypes().get(i));
+            }
+            method.visitMethodInsn(
+                INVOKEVIRTUAL,
+                owner,
+                function.name(),
+                methodDescriptor(type),
+                false
+            );
+            method.visitInsn(IRETURN);
+            method.visitMaxs(0, 0);
+            method.visitEnd();
+        }
+    }
+
+    private void collectJavaBridges(
+        final List<InterfaceType> interfaces,
+        final Map<String, FunctionSymbol> methods
+    ) {
+        for (final InterfaceType type : interfaces) {
+            final InterfaceContract contract = semanticModel.getInterface(type);
+            if (
+                type.javaClass() == Comparable.class
+                    || type.javaClass() == Comparator.class
+            ) {
+                contract.methods().forEach(methods::putIfAbsent);
+            }
+            collectJavaBridges(contract.superInterfaces(), methods);
+        }
     }
 
     private boolean referenceAssignable(
@@ -1934,6 +2099,11 @@ public final class BytecodeGenerator {
                 if (
                     semanticModel
                         .getEffectiveType(expression) instanceof UnionType
+                        || semanticModel.getEffectiveType(
+                            expression
+                        ) instanceof InterfaceType
+                        || semanticModel
+                            .getEffectiveType(expression) == BuiltinType.ANY
                 ) {
                     final var value =
                         Objects.requireNonNull(
@@ -2057,6 +2227,37 @@ public final class BytecodeGenerator {
                     }
                 }
                 case NewExpression creation -> {
+                    if (
+                        semanticModel.getExpressionType(
+                            creation
+                        ) instanceof InterfaceType javaType
+                    ) {
+                        final var constructor =
+                            semanticModel.getJavaConstructor(creation);
+                        final String owner = interfaceOwner(javaType);
+                        method.visitTypeInsn(NEW, owner);
+                        method.visitInsn(DUP);
+                        for (int i = 0; i < creation.arguments().size(); i++) {
+                            final Expression argument =
+                                creation.arguments().get(i);
+                            expression(argument);
+                            if (
+                                !constructor.getParameterTypes()[i]
+                                    .isPrimitive()
+                            ) {
+                                box(semanticModel.getEffectiveType(argument));
+                            }
+                        }
+                        method.visitMethodInsn(
+                            INVOKESPECIAL,
+                            owner,
+                            "<init>",
+                            org.objectweb.asm.Type
+                                .getConstructorDescriptor(constructor),
+                            false
+                        );
+                        break;
+                    }
                     final String name =
                         ((ClassType) semanticModel.getExpressionType(creation))
                             .name();
@@ -2126,15 +2327,26 @@ public final class BytecodeGenerator {
         private void convertExpression(final Expression expression) {
             final Type from = semanticModel.getExpressionType(expression);
             final Type to = semanticModel.getEffectiveType(expression);
-            if (to == BuiltinType.ANY) {
+            if (
+                to == BuiltinType.ANY || (to instanceof InterfaceType
+                    && JavaTypes.boxedClass(from) != null)
+            ) {
                 box(from);
             }
             else if (to instanceof UnionType) {
                 final Type member =
                     semanticModel.getUnionMemberType(expression);
                 if (!(from instanceof UnionType)) {
-                    convert(from, member);
-                    box(member);
+                    if (
+                        member instanceof InterfaceType
+                            && JavaTypes.boxedClass(from) != null
+                    ) {
+                        box(from);
+                    }
+                    else {
+                        convert(from, member);
+                        box(member);
+                    }
                 }
                 final String target = descriptor(to);
                 if (
@@ -2337,7 +2549,12 @@ public final class BytecodeGenerator {
                 V21,
                 ACC_FINAL | ACC_SUPER | ACC_SYNTHETIC,
                 info.owner(),
-                null,
+                classSignature(
+                    "java/lang/Object",
+                    List.of(
+                        (InterfaceType) semanticModel.getExpressionType(object)
+                    )
+                ),
                 "java/lang/Object",
                 new String[] {interfaceOwner(
                     (InterfaceType) semanticModel.getExpressionType(object)
@@ -2486,13 +2703,28 @@ public final class BytecodeGenerator {
                     );
                 }
             }
+            generateJavaBridges(
+                writer,
+                info.owner(),
+                List.of((InterfaceType) semanticModel.getExpressionType(object))
+            );
             writer.visitEnd();
             return writer.toByteArray();
         }
 
         private void lambda(final LambdaExpression lambda) {
+            final Type lambdaType = semanticModel.getExpressionType(lambda);
+            final InterfaceType comparator =
+                lambdaType instanceof InterfaceType contract ? contract : null;
             final FunctionType type =
-                (FunctionType) semanticModel.getExpressionType(lambda);
+                comparator != null
+                    ? JavaTypes.comparatorFunction(comparator)
+                    : (FunctionType) lambdaType;
+            if (comparator != null) {
+                method.visitLdcInsn(
+                    org.objectweb.asm.Type.getType(java.util.Comparator.class)
+                );
+            }
             final List<Symbol> captures =
                 semanticModel.getLambdaCaptures(lambda)
                     .stream()
@@ -2599,6 +2831,16 @@ public final class BytecodeGenerator {
                     false
                 );
             }
+            if (comparator != null) {
+                method.visitMethodInsn(
+                    INVOKESTATIC,
+                    "java/lang/invoke/MethodHandleProxies",
+                    "asInterfaceInstance",
+                    "(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;",
+                    false
+                );
+                method.visitTypeInsn(CHECKCAST, "java/util/Comparator");
+            }
         }
 
         private void box(final Type type) {
@@ -2680,6 +2922,22 @@ public final class BytecodeGenerator {
         private void call(final CallExpression call) {
             final Type calleeType =
                 semanticModel.getExpressionType(call.callee());
+            if (calleeType == BuiltinFunctionType.ARRAY_SORT) {
+                final MemberExpression member =
+                    (MemberExpression) unwrap(call.callee());
+                expression(member.target());
+                final ArrayType array =
+                    (ArrayType) semanticModel
+                        .getExpressionType(member.target());
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    RuntimeAbi.array(array.elementType()).owner,
+                    "sort",
+                    "()V",
+                    false
+                );
+                return;
+            }
             if (calleeType == BuiltinFunctionType.PRINT) {
                 expression(call.callee());
                 for (final Expression argument : call.arguments()) {
@@ -2703,6 +2961,43 @@ public final class BytecodeGenerator {
             }
             final FunctionType type = (FunctionType) calleeType;
             final Expression callee = unwrap(call.callee());
+            if (
+                callee instanceof MemberExpression member
+                    && semanticModel.getReference(
+                        member.member()
+                    ) instanceof JavaMethodSymbol function
+            ) {
+                final var javaMethod = function.method();
+                expression(member.target());
+                box(semanticModel.getEffectiveType(member.target()));
+                for (int i = 0; i < call.arguments().size(); i++) {
+                    final Expression argument = call.arguments().get(i);
+                    expression(argument);
+                    if (!javaMethod.getParameterTypes()[i].isPrimitive()) {
+                        box(semanticModel.getEffectiveType(argument));
+                    }
+                }
+                if (
+                    function.name().equals("sort") && call.arguments().isEmpty()
+                        && javaMethod.getParameterCount() == 1
+                ) {
+                    method.visitInsn(ACONST_NULL);
+                }
+                final boolean isInterface =
+                    javaMethod.getDeclaringClass().isInterface();
+                method.visitMethodInsn(
+                    isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
+                    org.objectweb.asm.Type
+                        .getInternalName(javaMethod.getDeclaringClass()),
+                    function.name(),
+                    org.objectweb.asm.Type.getMethodDescriptor(javaMethod),
+                    isInterface
+                );
+                if (!javaMethod.getReturnType().isPrimitive()) {
+                    readObject(type.returnType());
+                }
+                return;
+            }
             if (
                 callee instanceof MemberExpression member
                     && semanticModel.getReference(
@@ -2917,6 +3212,34 @@ public final class BytecodeGenerator {
         }
 
         private void array(final ArrayExpression array) {
+            if (
+                semanticModel.getExpressionType(array) instanceof InterfaceType
+            ) {
+                method.visitTypeInsn(NEW, "java/util/ArrayList");
+                method.visitInsn(DUP);
+                method.visitLdcInsn(array.elements().size());
+                method.visitMethodInsn(
+                    INVOKESPECIAL,
+                    "java/util/ArrayList",
+                    "<init>",
+                    "(I)V",
+                    false
+                );
+                for (final Expression element : array.elements()) {
+                    method.visitInsn(DUP);
+                    expression(element);
+                    box(semanticModel.getEffectiveType(element));
+                    method.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "java/util/ArrayList",
+                        "add",
+                        "(Ljava/lang/Object;)Z",
+                        false
+                    );
+                    method.visitInsn(POP);
+                }
+                return;
+            }
             final Type element =
                 ((ArrayType) semanticModel.getExpressionType(array))
                     .elementType();
@@ -3040,6 +3363,42 @@ public final class BytecodeGenerator {
 
         private void member(final MemberExpression member) {
             final Symbol symbol = semanticModel.getReference(member.member());
+            if (symbol instanceof JavaMethodSymbol function) {
+                final var javaMethod = function.method();
+                final boolean isInterface =
+                    javaMethod.getDeclaringClass().isInterface();
+                method.visitLdcInsn(
+                    new Handle(
+                        isInterface ? H_INVOKEINTERFACE : H_INVOKEVIRTUAL,
+                        org.objectweb.asm.Type
+                            .getInternalName(javaMethod.getDeclaringClass()),
+                        function.name(),
+                        org.objectweb.asm.Type.getMethodDescriptor(javaMethod),
+                        isInterface
+                    )
+                );
+                expression(member.target());
+                box(semanticModel.getEffectiveType(member.target()));
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    "java/lang/invoke/MethodHandle",
+                    "bindTo",
+                    "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
+                    false
+                );
+                method.visitLdcInsn(
+                    org.objectweb.asm.Type
+                        .getMethodType(methodDescriptor(function.type()))
+                );
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    "java/lang/invoke/MethodHandle",
+                    "asType",
+                    "(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;",
+                    false
+                );
+                return;
+            }
             if (symbol instanceof FunctionSymbol function) {
                 method.visitLdcInsn(
                     new Handle(

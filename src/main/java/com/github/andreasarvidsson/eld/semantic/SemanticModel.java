@@ -1,5 +1,6 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
@@ -22,27 +23,62 @@ import java.util.Set;
 import java.util.Collections;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
+import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
+    private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
+        new IdentityHashMap<>();
+    private final Map<ClassType, List<FunctionParameter>> constructorParameters =
+        new HashMap<>();
+    private static final String ARROW = " -> ";
+    private final IdentityHashMap<MemberExpression, Type> memberOwners =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<Expression, Type> expressionTypes =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<Expression, Type> conversionTypes =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<Expression, Type> unionMemberTypes =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<TypeNode, Type> resolvedTypes =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<AstNode, Symbol> declarations =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierExpression, Symbol> references =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierDeclaration, IdentifierDeclaration> namedArguments =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
+        new IdentityHashMap<>();
+    private final Map<ClassType, FunctionType> constructors = new HashMap<>();
+    private final Map<ClassType, Visibility> constructorVisibility =
+        new HashMap<>();
     private final Map<ClassType, Map<String, VariableSymbol>> interfaceFields =
         new HashMap<>();
-    public void setInterfaceFields(
-        ClassType type,
-        Map<String, VariableSymbol> fields
-    ) {
-        interfaceFields.put(type, fields);
-    }
-    public Map<String, VariableSymbol> getInterfaceFields(ClassType type) {
-        return interfaceFields.getOrDefault(type, Map.of());
-    }
     private final Map<InterfaceType, InterfaceContract> interfaces =
         new java.util.LinkedHashMap<>();
     private final Map<ClassType, List<InterfaceType>> implementedInterfaces =
         new HashMap<>();
     private final IdentityHashMap<Symbol, ClassType> classMemberOwners =
         new IdentityHashMap<>();
+    private final IdentityHashMap<NewExpression, Constructor<?>> javaConstructors =
+        new IdentityHashMap<>();
+
+    public void setInterfaceFields(
+        final ClassType type,
+        final Map<String, VariableSymbol> fields
+    ) {
+        interfaceFields.put(type, fields);
+    }
+
+    public Map<String, VariableSymbol> getInterfaceFields(
+        final ClassType type
+    ) {
+        return interfaceFields.getOrDefault(type, Map.of());
+    }
 
     public void setInterface(
         final InterfaceType type,
@@ -50,27 +86,36 @@ public final class SemanticModel {
     ) {
         interfaces.put(type, contract);
     }
+
     public InterfaceContract getInterface(final InterfaceType type) {
+        if (type.javaClass() != null) {
+            return JavaTypes.contract(type);
+        }
         return Objects.requireNonNull(interfaces.get(type));
     }
+
     public Set<InterfaceType> getInterfaceTypes() {
         return Collections.unmodifiableSet(interfaces.keySet());
     }
+
     public void setImplementedInterfaces(
         final ClassType type,
         final List<InterfaceType> contracts
     ) {
         implementedInterfaces.put(type, List.copyOf(contracts));
     }
+
     public List<InterfaceType> getImplementedInterfaces(final ClassType type) {
         return implementedInterfaces.getOrDefault(type, List.of());
     }
+
     public void setClassMemberOwner(
         final Symbol symbol,
         final ClassType owner
     ) {
         classMemberOwners.put(symbol, owner);
     }
+
     public ClassType getClassMemberOwner(final Symbol symbol) {
         return Objects.requireNonNull(classMemberOwners.get(symbol));
     }
@@ -85,7 +130,19 @@ public final class SemanticModel {
             return isSubclassOf(type, base);
         }
         if (target instanceof InterfaceType contract) {
+            if (
+                contract.javaClass() == Comparable.class
+                    && JavaTypes.hasNaturalOrder(source)
+            ) {
+                return contract.typeArguments().equals(List.of(source));
+            }
             if (source instanceof InterfaceType type) {
+                if (type.javaClass() != null && contract.javaClass() != null) {
+                    return contract.javaClass()
+                        .isAssignableFrom(type.javaClass())
+                        && type.typeArguments()
+                            .equals(contract.typeArguments());
+                }
                 return getInterface(type).superInterfaces()
                     .stream()
                     .anyMatch(parent -> isSubtype(parent, contract));
@@ -105,6 +162,18 @@ public final class SemanticModel {
         }
         return false;
     }
+
+    public void setJavaConstructor(
+        final NewExpression expression,
+        final Constructor<?> constructor
+    ) {
+        javaConstructors.put(expression, constructor);
+    }
+
+    public Constructor<?> getJavaConstructor(final NewExpression expression) {
+        return Objects.requireNonNull(javaConstructors.get(expression));
+    }
+
     private final Set<LambdaExpression> receiverlessLambdas =
         Collections.newSetFromMap(new IdentityHashMap<>());
 
@@ -115,6 +184,7 @@ public final class SemanticModel {
     public boolean isReceiverlessLambda(final LambdaExpression lambda) {
         return receiverlessLambdas.contains(lambda);
     }
+
     private final Map<ClassType, ClassType> superclasses = new HashMap<>();
 
     public void setSuperclass(
@@ -154,6 +224,7 @@ public final class SemanticModel {
         }
         return null;
     }
+
     private final IdentityHashMap<Symbol, Visibility> memberVisibility =
         new IdentityHashMap<>();
 
@@ -167,34 +238,6 @@ public final class SemanticModel {
     public Visibility getMemberVisibility(final Symbol symbol) {
         return memberVisibility.getOrDefault(symbol, Visibility.PRIVATE);
     }
-    private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
-        new IdentityHashMap<>();
-    private final Map<ClassType, List<FunctionParameter>> constructorParameters =
-        new HashMap<>();
-    private static final String ARROW = " -> ";
-    private final IdentityHashMap<MemberExpression, Type> memberOwners =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<Expression, Type> expressionTypes =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<Expression, Type> conversionTypes =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<Expression, Type> unionMemberTypes =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<TypeNode, Type> resolvedTypes =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<AstNode, Symbol> declarations =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<IdentifierExpression, Symbol> references =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<IdentifierDeclaration, IdentifierDeclaration> namedArguments =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
-        new IdentityHashMap<>();
-    private final Map<ClassType, FunctionType> constructors = new HashMap<>();
-    private final Map<ClassType, Visibility> constructorVisibility =
-        new HashMap<>();
 
     public void setConstructorVisibility(
         final ClassType owner,
@@ -206,6 +249,7 @@ public final class SemanticModel {
     public Visibility getConstructorVisibility(final ClassType owner) {
         return constructorVisibility.getOrDefault(owner, Visibility.PRIVATE);
     }
+
     private final IdentityHashMap<LambdaExpression, List<Symbol>> lambdaCaptures =
         new IdentityHashMap<>();
     private final Set<Symbol> capturedMutable =

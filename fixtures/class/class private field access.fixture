@@ -3,7 +3,6 @@ class Foo {
 }
 new Foo().value;
 
-
 --- TOKENS ---
 
 CLASS (1:1-1:6)

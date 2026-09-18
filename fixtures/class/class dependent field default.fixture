@@ -3,7 +3,6 @@ class Foo {
     var b = a + 1;
 }
 
-
 --- TOKENS ---
 
 CLASS (1:1-1:6)

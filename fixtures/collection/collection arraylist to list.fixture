@@ -1,0 +1,98 @@
+const values: List<i32> = new ArrayList<i32>();
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+IDENTIFIER "List" (1:15-1:19)
+LESS (1:19-1:20)
+IDENTIFIER "i32" (1:20-1:23)
+GREATER (1:23-1:24)
+EQUAL (1:25-1:26)
+NEW (1:27-1:30)
+IDENTIFIER "ArrayList" (1:31-1:40)
+LESS (1:40-1:41)
+IDENTIFIER "i32" (1:41-1:44)
+GREATER (1:44-1:45)
+LEFT_PAREN (1:45-1:46)
+RIGHT_PAREN (1:46-1:47)
+SEMICOLON (1:47-1:48)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:48
+  (VariableDeclaration
+    range: 1:1-1:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 1:15-1:24
+      name: "List"
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 1:27-1:47
+      (IdentifierExpression
+        range: 1:31-1:40
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 1:41-1:44
+        name: "i32"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:27-1:47 -> ArrayList<i32>
+  1:31-1:40 -> ArrayList<i32>
+
+Resolved types:
+  1:15-1:24 -> List<i32>
+  1:20-1:23 -> i32
+  1:27-1:47 -> ArrayList<i32>
+  1:41-1:44 -> i32
+
+Declarations:
+  1:7-1:13 -> const values: List<i32>
+
+References:
+  1:31-1:40 -> 1:27-1:47
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Integer;>;
+  // declaration: values extends java.util.List<java.lang.Integer>
+  public final static Ljava/util/List; values
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init> ()V
+    PUTSTATIC Test.values : Ljava/util/List;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

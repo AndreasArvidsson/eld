@@ -1,0 +1,151 @@
+class Foo implements Comparable<string> {
+    public func compareTo(other: string) i32 {
+        return 0;
+    }
+}
+const values: List<Foo> = [];
+values.sort();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+IMPLEMENTS (1:11-1:21)
+IDENTIFIER "Comparable" (1:22-1:32)
+LESS (1:32-1:33)
+IDENTIFIER "string" (1:33-1:39)
+GREATER (1:39-1:40)
+LEFT_BRACE (1:41-1:42)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "compareTo" (2:17-2:26)
+LEFT_PAREN (2:26-2:27)
+IDENTIFIER "other" (2:27-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "string" (2:34-2:40)
+RIGHT_PAREN (2:40-2:41)
+IDENTIFIER "i32" (2:42-2:45)
+LEFT_BRACE (2:46-2:47)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "0" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CONST (6:1-6:6)
+IDENTIFIER "values" (6:7-6:13)
+COLON (6:13-6:14)
+IDENTIFIER "List" (6:15-6:19)
+LESS (6:19-6:20)
+IDENTIFIER "Foo" (6:20-6:23)
+GREATER (6:23-6:24)
+EQUAL (6:25-6:26)
+LEFT_BRACKET (6:27-6:28)
+RIGHT_BRACKET (6:28-6:29)
+SEMICOLON (6:29-6:30)
+IDENTIFIER "values" (7:1-7:7)
+DOT (7:7-7:8)
+IDENTIFIER "sort" (7:8-7:12)
+LEFT_PAREN (7:12-7:13)
+RIGHT_PAREN (7:13-7:14)
+SEMICOLON (7:14-7:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:15
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 1:22-1:40
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:33-1:39
+        name: "string"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 2:27-2:40
+          (IdentifierDeclaration
+            range: 2:27-2:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:34-2:40
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:42-2:45
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:46-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 6:15-6:24
+      name: "List"
+      (NamedTypeNode
+        range: 6:20-6:23
+        name: "Foo"
+      )
+    )
+    (ArrayExpression
+      range: 6:27-6:29
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:15
+    (CallExpression
+      range: 7:1-7:14
+      (MemberExpression
+        range: 7:1-7:12
+        (IdentifierExpression
+          range: 7:1-7:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 7:8-7:12
+          name: "sort"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Natural sorting requires Foo to implement Comparable<Foo> at 7:1-7:12

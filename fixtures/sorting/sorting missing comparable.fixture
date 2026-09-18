@@ -1,0 +1,81 @@
+class Foo {}
+const values: List<Foo> = [];
+values.sort();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+RIGHT_BRACE (1:12-1:13)
+CONST (2:1-2:6)
+IDENTIFIER "values" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "List" (2:15-2:19)
+LESS (2:19-2:20)
+IDENTIFIER "Foo" (2:20-2:23)
+GREATER (2:23-2:24)
+EQUAL (2:25-2:26)
+LEFT_BRACKET (2:27-2:28)
+RIGHT_BRACKET (2:28-2:29)
+SEMICOLON (2:29-2:30)
+IDENTIFIER "values" (3:1-3:7)
+DOT (3:7-3:8)
+IDENTIFIER "sort" (3:8-3:12)
+LEFT_PAREN (3:12-3:13)
+RIGHT_PAREN (3:13-3:14)
+SEMICOLON (3:14-3:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:15
+  (ClassDeclaration
+    range: 1:1-1:13
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+  )
+  (VariableDeclaration
+    range: 2:1-2:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 2:15-2:24
+      name: "List"
+      (NamedTypeNode
+        range: 2:20-2:23
+        name: "Foo"
+      )
+    )
+    (ArrayExpression
+      range: 2:27-2:29
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:15
+    (CallExpression
+      range: 3:1-3:14
+      (MemberExpression
+        range: 3:1-3:12
+        (IdentifierExpression
+          range: 3:1-3:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 3:8-3:12
+          name: "sort"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Natural sorting requires Foo to implement Comparable<Foo> at 3:1-3:12

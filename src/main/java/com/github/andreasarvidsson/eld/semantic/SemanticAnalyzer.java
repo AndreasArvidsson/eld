@@ -3,6 +3,7 @@ package com.github.andreasarvidsson.eld.semantic;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
@@ -88,6 +89,7 @@ public final class SemanticAnalyzer {
     private final Map<ClassType, Map<String, FunctionSymbol>> classMethods =
         new HashMap<>();
     private boolean analyzingCallee;
+    private int callArity = -1;
     private @Nullable ClassType currentInstance;
     private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
@@ -284,6 +286,28 @@ public final class SemanticAnalyzer {
                 throw new SemanticException(
                     node.range(),
                     "'implements' requires an interface"
+                );
+            }
+            if (
+                contract.javaClass() != null
+                    && contract.javaClass() != Comparable.class
+                    && contract.javaClass() != java.util.Comparator.class
+            ) {
+                throw new SemanticException(
+                    node.range(),
+                    "Only Comparable and Comparator can be implemented from the Java collection API"
+                );
+            }
+            if (
+                contract.javaClass() != null && implemented.stream()
+                    .anyMatch(
+                        previous -> previous.javaClass() == contract.javaClass()
+                    )
+            ) {
+                throw new SemanticException(
+                    node.range(),
+                    "Duplicate implemented Java interface: %s",
+                    contract.name()
                 );
             }
             if (implemented.contains(contract)) {
@@ -538,6 +562,16 @@ public final class SemanticAnalyzer {
                     contract
                 );
             }
+            if (
+                contract.javaClass() != null
+                    && contract.javaClass() != Comparable.class
+                    && contract.javaClass() != Comparator.class
+            ) {
+                throw new SemanticException(
+                    node.range(),
+                    "Only Comparable and Comparator can be extended from the Java collection API"
+                );
+            }
             parents.add(contract);
             mergeContract(fields, model.getInterface(contract).fields(), node);
             mergeContract(
@@ -741,6 +775,15 @@ public final class SemanticAnalyzer {
         final InterfaceType type
     ) {
         final InterfaceContract contract = model.getInterface(type);
+        if (
+            type.javaClass() != null && type.javaClass() != Comparable.class
+                && type.javaClass() != Comparator.class
+        ) {
+            throw new SemanticException(
+                object.range(),
+                "Java collection types require a Java collection instance"
+            );
+        }
         final Set<String> present = new java.util.HashSet<>();
         for (final var member : object.members()) {
             final String name = member.name().name();
@@ -1810,6 +1853,12 @@ public final class SemanticAnalyzer {
             return from;
         }
         if (model.isSubtype(from, to)) {
+            if (
+                JavaTypes.boxedClass(from) != null
+                    && to instanceof InterfaceType
+            ) {
+                model.setConversionType(fromExpression, to);
+            }
             return to;
         }
         if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
@@ -1925,6 +1974,44 @@ public final class SemanticAnalyzer {
         final NamedTypeNode named,
         final SemanticContext context
     ) {
+        final Class<?> javaClass = JavaTypes.findClass(named.name());
+        if (
+            javaClass != null && context.scope().resolve(named.name()) == null
+        ) {
+            if (
+                named.typeArguments()
+                    .size() != javaClass.getTypeParameters().length
+            ) {
+                throw new SemanticException(
+                    named.range(),
+                    "%s requires %s type arguments, found %s",
+                    named.name(),
+                    javaClass.getTypeParameters().length,
+                    named.typeArguments().size()
+                );
+            }
+            final List<Type> arguments =
+                named.typeArguments()
+                    .stream()
+                    .map(argument -> resolveType(argument, context))
+                    .toList();
+            if (arguments.contains(BuiltinType.VOID)) {
+                throw new SemanticException(
+                    named.range(),
+                    "A Java generic type argument must produce a value"
+                );
+            }
+            final InterfaceType type = JavaTypes.type(named.name(), arguments);
+            model.setResolvedType(named, type);
+            return type;
+        }
+        if (!named.typeArguments().isEmpty()) {
+            throw new SemanticException(
+                named.range(),
+                "Type %s does not accept type arguments",
+                named.name()
+            );
+        }
         final Type type = switch (named.name()) {
             case "i8" -> BuiltinType.I8;
             case "i16" -> BuiltinType.I16;
@@ -1964,6 +2051,29 @@ public final class SemanticAnalyzer {
         final @Nullable Type expected
     ) {
         if (
+            expression instanceof ArrayExpression array
+                && expected instanceof InterfaceType list
+                && list.javaClass() != null
+                && list.javaClass().isAssignableFrom(java.util.ArrayList.class)
+                && list.typeArguments().size() == 1
+        ) {
+            final Type elementType = list.typeArguments().getFirst();
+            for (final Expression element : array.elements()) {
+                final Type actual =
+                    analyzeExpression(element, context, elementType);
+                if (resolveAssignType(actual, elementType, element) == null) {
+                    throw new SemanticException(
+                        element.range(),
+                        "Cannot use %s as list element %s",
+                        actual,
+                        elementType
+                    );
+                }
+            }
+            model.setExpressionType(array, list);
+            return list;
+        }
+        if (
             expected instanceof FunctionType
                 && expression instanceof MemberExpression
         ) {
@@ -1997,6 +2107,18 @@ public final class SemanticAnalyzer {
             return contract;
         }
         if (expression instanceof LambdaExpression lambda) {
+            if (
+                expected instanceof InterfaceType comparator
+                    && comparator.javaClass() == java.util.Comparator.class
+            ) {
+                analyzeLambdaExpression(
+                    lambda,
+                    context,
+                    JavaTypes.comparatorFunction(comparator)
+                );
+                model.setExpressionType(lambda, comparator);
+                return comparator;
+            }
             final Type type =
                 analyzeLambdaExpression(lambda, context, expected);
             model.setExpressionType(lambda, type);
@@ -2145,6 +2267,98 @@ public final class SemanticAnalyzer {
                 finally {
                     analyzingCallee = memberCallee;
                 }
+                if (
+                    target instanceof ArrayType array
+                        && member.member().name().equals("sort")
+                ) {
+                    final Type element = array.elementType();
+                    if (!analyzingCallee) {
+                        throw new SemanticException(
+                            member.range(),
+                            "Array sorting must be called with sort()"
+                        );
+                    }
+                    if (
+                        element == BuiltinType.BOOL || !model.isSubtype(
+                            element,
+                            JavaTypes.type("Comparable", List.of(element))
+                        )
+                    ) {
+                        throw new SemanticException(
+                            member.range(),
+                            "Array sorting requires a supported naturally ordered element type, found %s",
+                            element
+                        );
+                    }
+                    model.setMemberOwner(member, array);
+                    model.setReference(
+                        member.member(),
+                        new BuiltinFunctionSymbol(
+                            "sort",
+                            BuiltinFunctionType.ARRAY_SORT
+                        )
+                    );
+                    model.setExpressionType(
+                        member.member(),
+                        BuiltinFunctionType.ARRAY_SORT
+                    );
+                    yield BuiltinFunctionType.ARRAY_SORT;
+                }
+                final InterfaceType javaTarget =
+                    target instanceof InterfaceType contract
+                        && contract.javaClass() != null
+                            ? contract
+                            : JavaTypes.boxedClass(target) != null
+                                ? new InterfaceType(
+                                    target.toString(),
+                                    List.of(),
+                                    JavaTypes.boxedClass(target)
+                                )
+                                : null;
+                if (javaTarget != null) {
+                    final List<JavaMethodSymbol> candidates =
+                        JavaTypes.methods(
+                            javaTarget,
+                            member.member().name(),
+                            callArity,
+                            member.range()
+                        );
+                    if (candidates.size() != 1) {
+                        throw new SemanticException(
+                            member.range(),
+                            candidates.isEmpty()
+                                ? "Unknown Java method '%s' with %s arguments on %s"
+                                : "Ambiguous Java method '%s' with %s arguments on %s",
+                            member.member().name(),
+                            callArity,
+                            target
+                        );
+                    }
+                    if (
+                        member.member().name().equals("sort") && callArity == 0
+                    ) {
+                        final Type element =
+                            javaTarget.typeArguments().getFirst();
+                        if (
+                            !model.isSubtype(
+                                element,
+                                JavaTypes.type("Comparable", List.of(element))
+                            )
+                        ) {
+                            throw new SemanticException(
+                                member.range(),
+                                "Natural sorting requires %s to implement Comparable<%s>",
+                                element,
+                                element
+                            );
+                        }
+                    }
+                    final JavaMethodSymbol symbol = candidates.getFirst();
+                    model.setMemberOwner(member, target);
+                    model.setReference(member.member(), symbol);
+                    model.setExpressionType(member.member(), symbol.type());
+                    yield symbol.type();
+                }
                 if (target instanceof InterfaceType contract) {
                     final InterfaceContract members =
                         model.getInterface(contract);
@@ -2228,6 +2442,120 @@ public final class SemanticAnalyzer {
                 yield symbol.type();
             }
             case NewExpression creation -> {
+                if (
+                    JavaTypes.findClass(creation.className().name()) != null
+                        && context.scope()
+                            .resolve(creation.className().name()) == null
+                ) {
+                    final InterfaceType javaType =
+                        (InterfaceType) resolveNamedType(
+                            new NamedTypeNode(
+                                creation.className().name(),
+                                creation.typeArguments(),
+                                creation.range()
+                            ),
+                            context
+                        );
+                    final Class<?> javaClass =
+                        Objects.requireNonNull(javaType.javaClass());
+                    if (javaClass.isInterface()) {
+                        throw new SemanticException(
+                            creation.range(),
+                            "'new' requires a concrete Java collection class"
+                        );
+                    }
+                    final List<java.lang.reflect.Constructor<?>> candidates =
+                        new ArrayList<>();
+                    for (final var constructor : javaClass.getConstructors()) {
+                        if (
+                            constructor.getParameterCount() != creation
+                                .arguments()
+                                .size()
+                        ) {
+                            continue;
+                        }
+                        try {
+                            for (final var parameter : constructor
+                                .getGenericParameterTypes()) {
+                                JavaTypes.resolve(parameter, javaType);
+                            }
+                            candidates.add(constructor);
+                        }
+                        catch (IllegalArgumentException ignored) {
+                            // This constructor belongs to an API outside the exposed aliases.
+                        }
+                    }
+                    if (
+                        candidates.size() > 1
+                            && creation.arguments().size() == 1
+                    ) {
+                        final Expression argument =
+                            unwrap(creation.arguments().getFirst());
+                        if (argument instanceof LambdaExpression) {
+                            candidates.removeIf(
+                                constructor -> constructor
+                                    .getParameterTypes()[0] != java.util.Comparator.class
+                            );
+                        }
+                        else {
+                            final Type actual =
+                                analyzeExpression(argument, context);
+                            candidates.removeIf(
+                                constructor -> !model.isSubtype(
+                                    actual,
+                                    JavaTypes.resolve(
+                                        constructor
+                                            .getGenericParameterTypes()[0],
+                                        javaType
+                                    )
+                                )
+                            );
+                        }
+                    }
+                    if (candidates.size() != 1) {
+                        throw new SemanticException(
+                            creation.range(),
+                            "No unique supported constructor for %s with %s arguments",
+                            javaType,
+                            creation.arguments().size()
+                        );
+                    }
+                    final var constructor = candidates.getFirst();
+                    for (int i = 0; i < creation.arguments().size(); i++) {
+                        final Expression argument = creation.arguments().get(i);
+                        final Type wanted =
+                            JavaTypes.resolve(
+                                constructor.getGenericParameterTypes()[i],
+                                javaType
+                            );
+                        final Type actual =
+                            analyzeExpression(argument, context, wanted);
+                        if (
+                            resolveAssignType(actual, wanted, argument) == null
+                        ) {
+                            throw new SemanticException(
+                                argument.range(),
+                                "Cannot pass %s as %s",
+                                actual,
+                                wanted
+                            );
+                        }
+                    }
+                    model.setReference(
+                        creation.className(),
+                        new JavaClassSymbol(javaType, creation.range())
+                    );
+                    model.setExpressionType(creation.className(), javaType);
+                    model.setJavaConstructor(creation, constructor);
+                    yield javaType;
+                }
+                if (!creation.typeArguments().isEmpty()) {
+                    throw new SemanticException(
+                        creation.range(),
+                        "Type %s does not accept type arguments",
+                        creation.className().name()
+                    );
+                }
                 final Type classType =
                     analyzeIdentifierExpression(creation.className(), context);
                 if (
@@ -2519,13 +2847,25 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         final boolean previousCallee = analyzingCallee;
+        final int previousArity = callArity;
         final Type type;
         analyzingCallee = true;
+        callArity = call.arguments().size();
         try {
             type = analyzeExpression(call.callee(), context);
         }
         finally {
             analyzingCallee = previousCallee;
+            callArity = previousArity;
+        }
+        if (type == BuiltinFunctionType.ARRAY_SORT) {
+            if (!call.arguments().isEmpty()) {
+                throw new SemanticException(
+                    call.range(),
+                    "Array sorting expects no arguments"
+                );
+            }
+            return BuiltinType.VOID;
         }
         if (type == BuiltinFunctionType.PRINT) {
             if (call.arguments().size() > 1) {

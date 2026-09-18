@@ -1,0 +1,37 @@
+const values: List = [];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+IDENTIFIER "List" (1:15-1:19)
+EQUAL (1:20-1:21)
+LEFT_BRACKET (1:22-1:23)
+RIGHT_BRACKET (1:23-1:24)
+SEMICOLON (1:24-1:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:25
+  (VariableDeclaration
+    range: 1:1-1:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 1:15-1:19
+      name: "List"
+    )
+    (ArrayExpression
+      range: 1:22-1:24
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: List requires 1 type arguments, found 0 at 1:15-1:19

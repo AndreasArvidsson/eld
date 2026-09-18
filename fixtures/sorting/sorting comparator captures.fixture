@@ -1,0 +1,778 @@
+func comparator() Comparator<i32> {
+    var direction = 1;
+    const cmp: Comparator<i32> = (a, b) => direction * a.compareTo(b);
+    direction = -1;
+    return cmp;
+}
+class Direction {
+    const multiplier = 1;
+    public func comparator() Comparator<i32> {
+        return (a, b) => {
+            return this.multiplier * a.compareTo(b);
+        };
+    }
+}
+const values: List<i32> = [3, 1, 2];
+values.sort(comparator());
+print(values);
+values.sort(new Direction().comparator());
+print(values);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "comparator" (1:6-1:16)
+LEFT_PAREN (1:16-1:17)
+RIGHT_PAREN (1:17-1:18)
+IDENTIFIER "Comparator" (1:19-1:29)
+LESS (1:29-1:30)
+IDENTIFIER "i32" (1:30-1:33)
+GREATER (1:33-1:34)
+LEFT_BRACE (1:35-1:36)
+VAR (2:5-2:8)
+IDENTIFIER "direction" (2:9-2:18)
+EQUAL (2:19-2:20)
+INTEGER_LITERAL "1" (2:21-2:22)
+SEMICOLON (2:22-2:23)
+CONST (3:5-3:10)
+IDENTIFIER "cmp" (3:11-3:14)
+COLON (3:14-3:15)
+IDENTIFIER "Comparator" (3:16-3:26)
+LESS (3:26-3:27)
+IDENTIFIER "i32" (3:27-3:30)
+GREATER (3:30-3:31)
+EQUAL (3:32-3:33)
+LEFT_PAREN (3:34-3:35)
+IDENTIFIER "a" (3:35-3:36)
+COMMA (3:36-3:37)
+IDENTIFIER "b" (3:38-3:39)
+RIGHT_PAREN (3:39-3:40)
+ARROW (3:41-3:43)
+IDENTIFIER "direction" (3:44-3:53)
+STAR (3:54-3:55)
+IDENTIFIER "a" (3:56-3:57)
+DOT (3:57-3:58)
+IDENTIFIER "compareTo" (3:58-3:67)
+LEFT_PAREN (3:67-3:68)
+IDENTIFIER "b" (3:68-3:69)
+RIGHT_PAREN (3:69-3:70)
+SEMICOLON (3:70-3:71)
+IDENTIFIER "direction" (4:5-4:14)
+EQUAL (4:15-4:16)
+MINUS (4:17-4:18)
+INTEGER_LITERAL "1" (4:18-4:19)
+SEMICOLON (4:19-4:20)
+RETURN (5:5-5:11)
+IDENTIFIER "cmp" (5:12-5:15)
+SEMICOLON (5:15-5:16)
+RIGHT_BRACE (6:1-6:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Direction" (7:7-7:16)
+LEFT_BRACE (7:17-7:18)
+CONST (8:5-8:10)
+IDENTIFIER "multiplier" (8:11-8:21)
+EQUAL (8:22-8:23)
+INTEGER_LITERAL "1" (8:24-8:25)
+SEMICOLON (8:25-8:26)
+PUBLIC (9:5-9:11)
+FUNC (9:12-9:16)
+IDENTIFIER "comparator" (9:17-9:27)
+LEFT_PAREN (9:27-9:28)
+RIGHT_PAREN (9:28-9:29)
+IDENTIFIER "Comparator" (9:30-9:40)
+LESS (9:40-9:41)
+IDENTIFIER "i32" (9:41-9:44)
+GREATER (9:44-9:45)
+LEFT_BRACE (9:46-9:47)
+RETURN (10:9-10:15)
+LEFT_PAREN (10:16-10:17)
+IDENTIFIER "a" (10:17-10:18)
+COMMA (10:18-10:19)
+IDENTIFIER "b" (10:20-10:21)
+RIGHT_PAREN (10:21-10:22)
+ARROW (10:23-10:25)
+LEFT_BRACE (10:26-10:27)
+RETURN (11:13-11:19)
+THIS (11:20-11:24)
+DOT (11:24-11:25)
+IDENTIFIER "multiplier" (11:25-11:35)
+STAR (11:36-11:37)
+IDENTIFIER "a" (11:38-11:39)
+DOT (11:39-11:40)
+IDENTIFIER "compareTo" (11:40-11:49)
+LEFT_PAREN (11:49-11:50)
+IDENTIFIER "b" (11:50-11:51)
+RIGHT_PAREN (11:51-11:52)
+SEMICOLON (11:52-11:53)
+RIGHT_BRACE (12:9-12:10)
+SEMICOLON (12:10-12:11)
+RIGHT_BRACE (13:5-13:6)
+RIGHT_BRACE (14:1-14:2)
+CONST (15:1-15:6)
+IDENTIFIER "values" (15:7-15:13)
+COLON (15:13-15:14)
+IDENTIFIER "List" (15:15-15:19)
+LESS (15:19-15:20)
+IDENTIFIER "i32" (15:20-15:23)
+GREATER (15:23-15:24)
+EQUAL (15:25-15:26)
+LEFT_BRACKET (15:27-15:28)
+INTEGER_LITERAL "3" (15:28-15:29)
+COMMA (15:29-15:30)
+INTEGER_LITERAL "1" (15:31-15:32)
+COMMA (15:32-15:33)
+INTEGER_LITERAL "2" (15:34-15:35)
+RIGHT_BRACKET (15:35-15:36)
+SEMICOLON (15:36-15:37)
+IDENTIFIER "values" (16:1-16:7)
+DOT (16:7-16:8)
+IDENTIFIER "sort" (16:8-16:12)
+LEFT_PAREN (16:12-16:13)
+IDENTIFIER "comparator" (16:13-16:23)
+LEFT_PAREN (16:23-16:24)
+RIGHT_PAREN (16:24-16:25)
+RIGHT_PAREN (16:25-16:26)
+SEMICOLON (16:26-16:27)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "values" (17:7-17:13)
+RIGHT_PAREN (17:13-17:14)
+SEMICOLON (17:14-17:15)
+IDENTIFIER "values" (18:1-18:7)
+DOT (18:7-18:8)
+IDENTIFIER "sort" (18:8-18:12)
+LEFT_PAREN (18:12-18:13)
+NEW (18:13-18:16)
+IDENTIFIER "Direction" (18:17-18:26)
+LEFT_PAREN (18:26-18:27)
+RIGHT_PAREN (18:27-18:28)
+DOT (18:28-18:29)
+IDENTIFIER "comparator" (18:29-18:39)
+LEFT_PAREN (18:39-18:40)
+RIGHT_PAREN (18:40-18:41)
+RIGHT_PAREN (18:41-18:42)
+SEMICOLON (18:42-18:43)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "values" (19:7-19:13)
+RIGHT_PAREN (19:13-19:14)
+SEMICOLON (19:14-19:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-19:15
+  (FunctionDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:6-1:16
+      name: "comparator"
+    )
+    (NamedTypeNode
+      range: 1:19-1:34
+      name: "Comparator"
+      (NamedTypeNode
+        range: 1:30-1:33
+        name: "i32"
+      )
+    )
+    (BlockStatement
+      range: 1:35-6:2
+      (VariableDeclaration
+        range: 2:5-2:23
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:18
+          name: "direction"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:21-2:22
+          kind: INT
+          text: "1"
+        )
+      )
+      (VariableDeclaration
+        range: 3:5-3:71
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 3:11-3:14
+          name: "cmp"
+        )
+        (NamedTypeNode
+          range: 3:16-3:31
+          name: "Comparator"
+          (NamedTypeNode
+            range: 3:27-3:30
+            name: "i32"
+          )
+        )
+        (LambdaExpression
+          range: 3:34-3:70
+          (LambdaParameter
+            range: 3:35-3:36
+            (IdentifierDeclaration
+              range: 3:35-3:36
+              name: "a"
+            )
+          )
+          (LambdaParameter
+            range: 3:38-3:39
+            (IdentifierDeclaration
+              range: 3:38-3:39
+              name: "b"
+            )
+          )
+          (BinaryExpression
+            range: 3:44-3:70
+            (IdentifierExpression
+              range: 3:44-3:53
+              name: "direction"
+            )
+            operator: MULTIPLY
+            (CallExpression
+              range: 3:56-3:70
+              (MemberExpression
+                range: 3:56-3:67
+                (IdentifierExpression
+                  range: 3:56-3:57
+                  name: "a"
+                )
+                (IdentifierExpression
+                  range: 3:58-3:67
+                  name: "compareTo"
+                )
+              )
+              (IdentifierExpression
+                range: 3:68-3:69
+                name: "b"
+              )
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 4:5-4:20
+        (AssignmentExpression
+          range: 4:5-4:19
+          (IdentifierExpression
+            range: 4:5-4:14
+            name: "direction"
+          )
+          (UnaryExpression
+            range: 4:17-4:19
+            operator: MINUS
+            (LiteralExpression
+              range: 4:18-4:19
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 5:5-5:16
+        (IdentifierExpression
+          range: 5:12-5:15
+          name: "cmp"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-14:2
+    (IdentifierDeclaration
+      range: 7:7-7:16
+      name: "Direction"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 8:5-8:26
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 8:5-8:26
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 8:11-8:21
+          name: "multiplier"
+        )
+        type: null
+        (LiteralExpression
+          range: 8:24-8:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 9:5-13:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 9:12-13:6
+        (IdentifierDeclaration
+          range: 9:17-9:27
+          name: "comparator"
+        )
+        (NamedTypeNode
+          range: 9:30-9:45
+          name: "Comparator"
+          (NamedTypeNode
+            range: 9:41-9:44
+            name: "i32"
+          )
+        )
+        (BlockStatement
+          range: 9:46-13:6
+          (ReturnStatement
+            range: 10:9-12:11
+            (LambdaExpression
+              range: 10:16-12:10
+              (LambdaParameter
+                range: 10:17-10:18
+                (IdentifierDeclaration
+                  range: 10:17-10:18
+                  name: "a"
+                )
+              )
+              (LambdaParameter
+                range: 10:20-10:21
+                (IdentifierDeclaration
+                  range: 10:20-10:21
+                  name: "b"
+                )
+              )
+              (BlockStatement
+                range: 10:26-12:10
+                (ReturnStatement
+                  range: 11:13-11:53
+                  (BinaryExpression
+                    range: 11:20-11:52
+                    (MemberExpression
+                      range: 11:20-11:35
+                      (ThisExpression
+                        range: 11:20-11:24
+                      )
+                      (IdentifierExpression
+                        range: 11:25-11:35
+                        name: "multiplier"
+                      )
+                    )
+                    operator: MULTIPLY
+                    (CallExpression
+                      range: 11:38-11:52
+                      (MemberExpression
+                        range: 11:38-11:49
+                        (IdentifierExpression
+                          range: 11:38-11:39
+                          name: "a"
+                        )
+                        (IdentifierExpression
+                          range: 11:40-11:49
+                          name: "compareTo"
+                        )
+                      )
+                      (IdentifierExpression
+                        range: 11:50-11:51
+                        name: "b"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 15:15-15:24
+      name: "List"
+      (NamedTypeNode
+        range: 15:20-15:23
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 15:27-15:36
+      (LiteralExpression
+        range: 15:28-15:29
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 15:31-15:32
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 15:34-15:35
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:27
+    (CallExpression
+      range: 16:1-16:26
+      (MemberExpression
+        range: 16:1-16:12
+        (IdentifierExpression
+          range: 16:1-16:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 16:8-16:12
+          name: "sort"
+        )
+      )
+      (CallExpression
+        range: 16:13-16:25
+        (IdentifierExpression
+          range: 16:13-16:23
+          name: "comparator"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:15
+    (CallExpression
+      range: 17:1-17:14
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 17:7-17:13
+        name: "values"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:43
+    (CallExpression
+      range: 18:1-18:42
+      (MemberExpression
+        range: 18:1-18:12
+        (IdentifierExpression
+          range: 18:1-18:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 18:8-18:12
+          name: "sort"
+        )
+      )
+      (CallExpression
+        range: 18:13-18:41
+        (MemberExpression
+          range: 18:13-18:39
+          (NewExpression
+            range: 18:13-18:28
+            (IdentifierExpression
+              range: 18:17-18:26
+              name: "Direction"
+            )
+          )
+          (IdentifierExpression
+            range: 18:29-18:39
+            name: "comparator"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:15
+    (CallExpression
+      range: 19:1-19:14
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 19:7-19:13
+        name: "values"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:21-2:22 -> i32
+  3:34-3:70 -> Comparator<i32>
+  3:44-3:53 -> i32
+  3:44-3:70 -> i32
+  3:56-3:57 -> i32
+  3:56-3:67 -> (i32) => i32
+  3:56-3:70 -> i32
+  3:58-3:67 -> (i32) => i32
+  3:68-3:69 -> i32
+  4:5-4:14 -> i32
+  4:5-4:19 -> i32
+  4:17-4:19 -> i32
+  4:18-4:19 -> i32
+  5:12-5:15 -> Comparator<i32>
+  8:24-8:25 -> i32
+  10:16-12:10 -> Comparator<i32>
+  11:20-11:24 -> Direction
+  11:20-11:35 -> i32
+  11:20-11:52 -> i32
+  11:25-11:35 -> i32
+  11:38-11:39 -> i32
+  11:38-11:49 -> (i32) => i32
+  11:38-11:52 -> i32
+  11:40-11:49 -> (i32) => i32
+  11:50-11:51 -> i32
+  15:27-15:36 -> List<i32>
+  15:28-15:29 -> i32
+  15:31-15:32 -> i32
+  15:34-15:35 -> i32
+  16:1-16:7 -> List<i32>
+  16:1-16:12 -> (Comparator<i32>) => void
+  16:1-16:26 -> void
+  16:8-16:12 -> (Comparator<i32>) => void
+  16:13-16:23 -> () => Comparator<i32>
+  16:13-16:25 -> Comparator<i32>
+  17:1-17:6 -> (any) => void
+  17:1-17:14 -> void
+  17:7-17:13 -> List<i32>
+  18:1-18:7 -> List<i32>
+  18:1-18:12 -> (Comparator<i32>) => void
+  18:1-18:42 -> void
+  18:8-18:12 -> (Comparator<i32>) => void
+  18:13-18:28 -> Direction
+  18:13-18:39 -> () => Comparator<i32>
+  18:13-18:41 -> Comparator<i32>
+  18:17-18:26 -> Direction
+  18:29-18:39 -> () => Comparator<i32>
+  19:1-19:6 -> (any) => void
+  19:1-19:14 -> void
+  19:7-19:13 -> List<i32>
+
+Resolved types:
+  1:19-1:34 -> Comparator<i32>
+  1:30-1:33 -> i32
+  3:16-3:31 -> Comparator<i32>
+  3:27-3:30 -> i32
+  9:30-9:45 -> Comparator<i32>
+  9:41-9:44 -> i32
+  15:15-15:24 -> List<i32>
+  15:20-15:23 -> i32
+
+Declarations:
+  1:6-1:16 -> comparator() => Comparator<i32>
+  2:9-2:18 -> var direction: i32
+  3:11-3:14 -> const cmp: Comparator<i32>
+  3:35-3:36 -> const a: i32
+  3:38-3:39 -> const b: i32
+  7:7-7:16 -> class Direction
+  8:11-8:21 -> const multiplier: i32
+  9:17-9:27 -> comparator() => Comparator<i32>
+  10:17-10:18 -> const a: i32
+  10:20-10:21 -> const b: i32
+  15:7-15:13 -> const values: List<i32>
+
+References:
+  3:44-3:53 -> 2:9-2:18
+  3:56-3:57 -> 3:35-3:36
+  3:58-3:67 -> 3:56-3:67
+  3:68-3:69 -> 3:38-3:39
+  4:5-4:14 -> 2:9-2:18
+  5:12-5:15 -> 3:11-3:14
+  11:25-11:35 -> 8:11-8:21
+  11:38-11:39 -> 10:17-10:18
+  11:40-11:49 -> 11:38-11:49
+  11:50-11:51 -> 10:20-10:21
+  16:1-16:7 -> 15:7-15:13
+  16:8-16:12 -> 16:1-16:12
+  16:13-16:23 -> 1:6-1:16
+  17:1-17:6 -> builtin print
+  17:7-17:13 -> 15:7-15:13
+  18:1-18:7 -> 15:7-15:13
+  18:8-18:12 -> 18:1-18:12
+  18:17-18:26 -> 7:7-7:16
+  18:29-18:39 -> 9:17-9:27
+  19:1-19:6 -> builtin print
+  19:7-19:13 -> 15:7-15:13
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Direction
+  // access flags 0x9
+  public static INNERCLASS Test$Direction Test Direction
+
+  // access flags 0x19
+  // signature Ljava/util/List<Ljava/lang/Integer;>;
+  // declaration: values extends java.util.List<java.lang.Integer>
+  public final static Ljava/util/List; values
+
+  // access flags 0x9
+  // signature ()Ljava/util/Comparator<Ljava/lang/Integer;>;
+  // declaration: java.util.Comparator<java.lang.Integer> comparator()
+  public static comparator()Ljava/util/Comparator;
+    ICONST_1
+    NEWARRAY T_INT
+    ASTORE 0
+    LDC 1
+    ISTORE 1
+    ALOAD 0
+    ICONST_0
+    ILOAD 1
+    IASTORE
+    LDC Ljava/util/Comparator;.class
+    // handle kind 0x6 : INVOKESTATIC
+    LDC Test.$lambda0([III)I
+    ICONST_0
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    ALOAD 0
+    AASTORE
+    INVOKESTATIC java/lang/invoke/MethodHandles.insertArguments (Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    CHECKCAST java/util/Comparator
+    ASTORE 2
+    LDC -1
+    DUP
+    ISTORE 3
+    ALOAD 0
+    ICONST_0
+    ILOAD 3
+    IASTORE
+    POP
+    ALOAD 2
+    ARETURN
+    MAXSTACK = 7
+    MAXLOCALS = 4
+
+  // access flags 0x100A
+  private static synthetic $lambda0([III)I
+    ALOAD 0
+    ICONST_0
+    IALOAD
+    ILOAD 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    ILOAD 2
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    IMUL
+    IRETURN
+    MAXSTACK = 3
+    MAXLOCALS = 3
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW java/util/ArrayList
+    DUP
+    LDC 3
+    INVOKESPECIAL java/util/ArrayList.<init> (I)V
+    DUP
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    PUTSTATIC Test.values : Ljava/util/List;
+    GETSTATIC Test.values : Ljava/util/List;
+    INVOKESTATIC Test.comparator ()Ljava/util/Comparator;
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC Test.values : Ljava/util/List;
+    NEW Test$Direction
+    DUP
+    INVOKESPECIAL Test$Direction.<init> ()V
+    INVOKEVIRTUAL Test$Direction.comparator ()Ljava/util/Comparator;
+    INVOKEINTERFACE java/util/List.sort (Ljava/util/Comparator;)V (itf)
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.values : Ljava/util/List;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Direction {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Direction Test Direction
+
+  // access flags 0x12
+  private final I multiplier
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 1
+    PUTFIELD Test$Direction.multiplier : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  // signature ()Ljava/util/Comparator<Ljava/lang/Integer;>;
+  // declaration: java.util.Comparator<java.lang.Integer> comparator()
+  public comparator()Ljava/util/Comparator;
+    LDC Ljava/util/Comparator;.class
+    // handle kind 0x5 : INVOKEVIRTUAL
+    LDC Test$Direction.$lambda1(II)I
+    ALOAD 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance (Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    CHECKCAST java/util/Comparator
+    ARETURN
+    MAXSTACK = 3
+    MAXLOCALS = 1
+
+  // access flags 0x1002
+  private synthetic $lambda1(II)I
+    ALOAD 0
+    GETFIELD Test$Direction.multiplier : I
+    ILOAD 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    ILOAD 2
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    IMUL
+    IRETURN
+    MAXSTACK = 3
+    MAXLOCALS = 3
+}
+
+--- OUTPUT ---
+
+[3, 2, 1]
+[1, 2, 3]
+

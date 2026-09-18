@@ -1,0 +1,76 @@
+const values = [1, 2];
+const collection: Collection<i32> = values;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+INTEGER_LITERAL "1" (1:17-1:18)
+COMMA (1:18-1:19)
+INTEGER_LITERAL "2" (1:20-1:21)
+RIGHT_BRACKET (1:21-1:22)
+SEMICOLON (1:22-1:23)
+CONST (2:1-2:6)
+IDENTIFIER "collection" (2:7-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "Collection" (2:19-2:29)
+LESS (2:29-2:30)
+IDENTIFIER "i32" (2:30-2:33)
+GREATER (2:33-2:34)
+EQUAL (2:35-2:36)
+IDENTIFIER "values" (2:37-2:43)
+SEMICOLON (2:43-2:44)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:44
+  (VariableDeclaration
+    range: 1:1-1:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:22
+      (LiteralExpression
+        range: 1:17-1:18
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:20-1:21
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:17
+      name: "collection"
+    )
+    (NamedTypeNode
+      range: 2:19-2:34
+      name: "Collection"
+      (NamedTypeNode
+        range: 2:30-2:33
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 2:37-2:43
+      name: "values"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign [i32] to Collection<i32> at 2:37-2:43

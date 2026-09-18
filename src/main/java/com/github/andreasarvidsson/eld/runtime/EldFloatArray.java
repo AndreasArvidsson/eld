@@ -36,6 +36,10 @@ public final class EldFloatArray extends EldArray<EldFloatArray> {
         return super.copy();
     }
 
+    public void sort() {
+        Arrays.sort(elements, 0, size);
+    }
+
     @Override
     public EldFloatArray sliceFrom(final int start) {
         return super.sliceFrom(start);

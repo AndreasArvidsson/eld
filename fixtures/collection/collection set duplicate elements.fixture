@@ -1,0 +1,230 @@
+const set: Set<i32> = new HashSet<i32>();
+set.add(1);
+set.add(1);
+print(set.size());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "set" (1:7-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "Set" (1:12-1:15)
+LESS (1:15-1:16)
+IDENTIFIER "i32" (1:16-1:19)
+GREATER (1:19-1:20)
+EQUAL (1:21-1:22)
+NEW (1:23-1:26)
+IDENTIFIER "HashSet" (1:27-1:34)
+LESS (1:34-1:35)
+IDENTIFIER "i32" (1:35-1:38)
+GREATER (1:38-1:39)
+LEFT_PAREN (1:39-1:40)
+RIGHT_PAREN (1:40-1:41)
+SEMICOLON (1:41-1:42)
+IDENTIFIER "set" (2:1-2:4)
+DOT (2:4-2:5)
+IDENTIFIER "add" (2:5-2:8)
+LEFT_PAREN (2:8-2:9)
+INTEGER_LITERAL "1" (2:9-2:10)
+RIGHT_PAREN (2:10-2:11)
+SEMICOLON (2:11-2:12)
+IDENTIFIER "set" (3:1-3:4)
+DOT (3:4-3:5)
+IDENTIFIER "add" (3:5-3:8)
+LEFT_PAREN (3:8-3:9)
+INTEGER_LITERAL "1" (3:9-3:10)
+RIGHT_PAREN (3:10-3:11)
+SEMICOLON (3:11-3:12)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "set" (4:7-4:10)
+DOT (4:10-4:11)
+IDENTIFIER "size" (4:11-4:15)
+LEFT_PAREN (4:15-4:16)
+RIGHT_PAREN (4:16-4:17)
+RIGHT_PAREN (4:17-4:18)
+SEMICOLON (4:18-4:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:19
+  (VariableDeclaration
+    range: 1:1-1:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "set"
+    )
+    (NamedTypeNode
+      range: 1:12-1:20
+      name: "Set"
+      (NamedTypeNode
+        range: 1:16-1:19
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 1:23-1:41
+      (IdentifierExpression
+        range: 1:27-1:34
+        name: "HashSet"
+      )
+      (NamedTypeNode
+        range: 1:35-1:38
+        name: "i32"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:12
+    (CallExpression
+      range: 2:1-2:11
+      (MemberExpression
+        range: 2:1-2:8
+        (IdentifierExpression
+          range: 2:1-2:4
+          name: "set"
+        )
+        (IdentifierExpression
+          range: 2:5-2:8
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 2:9-2:10
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:12
+    (CallExpression
+      range: 3:1-3:11
+      (MemberExpression
+        range: 3:1-3:8
+        (IdentifierExpression
+          range: 3:1-3:4
+          name: "set"
+        )
+        (IdentifierExpression
+          range: 3:5-3:8
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 3:9-3:10
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:19
+    (CallExpression
+      range: 4:1-4:18
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:17
+        (MemberExpression
+          range: 4:7-4:15
+          (IdentifierExpression
+            range: 4:7-4:10
+            name: "set"
+          )
+          (IdentifierExpression
+            range: 4:11-4:15
+            name: "size"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:23-1:41 -> HashSet<i32>
+  1:27-1:34 -> HashSet<i32>
+  2:1-2:4 -> Set<i32>
+  2:1-2:8 -> (i32) => bool
+  2:1-2:11 -> bool
+  2:5-2:8 -> (i32) => bool
+  2:9-2:10 -> i32
+  3:1-3:4 -> Set<i32>
+  3:1-3:8 -> (i32) => bool
+  3:1-3:11 -> bool
+  3:5-3:8 -> (i32) => bool
+  3:9-3:10 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:18 -> void
+  4:7-4:10 -> Set<i32>
+  4:7-4:15 -> () => i32
+  4:7-4:17 -> i32
+  4:11-4:15 -> () => i32
+
+Resolved types:
+  1:12-1:20 -> Set<i32>
+  1:16-1:19 -> i32
+  1:23-1:41 -> HashSet<i32>
+  1:35-1:38 -> i32
+
+Declarations:
+  1:7-1:10 -> const set: Set<i32>
+
+References:
+  1:27-1:34 -> 1:23-1:41
+  2:1-2:4 -> 1:7-1:10
+  2:5-2:8 -> 2:1-2:8
+  3:1-3:4 -> 1:7-1:10
+  3:5-3:8 -> 3:1-3:8
+  4:1-4:6 -> builtin print
+  4:7-4:10 -> 1:7-1:10
+  4:11-4:15 -> 4:7-4:15
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  // signature Ljava/util/Set<Ljava/lang/Integer;>;
+  // declaration: set extends java.util.Set<java.lang.Integer>
+  public final static Ljava/util/Set; set
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW java/util/HashSet
+    DUP
+    INVOKESPECIAL java/util/HashSet.<init> ()V
+    PUTSTATIC Test.set : Ljava/util/Set;
+    GETSTATIC Test.set : Ljava/util/Set;
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    POP
+    GETSTATIC Test.set : Ljava/util/Set;
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Set.add (Ljava/lang/Object;)Z (itf)
+    POP
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.set : Ljava/util/Set;
+    INVOKEINTERFACE java/util/Set.size ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+1
+

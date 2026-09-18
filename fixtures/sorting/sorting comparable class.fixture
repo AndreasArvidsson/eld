@@ -1,0 +1,788 @@
+class Person implements Comparable<Person> {
+    public const age: i32;
+    public constructor(age: i32) {
+        this.age = age;
+    }
+    public func compareTo(other: Person) i32 {
+        return this.age.compareTo(other.age);
+    }
+}
+const people = new ArrayList<Person>();
+people.add(new Person(30));
+people.add(new Person(10));
+people.add(new Person(20));
+people.sort();
+print(people.get(0).age);
+print(people.get(1).age);
+print(people.get(2).age);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Person" (1:7-1:13)
+IMPLEMENTS (1:14-1:24)
+IDENTIFIER "Comparable" (1:25-1:35)
+LESS (1:35-1:36)
+IDENTIFIER "Person" (1:36-1:42)
+GREATER (1:42-1:43)
+LEFT_BRACE (1:44-1:45)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "age" (2:18-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "i32" (2:23-2:26)
+SEMICOLON (2:26-2:27)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "age" (3:24-3:27)
+COLON (3:27-3:28)
+IDENTIFIER "i32" (3:29-3:32)
+RIGHT_PAREN (3:32-3:33)
+LEFT_BRACE (3:34-3:35)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "age" (4:14-4:17)
+EQUAL (4:18-4:19)
+IDENTIFIER "age" (4:20-4:23)
+SEMICOLON (4:23-4:24)
+RIGHT_BRACE (5:5-5:6)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "compareTo" (6:17-6:26)
+LEFT_PAREN (6:26-6:27)
+IDENTIFIER "other" (6:27-6:32)
+COLON (6:32-6:33)
+IDENTIFIER "Person" (6:34-6:40)
+RIGHT_PAREN (6:40-6:41)
+IDENTIFIER "i32" (6:42-6:45)
+LEFT_BRACE (6:46-6:47)
+RETURN (7:9-7:15)
+THIS (7:16-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "age" (7:21-7:24)
+DOT (7:24-7:25)
+IDENTIFIER "compareTo" (7:25-7:34)
+LEFT_PAREN (7:34-7:35)
+IDENTIFIER "other" (7:35-7:40)
+DOT (7:40-7:41)
+IDENTIFIER "age" (7:41-7:44)
+RIGHT_PAREN (7:44-7:45)
+SEMICOLON (7:45-7:46)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (10:1-10:6)
+IDENTIFIER "people" (10:7-10:13)
+EQUAL (10:14-10:15)
+NEW (10:16-10:19)
+IDENTIFIER "ArrayList" (10:20-10:29)
+LESS (10:29-10:30)
+IDENTIFIER "Person" (10:30-10:36)
+GREATER (10:36-10:37)
+LEFT_PAREN (10:37-10:38)
+RIGHT_PAREN (10:38-10:39)
+SEMICOLON (10:39-10:40)
+IDENTIFIER "people" (11:1-11:7)
+DOT (11:7-11:8)
+IDENTIFIER "add" (11:8-11:11)
+LEFT_PAREN (11:11-11:12)
+NEW (11:12-11:15)
+IDENTIFIER "Person" (11:16-11:22)
+LEFT_PAREN (11:22-11:23)
+INTEGER_LITERAL "30" (11:23-11:25)
+RIGHT_PAREN (11:25-11:26)
+RIGHT_PAREN (11:26-11:27)
+SEMICOLON (11:27-11:28)
+IDENTIFIER "people" (12:1-12:7)
+DOT (12:7-12:8)
+IDENTIFIER "add" (12:8-12:11)
+LEFT_PAREN (12:11-12:12)
+NEW (12:12-12:15)
+IDENTIFIER "Person" (12:16-12:22)
+LEFT_PAREN (12:22-12:23)
+INTEGER_LITERAL "10" (12:23-12:25)
+RIGHT_PAREN (12:25-12:26)
+RIGHT_PAREN (12:26-12:27)
+SEMICOLON (12:27-12:28)
+IDENTIFIER "people" (13:1-13:7)
+DOT (13:7-13:8)
+IDENTIFIER "add" (13:8-13:11)
+LEFT_PAREN (13:11-13:12)
+NEW (13:12-13:15)
+IDENTIFIER "Person" (13:16-13:22)
+LEFT_PAREN (13:22-13:23)
+INTEGER_LITERAL "20" (13:23-13:25)
+RIGHT_PAREN (13:25-13:26)
+RIGHT_PAREN (13:26-13:27)
+SEMICOLON (13:27-13:28)
+IDENTIFIER "people" (14:1-14:7)
+DOT (14:7-14:8)
+IDENTIFIER "sort" (14:8-14:12)
+LEFT_PAREN (14:12-14:13)
+RIGHT_PAREN (14:13-14:14)
+SEMICOLON (14:14-14:15)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "people" (15:7-15:13)
+DOT (15:13-15:14)
+IDENTIFIER "get" (15:14-15:17)
+LEFT_PAREN (15:17-15:18)
+INTEGER_LITERAL "0" (15:18-15:19)
+RIGHT_PAREN (15:19-15:20)
+DOT (15:20-15:21)
+IDENTIFIER "age" (15:21-15:24)
+RIGHT_PAREN (15:24-15:25)
+SEMICOLON (15:25-15:26)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "people" (16:7-16:13)
+DOT (16:13-16:14)
+IDENTIFIER "get" (16:14-16:17)
+LEFT_PAREN (16:17-16:18)
+INTEGER_LITERAL "1" (16:18-16:19)
+RIGHT_PAREN (16:19-16:20)
+DOT (16:20-16:21)
+IDENTIFIER "age" (16:21-16:24)
+RIGHT_PAREN (16:24-16:25)
+SEMICOLON (16:25-16:26)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "people" (17:7-17:13)
+DOT (17:13-17:14)
+IDENTIFIER "get" (17:14-17:17)
+LEFT_PAREN (17:17-17:18)
+INTEGER_LITERAL "2" (17:18-17:19)
+RIGHT_PAREN (17:19-17:20)
+DOT (17:20-17:21)
+IDENTIFIER "age" (17:21-17:24)
+RIGHT_PAREN (17:24-17:25)
+SEMICOLON (17:25-17:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:26
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Person"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 1:25-1:43
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:36-1:42
+        name: "Person"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-2:27
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:27
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:21
+          name: "age"
+        )
+        (NamedTypeNode
+          range: 2:23-2:26
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-5:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-5:6
+        (FunctionParameter
+          range: 3:24-3:32
+          (IdentifierDeclaration
+            range: 3:24-3:27
+            name: "age"
+          )
+          (NamedTypeNode
+            range: 3:29-3:32
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:34-5:6
+          (ExpressionStatement
+            range: 4:9-4:24
+            (AssignmentExpression
+              range: 4:9-4:23
+              (MemberExpression
+                range: 4:9-4:17
+                (ThisExpression
+                  range: 4:9-4:13
+                )
+                (IdentifierExpression
+                  range: 4:14-4:17
+                  name: "age"
+                )
+              )
+              (IdentifierExpression
+                range: 4:20-4:23
+                name: "age"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 6:27-6:40
+          (IdentifierDeclaration
+            range: 6:27-6:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 6:34-6:40
+            name: "Person"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:42-6:45
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:46-8:6
+          (ReturnStatement
+            range: 7:9-7:46
+            (CallExpression
+              range: 7:16-7:45
+              (MemberExpression
+                range: 7:16-7:34
+                (MemberExpression
+                  range: 7:16-7:24
+                  (ThisExpression
+                    range: 7:16-7:20
+                  )
+                  (IdentifierExpression
+                    range: 7:21-7:24
+                    name: "age"
+                  )
+                )
+                (IdentifierExpression
+                  range: 7:25-7:34
+                  name: "compareTo"
+                )
+              )
+              (MemberExpression
+                range: 7:35-7:44
+                (IdentifierExpression
+                  range: 7:35-7:40
+                  name: "other"
+                )
+                (IdentifierExpression
+                  range: 7:41-7:44
+                  name: "age"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "people"
+    )
+    type: null
+    (NewExpression
+      range: 10:16-10:39
+      (IdentifierExpression
+        range: 10:20-10:29
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 10:30-10:36
+        name: "Person"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:28
+    (CallExpression
+      range: 11:1-11:27
+      (MemberExpression
+        range: 11:1-11:11
+        (IdentifierExpression
+          range: 11:1-11:7
+          name: "people"
+        )
+        (IdentifierExpression
+          range: 11:8-11:11
+          name: "add"
+        )
+      )
+      (NewExpression
+        range: 11:12-11:26
+        (IdentifierExpression
+          range: 11:16-11:22
+          name: "Person"
+        )
+        (LiteralExpression
+          range: 11:23-11:25
+          kind: INT
+          text: "30"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:28
+    (CallExpression
+      range: 12:1-12:27
+      (MemberExpression
+        range: 12:1-12:11
+        (IdentifierExpression
+          range: 12:1-12:7
+          name: "people"
+        )
+        (IdentifierExpression
+          range: 12:8-12:11
+          name: "add"
+        )
+      )
+      (NewExpression
+        range: 12:12-12:26
+        (IdentifierExpression
+          range: 12:16-12:22
+          name: "Person"
+        )
+        (LiteralExpression
+          range: 12:23-12:25
+          kind: INT
+          text: "10"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:28
+    (CallExpression
+      range: 13:1-13:27
+      (MemberExpression
+        range: 13:1-13:11
+        (IdentifierExpression
+          range: 13:1-13:7
+          name: "people"
+        )
+        (IdentifierExpression
+          range: 13:8-13:11
+          name: "add"
+        )
+      )
+      (NewExpression
+        range: 13:12-13:26
+        (IdentifierExpression
+          range: 13:16-13:22
+          name: "Person"
+        )
+        (LiteralExpression
+          range: 13:23-13:25
+          kind: INT
+          text: "20"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:15
+    (CallExpression
+      range: 14:1-14:14
+      (MemberExpression
+        range: 14:1-14:12
+        (IdentifierExpression
+          range: 14:1-14:7
+          name: "people"
+        )
+        (IdentifierExpression
+          range: 14:8-14:12
+          name: "sort"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:26
+    (CallExpression
+      range: 15:1-15:25
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 15:7-15:24
+        (CallExpression
+          range: 15:7-15:20
+          (MemberExpression
+            range: 15:7-15:17
+            (IdentifierExpression
+              range: 15:7-15:13
+              name: "people"
+            )
+            (IdentifierExpression
+              range: 15:14-15:17
+              name: "get"
+            )
+          )
+          (LiteralExpression
+            range: 15:18-15:19
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 15:21-15:24
+          name: "age"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:26
+    (CallExpression
+      range: 16:1-16:25
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 16:7-16:24
+        (CallExpression
+          range: 16:7-16:20
+          (MemberExpression
+            range: 16:7-16:17
+            (IdentifierExpression
+              range: 16:7-16:13
+              name: "people"
+            )
+            (IdentifierExpression
+              range: 16:14-16:17
+              name: "get"
+            )
+          )
+          (LiteralExpression
+            range: 16:18-16:19
+            kind: INT
+            text: "1"
+          )
+        )
+        (IdentifierExpression
+          range: 16:21-16:24
+          name: "age"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:26
+    (CallExpression
+      range: 17:1-17:25
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 17:7-17:24
+        (CallExpression
+          range: 17:7-17:20
+          (MemberExpression
+            range: 17:7-17:17
+            (IdentifierExpression
+              range: 17:7-17:13
+              name: "people"
+            )
+            (IdentifierExpression
+              range: 17:14-17:17
+              name: "get"
+            )
+          )
+          (LiteralExpression
+            range: 17:18-17:19
+            kind: INT
+            text: "2"
+          )
+        )
+        (IdentifierExpression
+          range: 17:21-17:24
+          name: "age"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:9-4:13 -> Person
+  4:9-4:17 -> i32
+  4:9-4:23 -> i32
+  4:14-4:17 -> i32
+  4:20-4:23 -> i32
+  7:16-7:20 -> Person
+  7:16-7:24 -> i32
+  7:16-7:34 -> (i32) => i32
+  7:16-7:45 -> i32
+  7:21-7:24 -> i32
+  7:25-7:34 -> (i32) => i32
+  7:35-7:40 -> Person
+  7:35-7:44 -> i32
+  7:41-7:44 -> i32
+  10:16-10:39 -> ArrayList<Person>
+  10:20-10:29 -> ArrayList<Person>
+  11:1-11:7 -> ArrayList<Person>
+  11:1-11:11 -> (Person) => bool
+  11:1-11:27 -> bool
+  11:8-11:11 -> (Person) => bool
+  11:12-11:26 -> Person
+  11:16-11:22 -> Person
+  11:23-11:25 -> i32
+  12:1-12:7 -> ArrayList<Person>
+  12:1-12:11 -> (Person) => bool
+  12:1-12:27 -> bool
+  12:8-12:11 -> (Person) => bool
+  12:12-12:26 -> Person
+  12:16-12:22 -> Person
+  12:23-12:25 -> i32
+  13:1-13:7 -> ArrayList<Person>
+  13:1-13:11 -> (Person) => bool
+  13:1-13:27 -> bool
+  13:8-13:11 -> (Person) => bool
+  13:12-13:26 -> Person
+  13:16-13:22 -> Person
+  13:23-13:25 -> i32
+  14:1-14:7 -> ArrayList<Person>
+  14:1-14:12 -> () => void
+  14:1-14:14 -> void
+  14:8-14:12 -> () => void
+  15:1-15:6 -> (any) => void
+  15:1-15:25 -> void
+  15:7-15:13 -> ArrayList<Person>
+  15:7-15:17 -> (i32) => Person
+  15:7-15:20 -> Person
+  15:7-15:24 -> i32
+  15:14-15:17 -> (i32) => Person
+  15:18-15:19 -> i32
+  15:21-15:24 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:25 -> void
+  16:7-16:13 -> ArrayList<Person>
+  16:7-16:17 -> (i32) => Person
+  16:7-16:20 -> Person
+  16:7-16:24 -> i32
+  16:14-16:17 -> (i32) => Person
+  16:18-16:19 -> i32
+  16:21-16:24 -> i32
+  17:1-17:6 -> (any) => void
+  17:1-17:25 -> void
+  17:7-17:13 -> ArrayList<Person>
+  17:7-17:17 -> (i32) => Person
+  17:7-17:20 -> Person
+  17:7-17:24 -> i32
+  17:14-17:17 -> (i32) => Person
+  17:18-17:19 -> i32
+  17:21-17:24 -> i32
+
+Resolved types:
+  1:25-1:43 -> Comparable<Person>
+  1:36-1:42 -> Person
+  2:23-2:26 -> i32
+  3:29-3:32 -> i32
+  6:34-6:40 -> Person
+  6:42-6:45 -> i32
+  10:16-10:39 -> ArrayList<Person>
+  10:30-10:36 -> Person
+
+Declarations:
+  1:7-1:13 -> class Person
+  2:18-2:21 -> const age: i32
+  3:12-5:6 -> constructor(age: i32)
+  3:24-3:27 -> const age: i32
+  6:17-6:26 -> compareTo(Person) => i32
+  6:27-6:32 -> const other: Person
+  10:7-10:13 -> const people: ArrayList<Person>
+
+References:
+  4:14-4:17 -> 2:18-2:21
+  4:20-4:23 -> 3:24-3:27
+  7:21-7:24 -> 2:18-2:21
+  7:25-7:34 -> 7:16-7:34
+  7:35-7:40 -> 6:27-6:32
+  7:41-7:44 -> 2:18-2:21
+  10:20-10:29 -> 10:16-10:39
+  11:1-11:7 -> 10:7-10:13
+  11:8-11:11 -> 11:1-11:11
+  11:16-11:22 -> 1:7-1:13
+  12:1-12:7 -> 10:7-10:13
+  12:8-12:11 -> 12:1-12:11
+  12:16-12:22 -> 1:7-1:13
+  13:1-13:7 -> 10:7-10:13
+  13:8-13:11 -> 13:1-13:11
+  13:16-13:22 -> 1:7-1:13
+  14:1-14:7 -> 10:7-10:13
+  14:8-14:12 -> 14:1-14:12
+  15:1-15:6 -> builtin print
+  15:7-15:13 -> 10:7-10:13
+  15:14-15:17 -> 15:7-15:17
+  15:21-15:24 -> 2:18-2:21
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 10:7-10:13
+  16:14-16:17 -> 16:7-16:17
+  16:21-16:24 -> 2:18-2:21
+  17:1-17:6 -> builtin print
+  17:7-17:13 -> 10:7-10:13
+  17:14-17:17 -> 17:7-17:17
+  17:21-17:24 -> 2:18-2:21
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Person
+  // access flags 0x9
+  public static INNERCLASS Test$Person Test Person
+
+  // access flags 0x19
+  // signature Ljava/util/ArrayList<LTest$Person;>;
+  // declaration: people extends java.util.ArrayList<Test$Person>
+  public final static Ljava/util/ArrayList; people
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init> ()V
+    PUTSTATIC Test.people : Ljava/util/ArrayList;
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    NEW Test$Person
+    DUP
+    LDC 30
+    INVOKESPECIAL Test$Person.<init> (I)V
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    NEW Test$Person
+    DUP
+    LDC 10
+    INVOKESPECIAL Test$Person.<init> (I)V
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    NEW Test$Person
+    DUP
+    LDC 20
+    INVOKESPECIAL Test$Person.<init> (I)V
+    INVOKEVIRTUAL java/util/ArrayList.add (Ljava/lang/Object;)Z
+    POP
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    ACONST_NULL
+    INVOKEVIRTUAL java/util/ArrayList.sort (Ljava/util/Comparator;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    LDC 0
+    INVOKEVIRTUAL java/util/ArrayList.get (I)Ljava/lang/Object;
+    CHECKCAST Test$Person
+    GETFIELD Test$Person.age : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    LDC 1
+    INVOKEVIRTUAL java/util/ArrayList.get (I)Ljava/lang/Object;
+    CHECKCAST Test$Person
+    GETFIELD Test$Person.age : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.people : Ljava/util/ArrayList;
+    LDC 2
+    INVOKEVIRTUAL java/util/ArrayList.get (I)Ljava/lang/Object;
+    CHECKCAST Test$Person
+    GETFIELD Test$Person.age : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+// signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Person;>;
+// declaration: Test$Person implements java.lang.Comparable<Test$Person>
+public class Test$Person implements java/lang/Comparable {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Person Test Person
+
+  // access flags 0x11
+  public final I age
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    DUP_X1
+    PUTFIELD Test$Person.age : I
+    POP
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public compareTo(LTest$Person;)I
+    ALOAD 0
+    GETFIELD Test$Person.age : I
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    ALOAD 1
+    GETFIELD Test$Person.age : I
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo (Ljava/lang/Integer;)I
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1041
+  public synthetic bridge compareTo(Ljava/lang/Object;)I
+    ALOAD 0
+    ALOAD 1
+    CHECKCAST Test$Person
+    INVOKEVIRTUAL Test$Person.compareTo (LTest$Person;)I
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+10
+20
+30
+

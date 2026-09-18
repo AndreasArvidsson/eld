@@ -5,7 +5,6 @@ print(foo);
 foo = null;
 print(foo);
 
-
 --- TOKENS ---
 
 VAR (1:1-1:4)

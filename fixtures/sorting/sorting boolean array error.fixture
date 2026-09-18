@@ -1,0 +1,69 @@
+const values = [true, false];
+values.sort();
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+BOOLEAN_LITERAL "true" (1:17-1:21)
+COMMA (1:21-1:22)
+BOOLEAN_LITERAL "false" (1:23-1:28)
+RIGHT_BRACKET (1:28-1:29)
+SEMICOLON (1:29-1:30)
+IDENTIFIER "values" (2:1-2:7)
+DOT (2:7-2:8)
+IDENTIFIER "sort" (2:8-2:12)
+LEFT_PAREN (2:12-2:13)
+RIGHT_PAREN (2:13-2:14)
+SEMICOLON (2:14-2:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:15
+  (VariableDeclaration
+    range: 1:1-1:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:29
+      (LiteralExpression
+        range: 1:17-1:21
+        kind: BOOL
+        text: "true"
+      )
+      (LiteralExpression
+        range: 1:23-1:28
+        kind: BOOL
+        text: "false"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:15
+    (CallExpression
+      range: 2:1-2:14
+      (MemberExpression
+        range: 2:1-2:12
+        (IdentifierExpression
+          range: 2:1-2:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 2:8-2:12
+          name: "sort"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Array sorting requires a supported naturally ordered element type, found bool at 2:1-2:12

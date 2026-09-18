@@ -11,7 +11,6 @@ class Foo {
 print(new Foo(true).value);
 print(new Foo(false).value);
 
-
 --- TOKENS ---
 
 CLASS (1:1-1:6)
