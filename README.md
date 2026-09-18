@@ -52,7 +52,15 @@ var unknown: any = 42;
 unknown = "world";
 ```
 
-Strings decode only `\"` and `\\`; other escapes such as `\n` remain literal.
+Strings decode `\n` (newline), `\r` (carriage return), `\t` (tab), `\0` (NUL),
+`\b` (backspace), `\f` (form feed), `\"`, `\'`, and `\\`.
+Unknown escape sequences remain literal. Raw strings preserve all escapes.
+Format strings interpolate expressions: `f"hello {value}"`. Values use the same
+text representation as `print`. Use `{{` and `}}` for literal braces, for example
+`f"{{value}} = {value}"`. Expressions can include calls and nested format strings.
+Raw strings preserve backslashes: `r"C:\Users\name"`. Combine raw strings with
+interpolation using `rf"C:\Users\{name}"` (or `fr"..."`). A backslash can protect
+a quote from ending a raw string; both characters remain in the resulting text.
 Multiline strings can contain actual newlines. Character literals also support
 escapes such as `'\n'` and `'\t'`.
 

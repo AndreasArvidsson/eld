@@ -243,12 +243,11 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Format string syntax
-- Exceptions
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
 - overloaded functions
+- Exceptions
 - Ubiquitous class toString and equals methods.
+- Class variables and methods are private by default. Only need the public modifier.
 - Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
 - To be wont to support operation overloading? eg defining add/mult etc for custom classes.
-- Class variables and methods are private by default. Only need the public modifier.

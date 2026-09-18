@@ -10,7 +10,7 @@ public record Token(TokenType type, String text, Range range) {
     public String toString() {
         final String typeText = switch (type()) {
             case IDENTIFIER, INTEGER_LITERAL, FLOAT_LITERAL, CHAR_LITERAL,
-                STRING_LITERAL,
+                STRING_LITERAL, RAW_STRING_LITERAL,
                 BOOLEAN_LITERAL -> "%s \"%s\"".formatted(
                     type(),
                     text().replace("\\", "\\\\")

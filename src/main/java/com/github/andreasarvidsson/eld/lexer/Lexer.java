@@ -1,6 +1,8 @@
 package com.github.andreasarvidsson.eld.lexer;
 
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -83,6 +85,17 @@ public class Lexer {
             )
         );
 
+    private static final class FormatContext {
+        private boolean text = true;
+        private int braces;
+        private final boolean raw;
+
+        private FormatContext(final boolean raw) {
+            this.raw = raw;
+        }
+    }
+
+    private final Deque<FormatContext> formats = new ArrayDeque<>();
     private final String source;
     private int position, line, column;
     private Position tokenStart = new Position(1, 1);
@@ -109,6 +122,83 @@ public class Lexer {
     }
 
     public @Nullable Token nextToken() {
+        final FormatContext context = formats.peek();
+        if (context != null && context.text) {
+            tokenStart = new Position(line, column);
+            return readFormatText(context);
+        }
+        final Token token = readToken();
+        if (context != null) {
+            if (token == null) {
+                throw new LexerException(
+                    new Range(tokenStart, new Position(line, column)),
+                    "Unterminated format string interpolation"
+                );
+            }
+            if (token.type() == TokenType.LEFT_BRACE) {
+                context.braces++;
+            }
+            else if (token.type() == TokenType.RIGHT_BRACE) {
+                if (context.braces == 0) {
+                    context.text = true;
+                }
+                else {
+                    context.braces--;
+                }
+            }
+        }
+        return token;
+    }
+
+    private Token readFormatText(final FormatContext context) {
+        final StringBuilder builder = new StringBuilder();
+        while (true) {
+            final Character next = peek();
+            if (next == null) {
+                throw new LexerException(
+                    new Range(tokenStart, new Position(line, column)),
+                    "Unterminated format string literal"
+                );
+            }
+            if (next == '"' || (next == '{' && !Objects.equals(peek(1), '{'))) {
+                if (!builder.isEmpty()) {
+                    return createToken(
+                        context.raw
+                            ? TokenType.RAW_STRING_LITERAL
+                            : TokenType.STRING_LITERAL,
+                        Objects.requireNonNull("\"" + builder + "\"")
+                    );
+                }
+                advance();
+                if (next == '"') {
+                    formats.pop();
+                    return createToken(TokenType.FORMAT_STRING_END, "\"");
+                }
+                context.text = false;
+                return createToken(TokenType.LEFT_BRACE, '{');
+            }
+            if (next == '{' || next == '}') {
+                if (!Objects.equals(peek(1), next)) {
+                    throw new LexerException(
+                        new Range(line, column, line, column + 1),
+                        "Unescaped closing brace in format string"
+                    );
+                }
+                advance();
+            }
+            builder.append(next);
+            advance();
+            if (
+                next == '\\' && (Objects.equals(peek(), '"')
+                    || Objects.equals(peek(), '\\'))
+            ) {
+                builder.append(peek());
+                advance();
+            }
+        }
+    }
+
+    private @Nullable Token readToken() {
         skipWhitespaceAndComments();
 
         final Character next = peek();
@@ -123,6 +213,33 @@ public class Lexer {
             return readNumberLiteral();
         }
 
+        if (next == 'f' || next == 'r') {
+            final boolean combined =
+                (next == 'r' && Objects.equals(peek(1), 'f'))
+                    || (next == 'f' && Objects.equals(peek(1), 'r'));
+            final int prefixLength = combined ? 2 : 1;
+            if (Objects.equals(peek(prefixLength), '"')) {
+                final boolean raw = next == 'r' || combined;
+                final boolean formatted = next == 'f' || combined;
+                final String prefix =
+                    Objects.requireNonNull(
+                        source.substring(position, position + prefixLength)
+                    );
+                for (int i = 0; i < prefixLength; i++) {
+                    advance();
+                }
+                if (formatted) {
+                    advance();
+                    formats.push(new FormatContext(raw));
+                    return createToken(
+                        TokenType.FORMAT_STRING_START,
+                        prefix + "\""
+                    );
+                }
+                return readStringLiteral(raw);
+            }
+        }
+
         if (Character.isAlphabetic(next) || next == '_') {
             return readIdentifier();
         }
@@ -132,7 +249,7 @@ public class Lexer {
         }
 
         if (next == '"') {
-            return readStringLiteral();
+            return readStringLiteral(false);
         }
 
         if (position + 1 < source.length()) {
@@ -322,7 +439,7 @@ public class Lexer {
         }
     }
 
-    private Token readStringLiteral() {
+    private Token readStringLiteral(final boolean raw) {
         // Skip the opening double quote.
         advance();
 
@@ -356,7 +473,10 @@ public class Lexer {
 
         final String text =
             Objects.requireNonNull("\"%s\"".formatted(builder.toString()));
-        return createToken(TokenType.STRING_LITERAL, text);
+        return createToken(
+            raw ? TokenType.RAW_STRING_LITERAL : TokenType.STRING_LITERAL,
+            text
+        );
     }
 
     private Token readCharLiteral() {
@@ -390,7 +510,7 @@ public class Lexer {
                     "Character literal must be on a single line"
                 );
             }
-            if (escaped == null || "btnfr'\"\\".indexOf(escaped) < 0) {
+            if (escaped == null || "btnfr0'\"\\".indexOf(escaped) < 0) {
                 throw new LexerException(
                     new Range(line, column, line, column + 1),
                     "Invalid character escape"

@@ -63,6 +63,7 @@ import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.UnaryExpression;
+import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.UnaryOperator;
 import com.github.andreasarvidsson.eld.parser.UnionTypeNode;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -1407,6 +1408,17 @@ public final class SemanticAnalyzer {
                 }
                 yield currentInstance;
             }
+            case FormatStringExpression format -> {
+                for (final Expression part : format.parts()) {
+                    if (analyzeExpression(part, context) == BuiltinType.VOID) {
+                        throw new SemanticException(
+                            part.range(),
+                            "Cannot interpolate a void expression"
+                        );
+                    }
+                }
+                yield BuiltinType.STRING;
+            }
             case LiteralExpression literal -> analyzeLiteralExpression(literal);
             case IdentifierExpression identifier ->
                 analyzeIdentifierExpression(identifier, context);
@@ -1987,7 +1999,7 @@ public final class SemanticAnalyzer {
             case FLOAT -> BuiltinType.F64;
             case CHAR -> BuiltinType.CHAR;
             case BOOL -> BuiltinType.BOOL;
-            case STRING -> BuiltinType.STRING;
+            case STRING, RAW_STRING -> BuiltinType.STRING;
             case NULL -> BuiltinType.NULL;
         };
 

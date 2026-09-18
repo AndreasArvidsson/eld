@@ -453,6 +453,8 @@ public final class BytecodeGenerator {
                 case BOOL -> Boolean.parseBoolean(literal.text()) ? 1 : 0;
                 case CHAR -> (int) decodeChar(literal.text());
                 case STRING -> decodeString(literal.text());
+                case RAW_STRING ->
+                    literal.text().substring(1, literal.text().length() - 1);
                 case NULL -> null;
             };
             case GroupingExpression grouping ->
@@ -605,15 +607,23 @@ public final class BytecodeGenerator {
     }
 
     private static String decodeString(final String text) {
-        // The lexer recognizes escaped quotes and backslashes only.
+        // Decode supported escapes while preserving other backslash sequences.
         final StringBuilder decoded = new StringBuilder();
         for (int i = 1; i < text.length() - 1; i++) {
             char c = text.charAt(i);
             if (
                 c == '\\' && i + 1 < text.length() - 1
-                    && (text.charAt(i + 1) == '\\' || text.charAt(i + 1) == '"')
+                    && "btnfr0'\"\\".indexOf(text.charAt(i + 1)) >= 0
             ) {
-                c = text.charAt(++i);
+                c = switch (text.charAt(++i)) {
+                    case 'b' -> '\b';
+                    case 't' -> '\t';
+                    case 'n' -> '\n';
+                    case 'f' -> '\f';
+                    case 'r' -> '\r';
+                    case '0' -> '\0';
+                    default -> text.charAt(i);
+                };
             }
             decoded.append(c);
         }
@@ -1340,6 +1350,38 @@ public final class BytecodeGenerator {
                 return;
             }
             switch (expression) {
+                case FormatStringExpression format -> {
+                    method.visitTypeInsn(NEW, "java/lang/StringBuilder");
+                    method.visitInsn(DUP);
+                    method.visitMethodInsn(
+                        INVOKESPECIAL,
+                        "java/lang/StringBuilder",
+                        "<init>",
+                        "()V",
+                        false
+                    );
+                    for (final Expression part : format.parts()) {
+                        expression(part);
+                        final String argument =
+                            printArgumentDescriptor(
+                                semanticModel.getEffectiveType(part)
+                            );
+                        method.visitMethodInsn(
+                            INVOKEVIRTUAL,
+                            "java/lang/StringBuilder",
+                            "append",
+                            "(" + argument + ")Ljava/lang/StringBuilder;",
+                            false
+                        );
+                    }
+                    method.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "java/lang/StringBuilder",
+                        "toString",
+                        "()Ljava/lang/String;",
+                        false
+                    );
+                }
                 case LiteralExpression literal -> literal(literal);
                 case IdentifierExpression identifier ->
                     load(semanticModel.getReference(identifier));
@@ -1553,6 +1595,8 @@ public final class BytecodeGenerator {
                 case NULL -> method.visitInsn(ACONST_NULL);
                 case CHAR -> method.visitLdcInsn((int) decodeChar(text));
                 case STRING -> method.visitLdcInsn(decodeString(text));
+                case RAW_STRING ->
+                    method.visitLdcInsn(text.substring(1, text.length() - 1));
             }
         }
 

@@ -656,6 +656,7 @@ public final class Parser {
 
     private Expression parsePrimitiveExpression(final Token token) {
         return switch (token.type()) {
+            case FORMAT_STRING_START -> parseFormatString(token);
             case THIS -> new ThisExpression(token.range());
             case IDENTIFIER ->
                 new IdentifierExpression(token.text(), token.range());
@@ -674,11 +675,14 @@ public final class Parser {
                 token.text(),
                 token.range()
             );
-            case STRING_LITERAL -> new LiteralExpression(
-                LiteralKind.STRING,
-                token.text(),
-                token.range()
-            );
+            case STRING_LITERAL,
+                RAW_STRING_LITERAL -> new LiteralExpression(
+                    token.type() == TokenType.RAW_STRING_LITERAL
+                        ? LiteralKind.RAW_STRING
+                        : LiteralKind.STRING,
+                    token.text(),
+                    token.range()
+                );
             case CHAR_LITERAL -> new LiteralExpression(
                 LiteralKind.CHAR,
                 token.text(),
@@ -717,6 +721,28 @@ public final class Parser {
                 token.type()
             );
         };
+    }
+
+    private Expression parseFormatString(final Token start) {
+        final List<Expression> parts = new ArrayList<>();
+        while (!check(TokenType.FORMAT_STRING_END)) {
+            if (match(TokenType.LEFT_BRACE)) {
+                parts.add(parseExpression());
+                expect(TokenType.RIGHT_BRACE);
+            }
+            else {
+                final Token part =
+                    check(TokenType.RAW_STRING_LITERAL)
+                        ? expect(TokenType.RAW_STRING_LITERAL)
+                        : expect(TokenType.STRING_LITERAL);
+                parts.add(parsePrimitiveExpression(part));
+            }
+        }
+        final Token end = expect(TokenType.FORMAT_STRING_END);
+        return new FormatStringExpression(
+            parts,
+            start.range().union(end.range())
+        );
     }
 
     private Expression parseGroupingExpression(final Token open) {

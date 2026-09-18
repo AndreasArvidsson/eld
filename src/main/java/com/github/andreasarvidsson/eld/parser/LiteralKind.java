@@ -6,5 +6,6 @@ public enum LiteralKind {
     BOOL,
     CHAR,
     STRING,
+    RAW_STRING,
     NULL;
 }

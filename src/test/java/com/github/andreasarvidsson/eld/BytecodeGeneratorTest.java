@@ -58,6 +58,169 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void decodesStringControlEscapesExceptInRawStrings() throws Exception {
+        final Class<?> module = compileClass("""
+            const normal = "\\n\\r\\t\\0\\b\\f\\'";
+            const formatted = f"\\n\\r\\t\\0\\b\\f\\'{5}";
+            const raw = r"\\n\\r\\t\\0\\b\\f\\'";
+            const rawFormatted = rf"\\n\\r\\t\\0\\b\\f\\'{5}";
+            const unknown = "\\q";
+            const escaped = "\\\\n\\\\r\\\\0";
+            const nul = '\\0';
+            func runtime() string { return "\\n\\r\\t\\0\\b\\f\\'"; }
+            func runtimeNul() char { return '\\0'; }
+            """, "Test");
+        final String decoded = "\n\r\t\0\b\f'";
+        final String literal = "\\n\\r\\t\\0\\b\\f\\'";
+        assertEquals(decoded, module.getField("normal").get(null));
+        assertEquals(decoded + "5", module.getField("formatted").get(null));
+        assertEquals(literal, module.getField("raw").get(null));
+        assertEquals(literal + "5", module.getField("rawFormatted").get(null));
+        assertEquals("\\q", module.getField("unknown").get(null));
+        assertEquals("\\n\\r\\0", module.getField("escaped").get(null));
+        assertEquals('\0', module.getField("nul").get(null));
+        assertEquals(decoded, module.getMethod("runtime").invoke(null));
+        assertEquals('\0', module.getMethod("runtimeNul").invoke(null));
+    }
+
+    @Test
+    void decodesTabsExceptInRawStrings() throws Exception {
+        final Class<?> module = compileClass("""
+            const value = 5;
+            const normal = "hello \\t{value}";
+            const raw = r"hello \\t{value}";
+            const formatted = f"hello \\t{value}";
+            const rawFormatted = rf"hello \\t{value}";
+            const escaped = "hello \\\\t";
+            const repeated = f"\\t{value}\\t";
+            """, "Test");
+        assertEquals("hello \t{value}", module.getField("normal").get(null));
+        assertEquals("hello \\t{value}", module.getField("raw").get(null));
+        assertEquals("hello \t5", module.getField("formatted").get(null));
+        assertEquals("hello \\t5", module.getField("rawFormatted").get(null));
+        assertEquals("hello \\t", module.getField("escaped").get(null));
+        assertEquals("\t5\t", module.getField("repeated").get(null));
+    }
+
+    @Test
+    void preservesRawStringContents() throws Exception {
+        final Class<?> module = compileClass("""
+            const name = "Ada";
+            const raw = r"C:\\Users\\Ada\\\\files";
+            const empty = r"";
+            const quoted = r"say \\"hello\\"";
+            const formatted = rf"C:\\Users\\{name}\\\\files {{literal}}";
+            const rawQuote = rf"say \\"{name}\\"";
+            const reversed = fr"hello\\\\{name}";
+            const nested = rf"{f"hello {name}"}\\\\{r"raw\\\\text"}";
+            const normal = f"hello\\\\{name}";
+            const multiline = r"first
+            second";
+            const concatenated = r"a\\\\" + r"b\\\\";
+            """, "Test");
+        assertEquals(
+            "C:\\Users\\Ada\\\\files",
+            module.getField("raw").get(null)
+        );
+        assertEquals("", module.getField("empty").get(null));
+        assertEquals(
+            "say " + '\\' + '"' + "hello" + '\\' + '"',
+            module.getField("quoted").get(null)
+        );
+        assertEquals(
+            "C:\\Users\\Ada\\\\files {literal}",
+            module.getField("formatted").get(null)
+        );
+        assertEquals(
+            "say " + '\\' + '"' + "Ada" + '\\' + '"',
+            module.getField("rawQuote").get(null)
+        );
+        assertEquals("hello\\\\Ada", module.getField("reversed").get(null));
+        assertEquals(
+            "hello Ada\\\\raw\\\\text",
+            module.getField("nested").get(null)
+        );
+        assertEquals("hello\\Ada", module.getField("normal").get(null));
+        assertEquals("first\nsecond", module.getField("multiline").get(null));
+        assertEquals("a\\\\b\\\\", module.getField("concatenated").get(null));
+    }
+
+    @Test
+    void interpolatesFormatStrings() throws Exception {
+        final Class<?> module = compileClass("""
+            const value = 42;
+            const greeting = f"hello {value}";
+            const empty = f"";
+            const plain = f"hello";
+            const braces = f"{{value}} = {{{value}}}";
+            const expression = f"{value + 1}: {true}, {'x'}, {null}, {[1, 2]}";
+            const nested = f"outer {f"inner {value}"}";
+            const quoted = f"{ "quoted } text" }";
+            const multiline = f"hello
+            {value}";
+            var count = 0;
+            func next() i32 { count = count + 1; return count; }
+            const ordered = f"{next()}{next()}";
+            const conditional = f"{if (true) { yield 7; } else { yield 8; }}";
+            const f = 1;
+            const r = 2;
+            const rf = 3;
+            const fr = 4;
+            const identifiers = f"{f}{r}{rf}{fr}";
+            const small: i8 = 5;
+            const short: i16 = 6;
+            const large: i64 = 7;
+            const single: f32 = 1.5;
+            const double: f64 = 2.5;
+            const typed = f"{small}, {short}, {large}, {single}, {double}";
+            """, "Test");
+        assertEquals("hello 42", module.getField("greeting").get(null));
+        assertEquals("", module.getField("empty").get(null));
+        assertEquals("hello", module.getField("plain").get(null));
+        assertEquals("{value} = {42}", module.getField("braces").get(null));
+        assertEquals(
+            "43: true, x, null, [1, 2]",
+            module.getField("expression").get(null)
+        );
+        assertEquals("outer inner 42", module.getField("nested").get(null));
+        assertEquals("quoted } text", module.getField("quoted").get(null));
+        assertEquals("hello\n42", module.getField("multiline").get(null));
+        assertEquals("12", module.getField("ordered").get(null));
+        assertEquals(2, module.getField("count").get(null));
+        assertEquals("7", module.getField("conditional").get(null));
+        assertEquals("1234", module.getField("identifiers").get(null));
+        assertEquals("5, 6, 7, 1.5, 2.5", module.getField("typed").get(null));
+    }
+
+    @Test
+    void rejectsInvalidFormatStrings() {
+        assertThrows(
+            com.github.andreasarvidsson.eld.lexer.LexerException.class,
+            () -> new Lexer("f\"hello").getTokens()
+        );
+        assertThrows(
+            com.github.andreasarvidsson.eld.lexer.LexerException.class,
+            () -> new Lexer("f\"{value").getTokens()
+        );
+        assertThrows(
+            com.github.andreasarvidsson.eld.lexer.LexerException.class,
+            () -> new Lexer("f\"}\"").getTokens()
+        );
+        assertThrows(
+            com.github.andreasarvidsson.eld.parser.ParserException.class,
+            () -> compileClass("const value = f\"{}\";", "Test")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass("const value = f\"{missing}\";", "Test")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass("const value = f\"{print(1)}\";", "Test")
+        );
+    }
+
+    @Test
     void constructorsInitializeFieldsWithExactSignatures() throws Exception {
         final Class<?> module = compileClass("""
             class Foo {

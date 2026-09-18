@@ -207,6 +207,13 @@ final class FieldInitializationAnalyzer {
                 }
                 return assigned;
             }
+            case FormatStringExpression format: {
+                List<Path> result = paths;
+                for (final Expression part : format.parts()) {
+                    result = walk(part, result);
+                }
+                return result;
+            }
             case PostfixExpression postfix:
                 return walk(postfix.operand(), paths);
             case UnaryExpression unary:

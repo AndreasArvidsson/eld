@@ -7,6 +7,9 @@ public enum TokenType {
     FLOAT_LITERAL,
     CHAR_LITERAL,
     STRING_LITERAL,
+    RAW_STRING_LITERAL,
+    FORMAT_STRING_START,
+    FORMAT_STRING_END,
     BOOLEAN_LITERAL,
 
     // Keywords
