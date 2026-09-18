@@ -63,6 +63,11 @@ public final class ReplSession {
                 );
             }
         }
+        for (final var type : model.getInterfaceTypes()) {
+            if (type.name().startsWith("$spread")) {
+                classOwners.putIfAbsent(type.name(), name + "$" + type.name());
+            }
+        }
         parent = name;
         try {
             module.getMethod("$eval").invoke(null);

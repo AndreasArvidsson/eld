@@ -31,6 +31,14 @@ public final class EldDoubleArray extends EldArray<EldDoubleArray> {
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final double[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldDoubleArray copy() {
         return super.copy();

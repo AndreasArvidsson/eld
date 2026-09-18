@@ -31,6 +31,14 @@ public final class EldLongArray extends EldArray<EldLongArray> {
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final long[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldLongArray copy() {
         return super.copy();

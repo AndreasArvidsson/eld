@@ -1,0 +1,15 @@
+const values = [...];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+ELLIPSIS (1:17-1:20)
+RIGHT_BRACKET (1:20-1:21)
+SEMICOLON (1:21-1:22)
+
+--- AST ---
+
+ParserException: Expected expression, but found RIGHT_BRACKET at 1:20-1:21

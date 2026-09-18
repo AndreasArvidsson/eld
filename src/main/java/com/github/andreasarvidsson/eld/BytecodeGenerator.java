@@ -152,6 +152,64 @@ public final class BytecodeGenerator {
         }
         final Map<String, byte[]> classes = new LinkedHashMap<>();
         classes.put(moduleName, generateModule());
+        for (final InterfaceType type : semanticModel.getInterfaceTypes()) {
+            if (
+                type.name().startsWith("$spread")
+                    && !classOwners.containsKey(type.name())
+            ) {
+                final ClassWriter writer = classWriter();
+                writer.visit(
+                    V21,
+                    ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT,
+                    interfaceOwner(type),
+                    null,
+                    "java/lang/Object",
+                    null
+                );
+                for (final VariableSymbol field : semanticModel
+                    .getInterface(type)
+                    .fields()
+                    .values()) {
+                    writer
+                        .visitMethod(
+                            ACC_PUBLIC | ACC_ABSTRACT,
+                            "$get$" + field.name(),
+                            "()" + descriptor(field.type()),
+                            null,
+                            null
+                        )
+                        .visitEnd();
+                    if (field.mutability() == Mutability.VAR) {
+                        writer
+                            .visitMethod(
+                                ACC_PUBLIC | ACC_ABSTRACT,
+                                "$set$" + field.name(),
+                                "(" + descriptor(field.type()) + ")V",
+                                null,
+                                null
+                            )
+                            .visitEnd();
+                    }
+                }
+                for (final FunctionSymbol function : semanticModel
+                    .getInterface(type)
+                    .methods()
+                    .values()) {
+                    writer
+                        .visitMethod(
+                            ACC_PUBLIC | ACC_ABSTRACT,
+                            function.name(),
+                            methodDescriptor(function.type()),
+                            null,
+                            null
+                        )
+                        .visitEnd();
+                }
+                writer.visitEnd();
+                classes.put(interfaceOwner(type), writer.toByteArray());
+            }
+        }
+
         for (final BlockItem item : program.items()
             .subList(previousItems, program.items().size())) {
             if (item instanceof InterfaceDeclaration contract) {
@@ -1428,6 +1486,8 @@ public final class BytecodeGenerator {
         private final Deque<YieldTarget> yieldTargets = new ArrayDeque<>();
         private final Type returnType;
         private int nextLocal;
+        private final IdentityHashMap<Expression, Integer> expressionTemporaries =
+            new IdentityHashMap<>();
         private boolean beforeBaseInitialization;
         private String lambdaOwner;
         private final IdentityHashMap<Symbol, String> captureFields =
@@ -2092,6 +2152,15 @@ public final class BytecodeGenerator {
         }
 
         private void expression(final Expression expression) {
+            final Integer temporary = expressionTemporaries.get(expression);
+            if (temporary != null) {
+                method.visitVarInsn(
+                    loadOpcode(semanticModel.getEffectiveType(expression)),
+                    temporary
+                );
+                return;
+            }
+
             if (
                 expression instanceof UnaryExpression unary
                     && SemanticAnalyzer.integerLiteral(unary) != null
@@ -2303,6 +2372,10 @@ public final class BytecodeGenerator {
                 case NamedArgumentExpression named ->
                     throw unsupported(named, "Named argument outside a call");
                 case TupleExpression tuple -> tuple(tuple);
+                case ArraySpread spread -> throw unsupported(
+                    spread,
+                    "Array spread must be compiled in an array literal"
+                );
                 case ArrayExpression array -> array(array);
                 case SubscriptExpression index -> {
                     if (
@@ -2442,8 +2515,12 @@ public final class BytecodeGenerator {
             if (info == null) {
                 final List<Symbol> captures = new ArrayList<>();
                 boolean receiver = false;
-                for (final ObjectMember member : object.members()) {
-                    if (contract.methods().containsKey(member.name().name())) {
+                for (final ObjectMember member : semanticModel
+                    .getObjectMembers(object)) {
+                    if (
+                        contract.methods().containsKey(member.name().name())
+                            && !semanticModel.isSpreadMethod(member)
+                    ) {
                         final LambdaExpression lambda =
                             (LambdaExpression) unwrap(member.value());
                         for (final Symbol capture : semanticModel
@@ -2472,11 +2549,23 @@ public final class BytecodeGenerator {
                             : Objects.requireNonNull(instance).owner()
                         : null;
                 final StringBuilder signature = new StringBuilder("(");
-                for (final ObjectMember member : object.members()) {
+                for (final ObjectMember member : semanticModel
+                    .getObjectMembers(object)) {
                     final VariableSymbol field =
                         contract.fields().get(member.name().name());
                     if (field != null) {
                         signature.append(descriptor(field.type()));
+                    }
+                    else if (semanticModel.isSpreadMethod(member)) {
+                        signature
+                            .append(
+                                descriptor(
+                                    semanticModel.getExpressionType(
+                                        ((MemberExpression) member.value())
+                                            .target()
+                                    )
+                                )
+                            );
                     }
                 }
                 for (final Symbol capture : captures) {
@@ -2507,11 +2596,93 @@ public final class BytecodeGenerator {
                     currentWriter = saved;
                 }
             }
+            final IdentityHashMap<Expression, Integer> values =
+                new IdentityHashMap<>();
+            final boolean spreadObject =
+                object.members()
+                    .stream()
+                    .anyMatch(ObjectSpread.class::isInstance);
+            if (
+                spreadObject || semanticModel.getObjectEvaluation(object)
+                    .size() != semanticModel.getObjectMembers(object).size()
+            ) {
+                for (final ObjectEntry entry : semanticModel
+                    .getObjectEvaluation(object)) {
+                    if (entry instanceof ObjectSpread spread) {
+                        expression(spread.value());
+                        final int slot = nextLocal++;
+                        method.visitVarInsn(ASTORE, slot);
+                        values.put(spread.value(), slot);
+                    }
+                    else {
+                        final ObjectMember member = (ObjectMember) entry;
+                        if (
+                            semanticModel.isSpreadMethod(member)
+                                || (contract.methods()
+                                    .containsKey(member.name().name())
+                                    && unwrap(
+                                        member.value()
+                                    ) instanceof LambdaExpression)
+                        ) {
+                            continue;
+                        }
+                        if (
+                            member.value() instanceof MemberExpression access
+                                && values.containsKey(access.target())
+                        ) {
+                            expressionTemporaries.put(
+                                access.target(),
+                                Objects
+                                    .requireNonNull(values.get(access.target()))
+                            );
+                            try {
+                                expression(member.value());
+                            }
+                            finally {
+                                expressionTemporaries.remove(access.target());
+                            }
+                        }
+                        else {
+                            expression(member.value());
+                        }
+                        final Type valueType =
+                            semanticModel.getEffectiveType(member.value());
+                        final int slot = nextLocal;
+                        nextLocal += slots(valueType);
+                        method.visitVarInsn(storeOpcode(valueType), slot);
+                        values.put(member.value(), slot);
+                    }
+                }
+            }
             method.visitTypeInsn(NEW, info.owner());
             method.visitInsn(DUP);
-            for (final ObjectMember member : object.members()) {
+            for (final ObjectMember member : semanticModel
+                .getObjectMembers(object)) {
                 if (contract.fields().containsKey(member.name().name())) {
-                    expression(member.value());
+                    if (values.containsKey(member.value())) {
+                        method.visitVarInsn(
+                            loadOpcode(
+                                semanticModel.getEffectiveType(member.value())
+                            ),
+                            Objects.requireNonNull(values.get(member.value()))
+                        );
+                    }
+                    else {
+                        expression(member.value());
+                    }
+                }
+                else if (semanticModel.isSpreadMethod(member)) {
+                    method
+                        .visitVarInsn(
+                            ALOAD,
+                            Objects
+                                .requireNonNull(
+                                    values.get(
+                                        ((MemberExpression) member.value())
+                                            .target()
+                                    )
+                                )
+                        );
                 }
             }
             for (final Symbol capture : info.captures()) {
@@ -2562,7 +2733,8 @@ public final class BytecodeGenerator {
             );
             writer.visitNestHost(moduleName);
             final Map<String, String> constructorFields = new LinkedHashMap<>();
-            for (final ObjectMember member : object.members()) {
+            for (final ObjectMember member : semanticModel
+                .getObjectMembers(object)) {
                 final VariableSymbol field =
                     contract.fields().get(member.name().name());
                 if (field != null) {
@@ -2594,6 +2766,25 @@ public final class BytecodeGenerator {
                             field.type()
                         );
                     }
+                }
+                else if (semanticModel.isSpreadMethod(member)) {
+                    final String name = "$delegate$" + member.name().name();
+                    final String sourceDescriptor =
+                        descriptor(
+                            semanticModel.getExpressionType(
+                                ((MemberExpression) member.value()).target()
+                            )
+                        );
+                    writer
+                        .visitField(
+                            ACC_PRIVATE | ACC_FINAL | ACC_SYNTHETIC,
+                            name,
+                            sourceDescriptor,
+                            null,
+                            null
+                        )
+                        .visitEnd();
+                    constructorFields.put(name, sourceDescriptor);
                 }
             }
             final IdentityHashMap<Symbol, String> fields =
@@ -2659,10 +2850,52 @@ public final class BytecodeGenerator {
             constructor.visitInsn(RETURN);
             constructor.visitMaxs(0, 0);
             constructor.visitEnd();
-            for (final ObjectMember member : object.members()) {
+            for (final ObjectMember member : semanticModel
+                .getObjectMembers(object)) {
                 final FunctionSymbol implementation =
                     contract.methods().get(member.name().name());
                 if (implementation == null) {
+                    continue;
+                }
+                if (semanticModel.isSpreadMethod(member)) {
+                    final MemberExpression access =
+                        (MemberExpression) member.value();
+                    final Type source =
+                        semanticModel.getExpressionType(access.target());
+                    final FunctionType signature = implementation.type();
+                    final MethodVisitor body =
+                        writer.visitMethod(
+                            ACC_PUBLIC,
+                            member.name().name(),
+                            methodDescriptor(signature),
+                            null,
+                            null
+                        );
+                    body.visitCode();
+                    body.visitVarInsn(ALOAD, 0);
+                    body.visitFieldInsn(
+                        GETFIELD,
+                        info.owner(),
+                        "$delegate$" + member.name().name(),
+                        descriptor(source)
+                    );
+                    int parameterSlot = 1;
+                    for (final Type parameter : signature.parameterTypes()) {
+                        body.visitVarInsn(loadOpcode(parameter), parameterSlot);
+                        parameterSlot += slots(parameter);
+                    }
+                    body.visitMethodInsn(
+                        source instanceof InterfaceType
+                            ? INVOKEINTERFACE
+                            : INVOKEVIRTUAL,
+                        typeOwner(source),
+                        member.name().name(),
+                        methodDescriptor(signature),
+                        source instanceof InterfaceType
+                    );
+                    body.visitInsn(returnOpcode(signature.returnType()));
+                    body.visitMaxs(0, 0);
+                    body.visitEnd();
                     continue;
                 }
                 final LambdaExpression lambda =
@@ -3211,7 +3444,162 @@ public final class BytecodeGenerator {
             }
         }
 
+        private void spreadArray(final ArrayExpression array) {
+            final Type element =
+                ((ArrayType) semanticModel.getExpressionType(array))
+                    .elementType();
+            final RuntimeAbi.ArrayKind runtime = RuntimeAbi.array(element);
+            final List<Integer> values = new ArrayList<>();
+            final List<Integer> lengths = new ArrayList<>();
+            final int total = nextLocal++;
+            method.visitInsn(ICONST_0);
+            method.visitVarInsn(ISTORE, total);
+            for (int entryIndex = 0; entryIndex < array.elements()
+                .size(); entryIndex++) {
+                final Expression entry = array.elements().get(entryIndex);
+                final int value = nextLocal;
+                if (entry instanceof ArraySpread spread) {
+                    final Type sourceElement =
+                        ((ArrayType) semanticModel
+                            .getExpressionType(spread.expression()))
+                            .elementType();
+                    expression(spread.expression());
+                    // Snapshot only when later expressions might mutate the contributed range.
+                    if (
+                        array.elements()
+                            .subList(entryIndex + 1, array.elements().size())
+                            .stream()
+                            .anyMatch(
+                                later -> AstTraversal.anyMatch(
+                                    later,
+                                    node -> node instanceof CallExpression
+                                        || node instanceof NewExpression
+                                        || node instanceof AssignmentExpression
+                                        || node instanceof UnaryExpression
+                                        || node instanceof PostfixExpression
+                                )
+                            )
+                    ) {
+                        arrayCall(sourceElement, RuntimeAbi.ArrayMethod.COPY);
+                    }
+                    nextLocal++;
+                    method.visitVarInsn(ASTORE, value);
+                    final int length = nextLocal++;
+                    method.visitVarInsn(ALOAD, value);
+                    arrayCall(sourceElement, RuntimeAbi.ArrayMethod.SIZE);
+                    method.visitVarInsn(ISTORE, length);
+                    lengths.add(length);
+                    method.visitVarInsn(ILOAD, total);
+                    method.visitVarInsn(ILOAD, length);
+                }
+                else {
+                    expression(entry);
+                    nextLocal += slots(element);
+                    method.visitVarInsn(storeOpcode(element), value);
+                    lengths.add(-1);
+                    method.visitVarInsn(ILOAD, total);
+                    method.visitInsn(ICONST_1);
+                }
+                values.add(value);
+                method.visitInsn(IADD);
+                method.visitVarInsn(ISTORE, total);
+            }
+            final int result = nextLocal++;
+            method.visitVarInsn(ILOAD, total);
+            if (runtime == RuntimeAbi.ArrayKind.OBJECT) {
+                method.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+            }
+            else {
+                method.visitIntInsn(NEWARRAY, runtime.creationOpcode);
+            }
+            method.visitVarInsn(ASTORE, result);
+            final int offset = nextLocal++;
+            method.visitInsn(ICONST_0);
+            method.visitVarInsn(ISTORE, offset);
+            for (int i = 0; i < array.elements().size(); i++) {
+                final Expression entry = array.elements().get(i);
+                if (entry instanceof ArraySpread spread) {
+                    final Type sourceElement =
+                        ((ArrayType) semanticModel
+                            .getExpressionType(spread.expression()))
+                            .elementType();
+                    final RuntimeAbi.ArrayKind sourceRuntime =
+                        RuntimeAbi.array(sourceElement);
+                    if (
+                        sourceRuntime == runtime
+                            && semanticModel.getEffectiveType(spread)
+                                .equals(sourceElement)
+                    ) {
+                        method.visitVarInsn(ALOAD, values.get(i));
+                        method.visitVarInsn(ALOAD, result);
+                        method.visitVarInsn(ILOAD, offset);
+                        method.visitVarInsn(ILOAD, lengths.get(i));
+                        method.visitMethodInsn(
+                            INVOKEVIRTUAL,
+                            sourceRuntime.owner,
+                            "copyTo",
+                            "(" + runtime.backingDescriptor + "II)V",
+                            false
+                        );
+                    }
+                    else {
+                        // Widening and boxing require element conversion; identical storage uses arraycopy.
+                        final int index = nextLocal++;
+                        method.visitInsn(ICONST_0);
+                        method.visitVarInsn(ISTORE, index);
+                        final Label start = new Label();
+                        final Label end = new Label();
+                        method.visitLabel(start);
+                        method.visitVarInsn(ILOAD, index);
+                        method.visitVarInsn(ILOAD, lengths.get(i));
+                        method.visitJumpInsn(IF_ICMPGE, end);
+                        method.visitVarInsn(ALOAD, result);
+                        method.visitVarInsn(ILOAD, offset);
+                        method.visitVarInsn(ILOAD, index);
+                        method.visitInsn(IADD);
+                        method.visitVarInsn(ALOAD, values.get(i));
+                        method.visitVarInsn(ILOAD, index);
+                        arrayGet(sourceElement);
+                        convertExpression(spread);
+                        method.visitInsn(arrayStoreOpcode(element));
+                        method.visitIincInsn(index, 1);
+                        method.visitJumpInsn(GOTO, start);
+                        method.visitLabel(end);
+                    }
+                    method.visitVarInsn(ILOAD, offset);
+                    method.visitVarInsn(ILOAD, lengths.get(i));
+                    method.visitInsn(IADD);
+                    method.visitVarInsn(ISTORE, offset);
+                }
+                else {
+                    method.visitVarInsn(ALOAD, result);
+                    method.visitVarInsn(ILOAD, offset);
+                    method.visitVarInsn(loadOpcode(element), values.get(i));
+                    method.visitInsn(arrayStoreOpcode(element));
+                    method.visitIincInsn(offset, 1);
+                }
+            }
+            method.visitTypeInsn(NEW, runtime.owner);
+            method.visitInsn(DUP);
+            method.visitVarInsn(ALOAD, result);
+            method.visitMethodInsn(
+                INVOKESPECIAL,
+                runtime.owner,
+                "<init>",
+                runtime.constructorDescriptor,
+                false
+            );
+        }
+
         private void array(final ArrayExpression array) {
+            if (
+                array.elements()
+                    .stream()
+                    .anyMatch(ArraySpread.class::isInstance)
+            ) {
+                spreadArray(array);
+                return;
+            }
             if (
                 semanticModel.getExpressionType(array) instanceof InterfaceType
             ) {

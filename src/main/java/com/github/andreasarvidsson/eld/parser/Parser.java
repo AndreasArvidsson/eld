@@ -324,18 +324,27 @@ public final class Parser {
     }
 
     private ObjectExpression parseObjectExpression(final Token open) {
-        final List<@NonNull ObjectMember> members = new ArrayList<>();
+        final List<@NonNull ObjectEntry> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-            final Token name = expect(TokenType.IDENTIFIER);
-            expect(TokenType.COLON);
-            final Expression value = parseExpression();
-            members.add(
-                new ObjectMember(
-                    new IdentifierDeclaration(name.text(), name.range()),
-                    value,
-                    name.range().union(value.range())
-                )
-            );
+            if (check(TokenType.ELLIPSIS)) {
+                final Token spread = advance();
+                final Expression value = parseExpression();
+                members.add(
+                    new ObjectSpread(value, spread.range().union(value.range()))
+                );
+            }
+            else {
+                final Token name = expect(TokenType.IDENTIFIER);
+                expect(TokenType.COLON);
+                final Expression value = parseExpression();
+                members.add(
+                    new ObjectMember(
+                        new IdentifierDeclaration(name.text(), name.range()),
+                        value,
+                        name.range().union(value.range())
+                    )
+                );
+            }
             if (!match(TokenType.COMMA)) {
                 break;
             }
@@ -974,7 +983,22 @@ public final class Parser {
         final List<@NonNull Expression> elements = new ArrayList<>();
         if (!check(TokenType.RIGHT_BRACKET)) {
             do {
-                elements.add(parseExpression());
+                if (check(TokenType.RIGHT_BRACKET)) {
+                    break;
+                }
+                if (check(TokenType.ELLIPSIS)) {
+                    final Token spread = advance();
+                    final Expression value = parseExpression();
+                    elements.add(
+                        new ArraySpread(
+                            value,
+                            spread.range().union(value.range())
+                        )
+                    );
+                }
+                else {
+                    elements.add(parseExpression());
+                }
             } while (match(TokenType.COMMA));
         }
         final Token close = expect(TokenType.RIGHT_BRACKET);

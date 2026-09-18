@@ -1,5 +1,7 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +27,10 @@ public final class Scope {
         }
 
         symbols.put(symbol.name(), symbol);
+    }
+
+    public Collection<Symbol> symbols() {
+        return Collections.unmodifiableCollection(symbols.values());
     }
 
     public @Nullable Symbol resolveLocal(final String name) {

@@ -1,0 +1,1475 @@
+interface Operation { const value: i32; add(n: i32) i32; }
+const old: Operation = { value: 10, add: (n) => n + 1 };
+const copied: Operation = { ...old, value: 5 };
+const inferred = { ...copied };
+const override: Operation = { ...old, add: (n) => n + 2 };
+class Base { public const value = 20; const hidden = 1; }
+class Child extends Base { public const other = 2; }
+interface Value { const value: i32; const other: i32; }
+const classCopy: Value = { ...new Child() };
+interface Method { compute() i32; }
+class MethodBase { public func compute() i32 { return 7; } }
+class MethodChild extends MethodBase {}
+const method: Method = { ...new MethodChild() };
+print([copied.add(4), inferred.add(5), override.add(4), classCopy.value, classCopy.other, method.compute()]);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Operation" (1:11-1:20)
+LEFT_BRACE (1:21-1:22)
+CONST (1:23-1:28)
+IDENTIFIER "value" (1:29-1:34)
+COLON (1:34-1:35)
+IDENTIFIER "i32" (1:36-1:39)
+SEMICOLON (1:39-1:40)
+IDENTIFIER "add" (1:41-1:44)
+LEFT_PAREN (1:44-1:45)
+IDENTIFIER "n" (1:45-1:46)
+COLON (1:46-1:47)
+IDENTIFIER "i32" (1:48-1:51)
+RIGHT_PAREN (1:51-1:52)
+IDENTIFIER "i32" (1:53-1:56)
+SEMICOLON (1:56-1:57)
+RIGHT_BRACE (1:58-1:59)
+CONST (2:1-2:6)
+IDENTIFIER "old" (2:7-2:10)
+COLON (2:10-2:11)
+IDENTIFIER "Operation" (2:12-2:21)
+EQUAL (2:22-2:23)
+LEFT_BRACE (2:24-2:25)
+IDENTIFIER "value" (2:26-2:31)
+COLON (2:31-2:32)
+INTEGER_LITERAL "10" (2:33-2:35)
+COMMA (2:35-2:36)
+IDENTIFIER "add" (2:37-2:40)
+COLON (2:40-2:41)
+LEFT_PAREN (2:42-2:43)
+IDENTIFIER "n" (2:43-2:44)
+RIGHT_PAREN (2:44-2:45)
+ARROW (2:46-2:48)
+IDENTIFIER "n" (2:49-2:50)
+PLUS (2:51-2:52)
+INTEGER_LITERAL "1" (2:53-2:54)
+RIGHT_BRACE (2:55-2:56)
+SEMICOLON (2:56-2:57)
+CONST (3:1-3:6)
+IDENTIFIER "copied" (3:7-3:13)
+COLON (3:13-3:14)
+IDENTIFIER "Operation" (3:15-3:24)
+EQUAL (3:25-3:26)
+LEFT_BRACE (3:27-3:28)
+ELLIPSIS (3:29-3:32)
+IDENTIFIER "old" (3:32-3:35)
+COMMA (3:35-3:36)
+IDENTIFIER "value" (3:37-3:42)
+COLON (3:42-3:43)
+INTEGER_LITERAL "5" (3:44-3:45)
+RIGHT_BRACE (3:46-3:47)
+SEMICOLON (3:47-3:48)
+CONST (4:1-4:6)
+IDENTIFIER "inferred" (4:7-4:15)
+EQUAL (4:16-4:17)
+LEFT_BRACE (4:18-4:19)
+ELLIPSIS (4:20-4:23)
+IDENTIFIER "copied" (4:23-4:29)
+RIGHT_BRACE (4:30-4:31)
+SEMICOLON (4:31-4:32)
+CONST (5:1-5:6)
+IDENTIFIER "override" (5:7-5:15)
+COLON (5:15-5:16)
+IDENTIFIER "Operation" (5:17-5:26)
+EQUAL (5:27-5:28)
+LEFT_BRACE (5:29-5:30)
+ELLIPSIS (5:31-5:34)
+IDENTIFIER "old" (5:34-5:37)
+COMMA (5:37-5:38)
+IDENTIFIER "add" (5:39-5:42)
+COLON (5:42-5:43)
+LEFT_PAREN (5:44-5:45)
+IDENTIFIER "n" (5:45-5:46)
+RIGHT_PAREN (5:46-5:47)
+ARROW (5:48-5:50)
+IDENTIFIER "n" (5:51-5:52)
+PLUS (5:53-5:54)
+INTEGER_LITERAL "2" (5:55-5:56)
+RIGHT_BRACE (5:57-5:58)
+SEMICOLON (5:58-5:59)
+CLASS (6:1-6:6)
+IDENTIFIER "Base" (6:7-6:11)
+LEFT_BRACE (6:12-6:13)
+PUBLIC (6:14-6:20)
+CONST (6:21-6:26)
+IDENTIFIER "value" (6:27-6:32)
+EQUAL (6:33-6:34)
+INTEGER_LITERAL "20" (6:35-6:37)
+SEMICOLON (6:37-6:38)
+CONST (6:39-6:44)
+IDENTIFIER "hidden" (6:45-6:51)
+EQUAL (6:52-6:53)
+INTEGER_LITERAL "1" (6:54-6:55)
+SEMICOLON (6:55-6:56)
+RIGHT_BRACE (6:57-6:58)
+CLASS (7:1-7:6)
+IDENTIFIER "Child" (7:7-7:12)
+EXTENDS (7:13-7:20)
+IDENTIFIER "Base" (7:21-7:25)
+LEFT_BRACE (7:26-7:27)
+PUBLIC (7:28-7:34)
+CONST (7:35-7:40)
+IDENTIFIER "other" (7:41-7:46)
+EQUAL (7:47-7:48)
+INTEGER_LITERAL "2" (7:49-7:50)
+SEMICOLON (7:50-7:51)
+RIGHT_BRACE (7:52-7:53)
+INTERFACE (8:1-8:10)
+IDENTIFIER "Value" (8:11-8:16)
+LEFT_BRACE (8:17-8:18)
+CONST (8:19-8:24)
+IDENTIFIER "value" (8:25-8:30)
+COLON (8:30-8:31)
+IDENTIFIER "i32" (8:32-8:35)
+SEMICOLON (8:35-8:36)
+CONST (8:37-8:42)
+IDENTIFIER "other" (8:43-8:48)
+COLON (8:48-8:49)
+IDENTIFIER "i32" (8:50-8:53)
+SEMICOLON (8:53-8:54)
+RIGHT_BRACE (8:55-8:56)
+CONST (9:1-9:6)
+IDENTIFIER "classCopy" (9:7-9:16)
+COLON (9:16-9:17)
+IDENTIFIER "Value" (9:18-9:23)
+EQUAL (9:24-9:25)
+LEFT_BRACE (9:26-9:27)
+ELLIPSIS (9:28-9:31)
+NEW (9:31-9:34)
+IDENTIFIER "Child" (9:35-9:40)
+LEFT_PAREN (9:40-9:41)
+RIGHT_PAREN (9:41-9:42)
+RIGHT_BRACE (9:43-9:44)
+SEMICOLON (9:44-9:45)
+INTERFACE (10:1-10:10)
+IDENTIFIER "Method" (10:11-10:17)
+LEFT_BRACE (10:18-10:19)
+IDENTIFIER "compute" (10:20-10:27)
+LEFT_PAREN (10:27-10:28)
+RIGHT_PAREN (10:28-10:29)
+IDENTIFIER "i32" (10:30-10:33)
+SEMICOLON (10:33-10:34)
+RIGHT_BRACE (10:35-10:36)
+CLASS (11:1-11:6)
+IDENTIFIER "MethodBase" (11:7-11:17)
+LEFT_BRACE (11:18-11:19)
+PUBLIC (11:20-11:26)
+FUNC (11:27-11:31)
+IDENTIFIER "compute" (11:32-11:39)
+LEFT_PAREN (11:39-11:40)
+RIGHT_PAREN (11:40-11:41)
+IDENTIFIER "i32" (11:42-11:45)
+LEFT_BRACE (11:46-11:47)
+RETURN (11:48-11:54)
+INTEGER_LITERAL "7" (11:55-11:56)
+SEMICOLON (11:56-11:57)
+RIGHT_BRACE (11:58-11:59)
+RIGHT_BRACE (11:60-11:61)
+CLASS (12:1-12:6)
+IDENTIFIER "MethodChild" (12:7-12:18)
+EXTENDS (12:19-12:26)
+IDENTIFIER "MethodBase" (12:27-12:37)
+LEFT_BRACE (12:38-12:39)
+RIGHT_BRACE (12:39-12:40)
+CONST (13:1-13:6)
+IDENTIFIER "method" (13:7-13:13)
+COLON (13:13-13:14)
+IDENTIFIER "Method" (13:15-13:21)
+EQUAL (13:22-13:23)
+LEFT_BRACE (13:24-13:25)
+ELLIPSIS (13:26-13:29)
+NEW (13:29-13:32)
+IDENTIFIER "MethodChild" (13:33-13:44)
+LEFT_PAREN (13:44-13:45)
+RIGHT_PAREN (13:45-13:46)
+RIGHT_BRACE (13:47-13:48)
+SEMICOLON (13:48-13:49)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+LEFT_BRACKET (14:7-14:8)
+IDENTIFIER "copied" (14:8-14:14)
+DOT (14:14-14:15)
+IDENTIFIER "add" (14:15-14:18)
+LEFT_PAREN (14:18-14:19)
+INTEGER_LITERAL "4" (14:19-14:20)
+RIGHT_PAREN (14:20-14:21)
+COMMA (14:21-14:22)
+IDENTIFIER "inferred" (14:23-14:31)
+DOT (14:31-14:32)
+IDENTIFIER "add" (14:32-14:35)
+LEFT_PAREN (14:35-14:36)
+INTEGER_LITERAL "5" (14:36-14:37)
+RIGHT_PAREN (14:37-14:38)
+COMMA (14:38-14:39)
+IDENTIFIER "override" (14:40-14:48)
+DOT (14:48-14:49)
+IDENTIFIER "add" (14:49-14:52)
+LEFT_PAREN (14:52-14:53)
+INTEGER_LITERAL "4" (14:53-14:54)
+RIGHT_PAREN (14:54-14:55)
+COMMA (14:55-14:56)
+IDENTIFIER "classCopy" (14:57-14:66)
+DOT (14:66-14:67)
+IDENTIFIER "value" (14:67-14:72)
+COMMA (14:72-14:73)
+IDENTIFIER "classCopy" (14:74-14:83)
+DOT (14:83-14:84)
+IDENTIFIER "other" (14:84-14:89)
+COMMA (14:89-14:90)
+IDENTIFIER "method" (14:91-14:97)
+DOT (14:97-14:98)
+IDENTIFIER "compute" (14:98-14:105)
+LEFT_PAREN (14:105-14:106)
+RIGHT_PAREN (14:106-14:107)
+RIGHT_BRACKET (14:107-14:108)
+RIGHT_PAREN (14:108-14:109)
+SEMICOLON (14:109-14:110)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:110
+  (InterfaceDeclaration
+    range: 1:1-1:59
+    (IdentifierDeclaration
+      range: 1:11-1:20
+      name: "Operation"
+    )
+    (UninitializedVariableDeclaration
+      range: 1:23-1:40
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 1:29-1:34
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:36-1:39
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 1:41-1:57
+      (IdentifierDeclaration
+        range: 1:41-1:44
+        name: "add"
+      )
+      (FunctionParameter
+        range: 1:45-1:51
+        (IdentifierDeclaration
+          range: 1:45-1:46
+          name: "n"
+        )
+        (NamedTypeNode
+          range: 1:48-1:51
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 1:53-1:56
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:57
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "old"
+    )
+    (NamedTypeNode
+      range: 2:12-2:21
+      name: "Operation"
+    )
+    (ObjectExpression
+      range: 2:24-2:56
+      (ObjectMember
+        range: 2:26-2:35
+        (IdentifierDeclaration
+          range: 2:26-2:31
+          name: "value"
+        )
+        (LiteralExpression
+          range: 2:33-2:35
+          kind: INT
+          text: "10"
+        )
+      )
+      (ObjectMember
+        range: 2:37-2:54
+        (IdentifierDeclaration
+          range: 2:37-2:40
+          name: "add"
+        )
+        (LambdaExpression
+          range: 2:42-2:54
+          (LambdaParameter
+            range: 2:43-2:44
+            (IdentifierDeclaration
+              range: 2:43-2:44
+              name: "n"
+            )
+          )
+          (BinaryExpression
+            range: 2:49-2:54
+            (IdentifierExpression
+              range: 2:49-2:50
+              name: "n"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 2:53-2:54
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:13
+      name: "copied"
+    )
+    (NamedTypeNode
+      range: 3:15-3:24
+      name: "Operation"
+    )
+    (ObjectExpression
+      range: 3:27-3:47
+      (ObjectSpread
+        range: 3:29-3:35
+        (IdentifierExpression
+          range: 3:32-3:35
+          name: "old"
+        )
+      )
+      (ObjectMember
+        range: 3:37-3:45
+        (IdentifierDeclaration
+          range: 3:37-3:42
+          name: "value"
+        )
+        (LiteralExpression
+          range: 3:44-3:45
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:15
+      name: "inferred"
+    )
+    type: null
+    (ObjectExpression
+      range: 4:18-4:31
+      (ObjectSpread
+        range: 4:20-4:29
+        (IdentifierExpression
+          range: 4:23-4:29
+          name: "copied"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:59
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "override"
+    )
+    (NamedTypeNode
+      range: 5:17-5:26
+      name: "Operation"
+    )
+    (ObjectExpression
+      range: 5:29-5:58
+      (ObjectSpread
+        range: 5:31-5:37
+        (IdentifierExpression
+          range: 5:34-5:37
+          name: "old"
+        )
+      )
+      (ObjectMember
+        range: 5:39-5:56
+        (IdentifierDeclaration
+          range: 5:39-5:42
+          name: "add"
+        )
+        (LambdaExpression
+          range: 5:44-5:56
+          (LambdaParameter
+            range: 5:45-5:46
+            (IdentifierDeclaration
+              range: 5:45-5:46
+              name: "n"
+            )
+          )
+          (BinaryExpression
+            range: 5:51-5:56
+            (IdentifierExpression
+              range: 5:51-5:52
+              name: "n"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 5:55-5:56
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-6:58
+    (IdentifierDeclaration
+      range: 6:7-6:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 6:14-6:38
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 6:21-6:38
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 6:27-6:32
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 6:35-6:37
+          kind: INT
+          text: "20"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:39-6:56
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 6:39-6:56
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 6:45-6:51
+          name: "hidden"
+        )
+        type: null
+        (LiteralExpression
+          range: 6:54-6:55
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-7:53
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 7:21-7:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 7:28-7:51
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 7:35-7:51
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 7:41-7:46
+          name: "other"
+        )
+        type: null
+        (LiteralExpression
+          range: 7:49-7:50
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 8:1-8:56
+    (IdentifierDeclaration
+      range: 8:11-8:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 8:19-8:36
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 8:25-8:30
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 8:32-8:35
+        name: "i32"
+      )
+    )
+    (UninitializedVariableDeclaration
+      range: 8:37-8:54
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 8:43-8:48
+        name: "other"
+      )
+      (NamedTypeNode
+        range: 8:50-8:53
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:16
+      name: "classCopy"
+    )
+    (NamedTypeNode
+      range: 9:18-9:23
+      name: "Value"
+    )
+    (ObjectExpression
+      range: 9:26-9:44
+      (ObjectSpread
+        range: 9:28-9:42
+        (NewExpression
+          range: 9:31-9:42
+          (IdentifierExpression
+            range: 9:35-9:40
+            name: "Child"
+          )
+        )
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 10:1-10:36
+    (IdentifierDeclaration
+      range: 10:11-10:17
+      name: "Method"
+    )
+    (InterfaceMethodDeclaration
+      range: 10:20-10:34
+      (IdentifierDeclaration
+        range: 10:20-10:27
+        name: "compute"
+      )
+      (NamedTypeNode
+        range: 10:30-10:33
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 11:1-11:61
+    (IdentifierDeclaration
+      range: 11:7-11:17
+      name: "MethodBase"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 11:20-11:59
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:27-11:59
+        (IdentifierDeclaration
+          range: 11:32-11:39
+          name: "compute"
+        )
+        (NamedTypeNode
+          range: 11:42-11:45
+          name: "i32"
+        )
+        (BlockStatement
+          range: 11:46-11:59
+          (ReturnStatement
+            range: 11:48-11:57
+            (LiteralExpression
+              range: 11:55-11:56
+              kind: INT
+              text: "7"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 12:1-12:40
+    (IdentifierDeclaration
+      range: 12:7-12:18
+      name: "MethodChild"
+    )
+    (IdentifierExpression
+      range: 12:27-12:37
+      name: "MethodBase"
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:13
+      name: "method"
+    )
+    (NamedTypeNode
+      range: 13:15-13:21
+      name: "Method"
+    )
+    (ObjectExpression
+      range: 13:24-13:48
+      (ObjectSpread
+        range: 13:26-13:46
+        (NewExpression
+          range: 13:29-13:46
+          (IdentifierExpression
+            range: 13:33-13:44
+            name: "MethodChild"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:110
+    (CallExpression
+      range: 14:1-14:109
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (ArrayExpression
+        range: 14:7-14:108
+        (CallExpression
+          range: 14:8-14:21
+          (MemberExpression
+            range: 14:8-14:18
+            (IdentifierExpression
+              range: 14:8-14:14
+              name: "copied"
+            )
+            (IdentifierExpression
+              range: 14:15-14:18
+              name: "add"
+            )
+          )
+          (LiteralExpression
+            range: 14:19-14:20
+            kind: INT
+            text: "4"
+          )
+        )
+        (CallExpression
+          range: 14:23-14:38
+          (MemberExpression
+            range: 14:23-14:35
+            (IdentifierExpression
+              range: 14:23-14:31
+              name: "inferred"
+            )
+            (IdentifierExpression
+              range: 14:32-14:35
+              name: "add"
+            )
+          )
+          (LiteralExpression
+            range: 14:36-14:37
+            kind: INT
+            text: "5"
+          )
+        )
+        (CallExpression
+          range: 14:40-14:55
+          (MemberExpression
+            range: 14:40-14:52
+            (IdentifierExpression
+              range: 14:40-14:48
+              name: "override"
+            )
+            (IdentifierExpression
+              range: 14:49-14:52
+              name: "add"
+            )
+          )
+          (LiteralExpression
+            range: 14:53-14:54
+            kind: INT
+            text: "4"
+          )
+        )
+        (MemberExpression
+          range: 14:57-14:72
+          (IdentifierExpression
+            range: 14:57-14:66
+            name: "classCopy"
+          )
+          (IdentifierExpression
+            range: 14:67-14:72
+            name: "value"
+          )
+        )
+        (MemberExpression
+          range: 14:74-14:89
+          (IdentifierExpression
+            range: 14:74-14:83
+            name: "classCopy"
+          )
+          (IdentifierExpression
+            range: 14:84-14:89
+            name: "other"
+          )
+        )
+        (CallExpression
+          range: 14:91-14:107
+          (MemberExpression
+            range: 14:91-14:105
+            (IdentifierExpression
+              range: 14:91-14:97
+              name: "method"
+            )
+            (IdentifierExpression
+              range: 14:98-14:105
+              name: "compute"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:24-2:56 -> Operation
+  2:33-2:35 -> i32
+  2:42-2:54 -> (i32) => i32
+  2:49-2:50 -> i32
+  2:49-2:54 -> i32
+  2:53-2:54 -> i32
+  3:27-3:47 -> Operation
+  3:29-3:35 -> (i32) => i32
+  3:29-3:35 -> (i32) => i32
+  3:29-3:35 -> i32
+  3:29-3:35 -> i32
+  3:32-3:35 -> Operation
+  3:44-3:45 -> i32
+  4:18-4:31 -> $spread1
+  4:20-4:29 -> (i32) => i32
+  4:20-4:29 -> (i32) => i32
+  4:20-4:29 -> i32
+  4:20-4:29 -> i32
+  4:23-4:29 -> Operation
+  5:29-5:58 -> Operation
+  5:31-5:37 -> (i32) => i32
+  5:31-5:37 -> (i32) => i32
+  5:31-5:37 -> i32
+  5:31-5:37 -> i32
+  5:34-5:37 -> Operation
+  5:44-5:56 -> (i32) => i32
+  5:51-5:52 -> i32
+  5:51-5:56 -> i32
+  5:55-5:56 -> i32
+  6:35-6:37 -> i32
+  6:54-6:55 -> i32
+  7:21-7:25 -> Base
+  7:49-7:50 -> i32
+  9:26-9:44 -> Value
+  9:28-9:42 -> i32
+  9:28-9:42 -> i32
+  9:28-9:42 -> i32
+  9:28-9:42 -> i32
+  9:31-9:42 -> Child
+  9:35-9:40 -> Child
+  11:55-11:56 -> i32
+  12:27-12:37 -> MethodBase
+  13:24-13:48 -> Method
+  13:26-13:46 -> () => i32
+  13:26-13:46 -> () => i32
+  13:29-13:46 -> MethodChild
+  13:33-13:44 -> MethodChild
+  14:1-14:6 -> (any) => void
+  14:1-14:109 -> void
+  14:7-14:108 -> [i32]
+  14:8-14:14 -> Operation
+  14:8-14:18 -> (i32) => i32
+  14:8-14:21 -> i32
+  14:15-14:18 -> (i32) => i32
+  14:19-14:20 -> i32
+  14:23-14:31 -> $spread1
+  14:23-14:35 -> (i32) => i32
+  14:23-14:38 -> i32
+  14:32-14:35 -> (i32) => i32
+  14:36-14:37 -> i32
+  14:40-14:48 -> Operation
+  14:40-14:52 -> (i32) => i32
+  14:40-14:55 -> i32
+  14:49-14:52 -> (i32) => i32
+  14:53-14:54 -> i32
+  14:57-14:66 -> Value
+  14:57-14:72 -> i32
+  14:67-14:72 -> i32
+  14:74-14:83 -> Value
+  14:74-14:89 -> i32
+  14:84-14:89 -> i32
+  14:91-14:97 -> Method
+  14:91-14:105 -> () => i32
+  14:91-14:107 -> i32
+  14:98-14:105 -> () => i32
+
+Resolved types:
+  1:36-1:39 -> i32
+  1:48-1:51 -> i32
+  1:53-1:56 -> i32
+  2:12-2:21 -> Operation
+  3:15-3:24 -> Operation
+  5:17-5:26 -> Operation
+  8:32-8:35 -> i32
+  8:50-8:53 -> i32
+  9:18-9:23 -> Value
+  10:30-10:33 -> i32
+  11:42-11:45 -> i32
+  13:15-13:21 -> Method
+
+Declarations:
+  1:11-1:20 -> interface Operation
+  1:29-1:34 -> const value: i32
+  1:41-1:44 -> add(i32) => i32
+  1:45-1:46 -> const n: i32
+  2:7-2:10 -> const old: Operation
+  2:43-2:44 -> const n: i32
+  3:7-3:13 -> const copied: Operation
+  4:7-4:15 -> const inferred: $spread1
+  5:7-5:15 -> const override: Operation
+  5:45-5:46 -> const n: i32
+  6:7-6:11 -> class Base
+  6:27-6:32 -> const value: i32
+  6:45-6:51 -> const hidden: i32
+  7:7-7:12 -> class Child
+  7:41-7:46 -> const other: i32
+  8:11-8:16 -> interface Value
+  8:25-8:30 -> const value: i32
+  8:43-8:48 -> const other: i32
+  9:7-9:16 -> const classCopy: Value
+  10:11-10:17 -> interface Method
+  10:20-10:27 -> compute() => i32
+  11:7-11:17 -> class MethodBase
+  11:32-11:39 -> compute() => i32
+  12:7-12:18 -> class MethodChild
+  13:7-13:13 -> const method: Method
+
+References:
+  2:49-2:50 -> 2:43-2:44
+  3:29-3:35 -> 1:29-1:34
+  3:29-3:35 -> 1:41-1:44
+  3:32-3:35 -> 2:7-2:10
+  4:20-4:29 -> 1:29-1:34
+  4:20-4:29 -> 1:41-1:44
+  4:23-4:29 -> 3:7-3:13
+  5:31-5:37 -> 1:29-1:34
+  5:31-5:37 -> 1:41-1:44
+  5:34-5:37 -> 2:7-2:10
+  5:51-5:52 -> 5:45-5:46
+  7:21-7:25 -> 6:7-6:11
+  9:28-9:42 -> 6:27-6:32
+  9:28-9:42 -> 7:41-7:46
+  9:35-9:40 -> 7:7-7:12
+  12:27-12:37 -> 11:7-11:17
+  13:26-13:46 -> 11:32-11:39
+  13:33-13:44 -> 12:7-12:18
+  14:1-14:6 -> builtin print
+  14:8-14:14 -> 3:7-3:13
+  14:15-14:18 -> 1:41-1:44
+  14:23-14:31 -> 4:7-4:15
+  14:32-14:35 -> 1:41-1:44
+  14:40-14:48 -> 5:7-5:15
+  14:49-14:52 -> 1:41-1:44
+  14:57-14:66 -> 9:7-9:16
+  14:67-14:72 -> 8:25-8:30
+  14:74-14:83 -> 9:7-9:16
+  14:84-14:89 -> 8:43-8:48
+  14:91-14:97 -> 13:7-13:13
+  14:98-14:105 -> 10:20-10:27
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$$object1
+  NESTMEMBER Test$$object2
+  NESTMEMBER Test$$object3
+  NESTMEMBER Test$$object4
+  NESTMEMBER Test$$object5
+  NESTMEMBER Test$Operation
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  NESTMEMBER Test$Value
+  NESTMEMBER Test$Method
+  NESTMEMBER Test$MethodBase
+  NESTMEMBER Test$MethodChild
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Operation Test Operation
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Method Test Method
+  // access flags 0x9
+  public static INNERCLASS Test$MethodBase Test MethodBase
+  // access flags 0x9
+  public static INNERCLASS Test$MethodChild Test MethodChild
+
+  // access flags 0x19
+  public final static LTest$Operation; old
+
+  // access flags 0x19
+  public final static LTest$Operation; copied
+
+  // access flags 0x19
+  public final static LTest$$spread1; inferred
+
+  // access flags 0x19
+  public final static LTest$Operation; override
+
+  // access flags 0x19
+  public final static LTest$Value; classCopy
+
+  // access flags 0x19
+  public final static LTest$Method; method
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    LDC 10
+    INVOKESPECIAL Test$$object0.<init> (I)V
+    PUTSTATIC Test.old : LTest$Operation;
+    GETSTATIC Test.old : LTest$Operation;
+    ASTORE 0
+    ALOAD 0
+    INVOKEINTERFACE Test$Operation.$get$value ()I (itf)
+    ISTORE 1
+    LDC 5
+    ISTORE 2
+    NEW Test$$object1
+    DUP
+    ILOAD 2
+    ALOAD 0
+    INVOKESPECIAL Test$$object1.<init> (ILTest$Operation;)V
+    PUTSTATIC Test.copied : LTest$Operation;
+    GETSTATIC Test.copied : LTest$Operation;
+    ASTORE 3
+    ALOAD 3
+    INVOKEINTERFACE Test$Operation.$get$value ()I (itf)
+    ISTORE 4
+    NEW Test$$object2
+    DUP
+    ILOAD 4
+    ALOAD 3
+    INVOKESPECIAL Test$$object2.<init> (ILTest$Operation;)V
+    PUTSTATIC Test.inferred : LTest$$spread1;
+    GETSTATIC Test.old : LTest$Operation;
+    ASTORE 5
+    ALOAD 5
+    INVOKEINTERFACE Test$Operation.$get$value ()I (itf)
+    ISTORE 6
+    NEW Test$$object3
+    DUP
+    ILOAD 6
+    INVOKESPECIAL Test$$object3.<init> (I)V
+    PUTSTATIC Test.override : LTest$Operation;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init> ()V
+    ASTORE 7
+    ALOAD 7
+    GETFIELD Test$Child.other : I
+    ISTORE 8
+    ALOAD 7
+    GETFIELD Test$Base.value : I
+    ISTORE 9
+    NEW Test$$object4
+    DUP
+    ILOAD 8
+    ILOAD 9
+    INVOKESPECIAL Test$$object4.<init> (II)V
+    PUTSTATIC Test.classCopy : LTest$Value;
+    NEW Test$MethodChild
+    DUP
+    INVOKESPECIAL Test$MethodChild.<init> ()V
+    ASTORE 10
+    NEW Test$$object5
+    DUP
+    ALOAD 10
+    INVOKESPECIAL Test$$object5.<init> (LTest$MethodChild;)V
+    PUTSTATIC Test.method : LTest$Method;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 6
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    GETSTATIC Test.copied : LTest$Operation;
+    LDC 4
+    INVOKEINTERFACE Test$Operation.add (I)I (itf)
+    IASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test.inferred : LTest$$spread1;
+    LDC 5
+    INVOKEINTERFACE Test$$spread1.add (I)I (itf)
+    IASTORE
+    DUP
+    LDC 2
+    GETSTATIC Test.override : LTest$Operation;
+    LDC 4
+    INVOKEINTERFACE Test$Operation.add (I)I (itf)
+    IASTORE
+    DUP
+    LDC 3
+    GETSTATIC Test.classCopy : LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value ()I (itf)
+    IASTORE
+    DUP
+    LDC 4
+    GETSTATIC Test.classCopy : LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$other ()I (itf)
+    IASTORE
+    DUP
+    LDC 5
+    GETSTATIC Test.method : LTest$Method;
+    INVOKEINTERFACE Test$Method.compute ()I (itf)
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 8
+    MAXLOCALS = 11
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$$spread1 {
+
+
+  // access flags 0x401
+  public abstract $get$value()I
+
+  // access flags 0x401
+  public abstract add(I)I
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Operation {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Operation Test Operation
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x401
+  public abstract add(I)I
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x11
+  public final I value
+
+  // access flags 0x12
+  private final I hidden
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 20
+    PUTFIELD Test$Base.value : I
+    ALOAD 0
+    LDC 1
+    PUTFIELD Test$Base.hidden : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Child extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x11
+  public final I other
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    ALOAD 0
+    LDC 2
+    PUTFIELD Test$Child.other : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Value {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x1401
+  public abstract synthetic $get$other()I
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Method {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Method Test Method
+
+  // access flags 0x401
+  public abstract compute()I
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$MethodBase {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$MethodBase Test MethodBase
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public compute()I
+    LDC 7
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$MethodChild extends Test$MethodBase {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$MethodChild Test MethodChild
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$MethodBase.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Operation {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object0.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public add(I)I
+    ILOAD 1
+    LDC 1
+    IADD
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object1 implements Test$Operation {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1012
+  private final synthetic LTest$Operation; $delegate$add
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object1.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(ILTest$Operation;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object1.value : I
+    ALOAD 0
+    ALOAD 2
+    PUTFIELD Test$$object1.$delegate$add : LTest$Operation;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+
+  // access flags 0x1
+  public add(I)I
+    ALOAD 0
+    GETFIELD Test$$object1.$delegate$add : LTest$Operation;
+    ILOAD 1
+    INVOKEINTERFACE Test$Operation.add (I)I (itf)
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object2 implements Test$$spread1 {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1012
+  private final synthetic LTest$Operation; $delegate$add
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object2.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(ILTest$Operation;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object2.value : I
+    ALOAD 0
+    ALOAD 2
+    PUTFIELD Test$$object2.$delegate$add : LTest$Operation;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+
+  // access flags 0x1
+  public add(I)I
+    ALOAD 0
+    GETFIELD Test$$object2.$delegate$add : LTest$Operation;
+    ILOAD 1
+    INVOKEINTERFACE Test$Operation.add (I)I (itf)
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object3 implements Test$Operation {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object3.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object3.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public add(I)I
+    ILOAD 1
+    LDC 2
+    IADD
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object4 implements Test$Value {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I other
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$other()I
+    ALOAD 0
+    GETFIELD Test$$object4.other : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object4.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(II)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object4.other : I
+    ALOAD 0
+    ILOAD 2
+    PUTFIELD Test$$object4.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object5 implements Test$Method {
+
+  NESTHOST Test
+
+  // access flags 0x1012
+  private final synthetic LTest$MethodChild; $delegate$compute
+
+  // access flags 0x1
+  public <init>(LTest$MethodChild;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD Test$$object5.$delegate$compute : LTest$MethodChild;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public compute()I
+    ALOAD 0
+    GETFIELD Test$$object5.$delegate$compute : LTest$MethodChild;
+    INVOKEVIRTUAL Test$MethodChild.compute ()I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+[5, 6, 6, 20, 2, 7]
+

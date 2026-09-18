@@ -1,0 +1,78 @@
+const old = [1];
+const values: List<i32> = [...old];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "old" (1:7-1:10)
+EQUAL (1:11-1:12)
+LEFT_BRACKET (1:13-1:14)
+INTEGER_LITERAL "1" (1:14-1:15)
+RIGHT_BRACKET (1:15-1:16)
+SEMICOLON (1:16-1:17)
+CONST (2:1-2:6)
+IDENTIFIER "values" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "List" (2:15-2:19)
+LESS (2:19-2:20)
+IDENTIFIER "i32" (2:20-2:23)
+GREATER (2:23-2:24)
+EQUAL (2:25-2:26)
+LEFT_BRACKET (2:27-2:28)
+ELLIPSIS (2:28-2:31)
+IDENTIFIER "old" (2:31-2:34)
+RIGHT_BRACKET (2:34-2:35)
+SEMICOLON (2:35-2:36)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:36
+  (VariableDeclaration
+    range: 1:1-1:17
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "old"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:13-1:16
+      (LiteralExpression
+        range: 1:14-1:15
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 2:15-2:24
+      name: "List"
+      (NamedTypeNode
+        range: 2:20-2:23
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 2:27-2:35
+      (ArraySpread
+        range: 2:28-2:34
+        (IdentifierExpression
+          range: 2:31-2:34
+          name: "old"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Array spread requires an Eld array target at 2:27-2:35

@@ -1,0 +1,772 @@
+interface Base { var value: i32; }
+interface Child extends Base { const name: string; }
+const original: Child = {value: 1, name: "original"};
+const copied = {...original};
+copied.value = 2;
+const typed: Child = {...copied, name: "typed"};
+print([original.value, copied.value, typed.value]);
+print([original.name, copied.name, typed.name]);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Base" (1:11-1:15)
+LEFT_BRACE (1:16-1:17)
+VAR (1:18-1:21)
+IDENTIFIER "value" (1:22-1:27)
+COLON (1:27-1:28)
+IDENTIFIER "i32" (1:29-1:32)
+SEMICOLON (1:32-1:33)
+RIGHT_BRACE (1:34-1:35)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Child" (2:11-2:16)
+EXTENDS (2:17-2:24)
+IDENTIFIER "Base" (2:25-2:29)
+LEFT_BRACE (2:30-2:31)
+CONST (2:32-2:37)
+IDENTIFIER "name" (2:38-2:42)
+COLON (2:42-2:43)
+IDENTIFIER "string" (2:44-2:50)
+SEMICOLON (2:50-2:51)
+RIGHT_BRACE (2:52-2:53)
+CONST (3:1-3:6)
+IDENTIFIER "original" (3:7-3:15)
+COLON (3:15-3:16)
+IDENTIFIER "Child" (3:17-3:22)
+EQUAL (3:23-3:24)
+LEFT_BRACE (3:25-3:26)
+IDENTIFIER "value" (3:26-3:31)
+COLON (3:31-3:32)
+INTEGER_LITERAL "1" (3:33-3:34)
+COMMA (3:34-3:35)
+IDENTIFIER "name" (3:36-3:40)
+COLON (3:40-3:41)
+STRING_LITERAL "\"original\"" (3:42-3:52)
+RIGHT_BRACE (3:52-3:53)
+SEMICOLON (3:53-3:54)
+CONST (4:1-4:6)
+IDENTIFIER "copied" (4:7-4:13)
+EQUAL (4:14-4:15)
+LEFT_BRACE (4:16-4:17)
+ELLIPSIS (4:17-4:20)
+IDENTIFIER "original" (4:20-4:28)
+RIGHT_BRACE (4:28-4:29)
+SEMICOLON (4:29-4:30)
+IDENTIFIER "copied" (5:1-5:7)
+DOT (5:7-5:8)
+IDENTIFIER "value" (5:8-5:13)
+EQUAL (5:14-5:15)
+INTEGER_LITERAL "2" (5:16-5:17)
+SEMICOLON (5:17-5:18)
+CONST (6:1-6:6)
+IDENTIFIER "typed" (6:7-6:12)
+COLON (6:12-6:13)
+IDENTIFIER "Child" (6:14-6:19)
+EQUAL (6:20-6:21)
+LEFT_BRACE (6:22-6:23)
+ELLIPSIS (6:23-6:26)
+IDENTIFIER "copied" (6:26-6:32)
+COMMA (6:32-6:33)
+IDENTIFIER "name" (6:34-6:38)
+COLON (6:38-6:39)
+STRING_LITERAL "\"typed\"" (6:40-6:47)
+RIGHT_BRACE (6:47-6:48)
+SEMICOLON (6:48-6:49)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+LEFT_BRACKET (7:7-7:8)
+IDENTIFIER "original" (7:8-7:16)
+DOT (7:16-7:17)
+IDENTIFIER "value" (7:17-7:22)
+COMMA (7:22-7:23)
+IDENTIFIER "copied" (7:24-7:30)
+DOT (7:30-7:31)
+IDENTIFIER "value" (7:31-7:36)
+COMMA (7:36-7:37)
+IDENTIFIER "typed" (7:38-7:43)
+DOT (7:43-7:44)
+IDENTIFIER "value" (7:44-7:49)
+RIGHT_BRACKET (7:49-7:50)
+RIGHT_PAREN (7:50-7:51)
+SEMICOLON (7:51-7:52)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+LEFT_BRACKET (8:7-8:8)
+IDENTIFIER "original" (8:8-8:16)
+DOT (8:16-8:17)
+IDENTIFIER "name" (8:17-8:21)
+COMMA (8:21-8:22)
+IDENTIFIER "copied" (8:23-8:29)
+DOT (8:29-8:30)
+IDENTIFIER "name" (8:30-8:34)
+COMMA (8:34-8:35)
+IDENTIFIER "typed" (8:36-8:41)
+DOT (8:41-8:42)
+IDENTIFIER "name" (8:42-8:46)
+RIGHT_BRACKET (8:46-8:47)
+RIGHT_PAREN (8:47-8:48)
+SEMICOLON (8:48-8:49)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:49
+  (InterfaceDeclaration
+    range: 1:1-1:35
+    (IdentifierDeclaration
+      range: 1:11-1:15
+      name: "Base"
+    )
+    (UninitializedVariableDeclaration
+      range: 1:18-1:33
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 1:22-1:27
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:29-1:32
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:53
+    (IdentifierDeclaration
+      range: 2:11-2:16
+      name: "Child"
+    )
+    (NamedTypeNode
+      range: 2:25-2:29
+      name: "Base"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:32-2:51
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:38-2:42
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 2:44-2:50
+        name: "string"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:54
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "original"
+    )
+    (NamedTypeNode
+      range: 3:17-3:22
+      name: "Child"
+    )
+    (ObjectExpression
+      range: 3:25-3:53
+      (ObjectMember
+        range: 3:26-3:34
+        (IdentifierDeclaration
+          range: 3:26-3:31
+          name: "value"
+        )
+        (LiteralExpression
+          range: 3:33-3:34
+          kind: INT
+          text: "1"
+        )
+      )
+      (ObjectMember
+        range: 3:36-3:52
+        (IdentifierDeclaration
+          range: 3:36-3:40
+          name: "name"
+        )
+        (LiteralExpression
+          range: 3:42-3:52
+          kind: STRING
+          text: "\"original\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "copied"
+    )
+    type: null
+    (ObjectExpression
+      range: 4:16-4:29
+      (ObjectSpread
+        range: 4:17-4:28
+        (IdentifierExpression
+          range: 4:20-4:28
+          name: "original"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:18
+    (AssignmentExpression
+      range: 5:1-5:17
+      (MemberExpression
+        range: 5:1-5:13
+        (IdentifierExpression
+          range: 5:1-5:7
+          name: "copied"
+        )
+        (IdentifierExpression
+          range: 5:8-5:13
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 5:16-5:17
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:12
+      name: "typed"
+    )
+    (NamedTypeNode
+      range: 6:14-6:19
+      name: "Child"
+    )
+    (ObjectExpression
+      range: 6:22-6:48
+      (ObjectSpread
+        range: 6:23-6:32
+        (IdentifierExpression
+          range: 6:26-6:32
+          name: "copied"
+        )
+      )
+      (ObjectMember
+        range: 6:34-6:47
+        (IdentifierDeclaration
+          range: 6:34-6:38
+          name: "name"
+        )
+        (LiteralExpression
+          range: 6:40-6:47
+          kind: STRING
+          text: "\"typed\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:52
+    (CallExpression
+      range: 7:1-7:51
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (ArrayExpression
+        range: 7:7-7:50
+        (MemberExpression
+          range: 7:8-7:22
+          (IdentifierExpression
+            range: 7:8-7:16
+            name: "original"
+          )
+          (IdentifierExpression
+            range: 7:17-7:22
+            name: "value"
+          )
+        )
+        (MemberExpression
+          range: 7:24-7:36
+          (IdentifierExpression
+            range: 7:24-7:30
+            name: "copied"
+          )
+          (IdentifierExpression
+            range: 7:31-7:36
+            name: "value"
+          )
+        )
+        (MemberExpression
+          range: 7:38-7:49
+          (IdentifierExpression
+            range: 7:38-7:43
+            name: "typed"
+          )
+          (IdentifierExpression
+            range: 7:44-7:49
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:49
+    (CallExpression
+      range: 8:1-8:48
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (ArrayExpression
+        range: 8:7-8:47
+        (MemberExpression
+          range: 8:8-8:21
+          (IdentifierExpression
+            range: 8:8-8:16
+            name: "original"
+          )
+          (IdentifierExpression
+            range: 8:17-8:21
+            name: "name"
+          )
+        )
+        (MemberExpression
+          range: 8:23-8:34
+          (IdentifierExpression
+            range: 8:23-8:29
+            name: "copied"
+          )
+          (IdentifierExpression
+            range: 8:30-8:34
+            name: "name"
+          )
+        )
+        (MemberExpression
+          range: 8:36-8:46
+          (IdentifierExpression
+            range: 8:36-8:41
+            name: "typed"
+          )
+          (IdentifierExpression
+            range: 8:42-8:46
+            name: "name"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:25-3:53 -> Child
+  3:33-3:34 -> i32
+  3:42-3:52 -> string
+  4:16-4:29 -> $spread2
+  4:17-4:28 -> i32
+  4:17-4:28 -> i32
+  4:17-4:28 -> string
+  4:17-4:28 -> string
+  4:20-4:28 -> Child
+  5:1-5:7 -> $spread2
+  5:1-5:13 -> i32
+  5:1-5:17 -> i32
+  5:8-5:13 -> i32
+  5:16-5:17 -> i32
+  6:22-6:48 -> Child
+  6:23-6:32 -> i32
+  6:23-6:32 -> i32
+  6:23-6:32 -> string
+  6:23-6:32 -> string
+  6:26-6:32 -> $spread2
+  6:40-6:47 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:51 -> void
+  7:7-7:50 -> [i32]
+  7:8-7:16 -> Child
+  7:8-7:22 -> i32
+  7:17-7:22 -> i32
+  7:24-7:30 -> $spread2
+  7:24-7:36 -> i32
+  7:31-7:36 -> i32
+  7:38-7:43 -> Child
+  7:38-7:49 -> i32
+  7:44-7:49 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:48 -> void
+  8:7-8:47 -> [string]
+  8:8-8:16 -> Child
+  8:8-8:21 -> string
+  8:17-8:21 -> string
+  8:23-8:29 -> $spread2
+  8:23-8:34 -> string
+  8:30-8:34 -> string
+  8:36-8:41 -> Child
+  8:36-8:46 -> string
+  8:42-8:46 -> string
+
+Resolved types:
+  1:29-1:32 -> i32
+  2:25-2:29 -> Base
+  2:44-2:50 -> string
+  3:17-3:22 -> Child
+  6:14-6:19 -> Child
+
+Declarations:
+  1:11-1:15 -> interface Base
+  1:22-1:27 -> var value: i32
+  2:11-2:16 -> interface Child
+  2:38-2:42 -> const name: string
+  3:7-3:15 -> const original: Child
+  4:7-4:13 -> const copied: $spread2
+  6:7-6:12 -> const typed: Child
+
+References:
+  4:17-4:28 -> 1:22-1:27
+  4:17-4:28 -> 2:38-2:42
+  4:20-4:28 -> 3:7-3:15
+  5:1-5:7 -> 4:7-4:13
+  5:8-5:13 -> 1:22-1:27
+  6:23-6:32 -> 1:22-1:27
+  6:23-6:32 -> 2:38-2:42
+  6:26-6:32 -> 4:7-4:13
+  7:1-7:6 -> builtin print
+  7:8-7:16 -> 3:7-3:15
+  7:17-7:22 -> 1:22-1:27
+  7:24-7:30 -> 4:7-4:13
+  7:31-7:36 -> 1:22-1:27
+  7:38-7:43 -> 6:7-6:12
+  7:44-7:49 -> 1:22-1:27
+  8:1-8:6 -> builtin print
+  8:8-8:16 -> 3:7-3:15
+  8:17-8:21 -> 2:38-2:42
+  8:23-8:29 -> 4:7-4:13
+  8:30-8:34 -> 2:38-2:42
+  8:36-8:41 -> 6:7-6:12
+  8:42-8:46 -> 2:38-2:42
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$$object1
+  NESTMEMBER Test$$object2
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Base Test Base
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Child Test Child
+
+  // access flags 0x19
+  public final static LTest$Child; original
+
+  // access flags 0x19
+  public final static LTest$$spread2; copied
+
+  // access flags 0x19
+  public final static LTest$Child; typed
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    LDC 1
+    LDC "original"
+    INVOKESPECIAL Test$$object0.<init> (ILjava/lang/String;)V
+    PUTSTATIC Test.original : LTest$Child;
+    GETSTATIC Test.original : LTest$Child;
+    ASTORE 0
+    ALOAD 0
+    INVOKEINTERFACE Test$Child.$get$value ()I (itf)
+    ISTORE 1
+    ALOAD 0
+    INVOKEINTERFACE Test$Child.$get$name ()Ljava/lang/String; (itf)
+    ASTORE 2
+    NEW Test$$object1
+    DUP
+    ILOAD 1
+    ALOAD 2
+    INVOKESPECIAL Test$$object1.<init> (ILjava/lang/String;)V
+    PUTSTATIC Test.copied : LTest$$spread2;
+    GETSTATIC Test.copied : LTest$$spread2;
+    LDC 2
+    DUP_X1
+    INVOKEINTERFACE Test$$spread2.$set$value (I)V (itf)
+    POP
+    GETSTATIC Test.copied : LTest$$spread2;
+    ASTORE 3
+    ALOAD 3
+    INVOKEINTERFACE Test$$spread2.$get$value ()I (itf)
+    ISTORE 4
+    ALOAD 3
+    INVOKEINTERFACE Test$$spread2.$get$name ()Ljava/lang/String; (itf)
+    ASTORE 5
+    LDC "typed"
+    ASTORE 6
+    NEW Test$$object2
+    DUP
+    ILOAD 4
+    ALOAD 6
+    INVOKESPECIAL Test$$object2.<init> (ILjava/lang/String;)V
+    PUTSTATIC Test.typed : LTest$Child;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    GETSTATIC Test.original : LTest$Child;
+    INVOKEINTERFACE Test$Child.$get$value ()I (itf)
+    IASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test.copied : LTest$$spread2;
+    INVOKEINTERFACE Test$$spread2.$get$value ()I (itf)
+    IASTORE
+    DUP
+    LDC 2
+    GETSTATIC Test.typed : LTest$Child;
+    INVOKEINTERFACE Test$Child.$get$value ()I (itf)
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test.original : LTest$Child;
+    INVOKEINTERFACE Test$Child.$get$name ()Ljava/lang/String; (itf)
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test.copied : LTest$$spread2;
+    INVOKEINTERFACE Test$$spread2.$get$name ()Ljava/lang/String; (itf)
+    AASTORE
+    DUP
+    LDC 2
+    GETSTATIC Test.typed : LTest$Child;
+    INVOKEINTERFACE Test$Child.$get$name ()Ljava/lang/String; (itf)
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 7
+    MAXLOCALS = 7
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$$spread2 {
+
+
+  // access flags 0x401
+  public abstract $get$value()I
+
+  // access flags 0x401
+  public abstract $set$value(I)V
+
+  // access flags 0x401
+  public abstract $get$name()Ljava/lang/String;
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Base {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Base Test Base
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x1401
+  public abstract synthetic $set$value(I)V
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Child implements Test$Base {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Child Test Child
+
+  // access flags 0x1401
+  public abstract synthetic $get$name()Ljava/lang/String;
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Child {
+
+  NESTHOST Test
+
+  // access flags 0x2
+  private I value
+
+  // access flags 0x12
+  private final Ljava/lang/String; name
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object0.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$value(I)V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1001
+  public synthetic $get$name()Ljava/lang/String;
+    ALOAD 0
+    GETFIELD Test$$object0.name : Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(ILjava/lang/String;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.value : I
+    ALOAD 0
+    ALOAD 2
+    PUTFIELD Test$$object0.name : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object1 implements Test$$spread2 {
+
+  NESTHOST Test
+
+  // access flags 0x2
+  private I value
+
+  // access flags 0x12
+  private final Ljava/lang/String; name
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object1.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$value(I)V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object1.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1001
+  public synthetic $get$name()Ljava/lang/String;
+    ALOAD 0
+    GETFIELD Test$$object1.name : Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(ILjava/lang/String;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object1.value : I
+    ALOAD 0
+    ALOAD 2
+    PUTFIELD Test$$object1.name : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object2 implements Test$Child {
+
+  NESTHOST Test
+
+  // access flags 0x2
+  private I value
+
+  // access flags 0x12
+  private final Ljava/lang/String; name
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object2.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$value(I)V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object2.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1001
+  public synthetic $get$name()Ljava/lang/String;
+    ALOAD 0
+    GETFIELD Test$$object2.name : Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(ILjava/lang/String;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object2.value : I
+    ALOAD 0
+    ALOAD 2
+    PUTFIELD Test$$object2.name : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+--- OUTPUT ---
+
+[1, 2, 2]
+[original, original, typed]
+

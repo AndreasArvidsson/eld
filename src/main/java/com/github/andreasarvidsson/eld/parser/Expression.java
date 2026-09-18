@@ -6,5 +6,5 @@ public sealed interface Expression extends AstNode permits MemberExpression,
     BinaryExpression, AssignmentExpression, CallExpression, SubscriptExpression,
     SliceExpression, ArrayExpression, TupleExpression, GroupingExpression,
     LambdaExpression, NamedArgumentExpression, ThisExpression,
-    FormatStringExpression, ObjectExpression {
+    FormatStringExpression, ObjectExpression, ArraySpread {
 }

@@ -258,6 +258,13 @@ public class Lexer {
             return readStringLiteral(false);
         }
 
+        if (source.startsWith("...", position)) {
+            advance();
+            advance();
+            advance();
+            return createToken(TokenType.ELLIPSIS, "...");
+        }
+
         if (position + 1 < source.length()) {
             final String text =
                 Objects

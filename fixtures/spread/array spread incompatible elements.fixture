@@ -1,0 +1,83 @@
+const strings = ["a"];
+const values: [i32] = [1, ...strings];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "strings" (1:7-1:14)
+EQUAL (1:15-1:16)
+LEFT_BRACKET (1:17-1:18)
+STRING_LITERAL "\"a\"" (1:18-1:21)
+RIGHT_BRACKET (1:21-1:22)
+SEMICOLON (1:22-1:23)
+CONST (2:1-2:6)
+IDENTIFIER "values" (2:7-2:13)
+COLON (2:13-2:14)
+LEFT_BRACKET (2:15-2:16)
+IDENTIFIER "i32" (2:16-2:19)
+RIGHT_BRACKET (2:19-2:20)
+EQUAL (2:21-2:22)
+LEFT_BRACKET (2:23-2:24)
+INTEGER_LITERAL "1" (2:24-2:25)
+COMMA (2:25-2:26)
+ELLIPSIS (2:27-2:30)
+IDENTIFIER "strings" (2:30-2:37)
+RIGHT_BRACKET (2:37-2:38)
+SEMICOLON (2:38-2:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:39
+  (VariableDeclaration
+    range: 1:1-1:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "strings"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:17-1:22
+      (LiteralExpression
+        range: 1:18-1:21
+        kind: STRING
+        text: "\"a\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "values"
+    )
+    (ArrayTypeNode
+      range: 2:15-2:20
+      (NamedTypeNode
+        range: 2:16-2:19
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 2:23-2:38
+      (LiteralExpression
+        range: 2:24-2:25
+        kind: INT
+        text: "1"
+      )
+      (ArraySpread
+        range: 2:27-2:37
+        (IdentifierExpression
+          range: 2:30-2:37
+          name: "strings"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot assign string to i32 at 2:27-2:37

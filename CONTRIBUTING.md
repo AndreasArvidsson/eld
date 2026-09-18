@@ -218,10 +218,12 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- ... operator when constructing objects/arrays
+- Update Java to v25 and replace ASM with Class-File API
 - Regular expressions from `regex`.
+- Refactor large files
 - Export & import
 - Exceptions
+- Improve test performance
 - Ubiquitous toString and equals methods
 - Immutable collections and objects
 - Overloaded functions

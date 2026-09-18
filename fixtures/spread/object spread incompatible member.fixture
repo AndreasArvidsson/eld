@@ -1,0 +1,143 @@
+interface Number { const value: i32; }
+interface Text { const value: string; }
+const old: Text = {value: "a"};
+const value: Number = {...old};
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Number" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+CONST (1:20-1:25)
+IDENTIFIER "value" (1:26-1:31)
+COLON (1:31-1:32)
+IDENTIFIER "i32" (1:33-1:36)
+SEMICOLON (1:36-1:37)
+RIGHT_BRACE (1:38-1:39)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Text" (2:11-2:15)
+LEFT_BRACE (2:16-2:17)
+CONST (2:18-2:23)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "string" (2:31-2:37)
+SEMICOLON (2:37-2:38)
+RIGHT_BRACE (2:39-2:40)
+CONST (3:1-3:6)
+IDENTIFIER "old" (3:7-3:10)
+COLON (3:10-3:11)
+IDENTIFIER "Text" (3:12-3:16)
+EQUAL (3:17-3:18)
+LEFT_BRACE (3:19-3:20)
+IDENTIFIER "value" (3:20-3:25)
+COLON (3:25-3:26)
+STRING_LITERAL "\"a\"" (3:27-3:30)
+RIGHT_BRACE (3:30-3:31)
+SEMICOLON (3:31-3:32)
+CONST (4:1-4:6)
+IDENTIFIER "value" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "Number" (4:14-4:20)
+EQUAL (4:21-4:22)
+LEFT_BRACE (4:23-4:24)
+ELLIPSIS (4:24-4:27)
+IDENTIFIER "old" (4:27-4:30)
+RIGHT_BRACE (4:30-4:31)
+SEMICOLON (4:31-4:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:32
+  (InterfaceDeclaration
+    range: 1:1-1:39
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Number"
+    )
+    (UninitializedVariableDeclaration
+      range: 1:20-1:37
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 1:26-1:31
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:33-1:36
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:40
+    (IdentifierDeclaration
+      range: 2:11-2:15
+      name: "Text"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:18-2:38
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:24-2:29
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:31-2:37
+        name: "string"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "old"
+    )
+    (NamedTypeNode
+      range: 3:12-3:16
+      name: "Text"
+    )
+    (ObjectExpression
+      range: 3:19-3:31
+      (ObjectMember
+        range: 3:20-3:30
+        (IdentifierDeclaration
+          range: 3:20-3:25
+          name: "value"
+        )
+        (LiteralExpression
+          range: 3:27-3:30
+          kind: STRING
+          text: "\"a\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 4:14-4:20
+      name: "Number"
+    )
+    (ObjectExpression
+      range: 4:23-4:31
+      (ObjectSpread
+        range: 4:24-4:30
+        (IdentifierExpression
+          range: 4:27-4:30
+          name: "old"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Member 'value' expects i32, found string at 4:24-4:30

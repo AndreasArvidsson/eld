@@ -1,0 +1,1446 @@
+const bytes: [i8] = [1, 2];
+const shorts: [i16] = [3];
+const longs: [i64] = [...bytes, ...shorts, 4];
+const doubles: [f64] = [...longs, 5.0];
+const floats: [f32] = [1.0];
+const floating: [f64] = [...floats];
+const chars: [char] = [...['a'], 'b'];
+const flags: [bool] = [...[true], false];
+const copiedBytes: [i8] = [...bytes];
+const copiedShorts: [i16] = [...shorts];
+const copiedFloats: [f32] = [...floats];
+const boxed: [any] = [...bytes, ...flags];
+print(longs);
+print(doubles);
+print(floating);
+print(chars);
+print(flags);
+print(copiedBytes);
+print(copiedShorts);
+print(copiedFloats);
+print(boxed);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "bytes" (1:7-1:12)
+COLON (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+IDENTIFIER "i8" (1:15-1:17)
+RIGHT_BRACKET (1:17-1:18)
+EQUAL (1:19-1:20)
+LEFT_BRACKET (1:21-1:22)
+INTEGER_LITERAL "1" (1:22-1:23)
+COMMA (1:23-1:24)
+INTEGER_LITERAL "2" (1:25-1:26)
+RIGHT_BRACKET (1:26-1:27)
+SEMICOLON (1:27-1:28)
+CONST (2:1-2:6)
+IDENTIFIER "shorts" (2:7-2:13)
+COLON (2:13-2:14)
+LEFT_BRACKET (2:15-2:16)
+IDENTIFIER "i16" (2:16-2:19)
+RIGHT_BRACKET (2:19-2:20)
+EQUAL (2:21-2:22)
+LEFT_BRACKET (2:23-2:24)
+INTEGER_LITERAL "3" (2:24-2:25)
+RIGHT_BRACKET (2:25-2:26)
+SEMICOLON (2:26-2:27)
+CONST (3:1-3:6)
+IDENTIFIER "longs" (3:7-3:12)
+COLON (3:12-3:13)
+LEFT_BRACKET (3:14-3:15)
+IDENTIFIER "i64" (3:15-3:18)
+RIGHT_BRACKET (3:18-3:19)
+EQUAL (3:20-3:21)
+LEFT_BRACKET (3:22-3:23)
+ELLIPSIS (3:23-3:26)
+IDENTIFIER "bytes" (3:26-3:31)
+COMMA (3:31-3:32)
+ELLIPSIS (3:33-3:36)
+IDENTIFIER "shorts" (3:36-3:42)
+COMMA (3:42-3:43)
+INTEGER_LITERAL "4" (3:44-3:45)
+RIGHT_BRACKET (3:45-3:46)
+SEMICOLON (3:46-3:47)
+CONST (4:1-4:6)
+IDENTIFIER "doubles" (4:7-4:14)
+COLON (4:14-4:15)
+LEFT_BRACKET (4:16-4:17)
+IDENTIFIER "f64" (4:17-4:20)
+RIGHT_BRACKET (4:20-4:21)
+EQUAL (4:22-4:23)
+LEFT_BRACKET (4:24-4:25)
+ELLIPSIS (4:25-4:28)
+IDENTIFIER "longs" (4:28-4:33)
+COMMA (4:33-4:34)
+FLOAT_LITERAL "5.0" (4:35-4:38)
+RIGHT_BRACKET (4:38-4:39)
+SEMICOLON (4:39-4:40)
+CONST (5:1-5:6)
+IDENTIFIER "floats" (5:7-5:13)
+COLON (5:13-5:14)
+LEFT_BRACKET (5:15-5:16)
+IDENTIFIER "f32" (5:16-5:19)
+RIGHT_BRACKET (5:19-5:20)
+EQUAL (5:21-5:22)
+LEFT_BRACKET (5:23-5:24)
+FLOAT_LITERAL "1.0" (5:24-5:27)
+RIGHT_BRACKET (5:27-5:28)
+SEMICOLON (5:28-5:29)
+CONST (6:1-6:6)
+IDENTIFIER "floating" (6:7-6:15)
+COLON (6:15-6:16)
+LEFT_BRACKET (6:17-6:18)
+IDENTIFIER "f64" (6:18-6:21)
+RIGHT_BRACKET (6:21-6:22)
+EQUAL (6:23-6:24)
+LEFT_BRACKET (6:25-6:26)
+ELLIPSIS (6:26-6:29)
+IDENTIFIER "floats" (6:29-6:35)
+RIGHT_BRACKET (6:35-6:36)
+SEMICOLON (6:36-6:37)
+CONST (7:1-7:6)
+IDENTIFIER "chars" (7:7-7:12)
+COLON (7:12-7:13)
+LEFT_BRACKET (7:14-7:15)
+IDENTIFIER "char" (7:15-7:19)
+RIGHT_BRACKET (7:19-7:20)
+EQUAL (7:21-7:22)
+LEFT_BRACKET (7:23-7:24)
+ELLIPSIS (7:24-7:27)
+LEFT_BRACKET (7:27-7:28)
+CHAR_LITERAL "'a'" (7:28-7:31)
+RIGHT_BRACKET (7:31-7:32)
+COMMA (7:32-7:33)
+CHAR_LITERAL "'b'" (7:34-7:37)
+RIGHT_BRACKET (7:37-7:38)
+SEMICOLON (7:38-7:39)
+CONST (8:1-8:6)
+IDENTIFIER "flags" (8:7-8:12)
+COLON (8:12-8:13)
+LEFT_BRACKET (8:14-8:15)
+IDENTIFIER "bool" (8:15-8:19)
+RIGHT_BRACKET (8:19-8:20)
+EQUAL (8:21-8:22)
+LEFT_BRACKET (8:23-8:24)
+ELLIPSIS (8:24-8:27)
+LEFT_BRACKET (8:27-8:28)
+BOOLEAN_LITERAL "true" (8:28-8:32)
+RIGHT_BRACKET (8:32-8:33)
+COMMA (8:33-8:34)
+BOOLEAN_LITERAL "false" (8:35-8:40)
+RIGHT_BRACKET (8:40-8:41)
+SEMICOLON (8:41-8:42)
+CONST (9:1-9:6)
+IDENTIFIER "copiedBytes" (9:7-9:18)
+COLON (9:18-9:19)
+LEFT_BRACKET (9:20-9:21)
+IDENTIFIER "i8" (9:21-9:23)
+RIGHT_BRACKET (9:23-9:24)
+EQUAL (9:25-9:26)
+LEFT_BRACKET (9:27-9:28)
+ELLIPSIS (9:28-9:31)
+IDENTIFIER "bytes" (9:31-9:36)
+RIGHT_BRACKET (9:36-9:37)
+SEMICOLON (9:37-9:38)
+CONST (10:1-10:6)
+IDENTIFIER "copiedShorts" (10:7-10:19)
+COLON (10:19-10:20)
+LEFT_BRACKET (10:21-10:22)
+IDENTIFIER "i16" (10:22-10:25)
+RIGHT_BRACKET (10:25-10:26)
+EQUAL (10:27-10:28)
+LEFT_BRACKET (10:29-10:30)
+ELLIPSIS (10:30-10:33)
+IDENTIFIER "shorts" (10:33-10:39)
+RIGHT_BRACKET (10:39-10:40)
+SEMICOLON (10:40-10:41)
+CONST (11:1-11:6)
+IDENTIFIER "copiedFloats" (11:7-11:19)
+COLON (11:19-11:20)
+LEFT_BRACKET (11:21-11:22)
+IDENTIFIER "f32" (11:22-11:25)
+RIGHT_BRACKET (11:25-11:26)
+EQUAL (11:27-11:28)
+LEFT_BRACKET (11:29-11:30)
+ELLIPSIS (11:30-11:33)
+IDENTIFIER "floats" (11:33-11:39)
+RIGHT_BRACKET (11:39-11:40)
+SEMICOLON (11:40-11:41)
+CONST (12:1-12:6)
+IDENTIFIER "boxed" (12:7-12:12)
+COLON (12:12-12:13)
+LEFT_BRACKET (12:14-12:15)
+IDENTIFIER "any" (12:15-12:18)
+RIGHT_BRACKET (12:18-12:19)
+EQUAL (12:20-12:21)
+LEFT_BRACKET (12:22-12:23)
+ELLIPSIS (12:23-12:26)
+IDENTIFIER "bytes" (12:26-12:31)
+COMMA (12:31-12:32)
+ELLIPSIS (12:33-12:36)
+IDENTIFIER "flags" (12:36-12:41)
+RIGHT_BRACKET (12:41-12:42)
+SEMICOLON (12:42-12:43)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "longs" (13:7-13:12)
+RIGHT_PAREN (13:12-13:13)
+SEMICOLON (13:13-13:14)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "doubles" (14:7-14:14)
+RIGHT_PAREN (14:14-14:15)
+SEMICOLON (14:15-14:16)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "floating" (15:7-15:15)
+RIGHT_PAREN (15:15-15:16)
+SEMICOLON (15:16-15:17)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "chars" (16:7-16:12)
+RIGHT_PAREN (16:12-16:13)
+SEMICOLON (16:13-16:14)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "flags" (17:7-17:12)
+RIGHT_PAREN (17:12-17:13)
+SEMICOLON (17:13-17:14)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "copiedBytes" (18:7-18:18)
+RIGHT_PAREN (18:18-18:19)
+SEMICOLON (18:19-18:20)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "copiedShorts" (19:7-19:19)
+RIGHT_PAREN (19:19-19:20)
+SEMICOLON (19:20-19:21)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "copiedFloats" (20:7-20:19)
+RIGHT_PAREN (20:19-20:20)
+SEMICOLON (20:20-20:21)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "boxed" (21:7-21:12)
+RIGHT_PAREN (21:12-21:13)
+SEMICOLON (21:13-21:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-21:14
+  (VariableDeclaration
+    range: 1:1-1:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "bytes"
+    )
+    (ArrayTypeNode
+      range: 1:14-1:18
+      (NamedTypeNode
+        range: 1:15-1:17
+        name: "i8"
+      )
+    )
+    (ArrayExpression
+      range: 1:21-1:27
+      (LiteralExpression
+        range: 1:22-1:23
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:25-1:26
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "shorts"
+    )
+    (ArrayTypeNode
+      range: 2:15-2:20
+      (NamedTypeNode
+        range: 2:16-2:19
+        name: "i16"
+      )
+    )
+    (ArrayExpression
+      range: 2:23-2:26
+      (LiteralExpression
+        range: 2:24-2:25
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "longs"
+    )
+    (ArrayTypeNode
+      range: 3:14-3:19
+      (NamedTypeNode
+        range: 3:15-3:18
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 3:22-3:46
+      (ArraySpread
+        range: 3:23-3:31
+        (IdentifierExpression
+          range: 3:26-3:31
+          name: "bytes"
+        )
+      )
+      (ArraySpread
+        range: 3:33-3:42
+        (IdentifierExpression
+          range: 3:36-3:42
+          name: "shorts"
+        )
+      )
+      (LiteralExpression
+        range: 3:44-3:45
+        kind: INT
+        text: "4"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:14
+      name: "doubles"
+    )
+    (ArrayTypeNode
+      range: 4:16-4:21
+      (NamedTypeNode
+        range: 4:17-4:20
+        name: "f64"
+      )
+    )
+    (ArrayExpression
+      range: 4:24-4:39
+      (ArraySpread
+        range: 4:25-4:33
+        (IdentifierExpression
+          range: 4:28-4:33
+          name: "longs"
+        )
+      )
+      (LiteralExpression
+        range: 4:35-4:38
+        kind: FLOAT
+        text: "5.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "floats"
+    )
+    (ArrayTypeNode
+      range: 5:15-5:20
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "f32"
+      )
+    )
+    (ArrayExpression
+      range: 5:23-5:28
+      (LiteralExpression
+        range: 5:24-5:27
+        kind: FLOAT
+        text: "1.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:15
+      name: "floating"
+    )
+    (ArrayTypeNode
+      range: 6:17-6:22
+      (NamedTypeNode
+        range: 6:18-6:21
+        name: "f64"
+      )
+    )
+    (ArrayExpression
+      range: 6:25-6:36
+      (ArraySpread
+        range: 6:26-6:35
+        (IdentifierExpression
+          range: 6:29-6:35
+          name: "floats"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "chars"
+    )
+    (ArrayTypeNode
+      range: 7:14-7:20
+      (NamedTypeNode
+        range: 7:15-7:19
+        name: "char"
+      )
+    )
+    (ArrayExpression
+      range: 7:23-7:38
+      (ArraySpread
+        range: 7:24-7:32
+        (ArrayExpression
+          range: 7:27-7:32
+          (LiteralExpression
+            range: 7:28-7:31
+            kind: CHAR
+            text: "'a'"
+          )
+        )
+      )
+      (LiteralExpression
+        range: 7:34-7:37
+        kind: CHAR
+        text: "'b'"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:12
+      name: "flags"
+    )
+    (ArrayTypeNode
+      range: 8:14-8:20
+      (NamedTypeNode
+        range: 8:15-8:19
+        name: "bool"
+      )
+    )
+    (ArrayExpression
+      range: 8:23-8:41
+      (ArraySpread
+        range: 8:24-8:33
+        (ArrayExpression
+          range: 8:27-8:33
+          (LiteralExpression
+            range: 8:28-8:32
+            kind: BOOL
+            text: "true"
+          )
+        )
+      )
+      (LiteralExpression
+        range: 8:35-8:40
+        kind: BOOL
+        text: "false"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:18
+      name: "copiedBytes"
+    )
+    (ArrayTypeNode
+      range: 9:20-9:24
+      (NamedTypeNode
+        range: 9:21-9:23
+        name: "i8"
+      )
+    )
+    (ArrayExpression
+      range: 9:27-9:37
+      (ArraySpread
+        range: 9:28-9:36
+        (IdentifierExpression
+          range: 9:31-9:36
+          name: "bytes"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:19
+      name: "copiedShorts"
+    )
+    (ArrayTypeNode
+      range: 10:21-10:26
+      (NamedTypeNode
+        range: 10:22-10:25
+        name: "i16"
+      )
+    )
+    (ArrayExpression
+      range: 10:29-10:40
+      (ArraySpread
+        range: 10:30-10:39
+        (IdentifierExpression
+          range: 10:33-10:39
+          name: "shorts"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:19
+      name: "copiedFloats"
+    )
+    (ArrayTypeNode
+      range: 11:21-11:26
+      (NamedTypeNode
+        range: 11:22-11:25
+        name: "f32"
+      )
+    )
+    (ArrayExpression
+      range: 11:29-11:40
+      (ArraySpread
+        range: 11:30-11:39
+        (IdentifierExpression
+          range: 11:33-11:39
+          name: "floats"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "boxed"
+    )
+    (ArrayTypeNode
+      range: 12:14-12:19
+      (NamedTypeNode
+        range: 12:15-12:18
+        name: "any"
+      )
+    )
+    (ArrayExpression
+      range: 12:22-12:42
+      (ArraySpread
+        range: 12:23-12:31
+        (IdentifierExpression
+          range: 12:26-12:31
+          name: "bytes"
+        )
+      )
+      (ArraySpread
+        range: 12:33-12:41
+        (IdentifierExpression
+          range: 12:36-12:41
+          name: "flags"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:14
+    (CallExpression
+      range: 13:1-13:13
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:7-13:12
+        name: "longs"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:16
+    (CallExpression
+      range: 14:1-14:15
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 14:7-14:14
+        name: "doubles"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:17
+    (CallExpression
+      range: 15:1-15:16
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 15:7-15:15
+        name: "floating"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:14
+    (CallExpression
+      range: 16:1-16:13
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 16:7-16:12
+        name: "chars"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:14
+    (CallExpression
+      range: 17:1-17:13
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 17:7-17:12
+        name: "flags"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:20
+    (CallExpression
+      range: 18:1-18:19
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 18:7-18:18
+        name: "copiedBytes"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:21
+    (CallExpression
+      range: 19:1-19:20
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 19:7-19:19
+        name: "copiedShorts"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:21
+    (CallExpression
+      range: 20:1-20:20
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 20:7-20:19
+        name: "copiedFloats"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:14
+    (CallExpression
+      range: 21:1-21:13
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 21:7-21:12
+        name: "boxed"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:21-1:27 -> [i8]
+  1:22-1:23 -> i32
+  1:25-1:26 -> i32
+  2:23-2:26 -> [i16]
+  2:24-2:25 -> i32
+  3:22-3:46 -> [i64]
+  3:23-3:31 -> i8
+  3:26-3:31 -> [i8]
+  3:33-3:42 -> i16
+  3:36-3:42 -> [i16]
+  3:44-3:45 -> i32
+  4:24-4:39 -> [f64]
+  4:25-4:33 -> i64
+  4:28-4:33 -> [i64]
+  4:35-4:38 -> f64
+  5:23-5:28 -> [f32]
+  5:24-5:27 -> f64
+  6:25-6:36 -> [f64]
+  6:26-6:35 -> f32
+  6:29-6:35 -> [f32]
+  7:23-7:38 -> [char]
+  7:24-7:32 -> char
+  7:27-7:32 -> [char]
+  7:28-7:31 -> char
+  7:34-7:37 -> char
+  8:23-8:41 -> [bool]
+  8:24-8:33 -> bool
+  8:27-8:33 -> [bool]
+  8:28-8:32 -> bool
+  8:35-8:40 -> bool
+  9:27-9:37 -> [i8]
+  9:28-9:36 -> i8
+  9:31-9:36 -> [i8]
+  10:29-10:40 -> [i16]
+  10:30-10:39 -> i16
+  10:33-10:39 -> [i16]
+  11:29-11:40 -> [f32]
+  11:30-11:39 -> f32
+  11:33-11:39 -> [f32]
+  12:22-12:42 -> [any]
+  12:23-12:31 -> i8
+  12:26-12:31 -> [i8]
+  12:33-12:41 -> bool
+  12:36-12:41 -> [bool]
+  13:1-13:6 -> (any) => void
+  13:1-13:13 -> void
+  13:7-13:12 -> [i64]
+  14:1-14:6 -> (any) => void
+  14:1-14:15 -> void
+  14:7-14:14 -> [f64]
+  15:1-15:6 -> (any) => void
+  15:1-15:16 -> void
+  15:7-15:15 -> [f64]
+  16:1-16:6 -> (any) => void
+  16:1-16:13 -> void
+  16:7-16:12 -> [char]
+  17:1-17:6 -> (any) => void
+  17:1-17:13 -> void
+  17:7-17:12 -> [bool]
+  18:1-18:6 -> (any) => void
+  18:1-18:19 -> void
+  18:7-18:18 -> [i8]
+  19:1-19:6 -> (any) => void
+  19:1-19:20 -> void
+  19:7-19:19 -> [i16]
+  20:1-20:6 -> (any) => void
+  20:1-20:20 -> void
+  20:7-20:19 -> [f32]
+  21:1-21:6 -> (any) => void
+  21:1-21:13 -> void
+  21:7-21:12 -> [any]
+
+Resolved types:
+  1:14-1:18 -> [i8]
+  1:15-1:17 -> i8
+  2:15-2:20 -> [i16]
+  2:16-2:19 -> i16
+  3:14-3:19 -> [i64]
+  3:15-3:18 -> i64
+  4:16-4:21 -> [f64]
+  4:17-4:20 -> f64
+  5:15-5:20 -> [f32]
+  5:16-5:19 -> f32
+  6:17-6:22 -> [f64]
+  6:18-6:21 -> f64
+  7:14-7:20 -> [char]
+  7:15-7:19 -> char
+  8:14-8:20 -> [bool]
+  8:15-8:19 -> bool
+  9:20-9:24 -> [i8]
+  9:21-9:23 -> i8
+  10:21-10:26 -> [i16]
+  10:22-10:25 -> i16
+  11:21-11:26 -> [f32]
+  11:22-11:25 -> f32
+  12:14-12:19 -> [any]
+  12:15-12:18 -> any
+
+Conversions:
+  1:22-1:23 -> i32 -> i8
+  1:25-1:26 -> i32 -> i8
+  2:24-2:25 -> i32 -> i16
+  3:23-3:31 -> i8 -> i64
+  3:33-3:42 -> i16 -> i64
+  3:44-3:45 -> i32 -> i64
+  4:25-4:33 -> i64 -> f64
+  5:24-5:27 -> f64 -> f32
+  6:26-6:35 -> f32 -> f64
+  12:23-12:31 -> i8 -> any
+  12:33-12:41 -> bool -> any
+
+Declarations:
+  1:7-1:12 -> const bytes: [i8]
+  2:7-2:13 -> const shorts: [i16]
+  3:7-3:12 -> const longs: [i64]
+  4:7-4:14 -> const doubles: [f64]
+  5:7-5:13 -> const floats: [f32]
+  6:7-6:15 -> const floating: [f64]
+  7:7-7:12 -> const chars: [char]
+  8:7-8:12 -> const flags: [bool]
+  9:7-9:18 -> const copiedBytes: [i8]
+  10:7-10:19 -> const copiedShorts: [i16]
+  11:7-11:19 -> const copiedFloats: [f32]
+  12:7-12:12 -> const boxed: [any]
+
+References:
+  3:26-3:31 -> 1:7-1:12
+  3:36-3:42 -> 2:7-2:13
+  4:28-4:33 -> 3:7-3:12
+  6:29-6:35 -> 5:7-5:13
+  9:31-9:36 -> 1:7-1:12
+  10:33-10:39 -> 2:7-2:13
+  11:33-11:39 -> 5:7-5:13
+  12:26-12:31 -> 1:7-1:12
+  12:36-12:41 -> 8:7-8:12
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 3:7-3:12
+  14:1-14:6 -> builtin print
+  14:7-14:14 -> 4:7-4:14
+  15:1-15:6 -> builtin print
+  15:7-15:15 -> 6:7-6:15
+  16:1-16:6 -> builtin print
+  16:7-16:12 -> 7:7-7:12
+  17:1-17:6 -> builtin print
+  17:7-17:12 -> 8:7-8:12
+  18:1-18:6 -> builtin print
+  18:7-18:18 -> 9:7-9:18
+  19:1-19:6 -> builtin print
+  19:7-19:19 -> 10:7-10:19
+  20:1-20:6 -> builtin print
+  20:7-20:19 -> 11:7-11:19
+  21:1-21:6 -> builtin print
+  21:7-21:12 -> 12:7-12:12
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; bytes
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; shorts
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; longs
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; doubles
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; floats
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; floating
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; chars
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; flags
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; copiedBytes
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; copiedShorts
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; copiedFloats
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; boxed
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
+    DUP
+    LDC 2
+    NEWARRAY T_BYTE
+    DUP
+    LDC 0
+    LDC 1
+    I2B
+    BASTORE
+    DUP
+    LDC 1
+    LDC 2
+    I2B
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init> ([B)V
+    PUTSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
+    DUP
+    LDC 1
+    NEWARRAY T_SHORT
+    DUP
+    LDC 0
+    LDC 3
+    I2S
+    SASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init> ([S)V
+    PUTSTATIC Test.shorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ICONST_0
+    ISTORE 0
+    GETSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    ASTORE 1
+    ALOAD 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size ()I
+    ISTORE 2
+    ILOAD 0
+    ILOAD 2
+    IADD
+    ISTORE 0
+    GETSTATIC Test.shorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ASTORE 3
+    ALOAD 3
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size ()I
+    ISTORE 4
+    ILOAD 0
+    ILOAD 4
+    IADD
+    ISTORE 0
+    LDC 4
+    I2L
+    LSTORE 5
+    ILOAD 0
+    ICONST_1
+    IADD
+    ISTORE 0
+    ILOAD 0
+    NEWARRAY T_LONG
+    ASTORE 7
+    ICONST_0
+    ISTORE 8
+    ICONST_0
+    ISTORE 9
+   L0
+   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I] []
+    ILOAD 9
+    ILOAD 2
+    IF_ICMPGE L1
+    ALOAD 7
+    ILOAD 8
+    ILOAD 9
+    IADD
+    ALOAD 1
+    ILOAD 9
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.get (I)B
+    I2L
+    LASTORE
+    IINC 9 1
+    GOTO L0
+   L1
+   FRAME SAME
+    ILOAD 8
+    ILOAD 2
+    IADD
+    ISTORE 8
+    ICONST_0
+    ISTORE 10
+   L2
+   FRAME APPEND [I]
+    ILOAD 10
+    ILOAD 4
+    IF_ICMPGE L3
+    ALOAD 7
+    ILOAD 8
+    ILOAD 10
+    IADD
+    ALOAD 3
+    ILOAD 10
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.get (I)S
+    I2L
+    LASTORE
+    IINC 10 1
+    GOTO L2
+   L3
+   FRAME SAME
+    ILOAD 8
+    ILOAD 4
+    IADD
+    ISTORE 8
+    ALOAD 7
+    ILOAD 8
+    LLOAD 5
+    LASTORE
+    IINC 8 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    ALOAD 7
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init> ([J)V
+    PUTSTATIC Test.longs : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    ICONST_0
+    ISTORE 11
+    GETSTATIC Test.longs : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    ASTORE 12
+    ALOAD 12
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.size ()I
+    ISTORE 13
+    ILOAD 11
+    ILOAD 13
+    IADD
+    ISTORE 11
+    LDC 5.0D
+    DSTORE 14
+    ILOAD 11
+    ICONST_1
+    IADD
+    ISTORE 11
+    ILOAD 11
+    NEWARRAY T_DOUBLE
+    ASTORE 16
+    ICONST_0
+    ISTORE 17
+    ICONST_0
+    ISTORE 18
+   L4
+   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I I I com/github/andreasarvidsson/eld/runtime/EldLongArray I D [D I I] []
+    ILOAD 18
+    ILOAD 13
+    IF_ICMPGE L5
+    ALOAD 16
+    ILOAD 17
+    ILOAD 18
+    IADD
+    ALOAD 12
+    ILOAD 18
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.get (I)J
+    L2D
+    DASTORE
+    IINC 18 1
+    GOTO L4
+   L5
+   FRAME SAME
+    ILOAD 17
+    ILOAD 13
+    IADD
+    ISTORE 17
+    ALOAD 16
+    ILOAD 17
+    DLOAD 14
+    DASTORE
+    IINC 17 1
+   L6
+    NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
+    DUP
+    ALOAD 16
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init> ([D)V
+    PUTSTATIC Test.doubles : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
+    DUP
+    LDC 1
+    NEWARRAY T_FLOAT
+    DUP
+    LDC 0
+    LDC 1.0D
+    D2F
+    FASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init> ([F)V
+    PUTSTATIC Test.floats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    ICONST_0
+    ISTORE 19
+    GETSTATIC Test.floats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    ASTORE 20
+    ALOAD 20
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size ()I
+    ISTORE 21
+    ILOAD 19
+    ILOAD 21
+    IADD
+    ISTORE 19
+    ILOAD 19
+    NEWARRAY T_DOUBLE
+    ASTORE 22
+    ICONST_0
+    ISTORE 23
+    ICONST_0
+    ISTORE 24
+   L7
+   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I I I com/github/andreasarvidsson/eld/runtime/EldLongArray I D [D I I I com/github/andreasarvidsson/eld/runtime/EldFloatArray I [D I I] []
+    ILOAD 24
+    ILOAD 21
+    IF_ICMPGE L8
+    ALOAD 22
+    ILOAD 23
+    ILOAD 24
+    IADD
+    ALOAD 20
+    ILOAD 24
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.get (I)F
+    F2D
+    DASTORE
+    IINC 24 1
+    GOTO L7
+   L8
+   FRAME SAME
+    ILOAD 23
+    ILOAD 21
+    IADD
+    ISTORE 23
+    NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
+    DUP
+    ALOAD 22
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init> ([D)V
+    PUTSTATIC Test.floating : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    ICONST_0
+    ISTORE 25
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
+    LDC 1
+    NEWARRAY T_CHAR
+    DUP
+    LDC 0
+    LDC 97
+    CASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
+    ASTORE 26
+    ALOAD 26
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.size ()I
+    ISTORE 27
+    ILOAD 25
+    ILOAD 27
+    IADD
+    ISTORE 25
+    LDC 98
+    ISTORE 28
+    ILOAD 25
+    ICONST_1
+    IADD
+    ISTORE 25
+    ILOAD 25
+    NEWARRAY T_CHAR
+    ASTORE 29
+    ICONST_0
+    ISTORE 30
+    ALOAD 26
+    ALOAD 29
+    ILOAD 30
+    ILOAD 27
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.copyTo ([CII)V
+    ILOAD 30
+    ILOAD 27
+    IADD
+    ISTORE 30
+    ALOAD 29
+    ILOAD 30
+    ILOAD 28
+    CASTORE
+    IINC 30 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
+    ALOAD 29
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init> ([C)V
+    PUTSTATIC Test.chars : Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    ICONST_0
+    ISTORE 31
+    NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
+    DUP
+    LDC 1
+    NEWARRAY T_BOOLEAN
+    DUP
+    LDC 0
+    ICONST_1
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init> ([Z)V
+    ASTORE 32
+    ALOAD 32
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size ()I
+    ISTORE 33
+    ILOAD 31
+    ILOAD 33
+    IADD
+    ISTORE 31
+    ICONST_0
+    ISTORE 34
+    ILOAD 31
+    ICONST_1
+    IADD
+    ISTORE 31
+    ILOAD 31
+    NEWARRAY T_BOOLEAN
+    ASTORE 35
+    ICONST_0
+    ISTORE 36
+    ALOAD 32
+    ALOAD 35
+    ILOAD 36
+    ILOAD 33
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.copyTo ([ZII)V
+    ILOAD 36
+    ILOAD 33
+    IADD
+    ISTORE 36
+    ALOAD 35
+    ILOAD 36
+    ILOAD 34
+    BASTORE
+    IINC 36 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
+    DUP
+    ALOAD 35
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init> ([Z)V
+    PUTSTATIC Test.flags : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    ICONST_0
+    ISTORE 37
+    GETSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    ASTORE 38
+    ALOAD 38
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size ()I
+    ISTORE 39
+    ILOAD 37
+    ILOAD 39
+    IADD
+    ISTORE 37
+    ILOAD 37
+    NEWARRAY T_BYTE
+    ASTORE 40
+    ICONST_0
+    ISTORE 41
+    ALOAD 38
+    ALOAD 40
+    ILOAD 41
+    ILOAD 39
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.copyTo ([BII)V
+    ILOAD 41
+    ILOAD 39
+    IADD
+    ISTORE 41
+    NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
+    DUP
+    ALOAD 40
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init> ([B)V
+    PUTSTATIC Test.copiedBytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    ICONST_0
+    ISTORE 42
+    GETSTATIC Test.shorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ASTORE 43
+    ALOAD 43
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size ()I
+    ISTORE 44
+    ILOAD 42
+    ILOAD 44
+    IADD
+    ISTORE 42
+    ILOAD 42
+    NEWARRAY T_SHORT
+    ASTORE 45
+    ICONST_0
+    ISTORE 46
+    ALOAD 43
+    ALOAD 45
+    ILOAD 46
+    ILOAD 44
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.copyTo ([SII)V
+    ILOAD 46
+    ILOAD 44
+    IADD
+    ISTORE 46
+    NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
+    DUP
+    ALOAD 45
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init> ([S)V
+    PUTSTATIC Test.copiedShorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    ICONST_0
+    ISTORE 47
+    GETSTATIC Test.floats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    ASTORE 48
+    ALOAD 48
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size ()I
+    ISTORE 49
+    ILOAD 47
+    ILOAD 49
+    IADD
+    ISTORE 47
+    ILOAD 47
+    NEWARRAY T_FLOAT
+    ASTORE 50
+    ICONST_0
+    ISTORE 51
+    ALOAD 48
+    ALOAD 50
+    ILOAD 51
+    ILOAD 49
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.copyTo ([FII)V
+    ILOAD 51
+    ILOAD 49
+    IADD
+    ISTORE 51
+    NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
+    DUP
+    ALOAD 50
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init> ([F)V
+    PUTSTATIC Test.copiedFloats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    ICONST_0
+    ISTORE 52
+    GETSTATIC Test.bytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    ASTORE 53
+    ALOAD 53
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size ()I
+    ISTORE 54
+    ILOAD 52
+    ILOAD 54
+    IADD
+    ISTORE 52
+    GETSTATIC Test.flags : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    ASTORE 55
+    ALOAD 55
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size ()I
+    ISTORE 56
+    ILOAD 52
+    ILOAD 56
+    IADD
+    ISTORE 52
+    ILOAD 52
+    ANEWARRAY java/lang/Object
+    ASTORE 57
+    ICONST_0
+    ISTORE 58
+    ICONST_0
+    ISTORE 59
+   L9
+   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldShortArray I J [J I I I I com/github/andreasarvidsson/eld/runtime/EldLongArray I D [D I I I com/github/andreasarvidsson/eld/runtime/EldFloatArray I [D I I I com/github/andreasarvidsson/eld/runtime/EldCharArray I I [C I I com/github/andreasarvidsson/eld/runtime/EldBooleanArray I I [Z I I com/github/andreasarvidsson/eld/runtime/EldByteArray I [B I I com/github/andreasarvidsson/eld/runtime/EldShortArray I [S I I com/github/andreasarvidsson/eld/runtime/EldFloatArray I [F I I com/github/andreasarvidsson/eld/runtime/EldByteArray I com/github/andreasarvidsson/eld/runtime/EldBooleanArray I [Ljava/lang/Object; I I] []
+    ILOAD 59
+    ILOAD 54
+    IF_ICMPGE L10
+    ALOAD 57
+    ILOAD 58
+    ILOAD 59
+    IADD
+    ALOAD 53
+    ILOAD 59
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.get (I)B
+    INVOKESTATIC java/lang/Byte.valueOf (B)Ljava/lang/Byte;
+    AASTORE
+    IINC 59 1
+    GOTO L9
+   L10
+   FRAME SAME
+    ILOAD 58
+    ILOAD 54
+    IADD
+    ISTORE 58
+    ICONST_0
+    ISTORE 60
+   L11
+   FRAME APPEND [I]
+    ILOAD 60
+    ILOAD 56
+    IF_ICMPGE L12
+    ALOAD 57
+    ILOAD 58
+    ILOAD 60
+    IADD
+    ALOAD 55
+    ILOAD 60
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.get (I)Z
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    IINC 60 1
+    GOTO L11
+   L12
+   FRAME SAME
+    ILOAD 58
+    ILOAD 56
+    IADD
+    ISTORE 58
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    ALOAD 57
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.boxed : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.longs : Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.doubles : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.floating : Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.chars : Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.flags : Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.copiedBytes : Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.copiedShorts : Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.copiedFloats : Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.boxed : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 7
+    MAXLOCALS = 61
+}
+
+--- OUTPUT ---
+
+[1, 2, 3, 4]
+[1.0, 2.0, 3.0, 4.0, 5.0]
+[1.0]
+[a, b]
+[true, false]
+[1, 2]
+[3]
+[1.0]
+[1, 2, true, false]
+

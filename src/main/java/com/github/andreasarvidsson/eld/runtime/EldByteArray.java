@@ -31,6 +31,14 @@ public final class EldByteArray extends EldArray<EldByteArray> {
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final byte[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldByteArray copy() {
         return super.copy();

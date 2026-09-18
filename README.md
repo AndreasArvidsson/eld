@@ -89,6 +89,24 @@ print(pair[0]);
 print(pair == (1, "one"));
 ```
 
+## Object and array spread
+
+Use `...` inside object and array literals to create shallow copies and compose values:
+
+```text
+interface Options {
+    const name: string;
+    const value: i32;
+}
+const old: Options = { name: "foo", value: 10 };
+const updated: Options = { ...old, value: 5 };
+const inferred = { ...old, name: "Bob" };
+
+const first = [1, 2];
+const second = [3, 4];
+const combined: [i32] = [0, ...first, ...second, 5];
+```
+
 ## Calls and function references
 
 ```text

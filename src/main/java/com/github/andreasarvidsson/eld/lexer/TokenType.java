@@ -73,6 +73,7 @@ public enum TokenType {
     RIGHT_BRACKET,
     COLON,
     DOT,
+    ELLIPSIS,
     QUESTION,
     SEMICOLON,
     COMMA,

@@ -15,6 +15,10 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
+import com.github.andreasarvidsson.eld.parser.ArraySpread;
+import com.github.andreasarvidsson.eld.parser.ObjectEntry;
+import com.github.andreasarvidsson.eld.parser.ObjectMember;
+import com.github.andreasarvidsson.eld.parser.ObjectSpread;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
@@ -88,6 +92,8 @@ public final class SemanticAnalyzer {
     private final Map<ClassType, Scope> classScopes = new HashMap<>();
     private final Map<ClassType, Map<String, FunctionSymbol>> classMethods =
         new HashMap<>();
+    private final IdentityHashMap<ObjectExpression, InterfaceType> inferredObjects =
+        new IdentityHashMap<>();
     private boolean analyzingCallee;
     private int callArity = -1;
     private @Nullable ClassType currentInstance;
@@ -784,16 +790,80 @@ public final class SemanticAnalyzer {
                 "Java collection types require a Java collection instance"
             );
         }
-        final Set<String> present = new java.util.HashSet<>();
-        for (final var member : object.members()) {
-            final String name = member.name().name();
-            if (!present.add(name)) {
-                throw new SemanticException(
-                    member.range(),
-                    "Duplicate object member '%s'",
-                    name
+        final List<ObjectEntry> evaluation = new ArrayList<>();
+        final Map<String, ObjectMember> effective = new LinkedHashMap<>();
+        for (final ObjectEntry entry : object.members()) {
+            if (entry instanceof ObjectSpread spread) {
+                evaluation.add(spread);
+                final Type source = analyzeExpression(spread.value(), context);
+                final Map<String, Symbol> supplied =
+                    spreadSymbols(source, spread.range());
+                for (final var suppliedMember : supplied.entrySet()) {
+                    final String name = suppliedMember.getKey();
+                    final IdentifierExpression identifier =
+                        new IdentifierExpression(name, spread.range());
+                    final MemberExpression access =
+                        new MemberExpression(
+                            spread.value(),
+                            identifier,
+                            spread.range()
+                        );
+                    final ObjectMember member =
+                        new ObjectMember(
+                            new IdentifierDeclaration(name, spread.range()),
+                            access,
+                            spread.range()
+                        );
+                    final boolean previous = analyzingCallee;
+                    analyzingCallee =
+                        suppliedMember.getValue() instanceof FunctionSymbol;
+                    try {
+                        analyzeExpression(access, context);
+                    }
+                    finally {
+                        analyzingCallee = previous;
+                    }
+                    if (suppliedMember.getValue() instanceof FunctionSymbol) {
+                        model.setSpreadMethod(member);
+                    }
+                    evaluation.add(member);
+                    effective.put(name, member);
+                }
+            }
+            else {
+                final ObjectMember member = (ObjectMember) entry;
+                final String name = member.name().name();
+                evaluation.add(member);
+                effective.put(name, member);
+            }
+        }
+        final Set<String> present = effective.keySet();
+        model.setObjectMembers(
+            object,
+            new ArrayList<>(effective.values()),
+            evaluation
+        );
+        // Analyze overridden values too, without validating them against the final contract.
+        for (final ObjectEntry entry : evaluation) {
+            if (
+                entry instanceof ObjectMember member
+                    && !member.equals(effective.get(member.name().name()))
+                    && !(member.value() instanceof MemberExpression
+                        && model.isSpreadMethod(member))
+            ) {
+                final Symbol target =
+                    contract.fields().containsKey(member.name().name())
+                        ? contract.fields().get(member.name().name())
+                        : contract.methods().get(member.name().name());
+                analyzeExpression(
+                    member.value(),
+                    context,
+                    target == null ? null : target.type()
                 );
             }
+        }
+        for (final ObjectMember member : effective.values()) {
+            final String name = member.name().name();
             final VariableSymbol field = contract.fields().get(name);
             final FunctionSymbol method = contract.methods().get(name);
             if (field == null && method == null) {
@@ -814,7 +884,7 @@ public final class SemanticAnalyzer {
             final Symbol symbol =
                 field != null ? field : Objects.requireNonNull(method);
             if (
-                method != null
+                method != null && !model.isSpreadMethod(member)
                     && !(unwrap(member.value()) instanceof LambdaExpression)
             ) {
                 throw new SemanticException(
@@ -824,7 +894,9 @@ public final class SemanticAnalyzer {
                 );
             }
             final Type actual =
-                analyzeExpression(member.value(), context, symbol.type());
+                model.isSpreadMethod(member)
+                    ? model.getExpressionType(member.value())
+                    : analyzeExpression(member.value(), context, symbol.type());
             if (
                 resolveAssignType(actual, symbol.type(), member.value()) == null
             ) {
@@ -850,6 +922,115 @@ public final class SemanticAnalyzer {
                 );
             }
         }
+    }
+
+    private InterfaceType inferSpreadObject(
+        final ObjectExpression object,
+        final SemanticContext context
+    ) {
+        final InterfaceType existing = inferredObjects.get(object);
+        if (existing != null) {
+            return existing;
+        }
+        final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
+        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
+        for (final ObjectEntry entry : object.members()) {
+            if (entry instanceof ObjectSpread spread) {
+                final Map<String, Symbol> symbols =
+                    spreadSymbols(
+                        analyzeExpression(spread.value(), context),
+                        spread.range()
+                    );
+                for (final Symbol symbol : symbols.values()) {
+                    fields.remove(symbol.name());
+                    methods.remove(symbol.name());
+                    if (symbol instanceof VariableSymbol field) {
+                        fields.put(field.name(), field);
+                    }
+                    else if (symbol instanceof FunctionSymbol method) {
+                        methods.put(method.name(), method);
+                    }
+                }
+            }
+            else {
+                final ObjectMember member = (ObjectMember) entry;
+                final String name = member.name().name();
+                final FunctionSymbol method = methods.get(name);
+                final Type value =
+                    analyzeExpression(
+                        member.value(),
+                        context,
+                        method == null ? null : method.type()
+                    );
+                if (method == null) {
+                    fields.put(
+                        name,
+                        new VariableSymbol(
+                            member.name(),
+                            value,
+                            Mutability.CONST
+                        )
+                    );
+                }
+            }
+        }
+        final InterfaceType type =
+            new InterfaceType("$spread" + model.getInterfaceTypes().size());
+        model.setInterface(
+            type,
+            new InterfaceContract(List.of(), fields, methods)
+        );
+        inferredObjects.put(object, type);
+        return type;
+    }
+
+    private Map<String, Symbol> spreadSymbols(
+        final Type source,
+        final Range range
+    ) {
+        final Map<String, Symbol> result = new LinkedHashMap<>();
+        if (
+            source instanceof InterfaceType contract
+                && contract.javaClass() == null
+        ) {
+            result.putAll(model.getInterface(contract).fields());
+            result.putAll(model.getInterface(contract).methods());
+        }
+        else if (source instanceof ClassType cls) {
+            for (ClassType current = cls; current != null; current =
+                model.getSuperclass(current)) {
+                for (final FunctionSymbol method : classMethods
+                    .getOrDefault(current, Map.of())
+                    .values()) {
+                    if (
+                        model.getMemberVisibility(method) == Visibility.PUBLIC
+                    ) {
+                        result.putIfAbsent(method.name(), method);
+                    }
+                }
+                final Scope scope = classScopes.get(current);
+                if (scope != null) {
+                    for (final Symbol symbol : scope.symbols()) {
+                        if (
+                            symbol instanceof VariableSymbol
+                                && model.getMemberVisibility(
+                                    symbol
+                                ) == Visibility.PUBLIC
+                        ) {
+                            result.putIfAbsent(symbol.name(), symbol);
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            throw new SemanticException(
+                range,
+                "Object spread requires a statically known Eld object type, found %s",
+                source
+            );
+        }
+        return result;
     }
 
     private @Nullable ClassType classFieldOwner(
@@ -2057,6 +2238,16 @@ public final class SemanticAnalyzer {
                 && list.javaClass().isAssignableFrom(java.util.ArrayList.class)
                 && list.typeArguments().size() == 1
         ) {
+            if (
+                array.elements()
+                    .stream()
+                    .anyMatch(ArraySpread.class::isInstance)
+            ) {
+                throw new SemanticException(
+                    array.range(),
+                    "Array spread requires an Eld array target"
+                );
+            }
             final Type elementType = list.typeArguments().getFirst();
             for (final Expression element : array.elements()) {
                 final Type actual =
@@ -2095,6 +2286,13 @@ public final class SemanticAnalyzer {
                         .filter(InterfaceType.class::isInstance)
                         .toList();
                 target = contracts.size() == 1 ? contracts.getFirst() : null;
+            }
+            if (
+                target == null && object.members()
+                    .stream()
+                    .anyMatch(ObjectSpread.class::isInstance)
+            ) {
+                target = inferSpreadObject(object, context);
             }
             if (!(target instanceof InterfaceType contract)) {
                 throw new SemanticException(
@@ -2183,7 +2381,10 @@ public final class SemanticAnalyzer {
         if (
             expected instanceof ArrayType target
                 && expression instanceof ArrayExpression array
-                && requiresContextualElements(target.elementType())
+                && (requiresContextualElements(target.elementType())
+                    || array.elements()
+                        .stream()
+                        .anyMatch(ArraySpread.class::isInstance))
         ) {
             for (final Expression element : array.elements()) {
                 final Type actual =
@@ -2641,6 +2842,18 @@ public final class SemanticAnalyzer {
                     .map(element -> analyzeExpression(element, context))
                     .toList()
             );
+            case ArraySpread spread -> {
+                final Type source =
+                    analyzeExpression(spread.expression(), context);
+                if (!(source instanceof ArrayType sourceArray)) {
+                    throw new SemanticException(
+                        spread.range(),
+                        "Array spread requires an Eld array, found %s",
+                        source
+                    );
+                }
+                yield sourceArray.elementType();
+            }
             case ArrayExpression array ->
                 analyzeArrayExpression(array, context);
             case BinaryExpression binary ->
@@ -2668,10 +2881,8 @@ public final class SemanticAnalyzer {
                 analyzeIfExpression(conditional, context);
             case SwitchExpression selection ->
                 analyzeSwitchExpression(selection, context, true);
-            case ObjectExpression object -> throw new SemanticException(
-                object.range(),
-                "Object literal requires an expected interface type"
-            );
+            case ObjectExpression object ->
+                analyzeExpression(object, context, null);
             case LambdaExpression lambda ->
                 analyzeLambdaExpression(lambda, context, null);
         };

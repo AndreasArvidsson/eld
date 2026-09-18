@@ -5,7 +5,7 @@ import com.github.andreasarvidsson.eld.Range;
 public sealed interface AstNode
     permits BlockItem, Expression, TypeNode, FunctionParameter, LambdaParameter,
     Program, ElseIfBranch, SwitchBranch, SwitchElseBranch, SwitchBranchBody,
-    MemberDeclaration, InterfaceMemberDeclaration, ObjectMember {
+    MemberDeclaration, InterfaceMemberDeclaration, ObjectEntry {
 
     Range range();
 

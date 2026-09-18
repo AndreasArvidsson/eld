@@ -1,0 +1,772 @@
+interface Options { const value: i32; }
+var calls = 0;
+var old: Options = { value: 10 };
+func spread(n: i32) Options { calls = calls * 10 + n; return old; }
+func value(n: i32) i32 { calls = calls * 10 + n; return n; }
+const result: Options = { value: value(1), ...spread(2), value: value(3), ...spread(4), value: value(5) };
+print(calls);
+print(result.value);
+print(old.value);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Options" (1:11-1:18)
+LEFT_BRACE (1:19-1:20)
+CONST (1:21-1:26)
+IDENTIFIER "value" (1:27-1:32)
+COLON (1:32-1:33)
+IDENTIFIER "i32" (1:34-1:37)
+SEMICOLON (1:37-1:38)
+RIGHT_BRACE (1:39-1:40)
+VAR (2:1-2:4)
+IDENTIFIER "calls" (2:5-2:10)
+EQUAL (2:11-2:12)
+INTEGER_LITERAL "0" (2:13-2:14)
+SEMICOLON (2:14-2:15)
+VAR (3:1-3:4)
+IDENTIFIER "old" (3:5-3:8)
+COLON (3:8-3:9)
+IDENTIFIER "Options" (3:10-3:17)
+EQUAL (3:18-3:19)
+LEFT_BRACE (3:20-3:21)
+IDENTIFIER "value" (3:22-3:27)
+COLON (3:27-3:28)
+INTEGER_LITERAL "10" (3:29-3:31)
+RIGHT_BRACE (3:32-3:33)
+SEMICOLON (3:33-3:34)
+FUNC (4:1-4:5)
+IDENTIFIER "spread" (4:6-4:12)
+LEFT_PAREN (4:12-4:13)
+IDENTIFIER "n" (4:13-4:14)
+COLON (4:14-4:15)
+IDENTIFIER "i32" (4:16-4:19)
+RIGHT_PAREN (4:19-4:20)
+IDENTIFIER "Options" (4:21-4:28)
+LEFT_BRACE (4:29-4:30)
+IDENTIFIER "calls" (4:31-4:36)
+EQUAL (4:37-4:38)
+IDENTIFIER "calls" (4:39-4:44)
+STAR (4:45-4:46)
+INTEGER_LITERAL "10" (4:47-4:49)
+PLUS (4:50-4:51)
+IDENTIFIER "n" (4:52-4:53)
+SEMICOLON (4:53-4:54)
+RETURN (4:55-4:61)
+IDENTIFIER "old" (4:62-4:65)
+SEMICOLON (4:65-4:66)
+RIGHT_BRACE (4:67-4:68)
+FUNC (5:1-5:5)
+IDENTIFIER "value" (5:6-5:11)
+LEFT_PAREN (5:11-5:12)
+IDENTIFIER "n" (5:12-5:13)
+COLON (5:13-5:14)
+IDENTIFIER "i32" (5:15-5:18)
+RIGHT_PAREN (5:18-5:19)
+IDENTIFIER "i32" (5:20-5:23)
+LEFT_BRACE (5:24-5:25)
+IDENTIFIER "calls" (5:26-5:31)
+EQUAL (5:32-5:33)
+IDENTIFIER "calls" (5:34-5:39)
+STAR (5:40-5:41)
+INTEGER_LITERAL "10" (5:42-5:44)
+PLUS (5:45-5:46)
+IDENTIFIER "n" (5:47-5:48)
+SEMICOLON (5:48-5:49)
+RETURN (5:50-5:56)
+IDENTIFIER "n" (5:57-5:58)
+SEMICOLON (5:58-5:59)
+RIGHT_BRACE (5:60-5:61)
+CONST (6:1-6:6)
+IDENTIFIER "result" (6:7-6:13)
+COLON (6:13-6:14)
+IDENTIFIER "Options" (6:15-6:22)
+EQUAL (6:23-6:24)
+LEFT_BRACE (6:25-6:26)
+IDENTIFIER "value" (6:27-6:32)
+COLON (6:32-6:33)
+IDENTIFIER "value" (6:34-6:39)
+LEFT_PAREN (6:39-6:40)
+INTEGER_LITERAL "1" (6:40-6:41)
+RIGHT_PAREN (6:41-6:42)
+COMMA (6:42-6:43)
+ELLIPSIS (6:44-6:47)
+IDENTIFIER "spread" (6:47-6:53)
+LEFT_PAREN (6:53-6:54)
+INTEGER_LITERAL "2" (6:54-6:55)
+RIGHT_PAREN (6:55-6:56)
+COMMA (6:56-6:57)
+IDENTIFIER "value" (6:58-6:63)
+COLON (6:63-6:64)
+IDENTIFIER "value" (6:65-6:70)
+LEFT_PAREN (6:70-6:71)
+INTEGER_LITERAL "3" (6:71-6:72)
+RIGHT_PAREN (6:72-6:73)
+COMMA (6:73-6:74)
+ELLIPSIS (6:75-6:78)
+IDENTIFIER "spread" (6:78-6:84)
+LEFT_PAREN (6:84-6:85)
+INTEGER_LITERAL "4" (6:85-6:86)
+RIGHT_PAREN (6:86-6:87)
+COMMA (6:87-6:88)
+IDENTIFIER "value" (6:89-6:94)
+COLON (6:94-6:95)
+IDENTIFIER "value" (6:96-6:101)
+LEFT_PAREN (6:101-6:102)
+INTEGER_LITERAL "5" (6:102-6:103)
+RIGHT_PAREN (6:103-6:104)
+RIGHT_BRACE (6:105-6:106)
+SEMICOLON (6:106-6:107)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "calls" (7:7-7:12)
+RIGHT_PAREN (7:12-7:13)
+SEMICOLON (7:13-7:14)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "result" (8:7-8:13)
+DOT (8:13-8:14)
+IDENTIFIER "value" (8:14-8:19)
+RIGHT_PAREN (8:19-8:20)
+SEMICOLON (8:20-8:21)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "old" (9:7-9:10)
+DOT (9:10-9:11)
+IDENTIFIER "value" (9:11-9:16)
+RIGHT_PAREN (9:16-9:17)
+SEMICOLON (9:17-9:18)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:18
+  (InterfaceDeclaration
+    range: 1:1-1:40
+    (IdentifierDeclaration
+      range: 1:11-1:18
+      name: "Options"
+    )
+    (UninitializedVariableDeclaration
+      range: 1:21-1:38
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 1:27-1:32
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:34-1:37
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:10
+      name: "calls"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:13-2:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:34
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 3:5-3:8
+      name: "old"
+    )
+    (NamedTypeNode
+      range: 3:10-3:17
+      name: "Options"
+    )
+    (ObjectExpression
+      range: 3:20-3:33
+      (ObjectMember
+        range: 3:22-3:31
+        (IdentifierDeclaration
+          range: 3:22-3:27
+          name: "value"
+        )
+        (LiteralExpression
+          range: 3:29-3:31
+          kind: INT
+          text: "10"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 4:1-4:68
+    (IdentifierDeclaration
+      range: 4:6-4:12
+      name: "spread"
+    )
+    (FunctionParameter
+      range: 4:13-4:19
+      (IdentifierDeclaration
+        range: 4:13-4:14
+        name: "n"
+      )
+      (NamedTypeNode
+        range: 4:16-4:19
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 4:21-4:28
+      name: "Options"
+    )
+    (BlockStatement
+      range: 4:29-4:68
+      (ExpressionStatement
+        range: 4:31-4:54
+        (AssignmentExpression
+          range: 4:31-4:53
+          (IdentifierExpression
+            range: 4:31-4:36
+            name: "calls"
+          )
+          (BinaryExpression
+            range: 4:39-4:53
+            (BinaryExpression
+              range: 4:39-4:49
+              (IdentifierExpression
+                range: 4:39-4:44
+                name: "calls"
+              )
+              operator: MULTIPLY
+              (LiteralExpression
+                range: 4:47-4:49
+                kind: INT
+                text: "10"
+              )
+            )
+            operator: ADD
+            (IdentifierExpression
+              range: 4:52-4:53
+              name: "n"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 4:55-4:66
+        (IdentifierExpression
+          range: 4:62-4:65
+          name: "old"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 5:1-5:61
+    (IdentifierDeclaration
+      range: 5:6-5:11
+      name: "value"
+    )
+    (FunctionParameter
+      range: 5:12-5:18
+      (IdentifierDeclaration
+        range: 5:12-5:13
+        name: "n"
+      )
+      (NamedTypeNode
+        range: 5:15-5:18
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 5:20-5:23
+      name: "i32"
+    )
+    (BlockStatement
+      range: 5:24-5:61
+      (ExpressionStatement
+        range: 5:26-5:49
+        (AssignmentExpression
+          range: 5:26-5:48
+          (IdentifierExpression
+            range: 5:26-5:31
+            name: "calls"
+          )
+          (BinaryExpression
+            range: 5:34-5:48
+            (BinaryExpression
+              range: 5:34-5:44
+              (IdentifierExpression
+                range: 5:34-5:39
+                name: "calls"
+              )
+              operator: MULTIPLY
+              (LiteralExpression
+                range: 5:42-5:44
+                kind: INT
+                text: "10"
+              )
+            )
+            operator: ADD
+            (IdentifierExpression
+              range: 5:47-5:48
+              name: "n"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 5:50-5:59
+        (IdentifierExpression
+          range: 5:57-5:58
+          name: "n"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:107
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "result"
+    )
+    (NamedTypeNode
+      range: 6:15-6:22
+      name: "Options"
+    )
+    (ObjectExpression
+      range: 6:25-6:106
+      (ObjectMember
+        range: 6:27-6:42
+        (IdentifierDeclaration
+          range: 6:27-6:32
+          name: "value"
+        )
+        (CallExpression
+          range: 6:34-6:42
+          (IdentifierExpression
+            range: 6:34-6:39
+            name: "value"
+          )
+          (LiteralExpression
+            range: 6:40-6:41
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+      (ObjectSpread
+        range: 6:44-6:56
+        (CallExpression
+          range: 6:47-6:56
+          (IdentifierExpression
+            range: 6:47-6:53
+            name: "spread"
+          )
+          (LiteralExpression
+            range: 6:54-6:55
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+      (ObjectMember
+        range: 6:58-6:73
+        (IdentifierDeclaration
+          range: 6:58-6:63
+          name: "value"
+        )
+        (CallExpression
+          range: 6:65-6:73
+          (IdentifierExpression
+            range: 6:65-6:70
+            name: "value"
+          )
+          (LiteralExpression
+            range: 6:71-6:72
+            kind: INT
+            text: "3"
+          )
+        )
+      )
+      (ObjectSpread
+        range: 6:75-6:87
+        (CallExpression
+          range: 6:78-6:87
+          (IdentifierExpression
+            range: 6:78-6:84
+            name: "spread"
+          )
+          (LiteralExpression
+            range: 6:85-6:86
+            kind: INT
+            text: "4"
+          )
+        )
+      )
+      (ObjectMember
+        range: 6:89-6:104
+        (IdentifierDeclaration
+          range: 6:89-6:94
+          name: "value"
+        )
+        (CallExpression
+          range: 6:96-6:104
+          (IdentifierExpression
+            range: 6:96-6:101
+            name: "value"
+          )
+          (LiteralExpression
+            range: 6:102-6:103
+            kind: INT
+            text: "5"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:14
+    (CallExpression
+      range: 7:1-7:13
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:12
+        name: "calls"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:21
+    (CallExpression
+      range: 8:1-8:20
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:19
+        (IdentifierExpression
+          range: 8:7-8:13
+          name: "result"
+        )
+        (IdentifierExpression
+          range: 8:14-8:19
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:18
+    (CallExpression
+      range: 9:1-9:17
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 9:7-9:16
+        (IdentifierExpression
+          range: 9:7-9:10
+          name: "old"
+        )
+        (IdentifierExpression
+          range: 9:11-9:16
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:13-2:14 -> i32
+  3:20-3:33 -> Options
+  3:29-3:31 -> i32
+  4:31-4:36 -> i32
+  4:31-4:53 -> i32
+  4:39-4:44 -> i32
+  4:39-4:49 -> i32
+  4:39-4:53 -> i32
+  4:47-4:49 -> i32
+  4:52-4:53 -> i32
+  4:62-4:65 -> Options
+  5:26-5:31 -> i32
+  5:26-5:48 -> i32
+  5:34-5:39 -> i32
+  5:34-5:44 -> i32
+  5:34-5:48 -> i32
+  5:42-5:44 -> i32
+  5:47-5:48 -> i32
+  5:57-5:58 -> i32
+  6:25-6:106 -> Options
+  6:34-6:39 -> (i32) => i32
+  6:34-6:42 -> i32
+  6:40-6:41 -> i32
+  6:44-6:56 -> i32
+  6:44-6:56 -> i32
+  6:47-6:53 -> (i32) => Options
+  6:47-6:56 -> Options
+  6:54-6:55 -> i32
+  6:65-6:70 -> (i32) => i32
+  6:65-6:73 -> i32
+  6:71-6:72 -> i32
+  6:75-6:87 -> i32
+  6:75-6:87 -> i32
+  6:78-6:84 -> (i32) => Options
+  6:78-6:87 -> Options
+  6:85-6:86 -> i32
+  6:96-6:101 -> (i32) => i32
+  6:96-6:104 -> i32
+  6:102-6:103 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:13 -> void
+  7:7-7:12 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:20 -> void
+  8:7-8:13 -> Options
+  8:7-8:19 -> i32
+  8:14-8:19 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:17 -> void
+  9:7-9:10 -> Options
+  9:7-9:16 -> i32
+  9:11-9:16 -> i32
+
+Resolved types:
+  1:34-1:37 -> i32
+  3:10-3:17 -> Options
+  4:16-4:19 -> i32
+  4:21-4:28 -> Options
+  5:15-5:18 -> i32
+  5:20-5:23 -> i32
+  6:15-6:22 -> Options
+
+Declarations:
+  1:11-1:18 -> interface Options
+  1:27-1:32 -> const value: i32
+  2:5-2:10 -> var calls: i32
+  3:5-3:8 -> var old: Options
+  4:6-4:12 -> spread(i32) => Options
+  4:13-4:14 -> const n: i32
+  5:6-5:11 -> value(i32) => i32
+  5:12-5:13 -> const n: i32
+  6:7-6:13 -> const result: Options
+
+References:
+  4:31-4:36 -> 2:5-2:10
+  4:39-4:44 -> 2:5-2:10
+  4:52-4:53 -> 4:13-4:14
+  4:62-4:65 -> 3:5-3:8
+  5:26-5:31 -> 2:5-2:10
+  5:34-5:39 -> 2:5-2:10
+  5:47-5:48 -> 5:12-5:13
+  5:57-5:58 -> 5:12-5:13
+  6:34-6:39 -> 5:6-5:11
+  6:44-6:56 -> 1:27-1:32
+  6:47-6:53 -> 4:6-4:12
+  6:65-6:70 -> 5:6-5:11
+  6:75-6:87 -> 1:27-1:32
+  6:78-6:84 -> 4:6-4:12
+  6:96-6:101 -> 5:6-5:11
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 2:5-2:10
+  8:1-8:6 -> builtin print
+  8:7-8:13 -> 6:7-6:13
+  8:14-8:19 -> 1:27-1:32
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 3:5-3:8
+  9:11-9:16 -> 1:27-1:32
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$$object1
+  NESTMEMBER Test$Options
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Options Test Options
+
+  // access flags 0x9
+  public static I calls
+
+  // access flags 0x9
+  public static LTest$Options; old
+
+  // access flags 0x19
+  public final static LTest$Options; result
+
+  // access flags 0x9
+  public static spread(I)LTest$Options;
+    GETSTATIC Test.calls : I
+    LDC 10
+    IMUL
+    ILOAD 0
+    IADD
+    DUP
+    PUTSTATIC Test.calls : I
+    POP
+    GETSTATIC Test.old : LTest$Options;
+    ARETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x9
+  public static value(I)I
+    GETSTATIC Test.calls : I
+    LDC 10
+    IMUL
+    ILOAD 0
+    IADD
+    DUP
+    PUTSTATIC Test.calls : I
+    POP
+    ILOAD 0
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 0
+    PUTSTATIC Test.calls : I
+    NEW Test$$object0
+    DUP
+    LDC 10
+    INVOKESPECIAL Test$$object0.<init> (I)V
+    PUTSTATIC Test.old : LTest$Options;
+    LDC 1
+    INVOKESTATIC Test.value (I)I
+    ISTORE 0
+    LDC 2
+    INVOKESTATIC Test.spread (I)LTest$Options;
+    ASTORE 1
+    ALOAD 1
+    INVOKEINTERFACE Test$Options.$get$value ()I (itf)
+    ISTORE 2
+    LDC 3
+    INVOKESTATIC Test.value (I)I
+    ISTORE 3
+    LDC 4
+    INVOKESTATIC Test.spread (I)LTest$Options;
+    ASTORE 4
+    ALOAD 4
+    INVOKEINTERFACE Test$Options.$get$value ()I (itf)
+    ISTORE 5
+    LDC 5
+    INVOKESTATIC Test.value (I)I
+    ISTORE 6
+    NEW Test$$object1
+    DUP
+    ILOAD 6
+    INVOKESPECIAL Test$$object1.<init> (I)V
+    PUTSTATIC Test.result : LTest$Options;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.calls : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.result : LTest$Options;
+    INVOKEINTERFACE Test$Options.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.old : LTest$Options;
+    INVOKEINTERFACE Test$Options.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 7
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Options {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Options Test Options
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Options {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object0.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object1 implements Test$Options {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object1.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object1.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+12345
+5
+10
+

@@ -1,0 +1,42 @@
+const values = [...10];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+ELLIPSIS (1:17-1:20)
+INTEGER_LITERAL "10" (1:20-1:22)
+RIGHT_BRACKET (1:22-1:23)
+SEMICOLON (1:23-1:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:24
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:23
+      (ArraySpread
+        range: 1:17-1:22
+        (LiteralExpression
+          range: 1:20-1:22
+          kind: INT
+          text: "10"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Array spread requires an Eld array, found i32 at 1:17-1:22

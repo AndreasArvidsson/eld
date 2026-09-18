@@ -1,0 +1,972 @@
+class Base { public const value = 7; }
+class Child extends Base {}
+class Sibling extends Base {}
+const children = [new Child()];
+const siblings = [new Sibling()];
+const common = [...children, ...siblings];
+const widened: [Base] = [...children];
+const nested = [...[[1]], [2]];
+const nullable: [i32 | null] = [...[1, 2], null];
+print(common[0].value);
+print(common[1].value);
+print(widened[0].value);
+print(nested);
+print(nullable);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (1:14-1:20)
+CONST (1:21-1:26)
+IDENTIFIER "value" (1:27-1:32)
+EQUAL (1:33-1:34)
+INTEGER_LITERAL "7" (1:35-1:36)
+SEMICOLON (1:36-1:37)
+RIGHT_BRACE (1:38-1:39)
+CLASS (2:1-2:6)
+IDENTIFIER "Child" (2:7-2:12)
+EXTENDS (2:13-2:20)
+IDENTIFIER "Base" (2:21-2:25)
+LEFT_BRACE (2:26-2:27)
+RIGHT_BRACE (2:27-2:28)
+CLASS (3:1-3:6)
+IDENTIFIER "Sibling" (3:7-3:14)
+EXTENDS (3:15-3:22)
+IDENTIFIER "Base" (3:23-3:27)
+LEFT_BRACE (3:28-3:29)
+RIGHT_BRACE (3:29-3:30)
+CONST (4:1-4:6)
+IDENTIFIER "children" (4:7-4:15)
+EQUAL (4:16-4:17)
+LEFT_BRACKET (4:18-4:19)
+NEW (4:19-4:22)
+IDENTIFIER "Child" (4:23-4:28)
+LEFT_PAREN (4:28-4:29)
+RIGHT_PAREN (4:29-4:30)
+RIGHT_BRACKET (4:30-4:31)
+SEMICOLON (4:31-4:32)
+CONST (5:1-5:6)
+IDENTIFIER "siblings" (5:7-5:15)
+EQUAL (5:16-5:17)
+LEFT_BRACKET (5:18-5:19)
+NEW (5:19-5:22)
+IDENTIFIER "Sibling" (5:23-5:30)
+LEFT_PAREN (5:30-5:31)
+RIGHT_PAREN (5:31-5:32)
+RIGHT_BRACKET (5:32-5:33)
+SEMICOLON (5:33-5:34)
+CONST (6:1-6:6)
+IDENTIFIER "common" (6:7-6:13)
+EQUAL (6:14-6:15)
+LEFT_BRACKET (6:16-6:17)
+ELLIPSIS (6:17-6:20)
+IDENTIFIER "children" (6:20-6:28)
+COMMA (6:28-6:29)
+ELLIPSIS (6:30-6:33)
+IDENTIFIER "siblings" (6:33-6:41)
+RIGHT_BRACKET (6:41-6:42)
+SEMICOLON (6:42-6:43)
+CONST (7:1-7:6)
+IDENTIFIER "widened" (7:7-7:14)
+COLON (7:14-7:15)
+LEFT_BRACKET (7:16-7:17)
+IDENTIFIER "Base" (7:17-7:21)
+RIGHT_BRACKET (7:21-7:22)
+EQUAL (7:23-7:24)
+LEFT_BRACKET (7:25-7:26)
+ELLIPSIS (7:26-7:29)
+IDENTIFIER "children" (7:29-7:37)
+RIGHT_BRACKET (7:37-7:38)
+SEMICOLON (7:38-7:39)
+CONST (8:1-8:6)
+IDENTIFIER "nested" (8:7-8:13)
+EQUAL (8:14-8:15)
+LEFT_BRACKET (8:16-8:17)
+ELLIPSIS (8:17-8:20)
+LEFT_BRACKET (8:20-8:21)
+LEFT_BRACKET (8:21-8:22)
+INTEGER_LITERAL "1" (8:22-8:23)
+RIGHT_BRACKET (8:23-8:24)
+RIGHT_BRACKET (8:24-8:25)
+COMMA (8:25-8:26)
+LEFT_BRACKET (8:27-8:28)
+INTEGER_LITERAL "2" (8:28-8:29)
+RIGHT_BRACKET (8:29-8:30)
+RIGHT_BRACKET (8:30-8:31)
+SEMICOLON (8:31-8:32)
+CONST (9:1-9:6)
+IDENTIFIER "nullable" (9:7-9:15)
+COLON (9:15-9:16)
+LEFT_BRACKET (9:17-9:18)
+IDENTIFIER "i32" (9:18-9:21)
+PIPE (9:22-9:23)
+NULL (9:24-9:28)
+RIGHT_BRACKET (9:28-9:29)
+EQUAL (9:30-9:31)
+LEFT_BRACKET (9:32-9:33)
+ELLIPSIS (9:33-9:36)
+LEFT_BRACKET (9:36-9:37)
+INTEGER_LITERAL "1" (9:37-9:38)
+COMMA (9:38-9:39)
+INTEGER_LITERAL "2" (9:40-9:41)
+RIGHT_BRACKET (9:41-9:42)
+COMMA (9:42-9:43)
+NULL (9:44-9:48)
+RIGHT_BRACKET (9:48-9:49)
+SEMICOLON (9:49-9:50)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "common" (10:7-10:13)
+LEFT_BRACKET (10:13-10:14)
+INTEGER_LITERAL "0" (10:14-10:15)
+RIGHT_BRACKET (10:15-10:16)
+DOT (10:16-10:17)
+IDENTIFIER "value" (10:17-10:22)
+RIGHT_PAREN (10:22-10:23)
+SEMICOLON (10:23-10:24)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "common" (11:7-11:13)
+LEFT_BRACKET (11:13-11:14)
+INTEGER_LITERAL "1" (11:14-11:15)
+RIGHT_BRACKET (11:15-11:16)
+DOT (11:16-11:17)
+IDENTIFIER "value" (11:17-11:22)
+RIGHT_PAREN (11:22-11:23)
+SEMICOLON (11:23-11:24)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "widened" (12:7-12:14)
+LEFT_BRACKET (12:14-12:15)
+INTEGER_LITERAL "0" (12:15-12:16)
+RIGHT_BRACKET (12:16-12:17)
+DOT (12:17-12:18)
+IDENTIFIER "value" (12:18-12:23)
+RIGHT_PAREN (12:23-12:24)
+SEMICOLON (12:24-12:25)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "nested" (13:7-13:13)
+RIGHT_PAREN (13:13-13:14)
+SEMICOLON (13:14-13:15)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "nullable" (14:7-14:15)
+RIGHT_PAREN (14:15-14:16)
+SEMICOLON (14:16-14:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:17
+  (ClassDeclaration
+    range: 1:1-1:39
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 1:14-1:37
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 1:21-1:37
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 1:27-1:32
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 1:35-1:36
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 2:1-2:28
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 2:21-2:25
+      name: "Base"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-3:30
+    (IdentifierDeclaration
+      range: 3:7-3:14
+      name: "Sibling"
+    )
+    (IdentifierExpression
+      range: 3:23-3:27
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:15
+      name: "children"
+    )
+    type: null
+    (ArrayExpression
+      range: 4:18-4:31
+      (NewExpression
+        range: 4:19-4:30
+        (IdentifierExpression
+          range: 4:23-4:28
+          name: "Child"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "siblings"
+    )
+    type: null
+    (ArrayExpression
+      range: 5:18-5:33
+      (NewExpression
+        range: 5:19-5:32
+        (IdentifierExpression
+          range: 5:23-5:30
+          name: "Sibling"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "common"
+    )
+    type: null
+    (ArrayExpression
+      range: 6:16-6:42
+      (ArraySpread
+        range: 6:17-6:28
+        (IdentifierExpression
+          range: 6:20-6:28
+          name: "children"
+        )
+      )
+      (ArraySpread
+        range: 6:30-6:41
+        (IdentifierExpression
+          range: 6:33-6:41
+          name: "siblings"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:14
+      name: "widened"
+    )
+    (ArrayTypeNode
+      range: 7:16-7:22
+      (NamedTypeNode
+        range: 7:17-7:21
+        name: "Base"
+      )
+    )
+    (ArrayExpression
+      range: 7:25-7:38
+      (ArraySpread
+        range: 7:26-7:37
+        (IdentifierExpression
+          range: 7:29-7:37
+          name: "children"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:13
+      name: "nested"
+    )
+    type: null
+    (ArrayExpression
+      range: 8:16-8:31
+      (ArraySpread
+        range: 8:17-8:25
+        (ArrayExpression
+          range: 8:20-8:25
+          (ArrayExpression
+            range: 8:21-8:24
+            (LiteralExpression
+              range: 8:22-8:23
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+      (ArrayExpression
+        range: 8:27-8:30
+        (LiteralExpression
+          range: 8:28-8:29
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:15
+      name: "nullable"
+    )
+    (ArrayTypeNode
+      range: 9:17-9:29
+      (UnionTypeNode
+        range: 9:18-9:28
+        (NamedTypeNode
+          range: 9:18-9:21
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 9:24-9:28
+          name: "null"
+        )
+      )
+    )
+    (ArrayExpression
+      range: 9:32-9:49
+      (ArraySpread
+        range: 9:33-9:42
+        (ArrayExpression
+          range: 9:36-9:42
+          (LiteralExpression
+            range: 9:37-9:38
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 9:40-9:41
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+      (LiteralExpression
+        range: 9:44-9:48
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:24
+    (CallExpression
+      range: 10:1-10:23
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 10:7-10:22
+        (SubscriptExpression
+          range: 10:7-10:16
+          (IdentifierExpression
+            range: 10:7-10:13
+            name: "common"
+          )
+          (LiteralExpression
+            range: 10:14-10:15
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 10:17-10:22
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:24
+    (CallExpression
+      range: 11:1-11:23
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 11:7-11:22
+        (SubscriptExpression
+          range: 11:7-11:16
+          (IdentifierExpression
+            range: 11:7-11:13
+            name: "common"
+          )
+          (LiteralExpression
+            range: 11:14-11:15
+            kind: INT
+            text: "1"
+          )
+        )
+        (IdentifierExpression
+          range: 11:17-11:22
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:25
+    (CallExpression
+      range: 12:1-12:24
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:23
+        (SubscriptExpression
+          range: 12:7-12:17
+          (IdentifierExpression
+            range: 12:7-12:14
+            name: "widened"
+          )
+          (LiteralExpression
+            range: 12:15-12:16
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 12:18-12:23
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:15
+    (CallExpression
+      range: 13:1-13:14
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:7-13:13
+        name: "nested"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:17
+    (CallExpression
+      range: 14:1-14:16
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 14:7-14:15
+        name: "nullable"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:35-1:36 -> i32
+  2:21-2:25 -> Base
+  3:23-3:27 -> Base
+  4:18-4:31 -> [Child]
+  4:19-4:30 -> Child
+  4:23-4:28 -> Child
+  5:18-5:33 -> [Sibling]
+  5:19-5:32 -> Sibling
+  5:23-5:30 -> Sibling
+  6:16-6:42 -> [Base]
+  6:17-6:28 -> Child
+  6:20-6:28 -> [Child]
+  6:30-6:41 -> Sibling
+  6:33-6:41 -> [Sibling]
+  7:25-7:38 -> [Base]
+  7:26-7:37 -> Child
+  7:29-7:37 -> [Child]
+  8:16-8:31 -> [[i32]]
+  8:17-8:25 -> [i32]
+  8:20-8:25 -> [[i32]]
+  8:21-8:24 -> [i32]
+  8:22-8:23 -> i32
+  8:27-8:30 -> [i32]
+  8:28-8:29 -> i32
+  9:32-9:49 -> [i32 | null]
+  9:33-9:42 -> i32
+  9:36-9:42 -> [i32]
+  9:37-9:38 -> i32
+  9:40-9:41 -> i32
+  9:44-9:48 -> null
+  10:1-10:6 -> (any) => void
+  10:1-10:23 -> void
+  10:7-10:13 -> [Base]
+  10:7-10:16 -> Base
+  10:7-10:22 -> i32
+  10:14-10:15 -> i32
+  10:17-10:22 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:23 -> void
+  11:7-11:13 -> [Base]
+  11:7-11:16 -> Base
+  11:7-11:22 -> i32
+  11:14-11:15 -> i32
+  11:17-11:22 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:24 -> void
+  12:7-12:14 -> [Base]
+  12:7-12:17 -> Base
+  12:7-12:23 -> i32
+  12:15-12:16 -> i32
+  12:18-12:23 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:14 -> void
+  13:7-13:13 -> [[i32]]
+  14:1-14:6 -> (any) => void
+  14:1-14:16 -> void
+  14:7-14:15 -> [i32 | null]
+
+Resolved types:
+  7:16-7:22 -> [Base]
+  7:17-7:21 -> Base
+  9:17-9:29 -> [i32 | null]
+  9:18-9:21 -> i32
+  9:18-9:28 -> i32 | null
+  9:24-9:28 -> null
+
+Conversions:
+  9:33-9:42 -> i32 -> i32 | null
+  9:44-9:48 -> null -> i32 | null
+
+Declarations:
+  1:7-1:11 -> class Base
+  1:27-1:32 -> const value: i32
+  2:7-2:12 -> class Child
+  3:7-3:14 -> class Sibling
+  4:7-4:15 -> const children: [Child]
+  5:7-5:15 -> const siblings: [Sibling]
+  6:7-6:13 -> const common: [Base]
+  7:7-7:14 -> const widened: [Base]
+  8:7-8:13 -> const nested: [[i32]]
+  9:7-9:15 -> const nullable: [i32 | null]
+
+References:
+  2:21-2:25 -> 1:7-1:11
+  3:23-3:27 -> 1:7-1:11
+  4:23-4:28 -> 2:7-2:12
+  5:23-5:30 -> 3:7-3:14
+  6:20-6:28 -> 4:7-4:15
+  6:33-6:41 -> 5:7-5:15
+  7:29-7:37 -> 4:7-4:15
+  10:1-10:6 -> builtin print
+  10:7-10:13 -> 6:7-6:13
+  10:17-10:22 -> 1:27-1:32
+  11:1-11:6 -> builtin print
+  11:7-11:13 -> 6:7-6:13
+  11:17-11:22 -> 1:27-1:32
+  12:1-12:6 -> builtin print
+  12:7-12:14 -> 7:7-7:14
+  12:18-12:23 -> 1:27-1:32
+  13:1-13:6 -> builtin print
+  13:7-13:13 -> 8:7-8:13
+  14:1-14:6 -> builtin print
+  14:7-14:15 -> 9:7-9:15
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  NESTMEMBER Test$Sibling
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+  // access flags 0x9
+  public static INNERCLASS Test$Sibling Test Sibling
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; children
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; siblings
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; common
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; widened
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; nested
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; nullable
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init> ()V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.children : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Sibling
+    DUP
+    INVOKESPECIAL Test$Sibling.<init> ()V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.siblings : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ICONST_0
+    ISTORE 0
+    GETSTATIC Test.children : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ASTORE 1
+    ALOAD 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size ()I
+    ISTORE 2
+    ILOAD 0
+    ILOAD 2
+    IADD
+    ISTORE 0
+    GETSTATIC Test.siblings : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ASTORE 3
+    ALOAD 3
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size ()I
+    ISTORE 4
+    ILOAD 0
+    ILOAD 4
+    IADD
+    ISTORE 0
+    ILOAD 0
+    ANEWARRAY java/lang/Object
+    ASTORE 5
+    ICONST_0
+    ISTORE 6
+    ALOAD 1
+    ALOAD 5
+    ILOAD 6
+    ILOAD 2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.copyTo ([Ljava/lang/Object;II)V
+    ILOAD 6
+    ILOAD 2
+    IADD
+    ISTORE 6
+    ALOAD 3
+    ALOAD 5
+    ILOAD 6
+    ILOAD 4
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.copyTo ([Ljava/lang/Object;II)V
+    ILOAD 6
+    ILOAD 4
+    IADD
+    ISTORE 6
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    ALOAD 5
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.common : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ICONST_0
+    ISTORE 7
+    GETSTATIC Test.children : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ASTORE 8
+    ALOAD 8
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size ()I
+    ISTORE 9
+    ILOAD 7
+    ILOAD 9
+    IADD
+    ISTORE 7
+    ILOAD 7
+    ANEWARRAY java/lang/Object
+    ASTORE 10
+    ICONST_0
+    ISTORE 11
+    ALOAD 8
+    ALOAD 10
+    ILOAD 11
+    ILOAD 9
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.copyTo ([Ljava/lang/Object;II)V
+    ILOAD 11
+    ILOAD 9
+    IADD
+    ISTORE 11
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    ALOAD 10
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.widened : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ICONST_0
+    ISTORE 12
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    ASTORE 13
+    ALOAD 13
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size ()I
+    ISTORE 14
+    ILOAD 12
+    ILOAD 14
+    IADD
+    ISTORE 12
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 2
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    ASTORE 15
+    ILOAD 12
+    ICONST_1
+    IADD
+    ISTORE 12
+    ILOAD 12
+    ANEWARRAY java/lang/Object
+    ASTORE 16
+    ICONST_0
+    ISTORE 17
+    ALOAD 13
+    ALOAD 16
+    ILOAD 17
+    ILOAD 14
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.copyTo ([Ljava/lang/Object;II)V
+    ILOAD 17
+    ILOAD 14
+    IADD
+    ISTORE 17
+    ALOAD 16
+    ILOAD 17
+    ALOAD 15
+    AASTORE
+    IINC 17 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    ALOAD 16
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.nested : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ICONST_0
+    ISTORE 18
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 2
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    ASTORE 19
+    ALOAD 19
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size ()I
+    ISTORE 20
+    ILOAD 18
+    ILOAD 20
+    IADD
+    ISTORE 18
+    ACONST_NULL
+    ASTORE 21
+    ILOAD 18
+    ICONST_1
+    IADD
+    ISTORE 18
+    ILOAD 18
+    ANEWARRAY java/lang/Object
+    ASTORE 22
+    ICONST_0
+    ISTORE 23
+    ICONST_0
+    ISTORE 24
+   L0
+   FRAME FULL [I com/github/andreasarvidsson/eld/runtime/EldObjectArray I com/github/andreasarvidsson/eld/runtime/EldObjectArray I [Ljava/lang/Object; I I com/github/andreasarvidsson/eld/runtime/EldObjectArray I [Ljava/lang/Object; I I com/github/andreasarvidsson/eld/runtime/EldObjectArray I com/github/andreasarvidsson/eld/runtime/EldIntArray [Ljava/lang/Object; I I com/github/andreasarvidsson/eld/runtime/EldIntArray I N [Ljava/lang/Object; I I] []
+    ILOAD 24
+    ILOAD 20
+    IF_ICMPGE L1
+    ALOAD 22
+    ILOAD 23
+    ILOAD 24
+    IADD
+    ALOAD 19
+    ILOAD 24
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get (I)I
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    AASTORE
+    IINC 24 1
+    GOTO L0
+   L1
+   FRAME SAME
+    ILOAD 23
+    ILOAD 20
+    IADD
+    ISTORE 23
+    ALOAD 22
+    ILOAD 23
+    ALOAD 21
+    AASTORE
+    IINC 23 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    ALOAD 22
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.nullable : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.common : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get (I)Ljava/lang/Object;
+    CHECKCAST Test$Base
+    GETFIELD Test$Base.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.common : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get (I)Ljava/lang/Object;
+    CHECKCAST Test$Base
+    GETFIELD Test$Base.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.widened : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get (I)Ljava/lang/Object;
+    CHECKCAST Test$Base
+    GETFIELD Test$Base.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.nested : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.nullable : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 11
+    MAXLOCALS = 25
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x11
+  public final I value
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 7
+    PUTFIELD Test$Base.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Child extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Sibling extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Sibling Test Sibling
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+7
+7
+7
+[[1], [2]]
+[1, 2, null]
+

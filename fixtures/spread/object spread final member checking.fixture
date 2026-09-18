@@ -1,0 +1,502 @@
+interface Number { const value: i32; }
+interface Text { const value: string; }
+const text: Text = {value: "text"};
+const number: Number = {...text, value: 5};
+const previous: Number = {value: "overridden", ...number};
+print(number.value);
+print(previous.value);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Number" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+CONST (1:20-1:25)
+IDENTIFIER "value" (1:26-1:31)
+COLON (1:31-1:32)
+IDENTIFIER "i32" (1:33-1:36)
+SEMICOLON (1:36-1:37)
+RIGHT_BRACE (1:38-1:39)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Text" (2:11-2:15)
+LEFT_BRACE (2:16-2:17)
+CONST (2:18-2:23)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "string" (2:31-2:37)
+SEMICOLON (2:37-2:38)
+RIGHT_BRACE (2:39-2:40)
+CONST (3:1-3:6)
+IDENTIFIER "text" (3:7-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "Text" (3:13-3:17)
+EQUAL (3:18-3:19)
+LEFT_BRACE (3:20-3:21)
+IDENTIFIER "value" (3:21-3:26)
+COLON (3:26-3:27)
+STRING_LITERAL "\"text\"" (3:28-3:34)
+RIGHT_BRACE (3:34-3:35)
+SEMICOLON (3:35-3:36)
+CONST (4:1-4:6)
+IDENTIFIER "number" (4:7-4:13)
+COLON (4:13-4:14)
+IDENTIFIER "Number" (4:15-4:21)
+EQUAL (4:22-4:23)
+LEFT_BRACE (4:24-4:25)
+ELLIPSIS (4:25-4:28)
+IDENTIFIER "text" (4:28-4:32)
+COMMA (4:32-4:33)
+IDENTIFIER "value" (4:34-4:39)
+COLON (4:39-4:40)
+INTEGER_LITERAL "5" (4:41-4:42)
+RIGHT_BRACE (4:42-4:43)
+SEMICOLON (4:43-4:44)
+CONST (5:1-5:6)
+IDENTIFIER "previous" (5:7-5:15)
+COLON (5:15-5:16)
+IDENTIFIER "Number" (5:17-5:23)
+EQUAL (5:24-5:25)
+LEFT_BRACE (5:26-5:27)
+IDENTIFIER "value" (5:27-5:32)
+COLON (5:32-5:33)
+STRING_LITERAL "\"overridden\"" (5:34-5:46)
+COMMA (5:46-5:47)
+ELLIPSIS (5:48-5:51)
+IDENTIFIER "number" (5:51-5:57)
+RIGHT_BRACE (5:57-5:58)
+SEMICOLON (5:58-5:59)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "number" (6:7-6:13)
+DOT (6:13-6:14)
+IDENTIFIER "value" (6:14-6:19)
+RIGHT_PAREN (6:19-6:20)
+SEMICOLON (6:20-6:21)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "previous" (7:7-7:15)
+DOT (7:15-7:16)
+IDENTIFIER "value" (7:16-7:21)
+RIGHT_PAREN (7:21-7:22)
+SEMICOLON (7:22-7:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:23
+  (InterfaceDeclaration
+    range: 1:1-1:39
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Number"
+    )
+    (UninitializedVariableDeclaration
+      range: 1:20-1:37
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 1:26-1:31
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:33-1:36
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:40
+    (IdentifierDeclaration
+      range: 2:11-2:15
+      name: "Text"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:18-2:38
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:24-2:29
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:31-2:37
+        name: "string"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:11
+      name: "text"
+    )
+    (NamedTypeNode
+      range: 3:13-3:17
+      name: "Text"
+    )
+    (ObjectExpression
+      range: 3:20-3:35
+      (ObjectMember
+        range: 3:21-3:34
+        (IdentifierDeclaration
+          range: 3:21-3:26
+          name: "value"
+        )
+        (LiteralExpression
+          range: 3:28-3:34
+          kind: STRING
+          text: "\"text\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "number"
+    )
+    (NamedTypeNode
+      range: 4:15-4:21
+      name: "Number"
+    )
+    (ObjectExpression
+      range: 4:24-4:43
+      (ObjectSpread
+        range: 4:25-4:32
+        (IdentifierExpression
+          range: 4:28-4:32
+          name: "text"
+        )
+      )
+      (ObjectMember
+        range: 4:34-4:42
+        (IdentifierDeclaration
+          range: 4:34-4:39
+          name: "value"
+        )
+        (LiteralExpression
+          range: 4:41-4:42
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:59
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "previous"
+    )
+    (NamedTypeNode
+      range: 5:17-5:23
+      name: "Number"
+    )
+    (ObjectExpression
+      range: 5:26-5:58
+      (ObjectMember
+        range: 5:27-5:46
+        (IdentifierDeclaration
+          range: 5:27-5:32
+          name: "value"
+        )
+        (LiteralExpression
+          range: 5:34-5:46
+          kind: STRING
+          text: "\"overridden\""
+        )
+      )
+      (ObjectSpread
+        range: 5:48-5:57
+        (IdentifierExpression
+          range: 5:51-5:57
+          name: "number"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:21
+    (CallExpression
+      range: 6:1-6:20
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 6:7-6:19
+        (IdentifierExpression
+          range: 6:7-6:13
+          name: "number"
+        )
+        (IdentifierExpression
+          range: 6:14-6:19
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:23
+    (CallExpression
+      range: 7:1-7:22
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 7:7-7:21
+        (IdentifierExpression
+          range: 7:7-7:15
+          name: "previous"
+        )
+        (IdentifierExpression
+          range: 7:16-7:21
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:20-3:35 -> Text
+  3:28-3:34 -> string
+  4:24-4:43 -> Number
+  4:25-4:32 -> string
+  4:25-4:32 -> string
+  4:28-4:32 -> Text
+  4:41-4:42 -> i32
+  5:26-5:58 -> Number
+  5:34-5:46 -> string
+  5:48-5:57 -> i32
+  5:48-5:57 -> i32
+  5:51-5:57 -> Number
+  6:1-6:6 -> (any) => void
+  6:1-6:20 -> void
+  6:7-6:13 -> Number
+  6:7-6:19 -> i32
+  6:14-6:19 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:22 -> void
+  7:7-7:15 -> Number
+  7:7-7:21 -> i32
+  7:16-7:21 -> i32
+
+Resolved types:
+  1:33-1:36 -> i32
+  2:31-2:37 -> string
+  3:13-3:17 -> Text
+  4:15-4:21 -> Number
+  5:17-5:23 -> Number
+
+Declarations:
+  1:11-1:17 -> interface Number
+  1:26-1:31 -> const value: i32
+  2:11-2:15 -> interface Text
+  2:24-2:29 -> const value: string
+  3:7-3:11 -> const text: Text
+  4:7-4:13 -> const number: Number
+  5:7-5:15 -> const previous: Number
+
+References:
+  4:25-4:32 -> 2:24-2:29
+  4:28-4:32 -> 3:7-3:11
+  5:48-5:57 -> 1:26-1:31
+  5:51-5:57 -> 4:7-4:13
+  6:1-6:6 -> builtin print
+  6:7-6:13 -> 4:7-4:13
+  6:14-6:19 -> 1:26-1:31
+  7:1-7:6 -> builtin print
+  7:7-7:15 -> 5:7-5:15
+  7:16-7:21 -> 1:26-1:31
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$$object1
+  NESTMEMBER Test$$object2
+  NESTMEMBER Test$Number
+  NESTMEMBER Test$Text
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Number Test Number
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Text Test Text
+
+  // access flags 0x19
+  public final static LTest$Text; text
+
+  // access flags 0x19
+  public final static LTest$Number; number
+
+  // access flags 0x19
+  public final static LTest$Number; previous
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    LDC "text"
+    INVOKESPECIAL Test$$object0.<init> (Ljava/lang/String;)V
+    PUTSTATIC Test.text : LTest$Text;
+    GETSTATIC Test.text : LTest$Text;
+    ASTORE 0
+    ALOAD 0
+    INVOKEINTERFACE Test$Text.$get$value ()Ljava/lang/String; (itf)
+    ASTORE 1
+    LDC 5
+    ISTORE 2
+    NEW Test$$object1
+    DUP
+    ILOAD 2
+    INVOKESPECIAL Test$$object1.<init> (I)V
+    PUTSTATIC Test.number : LTest$Number;
+    LDC "overridden"
+    ASTORE 3
+    GETSTATIC Test.number : LTest$Number;
+    ASTORE 4
+    ALOAD 4
+    INVOKEINTERFACE Test$Number.$get$value ()I (itf)
+    ISTORE 5
+    NEW Test$$object2
+    DUP
+    ILOAD 5
+    INVOKESPECIAL Test$$object2.<init> (I)V
+    PUTSTATIC Test.previous : LTest$Number;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.number : LTest$Number;
+    INVOKEINTERFACE Test$Number.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.previous : LTest$Number;
+    INVOKEINTERFACE Test$Number.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 6
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Number {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Number Test Number
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Text {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Text Test Text
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()Ljava/lang/String;
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Text {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final Ljava/lang/String; value
+
+  // access flags 0x1001
+  public synthetic $get$value()Ljava/lang/String;
+    ALOAD 0
+    GETFIELD Test$$object0.value : Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(Ljava/lang/String;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD Test$$object0.value : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object1 implements Test$Number {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object1.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object1.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object2 implements Test$Number {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object2.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object2.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+5
+5
+

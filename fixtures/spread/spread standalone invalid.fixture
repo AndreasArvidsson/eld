@@ -1,0 +1,14 @@
+const value = ...old;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+ELLIPSIS (1:15-1:18)
+IDENTIFIER "old" (1:18-1:21)
+SEMICOLON (1:21-1:22)
+
+--- AST ---
+
+ParserException: Expected expression, but found ELLIPSIS at 1:15-1:18

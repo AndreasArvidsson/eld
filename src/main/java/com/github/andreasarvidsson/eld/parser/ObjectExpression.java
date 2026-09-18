@@ -6,6 +6,6 @@ import org.jspecify.annotations.NonNull;
 
 import com.github.andreasarvidsson.eld.Range;
 
-public record ObjectExpression(List<@NonNull ObjectMember> members, Range range)
+public record ObjectExpression(List<@NonNull ObjectEntry> members, Range range)
     implements Expression {
 }

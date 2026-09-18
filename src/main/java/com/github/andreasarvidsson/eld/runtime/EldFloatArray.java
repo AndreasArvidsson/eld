@@ -31,6 +31,14 @@ public final class EldFloatArray extends EldArray<EldFloatArray> {
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final float[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldFloatArray copy() {
         return super.copy();

@@ -223,7 +223,7 @@ final class FieldInitializationAnalyzer {
                 return paths;
             case ObjectExpression object:
                 return sequence(
-                    object.members().stream().map(ObjectMember::value).toList(),
+                    object.members().stream().map(ObjectEntry::value).toList(),
                     paths
                 );
             case MemberExpression member: {
@@ -363,6 +363,8 @@ final class FieldInitializationAnalyzer {
                 return sequence(creation.arguments(), paths);
             case NamedArgumentExpression argument:
                 return walk(argument.value(), paths);
+            case ArraySpread spread:
+                return walk(spread.expression(), paths);
             case ArrayExpression array:
                 return sequence(array.elements(), paths);
             case TupleExpression tuple:

@@ -7,6 +7,9 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import com.github.andreasarvidsson.eld.parser.ObjectExpression;
+import com.github.andreasarvidsson.eld.parser.ObjectMember;
+import com.github.andreasarvidsson.eld.parser.ObjectEntry;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
@@ -28,11 +31,17 @@ import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
+    private static final String ARROW = " -> ";
     private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
         new IdentityHashMap<>();
     private final Map<ClassType, List<FunctionParameter>> constructorParameters =
         new HashMap<>();
-    private static final String ARROW = " -> ";
+    private final IdentityHashMap<ObjectExpression, List<ObjectMember>> objectMembers =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<ObjectExpression, List<ObjectEntry>> objectEvaluation =
+        new IdentityHashMap<>();
+    private final Set<ObjectMember> spreadMethods =
+        Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<MemberExpression, Type> memberOwners =
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> expressionTypes =
@@ -66,6 +75,33 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<NewExpression, Constructor<?>> javaConstructors =
         new IdentityHashMap<>();
+
+    public void setObjectMembers(
+        final ObjectExpression object,
+        final List<ObjectMember> members,
+        final List<ObjectEntry> evaluation
+    ) {
+        objectMembers.put(object, List.copyOf(members));
+        objectEvaluation.put(object, List.copyOf(evaluation));
+    }
+
+    public List<ObjectMember> getObjectMembers(final ObjectExpression object) {
+        return Objects.requireNonNull(objectMembers.get(object));
+    }
+
+    public List<ObjectEntry> getObjectEvaluation(
+        final ObjectExpression object
+    ) {
+        return Objects.requireNonNull(objectEvaluation.get(object));
+    }
+
+    public void setSpreadMethod(final ObjectMember member) {
+        spreadMethods.add(member);
+    }
+
+    public boolean isSpreadMethod(final ObjectMember member) {
+        return spreadMethods.contains(member);
+    }
 
     public void setInterfaceFields(
         final ClassType type,
@@ -519,9 +555,16 @@ public final class SemanticModel {
         entries.entrySet()
             .stream()
             .sorted(
-                Comparator.comparing(
-                    entry -> Objects.requireNonNull(entry.getKey()).range()
-                )
+                Comparator
+                    .comparing(
+                        (
+                            Map.Entry<K, V> entry
+                        ) -> Objects.requireNonNull(entry.getKey()).range()
+                    )
+                    .thenComparing(
+                        entry -> formatValue
+                            .apply(entry.getKey(), entry.getValue())
+                    )
             )
             .forEach(
                 entry -> lines

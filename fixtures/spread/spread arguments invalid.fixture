@@ -1,0 +1,14 @@
+foo(...args);
+
+--- TOKENS ---
+
+IDENTIFIER "foo" (1:1-1:4)
+LEFT_PAREN (1:4-1:5)
+ELLIPSIS (1:5-1:8)
+IDENTIFIER "args" (1:8-1:12)
+RIGHT_PAREN (1:12-1:13)
+SEMICOLON (1:13-1:14)
+
+--- AST ---
+
+ParserException: Expected expression, but found ELLIPSIS at 1:5-1:8

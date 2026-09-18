@@ -31,6 +31,14 @@ public final class EldBooleanArray extends EldArray<EldBooleanArray> {
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final boolean[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldBooleanArray copy() {
         return super.copy();

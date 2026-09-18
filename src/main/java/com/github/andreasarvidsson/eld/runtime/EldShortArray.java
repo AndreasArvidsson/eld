@@ -31,6 +31,14 @@ public final class EldShortArray extends EldArray<EldShortArray> {
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final short[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldShortArray copy() {
         return super.copy();

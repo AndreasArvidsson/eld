@@ -35,6 +35,14 @@ public final class EldObjectArray<T extends @Nullable Object>
         elements[size++] = value;
     }
 
+    public void copyTo(
+        final @Nullable Object[] destination,
+        final int offset,
+        final int length
+    ) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
     @Override
     public EldObjectArray<T> copy() {
         return super.copy();
