@@ -14,6 +14,8 @@ public enum TokenType {
     VAR,
     CLASS,
     NEW,
+    CONSTRUCTOR,
+    THIS,
     FUNC,
     RETURN,
     YIELD,

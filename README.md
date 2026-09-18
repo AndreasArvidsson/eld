@@ -1,6 +1,6 @@
 # Eld
 
-Eld is a statically typed programming language that compiles to JVM bytecode.
+Eld (Swedish for “fire”) is a statically typed programming language that compiles to JVM bytecode.
 
 Eld requires Java 21 or later. See [CONTRIBUTING.md](./CONTRIBUTING.md) for
 building from source, development setup, tests, and implementation notes.
@@ -25,7 +25,7 @@ func log(value: any) {
 class Counter {
     var value = 0;
     func next() i32 {
-        return value++;
+        return this.value++;
     }
 }
 ```
@@ -90,16 +90,13 @@ declared function or method; calls through stored function references are positi
 ## Classes and method references
 
 ```text
-const counter = new Counter();
+const counter = new Counter(0);
 print(counter.value);
 counter.value = 5;
 print(counter.next()); // 5; value becomes 6
 const next = counter.next;
 print(next()); // 6; bound to counter
 ```
-
-Methods can access their instance fields without a receiver, as `next` does
-with `value`. A stored method reference retains its receiver.
 
 ## Statements
 

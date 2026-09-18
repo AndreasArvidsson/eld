@@ -1,0 +1,88 @@
+class Foo {
+    const value = 1;
+    constructor() {
+        this.value = 2;
+    }
+}
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+EQUAL (2:17-2:18)
+INTEGER_LITERAL "1" (2:19-2:20)
+SEMICOLON (2:20-2:21)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+RIGHT_PAREN (3:17-3:18)
+LEFT_BRACE (3:19-3:20)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+EQUAL (4:20-4:21)
+INTEGER_LITERAL "2" (4:22-4:23)
+SEMICOLON (4:23-4:24)
+RIGHT_BRACE (5:5-5:6)
+RIGHT_BRACE (6:1-6:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:2
+  (ClassDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    (VariableDeclaration
+      range: 2:5-2:21
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      type: null
+      (LiteralExpression
+        range: 2:19-2:20
+        kind: INT
+        text: "1"
+      )
+    )
+    (ConstructorDeclaration
+      range: 3:5-5:6
+      (BlockStatement
+        range: 3:19-5:6
+        (ExpressionStatement
+          range: 4:9-4:24
+          (AssignmentExpression
+            range: 4:9-4:23
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
+              )
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
+              )
+            )
+            (LiteralExpression
+              range: 4:22-4:23
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const field 'value' may already be initialized at 4:9-4:23

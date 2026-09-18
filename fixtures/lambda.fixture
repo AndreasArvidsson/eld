@@ -17,7 +17,6 @@ SEMICOLON (1:9-1:10)
     range: 1:1-1:10
     (LambdaExpression
       range: 1:1-1:9
-      returnType: null
       (BlockStatement
         range: 1:7-1:9
       )

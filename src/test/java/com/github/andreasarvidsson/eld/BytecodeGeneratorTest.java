@@ -58,6 +58,137 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void constructorsInitializeFieldsWithExactSignatures() throws Exception {
+        final Class<?> module = compileClass("""
+            class Foo {
+                const name: string;
+                var value: i64;
+                var ratio: f64;
+                var values = [1, 2];
+                constructor(name: string, value: i64, ratio: f64) {
+                    this.name = name;
+                    this.value = value;
+                    this.ratio = ratio;
+                }
+                func get() i64 { return this.value; }
+                func direct() i64 { return this.get(); }
+                func bound() i64 { const getter = this.get; return getter(); }
+            }
+            const foo = new Foo("hello", 9, 2.5);
+            const other = new Foo("other", 10, 3.5);
+            """, "Test");
+        final Object foo = module.getField("foo").get(null);
+        final Object other = module.getField("other").get(null);
+        final Class<?> type = foo.getClass();
+        assertEquals("hello", type.getField("name").get(foo));
+        assertTrue(Modifier.isFinal(type.getField("name").getModifiers()));
+        assertEquals(9L, type.getMethod("direct").invoke(foo));
+        assertEquals(9L, type.getMethod("bound").invoke(foo));
+        assertEquals(2.5, type.getField("ratio").get(foo));
+        assertNotSame(
+            type.getField("values").get(foo),
+            type.getField("values").get(other)
+        );
+        assertNotNull(
+            type.getConstructor(String.class, long.class, double.class)
+        );
+        assertThrows(NoSuchMethodException.class, type::getConstructor);
+    }
+
+    @Test
+    void constructorsCheckEveryCompletionPath() throws Exception {
+        for (final String body : List.of(
+            "if (flag) { this.value = 1; } else { this.value = 2; }",
+            "if (flag) { this.value = 1; return; } this.value = 2;",
+            "switch (flag) { case true { this.value = 1; } else { this.value = 2; } }",
+            "do { this.value = 1; } while (false);",
+            "while (true) { this.value = 1; break; }",
+            "for (;;) { this.value = 1; break; }",
+            "this.value = if (flag) { yield 1; } else { yield 2; };",
+            "this.value = 1; return; this.value = 2;"
+        )) {
+            final Class<?> module =
+                compileClass(
+                    "class Foo { const value: i32; constructor(flag: bool) { "
+                        + body
+                        + " } } const foo = new Foo(true); const other = new Foo(false);",
+                    "Test"
+                );
+            final Object foo = module.getField("foo").get(null);
+            assertEquals(1, foo.getClass().getField("value").get(foo), body);
+            final Object other = module.getField("other").get(null);
+            assertTrue(
+                (int) other.getClass().getField("value").get(other) > 0,
+                body
+            );
+        }
+        for (final String body : List.of(
+            "",
+            "if (flag) { this.value = 1; }",
+            "if (flag) { return; } this.value = 1;",
+            "while (flag) { this.value = 1; }",
+            "for (item : [1]) { this.value = item; }",
+            "switch (flag) { case true { this.value = 1; } }",
+            "this.value = 1; this.value = 2;",
+            "if (flag) { this.value = 1; } this.value = 2;",
+            "do { this.value = 1; } while (flag);",
+            "while (flag) { this.value = 1; continue; } this.value = 2;",
+            "for (var i = 0; i < 2; i++) { this.value = i; }",
+            "print(this.value); this.value = 1;",
+            "this.get(); this.value = 1;",
+            "const escaped = this; this.value = 1;",
+            "const ignored = if (flag) { if (flag) { yield 1; } this.value = 1; yield 2; } else { this.value = 1; yield 2; };",
+            "return 5;"
+        )) {
+            final String source =
+                "class Foo { const value: i32; constructor(flag: bool) { "
+                    + body + " } func get() i32 { return this.value; } }";
+            assertThrows(
+                SemanticException.class,
+                () -> new SemanticAnalyzer()
+                    .analyze(new Parser(new Lexer(source).getTokens()).parse()),
+                body
+            );
+        }
+    }
+
+    @Test
+    void instanceStateRequiresExplicitAccessAndSafeDefaults() {
+        for (final String source : List.of(
+            "this;",
+            "class Foo { var value = this; }",
+            "class Foo { var a = 1; var b = a + 1; }",
+            "class Foo { var a = 1; var b = this.a + 1; }",
+            "class Foo { var value = 1; func get() i32 { return value; } }",
+            "class Foo { func get() i32 { return 1; } func other() i32 { return get(); } }",
+            "class Foo { var value: i32; }",
+            "class Foo { const value = 1; constructor() { this.value = 2; } }",
+            "class Foo { constructor(value: i32) { value = 2; } }",
+            "class Foo { constructor() {} constructor(value: i32) {} }",
+            "constructor() {}",
+            "class Foo { func replace() { this = new Foo(); } }"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(source, "Test"),
+                source
+            );
+        }
+        for (final String source : List.of(
+            "class Foo { print(1); }",
+            "class Foo { var value; }",
+            "class Foo { constructor() void {} }",
+            "class Foo { Foo(value: i32) {} }"
+        )) {
+            assertThrows(
+                com.github.andreasarvidsson.eld.parser.ParserException.class,
+                () -> new Parser(new Lexer(source).getTokens()).parse(),
+                source
+            );
+        }
+    }
+
+    @Test
     void concreteClassDescriptorsAndDirectCallsRemainPrecise()
         throws Exception {
         final String source =
@@ -65,7 +196,7 @@ class BytecodeGeneratorTest {
                 class Foo {
                     var value = 5;
                     var other: Foo | null = null;
-                    func getValue() i32 { return value; }
+                    func getValue() i32 { return this.value; }
                     func identity(value: Foo) Foo { return value; }
                     func compare(a: i64, b: f64) bool { return a < b; }
                 }
@@ -214,7 +345,7 @@ class BytecodeGeneratorTest {
                     class Foo {
                         var value: i64 = 5;
                         const fixed = 10;
-                        func add(amount: i64) i64 { value = value + amount; return value; }
+                        func add(amount: i64) i64 { this.value = this.value + amount; return this.value; }
                     }
                     const foo = new Foo();
                     const before = foo.value++;
@@ -260,7 +391,7 @@ class BytecodeGeneratorTest {
             var seed = 5;
             class Foo {
                 var value = seed++;
-                func getValue() i32 { return value; }
+                func getValue() i32 { return this.value; }
             }
             const first = new Foo();
             const second = new Foo();
@@ -328,14 +459,16 @@ class BytecodeGeneratorTest {
         try (final var capture = new PrintStream(output)) {
             System.setOut(capture);
             final ReplSession session = new ReplSession();
-            session.evaluate("class Foo { var value = 5; }");
-            session.evaluate("const first = new Foo();");
-            session.evaluate("const second = new Foo();");
+            session.evaluate(
+                "class Foo { var value: i32; constructor(value: i32) { this.value = value; } }"
+            );
+            session.evaluate("const first = new Foo(5);");
+            session.evaluate("const second = new Foo(5);");
             session.evaluate(
                 "const initial = first.value; first.value++; second.value = 9;"
             );
             session.evaluate("const different = first != second;");
-            session.evaluate("func make() any { return new Foo(); }");
+            session.evaluate("func make() any { return new Foo(5); }");
             session.evaluate("const third = make();");
         }
         finally {
@@ -1420,9 +1553,9 @@ class BytecodeGeneratorTest {
             class Counter {
                 var count: i64 = 1;
                 var real: f64 = 1.25;
-                func old() i64 { return count++; }
-                func next() f64 { real++; return real; }
-                func set() i64 { return count = 9000000000; }
+                func old() i64 { return this.count++; }
+                func next() f64 { this.real++; return this.real; }
+                func set() i64 { return this.count = 9000000000; }
             }
             """, "Test$Counter");
         final Object instance = counter.getConstructor().newInstance();
@@ -1928,12 +2061,12 @@ class BytecodeGeneratorTest {
         final Program program = new Parser(new Lexer("""
             class Counter {
                 const initial = 10;
-                var count = initial;
+                var count = 10;
                 var floating: f32 = 1.5;
                 var text = "hello";
-                func postfix() i32 { return count++; }
-                func next() i32 { return count++; }
-                func decrement() f32 { return floating--; }
+                func postfix() i32 { return this.count++; }
+                func next() i32 { return this.count++; }
+                func decrement() f32 { return this.floating--; }
             }
             """).getTokens()).parse();
         final var classes =
@@ -2049,22 +2182,27 @@ class BytecodeGeneratorTest {
 
     @Test
     void initializesFieldsPerInstanceAndUsesModuleFunctions() throws Exception {
-        final Class<?> type = compileClass("""
-            var seed = 2;
-            func next() i32 { return seed++; }
-            class Counter {
-                const first = next();
-                const second = next();
-                var count = first;
-                var widened: f32 = count;
-                var values = [1, 2];
-                var zero: i32 = 0;
-                var text: string = "";
-                func increment() i32 { return count++; }
-                func add(delta: i32) i32 { return count + delta; }
-                func shadow(count: i32) i32 { return count; }
-            }
-            """, "Test$Counter");
+        final Class<?> type =
+            compileClass(
+                """
+                    var seed = 2;
+                    func next() i32 { return seed++; }
+                    class Counter {
+                        const first = next();
+                        const second = next();
+                        var count: i32;
+                        var widened: f32;
+                        var values = [1, 2];
+                        var zero: i32 = 0;
+                        var text: string = "";
+                        constructor() { this.count = this.first; this.widened = this.count; }
+                        func increment() i32 { return this.count++; }
+                        func add(delta: i32) i32 { return this.count + delta; }
+                        func shadow(count: i32) i32 { return count; }
+                    }
+                    """,
+                "Test$Counter"
+            );
         final Object first = type.getConstructor().newInstance();
         final Object second = type.getConstructor().newInstance();
         assertEquals(2, type.getField("first").get(first));
@@ -2091,20 +2229,25 @@ class BytecodeGeneratorTest {
 
     @Test
     void invokesInstanceMethodsAndBindsMethodReferences() throws Exception {
-        final Class<?> type = compileClass("""
-            class Counter {
-                var count = 10;
-                func step() i32 { return count++; }
-                const initial = step();
-                const callback = step;
-                func direct() i32 { return step(); }
-                func indirect() i32 { return callback(); }
-                func recursive(n: i32) i32 {
-                    if (n <= 1) { return count; }
-                    return recursive(n - 1) + 1;
-                }
-            }
-            """, "Test$Counter");
+        final Class<?> type =
+            compileClass(
+                """
+                    class Counter {
+                        var count = 10;
+                        func step() i32 { return this.count++; }
+                        var initial = 0;
+                        constructor() { this.initial = this.step(); }
+
+                        func direct() i32 { return this.step(); }
+                        func indirect() i32 { const callback = this.step; return callback(); }
+                        func recursive(n: i32) i32 {
+                            if (n <= 1) { return this.count; }
+                            return this.recursive(n - 1) + 1;
+                        }
+                    }
+                    """,
+                "Test$Counter"
+            );
         final Object first = type.getConstructor().newInstance();
         final Object second = type.getConstructor().newInstance();
         assertEquals(10, type.getField("initial").get(first));
@@ -2119,21 +2262,25 @@ class BytecodeGeneratorTest {
 
     @Test
     void emitsControlFlowInConstructorsAndInstanceMethods() throws Exception {
-        final Class<?> type = compileClass("""
-            class Counter {
-                var count = 0;
-                for (var i = 0; i < 3; i++) { var ignored = count++; }
-                func advance(limit: i32) i32 {
-                    for (var i = 0; i < limit; i++) {
-                        if (i == 1) { continue; }
-                        var ignored = count++;
+        final Class<?> type =
+            compileClass(
+                """
+                    class Counter {
+                        var count = 0;
+                        constructor() { for (var i = 0; i < 3; i++) { var ignored = this.count++; } }
+                        func advance(limit: i32) i32 {
+                            for (var i = 0; i < limit; i++) {
+                                if (i == 1) { continue; }
+                                var ignored = this.count++;
+                            }
+                            return this.count;
+                        }
+                        var floating: f32 = 1.5;
+                        func floatStep() f32 { return this.floating++; }
                     }
-                    return count;
-                }
-                var floating: f32 = 1.5;
-                func floatStep() f32 { return floating++; }
-            }
-            """, "Test$Counter");
+                    """,
+                "Test$Counter"
+            );
         final Object instance = type.getConstructor().newInstance();
         assertEquals(3, type.getField("count").get(instance));
         assertEquals(
@@ -2151,13 +2298,13 @@ class BytecodeGeneratorTest {
             func read() i32 { return value; }
             class First {
                 var value = 1;
-                func read() i32 { return value; }
-                func call() i32 { return read(); }
+                func read() i32 { return this.value; }
+                func call() i32 { return this.read(); }
             }
             class Second {
                 var value = 2;
-                func read() i32 { return value; }
-                func call() i32 { return read(); }
+                func read() i32 { return this.value; }
+                func call() i32 { return this.read(); }
             }
             """).getTokens()).parse();
         final var classes =

@@ -8,6 +8,9 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
+import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
+import java.util.Map;
+import java.util.HashMap;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
@@ -27,7 +30,7 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<TypeNode, Type> resolvedTypes =
         new IdentityHashMap<>();
-    private final IdentityHashMap<IdentifierDeclaration, Symbol> declarations =
+    private final IdentityHashMap<AstNode, Symbol> declarations =
         new IdentityHashMap<>();
     private final IdentityHashMap<IdentifierExpression, Symbol> references =
         new IdentityHashMap<>();
@@ -37,6 +40,20 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
+    private final Map<ClassType, FunctionType> constructors = new HashMap<>();
+
+    public void setConstructor(final ClassType owner, final FunctionType type) {
+        constructors.put(owner, type);
+    }
+    public FunctionType getConstructor(final ClassType owner) {
+        return Objects.requireNonNull(constructors.get(owner));
+    }
+    public void setConstructorSymbol(
+        final ConstructorDeclaration declaration,
+        final ConstructorSymbol symbol
+    ) {
+        declarations.put(declaration, symbol);
+    }
 
     public void setMemberOwner(
         final MemberExpression expression,

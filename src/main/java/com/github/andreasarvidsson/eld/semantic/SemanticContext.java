@@ -10,18 +10,18 @@ public record SemanticContext(
 ) {
 
     public SemanticContext(
-        Scope scope,
-        @Nullable FunctionSymbol function,
-        int loopDepth,
-        @Nullable List<YieldStatement> yields
+        final Scope scope,
+        final @Nullable FunctionSymbol function,
+        final int loopDepth,
+        final @Nullable List<YieldStatement> yields
     ) {
         this(scope, function, loopDepth, yields, null);
     }
 
     public SemanticContext(
-        Scope scope,
-        @Nullable FunctionSymbol function,
-        int loopDepth
+        final Scope scope,
+        final @Nullable FunctionSymbol function,
+        final int loopDepth
     ) {
         this(scope, function, loopDepth, null);
     }

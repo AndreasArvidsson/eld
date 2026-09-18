@@ -1,0 +1,81 @@
+class Foo {
+    var value = 5;
+    func getValue() i32 {
+        return value;
+    }
+}
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL (2:15-2:16)
+INTEGER_LITERAL "5" (2:17-2:18)
+SEMICOLON (2:18-2:19)
+FUNC (3:5-3:9)
+IDENTIFIER "getValue" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+RIGHT_PAREN (3:19-3:20)
+IDENTIFIER "i32" (3:21-3:24)
+LEFT_BRACE (3:25-3:26)
+RETURN (4:9-4:15)
+IDENTIFIER "value" (4:16-4:21)
+SEMICOLON (4:21-4:22)
+RIGHT_BRACE (5:5-5:6)
+RIGHT_BRACE (6:1-6:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:2
+  (ClassDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    (VariableDeclaration
+      range: 2:5-2:19
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:14
+        name: "value"
+      )
+      type: null
+      (LiteralExpression
+        range: 2:17-2:18
+        kind: INT
+        text: "5"
+      )
+    )
+    (FunctionDeclaration
+      range: 3:5-5:6
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "getValue"
+      )
+      (NamedTypeNode
+        range: 3:21-3:24
+        name: "i32"
+      )
+      (BlockStatement
+        range: 3:25-5:6
+        (ReturnStatement
+          range: 4:9-4:22
+          (IdentifierExpression
+            range: 4:16-4:21
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'value' at 4:16-4:21

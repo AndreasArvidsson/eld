@@ -21,23 +21,20 @@ SEMICOLON (1:16-1:17)
     range: 1:1-1:17
     (LambdaExpression
       range: 1:1-1:16
-      (Parameter
+      (LambdaParameter
         range: 1:2-1:3
         (IdentifierDeclaration
           range: 1:2-1:3
           name: "a"
         )
-        type: null
       )
-      (Parameter
+      (LambdaParameter
         range: 1:5-1:6
         (IdentifierDeclaration
           range: 1:5-1:6
           name: "b"
         )
-        type: null
       )
-      returnType: null
       (BinaryExpression
         range: 1:11-1:16
         (IdentifierExpression

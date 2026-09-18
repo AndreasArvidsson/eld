@@ -1,0 +1,325 @@
+class Foo {
+    var value = 5;
+    constructor() {
+        this.value++;
+    }
+    func getValue() i32 {
+        return this.value;
+    }
+    func other() i32 {
+        return this.getValue();
+    }
+}
+print(new Foo().other());
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL (2:15-2:16)
+INTEGER_LITERAL "5" (2:17-2:18)
+SEMICOLON (2:18-2:19)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+RIGHT_PAREN (3:17-3:18)
+LEFT_BRACE (3:19-3:20)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+PLUS_PLUS (4:19-4:21)
+SEMICOLON (4:21-4:22)
+RIGHT_BRACE (5:5-5:6)
+FUNC (6:5-6:9)
+IDENTIFIER "getValue" (6:10-6:18)
+LEFT_PAREN (6:18-6:19)
+RIGHT_PAREN (6:19-6:20)
+IDENTIFIER "i32" (6:21-6:24)
+LEFT_BRACE (6:25-6:26)
+RETURN (7:9-7:15)
+THIS (7:16-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "value" (7:21-7:26)
+SEMICOLON (7:26-7:27)
+RIGHT_BRACE (8:5-8:6)
+FUNC (9:5-9:9)
+IDENTIFIER "other" (9:10-9:15)
+LEFT_PAREN (9:15-9:16)
+RIGHT_PAREN (9:16-9:17)
+IDENTIFIER "i32" (9:18-9:21)
+LEFT_BRACE (9:22-9:23)
+RETURN (10:9-10:15)
+THIS (10:16-10:20)
+DOT (10:20-10:21)
+IDENTIFIER "getValue" (10:21-10:29)
+LEFT_PAREN (10:29-10:30)
+RIGHT_PAREN (10:30-10:31)
+SEMICOLON (10:31-10:32)
+RIGHT_BRACE (11:5-11:6)
+RIGHT_BRACE (12:1-12:2)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+NEW (13:7-13:10)
+IDENTIFIER "Foo" (13:11-13:14)
+LEFT_PAREN (13:14-13:15)
+RIGHT_PAREN (13:15-13:16)
+DOT (13:16-13:17)
+IDENTIFIER "other" (13:17-13:22)
+LEFT_PAREN (13:22-13:23)
+RIGHT_PAREN (13:23-13:24)
+RIGHT_PAREN (13:24-13:25)
+SEMICOLON (13:25-13:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:26
+  (ClassDeclaration
+    range: 1:1-12:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    (VariableDeclaration
+      range: 2:5-2:19
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:14
+        name: "value"
+      )
+      type: null
+      (LiteralExpression
+        range: 2:17-2:18
+        kind: INT
+        text: "5"
+      )
+    )
+    (ConstructorDeclaration
+      range: 3:5-5:6
+      (BlockStatement
+        range: 3:19-5:6
+        (ExpressionStatement
+          range: 4:9-4:22
+          (PostfixExpression
+            range: 4:9-4:21
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
+              )
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
+              )
+            )
+            operator: INCREMENT
+          )
+        )
+      )
+    )
+    (FunctionDeclaration
+      range: 6:5-8:6
+      (IdentifierDeclaration
+        range: 6:10-6:18
+        name: "getValue"
+      )
+      (NamedTypeNode
+        range: 6:21-6:24
+        name: "i32"
+      )
+      (BlockStatement
+        range: 6:25-8:6
+        (ReturnStatement
+          range: 7:9-7:27
+          (MemberExpression
+            range: 7:16-7:26
+            (ThisExpression
+              range: 7:16-7:20
+            )
+            (IdentifierExpression
+              range: 7:21-7:26
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+    (FunctionDeclaration
+      range: 9:5-11:6
+      (IdentifierDeclaration
+        range: 9:10-9:15
+        name: "other"
+      )
+      (NamedTypeNode
+        range: 9:18-9:21
+        name: "i32"
+      )
+      (BlockStatement
+        range: 9:22-11:6
+        (ReturnStatement
+          range: 10:9-10:32
+          (CallExpression
+            range: 10:16-10:31
+            (MemberExpression
+              range: 10:16-10:29
+              (ThisExpression
+                range: 10:16-10:20
+              )
+              (IdentifierExpression
+                range: 10:21-10:29
+                name: "getValue"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:26
+    (CallExpression
+      range: 13:1-13:25
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:24
+        (MemberExpression
+          range: 13:7-13:22
+          (NewExpression
+            range: 13:7-13:16
+            (IdentifierExpression
+              range: 13:11-13:14
+              name: "Foo"
+            )
+          )
+          (IdentifierExpression
+            range: 13:17-13:22
+            name: "other"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:17-2:18 -> i32
+  4:9-4:13 -> Foo
+  4:9-4:19 -> i32
+  4:9-4:21 -> i32
+  4:14-4:19 -> i32
+  7:16-7:20 -> Foo
+  7:16-7:26 -> i32
+  7:21-7:26 -> i32
+  10:16-10:20 -> Foo
+  10:16-10:29 -> () => i32
+  10:16-10:31 -> i32
+  10:21-10:29 -> () => i32
+  13:1-13:6 -> (any) => void
+  13:1-13:25 -> void
+  13:7-13:16 -> Foo
+  13:7-13:22 -> () => i32
+  13:7-13:24 -> i32
+  13:11-13:14 -> Foo
+  13:17-13:22 -> () => i32
+
+Resolved types:
+  6:21-6:24 -> i32
+  9:18-9:21 -> i32
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:9-2:14 -> var value: i32
+  3:5-5:6 -> constructor()
+  6:10-6:18 -> getValue() => i32
+  9:10-9:15 -> other() => i32
+
+References:
+  4:14-4:19 -> 2:9-2:14
+  7:21-7:26 -> 2:9-2:14
+  10:21-10:29 -> 6:10-6:18
+  13:1-13:6 -> builtin print
+  13:11-13:14 -> 1:7-1:10
+  13:17-13:22 -> 9:10-9:15
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Foo
+  // access flags 0x9
+  public static INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x8
+  static <clinit>()V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init> ()V
+    INVOKEVIRTUAL Test$Foo.other ()I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Foo {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x1
+  public I value
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 5
+    PUTFIELD Test$Foo.value : I
+    ALOAD 0
+    DUP
+    GETFIELD Test$Foo.value : I
+    DUP_X1
+    ICONST_1
+    IADD
+    PUTFIELD Test$Foo.value : I
+    POP
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public getValue()I
+    ALOAD 0
+    GETFIELD Test$Foo.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public other()I
+    ALOAD 0
+    INVOKEVIRTUAL Test$Foo.getValue ()I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+6
+

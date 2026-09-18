@@ -75,11 +75,14 @@ public abstract class EldArray<T extends EldArray<T>> {
         return sb.toString();
     }
 
-    protected abstract void appendElement(StringBuilder builder, int index);
+    protected abstract void appendElement(
+        final StringBuilder builder,
+        final int index
+    );
 
     protected abstract int capacity();
 
-    protected abstract void resize(int newCapacity);
+    protected abstract void resize(final int newCapacity);
 
-    protected abstract T copyRange(int from, int to);
+    protected abstract T copyRange(final int from, final int to);
 }

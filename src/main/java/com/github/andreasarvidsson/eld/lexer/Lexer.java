@@ -19,6 +19,8 @@ public class Lexer {
                 Map.entry("var", TokenType.VAR),
                 Map.entry("class", TokenType.CLASS),
                 Map.entry("new", TokenType.NEW),
+                Map.entry("constructor", TokenType.CONSTRUCTOR),
+                Map.entry("this", TokenType.THIS),
                 Map.entry("func", TokenType.FUNC),
                 Map.entry("if", TokenType.IF),
                 Map.entry("switch", TokenType.SWITCH),

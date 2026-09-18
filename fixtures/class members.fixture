@@ -1,9 +1,13 @@
 class Counter {
     const initial = 10;
-    var count = initial;
-    func next() i32 { return count++; }
-    const callback = next;
-    func invoke() i32 { return callback(); }
+    var count = 10;
+    func next() i32 {
+        return this.count++;
+    }
+    func invoke() i32 {
+        const callback = this.next;
+        return callback();
+    }
 }
 
 --- TOKENS ---
@@ -19,44 +23,48 @@ SEMICOLON (2:23-2:24)
 VAR (3:5-3:8)
 IDENTIFIER "count" (3:9-3:14)
 EQUAL (3:15-3:16)
-IDENTIFIER "initial" (3:17-3:24)
-SEMICOLON (3:24-3:25)
+INTEGER_LITERAL "10" (3:17-3:19)
+SEMICOLON (3:19-3:20)
 FUNC (4:5-4:9)
 IDENTIFIER "next" (4:10-4:14)
 LEFT_PAREN (4:14-4:15)
 RIGHT_PAREN (4:15-4:16)
 IDENTIFIER "i32" (4:17-4:20)
 LEFT_BRACE (4:21-4:22)
-RETURN (4:23-4:29)
-IDENTIFIER "count" (4:30-4:35)
-PLUS_PLUS (4:35-4:37)
-SEMICOLON (4:37-4:38)
-RIGHT_BRACE (4:39-4:40)
-CONST (5:5-5:10)
-IDENTIFIER "callback" (5:11-5:19)
-EQUAL (5:20-5:21)
-IDENTIFIER "next" (5:22-5:26)
-SEMICOLON (5:26-5:27)
-FUNC (6:5-6:9)
-IDENTIFIER "invoke" (6:10-6:16)
-LEFT_PAREN (6:16-6:17)
-RIGHT_PAREN (6:17-6:18)
-IDENTIFIER "i32" (6:19-6:22)
-LEFT_BRACE (6:23-6:24)
-RETURN (6:25-6:31)
-IDENTIFIER "callback" (6:32-6:40)
-LEFT_PAREN (6:40-6:41)
-RIGHT_PAREN (6:41-6:42)
-SEMICOLON (6:42-6:43)
-RIGHT_BRACE (6:44-6:45)
-RIGHT_BRACE (7:1-7:2)
+RETURN (5:9-5:15)
+THIS (5:16-5:20)
+DOT (5:20-5:21)
+IDENTIFIER "count" (5:21-5:26)
+PLUS_PLUS (5:26-5:28)
+SEMICOLON (5:28-5:29)
+RIGHT_BRACE (6:5-6:6)
+FUNC (7:5-7:9)
+IDENTIFIER "invoke" (7:10-7:16)
+LEFT_PAREN (7:16-7:17)
+RIGHT_PAREN (7:17-7:18)
+IDENTIFIER "i32" (7:19-7:22)
+LEFT_BRACE (7:23-7:24)
+CONST (8:9-8:14)
+IDENTIFIER "callback" (8:15-8:23)
+EQUAL (8:24-8:25)
+THIS (8:26-8:30)
+DOT (8:30-8:31)
+IDENTIFIER "next" (8:31-8:35)
+SEMICOLON (8:35-8:36)
+RETURN (9:9-9:15)
+IDENTIFIER "callback" (9:16-9:24)
+LEFT_PAREN (9:24-9:25)
+RIGHT_PAREN (9:25-9:26)
+SEMICOLON (9:26-9:27)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
 
 --- AST ---
 
 (Program
-  range: 1:1-7:2
+  range: 1:1-11:2
   (ClassDeclaration
-    range: 1:1-7:2
+    range: 1:1-11:2
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -76,20 +84,21 @@ RIGHT_BRACE (7:1-7:2)
       )
     )
     (VariableDeclaration
-      range: 3:5-3:25
+      range: 3:5-3:20
       mutability: VAR
       (IdentifierDeclaration
         range: 3:9-3:14
         name: "count"
       )
       type: null
-      (IdentifierExpression
-        range: 3:17-3:24
-        name: "initial"
+      (LiteralExpression
+        range: 3:17-3:19
+        kind: INT
+        text: "10"
       )
     )
     (FunctionDeclaration
-      range: 4:5-4:40
+      range: 4:5-6:6
       (IdentifierDeclaration
         range: 4:10-4:14
         name: "next"
@@ -99,51 +108,63 @@ RIGHT_BRACE (7:1-7:2)
         name: "i32"
       )
       (BlockStatement
-        range: 4:21-4:40
+        range: 4:21-6:6
         (ReturnStatement
-          range: 4:23-4:38
+          range: 5:9-5:29
           (PostfixExpression
-            range: 4:30-4:37
-            (IdentifierExpression
-              range: 4:30-4:35
-              name: "count"
+            range: 5:16-5:28
+            (MemberExpression
+              range: 5:16-5:26
+              (ThisExpression
+                range: 5:16-5:20
+              )
+              (IdentifierExpression
+                range: 5:21-5:26
+                name: "count"
+              )
             )
             operator: INCREMENT
           )
         )
       )
     )
-    (VariableDeclaration
-      range: 5:5-5:27
-      mutability: CONST
-      (IdentifierDeclaration
-        range: 5:11-5:19
-        name: "callback"
-      )
-      type: null
-      (IdentifierExpression
-        range: 5:22-5:26
-        name: "next"
-      )
-    )
     (FunctionDeclaration
-      range: 6:5-6:45
+      range: 7:5-10:6
       (IdentifierDeclaration
-        range: 6:10-6:16
+        range: 7:10-7:16
         name: "invoke"
       )
       (NamedTypeNode
-        range: 6:19-6:22
+        range: 7:19-7:22
         name: "i32"
       )
       (BlockStatement
-        range: 6:23-6:45
-        (ReturnStatement
-          range: 6:25-6:43
-          (CallExpression
-            range: 6:32-6:42
+        range: 7:23-10:6
+        (VariableDeclaration
+          range: 8:9-8:36
+          mutability: CONST
+          (IdentifierDeclaration
+            range: 8:15-8:23
+            name: "callback"
+          )
+          type: null
+          (MemberExpression
+            range: 8:26-8:35
+            (ThisExpression
+              range: 8:26-8:30
+            )
             (IdentifierExpression
-              range: 6:32-6:40
+              range: 8:31-8:35
+              name: "next"
+            )
+          )
+        )
+        (ReturnStatement
+          range: 9:9-9:27
+          (CallExpression
+            range: 9:16-9:26
+            (IdentifierExpression
+              range: 9:16-9:24
               name: "callback"
             )
           )
@@ -157,30 +178,33 @@ RIGHT_BRACE (7:1-7:2)
 
 Expression types:
   2:21-2:23 -> i32
-  3:17-3:24 -> i32
-  4:30-4:35 -> i32
-  4:30-4:37 -> i32
-  5:22-5:26 -> () => i32
-  6:32-6:40 -> () => i32
-  6:32-6:42 -> i32
+  3:17-3:19 -> i32
+  5:16-5:20 -> Counter
+  5:16-5:26 -> i32
+  5:16-5:28 -> i32
+  5:21-5:26 -> i32
+  8:26-8:30 -> Counter
+  8:26-8:35 -> () => i32
+  8:31-8:35 -> () => i32
+  9:16-9:24 -> () => i32
+  9:16-9:26 -> i32
 
 Resolved types:
   4:17-4:20 -> i32
-  6:19-6:22 -> i32
+  7:19-7:22 -> i32
 
 Declarations:
   1:7-1:14 -> class Counter
   2:11-2:18 -> const initial: i32
   3:9-3:14 -> var count: i32
   4:10-4:14 -> next() => i32
-  5:11-5:19 -> const callback: () => i32
-  6:10-6:16 -> invoke() => i32
+  7:10-7:16 -> invoke() => i32
+  8:15-8:23 -> const callback: () => i32
 
 References:
-  3:17-3:24 -> 2:11-2:18
-  4:30-4:35 -> 3:9-3:14
-  5:22-5:26 -> 4:10-4:14
-  6:32-6:40 -> 5:11-5:19
+  5:21-5:26 -> 3:9-3:14
+  8:31-8:35 -> 4:10-4:14
+  9:16-9:24 -> 8:15-8:23
 
 --- BYTECODE ---
 
@@ -207,9 +231,6 @@ public class Test$Counter {
   // access flags 0x1
   public I count
 
-  // access flags 0x11
-  public final Ljava/lang/invoke/MethodHandle; callback
-
   // access flags 0x1
   public <init>()V
     ALOAD 0
@@ -218,23 +239,16 @@ public class Test$Counter {
     LDC 10
     PUTFIELD Test$Counter.initial : I
     ALOAD 0
-    ALOAD 0
-    GETFIELD Test$Counter.initial : I
+    LDC 10
     PUTFIELD Test$Counter.count : I
-    ALOAD 0
-    // handle kind 0x5 : INVOKEVIRTUAL
-    LDC Test$Counter.next()I
-    ALOAD 0
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    PUTFIELD Test$Counter.callback : Ljava/lang/invoke/MethodHandle;
     RETURN
-    MAXSTACK = 3
+    MAXSTACK = 2
     MAXLOCALS = 1
 
   // access flags 0x1
   public next()I
     ALOAD 0
-    ALOAD 0
+    DUP
     GETFIELD Test$Counter.count : I
     DUP_X1
     ICONST_1
@@ -246,12 +260,16 @@ public class Test$Counter {
 
   // access flags 0x1
   public invoke()I
+    // handle kind 0x5 : INVOKEVIRTUAL
+    LDC Test$Counter.next()I
     ALOAD 0
-    GETFIELD Test$Counter.callback : Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    ASTORE 1
+    ALOAD 1
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
     IRETURN
-    MAXSTACK = 1
-    MAXLOCALS = 1
+    MAXSTACK = 2
+    MAXLOCALS = 2
 }
 
 --- OUTPUT ---

@@ -1,11 +1,14 @@
 class Foo {
-    var value = 5;
+    var value: i32;
+    constructor(value: i32) {
+        this.value = value;
+    }
     func getValue() i32 {
-        return value;
+        return this.value;
     }
 }
 
-const foo = new Foo();
+const foo = new Foo(5);
 print(foo.value);
 foo.value++;
 print(foo.getValue());
@@ -17,145 +20,208 @@ IDENTIFIER "Foo" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
 VAR (2:5-2:8)
 IDENTIFIER "value" (2:9-2:14)
-EQUAL (2:15-2:16)
-INTEGER_LITERAL "5" (2:17-2:18)
-SEMICOLON (2:18-2:19)
-FUNC (3:5-3:9)
-IDENTIFIER "getValue" (3:10-3:18)
-LEFT_PAREN (3:18-3:19)
-RIGHT_PAREN (3:19-3:20)
-IDENTIFIER "i32" (3:21-3:24)
-LEFT_BRACE (3:25-3:26)
-RETURN (4:9-4:15)
-IDENTIFIER "value" (4:16-4:21)
-SEMICOLON (4:21-4:22)
+COLON (2:14-2:15)
+IDENTIFIER "i32" (2:16-2:19)
+SEMICOLON (2:19-2:20)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+IDENTIFIER "value" (3:17-3:22)
+COLON (3:22-3:23)
+IDENTIFIER "i32" (3:24-3:27)
+RIGHT_PAREN (3:27-3:28)
+LEFT_BRACE (3:29-3:30)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+EQUAL (4:20-4:21)
+IDENTIFIER "value" (4:22-4:27)
+SEMICOLON (4:27-4:28)
 RIGHT_BRACE (5:5-5:6)
-RIGHT_BRACE (6:1-6:2)
-CONST (8:1-8:6)
-IDENTIFIER "foo" (8:7-8:10)
-EQUAL (8:11-8:12)
-NEW (8:13-8:16)
-IDENTIFIER "Foo" (8:17-8:20)
-LEFT_PAREN (8:20-8:21)
-RIGHT_PAREN (8:21-8:22)
-SEMICOLON (8:22-8:23)
-IDENTIFIER "print" (9:1-9:6)
-LEFT_PAREN (9:6-9:7)
-IDENTIFIER "foo" (9:7-9:10)
-DOT (9:10-9:11)
-IDENTIFIER "value" (9:11-9:16)
-RIGHT_PAREN (9:16-9:17)
-SEMICOLON (9:17-9:18)
-IDENTIFIER "foo" (10:1-10:4)
-DOT (10:4-10:5)
-IDENTIFIER "value" (10:5-10:10)
-PLUS_PLUS (10:10-10:12)
-SEMICOLON (10:12-10:13)
-IDENTIFIER "print" (11:1-11:6)
-LEFT_PAREN (11:6-11:7)
+FUNC (6:5-6:9)
+IDENTIFIER "getValue" (6:10-6:18)
+LEFT_PAREN (6:18-6:19)
+RIGHT_PAREN (6:19-6:20)
+IDENTIFIER "i32" (6:21-6:24)
+LEFT_BRACE (6:25-6:26)
+RETURN (7:9-7:15)
+THIS (7:16-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "value" (7:21-7:26)
+SEMICOLON (7:26-7:27)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (11:1-11:6)
 IDENTIFIER "foo" (11:7-11:10)
-DOT (11:10-11:11)
-IDENTIFIER "getValue" (11:11-11:19)
-LEFT_PAREN (11:19-11:20)
-RIGHT_PAREN (11:20-11:21)
-RIGHT_PAREN (11:21-11:22)
-SEMICOLON (11:22-11:23)
+EQUAL (11:11-11:12)
+NEW (11:13-11:16)
+IDENTIFIER "Foo" (11:17-11:20)
+LEFT_PAREN (11:20-11:21)
+INTEGER_LITERAL "5" (11:21-11:22)
+RIGHT_PAREN (11:22-11:23)
+SEMICOLON (11:23-11:24)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "foo" (12:7-12:10)
+DOT (12:10-12:11)
+IDENTIFIER "value" (12:11-12:16)
+RIGHT_PAREN (12:16-12:17)
+SEMICOLON (12:17-12:18)
+IDENTIFIER "foo" (13:1-13:4)
+DOT (13:4-13:5)
+IDENTIFIER "value" (13:5-13:10)
+PLUS_PLUS (13:10-13:12)
+SEMICOLON (13:12-13:13)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "foo" (14:7-14:10)
+DOT (14:10-14:11)
+IDENTIFIER "getValue" (14:11-14:19)
+LEFT_PAREN (14:19-14:20)
+RIGHT_PAREN (14:20-14:21)
+RIGHT_PAREN (14:21-14:22)
+SEMICOLON (14:22-14:23)
 
 --- AST ---
 
 (Program
-  range: 1:1-11:23
+  range: 1:1-14:23
   (ClassDeclaration
-    range: 1:1-6:2
+    range: 1:1-9:2
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
     )
-    (VariableDeclaration
-      range: 2:5-2:19
+    (UninitializedVariableDeclaration
+      range: 2:5-2:20
       mutability: VAR
       (IdentifierDeclaration
         range: 2:9-2:14
         name: "value"
       )
-      type: null
-      (LiteralExpression
-        range: 2:17-2:18
-        kind: INT
-        text: "5"
+      (NamedTypeNode
+        range: 2:16-2:19
+        name: "i32"
+      )
+    )
+    (ConstructorDeclaration
+      range: 3:5-5:6
+      (FunctionParameter
+        range: 3:17-3:27
+        (IdentifierDeclaration
+          range: 3:17-3:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 3:24-3:27
+          name: "i32"
+        )
+      )
+      (BlockStatement
+        range: 3:29-5:6
+        (ExpressionStatement
+          range: 4:9-4:28
+          (AssignmentExpression
+            range: 4:9-4:27
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
+              )
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
+              )
+            )
+            (IdentifierExpression
+              range: 4:22-4:27
+              name: "value"
+            )
+          )
+        )
       )
     )
     (FunctionDeclaration
-      range: 3:5-5:6
+      range: 6:5-8:6
       (IdentifierDeclaration
-        range: 3:10-3:18
+        range: 6:10-6:18
         name: "getValue"
       )
       (NamedTypeNode
-        range: 3:21-3:24
+        range: 6:21-6:24
         name: "i32"
       )
       (BlockStatement
-        range: 3:25-5:6
+        range: 6:25-8:6
         (ReturnStatement
-          range: 4:9-4:22
-          (IdentifierExpression
-            range: 4:16-4:21
-            name: "value"
+          range: 7:9-7:27
+          (MemberExpression
+            range: 7:16-7:26
+            (ThisExpression
+              range: 7:16-7:20
+            )
+            (IdentifierExpression
+              range: 7:21-7:26
+              name: "value"
+            )
           )
         )
       )
     )
   )
   (VariableDeclaration
-    range: 8:1-8:23
+    range: 11:1-11:24
     mutability: CONST
     (IdentifierDeclaration
-      range: 8:7-8:10
+      range: 11:7-11:10
       name: "foo"
     )
     type: null
     (NewExpression
-      range: 8:13-8:22
+      range: 11:13-11:23
       (IdentifierExpression
-        range: 8:17-8:20
+        range: 11:17-11:20
         name: "Foo"
+      )
+      (LiteralExpression
+        range: 11:21-11:22
+        kind: INT
+        text: "5"
       )
     )
   )
   (ExpressionStatement
-    range: 9:1-9:18
+    range: 12:1-12:18
     (CallExpression
-      range: 9:1-9:17
+      range: 12:1-12:17
       (IdentifierExpression
-        range: 9:1-9:6
+        range: 12:1-12:6
         name: "print"
       )
       (MemberExpression
-        range: 9:7-9:16
+        range: 12:7-12:16
         (IdentifierExpression
-          range: 9:7-9:10
+          range: 12:7-12:10
           name: "foo"
         )
         (IdentifierExpression
-          range: 9:11-9:16
+          range: 12:11-12:16
           name: "value"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 10:1-10:13
+    range: 13:1-13:13
     (PostfixExpression
-      range: 10:1-10:12
+      range: 13:1-13:12
       (MemberExpression
-        range: 10:1-10:10
+        range: 13:1-13:10
         (IdentifierExpression
-          range: 10:1-10:4
+          range: 13:1-13:4
           name: "foo"
         )
         (IdentifierExpression
-          range: 10:5-10:10
+          range: 13:5-13:10
           name: "value"
         )
       )
@@ -163,23 +229,23 @@ SEMICOLON (11:22-11:23)
     )
   )
   (ExpressionStatement
-    range: 11:1-11:23
+    range: 14:1-14:23
     (CallExpression
-      range: 11:1-11:22
+      range: 14:1-14:22
       (IdentifierExpression
-        range: 11:1-11:6
+        range: 14:1-14:6
         name: "print"
       )
       (CallExpression
-        range: 11:7-11:21
+        range: 14:7-14:21
         (MemberExpression
-          range: 11:7-11:19
+          range: 14:7-14:19
           (IdentifierExpression
-            range: 11:7-11:10
+            range: 14:7-14:10
             name: "foo"
           )
           (IdentifierExpression
-            range: 11:11-11:19
+            range: 14:11-14:19
             name: "getValue"
           )
         )
@@ -191,46 +257,59 @@ SEMICOLON (11:22-11:23)
 --- SEMANTIC ---
 
 Expression types:
-  2:17-2:18 -> i32
-  4:16-4:21 -> i32
-  8:13-8:22 -> Foo
-  8:17-8:20 -> Foo
-  9:1-9:6 -> (any) => void
-  9:1-9:17 -> void
-  9:7-9:10 -> Foo
-  9:7-9:16 -> i32
-  9:11-9:16 -> i32
-  10:1-10:4 -> Foo
-  10:1-10:10 -> i32
-  10:1-10:12 -> i32
-  10:5-10:10 -> i32
-  11:1-11:6 -> (any) => void
-  11:1-11:22 -> void
-  11:7-11:10 -> Foo
-  11:7-11:19 -> () => i32
-  11:7-11:21 -> i32
-  11:11-11:19 -> () => i32
+  4:9-4:13 -> Foo
+  4:9-4:19 -> i32
+  4:9-4:27 -> i32
+  4:14-4:19 -> i32
+  4:22-4:27 -> i32
+  7:16-7:20 -> Foo
+  7:16-7:26 -> i32
+  7:21-7:26 -> i32
+  11:13-11:23 -> Foo
+  11:17-11:20 -> Foo
+  11:21-11:22 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:17 -> void
+  12:7-12:10 -> Foo
+  12:7-12:16 -> i32
+  12:11-12:16 -> i32
+  13:1-13:4 -> Foo
+  13:1-13:10 -> i32
+  13:1-13:12 -> i32
+  13:5-13:10 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:22 -> void
+  14:7-14:10 -> Foo
+  14:7-14:19 -> () => i32
+  14:7-14:21 -> i32
+  14:11-14:19 -> () => i32
 
 Resolved types:
-  3:21-3:24 -> i32
+  2:16-2:19 -> i32
+  3:24-3:27 -> i32
+  6:21-6:24 -> i32
 
 Declarations:
   1:7-1:10 -> class Foo
   2:9-2:14 -> var value: i32
-  3:10-3:18 -> getValue() => i32
-  8:7-8:10 -> const foo: Foo
+  3:5-5:6 -> constructor(value: i32)
+  3:17-3:22 -> const value: i32
+  6:10-6:18 -> getValue() => i32
+  11:7-11:10 -> const foo: Foo
 
 References:
-  4:16-4:21 -> 2:9-2:14
-  8:17-8:20 -> 1:7-1:10
-  9:1-9:6 -> builtin print
-  9:7-9:10 -> 8:7-8:10
-  9:11-9:16 -> 2:9-2:14
-  10:1-10:4 -> 8:7-8:10
-  10:5-10:10 -> 2:9-2:14
-  11:1-11:6 -> builtin print
-  11:7-11:10 -> 8:7-8:10
-  11:11-11:19 -> 3:10-3:18
+  4:14-4:19 -> 2:9-2:14
+  4:22-4:27 -> 3:17-3:22
+  7:21-7:26 -> 2:9-2:14
+  11:17-11:20 -> 1:7-1:10
+  12:1-12:6 -> builtin print
+  12:7-12:10 -> 11:7-11:10
+  12:11-12:16 -> 2:9-2:14
+  13:1-13:4 -> 11:7-11:10
+  13:5-13:10 -> 2:9-2:14
+  14:1-14:6 -> builtin print
+  14:7-14:10 -> 11:7-11:10
+  14:11-14:19 -> 6:10-6:18
 
 --- BYTECODE ---
 
@@ -249,7 +328,8 @@ public final class Test {
   static <clinit>()V
     NEW Test$Foo
     DUP
-    INVOKESPECIAL Test$Foo.<init> ()V
+    LDC 5
+    INVOKESPECIAL Test$Foo.<init> (I)V
     PUTSTATIC Test.foo : LTest$Foo;
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
     GETSTATIC Test.foo : LTest$Foo;
@@ -284,15 +364,17 @@ public class Test$Foo {
   public I value
 
   // access flags 0x1
-  public <init>()V
+  public <init>(I)V
     ALOAD 0
     INVOKESPECIAL java/lang/Object.<init> ()V
     ALOAD 0
-    LDC 5
+    ILOAD 1
+    DUP_X1
     PUTFIELD Test$Foo.value : I
+    POP
     RETURN
-    MAXSTACK = 2
-    MAXLOCALS = 1
+    MAXSTACK = 3
+    MAXLOCALS = 2
 
   // access flags 0x1
   public getValue()I

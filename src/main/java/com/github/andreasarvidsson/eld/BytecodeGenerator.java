@@ -101,7 +101,7 @@ public final class BytecodeGenerator {
      * Top-level class Foo is emitted as Test$Foo, a static member of Test.
      * Load or write every returned class file, not just the module.
      * Class fields and methods are instance members. Field initializers run in
-     * source order in the public no-argument constructor; const fields are final.
+     * source order before the constructor body; const fields are final.
      */
     public Map<String, byte[]> generateClasses() {
         final Map<String, byte[]> classes = new LinkedHashMap<>();
@@ -201,6 +201,21 @@ public final class BytecodeGenerator {
                 final Symbol symbol = semanticModel.getSymbol(function.name());
                 members.put(symbol, symbol.name());
             }
+            else if (member instanceof UninitializedVariableDeclaration field) {
+                final Symbol symbol = semanticModel.getSymbol(field.name());
+                members.put(symbol, symbol.name());
+                writer
+                    .visitField(
+                        ACC_PUBLIC | (field.mutability() == Mutability.CONST
+                            ? ACC_FINAL
+                            : 0),
+                        symbol.name(),
+                        descriptor(symbol.type()),
+                        null,
+                        null
+                    )
+                    .visitEnd();
+            }
             else if (member instanceof ClassDeclaration) {
                 throw unsupported(
                     member,
@@ -209,8 +224,25 @@ public final class BytecodeGenerator {
             }
         }
         final InstanceContext instance = new InstanceContext(name, members);
+        final ConstructorDeclaration declarationConstructor =
+            declaration.members()
+                .stream()
+                .filter(ConstructorDeclaration.class::isInstance)
+                .map(ConstructorDeclaration.class::cast)
+                .findFirst()
+                .orElse(null);
+        final FunctionType constructorType =
+            semanticModel.getConstructor(
+                (ClassType) semanticModel.getSymbol(declaration.name()).type()
+            );
         final MethodVisitor constructor =
-            writer.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+            writer.visitMethod(
+                ACC_PUBLIC,
+                "<init>",
+                methodDescriptor(constructorType),
+                null,
+                null
+            );
         final MethodGenerator initializer =
             new MethodGenerator(
                 constructor,
@@ -227,12 +259,20 @@ public final class BytecodeGenerator {
             "()V",
             false
         );
-        boolean reachable = true;
-        for (final BlockItem member : declaration.members()) {
-            if (reachable && !(member instanceof FunctionDeclaration)) {
-                reachable = initializer.item(member);
+        if (declarationConstructor != null) {
+            for (final FunctionParameter parameter : declarationConstructor
+                .parameters()) {
+                initializer.local(semanticModel.getSymbol(parameter.name()));
             }
         }
+        for (final BlockItem member : declaration.members()) {
+            if (member instanceof VariableDeclaration field) {
+                initializer.item(field);
+            }
+        }
+        final boolean reachable =
+            declarationConstructor == null
+                || initializer.block(declarationConstructor.body());
         initializer.finish(reachable);
         for (final BlockItem member : declaration.members()) {
             if (member instanceof FunctionDeclaration function) {
@@ -272,7 +312,7 @@ public final class BytecodeGenerator {
                 instance
             );
         method.visitCode();
-        for (final Parameter parameter : function.parameters()) {
+        for (final FunctionParameter parameter : function.parameters()) {
             generator.local(semanticModel.getSymbol(parameter.name()));
         }
         generator.finish(generator.block(function.body()));
@@ -1357,6 +1397,7 @@ public final class BytecodeGenerator {
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case MemberExpression member -> member(member);
+                case ThisExpression self -> method.visitVarInsn(ALOAD, 0);
                 case NewExpression creation -> {
                     final String name =
                         ((ClassType) semanticModel.getExpressionType(creation))
@@ -1365,11 +1406,19 @@ public final class BytecodeGenerator {
                         classOwners.getOrDefault(name, moduleName + "$" + name);
                     method.visitTypeInsn(NEW, owner);
                     method.visitInsn(DUP);
+                    for (final Expression argument : creation.arguments()) {
+                        expression(argument);
+                    }
                     method.visitMethodInsn(
                         INVOKESPECIAL,
                         owner,
                         "<init>",
-                        "()V",
+                        methodDescriptor(
+                            semanticModel.getConstructor(
+                                (ClassType) semanticModel
+                                    .getExpressionType(creation)
+                            )
+                        ),
                         false
                     );
                 }

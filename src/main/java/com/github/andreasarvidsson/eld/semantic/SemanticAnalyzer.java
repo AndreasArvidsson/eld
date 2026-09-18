@@ -22,6 +22,9 @@ import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
+import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
+import com.github.andreasarvidsson.eld.parser.ThisExpression;
+import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
@@ -44,7 +47,7 @@ import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
-import com.github.andreasarvidsson.eld.parser.Parameter;
+import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
@@ -69,6 +72,8 @@ import com.github.andreasarvidsson.eld.parser.YieldStatement;
 public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
     private final Map<ClassType, Scope> classScopes = new HashMap<>();
+    private @Nullable ClassType currentInstance;
+    private @Nullable ConstructorDeclaration currentConstructor;
 
     public SemanticModel analyze(final Program program) {
         final Scope builtinScope = new Scope(null);
@@ -131,6 +136,16 @@ public final class SemanticAnalyzer {
                 analyzeFunctionDeclaration(functionDeclaration, context);
             case ClassDeclaration classDeclaration ->
                 analyzeClassDeclaration(classDeclaration, context);
+            case ConstructorDeclaration constructor ->
+                throw new SemanticException(
+                    constructor.range(),
+                    "Constructors are only allowed directly in a class"
+                );
+            case UninitializedVariableDeclaration field ->
+                throw new SemanticException(
+                    field.range(),
+                    "Uninitialized declarations are only allowed directly in a class"
+                );
             case IdentifierDeclaration ignored -> throw new SemanticException(
                 declaration.range(),
                 "Unexpected declaration: %s",
@@ -191,18 +206,93 @@ public final class SemanticAnalyzer {
             new ClassSymbol(declaration.name(), classType);
         model.setSymbol(declaration.name(), classSymbol);
         context.scope().declare(classSymbol);
-        final SemanticContext classContext =
-            new SemanticContext(
-                new Scope(context.scope()),
-                context.function(),
-                0
-            );
-
-        classScopes.put(classType, classContext.scope());
-        for (final var member : declaration.members()) {
-            analyzeBlockItem(member, classContext);
+        final Scope members = new Scope(null);
+        classScopes.put(classType, members);
+        ConstructorDeclaration constructor = null;
+        for (final BlockItem member : declaration.members()) {
+            if (member instanceof ConstructorDeclaration candidate) {
+                if (constructor != null) {
+                    throw new SemanticException(
+                        candidate.range(),
+                        "A class may only declare one constructor"
+                    );
+                }
+                constructor = candidate;
+            }
+            else if (
+                !(member instanceof VariableDeclaration)
+                    && !(member instanceof UninitializedVariableDeclaration)
+                    && !(member instanceof FunctionDeclaration)
+            ) {
+                throw new SemanticException(
+                    member.range(),
+                    "Class bodies may only contain fields, methods, and constructors"
+                );
+            }
         }
-
+        final List<Type> parameterTypes = new ArrayList<>();
+        if (constructor != null) {
+            for (final FunctionParameter parameter : constructor.parameters()) {
+                final Type type = resolveType(parameter.type(), context);
+                parameterTypes.add(type);
+                model.setSymbol(
+                    parameter.name(),
+                    new VariableSymbol(parameter.name(), type, Mutability.CONST)
+                );
+            }
+        }
+        final FunctionType constructorType =
+            new FunctionType(parameterTypes, BuiltinType.VOID);
+        model.setConstructor(classType, constructorType);
+        if (constructor != null) {
+            model.setConstructorSymbol(
+                constructor,
+                new ConstructorSymbol(constructor, constructorType)
+            );
+        }
+        for (final BlockItem member : declaration.members()) {
+            if (member instanceof VariableDeclaration field) {
+                analyzeVariableDeclaration(field, context, members);
+            }
+            else if (member instanceof UninitializedVariableDeclaration field) {
+                final Type type = resolveType(field.type(), context);
+                final VariableSymbol symbol =
+                    new VariableSymbol(field.name(), type, field.mutability());
+                members.declare(symbol);
+                model.setSymbol(field.name(), symbol);
+            }
+            else if (member instanceof FunctionDeclaration method) {
+                registerFunction(method, context, members);
+            }
+        }
+        final ClassType previousInstance = currentInstance;
+        final ConstructorDeclaration previousConstructor = currentConstructor;
+        currentInstance = classType;
+        try {
+            for (final BlockItem member : declaration.members()) {
+                if (member instanceof FunctionDeclaration method) {
+                    analyzeFunctionBody(method, context);
+                }
+            }
+            if (constructor != null) {
+                currentConstructor = constructor;
+                final Scope scope = new Scope(context.scope());
+                for (final FunctionParameter parameter : constructor
+                    .parameters()) {
+                    scope.declare(model.getSymbol(parameter.name()));
+                }
+                analyzeBlockStatement(
+                    constructor.body(),
+                    new SemanticContext(scope, null, 0)
+                );
+            }
+            new FieldInitializationAnalyzer(model, declaration)
+                .analyze(constructor);
+        }
+        finally {
+            currentInstance = previousInstance;
+            currentConstructor = previousConstructor;
+        }
     }
 
     private void analyzeForStatement(
@@ -727,6 +817,15 @@ public final class SemanticAnalyzer {
         final ReturnStatement statement,
         final SemanticContext context
     ) {
+        if (currentConstructor != null && context.function() == null) {
+            if (statement.value() != null) {
+                throw new SemanticException(
+                    statement.range(),
+                    "A constructor cannot return a value"
+                );
+            }
+            return;
+        }
         final FunctionSymbol function = context.function();
 
         if (function == null) {
@@ -768,6 +867,14 @@ public final class SemanticAnalyzer {
         final VariableDeclaration declaration,
         final SemanticContext context
     ) {
+        analyzeVariableDeclaration(declaration, context, context.scope());
+    }
+
+    private void analyzeVariableDeclaration(
+        final VariableDeclaration declaration,
+        final SemanticContext context,
+        final Scope destination
+    ) {
         final TypeNode typeNode = declaration.type();
         final Expression initializer = declaration.initializer();
         final Type declaredType =
@@ -805,7 +912,7 @@ public final class SemanticAnalyzer {
                 declaration.mutability()
             );
 
-        context.scope().declare(symbol);
+        destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
     }
 
@@ -814,12 +921,20 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         // TODO: Verify that the parent is program or class body
+        registerFunction(declaration, context, context.scope());
+        analyzeFunctionBody(declaration, context);
+    }
 
+    private void registerFunction(
+        final FunctionDeclaration declaration,
+        final SemanticContext context,
+        final Scope destination
+    ) {
         final List<@NonNull Type> parameterTypes = new ArrayList<>();
         final Scope functionScope = new Scope(context.scope());
 
-        for (final Parameter param : declaration.parameters()) {
-            final TypeNode typeNode = Objects.requireNonNull(param.type());
+        for (final FunctionParameter param : declaration.parameters()) {
+            final TypeNode typeNode = param.type();
             final Type paramType = resolveType(typeNode, context);
             final VariableSymbol paramSymbol =
                 new VariableSymbol(param.name(), paramType, Mutability.CONST);
@@ -846,14 +961,29 @@ public final class SemanticAnalyzer {
                 )
             );
 
-        context.scope().declare(symbol);
+        destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
 
         model.setFunctionParameters(
             symbol,
-            declaration.parameters().stream().map(Parameter::name).toList()
+            declaration.parameters()
+                .stream()
+                .map(FunctionParameter::name)
+                .toList()
         );
 
+    }
+
+    private void analyzeFunctionBody(
+        final FunctionDeclaration declaration,
+        final SemanticContext context
+    ) {
+        final FunctionSymbol symbol =
+            (FunctionSymbol) model.getSymbol(declaration.name());
+        final Scope functionScope = new Scope(context.scope());
+        for (final FunctionParameter parameter : declaration.parameters()) {
+            functionScope.declare(model.getSymbol(parameter.name()));
+        }
         final SemanticContext functionContext =
             new SemanticContext(functionScope, symbol, 0);
 
@@ -1232,14 +1362,50 @@ public final class SemanticAnalyzer {
                         "'new' requires a class name"
                     );
                 }
-                if (!creation.arguments().isEmpty()) {
+                final FunctionType constructor =
+                    model.getConstructor((ClassType) classType);
+                if (
+                    creation.arguments().size() != constructor.parameterTypes()
+                        .size()
+                ) {
                     throw new SemanticException(
                         creation.range(),
-                        "Class %s constructor takes no arguments",
-                        creation.className().name()
+                        "Expected %s constructor arguments, found %s",
+                        constructor.parameterTypes().size(),
+                        creation.arguments().size()
                     );
                 }
+                for (int i = 0; i < creation.arguments().size(); i++) {
+                    final Expression argument = creation.arguments().get(i);
+                    final Type expectedType =
+                        constructor.parameterTypes().get(i);
+                    final Type actual =
+                        analyzeExpression(argument, context, expectedType);
+                    if (
+                        resolveAssignType(
+                            actual,
+                            expectedType,
+                            argument
+                        ) == null
+                    ) {
+                        throw new SemanticException(
+                            argument.range(),
+                            "Cannot assign %s to %s",
+                            actual,
+                            expectedType
+                        );
+                    }
+                }
                 yield classType;
+            }
+            case ThisExpression self -> {
+                if (currentInstance == null) {
+                    throw new SemanticException(
+                        self.range(),
+                        "'this' is only available in instance methods and constructors"
+                    );
+                }
+                yield currentInstance;
             }
             case LiteralExpression literal -> analyzeLiteralExpression(literal);
             case IdentifierExpression identifier ->
@@ -1492,7 +1658,17 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         final Type target = analyzeExpression(assignment.target(), context);
-        requireWritable(assignment.target());
+        if (
+            !(currentConstructor != null
+                && unwrap(
+                    assignment.target()
+                ) instanceof MemberExpression member
+                && unwrap(member.target()) instanceof ThisExpression
+                && model
+                    .getReference(member.member()) instanceof VariableSymbol)
+        ) {
+            requireWritable(assignment.target());
+        }
         final Type value =
             analyzeExpression(assignment.value(), context, target);
         if (resolveAssignType(value, target, assignment.value()) == null) {
@@ -1504,6 +1680,12 @@ public final class SemanticAnalyzer {
             );
         }
         return target;
+    }
+
+    private static Expression unwrap(final Expression expression) {
+        return expression instanceof GroupingExpression grouping
+            ? unwrap(grouping.expression())
+            : expression;
     }
 
     private void requireWritable(final Expression expression) {

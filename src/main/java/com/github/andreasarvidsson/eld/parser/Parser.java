@@ -94,6 +94,8 @@ public final class Parser {
                 return parseVariableDeclaration(token, Mutability.VAR);
             case CLASS:
                 return parseClassDeclaration(token);
+            case CONSTRUCTOR:
+                return parseConstructorDeclaration(token);
             case BREAK:
                 return parseBreakStatement(token);
             case CONTINUE:
@@ -154,7 +156,31 @@ public final class Parser {
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull BlockItem> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-            members.add(parseBlockItem());
+            if (
+                !check(TokenType.VAR) && !check(TokenType.CONST)
+                    && !check(TokenType.FUNC)
+                    && !check(TokenType.CONSTRUCTOR)
+            ) {
+                throw new ParserException(
+                    current().range(),
+                    "Class bodies may only contain fields, methods, and constructors"
+                );
+            }
+            if (check(TokenType.VAR) || check(TokenType.CONST)) {
+                final Token fieldKeyword = advance();
+                members.add(
+                    parseVariableDeclaration(
+                        fieldKeyword,
+                        fieldKeyword.type() == TokenType.VAR
+                            ? Mutability.VAR
+                            : Mutability.CONST,
+                        true
+                    )
+                );
+            }
+            else {
+                members.add(parseBlockItem());
+            }
         }
         final Token close = expect(TokenType.RIGHT_BRACE);
         final Range range = keyword.range().union(close.range());
@@ -175,7 +201,7 @@ public final class Parser {
         final IdentifierDeclaration nameId =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
-        final List<@NonNull Parameter> parameters = new ArrayList<>();
+        final List<@NonNull FunctionParameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
                 final Token paramName = expect(TokenType.IDENTIFIER);
@@ -186,7 +212,7 @@ public final class Parser {
                         paramName.text(),
                         paramName.range()
                     );
-                parameters.add(new Parameter(id, type));
+                parameters.add(new FunctionParameter(id, type));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
@@ -260,7 +286,7 @@ public final class Parser {
                 declarationKeyword.type() == TokenType.VAR
                     ? Mutability.VAR
                     : Mutability.CONST;
-            final VariableDeclaration declaration =
+            final Declaration declaration =
                 parseVariableDeclaration(declarationKeyword, mutability);
             initializer = new DeclarationStatement(declaration);
         }
@@ -416,9 +442,17 @@ public final class Parser {
         );
     }
 
-    private VariableDeclaration parseVariableDeclaration(
+    private Declaration parseVariableDeclaration(
         final Token keyword,
         final Mutability mutability
+    ) {
+        return parseVariableDeclaration(keyword, mutability, false);
+    }
+
+    private Declaration parseVariableDeclaration(
+        final Token keyword,
+        final Mutability mutability,
+        final boolean field
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
         final @Nullable TypeNode type =
@@ -426,6 +460,21 @@ public final class Parser {
         final IdentifierDeclaration identifier =
             new IdentifierDeclaration(name.text(), name.range());
 
+        if (field && check(TokenType.SEMICOLON)) {
+            if (type == null) {
+                throw new ParserException(
+                    identifier.range(),
+                    "A field without a default requires an explicit type"
+                );
+            }
+            final Token semicolon = advance();
+            return new UninitializedVariableDeclaration(
+                mutability,
+                identifier,
+                type,
+                keyword.range().union(semicolon.range())
+            );
+        }
         expect(TokenType.EQUAL);
         final Expression initializer = parseExpression();
         final Token semicolon = expect(TokenType.SEMICOLON);
@@ -436,6 +485,32 @@ public final class Parser {
             type,
             initializer,
             range
+        );
+    }
+
+    private ConstructorDeclaration parseConstructorDeclaration(
+        final Token keyword
+    ) {
+        expect(TokenType.LEFT_PAREN);
+        final List<FunctionParameter> parameters = new ArrayList<>();
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                final Token name = expect(TokenType.IDENTIFIER);
+                expect(TokenType.COLON);
+                parameters.add(
+                    new FunctionParameter(
+                        new IdentifierDeclaration(name.text(), name.range()),
+                        parseType()
+                    )
+                );
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.RIGHT_PAREN);
+        final BlockStatement body = parseBlockStatement();
+        return new ConstructorDeclaration(
+            parameters,
+            body,
+            keyword.range().union(body.range())
         );
     }
 
@@ -581,6 +656,7 @@ public final class Parser {
 
     private Expression parsePrimitiveExpression(final Token token) {
         return switch (token.type()) {
+            case THIS -> new ThisExpression(token.range());
             case IDENTIFIER ->
                 new IdentifierExpression(token.text(), token.range());
             case BOOLEAN_LITERAL -> new LiteralExpression(
@@ -731,26 +807,23 @@ public final class Parser {
     }
 
     private LambdaExpression parseLambdaExpression(final Token open) {
-        final List<@NonNull Parameter> parameters = new ArrayList<>();
+        final List<@NonNull LambdaParameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
                 final Token name = expect(TokenType.IDENTIFIER);
-                final TypeNode type =
-                    match(TokenType.COLON) ? parseType() : null;
                 final IdentifierDeclaration id =
                     new IdentifierDeclaration(name.text(), name.range());
-                parameters.add(new Parameter(id, type));
+                parameters.add(new LambdaParameter(id));
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
-        final TypeNode returnType = check(TokenType.ARROW) ? null : parseType();
         expect(TokenType.ARROW);
         final AstNode body =
             check(TokenType.LEFT_BRACE)
                 ? parseBlockStatement()
                 : parseExpression();
         final Range range = open.range().union(body.range());
-        return new LambdaExpression(parameters, returnType, body, range);
+        return new LambdaExpression(parameters, body, range);
     }
 
     private PostfixExpression parsePostfixExpression(

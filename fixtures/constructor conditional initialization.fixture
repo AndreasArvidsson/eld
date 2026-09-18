@@ -1,0 +1,359 @@
+class Foo {
+    const value: i32;
+    constructor(flag: bool) {
+        if (flag) {
+            this.value = 1;
+        } else {
+            this.value = 2;
+        }
+    }
+}
+print(new Foo(true).value);
+print(new Foo(false).value);
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+IDENTIFIER "flag" (3:17-3:21)
+COLON (3:21-3:22)
+IDENTIFIER "bool" (3:23-3:27)
+RIGHT_PAREN (3:27-3:28)
+LEFT_BRACE (3:29-3:30)
+IF (4:9-4:11)
+LEFT_PAREN (4:12-4:13)
+IDENTIFIER "flag" (4:13-4:17)
+RIGHT_PAREN (4:17-4:18)
+LEFT_BRACE (4:19-4:20)
+THIS (5:13-5:17)
+DOT (5:17-5:18)
+IDENTIFIER "value" (5:18-5:23)
+EQUAL (5:24-5:25)
+INTEGER_LITERAL "1" (5:26-5:27)
+SEMICOLON (5:27-5:28)
+RIGHT_BRACE (6:9-6:10)
+ELSE (6:11-6:15)
+LEFT_BRACE (6:16-6:17)
+THIS (7:13-7:17)
+DOT (7:17-7:18)
+IDENTIFIER "value" (7:18-7:23)
+EQUAL (7:24-7:25)
+INTEGER_LITERAL "2" (7:26-7:27)
+SEMICOLON (7:27-7:28)
+RIGHT_BRACE (8:9-8:10)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+NEW (11:7-11:10)
+IDENTIFIER "Foo" (11:11-11:14)
+LEFT_PAREN (11:14-11:15)
+BOOLEAN_LITERAL "true" (11:15-11:19)
+RIGHT_PAREN (11:19-11:20)
+DOT (11:20-11:21)
+IDENTIFIER "value" (11:21-11:26)
+RIGHT_PAREN (11:26-11:27)
+SEMICOLON (11:27-11:28)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+NEW (12:7-12:10)
+IDENTIFIER "Foo" (12:11-12:14)
+LEFT_PAREN (12:14-12:15)
+BOOLEAN_LITERAL "false" (12:15-12:20)
+RIGHT_PAREN (12:20-12:21)
+DOT (12:21-12:22)
+IDENTIFIER "value" (12:22-12:27)
+RIGHT_PAREN (12:27-12:28)
+SEMICOLON (12:28-12:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:29
+  (ClassDeclaration
+    range: 1:1-10:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+    (ConstructorDeclaration
+      range: 3:5-9:6
+      (FunctionParameter
+        range: 3:17-3:27
+        (IdentifierDeclaration
+          range: 3:17-3:21
+          name: "flag"
+        )
+        (NamedTypeNode
+          range: 3:23-3:27
+          name: "bool"
+        )
+      )
+      (BlockStatement
+        range: 3:29-9:6
+        (ExpressionStatement
+          range: 4:9-8:10
+          (IfExpression
+            range: 4:9-8:10
+            (IdentifierExpression
+              range: 4:13-4:17
+              name: "flag"
+            )
+            (BlockStatement
+              range: 4:19-6:10
+              (ExpressionStatement
+                range: 5:13-5:28
+                (AssignmentExpression
+                  range: 5:13-5:27
+                  (MemberExpression
+                    range: 5:13-5:23
+                    (ThisExpression
+                      range: 5:13-5:17
+                    )
+                    (IdentifierExpression
+                      range: 5:18-5:23
+                      name: "value"
+                    )
+                  )
+                  (LiteralExpression
+                    range: 5:26-5:27
+                    kind: INT
+                    text: "1"
+                  )
+                )
+              )
+            )
+            (BlockStatement
+              range: 6:16-8:10
+              (ExpressionStatement
+                range: 7:13-7:28
+                (AssignmentExpression
+                  range: 7:13-7:27
+                  (MemberExpression
+                    range: 7:13-7:23
+                    (ThisExpression
+                      range: 7:13-7:17
+                    )
+                    (IdentifierExpression
+                      range: 7:18-7:23
+                      name: "value"
+                    )
+                  )
+                  (LiteralExpression
+                    range: 7:26-7:27
+                    kind: INT
+                    text: "2"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:28
+    (CallExpression
+      range: 11:1-11:27
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 11:7-11:26
+        (NewExpression
+          range: 11:7-11:20
+          (IdentifierExpression
+            range: 11:11-11:14
+            name: "Foo"
+          )
+          (LiteralExpression
+            range: 11:15-11:19
+            kind: BOOL
+            text: "true"
+          )
+        )
+        (IdentifierExpression
+          range: 11:21-11:26
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:29
+    (CallExpression
+      range: 12:1-12:28
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:27
+        (NewExpression
+          range: 12:7-12:21
+          (IdentifierExpression
+            range: 12:11-12:14
+            name: "Foo"
+          )
+          (LiteralExpression
+            range: 12:15-12:20
+            kind: BOOL
+            text: "false"
+          )
+        )
+        (IdentifierExpression
+          range: 12:22-12:27
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:9-8:10 -> void
+  4:13-4:17 -> bool
+  5:13-5:17 -> Foo
+  5:13-5:23 -> i32
+  5:13-5:27 -> i32
+  5:18-5:23 -> i32
+  5:26-5:27 -> i32
+  7:13-7:17 -> Foo
+  7:13-7:23 -> i32
+  7:13-7:27 -> i32
+  7:18-7:23 -> i32
+  7:26-7:27 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:27 -> void
+  11:7-11:20 -> Foo
+  11:7-11:26 -> i32
+  11:11-11:14 -> Foo
+  11:15-11:19 -> bool
+  11:21-11:26 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:28 -> void
+  12:7-12:21 -> Foo
+  12:7-12:27 -> i32
+  12:11-12:14 -> Foo
+  12:15-12:20 -> bool
+  12:22-12:27 -> i32
+
+Resolved types:
+  2:18-2:21 -> i32
+  3:23-3:27 -> bool
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:11-2:16 -> const value: i32
+  3:5-9:6 -> constructor(flag: bool)
+  3:17-3:21 -> const flag: bool
+
+References:
+  4:13-4:17 -> 3:17-3:21
+  5:18-5:23 -> 2:11-2:16
+  7:18-7:23 -> 2:11-2:16
+  11:1-11:6 -> builtin print
+  11:11-11:14 -> 1:7-1:10
+  11:21-11:26 -> 2:11-2:16
+  12:1-12:6 -> builtin print
+  12:11-12:14 -> 1:7-1:10
+  12:22-12:27 -> 2:11-2:16
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Foo
+  // access flags 0x9
+  public static INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x8
+  static <clinit>()V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW Test$Foo
+    DUP
+    ICONST_1
+    INVOKESPECIAL Test$Foo.<init> (Z)V
+    GETFIELD Test$Foo.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW Test$Foo
+    DUP
+    ICONST_0
+    INVOKESPECIAL Test$Foo.<init> (Z)V
+    GETFIELD Test$Foo.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Foo {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x11
+  public final I value
+
+  // access flags 0x1
+  public <init>(Z)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ILOAD 1
+    IFEQ L0
+    ALOAD 0
+    LDC 1
+    DUP_X1
+    PUTFIELD Test$Foo.value : I
+    POP
+    GOTO L1
+   L0
+   FRAME FULL [Test$Foo I] []
+    ALOAD 0
+    LDC 2
+    DUP_X1
+    PUTFIELD Test$Foo.value : I
+    POP
+   L1
+   FRAME SAME
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+1
+2
+

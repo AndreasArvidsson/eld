@@ -1,66 +1,49 @@
-(a: i32, b: i32) i32 => a + b;
+(a, b) => a + b;
 
 --- TOKENS ---
 
 LEFT_PAREN (1:1-1:2)
 IDENTIFIER "a" (1:2-1:3)
-COLON (1:3-1:4)
-IDENTIFIER "i32" (1:5-1:8)
-COMMA (1:8-1:9)
-IDENTIFIER "b" (1:10-1:11)
-COLON (1:11-1:12)
-IDENTIFIER "i32" (1:13-1:16)
-RIGHT_PAREN (1:16-1:17)
-IDENTIFIER "i32" (1:18-1:21)
-ARROW (1:22-1:24)
-IDENTIFIER "a" (1:25-1:26)
-PLUS (1:27-1:28)
-IDENTIFIER "b" (1:29-1:30)
-SEMICOLON (1:30-1:31)
+COMMA (1:3-1:4)
+IDENTIFIER "b" (1:5-1:6)
+RIGHT_PAREN (1:6-1:7)
+ARROW (1:8-1:10)
+IDENTIFIER "a" (1:11-1:12)
+PLUS (1:13-1:14)
+IDENTIFIER "b" (1:15-1:16)
+SEMICOLON (1:16-1:17)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:31
+  range: 1:1-1:17
   (ExpressionStatement
-    range: 1:1-1:31
+    range: 1:1-1:17
     (LambdaExpression
-      range: 1:1-1:30
-      (Parameter
-        range: 1:2-1:8
+      range: 1:1-1:16
+      (LambdaParameter
+        range: 1:2-1:3
         (IdentifierDeclaration
           range: 1:2-1:3
           name: "a"
         )
-        (NamedTypeNode
-          range: 1:5-1:8
-          name: "i32"
-        )
       )
-      (Parameter
-        range: 1:10-1:16
+      (LambdaParameter
+        range: 1:5-1:6
         (IdentifierDeclaration
-          range: 1:10-1:11
+          range: 1:5-1:6
           name: "b"
         )
-        (NamedTypeNode
-          range: 1:13-1:16
-          name: "i32"
-        )
-      )
-      (NamedTypeNode
-        range: 1:18-1:21
-        name: "i32"
       )
       (BinaryExpression
-        range: 1:25-1:30
+        range: 1:11-1:16
         (IdentifierExpression
-          range: 1:25-1:26
+          range: 1:11-1:12
           name: "a"
         )
         operator: ADD
         (IdentifierExpression
-          range: 1:29-1:30
+          range: 1:15-1:16
           name: "b"
         )
       )
@@ -70,4 +53,4 @@ SEMICOLON (1:30-1:31)
 
 --- SEMANTIC ---
 
-SemanticException: Lambda expressions are not yet supported at 1:1-1:30
+SemanticException: Lambda expressions are not yet supported at 1:1-1:16

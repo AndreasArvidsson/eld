@@ -1,0 +1,114 @@
+class Foo {
+    const value: i32;
+    constructor() {
+        this.value = 1;
+        this.value = 2;
+    }
+}
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+RIGHT_PAREN (3:17-3:18)
+LEFT_BRACE (3:19-3:20)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+EQUAL (4:20-4:21)
+INTEGER_LITERAL "1" (4:22-4:23)
+SEMICOLON (4:23-4:24)
+THIS (5:9-5:13)
+DOT (5:13-5:14)
+IDENTIFIER "value" (5:14-5:19)
+EQUAL (5:20-5:21)
+INTEGER_LITERAL "2" (5:22-5:23)
+SEMICOLON (5:23-5:24)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+    (ConstructorDeclaration
+      range: 3:5-6:6
+      (BlockStatement
+        range: 3:19-6:6
+        (ExpressionStatement
+          range: 4:9-4:24
+          (AssignmentExpression
+            range: 4:9-4:23
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
+              )
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
+              )
+            )
+            (LiteralExpression
+              range: 4:22-4:23
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+        (ExpressionStatement
+          range: 5:9-5:24
+          (AssignmentExpression
+            range: 5:9-5:23
+            (MemberExpression
+              range: 5:9-5:19
+              (ThisExpression
+                range: 5:9-5:13
+              )
+              (IdentifierExpression
+                range: 5:14-5:19
+                name: "value"
+              )
+            )
+            (LiteralExpression
+              range: 5:22-5:23
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const field 'value' may already be initialized at 5:9-5:23
