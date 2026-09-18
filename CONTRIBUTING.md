@@ -218,7 +218,6 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- GitHub workflow
 - ... operator when constructing objects/arrays
 - Export & import
 - Exceptions

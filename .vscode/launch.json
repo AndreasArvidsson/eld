@@ -5,7 +5,8 @@
       "type": "java",
       "name": "Run program",
       "request": "launch",
-      "mainClass": "com.github.andreasarvidsson.eld.Main"
+      "mainClass": "com.github.andreasarvidsson.eld.Main",
+      "args": ["repl"]
     },
     {
       "type": "java",
