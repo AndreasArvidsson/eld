@@ -1,54 +1,43 @@
-const value = 1 < 2 ? 5 : 0.5;
+const foo = true ? 5 : 0.5;
 
 --- TOKENS ---
 
 CONST (1:1-1:6)
-IDENTIFIER "value" (1:7-1:12)
-EQUAL (1:13-1:14)
-INTEGER_LITERAL "1" (1:15-1:16)
-LESS (1:17-1:18)
-INTEGER_LITERAL "2" (1:19-1:20)
-QUESTION (1:21-1:22)
-INTEGER_LITERAL "5" (1:23-1:24)
-COLON (1:25-1:26)
-FLOAT_LITERAL "0.5" (1:27-1:30)
-SEMICOLON (1:30-1:31)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+BOOLEAN_LITERAL "true" (1:13-1:17)
+QUESTION (1:18-1:19)
+INTEGER_LITERAL "5" (1:20-1:21)
+COLON (1:22-1:23)
+FLOAT_LITERAL "0.5" (1:24-1:27)
+SEMICOLON (1:27-1:28)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:31
+  range: 1:1-1:28
   (VariableDeclaration
-    range: 1:1-1:31
+    range: 1:1-1:28
     mutability: CONST
     (IdentifierDeclaration
-      range: 1:7-1:12
-      name: "value"
+      range: 1:7-1:10
+      name: "foo"
     )
     type: null
     (TernaryExpression
-      range: 1:15-1:30
-      (BinaryExpression
-        range: 1:15-1:20
-        (LiteralExpression
-          range: 1:15-1:16
-          kind: INT
-          text: "1"
-        )
-        operator: LESS
-        (LiteralExpression
-          range: 1:19-1:20
-          kind: INT
-          text: "2"
-        )
+      range: 1:13-1:27
+      (LiteralExpression
+        range: 1:13-1:17
+        kind: BOOL
+        text: "true"
       )
       (LiteralExpression
-        range: 1:23-1:24
+        range: 1:20-1:21
         kind: INT
         text: "5"
       )
       (LiteralExpression
-        range: 1:27-1:30
+        range: 1:24-1:27
         kind: FLOAT
         text: "0.5"
       )
@@ -58,4 +47,4 @@ SEMICOLON (1:30-1:31)
 
 --- SEMANTIC ---
 
-SemanticException: Incompatible branch types: i32 and f64 at 1:27-1:30
+SemanticException: Incompatible branch types: i32 and f64 at 1:24-1:27

@@ -1,0 +1,303 @@
+const foo: any = switch (1) {
+    case 1  => 5
+    else => "hello"
+};
+const bar: i32 | string = switch (2) {
+    case 1  => 5
+    else => "hello"
+};
+
+print(foo);
+print(bar);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "any" (1:12-1:15)
+EQUAL (1:16-1:17)
+SWITCH (1:18-1:24)
+LEFT_PAREN (1:25-1:26)
+INTEGER_LITERAL "1" (1:26-1:27)
+RIGHT_PAREN (1:27-1:28)
+LEFT_BRACE (1:29-1:30)
+CASE (2:5-2:9)
+INTEGER_LITERAL "1" (2:10-2:11)
+ARROW (2:13-2:15)
+INTEGER_LITERAL "5" (2:16-2:17)
+ELSE (3:5-3:9)
+ARROW (3:10-3:12)
+STRING_LITERAL "\"hello\"" (3:13-3:20)
+RIGHT_BRACE (4:1-4:2)
+SEMICOLON (4:2-4:3)
+CONST (5:1-5:6)
+IDENTIFIER "bar" (5:7-5:10)
+COLON (5:10-5:11)
+IDENTIFIER "i32" (5:12-5:15)
+PIPE (5:16-5:17)
+IDENTIFIER "string" (5:18-5:24)
+EQUAL (5:25-5:26)
+SWITCH (5:27-5:33)
+LEFT_PAREN (5:34-5:35)
+INTEGER_LITERAL "2" (5:35-5:36)
+RIGHT_PAREN (5:36-5:37)
+LEFT_BRACE (5:38-5:39)
+CASE (6:5-6:9)
+INTEGER_LITERAL "1" (6:10-6:11)
+ARROW (6:13-6:15)
+INTEGER_LITERAL "5" (6:16-6:17)
+ELSE (7:5-7:9)
+ARROW (7:10-7:12)
+STRING_LITERAL "\"hello\"" (7:13-7:20)
+RIGHT_BRACE (8:1-8:2)
+SEMICOLON (8:2-8:3)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "foo" (10:7-10:10)
+RIGHT_PAREN (10:10-10:11)
+SEMICOLON (10:11-10:12)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "bar" (11:7-11:10)
+RIGHT_PAREN (11:10-11:11)
+SEMICOLON (11:11-11:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:12
+  (VariableDeclaration
+    range: 1:1-4:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "any"
+    )
+    (SwitchExpression
+      range: 1:18-4:2
+      (LiteralExpression
+        range: 1:26-1:27
+        kind: INT
+        text: "1"
+      )
+      (SwitchBranch
+        range: 2:5-2:17
+        (LiteralExpression
+          range: 2:10-2:11
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 2:16-2:17
+          (LiteralExpression
+            range: 2:16-2:17
+            kind: INT
+            text: "5"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 3:5-3:20
+        (SwitchBranchExpressionBody
+          range: 3:13-3:20
+          (LiteralExpression
+            range: 3:13-3:20
+            kind: STRING
+            text: "\"hello\""
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-8:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "bar"
+    )
+    (UnionTypeNode
+      range: 5:12-5:24
+      (NamedTypeNode
+        range: 5:12-5:15
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 5:18-5:24
+        name: "string"
+      )
+    )
+    (SwitchExpression
+      range: 5:27-8:2
+      (LiteralExpression
+        range: 5:35-5:36
+        kind: INT
+        text: "2"
+      )
+      (SwitchBranch
+        range: 6:5-6:17
+        (LiteralExpression
+          range: 6:10-6:11
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 6:16-6:17
+          (LiteralExpression
+            range: 6:16-6:17
+            kind: INT
+            text: "5"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 7:5-7:20
+        (SwitchBranchExpressionBody
+          range: 7:13-7:20
+          (LiteralExpression
+            range: 7:13-7:20
+            kind: STRING
+            text: "\"hello\""
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:12
+    (CallExpression
+      range: 10:1-10:11
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 10:7-10:10
+        name: "foo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:12
+    (CallExpression
+      range: 11:1-11:11
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 11:7-11:10
+        name: "bar"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:18-4:2 -> any
+  1:26-1:27 -> i32
+  2:10-2:11 -> i32
+  2:16-2:17 -> i32
+  3:13-3:20 -> string
+  5:27-8:2 -> i32 | string
+  5:35-5:36 -> i32
+  6:10-6:11 -> i32
+  6:16-6:17 -> i32
+  7:13-7:20 -> string
+  10:1-10:6 -> (any) => void
+  10:1-10:11 -> void
+  10:7-10:10 -> any
+  11:1-11:6 -> (any) => void
+  11:1-11:11 -> void
+  11:7-11:10 -> i32 | string
+
+Resolved types:
+  1:12-1:15 -> any
+  5:12-5:15 -> i32
+  5:12-5:24 -> i32 | string
+  5:18-5:24 -> string
+
+Conversions:
+  2:16-2:17 -> i32 -> any
+  3:13-3:20 -> string -> any
+  6:16-6:17 -> i32 -> i32 | string
+  7:13-7:20 -> string -> i32 | string
+
+Declarations:
+  1:7-1:10 -> const foo: any
+  5:7-5:10 -> const bar: i32 | string
+
+References:
+  10:1-10:6 -> builtin print
+  10:7-10:10 -> 1:7-1:10
+  11:1-11:6 -> builtin print
+  11:7-11:10 -> 5:7-5:10
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Ljava/lang/Object; foo
+
+  // access flags 0x19
+  public final static Ljava/lang/Object; bar
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 1
+    TABLESWITCH
+      1: L0
+      default: L1
+   L0
+   FRAME SAME
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    GOTO L2
+   L1
+   FRAME SAME
+    LDC "hello"
+   L2
+   FRAME SAME1 java/lang/Object
+    PUTSTATIC Test.foo : Ljava/lang/Object;
+    LDC 2
+    TABLESWITCH
+      1: L3
+      default: L4
+   L3
+   FRAME SAME
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    GOTO L5
+   L4
+   FRAME SAME
+    LDC "hello"
+   L5
+   FRAME SAME1 java/lang/Object
+    PUTSTATIC Test.bar : Ljava/lang/Object;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.bar : Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+5
+hello
+
