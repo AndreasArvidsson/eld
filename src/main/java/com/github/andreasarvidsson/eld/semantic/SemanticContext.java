@@ -6,8 +6,17 @@ import org.jspecify.annotations.Nullable;
 
 public record SemanticContext(
     Scope scope, @Nullable FunctionSymbol function, int loopDepth,
-    @Nullable List<YieldStatement> yields
+    @Nullable List<YieldStatement> yields, @Nullable Type yieldType
 ) {
+
+    public SemanticContext(
+        Scope scope,
+        @Nullable FunctionSymbol function,
+        int loopDepth,
+        @Nullable List<YieldStatement> yields
+    ) {
+        this(scope, function, loopDepth, yields, null);
+    }
 
     public SemanticContext(
         Scope scope,

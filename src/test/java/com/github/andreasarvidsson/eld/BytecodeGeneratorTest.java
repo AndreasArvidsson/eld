@@ -57,6 +57,123 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void anyTargetsConvertIfAndSwitchBranchesIndividually() throws Exception {
+        final Class<?> type = compile("""
+            func unionConditional(flag: bool) i32 | string {
+                return if (flag) { yield 5; } else { yield "hello"; };
+            }
+            func unionSelection(flag: bool) i64 | string {
+                return switch (flag) { case true => 5 else => "hello" };
+            }
+            func nullableConditional(flag: bool) i32 | null {
+                return if (flag) { yield 5; } else { yield null; };
+            }
+            func conditional(flag: bool) any {
+                return if (flag) { yield 5; } else { yield 0.5; };
+            }
+            func nested(flag: bool) any {
+                const values: [any] = [if (flag) {
+                    yield if (true) { yield 5; } else { yield "unused"; };
+                } else { yield "other"; }];
+                return values[0];
+            }
+            func selection(flag: bool) any {
+                return switch (flag) { case true => 5 else { yield 0.5; } };
+            }
+            func grouped(flag: bool) any {
+                return (if (flag) { yield null; } else { yield true; });
+            }
+            func multiple(flag: bool) any {
+                return if (flag) {
+                    if (flag) { yield 5; }
+                    yield "fallback";
+                } elif (false) { yield false; } else { yield 0.5; };
+            }
+            """);
+        assertEquals(
+            5,
+            type.getMethod("unionConditional", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            "hello",
+            type.getMethod("unionConditional", boolean.class)
+                .invoke(null, false)
+        );
+        assertEquals(
+            5L,
+            type.getMethod("unionSelection", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            "hello",
+            type.getMethod("unionSelection", boolean.class).invoke(null, false)
+        );
+        assertEquals(
+            5,
+            type.getMethod("nullableConditional", boolean.class)
+                .invoke(null, true)
+        );
+        assertNull(
+            type.getMethod("nullableConditional", boolean.class)
+                .invoke(null, false)
+        );
+        assertEquals(
+            5,
+            type.getMethod("conditional", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            0.5,
+            type.getMethod("conditional", boolean.class).invoke(null, false)
+        );
+        assertEquals(
+            5,
+            type.getMethod("nested", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            "other",
+            type.getMethod("nested", boolean.class).invoke(null, false)
+        );
+        assertEquals(
+            5,
+            type.getMethod("selection", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            0.5,
+            type.getMethod("selection", boolean.class).invoke(null, false)
+        );
+        assertNull(type.getMethod("grouped", boolean.class).invoke(null, true));
+        assertEquals(
+            true,
+            type.getMethod("grouped", boolean.class).invoke(null, false)
+        );
+        assertEquals(
+            5,
+            type.getMethod("multiple", boolean.class).invoke(null, true)
+        );
+        assertEquals(
+            0.5,
+            type.getMethod("multiple", boolean.class).invoke(null, false)
+        );
+    }
+
+    @Test
+    void anyBranchTargetsStillRequireValuesAndCompleteBranches() {
+        for (final String source : List.of(
+            "const value = if (true) { yield 5; } else { yield 0.5; };",
+            "const value: any = if (true) { yield 5; };",
+            "const value: any = if (true) { yield 5; } else {};",
+            "func empty() {} const value: any = if (true) { yield empty(); } else { yield 1; };",
+            "const value: any = switch (1) { case 1 => 5 };",
+            "const value: i32 | string = if (true) { yield false; } else { yield 1; };"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
     void anyUsesObjectAndBoxesPrimitiveValues() throws Exception {
         final Class<?> type =
             compile(

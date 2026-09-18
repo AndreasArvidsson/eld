@@ -1,4 +1,4 @@
-const value = if (1 < 2) {
+const value = if (true) {
     yield 5;
 }
 else {
@@ -14,11 +14,9 @@ IDENTIFIER "value" (1:7-1:12)
 EQUAL (1:13-1:14)
 IF (1:15-1:17)
 LEFT_PAREN (1:18-1:19)
-INTEGER_LITERAL "1" (1:19-1:20)
-LESS (1:21-1:22)
-INTEGER_LITERAL "2" (1:23-1:24)
-RIGHT_PAREN (1:24-1:25)
-LEFT_BRACE (1:26-1:27)
+BOOLEAN_LITERAL "true" (1:19-1:23)
+RIGHT_PAREN (1:23-1:24)
+LEFT_BRACE (1:25-1:26)
 YIELD (2:5-2:10)
 INTEGER_LITERAL "5" (2:11-2:12)
 SEMICOLON (2:12-2:13)
@@ -50,22 +48,13 @@ SEMICOLON (8:13-8:14)
     type: null
     (IfExpression
       range: 1:15-6:2
-      (BinaryExpression
-        range: 1:19-1:24
-        (LiteralExpression
-          range: 1:19-1:20
-          kind: INT
-          text: "1"
-        )
-        operator: LESS
-        (LiteralExpression
-          range: 1:23-1:24
-          kind: INT
-          text: "2"
-        )
+      (LiteralExpression
+        range: 1:19-1:23
+        kind: BOOL
+        text: "true"
       )
       (BlockStatement
-        range: 1:26-3:2
+        range: 1:25-3:2
         (YieldStatement
           range: 2:5-2:13
           (LiteralExpression
@@ -108,9 +97,7 @@ SEMICOLON (8:13-8:14)
 
 Expression types:
   1:15-6:2 -> i32
-  1:19-1:20 -> i32
-  1:19-1:24 -> bool
-  1:23-1:24 -> i32
+  1:19-1:23 -> bool
   2:11-2:12 -> i32
   5:11-5:12 -> i32
   8:1-8:6 -> (any) => void
@@ -136,24 +123,15 @@ public final class Test {
 
   // access flags 0x8
   static <clinit>()V
-    LDC 1
-    LDC 2
-    IF_ICMPLT L0
-    ICONST_0
+    ICONST_1
+    IFEQ L0
+    LDC 5
     GOTO L1
    L0
    FRAME SAME
-    ICONST_1
-   L1
-   FRAME SAME1 I
-    IFEQ L2
-    LDC 5
-    GOTO L3
-   L2
-   FRAME SAME
     LDC 0
-    GOTO L3
-   L3
+    GOTO L1
+   L1
    FRAME SAME1 I
     PUTSTATIC Test.value : I
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;

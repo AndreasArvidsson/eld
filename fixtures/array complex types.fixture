@@ -1,0 +1,237 @@
+const nested = [[1, 2], [3, 4]];
+const mixed: [any] = [1, "two", true, null];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "nested" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+LEFT_BRACKET (1:17-1:18)
+INTEGER_LITERAL "1" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "2" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+COMMA (1:23-1:24)
+LEFT_BRACKET (1:25-1:26)
+INTEGER_LITERAL "3" (1:26-1:27)
+COMMA (1:27-1:28)
+INTEGER_LITERAL "4" (1:29-1:30)
+RIGHT_BRACKET (1:30-1:31)
+RIGHT_BRACKET (1:31-1:32)
+SEMICOLON (1:32-1:33)
+CONST (2:1-2:6)
+IDENTIFIER "mixed" (2:7-2:12)
+COLON (2:12-2:13)
+LEFT_BRACKET (2:14-2:15)
+IDENTIFIER "any" (2:15-2:18)
+RIGHT_BRACKET (2:18-2:19)
+EQUAL (2:20-2:21)
+LEFT_BRACKET (2:22-2:23)
+INTEGER_LITERAL "1" (2:23-2:24)
+COMMA (2:24-2:25)
+STRING_LITERAL "\"two\"" (2:26-2:31)
+COMMA (2:31-2:32)
+BOOLEAN_LITERAL "true" (2:33-2:37)
+COMMA (2:37-2:38)
+NULL (2:39-2:43)
+RIGHT_BRACKET (2:43-2:44)
+SEMICOLON (2:44-2:45)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:45
+  (VariableDeclaration
+    range: 1:1-1:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "nested"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:32
+      (ArrayExpression
+        range: 1:17-1:23
+        (LiteralExpression
+          range: 1:18-1:19
+          kind: INT
+          text: "1"
+        )
+        (LiteralExpression
+          range: 1:21-1:22
+          kind: INT
+          text: "2"
+        )
+      )
+      (ArrayExpression
+        range: 1:25-1:31
+        (LiteralExpression
+          range: 1:26-1:27
+          kind: INT
+          text: "3"
+        )
+        (LiteralExpression
+          range: 1:29-1:30
+          kind: INT
+          text: "4"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "mixed"
+    )
+    (ArrayTypeNode
+      range: 2:14-2:19
+      (NamedTypeNode
+        range: 2:15-2:18
+        name: "any"
+      )
+    )
+    (ArrayExpression
+      range: 2:22-2:44
+      (LiteralExpression
+        range: 2:23-2:24
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 2:26-2:31
+        kind: STRING
+        text: "\"two\""
+      )
+      (LiteralExpression
+        range: 2:33-2:37
+        kind: BOOL
+        text: "true"
+      )
+      (LiteralExpression
+        range: 2:39-2:43
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:32 -> [[i32]]
+  1:17-1:23 -> [i32]
+  1:18-1:19 -> i32
+  1:21-1:22 -> i32
+  1:25-1:31 -> [i32]
+  1:26-1:27 -> i32
+  1:29-1:30 -> i32
+  2:22-2:44 -> [any]
+  2:23-2:24 -> i32
+  2:26-2:31 -> string
+  2:33-2:37 -> bool
+  2:39-2:43 -> null
+
+Resolved types:
+  2:14-2:19 -> [any]
+  2:15-2:18 -> any
+
+Conversions:
+  2:23-2:24 -> i32 -> any
+  2:26-2:31 -> string -> any
+  2:33-2:37 -> bool -> any
+  2:39-2:43 -> null -> any
+
+Declarations:
+  1:7-1:13 -> const nested: [[i32]]
+  2:7-2:12 -> const mixed: [any]
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; nested
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; mixed
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 2
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    AASTORE
+    DUP
+    LDC 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 2
+    NEWARRAY T_INT
+    DUP
+    LDC 0
+    LDC 3
+    IASTORE
+    DUP
+    LDC 1
+    LDC 4
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init> ([I)V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.nested : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 4
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "two"
+    AASTORE
+    DUP
+    LDC 2
+    ICONST_1
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    DUP
+    LDC 3
+    ACONST_NULL
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init> ([Ljava/lang/Object;)V
+    PUTSTATIC Test.mixed : Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    RETURN
+    MAXSTACK = 11
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+

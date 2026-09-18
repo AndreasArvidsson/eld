@@ -96,7 +96,8 @@ public final class SemanticAnalyzer {
                 new Scope(context.scope()),
                 context.function(),
                 context.loopDepth(),
-                context.yields()
+                context.yields(),
+                context.yieldType()
             );
         for (final BlockItem item : block.items()) {
             analyzeBlockItem(item, blockContext);
@@ -207,7 +208,8 @@ public final class SemanticAnalyzer {
                 new Scope(context.scope()),
                 context.function(),
                 context.loopDepth() + 1,
-                context.yields()
+                context.yields(),
+                context.yieldType()
             );
 
         final Statement initializer = statement.initializer();
@@ -246,7 +248,8 @@ public final class SemanticAnalyzer {
                 new Scope(context.scope()),
                 context.function(),
                 context.loopDepth() + 1,
-                context.yields()
+                context.yields(),
+                context.yieldType()
             );
         final Type iterableType =
             analyzeExpression(statement.iterable(), loopContext);
@@ -299,7 +302,8 @@ public final class SemanticAnalyzer {
                 context.scope(),
                 context.function(),
                 context.loopDepth() + 1,
-                context.yields()
+                context.yields(),
+                context.yieldType()
             );
 
         analyzeBlockStatement(statement.body(), loopContext);
@@ -325,7 +329,8 @@ public final class SemanticAnalyzer {
                 context.scope(),
                 context.function(),
                 context.loopDepth() + 1,
-                context.yields()
+                context.yields(),
+                context.yieldType()
             );
 
         analyzeBlockStatement(statement.body(), loopContext);
@@ -405,10 +410,27 @@ public final class SemanticAnalyzer {
                 "A 'yield' statement can only be used within an enclosing if or switch expression"
             );
         }
-        if (analyzeExpression(statement.value(), context) == BuiltinType.VOID) {
+        final Type expected = context.yieldType();
+        final Type actual =
+            analyzeExpression(statement.value(), context, expected);
+        if (actual == BuiltinType.VOID) {
             throw new SemanticException(
                 statement.range(),
                 "A yield statement must produce a value"
+            );
+        }
+        if (
+            expected != null && resolveAssignType(
+                actual,
+                expected,
+                statement.value()
+            ) == null
+        ) {
+            throw new SemanticException(
+                statement.value().range(),
+                "Cannot assign %s to %s",
+                actual,
+                expected
             );
         }
         yields.add(statement);
@@ -438,6 +460,15 @@ public final class SemanticAnalyzer {
         final SwitchExpression expression,
         final SemanticContext context,
         final boolean requireValue
+    ) {
+        return analyzeSwitchExpression(expression, context, requireValue, null);
+    }
+
+    private Type analyzeSwitchExpression(
+        final SwitchExpression expression,
+        final SemanticContext context,
+        final boolean requireValue,
+        final @Nullable Type expected
     ) {
         final Type subjectType =
             analyzeExpression(expression.subject(), context);
@@ -489,12 +520,32 @@ public final class SemanticAnalyzer {
                     context.scope(),
                     context.function(),
                     requireValue ? 0 : context.loopDepth(),
-                    yields
+                    yields,
+                    expected
                 );
             final List<Expression> values = new ArrayList<>();
             if (body instanceof SwitchBranchExpressionBody compact) {
                 if (requireValue) {
-                    analyzeExpression(compact.expression(), branchContext);
+                    final Type actual =
+                        analyzeExpression(
+                            compact.expression(),
+                            branchContext,
+                            expected
+                        );
+                    if (
+                        expected != null && resolveAssignType(
+                            actual,
+                            expected,
+                            compact.expression()
+                        ) == null
+                    ) {
+                        throw new SemanticException(
+                            compact.range(),
+                            "Cannot assign %s to %s",
+                            actual,
+                            expected
+                        );
+                    }
                     values.add(compact.expression());
                 }
                 else {
@@ -518,7 +569,7 @@ public final class SemanticAnalyzer {
             }
             if (requireValue) {
                 for (final Expression value : values) {
-                    final Type type = model.getExpressionType(value);
+                    final Type type = model.getEffectiveType(value);
                     if (type == BuiltinType.VOID) {
                         throw new SemanticException(
                             value.range(),
@@ -545,9 +596,23 @@ public final class SemanticAnalyzer {
         final IfExpression expression,
         final SemanticContext context
     ) {
+        return analyzeIfExpression(expression, context, null);
+    }
+
+    private Type analyzeIfExpression(
+        final IfExpression expression,
+        final SemanticContext context,
+        final @Nullable Type expected
+    ) {
         final List<YieldStatement> yields = new ArrayList<>();
         final SemanticContext branchContext =
-            new SemanticContext(context.scope(), context.function(), 0, yields);
+            new SemanticContext(
+                context.scope(),
+                context.function(),
+                0,
+                yields,
+                expected
+            );
         final BlockStatement otherwise = expression.elseBranch();
         if (otherwise == null) {
             throw new SemanticException(
@@ -568,9 +633,9 @@ public final class SemanticAnalyzer {
                 "Every branch of an if expression must yield a value"
             );
         }
-        Type result = model.getExpressionType(yields.getFirst().value());
+        Type result = model.getEffectiveType(yields.getFirst().value());
         for (final YieldStatement statement : yields) {
-            final Type type = model.getExpressionType(statement.value());
+            final Type type = model.getEffectiveType(statement.value());
             result = commonBranchType(result, type, statement.value());
         }
         return result;
@@ -863,12 +928,12 @@ public final class SemanticAnalyzer {
             model.setExpressionType(tuple, to);
             return to;
         }
+        if (from.equals(to)) {
+            return from;
+        }
         if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
             model.setConversionType(fromExpression, to);
             return to;
-        }
-        if (from.equals(to)) {
-            return from;
         }
 
         if (to instanceof UnionType union) {
@@ -979,6 +1044,20 @@ public final class SemanticAnalyzer {
         final SemanticContext context,
         final @Nullable Type expected
     ) {
+        if (expected == BuiltinType.ANY || expected instanceof UnionType) {
+            if (expression instanceof IfExpression conditional) {
+                final Type type =
+                    analyzeIfExpression(conditional, context, expected);
+                model.setExpressionType(expression, type);
+                return type;
+            }
+            if (expression instanceof SwitchExpression selection) {
+                final Type type =
+                    analyzeSwitchExpression(selection, context, true, expected);
+                model.setExpressionType(expression, type);
+                return type;
+            }
+        }
         if (
             expected instanceof TupleType target
                 && expression instanceof TupleExpression tuple
