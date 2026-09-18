@@ -17,6 +17,6 @@ public class ParserException extends BaseException {
         @FormatString final String format,
         final @Nullable Object... args
     ) {
-        super(range, Objects.requireNonNull(String.format(format, args)));
+        super(range, format.formatted(args));
     }
 }

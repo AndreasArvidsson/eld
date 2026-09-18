@@ -103,8 +103,7 @@ public class AstPrinter {
                 case '\t' -> output.append("\\t");
                 default -> {
                     if (Character.isISOControl(character)) {
-                        output
-                            .append(String.format("\\u%04x", (int) character));
+                        output.append("\\u%04x".formatted((int) character));
                     }
                     else {
                         output.append(character);

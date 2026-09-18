@@ -160,8 +160,8 @@ Expression types:
   3:17-3:24 -> i32
   4:30-4:35 -> i32
   4:30-4:37 -> i32
-  5:22-5:26 -> FunctionType([], i32)
-  6:32-6:40 -> FunctionType([], i32)
+  5:22-5:26 -> () => i32
+  6:32-6:40 -> () => i32
   6:32-6:42 -> i32
 
 Resolved types:
@@ -170,11 +170,11 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> ClassSymbol(name=Counter, type=ClassType(name=Counter))
-  2:11-2:18 -> VariableSymbol(name=initial, type=i32, mutability=CONST)
-  3:9-3:14 -> VariableSymbol(name=count, type=i32, mutability=VAR)
-  4:10-4:14 -> FunctionSymbol(name=next, parameterTypes=[], returnType=i32)
-  5:11-5:19 -> VariableSymbol(name=callback, type=FunctionType([], i32), mutability=CONST)
-  6:10-6:16 -> FunctionSymbol(name=invoke, parameterTypes=[], returnType=i32)
+  2:11-2:18 -> const initial: i32
+  3:9-3:14 -> var count: i32
+  4:10-4:14 -> next() => i32
+  5:11-5:19 -> const callback: () => i32
+  6:10-6:16 -> invoke() => i32
 
 References:
   3:17-3:24 -> 2:11-2:18

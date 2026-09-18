@@ -69,7 +69,7 @@ Conversions:
   1:31-1:33 -> i32 -> f64
 
 Declarations:
-  1:7-1:13 -> VariableSymbol(name=result, type=f64, mutability=CONST)
+  1:7-1:13 -> const result: f64
 
 --- BYTECODE ---
 

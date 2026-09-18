@@ -9,7 +9,11 @@ public record FunctionType(List<@NonNull Type> parameterTypes, Type returnType)
 
     @Override
     public String toString() {
-        return String
-            .format("FunctionType(%s, %s)", parameterTypes, returnType);
+        return "%s => %s".formatted(
+            parameterTypes.stream()
+                .map(Type::toString)
+                .collect(java.util.stream.Collectors.joining(", ", "(", ")")),
+            returnType
+        );
     }
 }

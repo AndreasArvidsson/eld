@@ -76,7 +76,7 @@ public class Fixtures {
             Fixtures.class.getResourceAsStream("/" + SUBSET_FILE)) {
             if (input == null) {
                 throw new IOException(
-                    String.format("Subset file '%s' not found", SUBSET_FILE)
+                    "Subset file '%s' not found".formatted(SUBSET_FILE)
                 );
             }
 

@@ -201,22 +201,22 @@ SEMICOLON (8:11-8:12)
 Expression types:
   1:23-1:27 -> null
   2:23-2:27 -> bool
-  3:1-3:6 -> BuiltinFunctionType(print)
+  3:1-3:6 -> (any) => void
   3:1-3:11 -> void
   3:7-3:10 -> i32 | null
   4:1-4:4 -> i32 | null
   4:1-4:9 -> i32 | null
   4:7-4:9 -> i32
-  5:1-5:6 -> BuiltinFunctionType(print)
+  5:1-5:6 -> (any) => void
   5:1-5:11 -> void
   5:7-5:10 -> i32 | null
-  6:1-6:6 -> BuiltinFunctionType(print)
+  6:1-6:6 -> (any) => void
   6:1-6:11 -> void
   6:7-6:10 -> f32 | bool
   7:1-7:4 -> f32 | bool
   7:1-7:10 -> f32 | bool
   7:7-7:10 -> f64
-  8:1-8:6 -> BuiltinFunctionType(print)
+  8:1-8:6 -> (any) => void
   8:1-8:11 -> void
   8:7-8:10 -> f32 | bool
 
@@ -235,8 +235,8 @@ Conversions:
   7:7-7:10 -> f64 -> f32 | bool
 
 Declarations:
-  1:5-1:8 -> VariableSymbol(name=foo, type=i32 | null, mutability=VAR)
-  2:5-2:8 -> VariableSymbol(name=bar, type=f32 | bool, mutability=VAR)
+  1:5-1:8 -> var foo: i32 | null
+  2:5-2:8 -> var bar: f32 | bool
 
 References:
   3:1-3:6 -> builtin print

@@ -165,26 +165,26 @@ Expression types:
   2:34-2:36 -> i32
   2:34-2:40 -> i32
   2:39-2:40 -> i32
-  6:1-6:6 -> BuiltinFunctionType(print)
+  6:1-6:6 -> (any) => void
   6:1-6:13 -> void
   6:7-6:12 -> i32
-  7:1-7:6 -> BuiltinFunctionType(print)
+  7:1-7:6 -> (any) => void
   7:1-7:42 -> void
   7:7-7:41 -> string
-  8:1-8:6 -> BuiltinFunctionType(print)
+  8:1-8:6 -> (any) => void
   8:1-8:11 -> void
   8:7-8:10 -> char
-  9:1-9:6 -> BuiltinFunctionType(print)
+  9:1-9:6 -> (any) => void
   9:1-9:11 -> void
   9:7-9:10 -> char
-  10:9-10:14 -> BuiltinFunctionType(print)
+  10:9-10:14 -> (any) => void
   10:9-10:33 -> void
   10:15-10:16 -> i32
   10:15-10:32 -> i32
   10:31-10:32 -> i32
 
 Declarations:
-  2:26-2:31 -> VariableSymbol(name=value, type=i32, mutability=CONST)
+  2:26-2:31 -> const value: i32
 
 References:
   6:1-6:6 -> builtin print

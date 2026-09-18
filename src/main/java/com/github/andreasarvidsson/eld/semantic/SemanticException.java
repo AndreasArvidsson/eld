@@ -1,14 +1,10 @@
 package com.github.andreasarvidsson.eld.semantic;
 
-import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
-
-import com.google.errorprone.annotations.FormatMethod;
-import com.google.errorprone.annotations.FormatString;
-
 import com.github.andreasarvidsson.eld.BaseException;
 import com.github.andreasarvidsson.eld.Range;
+import com.google.errorprone.annotations.FormatMethod;
+import com.google.errorprone.annotations.FormatString;
 
 public final class SemanticException extends BaseException {
     @FormatMethod
@@ -17,6 +13,6 @@ public final class SemanticException extends BaseException {
         @FormatString final String format,
         final @Nullable Object... args
     ) {
-        super(range, Objects.requireNonNull(String.format(format, args)));
+        super(range, format.formatted(args));
     }
 }

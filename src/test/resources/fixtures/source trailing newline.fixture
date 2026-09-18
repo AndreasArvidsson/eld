@@ -34,7 +34,7 @@ Expression types:
   1:13-1:14 -> i32
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=foo, type=i32, mutability=CONST)
+  1:7-1:10 -> const foo: i32
 
 --- BYTECODE ---
 

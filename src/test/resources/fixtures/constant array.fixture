@@ -72,18 +72,18 @@ SEMICOLON (2:22-2:23)
 --- SEMANTIC ---
 
 Expression types:
-  1:13-1:19 -> ArrayType<i32>
+  1:13-1:19 -> [i32]
   1:14-1:15 -> i32
   1:17-1:18 -> i32
-  2:20-2:22 -> ArrayType<i32>
+  2:20-2:22 -> [i32]
 
 Resolved types:
-  2:12-2:17 -> ArrayType<i32>
+  2:12-2:17 -> [i32]
   2:13-2:16 -> i32
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=foo, type=ArrayType<i32>, mutability=CONST)
-  2:7-2:10 -> VariableSymbol(name=bar, type=ArrayType<i32>, mutability=CONST)
+  1:7-1:10 -> const foo: [i32]
+  2:7-2:10 -> const bar: [i32]
 
 --- BYTECODE ---
 

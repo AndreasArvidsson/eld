@@ -204,11 +204,8 @@ public class FixtureTest {
                 | BytecodeException e
         ) {
             final String message =
-                String.format(
-                    "%s: %s",
-                    e.getClass().getSimpleName(),
-                    e.getMessage()
-                );
+                "%s: %s"
+                    .formatted(e.getClass().getSimpleName(), e.getMessage());
             actualBuilder.append(message);
 
             if (assertFixture) {

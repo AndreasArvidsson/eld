@@ -351,7 +351,7 @@ public class Lexer {
         advance();
 
         final String text =
-            Objects.requireNonNull(String.format("\"%s\"", builder.toString()));
+            Objects.requireNonNull("\"%s\"".formatted(builder.toString()));
         return createToken(TokenType.STRING_LITERAL, text);
     }
 

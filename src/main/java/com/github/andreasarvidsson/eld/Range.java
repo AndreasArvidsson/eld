@@ -28,7 +28,7 @@ public record Range(Position start, Position end)
 
     @Override
     public String toString() {
-        return Objects.requireNonNull(String.format("%s-%s", start(), end()));
+        return Objects.requireNonNull("%s-%s".formatted(start(), end()));
     }
 
     @Override

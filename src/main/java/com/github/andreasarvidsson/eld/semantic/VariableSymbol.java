@@ -1,7 +1,5 @@
 package com.github.andreasarvidsson.eld.semantic;
 
-import java.util.Objects;
-
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
@@ -22,13 +20,7 @@ public record VariableSymbol(
 
     @Override
     public String toString() {
-        return Objects.requireNonNull(
-            String.format(
-                "VariableSymbol(name=%s, type=%s, mutability=%s)",
-                name(),
-                type,
-                mutability
-            )
-        );
+        return "%s %s: %s"
+            .formatted(mutability.toString().toLowerCase(), name(), type);
     }
 }

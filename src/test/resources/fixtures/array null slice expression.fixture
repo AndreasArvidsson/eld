@@ -306,53 +306,53 @@ SEMICOLON (8:21-8:22)
 --- SEMANTIC ---
 
 Expression types:
-  1:16-1:34 -> ArrayType<null>
+  1:16-1:34 -> [null]
   1:17-1:21 -> null
   1:23-1:27 -> null
   1:29-1:33 -> null
-  2:1-2:6 -> BuiltinFunctionType(print)
+  2:1-2:6 -> (any) => void
   2:1-2:17 -> void
-  2:7-2:13 -> ArrayType<null>
-  2:7-2:16 -> ArrayType<null>
-  3:1-3:6 -> BuiltinFunctionType(print)
+  2:7-2:13 -> [null]
+  2:7-2:16 -> [null]
+  3:1-3:6 -> (any) => void
   3:1-3:18 -> void
-  3:7-3:13 -> ArrayType<null>
-  3:7-3:17 -> ArrayType<null>
+  3:7-3:13 -> [null]
+  3:7-3:17 -> [null]
   3:14-3:15 -> i32
-  4:1-4:6 -> BuiltinFunctionType(print)
+  4:1-4:6 -> (any) => void
   4:1-4:18 -> void
-  4:7-4:13 -> ArrayType<null>
-  4:7-4:17 -> ArrayType<null>
+  4:7-4:13 -> [null]
+  4:7-4:17 -> [null]
   4:15-4:16 -> i32
-  5:1-5:6 -> BuiltinFunctionType(print)
+  5:1-5:6 -> (any) => void
   5:1-5:19 -> void
-  5:7-5:13 -> ArrayType<null>
-  5:7-5:18 -> ArrayType<null>
+  5:7-5:13 -> [null]
+  5:7-5:18 -> [null]
   5:14-5:15 -> i32
   5:16-5:17 -> i32
-  6:1-6:6 -> BuiltinFunctionType(print)
+  6:1-6:6 -> (any) => void
   6:1-6:19 -> void
-  6:7-6:13 -> ArrayType<null>
-  6:7-6:18 -> ArrayType<null>
+  6:7-6:13 -> [null]
+  6:7-6:18 -> [null]
   6:15-6:17 -> i32
   6:16-6:17 -> i32
-  7:1-7:6 -> BuiltinFunctionType(print)
+  7:1-7:6 -> (any) => void
   7:1-7:19 -> void
-  7:7-7:13 -> ArrayType<null>
-  7:7-7:18 -> ArrayType<null>
+  7:7-7:13 -> [null]
+  7:7-7:18 -> [null]
   7:14-7:16 -> i32
   7:15-7:16 -> i32
-  8:1-8:6 -> BuiltinFunctionType(print)
+  8:1-8:6 -> (any) => void
   8:1-8:21 -> void
-  8:7-8:13 -> ArrayType<null>
-  8:7-8:20 -> ArrayType<null>
+  8:7-8:13 -> [null]
+  8:7-8:20 -> [null]
   8:14-8:16 -> i32
   8:15-8:16 -> i32
   8:17-8:19 -> i32
   8:18-8:19 -> i32
 
 Declarations:
-  1:7-1:13 -> VariableSymbol(name=values, type=ArrayType<null>, mutability=CONST)
+  1:7-1:13 -> const values: [null]
 
 References:
   2:1-2:6 -> builtin print

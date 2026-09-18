@@ -126,9 +126,9 @@ Expression types:
   2:12-2:13 -> i32
   2:12-2:17 -> i32
   2:16-2:17 -> i32
-  5:1-5:6 -> BuiltinFunctionType(print)
+  5:1-5:6 -> (any) => void
   5:1-5:17 -> void
-  5:7-5:10 -> FunctionType([i32, i32], i32)
+  5:7-5:10 -> (i32, i32) => i32
   5:7-5:16 -> i32
   5:11-5:12 -> i32
   5:14-5:15 -> i32
@@ -139,9 +139,9 @@ Resolved types:
   1:26-1:29 -> i32
 
 Declarations:
-  1:6-1:9 -> FunctionSymbol(name=sum, parameterTypes=[i32, i32], returnType=i32)
-  1:10-1:11 -> VariableSymbol(name=a, type=i32, mutability=CONST)
-  1:18-1:19 -> VariableSymbol(name=b, type=i32, mutability=CONST)
+  1:6-1:9 -> sum(i32, i32) => i32
+  1:10-1:11 -> const a: i32
+  1:18-1:19 -> const b: i32
 
 References:
   2:12-2:13 -> 1:10-1:11

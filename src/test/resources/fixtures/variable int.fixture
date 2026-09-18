@@ -34,7 +34,7 @@ Expression types:
   1:11-1:13 -> i32
 
 Declarations:
-  1:5-1:8 -> VariableSymbol(name=foo, type=i32, mutability=VAR)
+  1:5-1:8 -> var foo: i32
 
 --- BYTECODE ---
 

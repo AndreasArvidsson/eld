@@ -6,6 +6,6 @@ public enum BuiltinFunctionType implements Type {
 
     @Override
     public String toString() {
-        return "BuiltinFunctionType(print)";
+        return "(any) => void";
     }
 }

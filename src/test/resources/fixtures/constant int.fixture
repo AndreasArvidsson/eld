@@ -142,11 +142,11 @@ Conversions:
   5:18-5:20 -> i32 -> i64
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=aaa, type=i32, mutability=CONST)
-  2:7-2:10 -> VariableSymbol(name=bbb, type=i64, mutability=CONST)
-  3:7-3:10 -> VariableSymbol(name=ccc, type=i8, mutability=CONST)
-  4:7-4:10 -> VariableSymbol(name=ddd, type=i32, mutability=CONST)
-  5:7-5:10 -> VariableSymbol(name=eee, type=i64, mutability=CONST)
+  1:7-1:10 -> const aaa: i32
+  2:7-2:10 -> const bbb: i64
+  3:7-3:10 -> const ccc: i8
+  4:7-4:10 -> const ddd: i32
+  5:7-5:10 -> const eee: i64
 
 --- BYTECODE ---
 

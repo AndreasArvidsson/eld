@@ -80,7 +80,7 @@ Expression types:
   1:25-1:28 -> i32
 
 Declarations:
-  1:10-1:11 -> VariableSymbol(name=i, type=i32, mutability=VAR)
+  1:10-1:11 -> var i: i32
 
 References:
   1:17-1:18 -> 1:10-1:11

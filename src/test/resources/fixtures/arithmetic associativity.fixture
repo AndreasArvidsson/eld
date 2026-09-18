@@ -60,7 +60,7 @@ Expression types:
   1:25-1:26 -> i32
 
 Declarations:
-  1:7-1:13 -> VariableSymbol(name=result, type=i32, mutability=CONST)
+  1:7-1:13 -> const result: i32
 
 --- BYTECODE ---
 

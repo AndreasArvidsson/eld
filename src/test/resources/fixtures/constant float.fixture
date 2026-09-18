@@ -93,9 +93,9 @@ Conversions:
   2:18-2:22 -> f64 -> f32
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=aaa, type=f64, mutability=CONST)
-  2:7-2:10 -> VariableSymbol(name=bbb, type=f32, mutability=CONST)
-  3:7-3:10 -> VariableSymbol(name=ccc, type=f64, mutability=CONST)
+  1:7-1:10 -> const aaa: f64
+  2:7-2:10 -> const bbb: f32
+  3:7-3:10 -> const ccc: f64
 
 --- BYTECODE ---
 

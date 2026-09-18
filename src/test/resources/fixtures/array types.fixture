@@ -301,50 +301,50 @@ SEMICOLON (10:23-10:24)
 --- SEMANTIC ---
 
 Expression types:
-  1:19-1:21 -> ArrayType<i8>
-  2:20-2:22 -> ArrayType<i16>
-  3:20-3:22 -> ArrayType<i32>
-  4:20-4:22 -> ArrayType<i64>
-  5:20-5:22 -> ArrayType<f32>
-  6:20-6:22 -> ArrayType<f64>
-  7:21-7:23 -> ArrayType<bool>
-  8:21-8:23 -> ArrayType<char>
-  9:23-9:25 -> ArrayType<string>
-  10:21-10:23 -> ArrayType<null>
+  1:19-1:21 -> [i8]
+  2:20-2:22 -> [i16]
+  3:20-3:22 -> [i32]
+  4:20-4:22 -> [i64]
+  5:20-5:22 -> [f32]
+  6:20-6:22 -> [f64]
+  7:21-7:23 -> [bool]
+  8:21-8:23 -> [char]
+  9:23-9:25 -> [string]
+  10:21-10:23 -> [null]
 
 Resolved types:
-  1:12-1:16 -> ArrayType<i8>
+  1:12-1:16 -> [i8]
   1:13-1:15 -> i8
-  2:12-2:17 -> ArrayType<i16>
+  2:12-2:17 -> [i16]
   2:13-2:16 -> i16
-  3:12-3:17 -> ArrayType<i32>
+  3:12-3:17 -> [i32]
   3:13-3:16 -> i32
-  4:12-4:17 -> ArrayType<i64>
+  4:12-4:17 -> [i64]
   4:13-4:16 -> i64
-  5:12-5:17 -> ArrayType<f32>
+  5:12-5:17 -> [f32]
   5:13-5:16 -> f32
-  6:12-6:17 -> ArrayType<f64>
+  6:12-6:17 -> [f64]
   6:13-6:16 -> f64
-  7:12-7:18 -> ArrayType<bool>
+  7:12-7:18 -> [bool]
   7:13-7:17 -> bool
-  8:12-8:18 -> ArrayType<char>
+  8:12-8:18 -> [char]
   8:13-8:17 -> char
-  9:12-9:20 -> ArrayType<string>
+  9:12-9:20 -> [string]
   9:13-9:19 -> string
-  10:12-10:18 -> ArrayType<null>
+  10:12-10:18 -> [null]
   10:13-10:17 -> null
 
 Declarations:
-  1:7-1:10 -> VariableSymbol(name=aaa, type=ArrayType<i8>, mutability=CONST)
-  2:7-2:10 -> VariableSymbol(name=bbb, type=ArrayType<i16>, mutability=CONST)
-  3:7-3:10 -> VariableSymbol(name=ccc, type=ArrayType<i32>, mutability=CONST)
-  4:7-4:10 -> VariableSymbol(name=ddd, type=ArrayType<i64>, mutability=CONST)
-  5:7-5:10 -> VariableSymbol(name=eee, type=ArrayType<f32>, mutability=CONST)
-  6:7-6:10 -> VariableSymbol(name=fff, type=ArrayType<f64>, mutability=CONST)
-  7:7-7:10 -> VariableSymbol(name=ggg, type=ArrayType<bool>, mutability=CONST)
-  8:7-8:10 -> VariableSymbol(name=hhh, type=ArrayType<char>, mutability=CONST)
-  9:7-9:10 -> VariableSymbol(name=iii, type=ArrayType<string>, mutability=CONST)
-  10:7-10:10 -> VariableSymbol(name=jjj, type=ArrayType<null>, mutability=CONST)
+  1:7-1:10 -> const aaa: [i8]
+  2:7-2:10 -> const bbb: [i16]
+  3:7-3:10 -> const ccc: [i32]
+  4:7-4:10 -> const ddd: [i64]
+  5:7-5:10 -> const eee: [f32]
+  6:7-6:10 -> const fff: [f64]
+  7:7-7:10 -> const ggg: [bool]
+  8:7-8:10 -> const hhh: [char]
+  9:7-9:10 -> const iii: [string]
+  10:7-10:10 -> const jjj: [null]
 
 --- BYTECODE ---
 

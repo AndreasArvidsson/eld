@@ -107,8 +107,8 @@ Expression types:
   2:29-2:30 -> i32
 
 Declarations:
-  1:7-1:19 -> VariableSymbol(name=productFirst, type=i32, mutability=CONST)
-  2:7-2:18 -> VariableSymbol(name=productLast, type=i32, mutability=CONST)
+  1:7-1:19 -> const productFirst: i32
+  2:7-2:18 -> const productLast: i32
 
 --- BYTECODE ---
 

@@ -85,12 +85,12 @@ Expression types:
   1:19-1:20 -> i32
   1:23-1:24 -> i32
   1:27-1:28 -> i32
-  2:1-2:6 -> BuiltinFunctionType(print)
+  2:1-2:6 -> (any) => void
   2:1-2:13 -> void
   2:7-2:12 -> i32
 
 Declarations:
-  1:7-1:12 -> VariableSymbol(name=value, type=i32, mutability=CONST)
+  1:7-1:12 -> const value: i32
 
 References:
   2:1-2:6 -> builtin print

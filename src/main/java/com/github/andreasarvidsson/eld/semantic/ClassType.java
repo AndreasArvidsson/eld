@@ -4,6 +4,6 @@ public record ClassType(String name) implements Type {
 
     @Override
     public String toString() {
-        return String.format("ClassType(name=%s)", name);
+        return "ClassType(name=%s)".formatted(name);
     }
 }

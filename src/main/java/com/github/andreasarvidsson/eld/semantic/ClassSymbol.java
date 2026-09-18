@@ -20,7 +20,7 @@ public record ClassSymbol(IdentifierDeclaration declaration, ClassType type)
     @Override
     public String toString() {
         return Objects.requireNonNull(
-            String.format("ClassSymbol(name=%s, type=%s)", name(), type)
+            "ClassSymbol(name=%s, type=%s)".formatted(name(), type)
         );
     }
 

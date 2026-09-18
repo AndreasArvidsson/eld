@@ -51,10 +51,8 @@ final class Repl {
             ReplSession session = new ReplSession();
             terminal.writer()
                 .println(
-                    String.format(
-                        "%s REPL. :help for commands; Ctrl-D to exit.",
-                        Constants.LANGUAGE_NAME
-                    )
+                    "%s REPL. :help for commands; Ctrl-D to exit."
+                        .formatted(Constants.LANGUAGE_NAME)
                 );
             terminal.flush();
             while (true) {

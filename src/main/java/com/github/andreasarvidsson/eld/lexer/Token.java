@@ -11,8 +11,7 @@ public record Token(TokenType type, String text, Range range) {
         final String typeText = switch (type()) {
             case IDENTIFIER, INTEGER_LITERAL, FLOAT_LITERAL, CHAR_LITERAL,
                 STRING_LITERAL,
-                BOOLEAN_LITERAL -> String.format(
-                    "%s \"%s\"",
+                BOOLEAN_LITERAL -> "%s \"%s\"".formatted(
                     type(),
                     text().replace("\\", "\\\\")
                         .replace("\"", "\\\"")
@@ -24,7 +23,7 @@ public record Token(TokenType type, String text, Range range) {
             default -> type().name();
         };
 
-        final String result = String.format("%s (%s)", typeText, range());
+        final String result = "%s (%s)".formatted(typeText, range());
         return Objects.requireNonNull(result);
     }
 }

@@ -48,11 +48,11 @@ RIGHT_BRACE (3:1-3:2)
 --- SEMANTIC ---
 
 Expression types:
-  1:14-1:17 -> ArrayType<i32>
+  1:14-1:17 -> [i32]
   1:15-1:16 -> i32
 
 Declarations:
-  1:6-1:11 -> VariableSymbol(name=value, type=i32, mutability=CONST)
+  1:6-1:11 -> const value: i32
 
 --- BYTECODE ---
 

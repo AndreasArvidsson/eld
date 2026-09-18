@@ -1,0 +1,186 @@
+func get() (i32, bool) {
+    return (1, true);
+}
+
+const value = get();
+print(value);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "get" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+LEFT_PAREN (1:12-1:13)
+IDENTIFIER "i32" (1:13-1:16)
+COMMA (1:16-1:17)
+IDENTIFIER "bool" (1:18-1:22)
+RIGHT_PAREN (1:22-1:23)
+LEFT_BRACE (1:24-1:25)
+RETURN (2:5-2:11)
+LEFT_PAREN (2:12-2:13)
+INTEGER_LITERAL "1" (2:13-2:14)
+COMMA (2:14-2:15)
+BOOLEAN_LITERAL "true" (2:16-2:20)
+RIGHT_PAREN (2:20-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "value" (5:7-5:12)
+EQUAL (5:13-5:14)
+IDENTIFIER "get" (5:15-5:18)
+LEFT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+SEMICOLON (5:20-5:21)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "value" (6:7-6:12)
+RIGHT_PAREN (6:12-6:13)
+SEMICOLON (6:13-6:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:14
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "get"
+    )
+    (TupleTypeNode
+      range: 1:12-1:23
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 1:18-1:22
+        name: "bool"
+      )
+    )
+    (BlockStatement
+      range: 1:24-3:2
+      (ReturnStatement
+        range: 2:5-2:22
+        (TupleExpression
+          range: 2:12-2:21
+          (LiteralExpression
+            range: 2:13-2:14
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 2:16-2:20
+            kind: BOOL
+            text: "true"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "value"
+    )
+    type: null
+    (CallExpression
+      range: 5:15-5:20
+      (IdentifierExpression
+        range: 5:15-5:18
+        name: "get"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:14
+    (CallExpression
+      range: 6:1-6:13
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 6:7-6:12
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:21 -> (i32, bool)
+  2:13-2:14 -> i32
+  2:16-2:20 -> bool
+  5:15-5:18 -> () => (i32, bool)
+  5:15-5:20 -> (i32, bool)
+  6:1-6:6 -> (any) => void
+  6:1-6:13 -> void
+  6:7-6:12 -> (i32, bool)
+
+Resolved types:
+  1:12-1:23 -> (i32, bool)
+  1:13-1:16 -> i32
+  1:18-1:22 -> bool
+
+Declarations:
+  1:6-1:9 -> get() => (i32, bool)
+  5:7-5:12 -> const value: (i32, bool)
+
+References:
+  5:15-5:18 -> 1:6-1:9
+  6:1-6:6 -> builtin print
+  6:7-6:12 -> 5:7-5:12
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Lcom/github/andreasarvidsson/eld/runtime/EldTuple; value
+
+  // access flags 0x9
+  public static get()Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    ICONST_1
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
+    ARETURN
+    MAXSTACK = 6
+    MAXLOCALS = 0
+
+  // access flags 0x8
+  static <clinit>()V
+    INVOKESTATIC Test.get ()Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    PUTSTATIC Test.value : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+(1, true)
+
