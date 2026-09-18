@@ -2,10 +2,10 @@
 
 Eld is a statically typed programming language that compiles to JVM bytecode.
 
-Eld requires Java 21 or later. See [CONTRIBUTING.md](CONTRIBUTING.md) for
+Eld requires Java 21 or later. See [CONTRIBUTING.md](./CONTRIBUTING.md) for
 building from source, development setup, tests, and implementation notes.
 
-See [cli.md](cli.md) for command-line and REPL usage.
+See [cli.md](./cli.md) for command-line and REPL usage.
 
 ## Declarations
 
@@ -18,7 +18,8 @@ func add(a: i32, b: i32) i32 {
 }
 
 func log(value: any) {
-    print(value); return;
+    print(value);
+    return;
 }
 
 class Counter {
@@ -28,6 +29,9 @@ class Counter {
     }
 }
 ```
+
+`const` prevents reassignment; `var` allows it. Arrays and class instances can
+still be mutated through a `const` binding.
 
 ## Types and literals
 
@@ -40,13 +44,17 @@ const float: f32 = 0.5;
 const double: f64 = 1.25;
 const enabled: bool = true;
 const letter: char = 'x';
-const text: string = "hello\nworld";
+const text: string = "hello \"world\"";
 const optional: i32 | null = null;
 var poly: i32 | string = 5;
 poly = "hello";
 var unknown: any = 42;
 unknown = "world";
 ```
+
+Strings decode only `\"` and `\\`; other escapes such as `\n` remain literal.
+Multiline strings can contain actual newlines. Character literals also support
+escapes such as `'\n'` and `'\t'`.
 
 ## Arrays, slices, and tuples
 
@@ -76,25 +84,64 @@ const callback = add;
 callback(1, 2);
 ```
 
+Positional arguments must precede named arguments. Named arguments require a
+declared function or method; calls through stored function references are positional.
+
+## Classes and method references
+
+```text
+const counter = new Counter();
+print(counter.value);
+counter.value = 5;
+print(counter.next()); // 5; value becomes 6
+const next = counter.next;
+print(next()); // 6; bound to counter
+```
+
+Methods can access their instance fields without a receiver, as `next` does
+with `value`. A stored method reference retains its receiver.
+
 ## Statements
 
 ```text
 count = 3;
 count++;
 count--;
-if (count > 0) { print("positive"); }
-elif (count == 0) { print("zero"); }
-else { print("negative"); }
-while (count > 0) { count--; }
-do { count++; } while (count < 2);
+if (count > 0) {
+    print("positive");
+}
+elif (count == 0) {
+    print("zero");
+}
+else {
+    print("negative");
+}
+while (count > 0) {
+    count--;
+}
+do {
+    count++;
+} while (count < 2);
 for (var i = 0; i < 3; i++) {
-    if (i == 0) { continue; }
-    if (i == 2) { break; }
+    if (i == 0) {
+        continue;
+    }
+    if (i == 2) {
+        break;
+    }
     print(i);
 }
-for (value : numbers) { print(value); }
-for (value, index : numbers) { print(index); print(value); }
-switch (count) { case 1 => print("one") else => print("other") }
+for (value : values) {
+    print(value);
+}
+for (value, index : values) {
+    print(index);
+    print(value);
+}
+switch (count) {
+    case 1 => print("one")
+    else => print("other")
+}
 ```
 
 ## Expressions
@@ -119,6 +166,37 @@ const selected = switch (count) {
 };
 ```
 
+1. When used as values, `if` and `switch` require an `else` and a value from
+   every branch. Blocks produce values with `yield`; a switch's `=>` expression
+   supplies its value directly.
+2. When used as statements, `if` and `switch` can omit `else` and do not need
+   to produce values.
+3. Branch values must have compatible types or an explicit target type such
+   as `any` or a union.
+
+### Operators
+
+Precedence, highest to lowest:
+
+| Operators                            | Purpose                                              |
+| ------------------------------------ | ---------------------------------------------------- |
+| `()`, `[]`, `.`, postfix `++` / `--` | Calls, indexing, member access, increment/decrement. |
+| Unary `+`, `-`, `!`                  | Sign and logical negation.                           |
+| `*`, `/`, `%`                        | Multiplication, division, remainder.                 |
+| `+`, `-`                             | Addition, string concatenation, subtraction.         |
+| `<`, `<=`, `>`, `>=`                 | Ordering.                                            |
+| `==`, `!=`                           | Equality.                                            |
+| `&&`                                 | Logical AND.                                         |
+| `\|\|`                               | Logical OR.                                          |
+| `? :`                                | Conditional expression.                              |
+| `=`                                  | Assignment.                                          |
+
+1. Binary operators associate left to right; assignment and `? :` associate
+   right to left. Parentheses override precedence.
+2. `&&` and `||` short-circuit: the right operand runs only when needed.
+   Conditional expressions evaluate only the selected branch.
+3. Postfix `++` and `--` mutate the operand and return its previous value.
+
 ## Comments
 
 ```text
@@ -126,94 +204,70 @@ const selected = switch (count) {
 /* Block comment */
 ```
 
-## Numeric types
+## Type reference
 
-The signed integer types are `i8`, `i16`, `i32`, and `i64` (8, 16, 32, and
-64 bits). The floating-point types are `f32` and `f64` (IEEE 754 single and
-double precision). `i32` replaces `int`, and `f32` replaces `float`; the old
-names are no longer accepted as types.
+| Type                      | Description                                                       |
+| ------------------------- | ----------------------------------------------------------------- |
+| `i8`, `i16`, `i32`, `i64` | Signed integers of 8, 16, 32, and 64 bits.                        |
+| `f32`, `f64`              | IEEE 754 single- and double-precision floating point.             |
+| `bool`                    | `true` or `false`.                                                |
+| `char`                    | A character, such as `'x'`.                                       |
+| `string`                  | Text, such as `"hello"`.                                          |
+| `null`                    | The null value.                                                   |
+| `any`                     | Any value, including `null`; represented by Java's `Object`.      |
+| `[T]`                     | A mutable array of elements of type `T`.                          |
+| `(T, U)`                  | A tuple of two or more elements, which may have different types.  |
+| `T \| U`                  | A union accepting either type; `T \| null` makes a type nullable. |
+| `Foo`                     | An instance of a declared class `Foo`.                            |
 
-```text
-var small: i8 = 127;
-var count: i64 = 9000000000;
-var ratio: f32 = 0.5;
-var precise: f64 = 1.23456789012345;
-func twice(value: i64) i64 { return value * 2; }
-```
+### Numeric rules
 
-Integer literals infer `i32` when they fit, otherwise `i64`. Decimal literals
-infer `f64`; an explicit `f32` variable or parameter type converts the
-`f64` literal to `f32` (including signed and parenthesized literals). Signed integer literals can initialize any integer size that can
-hold their value. Out-of-range literals are rejected.
+1. Integer literals infer `i32` when they fit, otherwise `i64`. An explicit
+   integer type accepts signed literals within its range; out-of-range values
+   are rejected.
+2. Decimal literals infer `f64`. An explicit `f32` variable or parameter accepts
+   decimal literals, including signed and parenthesized ones.
+3. Integers widen implicitly to larger integers or floating-point types;
+   `f32` widens to `f64`. Other narrowing conversions are rejected. Conversion
+   to floating point may lose precision.
+4. Arithmetic and numeric comparisons promote operands to the first applicable
+   type: `f64`, `f32`, `i64`, then `i32`. Unary `+` and `-` also promote `i8`,
+   `i16`, and `char` to `i32`.
+5. `++` and `--` retain the operand's type. Integer arithmetic wraps at the
+   promoted width; increments and decrements wrap at the operand's width.
 
-Integer values widen implicitly to larger integers or floating-point types;
-`f32` also widens to `f64`. Other narrowing conversions are rejected. Arithmetic and numeric comparisons follow Java's binary numeric promotion:
-use `f64` if either operand is `f64`, otherwise `f32`, otherwise `i64`,
-otherwise `i32`. This includes `char`: operations on `i8`, `i16`, and `char`
-produce `i32`, even when both operands have the same small type. Unary `+`
-and `-` also promote these types to `i32`. Increments and decrements retain
-the operand's type. Integer arithmetic wraps at the promoted width; increments
-and decrements wrap at the operand's width. Widening to floating point can
-lose precision, just as in Java.
+### Any and union types
 
-## Any type
+| Rule           | `any`                                      | `T \| U`                                                                          |
+| -------------- | ------------------------------------------ | --------------------------------------------------------------------------------- |
+| Assignment     | Accepts every value.                       | Accepts members and unions containing a subset of its members.                    |
+| Representation | Boxes primitives; preserves references.    | Boxes primitive members; preserves references.                                    |
+| Equality       | Compares contained values using `equals`.  | Compares contained values using `equals`; `i32` and `i64` values remain distinct. |
+| Narrowing      | No implicit conversion to a concrete type. | No implicit or flow-sensitive narrowing to a member.                              |
 
-`any` is an unknown value type represented by Java's `Object`. Every value
-can be assigned to it, including `null`; primitive values are boxed.
+1. `any` cannot be used for arithmetic, conditions, calls, or indexing. Union
+   arithmetic requires a statically numeric type.
+2. Union member order and duplicates do not matter; a union containing `any`
+   simplifies to `any`.
+3. Unions work in parameters, return types, and array elements. `[i32 | null]`
+   is an array of nullable integers; `[i32] | null` is a nullable array.
+4. Mixed array literals need an explicit union or `any` element type. Unrelated
+   branch types do not automatically infer a union.
 
-```text
-var value: any = 42;
-value = "hello";
-const values: [any] = [1, "two", true, null];
-func identity(value: any) any { return value; }
-```
+### Arrays and tuples
 
-An `any` value cannot implicitly narrow to a concrete type or be used for
-arithmetic, conditions, calls, or indexing. Equality uses the contained values'
-`equals` methods. Arrays remain invariant: an existing `[i32]` cannot be
-assigned to `[any]`. A union containing `any` simplifies to `any`.
+| Behavior      | Arrays                                                | Tuples                                                                 |
+| ------------- | ----------------------------------------------------- | ---------------------------------------------------------------------- |
+| Indexing      | Integer indices; negative indices count from the end. | Nonnegative integer literal indices.                                   |
+| Invalid index | Rejected at runtime.                                  | Rejected at compile time.                                              |
+| Mutation      | Elements can be reassigned.                           | Elements cannot be reassigned; contained arrays can still be modified. |
+| Printing      | `[1, 2, 3]`                                           | `(42, answer)`                                                         |
 
-## Tuples
-
-Tuples use parentheses for both types and values, with two or more elements.
-Elements can have different types, including nested tuples and arrays.
-
-```text
-const pair: (i64, string) = (42, "answer");
-print(pair); // (42, answer)
-print(pair[0]); // 42
-func point() (f64, f64) { return (1.0, 2.0); }
-```
-
-Tuple types can be inferred. Literal elements support the same conversions as
-variable initializers. Access uses a nonnegative integer literal index; invalid
-indices are rejected at compile time. Tuple elements cannot be reassigned, but
-mutable arrays stored inside tuples can still be modified. Tuple variables can
-be reassigned when declared with `var`.
-
-## Union types
-
-Union types use `|`, for example `var value: i32 | null = null;`.
-A member value can be assigned to its union, and a union can widen to another
-union containing all its members. Member order and duplicates do not change
-type identity. Primitive members are boxed at union boundaries; reference
-members retain their runtime representation. Equality compares boxed values
-with their runtime types, so an `i32` member and an `i64` member remain distinct.
-Unions work in parameters, return types, and array elements such as
-`[i32 | null]`; `[i32] | null` instead describes an optional array.
-Mutable arrays remain invariant. Union values cannot implicitly narrow to one
-member, and flow-sensitive narrowing is not implemented. Arithmetic still
-requires a statically numeric type. Heterogeneous array literals require an
-explicit union element type; unrelated branch types are not automatically
-combined into inferred unions.
-
-## Arrays
-
-Arrays print their logical contents, such as `[1, 2, 3]`, `[true, false]`,
-or `[h, i]`. Source-level append syntax is not yet implemented.
-
-Subscripting accepts negative indices relative to the end and rejects
-out-of-range indices. Slices use an inclusive start and exclusive end
-and return independent copies. Omitted bounds default to zero and the
-logical length. For all arrays, normalized slice bounds must be between zero
-and the logical length (inclusive); invalid bounds and reversed ranges throw.
+1. Arrays are invariant: `[i32]` cannot be assigned to `[any]` or `[i32 | null]`.
+2. Tuple types can be inferred and nested. Literal elements use the same
+   conversions as variable initializers. A `var` tuple can be reassigned.
+3. Array slices copy elements from an inclusive start to an exclusive end.
+   Omitted bounds default to zero and the array length. After negative bounds
+   are normalized, both must be within `0..length`; invalid or reversed ranges
+   throw.
+4. Source-level array append syntax is not yet implemented.
