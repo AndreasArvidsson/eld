@@ -40,6 +40,7 @@ public final class BytecodeGenerator {
     private final int previousItems;
     private final Program program;
     private final SemanticModel semanticModel;
+    private final Map<String, String> classOwners;
 
     public BytecodeGenerator(
         final Program program,
@@ -55,6 +56,25 @@ public final class BytecodeGenerator {
         final String parentName,
         final int previousItems
     ) {
+        this(
+            program,
+            semanticModel,
+            moduleName,
+            parentName,
+            previousItems,
+            Map.of()
+        );
+    }
+
+    BytecodeGenerator(
+        final Program program,
+        final SemanticModel semanticModel,
+        final String moduleName,
+        final String parentName,
+        final int previousItems,
+        final Map<String, String> classOwners
+    ) {
+        this.classOwners = Map.copyOf(classOwners);
         this.program = program;
         this.semanticModel = semanticModel;
         this.moduleName = moduleName;
@@ -104,16 +124,39 @@ public final class BytecodeGenerator {
         return Collections.unmodifiableMap(classes);
     }
 
+    private ClassWriter classWriter() {
+        return new ClassWriter(
+            ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
+        ) {
+            @Override
+            protected String getCommonSuperClass(
+                final String left,
+                final String right
+            ) {
+                // Generated classes extend Object and are not available to ASM's class loader.
+                if (left.equals(right)) {
+                    return left;
+                }
+                if (
+                    left.startsWith(moduleName + "$")
+                        || right.startsWith(moduleName + "$")
+                        || classOwners.containsValue(left)
+                        || classOwners.containsValue(right)
+                ) {
+                    return "java/lang/Object";
+                }
+                return super.getCommonSuperClass(left, right);
+            }
+        };
+    }
+
     private String className(final ClassDeclaration declaration) {
         return moduleName + "$" + declaration.name().name();
     }
 
     private byte[] generateClass(final ClassDeclaration declaration) {
         final String name = className(declaration);
-        final ClassWriter writer =
-            new ClassWriter(
-                ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
-            );
+        final ClassWriter writer = classWriter();
         writer.visit(
             V21,
             ACC_PUBLIC | ACC_SUPER,
@@ -236,10 +279,7 @@ public final class BytecodeGenerator {
     }
 
     private byte[] generateModule() {
-        final ClassWriter writer =
-            new ClassWriter(
-                ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS
-            );
+        final ClassWriter writer = classWriter();
         writer.visit(
             V21,
             ACC_PUBLIC | ACC_SUPER
@@ -540,7 +580,12 @@ public final class BytecodeGenerator {
         return decoded.toString();
     }
 
-    private static String descriptor(final Type type) {
+    private String classOwner(final ClassType type) {
+        return classOwners
+            .getOrDefault(type.name(), moduleName + "$" + type.name());
+    }
+
+    private String descriptor(final Type type) {
         return switch (type) {
             case BuiltinType builtin -> switch (builtin) {
                 case I8 -> "B";
@@ -562,11 +607,11 @@ public final class BytecodeGenerator {
             case UnionType union -> unionDescriptor(union);
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
-            case ClassType ignored -> "Ljava/lang/Object;";
+            case ClassType classType -> "L" + classOwner(classType) + ";";
         };
     }
 
-    private static String unionDescriptor(final UnionType union) {
+    private String unionDescriptor(final UnionType union) {
         final List<Type> members =
             union.memberTypes()
                 .stream()
@@ -579,7 +624,7 @@ public final class BytecodeGenerator {
         return boxedDescriptor(members.getFirst());
     }
 
-    private static String boxedDescriptor(final Type type) {
+    private String boxedDescriptor(final Type type) {
         final String boxed = boxedOwner(type);
         return boxed == null ? descriptor(type) : "L" + boxed + ";";
     }
@@ -601,7 +646,7 @@ public final class BytecodeGenerator {
         };
     }
 
-    private static String printArgumentDescriptor(final Type type) {
+    private String printArgumentDescriptor(final Type type) {
         if (
             type instanceof ArrayType || type instanceof TupleType
                 || type instanceof FunctionType
@@ -616,7 +661,7 @@ public final class BytecodeGenerator {
             : descriptor(type);
     }
 
-    private static String methodDescriptor(final FunctionType type) {
+    private String methodDescriptor(final FunctionType type) {
         final StringBuilder result = new StringBuilder("(");
         type.parameterTypes()
             .forEach(parameter -> result.append(descriptor(parameter)));
@@ -627,6 +672,7 @@ public final class BytecodeGenerator {
 
     private static boolean reference(final Type type) {
         return type instanceof UnionType || type instanceof BuiltinFunctionType
+            || type instanceof ClassType
             || type instanceof ArrayType
             || type instanceof TupleType
             || type instanceof FunctionType
@@ -635,7 +681,7 @@ public final class BytecodeGenerator {
             || type == BuiltinType.ANY;
     }
 
-    private static int opcode(final Type type, final int base) {
+    private int opcode(final Type type, final int base) {
         return org.objectweb.asm.Type.getType(descriptor(type)).getOpcode(base);
     }
 
@@ -643,19 +689,19 @@ public final class BytecodeGenerator {
         return type == BuiltinType.I64 || type == BuiltinType.F64 ? 2 : 1;
     }
 
-    private static int loadOpcode(final Type type) {
+    private int loadOpcode(final Type type) {
         return opcode(type, ILOAD);
     }
 
-    private static int storeOpcode(final Type type) {
+    private int storeOpcode(final Type type) {
         return opcode(type, ISTORE);
     }
 
-    private static int returnOpcode(final Type type) {
+    private int returnOpcode(final Type type) {
         return opcode(type, IRETURN);
     }
 
-    private static int arrayStoreOpcode(final Type type) {
+    private int arrayStoreOpcode(final Type type) {
         return opcode(type, IASTORE);
     }
 
@@ -1310,6 +1356,23 @@ public final class BytecodeGenerator {
                 case SwitchExpression selection -> selection(selection);
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
+                case MemberExpression member -> member(member);
+                case NewExpression creation -> {
+                    final String name =
+                        ((ClassType) semanticModel.getExpressionType(creation))
+                            .name();
+                    final String owner =
+                        classOwners.getOrDefault(name, moduleName + "$" + name);
+                    method.visitTypeInsn(NEW, owner);
+                    method.visitInsn(DUP);
+                    method.visitMethodInsn(
+                        INVOKESPECIAL,
+                        owner,
+                        "<init>",
+                        "()V",
+                        false
+                    );
+                }
                 case NamedArgumentExpression named ->
                     throw unsupported(named, "Named argument outside a call");
                 case TupleExpression tuple -> tuple(tuple);
@@ -1471,6 +1534,22 @@ public final class BytecodeGenerator {
             final FunctionType type = (FunctionType) calleeType;
             final Expression callee = unwrap(call.callee());
             if (
+                callee instanceof MemberExpression member
+                    && semanticModel.getReference(
+                        member.member()
+                    ) instanceof FunctionSymbol function
+            ) {
+                memberReceiver(member);
+                callArguments(call);
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    memberOwner(member),
+                    function.name(),
+                    methodDescriptor(function.type()),
+                    false
+                );
+            }
+            else if (
                 callee instanceof IdentifierExpression identifier
                     && semanticModel.getReference(
                         identifier
@@ -1725,6 +1804,46 @@ public final class BytecodeGenerator {
                 : expression;
         }
 
+        private String memberOwner(final MemberExpression member) {
+            return classOwner(semanticModel.getMemberOwner(member));
+        }
+
+        private void memberReceiver(final MemberExpression member) {
+            expression(member.target());
+        }
+
+        private void member(final MemberExpression member) {
+            final Symbol symbol = semanticModel.getReference(member.member());
+            if (symbol instanceof FunctionSymbol function) {
+                method.visitLdcInsn(
+                    new Handle(
+                        H_INVOKEVIRTUAL,
+                        memberOwner(member),
+                        symbol.name(),
+                        methodDescriptor(function.type()),
+                        false
+                    )
+                );
+                memberReceiver(member);
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    "java/lang/invoke/MethodHandle",
+                    "bindTo",
+                    "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
+                    false
+                );
+            }
+            else {
+                memberReceiver(member);
+                method.visitFieldInsn(
+                    GETFIELD,
+                    memberOwner(member),
+                    symbol.name(),
+                    descriptor(symbol.type())
+                );
+            }
+        }
+
         private void assign(final AssignmentExpression assignment) {
             final Expression target = unwrap(assignment.target());
             if (target instanceof IdentifierExpression identifier) {
@@ -1737,6 +1856,18 @@ public final class BytecodeGenerator {
                         : (instanceField ? DUP_X1 : DUP)
                 );
                 store(symbol);
+            }
+            else if (target instanceof MemberExpression member) {
+                final Type type = semanticModel.getExpressionType(member);
+                memberReceiver(member);
+                expression(assignment.value());
+                method.visitInsn(slots(type) == 2 ? DUP2_X1 : DUP_X1);
+                method.visitFieldInsn(
+                    PUTFIELD,
+                    memberOwner(member),
+                    semanticModel.getReference(member.member()).name(),
+                    descriptor(type)
+                );
             }
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);
@@ -1780,6 +1911,29 @@ public final class BytecodeGenerator {
                     );
                 }
                 store(symbol);
+            }
+            else if (target instanceof MemberExpression member) {
+                memberReceiver(member);
+                method.visitInsn(DUP);
+                method.visitFieldInsn(
+                    GETFIELD,
+                    memberOwner(member),
+                    semanticModel.getReference(member.member()).name(),
+                    descriptor(type)
+                );
+                if (postfix) {
+                    method.visitInsn(slots(type) == 2 ? DUP2_X1 : DUP_X1);
+                }
+                addOne(type, increase);
+                if (!postfix) {
+                    method.visitInsn(slots(type) == 2 ? DUP2_X1 : DUP_X1);
+                }
+                method.visitFieldInsn(
+                    PUTFIELD,
+                    memberOwner(member),
+                    semanticModel.getReference(member.member()).name(),
+                    descriptor(type)
+                );
             }
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);

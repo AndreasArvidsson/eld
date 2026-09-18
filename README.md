@@ -2,6 +2,11 @@
 
 Eld is a statically typed programming language that compiles to JVM bytecode.
 
+Eld requires Java 21 or later. See [CONTRIBUTING.md](CONTRIBUTING.md) for
+building from source, development setup, tests, and implementation notes.
+
+See [cli.md](cli.md) for command-line and REPL usage.
+
 ## Declarations
 
 ```text
@@ -96,15 +101,22 @@ switch (count) { case 1 => print("one") else => print("other") }
 
 ```text
 print((1 + 2) * 3 - 4 / 2 % 2);
-print(+count);
-print(-count);
+print(count++);
+print(count--);
 print(!enabled);
 print(count == 2 && count != 0 || false);
 print(count < 3 && count <= 2 && count > 0 && count >= 1);
 print("hello " + "world");
 const choice = enabled ? 1 : 0;
-const conditional = if (enabled) { yield 1; } else { yield 0; };
-const selected = switch (count) { case 1, 2 => 10 else => 0 };
+const conditional = if (enabled) {
+    yield 1;
+} else {
+    yield 0;
+};
+const selected = switch (count) {
+    case 1, 2 => 10
+    else => 0
+};
 ```
 
 ## Comments
@@ -113,11 +125,6 @@ const selected = switch (count) { case 1, 2 => 10 else => 0 };
 // Single-line comment
 /* Block comment */
 ```
-
-Eld requires Java 21 or later. See [CONTRIBUTING.md](CONTRIBUTING.md) for
-building from source, development setup, tests, and implementation notes.
-
-See [cli.md](cli.md) for command-line and REPL usage.
 
 ## Numeric types
 

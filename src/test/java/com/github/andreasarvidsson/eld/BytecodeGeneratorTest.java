@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +57,296 @@ import com.github.andreasarvidsson.eld.runtime.EldCharArray;
 import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
+    @Test
+    void concreteClassDescriptorsAndDirectCallsRemainPrecise()
+        throws Exception {
+        final String source =
+            """
+                class Foo {
+                    var value = 5;
+                    var other: Foo | null = null;
+                    func getValue() i32 { return value; }
+                    func identity(value: Foo) Foo { return value; }
+                    func compare(a: i64, b: f64) bool { return a < b; }
+                }
+                const foo: Foo = new Foo();
+                const optional: Foo | null = null;
+                const items: [Foo] = [foo];
+                const pair = (foo, true);
+                const getter = foo.getValue;
+                const bound = getter();
+                const exact = foo.compare(b=2.5, a=1);
+                const same = foo.identity(foo) == foo;
+                func use(value: Foo) i32 { value.value = 6; value.value++; return value.getValue(); }
+                func identity(value: Foo) Foo { return value; }
+                func nullable() Foo | null { return null; }
+                func fromArray() i32 { return items[0].getValue(); }
+                func fromTuple() i32 { return pair[0].getValue(); }
+                func value() string { return "hello"; }
+                func direct() string { return value(); }
+                func indirect() string { const callback = value; return callback(); }
+                """;
+        final Program program =
+            new Parser(new Lexer(source).getTokens()).parse();
+        final var model = new SemanticAnalyzer().analyze(program);
+        final var classes =
+            new BytecodeGenerator(program, model).generateClasses();
+        final Class<?> module = loadClass(classes, "Test");
+        final Object foo = module.getField("foo").get(null);
+        final Class<?> fooClass = foo.getClass();
+        assertEquals(fooClass, module.getField("foo").getType());
+        assertEquals(fooClass, module.getField("optional").getType());
+        assertEquals(fooClass, fooClass.getField("other").getType());
+        assertEquals(
+            fooClass,
+            module.getMethod("identity", fooClass).getReturnType()
+        );
+        assertEquals(fooClass, module.getMethod("nullable").getReturnType());
+        assertNull(module.getMethod("nullable").invoke(null));
+        assertEquals(5, module.getField("bound").get(null));
+        assertEquals(true, module.getField("exact").get(null));
+        assertEquals(true, module.getField("same").get(null));
+        assertEquals(7, module.getMethod("use", fooClass).invoke(null, foo));
+        assertEquals(7, module.getMethod("fromArray").invoke(null));
+        assertEquals(7, module.getMethod("fromTuple").invoke(null));
+        assertEquals("hello", module.getMethod("direct").invoke(null));
+        assertEquals("hello", module.getMethod("indirect").invoke(null));
+        assertTrue(model.toString().contains("const foo: Foo"));
+        assertTrue(model.toString().contains("class Foo"));
+        assertFalse(model.toString().contains("ClassType("));
+        final ClassNode node = new ClassNode();
+        new ClassReader(classes.get("Test")).accept(node, 0);
+        final var use =
+            node.methods.stream()
+                .filter(method -> method.name.equals("use"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals("(LTest$Foo;)I", use.desc);
+        for (final var instruction : use.instructions) {
+            assertNotEquals(Opcodes.CHECKCAST, instruction.getOpcode());
+            if (
+                instruction instanceof org.objectweb.asm.tree.MethodInsnNode call
+            ) {
+                assertEquals("Test$Foo", call.owner);
+                assertEquals("getValue", call.name);
+                assertEquals(Opcodes.INVOKEVIRTUAL, call.getOpcode());
+                assertEquals("()I", call.desc);
+            }
+        }
+        final var clinit =
+            node.methods.stream()
+                .filter(method -> method.name.equals("<clinit>"))
+                .findFirst()
+                .orElseThrow();
+        final var calls =
+            java.util.Arrays.stream(clinit.instructions.toArray())
+                .filter(org.objectweb.asm.tree.MethodInsnNode.class::isInstance)
+                .map(org.objectweb.asm.tree.MethodInsnNode.class::cast)
+                .toList();
+        assertTrue(
+            calls.stream()
+                .anyMatch(
+                    call -> call.owner.equals("Test$Foo")
+                        && call.name.equals("compare")
+                        && call.desc.equals("(JD)Z")
+                        && call.getOpcode() == Opcodes.INVOKEVIRTUAL
+                )
+        );
+        assertTrue(
+            calls.stream()
+                .anyMatch(
+                    call -> call.owner.equals("Test$Foo")
+                        && call.name.equals("identity")
+                        && call.desc.equals("(LTest$Foo;)LTest$Foo;")
+                )
+        );
+        assertTrue(
+            calls.stream()
+                .anyMatch(
+                    call -> call.owner.equals("java/lang/invoke/MethodHandle")
+                        && call.name.equals("bindTo")
+                )
+        );
+        assertTrue(
+            calls.stream()
+                .anyMatch(
+                    call -> call.owner.equals("java/lang/invoke/MethodHandle")
+                        && call.name.equals("invokeExact")
+                )
+        );
+        final var direct =
+            node.methods.stream()
+                .filter(method -> method.name.equals("direct"))
+                .findFirst()
+                .orElseThrow();
+        final var directCall =
+            java.util.Arrays.stream(direct.instructions.toArray())
+                .filter(org.objectweb.asm.tree.MethodInsnNode.class::isInstance)
+                .map(org.objectweb.asm.tree.MethodInsnNode.class::cast)
+                .findFirst()
+                .orElseThrow();
+        assertEquals(Opcodes.INVOKESTATIC, directCall.getOpcode());
+        assertEquals("Test", directCall.owner);
+        assertEquals("value", directCall.name);
+        final ClassNode classNode = new ClassNode();
+        new ClassReader(classes.get("Test$Foo")).accept(classNode, 0);
+        final var getValue =
+            classNode.methods.stream()
+                .filter(method -> method.name.equals("getValue"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals(
+            Opcodes.ALOAD,
+            getValue.instructions.getFirst().getOpcode()
+        );
+        assertEquals(
+            Opcodes.GETFIELD,
+            getValue.instructions.getFirst().getNext().getOpcode()
+        );
+    }
+
+    @Test
+    void classMembersSupportMutationCallsAndBoundMethodReferences()
+        throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    class Foo {
+                        var value: i64 = 5;
+                        const fixed = 10;
+                        func add(amount: i64) i64 { value = value + amount; return value; }
+                    }
+                    const foo = new Foo();
+                    const before = foo.value++;
+                    const assigned = foo.value = 8;
+                    const result = foo.add(amount=2);
+                    const callback = foo.add;
+                    const bound = callback(3);
+                    const fresh = new Foo().value;
+                    const values = [foo];
+                    const indexed = values[0].value;
+                    """,
+                "Test"
+            );
+        assertEquals(5L, module.getField("before").get(null));
+        assertEquals(8L, module.getField("assigned").get(null));
+        assertEquals(10L, module.getField("result").get(null));
+        assertEquals(13L, module.getField("bound").get(null));
+        assertEquals(5L, module.getField("fresh").get(null));
+        assertEquals(13L, module.getField("indexed").get(null));
+    }
+
+    @Test
+    void classMembersRejectUnknownMembersAndConstantWrites() {
+        for (final String source : List.of(
+            "class Foo { const value = 1; } const foo = new Foo(); foo.value = 2;",
+            "class Foo {} const foo = new Foo(); foo.missing;",
+            "const foo = 1; foo.value;",
+            "const global = 1; class Foo {} const foo = new Foo(); foo.global;"
+        )) {
+            final Program program =
+                new Parser(new Lexer(source).getTokens()).parse();
+            assertThrows(
+                SemanticException.class,
+                () -> new SemanticAnalyzer().analyze(program),
+                source
+            );
+        }
+    }
+
+    @Test
+    void newConstructsIndependentClassInstances() throws Exception {
+        final Class<?> module = compileClass("""
+            var seed = 5;
+            class Foo {
+                var value = seed++;
+                func getValue() i32 { return value; }
+            }
+            const first = new Foo();
+            const second = new Foo();
+            const same = first == first;
+            const different = first != second;
+            const values = [new Foo(), new Foo()];
+            func make() any { return new Foo(); }
+            func choose(flag: bool) any { return flag ? new Foo() : "other"; }
+            """, "Test");
+        final Object first = module.getField("first").get(null);
+        final Object second = module.getField("second").get(null);
+        assertEquals("Test$Foo", first.getClass().getName());
+        assertEquals(5, first.getClass().getMethod("getValue").invoke(first));
+        assertEquals(6, second.getClass().getMethod("getValue").invoke(second));
+        assertNotSame(first, second);
+        assertEquals(
+            first.getClass(),
+            module.getMethod("choose", boolean.class)
+                .invoke(null, true)
+                .getClass()
+        );
+        assertEquals(
+            "other",
+            module.getMethod("choose", boolean.class).invoke(null, false)
+        );
+        assertEquals(true, module.getField("same").get(null));
+        assertEquals(true, module.getField("different").get(null));
+        final var values = (EldObjectArray) module.getField("values").get(null);
+        assertEquals(
+            7,
+            values.get(0).getClass().getMethod("getValue").invoke(values.get(0))
+        );
+        assertEquals(
+            8,
+            values.get(1).getClass().getMethod("getValue").invoke(values.get(1))
+        );
+        assertEquals(
+            first.getClass(),
+            module.getMethod("make").invoke(null).getClass()
+        );
+    }
+
+    @Test
+    void newRejectsUndefinedNamesNonClassesAndConstructorArguments() {
+        for (final String source : List.of(
+            "const value = new Missing();",
+            "const Foo = 1; const value = new Foo();",
+            "class Foo {} const value = new Foo(1);",
+            "class Foo {} const value = new Foo(value=1);"
+        )) {
+            final Program program =
+                new Parser(new Lexer(source).getTokens()).parse();
+            assertThrows(
+                SemanticException.class,
+                () -> new SemanticAnalyzer().analyze(program),
+                source
+            );
+        }
+    }
+
+    @Test
+    void newUsesClassesFromPreviousReplSubmissions() throws Exception {
+        final var output = new java.io.ByteArrayOutputStream();
+        final var previousOut = System.out;
+        try (final var capture = new PrintStream(output)) {
+            System.setOut(capture);
+            final ReplSession session = new ReplSession();
+            session.evaluate("class Foo { var value = 5; }");
+            session.evaluate("const first = new Foo();");
+            session.evaluate("const second = new Foo();");
+            session.evaluate(
+                "const initial = first.value; first.value++; second.value = 9;"
+            );
+            session.evaluate("const different = first != second;");
+            session.evaluate("func make() any { return new Foo(); }");
+            session.evaluate("const third = make();");
+        }
+        finally {
+            System.setOut(previousOut);
+        }
+        assertEquals(
+            "5\n9\n",
+            output.toString(Charset.defaultCharset()).replace("\r\n", "\n")
+        );
+    }
+
     @Test
     void anyTargetsConvertIfAndSwitchBranchesIndividually() throws Exception {
         final Class<?> type = compile("""
@@ -376,7 +667,7 @@ class BytecodeGeneratorTest {
         assertEquals(32.0, type.getMethod("converted").invoke(null));
         final var output = new java.io.ByteArrayOutputStream();
         final var previousOut = System.out;
-        try (final var capture = new java.io.PrintStream(output)) {
+        try (final var capture = new PrintStream(output)) {
             System.setOut(capture);
             assertEquals(21, type.getMethod("ordered").invoke(null));
         }
@@ -1735,20 +2026,12 @@ class BytecodeGeneratorTest {
         final String name
     )
         throws ClassNotFoundException {
+        final ModuleLoader loader = new ModuleLoader();
+        loader.add(classes);
         for (final byte[] bytecode : classes.values()) {
-            BytecodeUtil.verify(bytecode);
+            BytecodeUtil.verify(bytecode, loader);
         }
-        return new ClassLoader() {
-            @Override
-            protected Class<?> findClass(final String binaryName)
-                throws ClassNotFoundException {
-                final byte[] bytecode = classes.get(binaryName);
-                if (bytecode == null) {
-                    throw new ClassNotFoundException(binaryName);
-                }
-                return defineClass(binaryName, bytecode, 0, bytecode.length);
-            }
-        }.loadClass(name);
+        return loader.loadClass(name);
     }
 
     private static Class<?> compileClass(final String source, final String name)

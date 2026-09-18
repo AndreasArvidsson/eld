@@ -169,7 +169,7 @@ Resolved types:
   6:19-6:22 -> i32
 
 Declarations:
-  1:7-1:14 -> ClassSymbol(name=Counter, type=ClassType(name=Counter))
+  1:7-1:14 -> class Counter
   2:11-2:18 -> const initial: i32
   3:9-3:14 -> var count: i32
   4:10-4:14 -> next() => i32

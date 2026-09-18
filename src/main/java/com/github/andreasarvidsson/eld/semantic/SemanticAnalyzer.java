@@ -3,6 +3,8 @@ package com.github.andreasarvidsson.eld.semantic;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -40,6 +42,8 @@ import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
+import com.github.andreasarvidsson.eld.parser.NewExpression;
+import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.Parameter;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
@@ -64,6 +68,7 @@ import com.github.andreasarvidsson.eld.parser.YieldStatement;
 
 public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
+    private final Map<ClassType, Scope> classScopes = new HashMap<>();
 
     public SemanticModel analyze(final Program program) {
         final Scope builtinScope = new Scope(null);
@@ -181,6 +186,11 @@ public final class SemanticAnalyzer {
         final ClassDeclaration declaration,
         final SemanticContext context
     ) {
+        final ClassType classType = new ClassType(declaration.name().name());
+        final ClassSymbol classSymbol =
+            new ClassSymbol(declaration.name(), classType);
+        model.setSymbol(declaration.name(), classSymbol);
+        context.scope().declare(classSymbol);
         final SemanticContext classContext =
             new SemanticContext(
                 new Scope(context.scope()),
@@ -188,15 +198,11 @@ public final class SemanticAnalyzer {
                 0
             );
 
+        classScopes.put(classType, classContext.scope());
         for (final var member : declaration.members()) {
             analyzeBlockItem(member, classContext);
         }
 
-        final ClassType classType = new ClassType(declaration.name().name());
-        final ClassSymbol classSymbol =
-            new ClassSymbol(declaration.name(), classType);
-        model.setSymbol(declaration.name(), classSymbol);
-        classContext.scope().declare(classSymbol);
     }
 
     private void analyzeForStatement(
@@ -765,7 +771,7 @@ public final class SemanticAnalyzer {
         final TypeNode typeNode = declaration.type();
         final Expression initializer = declaration.initializer();
         final Type declaredType =
-            typeNode != null ? resolveType(typeNode) : null;
+            typeNode != null ? resolveType(typeNode, context) : null;
         Type initializerType =
             analyzeExpression(initializer, context, declaredType);
 
@@ -814,7 +820,7 @@ public final class SemanticAnalyzer {
 
         for (final Parameter param : declaration.parameters()) {
             final TypeNode typeNode = Objects.requireNonNull(param.type());
-            final Type paramType = resolveType(typeNode);
+            final Type paramType = resolveType(typeNode, context);
             final VariableSymbol paramSymbol =
                 new VariableSymbol(param.name(), paramType, Mutability.CONST);
             model.setResolvedType(typeNode, paramType);
@@ -825,7 +831,10 @@ public final class SemanticAnalyzer {
 
         final Type returnType =
             declaration.returnType() != null
-                ? resolveType(Objects.requireNonNull(declaration.returnType()))
+                ? resolveType(
+                    Objects.requireNonNull(declaration.returnType()),
+                    context
+                )
                 : BuiltinType.VOID;
 
         final FunctionSymbol symbol =
@@ -851,15 +860,18 @@ public final class SemanticAnalyzer {
         analyzeBlockStatement(declaration.body(), functionContext);
     }
 
-    private Type resolveType(final TypeNode typeNode) {
+    private Type resolveType(
+        final TypeNode typeNode,
+        final SemanticContext context
+    ) {
         return switch (typeNode) {
-            case NamedTypeNode named -> resolveNamedType(named);
+            case NamedTypeNode named -> resolveNamedType(named, context);
             case TupleTypeNode tuple -> {
                 final Type type =
                     new TupleType(
                         tuple.elementTypes()
                             .stream()
-                            .map(this::resolveType)
+                            .map(element -> resolveType(element, context))
                             .toList()
                     );
                 model.setResolvedType(tuple, type);
@@ -867,7 +879,7 @@ public final class SemanticAnalyzer {
             }
             case ArrayTypeNode array -> {
                 final Type type =
-                    new ArrayType(resolveType(array.elementType()));
+                    new ArrayType(resolveType(array.elementType(), context));
                 model.setResolvedType(array, type);
                 yield type;
             }
@@ -876,10 +888,10 @@ public final class SemanticAnalyzer {
                 final Type returnType =
                     returnTypeNode == null
                         ? BuiltinType.VOID
-                        : resolveType(returnTypeNode);
+                        : resolveType(returnTypeNode, context);
                 final List<Type> parameterTypes = new ArrayList<>();
                 for (final TypeNode paramTypeNode : function.parameterTypes()) {
-                    parameterTypes.add(resolveType(paramTypeNode));
+                    parameterTypes.add(resolveType(paramTypeNode, context));
                 }
                 final Type type = new FunctionType(parameterTypes, returnType);
                 model.setResolvedType(function, type);
@@ -888,7 +900,7 @@ public final class SemanticAnalyzer {
             case UnionTypeNode union -> {
                 final List<Type> memberTypes = new ArrayList<>();
                 for (final TypeNode memberTypeNode : union.memberTypes()) {
-                    memberTypes.add(resolveType(memberTypeNode));
+                    memberTypes.add(resolveType(memberTypeNode, context));
                 }
                 final Type type = UnionType.of(memberTypes);
                 model.setResolvedType(union, type);
@@ -1014,7 +1026,10 @@ public final class SemanticAnalyzer {
         return null;
     }
 
-    private Type resolveNamedType(final NamedTypeNode named) {
+    private Type resolveNamedType(
+        final NamedTypeNode named,
+        final SemanticContext context
+    ) {
         final Type type = switch (named.name()) {
             case "i8" -> BuiltinType.I8;
             case "i16" -> BuiltinType.I16;
@@ -1027,11 +1042,17 @@ public final class SemanticAnalyzer {
             case "string" -> BuiltinType.STRING;
             case "null" -> BuiltinType.NULL;
             case "any" -> BuiltinType.ANY;
-            default -> throw new SemanticException(
-                named.range(),
-                "Unknown type: %s",
-                named.name()
-            );
+            default -> {
+                final Symbol symbol = context.scope().resolve(named.name());
+                if (!(symbol instanceof ClassSymbol classSymbol)) {
+                    throw new SemanticException(
+                        named.range(),
+                        "Unknown type: %s",
+                        named.name()
+                    );
+                }
+                yield classSymbol.type();
+            }
         };
 
         model.setResolvedType(named, type);
@@ -1172,6 +1193,54 @@ public final class SemanticAnalyzer {
     ) {
 
         final Type type = switch (expression) {
+            case MemberExpression member -> {
+                final Type target = analyzeExpression(member.target(), context);
+                if (!(target instanceof ClassType classType)) {
+                    throw new SemanticException(
+                        member.target().range(),
+                        "Member access requires a class instance"
+                    );
+                }
+                final Scope scope = classScopes.get(classType);
+                final Symbol symbol =
+                    scope == null
+                        ? null
+                        : scope.resolveLocal(member.member().name());
+                if (symbol == null) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Unknown member '%s' of class %s",
+                        member.member().name(),
+                        classType.name()
+                    );
+                }
+                model.setMemberOwner(member, classType);
+                model.setReference(member.member(), symbol);
+                model.setExpressionType(member.member(), symbol.type());
+                yield symbol.type();
+            }
+            case NewExpression creation -> {
+                final Type classType =
+                    analyzeIdentifierExpression(creation.className(), context);
+                if (
+                    !(model.getReference(
+                        creation.className()
+                    ) instanceof ClassSymbol)
+                ) {
+                    throw new SemanticException(
+                        creation.className().range(),
+                        "'new' requires a class name"
+                    );
+                }
+                if (!creation.arguments().isEmpty()) {
+                    throw new SemanticException(
+                        creation.range(),
+                        "Class %s constructor takes no arguments",
+                        creation.className().name()
+                    );
+                }
+                yield classType;
+            }
             case LiteralExpression literal -> analyzeLiteralExpression(literal);
             case IdentifierExpression identifier ->
                 analyzeIdentifierExpression(identifier, context);
@@ -1264,9 +1333,15 @@ public final class SemanticAnalyzer {
         while (callee instanceof GroupingExpression grouping) {
             callee = grouping.expression();
         }
+        final IdentifierExpression functionName =
+            callee instanceof IdentifierExpression identifier
+                ? identifier
+                : callee instanceof MemberExpression member
+                    ? member.member()
+                    : null;
         final List<IdentifierDeclaration> declarations =
-            callee instanceof IdentifierExpression identifier && model
-                .getReference(identifier) instanceof FunctionSymbol symbol
+            functionName != null && model
+                .getReference(functionName) instanceof FunctionSymbol symbol
                     ? model.getFunctionParameters(symbol)
                     : List.of();
         final List<String> names =
@@ -1434,6 +1509,15 @@ public final class SemanticAnalyzer {
     private void requireWritable(final Expression expression) {
         if (expression instanceof GroupingExpression grouping) {
             requireWritable(grouping.expression());
+            return;
+        }
+        if (
+            expression instanceof MemberExpression member
+                && model.getReference(
+                    member.member()
+                ) instanceof VariableSymbol variable
+                && variable.mutability() == Mutability.VAR
+        ) {
             return;
         }
         if (expression instanceof SubscriptExpression subscript) {

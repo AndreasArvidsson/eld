@@ -557,6 +557,15 @@ public final class Parser {
                 advance();
                 left = parsePostfixExpression(left, postfix, next);
             }
+            else if (match(TokenType.DOT)) {
+                final Token name = expect(TokenType.IDENTIFIER);
+                left =
+                    new MemberExpression(
+                        left,
+                        new IdentifierExpression(name.text(), name.range()),
+                        left.range().union(name.range())
+                    );
+            }
             else if (check(TokenType.LEFT_BRACKET)) {
                 left = parseSubscriptExpression(left);
             }
@@ -604,6 +613,17 @@ public final class Parser {
                 token.text(),
                 token.range()
             );
+            case NEW -> {
+                final Token name = expect(TokenType.IDENTIFIER);
+                final IdentifierExpression className =
+                    new IdentifierExpression(name.text(), name.range());
+                final CallExpression call = parseCallExpression(className);
+                yield new NewExpression(
+                    className,
+                    call.arguments(),
+                    token.range().union(call.range())
+                );
+            }
             case IF -> parseIfExpression(token);
             case SWITCH -> parseSwitchExpression(token);
             case LEFT_PAREN -> {

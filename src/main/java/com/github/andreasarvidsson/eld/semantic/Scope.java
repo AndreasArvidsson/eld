@@ -27,6 +27,10 @@ public final class Scope {
         symbols.put(symbol.name(), symbol);
     }
 
+    public @Nullable Symbol resolveLocal(final String name) {
+        return symbols.get(name);
+    }
+
     public @Nullable Symbol resolve(final String name) {
         final Symbol symbol = symbols.get(name);
 

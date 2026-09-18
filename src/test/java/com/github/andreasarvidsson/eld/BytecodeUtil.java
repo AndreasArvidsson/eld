@@ -10,11 +10,15 @@ import org.objectweb.asm.util.TraceClassVisitor;
 public class BytecodeUtil {
 
     public static void verify(final byte[] bytecode) {
+        verify(bytecode, BytecodeUtil.class.getClassLoader());
+    }
+
+    public static void verify(final byte[] bytecode, final ClassLoader loader) {
         final var writer = new StringWriter();
         final var printWriter = new PrintWriter(writer);
         final var classReader = new ClassReader(bytecode);
 
-        CheckClassAdapter.verify(classReader, false, printWriter);
+        CheckClassAdapter.verify(classReader, loader, false, printWriter);
 
         final String errors = writer.toString();
 

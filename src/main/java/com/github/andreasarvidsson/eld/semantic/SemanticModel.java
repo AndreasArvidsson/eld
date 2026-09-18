@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.Expression;
+import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
@@ -16,6 +17,8 @@ import com.github.andreasarvidsson.eld.parser.TypeNode;
 public final class SemanticModel {
 
     private static final String ARROW = " -> ";
+    private final IdentityHashMap<MemberExpression, ClassType> memberOwners =
+        new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> expressionTypes =
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> conversionTypes =
@@ -34,6 +37,17 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
+
+    public void setMemberOwner(
+        final MemberExpression expression,
+        final ClassType owner
+    ) {
+        memberOwners.put(expression, owner);
+    }
+
+    public ClassType getMemberOwner(final MemberExpression expression) {
+        return Objects.requireNonNull(memberOwners.get(expression));
+    }
 
     public void setExpressionType(
         final Expression expression,

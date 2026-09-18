@@ -1,0 +1,59 @@
+var value: any = 5;
+"hello" + value;
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "any" (1:12-1:15)
+EQUAL (1:16-1:17)
+INTEGER_LITERAL "5" (1:18-1:19)
+SEMICOLON (1:19-1:20)
+STRING_LITERAL "\"hello\"" (2:1-2:8)
+PLUS (2:9-2:10)
+IDENTIFIER "value" (2:11-2:16)
+SEMICOLON (2:16-2:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:17
+  (VariableDeclaration
+    range: 1:1-1:20
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "any"
+    )
+    (LiteralExpression
+      range: 1:18-1:19
+      kind: INT
+      text: "5"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (BinaryExpression
+      range: 2:1-2:16
+      (LiteralExpression
+        range: 2:1-2:8
+        kind: STRING
+        text: "\"hello\""
+      )
+      operator: ADD
+      (IdentifierExpression
+        range: 2:11-2:16
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Operator ADD is not applicable to string and any at 2:1-2:16

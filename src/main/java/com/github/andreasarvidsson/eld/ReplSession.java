@@ -3,6 +3,8 @@ package com.github.andreasarvidsson.eld;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import java.util.Map;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.lexer.Token;
@@ -17,6 +19,7 @@ import com.github.andreasarvidsson.eld.semantic.SemanticModel;
 public final class ReplSession {
     private final ModuleLoader loader = new ModuleLoader();
     private final List<BlockItem> items = new ArrayList<>();
+    private final Map<String, String> classOwners = new HashMap<>();
     private String parent = "java/lang/Object";
     private int sequence;
 
@@ -33,12 +36,26 @@ public final class ReplSession {
         final SemanticModel model = new SemanticAnalyzer().analyze(program);
         final String name = "Repl" + sequence++;
         final Map<String, byte[]> classes =
-            new BytecodeGenerator(program, model, name, parent, items.size())
-                .generateClasses();
+            new BytecodeGenerator(
+                program,
+                model,
+                name,
+                parent,
+                items.size(),
+                classOwners
+            ).generateClasses();
         loader.add(classes);
         final Class<?> module = loader.loadClass(name);
         // Keep declarations even if execution fails: earlier mutations cannot be rolled back.
         items.addAll(submission.items());
+        for (final BlockItem item : submission.items()) {
+            if (item instanceof ClassDeclaration declaration) {
+                classOwners.put(
+                    declaration.name().name(),
+                    name + "$" + declaration.name().name()
+                );
+            }
+        }
         parent = name;
         try {
             module.getMethod("$eval").invoke(null);

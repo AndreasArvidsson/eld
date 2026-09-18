@@ -1,0 +1,35 @@
+"hello" + 5;
+
+--- TOKENS ---
+
+STRING_LITERAL "\"hello\"" (1:1-1:8)
+PLUS (1:9-1:10)
+INTEGER_LITERAL "5" (1:11-1:12)
+SEMICOLON (1:12-1:13)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:13
+  (ExpressionStatement
+    range: 1:1-1:13
+    (BinaryExpression
+      range: 1:1-1:12
+      (LiteralExpression
+        range: 1:1-1:8
+        kind: STRING
+        text: "\"hello\""
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 1:11-1:12
+        kind: INT
+        text: "5"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Operator ADD is not applicable to string and i32 at 1:1-1:12

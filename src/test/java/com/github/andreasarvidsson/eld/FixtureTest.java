@@ -164,10 +164,12 @@ public class FixtureTest {
                 );
             final var classes =
                 new BytecodeGenerator(ast, semanticModel).generateClasses();
+            final ModuleLoader loader = new ModuleLoader();
+            loader.add(classes);
             final List<String> classListings = new ArrayList<>();
             for (final byte[] bytecode : classes.values()) {
                 if (assertFixture) {
-                    BytecodeUtil.verify(bytecode);
+                    BytecodeUtil.verify(bytecode, loader);
                 }
                 classListings.add(BytecodeUtil.toString(bytecode));
             }

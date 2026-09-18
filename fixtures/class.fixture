@@ -23,7 +23,7 @@ RIGHT_BRACE (1:12-1:13)
 --- SEMANTIC ---
 
 Declarations:
-  1:7-1:10 -> ClassSymbol(name=Foo, type=ClassType(name=Foo))
+  1:7-1:10 -> class Foo
 
 --- BYTECODE ---
 

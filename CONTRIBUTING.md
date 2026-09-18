@@ -243,6 +243,7 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
+- Format string syntax
 - Exceptions
 - Optional arguments: `foo?: i32`
 - Default argument values: `foo: i32 = 0`
