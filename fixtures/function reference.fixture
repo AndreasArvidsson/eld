@@ -1,0 +1,148 @@
+func value() string {
+    return "hello";
+}
+
+const foo = value;
+
+print(foo());
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "value" (1:6-1:11)
+LEFT_PAREN (1:11-1:12)
+RIGHT_PAREN (1:12-1:13)
+IDENTIFIER "string" (1:14-1:20)
+LEFT_BRACE (1:21-1:22)
+RETURN (2:5-2:11)
+STRING_LITERAL "\"hello\"" (2:12-2:19)
+SEMICOLON (2:19-2:20)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "foo" (5:7-5:10)
+EQUAL (5:11-5:12)
+IDENTIFIER "value" (5:13-5:18)
+SEMICOLON (5:18-5:19)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "foo" (7:7-7:10)
+LEFT_PAREN (7:10-7:11)
+RIGHT_PAREN (7:11-7:12)
+RIGHT_PAREN (7:12-7:13)
+SEMICOLON (7:13-7:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:14
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:11
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:14-1:20
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:21-3:2
+      (ReturnStatement
+        range: 2:5-2:20
+        (LiteralExpression
+          range: 2:12-2:19
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "foo"
+    )
+    type: null
+    (IdentifierExpression
+      range: 5:13-5:18
+      name: "value"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:14
+    (CallExpression
+      range: 7:1-7:13
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:12
+        (IdentifierExpression
+          range: 7:7-7:10
+          name: "foo"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:19 -> string
+  5:13-5:18 -> () => string
+  7:1-7:6 -> (any) => void
+  7:1-7:13 -> void
+  7:7-7:10 -> () => string
+  7:7-7:12 -> string
+
+Resolved types:
+  1:14-1:20 -> string
+
+Declarations:
+  1:6-1:11 -> value() => string
+  5:7-5:10 -> const foo: () => string
+
+References:
+  5:13-5:18 -> 1:6-1:11
+  7:1-7:6 -> builtin print
+  7:7-7:10 -> 5:7-5:10
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Ljava/lang/invoke/MethodHandle; foo
+
+  // access flags 0x9
+  public static value()Ljava/lang/String;
+    LDC "hello"
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 0
+
+  // access flags 0x8
+  static <clinit>()V
+    // handle kind 0x6 : INVOKESTATIC
+    LDC Test.value()Ljava/lang/String;
+    PUTSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+--- OUTPUT ---
+
+hello
+
