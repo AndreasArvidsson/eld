@@ -17,6 +17,8 @@ public enum TokenType {
     VAR,
     CLASS,
     EXTENDS,
+    INTERFACE,
+    IMPLEMENTS,
     NEW,
     CONSTRUCTOR,
     THIS,

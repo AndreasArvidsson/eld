@@ -221,6 +221,11 @@ final class FieldInitializationAnalyzer {
                     }
                 });
                 return paths;
+            case ObjectExpression object:
+                return sequence(
+                    object.members().stream().map(ObjectMember::value).toList(),
+                    paths
+                );
             case MemberExpression member: {
                 final Symbol field = ownField(member);
                 if (field == null) {

@@ -1,0 +1,99 @@
+interface A {
+    const value: i32;
+}
+interface B {
+    var value: i32;
+}
+interface C extends B, A {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "A" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "B" (4:11-4:12)
+LEFT_BRACE (4:13-4:14)
+VAR (5:5-5:8)
+IDENTIFIER "value" (5:9-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "i32" (5:16-5:19)
+SEMICOLON (5:19-5:20)
+RIGHT_BRACE (6:1-6:2)
+INTERFACE (7:1-7:10)
+IDENTIFIER "C" (7:11-7:12)
+EXTENDS (7:13-7:20)
+IDENTIFIER "B" (7:21-7:22)
+COMMA (7:22-7:23)
+IDENTIFIER "A" (7:24-7:25)
+LEFT_BRACE (7:26-7:27)
+RIGHT_BRACE (7:27-7:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:28
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "A"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:12
+      name: "B"
+    )
+    (UninitializedVariableDeclaration
+      range: 5:5-5:20
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 5:9-5:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 7:1-7:28
+    (IdentifierDeclaration
+      range: 7:11-7:12
+      name: "C"
+    )
+    (NamedTypeNode
+      range: 7:21-7:22
+      name: "B"
+    )
+    (NamedTypeNode
+      range: 7:24-7:25
+      name: "A"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Conflicting interface member 'value' at 7:24-7:25

@@ -1,0 +1,135 @@
+interface Operation {
+    apply(value: i32) i32;
+}
+class Impl implements Operation {
+    public func apply(value: string) i32 {
+        return 1;
+    }
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Operation" (1:11-1:20)
+LEFT_BRACE (1:21-1:22)
+IDENTIFIER "apply" (2:5-2:10)
+LEFT_PAREN (2:10-2:11)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+RIGHT_PAREN (2:21-2:22)
+IDENTIFIER "i32" (2:23-2:26)
+SEMICOLON (2:26-2:27)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Impl" (4:7-4:11)
+IMPLEMENTS (4:12-4:22)
+IDENTIFIER "Operation" (4:23-4:32)
+LEFT_BRACE (4:33-4:34)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "apply" (5:17-5:22)
+LEFT_PAREN (5:22-5:23)
+IDENTIFIER "value" (5:23-5:28)
+COLON (5:28-5:29)
+IDENTIFIER "string" (5:30-5:36)
+RIGHT_PAREN (5:36-5:37)
+IDENTIFIER "i32" (5:38-5:41)
+LEFT_BRACE (5:42-5:43)
+RETURN (6:9-6:15)
+INTEGER_LITERAL "1" (6:16-6:17)
+SEMICOLON (6:17-6:18)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:20
+      name: "Operation"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:27
+      (IdentifierDeclaration
+        range: 2:5-2:10
+        name: "apply"
+      )
+      (FunctionParameter
+        range: 2:11-2:21
+        (IdentifierDeclaration
+          range: 2:11-2:16
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:18-2:21
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:23-2:26
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-8:2
+    (IdentifierDeclaration
+      range: 4:7-4:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:23-4:32
+      name: "Operation"
+    )
+    (MemberDeclaration
+      range: 5:5-7:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-7:6
+        (IdentifierDeclaration
+          range: 5:17-5:22
+          name: "apply"
+        )
+        (FunctionParameter
+          range: 5:23-5:36
+          (IdentifierDeclaration
+            range: 5:23-5:28
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 5:30-5:36
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 5:38-5:41
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:42-7:6
+          (ReturnStatement
+            range: 6:9-6:18
+            (LiteralExpression
+              range: 6:16-6:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Interface member 'apply' expects (i32) => i32, found (string) => i32 at 5:17-5:22

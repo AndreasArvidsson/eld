@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
+import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
 import java.util.Map;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.lexer.Token;
@@ -50,6 +51,12 @@ public final class ReplSession {
         items.addAll(submission.items());
         for (final BlockItem item : submission.items()) {
             if (item instanceof ClassDeclaration declaration) {
+                classOwners.put(
+                    declaration.name().name(),
+                    name + "$" + declaration.name().name()
+                );
+            }
+            else if (item instanceof InterfaceDeclaration declaration) {
                 classOwners.put(
                     declaration.name().name(),
                     name + "$" + declaration.name().name()

@@ -1,0 +1,412 @@
+interface Renamable {
+    rename(name: string);
+}
+class Person implements Renamable {
+    public var name = "Bob";
+    public func rename(name: string) {
+        this.name = name;
+    }
+}
+const person = new Person();
+const action: Renamable = person;
+action.rename("Alice");
+print(person.name);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Renamable" (1:11-1:20)
+LEFT_BRACE (1:21-1:22)
+IDENTIFIER "rename" (2:5-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "name" (2:12-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "string" (2:18-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Person" (4:7-4:13)
+IMPLEMENTS (4:14-4:24)
+IDENTIFIER "Renamable" (4:25-4:34)
+LEFT_BRACE (4:35-4:36)
+PUBLIC (5:5-5:11)
+VAR (5:12-5:15)
+IDENTIFIER "name" (5:16-5:20)
+EQUAL (5:21-5:22)
+STRING_LITERAL "\"Bob\"" (5:23-5:28)
+SEMICOLON (5:28-5:29)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "rename" (6:17-6:23)
+LEFT_PAREN (6:23-6:24)
+IDENTIFIER "name" (6:24-6:28)
+COLON (6:28-6:29)
+IDENTIFIER "string" (6:30-6:36)
+RIGHT_PAREN (6:36-6:37)
+LEFT_BRACE (6:38-6:39)
+THIS (7:9-7:13)
+DOT (7:13-7:14)
+IDENTIFIER "name" (7:14-7:18)
+EQUAL (7:19-7:20)
+IDENTIFIER "name" (7:21-7:25)
+SEMICOLON (7:25-7:26)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (10:1-10:6)
+IDENTIFIER "person" (10:7-10:13)
+EQUAL (10:14-10:15)
+NEW (10:16-10:19)
+IDENTIFIER "Person" (10:20-10:26)
+LEFT_PAREN (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+SEMICOLON (10:28-10:29)
+CONST (11:1-11:6)
+IDENTIFIER "action" (11:7-11:13)
+COLON (11:13-11:14)
+IDENTIFIER "Renamable" (11:15-11:24)
+EQUAL (11:25-11:26)
+IDENTIFIER "person" (11:27-11:33)
+SEMICOLON (11:33-11:34)
+IDENTIFIER "action" (12:1-12:7)
+DOT (12:7-12:8)
+IDENTIFIER "rename" (12:8-12:14)
+LEFT_PAREN (12:14-12:15)
+STRING_LITERAL "\"Alice\"" (12:15-12:22)
+RIGHT_PAREN (12:22-12:23)
+SEMICOLON (12:23-12:24)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "person" (13:7-13:13)
+DOT (13:13-13:14)
+IDENTIFIER "name" (13:14-13:18)
+RIGHT_PAREN (13:18-13:19)
+SEMICOLON (13:19-13:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:20
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:20
+      name: "Renamable"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:26
+      (IdentifierDeclaration
+        range: 2:5-2:11
+        name: "rename"
+      )
+      (FunctionParameter
+        range: 2:12-2:24
+        (IdentifierDeclaration
+          range: 2:12-2:16
+          name: "name"
+        )
+        (NamedTypeNode
+          range: 2:18-2:24
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      returnType: null
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-9:2
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "Person"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:25-4:34
+      name: "Renamable"
+    )
+    (MemberDeclaration
+      range: 5:5-5:29
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 5:12-5:29
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:16-5:20
+          name: "name"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:23-5:28
+          kind: STRING
+          text: "\"Bob\""
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:23
+          name: "rename"
+        )
+        (FunctionParameter
+          range: 6:24-6:36
+          (IdentifierDeclaration
+            range: 6:24-6:28
+            name: "name"
+          )
+          (NamedTypeNode
+            range: 6:30-6:36
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        returnType: null
+        (BlockStatement
+          range: 6:38-8:6
+          (ExpressionStatement
+            range: 7:9-7:26
+            (AssignmentExpression
+              range: 7:9-7:25
+              (MemberExpression
+                range: 7:9-7:18
+                (ThisExpression
+                  range: 7:9-7:13
+                )
+                (IdentifierExpression
+                  range: 7:14-7:18
+                  name: "name"
+                )
+              )
+              (IdentifierExpression
+                range: 7:21-7:25
+                name: "name"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "person"
+    )
+    type: null
+    (NewExpression
+      range: 10:16-10:28
+      (IdentifierExpression
+        range: 10:20-10:26
+        name: "Person"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:13
+      name: "action"
+    )
+    (NamedTypeNode
+      range: 11:15-11:24
+      name: "Renamable"
+    )
+    (IdentifierExpression
+      range: 11:27-11:33
+      name: "person"
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:24
+    (CallExpression
+      range: 12:1-12:23
+      (MemberExpression
+        range: 12:1-12:14
+        (IdentifierExpression
+          range: 12:1-12:7
+          name: "action"
+        )
+        (IdentifierExpression
+          range: 12:8-12:14
+          name: "rename"
+        )
+      )
+      (LiteralExpression
+        range: 12:15-12:22
+        kind: STRING
+        text: "\"Alice\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:20
+    (CallExpression
+      range: 13:1-13:19
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 13:7-13:18
+        (IdentifierExpression
+          range: 13:7-13:13
+          name: "person"
+        )
+        (IdentifierExpression
+          range: 13:14-13:18
+          name: "name"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:23-5:28 -> string
+  7:9-7:13 -> Person
+  7:9-7:18 -> string
+  7:9-7:25 -> string
+  7:14-7:18 -> string
+  7:21-7:25 -> string
+  10:16-10:28 -> Person
+  10:20-10:26 -> Person
+  11:27-11:33 -> Person
+  12:1-12:7 -> Renamable
+  12:1-12:14 -> (string) => void
+  12:1-12:23 -> void
+  12:8-12:14 -> (string) => void
+  12:15-12:22 -> string
+  13:1-13:6 -> (any) => void
+  13:1-13:19 -> void
+  13:7-13:13 -> Person
+  13:7-13:18 -> string
+  13:14-13:18 -> string
+
+Resolved types:
+  2:18-2:24 -> string
+  4:25-4:34 -> Renamable
+  6:30-6:36 -> string
+  11:15-11:24 -> Renamable
+
+Declarations:
+  1:11-1:20 -> interface Renamable
+  2:5-2:11 -> rename(string) => void
+  2:12-2:16 -> const name: string
+  4:7-4:13 -> class Person
+  5:16-5:20 -> var name: string
+  6:17-6:23 -> rename(string) => void
+  6:24-6:28 -> const name: string
+  10:7-10:13 -> const person: Person
+  11:7-11:13 -> const action: Renamable
+
+References:
+  7:14-7:18 -> 5:16-5:20
+  7:21-7:25 -> 6:24-6:28
+  10:20-10:26 -> 4:7-4:13
+  11:27-11:33 -> 10:7-10:13
+  12:1-12:7 -> 11:7-11:13
+  12:8-12:14 -> 2:5-2:11
+  13:1-13:6 -> builtin print
+  13:7-13:13 -> 10:7-10:13
+  13:14-13:18 -> 5:16-5:20
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Renamable
+  NESTMEMBER Test$Person
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Renamable Test Renamable
+  // access flags 0x9
+  public static INNERCLASS Test$Person Test Person
+
+  // access flags 0x19
+  public final static LTest$Person; person
+
+  // access flags 0x19
+  public final static LTest$Renamable; action
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Person
+    DUP
+    INVOKESPECIAL Test$Person.<init> ()V
+    PUTSTATIC Test.person : LTest$Person;
+    GETSTATIC Test.person : LTest$Person;
+    PUTSTATIC Test.action : LTest$Renamable;
+    GETSTATIC Test.action : LTest$Renamable;
+    LDC "Alice"
+    INVOKEINTERFACE Test$Renamable.rename (Ljava/lang/String;)V (itf)
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.person : LTest$Person;
+    GETFIELD Test$Person.name : Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Renamable {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Renamable Test Renamable
+
+  // access flags 0x401
+  public abstract rename(Ljava/lang/String;)V
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Person implements Test$Renamable {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Person Test Person
+
+  // access flags 0x1
+  public Ljava/lang/String; name
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC "Bob"
+    PUTFIELD Test$Person.name : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public rename(Ljava/lang/String;)V
+    ALOAD 0
+    ALOAD 1
+    DUP_X1
+    PUTFIELD Test$Person.name : Ljava/lang/String;
+    POP
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+Alice
+

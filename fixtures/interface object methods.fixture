@@ -1,0 +1,301 @@
+interface Calculator {
+    calculate(value: i32) i32;
+}
+const calculator: Calculator = {
+    calculate: (value) => {
+        const result = value * 2;
+        return result;
+    }
+};
+print(calculator.calculate(2));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Calculator" (1:11-1:21)
+LEFT_BRACE (1:22-1:23)
+IDENTIFIER "calculate" (2:5-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+RIGHT_PAREN (2:25-2:26)
+IDENTIFIER "i32" (2:27-2:30)
+SEMICOLON (2:30-2:31)
+RIGHT_BRACE (3:1-3:2)
+CONST (4:1-4:6)
+IDENTIFIER "calculator" (4:7-4:17)
+COLON (4:17-4:18)
+IDENTIFIER "Calculator" (4:19-4:29)
+EQUAL (4:30-4:31)
+LEFT_BRACE (4:32-4:33)
+IDENTIFIER "calculate" (5:5-5:14)
+COLON (5:14-5:15)
+LEFT_PAREN (5:16-5:17)
+IDENTIFIER "value" (5:17-5:22)
+RIGHT_PAREN (5:22-5:23)
+ARROW (5:24-5:26)
+LEFT_BRACE (5:27-5:28)
+CONST (6:9-6:14)
+IDENTIFIER "result" (6:15-6:21)
+EQUAL (6:22-6:23)
+IDENTIFIER "value" (6:24-6:29)
+STAR (6:30-6:31)
+INTEGER_LITERAL "2" (6:32-6:33)
+SEMICOLON (6:33-6:34)
+RETURN (7:9-7:15)
+IDENTIFIER "result" (7:16-7:22)
+SEMICOLON (7:22-7:23)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+SEMICOLON (9:2-9:3)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "calculator" (10:7-10:17)
+DOT (10:17-10:18)
+IDENTIFIER "calculate" (10:18-10:27)
+LEFT_PAREN (10:27-10:28)
+INTEGER_LITERAL "2" (10:28-10:29)
+RIGHT_PAREN (10:29-10:30)
+RIGHT_PAREN (10:30-10:31)
+SEMICOLON (10:31-10:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:32
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:21
+      name: "Calculator"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:31
+      (IdentifierDeclaration
+        range: 2:5-2:14
+        name: "calculate"
+      )
+      (FunctionParameter
+        range: 2:15-2:25
+        (IdentifierDeclaration
+          range: 2:15-2:20
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:22-2:25
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:27-2:30
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-9:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:17
+      name: "calculator"
+    )
+    (NamedTypeNode
+      range: 4:19-4:29
+      name: "Calculator"
+    )
+    (ObjectExpression
+      range: 4:32-9:2
+      (ObjectMember
+        range: 5:5-8:6
+        (IdentifierDeclaration
+          range: 5:5-5:14
+          name: "calculate"
+        )
+        (LambdaExpression
+          range: 5:16-8:6
+          (LambdaParameter
+            range: 5:17-5:22
+            (IdentifierDeclaration
+              range: 5:17-5:22
+              name: "value"
+            )
+          )
+          (BlockStatement
+            range: 5:27-8:6
+            (VariableDeclaration
+              range: 6:9-6:34
+              mutability: CONST
+              (IdentifierDeclaration
+                range: 6:15-6:21
+                name: "result"
+              )
+              type: null
+              (BinaryExpression
+                range: 6:24-6:33
+                (IdentifierExpression
+                  range: 6:24-6:29
+                  name: "value"
+                )
+                operator: MULTIPLY
+                (LiteralExpression
+                  range: 6:32-6:33
+                  kind: INT
+                  text: "2"
+                )
+              )
+            )
+            (ReturnStatement
+              range: 7:9-7:23
+              (IdentifierExpression
+                range: 7:16-7:22
+                name: "result"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:32
+    (CallExpression
+      range: 10:1-10:31
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:30
+        (MemberExpression
+          range: 10:7-10:27
+          (IdentifierExpression
+            range: 10:7-10:17
+            name: "calculator"
+          )
+          (IdentifierExpression
+            range: 10:18-10:27
+            name: "calculate"
+          )
+        )
+        (LiteralExpression
+          range: 10:28-10:29
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:32-9:2 -> Calculator
+  5:16-8:6 -> (i32) => i32
+  6:24-6:29 -> i32
+  6:24-6:33 -> i32
+  6:32-6:33 -> i32
+  7:16-7:22 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:31 -> void
+  10:7-10:17 -> Calculator
+  10:7-10:27 -> (i32) => i32
+  10:7-10:30 -> i32
+  10:18-10:27 -> (i32) => i32
+  10:28-10:29 -> i32
+
+Resolved types:
+  2:22-2:25 -> i32
+  2:27-2:30 -> i32
+  4:19-4:29 -> Calculator
+
+Declarations:
+  1:11-1:21 -> interface Calculator
+  2:5-2:14 -> calculate(i32) => i32
+  2:15-2:20 -> const value: i32
+  4:7-4:17 -> const calculator: Calculator
+  5:17-5:22 -> const value: i32
+  6:15-6:21 -> const result: i32
+
+References:
+  6:24-6:29 -> 5:17-5:22
+  7:16-7:22 -> 6:15-6:21
+  10:1-10:6 -> builtin print
+  10:7-10:17 -> 4:7-4:17
+  10:18-10:27 -> 2:5-2:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Calculator
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Calculator Test Calculator
+
+  // access flags 0x19
+  public final static LTest$Calculator; calculator
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    INVOKESPECIAL Test$$object0.<init> ()V
+    PUTSTATIC Test.calculator : LTest$Calculator;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.calculator : LTest$Calculator;
+    LDC 2
+    INVOKEINTERFACE Test$Calculator.calculate (I)I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Calculator {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Calculator Test Calculator
+
+  // access flags 0x401
+  public abstract calculate(I)I
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Calculator {
+
+  NESTHOST Test
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public calculate(I)I
+    ILOAD 1
+    LDC 2
+    IMUL
+    ISTORE 2
+    ILOAD 2
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+--- OUTPUT ---
+
+4
+

@@ -1,0 +1,49 @@
+const value = {
+    name: "Bob"
+};
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+LEFT_BRACE (1:15-1:16)
+IDENTIFIER "name" (2:5-2:9)
+COLON (2:9-2:10)
+STRING_LITERAL "\"Bob\"" (2:11-2:16)
+RIGHT_BRACE (3:1-3:2)
+SEMICOLON (3:2-3:3)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:3
+  (VariableDeclaration
+    range: 1:1-3:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    type: null
+    (ObjectExpression
+      range: 1:15-3:2
+      (ObjectMember
+        range: 2:5-2:16
+        (IdentifierDeclaration
+          range: 2:5-2:9
+          name: "name"
+        )
+        (LiteralExpression
+          range: 2:11-2:16
+          kind: STRING
+          text: "\"Bob\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Object literal requires an expected interface type at 1:15-3:2

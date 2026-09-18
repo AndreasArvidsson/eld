@@ -1,0 +1,279 @@
+interface Value {
+    var value: string;
+}
+const value: Value = {
+    value: "before"
+};
+print(value.value = "after");
+print(value.value);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "string" (2:16-2:22)
+SEMICOLON (2:22-2:23)
+RIGHT_BRACE (3:1-3:2)
+CONST (4:1-4:6)
+IDENTIFIER "value" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "Value" (4:14-4:19)
+EQUAL (4:20-4:21)
+LEFT_BRACE (4:22-4:23)
+IDENTIFIER "value" (5:5-5:10)
+COLON (5:10-5:11)
+STRING_LITERAL "\"before\"" (5:12-5:20)
+RIGHT_BRACE (6:1-6:2)
+SEMICOLON (6:2-6:3)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "value" (7:7-7:12)
+DOT (7:12-7:13)
+IDENTIFIER "value" (7:13-7:18)
+EQUAL (7:19-7:20)
+STRING_LITERAL "\"after\"" (7:21-7:28)
+RIGHT_PAREN (7:28-7:29)
+SEMICOLON (7:29-7:30)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "value" (8:7-8:12)
+DOT (8:12-8:13)
+IDENTIFIER "value" (8:13-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:20
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:23
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:16-2:22
+        name: "string"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-6:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 4:14-4:19
+      name: "Value"
+    )
+    (ObjectExpression
+      range: 4:22-6:2
+      (ObjectMember
+        range: 5:5-5:20
+        (IdentifierDeclaration
+          range: 5:5-5:10
+          name: "value"
+        )
+        (LiteralExpression
+          range: 5:12-5:20
+          kind: STRING
+          text: "\"before\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:30
+    (CallExpression
+      range: 7:1-7:29
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (AssignmentExpression
+        range: 7:7-7:28
+        (MemberExpression
+          range: 7:7-7:18
+          (IdentifierExpression
+            range: 7:7-7:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 7:13-7:18
+            name: "value"
+          )
+        )
+        (LiteralExpression
+          range: 7:21-7:28
+          kind: STRING
+          text: "\"after\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:18
+        (IdentifierExpression
+          range: 8:7-8:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 8:13-8:18
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:22-6:2 -> Value
+  5:12-5:20 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:29 -> void
+  7:7-7:12 -> Value
+  7:7-7:18 -> string
+  7:7-7:28 -> string
+  7:13-7:18 -> string
+  7:21-7:28 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:12 -> Value
+  8:7-8:18 -> string
+  8:13-8:18 -> string
+
+Resolved types:
+  2:16-2:22 -> string
+  4:14-4:19 -> Value
+
+Declarations:
+  1:11-1:16 -> interface Value
+  2:9-2:14 -> var value: string
+  4:7-4:12 -> const value: Value
+
+References:
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 4:7-4:12
+  7:13-7:18 -> 2:9-2:14
+  8:1-8:6 -> builtin print
+  8:7-8:12 -> 4:7-4:12
+  8:13-8:18 -> 2:9-2:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Value
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x19
+  public final static LTest$Value; value
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    LDC "before"
+    INVOKESPECIAL Test$$object0.<init> (Ljava/lang/String;)V
+    PUTSTATIC Test.value : LTest$Value;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : LTest$Value;
+    LDC "after"
+    DUP_X1
+    INVOKEINTERFACE Test$Value.$set$value (Ljava/lang/String;)V (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value ()Ljava/lang/String; (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 4
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Value {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()Ljava/lang/String;
+
+  // access flags 0x1401
+  public abstract synthetic $set$value(Ljava/lang/String;)V
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Value {
+
+  NESTHOST Test
+
+  // access flags 0x2
+  private Ljava/lang/String; value
+
+  // access flags 0x1001
+  public synthetic $get$value()Ljava/lang/String;
+    ALOAD 0
+    GETFIELD Test$$object0.value : Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$value(Ljava/lang/String;)V
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD Test$$object0.value : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public <init>(Ljava/lang/String;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD Test$$object0.value : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+after
+after
+

@@ -1,0 +1,81 @@
+interface Value {
+    const value: i32;
+}
+interface Mutable extends Value {
+    var value: i32;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "Mutable" (4:11-4:18)
+EXTENDS (4:19-4:26)
+IDENTIFIER "Value" (4:27-4:32)
+LEFT_BRACE (4:33-4:34)
+VAR (5:5-5:8)
+IDENTIFIER "value" (5:9-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "i32" (5:16-5:19)
+SEMICOLON (5:19-5:20)
+RIGHT_BRACE (6:1-6:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:18
+      name: "Mutable"
+    )
+    (NamedTypeNode
+      range: 4:27-4:32
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 5:5-5:20
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 5:9-5:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "i32"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Conflicting interface member 'value' at 5:5-5:20

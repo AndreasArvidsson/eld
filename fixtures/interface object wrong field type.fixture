@@ -1,0 +1,85 @@
+interface Value {
+    const value: i32;
+}
+const value: Value = {
+    value: true
+};
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CONST (4:1-4:6)
+IDENTIFIER "value" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "Value" (4:14-4:19)
+EQUAL (4:20-4:21)
+LEFT_BRACE (4:22-4:23)
+IDENTIFIER "value" (5:5-5:10)
+COLON (5:10-5:11)
+BOOLEAN_LITERAL "true" (5:12-5:16)
+RIGHT_BRACE (6:1-6:2)
+SEMICOLON (6:2-6:3)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:3
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-6:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 4:14-4:19
+      name: "Value"
+    )
+    (ObjectExpression
+      range: 4:22-6:2
+      (ObjectMember
+        range: 5:5-5:16
+        (IdentifierDeclaration
+          range: 5:5-5:10
+          name: "value"
+        )
+        (LiteralExpression
+          range: 5:12-5:16
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Member 'value' expects i32, found bool at 5:12-5:16

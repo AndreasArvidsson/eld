@@ -7,6 +7,7 @@ import com.github.andreasarvidsson.eld.Range;
 
 public record ClassDeclaration(
     IdentifierDeclaration name, @Nullable IdentifierExpression superClass,
+    List<@NonNull TypeNode> implementedInterfaces,
     List<@NonNull MemberDeclaration> members, Range range
 ) implements Declaration {
 }

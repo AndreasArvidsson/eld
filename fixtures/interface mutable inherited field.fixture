@@ -1,0 +1,444 @@
+interface Value {
+    var value: i32;
+}
+interface NamedValue extends Value {
+    const name: string;
+}
+class Base {
+    public var value = 1;
+    public const name = "box";
+}
+class Box extends Base implements NamedValue {}
+const value: NamedValue = new Box();
+value.value = 7;
+print(value.value);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "i32" (2:16-2:19)
+SEMICOLON (2:19-2:20)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "NamedValue" (4:11-4:21)
+EXTENDS (4:22-4:29)
+IDENTIFIER "Value" (4:30-4:35)
+LEFT_BRACE (4:36-4:37)
+CONST (5:5-5:10)
+IDENTIFIER "name" (5:11-5:15)
+COLON (5:15-5:16)
+IDENTIFIER "string" (5:17-5:23)
+SEMICOLON (5:23-5:24)
+RIGHT_BRACE (6:1-6:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Base" (7:7-7:11)
+LEFT_BRACE (7:12-7:13)
+PUBLIC (8:5-8:11)
+VAR (8:12-8:15)
+IDENTIFIER "value" (8:16-8:21)
+EQUAL (8:22-8:23)
+INTEGER_LITERAL "1" (8:24-8:25)
+SEMICOLON (8:25-8:26)
+PUBLIC (9:5-9:11)
+CONST (9:12-9:17)
+IDENTIFIER "name" (9:18-9:22)
+EQUAL (9:23-9:24)
+STRING_LITERAL "\"box\"" (9:25-9:30)
+SEMICOLON (9:30-9:31)
+RIGHT_BRACE (10:1-10:2)
+CLASS (11:1-11:6)
+IDENTIFIER "Box" (11:7-11:10)
+EXTENDS (11:11-11:18)
+IDENTIFIER "Base" (11:19-11:23)
+IMPLEMENTS (11:24-11:34)
+IDENTIFIER "NamedValue" (11:35-11:45)
+LEFT_BRACE (11:46-11:47)
+RIGHT_BRACE (11:47-11:48)
+CONST (12:1-12:6)
+IDENTIFIER "value" (12:7-12:12)
+COLON (12:12-12:13)
+IDENTIFIER "NamedValue" (12:14-12:24)
+EQUAL (12:25-12:26)
+NEW (12:27-12:30)
+IDENTIFIER "Box" (12:31-12:34)
+LEFT_PAREN (12:34-12:35)
+RIGHT_PAREN (12:35-12:36)
+SEMICOLON (12:36-12:37)
+IDENTIFIER "value" (13:1-13:6)
+DOT (13:6-13:7)
+IDENTIFIER "value" (13:7-13:12)
+EQUAL (13:13-13:14)
+INTEGER_LITERAL "7" (13:15-13:16)
+SEMICOLON (13:16-13:17)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "value" (14:7-14:12)
+DOT (14:12-14:13)
+IDENTIFIER "value" (14:13-14:18)
+RIGHT_PAREN (14:18-14:19)
+SEMICOLON (14:19-14:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:20
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:20
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:16-2:19
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:21
+      name: "NamedValue"
+    )
+    (NamedTypeNode
+      range: 4:30-4:35
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 5:5-5:24
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 5:11-5:15
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 5:17-5:23
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-10:2
+    (IdentifierDeclaration
+      range: 7:7-7:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 8:5-8:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 8:12-8:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 8:16-8:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 8:24-8:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 9:5-9:31
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 9:12-9:31
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 9:18-9:22
+          name: "name"
+        )
+        type: null
+        (LiteralExpression
+          range: 9:25-9:30
+          kind: STRING
+          text: "\"box\""
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 11:1-11:48
+    (IdentifierDeclaration
+      range: 11:7-11:10
+      name: "Box"
+    )
+    (IdentifierExpression
+      range: 11:19-11:23
+      name: "Base"
+    )
+    (NamedTypeNode
+      range: 11:35-11:45
+      name: "NamedValue"
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 12:14-12:24
+      name: "NamedValue"
+    )
+    (NewExpression
+      range: 12:27-12:36
+      (IdentifierExpression
+        range: 12:31-12:34
+        name: "Box"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:17
+    (AssignmentExpression
+      range: 13:1-13:16
+      (MemberExpression
+        range: 13:1-13:12
+        (IdentifierExpression
+          range: 13:1-13:6
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 13:7-13:12
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 13:15-13:16
+        kind: INT
+        text: "7"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:20
+    (CallExpression
+      range: 14:1-14:19
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:18
+        (IdentifierExpression
+          range: 14:7-14:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 14:13-14:18
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  8:24-8:25 -> i32
+  9:25-9:30 -> string
+  11:19-11:23 -> Base
+  12:27-12:36 -> Box
+  12:31-12:34 -> Box
+  13:1-13:6 -> NamedValue
+  13:1-13:12 -> i32
+  13:1-13:16 -> i32
+  13:7-13:12 -> i32
+  13:15-13:16 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:19 -> void
+  14:7-14:12 -> NamedValue
+  14:7-14:18 -> i32
+  14:13-14:18 -> i32
+
+Resolved types:
+  2:16-2:19 -> i32
+  4:30-4:35 -> Value
+  5:17-5:23 -> string
+  11:35-11:45 -> NamedValue
+  12:14-12:24 -> NamedValue
+
+Declarations:
+  1:11-1:16 -> interface Value
+  2:9-2:14 -> var value: i32
+  4:11-4:21 -> interface NamedValue
+  5:11-5:15 -> const name: string
+  7:7-7:11 -> class Base
+  8:16-8:21 -> var value: i32
+  9:18-9:22 -> const name: string
+  11:7-11:10 -> class Box
+  12:7-12:12 -> const value: NamedValue
+
+References:
+  11:19-11:23 -> 7:7-7:11
+  12:31-12:34 -> 11:7-11:10
+  13:1-13:6 -> 12:7-12:12
+  13:7-13:12 -> 2:9-2:14
+  14:1-14:6 -> builtin print
+  14:7-14:12 -> 12:7-12:12
+  14:13-14:18 -> 2:9-2:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Value
+  NESTMEMBER Test$NamedValue
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Box
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+  // access flags 0x609
+  public static abstract INNERCLASS Test$NamedValue Test NamedValue
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Box Test Box
+
+  // access flags 0x19
+  public final static LTest$NamedValue; value
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init> ()V
+    PUTSTATIC Test.value : LTest$NamedValue;
+    GETSTATIC Test.value : LTest$NamedValue;
+    LDC 7
+    DUP_X1
+    INVOKEINTERFACE Test$NamedValue.$set$value (I)V (itf)
+    POP
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : LTest$NamedValue;
+    INVOKEINTERFACE Test$NamedValue.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Value {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x1401
+  public abstract synthetic $set$value(I)V
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$NamedValue implements Test$Value {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$NamedValue Test NamedValue
+
+  // access flags 0x1401
+  public abstract synthetic $get$name()Ljava/lang/String;
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x1
+  public I value
+
+  // access flags 0x11
+  public final Ljava/lang/String; name
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 1
+    PUTFIELD Test$Base.value : I
+    ALOAD 0
+    LDC "box"
+    PUTFIELD Test$Base.name : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Box extends Test$Base implements Test$NamedValue {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Box Test Box
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$Base.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$value(I)V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$Base.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1001
+  public synthetic $get$name()Ljava/lang/String;
+    ALOAD 0
+    GETFIELD Test$Base.name : Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL Test$Base.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+7
+

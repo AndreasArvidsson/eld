@@ -1,0 +1,333 @@
+interface Greeting {
+    greeting() string;
+}
+class Person implements Greeting {
+    public const name = "Bob";
+    public func greeting() string {
+        return f"Hello {this.name}";
+    }
+}
+const person: Greeting = new Person();
+print(person.greeting());
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Greeting" (1:11-1:19)
+LEFT_BRACE (1:20-1:21)
+IDENTIFIER "greeting" (2:5-2:13)
+LEFT_PAREN (2:13-2:14)
+RIGHT_PAREN (2:14-2:15)
+IDENTIFIER "string" (2:16-2:22)
+SEMICOLON (2:22-2:23)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Person" (4:7-4:13)
+IMPLEMENTS (4:14-4:24)
+IDENTIFIER "Greeting" (4:25-4:33)
+LEFT_BRACE (4:34-4:35)
+PUBLIC (5:5-5:11)
+CONST (5:12-5:17)
+IDENTIFIER "name" (5:18-5:22)
+EQUAL (5:23-5:24)
+STRING_LITERAL "\"Bob\"" (5:25-5:30)
+SEMICOLON (5:30-5:31)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "greeting" (6:17-6:25)
+LEFT_PAREN (6:25-6:26)
+RIGHT_PAREN (6:26-6:27)
+IDENTIFIER "string" (6:28-6:34)
+LEFT_BRACE (6:35-6:36)
+RETURN (7:9-7:15)
+FORMAT_STRING_START (7:16-7:18)
+STRING_LITERAL "\"Hello \"" (7:18-7:24)
+LEFT_BRACE (7:24-7:25)
+THIS (7:25-7:29)
+DOT (7:29-7:30)
+IDENTIFIER "name" (7:30-7:34)
+RIGHT_BRACE (7:34-7:35)
+FORMAT_STRING_END (7:35-7:36)
+SEMICOLON (7:36-7:37)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (10:1-10:6)
+IDENTIFIER "person" (10:7-10:13)
+COLON (10:13-10:14)
+IDENTIFIER "Greeting" (10:15-10:23)
+EQUAL (10:24-10:25)
+NEW (10:26-10:29)
+IDENTIFIER "Person" (10:30-10:36)
+LEFT_PAREN (10:36-10:37)
+RIGHT_PAREN (10:37-10:38)
+SEMICOLON (10:38-10:39)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "person" (11:7-11:13)
+DOT (11:13-11:14)
+IDENTIFIER "greeting" (11:14-11:22)
+LEFT_PAREN (11:22-11:23)
+RIGHT_PAREN (11:23-11:24)
+RIGHT_PAREN (11:24-11:25)
+SEMICOLON (11:25-11:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:26
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:19
+      name: "Greeting"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:23
+      (IdentifierDeclaration
+        range: 2:5-2:13
+        name: "greeting"
+      )
+      (NamedTypeNode
+        range: 2:16-2:22
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-9:2
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "Person"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:25-4:33
+      name: "Greeting"
+    )
+    (MemberDeclaration
+      range: 5:5-5:31
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 5:12-5:31
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 5:18-5:22
+          name: "name"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:25-5:30
+          kind: STRING
+          text: "\"Bob\""
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:25
+          name: "greeting"
+        )
+        (NamedTypeNode
+          range: 6:28-6:34
+          name: "string"
+        )
+        (BlockStatement
+          range: 6:35-8:6
+          (ReturnStatement
+            range: 7:9-7:37
+            (FormatStringExpression
+              range: 7:16-7:36
+              (LiteralExpression
+                range: 7:18-7:24
+                kind: STRING
+                text: "\"Hello \""
+              )
+              (MemberExpression
+                range: 7:25-7:34
+                (ThisExpression
+                  range: 7:25-7:29
+                )
+                (IdentifierExpression
+                  range: 7:30-7:34
+                  name: "name"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "person"
+    )
+    (NamedTypeNode
+      range: 10:15-10:23
+      name: "Greeting"
+    )
+    (NewExpression
+      range: 10:26-10:38
+      (IdentifierExpression
+        range: 10:30-10:36
+        name: "Person"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:26
+    (CallExpression
+      range: 11:1-11:25
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:24
+        (MemberExpression
+          range: 11:7-11:22
+          (IdentifierExpression
+            range: 11:7-11:13
+            name: "person"
+          )
+          (IdentifierExpression
+            range: 11:14-11:22
+            name: "greeting"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:25-5:30 -> string
+  7:16-7:36 -> string
+  7:18-7:24 -> string
+  7:25-7:29 -> Person
+  7:25-7:34 -> string
+  7:30-7:34 -> string
+  10:26-10:38 -> Person
+  10:30-10:36 -> Person
+  11:1-11:6 -> (any) => void
+  11:1-11:25 -> void
+  11:7-11:13 -> Greeting
+  11:7-11:22 -> () => string
+  11:7-11:24 -> string
+  11:14-11:22 -> () => string
+
+Resolved types:
+  2:16-2:22 -> string
+  4:25-4:33 -> Greeting
+  6:28-6:34 -> string
+  10:15-10:23 -> Greeting
+
+Declarations:
+  1:11-1:19 -> interface Greeting
+  2:5-2:13 -> greeting() => string
+  4:7-4:13 -> class Person
+  5:18-5:22 -> const name: string
+  6:17-6:25 -> greeting() => string
+  10:7-10:13 -> const person: Greeting
+
+References:
+  7:30-7:34 -> 5:18-5:22
+  10:30-10:36 -> 4:7-4:13
+  11:1-11:6 -> builtin print
+  11:7-11:13 -> 10:7-10:13
+  11:14-11:22 -> 2:5-2:13
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Greeting
+  NESTMEMBER Test$Person
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Greeting Test Greeting
+  // access flags 0x9
+  public static INNERCLASS Test$Person Test Person
+
+  // access flags 0x19
+  public final static LTest$Greeting; person
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Person
+    DUP
+    INVOKESPECIAL Test$Person.<init> ()V
+    PUTSTATIC Test.person : LTest$Greeting;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.person : LTest$Greeting;
+    INVOKEINTERFACE Test$Greeting.greeting ()Ljava/lang/String; (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Greeting {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Greeting Test Greeting
+
+  // access flags 0x401
+  public abstract greeting()Ljava/lang/String;
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Person implements Test$Greeting {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Person Test Person
+
+  // access flags 0x11
+  public final Ljava/lang/String; name
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC "Bob"
+    PUTFIELD Test$Person.name : Ljava/lang/String;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public greeting()Ljava/lang/String;
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
+    LDC "Hello "
+    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD 0
+    GETFIELD Test$Person.name : Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+Hello Bob
+

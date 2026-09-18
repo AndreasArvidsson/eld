@@ -5,5 +5,5 @@ import com.github.andreasarvidsson.eld.Range;
 public record UninitializedVariableDeclaration(
     Mutability mutability, IdentifierDeclaration name, TypeNode type,
     Range range
-) implements Declaration {
+) implements Declaration, InterfaceMemberDeclaration {
 }

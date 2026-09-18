@@ -1,0 +1,278 @@
+interface Callback {
+    const callback: (i32) => i32;
+}
+const callback: Callback = {
+    callback: (value) => value + 1
+};
+print(callback.callback(5));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Callback" (1:11-1:19)
+LEFT_BRACE (1:20-1:21)
+CONST (2:5-2:10)
+IDENTIFIER "callback" (2:11-2:19)
+COLON (2:19-2:20)
+LEFT_PAREN (2:21-2:22)
+IDENTIFIER "i32" (2:22-2:25)
+RIGHT_PAREN (2:25-2:26)
+ARROW (2:27-2:29)
+IDENTIFIER "i32" (2:30-2:33)
+SEMICOLON (2:33-2:34)
+RIGHT_BRACE (3:1-3:2)
+CONST (4:1-4:6)
+IDENTIFIER "callback" (4:7-4:15)
+COLON (4:15-4:16)
+IDENTIFIER "Callback" (4:17-4:25)
+EQUAL (4:26-4:27)
+LEFT_BRACE (4:28-4:29)
+IDENTIFIER "callback" (5:5-5:13)
+COLON (5:13-5:14)
+LEFT_PAREN (5:15-5:16)
+IDENTIFIER "value" (5:16-5:21)
+RIGHT_PAREN (5:21-5:22)
+ARROW (5:23-5:25)
+IDENTIFIER "value" (5:26-5:31)
+PLUS (5:32-5:33)
+INTEGER_LITERAL "1" (5:34-5:35)
+RIGHT_BRACE (6:1-6:2)
+SEMICOLON (6:2-6:3)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "callback" (7:7-7:15)
+DOT (7:15-7:16)
+IDENTIFIER "callback" (7:16-7:24)
+LEFT_PAREN (7:24-7:25)
+INTEGER_LITERAL "5" (7:25-7:26)
+RIGHT_PAREN (7:26-7:27)
+RIGHT_PAREN (7:27-7:28)
+SEMICOLON (7:28-7:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:29
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:19
+      name: "Callback"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:34
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:19
+        name: "callback"
+      )
+      (FunctionTypeNode
+        range: 2:21-2:33
+        (NamedTypeNode
+          range: 2:22-2:25
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 2:30-2:33
+          name: "i32"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-6:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:15
+      name: "callback"
+    )
+    (NamedTypeNode
+      range: 4:17-4:25
+      name: "Callback"
+    )
+    (ObjectExpression
+      range: 4:28-6:2
+      (ObjectMember
+        range: 5:5-5:35
+        (IdentifierDeclaration
+          range: 5:5-5:13
+          name: "callback"
+        )
+        (LambdaExpression
+          range: 5:15-5:35
+          (LambdaParameter
+            range: 5:16-5:21
+            (IdentifierDeclaration
+              range: 5:16-5:21
+              name: "value"
+            )
+          )
+          (BinaryExpression
+            range: 5:26-5:35
+            (IdentifierExpression
+              range: 5:26-5:31
+              name: "value"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 5:34-5:35
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:29
+    (CallExpression
+      range: 7:1-7:28
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:27
+        (MemberExpression
+          range: 7:7-7:24
+          (IdentifierExpression
+            range: 7:7-7:15
+            name: "callback"
+          )
+          (IdentifierExpression
+            range: 7:16-7:24
+            name: "callback"
+          )
+        )
+        (LiteralExpression
+          range: 7:25-7:26
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:28-6:2 -> Callback
+  5:15-5:35 -> (i32) => i32
+  5:26-5:31 -> i32
+  5:26-5:35 -> i32
+  5:34-5:35 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:28 -> void
+  7:7-7:15 -> Callback
+  7:7-7:24 -> (i32) => i32
+  7:7-7:27 -> i32
+  7:16-7:24 -> (i32) => i32
+  7:25-7:26 -> i32
+
+Resolved types:
+  2:21-2:33 -> (i32) => i32
+  2:22-2:25 -> i32
+  2:30-2:33 -> i32
+  4:17-4:25 -> Callback
+
+Declarations:
+  1:11-1:19 -> interface Callback
+  2:11-2:19 -> const callback: (i32) => i32
+  4:7-4:15 -> const callback: Callback
+  5:16-5:21 -> const value: i32
+
+References:
+  5:26-5:31 -> 5:16-5:21
+  7:1-7:6 -> builtin print
+  7:7-7:15 -> 4:7-4:15
+  7:16-7:24 -> 2:11-2:19
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Callback
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Callback Test Callback
+
+  // access flags 0x19
+  public final static LTest$Callback; callback
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    // handle kind 0x6 : INVOKESTATIC
+    LDC Test.$lambda0(I)I
+    INVOKESPECIAL Test$$object0.<init> (Ljava/lang/invoke/MethodHandle;)V
+    PUTSTATIC Test.callback : LTest$Callback;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.callback : LTest$Callback;
+    INVOKEINTERFACE Test$Callback.$get$callback ()Ljava/lang/invoke/MethodHandle; (itf)
+    LDC 5
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+
+  // access flags 0x100A
+  private static synthetic $lambda0(I)I
+    ILOAD 0
+    LDC 1
+    IADD
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Callback {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Callback Test Callback
+
+  // access flags 0x1401
+  public abstract synthetic $get$callback()Ljava/lang/invoke/MethodHandle;
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Callback {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final Ljava/lang/invoke/MethodHandle; callback
+
+  // access flags 0x1001
+  public synthetic $get$callback()Ljava/lang/invoke/MethodHandle;
+    ALOAD 0
+    GETFIELD Test$$object0.callback : Ljava/lang/invoke/MethodHandle;
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(Ljava/lang/invoke/MethodHandle;)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD Test$$object0.callback : Ljava/lang/invoke/MethodHandle;
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+6
+

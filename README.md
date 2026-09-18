@@ -28,6 +28,13 @@ class Counter {
         return this.value++;
     }
 }
+
+interface Person {
+    const name: string;
+    var age: i32;
+    greeting() string;
+    rename(name: string);
+}
 ```
 
 `const` prevents reassignment; `var` allows it. Arrays and class instances can

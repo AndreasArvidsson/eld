@@ -1,0 +1,44 @@
+class Base {}
+interface Value extends Base {}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Value" (2:11-2:16)
+EXTENDS (2:17-2:24)
+IDENTIFIER "Base" (2:25-2:29)
+LEFT_BRACE (2:30-2:31)
+RIGHT_BRACE (2:31-2:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:32
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:32
+    (IdentifierDeclaration
+      range: 2:11-2:16
+      name: "Value"
+    )
+    (NamedTypeNode
+      range: 2:25-2:29
+      name: "Base"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Interfaces may only extend interfaces at 2:25-2:29

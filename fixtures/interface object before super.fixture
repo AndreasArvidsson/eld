@@ -1,0 +1,511 @@
+interface Reader {
+    read() i32;
+}
+class Base {
+    public var value: i32;
+    public constructor(value: i32) {
+        this.value = value;
+    }
+}
+class Child extends Base {
+    public constructor(value: i32) {
+        const reader: Reader = {
+            read: () => value
+        };
+        super(reader.read());
+    }
+}
+const child = new Child(7);
+print(child.value);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Reader" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+IDENTIFIER "read" (2:5-2:9)
+LEFT_PAREN (2:9-2:10)
+RIGHT_PAREN (2:10-2:11)
+IDENTIFIER "i32" (2:12-2:15)
+SEMICOLON (2:15-2:16)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Base" (4:7-4:11)
+LEFT_BRACE (4:12-4:13)
+PUBLIC (5:5-5:11)
+VAR (5:12-5:15)
+IDENTIFIER "value" (5:16-5:21)
+COLON (5:21-5:22)
+IDENTIFIER "i32" (5:23-5:26)
+SEMICOLON (5:26-5:27)
+PUBLIC (6:5-6:11)
+CONSTRUCTOR (6:12-6:23)
+LEFT_PAREN (6:23-6:24)
+IDENTIFIER "value" (6:24-6:29)
+COLON (6:29-6:30)
+IDENTIFIER "i32" (6:31-6:34)
+RIGHT_PAREN (6:34-6:35)
+LEFT_BRACE (6:36-6:37)
+THIS (7:9-7:13)
+DOT (7:13-7:14)
+IDENTIFIER "value" (7:14-7:19)
+EQUAL (7:20-7:21)
+IDENTIFIER "value" (7:22-7:27)
+SEMICOLON (7:27-7:28)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CLASS (10:1-10:6)
+IDENTIFIER "Child" (10:7-10:12)
+EXTENDS (10:13-10:20)
+IDENTIFIER "Base" (10:21-10:25)
+LEFT_BRACE (10:26-10:27)
+PUBLIC (11:5-11:11)
+CONSTRUCTOR (11:12-11:23)
+LEFT_PAREN (11:23-11:24)
+IDENTIFIER "value" (11:24-11:29)
+COLON (11:29-11:30)
+IDENTIFIER "i32" (11:31-11:34)
+RIGHT_PAREN (11:34-11:35)
+LEFT_BRACE (11:36-11:37)
+CONST (12:9-12:14)
+IDENTIFIER "reader" (12:15-12:21)
+COLON (12:21-12:22)
+IDENTIFIER "Reader" (12:23-12:29)
+EQUAL (12:30-12:31)
+LEFT_BRACE (12:32-12:33)
+IDENTIFIER "read" (13:13-13:17)
+COLON (13:17-13:18)
+LEFT_PAREN (13:19-13:20)
+RIGHT_PAREN (13:20-13:21)
+ARROW (13:22-13:24)
+IDENTIFIER "value" (13:25-13:30)
+RIGHT_BRACE (14:9-14:10)
+SEMICOLON (14:10-14:11)
+SUPER (15:9-15:14)
+LEFT_PAREN (15:14-15:15)
+IDENTIFIER "reader" (15:15-15:21)
+DOT (15:21-15:22)
+IDENTIFIER "read" (15:22-15:26)
+LEFT_PAREN (15:26-15:27)
+RIGHT_PAREN (15:27-15:28)
+RIGHT_PAREN (15:28-15:29)
+SEMICOLON (15:29-15:30)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+CONST (18:1-18:6)
+IDENTIFIER "child" (18:7-18:12)
+EQUAL (18:13-18:14)
+NEW (18:15-18:18)
+IDENTIFIER "Child" (18:19-18:24)
+LEFT_PAREN (18:24-18:25)
+INTEGER_LITERAL "7" (18:25-18:26)
+RIGHT_PAREN (18:26-18:27)
+SEMICOLON (18:27-18:28)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "child" (19:7-19:12)
+DOT (19:12-19:13)
+IDENTIFIER "value" (19:13-19:18)
+RIGHT_PAREN (19:18-19:19)
+SEMICOLON (19:19-19:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-19:20
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:16
+      (IdentifierDeclaration
+        range: 2:5-2:9
+        name: "read"
+      )
+      (NamedTypeNode
+        range: 2:12-2:15
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-9:2
+    (IdentifierDeclaration
+      range: 4:7-4:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 5:5-5:27
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 5:12-5:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:16-5:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 5:23-5:26
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 6:12-8:6
+        (FunctionParameter
+          range: 6:24-6:34
+          (IdentifierDeclaration
+            range: 6:24-6:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 6:31-6:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 6:36-8:6
+          (ExpressionStatement
+            range: 7:9-7:28
+            (AssignmentExpression
+              range: 7:9-7:27
+              (MemberExpression
+                range: 7:9-7:19
+                (ThisExpression
+                  range: 7:9-7:13
+                )
+                (IdentifierExpression
+                  range: 7:14-7:19
+                  name: "value"
+                )
+              )
+              (IdentifierExpression
+                range: 7:22-7:27
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 10:1-17:2
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 10:21-10:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 11:5-16:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 11:12-16:6
+        (FunctionParameter
+          range: 11:24-11:34
+          (IdentifierDeclaration
+            range: 11:24-11:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 11:31-11:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 11:36-16:6
+          (VariableDeclaration
+            range: 12:9-14:11
+            mutability: CONST
+            (IdentifierDeclaration
+              range: 12:15-12:21
+              name: "reader"
+            )
+            (NamedTypeNode
+              range: 12:23-12:29
+              name: "Reader"
+            )
+            (ObjectExpression
+              range: 12:32-14:10
+              (ObjectMember
+                range: 13:13-13:30
+                (IdentifierDeclaration
+                  range: 13:13-13:17
+                  name: "read"
+                )
+                (LambdaExpression
+                  range: 13:19-13:30
+                  (IdentifierExpression
+                    range: 13:25-13:30
+                    name: "value"
+                  )
+                )
+              )
+            )
+          )
+          (SuperConstructorCall
+            range: 15:9-15:30
+            (CallExpression
+              range: 15:15-15:28
+              (MemberExpression
+                range: 15:15-15:26
+                (IdentifierExpression
+                  range: 15:15-15:21
+                  name: "reader"
+                )
+                (IdentifierExpression
+                  range: 15:22-15:26
+                  name: "read"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:12
+      name: "child"
+    )
+    type: null
+    (NewExpression
+      range: 18:15-18:27
+      (IdentifierExpression
+        range: 18:19-18:24
+        name: "Child"
+      )
+      (LiteralExpression
+        range: 18:25-18:26
+        kind: INT
+        text: "7"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:20
+    (CallExpression
+      range: 19:1-19:19
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 19:7-19:18
+        (IdentifierExpression
+          range: 19:7-19:12
+          name: "child"
+        )
+        (IdentifierExpression
+          range: 19:13-19:18
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:9-7:13 -> Base
+  7:9-7:19 -> i32
+  7:9-7:27 -> i32
+  7:14-7:19 -> i32
+  7:22-7:27 -> i32
+  10:21-10:25 -> Base
+  12:32-14:10 -> Reader
+  13:19-13:30 -> () => i32
+  13:25-13:30 -> i32
+  15:15-15:21 -> Reader
+  15:15-15:26 -> () => i32
+  15:15-15:28 -> i32
+  15:22-15:26 -> () => i32
+  18:15-18:27 -> Child
+  18:19-18:24 -> Child
+  18:25-18:26 -> i32
+  19:1-19:6 -> (any) => void
+  19:1-19:19 -> void
+  19:7-19:12 -> Child
+  19:7-19:18 -> i32
+  19:13-19:18 -> i32
+
+Resolved types:
+  2:12-2:15 -> i32
+  5:23-5:26 -> i32
+  6:31-6:34 -> i32
+  11:31-11:34 -> i32
+  12:23-12:29 -> Reader
+
+Declarations:
+  1:11-1:17 -> interface Reader
+  2:5-2:9 -> read() => i32
+  4:7-4:11 -> class Base
+  5:16-5:21 -> var value: i32
+  6:12-8:6 -> constructor(value: i32)
+  6:24-6:29 -> const value: i32
+  10:7-10:12 -> class Child
+  11:12-16:6 -> constructor(value: i32)
+  11:24-11:29 -> const value: i32
+  12:15-12:21 -> const reader: Reader
+  18:7-18:12 -> const child: Child
+
+References:
+  7:14-7:19 -> 5:16-5:21
+  7:22-7:27 -> 6:24-6:29
+  10:21-10:25 -> 4:7-4:11
+  13:25-13:30 -> 11:24-11:29
+  15:15-15:21 -> 12:15-12:21
+  15:22-15:26 -> 2:5-2:9
+  18:19-18:24 -> 10:7-10:12
+  19:1-19:6 -> builtin print
+  19:7-19:12 -> 18:7-18:12
+  19:13-19:18 -> 5:16-5:21
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Reader
+  NESTMEMBER Test$Base
+  NESTMEMBER Test$Child
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Reader Test Reader
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x19
+  public final static LTest$Child; child
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Child
+    DUP
+    LDC 7
+    INVOKESPECIAL Test$Child.<init> (I)V
+    PUTSTATIC Test.child : LTest$Child;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.child : LTest$Child;
+    GETFIELD Test$Base.value : I
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Reader {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Reader Test Reader
+
+  // access flags 0x401
+  public abstract read()I
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Base Test Base
+
+  // access flags 0x1
+  public I value
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    DUP_X1
+    PUTFIELD Test$Base.value : I
+    POP
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Child extends Test$Base {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Child Test Child
+
+  // access flags 0x1
+  public <init>(I)V
+    NEW Test$$object0
+    DUP
+    ILOAD 1
+    INVOKESPECIAL Test$$object0.<init> (I)V
+    ASTORE 2
+    ALOAD 0
+    ALOAD 2
+    INVOKEINTERFACE Test$Reader.read ()I (itf)
+    INVOKESPECIAL Test$Base.<init> (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 3
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Reader {
+
+  NESTHOST Test
+
+  // access flags 0x1012
+  private final synthetic I $capture0
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.$capture0 : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public read()I
+    ALOAD 0
+    GETFIELD Test$$object0.$capture0 : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+7
+

@@ -1,0 +1,388 @@
+interface First {
+    var value: i32;
+}
+interface Second {
+    var value: i32;
+}
+interface Value extends First, Second {}
+const value: Value = {
+    value: 1
+};
+value.value = 7;
+const first: First = value;
+print(first.value);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "First" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "i32" (2:16-2:19)
+SEMICOLON (2:19-2:20)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "Second" (4:11-4:17)
+LEFT_BRACE (4:18-4:19)
+VAR (5:5-5:8)
+IDENTIFIER "value" (5:9-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "i32" (5:16-5:19)
+SEMICOLON (5:19-5:20)
+RIGHT_BRACE (6:1-6:2)
+INTERFACE (7:1-7:10)
+IDENTIFIER "Value" (7:11-7:16)
+EXTENDS (7:17-7:24)
+IDENTIFIER "First" (7:25-7:30)
+COMMA (7:30-7:31)
+IDENTIFIER "Second" (7:32-7:38)
+LEFT_BRACE (7:39-7:40)
+RIGHT_BRACE (7:40-7:41)
+CONST (8:1-8:6)
+IDENTIFIER "value" (8:7-8:12)
+COLON (8:12-8:13)
+IDENTIFIER "Value" (8:14-8:19)
+EQUAL (8:20-8:21)
+LEFT_BRACE (8:22-8:23)
+IDENTIFIER "value" (9:5-9:10)
+COLON (9:10-9:11)
+INTEGER_LITERAL "1" (9:12-9:13)
+RIGHT_BRACE (10:1-10:2)
+SEMICOLON (10:2-10:3)
+IDENTIFIER "value" (11:1-11:6)
+DOT (11:6-11:7)
+IDENTIFIER "value" (11:7-11:12)
+EQUAL (11:13-11:14)
+INTEGER_LITERAL "7" (11:15-11:16)
+SEMICOLON (11:16-11:17)
+CONST (12:1-12:6)
+IDENTIFIER "first" (12:7-12:12)
+COLON (12:12-12:13)
+IDENTIFIER "First" (12:14-12:19)
+EQUAL (12:20-12:21)
+IDENTIFIER "value" (12:22-12:27)
+SEMICOLON (12:27-12:28)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "first" (13:7-13:12)
+DOT (13:12-13:13)
+IDENTIFIER "value" (13:13-13:18)
+RIGHT_PAREN (13:18-13:19)
+SEMICOLON (13:19-13:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:20
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "First"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:20
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:16-2:19
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:17
+      name: "Second"
+    )
+    (UninitializedVariableDeclaration
+      range: 5:5-5:20
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 5:9-5:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 7:1-7:41
+    (IdentifierDeclaration
+      range: 7:11-7:16
+      name: "Value"
+    )
+    (NamedTypeNode
+      range: 7:25-7:30
+      name: "First"
+    )
+    (NamedTypeNode
+      range: 7:32-7:38
+      name: "Second"
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-10:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 8:14-8:19
+      name: "Value"
+    )
+    (ObjectExpression
+      range: 8:22-10:2
+      (ObjectMember
+        range: 9:5-9:13
+        (IdentifierDeclaration
+          range: 9:5-9:10
+          name: "value"
+        )
+        (LiteralExpression
+          range: 9:12-9:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:17
+    (AssignmentExpression
+      range: 11:1-11:16
+      (MemberExpression
+        range: 11:1-11:12
+        (IdentifierExpression
+          range: 11:1-11:6
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 11:7-11:12
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 11:15-11:16
+        kind: INT
+        text: "7"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "first"
+    )
+    (NamedTypeNode
+      range: 12:14-12:19
+      name: "First"
+    )
+    (IdentifierExpression
+      range: 12:22-12:27
+      name: "value"
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:20
+    (CallExpression
+      range: 13:1-13:19
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 13:7-13:18
+        (IdentifierExpression
+          range: 13:7-13:12
+          name: "first"
+        )
+        (IdentifierExpression
+          range: 13:13-13:18
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  8:22-10:2 -> Value
+  9:12-9:13 -> i32
+  11:1-11:6 -> Value
+  11:1-11:12 -> i32
+  11:1-11:16 -> i32
+  11:7-11:12 -> i32
+  11:15-11:16 -> i32
+  12:22-12:27 -> Value
+  13:1-13:6 -> (any) => void
+  13:1-13:19 -> void
+  13:7-13:12 -> First
+  13:7-13:18 -> i32
+  13:13-13:18 -> i32
+
+Resolved types:
+  2:16-2:19 -> i32
+  5:16-5:19 -> i32
+  7:25-7:30 -> First
+  7:32-7:38 -> Second
+  8:14-8:19 -> Value
+  12:14-12:19 -> First
+
+Declarations:
+  1:11-1:16 -> interface First
+  2:9-2:14 -> var value: i32
+  4:11-4:17 -> interface Second
+  5:9-5:14 -> var value: i32
+  7:11-7:16 -> interface Value
+  8:7-8:12 -> const value: Value
+  12:7-12:12 -> const first: First
+
+References:
+  11:1-11:6 -> 8:7-8:12
+  11:7-11:12 -> 2:9-2:14
+  12:22-12:27 -> 8:7-8:12
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 12:7-12:12
+  13:13-13:18 -> 2:9-2:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$First
+  NESTMEMBER Test$Second
+  NESTMEMBER Test$Value
+  // access flags 0x609
+  public static abstract INNERCLASS Test$First Test First
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Second Test Second
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x19
+  public final static LTest$Value; value
+
+  // access flags 0x19
+  public final static LTest$First; first
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    LDC 1
+    INVOKESPECIAL Test$$object0.<init> (I)V
+    PUTSTATIC Test.value : LTest$Value;
+    GETSTATIC Test.value : LTest$Value;
+    LDC 7
+    DUP_X1
+    INVOKEINTERFACE Test$Value.$set$value (I)V (itf)
+    POP
+    GETSTATIC Test.value : LTest$Value;
+    PUTSTATIC Test.first : LTest$First;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.first : LTest$First;
+    INVOKEINTERFACE Test$First.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$First {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$First Test First
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x1401
+  public abstract synthetic $set$value(I)V
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Second {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Second Test Second
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x1401
+  public abstract synthetic $set$value(I)V
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Value implements Test$First Test$Second {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Value {
+
+  NESTHOST Test
+
+  // access flags 0x2
+  private I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object0.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$value(I)V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+}
+
+--- OUTPUT ---
+
+7
+

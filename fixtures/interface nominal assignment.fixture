@@ -1,0 +1,113 @@
+interface Value {
+    const value: i32;
+}
+class Impl {
+    public var value = 1;
+}
+const value: Value = new Impl();
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Impl" (4:7-4:11)
+LEFT_BRACE (4:12-4:13)
+PUBLIC (5:5-5:11)
+VAR (5:12-5:15)
+IDENTIFIER "value" (5:16-5:21)
+EQUAL (5:22-5:23)
+INTEGER_LITERAL "1" (5:24-5:25)
+SEMICOLON (5:25-5:26)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+IDENTIFIER "value" (7:7-7:12)
+COLON (7:12-7:13)
+IDENTIFIER "Value" (7:14-7:19)
+EQUAL (7:20-7:21)
+NEW (7:22-7:25)
+IDENTIFIER "Impl" (7:26-7:30)
+LEFT_PAREN (7:30-7:31)
+RIGHT_PAREN (7:31-7:32)
+SEMICOLON (7:32-7:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:33
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:11
+      name: "Impl"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 5:5-5:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 5:12-5:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:16-5:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:24-5:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 7:14-7:19
+      name: "Value"
+    )
+    (NewExpression
+      range: 7:22-7:32
+      (IdentifierExpression
+        range: 7:26-7:30
+        name: "Impl"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign Impl to Value at 7:22-7:32

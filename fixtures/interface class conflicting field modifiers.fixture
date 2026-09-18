@@ -1,0 +1,126 @@
+interface ReadOnly {
+    const value: i32;
+}
+interface Mutable {
+    var value: i32;
+}
+class Box implements ReadOnly, Mutable {
+    public var value = 1;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "ReadOnly" (1:11-1:19)
+LEFT_BRACE (1:20-1:21)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "Mutable" (4:11-4:18)
+LEFT_BRACE (4:19-4:20)
+VAR (5:5-5:8)
+IDENTIFIER "value" (5:9-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "i32" (5:16-5:19)
+SEMICOLON (5:19-5:20)
+RIGHT_BRACE (6:1-6:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Box" (7:7-7:10)
+IMPLEMENTS (7:11-7:21)
+IDENTIFIER "ReadOnly" (7:22-7:30)
+COMMA (7:30-7:31)
+IDENTIFIER "Mutable" (7:32-7:39)
+LEFT_BRACE (7:40-7:41)
+PUBLIC (8:5-8:11)
+VAR (8:12-8:15)
+IDENTIFIER "value" (8:16-8:21)
+EQUAL (8:22-8:23)
+INTEGER_LITERAL "1" (8:24-8:25)
+SEMICOLON (8:25-8:26)
+RIGHT_BRACE (9:1-9:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:19
+      name: "ReadOnly"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:18
+      name: "Mutable"
+    )
+    (UninitializedVariableDeclaration
+      range: 5:5-5:20
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 5:9-5:14
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-9:2
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "Box"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 7:22-7:30
+      name: "ReadOnly"
+    )
+    (NamedTypeNode
+      range: 7:32-7:39
+      name: "Mutable"
+    )
+    (MemberDeclaration
+      range: 8:5-8:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 8:12-8:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 8:16-8:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 8:24-8:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Conflicting interface member 'value' at 7:1-9:2

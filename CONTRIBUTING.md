@@ -191,32 +191,6 @@ import foo from "lib";
 export default foo;
 ```
 
-### More default libraries should return null
-
-- Methods like `indexOf` should return `null` instead of `-1` on failure. Force the user to deal with this scenario.
-
-### Support Comparable interface
-
-- Add a `Comparable` interface. Classes that implement it can be sorted without a callback.
-- Non-primitive types that do not implement `Comparable` cannot be sorted without a callback.
-
-Valid
-
-```ts
-// Foo implements Comparable
-var items: Foo[];
-items.sort();
-items.sort((a, b) -> a.value - b.value);
-```
-
-Invalid
-
-```ts
-// Foo does not implement Comparable
-var items: Foo[];
-items.sort();
-```
-
 ### Immutable collections and objects
 
 Mutable by default with `readonly` keyword
@@ -239,11 +213,15 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Inheritance
-- Interfaces
-- overloaded functions
+- GitHub workflow
+- ... operator when constructing objects/arrays
+- Export & import
 - Exceptions
-- Ubiquitous class toString and equals methods.
-- Class variables and methods are private by default. Only need the public modifier.
+- Ubiquitous toString and equals methods
+- Comparable interface and .sort() method
+- Immutable collections and objects
+- Mutable interface objects?
+- Overloaded functions
+- Operator overloading
 - Regular expressions from `regex`. Also add literals `const re: regex = /^\d+$`;
-- To be wont to support operation overloading? eg defining add/mult etc for custom classes.
+- Methods like `indexOf` should return `null` instead of `-1` on failure.

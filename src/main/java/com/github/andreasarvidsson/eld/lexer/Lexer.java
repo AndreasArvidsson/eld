@@ -21,6 +21,8 @@ public class Lexer {
                 Map.entry("var", TokenType.VAR),
                 Map.entry("class", TokenType.CLASS),
                 Map.entry("extends", TokenType.EXTENDS),
+                Map.entry("interface", TokenType.INTERFACE),
+                Map.entry("implements", TokenType.IMPLEMENTS),
                 Map.entry("new", TokenType.NEW),
                 Map.entry("constructor", TokenType.CONSTRUCTOR),
                 Map.entry("this", TokenType.THIS),

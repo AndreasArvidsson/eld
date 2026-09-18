@@ -26,6 +26,85 @@ import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
+    private final Map<ClassType, Map<String, VariableSymbol>> interfaceFields =
+        new HashMap<>();
+    public void setInterfaceFields(
+        ClassType type,
+        Map<String, VariableSymbol> fields
+    ) {
+        interfaceFields.put(type, fields);
+    }
+    public Map<String, VariableSymbol> getInterfaceFields(ClassType type) {
+        return interfaceFields.getOrDefault(type, Map.of());
+    }
+    private final Map<InterfaceType, InterfaceContract> interfaces =
+        new java.util.LinkedHashMap<>();
+    private final Map<ClassType, List<InterfaceType>> implementedInterfaces =
+        new HashMap<>();
+    private final IdentityHashMap<Symbol, ClassType> classMemberOwners =
+        new IdentityHashMap<>();
+
+    public void setInterface(
+        final InterfaceType type,
+        final InterfaceContract contract
+    ) {
+        interfaces.put(type, contract);
+    }
+    public InterfaceContract getInterface(final InterfaceType type) {
+        return Objects.requireNonNull(interfaces.get(type));
+    }
+    public Set<InterfaceType> getInterfaceTypes() {
+        return Collections.unmodifiableSet(interfaces.keySet());
+    }
+    public void setImplementedInterfaces(
+        final ClassType type,
+        final List<InterfaceType> contracts
+    ) {
+        implementedInterfaces.put(type, List.copyOf(contracts));
+    }
+    public List<InterfaceType> getImplementedInterfaces(final ClassType type) {
+        return implementedInterfaces.getOrDefault(type, List.of());
+    }
+    public void setClassMemberOwner(
+        final Symbol symbol,
+        final ClassType owner
+    ) {
+        classMemberOwners.put(symbol, owner);
+    }
+    public ClassType getClassMemberOwner(final Symbol symbol) {
+        return Objects.requireNonNull(classMemberOwners.get(symbol));
+    }
+
+    public boolean isSubtype(final Type source, final Type target) {
+        if (source.equals(target)) {
+            return true;
+        }
+        if (
+            source instanceof ClassType type && target instanceof ClassType base
+        ) {
+            return isSubclassOf(type, base);
+        }
+        if (target instanceof InterfaceType contract) {
+            if (source instanceof InterfaceType type) {
+                return getInterface(type).superInterfaces()
+                    .stream()
+                    .anyMatch(parent -> isSubtype(parent, contract));
+            }
+            if (source instanceof ClassType type) {
+                for (ClassType current = type; current != null; current =
+                    getSuperclass(current)) {
+                    for (final InterfaceType implemented : getImplementedInterfaces(
+                        current
+                    )) {
+                        if (isSubtype(implemented, contract)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
     private final Set<LambdaExpression> receiverlessLambdas =
         Collections.newSetFromMap(new IdentityHashMap<>());
 
@@ -93,7 +172,7 @@ public final class SemanticModel {
     private final Map<ClassType, List<FunctionParameter>> constructorParameters =
         new HashMap<>();
     private static final String ARROW = " -> ";
-    private final IdentityHashMap<MemberExpression, ClassType> memberOwners =
+    private final IdentityHashMap<MemberExpression, Type> memberOwners =
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> expressionTypes =
         new IdentityHashMap<>();
@@ -199,12 +278,12 @@ public final class SemanticModel {
 
     public void setMemberOwner(
         final MemberExpression expression,
-        final ClassType owner
+        final Type owner
     ) {
         memberOwners.put(expression, owner);
     }
 
-    public ClassType getMemberOwner(final MemberExpression expression) {
+    public Type getMemberOwner(final MemberExpression expression) {
         return Objects.requireNonNull(memberOwners.get(expression));
     }
 

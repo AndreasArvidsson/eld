@@ -1,0 +1,437 @@
+interface Calculator {
+    calculate(value: i32) i32;
+}
+const calculator: Calculator = {
+    calculate: (value) => {
+        var result = value;
+        if (result > 10) {
+            result = result - 1;
+        }
+        return result;
+    }
+};
+print(calculator.calculate(16));
+print(calculator.calculate(8));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Calculator" (1:11-1:21)
+LEFT_BRACE (1:22-1:23)
+IDENTIFIER "calculate" (2:5-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+RIGHT_PAREN (2:25-2:26)
+IDENTIFIER "i32" (2:27-2:30)
+SEMICOLON (2:30-2:31)
+RIGHT_BRACE (3:1-3:2)
+CONST (4:1-4:6)
+IDENTIFIER "calculator" (4:7-4:17)
+COLON (4:17-4:18)
+IDENTIFIER "Calculator" (4:19-4:29)
+EQUAL (4:30-4:31)
+LEFT_BRACE (4:32-4:33)
+IDENTIFIER "calculate" (5:5-5:14)
+COLON (5:14-5:15)
+LEFT_PAREN (5:16-5:17)
+IDENTIFIER "value" (5:17-5:22)
+RIGHT_PAREN (5:22-5:23)
+ARROW (5:24-5:26)
+LEFT_BRACE (5:27-5:28)
+VAR (6:9-6:12)
+IDENTIFIER "result" (6:13-6:19)
+EQUAL (6:20-6:21)
+IDENTIFIER "value" (6:22-6:27)
+SEMICOLON (6:27-6:28)
+IF (7:9-7:11)
+LEFT_PAREN (7:12-7:13)
+IDENTIFIER "result" (7:13-7:19)
+GREATER (7:20-7:21)
+INTEGER_LITERAL "10" (7:22-7:24)
+RIGHT_PAREN (7:24-7:25)
+LEFT_BRACE (7:26-7:27)
+IDENTIFIER "result" (8:13-8:19)
+EQUAL (8:20-8:21)
+IDENTIFIER "result" (8:22-8:28)
+MINUS (8:29-8:30)
+INTEGER_LITERAL "1" (8:31-8:32)
+SEMICOLON (8:32-8:33)
+RIGHT_BRACE (9:9-9:10)
+RETURN (10:9-10:15)
+IDENTIFIER "result" (10:16-10:22)
+SEMICOLON (10:22-10:23)
+RIGHT_BRACE (11:5-11:6)
+RIGHT_BRACE (12:1-12:2)
+SEMICOLON (12:2-12:3)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "calculator" (13:7-13:17)
+DOT (13:17-13:18)
+IDENTIFIER "calculate" (13:18-13:27)
+LEFT_PAREN (13:27-13:28)
+INTEGER_LITERAL "16" (13:28-13:30)
+RIGHT_PAREN (13:30-13:31)
+RIGHT_PAREN (13:31-13:32)
+SEMICOLON (13:32-13:33)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "calculator" (14:7-14:17)
+DOT (14:17-14:18)
+IDENTIFIER "calculate" (14:18-14:27)
+LEFT_PAREN (14:27-14:28)
+INTEGER_LITERAL "8" (14:28-14:29)
+RIGHT_PAREN (14:29-14:30)
+RIGHT_PAREN (14:30-14:31)
+SEMICOLON (14:31-14:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:32
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:21
+      name: "Calculator"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:31
+      (IdentifierDeclaration
+        range: 2:5-2:14
+        name: "calculate"
+      )
+      (FunctionParameter
+        range: 2:15-2:25
+        (IdentifierDeclaration
+          range: 2:15-2:20
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:22-2:25
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:27-2:30
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-12:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:17
+      name: "calculator"
+    )
+    (NamedTypeNode
+      range: 4:19-4:29
+      name: "Calculator"
+    )
+    (ObjectExpression
+      range: 4:32-12:2
+      (ObjectMember
+        range: 5:5-11:6
+        (IdentifierDeclaration
+          range: 5:5-5:14
+          name: "calculate"
+        )
+        (LambdaExpression
+          range: 5:16-11:6
+          (LambdaParameter
+            range: 5:17-5:22
+            (IdentifierDeclaration
+              range: 5:17-5:22
+              name: "value"
+            )
+          )
+          (BlockStatement
+            range: 5:27-11:6
+            (VariableDeclaration
+              range: 6:9-6:28
+              mutability: VAR
+              (IdentifierDeclaration
+                range: 6:13-6:19
+                name: "result"
+              )
+              type: null
+              (IdentifierExpression
+                range: 6:22-6:27
+                name: "value"
+              )
+            )
+            (ExpressionStatement
+              range: 7:9-9:10
+              (IfExpression
+                range: 7:9-9:10
+                (BinaryExpression
+                  range: 7:13-7:24
+                  (IdentifierExpression
+                    range: 7:13-7:19
+                    name: "result"
+                  )
+                  operator: GREATER
+                  (LiteralExpression
+                    range: 7:22-7:24
+                    kind: INT
+                    text: "10"
+                  )
+                )
+                (BlockStatement
+                  range: 7:26-9:10
+                  (ExpressionStatement
+                    range: 8:13-8:33
+                    (AssignmentExpression
+                      range: 8:13-8:32
+                      (IdentifierExpression
+                        range: 8:13-8:19
+                        name: "result"
+                      )
+                      (BinaryExpression
+                        range: 8:22-8:32
+                        (IdentifierExpression
+                          range: 8:22-8:28
+                          name: "result"
+                        )
+                        operator: SUBTRACT
+                        (LiteralExpression
+                          range: 8:31-8:32
+                          kind: INT
+                          text: "1"
+                        )
+                      )
+                    )
+                  )
+                )
+                elseBranch: null
+              )
+            )
+            (ReturnStatement
+              range: 10:9-10:23
+              (IdentifierExpression
+                range: 10:16-10:22
+                name: "result"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:33
+    (CallExpression
+      range: 13:1-13:32
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:31
+        (MemberExpression
+          range: 13:7-13:27
+          (IdentifierExpression
+            range: 13:7-13:17
+            name: "calculator"
+          )
+          (IdentifierExpression
+            range: 13:18-13:27
+            name: "calculate"
+          )
+        )
+        (LiteralExpression
+          range: 13:28-13:30
+          kind: INT
+          text: "16"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:32
+    (CallExpression
+      range: 14:1-14:31
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:30
+        (MemberExpression
+          range: 14:7-14:27
+          (IdentifierExpression
+            range: 14:7-14:17
+            name: "calculator"
+          )
+          (IdentifierExpression
+            range: 14:18-14:27
+            name: "calculate"
+          )
+        )
+        (LiteralExpression
+          range: 14:28-14:29
+          kind: INT
+          text: "8"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:32-12:2 -> Calculator
+  5:16-11:6 -> (i32) => i32
+  6:22-6:27 -> i32
+  7:9-9:10 -> void
+  7:13-7:19 -> i32
+  7:13-7:24 -> bool
+  7:22-7:24 -> i32
+  8:13-8:19 -> i32
+  8:13-8:32 -> i32
+  8:22-8:28 -> i32
+  8:22-8:32 -> i32
+  8:31-8:32 -> i32
+  10:16-10:22 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:32 -> void
+  13:7-13:17 -> Calculator
+  13:7-13:27 -> (i32) => i32
+  13:7-13:31 -> i32
+  13:18-13:27 -> (i32) => i32
+  13:28-13:30 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:31 -> void
+  14:7-14:17 -> Calculator
+  14:7-14:27 -> (i32) => i32
+  14:7-14:30 -> i32
+  14:18-14:27 -> (i32) => i32
+  14:28-14:29 -> i32
+
+Resolved types:
+  2:22-2:25 -> i32
+  2:27-2:30 -> i32
+  4:19-4:29 -> Calculator
+
+Declarations:
+  1:11-1:21 -> interface Calculator
+  2:5-2:14 -> calculate(i32) => i32
+  2:15-2:20 -> const value: i32
+  4:7-4:17 -> const calculator: Calculator
+  5:17-5:22 -> const value: i32
+  6:13-6:19 -> var result: i32
+
+References:
+  6:22-6:27 -> 5:17-5:22
+  7:13-7:19 -> 6:13-6:19
+  8:13-8:19 -> 6:13-6:19
+  8:22-8:28 -> 6:13-6:19
+  10:16-10:22 -> 6:13-6:19
+  13:1-13:6 -> builtin print
+  13:7-13:17 -> 4:7-4:17
+  13:18-13:27 -> 2:5-2:14
+  14:1-14:6 -> builtin print
+  14:7-14:17 -> 4:7-4:17
+  14:18-14:27 -> 2:5-2:14
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Calculator
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Calculator Test Calculator
+
+  // access flags 0x19
+  public final static LTest$Calculator; calculator
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    INVOKESPECIAL Test$$object0.<init> ()V
+    PUTSTATIC Test.calculator : LTest$Calculator;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.calculator : LTest$Calculator;
+    LDC 16
+    INVOKEINTERFACE Test$Calculator.calculate (I)I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.calculator : LTest$Calculator;
+    LDC 8
+    INVOKEINTERFACE Test$Calculator.calculate (I)I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Calculator {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Calculator Test Calculator
+
+  // access flags 0x401
+  public abstract calculate(I)I
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Calculator {
+
+  NESTHOST Test
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public calculate(I)I
+    ILOAD 1
+    ISTORE 2
+    ILOAD 2
+    LDC 10
+    IF_ICMPGT L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME APPEND [I]
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IFEQ L2
+    ILOAD 2
+    LDC 1
+    ISUB
+    DUP
+    ISTORE 2
+    POP
+    GOTO L2
+   L2
+   FRAME SAME
+    ILOAD 2
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+--- OUTPUT ---
+
+15
+8
+

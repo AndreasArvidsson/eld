@@ -1,0 +1,525 @@
+interface Foo {
+    const immutable: i32;
+    var mutable: i32;
+}
+const foo: Foo = {
+    immutable: 1,
+    mutable: 2
+};
+print(foo.mutable = 3);
+print(foo.mutable++);
+print(foo.mutable);
+print(foo.mutable--);
+print(foo.mutable);
+print(foo.immutable);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Foo" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+CONST (2:5-2:10)
+IDENTIFIER "immutable" (2:11-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+SEMICOLON (2:25-2:26)
+VAR (3:5-3:8)
+IDENTIFIER "mutable" (3:9-3:16)
+COLON (3:16-3:17)
+IDENTIFIER "i32" (3:18-3:21)
+SEMICOLON (3:21-3:22)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+IDENTIFIER "foo" (5:7-5:10)
+COLON (5:10-5:11)
+IDENTIFIER "Foo" (5:12-5:15)
+EQUAL (5:16-5:17)
+LEFT_BRACE (5:18-5:19)
+IDENTIFIER "immutable" (6:5-6:14)
+COLON (6:14-6:15)
+INTEGER_LITERAL "1" (6:16-6:17)
+COMMA (6:17-6:18)
+IDENTIFIER "mutable" (7:5-7:12)
+COLON (7:12-7:13)
+INTEGER_LITERAL "2" (7:14-7:15)
+RIGHT_BRACE (8:1-8:2)
+SEMICOLON (8:2-8:3)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "foo" (9:7-9:10)
+DOT (9:10-9:11)
+IDENTIFIER "mutable" (9:11-9:18)
+EQUAL (9:19-9:20)
+INTEGER_LITERAL "3" (9:21-9:22)
+RIGHT_PAREN (9:22-9:23)
+SEMICOLON (9:23-9:24)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "foo" (10:7-10:10)
+DOT (10:10-10:11)
+IDENTIFIER "mutable" (10:11-10:18)
+PLUS_PLUS (10:18-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "foo" (11:7-11:10)
+DOT (11:10-11:11)
+IDENTIFIER "mutable" (11:11-11:18)
+RIGHT_PAREN (11:18-11:19)
+SEMICOLON (11:19-11:20)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "foo" (12:7-12:10)
+DOT (12:10-12:11)
+IDENTIFIER "mutable" (12:11-12:18)
+MINUS_MINUS (12:18-12:20)
+RIGHT_PAREN (12:20-12:21)
+SEMICOLON (12:21-12:22)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "foo" (13:7-13:10)
+DOT (13:10-13:11)
+IDENTIFIER "mutable" (13:11-13:18)
+RIGHT_PAREN (13:18-13:19)
+SEMICOLON (13:19-13:20)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "foo" (14:7-14:10)
+DOT (14:10-14:11)
+IDENTIFIER "immutable" (14:11-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:22
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:14
+      name: "Foo"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:26
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:20
+        name: "immutable"
+      )
+      (NamedTypeNode
+        range: 2:22-2:25
+        name: "i32"
+      )
+    )
+    (UninitializedVariableDeclaration
+      range: 3:5-3:22
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 3:9-3:16
+        name: "mutable"
+      )
+      (NamedTypeNode
+        range: 3:18-3:21
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-8:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "foo"
+    )
+    (NamedTypeNode
+      range: 5:12-5:15
+      name: "Foo"
+    )
+    (ObjectExpression
+      range: 5:18-8:2
+      (ObjectMember
+        range: 6:5-6:17
+        (IdentifierDeclaration
+          range: 6:5-6:14
+          name: "immutable"
+        )
+        (LiteralExpression
+          range: 6:16-6:17
+          kind: INT
+          text: "1"
+        )
+      )
+      (ObjectMember
+        range: 7:5-7:15
+        (IdentifierDeclaration
+          range: 7:5-7:12
+          name: "mutable"
+        )
+        (LiteralExpression
+          range: 7:14-7:15
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:24
+    (CallExpression
+      range: 9:1-9:23
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (AssignmentExpression
+        range: 9:7-9:22
+        (MemberExpression
+          range: 9:7-9:18
+          (IdentifierExpression
+            range: 9:7-9:10
+            name: "foo"
+          )
+          (IdentifierExpression
+            range: 9:11-9:18
+            name: "mutable"
+          )
+        )
+        (LiteralExpression
+          range: 9:21-9:22
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:22
+    (CallExpression
+      range: 10:1-10:21
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (PostfixExpression
+        range: 10:7-10:20
+        (MemberExpression
+          range: 10:7-10:18
+          (IdentifierExpression
+            range: 10:7-10:10
+            name: "foo"
+          )
+          (IdentifierExpression
+            range: 10:11-10:18
+            name: "mutable"
+          )
+        )
+        operator: INCREMENT
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:20
+    (CallExpression
+      range: 11:1-11:19
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 11:7-11:18
+        (IdentifierExpression
+          range: 11:7-11:10
+          name: "foo"
+        )
+        (IdentifierExpression
+          range: 11:11-11:18
+          name: "mutable"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:22
+    (CallExpression
+      range: 12:1-12:21
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (PostfixExpression
+        range: 12:7-12:20
+        (MemberExpression
+          range: 12:7-12:18
+          (IdentifierExpression
+            range: 12:7-12:10
+            name: "foo"
+          )
+          (IdentifierExpression
+            range: 12:11-12:18
+            name: "mutable"
+          )
+        )
+        operator: DECREMENT
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:20
+    (CallExpression
+      range: 13:1-13:19
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 13:7-13:18
+        (IdentifierExpression
+          range: 13:7-13:10
+          name: "foo"
+        )
+        (IdentifierExpression
+          range: 13:11-13:18
+          name: "mutable"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:22
+    (CallExpression
+      range: 14:1-14:21
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:20
+        (IdentifierExpression
+          range: 14:7-14:10
+          name: "foo"
+        )
+        (IdentifierExpression
+          range: 14:11-14:20
+          name: "immutable"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:18-8:2 -> Foo
+  6:16-6:17 -> i32
+  7:14-7:15 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:23 -> void
+  9:7-9:10 -> Foo
+  9:7-9:18 -> i32
+  9:7-9:22 -> i32
+  9:11-9:18 -> i32
+  9:21-9:22 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:21 -> void
+  10:7-10:10 -> Foo
+  10:7-10:18 -> i32
+  10:7-10:20 -> i32
+  10:11-10:18 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:19 -> void
+  11:7-11:10 -> Foo
+  11:7-11:18 -> i32
+  11:11-11:18 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:21 -> void
+  12:7-12:10 -> Foo
+  12:7-12:18 -> i32
+  12:7-12:20 -> i32
+  12:11-12:18 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:19 -> void
+  13:7-13:10 -> Foo
+  13:7-13:18 -> i32
+  13:11-13:18 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:21 -> void
+  14:7-14:10 -> Foo
+  14:7-14:20 -> i32
+  14:11-14:20 -> i32
+
+Resolved types:
+  2:22-2:25 -> i32
+  3:18-3:21 -> i32
+  5:12-5:15 -> Foo
+
+Declarations:
+  1:11-1:14 -> interface Foo
+  2:11-2:20 -> const immutable: i32
+  3:9-3:16 -> var mutable: i32
+  5:7-5:10 -> const foo: Foo
+
+References:
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 5:7-5:10
+  9:11-9:18 -> 3:9-3:16
+  10:1-10:6 -> builtin print
+  10:7-10:10 -> 5:7-5:10
+  10:11-10:18 -> 3:9-3:16
+  11:1-11:6 -> builtin print
+  11:7-11:10 -> 5:7-5:10
+  11:11-11:18 -> 3:9-3:16
+  12:1-12:6 -> builtin print
+  12:7-12:10 -> 5:7-5:10
+  12:11-12:18 -> 3:9-3:16
+  13:1-13:6 -> builtin print
+  13:7-13:10 -> 5:7-5:10
+  13:11-13:18 -> 3:9-3:16
+  14:1-14:6 -> builtin print
+  14:7-14:10 -> 5:7-5:10
+  14:11-14:20 -> 2:11-2:20
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Foo
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x19
+  public final static LTest$Foo; foo
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$$object0
+    DUP
+    LDC 1
+    LDC 2
+    INVOKESPECIAL Test$$object0.<init> (II)V
+    PUTSTATIC Test.foo : LTest$Foo;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : LTest$Foo;
+    LDC 3
+    DUP_X1
+    INVOKEINTERFACE Test$Foo.$set$mutable (I)V (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : LTest$Foo;
+    DUP
+    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
+    DUP_X1
+    ICONST_1
+    IADD
+    INVOKEINTERFACE Test$Foo.$set$mutable (I)V (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : LTest$Foo;
+    DUP
+    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
+    DUP_X1
+    ICONST_1
+    ISUB
+    INVOKEINTERFACE Test$Foo.$set$mutable (I)V (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$get$mutable ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : LTest$Foo;
+    INVOKEINTERFACE Test$Foo.$get$immutable ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 5
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Foo {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Foo Test Foo
+
+  // access flags 0x1401
+  public abstract synthetic $get$immutable()I
+
+  // access flags 0x1401
+  public abstract synthetic $get$mutable()I
+
+  // access flags 0x1401
+  public abstract synthetic $set$mutable(I)V
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Foo {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I immutable
+
+  // access flags 0x2
+  private I mutable
+
+  // access flags 0x1001
+  public synthetic $get$immutable()I
+    ALOAD 0
+    GETFIELD Test$$object0.immutable : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $get$mutable()I
+    ALOAD 0
+    GETFIELD Test$$object0.mutable : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $set$mutable(I)V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.mutable : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  public <init>(II)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object0.immutable : I
+    ALOAD 0
+    ILOAD 2
+    PUTFIELD Test$$object0.mutable : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+}
+
+--- OUTPUT ---
+
+3
+3
+4
+4
+3
+1
+

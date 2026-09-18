@@ -1,0 +1,527 @@
+interface Reader {
+    read() i32;
+}
+func make(start: i32) Reader {
+    var count = start;
+    const offset = 2;
+    return {
+        read: () => {
+            count++;
+            const nested: () => i32 = () => count + offset;
+            return nested();
+        }
+    };
+}
+const reader = make(13);
+print(reader.read());
+print(reader.read());
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Reader" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+IDENTIFIER "read" (2:5-2:9)
+LEFT_PAREN (2:9-2:10)
+RIGHT_PAREN (2:10-2:11)
+IDENTIFIER "i32" (2:12-2:15)
+SEMICOLON (2:15-2:16)
+RIGHT_BRACE (3:1-3:2)
+FUNC (4:1-4:5)
+IDENTIFIER "make" (4:6-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "start" (4:11-4:16)
+COLON (4:16-4:17)
+IDENTIFIER "i32" (4:18-4:21)
+RIGHT_PAREN (4:21-4:22)
+IDENTIFIER "Reader" (4:23-4:29)
+LEFT_BRACE (4:30-4:31)
+VAR (5:5-5:8)
+IDENTIFIER "count" (5:9-5:14)
+EQUAL (5:15-5:16)
+IDENTIFIER "start" (5:17-5:22)
+SEMICOLON (5:22-5:23)
+CONST (6:5-6:10)
+IDENTIFIER "offset" (6:11-6:17)
+EQUAL (6:18-6:19)
+INTEGER_LITERAL "2" (6:20-6:21)
+SEMICOLON (6:21-6:22)
+RETURN (7:5-7:11)
+LEFT_BRACE (7:12-7:13)
+IDENTIFIER "read" (8:9-8:13)
+COLON (8:13-8:14)
+LEFT_PAREN (8:15-8:16)
+RIGHT_PAREN (8:16-8:17)
+ARROW (8:18-8:20)
+LEFT_BRACE (8:21-8:22)
+IDENTIFIER "count" (9:13-9:18)
+PLUS_PLUS (9:18-9:20)
+SEMICOLON (9:20-9:21)
+CONST (10:13-10:18)
+IDENTIFIER "nested" (10:19-10:25)
+COLON (10:25-10:26)
+LEFT_PAREN (10:27-10:28)
+RIGHT_PAREN (10:28-10:29)
+ARROW (10:30-10:32)
+IDENTIFIER "i32" (10:33-10:36)
+EQUAL (10:37-10:38)
+LEFT_PAREN (10:39-10:40)
+RIGHT_PAREN (10:40-10:41)
+ARROW (10:42-10:44)
+IDENTIFIER "count" (10:45-10:50)
+PLUS (10:51-10:52)
+IDENTIFIER "offset" (10:53-10:59)
+SEMICOLON (10:59-10:60)
+RETURN (11:13-11:19)
+IDENTIFIER "nested" (11:20-11:26)
+LEFT_PAREN (11:26-11:27)
+RIGHT_PAREN (11:27-11:28)
+SEMICOLON (11:28-11:29)
+RIGHT_BRACE (12:9-12:10)
+RIGHT_BRACE (13:5-13:6)
+SEMICOLON (13:6-13:7)
+RIGHT_BRACE (14:1-14:2)
+CONST (15:1-15:6)
+IDENTIFIER "reader" (15:7-15:13)
+EQUAL (15:14-15:15)
+IDENTIFIER "make" (15:16-15:20)
+LEFT_PAREN (15:20-15:21)
+INTEGER_LITERAL "13" (15:21-15:23)
+RIGHT_PAREN (15:23-15:24)
+SEMICOLON (15:24-15:25)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "reader" (16:7-16:13)
+DOT (16:13-16:14)
+IDENTIFIER "read" (16:14-16:18)
+LEFT_PAREN (16:18-16:19)
+RIGHT_PAREN (16:19-16:20)
+RIGHT_PAREN (16:20-16:21)
+SEMICOLON (16:21-16:22)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "reader" (17:7-17:13)
+DOT (17:13-17:14)
+IDENTIFIER "read" (17:14-17:18)
+LEFT_PAREN (17:18-17:19)
+RIGHT_PAREN (17:19-17:20)
+RIGHT_PAREN (17:20-17:21)
+SEMICOLON (17:21-17:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:22
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:16
+      (IdentifierDeclaration
+        range: 2:5-2:9
+        name: "read"
+      )
+      (NamedTypeNode
+        range: 2:12-2:15
+        name: "i32"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 4:1-14:2
+    (IdentifierDeclaration
+      range: 4:6-4:10
+      name: "make"
+    )
+    (FunctionParameter
+      range: 4:11-4:21
+      (IdentifierDeclaration
+        range: 4:11-4:16
+        name: "start"
+      )
+      (NamedTypeNode
+        range: 4:18-4:21
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 4:23-4:29
+      name: "Reader"
+    )
+    (BlockStatement
+      range: 4:30-14:2
+      (VariableDeclaration
+        range: 5:5-5:23
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:9-5:14
+          name: "count"
+        )
+        type: null
+        (IdentifierExpression
+          range: 5:17-5:22
+          name: "start"
+        )
+      )
+      (VariableDeclaration
+        range: 6:5-6:22
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 6:11-6:17
+          name: "offset"
+        )
+        type: null
+        (LiteralExpression
+          range: 6:20-6:21
+          kind: INT
+          text: "2"
+        )
+      )
+      (ReturnStatement
+        range: 7:5-13:7
+        (ObjectExpression
+          range: 7:12-13:6
+          (ObjectMember
+            range: 8:9-12:10
+            (IdentifierDeclaration
+              range: 8:9-8:13
+              name: "read"
+            )
+            (LambdaExpression
+              range: 8:15-12:10
+              (BlockStatement
+                range: 8:21-12:10
+                (ExpressionStatement
+                  range: 9:13-9:21
+                  (PostfixExpression
+                    range: 9:13-9:20
+                    (IdentifierExpression
+                      range: 9:13-9:18
+                      name: "count"
+                    )
+                    operator: INCREMENT
+                  )
+                )
+                (VariableDeclaration
+                  range: 10:13-10:60
+                  mutability: CONST
+                  (IdentifierDeclaration
+                    range: 10:19-10:25
+                    name: "nested"
+                  )
+                  (FunctionTypeNode
+                    range: 10:27-10:36
+                    (NamedTypeNode
+                      range: 10:33-10:36
+                      name: "i32"
+                    )
+                  )
+                  (LambdaExpression
+                    range: 10:39-10:59
+                    (BinaryExpression
+                      range: 10:45-10:59
+                      (IdentifierExpression
+                        range: 10:45-10:50
+                        name: "count"
+                      )
+                      operator: ADD
+                      (IdentifierExpression
+                        range: 10:53-10:59
+                        name: "offset"
+                      )
+                    )
+                  )
+                )
+                (ReturnStatement
+                  range: 11:13-11:29
+                  (CallExpression
+                    range: 11:20-11:28
+                    (IdentifierExpression
+                      range: 11:20-11:26
+                      name: "nested"
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:13
+      name: "reader"
+    )
+    type: null
+    (CallExpression
+      range: 15:16-15:24
+      (IdentifierExpression
+        range: 15:16-15:20
+        name: "make"
+      )
+      (LiteralExpression
+        range: 15:21-15:23
+        kind: INT
+        text: "13"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:22
+    (CallExpression
+      range: 16:1-16:21
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:20
+        (MemberExpression
+          range: 16:7-16:18
+          (IdentifierExpression
+            range: 16:7-16:13
+            name: "reader"
+          )
+          (IdentifierExpression
+            range: 16:14-16:18
+            name: "read"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:22
+    (CallExpression
+      range: 17:1-17:21
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:20
+        (MemberExpression
+          range: 17:7-17:18
+          (IdentifierExpression
+            range: 17:7-17:13
+            name: "reader"
+          )
+          (IdentifierExpression
+            range: 17:14-17:18
+            name: "read"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:17-5:22 -> i32
+  6:20-6:21 -> i32
+  7:12-13:6 -> Reader
+  8:15-12:10 -> () => i32
+  9:13-9:18 -> i32
+  9:13-9:20 -> i32
+  10:39-10:59 -> () => i32
+  10:45-10:50 -> i32
+  10:45-10:59 -> i32
+  10:53-10:59 -> i32
+  11:20-11:26 -> () => i32
+  11:20-11:28 -> i32
+  15:16-15:20 -> (i32) => Reader
+  15:16-15:24 -> Reader
+  15:21-15:23 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:21 -> void
+  16:7-16:13 -> Reader
+  16:7-16:18 -> () => i32
+  16:7-16:20 -> i32
+  16:14-16:18 -> () => i32
+  17:1-17:6 -> (any) => void
+  17:1-17:21 -> void
+  17:7-17:13 -> Reader
+  17:7-17:18 -> () => i32
+  17:7-17:20 -> i32
+  17:14-17:18 -> () => i32
+
+Resolved types:
+  2:12-2:15 -> i32
+  4:18-4:21 -> i32
+  4:23-4:29 -> Reader
+  10:27-10:36 -> () => i32
+  10:33-10:36 -> i32
+
+Declarations:
+  1:11-1:17 -> interface Reader
+  2:5-2:9 -> read() => i32
+  4:6-4:10 -> make(i32) => Reader
+  4:11-4:16 -> const start: i32
+  5:9-5:14 -> var count: i32
+  6:11-6:17 -> const offset: i32
+  10:19-10:25 -> const nested: () => i32
+  15:7-15:13 -> const reader: Reader
+
+References:
+  5:17-5:22 -> 4:11-4:16
+  9:13-9:18 -> 5:9-5:14
+  10:45-10:50 -> 5:9-5:14
+  10:53-10:59 -> 6:11-6:17
+  11:20-11:26 -> 10:19-10:25
+  15:16-15:20 -> 4:6-4:10
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 15:7-15:13
+  16:14-16:18 -> 2:5-2:9
+  17:1-17:6 -> builtin print
+  17:7-17:13 -> 15:7-15:13
+  17:14-17:18 -> 2:5-2:9
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$$object0
+  NESTMEMBER Test$Reader
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Reader Test Reader
+
+  // access flags 0x19
+  public final static LTest$Reader; reader
+
+  // access flags 0x9
+  public static make(I)LTest$Reader;
+    ICONST_1
+    NEWARRAY T_INT
+    ASTORE 1
+    ILOAD 0
+    ISTORE 2
+    ALOAD 1
+    ICONST_0
+    ILOAD 2
+    IASTORE
+    LDC 2
+    ISTORE 3
+    NEW Test$$object0
+    DUP
+    ALOAD 1
+    ILOAD 3
+    INVOKESPECIAL Test$$object0.<init> ([II)V
+    ARETURN
+    MAXSTACK = 4
+    MAXLOCALS = 4
+
+  // access flags 0x8
+  static <clinit>()V
+    LDC 13
+    INVOKESTATIC Test.make (I)LTest$Reader;
+    PUTSTATIC Test.reader : LTest$Reader;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.reader : LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.reader : LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Reader {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Reader Test Reader
+
+  // access flags 0x401
+  public abstract read()I
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object0 implements Test$Reader {
+
+  NESTHOST Test
+
+  // access flags 0x1012
+  private final synthetic [I $capture0
+
+  // access flags 0x1012
+  private final synthetic I $capture1
+
+  // access flags 0x1
+  public <init>([II)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD Test$$object0.$capture0 : [I
+    ALOAD 0
+    ILOAD 2
+    PUTFIELD Test$$object0.$capture1 : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+
+  // access flags 0x1
+  public read()I
+    ALOAD 0
+    GETFIELD Test$$object0.$capture0 : [I
+    ICONST_0
+    IALOAD
+    DUP
+    ICONST_1
+    IADD
+    ISTORE 1
+    ALOAD 0
+    GETFIELD Test$$object0.$capture0 : [I
+    ICONST_0
+    ILOAD 1
+    IASTORE
+    POP
+    // handle kind 0x5 : INVOKEVIRTUAL
+    LDC Test$$object0.$lambda0()I
+    ALOAD 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo (Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    ASTORE 2
+    ALOAD 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact ()I
+    IRETURN
+    MAXSTACK = 4
+    MAXLOCALS = 3
+
+  // access flags 0x1002
+  private synthetic $lambda0()I
+    ALOAD 0
+    GETFIELD Test$$object0.$capture0 : [I
+    ICONST_0
+    IALOAD
+    ALOAD 0
+    GETFIELD Test$$object0.$capture1 : I
+    IADD
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+16
+17
+

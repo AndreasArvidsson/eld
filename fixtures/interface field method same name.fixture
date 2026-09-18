@@ -1,0 +1,373 @@
+interface Value {
+    const value: i32;
+    value() string;
+}
+class Impl implements Value {
+    public const value = 7;
+    public func value() string {
+        return "seven";
+    }
+}
+const value: Value = new Impl();
+print(value.value);
+print(value.value());
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+IDENTIFIER "value" (3:5-3:10)
+LEFT_PAREN (3:10-3:11)
+RIGHT_PAREN (3:11-3:12)
+IDENTIFIER "string" (3:13-3:19)
+SEMICOLON (3:19-3:20)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Impl" (5:7-5:11)
+IMPLEMENTS (5:12-5:22)
+IDENTIFIER "Value" (5:23-5:28)
+LEFT_BRACE (5:29-5:30)
+PUBLIC (6:5-6:11)
+CONST (6:12-6:17)
+IDENTIFIER "value" (6:18-6:23)
+EQUAL (6:24-6:25)
+INTEGER_LITERAL "7" (6:26-6:27)
+SEMICOLON (6:27-6:28)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "value" (7:17-7:22)
+LEFT_PAREN (7:22-7:23)
+RIGHT_PAREN (7:23-7:24)
+IDENTIFIER "string" (7:25-7:31)
+LEFT_BRACE (7:32-7:33)
+RETURN (8:9-8:15)
+STRING_LITERAL "\"seven\"" (8:16-8:23)
+SEMICOLON (8:23-8:24)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+CONST (11:1-11:6)
+IDENTIFIER "value" (11:7-11:12)
+COLON (11:12-11:13)
+IDENTIFIER "Value" (11:14-11:19)
+EQUAL (11:20-11:21)
+NEW (11:22-11:25)
+IDENTIFIER "Impl" (11:26-11:30)
+LEFT_PAREN (11:30-11:31)
+RIGHT_PAREN (11:31-11:32)
+SEMICOLON (11:32-11:33)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "value" (12:7-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "value" (12:13-12:18)
+RIGHT_PAREN (12:18-12:19)
+SEMICOLON (12:19-12:20)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "value" (13:7-13:12)
+DOT (13:12-13:13)
+IDENTIFIER "value" (13:13-13:18)
+LEFT_PAREN (13:18-13:19)
+RIGHT_PAREN (13:19-13:20)
+RIGHT_PAREN (13:20-13:21)
+SEMICOLON (13:21-13:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:22
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:20
+      (IdentifierDeclaration
+        range: 3:5-3:10
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 3:13-3:19
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-10:2
+    (IdentifierDeclaration
+      range: 5:7-5:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:23-5:28
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 6:5-6:28
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 6:12-6:28
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 6:18-6:23
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 6:26-6:27
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-9:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-9:6
+        (IdentifierDeclaration
+          range: 7:17-7:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 7:25-7:31
+          name: "string"
+        )
+        (BlockStatement
+          range: 7:32-9:6
+          (ReturnStatement
+            range: 8:9-8:24
+            (LiteralExpression
+              range: 8:16-8:23
+              kind: STRING
+              text: "\"seven\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 11:14-11:19
+      name: "Value"
+    )
+    (NewExpression
+      range: 11:22-11:32
+      (IdentifierExpression
+        range: 11:26-11:30
+        name: "Impl"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:20
+    (CallExpression
+      range: 12:1-12:19
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:18
+        (IdentifierExpression
+          range: 12:7-12:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 12:13-12:18
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:22
+    (CallExpression
+      range: 13:1-13:21
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:20
+        (MemberExpression
+          range: 13:7-13:18
+          (IdentifierExpression
+            range: 13:7-13:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 13:13-13:18
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  6:26-6:27 -> i32
+  8:16-8:23 -> string
+  11:22-11:32 -> Impl
+  11:26-11:30 -> Impl
+  12:1-12:6 -> (any) => void
+  12:1-12:19 -> void
+  12:7-12:12 -> Value
+  12:7-12:18 -> i32
+  12:13-12:18 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:21 -> void
+  13:7-13:12 -> Value
+  13:7-13:18 -> () => string
+  13:7-13:20 -> string
+  13:13-13:18 -> () => string
+
+Resolved types:
+  2:18-2:21 -> i32
+  3:13-3:19 -> string
+  5:23-5:28 -> Value
+  7:25-7:31 -> string
+  11:14-11:19 -> Value
+
+Declarations:
+  1:11-1:16 -> interface Value
+  2:11-2:16 -> const value: i32
+  3:5-3:10 -> value() => string
+  5:7-5:11 -> class Impl
+  6:18-6:23 -> const value: i32
+  7:17-7:22 -> value() => string
+  11:7-11:12 -> const value: Value
+
+References:
+  11:26-11:30 -> 5:7-5:11
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 11:7-11:12
+  12:13-12:18 -> 2:11-2:16
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 11:7-11:12
+  13:13-13:18 -> 3:5-3:10
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Value
+  NESTMEMBER Test$Impl
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+  // access flags 0x9
+  public static INNERCLASS Test$Impl Test Impl
+
+  // access flags 0x19
+  public final static LTest$Value; value
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Impl
+    DUP
+    INVOKESPECIAL Test$Impl.<init> ()V
+    PUTSTATIC Test.value : LTest$Value;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : LTest$Value;
+    INVOKEINTERFACE Test$Value.value ()Ljava/lang/String; (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Value {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+
+  // access flags 0x401
+  public abstract value()Ljava/lang/String;
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Impl implements Test$Value {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Impl Test Impl
+
+  // access flags 0x11
+  public final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$Impl.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 7
+    PUTFIELD Test$Impl.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public value()Ljava/lang/String;
+    LDC "seven"
+    ARETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+7
+seven
+

@@ -1,0 +1,63 @@
+interface Value {
+    const value: i32;
+}
+class Empty implements Value {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Empty" (4:7-4:12)
+IMPLEMENTS (4:13-4:23)
+IDENTIFIER "Value" (4:24-4:29)
+LEFT_BRACE (4:30-4:31)
+RIGHT_BRACE (4:31-4:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:32
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-4:32
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "Empty"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:24-4:29
+      name: "Value"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Class Empty does not implement interface member 'value' at 4:1-4:32

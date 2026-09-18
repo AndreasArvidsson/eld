@@ -5,19 +5,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
-import com.github.andreasarvidsson.eld.parser.Declaration;
-import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
-import com.github.andreasarvidsson.eld.parser.Visibility;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BinaryOperator;
@@ -27,8 +26,6 @@ import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
-import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
-import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
@@ -46,20 +43,25 @@ import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
+import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
+import com.github.andreasarvidsson.eld.parser.InterfaceMethodDeclaration;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
+import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
+import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
 import com.github.andreasarvidsson.eld.parser.SliceExpression;
 import com.github.andreasarvidsson.eld.parser.Statement;
 import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
+import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.SwitchBranch;
 import com.github.andreasarvidsson.eld.parser.SwitchBranchBlockBody;
 import com.github.andreasarvidsson.eld.parser.SwitchBranchBody;
@@ -76,12 +78,16 @@ import com.github.andreasarvidsson.eld.parser.UnaryOperator;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.UnionTypeNode;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
+import com.github.andreasarvidsson.eld.parser.Visibility;
 import com.github.andreasarvidsson.eld.parser.WhileStatement;
 import com.github.andreasarvidsson.eld.parser.YieldStatement;
 
 public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
     private final Map<ClassType, Scope> classScopes = new HashMap<>();
+    private final Map<ClassType, Map<String, FunctionSymbol>> classMethods =
+        new HashMap<>();
+    private boolean analyzingCallee;
     private @Nullable ClassType currentInstance;
     private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
@@ -149,6 +155,8 @@ public final class SemanticAnalyzer {
                 analyzeVariableDeclaration(variableDeclaration, context);
             case FunctionDeclaration functionDeclaration ->
                 analyzeFunctionDeclaration(functionDeclaration, context);
+            case InterfaceDeclaration contract ->
+                analyzeInterfaceDeclaration(contract, context);
             case ClassDeclaration classDeclaration ->
                 analyzeClassDeclaration(classDeclaration, context);
             case ConstructorDeclaration constructor ->
@@ -269,6 +277,25 @@ public final class SemanticAnalyzer {
             new ClassSymbol(declaration.name(), classType);
         model.setSymbol(declaration.name(), classSymbol);
         context.scope().declare(classSymbol);
+        final List<InterfaceType> implemented = new ArrayList<>();
+        for (final TypeNode node : declaration.implementedInterfaces()) {
+            final Type type = resolveType(node, context);
+            if (!(type instanceof InterfaceType contract)) {
+                throw new SemanticException(
+                    node.range(),
+                    "'implements' requires an interface"
+                );
+            }
+            if (implemented.contains(contract)) {
+                throw new SemanticException(
+                    node.range(),
+                    "Duplicate implemented interface: %s",
+                    contract
+                );
+            }
+            implemented.add(contract);
+        }
+        model.setImplementedInterfaces(classType, implemented);
         final IdentifierExpression superclassName = declaration.superClass();
         if (superclassName != null) {
             final Type base =
@@ -307,6 +334,7 @@ public final class SemanticAnalyzer {
         }
         final Scope members = new Scope(null);
         classScopes.put(classType, members);
+        classMethods.put(classType, new LinkedHashMap<>());
         ConstructorDeclaration constructor = null;
         model.setConstructorVisibility(classType, Visibility.PUBLIC);
         for (final MemberDeclaration memberDeclaration : declaration
@@ -394,8 +422,32 @@ public final class SemanticAnalyzer {
                 members.declare(symbol);
                 model.setSymbol(field.name(), symbol);
             }
-            else if (member instanceof FunctionDeclaration method) {
-                registerFunction(method, context, members);
+        }
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            if (
+                memberDeclaration
+                    .declaration() instanceof FunctionDeclaration method
+            ) {
+                registerFunction(
+                    method,
+                    context,
+                    members.resolveLocal(
+                        method.name().name()
+                    ) instanceof VariableSymbol ? new Scope(null) : members
+                );
+                final FunctionSymbol function =
+                    (FunctionSymbol) model.getSymbol(method.name());
+                if (
+                    Objects.requireNonNull(classMethods.get(classType))
+                        .putIfAbsent(function.name(), function) != null
+                ) {
+                    throw new SemanticException(
+                        method.range(),
+                        "Duplicate method: %s",
+                        function.name()
+                    );
+                }
             }
         }
         for (final MemberDeclaration memberDeclaration : declaration
@@ -412,9 +464,11 @@ public final class SemanticAnalyzer {
                     model.getSymbol(name),
                     memberDeclaration.visibility()
                 );
+                model.setClassMemberOwner(model.getSymbol(name), classType);
                 validateInheritedMember(classType, model.getSymbol(name));
             }
         }
+        validateInterfaces(classType, declaration);
         final ClassType previousInstance = currentInstance;
         final ConstructorDeclaration previousConstructor = currentConstructor;
         currentInstance = classType;
@@ -451,6 +505,357 @@ public final class SemanticAnalyzer {
         }
     }
 
+    private void analyzeInterfaceDeclaration(
+        final InterfaceDeclaration declaration,
+        final SemanticContext context
+    ) {
+        final InterfaceType type = new InterfaceType(declaration.name().name());
+        final InterfaceSymbol symbol =
+            new InterfaceSymbol(declaration.name(), type);
+        context.scope().declare(symbol);
+        model.setSymbol(declaration.name(), symbol);
+        final List<InterfaceType> parents = new ArrayList<>();
+        final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
+        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
+        for (final TypeNode node : declaration.superInterfaces()) {
+            final Type parent = resolveType(node, context);
+            if (!(parent instanceof InterfaceType contract)) {
+                throw new SemanticException(
+                    node.range(),
+                    "Interfaces may only extend interfaces"
+                );
+            }
+            if (contract.equals(type)) {
+                throw new SemanticException(
+                    node.range(),
+                    "Interface inheritance cannot be cyclic"
+                );
+            }
+            if (parents.contains(contract)) {
+                throw new SemanticException(
+                    node.range(),
+                    "Duplicate superinterface: %s",
+                    contract
+                );
+            }
+            parents.add(contract);
+            mergeContract(fields, model.getInterface(contract).fields(), node);
+            mergeContract(
+                methods,
+                model.getInterface(contract).methods(),
+                node
+            );
+        }
+        final Set<String> ownFields = new java.util.HashSet<>();
+        final Set<String> ownMethods = new java.util.HashSet<>();
+        for (final var member : declaration.members()) {
+            if (member instanceof UninitializedVariableDeclaration field) {
+                if (!ownFields.add(field.name().name())) {
+                    throw new SemanticException(
+                        field.range(),
+                        "Duplicate interface field: %s",
+                        field.name().name()
+                    );
+                }
+                final VariableSymbol value =
+                    new VariableSymbol(
+                        field.name(),
+                        resolveType(field.type(), context),
+                        field.mutability()
+                    );
+                mergeContract(fields, Map.of(value.name(), value), field);
+                fields.put(value.name(), value);
+                model.setSymbol(field.name(), value);
+                model.setMemberVisibility(value, Visibility.PUBLIC);
+            }
+            else if (member instanceof InterfaceMethodDeclaration method) {
+                if (!ownMethods.add(method.name().name())) {
+                    throw new SemanticException(
+                        method.range(),
+                        "Duplicate interface method: %s",
+                        method.name().name()
+                    );
+                }
+                final List<Type> parameters = new ArrayList<>();
+                final Scope scope = new Scope(context.scope());
+                for (final FunctionParameter parameter : method.parameters()) {
+                    final Type parameterType =
+                        resolveParameterType(parameter, context);
+                    parameters.add(parameterType);
+                    final VariableSymbol value =
+                        new VariableSymbol(
+                            parameter.name(),
+                            parameterType,
+                            Mutability.CONST
+                        );
+                    model.setSymbol(parameter.name(), value);
+                    analyzeParameterDefault(
+                        parameter,
+                        new SemanticContext(scope, null, 0)
+                    );
+                    scope.declare(value);
+                }
+                final FunctionSymbol value =
+                    new FunctionSymbol(
+                        method.name(),
+                        new FunctionType(
+                            parameters,
+                            method.returnType() == null
+                                ? BuiltinType.VOID
+                                : resolveType(method.returnType(), context)
+                        )
+                    );
+                mergeContract(methods, Map.of(value.name(), value), method);
+                methods.put(value.name(), value);
+                model.setSymbol(method.name(), value);
+                model.setMemberVisibility(value, Visibility.PUBLIC);
+                model.setFunctionParameters(
+                    value,
+                    method.parameters()
+                        .stream()
+                        .map(FunctionParameter::name)
+                        .toList()
+                );
+            }
+        }
+        model.setInterface(
+            type,
+            new InterfaceContract(List.copyOf(parents), fields, methods)
+        );
+    }
+
+    private <S extends Symbol> void mergeContract(
+        final Map<String, S> target,
+        final Map<String, S> source,
+        final AstNode node
+    ) {
+        for (final var entry : source.entrySet()) {
+            final S previous =
+                target.putIfAbsent(entry.getKey(), entry.getValue());
+            if (
+                previous != null && (!previous.type()
+                    .equals(entry.getValue().type())
+                    || (previous instanceof VariableSymbol oldField
+                        && entry.getValue() instanceof VariableSymbol newField
+                        && oldField.mutability() != newField.mutability()))
+            ) {
+                throw new SemanticException(
+                    node.range(),
+                    "Conflicting interface member '%s'",
+                    entry.getKey()
+                );
+            }
+        }
+    }
+
+    private void validateInterfaces(
+        final ClassType type,
+        final ClassDeclaration declaration
+    ) {
+        final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
+        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            for (final InterfaceType contract : model
+                .getImplementedInterfaces(current)) {
+                mergeContract(
+                    fields,
+                    model.getInterface(contract).fields(),
+                    declaration
+                );
+                mergeContract(
+                    methods,
+                    model.getInterface(contract).methods(),
+                    declaration
+                );
+            }
+        }
+        final Map<String, VariableSymbol> implementations =
+            new LinkedHashMap<>();
+        final List<Symbol> required = new ArrayList<>(fields.values());
+        required.addAll(methods.values());
+        for (final Symbol contract : required) {
+            final ClassType owner =
+                contract instanceof VariableSymbol
+                    ? classFieldOwner(type, contract.name())
+                    : memberOwner(type, contract.name());
+            final Symbol implementation =
+                contract instanceof FunctionSymbol
+                    ? classMethod(type, contract.name())
+                    : owner == null
+                        ? null
+                        : Objects.requireNonNull(classScopes.get(owner))
+                            .resolveLocal(contract.name());
+            if (implementation == null) {
+                throw new SemanticException(
+                    declaration.range(),
+                    "Class %s does not implement interface member '%s'",
+                    type,
+                    contract.name()
+                );
+            }
+            if (
+                model.getMemberVisibility(implementation) != Visibility.PUBLIC
+            ) {
+                throw new SemanticException(
+                    implementation.range(),
+                    "Interface member '%s' must be public",
+                    contract.name()
+                );
+            }
+            if (
+                !contract.type().equals(implementation.type())
+                    || (contract instanceof FunctionSymbol) != (implementation instanceof FunctionSymbol)
+            ) {
+                throw new SemanticException(
+                    implementation.range(),
+                    "Interface member '%s' expects %s, found %s",
+                    contract.name(),
+                    contract.type(),
+                    implementation.type()
+                );
+            }
+            if (implementation instanceof VariableSymbol field) {
+                if (
+                    contract instanceof VariableSymbol requiredField
+                        && field.mutability() != requiredField.mutability()
+                ) {
+                    throw new SemanticException(
+                        field.range(),
+                        "Interface field '%s' must be %s",
+                        field.name(),
+                        requiredField.mutability() == Mutability.VAR
+                            ? "mutable"
+                            : "constant"
+                    );
+                }
+                implementations.put(field.name(), field);
+            }
+        }
+        model.setInterfaceFields(type, implementations);
+    }
+
+    private void analyzeObjectExpression(
+        final ObjectExpression object,
+        final SemanticContext context,
+        final InterfaceType type
+    ) {
+        final InterfaceContract contract = model.getInterface(type);
+        final Set<String> present = new java.util.HashSet<>();
+        for (final var member : object.members()) {
+            final String name = member.name().name();
+            if (!present.add(name)) {
+                throw new SemanticException(
+                    member.range(),
+                    "Duplicate object member '%s'",
+                    name
+                );
+            }
+            final VariableSymbol field = contract.fields().get(name);
+            final FunctionSymbol method = contract.methods().get(name);
+            if (field == null && method == null) {
+                throw new SemanticException(
+                    member.range(),
+                    "Unknown object member '%s' of interface %s",
+                    name,
+                    type
+                );
+            }
+            if (field != null && method != null) {
+                throw new SemanticException(
+                    member.range(),
+                    "Object member '%s' cannot implement both a field and a method",
+                    name
+                );
+            }
+            final Symbol symbol =
+                field != null ? field : Objects.requireNonNull(method);
+            if (
+                method != null
+                    && !(unwrap(member.value()) instanceof LambdaExpression)
+            ) {
+                throw new SemanticException(
+                    member.value().range(),
+                    "Interface method '%s' requires a lambda",
+                    name
+                );
+            }
+            final Type actual =
+                analyzeExpression(member.value(), context, symbol.type());
+            if (
+                resolveAssignType(actual, symbol.type(), member.value()) == null
+            ) {
+                throw new SemanticException(
+                    member.value().range(),
+                    "Member '%s' expects %s, found %s",
+                    name,
+                    symbol.type(),
+                    actual
+                );
+            }
+        }
+        final Set<String> required =
+            new java.util.LinkedHashSet<>(contract.fields().keySet());
+        required.addAll(contract.methods().keySet());
+        for (final String name : required) {
+            if (!present.contains(name)) {
+                throw new SemanticException(
+                    object.range(),
+                    "Object literal does not implement %s: missing member '%s'",
+                    type,
+                    name
+                );
+            }
+        }
+    }
+
+    private @Nullable ClassType classFieldOwner(
+        final ClassType type,
+        final String name
+    ) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope members = classScopes.get(current);
+            if (
+                members != null
+                    && members.resolveLocal(name) instanceof VariableSymbol
+            ) {
+                return current;
+            }
+        }
+        return null;
+    }
+
+    private @Nullable ClassType classMethodOwner(
+        final ClassType type,
+        final String name
+    ) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            if (
+                classMethods.getOrDefault(current, Map.of()).containsKey(name)
+            ) {
+                return current;
+            }
+        }
+        return null;
+    }
+
+    private @Nullable FunctionSymbol classMethod(
+        final ClassType type,
+        final String name
+    ) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final FunctionSymbol method =
+                classMethods.getOrDefault(current, Map.of()).get(name);
+            if (method != null) {
+                return method;
+            }
+        }
+        return null;
+    }
+
     private boolean canAccess(
         final ClassType owner,
         final Visibility visibility
@@ -483,15 +888,24 @@ public final class SemanticAnalyzer {
         if (base == null) {
             return;
         }
-        final ClassType owner = memberOwner(base, symbol.name());
+        final ClassType methodOwner =
+            symbol instanceof FunctionSymbol
+                ? classMethodOwner(base, symbol.name())
+                : null;
+        final ClassType owner =
+            methodOwner != null
+                ? methodOwner
+                : memberOwner(base, symbol.name());
         if (owner == null) {
             return;
         }
         final Symbol inherited =
-            Objects.requireNonNull(
-                Objects.requireNonNull(classScopes.get(owner))
-                    .resolveLocal(symbol.name())
-            );
+            methodOwner != null
+                ? Objects.requireNonNull(classMethod(base, symbol.name()))
+                : Objects.requireNonNull(
+                    Objects.requireNonNull(classScopes.get(owner))
+                        .resolveLocal(symbol.name())
+                );
         final Visibility visibility = model.getMemberVisibility(inherited);
         if (visibility == Visibility.PRIVATE) {
             return;
@@ -1005,6 +1419,12 @@ public final class SemanticAnalyzer {
         final Type right,
         final AstNode node
     ) {
+        if (model.isSubtype(left, right)) {
+            return right;
+        }
+        if (model.isSubtype(right, left)) {
+            return left;
+        }
         if (left.equals(right)) {
             return left;
         }
@@ -1389,11 +1809,7 @@ public final class SemanticAnalyzer {
         if (from.equals(to)) {
             return from;
         }
-        if (
-            from instanceof ClassType fromClass
-                && to instanceof ClassType toClass
-                && model.isSubclassOf(fromClass, toClass)
-        ) {
+        if (model.isSubtype(from, to)) {
             return to;
         }
         if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
@@ -1409,9 +1825,11 @@ public final class SemanticAnalyzer {
             if (from instanceof UnionType source) {
                 for (final Type sourceMember : source.memberTypes()) {
                     final boolean assignable =
-                        union.contains(
-                            sourceMember
-                        ) || sourceMember instanceof ClassType sourceClass && union.memberTypes().stream().anyMatch(member -> member instanceof ClassType targetClass && model.isSubclassOf(sourceClass, targetClass));
+                        union.memberTypes()
+                            .stream()
+                            .anyMatch(
+                                member -> model.isSubtype(sourceMember, member)
+                            );
                     if (!assignable) {
                         // Numeric coercions between union members still require runtime dispatch.
                         return null;
@@ -1422,11 +1840,13 @@ public final class SemanticAnalyzer {
             }
             for (final Type member : union.memberTypes()) {
                 if (
-                    member instanceof ClassType && resolveAssignType(
-                        from,
-                        member,
-                        fromExpression
-                    ) != null
+                    (member instanceof ClassType
+                        || member instanceof InterfaceType)
+                        && resolveAssignType(
+                            from,
+                            member,
+                            fromExpression
+                        ) != null
                 ) {
                     model.setUnionConversion(fromExpression, member, union);
                     return to;
@@ -1519,6 +1939,9 @@ public final class SemanticAnalyzer {
             case "any" -> BuiltinType.ANY;
             default -> {
                 final Symbol symbol = context.scope().resolve(named.name());
+                if (symbol instanceof InterfaceSymbol contract) {
+                    yield contract.type();
+                }
                 if (!(symbol instanceof ClassSymbol classSymbol)) {
                     throw new SemanticException(
                         named.range(),
@@ -1540,13 +1963,49 @@ public final class SemanticAnalyzer {
         final SemanticContext context,
         final @Nullable Type expected
     ) {
+        if (
+            expected instanceof FunctionType
+                && expression instanceof MemberExpression
+        ) {
+            final boolean previousCallee = analyzingCallee;
+            analyzingCallee = true;
+            try {
+                return analyzeExpression(expression, context);
+            }
+            finally {
+                analyzingCallee = previousCallee;
+            }
+        }
+        if (expression instanceof ObjectExpression object) {
+            Type target = expected;
+            if (expected instanceof UnionType union) {
+                final List<Type> contracts =
+                    union.memberTypes()
+                        .stream()
+                        .filter(InterfaceType.class::isInstance)
+                        .toList();
+                target = contracts.size() == 1 ? contracts.getFirst() : null;
+            }
+            if (!(target instanceof InterfaceType contract)) {
+                throw new SemanticException(
+                    object.range(),
+                    "Object literal requires an expected interface type"
+                );
+            }
+            analyzeObjectExpression(object, context, contract);
+            model.setExpressionType(object, contract);
+            return contract;
+        }
         if (expression instanceof LambdaExpression lambda) {
             final Type type =
                 analyzeLambdaExpression(lambda, context, expected);
             model.setExpressionType(lambda, type);
             return type;
         }
-        if (expected == BuiltinType.ANY || expected instanceof UnionType) {
+        if (
+            expected == BuiltinType.ANY || expected instanceof UnionType
+                || expected instanceof InterfaceType
+        ) {
             if (expression instanceof IfExpression conditional) {
                 final Type type =
                     analyzeIfExpression(conditional, context, expected);
@@ -1568,7 +2027,8 @@ public final class SemanticAnalyzer {
             return analyzeTupleExpression(tuple, context, target);
         }
         if (
-            (expected instanceof UnionType || expected == BuiltinType.ANY)
+            (expected instanceof UnionType || expected == BuiltinType.ANY
+                || expected instanceof InterfaceType)
                 && expression instanceof TernaryExpression ternary
         ) {
             if (
@@ -1659,9 +2119,10 @@ public final class SemanticAnalyzer {
     }
 
     private static boolean requiresContextualElements(final Type type) {
-        return (type instanceof TupleType tuple && tuple.elementTypes()
-            .stream()
-            .anyMatch(SemanticAnalyzer::requiresContextualElements))
+        return type instanceof InterfaceType || type instanceof FunctionType
+            || (type instanceof TupleType tuple && tuple.elementTypes()
+                .stream()
+                .anyMatch(SemanticAnalyzer::requiresContextualElements))
             || type instanceof UnionType
             || type == BuiltinType.ANY
             || (type instanceof ArrayType array
@@ -1675,21 +2136,67 @@ public final class SemanticAnalyzer {
 
         final Type type = switch (expression) {
             case MemberExpression member -> {
-                final Type target = analyzeExpression(member.target(), context);
+                final boolean memberCallee = analyzingCallee;
+                final Type target;
+                analyzingCallee = false;
+                try {
+                    target = analyzeExpression(member.target(), context);
+                }
+                finally {
+                    analyzingCallee = memberCallee;
+                }
+                if (target instanceof InterfaceType contract) {
+                    final InterfaceContract members =
+                        model.getInterface(contract);
+                    Symbol symbol =
+                        analyzingCallee
+                            ? members.methods().get(member.member().name())
+                            : members.fields().get(member.member().name());
+                    if (symbol == null) {
+                        symbol = members.fields().get(member.member().name());
+                    }
+                    if (symbol == null) {
+                        symbol = members.methods().get(member.member().name());
+                    }
+                    if (symbol == null) {
+                        throw new SemanticException(
+                            member.member().range(),
+                            "Unknown member '%s' of interface %s",
+                            member.member().name(),
+                            contract
+                        );
+                    }
+                    model.setMemberOwner(member, contract);
+                    model.setReference(member.member(), symbol);
+                    model.setExpressionType(member.member(), symbol.type());
+                    yield symbol.type();
+                }
                 if (!(target instanceof ClassType classType)) {
                     throw new SemanticException(
                         member.target().range(),
                         "Member access requires a class instance"
                     );
                 }
+                final ClassType methodOwner =
+                    analyzingCallee
+                        ? classMethodOwner(classType, member.member().name())
+                        : null;
+                final ClassType fieldOwner =
+                    classFieldOwner(classType, member.member().name());
                 final ClassType owner =
-                    memberOwner(classType, member.member().name());
+                    methodOwner != null
+                        ? methodOwner
+                        : fieldOwner != null
+                            ? fieldOwner
+                            : memberOwner(classType, member.member().name());
                 final Scope scope =
                     owner == null ? null : classScopes.get(owner);
                 final Symbol symbol =
-                    scope == null
-                        ? null
-                        : scope.resolveLocal(member.member().name());
+                    methodOwner != null
+                        ? classMethod(classType, member.member().name())
+                        : scope == null
+                            ? null
+                            : scope.resolveLocal(member.member().name());
                 if (symbol == null) {
                     throw new SemanticException(
                         member.member().range(),
@@ -1824,6 +2331,10 @@ public final class SemanticAnalyzer {
                 analyzeIfExpression(conditional, context);
             case SwitchExpression selection ->
                 analyzeSwitchExpression(selection, context, true);
+            case ObjectExpression object -> throw new SemanticException(
+                object.range(),
+                "Object literal requires an expected interface type"
+            );
             case LambdaExpression lambda ->
                 analyzeLambdaExpression(lambda, context, null);
         };
@@ -2007,7 +2518,15 @@ public final class SemanticAnalyzer {
         final CallExpression call,
         final SemanticContext context
     ) {
-        final Type type = analyzeExpression(call.callee(), context);
+        final boolean previousCallee = analyzingCallee;
+        final Type type;
+        analyzingCallee = true;
+        try {
+            type = analyzeExpression(call.callee(), context);
+        }
+        finally {
+            analyzingCallee = previousCallee;
+        }
         if (type == BuiltinFunctionType.PRINT) {
             if (call.arguments().size() > 1) {
                 throw new SemanticException(
@@ -2348,6 +2867,10 @@ public final class SemanticAnalyzer {
             case AND, OR ->
                 leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
             case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
+                || ((leftType instanceof InterfaceType
+                    || rightType instanceof InterfaceType)
+                    && (model.isSubtype(leftType, rightType)
+                        || model.isSubtype(rightType, leftType)))
                 || relatedClasses
                 || (leftType.equals(rightType) && leftType != BuiltinType.VOID);
             case ADD -> compatibleNumbers || (leftType == BuiltinType.STRING

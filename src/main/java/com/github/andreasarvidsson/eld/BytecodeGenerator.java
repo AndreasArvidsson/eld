@@ -25,6 +25,9 @@ import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
 import com.github.andreasarvidsson.eld.semantic.ClassType;
+import com.github.andreasarvidsson.eld.semantic.InterfaceType;
+import com.github.andreasarvidsson.eld.semantic.InterfaceContract;
+import com.github.andreasarvidsson.eld.semantic.VariableSymbol;
 import com.github.andreasarvidsson.eld.semantic.FunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.FunctionType;
 import com.github.andreasarvidsson.eld.semantic.SemanticModel;
@@ -43,6 +46,20 @@ public final class BytecodeGenerator {
     private final Map<String, String> classOwners;
     private @Nullable ClassWriter currentWriter;
     private int nextLambda;
+    private int nextObject;
+    private final IdentityHashMap<ObjectExpression, String> objectNames =
+        new IdentityHashMap<>();
+    private final Map<String, byte[]> objectClasses = new LinkedHashMap<>();
+    private final IdentityHashMap<ObjectExpression, ObjectInfo> objects =
+        new IdentityHashMap<>();
+    private final Map<String, InterfaceType> objectTypes =
+        new LinkedHashMap<>();
+    private final List<String> objectNameOrder = new ArrayList<>();
+    private record ObjectInfo(
+        String owner, List<Symbol> captures, boolean receiver,
+        String constructorDescriptor
+    ) {
+    }
 
     public BytecodeGenerator(
         final Program program,
@@ -89,7 +106,12 @@ public final class BytecodeGenerator {
         if (
             program.items()
                 .stream()
-                .anyMatch(ClassDeclaration.class::isInstance)
+                .anyMatch(
+                    item -> item instanceof ClassDeclaration
+                        || item instanceof InterfaceDeclaration
+                        || AstTraversal
+                            .anyMatch(item, ObjectExpression.class::isInstance)
+                )
         ) {
             throw new IllegalStateException(
                 "This program declares classes; use generateClasses()"
@@ -106,10 +128,36 @@ public final class BytecodeGenerator {
      * source order before the constructor body; const fields are final.
      */
     public Map<String, byte[]> generateClasses() {
+        nextLambda = 0;
+        nextObject = 0;
+        objectClasses.clear();
+        objectTypes.clear();
+        objects.clear();
+        objectNames.clear();
+        objectNameOrder.clear();
+        for (final BlockItem item : program.items()
+            .subList(previousItems, program.items().size())) {
+            AstTraversal.walk(item, node -> {
+                if (node instanceof ObjectExpression object) {
+                    final String name = moduleName + "$$object" + nextObject++;
+                    objectNames.put(object, name);
+                    objectNameOrder.add(name);
+                }
+            });
+        }
         final Map<String, byte[]> classes = new LinkedHashMap<>();
         classes.put(moduleName, generateModule());
         for (final BlockItem item : program.items()
             .subList(previousItems, program.items().size())) {
+            if (item instanceof InterfaceDeclaration contract) {
+                classes.put(
+                    interfaceOwner(
+                        (InterfaceType) semanticModel.getSymbol(contract.name())
+                            .type()
+                    ),
+                    generateInterface(contract)
+                );
+            }
             if (item instanceof ClassDeclaration declaration) {
                 final String name = className(declaration);
                 if (
@@ -123,6 +171,7 @@ public final class BytecodeGenerator {
                 }
             }
         }
+        classes.putAll(objectClasses);
         return Collections.unmodifiableMap(classes);
     }
 
@@ -145,13 +194,40 @@ public final class BytecodeGenerator {
                         || classOwners.containsValue(left)
                         || classOwners.containsValue(right)
                 ) {
-                    final ClassType leftType = generatedClassType(left);
-                    final ClassType rightType = generatedClassType(right);
-                    if (leftType != null && rightType != null) {
+                    final ClassType leftClass = generatedClassType(left);
+                    final ClassType rightClass = generatedClassType(right);
+                    if (leftClass != null && rightClass != null) {
                         final ClassType common =
-                            semanticModel.commonClassType(leftType, rightType);
+                            semanticModel
+                                .commonClassType(leftClass, rightClass);
                         if (common != null) {
                             return classOwner(common);
+                        }
+                    }
+                    final Type leftReference = generatedReferenceType(left);
+                    final Type rightReference = generatedReferenceType(right);
+                    if (leftReference != null && rightReference != null) {
+                        if (
+                            semanticModel
+                                .isSubtype(leftReference, rightReference)
+                        ) {
+                            return typeOwner(rightReference);
+                        }
+                        if (
+                            semanticModel
+                                .isSubtype(rightReference, leftReference)
+                        ) {
+                            return typeOwner(leftReference);
+                        }
+                        for (final InterfaceType contract : semanticModel
+                            .getInterfaceTypes()) {
+                            if (
+                                semanticModel.isSubtype(leftReference, contract)
+                                    && semanticModel
+                                        .isSubtype(rightReference, contract)
+                            ) {
+                                return interfaceOwner(contract);
+                            }
                         }
                     }
                     return "java/lang/Object";
@@ -174,6 +250,156 @@ public final class BytecodeGenerator {
         return null;
     }
 
+    private byte[] generateInterface(final InterfaceDeclaration declaration) {
+        final InterfaceType type =
+            (InterfaceType) semanticModel.getSymbol(declaration.name()).type();
+        final String owner = interfaceOwner(type);
+        final ClassWriter writer = classWriter();
+        currentWriter = writer;
+        writer.visit(
+            V21,
+            ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT,
+            owner,
+            null,
+            "java/lang/Object",
+            semanticModel.getInterface(type)
+                .superInterfaces()
+                .stream()
+                .map(this::interfaceOwner)
+                .toArray(String[]::new)
+        );
+        writer.visitNestHost(moduleName);
+        writer.visitInnerClass(
+            owner,
+            moduleName,
+            declaration.name().name(),
+            ACC_PUBLIC | ACC_STATIC | ACC_INTERFACE | ACC_ABSTRACT
+        );
+        final IdentityHashMap<Symbol, String> globals = new IdentityHashMap<>();
+        for (final BlockItem item : program.items()) {
+            if (item instanceof VariableDeclaration variable) {
+                final Symbol symbol = semanticModel.getSymbol(variable.name());
+                globals.put(symbol, symbol.name());
+            }
+        }
+        for (final var member : declaration.members()) {
+            if (member instanceof UninitializedVariableDeclaration field) {
+                writer
+                    .visitMethod(
+                        ACC_PUBLIC | ACC_ABSTRACT | ACC_SYNTHETIC,
+                        "$get$" + field.name().name(),
+                        "()" + descriptor(
+                            semanticModel.getSymbol(field.name()).type()
+                        ),
+                        null,
+                        null
+                    )
+                    .visitEnd();
+                if (field.mutability() == Mutability.VAR) {
+                    writer
+                        .visitMethod(
+                            ACC_PUBLIC | ACC_ABSTRACT | ACC_SYNTHETIC,
+                            "$set$" + field.name().name(),
+                            "(" + descriptor(
+                                semanticModel.getSymbol(field.name()).type()
+                            ) + ")V",
+                            null,
+                            null
+                        )
+                        .visitEnd();
+                }
+            }
+            else if (member instanceof InterfaceMethodDeclaration method) {
+                final FunctionType signature =
+                    (FunctionType) semanticModel.getSymbol(method.name())
+                        .type();
+                writer
+                    .visitMethod(
+                        ACC_PUBLIC | ACC_ABSTRACT,
+                        method.name().name(),
+                        methodDescriptor(signature),
+                        null,
+                        null
+                    )
+                    .visitEnd();
+                generateDefaultOverload(
+                    writer,
+                    method.name().name(),
+                    signature,
+                    method.parameters(),
+                    globals,
+                    new InstanceContext(owner, new IdentityHashMap<>()),
+                    Visibility.PUBLIC
+                );
+            }
+        }
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
+    private void generateGetter(
+        final ClassWriter writer,
+        final String name,
+        final String fieldOwner,
+        final Type type
+    ) {
+        final MethodVisitor getter =
+            writer.visitMethod(
+                ACC_PUBLIC | ACC_SYNTHETIC,
+                "$get$" + name,
+                "()" + descriptor(type),
+                null,
+                null
+            );
+        getter.visitCode();
+        getter.visitVarInsn(ALOAD, 0);
+        getter.visitFieldInsn(GETFIELD, fieldOwner, name, descriptor(type));
+        getter.visitInsn(returnOpcode(type));
+        getter.visitMaxs(0, 0);
+        getter.visitEnd();
+    }
+
+    private void generateSetter(
+        final ClassWriter writer,
+        final String name,
+        final String fieldOwner,
+        final Type type
+    ) {
+        final MethodVisitor setter =
+            writer.visitMethod(
+                ACC_PUBLIC | ACC_SYNTHETIC,
+                "$set$" + name,
+                "(" + descriptor(type) + ")V",
+                null,
+                null
+            );
+        setter.visitCode();
+        setter.visitVarInsn(ALOAD, 0);
+        setter.visitVarInsn(loadOpcode(type), 1);
+        setter.visitFieldInsn(PUTFIELD, fieldOwner, name, descriptor(type));
+        setter.visitInsn(RETURN);
+        setter.visitMaxs(0, 0);
+        setter.visitEnd();
+    }
+
+    private boolean mutableInterfaceField(
+        final ClassType type,
+        final String name
+    ) {
+        for (ClassType current = type; current != null; current =
+            semanticModel.getSuperclass(current)) {
+            for (final InterfaceType contract : semanticModel
+                .getImplementedInterfaces(current)) {
+                final VariableSymbol field =
+                    semanticModel.getInterface(contract).fields().get(name);
+                if (field != null && field.mutability() == Mutability.VAR) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private byte[] generateClass(final ClassDeclaration declaration) {
         final String name = className(declaration);
         final ClassType classType =
@@ -189,7 +415,10 @@ public final class BytecodeGenerator {
             name,
             null,
             superclassOwner,
-            null
+            semanticModel.getImplementedInterfaces(classType)
+                .stream()
+                .map(BytecodeGenerator.this::interfaceOwner)
+                .toArray(String[]::new)
         );
         writer.visitNestHost(moduleName);
         writer.visitInnerClass(
@@ -250,6 +479,24 @@ public final class BytecodeGenerator {
                 throw unsupported(
                     member,
                     "Nested class generation is not supported yet"
+                );
+            }
+        }
+        for (final var entry : semanticModel.getInterfaceFields(classType)
+            .entrySet()) {
+            final VariableSymbol field = entry.getValue();
+            generateGetter(
+                writer,
+                entry.getKey(),
+                classOwner(semanticModel.getClassMemberOwner(field)),
+                field.type()
+            );
+            if (mutableInterfaceField(classType, entry.getKey())) {
+                generateSetter(
+                    writer,
+                    entry.getKey(),
+                    classOwner(semanticModel.getClassMemberOwner(field)),
+                    field.type()
                 );
             }
         }
@@ -462,11 +709,15 @@ public final class BytecodeGenerator {
         method.visitMethodInsn(
             name.equals("<init>")
                 ? INVOKESPECIAL
-                : instance == null ? INVOKESTATIC : INVOKEVIRTUAL,
+                : instance == null
+                    ? INVOKESTATIC
+                    : interfaceOwnerName(instance.owner())
+                        ? INVOKEINTERFACE
+                        : INVOKEVIRTUAL,
             instance == null ? moduleName : instance.owner(),
             name,
             methodDescriptor(type),
-            false
+            instance != null && interfaceOwnerName(instance.owner())
         );
         method.visitInsn(returnOpcode(type.returnType()));
         method.visitMaxs(0, 0);
@@ -476,6 +727,9 @@ public final class BytecodeGenerator {
     private byte[] generateModule() {
         final ClassWriter writer = classWriter();
         currentWriter = writer;
+        for (final String objectName : objectNameOrder) {
+            writer.visitNestMember(objectName);
+        }
         writer.visit(
             V21,
             ACC_PUBLIC | ACC_SUPER
@@ -528,6 +782,20 @@ public final class BytecodeGenerator {
                     moduleName,
                     declaration.name().name(),
                     ACC_PUBLIC | ACC_STATIC
+                );
+            }
+            else if (item instanceof InterfaceDeclaration contract) {
+                final String name =
+                    interfaceOwner(
+                        (InterfaceType) semanticModel.getSymbol(contract.name())
+                            .type()
+                    );
+                writer.visitNestMember(name);
+                writer.visitInnerClass(
+                    name,
+                    moduleName,
+                    contract.name().name(),
+                    ACC_PUBLIC | ACC_STATIC | ACC_INTERFACE | ACC_ABSTRACT
                 );
             }
             else if (!(item instanceof FunctionDeclaration)) {
@@ -791,6 +1059,35 @@ public final class BytecodeGenerator {
             .getOrDefault(type.name(), moduleName + "$" + type.name());
     }
 
+    private String interfaceOwner(final InterfaceType type) {
+        return classOwners
+            .getOrDefault(type.name(), moduleName + "$" + type.name());
+    }
+    private String typeOwner(final Type type) {
+        return type instanceof ClassType cls
+            ? classOwner(cls)
+            : interfaceOwner((InterfaceType) type);
+    }
+    private @Nullable Type generatedReferenceType(final String owner) {
+        final ClassType cls = generatedClassType(owner);
+        if (cls != null) {
+            return cls;
+        }
+        if (objectTypes.containsKey(owner)) {
+            return objectTypes.get(owner);
+        }
+        for (final InterfaceType type : semanticModel.getInterfaceTypes()) {
+            if (interfaceOwner(type).equals(owner)) {
+                return type;
+            }
+        }
+        return null;
+    }
+    private boolean interfaceOwnerName(final String owner) {
+        return generatedReferenceType(owner) instanceof InterfaceType
+            && !objectTypes.containsKey(owner);
+    }
+
     private String descriptor(final Type type) {
         return switch (type) {
             case BuiltinType builtin -> switch (builtin) {
@@ -814,6 +1111,7 @@ public final class BytecodeGenerator {
             case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
             case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
             case ClassType classType -> "L" + classOwner(classType) + ";";
+            case InterfaceType contract -> "L" + interfaceOwner(contract) + ";";
         };
     }
 
@@ -842,16 +1140,16 @@ public final class BytecodeGenerator {
         if (source.equals(target) || target.equals("Ljava/lang/Object;")) {
             return true;
         }
-        final ClassType sourceClass =
-            generatedClassType(
+        final Type sourceClass =
+            generatedReferenceType(
                 org.objectweb.asm.Type.getType(source).getInternalName()
             );
-        final ClassType targetClass =
-            generatedClassType(
+        final Type targetClass =
+            generatedReferenceType(
                 org.objectweb.asm.Type.getType(target).getInternalName()
             );
         return sourceClass != null && targetClass != null
-            && semanticModel.isSubclassOf(sourceClass, targetClass);
+            && semanticModel.isSubtype(sourceClass, targetClass);
     }
 
     private static @Nullable String boxedOwner(final Type type) {
@@ -877,6 +1175,7 @@ public final class BytecodeGenerator {
                 || type instanceof FunctionType
                 || type instanceof BuiltinFunctionType
                 || type instanceof ClassType
+                || type instanceof InterfaceType
                 || type instanceof UnionType
         ) {
             return "Ljava/lang/Object;";
@@ -898,6 +1197,7 @@ public final class BytecodeGenerator {
     private static boolean reference(final Type type) {
         return type instanceof UnionType || type instanceof BuiltinFunctionType
             || type instanceof ClassType
+            || type instanceof InterfaceType
             || type instanceof ArrayType
             || type instanceof TupleType
             || type instanceof FunctionType
@@ -965,6 +1265,9 @@ public final class BytecodeGenerator {
         private int nextLocal;
         private boolean beforeBaseInitialization;
         private String lambdaOwner;
+        private final IdentityHashMap<Symbol, String> captureFields =
+            new IdentityHashMap<>();
+        private @Nullable String lexicalReceiverOwner;
         private @Nullable ClassType constructorSuperclass;
         private List<VariableDeclaration> constructorFields = List.of();
 
@@ -1183,9 +1486,8 @@ public final class BytecodeGenerator {
                         }
                     }
                     method.visitLabel(end);
-                    return reachesCondition
-                        && !(constructorSuperclass != null
-                            && isBooleanLiteral(statement.condition(), true))
+                    return (reachesCondition && !(constructorSuperclass != null
+                        && isBooleanLiteral(statement.condition(), true)))
                         || loop.hasBreak;
                 }
                 case ForStatement statement -> {
@@ -1202,8 +1504,8 @@ public final class BytecodeGenerator {
                         return true;
                     }
                     final boolean alwaysTrue =
-                        condition == null || constructorSuperclass != null
-                            && isBooleanLiteral(condition, true);
+                        condition == null || (constructorSuperclass != null
+                            && isBooleanLiteral(condition, true));
                     final Label start = new Label();
                     final Label next = new Label();
                     final Label end = new Label();
@@ -1531,6 +1833,16 @@ public final class BytecodeGenerator {
                     descriptor(symbol.type())
                 );
             }
+            else if (captureFields.containsKey(symbol)) {
+                loadCaptureStorage(symbol);
+                if (cell(symbol)) {
+                    method.visitInsn(ICONST_0);
+                    method.visitInsn(opcode(symbol.type(), IALOAD));
+                    if (reference(symbol.type())) {
+                        readObject(symbol.type());
+                    }
+                }
+            }
             else if (globals.containsKey(symbol)) {
                 method.visitFieldInsn(
                     GETSTATIC,
@@ -1574,7 +1886,7 @@ public final class BytecodeGenerator {
                 final int value = nextLocal;
                 nextLocal += slots(symbol.type());
                 method.visitVarInsn(storeOpcode(symbol.type()), value);
-                method.visitVarInsn(ALOAD, local(symbol));
+                loadCaptureStorage(symbol);
                 method.visitInsn(ICONST_0);
                 method.visitVarInsn(loadOpcode(symbol.type()), value);
                 method.visitInsn(arrayStoreOpcode(symbol.type()));
@@ -1733,7 +2045,17 @@ public final class BytecodeGenerator {
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case MemberExpression member -> member(member);
-                case ThisExpression self -> method.visitVarInsn(ALOAD, 0);
+                case ThisExpression self -> {
+                    method.visitVarInsn(ALOAD, 0);
+                    if (lexicalReceiverOwner != null) {
+                        method.visitFieldInsn(
+                            GETFIELD,
+                            Objects.requireNonNull(instance).owner(),
+                            "$receiver",
+                            "L" + lexicalReceiverOwner + ";"
+                        );
+                    }
+                }
                 case NewExpression creation -> {
                     final String name =
                         ((ClassType) semanticModel.getExpressionType(creation))
@@ -1795,6 +2117,7 @@ public final class BytecodeGenerator {
                     }
                 }
                 case SliceExpression slice -> slice(slice);
+                case ObjectExpression object -> object(object);
                 case LambdaExpression lambda -> lambda(lambda);
             }
             convertExpression(expression);
@@ -1873,6 +2196,300 @@ public final class BytecodeGenerator {
             }
         }
 
+        private String captureDescriptor(final Symbol symbol) {
+            return cell(symbol)
+                ? reference(symbol.type())
+                    ? "[Ljava/lang/Object;"
+                    : "[" + descriptor(symbol.type())
+                : descriptor(symbol.type());
+        }
+
+        private void loadCaptureStorage(final Symbol symbol) {
+            if (captureFields.containsKey(symbol)) {
+                method.visitVarInsn(ALOAD, 0);
+                method.visitFieldInsn(
+                    GETFIELD,
+                    Objects.requireNonNull(instance).owner(),
+                    Objects.requireNonNull(captureFields.get(symbol)),
+                    captureDescriptor(symbol)
+                );
+            }
+            else if (cell(symbol)) {
+                method.visitVarInsn(ALOAD, local(symbol));
+            }
+            else {
+                load(symbol);
+            }
+        }
+
+        private void object(final ObjectExpression object) {
+            final InterfaceType type =
+                (InterfaceType) semanticModel.getExpressionType(object);
+            final InterfaceContract contract = semanticModel.getInterface(type);
+            ObjectInfo info = objects.get(object);
+            if (info == null) {
+                final List<Symbol> captures = new ArrayList<>();
+                boolean receiver = false;
+                for (final ObjectMember member : object.members()) {
+                    if (contract.methods().containsKey(member.name().name())) {
+                        final LambdaExpression lambda =
+                            (LambdaExpression) unwrap(member.value());
+                        for (final Symbol capture : semanticModel
+                            .getLambdaCaptures(lambda)) {
+                            if (
+                                (locals.containsKey(capture)
+                                    || captureFields.containsKey(capture))
+                                    && !captures.contains(capture)
+                            ) {
+                                captures.add(capture);
+                            }
+                        }
+                        receiver |=
+                            AstTraversal.anyMatch(
+                                lambda.body(),
+                                ThisExpression.class::isInstance
+                            );
+                    }
+                }
+                final String owner =
+                    Objects.requireNonNull(objectNames.get(object));
+                final String receiverOwner =
+                    receiver
+                        ? lexicalReceiverOwner != null
+                            ? lexicalReceiverOwner
+                            : Objects.requireNonNull(instance).owner()
+                        : null;
+                final StringBuilder signature = new StringBuilder("(");
+                for (final ObjectMember member : object.members()) {
+                    final VariableSymbol field =
+                        contract.fields().get(member.name().name());
+                    if (field != null) {
+                        signature.append(descriptor(field.type()));
+                    }
+                }
+                for (final Symbol capture : captures) {
+                    signature.append(captureDescriptor(capture));
+                }
+                if (receiver) {
+                    signature.append("L").append(receiverOwner).append(";");
+                }
+                signature.append(")V");
+                info =
+                    new ObjectInfo(
+                        owner,
+                        List.copyOf(captures),
+                        receiver,
+                        signature.toString()
+                    );
+                objects.put(object, info);
+                objectTypes.put(owner, type);
+
+                final ClassWriter saved = currentWriter;
+                try {
+                    objectClasses.put(
+                        owner,
+                        generateObject(object, contract, info, receiverOwner)
+                    );
+                }
+                finally {
+                    currentWriter = saved;
+                }
+            }
+            method.visitTypeInsn(NEW, info.owner());
+            method.visitInsn(DUP);
+            for (final ObjectMember member : object.members()) {
+                if (contract.fields().containsKey(member.name().name())) {
+                    expression(member.value());
+                }
+            }
+            for (final Symbol capture : info.captures()) {
+                loadCaptureStorage(capture);
+            }
+            if (info.receiver()) {
+                method.visitVarInsn(ALOAD, 0);
+                if (lexicalReceiverOwner != null) {
+                    method.visitFieldInsn(
+                        GETFIELD,
+                        Objects.requireNonNull(instance).owner(),
+                        "$receiver",
+                        "L" + lexicalReceiverOwner + ";"
+                    );
+                }
+            }
+            method.visitMethodInsn(
+                INVOKESPECIAL,
+                info.owner(),
+                "<init>",
+                info.constructorDescriptor(),
+                false
+            );
+        }
+
+        private byte[] generateObject(
+            final ObjectExpression object,
+            final InterfaceContract contract,
+            final ObjectInfo info,
+            final @Nullable String receiverOwner
+        ) {
+            final ClassWriter writer = classWriter();
+            currentWriter = writer;
+            writer.visit(
+                V21,
+                ACC_FINAL | ACC_SUPER | ACC_SYNTHETIC,
+                info.owner(),
+                null,
+                "java/lang/Object",
+                new String[] {interfaceOwner(
+                    (InterfaceType) semanticModel.getExpressionType(object)
+                )}
+            );
+            writer.visitNestHost(moduleName);
+            final Map<String, String> constructorFields = new LinkedHashMap<>();
+            for (final ObjectMember member : object.members()) {
+                final VariableSymbol field =
+                    contract.fields().get(member.name().name());
+                if (field != null) {
+                    writer
+                        .visitField(
+                            ACC_PRIVATE
+                                | (field.mutability() == Mutability.CONST
+                                    ? ACC_FINAL
+                                    : 0),
+                            field.name(),
+                            descriptor(field.type()),
+                            null,
+                            null
+                        )
+                        .visitEnd();
+                    constructorFields
+                        .put(field.name(), descriptor(field.type()));
+                    generateGetter(
+                        writer,
+                        field.name(),
+                        info.owner(),
+                        field.type()
+                    );
+                    if (field.mutability() == Mutability.VAR) {
+                        generateSetter(
+                            writer,
+                            field.name(),
+                            info.owner(),
+                            field.type()
+                        );
+                    }
+                }
+            }
+            final IdentityHashMap<Symbol, String> fields =
+                new IdentityHashMap<>();
+            for (int i = 0; i < info.captures().size(); i++) {
+                final Symbol capture = info.captures().get(i);
+                final String name = "$capture" + i;
+                fields.put(capture, name);
+                writer
+                    .visitField(
+                        ACC_PRIVATE | ACC_FINAL | ACC_SYNTHETIC,
+                        name,
+                        captureDescriptor(capture),
+                        null,
+                        null
+                    )
+                    .visitEnd();
+                constructorFields.put(name, captureDescriptor(capture));
+            }
+            if (receiverOwner != null) {
+                writer
+                    .visitField(
+                        ACC_PRIVATE | ACC_FINAL | ACC_SYNTHETIC,
+                        "$receiver",
+                        "L" + receiverOwner + ";",
+                        null,
+                        null
+                    )
+                    .visitEnd();
+                constructorFields.put("$receiver", "L" + receiverOwner + ";");
+            }
+            final MethodVisitor constructor =
+                writer.visitMethod(
+                    ACC_PUBLIC,
+                    "<init>",
+                    info.constructorDescriptor(),
+                    null,
+                    null
+                );
+            constructor.visitCode();
+            constructor.visitVarInsn(ALOAD, 0);
+            constructor.visitMethodInsn(
+                INVOKESPECIAL,
+                "java/lang/Object",
+                "<init>",
+                "()V",
+                false
+            );
+            int slot = 1;
+            for (final var field : constructorFields.entrySet()) {
+                final org.objectweb.asm.Type fieldType =
+                    org.objectweb.asm.Type.getType(field.getValue());
+                constructor.visitVarInsn(ALOAD, 0);
+                constructor.visitVarInsn(fieldType.getOpcode(ILOAD), slot);
+                constructor.visitFieldInsn(
+                    PUTFIELD,
+                    info.owner(),
+                    field.getKey(),
+                    field.getValue()
+                );
+                slot += fieldType.getSize();
+            }
+            constructor.visitInsn(RETURN);
+            constructor.visitMaxs(0, 0);
+            constructor.visitEnd();
+            for (final ObjectMember member : object.members()) {
+                final FunctionSymbol implementation =
+                    contract.methods().get(member.name().name());
+                if (implementation == null) {
+                    continue;
+                }
+                final LambdaExpression lambda =
+                    (LambdaExpression) unwrap(member.value());
+                final FunctionType signature = implementation.type();
+                final MethodVisitor body =
+                    writer.visitMethod(
+                        ACC_PUBLIC,
+                        member.name().name(),
+                        methodDescriptor(signature),
+                        null,
+                        null
+                    );
+                final MethodGenerator generator =
+                    new MethodGenerator(
+                        body,
+                        globals,
+                        signature.returnType(),
+                        new InstanceContext(
+                            info.owner(),
+                            new IdentityHashMap<>()
+                        )
+                    );
+                generator.captureFields.putAll(fields);
+                generator.lexicalReceiverOwner = receiverOwner;
+                body.visitCode();
+                for (final LambdaParameter parameter : lambda.parameters()) {
+                    generator.local(semanticModel.getSymbol(parameter.name()));
+                }
+                if (lambda.body() instanceof Expression expression) {
+                    generator.expression(expression);
+                    body.visitInsn(returnOpcode(signature.returnType()));
+                    generator.finish(false);
+                }
+                else {
+                    generator.finish(
+                        generator.block((BlockStatement) lambda.body())
+                    );
+                }
+            }
+            writer.visitEnd();
+            return writer.toByteArray();
+        }
+
         private void lambda(final LambdaExpression lambda) {
             final FunctionType type =
                 (FunctionType) semanticModel.getExpressionType(lambda);
@@ -1920,6 +2537,8 @@ public final class BytecodeGenerator {
                     lambdaInstance
                 );
             generator.lambdaOwner = owner;
+            generator.captureFields.putAll(captureFields);
+            generator.lexicalReceiverOwner = lexicalReceiverOwner;
             body.visitCode();
             for (final Symbol capture : captures) {
                 generator.local(capture);
@@ -2093,11 +2712,15 @@ public final class BytecodeGenerator {
                 memberReceiver(member);
                 callArguments(call);
                 method.visitMethodInsn(
-                    INVOKEVIRTUAL,
+                    semanticModel
+                        .getMemberOwner(member) instanceof InterfaceType
+                            ? INVOKEINTERFACE
+                            : INVOKEVIRTUAL,
                     memberOwner(member),
                     function.name(),
                     callDescriptor(call, function.type()),
-                    false
+                    semanticModel
+                        .getMemberOwner(member) instanceof InterfaceType
                 );
             }
             else if (
@@ -2408,7 +3031,7 @@ public final class BytecodeGenerator {
         }
 
         private String memberOwner(final MemberExpression member) {
-            return classOwner(semanticModel.getMemberOwner(member));
+            return typeOwner(semanticModel.getMemberOwner(member));
         }
 
         private void memberReceiver(final MemberExpression member) {
@@ -2420,11 +3043,15 @@ public final class BytecodeGenerator {
             if (symbol instanceof FunctionSymbol function) {
                 method.visitLdcInsn(
                     new Handle(
-                        H_INVOKEVIRTUAL,
+                        semanticModel
+                            .getMemberOwner(member) instanceof InterfaceType
+                                ? H_INVOKEINTERFACE
+                                : H_INVOKEVIRTUAL,
                         memberOwner(member),
                         symbol.name(),
                         methodDescriptor(function.type()),
-                        false
+                        semanticModel
+                            .getMemberOwner(member) instanceof InterfaceType
                     )
                 );
                 memberReceiver(member);
@@ -2434,6 +3061,18 @@ public final class BytecodeGenerator {
                     "bindTo",
                     "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
                     false
+                );
+            }
+            else if (
+                semanticModel.getMemberOwner(member) instanceof InterfaceType
+            ) {
+                memberReceiver(member);
+                method.visitMethodInsn(
+                    INVOKEINTERFACE,
+                    memberOwner(member),
+                    "$get$" + symbol.name(),
+                    "()" + descriptor(symbol.type()),
+                    true
                 );
             }
             else {
@@ -2465,12 +3104,7 @@ public final class BytecodeGenerator {
                 memberReceiver(member);
                 expression(assignment.value());
                 method.visitInsn(slots(type) == 2 ? DUP2_X1 : DUP_X1);
-                method.visitFieldInsn(
-                    PUTFIELD,
-                    memberOwner(member),
-                    semanticModel.getReference(member.member()).name(),
-                    descriptor(type)
-                );
+                storeMember(member, type);
             }
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);
@@ -2484,6 +3118,31 @@ public final class BytecodeGenerator {
             }
             else {
                 throw unsupported(target, "Invalid assignment target");
+            }
+        }
+
+        private void storeMember(
+            final MemberExpression member,
+            final Type type
+        ) {
+            final String name =
+                semanticModel.getReference(member.member()).name();
+            if (semanticModel.getMemberOwner(member) instanceof InterfaceType) {
+                method.visitMethodInsn(
+                    INVOKEINTERFACE,
+                    memberOwner(member),
+                    "$set$" + name,
+                    "(" + descriptor(type) + ")V",
+                    true
+                );
+            }
+            else {
+                method.visitFieldInsn(
+                    PUTFIELD,
+                    memberOwner(member),
+                    name,
+                    descriptor(type)
+                );
             }
         }
 
@@ -2518,12 +3177,27 @@ public final class BytecodeGenerator {
             else if (target instanceof MemberExpression member) {
                 memberReceiver(member);
                 method.visitInsn(DUP);
-                method.visitFieldInsn(
-                    GETFIELD,
-                    memberOwner(member),
-                    semanticModel.getReference(member.member()).name(),
-                    descriptor(type)
-                );
+                if (
+                    semanticModel
+                        .getMemberOwner(member) instanceof InterfaceType
+                ) {
+                    method.visitMethodInsn(
+                        INVOKEINTERFACE,
+                        memberOwner(member),
+                        "$get$" + semanticModel.getReference(member.member())
+                            .name(),
+                        "()" + descriptor(type),
+                        true
+                    );
+                }
+                else {
+                    method.visitFieldInsn(
+                        GETFIELD,
+                        memberOwner(member),
+                        semanticModel.getReference(member.member()).name(),
+                        descriptor(type)
+                    );
+                }
                 if (postfix) {
                     method.visitInsn(slots(type) == 2 ? DUP2_X1 : DUP_X1);
                 }
@@ -2531,12 +3205,7 @@ public final class BytecodeGenerator {
                 if (!postfix) {
                     method.visitInsn(slots(type) == 2 ? DUP2_X1 : DUP_X1);
                 }
-                method.visitFieldInsn(
-                    PUTFIELD,
-                    memberOwner(member),
-                    semanticModel.getReference(member.member()).name(),
-                    descriptor(type)
-                );
+                storeMember(member, type);
             }
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);

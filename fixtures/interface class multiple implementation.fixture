@@ -1,0 +1,452 @@
+interface Value {
+    const value: i32;
+}
+interface Flag {
+    const flag: bool;
+}
+class Box implements Value, Flag {
+    public const value = 7;
+    public const flag = true;
+}
+const box = new Box();
+const value: Value = box;
+const flag: Flag = box;
+print(value.value);
+print(flag.flag);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "Flag" (4:11-4:15)
+LEFT_BRACE (4:16-4:17)
+CONST (5:5-5:10)
+IDENTIFIER "flag" (5:11-5:15)
+COLON (5:15-5:16)
+IDENTIFIER "bool" (5:17-5:21)
+SEMICOLON (5:21-5:22)
+RIGHT_BRACE (6:1-6:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Box" (7:7-7:10)
+IMPLEMENTS (7:11-7:21)
+IDENTIFIER "Value" (7:22-7:27)
+COMMA (7:27-7:28)
+IDENTIFIER "Flag" (7:29-7:33)
+LEFT_BRACE (7:34-7:35)
+PUBLIC (8:5-8:11)
+CONST (8:12-8:17)
+IDENTIFIER "value" (8:18-8:23)
+EQUAL (8:24-8:25)
+INTEGER_LITERAL "7" (8:26-8:27)
+SEMICOLON (8:27-8:28)
+PUBLIC (9:5-9:11)
+CONST (9:12-9:17)
+IDENTIFIER "flag" (9:18-9:22)
+EQUAL (9:23-9:24)
+BOOLEAN_LITERAL "true" (9:25-9:29)
+SEMICOLON (9:29-9:30)
+RIGHT_BRACE (10:1-10:2)
+CONST (11:1-11:6)
+IDENTIFIER "box" (11:7-11:10)
+EQUAL (11:11-11:12)
+NEW (11:13-11:16)
+IDENTIFIER "Box" (11:17-11:20)
+LEFT_PAREN (11:20-11:21)
+RIGHT_PAREN (11:21-11:22)
+SEMICOLON (11:22-11:23)
+CONST (12:1-12:6)
+IDENTIFIER "value" (12:7-12:12)
+COLON (12:12-12:13)
+IDENTIFIER "Value" (12:14-12:19)
+EQUAL (12:20-12:21)
+IDENTIFIER "box" (12:22-12:25)
+SEMICOLON (12:25-12:26)
+CONST (13:1-13:6)
+IDENTIFIER "flag" (13:7-13:11)
+COLON (13:11-13:12)
+IDENTIFIER "Flag" (13:13-13:17)
+EQUAL (13:18-13:19)
+IDENTIFIER "box" (13:20-13:23)
+SEMICOLON (13:23-13:24)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "value" (14:7-14:12)
+DOT (14:12-14:13)
+IDENTIFIER "value" (14:13-14:18)
+RIGHT_PAREN (14:18-14:19)
+SEMICOLON (14:19-14:20)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "flag" (15:7-15:11)
+DOT (15:11-15:12)
+IDENTIFIER "flag" (15:12-15:16)
+RIGHT_PAREN (15:16-15:17)
+SEMICOLON (15:17-15:18)
+
+--- AST ---
+
+(Program
+  range: 1:1-15:18
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:15
+      name: "Flag"
+    )
+    (UninitializedVariableDeclaration
+      range: 5:5-5:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 5:11-5:15
+        name: "flag"
+      )
+      (NamedTypeNode
+        range: 5:17-5:21
+        name: "bool"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-10:2
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "Box"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 7:22-7:27
+      name: "Value"
+    )
+    (NamedTypeNode
+      range: 7:29-7:33
+      name: "Flag"
+    )
+    (MemberDeclaration
+      range: 8:5-8:28
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 8:12-8:28
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 8:18-8:23
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 8:26-8:27
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 9:5-9:30
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 9:12-9:30
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 9:18-9:22
+          name: "flag"
+        )
+        type: null
+        (LiteralExpression
+          range: 9:25-9:29
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:10
+      name: "box"
+    )
+    type: null
+    (NewExpression
+      range: 11:13-11:22
+      (IdentifierExpression
+        range: 11:17-11:20
+        name: "Box"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 12:14-12:19
+      name: "Value"
+    )
+    (IdentifierExpression
+      range: 12:22-12:25
+      name: "box"
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:11
+      name: "flag"
+    )
+    (NamedTypeNode
+      range: 13:13-13:17
+      name: "Flag"
+    )
+    (IdentifierExpression
+      range: 13:20-13:23
+      name: "box"
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:20
+    (CallExpression
+      range: 14:1-14:19
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:18
+        (IdentifierExpression
+          range: 14:7-14:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 14:13-14:18
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:18
+    (CallExpression
+      range: 15:1-15:17
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 15:7-15:16
+        (IdentifierExpression
+          range: 15:7-15:11
+          name: "flag"
+        )
+        (IdentifierExpression
+          range: 15:12-15:16
+          name: "flag"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  8:26-8:27 -> i32
+  9:25-9:29 -> bool
+  11:13-11:22 -> Box
+  11:17-11:20 -> Box
+  12:22-12:25 -> Box
+  13:20-13:23 -> Box
+  14:1-14:6 -> (any) => void
+  14:1-14:19 -> void
+  14:7-14:12 -> Value
+  14:7-14:18 -> i32
+  14:13-14:18 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:17 -> void
+  15:7-15:11 -> Flag
+  15:7-15:16 -> bool
+  15:12-15:16 -> bool
+
+Resolved types:
+  2:18-2:21 -> i32
+  5:17-5:21 -> bool
+  7:22-7:27 -> Value
+  7:29-7:33 -> Flag
+  12:14-12:19 -> Value
+  13:13-13:17 -> Flag
+
+Declarations:
+  1:11-1:16 -> interface Value
+  2:11-2:16 -> const value: i32
+  4:11-4:15 -> interface Flag
+  5:11-5:15 -> const flag: bool
+  7:7-7:10 -> class Box
+  8:18-8:23 -> const value: i32
+  9:18-9:22 -> const flag: bool
+  11:7-11:10 -> const box: Box
+  12:7-12:12 -> const value: Value
+  13:7-13:11 -> const flag: Flag
+
+References:
+  11:17-11:20 -> 7:7-7:10
+  12:22-12:25 -> 11:7-11:10
+  13:20-13:23 -> 11:7-11:10
+  14:1-14:6 -> builtin print
+  14:7-14:12 -> 12:7-12:12
+  14:13-14:18 -> 2:11-2:16
+  15:1-15:6 -> builtin print
+  15:7-15:11 -> 13:7-13:11
+  15:12-15:16 -> 5:11-5:15
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+  NESTMEMBER Test$Value
+  NESTMEMBER Test$Flag
+  NESTMEMBER Test$Box
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Flag Test Flag
+  // access flags 0x9
+  public static INNERCLASS Test$Box Test Box
+
+  // access flags 0x19
+  public final static LTest$Box; box
+
+  // access flags 0x19
+  public final static LTest$Value; value
+
+  // access flags 0x19
+  public final static LTest$Flag; flag
+
+  // access flags 0x8
+  static <clinit>()V
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init> ()V
+    PUTSTATIC Test.box : LTest$Box;
+    GETSTATIC Test.box : LTest$Box;
+    PUTSTATIC Test.value : LTest$Value;
+    GETSTATIC Test.box : LTest$Box;
+    PUTSTATIC Test.flag : LTest$Flag;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.value : LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$value ()I (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (I)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.flag : LTest$Flag;
+    INVOKEINTERFACE Test$Flag.$get$flag ()Z (itf)
+    INVOKEVIRTUAL java/io/PrintStream.println (Z)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 0
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Value {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Value Test Value
+
+  // access flags 0x1401
+  public abstract synthetic $get$value()I
+}
+
+// class version 65.0 (65)
+// access flags 0x601
+public abstract interface Test$Flag {
+
+  NESTHOST Test
+  // access flags 0x609
+  public static abstract INNERCLASS Test$Flag Test Flag
+
+  // access flags 0x1401
+  public abstract synthetic $get$flag()Z
+}
+
+// class version 65.0 (65)
+// access flags 0x21
+public class Test$Box implements Test$Value Test$Flag {
+
+  NESTHOST Test
+  // access flags 0x9
+  public static INNERCLASS Test$Box Test Box
+
+  // access flags 0x11
+  public final I value
+
+  // access flags 0x11
+  public final Z flag
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$Box.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1001
+  public synthetic $get$flag()Z
+    ALOAD 0
+    GETFIELD Test$Box.flag : Z
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>()V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    LDC 7
+    PUTFIELD Test$Box.value : I
+    ALOAD 0
+    ICONST_1
+    PUTFIELD Test$Box.flag : Z
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+7
+true
+

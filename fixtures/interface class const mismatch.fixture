@@ -1,0 +1,87 @@
+interface Value {
+    const value: i32;
+}
+class Box implements Value {
+    public var value: i32;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Box" (4:7-4:10)
+IMPLEMENTS (4:11-4:21)
+IDENTIFIER "Value" (4:22-4:27)
+LEFT_BRACE (4:28-4:29)
+PUBLIC (5:5-5:11)
+VAR (5:12-5:15)
+IDENTIFIER "value" (5:16-5:21)
+COLON (5:21-5:22)
+IDENTIFIER "i32" (5:23-5:26)
+SEMICOLON (5:26-5:27)
+RIGHT_BRACE (6:1-6:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "Box"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:22-4:27
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 5:5-5:27
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 5:12-5:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:16-5:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 5:23-5:26
+          name: "i32"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Interface field 'value' must be constant at 5:16-5:21

@@ -94,6 +94,8 @@ public final class Parser {
                 return parseVariableDeclaration(token, Mutability.VAR);
             case CLASS:
                 return parseClassDeclaration(token);
+            case INTERFACE:
+                return parseInterfaceDeclaration(token);
             case CONSTRUCTOR:
                 return parseConstructorDeclaration(token);
             case SUPER:
@@ -171,6 +173,12 @@ public final class Parser {
         else {
             superclass = null;
         }
+        final List<@NonNull TypeNode> implementedInterfaces = new ArrayList<>();
+        if (match(TokenType.IMPLEMENTS)) {
+            do {
+                implementedInterfaces.add(parseType());
+            } while (match(TokenType.COMMA));
+        }
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull MemberDeclaration> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
@@ -223,7 +231,117 @@ public final class Parser {
         final Token close = expect(TokenType.RIGHT_BRACE);
         final Range range = keyword.range().union(close.range());
         final var id = new IdentifierDeclaration(name.text(), name.range());
-        return new ClassDeclaration(id, superclass, members, range);
+        return new ClassDeclaration(
+            id,
+            superclass,
+            implementedInterfaces,
+            members,
+            range
+        );
+    }
+
+    private InterfaceDeclaration parseInterfaceDeclaration(
+        final Token keyword
+    ) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        final List<@NonNull TypeNode> parents = new ArrayList<>();
+        if (match(TokenType.EXTENDS)) {
+            do {
+                parents.add(parseType());
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.LEFT_BRACE);
+        final List<@NonNull InterfaceMemberDeclaration> members =
+            new ArrayList<>();
+        while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            final Token start = current();
+            final Mutability mutability =
+                match(TokenType.CONST)
+                    ? Mutability.CONST
+                    : match(TokenType.VAR) ? Mutability.VAR : null;
+            final Token memberName = expect(TokenType.IDENTIFIER);
+            final IdentifierDeclaration id =
+                new IdentifierDeclaration(
+                    memberName.text(),
+                    memberName.range()
+                );
+            if (mutability == null && match(TokenType.LEFT_PAREN)) {
+                final List<@NonNull FunctionParameter> parameters =
+                    new ArrayList<>();
+                if (!check(TokenType.RIGHT_PAREN)) {
+                    do {
+                        final FunctionParameter parameter =
+                            parseFunctionParameter();
+                        if (parameter.defaultValue() != null) {
+                            throw new ParserException(
+                                parameter.defaultValue().range(),
+                                "Interface parameters cannot have default values"
+                            );
+                        }
+                        parameters.add(parameter);
+                    } while (match(TokenType.COMMA));
+                }
+                expect(TokenType.RIGHT_PAREN);
+                final TypeNode returnType =
+                    check(TokenType.SEMICOLON) ? null : parseType();
+                final Token end = expect(TokenType.SEMICOLON);
+                members.add(
+                    new InterfaceMethodDeclaration(
+                        id,
+                        parameters,
+                        returnType,
+                        start.range().union(end.range())
+                    )
+                );
+            }
+            else {
+                if (mutability == null) {
+                    throw new ParserException(
+                        start.range(),
+                        "Interface fields require a const or var modifier"
+                    );
+                }
+                expect(TokenType.COLON);
+                final TypeNode type = parseType();
+                final Token end = expect(TokenType.SEMICOLON);
+                members.add(
+                    new UninitializedVariableDeclaration(
+                        mutability,
+                        id,
+                        type,
+                        start.range().union(end.range())
+                    )
+                );
+            }
+        }
+        final Token end = expect(TokenType.RIGHT_BRACE);
+        return new InterfaceDeclaration(
+            new IdentifierDeclaration(name.text(), name.range()),
+            parents,
+            members,
+            keyword.range().union(end.range())
+        );
+    }
+
+    private ObjectExpression parseObjectExpression(final Token open) {
+        final List<@NonNull ObjectMember> members = new ArrayList<>();
+        while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            final Token name = expect(TokenType.IDENTIFIER);
+            expect(TokenType.COLON);
+            final Expression value = parseExpression();
+            members.add(
+                new ObjectMember(
+                    new IdentifierDeclaration(name.text(), name.range()),
+                    value,
+                    name.range().union(value.range())
+                )
+            );
+            if (!match(TokenType.COMMA)) {
+                break;
+            }
+        }
+        final Token close = expect(TokenType.RIGHT_BRACE);
+        return new ObjectExpression(members, open.range().union(close.range()));
     }
 
     private ReturnStatement parseReturnStatement(final Token keyword) {
@@ -776,6 +894,7 @@ public final class Parser {
                 }
             }
             case LEFT_BRACKET -> parseArrayExpression(token);
+            case LEFT_BRACE -> parseObjectExpression(token);
             default -> throw new ParserException(
                 token.range(),
                 "Expected expression, but found %s",
