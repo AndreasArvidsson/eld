@@ -1,0 +1,557 @@
+func compile(pattern: string) Regex {
+    return Regex.compile(pattern);
+}
+func match(regex: Regex, text: string) Matcher {
+    return regex.matcher(text);
+}
+const regex: Regex = compile(r"\d+");
+const matcher: Matcher = match(regex, "42");
+const matches = matcher.matches;
+print(matches());
+const quote = Regex.quote;
+print(Regex.compile(quote("a.b")).matcher("a.b").matches());
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "compile" (1:6-1:13)
+LEFT_PAREN (1:13-1:14)
+IDENTIFIER "pattern" (1:14-1:21)
+COLON (1:21-1:22)
+IDENTIFIER "string" (1:23-1:29)
+RIGHT_PAREN (1:29-1:30)
+IDENTIFIER "Regex" (1:31-1:36)
+LEFT_BRACE (1:37-1:38)
+RETURN (2:5-2:11)
+IDENTIFIER "Regex" (2:12-2:17)
+DOT (2:17-2:18)
+IDENTIFIER "compile" (2:18-2:25)
+LEFT_PAREN (2:25-2:26)
+IDENTIFIER "pattern" (2:26-2:33)
+RIGHT_PAREN (2:33-2:34)
+SEMICOLON (2:34-2:35)
+RIGHT_BRACE (3:1-3:2)
+FUNC (4:1-4:5)
+IDENTIFIER "match" (4:6-4:11)
+LEFT_PAREN (4:11-4:12)
+IDENTIFIER "regex" (4:12-4:17)
+COLON (4:17-4:18)
+IDENTIFIER "Regex" (4:19-4:24)
+COMMA (4:24-4:25)
+IDENTIFIER "text" (4:26-4:30)
+COLON (4:30-4:31)
+IDENTIFIER "string" (4:32-4:38)
+RIGHT_PAREN (4:38-4:39)
+IDENTIFIER "Matcher" (4:40-4:47)
+LEFT_BRACE (4:48-4:49)
+RETURN (5:5-5:11)
+IDENTIFIER "regex" (5:12-5:17)
+DOT (5:17-5:18)
+IDENTIFIER "matcher" (5:18-5:25)
+LEFT_PAREN (5:25-5:26)
+IDENTIFIER "text" (5:26-5:30)
+RIGHT_PAREN (5:30-5:31)
+SEMICOLON (5:31-5:32)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+IDENTIFIER "regex" (7:7-7:12)
+COLON (7:12-7:13)
+IDENTIFIER "Regex" (7:14-7:19)
+EQUAL (7:20-7:21)
+IDENTIFIER "compile" (7:22-7:29)
+LEFT_PAREN (7:29-7:30)
+RAW_STRING_LITERAL "\"\\d+\"" (7:30-7:36)
+RIGHT_PAREN (7:36-7:37)
+SEMICOLON (7:37-7:38)
+CONST (8:1-8:6)
+IDENTIFIER "matcher" (8:7-8:14)
+COLON (8:14-8:15)
+IDENTIFIER "Matcher" (8:16-8:23)
+EQUAL (8:24-8:25)
+IDENTIFIER "match" (8:26-8:31)
+LEFT_PAREN (8:31-8:32)
+IDENTIFIER "regex" (8:32-8:37)
+COMMA (8:37-8:38)
+STRING_LITERAL "\"42\"" (8:39-8:43)
+RIGHT_PAREN (8:43-8:44)
+SEMICOLON (8:44-8:45)
+CONST (9:1-9:6)
+IDENTIFIER "matches" (9:7-9:14)
+EQUAL (9:15-9:16)
+IDENTIFIER "matcher" (9:17-9:24)
+DOT (9:24-9:25)
+IDENTIFIER "matches" (9:25-9:32)
+SEMICOLON (9:32-9:33)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "matches" (10:7-10:14)
+LEFT_PAREN (10:14-10:15)
+RIGHT_PAREN (10:15-10:16)
+RIGHT_PAREN (10:16-10:17)
+SEMICOLON (10:17-10:18)
+CONST (11:1-11:6)
+IDENTIFIER "quote" (11:7-11:12)
+EQUAL (11:13-11:14)
+IDENTIFIER "Regex" (11:15-11:20)
+DOT (11:20-11:21)
+IDENTIFIER "quote" (11:21-11:26)
+SEMICOLON (11:26-11:27)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "Regex" (12:7-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "compile" (12:13-12:20)
+LEFT_PAREN (12:20-12:21)
+IDENTIFIER "quote" (12:21-12:26)
+LEFT_PAREN (12:26-12:27)
+STRING_LITERAL "\"a.b\"" (12:27-12:32)
+RIGHT_PAREN (12:32-12:33)
+RIGHT_PAREN (12:33-12:34)
+DOT (12:34-12:35)
+IDENTIFIER "matcher" (12:35-12:42)
+LEFT_PAREN (12:42-12:43)
+STRING_LITERAL "\"a.b\"" (12:43-12:48)
+RIGHT_PAREN (12:48-12:49)
+DOT (12:49-12:50)
+IDENTIFIER "matches" (12:50-12:57)
+LEFT_PAREN (12:57-12:58)
+RIGHT_PAREN (12:58-12:59)
+RIGHT_PAREN (12:59-12:60)
+SEMICOLON (12:60-12:61)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:61
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:13
+      name: "compile"
+    )
+    (FunctionParameter
+      range: 1:14-1:29
+      (IdentifierDeclaration
+        range: 1:14-1:21
+        name: "pattern"
+      )
+      (NamedTypeNode
+        range: 1:23-1:29
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:31-1:36
+      name: "Regex"
+    )
+    (BlockStatement
+      range: 1:37-3:2
+      (ReturnStatement
+        range: 2:5-2:35
+        (CallExpression
+          range: 2:12-2:34
+          (MemberExpression
+            range: 2:12-2:25
+            (IdentifierExpression
+              range: 2:12-2:17
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 2:18-2:25
+              name: "compile"
+            )
+          )
+          (IdentifierExpression
+            range: 2:26-2:33
+            name: "pattern"
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:6-4:11
+      name: "match"
+    )
+    (FunctionParameter
+      range: 4:12-4:24
+      (IdentifierDeclaration
+        range: 4:12-4:17
+        name: "regex"
+      )
+      (NamedTypeNode
+        range: 4:19-4:24
+        name: "Regex"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 4:26-4:38
+      (IdentifierDeclaration
+        range: 4:26-4:30
+        name: "text"
+      )
+      (NamedTypeNode
+        range: 4:32-4:38
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 4:40-4:47
+      name: "Matcher"
+    )
+    (BlockStatement
+      range: 4:48-6:2
+      (ReturnStatement
+        range: 5:5-5:32
+        (CallExpression
+          range: 5:12-5:31
+          (MemberExpression
+            range: 5:12-5:25
+            (IdentifierExpression
+              range: 5:12-5:17
+              name: "regex"
+            )
+            (IdentifierExpression
+              range: 5:18-5:25
+              name: "matcher"
+            )
+          )
+          (IdentifierExpression
+            range: 5:26-5:30
+            name: "text"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "regex"
+    )
+    (NamedTypeNode
+      range: 7:14-7:19
+      name: "Regex"
+    )
+    (CallExpression
+      range: 7:22-7:37
+      (IdentifierExpression
+        range: 7:22-7:29
+        name: "compile"
+      )
+      (LiteralExpression
+        range: 7:30-7:36
+        kind: RAW_STRING
+        text: "\"\\d+\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "matcher"
+    )
+    (NamedTypeNode
+      range: 8:16-8:23
+      name: "Matcher"
+    )
+    (CallExpression
+      range: 8:26-8:44
+      (IdentifierExpression
+        range: 8:26-8:31
+        name: "match"
+      )
+      (IdentifierExpression
+        range: 8:32-8:37
+        name: "regex"
+      )
+      (LiteralExpression
+        range: 8:39-8:43
+        kind: STRING
+        text: "\"42\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:14
+      name: "matches"
+    )
+    type: null
+    (MemberExpression
+      range: 9:17-9:32
+      (IdentifierExpression
+        range: 9:17-9:24
+        name: "matcher"
+      )
+      (IdentifierExpression
+        range: 9:25-9:32
+        name: "matches"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:18
+    (CallExpression
+      range: 10:1-10:17
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:16
+        (IdentifierExpression
+          range: 10:7-10:14
+          name: "matches"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "quote"
+    )
+    type: null
+    (MemberExpression
+      range: 11:15-11:26
+      (IdentifierExpression
+        range: 11:15-11:20
+        name: "Regex"
+      )
+      (IdentifierExpression
+        range: 11:21-11:26
+        name: "quote"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:61
+    (CallExpression
+      range: 12:1-12:60
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:59
+        (MemberExpression
+          range: 12:7-12:57
+          (CallExpression
+            range: 12:7-12:49
+            (MemberExpression
+              range: 12:7-12:42
+              (CallExpression
+                range: 12:7-12:34
+                (MemberExpression
+                  range: 12:7-12:20
+                  (IdentifierExpression
+                    range: 12:7-12:12
+                    name: "Regex"
+                  )
+                  (IdentifierExpression
+                    range: 12:13-12:20
+                    name: "compile"
+                  )
+                )
+                (CallExpression
+                  range: 12:21-12:33
+                  (IdentifierExpression
+                    range: 12:21-12:26
+                    name: "quote"
+                  )
+                  (LiteralExpression
+                    range: 12:27-12:32
+                    kind: STRING
+                    text: "\"a.b\""
+                  )
+                )
+              )
+              (IdentifierExpression
+                range: 12:35-12:42
+                name: "matcher"
+              )
+            )
+            (LiteralExpression
+              range: 12:43-12:48
+              kind: STRING
+              text: "\"a.b\""
+            )
+          )
+          (IdentifierExpression
+            range: 12:50-12:57
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:17 -> Regex
+  2:12-2:25 -> (string) => Regex
+  2:12-2:34 -> Regex
+  2:18-2:25 -> (string) => Regex
+  2:26-2:33 -> string
+  5:12-5:17 -> Regex
+  5:12-5:25 -> (string) => Matcher
+  5:12-5:31 -> Matcher
+  5:18-5:25 -> (string) => Matcher
+  5:26-5:30 -> string
+  7:22-7:29 -> (string) => Regex
+  7:22-7:37 -> Regex
+  7:30-7:36 -> string
+  8:26-8:31 -> (Regex, string) => Matcher
+  8:26-8:44 -> Matcher
+  8:32-8:37 -> Regex
+  8:39-8:43 -> string
+  9:17-9:24 -> Matcher
+  9:17-9:32 -> () => bool
+  9:25-9:32 -> () => bool
+  10:1-10:6 -> (any) => void
+  10:1-10:17 -> void
+  10:7-10:14 -> () => bool
+  10:7-10:16 -> bool
+  11:15-11:20 -> Regex
+  11:15-11:26 -> (string) => string
+  11:21-11:26 -> (string) => string
+  12:1-12:6 -> (any) => void
+  12:1-12:60 -> void
+  12:7-12:12 -> Regex
+  12:7-12:20 -> (string) => Regex
+  12:7-12:34 -> Regex
+  12:7-12:42 -> (string) => Matcher
+  12:7-12:49 -> Matcher
+  12:7-12:57 -> () => bool
+  12:7-12:59 -> bool
+  12:13-12:20 -> (string) => Regex
+  12:21-12:26 -> (string) => string
+  12:21-12:33 -> string
+  12:27-12:32 -> string
+  12:35-12:42 -> (string) => Matcher
+  12:43-12:48 -> string
+  12:50-12:57 -> () => bool
+
+Resolved types:
+  1:23-1:29 -> string
+  1:31-1:36 -> Regex
+  4:19-4:24 -> Regex
+  4:32-4:38 -> string
+  4:40-4:47 -> Matcher
+  7:14-7:19 -> Regex
+  8:16-8:23 -> Matcher
+
+Declarations:
+  1:6-1:13 -> compile(string) => Regex
+  1:14-1:21 -> const pattern: string
+  4:6-4:11 -> match(Regex, string) => Matcher
+  4:12-4:17 -> const regex: Regex
+  4:26-4:30 -> const text: string
+  7:7-7:12 -> const regex: Regex
+  8:7-8:14 -> const matcher: Matcher
+  9:7-9:14 -> const matches: () => bool
+  11:7-11:12 -> const quote: (string) => string
+
+References:
+  2:12-2:17 -> 2:12-2:17
+  2:18-2:25 -> 2:12-2:25
+  2:26-2:33 -> 1:14-1:21
+  5:12-5:17 -> 4:12-4:17
+  5:18-5:25 -> 5:12-5:25
+  5:26-5:30 -> 4:26-4:30
+  7:22-7:29 -> 1:6-1:13
+  8:26-8:31 -> 4:6-4:11
+  8:32-8:37 -> 7:7-7:12
+  9:17-9:24 -> 8:7-8:14
+  9:25-9:32 -> 9:17-9:32
+  10:1-10:6 -> builtin print
+  10:7-10:14 -> 9:7-9:14
+  11:15-11:20 -> 11:15-11:20
+  11:21-11:26 -> 11:15-11:26
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 12:7-12:12
+  12:13-12:20 -> 12:7-12:20
+  12:21-12:26 -> 11:7-11:12
+  12:35-12:42 -> 12:7-12:42
+  12:50-12:57 -> 12:7-12:57
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field regex Ljava/util/regex/Pattern; flags [PUBLIC, STATIC, FINAL]
+  field matcher Ljava/util/regex/Matcher; flags [PUBLIC, STATIC, FINAL]
+  field matches Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field quote Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method compile(Ljava/lang/String;)Ljava/util/regex/Pattern; flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    ARETURN
+    max stack 1 max locals 1
+  method match(Ljava/util/regex/Pattern;Ljava/lang/String;)Ljava/util/regex/Matcher; flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    ARETURN
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
+    LDC "\\d+"
+    INVOKESTATIC Test.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    PUTSTATIC Test.regex Ljava/util/regex/Pattern;
+    GETSTATIC Test.regex Ljava/util/regex/Pattern;
+    LDC "42"
+    INVOKESTATIC Test.match(Ljava/util/regex/Pattern;Ljava/lang/String;)Ljava/util/regex/Matcher;
+    PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC MethodHandleDesc[VIRTUAL/Matcher::matches(Matcher)boolean]
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[()boolean]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.matches Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matches Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC MethodHandleDesc[STATIC/Pattern::quote(String)String]
+    LDC MethodTypeDesc[(String)String]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.quote Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.quote Ljava/lang/invoke/MethodHandle;
+    LDC "a.b"
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/String;)Ljava/lang/String;
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    LDC "a.b"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+

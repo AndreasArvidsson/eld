@@ -20,14 +20,18 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 
-/** Thin source aliases for JDK ordering and collection APIs. */
+/** Thin source aliases for JDK APIs. */
 public final class JavaTypes {
     private static final Map<String, Class<?>> CLASSES =
         Map.ofEntries(
+            Map.entry("Regex", Pattern.class),
+            Map.entry("Matcher", Matcher.class),
             Map.entry("Comparable", Comparable.class),
             Map.entry("Comparator", Comparator.class),
             Map.entry("Collection", Collection.class),
@@ -115,7 +119,20 @@ public final class JavaTypes {
         int arity,
         Range range
     ) {
-        if (!METHODS.contains(name)) {
+        return methods(owner, name, arity, range, false);
+    }
+
+    public static List<JavaMethodSymbol> methods(
+        final InterfaceType owner,
+        final String name,
+        final int arity,
+        final Range range,
+        final boolean isStatic
+    ) {
+        if (
+            !METHODS.contains(name) && owner.javaClass() != Pattern.class
+                && owner.javaClass() != Matcher.class
+        ) {
             return List.of();
         }
         final Class<?> javaClass = owner.javaClass();
@@ -127,7 +144,7 @@ public final class JavaTypes {
         for (final var method : javaClass.getMethods()) {
             if (
                 !method.getName().equals(name) || method.isBridge()
-                    || Modifier.isStatic(method.getModifiers())
+                    || Modifier.isStatic(method.getModifiers()) != isStatic
             ) {
                 continue;
             }
@@ -238,8 +255,13 @@ public final class JavaTypes {
             if (cls == char.class || cls == Character.class) {
                 return BuiltinType.CHAR;
             }
-            if (cls == String.class) {
+            if (cls == String.class || cls == CharSequence.class) {
                 return BuiltinType.STRING;
+            }
+            for (final var entry : CLASSES.entrySet()) {
+                if (entry.getValue() == cls) {
+                    return type(entry.getKey(), List.of());
+                }
             }
             if (cls == Object.class) {
                 return BuiltinType.ANY;

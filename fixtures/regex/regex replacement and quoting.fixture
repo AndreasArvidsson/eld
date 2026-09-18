@@ -1,0 +1,545 @@
+const matcher = Regex.compile(r"(\d+)").matcher("a12b34");
+print(matcher.replaceAll("<$1>"));
+print(matcher.replaceFirst("#"));
+print(matcher.replaceAll(Matcher.quoteReplacement("$1")));
+const literal: Regex = Regex.compile(Regex.quote("a.b"));
+print(literal.matcher("a.b").matches());
+print(literal.matcher("axb").matches());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "matcher" (1:7-1:14)
+EQUAL (1:15-1:16)
+IDENTIFIER "Regex" (1:17-1:22)
+DOT (1:22-1:23)
+IDENTIFIER "compile" (1:23-1:30)
+LEFT_PAREN (1:30-1:31)
+RAW_STRING_LITERAL "\"(\\d+)\"" (1:31-1:39)
+RIGHT_PAREN (1:39-1:40)
+DOT (1:40-1:41)
+IDENTIFIER "matcher" (1:41-1:48)
+LEFT_PAREN (1:48-1:49)
+STRING_LITERAL "\"a12b34\"" (1:49-1:57)
+RIGHT_PAREN (1:57-1:58)
+SEMICOLON (1:58-1:59)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "matcher" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "replaceAll" (2:15-2:25)
+LEFT_PAREN (2:25-2:26)
+STRING_LITERAL "\"<$1>\"" (2:26-2:32)
+RIGHT_PAREN (2:32-2:33)
+RIGHT_PAREN (2:33-2:34)
+SEMICOLON (2:34-2:35)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "matcher" (3:7-3:14)
+DOT (3:14-3:15)
+IDENTIFIER "replaceFirst" (3:15-3:27)
+LEFT_PAREN (3:27-3:28)
+STRING_LITERAL "\"#\"" (3:28-3:31)
+RIGHT_PAREN (3:31-3:32)
+RIGHT_PAREN (3:32-3:33)
+SEMICOLON (3:33-3:34)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "matcher" (4:7-4:14)
+DOT (4:14-4:15)
+IDENTIFIER "replaceAll" (4:15-4:25)
+LEFT_PAREN (4:25-4:26)
+IDENTIFIER "Matcher" (4:26-4:33)
+DOT (4:33-4:34)
+IDENTIFIER "quoteReplacement" (4:34-4:50)
+LEFT_PAREN (4:50-4:51)
+STRING_LITERAL "\"$1\"" (4:51-4:55)
+RIGHT_PAREN (4:55-4:56)
+RIGHT_PAREN (4:56-4:57)
+RIGHT_PAREN (4:57-4:58)
+SEMICOLON (4:58-4:59)
+CONST (5:1-5:6)
+IDENTIFIER "literal" (5:7-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "Regex" (5:16-5:21)
+EQUAL (5:22-5:23)
+IDENTIFIER "Regex" (5:24-5:29)
+DOT (5:29-5:30)
+IDENTIFIER "compile" (5:30-5:37)
+LEFT_PAREN (5:37-5:38)
+IDENTIFIER "Regex" (5:38-5:43)
+DOT (5:43-5:44)
+IDENTIFIER "quote" (5:44-5:49)
+LEFT_PAREN (5:49-5:50)
+STRING_LITERAL "\"a.b\"" (5:50-5:55)
+RIGHT_PAREN (5:55-5:56)
+RIGHT_PAREN (5:56-5:57)
+SEMICOLON (5:57-5:58)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "literal" (6:7-6:14)
+DOT (6:14-6:15)
+IDENTIFIER "matcher" (6:15-6:22)
+LEFT_PAREN (6:22-6:23)
+STRING_LITERAL "\"a.b\"" (6:23-6:28)
+RIGHT_PAREN (6:28-6:29)
+DOT (6:29-6:30)
+IDENTIFIER "matches" (6:30-6:37)
+LEFT_PAREN (6:37-6:38)
+RIGHT_PAREN (6:38-6:39)
+RIGHT_PAREN (6:39-6:40)
+SEMICOLON (6:40-6:41)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "literal" (7:7-7:14)
+DOT (7:14-7:15)
+IDENTIFIER "matcher" (7:15-7:22)
+LEFT_PAREN (7:22-7:23)
+STRING_LITERAL "\"axb\"" (7:23-7:28)
+RIGHT_PAREN (7:28-7:29)
+DOT (7:29-7:30)
+IDENTIFIER "matches" (7:30-7:37)
+LEFT_PAREN (7:37-7:38)
+RIGHT_PAREN (7:38-7:39)
+RIGHT_PAREN (7:39-7:40)
+SEMICOLON (7:40-7:41)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:41
+  (VariableDeclaration
+    range: 1:1-1:59
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "matcher"
+    )
+    type: null
+    (CallExpression
+      range: 1:17-1:58
+      (MemberExpression
+        range: 1:17-1:48
+        (CallExpression
+          range: 1:17-1:40
+          (MemberExpression
+            range: 1:17-1:30
+            (IdentifierExpression
+              range: 1:17-1:22
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 1:23-1:30
+              name: "compile"
+            )
+          )
+          (LiteralExpression
+            range: 1:31-1:39
+            kind: RAW_STRING
+            text: "\"(\\d+)\""
+          )
+        )
+        (IdentifierExpression
+          range: 1:41-1:48
+          name: "matcher"
+        )
+      )
+      (LiteralExpression
+        range: 1:49-1:57
+        kind: STRING
+        text: "\"a12b34\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:35
+    (CallExpression
+      range: 2:1-2:34
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:33
+        (MemberExpression
+          range: 2:7-2:25
+          (IdentifierExpression
+            range: 2:7-2:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 2:15-2:25
+            name: "replaceAll"
+          )
+        )
+        (LiteralExpression
+          range: 2:26-2:32
+          kind: STRING
+          text: "\"<$1>\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:34
+    (CallExpression
+      range: 3:1-3:33
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:32
+        (MemberExpression
+          range: 3:7-3:27
+          (IdentifierExpression
+            range: 3:7-3:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 3:15-3:27
+            name: "replaceFirst"
+          )
+        )
+        (LiteralExpression
+          range: 3:28-3:31
+          kind: STRING
+          text: "\"#\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:59
+    (CallExpression
+      range: 4:1-4:58
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:57
+        (MemberExpression
+          range: 4:7-4:25
+          (IdentifierExpression
+            range: 4:7-4:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 4:15-4:25
+            name: "replaceAll"
+          )
+        )
+        (CallExpression
+          range: 4:26-4:56
+          (MemberExpression
+            range: 4:26-4:50
+            (IdentifierExpression
+              range: 4:26-4:33
+              name: "Matcher"
+            )
+            (IdentifierExpression
+              range: 4:34-4:50
+              name: "quoteReplacement"
+            )
+          )
+          (LiteralExpression
+            range: 4:51-4:55
+            kind: STRING
+            text: "\"$1\""
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:58
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "literal"
+    )
+    (NamedTypeNode
+      range: 5:16-5:21
+      name: "Regex"
+    )
+    (CallExpression
+      range: 5:24-5:57
+      (MemberExpression
+        range: 5:24-5:37
+        (IdentifierExpression
+          range: 5:24-5:29
+          name: "Regex"
+        )
+        (IdentifierExpression
+          range: 5:30-5:37
+          name: "compile"
+        )
+      )
+      (CallExpression
+        range: 5:38-5:56
+        (MemberExpression
+          range: 5:38-5:49
+          (IdentifierExpression
+            range: 5:38-5:43
+            name: "Regex"
+          )
+          (IdentifierExpression
+            range: 5:44-5:49
+            name: "quote"
+          )
+        )
+        (LiteralExpression
+          range: 5:50-5:55
+          kind: STRING
+          text: "\"a.b\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:41
+    (CallExpression
+      range: 6:1-6:40
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:39
+        (MemberExpression
+          range: 6:7-6:37
+          (CallExpression
+            range: 6:7-6:29
+            (MemberExpression
+              range: 6:7-6:22
+              (IdentifierExpression
+                range: 6:7-6:14
+                name: "literal"
+              )
+              (IdentifierExpression
+                range: 6:15-6:22
+                name: "matcher"
+              )
+            )
+            (LiteralExpression
+              range: 6:23-6:28
+              kind: STRING
+              text: "\"a.b\""
+            )
+          )
+          (IdentifierExpression
+            range: 6:30-6:37
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:41
+    (CallExpression
+      range: 7:1-7:40
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:39
+        (MemberExpression
+          range: 7:7-7:37
+          (CallExpression
+            range: 7:7-7:29
+            (MemberExpression
+              range: 7:7-7:22
+              (IdentifierExpression
+                range: 7:7-7:14
+                name: "literal"
+              )
+              (IdentifierExpression
+                range: 7:15-7:22
+                name: "matcher"
+              )
+            )
+            (LiteralExpression
+              range: 7:23-7:28
+              kind: STRING
+              text: "\"axb\""
+            )
+          )
+          (IdentifierExpression
+            range: 7:30-7:37
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:17-1:22 -> Regex
+  1:17-1:30 -> (string) => Regex
+  1:17-1:40 -> Regex
+  1:17-1:48 -> (string) => Matcher
+  1:17-1:58 -> Matcher
+  1:23-1:30 -> (string) => Regex
+  1:31-1:39 -> string
+  1:41-1:48 -> (string) => Matcher
+  1:49-1:57 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:34 -> void
+  2:7-2:14 -> Matcher
+  2:7-2:25 -> (string) => string
+  2:7-2:33 -> string
+  2:15-2:25 -> (string) => string
+  2:26-2:32 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:33 -> void
+  3:7-3:14 -> Matcher
+  3:7-3:27 -> (string) => string
+  3:7-3:32 -> string
+  3:15-3:27 -> (string) => string
+  3:28-3:31 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:58 -> void
+  4:7-4:14 -> Matcher
+  4:7-4:25 -> (string) => string
+  4:7-4:57 -> string
+  4:15-4:25 -> (string) => string
+  4:26-4:33 -> Matcher
+  4:26-4:50 -> (string) => string
+  4:26-4:56 -> string
+  4:34-4:50 -> (string) => string
+  4:51-4:55 -> string
+  5:24-5:29 -> Regex
+  5:24-5:37 -> (string) => Regex
+  5:24-5:57 -> Regex
+  5:30-5:37 -> (string) => Regex
+  5:38-5:43 -> Regex
+  5:38-5:49 -> (string) => string
+  5:38-5:56 -> string
+  5:44-5:49 -> (string) => string
+  5:50-5:55 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:40 -> void
+  6:7-6:14 -> Regex
+  6:7-6:22 -> (string) => Matcher
+  6:7-6:29 -> Matcher
+  6:7-6:37 -> () => bool
+  6:7-6:39 -> bool
+  6:15-6:22 -> (string) => Matcher
+  6:23-6:28 -> string
+  6:30-6:37 -> () => bool
+  7:1-7:6 -> (any) => void
+  7:1-7:40 -> void
+  7:7-7:14 -> Regex
+  7:7-7:22 -> (string) => Matcher
+  7:7-7:29 -> Matcher
+  7:7-7:37 -> () => bool
+  7:7-7:39 -> bool
+  7:15-7:22 -> (string) => Matcher
+  7:23-7:28 -> string
+  7:30-7:37 -> () => bool
+
+Resolved types:
+  5:16-5:21 -> Regex
+
+Declarations:
+  1:7-1:14 -> const matcher: Matcher
+  5:7-5:14 -> const literal: Regex
+
+References:
+  1:17-1:22 -> 1:17-1:22
+  1:23-1:30 -> 1:17-1:30
+  1:41-1:48 -> 1:17-1:48
+  2:1-2:6 -> builtin print
+  2:7-2:14 -> 1:7-1:14
+  2:15-2:25 -> 2:7-2:25
+  3:1-3:6 -> builtin print
+  3:7-3:14 -> 1:7-1:14
+  3:15-3:27 -> 3:7-3:27
+  4:1-4:6 -> builtin print
+  4:7-4:14 -> 1:7-1:14
+  4:15-4:25 -> 4:7-4:25
+  4:26-4:33 -> 4:26-4:33
+  4:34-4:50 -> 4:26-4:50
+  5:24-5:29 -> 5:24-5:29
+  5:30-5:37 -> 5:24-5:37
+  5:38-5:43 -> 5:38-5:43
+  5:44-5:49 -> 5:38-5:49
+  6:1-6:6 -> builtin print
+  6:7-6:14 -> 5:7-5:14
+  6:15-6:22 -> 6:7-6:22
+  6:30-6:37 -> 6:7-6:37
+  7:1-7:6 -> builtin print
+  7:7-7:14 -> 5:7-5:14
+  7:15-7:22 -> 7:7-7:22
+  7:30-7:37 -> 7:7-7:37
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field matcher Ljava/util/regex/Matcher; flags [PUBLIC, STATIC, FINAL]
+  field literal Ljava/util/regex/Pattern; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC "(\\d+)"
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    LDC "a12b34"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "<$1>"
+    INVOKEVIRTUAL java/util/regex/Matcher.replaceAll(Ljava/lang/String;)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "#"
+    INVOKEVIRTUAL java/util/regex/Matcher.replaceFirst(Ljava/lang/String;)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "$1"
+    INVOKESTATIC java/util/regex/Matcher.quoteReplacement(Ljava/lang/String;)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/util/regex/Matcher.replaceAll(Ljava/lang/String;)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    LDC "a.b"
+    INVOKESTATIC java/util/regex/Pattern.quote(Ljava/lang/String;)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    PUTSTATIC Test.literal Ljava/util/regex/Pattern;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.literal Ljava/util/regex/Pattern;
+    LDC "a.b"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.literal Ljava/util/regex/Pattern;
+    LDC "axb"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+a<12>b<34>
+a#b34
+a$1b$1
+true
+false
+

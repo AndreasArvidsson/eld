@@ -1,0 +1,52 @@
+const regex = Regex.compile(42);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "regex" (1:7-1:12)
+EQUAL (1:13-1:14)
+IDENTIFIER "Regex" (1:15-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "compile" (1:21-1:28)
+LEFT_PAREN (1:28-1:29)
+INTEGER_LITERAL "42" (1:29-1:31)
+RIGHT_PAREN (1:31-1:32)
+SEMICOLON (1:32-1:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:33
+  (VariableDeclaration
+    range: 1:1-1:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "regex"
+    )
+    type: null
+    (CallExpression
+      range: 1:15-1:32
+      (MemberExpression
+        range: 1:15-1:28
+        (IdentifierExpression
+          range: 1:15-1:20
+          name: "Regex"
+        )
+        (IdentifierExpression
+          range: 1:21-1:28
+          name: "compile"
+        )
+      )
+      (LiteralExpression
+        range: 1:29-1:31
+        kind: INT
+        text: "42"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot pass i32 as string at 1:29-1:31

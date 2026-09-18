@@ -1,0 +1,796 @@
+const regex: Regex = Regex.compile(r"\d+");
+const matcher: Matcher = regex.matcher("123abc");
+print(matcher.lookingAt());
+print(matcher.matches());
+print(matcher.reset("456").matches());
+print(matcher.pattern().pattern());
+print(matcher.reset().find());
+print(matcher.reset("x789y").region(1, 4).matches());
+print(matcher.regionStart());
+print(matcher.regionEnd());
+print(matcher.usePattern(Regex.compile("abc")).reset("abc").matches());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "regex" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "Regex" (1:14-1:19)
+EQUAL (1:20-1:21)
+IDENTIFIER "Regex" (1:22-1:27)
+DOT (1:27-1:28)
+IDENTIFIER "compile" (1:28-1:35)
+LEFT_PAREN (1:35-1:36)
+RAW_STRING_LITERAL "\"\\d+\"" (1:36-1:42)
+RIGHT_PAREN (1:42-1:43)
+SEMICOLON (1:43-1:44)
+CONST (2:1-2:6)
+IDENTIFIER "matcher" (2:7-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "Matcher" (2:16-2:23)
+EQUAL (2:24-2:25)
+IDENTIFIER "regex" (2:26-2:31)
+DOT (2:31-2:32)
+IDENTIFIER "matcher" (2:32-2:39)
+LEFT_PAREN (2:39-2:40)
+STRING_LITERAL "\"123abc\"" (2:40-2:48)
+RIGHT_PAREN (2:48-2:49)
+SEMICOLON (2:49-2:50)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "matcher" (3:7-3:14)
+DOT (3:14-3:15)
+IDENTIFIER "lookingAt" (3:15-3:24)
+LEFT_PAREN (3:24-3:25)
+RIGHT_PAREN (3:25-3:26)
+RIGHT_PAREN (3:26-3:27)
+SEMICOLON (3:27-3:28)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "matcher" (4:7-4:14)
+DOT (4:14-4:15)
+IDENTIFIER "matches" (4:15-4:22)
+LEFT_PAREN (4:22-4:23)
+RIGHT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+SEMICOLON (4:25-4:26)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "matcher" (5:7-5:14)
+DOT (5:14-5:15)
+IDENTIFIER "reset" (5:15-5:20)
+LEFT_PAREN (5:20-5:21)
+STRING_LITERAL "\"456\"" (5:21-5:26)
+RIGHT_PAREN (5:26-5:27)
+DOT (5:27-5:28)
+IDENTIFIER "matches" (5:28-5:35)
+LEFT_PAREN (5:35-5:36)
+RIGHT_PAREN (5:36-5:37)
+RIGHT_PAREN (5:37-5:38)
+SEMICOLON (5:38-5:39)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "matcher" (6:7-6:14)
+DOT (6:14-6:15)
+IDENTIFIER "pattern" (6:15-6:22)
+LEFT_PAREN (6:22-6:23)
+RIGHT_PAREN (6:23-6:24)
+DOT (6:24-6:25)
+IDENTIFIER "pattern" (6:25-6:32)
+LEFT_PAREN (6:32-6:33)
+RIGHT_PAREN (6:33-6:34)
+RIGHT_PAREN (6:34-6:35)
+SEMICOLON (6:35-6:36)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "matcher" (7:7-7:14)
+DOT (7:14-7:15)
+IDENTIFIER "reset" (7:15-7:20)
+LEFT_PAREN (7:20-7:21)
+RIGHT_PAREN (7:21-7:22)
+DOT (7:22-7:23)
+IDENTIFIER "find" (7:23-7:27)
+LEFT_PAREN (7:27-7:28)
+RIGHT_PAREN (7:28-7:29)
+RIGHT_PAREN (7:29-7:30)
+SEMICOLON (7:30-7:31)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "matcher" (8:7-8:14)
+DOT (8:14-8:15)
+IDENTIFIER "reset" (8:15-8:20)
+LEFT_PAREN (8:20-8:21)
+STRING_LITERAL "\"x789y\"" (8:21-8:28)
+RIGHT_PAREN (8:28-8:29)
+DOT (8:29-8:30)
+IDENTIFIER "region" (8:30-8:36)
+LEFT_PAREN (8:36-8:37)
+INTEGER_LITERAL "1" (8:37-8:38)
+COMMA (8:38-8:39)
+INTEGER_LITERAL "4" (8:40-8:41)
+RIGHT_PAREN (8:41-8:42)
+DOT (8:42-8:43)
+IDENTIFIER "matches" (8:43-8:50)
+LEFT_PAREN (8:50-8:51)
+RIGHT_PAREN (8:51-8:52)
+RIGHT_PAREN (8:52-8:53)
+SEMICOLON (8:53-8:54)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "matcher" (9:7-9:14)
+DOT (9:14-9:15)
+IDENTIFIER "regionStart" (9:15-9:26)
+LEFT_PAREN (9:26-9:27)
+RIGHT_PAREN (9:27-9:28)
+RIGHT_PAREN (9:28-9:29)
+SEMICOLON (9:29-9:30)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "matcher" (10:7-10:14)
+DOT (10:14-10:15)
+IDENTIFIER "regionEnd" (10:15-10:24)
+LEFT_PAREN (10:24-10:25)
+RIGHT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+SEMICOLON (10:27-10:28)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "matcher" (11:7-11:14)
+DOT (11:14-11:15)
+IDENTIFIER "usePattern" (11:15-11:25)
+LEFT_PAREN (11:25-11:26)
+IDENTIFIER "Regex" (11:26-11:31)
+DOT (11:31-11:32)
+IDENTIFIER "compile" (11:32-11:39)
+LEFT_PAREN (11:39-11:40)
+STRING_LITERAL "\"abc\"" (11:40-11:45)
+RIGHT_PAREN (11:45-11:46)
+RIGHT_PAREN (11:46-11:47)
+DOT (11:47-11:48)
+IDENTIFIER "reset" (11:48-11:53)
+LEFT_PAREN (11:53-11:54)
+STRING_LITERAL "\"abc\"" (11:54-11:59)
+RIGHT_PAREN (11:59-11:60)
+DOT (11:60-11:61)
+IDENTIFIER "matches" (11:61-11:68)
+LEFT_PAREN (11:68-11:69)
+RIGHT_PAREN (11:69-11:70)
+RIGHT_PAREN (11:70-11:71)
+SEMICOLON (11:71-11:72)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:72
+  (VariableDeclaration
+    range: 1:1-1:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "regex"
+    )
+    (NamedTypeNode
+      range: 1:14-1:19
+      name: "Regex"
+    )
+    (CallExpression
+      range: 1:22-1:43
+      (MemberExpression
+        range: 1:22-1:35
+        (IdentifierExpression
+          range: 1:22-1:27
+          name: "Regex"
+        )
+        (IdentifierExpression
+          range: 1:28-1:35
+          name: "compile"
+        )
+      )
+      (LiteralExpression
+        range: 1:36-1:42
+        kind: RAW_STRING
+        text: "\"\\d+\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "matcher"
+    )
+    (NamedTypeNode
+      range: 2:16-2:23
+      name: "Matcher"
+    )
+    (CallExpression
+      range: 2:26-2:49
+      (MemberExpression
+        range: 2:26-2:39
+        (IdentifierExpression
+          range: 2:26-2:31
+          name: "regex"
+        )
+        (IdentifierExpression
+          range: 2:32-2:39
+          name: "matcher"
+        )
+      )
+      (LiteralExpression
+        range: 2:40-2:48
+        kind: STRING
+        text: "\"123abc\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:28
+    (CallExpression
+      range: 3:1-3:27
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:26
+        (MemberExpression
+          range: 3:7-3:24
+          (IdentifierExpression
+            range: 3:7-3:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 3:15-3:24
+            name: "lookingAt"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:26
+    (CallExpression
+      range: 4:1-4:25
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:24
+        (MemberExpression
+          range: 4:7-4:22
+          (IdentifierExpression
+            range: 4:7-4:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 4:15-4:22
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:39
+    (CallExpression
+      range: 5:1-5:38
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:37
+        (MemberExpression
+          range: 5:7-5:35
+          (CallExpression
+            range: 5:7-5:27
+            (MemberExpression
+              range: 5:7-5:20
+              (IdentifierExpression
+                range: 5:7-5:14
+                name: "matcher"
+              )
+              (IdentifierExpression
+                range: 5:15-5:20
+                name: "reset"
+              )
+            )
+            (LiteralExpression
+              range: 5:21-5:26
+              kind: STRING
+              text: "\"456\""
+            )
+          )
+          (IdentifierExpression
+            range: 5:28-5:35
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:36
+    (CallExpression
+      range: 6:1-6:35
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:34
+        (MemberExpression
+          range: 6:7-6:32
+          (CallExpression
+            range: 6:7-6:24
+            (MemberExpression
+              range: 6:7-6:22
+              (IdentifierExpression
+                range: 6:7-6:14
+                name: "matcher"
+              )
+              (IdentifierExpression
+                range: 6:15-6:22
+                name: "pattern"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 6:25-6:32
+            name: "pattern"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:31
+    (CallExpression
+      range: 7:1-7:30
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:29
+        (MemberExpression
+          range: 7:7-7:27
+          (CallExpression
+            range: 7:7-7:22
+            (MemberExpression
+              range: 7:7-7:20
+              (IdentifierExpression
+                range: 7:7-7:14
+                name: "matcher"
+              )
+              (IdentifierExpression
+                range: 7:15-7:20
+                name: "reset"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 7:23-7:27
+            name: "find"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:54
+    (CallExpression
+      range: 8:1-8:53
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:52
+        (MemberExpression
+          range: 8:7-8:50
+          (CallExpression
+            range: 8:7-8:42
+            (MemberExpression
+              range: 8:7-8:36
+              (CallExpression
+                range: 8:7-8:29
+                (MemberExpression
+                  range: 8:7-8:20
+                  (IdentifierExpression
+                    range: 8:7-8:14
+                    name: "matcher"
+                  )
+                  (IdentifierExpression
+                    range: 8:15-8:20
+                    name: "reset"
+                  )
+                )
+                (LiteralExpression
+                  range: 8:21-8:28
+                  kind: STRING
+                  text: "\"x789y\""
+                )
+              )
+              (IdentifierExpression
+                range: 8:30-8:36
+                name: "region"
+              )
+            )
+            (LiteralExpression
+              range: 8:37-8:38
+              kind: INT
+              text: "1"
+            )
+            (LiteralExpression
+              range: 8:40-8:41
+              kind: INT
+              text: "4"
+            )
+          )
+          (IdentifierExpression
+            range: 8:43-8:50
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:30
+    (CallExpression
+      range: 9:1-9:29
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:28
+        (MemberExpression
+          range: 9:7-9:26
+          (IdentifierExpression
+            range: 9:7-9:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 9:15-9:26
+            name: "regionStart"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:28
+    (CallExpression
+      range: 10:1-10:27
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:26
+        (MemberExpression
+          range: 10:7-10:24
+          (IdentifierExpression
+            range: 10:7-10:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 10:15-10:24
+            name: "regionEnd"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:72
+    (CallExpression
+      range: 11:1-11:71
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:70
+        (MemberExpression
+          range: 11:7-11:68
+          (CallExpression
+            range: 11:7-11:60
+            (MemberExpression
+              range: 11:7-11:53
+              (CallExpression
+                range: 11:7-11:47
+                (MemberExpression
+                  range: 11:7-11:25
+                  (IdentifierExpression
+                    range: 11:7-11:14
+                    name: "matcher"
+                  )
+                  (IdentifierExpression
+                    range: 11:15-11:25
+                    name: "usePattern"
+                  )
+                )
+                (CallExpression
+                  range: 11:26-11:46
+                  (MemberExpression
+                    range: 11:26-11:39
+                    (IdentifierExpression
+                      range: 11:26-11:31
+                      name: "Regex"
+                    )
+                    (IdentifierExpression
+                      range: 11:32-11:39
+                      name: "compile"
+                    )
+                  )
+                  (LiteralExpression
+                    range: 11:40-11:45
+                    kind: STRING
+                    text: "\"abc\""
+                  )
+                )
+              )
+              (IdentifierExpression
+                range: 11:48-11:53
+                name: "reset"
+              )
+            )
+            (LiteralExpression
+              range: 11:54-11:59
+              kind: STRING
+              text: "\"abc\""
+            )
+          )
+          (IdentifierExpression
+            range: 11:61-11:68
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:22-1:27 -> Regex
+  1:22-1:35 -> (string) => Regex
+  1:22-1:43 -> Regex
+  1:28-1:35 -> (string) => Regex
+  1:36-1:42 -> string
+  2:26-2:31 -> Regex
+  2:26-2:39 -> (string) => Matcher
+  2:26-2:49 -> Matcher
+  2:32-2:39 -> (string) => Matcher
+  2:40-2:48 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:27 -> void
+  3:7-3:14 -> Matcher
+  3:7-3:24 -> () => bool
+  3:7-3:26 -> bool
+  3:15-3:24 -> () => bool
+  4:1-4:6 -> (any) => void
+  4:1-4:25 -> void
+  4:7-4:14 -> Matcher
+  4:7-4:22 -> () => bool
+  4:7-4:24 -> bool
+  4:15-4:22 -> () => bool
+  5:1-5:6 -> (any) => void
+  5:1-5:38 -> void
+  5:7-5:14 -> Matcher
+  5:7-5:20 -> (string) => Matcher
+  5:7-5:27 -> Matcher
+  5:7-5:35 -> () => bool
+  5:7-5:37 -> bool
+  5:15-5:20 -> (string) => Matcher
+  5:21-5:26 -> string
+  5:28-5:35 -> () => bool
+  6:1-6:6 -> (any) => void
+  6:1-6:35 -> void
+  6:7-6:14 -> Matcher
+  6:7-6:22 -> () => Regex
+  6:7-6:24 -> Regex
+  6:7-6:32 -> () => string
+  6:7-6:34 -> string
+  6:15-6:22 -> () => Regex
+  6:25-6:32 -> () => string
+  7:1-7:6 -> (any) => void
+  7:1-7:30 -> void
+  7:7-7:14 -> Matcher
+  7:7-7:20 -> () => Matcher
+  7:7-7:22 -> Matcher
+  7:7-7:27 -> () => bool
+  7:7-7:29 -> bool
+  7:15-7:20 -> () => Matcher
+  7:23-7:27 -> () => bool
+  8:1-8:6 -> (any) => void
+  8:1-8:53 -> void
+  8:7-8:14 -> Matcher
+  8:7-8:20 -> (string) => Matcher
+  8:7-8:29 -> Matcher
+  8:7-8:36 -> (i32, i32) => Matcher
+  8:7-8:42 -> Matcher
+  8:7-8:50 -> () => bool
+  8:7-8:52 -> bool
+  8:15-8:20 -> (string) => Matcher
+  8:21-8:28 -> string
+  8:30-8:36 -> (i32, i32) => Matcher
+  8:37-8:38 -> i32
+  8:40-8:41 -> i32
+  8:43-8:50 -> () => bool
+  9:1-9:6 -> (any) => void
+  9:1-9:29 -> void
+  9:7-9:14 -> Matcher
+  9:7-9:26 -> () => i32
+  9:7-9:28 -> i32
+  9:15-9:26 -> () => i32
+  10:1-10:6 -> (any) => void
+  10:1-10:27 -> void
+  10:7-10:14 -> Matcher
+  10:7-10:24 -> () => i32
+  10:7-10:26 -> i32
+  10:15-10:24 -> () => i32
+  11:1-11:6 -> (any) => void
+  11:1-11:71 -> void
+  11:7-11:14 -> Matcher
+  11:7-11:25 -> (Regex) => Matcher
+  11:7-11:47 -> Matcher
+  11:7-11:53 -> (string) => Matcher
+  11:7-11:60 -> Matcher
+  11:7-11:68 -> () => bool
+  11:7-11:70 -> bool
+  11:15-11:25 -> (Regex) => Matcher
+  11:26-11:31 -> Regex
+  11:26-11:39 -> (string) => Regex
+  11:26-11:46 -> Regex
+  11:32-11:39 -> (string) => Regex
+  11:40-11:45 -> string
+  11:48-11:53 -> (string) => Matcher
+  11:54-11:59 -> string
+  11:61-11:68 -> () => bool
+
+Resolved types:
+  1:14-1:19 -> Regex
+  2:16-2:23 -> Matcher
+
+Declarations:
+  1:7-1:12 -> const regex: Regex
+  2:7-2:14 -> const matcher: Matcher
+
+References:
+  1:22-1:27 -> 1:22-1:27
+  1:28-1:35 -> 1:22-1:35
+  2:26-2:31 -> 1:7-1:12
+  2:32-2:39 -> 2:26-2:39
+  3:1-3:6 -> builtin print
+  3:7-3:14 -> 2:7-2:14
+  3:15-3:24 -> 3:7-3:24
+  4:1-4:6 -> builtin print
+  4:7-4:14 -> 2:7-2:14
+  4:15-4:22 -> 4:7-4:22
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 2:7-2:14
+  5:15-5:20 -> 5:7-5:20
+  5:28-5:35 -> 5:7-5:35
+  6:1-6:6 -> builtin print
+  6:7-6:14 -> 2:7-2:14
+  6:15-6:22 -> 6:7-6:22
+  6:25-6:32 -> 6:7-6:32
+  7:1-7:6 -> builtin print
+  7:7-7:14 -> 2:7-2:14
+  7:15-7:20 -> 7:7-7:20
+  7:23-7:27 -> 7:7-7:27
+  8:1-8:6 -> builtin print
+  8:7-8:14 -> 2:7-2:14
+  8:15-8:20 -> 8:7-8:20
+  8:30-8:36 -> 8:7-8:36
+  8:43-8:50 -> 8:7-8:50
+  9:1-9:6 -> builtin print
+  9:7-9:14 -> 2:7-2:14
+  9:15-9:26 -> 9:7-9:26
+  10:1-10:6 -> builtin print
+  10:7-10:14 -> 2:7-2:14
+  10:15-10:24 -> 10:7-10:24
+  11:1-11:6 -> builtin print
+  11:7-11:14 -> 2:7-2:14
+  11:15-11:25 -> 11:7-11:25
+  11:26-11:31 -> 11:26-11:31
+  11:32-11:39 -> 11:26-11:39
+  11:48-11:53 -> 11:7-11:53
+  11:61-11:68 -> 11:7-11:68
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field regex Ljava/util/regex/Pattern; flags [PUBLIC, STATIC, FINAL]
+  field matcher Ljava/util/regex/Matcher; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC "\\d+"
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    PUTSTATIC Test.regex Ljava/util/regex/Pattern;
+    GETSTATIC Test.regex Ljava/util/regex/Pattern;
+    LDC "123abc"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.lookingAt()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "456"
+    INVOKEVIRTUAL java/util/regex/Matcher.reset(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.pattern()Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    INVOKEVIRTUAL java/util/regex/Pattern.pattern()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.reset()Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.find()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "x789y"
+    INVOKEVIRTUAL java/util/regex/Matcher.reset(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    LDC 1
+    LDC 4
+    INVOKEVIRTUAL java/util/regex/Matcher.region(II)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.regionStart()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.regionEnd()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "abc"
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    INVOKEVIRTUAL java/util/regex/Matcher.usePattern(Ljava/util/regex/Pattern;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    LDC "abc"
+    INVOKEVIRTUAL java/util/regex/Matcher.reset(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+true
+false
+true
+\d+
+true
+true
+1
+4
+true
+

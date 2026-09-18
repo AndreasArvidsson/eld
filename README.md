@@ -71,6 +71,20 @@ a quote from ending a raw string; both characters remain in the resulting text.
 Multiline strings can contain actual newlines. Character literals also support
 escapes such as `'\n'` and `'\t'`.
 
+## Regular expressions
+
+`Regex` is a direct alias of Java's `java.util.regex.Pattern`, and `Matcher`
+is an alias of `java.util.regex.Matcher`. Use raw strings (`r"..."`) to preserve
+regex backslashes:
+
+```text
+const regex: Regex = Regex.compile(r"\d+");
+const matcher: Matcher = regex.matcher("abc123");
+if (matcher.find()) {
+    print(matcher.group());
+}
+```
+
 ## Arrays, slices, and tuples
 
 ```text

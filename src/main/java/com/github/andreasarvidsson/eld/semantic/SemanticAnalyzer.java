@@ -97,6 +97,7 @@ public final class SemanticAnalyzer {
         new IdentityHashMap<>();
     private boolean analyzingCallee;
     private int callArity = -1;
+    private List<Expression> javaCallArguments = List.of();
     private @Nullable ClassType currentInstance;
     private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
@@ -2480,7 +2481,25 @@ public final class SemanticAnalyzer {
                 final Type target;
                 analyzingCallee = false;
                 try {
-                    target = analyzeExpression(member.target(), context);
+                    if (
+                        member
+                            .target() instanceof IdentifierExpression identifier
+                            && context.scope()
+                                .resolve(identifier.name()) == null
+                            && JavaTypes.findClass(identifier.name()) != null
+                    ) {
+                        final JavaClassSymbol symbol =
+                            new JavaClassSymbol(
+                                JavaTypes.type(identifier.name(), List.of()),
+                                identifier.range()
+                            );
+                        model.setReference(identifier, symbol);
+                        model.setExpressionType(identifier, symbol.type());
+                        target = symbol.type();
+                    }
+                    else {
+                        target = analyzeExpression(member.target(), context);
+                    }
                 }
                 finally {
                     analyzingCallee = memberCallee;
@@ -2532,13 +2551,43 @@ public final class SemanticAnalyzer {
                                 )
                                 : null;
                 if (javaTarget != null) {
-                    final List<JavaMethodSymbol> candidates =
+                    List<JavaMethodSymbol> candidates =
                         JavaTypes.methods(
                             javaTarget,
                             member.member().name(),
                             callArity,
-                            member.range()
+                            member.range(),
+                            member
+                                .target() instanceof IdentifierExpression identifier
+                                && model.getReference(
+                                    identifier
+                                ) instanceof JavaClassSymbol
                         );
+                    if (candidates.size() > 1 && analyzingCallee) {
+                        final List<Expression> supplied = javaCallArguments;
+                        final List<Type> arguments =
+                            supplied.stream()
+                                .map(
+                                    argument -> analyzeExpression(
+                                        argument,
+                                        context
+                                    )
+                                )
+                                .toList();
+                        candidates = candidates.stream().filter(candidate -> {
+                            for (int i = 0; i < arguments.size(); i++) {
+                                if (
+                                    !model.isSubtype(
+                                        arguments.get(i),
+                                        candidate.type().parameterTypes().get(i)
+                                    )
+                                ) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }).toList();
+                    }
                     if (candidates.size() != 1) {
                         throw new SemanticException(
                             member.range(),
@@ -3085,15 +3134,18 @@ public final class SemanticAnalyzer {
     ) {
         final boolean previousCallee = analyzingCallee;
         final int previousArity = callArity;
+        final List<Expression> previousArguments = javaCallArguments;
         final Type type;
         analyzingCallee = true;
         callArity = call.arguments().size();
+        javaCallArguments = call.arguments();
         try {
             type = analyzeExpression(call.callee(), context);
         }
         finally {
             analyzingCallee = previousCallee;
             callArity = previousArity;
+            javaCallArguments = previousArguments;
         }
         if (type == BuiltinFunctionType.ARRAY_SORT) {
             if (!call.arguments().isEmpty()) {

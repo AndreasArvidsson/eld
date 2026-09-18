@@ -53,6 +53,118 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void regexUsesJavaPatternAndMatcher() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    const regex: Regex = Regex.compile(r"(?<digits>\\d+)");
+                    const matcher: Matcher = regex.matcher("abc123def456");
+                    const found = matcher.find();
+                    const group = matcher.group();
+                    const numbered = matcher.group(1);
+                    const named = matcher.group("digits");
+                    const start = matcher.start("digits");
+                    const end = matcher.end(1);
+                    const second = matcher.find();
+                    const secondGroup = matcher.group();
+                    const replaced = matcher.replaceAll("#");
+                    const reset: Matcher = matcher.reset("789");
+                    const matches = reset.matches();
+                    const sameRegex: Regex = matcher.pattern();
+                    const staticMatches = Regex.matches(r"\\d+", "42");
+                    const flagged: Regex = Regex.compile("abc", 2);
+                    const insensitive = flagged.matcher("ABC").matches();
+                    const prefix = Regex.compile("abc").matcher("abcdef").lookingAt();
+                    const region = Regex.compile(r"\\d+").matcher("x123y").region(1, 4).matches();
+                    const match = regex.matcher("12").matches;
+                    const boundMatch = match();
+                    const patternText = regex.pattern();
+                    const flags = flagged.flags();
+                    const quoted = Regex.quote("a.b");
+                    const quote = Regex.quote;
+                    const viaHandle = quote("a.b");
+                    """,
+                "Test"
+            );
+        assertEquals(
+            java.util.regex.Pattern.class,
+            module.getField("regex").getType()
+        );
+        assertEquals(
+            java.util.regex.Matcher.class,
+            module.getField("matcher").getType()
+        );
+        for (final String name : List.of(
+            "found",
+            "second",
+            "matches",
+            "staticMatches",
+            "insensitive",
+            "prefix",
+            "region",
+            "boundMatch"
+        )) {
+            assertEquals(true, module.getField(name).get(null), name);
+        }
+        for (final String name : List.of("group", "numbered", "named")) {
+            assertEquals("123", module.getField(name).get(null), name);
+        }
+        assertEquals(
+            "(?<digits>\\d+)",
+            module.getField("patternText").get(null)
+        );
+        assertEquals(2, module.getField("flags").get(null));
+        assertEquals(3, module.getField("start").get(null));
+        assertEquals(6, module.getField("end").get(null));
+        assertEquals("456", module.getField("secondGroup").get(null));
+        assertEquals("abc#def#", module.getField("replaced").get(null));
+        assertSame(
+            module.getField("regex").get(null),
+            module.getField("sameRegex").get(null)
+        );
+        assertEquals("\\Qa.b\\E", module.getField("quoted").get(null));
+        assertEquals("\\Qa.b\\E", module.getField("viaHandle").get(null));
+    }
+
+    @Test
+    void regexReportsInvalidTypesAndPreservesJavaErrors() {
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass("const value = Regex;", "Test")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass(
+                "const value: Regex<i32> = Regex.compile(\"x\");",
+                "Test"
+            )
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass("const regex = Regex.compile(42);", "Test")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass(
+                "const matcher = Regex.compile(\"x\").matcher(42);",
+                "Test"
+            )
+        );
+        final ExceptionInInitializerError error =
+            assertThrows(
+                ExceptionInInitializerError.class,
+                () -> compileClass(
+                    "const regex = Regex.compile(\"[\");",
+                    "Test"
+                ).getField("regex").get(null)
+            );
+        assertInstanceOf(
+            java.util.regex.PatternSyntaxException.class,
+            error.getCause()
+        );
+    }
+
+    @Test
     void nullableInheritanceOnlyCastsObjectStoredUnions() {
         final String source =
             """

@@ -1,0 +1,112 @@
+const matcher = Regex.compile("x").matcher("x");
+print(matcher.group(true));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "matcher" (1:7-1:14)
+EQUAL (1:15-1:16)
+IDENTIFIER "Regex" (1:17-1:22)
+DOT (1:22-1:23)
+IDENTIFIER "compile" (1:23-1:30)
+LEFT_PAREN (1:30-1:31)
+STRING_LITERAL "\"x\"" (1:31-1:34)
+RIGHT_PAREN (1:34-1:35)
+DOT (1:35-1:36)
+IDENTIFIER "matcher" (1:36-1:43)
+LEFT_PAREN (1:43-1:44)
+STRING_LITERAL "\"x\"" (1:44-1:47)
+RIGHT_PAREN (1:47-1:48)
+SEMICOLON (1:48-1:49)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "matcher" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "group" (2:15-2:20)
+LEFT_PAREN (2:20-2:21)
+BOOLEAN_LITERAL "true" (2:21-2:25)
+RIGHT_PAREN (2:25-2:26)
+RIGHT_PAREN (2:26-2:27)
+SEMICOLON (2:27-2:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:28
+  (VariableDeclaration
+    range: 1:1-1:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "matcher"
+    )
+    type: null
+    (CallExpression
+      range: 1:17-1:48
+      (MemberExpression
+        range: 1:17-1:43
+        (CallExpression
+          range: 1:17-1:35
+          (MemberExpression
+            range: 1:17-1:30
+            (IdentifierExpression
+              range: 1:17-1:22
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 1:23-1:30
+              name: "compile"
+            )
+          )
+          (LiteralExpression
+            range: 1:31-1:34
+            kind: STRING
+            text: "\"x\""
+          )
+        )
+        (IdentifierExpression
+          range: 1:36-1:43
+          name: "matcher"
+        )
+      )
+      (LiteralExpression
+        range: 1:44-1:47
+        kind: STRING
+        text: "\"x\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:28
+    (CallExpression
+      range: 2:1-2:27
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:26
+        (MemberExpression
+          range: 2:7-2:20
+          (IdentifierExpression
+            range: 2:7-2:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 2:15-2:20
+            name: "group"
+          )
+        )
+        (LiteralExpression
+          range: 2:21-2:25
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Unknown Java method 'group' with 1 arguments on Matcher at 2:7-2:20

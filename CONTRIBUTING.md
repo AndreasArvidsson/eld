@@ -218,10 +218,10 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Regular expressions from `regex`.
+- Exceptions
+- Something similar to pythons dir() and help()
 - Refactor large files
 - Export & import
-- Exceptions
 - Improve test performance
 - Ubiquitous toString and equals methods
 - Immutable collections and objects

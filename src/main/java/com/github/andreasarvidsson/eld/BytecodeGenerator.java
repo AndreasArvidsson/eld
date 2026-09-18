@@ -3659,8 +3659,13 @@ public final class BytecodeGenerator {
                     ) instanceof JavaMethodSymbol function
             ) {
                 final var javaMethod = function.method();
-                expression(member.target());
-                box(semanticModel.getEffectiveType(member.target()));
+                final boolean isStatic =
+                    java.lang.reflect.Modifier
+                        .isStatic(javaMethod.getModifiers());
+                if (!isStatic) {
+                    expression(member.target());
+                    box(semanticModel.getEffectiveType(member.target()));
+                }
                 for (int i = 0; i < call.arguments().size(); i++) {
                     final Expression argument = call.arguments().get(i);
                     expression(argument);
@@ -3677,7 +3682,9 @@ public final class BytecodeGenerator {
                 final boolean isInterface =
                     javaMethod.getDeclaringClass().isInterface();
                 method.invoke(
-                    isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
+                    isStatic
+                        ? INVOKESTATIC
+                        : isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
                     classDesc(
                         javaMethod.getDeclaringClass()
                             .getName()
@@ -4235,9 +4242,13 @@ public final class BytecodeGenerator {
                     javaMethod.getDeclaringClass().isInterface();
                 method.ldc(
                     MethodHandleDesc.ofMethod(
-                        isInterface
-                            ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
-                            : DirectMethodHandleDesc.Kind.VIRTUAL,
+                        java.lang.reflect.Modifier.isStatic(
+                            javaMethod.getModifiers()
+                        )
+                            ? DirectMethodHandleDesc.Kind.STATIC
+                            : isInterface
+                                ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
+                                : DirectMethodHandleDesc.Kind.VIRTUAL,
                         classDesc(
                             javaMethod.getDeclaringClass()
                                 .getName()
@@ -4249,17 +4260,22 @@ public final class BytecodeGenerator {
                         )
                     )
                 );
-                expression(member.target());
-                box(semanticModel.getEffectiveType(member.target()));
-                method.invoke(
-                    INVOKEVIRTUAL,
-                    classDesc("java/lang/invoke/MethodHandle"),
-                    "bindTo",
-                    MethodTypeDesc.ofDescriptor(
-                        "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;"
-                    ),
-                    false
-                );
+                if (
+                    !java.lang.reflect.Modifier
+                        .isStatic(javaMethod.getModifiers())
+                ) {
+                    expression(member.target());
+                    box(semanticModel.getEffectiveType(member.target()));
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/invoke/MethodHandle"),
+                        "bindTo",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;"
+                        ),
+                        false
+                    );
+                }
                 method.ldc(
                     MethodTypeDesc
                         .ofDescriptor(methodDescriptor(function.type()))
