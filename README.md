@@ -2,7 +2,7 @@
 
 Eld (Swedish for “fire”) is a statically typed programming language that compiles to JVM bytecode.
 
-Eld requires Java 21 or later. See [CONTRIBUTING.md](./CONTRIBUTING.md) for
+Eld requires Java 25 or later. See [CONTRIBUTING.md](./CONTRIBUTING.md) for
 building from source, development setup, tests, and implementation notes.
 
 See [cli.md](./cli.md) for command-line and REPL usage.

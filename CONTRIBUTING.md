@@ -5,7 +5,7 @@ command-line and REPL usage.
 
 ## Development setup
 
-Use Java 21 or later and Maven 3.9 or later. Run the commands below from the
+Use Java 25 or later and Maven 3.9 or later. Run the commands below from the
 project root.
 
 ## Building

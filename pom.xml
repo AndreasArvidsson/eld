@@ -12,7 +12,7 @@
     <url>https://github.com/AndreasArvidsson/eld</url>
 
     <properties>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -146,7 +146,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <version>[21,)</version>
+                                    <version>[25,)</version>
                                 </requireJavaVersion>
                                 <requireMavenVersion>
                                     <version>3.9.0</version>
@@ -204,9 +204,6 @@
                         <!-- Stop compilation after flow analysis once errors are found to avoid
                         later noisy phases. -->
                         <arg>--should-stop=ifError=FLOW</arg>
-                        <!-- necessary only if building with JDK21:
-                        https://github.com/google/error-prone/issues/5426 -->
-                        <arg>-XDaddTypeAnnotationsToSymbol=true</arg>
                         <!-- Enable the Error Prone javac plugin. -->
                         <!-- Run NullAway as an Error Prone check and fail on any violations. -->
                         <!-- Limit NullAway checking to code annotated with JSpecify @NullMarked. -->
