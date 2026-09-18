@@ -1,0 +1,94 @@
+func foo(a: i32, b: i32 | null) {}
+foo(1);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "a" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+COMMA (1:16-1:17)
+IDENTIFIER "b" (1:18-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "i32" (1:21-1:24)
+PIPE (1:25-1:26)
+NULL (1:27-1:31)
+RIGHT_PAREN (1:31-1:32)
+LEFT_BRACE (1:33-1:34)
+RIGHT_BRACE (1:34-1:35)
+IDENTIFIER "foo" (2:1-2:4)
+LEFT_PAREN (2:4-2:5)
+INTEGER_LITERAL "1" (2:5-2:6)
+RIGHT_PAREN (2:6-2:7)
+SEMICOLON (2:7-2:8)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:8
+  (FunctionDeclaration
+    range: 1:1-1:35
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:16
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:18-1:31
+      (IdentifierDeclaration
+        range: 1:18-1:19
+        name: "b"
+      )
+      (UnionTypeNode
+        range: 1:21-1:31
+        (NamedTypeNode
+          range: 1:21-1:24
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 1:27-1:31
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:33-1:35
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:8
+    (CallExpression
+      range: 2:1-2:7
+      (IdentifierExpression
+        range: 2:1-2:4
+        name: "foo"
+      )
+      (LiteralExpression
+        range: 2:5-2:6
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expected 2 arguments, found 1 at 2:1-2:7

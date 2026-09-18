@@ -204,15 +204,7 @@ public final class Parser {
         final List<@NonNull FunctionParameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
-                final Token paramName = expect(TokenType.IDENTIFIER);
-                expect(TokenType.COLON);
-                final TypeNode type = parseType();
-                final IdentifierDeclaration id =
-                    new IdentifierDeclaration(
-                        paramName.text(),
-                        paramName.range()
-                    );
-                parameters.add(new FunctionParameter(id, type));
+                parameters.add(parseFunctionParameter());
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
@@ -488,6 +480,21 @@ public final class Parser {
         );
     }
 
+    private FunctionParameter parseFunctionParameter() {
+        final Token name = expect(TokenType.IDENTIFIER);
+        final boolean optional = match(TokenType.QUESTION);
+        expect(TokenType.COLON);
+        final TypeNode type = parseType();
+        final Expression defaultValue =
+            match(TokenType.EQUAL) ? parseExpression() : null;
+        return new FunctionParameter(
+            new IdentifierDeclaration(name.text(), name.range()),
+            type,
+            optional,
+            defaultValue
+        );
+    }
+
     private ConstructorDeclaration parseConstructorDeclaration(
         final Token keyword
     ) {
@@ -495,14 +502,7 @@ public final class Parser {
         final List<FunctionParameter> parameters = new ArrayList<>();
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
-                final Token name = expect(TokenType.IDENTIFIER);
-                expect(TokenType.COLON);
-                parameters.add(
-                    new FunctionParameter(
-                        new IdentifierDeclaration(name.text(), name.range()),
-                        parseType()
-                    )
-                );
+                parameters.add(parseFunctionParameter());
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
@@ -529,12 +529,35 @@ public final class Parser {
         final Token open = matchToken(TokenType.LEFT_PAREN);
         if (open != null) {
             final List<TypeNode> elementTypes = new ArrayList<>();
-            elementTypes.add(parseType());
-            expect(TokenType.COMMA);
-            do {
-                elementTypes.add(parseType());
-            } while (match(TokenType.COMMA));
+            if (!check(TokenType.RIGHT_PAREN)) {
+                do {
+                    elementTypes.add(parseType());
+                } while (match(TokenType.COMMA));
+            }
             final Token close = expect(TokenType.RIGHT_PAREN);
+            final Token arrow = matchToken(TokenType.ARROW);
+            if (arrow != null) {
+                final TypeNode returnType =
+                    check(TokenType.IDENTIFIER) || check(TokenType.NULL)
+                        || check(TokenType.LEFT_PAREN)
+                        || check(TokenType.LEFT_BRACKET) ? parseType() : null;
+                return new FunctionTypeNode(
+                    elementTypes,
+                    returnType,
+                    open.range()
+                        .union(
+                            returnType != null
+                                ? returnType.range()
+                                : arrow.range()
+                        )
+                );
+            }
+            if (elementTypes.size() < 2) {
+                throw new ParserException(
+                    open.range().union(close.range()),
+                    "A tuple type requires at least two elements; function types require '=>'"
+                );
+            }
             return new TupleTypeNode(
                 elementTypes,
                 open.range().union(close.range())

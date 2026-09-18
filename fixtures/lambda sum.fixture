@@ -53,4 +53,4 @@ SEMICOLON (1:16-1:17)
 
 --- SEMANTIC ---
 
-SemanticException: Lambda expressions are not yet supported at 1:1-1:16
+SemanticException: Lambda parameters require an expected function type at 1:1-1:16

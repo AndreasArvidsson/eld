@@ -1,0 +1,322 @@
+func foo(a: i32 = 1, b: i32 = a + 1) {
+    print(f"{a} {b}");
+}
+
+foo();
+foo(5);
+foo(5, 10);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "a" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "1" (1:19-1:20)
+COMMA (1:20-1:21)
+IDENTIFIER "b" (1:22-1:23)
+COLON (1:23-1:24)
+IDENTIFIER "i32" (1:25-1:28)
+EQUAL (1:29-1:30)
+IDENTIFIER "a" (1:31-1:32)
+PLUS (1:33-1:34)
+INTEGER_LITERAL "1" (1:35-1:36)
+RIGHT_PAREN (1:36-1:37)
+LEFT_BRACE (1:38-1:39)
+IDENTIFIER "print" (2:5-2:10)
+LEFT_PAREN (2:10-2:11)
+FORMAT_STRING_START (2:11-2:13)
+LEFT_BRACE (2:13-2:14)
+IDENTIFIER "a" (2:14-2:15)
+RIGHT_BRACE (2:15-2:16)
+STRING_LITERAL "\" \"" (2:16-2:17)
+LEFT_BRACE (2:17-2:18)
+IDENTIFIER "b" (2:18-2:19)
+RIGHT_BRACE (2:19-2:20)
+FORMAT_STRING_END (2:20-2:21)
+RIGHT_PAREN (2:21-2:22)
+SEMICOLON (2:22-2:23)
+RIGHT_BRACE (3:1-3:2)
+IDENTIFIER "foo" (5:1-5:4)
+LEFT_PAREN (5:4-5:5)
+RIGHT_PAREN (5:5-5:6)
+SEMICOLON (5:6-5:7)
+IDENTIFIER "foo" (6:1-6:4)
+LEFT_PAREN (6:4-6:5)
+INTEGER_LITERAL "5" (6:5-6:6)
+RIGHT_PAREN (6:6-6:7)
+SEMICOLON (6:7-6:8)
+IDENTIFIER "foo" (7:1-7:4)
+LEFT_PAREN (7:4-7:5)
+INTEGER_LITERAL "5" (7:5-7:6)
+COMMA (7:6-7:7)
+INTEGER_LITERAL "10" (7:8-7:10)
+RIGHT_PAREN (7:10-7:11)
+SEMICOLON (7:11-7:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:12
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:20
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      optional: false
+      (LiteralExpression
+        range: 1:19-1:20
+        kind: INT
+        text: "1"
+      )
+    )
+    (FunctionParameter
+      range: 1:22-1:36
+      (IdentifierDeclaration
+        range: 1:22-1:23
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:25-1:28
+        name: "i32"
+      )
+      optional: false
+      (BinaryExpression
+        range: 1:31-1:36
+        (IdentifierExpression
+          range: 1:31-1:32
+          name: "a"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 1:35-1:36
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:38-3:2
+      (ExpressionStatement
+        range: 2:5-2:23
+        (CallExpression
+          range: 2:5-2:22
+          (IdentifierExpression
+            range: 2:5-2:10
+            name: "print"
+          )
+          (FormatStringExpression
+            range: 2:11-2:21
+            (IdentifierExpression
+              range: 2:14-2:15
+              name: "a"
+            )
+            (LiteralExpression
+              range: 2:16-2:17
+              kind: STRING
+              text: "\" \""
+            )
+            (IdentifierExpression
+              range: 2:18-2:19
+              name: "b"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:7
+    (CallExpression
+      range: 5:1-5:6
+      (IdentifierExpression
+        range: 5:1-5:4
+        name: "foo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:8
+    (CallExpression
+      range: 6:1-6:7
+      (IdentifierExpression
+        range: 6:1-6:4
+        name: "foo"
+      )
+      (LiteralExpression
+        range: 6:5-6:6
+        kind: INT
+        text: "5"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:12
+    (CallExpression
+      range: 7:1-7:11
+      (IdentifierExpression
+        range: 7:1-7:4
+        name: "foo"
+      )
+      (LiteralExpression
+        range: 7:5-7:6
+        kind: INT
+        text: "5"
+      )
+      (LiteralExpression
+        range: 7:8-7:10
+        kind: INT
+        text: "10"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:20 -> i32
+  1:31-1:32 -> i32
+  1:31-1:36 -> i32
+  1:35-1:36 -> i32
+  2:5-2:10 -> (any) => void
+  2:5-2:22 -> void
+  2:11-2:21 -> string
+  2:14-2:15 -> i32
+  2:16-2:17 -> string
+  2:18-2:19 -> i32
+  5:1-5:4 -> (i32, i32) => void
+  5:1-5:6 -> void
+  6:1-6:4 -> (i32, i32) => void
+  6:1-6:7 -> void
+  6:5-6:6 -> i32
+  7:1-7:4 -> (i32, i32) => void
+  7:1-7:11 -> void
+  7:5-7:6 -> i32
+  7:8-7:10 -> i32
+
+Resolved types:
+  1:13-1:16 -> i32
+  1:25-1:28 -> i32
+
+Declarations:
+  1:6-1:9 -> foo(i32, i32) => void
+  1:10-1:11 -> const a: i32
+  1:22-1:23 -> const b: i32
+
+References:
+  1:31-1:32 -> 1:10-1:11
+  2:5-2:10 -> builtin print
+  2:14-2:15 -> 1:10-1:11
+  2:18-2:19 -> 1:22-1:23
+  5:1-5:4 -> 1:6-1:9
+  6:1-6:4 -> 1:6-1:9
+  7:1-7:4 -> 1:6-1:9
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x9
+  public static foo(II)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
+    ILOAD 0
+    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
+    LDC " "
+    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ILOAD 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append (I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 2
+
+  // access flags 0x1009
+  public static synthetic foo(II[Z)V
+    ALOAD 2
+    LDC 0
+    BALOAD
+    IFEQ L0
+    LDC 1
+    ISTORE 0
+   L0
+   FRAME SAME
+    ALOAD 2
+    LDC 1
+    BALOAD
+    IFEQ L1
+    ILOAD 0
+    LDC 1
+    IADD
+    ISTORE 1
+   L1
+   FRAME SAME
+    ILOAD 0
+    ILOAD 1
+    INVOKESTATIC Test.foo (II)V
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 3
+
+  // access flags 0x8
+  static <clinit>()V
+    ICONST_0
+    ICONST_0
+    LDC 2
+    NEWARRAY T_BOOLEAN
+    DUP
+    LDC 0
+    ICONST_1
+    BASTORE
+    DUP
+    LDC 1
+    ICONST_1
+    BASTORE
+    INVOKESTATIC Test.foo (II[Z)V
+    LDC 5
+    ISTORE 0
+    ILOAD 0
+    ICONST_0
+    LDC 2
+    NEWARRAY T_BOOLEAN
+    DUP
+    LDC 1
+    ICONST_1
+    BASTORE
+    INVOKESTATIC Test.foo (II[Z)V
+    LDC 5
+    LDC 10
+    INVOKESTATIC Test.foo (II)V
+    RETURN
+    MAXSTACK = 6
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+1 2
+5 6
+5 10
+

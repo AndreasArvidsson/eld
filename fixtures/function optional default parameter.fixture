@@ -1,0 +1,71 @@
+func foo(a: i32, b?: i32 = 5) {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "a" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+COMMA (1:16-1:17)
+IDENTIFIER "b" (1:18-1:19)
+QUESTION (1:19-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+EQUAL (1:26-1:27)
+INTEGER_LITERAL "5" (1:28-1:29)
+RIGHT_PAREN (1:29-1:30)
+LEFT_BRACE (1:31-1:32)
+RIGHT_BRACE (1:32-1:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:33
+  (FunctionDeclaration
+    range: 1:1-1:33
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:16
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:18-1:29
+      (IdentifierDeclaration
+        range: 1:18-1:19
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:22-1:25
+        name: "i32"
+      )
+      optional: true
+      (LiteralExpression
+        range: 1:28-1:29
+        kind: INT
+        text: "5"
+      )
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:31-1:33
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: A parameter with a default value cannot also be optional; remove '?' at 1:18-1:29

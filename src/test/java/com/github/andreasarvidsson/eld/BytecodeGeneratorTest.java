@@ -58,6 +58,349 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void capturedPrimitiveUpdatesDoNotBox() throws Exception {
+        final String source = """
+            func result() i32 {
+                var value = 1000;
+                const update = () => { value++; return value; };
+                value = 2000;
+                return update();
+            }
+            """;
+        final Class<?> type = compile(source);
+        assertEquals(2001, type.getMethod("result").invoke(null));
+        final ClassNode node = inspect(source);
+        assertTrue(
+            node.methods.stream()
+                .anyMatch(
+                    method -> method.name.startsWith("$lambda")
+                        && method.desc.equals("([I)I")
+                )
+        );
+        for (final var method : node.methods) {
+            for (final var instruction : method.instructions) {
+                if (
+                    instruction instanceof org.objectweb.asm.tree.MethodInsnNode call
+                ) {
+                    assertFalse(
+                        call.owner.equals("java/lang/Integer"),
+                        "Captured i32 must not box or unbox"
+                    );
+                }
+            }
+        }
+    }
+
+    @Test
+    void capturedCellsPreserveAllPrimitiveAndReferenceTypes() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    func small() i8 { var value: i8 = 126; const f = () => { value++; return value; }; return f(); }
+                    func shortValue() i16 { var value: i16 = 1000; const f = () => { value++; return value; }; return f(); }
+                    func longValue() i64 { var value: i64 = 1000; const f = () => { value++; return value; }; return f(); }
+                    func floatValue() f32 { var value: f32 = 1.5; const f = () => { value++; return value; }; return f(); }
+                    func doubleValue() f64 { var value: f64 = 1.5; const f = () => { value++; return value; }; return f(); }
+                    func booleanValue() bool { var value = true; const f = () => { value = !value; return value; }; return f(); }
+                    func character() char { var value = 'a'; const f = () => { value++; return value; }; return f(); }
+                    func text() string { var value = "a"; const f = () => { value = "b"; return value; }; return f(); }
+                    func nullable() i32 | null { var value: i32 | null = 1000; const f = () => { value = null; return value; }; return f(); }
+                    """
+            );
+        assertEquals((byte) 127, type.getMethod("small").invoke(null));
+        assertEquals((short) 1001, type.getMethod("shortValue").invoke(null));
+        assertEquals(1001L, type.getMethod("longValue").invoke(null));
+        assertEquals(2.5f, type.getMethod("floatValue").invoke(null));
+        assertEquals(2.5, type.getMethod("doubleValue").invoke(null));
+        assertEquals(false, type.getMethod("booleanValue").invoke(null));
+        assertEquals('b', type.getMethod("character").invoke(null));
+        assertEquals("b", type.getMethod("text").invoke(null));
+        assertNull(type.getMethod("nullable").invoke(null));
+    }
+
+    @Test
+    void lambdasWithExpressionAndBlockBodies() throws Exception {
+        final Class<?> type = compile("""
+            const expression = () => 42;
+            const block = () => { return 7; };
+            const empty = () => {};
+            var calls = 0;
+            const action = () => { calls++; };
+            const nested = () => () => 9;
+            func result() i32 {
+                empty(); action();
+                return expression() + block() + nested()();
+            }
+            func immediate() i32 { return (() => 3)(); }
+            """);
+        assertEquals(58, type.getMethod("result").invoke(null));
+        assertEquals(1, type.getField("calls").get(null));
+        assertEquals(3, type.getMethod("immediate").invoke(null));
+    }
+
+    @Test
+    void lambdasCaptureLocalsAndShareMutableBindings() throws Exception {
+        final Class<?> type = compile("""
+            func result() i64 {
+                const factor: i64 = 10;
+                var count: i64 = 1;
+                const next = () => { count++; return count * factor; };
+                const read = () => count;
+                count = 4;
+                return next() + read();
+            }
+            func nested() i32 {
+                var count = 1;
+                const outer = () => () => { count++; return count; };
+                const inner = outer();
+                count = 5;
+                return inner();
+            }
+            func independent() i32 {
+                var result = 0;
+                for (var i = 0; i < 2; i++) {
+                    var value = i;
+                    const read = () => value;
+                    value++;
+                    result = result + read();
+                }
+                return result;
+            }
+            """);
+        assertEquals(55L, type.getMethod("result").invoke(null));
+        assertEquals(6, type.getMethod("nested").invoke(null));
+        assertEquals(3, type.getMethod("independent").invoke(null));
+    }
+
+    @Test
+    void lambdasCaptureTheirReceiver() throws Exception {
+        final Class<?> type = compileClass("""
+            class Counter {
+                var value = 4;
+                func result() i32 {
+                    const next = () => { this.value++; return this.value; };
+                    return next();
+                }
+            }
+            func result() i32 { return new Counter().result(); }
+            """, "Test");
+        assertEquals(5, type.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void lambdaParametersUseTheExpectedFunctionType() throws Exception {
+        final Class<?> type = compile("""
+            func add(a: i32, b: i32) i32 { return a + b; }
+            func result() i32 {
+                const offset = 3;
+                var callback = add;
+                callback = (a, b) => a * b + offset;
+                return callback(4, 5);
+            }
+            """);
+        assertEquals(23, type.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void typedLambdaDeclarationsAndCallbacks() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    const foo: (i32, i32) => i32 = (a, b) => a + b;
+                    const answer: () => i32 = () => 42;
+                    const action: () => = () => {};
+                    const block: (i32) => i32 = (a) => { return a * 2; };
+                    const nested: () => () => i32 = () => () => 7;
+                    func apply(callback: (i32) => i32, value: i32) i32 { return callback(value); }
+                    func result() i32 {
+                        action();
+                        return foo(1, 2) + answer() + block(4) + nested()() + apply((x) => x + 1, 5);
+                    }
+                    """
+            );
+        assertEquals(66, type.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void rejectsIncompatibleTypedLambdas() {
+        for (final String source : List.of(
+            "const f: (i32) => i32 = () => 1;",
+            "const f: () => i32 = () => true;",
+            "const f: (i32) => i32 = (x) => { return true; };"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
+    void constructorLambdasCannotAssignConstFields() {
+        for (final String body : List.of(
+            "const f = () => { this.value = 2; }; f();",
+            "const f = () => this.value = 2; f();",
+            "const f = () => () => { this.value = 2; }; f()();"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(
+                    "class C { const value = 1; constructor() { " + body
+                        + " } }",
+                    "Test"
+                ),
+                body
+            );
+        }
+    }
+
+    @Test
+    void constructorLambdasCannotCaptureAnUninitializedReceiver() {
+        for (final String body : List.of(
+            "const f = () => this.value; print(f()); this.value = 5;",
+            "print((() => this.value)()); this.value = 5;",
+            "const f = () => () => this.value; this.value = 5;",
+            "const f = () => this; this.value = 5;",
+            "const f = () => { this.value = 5; }; f();",
+            "if (flag) { this.value = 5; } const f = () => this.value; this.value = 5;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compileClass(
+                    "class C { var value: i32; constructor(flag: bool) { "
+                        + body + " } }",
+                    "Test"
+                ),
+                body
+            );
+        }
+    }
+
+    @Test
+    void constructorLambdasPreserveDefiniteInitialization() throws Exception {
+        final Class<?> type = compileClass("""
+            class C {
+                const value: i32;
+                var count: i32;
+                constructor() {
+                    const initial = () => { return 5; };
+                    this.value = initial();
+                    this.count = 0;
+                    const read = () => this.value;
+                    const update = () => { this.count++; };
+                    update();
+                    this.count = this.count + read();
+                }
+            }
+            func result() i32 { return new C().count; }
+            """, "Test");
+        assertEquals(6, type.getMethod("result").invoke(null));
+    }
+
+    @Test
+    void rejectsInvalidLambdaBodiesAndCalls() {
+        for (final String source : List.of(
+            "const f = () => missing;",
+            "const f = () => { break; };",
+            "const f = () => { const x = 1; x = 2; };",
+            "const f = () => { if (true) { return 1; } return; };",
+            "const f = () => 1; f(2);",
+            "const f = (x) => x;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
+    void optionalAndDefaultArguments() throws Exception {
+        final Class<?> type =
+            compile(
+                """
+                    var calls = 0;
+                    func next() i32 { calls++; return calls; }
+                    func optional(foo?: i32) i32 | null { return foo; }
+                    func defaults(a: i64 = next(), b: f64 = a + 2) f64 { return a * 10 + b; }
+                    func omitted() i32 | null { return optional(); }
+                    func supplied() i32 | null { return optional(7); }
+                    func explicitNull() i32 | null { return optional(null); }
+                    func first() f64 { return defaults(); }
+                    func second() f64 { return defaults(b=5); }
+                    func explicit() f64 { return defaults(0, 0); }
+                    func grouped() f64 { return (defaults)(b=1, a=2); }
+                    func mixed(a?: i32, b: i32 = 4, c: i32) i32 { return b + c; }
+                    func skipped() i32 { return mixed(c=3); }
+                    func nullable(value?: i32 | string) any { return value; }
+                    func nullableValue() any { return nullable("hello"); }
+                    """
+            );
+        assertNull(type.getMethod("omitted").invoke(null));
+        assertEquals(7, type.getMethod("supplied").invoke(null));
+        assertNull(type.getMethod("explicitNull").invoke(null));
+        assertEquals(13.0, type.getMethod("first").invoke(null));
+        assertEquals(25.0, type.getMethod("second").invoke(null));
+        assertEquals(0.0, type.getMethod("explicit").invoke(null));
+        assertEquals(21.0, type.getMethod("grouped").invoke(null));
+        assertEquals(2, type.getField("calls").get(null));
+        assertEquals(7, type.getMethod("skipped").invoke(null));
+        assertEquals("hello", type.getMethod("nullableValue").invoke(null));
+    }
+
+    @Test
+    void defaultsUseTheMethodReceiverAndConstructorParameters()
+        throws Exception {
+        final Class<?> type =
+            compileClass(
+                """
+                    class Counter {
+                        var value: i32;
+                        constructor(value: i32 = 5) { this.value = value; }
+                        func add(amount: i32 = this.value) i32 { return this.value + amount; }
+                    }
+                    class Pair {
+                        var value: i64;
+                        constructor(a: i64 = 3, b: i64 = a + 2) { this.value = a + b; }
+                    }
+                    func method() i32 { return new Counter().add(); }
+                    func supplied() i32 { return new Counter(7).add(2); }
+                    func constructorDefaults() i64 { return new Pair().value; }
+                    """,
+                "Test"
+            );
+        assertEquals(10, type.getMethod("method").invoke(null));
+        assertEquals(9, type.getMethod("supplied").invoke(null));
+        assertEquals(8L, type.getMethod("constructorDefaults").invoke(null));
+    }
+
+    @Test
+    void rejectsInvalidOptionalAndDefaultArguments() {
+        for (final String source : List.of(
+            "func f(a: i32 = true) {}",
+            "func f(a?: i32 = 5) {}",
+            "func f(a?: i32 = null) {}",
+            "class C { constructor(a?: i32 = 5) {} }",
+            "func f(a: i32 = b, b: i32 = 0) {}",
+            "func f(a: i32 = a) {}",
+            "func f(a: i32 = 0, b: i32) {} f();",
+            "func f(a?: i32) {} f(true);",
+            "func f(a: i32 = 0) {} f(null);",
+            "func f(a: i32 = 0) {} const alias = f; alias();",
+            "class C { var value = 1; constructor(a: i32 = this.value) {} }",
+            "class C { constructor(a: i32 = 0, b: i32) {} } new C();"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
+    @Test
     void decodesStringControlEscapesExceptInRawStrings() throws Exception {
         final Class<?> module = compileClass("""
             const normal = "\\n\\r\\t\\0\\b\\f\\'";

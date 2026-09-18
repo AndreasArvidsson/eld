@@ -95,6 +95,46 @@ callback(1, 2);
 Positional arguments must precede named arguments. Named arguments require a
 declared function or method; calls through stored function references are positional.
 
+Parameters can be optional or have default values:
+
+```text
+func optional(foo?: i32) i32 | null { return foo; }
+func defaulted(foo: i32 = 0) i32 { return foo; }
+optional(); // null
+defaulted(); // 0
+defaulted(foo=5); // 5
+```
+
+An optional parameter accepts its declared type or `null`. Omission supplies
+`null`. The `?` marker cannot be combined with a default value, since a default
+already allows omission. Defaults retain the declared type and are
+evaluated only when omitted, in parameter order, after supplied arguments.
+They can use earlier parameters and values in the declaration's scope; method
+defaults can also use `this`. Constructors support both forms, but their defaults
+cannot use `this` before initialization. Named calls can skip optional or defaulted
+parameters. Required parameters must still be supplied. Stored function references
+require all arguments explicitly.
+
+## Lambdas
+
+```text
+const answer = () => 42;
+const add: (i32, i32) => i32 = (a, b) => a + b;
+const action = () => { print("hello"); };
+const value = () => { return 7; };
+print(answer());
+action();
+```
+
+Expression bodies return their expression's value. Block bodies use `return`
+to return a value; blocks without a value return produce `void`. Return types
+are inferred. Lambdas capture local bindings and `this`; captured mutable
+bindings remain shared with the surrounding scope and other lambdas.
+In constructors, lambdas can capture `this` only after all fields are definitely
+initialized. Lambda bodies cannot assign to `const` fields.
+Function type annotations supply lambda parameter types. Use `() => i32` for
+a function returning `i32`, or `() =>` for a function returning `void`.
+
 ## Classes and method references
 
 ```text

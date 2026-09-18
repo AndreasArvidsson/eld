@@ -2,29 +2,28 @@ package com.github.andreasarvidsson.eld.semantic;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
-import com.github.andreasarvidsson.eld.parser.TupleExpression;
-import com.github.andreasarvidsson.eld.parser.TupleTypeNode;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
+import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BinaryOperator;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
-import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
-import com.github.andreasarvidsson.eld.parser.ThisExpression;
-import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
@@ -34,7 +33,9 @@ import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.ForEachStatement;
 import com.github.andreasarvidsson.eld.parser.ForStatement;
+import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
+import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.FunctionTypeNode;
 import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
@@ -43,11 +44,11 @@ import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
+import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
+import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
-import com.github.andreasarvidsson.eld.parser.MemberExpression;
-import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
@@ -61,10 +62,13 @@ import com.github.andreasarvidsson.eld.parser.SwitchBranchExpressionBody;
 import com.github.andreasarvidsson.eld.parser.SwitchElseBranch;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
+import com.github.andreasarvidsson.eld.parser.ThisExpression;
+import com.github.andreasarvidsson.eld.parser.TupleExpression;
+import com.github.andreasarvidsson.eld.parser.TupleTypeNode;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.UnaryExpression;
-import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.UnaryOperator;
+import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.UnionTypeNode;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.WhileStatement;
@@ -75,6 +79,9 @@ public final class SemanticAnalyzer {
     private final Map<ClassType, Scope> classScopes = new HashMap<>();
     private @Nullable ClassType currentInstance;
     private @Nullable ConstructorDeclaration currentConstructor;
+    private boolean analyzingConstructorDefault;
+    private final IdentityHashMap<FunctionSymbol, List<ReturnStatement>> lambdaReturns =
+        new IdentityHashMap<>();
 
     public SemanticModel analyze(final Program program) {
         final Scope builtinScope = new Scope(null);
@@ -234,7 +241,7 @@ public final class SemanticAnalyzer {
         final List<Type> parameterTypes = new ArrayList<>();
         if (constructor != null) {
             for (final FunctionParameter parameter : constructor.parameters()) {
-                final Type type = resolveType(parameter.type(), context);
+                final Type type = resolveParameterType(parameter, context);
                 parameterTypes.add(type);
                 model.setSymbol(
                     parameter.name(),
@@ -245,6 +252,10 @@ public final class SemanticAnalyzer {
         final FunctionType constructorType =
             new FunctionType(parameterTypes, BuiltinType.VOID);
         model.setConstructor(classType, constructorType);
+        model.setConstructorParameters(
+            classType,
+            constructor != null ? constructor.parameters() : List.of()
+        );
         if (constructor != null) {
             model.setConstructorSymbol(
                 constructor,
@@ -280,6 +291,10 @@ public final class SemanticAnalyzer {
                 final Scope scope = new Scope(context.scope());
                 for (final FunctionParameter parameter : constructor
                     .parameters()) {
+                    analyzeParameterDefault(
+                        parameter,
+                        new SemanticContext(scope, null, 0)
+                    );
                     scope.declare(model.getSymbol(parameter.name()));
                 }
                 analyzeBlockStatement(
@@ -818,6 +833,15 @@ public final class SemanticAnalyzer {
         final ReturnStatement statement,
         final SemanticContext context
     ) {
+        final List<ReturnStatement> inferredReturns =
+            lambdaReturns.get(context.function());
+        if (inferredReturns != null) {
+            if (statement.value() != null) {
+                analyzeExpression(statement.value(), context);
+            }
+            inferredReturns.add(statement);
+            return;
+        }
         if (currentConstructor != null && context.function() == null) {
             if (statement.value() != null) {
                 throw new SemanticException(
@@ -936,7 +960,7 @@ public final class SemanticAnalyzer {
 
         for (final FunctionParameter param : declaration.parameters()) {
             final TypeNode typeNode = param.type();
-            final Type paramType = resolveType(typeNode, context);
+            final Type paramType = resolveParameterType(param, context);
             final VariableSymbol paramSymbol =
                 new VariableSymbol(param.name(), paramType, Mutability.CONST);
             model.setResolvedType(typeNode, paramType);
@@ -983,12 +1007,72 @@ public final class SemanticAnalyzer {
             (FunctionSymbol) model.getSymbol(declaration.name());
         final Scope functionScope = new Scope(context.scope());
         for (final FunctionParameter parameter : declaration.parameters()) {
+            analyzeParameterDefault(
+                parameter,
+                new SemanticContext(functionScope, symbol, 0)
+            );
             functionScope.declare(model.getSymbol(parameter.name()));
         }
         final SemanticContext functionContext =
             new SemanticContext(functionScope, symbol, 0);
 
         analyzeBlockStatement(declaration.body(), functionContext);
+    }
+
+    private Type resolveParameterType(
+        final FunctionParameter parameter,
+        final SemanticContext context
+    ) {
+        if (parameter.optional() && parameter.defaultValue() != null) {
+            throw new SemanticException(
+                parameter.range(),
+                "A parameter with a default value cannot also be optional; remove '?'"
+            );
+        }
+        final Type declared = resolveType(parameter.type(), context);
+        final List<Type> members =
+            new ArrayList<>(
+                declared instanceof UnionType union
+                    ? union.memberTypes()
+                    : List.of(declared)
+            );
+        if (!members.contains(BuiltinType.NULL)) {
+            members.add(BuiltinType.NULL);
+        }
+        final Type type =
+            parameter.optional() ? UnionType.of(members) : declared;
+        model.setParameterDetails(parameter);
+        model.setResolvedType(parameter.type(), type);
+        return type;
+    }
+
+    private void analyzeParameterDefault(
+        final FunctionParameter parameter,
+        final SemanticContext context
+    ) {
+        final Expression value = parameter.defaultValue();
+        if (value == null) {
+            return;
+        }
+        final Type expected = model.getSymbol(parameter.name()).type();
+        final boolean previous = analyzingConstructorDefault;
+        final Type actual;
+        analyzingConstructorDefault =
+            currentConstructor != null && context.function() == null;
+        try {
+            actual = analyzeExpression(value, context, expected);
+        }
+        finally {
+            analyzingConstructorDefault = previous;
+        }
+        if (resolveAssignType(actual, expected, value) == null) {
+            throw new SemanticException(
+                value.range(),
+                "Cannot use %s as default value for %s",
+                actual,
+                expected
+            );
+        }
     }
 
     private Type resolveType(
@@ -1196,6 +1280,12 @@ public final class SemanticAnalyzer {
         final SemanticContext context,
         final @Nullable Type expected
     ) {
+        if (expression instanceof LambdaExpression lambda) {
+            final Type type =
+                analyzeLambdaExpression(lambda, context, expected);
+            model.setExpressionType(lambda, type);
+            return type;
+        }
         if (expected == BuiltinType.ANY || expected instanceof UnionType) {
             if (expression instanceof IfExpression conditional) {
                 final Type type =
@@ -1366,7 +1456,7 @@ public final class SemanticAnalyzer {
                 final FunctionType constructor =
                     model.getConstructor((ClassType) classType);
                 if (
-                    creation.arguments().size() != constructor.parameterTypes()
+                    creation.arguments().size() > constructor.parameterTypes()
                         .size()
                 ) {
                     throw new SemanticException(
@@ -1397,9 +1487,27 @@ public final class SemanticAnalyzer {
                         );
                     }
                 }
+                final List<FunctionParameter> parameters =
+                    model.getConstructorParameters((ClassType) classType);
+                for (int i = creation.arguments().size(); i < parameters
+                    .size(); i++) {
+                    if (!parameters.get(i).omittable()) {
+                        throw new SemanticException(
+                            creation.range(),
+                            "Missing required constructor argument: %s",
+                            parameters.get(i).name().name()
+                        );
+                    }
+                }
                 yield classType;
             }
             case ThisExpression self -> {
+                if (analyzingConstructorDefault) {
+                    throw new SemanticException(
+                        self.range(),
+                        "Constructor defaults cannot access 'this' before initialization"
+                    );
+                }
                 if (currentInstance == null) {
                     throw new SemanticException(
                         self.range(),
@@ -1455,18 +1563,141 @@ public final class SemanticAnalyzer {
                 analyzeIfExpression(conditional, context);
             case SwitchExpression selection ->
                 analyzeSwitchExpression(selection, context, true);
-            // TODO: Implement lambda expression analysis
             case LambdaExpression lambda ->
-                // analyzeLambdaExpression(lambda, context);
-                throw new SemanticException(
-                    lambda.range(),
-                    "Lambda expressions are not yet supported"
-                );
+                analyzeLambdaExpression(lambda, context, null);
         };
 
         model.setExpressionType(expression, type);
 
         return type;
+    }
+
+    private Type analyzeLambdaExpression(
+        final LambdaExpression lambda,
+        final SemanticContext context,
+        final @Nullable Type expected
+    ) {
+        final FunctionType target =
+            expected instanceof FunctionType function ? function : null;
+        if (!lambda.parameters().isEmpty() && target == null) {
+            throw new SemanticException(
+                lambda.range(),
+                "Lambda parameters require an expected function type"
+            );
+        }
+        if (
+            target != null
+                && target.parameterTypes().size() != lambda.parameters().size()
+        ) {
+            throw new SemanticException(
+                lambda.range(),
+                "Lambda parameter count does not match expected function type"
+            );
+        }
+        final Scope scope = new Scope(context.scope());
+        final List<Type> parameterTypes =
+            target != null ? target.parameterTypes() : List.of();
+        for (int i = 0; i < lambda.parameters().size(); i++) {
+            final var name = lambda.parameters().get(i).name();
+            final VariableSymbol parameter =
+                new VariableSymbol(
+                    name,
+                    parameterTypes.get(i),
+                    Mutability.CONST
+                );
+            scope.declare(parameter);
+            model.setSymbol(name, parameter);
+        }
+        final FunctionSymbol symbol =
+            new FunctionSymbol(
+                new IdentifierDeclaration("$lambda", lambda.range()),
+                new FunctionType(
+                    parameterTypes,
+                    target != null ? target.returnType() : BuiltinType.ANY
+                )
+            );
+        final SemanticContext lambdaContext =
+            new SemanticContext(scope, symbol, 0);
+        final Type returnType;
+        if (lambda.body() instanceof Expression expression) {
+            final Type actual =
+                analyzeExpression(
+                    expression,
+                    lambdaContext,
+                    target != null ? target.returnType() : null
+                );
+            returnType = target != null ? target.returnType() : actual;
+            if (resolveAssignType(actual, returnType, expression) == null) {
+                throw new SemanticException(
+                    expression.range(),
+                    "Cannot return %s from lambda returning %s",
+                    actual,
+                    returnType
+                );
+            }
+        }
+        else {
+            final List<ReturnStatement> returns = new ArrayList<>();
+            if (target == null) {
+                lambdaReturns.put(symbol, returns);
+            }
+            try {
+                analyzeBlockStatement(
+                    (BlockStatement) lambda.body(),
+                    lambdaContext
+                );
+            }
+            finally {
+                lambdaReturns.remove(symbol);
+            }
+            Type inferred = returns.isEmpty() ? BuiltinType.VOID : null;
+            for (final ReturnStatement statement : returns) {
+                final Type type =
+                    statement.value() != null
+                        ? model.getExpressionType(statement.value())
+                        : BuiltinType.VOID;
+                inferred =
+                    inferred == null
+                        ? type
+                        : commonBranchType(inferred, type, statement);
+            }
+            returnType =
+                target != null
+                    ? target.returnType()
+                    : Objects.requireNonNull(inferred);
+            for (final ReturnStatement statement : returns) {
+                if (statement.value() != null) {
+                    resolveAssignType(
+                        model.getExpressionType(statement.value()),
+                        returnType,
+                        statement.value()
+                    );
+                }
+            }
+        }
+        final Set<Symbol> declared =
+            Collections.newSetFromMap(new IdentityHashMap<>());
+        AstTraversal.walk(lambda, node -> {
+            final Symbol declaration = model.findDeclaredSymbol(node);
+            if (declaration != null) {
+                declared.add(declaration);
+            }
+        });
+        final List<Symbol> captures = new ArrayList<>();
+        AstTraversal.walk(lambda.body(), node -> {
+            if (node instanceof IdentifierExpression identifier) {
+                final Symbol reference = model.getReference(identifier);
+                if (
+                    reference instanceof VariableSymbol
+                        && !declared.contains(reference)
+                        && !captures.contains(reference)
+                ) {
+                    captures.add(reference);
+                }
+            }
+        });
+        model.setLambdaCaptures(lambda, captures);
+        return new FunctionType(parameterTypes, returnType);
     }
 
     private Type analyzeCallExpression(
@@ -1499,7 +1730,7 @@ public final class SemanticAnalyzer {
                 type
             );
         }
-        if (call.arguments().size() != function.parameterTypes().size()) {
+        if (call.arguments().size() > function.parameterTypes().size()) {
             throw new SemanticException(
                 call.range(),
                 "Expected %s arguments, found %s",
@@ -1583,6 +1814,20 @@ public final class SemanticAnalyzer {
                     "Cannot pass %s as %s",
                     actual,
                     expected
+                );
+            }
+        }
+        for (int i = 0; i < assigned.length; i++) {
+            if (
+                !assigned[i] && (declarations.isEmpty()
+                    || !model.getParameterDetails(declarations.get(i))
+                        .omittable())
+            ) {
+                throw new SemanticException(
+                    call.range(),
+                    "Expected %s arguments, found %s",
+                    function.parameterTypes().size(),
+                    call.arguments().size()
                 );
             }
         }
@@ -1671,7 +1916,7 @@ public final class SemanticAnalyzer {
     ) {
         final Type target = analyzeExpression(assignment.target(), context);
         if (
-            !(currentConstructor != null
+            !(currentConstructor != null && context.function() == null
                 && unwrap(
                     assignment.target()
                 ) instanceof MemberExpression member

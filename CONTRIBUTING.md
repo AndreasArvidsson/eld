@@ -191,10 +191,6 @@ import foo from "lib";
 export default foo;
 ```
 
-### Lambda syntax
-
-`() => 0` and `() => {}` works fine, but the example with the braces doesn't really need the arrow. It's only really there for the parser to identify this as a lambda. It also needs to lookahead to do this. A prefix would be simpler. eg: `fn() => 0` and `fn() {}`
-
 ### More default libraries should return null
 
 - Methods like `indexOf` should return `null` instead of `-1` on failure. Force the user to deal with this scenario.
@@ -243,8 +239,6 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Optional arguments: `foo?: i32`
-- Default argument values: `foo: i32 = 0`
 - overloaded functions
 - Exceptions
 - Ubiquitous class toString and equals methods.

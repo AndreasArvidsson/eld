@@ -157,6 +157,15 @@ final class FieldInitializationAnalyzer {
             case ThisExpression self:
                 requireComplete(path, self);
                 return paths;
+            case LambdaExpression lambda:
+                // Capturing the receiver exposes it to code outside the constructor.
+                // Do not execute the deferred body or count its field assignments.
+                AstTraversal.walk(lambda.body(), child -> {
+                    if (child instanceof ThisExpression) {
+                        requireComplete(path, lambda);
+                    }
+                });
+                return paths;
             case MemberExpression member: {
                 final Symbol field = ownField(member);
                 if (field == null) {

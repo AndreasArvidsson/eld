@@ -1,0 +1,262 @@
+const foo: ((i32) => bool) => string = (callback) => f"hello {callback(1)}";
+print(foo((v) => v % 2 == 0));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+COLON (1:10-1:11)
+LEFT_PAREN (1:12-1:13)
+LEFT_PAREN (1:13-1:14)
+IDENTIFIER "i32" (1:14-1:17)
+RIGHT_PAREN (1:17-1:18)
+ARROW (1:19-1:21)
+IDENTIFIER "bool" (1:22-1:26)
+RIGHT_PAREN (1:26-1:27)
+ARROW (1:28-1:30)
+IDENTIFIER "string" (1:31-1:37)
+EQUAL (1:38-1:39)
+LEFT_PAREN (1:40-1:41)
+IDENTIFIER "callback" (1:41-1:49)
+RIGHT_PAREN (1:49-1:50)
+ARROW (1:51-1:53)
+FORMAT_STRING_START (1:54-1:56)
+STRING_LITERAL "\"hello \"" (1:56-1:62)
+LEFT_BRACE (1:62-1:63)
+IDENTIFIER "callback" (1:63-1:71)
+LEFT_PAREN (1:71-1:72)
+INTEGER_LITERAL "1" (1:72-1:73)
+RIGHT_PAREN (1:73-1:74)
+RIGHT_BRACE (1:74-1:75)
+FORMAT_STRING_END (1:75-1:76)
+SEMICOLON (1:76-1:77)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "foo" (2:7-2:10)
+LEFT_PAREN (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "v" (2:12-2:13)
+RIGHT_PAREN (2:13-2:14)
+ARROW (2:15-2:17)
+IDENTIFIER "v" (2:18-2:19)
+PERCENT (2:20-2:21)
+INTEGER_LITERAL "2" (2:22-2:23)
+EQUAL_EQUAL (2:24-2:26)
+INTEGER_LITERAL "0" (2:27-2:28)
+RIGHT_PAREN (2:28-2:29)
+RIGHT_PAREN (2:29-2:30)
+SEMICOLON (2:30-2:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:31
+  (VariableDeclaration
+    range: 1:1-1:77
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    (FunctionTypeNode
+      range: 1:12-1:37
+      (FunctionTypeNode
+        range: 1:13-1:26
+        (NamedTypeNode
+          range: 1:14-1:17
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 1:22-1:26
+          name: "bool"
+        )
+      )
+      (NamedTypeNode
+        range: 1:31-1:37
+        name: "string"
+      )
+    )
+    (LambdaExpression
+      range: 1:40-1:76
+      (LambdaParameter
+        range: 1:41-1:49
+        (IdentifierDeclaration
+          range: 1:41-1:49
+          name: "callback"
+        )
+      )
+      (FormatStringExpression
+        range: 1:54-1:76
+        (LiteralExpression
+          range: 1:56-1:62
+          kind: STRING
+          text: "\"hello \""
+        )
+        (CallExpression
+          range: 1:63-1:74
+          (IdentifierExpression
+            range: 1:63-1:71
+            name: "callback"
+          )
+          (LiteralExpression
+            range: 1:72-1:73
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:31
+    (CallExpression
+      range: 2:1-2:30
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:29
+        (IdentifierExpression
+          range: 2:7-2:10
+          name: "foo"
+        )
+        (LambdaExpression
+          range: 2:11-2:28
+          (LambdaParameter
+            range: 2:12-2:13
+            (IdentifierDeclaration
+              range: 2:12-2:13
+              name: "v"
+            )
+          )
+          (BinaryExpression
+            range: 2:18-2:28
+            (BinaryExpression
+              range: 2:18-2:23
+              (IdentifierExpression
+                range: 2:18-2:19
+                name: "v"
+              )
+              operator: MODULO
+              (LiteralExpression
+                range: 2:22-2:23
+                kind: INT
+                text: "2"
+              )
+            )
+            operator: EQUAL
+            (LiteralExpression
+              range: 2:27-2:28
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:40-1:76 -> ((i32) => bool) => string
+  1:54-1:76 -> string
+  1:56-1:62 -> string
+  1:63-1:71 -> (i32) => bool
+  1:63-1:74 -> bool
+  1:72-1:73 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:30 -> void
+  2:7-2:10 -> ((i32) => bool) => string
+  2:7-2:29 -> string
+  2:11-2:28 -> (i32) => bool
+  2:18-2:19 -> i32
+  2:18-2:23 -> i32
+  2:18-2:28 -> bool
+  2:22-2:23 -> i32
+  2:27-2:28 -> i32
+
+Resolved types:
+  1:12-1:37 -> ((i32) => bool) => string
+  1:13-1:26 -> (i32) => bool
+  1:14-1:17 -> i32
+  1:22-1:26 -> bool
+  1:31-1:37 -> string
+
+Declarations:
+  1:7-1:10 -> const foo: ((i32) => bool) => string
+  1:41-1:49 -> const callback: (i32) => bool
+  2:12-2:13 -> const v: i32
+
+References:
+  1:63-1:71 -> 1:41-1:49
+  2:1-2:6 -> builtin print
+  2:7-2:10 -> 1:7-1:10
+  2:18-2:19 -> 2:12-2:13
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Ljava/lang/invoke/MethodHandle; foo
+
+  // access flags 0x8
+  static <clinit>()V
+    // handle kind 0x6 : INVOKESTATIC
+    LDC Test.$lambda0(Ljava/lang/invoke/MethodHandle;)Ljava/lang/String;
+    PUTSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    // handle kind 0x6 : INVOKESTATIC
+    LDC Test.$lambda1(I)Z
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (Ljava/lang/invoke/MethodHandle;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+
+  // access flags 0x1009
+  public static synthetic $lambda0(Ljava/lang/invoke/MethodHandle;)Ljava/lang/String;
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init> ()V
+    LDC "hello "
+    INVOKEVIRTUAL java/lang/StringBuilder.append (Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD 0
+    LDC 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)Z
+    INVOKEVIRTUAL java/lang/StringBuilder.append (Z)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString ()Ljava/lang/String;
+    ARETURN
+    MAXSTACK = 3
+    MAXLOCALS = 1
+
+  // access flags 0x1009
+  public static synthetic $lambda1(I)Z
+    ILOAD 0
+    LDC 2
+    IREM
+    LDC 0
+    IF_ICMPEQ L0
+    ICONST_0
+    GOTO L1
+   L0
+   FRAME SAME
+    ICONST_1
+   L1
+   FRAME SAME1 I
+    IRETURN
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+hello false
+

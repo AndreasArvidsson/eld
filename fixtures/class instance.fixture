@@ -115,6 +115,8 @@ SEMICOLON (14:22-14:23)
           range: 3:24-3:27
           name: "i32"
         )
+        optional: false
+        defaultValue: null
       )
       (BlockStatement
         range: 3:29-5:6

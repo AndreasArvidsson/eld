@@ -71,6 +71,8 @@ SEMICOLON (6:24-6:25)
         range: 1:16-1:19
         name: "i32"
       )
+      optional: false
+      defaultValue: null
     )
     (FunctionParameter
       range: 1:21-1:27
@@ -82,6 +84,8 @@ SEMICOLON (6:24-6:25)
         range: 1:24-1:27
         name: "i32"
       )
+      optional: false
+      defaultValue: null
     )
     (NamedTypeNode
       range: 1:29-1:33

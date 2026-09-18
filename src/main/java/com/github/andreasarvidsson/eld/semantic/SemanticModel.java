@@ -16,9 +16,19 @@ import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
+import com.github.andreasarvidsson.eld.parser.FunctionParameter;
+
+import java.util.Set;
+import java.util.Collections;
+import com.github.andreasarvidsson.eld.parser.LambdaExpression;
+import com.github.andreasarvidsson.eld.parser.Mutability;
+import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
-
+    private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
+        new IdentityHashMap<>();
+    private final Map<ClassType, List<FunctionParameter>> constructorParameters =
+        new HashMap<>();
     private static final String ARROW = " -> ";
     private final IdentityHashMap<MemberExpression, ClassType> memberOwners =
         new IdentityHashMap<>();
@@ -41,13 +51,69 @@ public final class SemanticModel {
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
     private final Map<ClassType, FunctionType> constructors = new HashMap<>();
+    private final IdentityHashMap<LambdaExpression, List<Symbol>> lambdaCaptures =
+        new IdentityHashMap<>();
+    private final Set<Symbol> capturedMutable =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+
+    public void setLambdaCaptures(
+        final LambdaExpression lambda,
+        final List<Symbol> captures
+    ) {
+        lambdaCaptures.put(lambda, captures);
+        for (final Symbol symbol : captures) {
+            if (
+                symbol instanceof VariableSymbol variable
+                    && variable.mutability() == Mutability.VAR
+            ) {
+                capturedMutable.add(symbol);
+            }
+        }
+    }
+
+    public List<Symbol> getLambdaCaptures(final LambdaExpression lambda) {
+        return Objects.requireNonNull(lambdaCaptures.get(lambda));
+    }
+
+    public boolean isCapturedMutable(final Symbol symbol) {
+        return capturedMutable.contains(symbol);
+    }
+
+    public @Nullable Symbol findDeclaredSymbol(final AstNode node) {
+        return declarations.get(node);
+    }
+
+    public void setParameterDetails(final FunctionParameter parameter) {
+        parameterDetails.put(parameter.name(), parameter);
+    }
+
+    public FunctionParameter getParameterDetails(
+        final IdentifierDeclaration name
+    ) {
+        return Objects.requireNonNull(parameterDetails.get(name));
+    }
+
+    public void setConstructorParameters(
+        final ClassType owner,
+        final List<FunctionParameter> parameters
+    ) {
+        constructorParameters.put(owner, List.copyOf(parameters));
+    }
+
+    public List<FunctionParameter> getConstructorParameters(
+        final ClassType owner
+    ) {
+        return constructorParameters.getOrDefault(owner, List.of());
+    }
 
     public void setConstructor(final ClassType owner, final FunctionType type) {
         constructors.put(owner, type);
     }
+
     public FunctionType getConstructor(final ClassType owner) {
         return Objects.requireNonNull(constructors.get(owner));
     }
+
     public void setConstructorSymbol(
         final ConstructorDeclaration declaration,
         final ConstructorSymbol symbol

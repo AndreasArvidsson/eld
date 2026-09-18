@@ -120,7 +120,7 @@ final class RuntimeAbi {
         for (final ArrayKind array : ArrayKind.values()) {
             classes.add(array.runtimeClass);
         }
-        return List.copyOf(classes);
+        return classes;
     }
 
     private RuntimeAbi() {}

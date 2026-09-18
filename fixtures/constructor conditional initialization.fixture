@@ -109,6 +109,8 @@ SEMICOLON (12:28-12:29)
           range: 3:23-3:27
           name: "bool"
         )
+        optional: false
+        defaultValue: null
       )
       (BlockStatement
         range: 3:29-9:6

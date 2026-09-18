@@ -41,6 +41,8 @@ public final class BytecodeGenerator {
     private final Program program;
     private final SemanticModel semanticModel;
     private final Map<String, String> classOwners;
+    private @Nullable ClassWriter currentWriter;
+    private int nextLambda;
 
     public BytecodeGenerator(
         final Program program,
@@ -157,6 +159,7 @@ public final class BytecodeGenerator {
     private byte[] generateClass(final ClassDeclaration declaration) {
         final String name = className(declaration);
         final ClassWriter writer = classWriter();
+        currentWriter = writer;
         writer.visit(
             V21,
             ACC_PUBLIC | ACC_SUPER,
@@ -274,6 +277,16 @@ public final class BytecodeGenerator {
             declarationConstructor == null
                 || initializer.block(declarationConstructor.body());
         initializer.finish(reachable);
+        if (declarationConstructor != null) {
+            generateDefaultOverload(
+                writer,
+                "<init>",
+                constructorType,
+                declarationConstructor.parameters(),
+                globals,
+                instance
+            );
+        }
         for (final BlockItem member : declaration.members()) {
             if (member instanceof FunctionDeclaration function) {
                 generateFunction(writer, function, globals, instance);
@@ -316,10 +329,96 @@ public final class BytecodeGenerator {
             generator.local(semanticModel.getSymbol(parameter.name()));
         }
         generator.finish(generator.block(function.body()));
+        generateDefaultOverload(
+            writer,
+            symbol.name(),
+            symbol.type(),
+            function.parameters(),
+            globals,
+            instance
+        );
+    }
+
+    private String defaultDescriptor(final FunctionType type) {
+        return methodDescriptor(type).replace(")", "[Z)");
+    }
+
+    private void generateDefaultOverload(
+        final ClassWriter writer,
+        final String name,
+        final FunctionType type,
+        final List<FunctionParameter> parameters,
+        final IdentityHashMap<Symbol, String> globals,
+        final @Nullable InstanceContext instance
+    ) {
+        if (parameters.stream().noneMatch(FunctionParameter::omittable)) {
+            return;
+        }
+        final MethodVisitor method =
+            writer.visitMethod(
+                ACC_PUBLIC | ACC_SYNTHETIC
+                    | (instance == null ? ACC_STATIC : 0),
+                name,
+                defaultDescriptor(type),
+                null,
+                null
+            );
+        final MethodGenerator generator =
+            new MethodGenerator(method, globals, type.returnType(), instance);
+        method.visitCode();
+        for (final FunctionParameter parameter : parameters) {
+            generator.local(semanticModel.getSymbol(parameter.name()));
+        }
+        final int mask = generator.nextLocal++;
+        for (int i = 0; i < parameters.size(); i++) {
+            final FunctionParameter parameter = parameters.get(i);
+            if (!parameter.omittable()) {
+                continue;
+            }
+            final Label supplied = new Label();
+            method.visitVarInsn(ALOAD, mask);
+            method.visitLdcInsn(i);
+            method.visitInsn(BALOAD);
+            method.visitJumpInsn(IFEQ, supplied);
+            if (parameter.defaultValue() != null) {
+                generator.expression(parameter.defaultValue());
+            }
+            else {
+                method.visitInsn(ACONST_NULL);
+            }
+            method.visitVarInsn(
+                storeOpcode(type.parameterTypes().get(i)),
+                generator.local(semanticModel.getSymbol(parameter.name()))
+            );
+            method.visitLabel(supplied);
+        }
+        if (instance != null) {
+            method.visitVarInsn(ALOAD, 0);
+        }
+        for (final FunctionParameter parameter : parameters) {
+            final Symbol symbol = semanticModel.getSymbol(parameter.name());
+            method.visitVarInsn(
+                loadOpcode(symbol.type()),
+                generator.local(symbol)
+            );
+        }
+        method.visitMethodInsn(
+            name.equals("<init>")
+                ? INVOKESPECIAL
+                : instance == null ? INVOKESTATIC : INVOKEVIRTUAL,
+            instance == null ? moduleName : instance.owner(),
+            name,
+            methodDescriptor(type),
+            false
+        );
+        method.visitInsn(returnOpcode(type.returnType()));
+        method.visitMaxs(0, 0);
+        method.visitEnd();
     }
 
     private byte[] generateModule() {
         final ClassWriter writer = classWriter();
+        currentWriter = writer;
         writer.visit(
             V21,
             ACC_PUBLIC | ACC_SUPER
@@ -813,7 +912,7 @@ public final class BytecodeGenerator {
         private int local(final Symbol symbol) {
             return locals.computeIfAbsent(symbol, ignored -> {
                 final int slot = nextLocal;
-                nextLocal += slots(symbol.type());
+                nextLocal += cell(symbol) ? 1 : slots(symbol.type());
                 return slot;
             });
         }
@@ -857,6 +956,19 @@ public final class BytecodeGenerator {
                 case VariableDeclaration variable -> {
                     final Symbol symbol =
                         semanticModel.getSymbol(variable.name());
+                    if (cell(symbol)) {
+                        method.visitInsn(ICONST_1);
+                        if (reference(symbol.type())) {
+                            method.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+                        }
+                        else {
+                            method.visitIntInsn(
+                                NEWARRAY,
+                                RuntimeAbi.array(symbol.type()).creationOpcode
+                            );
+                        }
+                        method.visitVarInsn(ASTORE, local(symbol));
+                    }
                     prepareStore(symbol);
                     final Expression initializer = variable.initializer();
                     expression(initializer);
@@ -1272,7 +1384,17 @@ public final class BytecodeGenerator {
                         "No local storage for " + symbol.name()
                     );
                 }
-                method.visitVarInsn(loadOpcode(symbol.type()), slot);
+                if (cell(symbol)) {
+                    method.visitVarInsn(ALOAD, slot);
+                    method.visitInsn(ICONST_0);
+                    method.visitInsn(opcode(symbol.type(), IALOAD));
+                    if (reference(symbol.type())) {
+                        readObject(symbol.type());
+                    }
+                }
+                else {
+                    method.visitVarInsn(loadOpcode(symbol.type()), slot);
+                }
             }
         }
 
@@ -1286,6 +1408,16 @@ public final class BytecodeGenerator {
 
         // Instance stores expect the receiver below the value on the stack.
         private void store(final Symbol symbol) {
+            if (cell(symbol)) {
+                final int value = nextLocal;
+                nextLocal += slots(symbol.type());
+                method.visitVarInsn(storeOpcode(symbol.type()), value);
+                method.visitVarInsn(ALOAD, local(symbol));
+                method.visitInsn(ICONST_0);
+                method.visitVarInsn(loadOpcode(symbol.type()), value);
+                method.visitInsn(arrayStoreOpcode(symbol.type()));
+                return;
+            }
             if (instance != null && instance.members().containsKey(symbol)) {
                 method.visitFieldInsn(
                     PUTFIELD,
@@ -1451,16 +1583,35 @@ public final class BytecodeGenerator {
                     for (final Expression argument : creation.arguments()) {
                         expression(argument);
                     }
+                    final FunctionType constructorType =
+                        semanticModel.getConstructor(
+                            (ClassType) semanticModel
+                                .getExpressionType(creation)
+                        );
+                    final boolean omitted =
+                        creation.arguments()
+                            .size() < constructorType.parameterTypes().size();
+                    if (omitted) {
+                        final boolean[] assigned =
+                            new boolean[constructorType.parameterTypes()
+                                .size()];
+                        for (int i = 0; i < assigned.length; i++) {
+                            assigned[i] = i < creation.arguments().size();
+                            if (!assigned[i]) {
+                                omittedValue(
+                                    constructorType.parameterTypes().get(i)
+                                );
+                            }
+                        }
+                        omissionMask(assigned);
+                    }
                     method.visitMethodInsn(
                         INVOKESPECIAL,
                         owner,
                         "<init>",
-                        methodDescriptor(
-                            semanticModel.getConstructor(
-                                (ClassType) semanticModel
-                                    .getExpressionType(creation)
-                            )
-                        ),
+                        omitted
+                            ? defaultDescriptor(constructorType)
+                            : methodDescriptor(constructorType),
                         false
                     );
                 }
@@ -1482,10 +1633,7 @@ public final class BytecodeGenerator {
                     }
                 }
                 case SliceExpression slice -> slice(slice);
-                case LambdaExpression lambda -> throw unsupported(
-                    lambda,
-                    "Lambda generation requires closure analysis"
-                );
+                case LambdaExpression lambda -> lambda(lambda);
             }
             convertExpression(expression);
         }
@@ -1521,6 +1669,145 @@ public final class BytecodeGenerator {
             }
             else {
                 convert(from, to);
+            }
+        }
+
+        private boolean cell(final Symbol symbol) {
+            return semanticModel.isCapturedMutable(symbol)
+                && !globals.containsKey(symbol)
+                && (instance == null
+                    || !instance.members().containsKey(symbol));
+        }
+
+        private void readObject(final Type type) {
+            final String owner = boxedOwner(type);
+            if (owner != null) {
+                method.visitTypeInsn(CHECKCAST, owner);
+                final String valueMethod = switch ((BuiltinType) type) {
+                    case I8 -> "byteValue";
+                    case I16 -> "shortValue";
+                    case I32 -> "intValue";
+                    case I64 -> "longValue";
+                    case F32 -> "floatValue";
+                    case F64 -> "doubleValue";
+                    case BOOL -> "booleanValue";
+                    case CHAR -> "charValue";
+                    default ->
+                        throw new IllegalArgumentException("Not a primitive");
+                };
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    owner,
+                    valueMethod,
+                    "()" + descriptor(type),
+                    false
+                );
+            }
+            else if (!descriptor(type).equals("Ljava/lang/Object;")) {
+                method.visitTypeInsn(
+                    CHECKCAST,
+                    org.objectweb.asm.Type.getType(descriptor(type))
+                        .getInternalName()
+                );
+            }
+        }
+
+        private void lambda(final LambdaExpression lambda) {
+            final FunctionType type =
+                (FunctionType) semanticModel.getExpressionType(lambda);
+            final List<Symbol> captures =
+                semanticModel.getLambdaCaptures(lambda)
+                    .stream()
+                    .filter(locals::containsKey)
+                    .toList();
+            final String name = "$lambda" + nextLambda++;
+            final StringBuilder signature = new StringBuilder("(");
+            for (final Symbol capture : captures) {
+                signature.append(
+                    cell(capture)
+                        ? reference(capture.type())
+                            ? "[Ljava/lang/Object;"
+                            : "[" + descriptor(capture.type())
+                        : descriptor(capture.type())
+                );
+            }
+            for (final Type parameter : type.parameterTypes()) {
+                signature.append(descriptor(parameter));
+            }
+            signature.append(")").append(descriptor(type.returnType()));
+            final String owner =
+                instance == null ? moduleName : instance.owner();
+            final MethodVisitor body =
+                Objects.requireNonNull(currentWriter)
+                    .visitMethod(
+                        ACC_PUBLIC | ACC_SYNTHETIC
+                            | (instance == null ? ACC_STATIC : 0),
+                        name,
+                        signature.toString(),
+                        null,
+                        null
+                    );
+            final MethodGenerator generator =
+                new MethodGenerator(body, globals, type.returnType(), instance);
+            body.visitCode();
+            for (final Symbol capture : captures) {
+                generator.local(capture);
+            }
+            for (final LambdaParameter parameter : lambda.parameters()) {
+                generator.local(semanticModel.getSymbol(parameter.name()));
+            }
+            if (lambda.body() instanceof Expression expression) {
+                generator.expression(expression);
+                body.visitInsn(returnOpcode(type.returnType()));
+                generator.finish(false);
+            }
+            else {
+                generator
+                    .finish(generator.block((BlockStatement) lambda.body()));
+            }
+            method.visitLdcInsn(
+                new Handle(
+                    instance == null ? H_INVOKESTATIC : H_INVOKEVIRTUAL,
+                    owner,
+                    name,
+                    signature.toString(),
+                    false
+                )
+            );
+            if (instance != null) {
+                method.visitVarInsn(ALOAD, 0);
+                method.visitMethodInsn(
+                    INVOKEVIRTUAL,
+                    "java/lang/invoke/MethodHandle",
+                    "bindTo",
+                    "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
+                    false
+                );
+            }
+            if (!captures.isEmpty()) {
+                method.visitInsn(ICONST_0);
+                method.visitLdcInsn(captures.size());
+                method.visitTypeInsn(ANEWARRAY, "java/lang/Object");
+                for (int i = 0; i < captures.size(); i++) {
+                    final Symbol capture = captures.get(i);
+                    method.visitInsn(DUP);
+                    method.visitLdcInsn(i);
+                    if (cell(capture)) {
+                        method.visitVarInsn(ALOAD, local(capture));
+                    }
+                    else {
+                        load(capture);
+                        box(capture.type());
+                    }
+                    method.visitInsn(AASTORE);
+                }
+                method.visitMethodInsn(
+                    INVOKESTATIC,
+                    "java/lang/invoke/MethodHandles",
+                    "insertArguments",
+                    "(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;",
+                    false
+                );
             }
         }
 
@@ -1638,7 +1925,7 @@ public final class BytecodeGenerator {
                     INVOKEVIRTUAL,
                     memberOwner(member),
                     function.name(),
-                    methodDescriptor(function.type()),
+                    callDescriptor(call, function.type()),
                     false
                 );
             }
@@ -1661,7 +1948,7 @@ public final class BytecodeGenerator {
                         ? Objects.requireNonNull(instance).owner()
                         : moduleName,
                     function.name(),
-                    methodDescriptor(type),
+                    callDescriptor(call, type),
                     false
                 );
             }
@@ -1678,9 +1965,44 @@ public final class BytecodeGenerator {
             }
         }
 
+        private String callDescriptor(
+            final CallExpression call,
+            final FunctionType type
+        ) {
+            return call.arguments().size() < type.parameterTypes().size()
+                ? defaultDescriptor(type)
+                : methodDescriptor(type);
+        }
+
+        private void omittedValue(final Type type) {
+            switch (descriptor(type)) {
+                case "J" -> method.visitInsn(LCONST_0);
+                case "F" -> method.visitInsn(FCONST_0);
+                case "D" -> method.visitInsn(DCONST_0);
+                case "I", "B", "S", "C", "Z" -> method.visitInsn(ICONST_0);
+                default -> method.visitInsn(ACONST_NULL);
+            }
+        }
+
+        private void omissionMask(final boolean[] assigned) {
+            method.visitLdcInsn(assigned.length);
+            method.visitIntInsn(NEWARRAY, T_BOOLEAN);
+            for (int i = 0; i < assigned.length; i++) {
+                if (!assigned[i]) {
+                    method.visitInsn(DUP);
+                    method.visitLdcInsn(i);
+                    method.visitInsn(ICONST_1);
+                    method.visitInsn(BASTORE);
+                }
+            }
+        }
+
         private void callArguments(final CallExpression call) {
+            final FunctionType type =
+                (FunctionType) semanticModel.getExpressionType(call.callee());
             if (
-                call.arguments()
+                call.arguments().size() == type.parameterTypes().size() && call
+                    .arguments()
                     .stream()
                     .noneMatch(
                         argument -> argument instanceof NamedArgumentExpression
@@ -1691,11 +2013,10 @@ public final class BytecodeGenerator {
                 }
                 return;
             }
-            final FunctionType type =
-                (FunctionType) semanticModel.getExpressionType(call.callee());
             final List<Integer> parameters =
                 semanticModel.getArgumentParameters(call);
-            final int[] locals = new int[parameters.size()];
+            final int[] locals = new int[type.parameterTypes().size()];
+            final boolean[] assigned = new boolean[locals.length];
             for (int i = 0; i < parameters.size(); i++) {
                 final Expression supplied = call.arguments().get(i);
                 final Expression value =
@@ -1707,14 +2028,23 @@ public final class BytecodeGenerator {
                 final int slot = nextLocal;
                 nextLocal += slots(parameterType);
                 locals[parameter] = slot;
+                assigned[parameter] = true;
                 expression(value);
                 method.visitVarInsn(storeOpcode(parameterType), slot);
             }
             for (int i = 0; i < locals.length; i++) {
-                method.visitVarInsn(
-                    loadOpcode(type.parameterTypes().get(i)),
-                    locals[i]
-                );
+                if (assigned[i]) {
+                    method.visitVarInsn(
+                        loadOpcode(type.parameterTypes().get(i)),
+                        locals[i]
+                    );
+                }
+                else {
+                    omittedValue(type.parameterTypes().get(i));
+                }
+            }
+            if (parameters.size() < locals.length) {
+                omissionMask(assigned);
             }
         }
 

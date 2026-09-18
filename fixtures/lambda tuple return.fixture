@@ -1,0 +1,274 @@
+const foo: (i32) => (i32, bool) = (value) => (value, value % 2 == 0);
+print(foo(1));
+print(foo(2));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+COLON (1:10-1:11)
+LEFT_PAREN (1:12-1:13)
+IDENTIFIER "i32" (1:13-1:16)
+RIGHT_PAREN (1:16-1:17)
+ARROW (1:18-1:20)
+LEFT_PAREN (1:21-1:22)
+IDENTIFIER "i32" (1:22-1:25)
+COMMA (1:25-1:26)
+IDENTIFIER "bool" (1:27-1:31)
+RIGHT_PAREN (1:31-1:32)
+EQUAL (1:33-1:34)
+LEFT_PAREN (1:35-1:36)
+IDENTIFIER "value" (1:36-1:41)
+RIGHT_PAREN (1:41-1:42)
+ARROW (1:43-1:45)
+LEFT_PAREN (1:46-1:47)
+IDENTIFIER "value" (1:47-1:52)
+COMMA (1:52-1:53)
+IDENTIFIER "value" (1:54-1:59)
+PERCENT (1:60-1:61)
+INTEGER_LITERAL "2" (1:62-1:63)
+EQUAL_EQUAL (1:64-1:66)
+INTEGER_LITERAL "0" (1:67-1:68)
+RIGHT_PAREN (1:68-1:69)
+SEMICOLON (1:69-1:70)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "foo" (2:7-2:10)
+LEFT_PAREN (2:10-2:11)
+INTEGER_LITERAL "1" (2:11-2:12)
+RIGHT_PAREN (2:12-2:13)
+RIGHT_PAREN (2:13-2:14)
+SEMICOLON (2:14-2:15)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "foo" (3:7-3:10)
+LEFT_PAREN (3:10-3:11)
+INTEGER_LITERAL "2" (3:11-3:12)
+RIGHT_PAREN (3:12-3:13)
+RIGHT_PAREN (3:13-3:14)
+SEMICOLON (3:14-3:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:15
+  (VariableDeclaration
+    range: 1:1-1:70
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    (FunctionTypeNode
+      range: 1:12-1:32
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      (TupleTypeNode
+        range: 1:21-1:32
+        (NamedTypeNode
+          range: 1:22-1:25
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 1:27-1:31
+          name: "bool"
+        )
+      )
+    )
+    (LambdaExpression
+      range: 1:35-1:69
+      (LambdaParameter
+        range: 1:36-1:41
+        (IdentifierDeclaration
+          range: 1:36-1:41
+          name: "value"
+        )
+      )
+      (TupleExpression
+        range: 1:46-1:69
+        (IdentifierExpression
+          range: 1:47-1:52
+          name: "value"
+        )
+        (BinaryExpression
+          range: 1:54-1:68
+          (BinaryExpression
+            range: 1:54-1:63
+            (IdentifierExpression
+              range: 1:54-1:59
+              name: "value"
+            )
+            operator: MODULO
+            (LiteralExpression
+              range: 1:62-1:63
+              kind: INT
+              text: "2"
+            )
+          )
+          operator: EQUAL
+          (LiteralExpression
+            range: 1:67-1:68
+            kind: INT
+            text: "0"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:15
+    (CallExpression
+      range: 2:1-2:14
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:13
+        (IdentifierExpression
+          range: 2:7-2:10
+          name: "foo"
+        )
+        (LiteralExpression
+          range: 2:11-2:12
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:15
+    (CallExpression
+      range: 3:1-3:14
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:13
+        (IdentifierExpression
+          range: 3:7-3:10
+          name: "foo"
+        )
+        (LiteralExpression
+          range: 3:11-3:12
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:35-1:69 -> (i32) => (i32, bool)
+  1:46-1:69 -> (i32, bool)
+  1:47-1:52 -> i32
+  1:54-1:59 -> i32
+  1:54-1:63 -> i32
+  1:54-1:68 -> bool
+  1:62-1:63 -> i32
+  1:67-1:68 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:14 -> void
+  2:7-2:10 -> (i32) => (i32, bool)
+  2:7-2:13 -> (i32, bool)
+  2:11-2:12 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:14 -> void
+  3:7-3:10 -> (i32) => (i32, bool)
+  3:7-3:13 -> (i32, bool)
+  3:11-3:12 -> i32
+
+Resolved types:
+  1:12-1:32 -> (i32) => (i32, bool)
+  1:13-1:16 -> i32
+  1:21-1:32 -> (i32, bool)
+  1:22-1:25 -> i32
+  1:27-1:31 -> bool
+
+Declarations:
+  1:7-1:10 -> const foo: (i32) => (i32, bool)
+  1:36-1:41 -> const value: i32
+
+References:
+  1:47-1:52 -> 1:36-1:41
+  1:54-1:59 -> 1:36-1:41
+  2:1-2:6 -> builtin print
+  2:7-2:10 -> 1:7-1:10
+  3:1-3:6 -> builtin print
+  3:7-3:10 -> 1:7-1:10
+
+--- BYTECODE ---
+
+// class version 65.0 (65)
+// access flags 0x31
+public final class Test {
+
+
+  // access flags 0x19
+  public final static Ljava/lang/invoke/MethodHandle; foo
+
+  // access flags 0x8
+  static <clinit>()V
+    // handle kind 0x6 : INVOKESTATIC
+    LDC Test.$lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    PUTSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    LDC 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
+    GETSTATIC Test.foo : Ljava/lang/invoke/MethodHandle;
+    LDC 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact (I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/Object;)V
+    RETURN
+    MAXSTACK = 3
+    MAXLOCALS = 0
+
+  // access flags 0x1009
+  public static synthetic $lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+   L0
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    ILOAD 0
+    INVOKESTATIC java/lang/Integer.valueOf (I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    ILOAD 0
+    LDC 2
+    IREM
+    LDC 0
+    IF_ICMPEQ L1
+    ICONST_0
+    GOTO L2
+   L1
+   FRAME FULL [I] [L0 L0 [Ljava/lang/Object; [Ljava/lang/Object; I]
+    ICONST_1
+   L2
+   FRAME FULL [I] [L0 L0 [Ljava/lang/Object; [Ljava/lang/Object; I I]
+    INVOKESTATIC java/lang/Boolean.valueOf (Z)Ljava/lang/Boolean;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init> ([Ljava/lang/Object;)V
+    ARETURN
+    MAXSTACK = 7
+    MAXLOCALS = 1
+}
+
+--- OUTPUT ---
+
+(1, false)
+(2, true)
+
