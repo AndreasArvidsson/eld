@@ -1,7 +1,11 @@
 var calls = 0;
 const source = [1, 2];
-func spread() [i32] { calls = calls * 10 + 2; return source; }
-func value(n: i32) i32 { calls = calls * 10 + n; source[0] = n; return n; }
+func spread() [i32] {
+    calls = calls * 10 + 2; return source;
+}
+func value(n: i32) i32 {
+    calls = calls * 10 + n; source[0] = n; return n;
+}
 const result = [value(1), ...spread(), value(3), ...spread(), value(4)];
 print(calls);
 print(result);
@@ -31,96 +35,96 @@ LEFT_BRACKET (3:15-3:16)
 IDENTIFIER "i32" (3:16-3:19)
 RIGHT_BRACKET (3:19-3:20)
 LEFT_BRACE (3:21-3:22)
-IDENTIFIER "calls" (3:23-3:28)
-EQUAL (3:29-3:30)
-IDENTIFIER "calls" (3:31-3:36)
-STAR (3:37-3:38)
-INTEGER_LITERAL "10" (3:39-3:41)
-PLUS (3:42-3:43)
-INTEGER_LITERAL "2" (3:44-3:45)
-SEMICOLON (3:45-3:46)
-RETURN (3:47-3:53)
-IDENTIFIER "source" (3:54-3:60)
-SEMICOLON (3:60-3:61)
-RIGHT_BRACE (3:62-3:63)
-FUNC (4:1-4:5)
-IDENTIFIER "value" (4:6-4:11)
-LEFT_PAREN (4:11-4:12)
-IDENTIFIER "n" (4:12-4:13)
-COLON (4:13-4:14)
-IDENTIFIER "i32" (4:15-4:18)
-RIGHT_PAREN (4:18-4:19)
-IDENTIFIER "i32" (4:20-4:23)
-LEFT_BRACE (4:24-4:25)
-IDENTIFIER "calls" (4:26-4:31)
-EQUAL (4:32-4:33)
-IDENTIFIER "calls" (4:34-4:39)
-STAR (4:40-4:41)
-INTEGER_LITERAL "10" (4:42-4:44)
-PLUS (4:45-4:46)
-IDENTIFIER "n" (4:47-4:48)
-SEMICOLON (4:48-4:49)
-IDENTIFIER "source" (4:50-4:56)
-LEFT_BRACKET (4:56-4:57)
-INTEGER_LITERAL "0" (4:57-4:58)
-RIGHT_BRACKET (4:58-4:59)
-EQUAL (4:60-4:61)
-IDENTIFIER "n" (4:62-4:63)
-SEMICOLON (4:63-4:64)
-RETURN (4:65-4:71)
-IDENTIFIER "n" (4:72-4:73)
-SEMICOLON (4:73-4:74)
-RIGHT_BRACE (4:75-4:76)
-CONST (5:1-5:6)
-IDENTIFIER "result" (5:7-5:13)
-EQUAL (5:14-5:15)
-LEFT_BRACKET (5:16-5:17)
-IDENTIFIER "value" (5:17-5:22)
-LEFT_PAREN (5:22-5:23)
-INTEGER_LITERAL "1" (5:23-5:24)
-RIGHT_PAREN (5:24-5:25)
-COMMA (5:25-5:26)
-ELLIPSIS (5:27-5:30)
-IDENTIFIER "spread" (5:30-5:36)
-LEFT_PAREN (5:36-5:37)
-RIGHT_PAREN (5:37-5:38)
-COMMA (5:38-5:39)
-IDENTIFIER "value" (5:40-5:45)
-LEFT_PAREN (5:45-5:46)
-INTEGER_LITERAL "3" (5:46-5:47)
-RIGHT_PAREN (5:47-5:48)
-COMMA (5:48-5:49)
-ELLIPSIS (5:50-5:53)
-IDENTIFIER "spread" (5:53-5:59)
-LEFT_PAREN (5:59-5:60)
-RIGHT_PAREN (5:60-5:61)
-COMMA (5:61-5:62)
-IDENTIFIER "value" (5:63-5:68)
-LEFT_PAREN (5:68-5:69)
-INTEGER_LITERAL "4" (5:69-5:70)
-RIGHT_PAREN (5:70-5:71)
-RIGHT_BRACKET (5:71-5:72)
-SEMICOLON (5:72-5:73)
-IDENTIFIER "print" (6:1-6:6)
-LEFT_PAREN (6:6-6:7)
-IDENTIFIER "calls" (6:7-6:12)
-RIGHT_PAREN (6:12-6:13)
-SEMICOLON (6:13-6:14)
-IDENTIFIER "print" (7:1-7:6)
-LEFT_PAREN (7:6-7:7)
-IDENTIFIER "result" (7:7-7:13)
-RIGHT_PAREN (7:13-7:14)
-SEMICOLON (7:14-7:15)
-IDENTIFIER "print" (8:1-8:6)
-LEFT_PAREN (8:6-8:7)
-IDENTIFIER "source" (8:7-8:13)
-RIGHT_PAREN (8:13-8:14)
-SEMICOLON (8:14-8:15)
+IDENTIFIER "calls" (4:5-4:10)
+EQUAL (4:11-4:12)
+IDENTIFIER "calls" (4:13-4:18)
+STAR (4:19-4:20)
+INTEGER_LITERAL "10" (4:21-4:23)
+PLUS (4:24-4:25)
+INTEGER_LITERAL "2" (4:26-4:27)
+SEMICOLON (4:27-4:28)
+RETURN (4:29-4:35)
+IDENTIFIER "source" (4:36-4:42)
+SEMICOLON (4:42-4:43)
+RIGHT_BRACE (5:1-5:2)
+FUNC (6:1-6:5)
+IDENTIFIER "value" (6:6-6:11)
+LEFT_PAREN (6:11-6:12)
+IDENTIFIER "n" (6:12-6:13)
+COLON (6:13-6:14)
+IDENTIFIER "i32" (6:15-6:18)
+RIGHT_PAREN (6:18-6:19)
+IDENTIFIER "i32" (6:20-6:23)
+LEFT_BRACE (6:24-6:25)
+IDENTIFIER "calls" (7:5-7:10)
+EQUAL (7:11-7:12)
+IDENTIFIER "calls" (7:13-7:18)
+STAR (7:19-7:20)
+INTEGER_LITERAL "10" (7:21-7:23)
+PLUS (7:24-7:25)
+IDENTIFIER "n" (7:26-7:27)
+SEMICOLON (7:27-7:28)
+IDENTIFIER "source" (7:29-7:35)
+LEFT_BRACKET (7:35-7:36)
+INTEGER_LITERAL "0" (7:36-7:37)
+RIGHT_BRACKET (7:37-7:38)
+EQUAL (7:39-7:40)
+IDENTIFIER "n" (7:41-7:42)
+SEMICOLON (7:42-7:43)
+RETURN (7:44-7:50)
+IDENTIFIER "n" (7:51-7:52)
+SEMICOLON (7:52-7:53)
+RIGHT_BRACE (8:1-8:2)
+CONST (9:1-9:6)
+IDENTIFIER "result" (9:7-9:13)
+EQUAL (9:14-9:15)
+LEFT_BRACKET (9:16-9:17)
+IDENTIFIER "value" (9:17-9:22)
+LEFT_PAREN (9:22-9:23)
+INTEGER_LITERAL "1" (9:23-9:24)
+RIGHT_PAREN (9:24-9:25)
+COMMA (9:25-9:26)
+ELLIPSIS (9:27-9:30)
+IDENTIFIER "spread" (9:30-9:36)
+LEFT_PAREN (9:36-9:37)
+RIGHT_PAREN (9:37-9:38)
+COMMA (9:38-9:39)
+IDENTIFIER "value" (9:40-9:45)
+LEFT_PAREN (9:45-9:46)
+INTEGER_LITERAL "3" (9:46-9:47)
+RIGHT_PAREN (9:47-9:48)
+COMMA (9:48-9:49)
+ELLIPSIS (9:50-9:53)
+IDENTIFIER "spread" (9:53-9:59)
+LEFT_PAREN (9:59-9:60)
+RIGHT_PAREN (9:60-9:61)
+COMMA (9:61-9:62)
+IDENTIFIER "value" (9:63-9:68)
+LEFT_PAREN (9:68-9:69)
+INTEGER_LITERAL "4" (9:69-9:70)
+RIGHT_PAREN (9:70-9:71)
+RIGHT_BRACKET (9:71-9:72)
+SEMICOLON (9:72-9:73)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "calls" (10:7-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "result" (11:7-11:13)
+RIGHT_PAREN (11:13-11:14)
+SEMICOLON (11:14-11:15)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "source" (12:7-12:13)
+RIGHT_PAREN (12:13-12:14)
+SEMICOLON (12:14-12:15)
 
 --- AST ---
 
 (Program
-  range: 1:1-8:15
+  range: 1:1-12:15
   (VariableDeclaration
     range: 1:1-1:15
     mutability: VAR
@@ -158,7 +162,7 @@ SEMICOLON (8:14-8:15)
     )
   )
   (FunctionDeclaration
-    range: 3:1-3:63
+    range: 3:1-5:2
     (IdentifierDeclaration
       range: 3:6-3:12
       name: "spread"
@@ -171,33 +175,33 @@ SEMICOLON (8:14-8:15)
       )
     )
     (BlockStatement
-      range: 3:21-3:63
+      range: 3:21-5:2
       (ExpressionStatement
-        range: 3:23-3:46
+        range: 4:5-4:28
         (AssignmentExpression
-          range: 3:23-3:45
+          range: 4:5-4:27
           (IdentifierExpression
-            range: 3:23-3:28
+            range: 4:5-4:10
             name: "calls"
           )
           (BinaryExpression
-            range: 3:31-3:45
+            range: 4:13-4:27
             (BinaryExpression
-              range: 3:31-3:41
+              range: 4:13-4:23
               (IdentifierExpression
-                range: 3:31-3:36
+                range: 4:13-4:18
                 name: "calls"
               )
               operator: MULTIPLY
               (LiteralExpression
-                range: 3:39-3:41
+                range: 4:21-4:23
                 kind: INT
                 text: "10"
               )
             )
             operator: ADD
             (LiteralExpression
-              range: 3:44-3:45
+              range: 4:26-4:27
               kind: INT
               text: "2"
             )
@@ -205,163 +209,163 @@ SEMICOLON (8:14-8:15)
         )
       )
       (ReturnStatement
-        range: 3:47-3:61
+        range: 4:29-4:43
         (IdentifierExpression
-          range: 3:54-3:60
+          range: 4:36-4:42
           name: "source"
         )
       )
     )
   )
   (FunctionDeclaration
-    range: 4:1-4:76
+    range: 6:1-8:2
     (IdentifierDeclaration
-      range: 4:6-4:11
+      range: 6:6-6:11
       name: "value"
     )
     (FunctionParameter
-      range: 4:12-4:18
+      range: 6:12-6:18
       (IdentifierDeclaration
-        range: 4:12-4:13
+        range: 6:12-6:13
         name: "n"
       )
       (NamedTypeNode
-        range: 4:15-4:18
+        range: 6:15-6:18
         name: "i32"
       )
       optional: false
       defaultValue: null
     )
     (NamedTypeNode
-      range: 4:20-4:23
+      range: 6:20-6:23
       name: "i32"
     )
     (BlockStatement
-      range: 4:24-4:76
+      range: 6:24-8:2
       (ExpressionStatement
-        range: 4:26-4:49
+        range: 7:5-7:28
         (AssignmentExpression
-          range: 4:26-4:48
+          range: 7:5-7:27
           (IdentifierExpression
-            range: 4:26-4:31
+            range: 7:5-7:10
             name: "calls"
           )
           (BinaryExpression
-            range: 4:34-4:48
+            range: 7:13-7:27
             (BinaryExpression
-              range: 4:34-4:44
+              range: 7:13-7:23
               (IdentifierExpression
-                range: 4:34-4:39
+                range: 7:13-7:18
                 name: "calls"
               )
               operator: MULTIPLY
               (LiteralExpression
-                range: 4:42-4:44
+                range: 7:21-7:23
                 kind: INT
                 text: "10"
               )
             )
             operator: ADD
             (IdentifierExpression
-              range: 4:47-4:48
+              range: 7:26-7:27
               name: "n"
             )
           )
         )
       )
       (ExpressionStatement
-        range: 4:50-4:64
+        range: 7:29-7:43
         (AssignmentExpression
-          range: 4:50-4:63
+          range: 7:29-7:42
           (SubscriptExpression
-            range: 4:50-4:59
+            range: 7:29-7:38
             (IdentifierExpression
-              range: 4:50-4:56
+              range: 7:29-7:35
               name: "source"
             )
             (LiteralExpression
-              range: 4:57-4:58
+              range: 7:36-7:37
               kind: INT
               text: "0"
             )
           )
           (IdentifierExpression
-            range: 4:62-4:63
+            range: 7:41-7:42
             name: "n"
           )
         )
       )
       (ReturnStatement
-        range: 4:65-4:74
+        range: 7:44-7:53
         (IdentifierExpression
-          range: 4:72-4:73
+          range: 7:51-7:52
           name: "n"
         )
       )
     )
   )
   (VariableDeclaration
-    range: 5:1-5:73
+    range: 9:1-9:73
     mutability: CONST
     (IdentifierDeclaration
-      range: 5:7-5:13
+      range: 9:7-9:13
       name: "result"
     )
     type: null
     (ArrayExpression
-      range: 5:16-5:72
+      range: 9:16-9:72
       (CallExpression
-        range: 5:17-5:25
+        range: 9:17-9:25
         (IdentifierExpression
-          range: 5:17-5:22
+          range: 9:17-9:22
           name: "value"
         )
         (LiteralExpression
-          range: 5:23-5:24
+          range: 9:23-9:24
           kind: INT
           text: "1"
         )
       )
       (ArraySpread
-        range: 5:27-5:38
+        range: 9:27-9:38
         (CallExpression
-          range: 5:30-5:38
+          range: 9:30-9:38
           (IdentifierExpression
-            range: 5:30-5:36
+            range: 9:30-9:36
             name: "spread"
           )
         )
       )
       (CallExpression
-        range: 5:40-5:48
+        range: 9:40-9:48
         (IdentifierExpression
-          range: 5:40-5:45
+          range: 9:40-9:45
           name: "value"
         )
         (LiteralExpression
-          range: 5:46-5:47
+          range: 9:46-9:47
           kind: INT
           text: "3"
         )
       )
       (ArraySpread
-        range: 5:50-5:61
+        range: 9:50-9:61
         (CallExpression
-          range: 5:53-5:61
+          range: 9:53-9:61
           (IdentifierExpression
-            range: 5:53-5:59
+            range: 9:53-9:59
             name: "spread"
           )
         )
       )
       (CallExpression
-        range: 5:63-5:71
+        range: 9:63-9:71
         (IdentifierExpression
-          range: 5:63-5:68
+          range: 9:63-9:68
           name: "value"
         )
         (LiteralExpression
-          range: 5:69-5:70
+          range: 9:69-9:70
           kind: INT
           text: "4"
         )
@@ -369,43 +373,43 @@ SEMICOLON (8:14-8:15)
     )
   )
   (ExpressionStatement
-    range: 6:1-6:14
+    range: 10:1-10:14
     (CallExpression
-      range: 6:1-6:13
+      range: 10:1-10:13
       (IdentifierExpression
-        range: 6:1-6:6
+        range: 10:1-10:6
         name: "print"
       )
       (IdentifierExpression
-        range: 6:7-6:12
+        range: 10:7-10:12
         name: "calls"
       )
     )
   )
   (ExpressionStatement
-    range: 7:1-7:15
+    range: 11:1-11:15
     (CallExpression
-      range: 7:1-7:14
+      range: 11:1-11:14
       (IdentifierExpression
-        range: 7:1-7:6
+        range: 11:1-11:6
         name: "print"
       )
       (IdentifierExpression
-        range: 7:7-7:13
+        range: 11:7-11:13
         name: "result"
       )
     )
   )
   (ExpressionStatement
-    range: 8:1-8:15
+    range: 12:1-12:15
     (CallExpression
-      range: 8:1-8:14
+      range: 12:1-12:14
       (IdentifierExpression
-        range: 8:1-8:6
+        range: 12:1-12:6
         name: "print"
       )
       (IdentifierExpression
-        range: 8:7-8:13
+        range: 12:7-12:13
         name: "source"
       )
     )
@@ -419,88 +423,88 @@ Expression types:
   2:16-2:22 -> [i32]
   2:17-2:18 -> i32
   2:20-2:21 -> i32
-  3:23-3:28 -> i32
-  3:23-3:45 -> i32
-  3:31-3:36 -> i32
-  3:31-3:41 -> i32
-  3:31-3:45 -> i32
-  3:39-3:41 -> i32
-  3:44-3:45 -> i32
-  3:54-3:60 -> [i32]
-  4:26-4:31 -> i32
-  4:26-4:48 -> i32
-  4:34-4:39 -> i32
-  4:34-4:44 -> i32
-  4:34-4:48 -> i32
-  4:42-4:44 -> i32
-  4:47-4:48 -> i32
-  4:50-4:56 -> [i32]
-  4:50-4:59 -> i32
-  4:50-4:63 -> i32
-  4:57-4:58 -> i32
-  4:62-4:63 -> i32
-  4:72-4:73 -> i32
-  5:16-5:72 -> [i32]
-  5:17-5:22 -> (i32) => i32
-  5:17-5:25 -> i32
-  5:23-5:24 -> i32
-  5:27-5:38 -> i32
-  5:30-5:36 -> () => [i32]
-  5:30-5:38 -> [i32]
-  5:40-5:45 -> (i32) => i32
-  5:40-5:48 -> i32
-  5:46-5:47 -> i32
-  5:50-5:61 -> i32
-  5:53-5:59 -> () => [i32]
-  5:53-5:61 -> [i32]
-  5:63-5:68 -> (i32) => i32
-  5:63-5:71 -> i32
-  5:69-5:70 -> i32
-  6:1-6:6 -> (any) => void
-  6:1-6:13 -> void
-  6:7-6:12 -> i32
-  7:1-7:6 -> (any) => void
-  7:1-7:14 -> void
-  7:7-7:13 -> [i32]
-  8:1-8:6 -> (any) => void
-  8:1-8:14 -> void
-  8:7-8:13 -> [i32]
+  4:5-4:10 -> i32
+  4:5-4:27 -> i32
+  4:13-4:18 -> i32
+  4:13-4:23 -> i32
+  4:13-4:27 -> i32
+  4:21-4:23 -> i32
+  4:26-4:27 -> i32
+  4:36-4:42 -> [i32]
+  7:5-7:10 -> i32
+  7:5-7:27 -> i32
+  7:13-7:18 -> i32
+  7:13-7:23 -> i32
+  7:13-7:27 -> i32
+  7:21-7:23 -> i32
+  7:26-7:27 -> i32
+  7:29-7:35 -> [i32]
+  7:29-7:38 -> i32
+  7:29-7:42 -> i32
+  7:36-7:37 -> i32
+  7:41-7:42 -> i32
+  7:51-7:52 -> i32
+  9:16-9:72 -> [i32]
+  9:17-9:22 -> (i32) => i32
+  9:17-9:25 -> i32
+  9:23-9:24 -> i32
+  9:27-9:38 -> i32
+  9:30-9:36 -> () => [i32]
+  9:30-9:38 -> [i32]
+  9:40-9:45 -> (i32) => i32
+  9:40-9:48 -> i32
+  9:46-9:47 -> i32
+  9:50-9:61 -> i32
+  9:53-9:59 -> () => [i32]
+  9:53-9:61 -> [i32]
+  9:63-9:68 -> (i32) => i32
+  9:63-9:71 -> i32
+  9:69-9:70 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:13 -> void
+  10:7-10:12 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:14 -> void
+  11:7-11:13 -> [i32]
+  12:1-12:6 -> (any) => void
+  12:1-12:14 -> void
+  12:7-12:13 -> [i32]
 
 Resolved types:
   3:15-3:20 -> [i32]
   3:16-3:19 -> i32
-  4:15-4:18 -> i32
-  4:20-4:23 -> i32
+  6:15-6:18 -> i32
+  6:20-6:23 -> i32
 
 Declarations:
   1:5-1:10 -> var calls: i32
   2:7-2:13 -> const source: [i32]
   3:6-3:12 -> spread() => [i32]
-  4:6-4:11 -> value(i32) => i32
-  4:12-4:13 -> const n: i32
-  5:7-5:13 -> const result: [i32]
+  6:6-6:11 -> value(i32) => i32
+  6:12-6:13 -> const n: i32
+  9:7-9:13 -> const result: [i32]
 
 References:
-  3:23-3:28 -> 1:5-1:10
-  3:31-3:36 -> 1:5-1:10
-  3:54-3:60 -> 2:7-2:13
-  4:26-4:31 -> 1:5-1:10
-  4:34-4:39 -> 1:5-1:10
-  4:47-4:48 -> 4:12-4:13
-  4:50-4:56 -> 2:7-2:13
-  4:62-4:63 -> 4:12-4:13
-  4:72-4:73 -> 4:12-4:13
-  5:17-5:22 -> 4:6-4:11
-  5:30-5:36 -> 3:6-3:12
-  5:40-5:45 -> 4:6-4:11
-  5:53-5:59 -> 3:6-3:12
-  5:63-5:68 -> 4:6-4:11
-  6:1-6:6 -> builtin print
-  6:7-6:12 -> 1:5-1:10
-  7:1-7:6 -> builtin print
-  7:7-7:13 -> 5:7-5:13
-  8:1-8:6 -> builtin print
-  8:7-8:13 -> 2:7-2:13
+  4:5-4:10 -> 1:5-1:10
+  4:13-4:18 -> 1:5-1:10
+  4:36-4:42 -> 2:7-2:13
+  7:5-7:10 -> 1:5-1:10
+  7:13-7:18 -> 1:5-1:10
+  7:26-7:27 -> 6:12-6:13
+  7:29-7:35 -> 2:7-2:13
+  7:41-7:42 -> 6:12-6:13
+  7:51-7:52 -> 6:12-6:13
+  9:17-9:22 -> 6:6-6:11
+  9:30-9:36 -> 3:6-3:12
+  9:40-9:45 -> 6:6-6:11
+  9:53-9:59 -> 3:6-3:12
+  9:63-9:68 -> 6:6-6:11
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 1:5-1:10
+  11:1-11:6 -> builtin print
+  11:7-11:13 -> 9:7-9:13
+  12:1-12:6 -> builtin print
+  12:7-12:13 -> 2:7-2:13
 
 --- BYTECODE ---
 

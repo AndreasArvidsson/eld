@@ -1,9 +1,16 @@
 interface Options { const value: i32; }
 var calls = 0;
 var old: Options = { value: 10 };
-func spread(n: i32) Options { calls = calls * 10 + n; return old; }
-func value(n: i32) i32 { calls = calls * 10 + n; return n; }
-const result: Options = { value: value(1), ...spread(2), value: value(3), ...spread(4), value: value(5) };
+func spread(n: i32) Options {
+    calls = calls * 10 + n; return old;
+}
+func value(n: i32) i32 {
+    calls = calls * 10 + n; return n;
+}
+func property(n: i32) Options {
+    return { value: value(n) };
+}
+const result: Options = { value: value(1), ...spread(2), ...property(3), ...spread(4), ...property(5) };
 print(calls);
 print(result.value);
 print(old.value);
@@ -44,103 +51,121 @@ IDENTIFIER "i32" (4:16-4:19)
 RIGHT_PAREN (4:19-4:20)
 IDENTIFIER "Options" (4:21-4:28)
 LEFT_BRACE (4:29-4:30)
-IDENTIFIER "calls" (4:31-4:36)
-EQUAL (4:37-4:38)
-IDENTIFIER "calls" (4:39-4:44)
-STAR (4:45-4:46)
-INTEGER_LITERAL "10" (4:47-4:49)
-PLUS (4:50-4:51)
-IDENTIFIER "n" (4:52-4:53)
-SEMICOLON (4:53-4:54)
-RETURN (4:55-4:61)
-IDENTIFIER "old" (4:62-4:65)
-SEMICOLON (4:65-4:66)
-RIGHT_BRACE (4:67-4:68)
-FUNC (5:1-5:5)
-IDENTIFIER "value" (5:6-5:11)
-LEFT_PAREN (5:11-5:12)
-IDENTIFIER "n" (5:12-5:13)
-COLON (5:13-5:14)
-IDENTIFIER "i32" (5:15-5:18)
-RIGHT_PAREN (5:18-5:19)
-IDENTIFIER "i32" (5:20-5:23)
-LEFT_BRACE (5:24-5:25)
-IDENTIFIER "calls" (5:26-5:31)
-EQUAL (5:32-5:33)
-IDENTIFIER "calls" (5:34-5:39)
-STAR (5:40-5:41)
-INTEGER_LITERAL "10" (5:42-5:44)
-PLUS (5:45-5:46)
-IDENTIFIER "n" (5:47-5:48)
-SEMICOLON (5:48-5:49)
-RETURN (5:50-5:56)
-IDENTIFIER "n" (5:57-5:58)
-SEMICOLON (5:58-5:59)
-RIGHT_BRACE (5:60-5:61)
-CONST (6:1-6:6)
-IDENTIFIER "result" (6:7-6:13)
-COLON (6:13-6:14)
-IDENTIFIER "Options" (6:15-6:22)
-EQUAL (6:23-6:24)
-LEFT_BRACE (6:25-6:26)
-IDENTIFIER "value" (6:27-6:32)
-COLON (6:32-6:33)
-IDENTIFIER "value" (6:34-6:39)
-LEFT_PAREN (6:39-6:40)
-INTEGER_LITERAL "1" (6:40-6:41)
-RIGHT_PAREN (6:41-6:42)
-COMMA (6:42-6:43)
-ELLIPSIS (6:44-6:47)
-IDENTIFIER "spread" (6:47-6:53)
-LEFT_PAREN (6:53-6:54)
-INTEGER_LITERAL "2" (6:54-6:55)
-RIGHT_PAREN (6:55-6:56)
-COMMA (6:56-6:57)
-IDENTIFIER "value" (6:58-6:63)
-COLON (6:63-6:64)
-IDENTIFIER "value" (6:65-6:70)
-LEFT_PAREN (6:70-6:71)
-INTEGER_LITERAL "3" (6:71-6:72)
-RIGHT_PAREN (6:72-6:73)
-COMMA (6:73-6:74)
-ELLIPSIS (6:75-6:78)
-IDENTIFIER "spread" (6:78-6:84)
-LEFT_PAREN (6:84-6:85)
-INTEGER_LITERAL "4" (6:85-6:86)
-RIGHT_PAREN (6:86-6:87)
-COMMA (6:87-6:88)
-IDENTIFIER "value" (6:89-6:94)
-COLON (6:94-6:95)
-IDENTIFIER "value" (6:96-6:101)
-LEFT_PAREN (6:101-6:102)
-INTEGER_LITERAL "5" (6:102-6:103)
-RIGHT_PAREN (6:103-6:104)
-RIGHT_BRACE (6:105-6:106)
-SEMICOLON (6:106-6:107)
-IDENTIFIER "print" (7:1-7:6)
-LEFT_PAREN (7:6-7:7)
-IDENTIFIER "calls" (7:7-7:12)
-RIGHT_PAREN (7:12-7:13)
-SEMICOLON (7:13-7:14)
-IDENTIFIER "print" (8:1-8:6)
-LEFT_PAREN (8:6-8:7)
-IDENTIFIER "result" (8:7-8:13)
-DOT (8:13-8:14)
-IDENTIFIER "value" (8:14-8:19)
-RIGHT_PAREN (8:19-8:20)
-SEMICOLON (8:20-8:21)
-IDENTIFIER "print" (9:1-9:6)
-LEFT_PAREN (9:6-9:7)
-IDENTIFIER "old" (9:7-9:10)
-DOT (9:10-9:11)
-IDENTIFIER "value" (9:11-9:16)
-RIGHT_PAREN (9:16-9:17)
-SEMICOLON (9:17-9:18)
+IDENTIFIER "calls" (5:5-5:10)
+EQUAL (5:11-5:12)
+IDENTIFIER "calls" (5:13-5:18)
+STAR (5:19-5:20)
+INTEGER_LITERAL "10" (5:21-5:23)
+PLUS (5:24-5:25)
+IDENTIFIER "n" (5:26-5:27)
+SEMICOLON (5:27-5:28)
+RETURN (5:29-5:35)
+IDENTIFIER "old" (5:36-5:39)
+SEMICOLON (5:39-5:40)
+RIGHT_BRACE (6:1-6:2)
+FUNC (7:1-7:5)
+IDENTIFIER "value" (7:6-7:11)
+LEFT_PAREN (7:11-7:12)
+IDENTIFIER "n" (7:12-7:13)
+COLON (7:13-7:14)
+IDENTIFIER "i32" (7:15-7:18)
+RIGHT_PAREN (7:18-7:19)
+IDENTIFIER "i32" (7:20-7:23)
+LEFT_BRACE (7:24-7:25)
+IDENTIFIER "calls" (8:5-8:10)
+EQUAL (8:11-8:12)
+IDENTIFIER "calls" (8:13-8:18)
+STAR (8:19-8:20)
+INTEGER_LITERAL "10" (8:21-8:23)
+PLUS (8:24-8:25)
+IDENTIFIER "n" (8:26-8:27)
+SEMICOLON (8:27-8:28)
+RETURN (8:29-8:35)
+IDENTIFIER "n" (8:36-8:37)
+SEMICOLON (8:37-8:38)
+RIGHT_BRACE (9:1-9:2)
+FUNC (10:1-10:5)
+IDENTIFIER "property" (10:6-10:14)
+LEFT_PAREN (10:14-10:15)
+IDENTIFIER "n" (10:15-10:16)
+COLON (10:16-10:17)
+IDENTIFIER "i32" (10:18-10:21)
+RIGHT_PAREN (10:21-10:22)
+IDENTIFIER "Options" (10:23-10:30)
+LEFT_BRACE (10:31-10:32)
+RETURN (11:5-11:11)
+LEFT_BRACE (11:12-11:13)
+IDENTIFIER "value" (11:14-11:19)
+COLON (11:19-11:20)
+IDENTIFIER "value" (11:21-11:26)
+LEFT_PAREN (11:26-11:27)
+IDENTIFIER "n" (11:27-11:28)
+RIGHT_PAREN (11:28-11:29)
+RIGHT_BRACE (11:30-11:31)
+SEMICOLON (11:31-11:32)
+RIGHT_BRACE (12:1-12:2)
+CONST (13:1-13:6)
+IDENTIFIER "result" (13:7-13:13)
+COLON (13:13-13:14)
+IDENTIFIER "Options" (13:15-13:22)
+EQUAL (13:23-13:24)
+LEFT_BRACE (13:25-13:26)
+IDENTIFIER "value" (13:27-13:32)
+COLON (13:32-13:33)
+IDENTIFIER "value" (13:34-13:39)
+LEFT_PAREN (13:39-13:40)
+INTEGER_LITERAL "1" (13:40-13:41)
+RIGHT_PAREN (13:41-13:42)
+COMMA (13:42-13:43)
+ELLIPSIS (13:44-13:47)
+IDENTIFIER "spread" (13:47-13:53)
+LEFT_PAREN (13:53-13:54)
+INTEGER_LITERAL "2" (13:54-13:55)
+RIGHT_PAREN (13:55-13:56)
+COMMA (13:56-13:57)
+ELLIPSIS (13:58-13:61)
+IDENTIFIER "property" (13:61-13:69)
+LEFT_PAREN (13:69-13:70)
+INTEGER_LITERAL "3" (13:70-13:71)
+RIGHT_PAREN (13:71-13:72)
+COMMA (13:72-13:73)
+ELLIPSIS (13:74-13:77)
+IDENTIFIER "spread" (13:77-13:83)
+LEFT_PAREN (13:83-13:84)
+INTEGER_LITERAL "4" (13:84-13:85)
+RIGHT_PAREN (13:85-13:86)
+COMMA (13:86-13:87)
+ELLIPSIS (13:88-13:91)
+IDENTIFIER "property" (13:91-13:99)
+LEFT_PAREN (13:99-13:100)
+INTEGER_LITERAL "5" (13:100-13:101)
+RIGHT_PAREN (13:101-13:102)
+RIGHT_BRACE (13:103-13:104)
+SEMICOLON (13:104-13:105)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "calls" (14:7-14:12)
+RIGHT_PAREN (14:12-14:13)
+SEMICOLON (14:13-14:14)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "result" (15:7-15:13)
+DOT (15:13-15:14)
+IDENTIFIER "value" (15:14-15:19)
+RIGHT_PAREN (15:19-15:20)
+SEMICOLON (15:20-15:21)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "old" (16:7-16:10)
+DOT (16:10-16:11)
+IDENTIFIER "value" (16:11-16:16)
+RIGHT_PAREN (16:16-16:17)
+SEMICOLON (16:17-16:18)
 
 --- AST ---
 
 (Program
-  range: 1:1-9:18
+  range: 1:1-16:18
   (InterfaceDeclaration
     range: 1:1-1:40
     (IdentifierDeclaration
@@ -202,7 +227,7 @@ SEMICOLON (9:17-9:18)
     )
   )
   (FunctionDeclaration
-    range: 4:1-4:68
+    range: 4:1-6:2
     (IdentifierDeclaration
       range: 4:6-4:12
       name: "spread"
@@ -225,207 +250,250 @@ SEMICOLON (9:17-9:18)
       name: "Options"
     )
     (BlockStatement
-      range: 4:29-4:68
+      range: 4:29-6:2
       (ExpressionStatement
-        range: 4:31-4:54
+        range: 5:5-5:28
         (AssignmentExpression
-          range: 4:31-4:53
+          range: 5:5-5:27
           (IdentifierExpression
-            range: 4:31-4:36
+            range: 5:5-5:10
             name: "calls"
           )
           (BinaryExpression
-            range: 4:39-4:53
+            range: 5:13-5:27
             (BinaryExpression
-              range: 4:39-4:49
+              range: 5:13-5:23
               (IdentifierExpression
-                range: 4:39-4:44
+                range: 5:13-5:18
                 name: "calls"
               )
               operator: MULTIPLY
               (LiteralExpression
-                range: 4:47-4:49
+                range: 5:21-5:23
                 kind: INT
                 text: "10"
               )
             )
             operator: ADD
             (IdentifierExpression
-              range: 4:52-4:53
+              range: 5:26-5:27
               name: "n"
             )
           )
         )
       )
       (ReturnStatement
-        range: 4:55-4:66
+        range: 5:29-5:40
         (IdentifierExpression
-          range: 4:62-4:65
+          range: 5:36-5:39
           name: "old"
         )
       )
     )
   )
   (FunctionDeclaration
-    range: 5:1-5:61
+    range: 7:1-9:2
     (IdentifierDeclaration
-      range: 5:6-5:11
+      range: 7:6-7:11
       name: "value"
     )
     (FunctionParameter
-      range: 5:12-5:18
+      range: 7:12-7:18
       (IdentifierDeclaration
-        range: 5:12-5:13
+        range: 7:12-7:13
         name: "n"
       )
       (NamedTypeNode
-        range: 5:15-5:18
+        range: 7:15-7:18
         name: "i32"
       )
       optional: false
       defaultValue: null
     )
     (NamedTypeNode
-      range: 5:20-5:23
+      range: 7:20-7:23
       name: "i32"
     )
     (BlockStatement
-      range: 5:24-5:61
+      range: 7:24-9:2
       (ExpressionStatement
-        range: 5:26-5:49
+        range: 8:5-8:28
         (AssignmentExpression
-          range: 5:26-5:48
+          range: 8:5-8:27
           (IdentifierExpression
-            range: 5:26-5:31
+            range: 8:5-8:10
             name: "calls"
           )
           (BinaryExpression
-            range: 5:34-5:48
+            range: 8:13-8:27
             (BinaryExpression
-              range: 5:34-5:44
+              range: 8:13-8:23
               (IdentifierExpression
-                range: 5:34-5:39
+                range: 8:13-8:18
                 name: "calls"
               )
               operator: MULTIPLY
               (LiteralExpression
-                range: 5:42-5:44
+                range: 8:21-8:23
                 kind: INT
                 text: "10"
               )
             )
             operator: ADD
             (IdentifierExpression
-              range: 5:47-5:48
+              range: 8:26-8:27
               name: "n"
             )
           )
         )
       )
       (ReturnStatement
-        range: 5:50-5:59
+        range: 8:29-8:38
         (IdentifierExpression
-          range: 5:57-5:58
+          range: 8:36-8:37
           name: "n"
         )
       )
     )
   )
+  (FunctionDeclaration
+    range: 10:1-12:2
+    (IdentifierDeclaration
+      range: 10:6-10:14
+      name: "property"
+    )
+    (FunctionParameter
+      range: 10:15-10:21
+      (IdentifierDeclaration
+        range: 10:15-10:16
+        name: "n"
+      )
+      (NamedTypeNode
+        range: 10:18-10:21
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 10:23-10:30
+      name: "Options"
+    )
+    (BlockStatement
+      range: 10:31-12:2
+      (ReturnStatement
+        range: 11:5-11:32
+        (ObjectExpression
+          range: 11:12-11:31
+          (ObjectMember
+            range: 11:14-11:29
+            (IdentifierDeclaration
+              range: 11:14-11:19
+              name: "value"
+            )
+            (CallExpression
+              range: 11:21-11:29
+              (IdentifierExpression
+                range: 11:21-11:26
+                name: "value"
+              )
+              (IdentifierExpression
+                range: 11:27-11:28
+                name: "n"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
   (VariableDeclaration
-    range: 6:1-6:107
+    range: 13:1-13:105
     mutability: CONST
     (IdentifierDeclaration
-      range: 6:7-6:13
+      range: 13:7-13:13
       name: "result"
     )
     (NamedTypeNode
-      range: 6:15-6:22
+      range: 13:15-13:22
       name: "Options"
     )
     (ObjectExpression
-      range: 6:25-6:106
+      range: 13:25-13:104
       (ObjectMember
-        range: 6:27-6:42
+        range: 13:27-13:42
         (IdentifierDeclaration
-          range: 6:27-6:32
+          range: 13:27-13:32
           name: "value"
         )
         (CallExpression
-          range: 6:34-6:42
+          range: 13:34-13:42
           (IdentifierExpression
-            range: 6:34-6:39
+            range: 13:34-13:39
             name: "value"
           )
           (LiteralExpression
-            range: 6:40-6:41
+            range: 13:40-13:41
             kind: INT
             text: "1"
           )
         )
       )
       (ObjectSpread
-        range: 6:44-6:56
+        range: 13:44-13:56
         (CallExpression
-          range: 6:47-6:56
+          range: 13:47-13:56
           (IdentifierExpression
-            range: 6:47-6:53
+            range: 13:47-13:53
             name: "spread"
           )
           (LiteralExpression
-            range: 6:54-6:55
+            range: 13:54-13:55
             kind: INT
             text: "2"
           )
         )
       )
-      (ObjectMember
-        range: 6:58-6:73
-        (IdentifierDeclaration
-          range: 6:58-6:63
-          name: "value"
-        )
+      (ObjectSpread
+        range: 13:58-13:72
         (CallExpression
-          range: 6:65-6:73
+          range: 13:61-13:72
           (IdentifierExpression
-            range: 6:65-6:70
-            name: "value"
+            range: 13:61-13:69
+            name: "property"
           )
           (LiteralExpression
-            range: 6:71-6:72
+            range: 13:70-13:71
             kind: INT
             text: "3"
           )
         )
       )
       (ObjectSpread
-        range: 6:75-6:87
+        range: 13:74-13:86
         (CallExpression
-          range: 6:78-6:87
+          range: 13:77-13:86
           (IdentifierExpression
-            range: 6:78-6:84
+            range: 13:77-13:83
             name: "spread"
           )
           (LiteralExpression
-            range: 6:85-6:86
+            range: 13:84-13:85
             kind: INT
             text: "4"
           )
         )
       )
-      (ObjectMember
-        range: 6:89-6:104
-        (IdentifierDeclaration
-          range: 6:89-6:94
-          name: "value"
-        )
+      (ObjectSpread
+        range: 13:88-13:102
         (CallExpression
-          range: 6:96-6:104
+          range: 13:91-13:102
           (IdentifierExpression
-            range: 6:96-6:101
-            name: "value"
+            range: 13:91-13:99
+            name: "property"
           )
           (LiteralExpression
-            range: 6:102-6:103
+            range: 13:100-13:101
             kind: INT
             text: "5"
           )
@@ -434,56 +502,56 @@ SEMICOLON (9:17-9:18)
     )
   )
   (ExpressionStatement
-    range: 7:1-7:14
+    range: 14:1-14:14
     (CallExpression
-      range: 7:1-7:13
+      range: 14:1-14:13
       (IdentifierExpression
-        range: 7:1-7:6
+        range: 14:1-14:6
         name: "print"
       )
       (IdentifierExpression
-        range: 7:7-7:12
+        range: 14:7-14:12
         name: "calls"
       )
     )
   )
   (ExpressionStatement
-    range: 8:1-8:21
+    range: 15:1-15:21
     (CallExpression
-      range: 8:1-8:20
+      range: 15:1-15:20
       (IdentifierExpression
-        range: 8:1-8:6
+        range: 15:1-15:6
         name: "print"
       )
       (MemberExpression
-        range: 8:7-8:19
+        range: 15:7-15:19
         (IdentifierExpression
-          range: 8:7-8:13
+          range: 15:7-15:13
           name: "result"
         )
         (IdentifierExpression
-          range: 8:14-8:19
+          range: 15:14-15:19
           name: "value"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 9:1-9:18
+    range: 16:1-16:18
     (CallExpression
-      range: 9:1-9:17
+      range: 16:1-16:17
       (IdentifierExpression
-        range: 9:1-9:6
+        range: 16:1-16:6
         name: "print"
       )
       (MemberExpression
-        range: 9:7-9:16
+        range: 16:7-16:16
         (IdentifierExpression
-          range: 9:7-9:10
+          range: 16:7-16:10
           name: "old"
         )
         (IdentifierExpression
-          range: 9:11-9:16
+          range: 16:11-16:16
           name: "value"
         )
       )
@@ -497,64 +565,74 @@ Expression types:
   2:13-2:14 -> i32
   3:20-3:33 -> Options
   3:29-3:31 -> i32
-  4:31-4:36 -> i32
-  4:31-4:53 -> i32
-  4:39-4:44 -> i32
-  4:39-4:49 -> i32
-  4:39-4:53 -> i32
-  4:47-4:49 -> i32
-  4:52-4:53 -> i32
-  4:62-4:65 -> Options
-  5:26-5:31 -> i32
-  5:26-5:48 -> i32
-  5:34-5:39 -> i32
-  5:34-5:44 -> i32
-  5:34-5:48 -> i32
-  5:42-5:44 -> i32
-  5:47-5:48 -> i32
-  5:57-5:58 -> i32
-  6:25-6:106 -> Options
-  6:34-6:39 -> (i32) => i32
-  6:34-6:42 -> i32
-  6:40-6:41 -> i32
-  6:44-6:56 -> i32
-  6:44-6:56 -> i32
-  6:47-6:53 -> (i32) => Options
-  6:47-6:56 -> Options
-  6:54-6:55 -> i32
-  6:65-6:70 -> (i32) => i32
-  6:65-6:73 -> i32
-  6:71-6:72 -> i32
-  6:75-6:87 -> i32
-  6:75-6:87 -> i32
-  6:78-6:84 -> (i32) => Options
-  6:78-6:87 -> Options
-  6:85-6:86 -> i32
-  6:96-6:101 -> (i32) => i32
-  6:96-6:104 -> i32
-  6:102-6:103 -> i32
-  7:1-7:6 -> (any) => void
-  7:1-7:13 -> void
-  7:7-7:12 -> i32
-  8:1-8:6 -> (any) => void
-  8:1-8:20 -> void
-  8:7-8:13 -> Options
-  8:7-8:19 -> i32
-  8:14-8:19 -> i32
-  9:1-9:6 -> (any) => void
-  9:1-9:17 -> void
-  9:7-9:10 -> Options
-  9:7-9:16 -> i32
-  9:11-9:16 -> i32
+  5:5-5:10 -> i32
+  5:5-5:27 -> i32
+  5:13-5:18 -> i32
+  5:13-5:23 -> i32
+  5:13-5:27 -> i32
+  5:21-5:23 -> i32
+  5:26-5:27 -> i32
+  5:36-5:39 -> Options
+  8:5-8:10 -> i32
+  8:5-8:27 -> i32
+  8:13-8:18 -> i32
+  8:13-8:23 -> i32
+  8:13-8:27 -> i32
+  8:21-8:23 -> i32
+  8:26-8:27 -> i32
+  8:36-8:37 -> i32
+  11:12-11:31 -> Options
+  11:21-11:26 -> (i32) => i32
+  11:21-11:29 -> i32
+  11:27-11:28 -> i32
+  13:25-13:104 -> Options
+  13:34-13:39 -> (i32) => i32
+  13:34-13:42 -> i32
+  13:40-13:41 -> i32
+  13:44-13:56 -> i32
+  13:44-13:56 -> i32
+  13:47-13:53 -> (i32) => Options
+  13:47-13:56 -> Options
+  13:54-13:55 -> i32
+  13:58-13:72 -> i32
+  13:58-13:72 -> i32
+  13:61-13:69 -> (i32) => Options
+  13:61-13:72 -> Options
+  13:70-13:71 -> i32
+  13:74-13:86 -> i32
+  13:74-13:86 -> i32
+  13:77-13:83 -> (i32) => Options
+  13:77-13:86 -> Options
+  13:84-13:85 -> i32
+  13:88-13:102 -> i32
+  13:88-13:102 -> i32
+  13:91-13:99 -> (i32) => Options
+  13:91-13:102 -> Options
+  13:100-13:101 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:13 -> void
+  14:7-14:12 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:20 -> void
+  15:7-15:13 -> Options
+  15:7-15:19 -> i32
+  15:14-15:19 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:17 -> void
+  16:7-16:10 -> Options
+  16:7-16:16 -> i32
+  16:11-16:16 -> i32
 
 Resolved types:
   1:34-1:37 -> i32
   3:10-3:17 -> Options
   4:16-4:19 -> i32
   4:21-4:28 -> Options
-  5:15-5:18 -> i32
-  5:20-5:23 -> i32
-  6:15-6:22 -> Options
+  7:15-7:18 -> i32
+  7:20-7:23 -> i32
+  10:18-10:21 -> i32
+  10:23-10:30 -> Options
+  13:15-13:22 -> Options
 
 Declarations:
   1:11-1:18 -> interface Options
@@ -563,34 +641,40 @@ Declarations:
   3:5-3:8 -> var old: Options
   4:6-4:12 -> spread(i32) => Options
   4:13-4:14 -> const n: i32
-  5:6-5:11 -> value(i32) => i32
-  5:12-5:13 -> const n: i32
-  6:7-6:13 -> const result: Options
+  7:6-7:11 -> value(i32) => i32
+  7:12-7:13 -> const n: i32
+  10:6-10:14 -> property(i32) => Options
+  10:15-10:16 -> const n: i32
+  13:7-13:13 -> const result: Options
 
 References:
-  4:31-4:36 -> 2:5-2:10
-  4:39-4:44 -> 2:5-2:10
-  4:52-4:53 -> 4:13-4:14
-  4:62-4:65 -> 3:5-3:8
-  5:26-5:31 -> 2:5-2:10
-  5:34-5:39 -> 2:5-2:10
-  5:47-5:48 -> 5:12-5:13
-  5:57-5:58 -> 5:12-5:13
-  6:34-6:39 -> 5:6-5:11
-  6:44-6:56 -> 1:27-1:32
-  6:47-6:53 -> 4:6-4:12
-  6:65-6:70 -> 5:6-5:11
-  6:75-6:87 -> 1:27-1:32
-  6:78-6:84 -> 4:6-4:12
-  6:96-6:101 -> 5:6-5:11
-  7:1-7:6 -> builtin print
-  7:7-7:12 -> 2:5-2:10
-  8:1-8:6 -> builtin print
-  8:7-8:13 -> 6:7-6:13
-  8:14-8:19 -> 1:27-1:32
-  9:1-9:6 -> builtin print
-  9:7-9:10 -> 3:5-3:8
-  9:11-9:16 -> 1:27-1:32
+  5:5-5:10 -> 2:5-2:10
+  5:13-5:18 -> 2:5-2:10
+  5:26-5:27 -> 4:13-4:14
+  5:36-5:39 -> 3:5-3:8
+  8:5-8:10 -> 2:5-2:10
+  8:13-8:18 -> 2:5-2:10
+  8:26-8:27 -> 7:12-7:13
+  8:36-8:37 -> 7:12-7:13
+  11:21-11:26 -> 7:6-7:11
+  11:27-11:28 -> 10:15-10:16
+  13:34-13:39 -> 7:6-7:11
+  13:44-13:56 -> 1:27-1:32
+  13:47-13:53 -> 4:6-4:12
+  13:58-13:72 -> 1:27-1:32
+  13:61-13:69 -> 10:6-10:14
+  13:74-13:86 -> 1:27-1:32
+  13:77-13:83 -> 4:6-4:12
+  13:88-13:102 -> 1:27-1:32
+  13:91-13:99 -> 10:6-10:14
+  14:1-14:6 -> builtin print
+  14:7-14:12 -> 2:5-2:10
+  15:1-15:6 -> builtin print
+  15:7-15:13 -> 13:7-13:13
+  15:14-15:19 -> 1:27-1:32
+  16:1-16:6 -> builtin print
+  16:7-16:10 -> 3:5-3:8
+  16:11-16:16 -> 1:27-1:32
 
 --- BYTECODE ---
 
@@ -600,6 +684,7 @@ public final class Test {
 
   NESTMEMBER Test$$object0
   NESTMEMBER Test$$object1
+  NESTMEMBER Test$$object2
   NESTMEMBER Test$Options
   // access flags 0x609
   public static abstract INNERCLASS Test$Options Test Options
@@ -643,6 +728,17 @@ public final class Test {
     MAXSTACK = 2
     MAXLOCALS = 1
 
+  // access flags 0x9
+  public static property(I)LTest$Options;
+    NEW Test$$object1
+    DUP
+    ILOAD 0
+    INVOKESTATIC Test.value (I)I
+    INVOKESPECIAL Test$$object1.<init> (I)V
+    ARETURN
+    MAXSTACK = 3
+    MAXLOCALS = 1
+
   // access flags 0x8
   static <clinit>()V
     LDC 0
@@ -662,21 +758,27 @@ public final class Test {
     INVOKEINTERFACE Test$Options.$get$value ()I (itf)
     ISTORE 2
     LDC 3
-    INVOKESTATIC Test.value (I)I
-    ISTORE 3
+    INVOKESTATIC Test.property (I)LTest$Options;
+    ASTORE 3
+    ALOAD 3
+    INVOKEINTERFACE Test$Options.$get$value ()I (itf)
+    ISTORE 4
     LDC 4
     INVOKESTATIC Test.spread (I)LTest$Options;
-    ASTORE 4
-    ALOAD 4
+    ASTORE 5
+    ALOAD 5
     INVOKEINTERFACE Test$Options.$get$value ()I (itf)
-    ISTORE 5
-    LDC 5
-    INVOKESTATIC Test.value (I)I
     ISTORE 6
-    NEW Test$$object1
+    LDC 5
+    INVOKESTATIC Test.property (I)LTest$Options;
+    ASTORE 7
+    ALOAD 7
+    INVOKEINTERFACE Test$Options.$get$value ()I (itf)
+    ISTORE 8
+    NEW Test$$object2
     DUP
-    ILOAD 6
-    INVOKESPECIAL Test$$object1.<init> (I)V
+    ILOAD 8
+    INVOKESPECIAL Test$$object2.<init> (I)V
     PUTSTATIC Test.result : LTest$Options;
     GETSTATIC java/lang/System.out : Ljava/io/PrintStream;
     GETSTATIC Test.calls : I
@@ -691,7 +793,7 @@ public final class Test {
     INVOKEVIRTUAL java/io/PrintStream.println (I)V
     RETURN
     MAXSTACK = 3
-    MAXLOCALS = 7
+    MAXLOCALS = 9
 }
 
 // class version 65.0 (65)
@@ -704,6 +806,35 @@ public abstract interface Test$Options {
 
   // access flags 0x1401
   public abstract synthetic $get$value()I
+}
+
+// class version 65.0 (65)
+// access flags 0x1030
+final synthetic class Test$$object1 implements Test$Options {
+
+  NESTHOST Test
+
+  // access flags 0x12
+  private final I value
+
+  // access flags 0x1001
+  public synthetic $get$value()I
+    ALOAD 0
+    GETFIELD Test$$object1.value : I
+    IRETURN
+    MAXSTACK = 1
+    MAXLOCALS = 1
+
+  // access flags 0x1
+  public <init>(I)V
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    ALOAD 0
+    ILOAD 1
+    PUTFIELD Test$$object1.value : I
+    RETURN
+    MAXSTACK = 2
+    MAXLOCALS = 2
 }
 
 // class version 65.0 (65)
@@ -737,7 +868,7 @@ final synthetic class Test$$object0 implements Test$Options {
 
 // class version 65.0 (65)
 // access flags 0x1030
-final synthetic class Test$$object1 implements Test$Options {
+final synthetic class Test$$object2 implements Test$Options {
 
   NESTHOST Test
 
@@ -747,7 +878,7 @@ final synthetic class Test$$object1 implements Test$Options {
   // access flags 0x1001
   public synthetic $get$value()I
     ALOAD 0
-    GETFIELD Test$$object1.value : I
+    GETFIELD Test$$object2.value : I
     IRETURN
     MAXSTACK = 1
     MAXLOCALS = 1
@@ -758,7 +889,7 @@ final synthetic class Test$$object1 implements Test$Options {
     INVOKESPECIAL java/lang/Object.<init> ()V
     ALOAD 0
     ILOAD 1
-    PUTFIELD Test$$object1.value : I
+    PUTFIELD Test$$object2.value : I
     RETURN
     MAXSTACK = 2
     MAXLOCALS = 2

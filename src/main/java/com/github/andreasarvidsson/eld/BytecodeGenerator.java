@@ -204,6 +204,17 @@ public final class BytecodeGenerator {
                             null
                         )
                         .visitEnd();
+                    if (hasDefaultParameters(function)) {
+                        writer
+                            .visitMethod(
+                                ACC_PUBLIC | ACC_ABSTRACT | ACC_SYNTHETIC,
+                                function.name(),
+                                defaultDescriptor(function.type()),
+                                null,
+                                null
+                            )
+                            .visitEnd();
+                    }
                 }
                 writer.visitEnd();
                 classes.put(interfaceOwner(type), writer.toByteArray());
@@ -709,6 +720,13 @@ public final class BytecodeGenerator {
 
     private String defaultDescriptor(final FunctionType type) {
         return methodDescriptor(type).replace(")", "[Z)");
+    }
+
+    private boolean hasDefaultParameters(final FunctionSymbol function) {
+        return semanticModel.getFunctionParameters(function)
+            .stream()
+            .map(semanticModel::getParameterDetails)
+            .anyMatch(FunctionParameter::omittable);
     }
 
     private static int visibilityAccess(final Visibility visibility) {
@@ -2617,7 +2635,9 @@ public final class BytecodeGenerator {
                     else {
                         final ObjectMember member = (ObjectMember) entry;
                         if (
-                            semanticModel.isSpreadMethod(member)
+                            (semanticModel.isSpreadMethod(member)
+                                && !contract.fields()
+                                    .containsKey(member.name().name()))
                                 || (contract.methods()
                                     .containsKey(member.name().name())
                                     && unwrap(
@@ -2896,6 +2916,54 @@ public final class BytecodeGenerator {
                     body.visitInsn(returnOpcode(signature.returnType()));
                     body.visitMaxs(0, 0);
                     body.visitEnd();
+                    // Named interfaces already supply their own default overloads.
+                    // Inferred contracts retain the source method's defaults instead.
+                    if (
+                        ((InterfaceType) semanticModel
+                            .getExpressionType(object)).name()
+                            .startsWith("$spread")
+                            && hasDefaultParameters(implementation)
+                    ) {
+                        final MethodVisitor defaults =
+                            writer.visitMethod(
+                                ACC_PUBLIC | ACC_SYNTHETIC,
+                                member.name().name(),
+                                defaultDescriptor(signature),
+                                null,
+                                null
+                            );
+                        defaults.visitCode();
+                        defaults.visitVarInsn(ALOAD, 0);
+                        defaults.visitFieldInsn(
+                            GETFIELD,
+                            info.owner(),
+                            "$delegate$" + member.name().name(),
+                            descriptor(source)
+                        );
+                        int defaultSlot = 1;
+                        for (final Type parameter : signature
+                            .parameterTypes()) {
+                            defaults.visitVarInsn(
+                                loadOpcode(parameter),
+                                defaultSlot
+                            );
+                            defaultSlot += slots(parameter);
+                        }
+                        defaults.visitVarInsn(ALOAD, defaultSlot);
+                        defaults.visitMethodInsn(
+                            source instanceof InterfaceType
+                                ? INVOKEINTERFACE
+                                : INVOKEVIRTUAL,
+                            typeOwner(source),
+                            member.name().name(),
+                            defaultDescriptor(signature),
+                            source instanceof InterfaceType
+                        );
+                        defaults
+                            .visitInsn(returnOpcode(signature.returnType()));
+                        defaults.visitMaxs(0, 0);
+                        defaults.visitEnd();
+                    }
                     continue;
                 }
                 final LambdaExpression lambda =

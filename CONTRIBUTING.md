@@ -218,7 +218,7 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Update Java to v25 and replace ASM with Class-File API
+- Replace ASM with Class-File API
 - Regular expressions from `regex`.
 - Refactor large files
 - Export & import

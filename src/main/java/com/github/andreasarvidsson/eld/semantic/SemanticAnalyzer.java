@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -792,6 +793,7 @@ public final class SemanticAnalyzer {
         }
         final List<ObjectEntry> evaluation = new ArrayList<>();
         final Map<String, ObjectMember> effective = new LinkedHashMap<>();
+        final Set<String> explicitNames = new HashSet<>();
         for (final ObjectEntry entry : object.members()) {
             if (entry instanceof ObjectSpread spread) {
                 evaluation.add(spread);
@@ -833,6 +835,13 @@ public final class SemanticAnalyzer {
             else {
                 final ObjectMember member = (ObjectMember) entry;
                 final String name = member.name().name();
+                if (!explicitNames.add(name)) {
+                    throw new SemanticException(
+                        member.range(),
+                        "Duplicate object member '%s'",
+                        name
+                    );
+                }
                 evaluation.add(member);
                 effective.put(name, member);
             }
@@ -855,11 +864,19 @@ public final class SemanticAnalyzer {
                     contract.fields().containsKey(member.name().name())
                         ? contract.fields().get(member.name().name())
                         : contract.methods().get(member.name().name());
-                analyzeExpression(
-                    member.value(),
-                    context,
-                    target == null ? null : target.type()
-                );
+                final Type actual =
+                    analyzeExpression(
+                        member.value(),
+                        context,
+                        target == null ? null : target.type()
+                    );
+                if (actual == BuiltinType.VOID) {
+                    throw new SemanticException(
+                        member.value().range(),
+                        "Object member '%s' requires a value",
+                        member.name().name()
+                    );
+                }
             }
         }
         for (final ObjectMember member : effective.values()) {
