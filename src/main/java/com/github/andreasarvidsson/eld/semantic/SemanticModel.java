@@ -22,9 +22,23 @@ import java.util.Set;
 import java.util.Collections;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
+import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
+    private final IdentityHashMap<Symbol, Visibility> memberVisibility =
+        new IdentityHashMap<>();
+
+    public void setMemberVisibility(
+        final Symbol symbol,
+        final Visibility visibility
+    ) {
+        memberVisibility.put(symbol, visibility);
+    }
+
+    public Visibility getMemberVisibility(final Symbol symbol) {
+        return memberVisibility.getOrDefault(symbol, Visibility.PRIVATE);
+    }
     private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
         new IdentityHashMap<>();
     private final Map<ClassType, List<FunctionParameter>> constructorParameters =
@@ -51,6 +65,19 @@ public final class SemanticModel {
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
     private final Map<ClassType, FunctionType> constructors = new HashMap<>();
+    private final Map<ClassType, Visibility> constructorVisibility =
+        new HashMap<>();
+
+    public void setConstructorVisibility(
+        final ClassType owner,
+        final Visibility visibility
+    ) {
+        constructorVisibility.put(owner, visibility);
+    }
+
+    public Visibility getConstructorVisibility(final ClassType owner) {
+        return constructorVisibility.getOrDefault(owner, Visibility.PRIVATE);
+    }
     private final IdentityHashMap<LambdaExpression, List<Symbol>> lambdaCaptures =
         new IdentityHashMap<>();
     private final Set<Symbol> capturedMutable =

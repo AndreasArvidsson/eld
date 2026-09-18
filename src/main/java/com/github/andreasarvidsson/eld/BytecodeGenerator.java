@@ -183,16 +183,19 @@ public final class BytecodeGenerator {
             }
         }
         final IdentityHashMap<Symbol, String> members = new IdentityHashMap<>();
-        for (final BlockItem member : declaration.members()) {
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             if (member instanceof VariableDeclaration variable) {
                 final Symbol symbol = semanticModel.getSymbol(variable.name());
                 members.put(symbol, symbol.name());
                 // Instance constants must be assigned by each constructor.
                 writer
                     .visitField(
-                        ACC_PUBLIC | (variable.mutability() == Mutability.CONST
-                            ? ACC_FINAL
-                            : 0),
+                        visibilityAccess(memberDeclaration.visibility())
+                            | (variable.mutability() == Mutability.CONST
+                                ? ACC_FINAL
+                                : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
                         null,
@@ -209,9 +212,10 @@ public final class BytecodeGenerator {
                 members.put(symbol, symbol.name());
                 writer
                     .visitField(
-                        ACC_PUBLIC | (field.mutability() == Mutability.CONST
-                            ? ACC_FINAL
-                            : 0),
+                        visibilityAccess(memberDeclaration.visibility())
+                            | (field.mutability() == Mutability.CONST
+                                ? ACC_FINAL
+                                : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
                         null,
@@ -230,6 +234,7 @@ public final class BytecodeGenerator {
         final ConstructorDeclaration declarationConstructor =
             declaration.members()
                 .stream()
+                .map(MemberDeclaration::declaration)
                 .filter(ConstructorDeclaration.class::isInstance)
                 .map(ConstructorDeclaration.class::cast)
                 .findFirst()
@@ -240,7 +245,12 @@ public final class BytecodeGenerator {
             );
         final MethodVisitor constructor =
             writer.visitMethod(
-                ACC_PUBLIC,
+                visibilityAccess(
+                    semanticModel.getConstructorVisibility(
+                        (ClassType) semanticModel.getSymbol(declaration.name())
+                            .type()
+                    )
+                ),
                 "<init>",
                 methodDescriptor(constructorType),
                 null,
@@ -268,7 +278,9 @@ public final class BytecodeGenerator {
                 initializer.local(semanticModel.getSymbol(parameter.name()));
             }
         }
-        for (final BlockItem member : declaration.members()) {
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             if (member instanceof VariableDeclaration field) {
                 initializer.item(field);
             }
@@ -284,10 +296,16 @@ public final class BytecodeGenerator {
                 constructorType,
                 declarationConstructor.parameters(),
                 globals,
-                instance
+                instance,
+                semanticModel.getConstructorVisibility(
+                    (ClassType) semanticModel.getSymbol(declaration.name())
+                        .type()
+                )
             );
         }
-        for (final BlockItem member : declaration.members()) {
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             if (member instanceof FunctionDeclaration function) {
                 generateFunction(writer, function, globals, instance);
             }
@@ -311,7 +329,11 @@ public final class BytecodeGenerator {
             (FunctionSymbol) semanticModel.getSymbol(function.name());
         final MethodVisitor method =
             writer.visitMethod(
-                ACC_PUBLIC | (instance == null ? ACC_STATIC : 0),
+                visibilityAccess(
+                    instance == null
+                        ? Visibility.PUBLIC
+                        : semanticModel.getMemberVisibility(symbol)
+                ) | (instance == null ? ACC_STATIC : 0),
                 symbol.name(),
                 methodDescriptor(symbol.type()),
                 null,
@@ -335,12 +357,23 @@ public final class BytecodeGenerator {
             symbol.type(),
             function.parameters(),
             globals,
-            instance
+            instance,
+            instance == null
+                ? Visibility.PUBLIC
+                : semanticModel.getMemberVisibility(symbol)
         );
     }
 
     private String defaultDescriptor(final FunctionType type) {
         return methodDescriptor(type).replace(")", "[Z)");
+    }
+
+    private static int visibilityAccess(final Visibility visibility) {
+        return switch (visibility) {
+            case PRIVATE -> ACC_PRIVATE;
+            case PUBLIC -> ACC_PUBLIC;
+            case PROTECTED -> ACC_PROTECTED;
+        };
     }
 
     private void generateDefaultOverload(
@@ -349,14 +382,15 @@ public final class BytecodeGenerator {
         final FunctionType type,
         final List<FunctionParameter> parameters,
         final IdentityHashMap<Symbol, String> globals,
-        final @Nullable InstanceContext instance
+        final @Nullable InstanceContext instance,
+        final Visibility visibility
     ) {
         if (parameters.stream().noneMatch(FunctionParameter::omittable)) {
             return;
         }
         final MethodVisitor method =
             writer.visitMethod(
-                ACC_PUBLIC | ACC_SYNTHETIC
+                visibilityAccess(visibility) | ACC_SYNTHETIC
                     | (instance == null ? ACC_STATIC : 0),
                 name,
                 defaultDescriptor(type),
@@ -1740,7 +1774,7 @@ public final class BytecodeGenerator {
             final MethodVisitor body =
                 Objects.requireNonNull(currentWriter)
                     .visitMethod(
-                        ACC_PUBLIC | ACC_SYNTHETIC
+                        ACC_PRIVATE | ACC_SYNTHETIC
                             | (instance == null ? ACC_STATIC : 0),
                         name,
                         signature.toString(),

@@ -1,0 +1,77 @@
+class Foo {
+    protected var value = 1;
+}
+new Foo().value;
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PROTECTED (2:5-2:14)
+VAR (2:15-2:18)
+IDENTIFIER "value" (2:19-2:24)
+EQUAL (2:25-2:26)
+INTEGER_LITERAL "1" (2:27-2:28)
+SEMICOLON (2:28-2:29)
+RIGHT_BRACE (3:1-3:2)
+NEW (4:1-4:4)
+IDENTIFIER "Foo" (4:5-4:8)
+LEFT_PAREN (4:8-4:9)
+RIGHT_PAREN (4:9-4:10)
+DOT (4:10-4:11)
+IDENTIFIER "value" (4:11-4:16)
+SEMICOLON (4:16-4:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:17
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PROTECTED
+      (VariableDeclaration
+        range: 2:15-2:29
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:19-2:24
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:27-2:28
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:17
+    (MemberExpression
+      range: 4:1-4:16
+      (NewExpression
+        range: 4:1-4:10
+        (IdentifierExpression
+          range: 4:5-4:8
+          name: "Foo"
+        )
+      )
+      (IdentifierExpression
+        range: 4:11-4:16
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Member 'value' of class Foo is protected at 4:11-4:16

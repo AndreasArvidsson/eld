@@ -154,8 +154,12 @@ public final class Parser {
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
         expect(TokenType.LEFT_BRACE);
-        final List<@NonNull BlockItem> members = new ArrayList<>();
+        final List<@NonNull MemberDeclaration> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            final Token modifier =
+                check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
+                    ? advance()
+                    : null;
             if (
                 !check(TokenType.VAR) && !check(TokenType.CONST)
                     && !check(TokenType.FUNC)
@@ -166,21 +170,37 @@ public final class Parser {
                     "Class bodies may only contain fields, methods, and constructors"
                 );
             }
+            final Declaration member;
             if (check(TokenType.VAR) || check(TokenType.CONST)) {
                 final Token fieldKeyword = advance();
-                members.add(
+                member =
                     parseVariableDeclaration(
                         fieldKeyword,
                         fieldKeyword.type() == TokenType.VAR
                             ? Mutability.VAR
                             : Mutability.CONST,
                         true
-                    )
-                );
+                    );
             }
             else {
-                members.add(parseBlockItem());
+                member =
+                    check(TokenType.FUNC)
+                        ? parseFunctionDeclaration(advance())
+                        : parseConstructorDeclaration(advance());
             }
+            members.add(
+                new MemberDeclaration(
+                    modifier == null
+                        ? Visibility.PRIVATE
+                        : modifier.type() == TokenType.PROTECTED
+                            ? Visibility.PROTECTED
+                            : Visibility.PUBLIC,
+                    member,
+                    modifier != null
+                        ? modifier.range().union(member.range())
+                        : member.range()
+                )
+            );
         }
         final Token close = expect(TokenType.RIGHT_BRACE);
         final Range range = keyword.range().union(close.range());

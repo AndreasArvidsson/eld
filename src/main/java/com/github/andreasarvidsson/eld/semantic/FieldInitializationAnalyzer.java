@@ -35,7 +35,9 @@ final class FieldInitializationAnalyzer {
     ) {
         this.model = model;
         this.declaration = declaration;
-        for (final BlockItem member : declaration.members()) {
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             if (member instanceof VariableDeclaration field) {
                 final Symbol symbol = model.getSymbol(field.name());
                 fields.add(symbol);
@@ -50,7 +52,9 @@ final class FieldInitializationAnalyzer {
     void analyze(final @Nullable ConstructorDeclaration constructor) {
         final Path initial = new Path(defaults, defaults, Exit.NORMAL);
         if (constructor == null) {
-            for (final BlockItem member : declaration.members()) {
+            for (final MemberDeclaration memberDeclaration : declaration
+                .members()) {
+                final Declaration member = memberDeclaration.declaration();
                 if (member instanceof UninitializedVariableDeclaration field) {
                     throw new SemanticException(
                         field.range(),

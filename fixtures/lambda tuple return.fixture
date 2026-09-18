@@ -233,8 +233,8 @@ public final class Test {
     MAXSTACK = 3
     MAXLOCALS = 0
 
-  // access flags 0x1009
-  public static synthetic $lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+  // access flags 0x100A
+  private static synthetic $lambda0(I)Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
    L0
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP

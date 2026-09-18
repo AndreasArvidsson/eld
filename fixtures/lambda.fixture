@@ -45,8 +45,8 @@ public final class Test {
     MAXSTACK = 1
     MAXLOCALS = 0
 
-  // access flags 0x1009
-  public static synthetic $lambda0()V
+  // access flags 0x100A
+  private static synthetic $lambda0()V
     RETURN
     MAXSTACK = 0
     MAXLOCALS = 0

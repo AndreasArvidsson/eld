@@ -221,8 +221,8 @@ public final class Test {
     MAXSTACK = 3
     MAXLOCALS = 0
 
-  // access flags 0x1009
-  public static synthetic $lambda0(Ljava/lang/invoke/MethodHandle;)Ljava/lang/String;
+  // access flags 0x100A
+  private static synthetic $lambda0(Ljava/lang/invoke/MethodHandle;)Ljava/lang/String;
     NEW java/lang/StringBuilder
     DUP
     INVOKESPECIAL java/lang/StringBuilder.<init> ()V
@@ -237,8 +237,8 @@ public final class Test {
     MAXSTACK = 3
     MAXLOCALS = 1
 
-  // access flags 0x1009
-  public static synthetic $lambda1(I)Z
+  // access flags 0x100A
+  private static synthetic $lambda1(I)Z
     ILOAD 0
     LDC 2
     IREM

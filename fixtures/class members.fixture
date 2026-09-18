@@ -1,10 +1,11 @@
 class Counter {
+    public constructor() {}
     const initial = 10;
-    var count = 10;
-    func next() i32 {
+    protected var count = 10;
+    public func next() i32 {
         return this.count++;
     }
-    func invoke() i32 {
+   public  func invoke() i32 {
         const callback = this.next;
         return callback();
     }
@@ -15,157 +16,192 @@ class Counter {
 CLASS (1:1-1:6)
 IDENTIFIER "Counter" (1:7-1:14)
 LEFT_BRACE (1:15-1:16)
-CONST (2:5-2:10)
-IDENTIFIER "initial" (2:11-2:18)
-EQUAL (2:19-2:20)
-INTEGER_LITERAL "10" (2:21-2:23)
-SEMICOLON (2:23-2:24)
-VAR (3:5-3:8)
-IDENTIFIER "count" (3:9-3:14)
-EQUAL (3:15-3:16)
-INTEGER_LITERAL "10" (3:17-3:19)
-SEMICOLON (3:19-3:20)
-FUNC (4:5-4:9)
-IDENTIFIER "next" (4:10-4:14)
-LEFT_PAREN (4:14-4:15)
-RIGHT_PAREN (4:15-4:16)
-IDENTIFIER "i32" (4:17-4:20)
-LEFT_BRACE (4:21-4:22)
-RETURN (5:9-5:15)
-THIS (5:16-5:20)
-DOT (5:20-5:21)
-IDENTIFIER "count" (5:21-5:26)
-PLUS_PLUS (5:26-5:28)
-SEMICOLON (5:28-5:29)
-RIGHT_BRACE (6:5-6:6)
-FUNC (7:5-7:9)
-IDENTIFIER "invoke" (7:10-7:16)
-LEFT_PAREN (7:16-7:17)
-RIGHT_PAREN (7:17-7:18)
-IDENTIFIER "i32" (7:19-7:22)
-LEFT_BRACE (7:23-7:24)
-CONST (8:9-8:14)
-IDENTIFIER "callback" (8:15-8:23)
-EQUAL (8:24-8:25)
-THIS (8:26-8:30)
-DOT (8:30-8:31)
-IDENTIFIER "next" (8:31-8:35)
-SEMICOLON (8:35-8:36)
-RETURN (9:9-9:15)
-IDENTIFIER "callback" (9:16-9:24)
-LEFT_PAREN (9:24-9:25)
-RIGHT_PAREN (9:25-9:26)
-SEMICOLON (9:26-9:27)
-RIGHT_BRACE (10:5-10:6)
-RIGHT_BRACE (11:1-11:2)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+LEFT_BRACE (2:26-2:27)
+RIGHT_BRACE (2:27-2:28)
+CONST (3:5-3:10)
+IDENTIFIER "initial" (3:11-3:18)
+EQUAL (3:19-3:20)
+INTEGER_LITERAL "10" (3:21-3:23)
+SEMICOLON (3:23-3:24)
+PROTECTED (4:5-4:14)
+VAR (4:15-4:18)
+IDENTIFIER "count" (4:19-4:24)
+EQUAL (4:25-4:26)
+INTEGER_LITERAL "10" (4:27-4:29)
+SEMICOLON (4:29-4:30)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "next" (5:17-5:21)
+LEFT_PAREN (5:21-5:22)
+RIGHT_PAREN (5:22-5:23)
+IDENTIFIER "i32" (5:24-5:27)
+LEFT_BRACE (5:28-5:29)
+RETURN (6:9-6:15)
+THIS (6:16-6:20)
+DOT (6:20-6:21)
+IDENTIFIER "count" (6:21-6:26)
+PLUS_PLUS (6:26-6:28)
+SEMICOLON (6:28-6:29)
+RIGHT_BRACE (7:5-7:6)
+PUBLIC (8:4-8:10)
+FUNC (8:12-8:16)
+IDENTIFIER "invoke" (8:17-8:23)
+LEFT_PAREN (8:23-8:24)
+RIGHT_PAREN (8:24-8:25)
+IDENTIFIER "i32" (8:26-8:29)
+LEFT_BRACE (8:30-8:31)
+CONST (9:9-9:14)
+IDENTIFIER "callback" (9:15-9:23)
+EQUAL (9:24-9:25)
+THIS (9:26-9:30)
+DOT (9:30-9:31)
+IDENTIFIER "next" (9:31-9:35)
+SEMICOLON (9:35-9:36)
+RETURN (10:9-10:15)
+IDENTIFIER "callback" (10:16-10:24)
+LEFT_PAREN (10:24-10:25)
+RIGHT_PAREN (10:25-10:26)
+SEMICOLON (10:26-10:27)
+RIGHT_BRACE (11:5-11:6)
+RIGHT_BRACE (12:1-12:2)
 
 --- AST ---
 
 (Program
-  range: 1:1-11:2
+  range: 1:1-12:2
   (ClassDeclaration
-    range: 1:1-11:2
+    range: 1:1-12:2
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
     )
-    (VariableDeclaration
-      range: 2:5-2:24
-      mutability: CONST
-      (IdentifierDeclaration
-        range: 2:11-2:18
-        name: "initial"
-      )
-      type: null
-      (LiteralExpression
-        range: 2:21-2:23
-        kind: INT
-        text: "10"
+    (MemberDeclaration
+      range: 2:5-2:28
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 2:12-2:28
+        (BlockStatement
+          range: 2:26-2:28
+        )
       )
     )
-    (VariableDeclaration
-      range: 3:5-3:20
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 3:9-3:14
-        name: "count"
-      )
-      type: null
-      (LiteralExpression
-        range: 3:17-3:19
-        kind: INT
-        text: "10"
+    (MemberDeclaration
+      range: 3:5-3:24
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 3:5-3:24
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 3:11-3:18
+          name: "initial"
+        )
+        type: null
+        (LiteralExpression
+          range: 3:21-3:23
+          kind: INT
+          text: "10"
+        )
       )
     )
-    (FunctionDeclaration
-      range: 4:5-6:6
-      (IdentifierDeclaration
-        range: 4:10-4:14
-        name: "next"
+    (MemberDeclaration
+      range: 4:5-4:30
+      visibility: PROTECTED
+      (VariableDeclaration
+        range: 4:15-4:30
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 4:19-4:24
+          name: "count"
+        )
+        type: null
+        (LiteralExpression
+          range: 4:27-4:29
+          kind: INT
+          text: "10"
+        )
       )
-      (NamedTypeNode
-        range: 4:17-4:20
-        name: "i32"
+    )
+    (MemberDeclaration
+      range: 5:5-7:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-7:6
+        (IdentifierDeclaration
+          range: 5:17-5:21
+          name: "next"
+        )
+        (NamedTypeNode
+          range: 5:24-5:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:28-7:6
+          (ReturnStatement
+            range: 6:9-6:29
+            (PostfixExpression
+              range: 6:16-6:28
+              (MemberExpression
+                range: 6:16-6:26
+                (ThisExpression
+                  range: 6:16-6:20
+                )
+                (IdentifierExpression
+                  range: 6:21-6:26
+                  name: "count"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+        )
       )
-      (BlockStatement
-        range: 4:21-6:6
-        (ReturnStatement
-          range: 5:9-5:29
-          (PostfixExpression
-            range: 5:16-5:28
+    )
+    (MemberDeclaration
+      range: 8:4-11:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-11:6
+        (IdentifierDeclaration
+          range: 8:17-8:23
+          name: "invoke"
+        )
+        (NamedTypeNode
+          range: 8:26-8:29
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:30-11:6
+          (VariableDeclaration
+            range: 9:9-9:36
+            mutability: CONST
+            (IdentifierDeclaration
+              range: 9:15-9:23
+              name: "callback"
+            )
+            type: null
             (MemberExpression
-              range: 5:16-5:26
+              range: 9:26-9:35
               (ThisExpression
-                range: 5:16-5:20
+                range: 9:26-9:30
               )
               (IdentifierExpression
-                range: 5:21-5:26
-                name: "count"
+                range: 9:31-9:35
+                name: "next"
               )
             )
-            operator: INCREMENT
           )
-        )
-      )
-    )
-    (FunctionDeclaration
-      range: 7:5-10:6
-      (IdentifierDeclaration
-        range: 7:10-7:16
-        name: "invoke"
-      )
-      (NamedTypeNode
-        range: 7:19-7:22
-        name: "i32"
-      )
-      (BlockStatement
-        range: 7:23-10:6
-        (VariableDeclaration
-          range: 8:9-8:36
-          mutability: CONST
-          (IdentifierDeclaration
-            range: 8:15-8:23
-            name: "callback"
-          )
-          type: null
-          (MemberExpression
-            range: 8:26-8:35
-            (ThisExpression
-              range: 8:26-8:30
-            )
-            (IdentifierExpression
-              range: 8:31-8:35
-              name: "next"
-            )
-          )
-        )
-        (ReturnStatement
-          range: 9:9-9:27
-          (CallExpression
-            range: 9:16-9:26
-            (IdentifierExpression
-              range: 9:16-9:24
-              name: "callback"
+          (ReturnStatement
+            range: 10:9-10:27
+            (CallExpression
+              range: 10:16-10:26
+              (IdentifierExpression
+                range: 10:16-10:24
+                name: "callback"
+              )
             )
           )
         )
@@ -177,34 +213,35 @@ RIGHT_BRACE (11:1-11:2)
 --- SEMANTIC ---
 
 Expression types:
-  2:21-2:23 -> i32
-  3:17-3:19 -> i32
-  5:16-5:20 -> Counter
-  5:16-5:26 -> i32
-  5:16-5:28 -> i32
-  5:21-5:26 -> i32
-  8:26-8:30 -> Counter
-  8:26-8:35 -> () => i32
-  8:31-8:35 -> () => i32
-  9:16-9:24 -> () => i32
-  9:16-9:26 -> i32
+  3:21-3:23 -> i32
+  4:27-4:29 -> i32
+  6:16-6:20 -> Counter
+  6:16-6:26 -> i32
+  6:16-6:28 -> i32
+  6:21-6:26 -> i32
+  9:26-9:30 -> Counter
+  9:26-9:35 -> () => i32
+  9:31-9:35 -> () => i32
+  10:16-10:24 -> () => i32
+  10:16-10:26 -> i32
 
 Resolved types:
-  4:17-4:20 -> i32
-  7:19-7:22 -> i32
+  5:24-5:27 -> i32
+  8:26-8:29 -> i32
 
 Declarations:
   1:7-1:14 -> class Counter
-  2:11-2:18 -> const initial: i32
-  3:9-3:14 -> var count: i32
-  4:10-4:14 -> next() => i32
-  7:10-7:16 -> invoke() => i32
-  8:15-8:23 -> const callback: () => i32
+  2:12-2:28 -> constructor()
+  3:11-3:18 -> const initial: i32
+  4:19-4:24 -> var count: i32
+  5:17-5:21 -> next() => i32
+  8:17-8:23 -> invoke() => i32
+  9:15-9:23 -> const callback: () => i32
 
 References:
-  5:21-5:26 -> 3:9-3:14
-  8:31-8:35 -> 4:10-4:14
-  9:16-9:24 -> 8:15-8:23
+  6:21-6:26 -> 4:19-4:24
+  9:31-9:35 -> 5:17-5:21
+  10:16-10:24 -> 9:15-9:23
 
 --- BYTECODE ---
 
@@ -225,11 +262,11 @@ public class Test$Counter {
   // access flags 0x9
   public static INNERCLASS Test$Counter Test Counter
 
-  // access flags 0x11
-  public final I initial
+  // access flags 0x12
+  private final I initial
 
-  // access flags 0x1
-  public I count
+  // access flags 0x4
+  protected I count
 
   // access flags 0x1
   public <init>()V

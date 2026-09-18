@@ -15,6 +15,9 @@ import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
+import com.github.andreasarvidsson.eld.parser.Declaration;
+import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
+import com.github.andreasarvidsson.eld.parser.Visibility;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BinaryOperator;
@@ -78,6 +81,7 @@ public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
     private final Map<ClassType, Scope> classScopes = new HashMap<>();
     private @Nullable ClassType currentInstance;
+    private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
     private boolean analyzingConstructorDefault;
     private final IdentityHashMap<FunctionSymbol, List<ReturnStatement>> lambdaReturns =
@@ -209,6 +213,20 @@ public final class SemanticAnalyzer {
         final ClassDeclaration declaration,
         final SemanticContext context
     ) {
+        final ClassType previous = currentAccessClass;
+        currentAccessClass = new ClassType(declaration.name().name());
+        try {
+            analyzeClassMembers(declaration, context);
+        }
+        finally {
+            currentAccessClass = previous;
+        }
+    }
+
+    private void analyzeClassMembers(
+        final ClassDeclaration declaration,
+        final SemanticContext context
+    ) {
         final ClassType classType = new ClassType(declaration.name().name());
         final ClassSymbol classSymbol =
             new ClassSymbol(declaration.name(), classType);
@@ -217,7 +235,10 @@ public final class SemanticAnalyzer {
         final Scope members = new Scope(null);
         classScopes.put(classType, members);
         ConstructorDeclaration constructor = null;
-        for (final BlockItem member : declaration.members()) {
+        model.setConstructorVisibility(classType, Visibility.PUBLIC);
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             if (member instanceof ConstructorDeclaration candidate) {
                 if (constructor != null) {
                     throw new SemanticException(
@@ -226,6 +247,10 @@ public final class SemanticAnalyzer {
                     );
                 }
                 constructor = candidate;
+                model.setConstructorVisibility(
+                    classType,
+                    memberDeclaration.visibility()
+                );
             }
             else if (
                 !(member instanceof VariableDeclaration)
@@ -262,7 +287,9 @@ public final class SemanticAnalyzer {
                 new ConstructorSymbol(constructor, constructorType)
             );
         }
-        for (final BlockItem member : declaration.members()) {
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             if (member instanceof VariableDeclaration field) {
                 analyzeVariableDeclaration(field, context, members);
             }
@@ -277,11 +304,29 @@ public final class SemanticAnalyzer {
                 registerFunction(method, context, members);
             }
         }
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
+            final IdentifierDeclaration name = switch (member) {
+                case VariableDeclaration field -> field.name();
+                case UninitializedVariableDeclaration field -> field.name();
+                case FunctionDeclaration method -> method.name();
+                default -> null;
+            };
+            if (name != null) {
+                model.setMemberVisibility(
+                    model.getSymbol(name),
+                    memberDeclaration.visibility()
+                );
+            }
+        }
         final ClassType previousInstance = currentInstance;
         final ConstructorDeclaration previousConstructor = currentConstructor;
         currentInstance = classType;
         try {
-            for (final BlockItem member : declaration.members()) {
+            for (final MemberDeclaration memberDeclaration : declaration
+                .members()) {
+                final Declaration member = memberDeclaration.declaration();
                 if (member instanceof FunctionDeclaration method) {
                     analyzeFunctionBody(method, context);
                 }
@@ -1436,6 +1481,21 @@ public final class SemanticAnalyzer {
                     );
                 }
                 model.setMemberOwner(member, classType);
+                if (
+                    !classType.equals(currentAccessClass) && model
+                        .getMemberVisibility(symbol) != Visibility.PUBLIC
+                ) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Member '%s' of class %s is %s",
+                        member.member().name(),
+                        classType.name(),
+                        model
+                            .getMemberVisibility(symbol) == Visibility.PROTECTED
+                                ? "protected"
+                                : "private"
+                    );
+                }
                 model.setReference(member.member(), symbol);
                 model.setExpressionType(member.member(), symbol.type());
                 yield symbol.type();
@@ -1451,6 +1511,21 @@ public final class SemanticAnalyzer {
                     throw new SemanticException(
                         creation.className().range(),
                         "'new' requires a class name"
+                    );
+                }
+                if (
+                    !classType.equals(currentAccessClass)
+                        && model.getConstructorVisibility(
+                            (ClassType) classType
+                        ) != Visibility.PUBLIC
+                ) {
+                    throw new SemanticException(
+                        creation.className().range(),
+                        "Constructor of class %s is %s",
+                        creation.className().name(),
+                        model.getConstructorVisibility(
+                            (ClassType) classType
+                        ) == Visibility.PROTECTED ? "protected" : "private"
                     );
                 }
                 final FunctionType constructor =

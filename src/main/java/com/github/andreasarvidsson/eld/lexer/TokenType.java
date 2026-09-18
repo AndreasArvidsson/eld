@@ -20,6 +20,8 @@ public enum TokenType {
     CONSTRUCTOR,
     THIS,
     FUNC,
+    PUBLIC,
+    PROTECTED,
     RETURN,
     YIELD,
     IF,

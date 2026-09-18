@@ -24,7 +24,7 @@ func log(value: any) {
 
 class Counter {
     var value = 0;
-    func next() i32 {
+    public func next() i32 {
         return this.value++;
     }
 }
@@ -136,6 +136,18 @@ Function type annotations supply lambda parameter types. Use `() => i32` for
 a function returning `i32`, or `() =>` for a function returning `void`.
 
 ## Classes and method references
+
+Class fields, methods, and constructors are private by default. Add `public` to expose a
+member outside its declaring class. Private members can be accessed within
+the class, including through another instance or inside a lambda. Visibility
+is checked for reads, writes, calls, method references, and instance creation.
+Implicit constructors are public. Declared constructors require `public` to allow
+external instance creation. `public` is only valid on class members; there is
+no `private` keyword.
+
+Use `protected` on fields, methods, or constructors to reserve access for the
+declaring class and future subclasses. Until inheritance is supported, protected
+members are accessible only within their declaring class.
 
 ```text
 const counter = new Counter(0);

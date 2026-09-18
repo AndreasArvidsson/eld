@@ -1,12 +1,12 @@
 class Foo {
     var value = 5;
-    constructor() {
+    public constructor() {
         this.value++;
     }
     func getValue() i32 {
         return this.value;
     }
-    func other() i32 {
+    public func other() i32 {
         return this.getValue();
     }
 }
@@ -23,10 +23,11 @@ IDENTIFIER "value" (2:9-2:14)
 EQUAL (2:15-2:16)
 INTEGER_LITERAL "5" (2:17-2:18)
 SEMICOLON (2:18-2:19)
-CONSTRUCTOR (3:5-3:16)
-LEFT_PAREN (3:16-3:17)
-RIGHT_PAREN (3:17-3:18)
-LEFT_BRACE (3:19-3:20)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
 THIS (4:9-4:13)
 DOT (4:13-4:14)
 IDENTIFIER "value" (4:14-4:19)
@@ -45,12 +46,13 @@ DOT (7:20-7:21)
 IDENTIFIER "value" (7:21-7:26)
 SEMICOLON (7:26-7:27)
 RIGHT_BRACE (8:5-8:6)
-FUNC (9:5-9:9)
-IDENTIFIER "other" (9:10-9:15)
-LEFT_PAREN (9:15-9:16)
-RIGHT_PAREN (9:16-9:17)
-IDENTIFIER "i32" (9:18-9:21)
-LEFT_BRACE (9:22-9:23)
+PUBLIC (9:5-9:11)
+FUNC (9:12-9:16)
+IDENTIFIER "other" (9:17-9:22)
+LEFT_PAREN (9:22-9:23)
+RIGHT_PAREN (9:23-9:24)
+IDENTIFIER "i32" (9:25-9:28)
+LEFT_BRACE (9:29-9:30)
 RETURN (10:9-10:15)
 THIS (10:16-10:20)
 DOT (10:20-10:21)
@@ -83,94 +85,110 @@ SEMICOLON (13:25-13:26)
       range: 1:7-1:10
       name: "Foo"
     )
-    (VariableDeclaration
+    (MemberDeclaration
       range: 2:5-2:19
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 2:9-2:14
-        name: "value"
-      )
-      type: null
-      (LiteralExpression
-        range: 2:17-2:18
-        kind: INT
-        text: "5"
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:14
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:17-2:18
+          kind: INT
+          text: "5"
+        )
       )
     )
-    (ConstructorDeclaration
+    (MemberDeclaration
       range: 3:5-5:6
-      (BlockStatement
-        range: 3:19-5:6
-        (ExpressionStatement
-          range: 4:9-4:22
-          (PostfixExpression
-            range: 4:9-4:21
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-5:6
+        (BlockStatement
+          range: 3:26-5:6
+          (ExpressionStatement
+            range: 4:9-4:22
+            (PostfixExpression
+              range: 4:9-4:21
+              (MemberExpression
+                range: 4:9-4:19
+                (ThisExpression
+                  range: 4:9-4:13
+                )
+                (IdentifierExpression
+                  range: 4:14-4:19
+                  name: "value"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 6:5-8:6
+        (IdentifierDeclaration
+          range: 6:10-6:18
+          name: "getValue"
+        )
+        (NamedTypeNode
+          range: 6:21-6:24
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:25-8:6
+          (ReturnStatement
+            range: 7:9-7:27
             (MemberExpression
-              range: 4:9-4:19
+              range: 7:16-7:26
               (ThisExpression
-                range: 4:9-4:13
+                range: 7:16-7:20
               )
               (IdentifierExpression
-                range: 4:14-4:19
+                range: 7:21-7:26
                 name: "value"
               )
             )
-            operator: INCREMENT
           )
         )
       )
     )
-    (FunctionDeclaration
-      range: 6:5-8:6
-      (IdentifierDeclaration
-        range: 6:10-6:18
-        name: "getValue"
-      )
-      (NamedTypeNode
-        range: 6:21-6:24
-        name: "i32"
-      )
-      (BlockStatement
-        range: 6:25-8:6
-        (ReturnStatement
-          range: 7:9-7:27
-          (MemberExpression
-            range: 7:16-7:26
-            (ThisExpression
-              range: 7:16-7:20
-            )
-            (IdentifierExpression
-              range: 7:21-7:26
-              name: "value"
-            )
-          )
-        )
-      )
-    )
-    (FunctionDeclaration
+    (MemberDeclaration
       range: 9:5-11:6
-      (IdentifierDeclaration
-        range: 9:10-9:15
-        name: "other"
-      )
-      (NamedTypeNode
-        range: 9:18-9:21
-        name: "i32"
-      )
-      (BlockStatement
-        range: 9:22-11:6
-        (ReturnStatement
-          range: 10:9-10:32
-          (CallExpression
-            range: 10:16-10:31
-            (MemberExpression
-              range: 10:16-10:29
-              (ThisExpression
-                range: 10:16-10:20
-              )
-              (IdentifierExpression
-                range: 10:21-10:29
-                name: "getValue"
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 9:12-11:6
+        (IdentifierDeclaration
+          range: 9:17-9:22
+          name: "other"
+        )
+        (NamedTypeNode
+          range: 9:25-9:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 9:29-11:6
+          (ReturnStatement
+            range: 10:9-10:32
+            (CallExpression
+              range: 10:16-10:31
+              (MemberExpression
+                range: 10:16-10:29
+                (ThisExpression
+                  range: 10:16-10:20
+                )
+                (IdentifierExpression
+                  range: 10:21-10:29
+                  name: "getValue"
+                )
               )
             )
           )
@@ -232,14 +250,14 @@ Expression types:
 
 Resolved types:
   6:21-6:24 -> i32
-  9:18-9:21 -> i32
+  9:25-9:28 -> i32
 
 Declarations:
   1:7-1:10 -> class Foo
   2:9-2:14 -> var value: i32
-  3:5-5:6 -> constructor()
+  3:12-5:6 -> constructor()
   6:10-6:18 -> getValue() => i32
-  9:10-9:15 -> other() => i32
+  9:17-9:22 -> other() => i32
 
 References:
   4:14-4:19 -> 2:9-2:14
@@ -247,7 +265,7 @@ References:
   10:21-10:29 -> 6:10-6:18
   13:1-13:6 -> builtin print
   13:11-13:14 -> 1:7-1:10
-  13:17-13:22 -> 9:10-9:15
+  13:17-13:22 -> 9:17-9:22
 
 --- BYTECODE ---
 
@@ -280,8 +298,8 @@ public class Test$Foo {
   // access flags 0x9
   public static INNERCLASS Test$Foo Test Foo
 
-  // access flags 0x1
-  public I value
+  // access flags 0x2
+  private I value
 
   // access flags 0x1
   public <init>()V
@@ -302,8 +320,8 @@ public class Test$Foo {
     MAXSTACK = 4
     MAXLOCALS = 1
 
-  // access flags 0x1
-  public getValue()I
+  // access flags 0x2
+  private getValue()I
     ALOAD 0
     GETFIELD Test$Foo.value : I
     IRETURN

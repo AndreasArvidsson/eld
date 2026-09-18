@@ -32,22 +32,30 @@ RIGHT_BRACE (5:1-5:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    (UninitializedVariableDeclaration
+    (MemberDeclaration
       range: 2:5-2:20
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 2:9-2:14
-        name: "value"
-      )
-      (NamedTypeNode
-        range: 2:16-2:19
-        name: "i32"
+      visibility: PRIVATE
+      (UninitializedVariableDeclaration
+        range: 2:5-2:20
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:14
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:16-2:19
+          name: "i32"
+        )
       )
     )
-    (ConstructorDeclaration
+    (MemberDeclaration
       range: 3:5-4:6
-      (BlockStatement
-        range: 3:19-4:6
+      visibility: PRIVATE
+      (ConstructorDeclaration
+        range: 3:5-4:6
+        (BlockStatement
+          range: 3:19-4:6
+        )
       )
     )
   )

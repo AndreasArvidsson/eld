@@ -39,42 +39,50 @@ RIGHT_BRACE (6:1-6:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    (VariableDeclaration
+    (MemberDeclaration
       range: 2:5-2:21
-      mutability: CONST
-      (IdentifierDeclaration
-        range: 2:11-2:16
-        name: "value"
-      )
-      type: null
-      (LiteralExpression
-        range: 2:19-2:20
-        kind: INT
-        text: "1"
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:21
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:11-2:16
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:19-2:20
+          kind: INT
+          text: "1"
+        )
       )
     )
-    (ConstructorDeclaration
+    (MemberDeclaration
       range: 3:5-5:6
-      (BlockStatement
-        range: 3:19-5:6
-        (ExpressionStatement
-          range: 4:9-4:24
-          (AssignmentExpression
-            range: 4:9-4:23
-            (MemberExpression
-              range: 4:9-4:19
-              (ThisExpression
-                range: 4:9-4:13
+      visibility: PRIVATE
+      (ConstructorDeclaration
+        range: 3:5-5:6
+        (BlockStatement
+          range: 3:19-5:6
+          (ExpressionStatement
+            range: 4:9-4:24
+            (AssignmentExpression
+              range: 4:9-4:23
+              (MemberExpression
+                range: 4:9-4:19
+                (ThisExpression
+                  range: 4:9-4:13
+                )
+                (IdentifierExpression
+                  range: 4:14-4:19
+                  name: "value"
+                )
               )
-              (IdentifierExpression
-                range: 4:14-4:19
-                name: "value"
+              (LiteralExpression
+                range: 4:22-4:23
+                kind: INT
+                text: "2"
               )
-            )
-            (LiteralExpression
-              range: 4:22-4:23
-              kind: INT
-              text: "2"
             )
           )
         )

@@ -58,6 +58,290 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void classMembersArePrivateUnlessPublic() throws Exception {
+        final String source =
+            """
+                class Secret {
+                    var value = 4;
+                    const factor = 2;
+                    public var exposed = 1;
+                    public const fixed = 3;
+                    public var initialized: i32;
+                    public constructor() { this.initialized = 7; }
+                    func helper(amount: i32 = 1) i32 { return this.value + amount; }
+                    public func read(other: Secret) i32 { return other.value * this.factor + other.helper(); }
+                    public func reference() () => i32 { return () => this.helper(); }
+                    public func methodReference() (i32) => i32 { return this.helper; }
+                    public func defaulted(amount: i32 = 2) i32 { return this.helper(amount); }
+                }
+                func result() i32 {
+                    const secret = new Secret();
+                    secret.exposed = 5;
+                    return secret.read(secret) + secret.reference()() + secret.methodReference()(3)
+                        + secret.defaulted() + secret.exposed + secret.fixed + secret.initialized;
+                }
+                """;
+        final Class<?> module = compileClass(source, "Test");
+        assertEquals(46, module.getMethod("result").invoke(null));
+        final Class<?> secret =
+            module.getClassLoader().loadClass("Test$Secret");
+        assertTrue(
+            Modifier.isPrivate(secret.getDeclaredField("value").getModifiers())
+        );
+        assertTrue(
+            Modifier.isPrivate(secret.getDeclaredField("factor").getModifiers())
+        );
+        assertTrue(
+            Modifier.isPublic(secret.getDeclaredField("exposed").getModifiers())
+        );
+        assertTrue(
+            Modifier.isPublic(secret.getDeclaredField("fixed").getModifiers())
+        );
+        assertTrue(
+            Modifier.isPrivate(
+                secret.getDeclaredMethod("helper", int.class).getModifiers()
+            )
+        );
+        assertTrue(
+            Modifier.isPrivate(
+                secret.getDeclaredMethod("helper", int.class, boolean[].class)
+                    .getModifiers()
+            )
+        );
+        assertTrue(
+            Modifier.isPublic(
+                secret
+                    .getDeclaredMethod("defaulted", int.class, boolean[].class)
+                    .getModifiers()
+            )
+        );
+        for (final var method : secret.getDeclaredMethods()) {
+            if (method.getName().startsWith("$lambda")) {
+                assertTrue(Modifier.isPrivate(method.getModifiers()));
+            }
+        }
+    }
+
+    @Test
+    void rejectsPrivateAccessFromOutsideTheDeclaringClass() {
+        for (final String expression : List.of(
+            "secret.value;",
+            "secret.value = 5;",
+            "secret.value++;",
+            "secret.helper();",
+            "secret.helper;",
+            "(secret.helper)();",
+            "(() => secret.value)();",
+            "(() => secret.helper())();"
+        )) {
+            final String source =
+                "class Secret { public constructor() {} var value = 1; func helper() i32 { return this.value; } } "
+                    + "const secret = new Secret(); " + expression;
+            final SemanticException error =
+                assertThrows(
+                    SemanticException.class,
+                    () -> compileClass(source, "Test"),
+                    expression
+                );
+            assertTrue(
+                error.getMessage().contains("is private"),
+                error.getMessage()
+            );
+        }
+        assertThrows(
+            SemanticException.class,
+            () -> compileClass(
+                """
+                    class Secret { public constructor() {} var value = 1; }
+                    class Other { public constructor() {} public func read(secret: Secret) i32 { return secret.value; } }
+                    """,
+                "Test"
+            )
+        );
+    }
+
+    @Test
+    void protectedMembersUseVisibilityChecksAndJvmFlags() throws Exception {
+        final String declaration =
+            """
+                class Secret {
+                    protected var value: i32;
+                    protected const factor = 2;
+                    protected constructor(value: i32 = 7) { this.value = value; }
+                    protected func helper(amount: i32 = 1) i32 { return this.value + amount; }
+                    public func result(other: Secret) i32 {
+                        other.value++;
+                        const read = () => other.helper();
+                        const ref = other.helper;
+                        return read() + ref(2) + new Secret().value + this.factor;
+                    }
+                }
+                """;
+        final Class<?> module = compileClass(declaration, "Test");
+        final Class<?> secret =
+            module.getClassLoader().loadClass("Test$Secret");
+        for (final var field : secret.getDeclaredFields()) {
+            assertTrue(Modifier.isProtected(field.getModifiers()));
+        }
+        for (final var constructor : secret.getDeclaredConstructors()) {
+            assertTrue(Modifier.isProtected(constructor.getModifiers()));
+        }
+        for (final var method : secret.getDeclaredMethods()) {
+            if (method.getName().equals("helper")) {
+                assertTrue(Modifier.isProtected(method.getModifiers()));
+            }
+        }
+        final var constructor = secret.getDeclaredConstructor(int.class);
+        constructor.setAccessible(true);
+        final Object instance = constructor.newInstance(3);
+        assertEquals(
+            20,
+            secret.getMethod("result", secret).invoke(instance, instance)
+        );
+        for (final String expression : List.of(
+            "secret.value;",
+            "secret.value = 5;",
+            "secret.value++;",
+            "secret.factor;",
+            "secret.helper();",
+            "secret.helper;",
+            "(() => secret.helper())();"
+        )) {
+            final SemanticException error =
+                assertThrows(
+                    SemanticException.class,
+                    () -> compileClass(
+                        declaration + " func access(secret: Secret) { "
+                            + expression + " }",
+                        "Test"
+                    )
+                );
+            assertTrue(error.getMessage().contains("is protected"));
+        }
+        for (final String arguments : List.of("", "1")) {
+            final SemanticException error =
+                assertThrows(
+                    SemanticException.class,
+                    () -> compileClass(
+                        declaration + " new Secret(" + arguments + ");",
+                        "Test"
+                    )
+                );
+            assertTrue(
+                error.getMessage()
+                    .contains("Constructor of class Secret is protected")
+            );
+        }
+    }
+
+    @Test
+    void rejectsPublicOutsideClassMembers() {
+        for (final String source : List.of(
+            "public var value = 1;",
+            "public func f() {}",
+            "protected var value = 1;",
+            "protected func f() {}",
+            "protected constructor() {}",
+            "func f() { protected var value = 1; }",
+            "class C { public protected var value = 1; }",
+            "class C { protected public func f() {} }",
+            "class C { protected protected constructor() {} }",
+            "func f() { public var value = 1; }",
+            "class C { public constructor() {} public public var value = 1; }"
+        )) {
+            assertThrows(
+                com.github.andreasarvidsson.eld.parser.ParserException.class,
+                () -> compileClass(source, "Test"),
+                source
+            );
+        }
+    }
+
+    @Test
+    void constructorsUseMemberVisibility() throws Exception {
+        for (final String declaration : List.of(
+            "class Secret { constructor() {} }",
+            "class Secret { constructor(value: i32 = 1) {} }"
+        )) {
+            for (final String arguments : List.of("", "1")) {
+                final SemanticException error =
+                    assertThrows(
+                        SemanticException.class,
+                        () -> compileClass(
+                            declaration + " const value = new Secret("
+                                + arguments + ");",
+                            "Test"
+                        )
+                    );
+                assertTrue(
+                    error.getMessage()
+                        .contains("Constructor of class Secret is private")
+                );
+            }
+            final Class<?> module = compileClass(declaration, "Test");
+            final Class<?> secret =
+                module.getClassLoader().loadClass("Test$Secret");
+            for (final var constructor : secret.getDeclaredConstructors()) {
+                assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+            }
+        }
+        final Class<?> module =
+            compileClass(
+                """
+                    class Secret {
+                        public var value: i32;
+                        constructor(value: i32 = 7) { this.value = value; }
+                        public func create() Secret { return new Secret(); }
+                        public func lambda() () => Secret { return () => new Secret(9); }
+                    }
+                    class Open {
+                        public constructor(value: i32 = 1) {}
+                    }
+                    const open = new Open();
+                    class Implicit {
+                        public var value = 5;
+                    }
+                    func implicitValue() i32 { return new Implicit().value; }
+                    """,
+                "Test"
+            );
+        final Class<?> secret =
+            module.getClassLoader().loadClass("Test$Secret");
+        final var constructor = secret.getDeclaredConstructor(int.class);
+        constructor.setAccessible(true);
+        final Object instance = constructor.newInstance(3);
+        final Object created = secret.getMethod("create").invoke(instance);
+        assertEquals(7, secret.getField("value").get(created));
+        final var lambda =
+            (java.lang.invoke.MethodHandle) secret.getMethod("lambda")
+                .invoke(instance);
+        try {
+            assertEquals(
+                9,
+                secret.getField("value").get(lambda.invokeWithArguments())
+            );
+        }
+        catch (Throwable error) {
+            throw new AssertionError(error);
+        }
+        final Class<?> open = module.getClassLoader().loadClass("Test$Open");
+        assertEquals(5, module.getMethod("implicitValue").invoke(null));
+        final Class<?> implicit =
+            module.getClassLoader().loadClass("Test$Implicit");
+        assertTrue(
+            Modifier.isPublic(implicit.getDeclaredConstructor().getModifiers())
+        );
+        assertEquals(
+            5,
+            implicit.getField("value")
+                .get(implicit.getConstructor().newInstance())
+        );
+        for (final var publicConstructor : open.getDeclaredConstructors()) {
+            assertTrue(Modifier.isPublic(publicConstructor.getModifiers()));
+        }
+    }
+
+    @Test
     void capturedPrimitiveUpdatesDoNotBox() throws Exception {
         final String source = """
             func result() i32 {
@@ -176,8 +460,9 @@ class BytecodeGeneratorTest {
     void lambdasCaptureTheirReceiver() throws Exception {
         final Class<?> type = compileClass("""
             class Counter {
-                var value = 4;
-                func result() i32 {
+                public constructor() {}
+                public var value = 4;
+                public func result() i32 {
                     const next = () => { this.value++; return this.value; };
                     return next();
                 }
@@ -246,8 +531,8 @@ class BytecodeGeneratorTest {
             assertThrows(
                 SemanticException.class,
                 () -> compileClass(
-                    "class C { const value = 1; constructor() { " + body
-                        + " } }",
+                    "class C { public const value = 1; public constructor() { "
+                        + body + " } }",
                     "Test"
                 ),
                 body
@@ -268,7 +553,7 @@ class BytecodeGeneratorTest {
             assertThrows(
                 SemanticException.class,
                 () -> compileClass(
-                    "class C { var value: i32; constructor(flag: bool) { "
+                    "class C { public var value: i32; public constructor(flag: bool) { "
                         + body + " } }",
                     "Test"
                 ),
@@ -281,9 +566,9 @@ class BytecodeGeneratorTest {
     void constructorLambdasPreserveDefiniteInitialization() throws Exception {
         final Class<?> type = compileClass("""
             class C {
-                const value: i32;
-                var count: i32;
-                constructor() {
+                public const value: i32;
+                public var count: i32;
+                public constructor() {
                     const initial = () => { return 5; };
                     this.value = initial();
                     this.count = 0;
@@ -357,13 +642,13 @@ class BytecodeGeneratorTest {
             compileClass(
                 """
                     class Counter {
-                        var value: i32;
-                        constructor(value: i32 = 5) { this.value = value; }
-                        func add(amount: i32 = this.value) i32 { return this.value + amount; }
+                        public var value: i32;
+                        public constructor(value: i32 = 5) { this.value = value; }
+                        public func add(amount: i32 = this.value) i32 { return this.value + amount; }
                     }
                     class Pair {
-                        var value: i64;
-                        constructor(a: i64 = 3, b: i64 = a + 2) { this.value = a + b; }
+                        public var value: i64;
+                        public constructor(a: i64 = 3, b: i64 = a + 2) { this.value = a + b; }
                     }
                     func method() i32 { return new Counter().add(); }
                     func supplied() i32 { return new Counter(7).add(2); }
@@ -382,15 +667,15 @@ class BytecodeGeneratorTest {
             "func f(a: i32 = true) {}",
             "func f(a?: i32 = 5) {}",
             "func f(a?: i32 = null) {}",
-            "class C { constructor(a?: i32 = 5) {} }",
+            "class C { public constructor(a?: i32 = 5) {} }",
             "func f(a: i32 = b, b: i32 = 0) {}",
             "func f(a: i32 = a) {}",
             "func f(a: i32 = 0, b: i32) {} f();",
             "func f(a?: i32) {} f(true);",
             "func f(a: i32 = 0) {} f(null);",
             "func f(a: i32 = 0) {} const alias = f; alias();",
-            "class C { var value = 1; constructor(a: i32 = this.value) {} }",
-            "class C { constructor(a: i32 = 0, b: i32) {} } new C();"
+            "class C { public var value = 1; public constructor(a: i32 = this.value) {} }",
+            "class C { public constructor(a: i32 = 0, b: i32) {} } new C();"
         )) {
             assertThrows(
                 SemanticException.class,
@@ -565,24 +850,28 @@ class BytecodeGeneratorTest {
 
     @Test
     void constructorsInitializeFieldsWithExactSignatures() throws Exception {
-        final Class<?> module = compileClass("""
-            class Foo {
-                const name: string;
-                var value: i64;
-                var ratio: f64;
-                var values = [1, 2];
-                constructor(name: string, value: i64, ratio: f64) {
-                    this.name = name;
-                    this.value = value;
-                    this.ratio = ratio;
-                }
-                func get() i64 { return this.value; }
-                func direct() i64 { return this.get(); }
-                func bound() i64 { const getter = this.get; return getter(); }
-            }
-            const foo = new Foo("hello", 9, 2.5);
-            const other = new Foo("other", 10, 3.5);
-            """, "Test");
+        final Class<?> module =
+            compileClass(
+                """
+                    class Foo {
+                        public const name: string;
+                        public var value: i64;
+                        public var ratio: f64;
+                        public var values = [1, 2];
+                        public constructor(name: string, value: i64, ratio: f64) {
+                            this.name = name;
+                            this.value = value;
+                            this.ratio = ratio;
+                        }
+                        public func get() i64 { return this.value; }
+                        public func direct() i64 { return this.get(); }
+                        public func bound() i64 { const getter = this.get; return getter(); }
+                    }
+                    const foo = new Foo("hello", 9, 2.5);
+                    const other = new Foo("other", 10, 3.5);
+                    """,
+                "Test"
+            );
         final Object foo = module.getField("foo").get(null);
         final Object other = module.getField("other").get(null);
         final Class<?> type = foo.getClass();
@@ -615,7 +904,7 @@ class BytecodeGeneratorTest {
         )) {
             final Class<?> module =
                 compileClass(
-                    "class Foo { const value: i32; constructor(flag: bool) { "
+                    "class Foo { public const value: i32; public constructor(flag: bool) { "
                         + body
                         + " } } const foo = new Foo(true); const other = new Foo(false);",
                     "Test"
@@ -647,8 +936,9 @@ class BytecodeGeneratorTest {
             "return 5;"
         )) {
             final String source =
-                "class Foo { const value: i32; constructor(flag: bool) { "
-                    + body + " } func get() i32 { return this.value; } }";
+                "class Foo { public const value: i32; public constructor(flag: bool) { "
+                    + body
+                    + " } public func get() i32 { return this.value; } }";
             assertThrows(
                 SemanticException.class,
                 () -> new SemanticAnalyzer()
@@ -662,17 +952,17 @@ class BytecodeGeneratorTest {
     void instanceStateRequiresExplicitAccessAndSafeDefaults() {
         for (final String source : List.of(
             "this;",
-            "class Foo { var value = this; }",
-            "class Foo { var a = 1; var b = a + 1; }",
-            "class Foo { var a = 1; var b = this.a + 1; }",
-            "class Foo { var value = 1; func get() i32 { return value; } }",
-            "class Foo { func get() i32 { return 1; } func other() i32 { return get(); } }",
-            "class Foo { var value: i32; }",
-            "class Foo { const value = 1; constructor() { this.value = 2; } }",
-            "class Foo { constructor(value: i32) { value = 2; } }",
-            "class Foo { constructor() {} constructor(value: i32) {} }",
+            "class Foo { public constructor() {} public var value = this; }",
+            "class Foo { public constructor() {} public var a = 1; public var b = a + 1; }",
+            "class Foo { public constructor() {} public var a = 1; public var b = this.a + 1; }",
+            "class Foo { public constructor() {} public var value = 1; public func get() i32 { return value; } }",
+            "class Foo { public constructor() {} public func get() i32 { return 1; } public func other() i32 { return get(); } }",
+            "class Foo { public constructor() {} public var value: i32; }",
+            "class Foo { public const value = 1; public constructor() { this.value = 2; } }",
+            "class Foo { public constructor(value: i32) { value = 2; } }",
+            "class Foo { public constructor() {} public constructor(value: i32) {} }",
             "constructor() {}",
-            "class Foo { func replace() { this = new Foo(); } }"
+            "class Foo { public constructor() {} public func replace() { this = new Foo(); } }"
         )) {
             assertThrows(
                 SemanticException.class,
@@ -681,10 +971,10 @@ class BytecodeGeneratorTest {
             );
         }
         for (final String source : List.of(
-            "class Foo { print(1); }",
-            "class Foo { var value; }",
-            "class Foo { constructor() void {} }",
-            "class Foo { Foo(value: i32) {} }"
+            "class Foo { public constructor() {} print(1); }",
+            "class Foo { public constructor() {} public var value; }",
+            "class Foo { public constructor() void {} }",
+            "class Foo { public constructor() {} Foo(value: i32) {} }"
         )) {
             assertThrows(
                 com.github.andreasarvidsson.eld.parser.ParserException.class,
@@ -700,11 +990,12 @@ class BytecodeGeneratorTest {
         final String source =
             """
                 class Foo {
-                    var value = 5;
-                    var other: Foo | null = null;
-                    func getValue() i32 { return this.value; }
-                    func identity(value: Foo) Foo { return value; }
-                    func compare(a: i64, b: f64) bool { return a < b; }
+                    public constructor() {}
+                    public var value = 5;
+                    public var other: Foo | null = null;
+                    public func getValue() i32 { return this.value; }
+                    public func identity(value: Foo) Foo { return value; }
+                    public func compare(a: i64, b: f64) bool { return a < b; }
                 }
                 const foo: Foo = new Foo();
                 const optional: Foo | null = null;
@@ -849,9 +1140,10 @@ class BytecodeGeneratorTest {
             compileClass(
                 """
                     class Foo {
-                        var value: i64 = 5;
-                        const fixed = 10;
-                        func add(amount: i64) i64 { this.value = this.value + amount; return this.value; }
+                        public constructor() {}
+                        public var value: i64 = 5;
+                        public const fixed = 10;
+                        public func add(amount: i64) i64 { this.value = this.value + amount; return this.value; }
                     }
                     const foo = new Foo();
                     const before = foo.value++;
@@ -876,10 +1168,10 @@ class BytecodeGeneratorTest {
     @Test
     void classMembersRejectUnknownMembersAndConstantWrites() {
         for (final String source : List.of(
-            "class Foo { const value = 1; } const foo = new Foo(); foo.value = 2;",
-            "class Foo {} const foo = new Foo(); foo.missing;",
+            "class Foo { public constructor() {} public const value = 1; } const foo = new Foo(); foo.value = 2;",
+            "class Foo { public constructor() {} } const foo = new Foo(); foo.missing;",
             "const foo = 1; foo.value;",
-            "const global = 1; class Foo {} const foo = new Foo(); foo.global;"
+            "const global = 1; class Foo { public constructor() {} } const foo = new Foo(); foo.global;"
         )) {
             final Program program =
                 new Parser(new Lexer(source).getTokens()).parse();
@@ -896,8 +1188,9 @@ class BytecodeGeneratorTest {
         final Class<?> module = compileClass("""
             var seed = 5;
             class Foo {
-                var value = seed++;
-                func getValue() i32 { return this.value; }
+                public constructor() {}
+                public var value = seed++;
+                public func getValue() i32 { return this.value; }
             }
             const first = new Foo();
             const second = new Foo();
@@ -945,8 +1238,8 @@ class BytecodeGeneratorTest {
         for (final String source : List.of(
             "const value = new Missing();",
             "const Foo = 1; const value = new Foo();",
-            "class Foo {} const value = new Foo(1);",
-            "class Foo {} const value = new Foo(value=1);"
+            "class Foo { public constructor() {} } const value = new Foo(1);",
+            "class Foo { public constructor() {} } const value = new Foo(value=1);"
         )) {
             final Program program =
                 new Parser(new Lexer(source).getTokens()).parse();
@@ -966,7 +1259,7 @@ class BytecodeGeneratorTest {
             System.setOut(capture);
             final ReplSession session = new ReplSession();
             session.evaluate(
-                "class Foo { var value: i32; constructor(value: i32) { this.value = value; } }"
+                "class Foo { public var value: i32; public constructor(value: i32) { this.value = value; } }"
             );
             session.evaluate("const first = new Foo(5);");
             session.evaluate("const second = new Foo(5);");
@@ -2057,11 +2350,12 @@ class BytecodeGeneratorTest {
         assertEquals(-1.23456789012345, type.getField("precise").get(null));
         final Class<?> counter = compileClass("""
             class Counter {
-                var count: i64 = 1;
-                var real: f64 = 1.25;
-                func old() i64 { return this.count++; }
-                func next() f64 { this.real++; return this.real; }
-                func set() i64 { return this.count = 9000000000; }
+                public constructor() {}
+                public var count: i64 = 1;
+                public var real: f64 = 1.25;
+                public func old() i64 { return this.count++; }
+                public func next() f64 { this.real++; return this.real; }
+                public func set() i64 { return this.count = 9000000000; }
             }
             """, "Test$Counter");
         final Object instance = counter.getConstructor().newInstance();
@@ -2566,13 +2860,14 @@ class BytecodeGeneratorTest {
     void storesInstanceFieldsInReceiverValueOrder() throws Exception {
         final Program program = new Parser(new Lexer("""
             class Counter {
-                const initial = 10;
-                var count = 10;
-                var floating: f32 = 1.5;
-                var text = "hello";
-                func postfix() i32 { return this.count++; }
-                func next() i32 { return this.count++; }
-                func decrement() f32 { return this.floating--; }
+                public constructor() {}
+                public const initial = 10;
+                public var count = 10;
+                public var floating: f32 = 1.5;
+                public var text = "hello";
+                public func postfix() i32 { return this.count++; }
+                public func next() i32 { return this.count++; }
+                public func decrement() f32 { return this.floating--; }
             }
             """).getTokens()).parse();
         final var classes =
@@ -2694,17 +2989,17 @@ class BytecodeGeneratorTest {
                     var seed = 2;
                     func next() i32 { return seed++; }
                     class Counter {
-                        const first = next();
-                        const second = next();
-                        var count: i32;
-                        var widened: f32;
-                        var values = [1, 2];
-                        var zero: i32 = 0;
-                        var text: string = "";
-                        constructor() { this.count = this.first; this.widened = this.count; }
-                        func increment() i32 { return this.count++; }
-                        func add(delta: i32) i32 { return this.count + delta; }
-                        func shadow(count: i32) i32 { return count; }
+                        public const first = next();
+                        public const second = next();
+                        public var count: i32;
+                        public var widened: f32;
+                        public var values = [1, 2];
+                        public var zero: i32 = 0;
+                        public var text: string = "";
+                        public constructor() { this.count = this.first; this.widened = this.count; }
+                        public func increment() i32 { return this.count++; }
+                        public func add(delta: i32) i32 { return this.count + delta; }
+                        public func shadow(count: i32) i32 { return count; }
                     }
                     """,
                 "Test$Counter"
@@ -2739,14 +3034,14 @@ class BytecodeGeneratorTest {
             compileClass(
                 """
                     class Counter {
-                        var count = 10;
-                        func step() i32 { return this.count++; }
-                        var initial = 0;
-                        constructor() { this.initial = this.step(); }
+                        public var count = 10;
+                        public func step() i32 { return this.count++; }
+                        public var initial = 0;
+                        public constructor() { this.initial = this.step(); }
 
-                        func direct() i32 { return this.step(); }
-                        func indirect() i32 { const callback = this.step; return callback(); }
-                        func recursive(n: i32) i32 {
+                        public func direct() i32 { return this.step(); }
+                        public func indirect() i32 { const callback = this.step; return callback(); }
+                        public func recursive(n: i32) i32 {
                             if (n <= 1) { return this.count; }
                             return this.recursive(n - 1) + 1;
                         }
@@ -2772,17 +3067,17 @@ class BytecodeGeneratorTest {
             compileClass(
                 """
                     class Counter {
-                        var count = 0;
-                        constructor() { for (var i = 0; i < 3; i++) { var ignored = this.count++; } }
-                        func advance(limit: i32) i32 {
+                        public var count = 0;
+                        public constructor() { for (var i = 0; i < 3; i++) { var ignored = this.count++; } }
+                        public func advance(limit: i32) i32 {
                             for (var i = 0; i < limit; i++) {
                                 if (i == 1) { continue; }
                                 var ignored = this.count++;
                             }
                             return this.count;
                         }
-                        var floating: f32 = 1.5;
-                        func floatStep() f32 { return this.floating++; }
+                        public var floating: f32 = 1.5;
+                        public func floatStep() f32 { return this.floating++; }
                     }
                     """,
                 "Test$Counter"
@@ -2803,14 +3098,16 @@ class BytecodeGeneratorTest {
             const value = 100;
             func read() i32 { return value; }
             class First {
-                var value = 1;
-                func read() i32 { return this.value; }
-                func call() i32 { return this.read(); }
+                public constructor() {}
+                public var value = 1;
+                public func read() i32 { return this.value; }
+                public func call() i32 { return this.read(); }
             }
             class Second {
-                var value = 2;
-                func read() i32 { return this.value; }
-                func call() i32 { return this.read(); }
+                public constructor() {}
+                public var value = 2;
+                public func read() i32 { return this.value; }
+                public func call() i32 { return this.read(); }
             }
             """).getTokens()).parse();
         final var classes =
@@ -2838,8 +3135,8 @@ class BytecodeGeneratorTest {
     @Test
     void generatesLoadableDeclaredClassesAlongsideModule() throws Exception {
         final Program program = new Parser(new Lexer("""
-            class Foo {}
-            class Bar {}
+            class Foo { public constructor() {} }
+            class Bar { public constructor() {} }
             const value = 7;
             func result() i32 { return value; }
             """).getTokens()).parse();
@@ -2887,8 +3184,11 @@ class BytecodeGeneratorTest {
     @Test
     void generatesFinalInstanceFields() throws Exception {
         final Program program =
-            new Parser(new Lexer("class Foo { const field = 10; }").getTokens())
-                .parse();
+            new Parser(
+                new Lexer(
+                    "class Foo { public constructor() {} public const field = 10; }"
+                ).getTokens()
+            ).parse();
         final var model = new SemanticAnalyzer().analyze(program);
         final var generator = new BytecodeGenerator(program, model);
         final var classes = generator.generateClasses();

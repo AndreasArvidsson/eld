@@ -33,39 +33,47 @@ RIGHT_BRACE (4:1-4:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    (VariableDeclaration
+    (MemberDeclaration
       range: 2:5-2:15
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 2:9-2:10
-        name: "a"
-      )
-      type: null
-      (LiteralExpression
-        range: 2:13-2:14
-        kind: INT
-        text: "1"
-      )
-    )
-    (VariableDeclaration
-      range: 3:5-3:19
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 3:9-3:10
-        name: "b"
-      )
-      type: null
-      (BinaryExpression
-        range: 3:13-3:18
-        (IdentifierExpression
-          range: 3:13-3:14
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:15
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:10
           name: "a"
         )
-        operator: ADD
+        type: null
         (LiteralExpression
-          range: 3:17-3:18
+          range: 2:13-2:14
           kind: INT
           text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:19
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 3:5-3:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 3:9-3:10
+          name: "b"
+        )
+        type: null
+        (BinaryExpression
+          range: 3:13-3:18
+          (IdentifierExpression
+            range: 3:13-3:14
+            name: "a"
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 3:17-3:18
+            kind: INT
+            text: "1"
+          )
         )
       )
     )

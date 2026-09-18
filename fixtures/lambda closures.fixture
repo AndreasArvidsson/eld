@@ -485,8 +485,8 @@ public final class Test {
     MAXSTACK = 6
     MAXLOCALS = 5
 
-  // access flags 0x1009
-  public static synthetic $lambda0([I)I
+  // access flags 0x100A
+  private static synthetic $lambda0([I)I
     ALOAD 0
     ICONST_0
     IALOAD
@@ -506,8 +506,8 @@ public final class Test {
     MAXSTACK = 4
     MAXLOCALS = 2
 
-  // access flags 0x1009
-  public static synthetic $lambda1([I)I
+  // access flags 0x100A
+  private static synthetic $lambda1([I)I
     ALOAD 0
     ICONST_0
     IALOAD
@@ -539,15 +539,15 @@ public final class Test {
     MAXSTACK = 2
     MAXLOCALS = 0
 
-  // access flags 0x1009
-  public static synthetic $lambda2()I
+  // access flags 0x100A
+  private static synthetic $lambda2()I
     LDC 42
     IRETURN
     MAXSTACK = 1
     MAXLOCALS = 0
 
-  // access flags 0x1009
-  public static synthetic $lambda3()V
+  // access flags 0x100A
+  private static synthetic $lambda3()V
     GETSTATIC Test.count : I
     DUP
     ICONST_1

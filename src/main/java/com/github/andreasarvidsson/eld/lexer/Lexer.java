@@ -24,6 +24,8 @@ public class Lexer {
                 Map.entry("constructor", TokenType.CONSTRUCTOR),
                 Map.entry("this", TokenType.THIS),
                 Map.entry("func", TokenType.FUNC),
+                Map.entry("public", TokenType.PUBLIC),
+                Map.entry("protected", TokenType.PROTECTED),
                 Map.entry("if", TokenType.IF),
                 Map.entry("switch", TokenType.SWITCH),
                 Map.entry("case", TokenType.CASE),

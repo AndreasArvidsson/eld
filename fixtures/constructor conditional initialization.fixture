@@ -1,6 +1,6 @@
 class Foo {
-    const value: i32;
-    constructor(flag: bool) {
+    public const value: i32;
+    public constructor(flag: bool) {
         if (flag) {
             this.value = 1;
         } else {
@@ -17,18 +17,20 @@ print(new Foo(false).value);
 CLASS (1:1-1:6)
 IDENTIFIER "Foo" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
-CONST (2:5-2:10)
-IDENTIFIER "value" (2:11-2:16)
-COLON (2:16-2:17)
-IDENTIFIER "i32" (2:18-2:21)
-SEMICOLON (2:21-2:22)
-CONSTRUCTOR (3:5-3:16)
-LEFT_PAREN (3:16-3:17)
-IDENTIFIER "flag" (3:17-3:21)
-COLON (3:21-3:22)
-IDENTIFIER "bool" (3:23-3:27)
-RIGHT_PAREN (3:27-3:28)
-LEFT_BRACE (3:29-3:30)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "flag" (3:24-3:28)
+COLON (3:28-3:29)
+IDENTIFIER "bool" (3:30-3:34)
+RIGHT_PAREN (3:34-3:35)
+LEFT_BRACE (3:36-3:37)
 IF (4:9-4:11)
 LEFT_PAREN (4:12-4:13)
 IDENTIFIER "flag" (4:13-4:17)
@@ -85,87 +87,95 @@ SEMICOLON (12:28-12:29)
       range: 1:7-1:10
       name: "Foo"
     )
-    (UninitializedVariableDeclaration
-      range: 2:5-2:22
-      mutability: CONST
-      (IdentifierDeclaration
-        range: 2:11-2:16
-        name: "value"
-      )
-      (NamedTypeNode
-        range: 2:18-2:21
-        name: "i32"
-      )
-    )
-    (ConstructorDeclaration
-      range: 3:5-9:6
-      (FunctionParameter
-        range: 3:17-3:27
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
         (IdentifierDeclaration
-          range: 3:17-3:21
-          name: "flag"
+          range: 2:18-2:23
+          name: "value"
         )
         (NamedTypeNode
-          range: 3:23-3:27
-          name: "bool"
+          range: 2:25-2:28
+          name: "i32"
         )
-        optional: false
-        defaultValue: null
       )
-      (BlockStatement
-        range: 3:29-9:6
-        (ExpressionStatement
-          range: 4:9-8:10
-          (IfExpression
+    )
+    (MemberDeclaration
+      range: 3:5-9:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-9:6
+        (FunctionParameter
+          range: 3:24-3:34
+          (IdentifierDeclaration
+            range: 3:24-3:28
+            name: "flag"
+          )
+          (NamedTypeNode
+            range: 3:30-3:34
+            name: "bool"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:36-9:6
+          (ExpressionStatement
             range: 4:9-8:10
-            (IdentifierExpression
-              range: 4:13-4:17
-              name: "flag"
-            )
-            (BlockStatement
-              range: 4:19-6:10
-              (ExpressionStatement
-                range: 5:13-5:28
-                (AssignmentExpression
-                  range: 5:13-5:27
-                  (MemberExpression
-                    range: 5:13-5:23
-                    (ThisExpression
-                      range: 5:13-5:17
+            (IfExpression
+              range: 4:9-8:10
+              (IdentifierExpression
+                range: 4:13-4:17
+                name: "flag"
+              )
+              (BlockStatement
+                range: 4:19-6:10
+                (ExpressionStatement
+                  range: 5:13-5:28
+                  (AssignmentExpression
+                    range: 5:13-5:27
+                    (MemberExpression
+                      range: 5:13-5:23
+                      (ThisExpression
+                        range: 5:13-5:17
+                      )
+                      (IdentifierExpression
+                        range: 5:18-5:23
+                        name: "value"
+                      )
                     )
-                    (IdentifierExpression
-                      range: 5:18-5:23
-                      name: "value"
+                    (LiteralExpression
+                      range: 5:26-5:27
+                      kind: INT
+                      text: "1"
                     )
-                  )
-                  (LiteralExpression
-                    range: 5:26-5:27
-                    kind: INT
-                    text: "1"
                   )
                 )
               )
-            )
-            (BlockStatement
-              range: 6:16-8:10
-              (ExpressionStatement
-                range: 7:13-7:28
-                (AssignmentExpression
-                  range: 7:13-7:27
-                  (MemberExpression
-                    range: 7:13-7:23
-                    (ThisExpression
-                      range: 7:13-7:17
+              (BlockStatement
+                range: 6:16-8:10
+                (ExpressionStatement
+                  range: 7:13-7:28
+                  (AssignmentExpression
+                    range: 7:13-7:27
+                    (MemberExpression
+                      range: 7:13-7:23
+                      (ThisExpression
+                        range: 7:13-7:17
+                      )
+                      (IdentifierExpression
+                        range: 7:18-7:23
+                        name: "value"
+                      )
                     )
-                    (IdentifierExpression
-                      range: 7:18-7:23
-                      name: "value"
+                    (LiteralExpression
+                      range: 7:26-7:27
+                      kind: INT
+                      text: "2"
                     )
-                  )
-                  (LiteralExpression
-                    range: 7:26-7:27
-                    kind: INT
-                    text: "2"
                   )
                 )
               )
@@ -266,25 +276,25 @@ Expression types:
   12:22-12:27 -> i32
 
 Resolved types:
-  2:18-2:21 -> i32
-  3:23-3:27 -> bool
+  2:25-2:28 -> i32
+  3:30-3:34 -> bool
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:11-2:16 -> const value: i32
-  3:5-9:6 -> constructor(flag: bool)
-  3:17-3:21 -> const flag: bool
+  2:18-2:23 -> const value: i32
+  3:12-9:6 -> constructor(flag: bool)
+  3:24-3:28 -> const flag: bool
 
 References:
-  4:13-4:17 -> 3:17-3:21
-  5:18-5:23 -> 2:11-2:16
-  7:18-7:23 -> 2:11-2:16
+  4:13-4:17 -> 3:24-3:28
+  5:18-5:23 -> 2:18-2:23
+  7:18-7:23 -> 2:18-2:23
   11:1-11:6 -> builtin print
   11:11-11:14 -> 1:7-1:10
-  11:21-11:26 -> 2:11-2:16
+  11:21-11:26 -> 2:18-2:23
   12:1-12:6 -> builtin print
   12:11-12:14 -> 1:7-1:10
-  12:22-12:27 -> 2:11-2:16
+  12:22-12:27 -> 2:18-2:23
 
 --- BYTECODE ---
 

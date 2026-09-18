@@ -50,68 +50,76 @@ RIGHT_BRACE (8:1-8:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    (UninitializedVariableDeclaration
+    (MemberDeclaration
       range: 2:5-2:22
-      mutability: CONST
-      (IdentifierDeclaration
-        range: 2:11-2:16
-        name: "value"
-      )
-      (NamedTypeNode
-        range: 2:18-2:21
-        name: "i32"
-      )
-    )
-    (ConstructorDeclaration
-      range: 3:5-7:6
-      (FunctionParameter
-        range: 3:17-3:27
+      visibility: PRIVATE
+      (UninitializedVariableDeclaration
+        range: 2:5-2:22
+        mutability: CONST
         (IdentifierDeclaration
-          range: 3:17-3:21
-          name: "flag"
+          range: 2:11-2:16
+          name: "value"
         )
         (NamedTypeNode
-          range: 3:23-3:27
-          name: "bool"
+          range: 2:18-2:21
+          name: "i32"
         )
-        optional: false
-        defaultValue: null
       )
-      (BlockStatement
-        range: 3:29-7:6
-        (ExpressionStatement
-          range: 4:9-6:10
-          (IfExpression
+    )
+    (MemberDeclaration
+      range: 3:5-7:6
+      visibility: PRIVATE
+      (ConstructorDeclaration
+        range: 3:5-7:6
+        (FunctionParameter
+          range: 3:17-3:27
+          (IdentifierDeclaration
+            range: 3:17-3:21
+            name: "flag"
+          )
+          (NamedTypeNode
+            range: 3:23-3:27
+            name: "bool"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:29-7:6
+          (ExpressionStatement
             range: 4:9-6:10
-            (IdentifierExpression
-              range: 4:13-4:17
-              name: "flag"
-            )
-            (BlockStatement
-              range: 4:19-6:10
-              (ExpressionStatement
-                range: 5:13-5:28
-                (AssignmentExpression
-                  range: 5:13-5:27
-                  (MemberExpression
-                    range: 5:13-5:23
-                    (ThisExpression
-                      range: 5:13-5:17
+            (IfExpression
+              range: 4:9-6:10
+              (IdentifierExpression
+                range: 4:13-4:17
+                name: "flag"
+              )
+              (BlockStatement
+                range: 4:19-6:10
+                (ExpressionStatement
+                  range: 5:13-5:28
+                  (AssignmentExpression
+                    range: 5:13-5:27
+                    (MemberExpression
+                      range: 5:13-5:23
+                      (ThisExpression
+                        range: 5:13-5:17
+                      )
+                      (IdentifierExpression
+                        range: 5:18-5:23
+                        name: "value"
+                      )
                     )
-                    (IdentifierExpression
-                      range: 5:18-5:23
-                      name: "value"
+                    (LiteralExpression
+                      range: 5:26-5:27
+                      kind: INT
+                      text: "1"
                     )
-                  )
-                  (LiteralExpression
-                    range: 5:26-5:27
-                    kind: INT
-                    text: "1"
                   )
                 )
               )
+              elseBranch: null
             )
-            elseBranch: null
           )
         )
       )

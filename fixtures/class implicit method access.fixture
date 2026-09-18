@@ -47,47 +47,55 @@ RIGHT_BRACE (8:1-8:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    (FunctionDeclaration
+    (MemberDeclaration
       range: 2:5-4:6
-      (IdentifierDeclaration
-        range: 2:10-2:18
-        name: "getValue"
-      )
-      (NamedTypeNode
-        range: 2:21-2:24
-        name: "i32"
-      )
-      (BlockStatement
-        range: 2:25-4:6
-        (ReturnStatement
-          range: 3:9-3:18
-          (LiteralExpression
-            range: 3:16-3:17
-            kind: INT
-            text: "5"
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 2:5-4:6
+        (IdentifierDeclaration
+          range: 2:10-2:18
+          name: "getValue"
+        )
+        (NamedTypeNode
+          range: 2:21-2:24
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:25-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "5"
+            )
           )
         )
       )
     )
-    (FunctionDeclaration
+    (MemberDeclaration
       range: 5:5-7:6
-      (IdentifierDeclaration
-        range: 5:10-5:15
-        name: "other"
-      )
-      (NamedTypeNode
-        range: 5:18-5:21
-        name: "i32"
-      )
-      (BlockStatement
-        range: 5:22-7:6
-        (ReturnStatement
-          range: 6:9-6:27
-          (CallExpression
-            range: 6:16-6:26
-            (IdentifierExpression
-              range: 6:16-6:24
-              name: "getValue"
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 5:5-7:6
+        (IdentifierDeclaration
+          range: 5:10-5:15
+          name: "other"
+        )
+        (NamedTypeNode
+          range: 5:18-5:21
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:22-7:6
+          (ReturnStatement
+            range: 6:9-6:27
+            (CallExpression
+              range: 6:16-6:26
+              (IdentifierExpression
+                range: 6:16-6:24
+                name: "getValue"
+              )
             )
           )
         )

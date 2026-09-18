@@ -1,9 +1,9 @@
 class Foo {
-    var value: i32;
-    constructor(value: i32) {
+    public var value: i32;
+    public constructor(value: i32) {
         this.value = value;
     }
-    func getValue() i32 {
+    public func getValue() i32 {
         return this.value;
     }
 }
@@ -18,18 +18,20 @@ print(foo.getValue());
 CLASS (1:1-1:6)
 IDENTIFIER "Foo" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
-VAR (2:5-2:8)
-IDENTIFIER "value" (2:9-2:14)
-COLON (2:14-2:15)
-IDENTIFIER "i32" (2:16-2:19)
-SEMICOLON (2:19-2:20)
-CONSTRUCTOR (3:5-3:16)
-LEFT_PAREN (3:16-3:17)
-IDENTIFIER "value" (3:17-3:22)
-COLON (3:22-3:23)
-IDENTIFIER "i32" (3:24-3:27)
-RIGHT_PAREN (3:27-3:28)
-LEFT_BRACE (3:29-3:30)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "i32" (2:23-2:26)
+SEMICOLON (2:26-2:27)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "value" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+RIGHT_PAREN (3:34-3:35)
+LEFT_BRACE (3:36-3:37)
 THIS (4:9-4:13)
 DOT (4:13-4:14)
 IDENTIFIER "value" (4:14-4:19)
@@ -37,12 +39,13 @@ EQUAL (4:20-4:21)
 IDENTIFIER "value" (4:22-4:27)
 SEMICOLON (4:27-4:28)
 RIGHT_BRACE (5:5-5:6)
-FUNC (6:5-6:9)
-IDENTIFIER "getValue" (6:10-6:18)
-LEFT_PAREN (6:18-6:19)
-RIGHT_PAREN (6:19-6:20)
-IDENTIFIER "i32" (6:21-6:24)
-LEFT_BRACE (6:25-6:26)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "getValue" (6:17-6:25)
+LEFT_PAREN (6:25-6:26)
+RIGHT_PAREN (6:26-6:27)
+IDENTIFIER "i32" (6:28-6:31)
+LEFT_BRACE (6:32-6:33)
 RETURN (7:9-7:15)
 THIS (7:16-7:20)
 DOT (7:20-7:21)
@@ -91,79 +94,91 @@ SEMICOLON (14:22-14:23)
       range: 1:7-1:10
       name: "Foo"
     )
-    (UninitializedVariableDeclaration
-      range: 2:5-2:20
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 2:9-2:14
-        name: "value"
-      )
-      (NamedTypeNode
-        range: 2:16-2:19
-        name: "i32"
-      )
-    )
-    (ConstructorDeclaration
-      range: 3:5-5:6
-      (FunctionParameter
-        range: 3:17-3:27
+    (MemberDeclaration
+      range: 2:5-2:27
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:27
+        mutability: VAR
         (IdentifierDeclaration
-          range: 3:17-3:22
+          range: 2:16-2:21
           name: "value"
         )
         (NamedTypeNode
-          range: 3:24-3:27
+          range: 2:23-2:26
           name: "i32"
         )
-        optional: false
-        defaultValue: null
       )
-      (BlockStatement
-        range: 3:29-5:6
-        (ExpressionStatement
-          range: 4:9-4:28
-          (AssignmentExpression
-            range: 4:9-4:27
-            (MemberExpression
-              range: 4:9-4:19
-              (ThisExpression
-                range: 4:9-4:13
+    )
+    (MemberDeclaration
+      range: 3:5-5:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-5:6
+        (FunctionParameter
+          range: 3:24-3:34
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:31-3:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:36-5:6
+          (ExpressionStatement
+            range: 4:9-4:28
+            (AssignmentExpression
+              range: 4:9-4:27
+              (MemberExpression
+                range: 4:9-4:19
+                (ThisExpression
+                  range: 4:9-4:13
+                )
+                (IdentifierExpression
+                  range: 4:14-4:19
+                  name: "value"
+                )
               )
               (IdentifierExpression
-                range: 4:14-4:19
+                range: 4:22-4:27
                 name: "value"
               )
-            )
-            (IdentifierExpression
-              range: 4:22-4:27
-              name: "value"
             )
           )
         )
       )
     )
-    (FunctionDeclaration
+    (MemberDeclaration
       range: 6:5-8:6
-      (IdentifierDeclaration
-        range: 6:10-6:18
-        name: "getValue"
-      )
-      (NamedTypeNode
-        range: 6:21-6:24
-        name: "i32"
-      )
-      (BlockStatement
-        range: 6:25-8:6
-        (ReturnStatement
-          range: 7:9-7:27
-          (MemberExpression
-            range: 7:16-7:26
-            (ThisExpression
-              range: 7:16-7:20
-            )
-            (IdentifierExpression
-              range: 7:21-7:26
-              name: "value"
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:25
+          name: "getValue"
+        )
+        (NamedTypeNode
+          range: 6:28-6:31
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:32-8:6
+          (ReturnStatement
+            range: 7:9-7:27
+            (MemberExpression
+              range: 7:16-7:26
+              (ThisExpression
+                range: 7:16-7:20
+              )
+              (IdentifierExpression
+                range: 7:21-7:26
+                name: "value"
+              )
             )
           )
         )
@@ -287,31 +302,31 @@ Expression types:
   14:11-14:19 -> () => i32
 
 Resolved types:
-  2:16-2:19 -> i32
-  3:24-3:27 -> i32
-  6:21-6:24 -> i32
+  2:23-2:26 -> i32
+  3:31-3:34 -> i32
+  6:28-6:31 -> i32
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:9-2:14 -> var value: i32
-  3:5-5:6 -> constructor(value: i32)
-  3:17-3:22 -> const value: i32
-  6:10-6:18 -> getValue() => i32
+  2:16-2:21 -> var value: i32
+  3:12-5:6 -> constructor(value: i32)
+  3:24-3:29 -> const value: i32
+  6:17-6:25 -> getValue() => i32
   11:7-11:10 -> const foo: Foo
 
 References:
-  4:14-4:19 -> 2:9-2:14
-  4:22-4:27 -> 3:17-3:22
-  7:21-7:26 -> 2:9-2:14
+  4:14-4:19 -> 2:16-2:21
+  4:22-4:27 -> 3:24-3:29
+  7:21-7:26 -> 2:16-2:21
   11:17-11:20 -> 1:7-1:10
   12:1-12:6 -> builtin print
   12:7-12:10 -> 11:7-11:10
-  12:11-12:16 -> 2:9-2:14
+  12:11-12:16 -> 2:16-2:21
   13:1-13:4 -> 11:7-11:10
-  13:5-13:10 -> 2:9-2:14
+  13:5-13:10 -> 2:16-2:21
   14:1-14:6 -> builtin print
   14:7-14:10 -> 11:7-11:10
-  14:11-14:19 -> 6:10-6:18
+  14:11-14:19 -> 6:17-6:25
 
 --- BYTECODE ---
 

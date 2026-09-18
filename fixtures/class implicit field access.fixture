@@ -38,37 +38,45 @@ RIGHT_BRACE (6:1-6:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    (VariableDeclaration
+    (MemberDeclaration
       range: 2:5-2:19
-      mutability: VAR
-      (IdentifierDeclaration
-        range: 2:9-2:14
-        name: "value"
-      )
-      type: null
-      (LiteralExpression
-        range: 2:17-2:18
-        kind: INT
-        text: "5"
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:14
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:17-2:18
+          kind: INT
+          text: "5"
+        )
       )
     )
-    (FunctionDeclaration
+    (MemberDeclaration
       range: 3:5-5:6
-      (IdentifierDeclaration
-        range: 3:10-3:18
-        name: "getValue"
-      )
-      (NamedTypeNode
-        range: 3:21-3:24
-        name: "i32"
-      )
-      (BlockStatement
-        range: 3:25-5:6
-        (ReturnStatement
-          range: 4:9-4:22
-          (IdentifierExpression
-            range: 4:16-4:21
-            name: "value"
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 3:5-5:6
+        (IdentifierDeclaration
+          range: 3:10-3:18
+          name: "getValue"
+        )
+        (NamedTypeNode
+          range: 3:21-3:24
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:25-5:6
+          (ReturnStatement
+            range: 4:9-4:22
+            (IdentifierExpression
+              range: 4:16-4:21
+              name: "value"
+            )
           )
         )
       )
