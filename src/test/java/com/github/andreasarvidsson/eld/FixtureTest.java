@@ -190,12 +190,10 @@ public class FixtureTest {
             }
             expected =
                 getContent(fixture, OUTPUT_HEADER, outputHeaderIndex, -1);
-            if (!expected.isEmpty() || updateFixture) {
-                final String outputActual = BytecodeRunner.run(classes);
-                actualBuilder.append(outputActual);
-                if (assertFixture) {
-                    assertEquals(expected, outputActual, name);
-                }
+            final String outputActual = BytecodeRunner.run(classes);
+            actualBuilder.append(outputActual);
+            if (assertFixture) {
+                assertEquals(expected, outputActual, name);
             }
         }
         catch (
