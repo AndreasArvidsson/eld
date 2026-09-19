@@ -1410,11 +1410,14 @@ public final class BytecodeGenerator {
             };
             case ArrayType array ->
                 RuntimeAbi.array(array.elementType()).descriptor;
-            case TupleType ignored ->
+            case TupleType _ ->
                 "Lcom/github/andreasarvidsson/eld/runtime/EldTuple;";
             case UnionType union -> unionDescriptor(union);
-            case FunctionType ignored -> "Ljava/lang/invoke/MethodHandle;";
-            case BuiltinFunctionType ignored -> "Ljava/io/PrintStream;";
+            case FunctionType _ -> "Ljava/lang/invoke/MethodHandle;";
+            case BuiltinFunctionType builtin ->
+                builtin == BuiltinFunctionType.PRINT
+                    ? "Ljava/io/PrintStream;"
+                    : "Ljava/lang/invoke/MethodHandle;";
             case ClassType classType -> "L" + classOwner(classType) + ";";
             case InterfaceType contract -> "L" + interfaceOwner(contract) + ";";
         };
@@ -2571,6 +2574,26 @@ public final class BytecodeGenerator {
                     ClassDesc.ofDescriptor("Ljava/io/PrintStream;")
                 );
             }
+            else if (
+                BuiltinFunctionSymbol.DIR.equals(symbol)
+                    || BuiltinFunctionSymbol.HELP.equals(symbol)
+            ) {
+                final boolean dir = BuiltinFunctionSymbol.DIR.equals(symbol);
+                method.ldc(
+                    MethodHandleDesc.ofMethod(
+                        DirectMethodHandleDesc.Kind.STATIC,
+                        classDesc(
+                            "com/github/andreasarvidsson/eld/runtime/Introspection"
+                        ),
+                        dir ? "dir" : "help",
+                        MethodTypeDesc.ofDescriptor(
+                            dir
+                                ? "(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;"
+                                : "(Ljava/lang/Object;)V"
+                        )
+                    )
+                );
+            }
             else if (symbol instanceof FunctionSymbol function) {
                 final boolean instanceMethod =
                     instance != null && instance.members().containsKey(symbol);
@@ -2862,7 +2885,7 @@ public final class BytecodeGenerator {
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case MemberExpression member -> member(member);
-                case ThisExpression ignored -> {
+                case ThisExpression _ -> {
                     method.aload(0);
                     if (lexicalReceiverOwner != null) {
                         method.fieldAccess(
@@ -3911,6 +3934,29 @@ public final class BytecodeGenerator {
                     "println",
                     MethodTypeDesc
                         .ofDescriptor("(" + argumentDescriptor + ")V"),
+                    false
+                );
+                return;
+            }
+            if (
+                calleeType == BuiltinFunctionType.DIR
+                    || calleeType == BuiltinFunctionType.HELP
+            ) {
+                final Expression argument = call.arguments().getFirst();
+                expression(argument);
+                box(semanticModel.getEffectiveType(argument));
+                final boolean dir = calleeType == BuiltinFunctionType.DIR;
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc(
+                        "com/github/andreasarvidsson/eld/runtime/Introspection"
+                    ),
+                    dir ? "dir" : "help",
+                    MethodTypeDesc.ofDescriptor(
+                        dir
+                            ? "(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;"
+                            : "(Ljava/lang/Object;)V"
+                    ),
                     false
                 );
                 return;

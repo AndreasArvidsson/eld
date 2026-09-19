@@ -17,6 +17,7 @@ import com.github.andreasarvidsson.eld.runtime.EldDoubleArray;
 import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 import com.github.andreasarvidsson.eld.runtime.EldCharArray;
 import com.github.andreasarvidsson.eld.runtime.EldObjectArray;
+import com.github.andreasarvidsson.eld.runtime.Introspection;
 
 final class RuntimeAbi {
     static final String EMPTY_ARRAY_CONSTRUCTOR = "()V";
@@ -117,6 +118,7 @@ final class RuntimeAbi {
         final ArrayList<Class<?>> classes = new ArrayList<>();
         classes.add(EldArray.class);
         classes.add(EldTuple.class);
+        classes.add(Introspection.class);
         for (final ArrayKind array : ArrayKind.values()) {
             classes.add(array.runtimeClass);
         }

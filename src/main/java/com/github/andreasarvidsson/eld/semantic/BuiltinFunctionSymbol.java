@@ -7,6 +7,10 @@ public record BuiltinFunctionSymbol(String name, BuiltinFunctionType type)
 
     public static final BuiltinFunctionSymbol PRINT =
         new BuiltinFunctionSymbol("print", BuiltinFunctionType.PRINT);
+    public static final BuiltinFunctionSymbol DIR =
+        new BuiltinFunctionSymbol("dir", BuiltinFunctionType.DIR);
+    public static final BuiltinFunctionSymbol HELP =
+        new BuiltinFunctionSymbol("help", BuiltinFunctionType.HELP);
 
     @Override
     public Range range() {

@@ -1,0 +1,434 @@
+class Counter {
+    public var value = 1;
+    public constructor() {}
+    public func next() i32 { return this.value++; }
+    func hidden() i32 { return 0; }
+}
+const counter = new Counter();
+const inspect = dir;
+print(inspect(counter));
+help(counter);
+print(dir(null));
+help(null);
+
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "1" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+RIGHT_BRACE (3:27-3:28)
+PUBLIC (4:5-4:11)
+FUNC (4:12-4:16)
+IDENTIFIER "next" (4:17-4:21)
+LEFT_PAREN (4:21-4:22)
+RIGHT_PAREN (4:22-4:23)
+IDENTIFIER "i32" (4:24-4:27)
+LEFT_BRACE (4:28-4:29)
+RETURN (4:30-4:36)
+THIS (4:37-4:41)
+DOT (4:41-4:42)
+IDENTIFIER "value" (4:42-4:47)
+PLUS_PLUS (4:47-4:49)
+SEMICOLON (4:49-4:50)
+RIGHT_BRACE (4:51-4:52)
+FUNC (5:5-5:9)
+IDENTIFIER "hidden" (5:10-5:16)
+LEFT_PAREN (5:16-5:17)
+RIGHT_PAREN (5:17-5:18)
+IDENTIFIER "i32" (5:19-5:22)
+LEFT_BRACE (5:23-5:24)
+RETURN (5:25-5:31)
+INTEGER_LITERAL "0" (5:32-5:33)
+SEMICOLON (5:33-5:34)
+RIGHT_BRACE (5:35-5:36)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+IDENTIFIER "counter" (7:7-7:14)
+EQUAL (7:15-7:16)
+NEW (7:17-7:20)
+IDENTIFIER "Counter" (7:21-7:28)
+LEFT_PAREN (7:28-7:29)
+RIGHT_PAREN (7:29-7:30)
+SEMICOLON (7:30-7:31)
+CONST (8:1-8:6)
+IDENTIFIER "inspect" (8:7-8:14)
+EQUAL (8:15-8:16)
+IDENTIFIER "dir" (8:17-8:20)
+SEMICOLON (8:20-8:21)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "inspect" (9:7-9:14)
+LEFT_PAREN (9:14-9:15)
+IDENTIFIER "counter" (9:15-9:22)
+RIGHT_PAREN (9:22-9:23)
+RIGHT_PAREN (9:23-9:24)
+SEMICOLON (9:24-9:25)
+IDENTIFIER "help" (10:1-10:5)
+LEFT_PAREN (10:5-10:6)
+IDENTIFIER "counter" (10:6-10:13)
+RIGHT_PAREN (10:13-10:14)
+SEMICOLON (10:14-10:15)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "dir" (11:7-11:10)
+LEFT_PAREN (11:10-11:11)
+NULL (11:11-11:15)
+RIGHT_PAREN (11:15-11:16)
+RIGHT_PAREN (11:16-11:17)
+SEMICOLON (11:17-11:18)
+IDENTIFIER "help" (12:1-12:5)
+LEFT_PAREN (12:5-12:6)
+NULL (12:6-12:10)
+RIGHT_PAREN (12:10-12:11)
+SEMICOLON (12:11-12:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:12
+  (ClassDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:28
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-3:28
+        (BlockStatement
+          range: 3:26-3:28
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:52
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-4:52
+        (IdentifierDeclaration
+          range: 4:17-4:21
+          name: "next"
+        )
+        (NamedTypeNode
+          range: 4:24-4:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:28-4:52
+          (ReturnStatement
+            range: 4:30-4:50
+            (PostfixExpression
+              range: 4:37-4:49
+              (MemberExpression
+                range: 4:37-4:47
+                (ThisExpression
+                  range: 4:37-4:41
+                )
+                (IdentifierExpression
+                  range: 4:42-4:47
+                  name: "value"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:36
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 5:5-5:36
+        (IdentifierDeclaration
+          range: 5:10-5:16
+          name: "hidden"
+        )
+        (NamedTypeNode
+          range: 5:19-5:22
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:23-5:36
+          (ReturnStatement
+            range: 5:25-5:34
+            (LiteralExpression
+              range: 5:32-5:33
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:14
+      name: "counter"
+    )
+    type: null
+    (NewExpression
+      range: 7:17-7:30
+      (IdentifierExpression
+        range: 7:21-7:28
+        name: "Counter"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "inspect"
+    )
+    type: null
+    (IdentifierExpression
+      range: 8:17-8:20
+      name: "dir"
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:25
+    (CallExpression
+      range: 9:1-9:24
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:23
+        (IdentifierExpression
+          range: 9:7-9:14
+          name: "inspect"
+        )
+        (IdentifierExpression
+          range: 9:15-9:22
+          name: "counter"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:15
+    (CallExpression
+      range: 10:1-10:14
+      (IdentifierExpression
+        range: 10:1-10:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 10:6-10:13
+        name: "counter"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:18
+    (CallExpression
+      range: 11:1-11:17
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:16
+        (IdentifierExpression
+          range: 11:7-11:10
+          name: "dir"
+        )
+        (LiteralExpression
+          range: 11:11-11:15
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:12
+    (CallExpression
+      range: 12:1-12:11
+      (IdentifierExpression
+        range: 12:1-12:5
+        name: "help"
+      )
+      (LiteralExpression
+        range: 12:6-12:10
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:24-2:25 -> i32
+  4:37-4:41 -> Counter
+  4:37-4:47 -> i32
+  4:37-4:49 -> i32
+  4:42-4:47 -> i32
+  5:32-5:33 -> i32
+  7:17-7:30 -> Counter
+  7:21-7:28 -> Counter
+  8:17-8:20 -> (any) => [string]
+  9:1-9:6 -> (any) => void
+  9:1-9:24 -> void
+  9:7-9:14 -> (any) => [string]
+  9:7-9:23 -> [string]
+  9:15-9:22 -> Counter
+  10:1-10:5 -> (any) => void
+  10:1-10:14 -> void
+  10:6-10:13 -> Counter
+  11:1-11:6 -> (any) => void
+  11:1-11:17 -> void
+  11:7-11:10 -> (any) => [string]
+  11:7-11:16 -> [string]
+  11:11-11:15 -> null
+  12:1-12:5 -> (any) => void
+  12:1-12:11 -> void
+  12:6-12:10 -> null
+
+Resolved types:
+  4:24-4:27 -> i32
+  5:19-5:22 -> i32
+
+Declarations:
+  1:7-1:14 -> class Counter
+  2:16-2:21 -> var value: i32
+  3:12-3:28 -> constructor()
+  4:17-4:21 -> next() => i32
+  5:10-5:16 -> hidden() => i32
+  7:7-7:14 -> const counter: Counter
+  8:7-8:14 -> const inspect: (any) => [string]
+
+References:
+  4:42-4:47 -> 2:16-2:21
+  7:21-7:28 -> 1:7-1:14
+  8:17-8:20 -> builtin dir
+  9:1-9:6 -> builtin print
+  9:7-9:14 -> 8:7-8:14
+  9:15-9:22 -> 7:7-7:14
+  10:1-10:5 -> builtin help
+  10:6-10:13 -> 7:7-7:14
+  11:1-11:6 -> builtin print
+  11:7-11:10 -> builtin dir
+  12:1-12:5 -> builtin help
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field counter LTest$Counter; flags [PUBLIC, STATIC, FINAL]
+  field inspect Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Counter
+    DUP
+    INVOKESPECIAL Test$Counter.<init>()V
+    PUTSTATIC Test.counter LTest$Counter;
+    LDC MethodHandleDesc[STATIC/Introspection::dir(Object)EldObjectArray]
+    PUTSTATIC Test.inspect Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.counter LTest$Counter;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$Counter.value I
+    RETURN
+    max stack 2 max locals 1
+  method next()I flags [PUBLIC]
+    ALOAD_0 0
+    DUP
+    GETFIELD Test$Counter.value I
+    DUP_X1
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$Counter.value I
+    IRETURN
+    max stack 4 max locals 1
+  method hidden()I flags [PRIVATE]
+    LDC 0
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+[equals, getClass, hashCode, next, notify, notifyAll, toString, value, wait]
+Counter
+Constructors:
+  Counter()
+Fields:
+  int value
+Methods:
+  Class getClass()
+  String toString()
+  boolean equals(Object)
+  int hashCode()
+  int next()
+  void notify()
+  void notifyAll()
+  void wait()
+  void wait(long)
+  void wait(long, int)
+[]
+null
+No members.
+

@@ -1,0 +1,42 @@
+help(1, 2);
+
+
+--- TOKENS ---
+
+IDENTIFIER "help" (1:1-1:5)
+LEFT_PAREN (1:5-1:6)
+INTEGER_LITERAL "1" (1:6-1:7)
+COMMA (1:7-1:8)
+INTEGER_LITERAL "2" (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+SEMICOLON (1:11-1:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:12
+  (ExpressionStatement
+    range: 1:1-1:12
+    (CallExpression
+      range: 1:1-1:11
+      (IdentifierExpression
+        range: 1:1-1:5
+        name: "help"
+      )
+      (LiteralExpression
+        range: 1:6-1:7
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:9-1:10
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Help expects one argument, found 2 at 1:1-1:11

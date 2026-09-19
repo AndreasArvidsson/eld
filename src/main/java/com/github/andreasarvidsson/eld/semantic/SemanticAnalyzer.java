@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -112,6 +113,8 @@ public final class SemanticAnalyzer {
     public SemanticModel analyze(final Program program) {
         final Scope builtinScope = new Scope(null);
         builtinScope.declare(BuiltinFunctionSymbol.PRINT);
+        builtinScope.declare(BuiltinFunctionSymbol.DIR);
+        builtinScope.declare(BuiltinFunctionSymbol.HELP);
 
         final Scope globalScope = new Scope(builtinScope);
         final SemanticContext context =
@@ -182,7 +185,7 @@ public final class SemanticAnalyzer {
                     field.range(),
                     "Uninitialized declarations are only allowed directly in a class"
                 );
-            case IdentifierDeclaration ignored -> throw new SemanticException(
+            case IdentifierDeclaration _ -> throw new SemanticException(
                 declaration.range(),
                 "Unexpected declaration: %s",
                 declaration
@@ -1771,9 +1774,9 @@ public final class SemanticAnalyzer {
 
     private boolean producesValue(final BlockItem item) {
         return switch (item) {
-            case YieldStatement ignored -> true;
-            case ReturnStatement ignored -> true;
-            case ThrowStatement ignored -> true;
+            case YieldStatement _ -> true;
+            case ReturnStatement _ -> true;
+            case ThrowStatement _ -> true;
             case TryStatement statement -> (statement.finallyBody() != null
                 && producesValue(statement.finallyBody()))
                 || (producesValue(statement.body()) && statement.catches()
@@ -3336,6 +3339,31 @@ public final class SemanticAnalyzer {
                 }
             }
             return BuiltinType.VOID;
+        }
+        if (
+            type == BuiltinFunctionType.DIR || type == BuiltinFunctionType.HELP
+        ) {
+            final String name =
+                type == BuiltinFunctionType.DIR ? "Dir" : "Help";
+            if (call.arguments().size() != 1) {
+                throw new SemanticException(
+                    call.range(),
+                    "%s expects one argument, found %s",
+                    name,
+                    call.arguments().size()
+                );
+            }
+            final Expression argument = call.arguments().getFirst();
+            if (analyzeExpression(argument, context) == BuiltinType.VOID) {
+                throw new SemanticException(
+                    argument.range(),
+                    "A %s argument must produce a value",
+                    name.toLowerCase(Locale.ROOT)
+                );
+            }
+            return type == BuiltinFunctionType.DIR
+                ? new ArrayType(BuiltinType.STRING)
+                : BuiltinType.VOID;
         }
         if (!(type instanceof FunctionType function)) {
             throw new SemanticException(

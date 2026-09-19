@@ -1,0 +1,29 @@
+dir();
+
+
+--- TOKENS ---
+
+IDENTIFIER "dir" (1:1-1:4)
+LEFT_PAREN (1:4-1:5)
+RIGHT_PAREN (1:5-1:6)
+SEMICOLON (1:6-1:7)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:7
+  (ExpressionStatement
+    range: 1:1-1:7
+    (CallExpression
+      range: 1:1-1:6
+      (IdentifierExpression
+        range: 1:1-1:4
+        name: "dir"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Dir expects one argument, found 0 at 1:1-1:6

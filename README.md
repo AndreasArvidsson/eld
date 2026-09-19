@@ -7,6 +7,16 @@ building from source, development setup, tests, and implementation notes.
 
 See [cli.md](./cli.md) for command-line and REPL usage.
 
+When editor tooling is unavailable, use `dir(value)` to get the sorted names of
+an object's public fields and methods. Use `help(value)` to print its public
+constructors, fields, and method signatures:
+
+```text
+const matcher = Regex.compile(r"\d+").matcher("abc123");
+print(dir(matcher));
+help(matcher);
+```
+
 ## Declarations
 
 ```text

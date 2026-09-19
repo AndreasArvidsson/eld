@@ -1922,7 +1922,8 @@ class BytecodeGeneratorTest {
         );
         assertEquals(true, module.getField("same").get(null));
         assertEquals(true, module.getField("different").get(null));
-        final var values = (EldObjectArray) module.getField("values").get(null);
+        final var values =
+            (EldObjectArray<?>) module.getField("values").get(null);
         assertEquals(
             7,
             values.get(0).getClass().getMethod("getValue").invoke(values.get(0))
@@ -2164,7 +2165,7 @@ class BytecodeGeneratorTest {
                     """
             );
         final var values =
-            (EldObjectArray) type.getMethod("values").invoke(null);
+            (EldObjectArray<?>) type.getMethod("values").invoke(null);
         assertEquals(5.0, values.get(0));
         assertEquals("two", values.get(1));
         assertEquals(true, values.get(2));
@@ -2184,8 +2185,8 @@ class BytecodeGeneratorTest {
             type.getMethod("branch", boolean.class).invoke(null, false)
         );
         final var nested =
-            (EldObjectArray) type.getMethod("nested").invoke(null);
-        assertEquals("two", ((EldObjectArray) nested.get(0)).get(1));
+            (EldObjectArray<?>) type.getMethod("nested").invoke(null);
+        assertEquals("two", ((EldObjectArray<?>) nested.get(0)).get(1));
         assertEquals("one", type.getMethod("selection").invoke(null));
     }
 
@@ -3559,6 +3560,42 @@ class BytecodeGeneratorTest {
             SemanticException.class,
             () -> compile("const log = print; log(print());")
         );
+    }
+
+    @Test
+    void introspectionBuiltinsDescribeRuntimeObjects() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            const inspect = dir;
+            print(inspect("hello"));
+            print(dir(null));
+            help(null);
+            """).getTokens()).parse();
+        final var classes =
+            new BytecodeGenerator(
+                program,
+                new SemanticAnalyzer().analyze(program)
+            ).generateClasses();
+        for (final byte[] bytecode : classes.values()) {
+            BytecodeUtil.verify(bytecode);
+        }
+        final String output = BytecodeRunner.run(classes);
+        assertTrue(output.contains("charAt"));
+        assertTrue(output.contains("substring"));
+        assertTrue(output.endsWith("[]\nnull\nNo members.\n"));
+        assertThrows(SemanticException.class, () -> compile("dir();"));
+        assertThrows(SemanticException.class, () -> compile("dir(1, 2);"));
+        assertThrows(SemanticException.class, () -> compile("help();"));
+        assertThrows(SemanticException.class, () -> compile("help(print());"));
+    }
+
+    @Test
+    void userFunctionsCanShadowIntrospectionBuiltins() throws Exception {
+        final Class<?> type = compile("""
+            func dir(value: i32) i32 { return value + 1; }
+            func help(value: i32) i32 { return value + 2; }
+            func result() i32 { return dir(19) + help(20); }
+            """);
+        assertEquals(42, type.getMethod("result").invoke(null));
     }
 
     @Test

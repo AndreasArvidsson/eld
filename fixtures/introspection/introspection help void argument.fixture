@@ -1,0 +1,39 @@
+help(print());
+
+
+--- TOKENS ---
+
+IDENTIFIER "help" (1:1-1:5)
+LEFT_PAREN (1:5-1:6)
+IDENTIFIER "print" (1:6-1:11)
+LEFT_PAREN (1:11-1:12)
+RIGHT_PAREN (1:12-1:13)
+RIGHT_PAREN (1:13-1:14)
+SEMICOLON (1:14-1:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:15
+  (ExpressionStatement
+    range: 1:1-1:15
+    (CallExpression
+      range: 1:1-1:14
+      (IdentifierExpression
+        range: 1:1-1:5
+        name: "help"
+      )
+      (CallExpression
+        range: 1:6-1:13
+        (IdentifierExpression
+          range: 1:6-1:11
+          name: "print"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: A help argument must produce a value at 1:6-1:13
