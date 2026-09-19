@@ -1,0 +1,525 @@
+try {
+    throw new IllegalArgumentException("argument");
+} catch (e: IOException) {
+    print("wrong catch");
+} catch (e: RuntimeException) {
+    print(e.getMessage());
+} catch (e: Exception) {
+    print("wrong broad catch");
+}
+try {
+    throw new Error("error");
+} catch (e: Throwable) {
+    print(e.getMessage());
+}
+try {
+    throw new Exception("exception");
+} catch (e: Exception) {
+    print(e.getMessage());
+}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+THROW (2:5-2:10)
+NEW (2:11-2:14)
+IDENTIFIER "IllegalArgumentException" (2:15-2:39)
+LEFT_PAREN (2:39-2:40)
+STRING_LITERAL "\"argument\"" (2:40-2:50)
+RIGHT_PAREN (2:50-2:51)
+SEMICOLON (2:51-2:52)
+RIGHT_BRACE (3:1-3:2)
+CATCH (3:3-3:8)
+LEFT_PAREN (3:9-3:10)
+IDENTIFIER "e" (3:10-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "IOException" (3:13-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+STRING_LITERAL "\"wrong catch\"" (4:11-4:24)
+RIGHT_PAREN (4:24-4:25)
+SEMICOLON (4:25-4:26)
+RIGHT_BRACE (5:1-5:2)
+CATCH (5:3-5:8)
+LEFT_PAREN (5:9-5:10)
+IDENTIFIER "e" (5:10-5:11)
+COLON (5:11-5:12)
+IDENTIFIER "RuntimeException" (5:13-5:29)
+RIGHT_PAREN (5:29-5:30)
+LEFT_BRACE (5:31-5:32)
+IDENTIFIER "print" (6:5-6:10)
+LEFT_PAREN (6:10-6:11)
+IDENTIFIER "e" (6:11-6:12)
+DOT (6:12-6:13)
+IDENTIFIER "getMessage" (6:13-6:23)
+LEFT_PAREN (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+RIGHT_BRACE (7:1-7:2)
+CATCH (7:3-7:8)
+LEFT_PAREN (7:9-7:10)
+IDENTIFIER "e" (7:10-7:11)
+COLON (7:11-7:12)
+IDENTIFIER "Exception" (7:13-7:22)
+RIGHT_PAREN (7:22-7:23)
+LEFT_BRACE (7:24-7:25)
+IDENTIFIER "print" (8:5-8:10)
+LEFT_PAREN (8:10-8:11)
+STRING_LITERAL "\"wrong broad catch\"" (8:11-8:30)
+RIGHT_PAREN (8:30-8:31)
+SEMICOLON (8:31-8:32)
+RIGHT_BRACE (9:1-9:2)
+TRY (10:1-10:4)
+LEFT_BRACE (10:5-10:6)
+THROW (11:5-11:10)
+NEW (11:11-11:14)
+IDENTIFIER "Error" (11:15-11:20)
+LEFT_PAREN (11:20-11:21)
+STRING_LITERAL "\"error\"" (11:21-11:28)
+RIGHT_PAREN (11:28-11:29)
+SEMICOLON (11:29-11:30)
+RIGHT_BRACE (12:1-12:2)
+CATCH (12:3-12:8)
+LEFT_PAREN (12:9-12:10)
+IDENTIFIER "e" (12:10-12:11)
+COLON (12:11-12:12)
+IDENTIFIER "Throwable" (12:13-12:22)
+RIGHT_PAREN (12:22-12:23)
+LEFT_BRACE (12:24-12:25)
+IDENTIFIER "print" (13:5-13:10)
+LEFT_PAREN (13:10-13:11)
+IDENTIFIER "e" (13:11-13:12)
+DOT (13:12-13:13)
+IDENTIFIER "getMessage" (13:13-13:23)
+LEFT_PAREN (13:23-13:24)
+RIGHT_PAREN (13:24-13:25)
+RIGHT_PAREN (13:25-13:26)
+SEMICOLON (13:26-13:27)
+RIGHT_BRACE (14:1-14:2)
+TRY (15:1-15:4)
+LEFT_BRACE (15:5-15:6)
+THROW (16:5-16:10)
+NEW (16:11-16:14)
+IDENTIFIER "Exception" (16:15-16:24)
+LEFT_PAREN (16:24-16:25)
+STRING_LITERAL "\"exception\"" (16:25-16:36)
+RIGHT_PAREN (16:36-16:37)
+SEMICOLON (16:37-16:38)
+RIGHT_BRACE (17:1-17:2)
+CATCH (17:3-17:8)
+LEFT_PAREN (17:9-17:10)
+IDENTIFIER "e" (17:10-17:11)
+COLON (17:11-17:12)
+IDENTIFIER "Exception" (17:13-17:22)
+RIGHT_PAREN (17:22-17:23)
+LEFT_BRACE (17:24-17:25)
+IDENTIFIER "print" (18:5-18:10)
+LEFT_PAREN (18:10-18:11)
+IDENTIFIER "e" (18:11-18:12)
+DOT (18:12-18:13)
+IDENTIFIER "getMessage" (18:13-18:23)
+LEFT_PAREN (18:23-18:24)
+RIGHT_PAREN (18:24-18:25)
+RIGHT_PAREN (18:25-18:26)
+SEMICOLON (18:26-18:27)
+RIGHT_BRACE (19:1-19:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-19:2
+  (TryStatement
+    range: 1:1-9:2
+    (BlockStatement
+      range: 1:5-3:2
+      (ThrowStatement
+        range: 2:5-2:52
+        (NewExpression
+          range: 2:11-2:51
+          (IdentifierExpression
+            range: 2:15-2:39
+            name: "IllegalArgumentException"
+          )
+          (LiteralExpression
+            range: 2:40-2:50
+            kind: STRING
+            text: "\"argument\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 3:3-5:2
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 3:13-3:24
+        name: "IOException"
+      )
+      (BlockStatement
+        range: 3:26-5:2
+        (ExpressionStatement
+          range: 4:5-4:26
+          (CallExpression
+            range: 4:5-4:25
+            (IdentifierExpression
+              range: 4:5-4:10
+              name: "print"
+            )
+            (LiteralExpression
+              range: 4:11-4:24
+              kind: STRING
+              text: "\"wrong catch\""
+            )
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 5:3-7:2
+      (IdentifierDeclaration
+        range: 5:10-5:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 5:13-5:29
+        name: "RuntimeException"
+      )
+      (BlockStatement
+        range: 5:31-7:2
+        (ExpressionStatement
+          range: 6:5-6:27
+          (CallExpression
+            range: 6:5-6:26
+            (IdentifierExpression
+              range: 6:5-6:10
+              name: "print"
+            )
+            (CallExpression
+              range: 6:11-6:25
+              (MemberExpression
+                range: 6:11-6:23
+                (IdentifierExpression
+                  range: 6:11-6:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 6:13-6:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 7:3-9:2
+      (IdentifierDeclaration
+        range: 7:10-7:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 7:13-7:22
+        name: "Exception"
+      )
+      (BlockStatement
+        range: 7:24-9:2
+        (ExpressionStatement
+          range: 8:5-8:32
+          (CallExpression
+            range: 8:5-8:31
+            (IdentifierExpression
+              range: 8:5-8:10
+              name: "print"
+            )
+            (LiteralExpression
+              range: 8:11-8:30
+              kind: STRING
+              text: "\"wrong broad catch\""
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (TryStatement
+    range: 10:1-14:2
+    (BlockStatement
+      range: 10:5-12:2
+      (ThrowStatement
+        range: 11:5-11:30
+        (NewExpression
+          range: 11:11-11:29
+          (IdentifierExpression
+            range: 11:15-11:20
+            name: "Error"
+          )
+          (LiteralExpression
+            range: 11:21-11:28
+            kind: STRING
+            text: "\"error\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 12:3-14:2
+      (IdentifierDeclaration
+        range: 12:10-12:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 12:13-12:22
+        name: "Throwable"
+      )
+      (BlockStatement
+        range: 12:24-14:2
+        (ExpressionStatement
+          range: 13:5-13:27
+          (CallExpression
+            range: 13:5-13:26
+            (IdentifierExpression
+              range: 13:5-13:10
+              name: "print"
+            )
+            (CallExpression
+              range: 13:11-13:25
+              (MemberExpression
+                range: 13:11-13:23
+                (IdentifierExpression
+                  range: 13:11-13:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 13:13-13:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (TryStatement
+    range: 15:1-19:2
+    (BlockStatement
+      range: 15:5-17:2
+      (ThrowStatement
+        range: 16:5-16:38
+        (NewExpression
+          range: 16:11-16:37
+          (IdentifierExpression
+            range: 16:15-16:24
+            name: "Exception"
+          )
+          (LiteralExpression
+            range: 16:25-16:36
+            kind: STRING
+            text: "\"exception\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 17:3-19:2
+      (IdentifierDeclaration
+        range: 17:10-17:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 17:13-17:22
+        name: "Exception"
+      )
+      (BlockStatement
+        range: 17:24-19:2
+        (ExpressionStatement
+          range: 18:5-18:27
+          (CallExpression
+            range: 18:5-18:26
+            (IdentifierExpression
+              range: 18:5-18:10
+              name: "print"
+            )
+            (CallExpression
+              range: 18:11-18:25
+              (MemberExpression
+                range: 18:11-18:23
+                (IdentifierExpression
+                  range: 18:11-18:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 18:13-18:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:11-2:51 -> IllegalArgumentException
+  2:15-2:39 -> IllegalArgumentException
+  2:40-2:50 -> string
+  4:5-4:10 -> (any) => void
+  4:5-4:25 -> void
+  4:11-4:24 -> string
+  6:5-6:10 -> (any) => void
+  6:5-6:26 -> void
+  6:11-6:12 -> RuntimeException
+  6:11-6:23 -> () => string | null
+  6:11-6:25 -> string | null
+  6:13-6:23 -> () => string | null
+  8:5-8:10 -> (any) => void
+  8:5-8:31 -> void
+  8:11-8:30 -> string
+  11:11-11:29 -> Error
+  11:15-11:20 -> Error
+  11:21-11:28 -> string
+  13:5-13:10 -> (any) => void
+  13:5-13:26 -> void
+  13:11-13:12 -> Throwable
+  13:11-13:23 -> () => string | null
+  13:11-13:25 -> string | null
+  13:13-13:23 -> () => string | null
+  16:11-16:37 -> Exception
+  16:15-16:24 -> Exception
+  16:25-16:36 -> string
+  18:5-18:10 -> (any) => void
+  18:5-18:26 -> void
+  18:11-18:12 -> Exception
+  18:11-18:23 -> () => string | null
+  18:11-18:25 -> string | null
+  18:13-18:23 -> () => string | null
+
+Resolved types:
+  2:11-2:51 -> IllegalArgumentException
+  3:13-3:24 -> IOException
+  5:13-5:29 -> RuntimeException
+  7:13-7:22 -> Exception
+  11:11-11:29 -> Error
+  12:13-12:22 -> Throwable
+  16:11-16:37 -> Exception
+  17:13-17:22 -> Exception
+
+Declarations:
+  3:10-3:11 -> const e: IOException
+  5:10-5:11 -> const e: RuntimeException
+  7:10-7:11 -> const e: Exception
+  12:10-12:11 -> const e: Throwable
+  17:10-17:11 -> const e: Exception
+
+References:
+  2:15-2:39 -> 2:11-2:51
+  4:5-4:10 -> builtin print
+  6:5-6:10 -> builtin print
+  6:11-6:12 -> 5:10-5:11
+  6:13-6:23 -> 6:11-6:23
+  8:5-8:10 -> builtin print
+  11:15-11:20 -> 11:11-11:29
+  13:5-13:10 -> builtin print
+  13:11-13:12 -> 12:10-12:11
+  13:13-13:23 -> 13:11-13:23
+  16:15-16:24 -> 16:11-16:37
+  18:5-18:10 -> builtin print
+  18:11-18:12 -> 17:10-17:11
+  18:13-18:23 -> 18:11-18:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    NEW java/lang/IllegalArgumentException
+    DUP
+    LDC "argument"
+    INVOKESPECIAL java/lang/IllegalArgumentException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wrong catch"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L2:
+    ASTORE_1 1
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L3:
+    ASTORE_2 2
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wrong broad catch"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L4:
+    NOP
+    NEW java/lang/Error
+    DUP
+    LDC "error"
+    INVOKESPECIAL java/lang/Error.<init>(Ljava/lang/String;)V
+    ATHROW
+   L5:
+    ASTORE_3 3
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_3 3
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L6:
+    NOP
+    NEW java/lang/Exception
+    DUP
+    LDC "exception"
+    INVOKESPECIAL java/lang/Exception.<init>(Ljava/lang/String;)V
+    ATHROW
+   L7:
+    ASTORE 4
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD 4
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L8
+   L8:
+    RETURN
+    catch java/io/IOException from L0 to L1 handler L1
+    catch java/lang/RuntimeException from L0 to L1 handler L2
+    catch java/lang/Exception from L0 to L1 handler L3
+    catch java/lang/Throwable from L4 to L5 handler L5
+    catch java/lang/Exception from L6 to L7 handler L7
+    max stack 3 max locals 5
+
+--- OUTPUT ---
+
+argument
+error
+exception
+

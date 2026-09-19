@@ -28,8 +28,37 @@ import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 
 /** Thin source aliases for JDK APIs. */
 public final class JavaTypes {
+    private static final List<String> EXCEPTION_PACKAGES =
+        List.of(
+            "java.lang.",
+            "java.lang.invoke.",
+            "java.lang.reflect.",
+            "java.io.",
+            "java.net.",
+            "java.net.http.",
+            "java.nio.",
+            "java.nio.channels.",
+            "java.nio.charset.",
+            "java.nio.file.",
+            "java.security.",
+            "java.security.cert.",
+            "java.security.spec.",
+            "java.sql.",
+            "java.text.",
+            "java.time.",
+            "java.time.format.",
+            "java.time.zone.",
+            "java.util.",
+            "java.util.concurrent.",
+            "java.util.regex.",
+            "java.util.zip."
+        );
     private static final Map<String, Class<?>> CLASSES =
         Map.ofEntries(
+            Map.entry("Throwable", Throwable.class),
+            Map.entry("Exception", Exception.class),
+            Map.entry("Error", Error.class),
+            Map.entry("RuntimeException", RuntimeException.class),
             Map.entry("Regex", Pattern.class),
             Map.entry("Matcher", Matcher.class),
             Map.entry("Comparable", Comparable.class),
@@ -78,15 +107,31 @@ public final class JavaTypes {
         );
 
     public static @Nullable Class<?> findClass(String name) {
-        return CLASSES.get(name);
+        final Class<?> known = CLASSES.get(name);
+        if (known != null) {
+            return known;
+        }
+        for (final String prefix : EXCEPTION_PACKAGES) {
+            try {
+                final Class<?> type =
+                    Class.forName(
+                        prefix + name,
+                        false,
+                        JavaTypes.class.getClassLoader()
+                    );
+                if (Throwable.class.isAssignableFrom(type)) {
+                    return type;
+                }
+            }
+            catch (ClassNotFoundException ignored) {
+                // Continue looking in the standard exception packages.
+            }
+        }
+        return null;
     }
 
     public static InterfaceType type(String name, List<Type> arguments) {
-        return new InterfaceType(
-            name,
-            List.copyOf(arguments),
-            CLASSES.get(name)
-        );
+        return new InterfaceType(name, List.copyOf(arguments), findClass(name));
     }
 
     public static @Nullable Class<?> boxedClass(Type type) {
@@ -132,6 +177,8 @@ public final class JavaTypes {
         if (
             !METHODS.contains(name) && owner.javaClass() != Pattern.class
                 && owner.javaClass() != Matcher.class
+                && (owner.javaClass() == null
+                    || !Throwable.class.isAssignableFrom(owner.javaClass()))
         ) {
             return List.of();
         }
@@ -168,16 +215,28 @@ public final class JavaTypes {
                         (Map.class.isAssignableFrom(javaClass)
                             && (name.equals("get") || name.equals("put")))
                             || name.equals("comparator")
-                                ? UnionType.of(
-                                    List.of(
-                                        resolve(
-                                            method.getGenericReturnType(),
-                                            owner
-                                        ),
-                                        BuiltinType.NULL
+                            || (Throwable.class.isAssignableFrom(javaClass)
+                                && (name.equals("getMessage")
+                                    || name.equals("getLocalizedMessage")
+                                    || name.equals("getCause")))
+                            || (javaClass == Matcher.class
+                                && name.equals("group")
+                                && method.getParameterCount() == 1)
+                                    ? UnionType
+                                        .of(
+                                            List.of(
+                                                resolve(
+                                                    method
+                                                        .getGenericReturnType(),
+                                                    owner
+                                                ),
+                                                BuiltinType.NULL
+                                            )
+                                        )
+                                    : resolve(
+                                        method.getGenericReturnType(),
+                                        owner
                                     )
-                                )
-                                : resolve(method.getGenericReturnType(), owner)
                     );
                 result.putIfAbsent(
                     signature,
@@ -262,6 +321,9 @@ public final class JavaTypes {
                 if (entry.getValue() == cls) {
                     return type(entry.getKey(), List.of());
                 }
+            }
+            if (Throwable.class.isAssignableFrom(cls)) {
+                return new InterfaceType(cls.getSimpleName(), List.of(), cls);
             }
             if (cls == Object.class) {
                 return BuiltinType.ANY;

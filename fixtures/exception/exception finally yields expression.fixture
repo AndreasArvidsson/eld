@@ -1,0 +1,197 @@
+const value = if (true) {
+    try {
+        yield 7;
+    } finally {
+        print("yield cleanup");
+    }
+} else {
+    yield 0;
+};
+print(value);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+IF (1:15-1:17)
+LEFT_PAREN (1:18-1:19)
+BOOLEAN_LITERAL "true" (1:19-1:23)
+RIGHT_PAREN (1:23-1:24)
+LEFT_BRACE (1:25-1:26)
+TRY (2:5-2:8)
+LEFT_BRACE (2:9-2:10)
+YIELD (3:9-3:14)
+INTEGER_LITERAL "7" (3:15-3:16)
+SEMICOLON (3:16-3:17)
+RIGHT_BRACE (4:5-4:6)
+FINALLY (4:7-4:14)
+LEFT_BRACE (4:15-4:16)
+IDENTIFIER "print" (5:9-5:14)
+LEFT_PAREN (5:14-5:15)
+STRING_LITERAL "\"yield cleanup\"" (5:15-5:30)
+RIGHT_PAREN (5:30-5:31)
+SEMICOLON (5:31-5:32)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+ELSE (7:3-7:7)
+LEFT_BRACE (7:8-7:9)
+YIELD (8:5-8:10)
+INTEGER_LITERAL "0" (8:11-8:12)
+SEMICOLON (8:12-8:13)
+RIGHT_BRACE (9:1-9:2)
+SEMICOLON (9:2-9:3)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "value" (10:7-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:14
+  (VariableDeclaration
+    range: 1:1-9:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    type: null
+    (IfExpression
+      range: 1:15-9:2
+      (LiteralExpression
+        range: 1:19-1:23
+        kind: BOOL
+        text: "true"
+      )
+      (BlockStatement
+        range: 1:25-7:2
+        (TryStatement
+          range: 2:5-6:6
+          (BlockStatement
+            range: 2:9-4:6
+            (YieldStatement
+              range: 3:9-3:17
+              (LiteralExpression
+                range: 3:15-3:16
+                kind: INT
+                text: "7"
+              )
+            )
+          )
+          (BlockStatement
+            range: 4:15-6:6
+            (ExpressionStatement
+              range: 5:9-5:32
+              (CallExpression
+                range: 5:9-5:31
+                (IdentifierExpression
+                  range: 5:9-5:14
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 5:15-5:30
+                  kind: STRING
+                  text: "\"yield cleanup\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (BlockStatement
+        range: 7:8-9:2
+        (YieldStatement
+          range: 8:5-8:13
+          (LiteralExpression
+            range: 8:11-8:12
+            kind: INT
+            text: "0"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:1-10:13
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 10:7-10:12
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:15-9:2 -> i32
+  1:19-1:23 -> bool
+  3:15-3:16 -> i32
+  5:9-5:14 -> (any) => void
+  5:9-5:31 -> void
+  5:15-5:30 -> string
+  8:11-8:12 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:13 -> void
+  10:7-10:12 -> i32
+
+Declarations:
+  1:7-1:12 -> const value: i32
+
+References:
+  5:9-5:14 -> builtin print
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 1:7-1:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    ICONST_1 1
+    IFEQ L4
+   L0:
+    NOP
+    LDC 7
+    ISTORE_0 0
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "yield cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ILOAD_0 0
+    GOTO L5
+   L2:
+    ATHROW
+   L3:
+    ASTORE_1 1
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "yield cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_1 1
+    ATHROW
+   L4:
+    LDC 0
+    GOTO L5
+   L5:
+    PUTSTATIC Test.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    catch all from L0 to L1 handler L3
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+yield cleanup
+7
+

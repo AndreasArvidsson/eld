@@ -1,0 +1,445 @@
+const original = new IOException("original");
+try {
+    try {
+        throw original;
+    } finally {
+        print("inner cleanup");
+    }
+} catch (e: IOException) {
+    print(e == original);
+    try {
+        try {
+            throw e;
+        } catch (again: IOException) {
+            throw again;
+        } finally {
+            print("rethrow cleanup");
+        }
+    } catch (outer: IOException) {
+        print(outer == original);
+    }
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "original" (1:7-1:15)
+EQUAL (1:16-1:17)
+NEW (1:18-1:21)
+IDENTIFIER "IOException" (1:22-1:33)
+LEFT_PAREN (1:33-1:34)
+STRING_LITERAL "\"original\"" (1:34-1:44)
+RIGHT_PAREN (1:44-1:45)
+SEMICOLON (1:45-1:46)
+TRY (2:1-2:4)
+LEFT_BRACE (2:5-2:6)
+TRY (3:5-3:8)
+LEFT_BRACE (3:9-3:10)
+THROW (4:9-4:14)
+IDENTIFIER "original" (4:15-4:23)
+SEMICOLON (4:23-4:24)
+RIGHT_BRACE (5:5-5:6)
+FINALLY (5:7-5:14)
+LEFT_BRACE (5:15-5:16)
+IDENTIFIER "print" (6:9-6:14)
+LEFT_PAREN (6:14-6:15)
+STRING_LITERAL "\"inner cleanup\"" (6:15-6:30)
+RIGHT_PAREN (6:30-6:31)
+SEMICOLON (6:31-6:32)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+CATCH (8:3-8:8)
+LEFT_PAREN (8:9-8:10)
+IDENTIFIER "e" (8:10-8:11)
+COLON (8:11-8:12)
+IDENTIFIER "IOException" (8:13-8:24)
+RIGHT_PAREN (8:24-8:25)
+LEFT_BRACE (8:26-8:27)
+IDENTIFIER "print" (9:5-9:10)
+LEFT_PAREN (9:10-9:11)
+IDENTIFIER "e" (9:11-9:12)
+EQUAL_EQUAL (9:13-9:15)
+IDENTIFIER "original" (9:16-9:24)
+RIGHT_PAREN (9:24-9:25)
+SEMICOLON (9:25-9:26)
+TRY (10:5-10:8)
+LEFT_BRACE (10:9-10:10)
+TRY (11:9-11:12)
+LEFT_BRACE (11:13-11:14)
+THROW (12:13-12:18)
+IDENTIFIER "e" (12:19-12:20)
+SEMICOLON (12:20-12:21)
+RIGHT_BRACE (13:9-13:10)
+CATCH (13:11-13:16)
+LEFT_PAREN (13:17-13:18)
+IDENTIFIER "again" (13:18-13:23)
+COLON (13:23-13:24)
+IDENTIFIER "IOException" (13:25-13:36)
+RIGHT_PAREN (13:36-13:37)
+LEFT_BRACE (13:38-13:39)
+THROW (14:13-14:18)
+IDENTIFIER "again" (14:19-14:24)
+SEMICOLON (14:24-14:25)
+RIGHT_BRACE (15:9-15:10)
+FINALLY (15:11-15:18)
+LEFT_BRACE (15:19-15:20)
+IDENTIFIER "print" (16:13-16:18)
+LEFT_PAREN (16:18-16:19)
+STRING_LITERAL "\"rethrow cleanup\"" (16:19-16:36)
+RIGHT_PAREN (16:36-16:37)
+SEMICOLON (16:37-16:38)
+RIGHT_BRACE (17:9-17:10)
+RIGHT_BRACE (18:5-18:6)
+CATCH (18:7-18:12)
+LEFT_PAREN (18:13-18:14)
+IDENTIFIER "outer" (18:14-18:19)
+COLON (18:19-18:20)
+IDENTIFIER "IOException" (18:21-18:32)
+RIGHT_PAREN (18:32-18:33)
+LEFT_BRACE (18:34-18:35)
+IDENTIFIER "print" (19:9-19:14)
+LEFT_PAREN (19:14-19:15)
+IDENTIFIER "outer" (19:15-19:20)
+EQUAL_EQUAL (19:21-19:23)
+IDENTIFIER "original" (19:24-19:32)
+RIGHT_PAREN (19:32-19:33)
+SEMICOLON (19:33-19:34)
+RIGHT_BRACE (20:5-20:6)
+RIGHT_BRACE (21:1-21:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-21:2
+  (VariableDeclaration
+    range: 1:1-1:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "original"
+    )
+    type: null
+    (NewExpression
+      range: 1:18-1:45
+      (IdentifierExpression
+        range: 1:22-1:33
+        name: "IOException"
+      )
+      (LiteralExpression
+        range: 1:34-1:44
+        kind: STRING
+        text: "\"original\""
+      )
+    )
+  )
+  (TryStatement
+    range: 2:1-21:2
+    (BlockStatement
+      range: 2:5-8:2
+      (TryStatement
+        range: 3:5-7:6
+        (BlockStatement
+          range: 3:9-5:6
+          (ThrowStatement
+            range: 4:9-4:24
+            (IdentifierExpression
+              range: 4:15-4:23
+              name: "original"
+            )
+          )
+        )
+        (BlockStatement
+          range: 5:15-7:6
+          (ExpressionStatement
+            range: 6:9-6:32
+            (CallExpression
+              range: 6:9-6:31
+              (IdentifierExpression
+                range: 6:9-6:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 6:15-6:30
+                kind: STRING
+                text: "\"inner cleanup\""
+              )
+            )
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 8:3-21:2
+      (IdentifierDeclaration
+        range: 8:10-8:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 8:13-8:24
+        name: "IOException"
+      )
+      (BlockStatement
+        range: 8:26-21:2
+        (ExpressionStatement
+          range: 9:5-9:26
+          (CallExpression
+            range: 9:5-9:25
+            (IdentifierExpression
+              range: 9:5-9:10
+              name: "print"
+            )
+            (BinaryExpression
+              range: 9:11-9:24
+              (IdentifierExpression
+                range: 9:11-9:12
+                name: "e"
+              )
+              operator: EQUAL
+              (IdentifierExpression
+                range: 9:16-9:24
+                name: "original"
+              )
+            )
+          )
+        )
+        (TryStatement
+          range: 10:5-20:6
+          (BlockStatement
+            range: 10:9-18:6
+            (TryStatement
+              range: 11:9-17:10
+              (BlockStatement
+                range: 11:13-13:10
+                (ThrowStatement
+                  range: 12:13-12:21
+                  (IdentifierExpression
+                    range: 12:19-12:20
+                    name: "e"
+                  )
+                )
+              )
+              (CatchClause
+                range: 13:11-15:10
+                (IdentifierDeclaration
+                  range: 13:18-13:23
+                  name: "again"
+                )
+                (NamedTypeNode
+                  range: 13:25-13:36
+                  name: "IOException"
+                )
+                (BlockStatement
+                  range: 13:38-15:10
+                  (ThrowStatement
+                    range: 14:13-14:25
+                    (IdentifierExpression
+                      range: 14:19-14:24
+                      name: "again"
+                    )
+                  )
+                )
+              )
+              (BlockStatement
+                range: 15:19-17:10
+                (ExpressionStatement
+                  range: 16:13-16:38
+                  (CallExpression
+                    range: 16:13-16:37
+                    (IdentifierExpression
+                      range: 16:13-16:18
+                      name: "print"
+                    )
+                    (LiteralExpression
+                      range: 16:19-16:36
+                      kind: STRING
+                      text: "\"rethrow cleanup\""
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (CatchClause
+            range: 18:7-20:6
+            (IdentifierDeclaration
+              range: 18:14-18:19
+              name: "outer"
+            )
+            (NamedTypeNode
+              range: 18:21-18:32
+              name: "IOException"
+            )
+            (BlockStatement
+              range: 18:34-20:6
+              (ExpressionStatement
+                range: 19:9-19:34
+                (CallExpression
+                  range: 19:9-19:33
+                  (IdentifierExpression
+                    range: 19:9-19:14
+                    name: "print"
+                  )
+                  (BinaryExpression
+                    range: 19:15-19:32
+                    (IdentifierExpression
+                      range: 19:15-19:20
+                      name: "outer"
+                    )
+                    operator: EQUAL
+                    (IdentifierExpression
+                      range: 19:24-19:32
+                      name: "original"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          finallyBody: null
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:18-1:45 -> IOException
+  1:22-1:33 -> IOException
+  1:34-1:44 -> string
+  4:15-4:23 -> IOException
+  6:9-6:14 -> (any) => void
+  6:9-6:31 -> void
+  6:15-6:30 -> string
+  9:5-9:10 -> (any) => void
+  9:5-9:25 -> void
+  9:11-9:12 -> IOException
+  9:11-9:24 -> bool
+  9:16-9:24 -> IOException
+  12:19-12:20 -> IOException
+  14:19-14:24 -> IOException
+  16:13-16:18 -> (any) => void
+  16:13-16:37 -> void
+  16:19-16:36 -> string
+  19:9-19:14 -> (any) => void
+  19:9-19:33 -> void
+  19:15-19:20 -> IOException
+  19:15-19:32 -> bool
+  19:24-19:32 -> IOException
+
+Resolved types:
+  1:18-1:45 -> IOException
+  8:13-8:24 -> IOException
+  13:25-13:36 -> IOException
+  18:21-18:32 -> IOException
+
+Declarations:
+  1:7-1:15 -> const original: IOException
+  8:10-8:11 -> const e: IOException
+  13:18-13:23 -> const again: IOException
+  18:14-18:19 -> const outer: IOException
+
+References:
+  1:22-1:33 -> 1:18-1:45
+  4:15-4:23 -> 1:7-1:15
+  6:9-6:14 -> builtin print
+  9:5-9:10 -> builtin print
+  9:11-9:12 -> 8:10-8:11
+  9:16-9:24 -> 1:7-1:15
+  12:19-12:20 -> 8:10-8:11
+  14:19-14:24 -> 13:18-13:23
+  16:13-16:18 -> builtin print
+  19:9-19:14 -> builtin print
+  19:15-19:20 -> 18:14-18:19
+  19:24-19:32 -> 1:7-1:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field original Ljava/io/IOException; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW java/io/IOException
+    DUP
+    LDC "original"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.original Ljava/io/IOException;
+   L0:
+    NOP
+   L1:
+    NOP
+    GETSTATIC Test.original Ljava/io/IOException;
+    ATHROW
+   L2:
+    ASTORE_0 0
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "inner cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_0 0
+    ATHROW
+   L3:
+    ASTORE_1 1
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    GETSTATIC Test.original Ljava/io/IOException;
+    IF_ACMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+   L6:
+    NOP
+   L7:
+    NOP
+    ALOAD_1 1
+    ATHROW
+   L8:
+    ASTORE_2 2
+   L9:
+    NOP
+    ALOAD_2 2
+    ATHROW
+   L10:
+    ASTORE_3 3
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "rethrow cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_3 3
+    ATHROW
+   L11:
+    ASTORE 4
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD 4
+    GETSTATIC Test.original Ljava/io/IOException;
+    IF_ACMPEQ L12
+    ICONST_0 0
+    GOTO L13
+   L12:
+    ICONST_1 1
+   L13:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GOTO L14
+   L14:
+    GOTO L15
+   L15:
+    RETURN
+    catch all from L1 to L2 handler L2
+    catch java/io/IOException from L7 to L8 handler L8
+    catch all from L7 to L8 handler L10
+    catch all from L9 to L10 handler L10
+    catch java/io/IOException from L6 to L11 handler L11
+    catch java/io/IOException from L0 to L3 handler L3
+    max stack 3 max locals 5
+
+--- OUTPUT ---
+
+inner cleanup
+true
+rethrow cleanup
+true
+

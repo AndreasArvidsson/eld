@@ -13,6 +13,7 @@ final class FieldInitializationAnalyzer {
     private enum Exit {
         NORMAL,
         RETURN,
+        THROW,
         BREAK,
         CONTINUE,
         YIELD
@@ -33,6 +34,7 @@ final class FieldInitializationAnalyzer {
         }
     }
 
+    private int pendingFinalizers;
     private final SemanticModel model;
     private final ClassDeclaration declaration;
     private final Set<Symbol> fields = new HashSet<>();
@@ -191,8 +193,18 @@ final class FieldInitializationAnalyzer {
                 }
                 return result;
             }
+            case ThrowStatement statement:
+                return changeExit(
+                    walk(statement.value(), paths),
+                    Exit.NORMAL,
+                    Exit.THROW
+                );
+            case TryStatement statement:
+                return tryStatement(statement, path);
             case ReturnStatement statement:
-                requireComplete(path, statement);
+                if (pendingFinalizers == 0) {
+                    requireComplete(path, statement);
+                }
                 return List.of(path.withExit(Exit.RETURN));
             case BreakStatement ignored:
                 return List.of(path.withExit(Exit.BREAK));
@@ -417,6 +429,64 @@ final class FieldInitializationAnalyzer {
             default:
                 return paths;
         }
+    }
+
+    private List<Path> tryStatement(
+        final TryStatement statement,
+        final Path initial
+    ) {
+        final List<Path> outcomes;
+        if (statement.finallyBody() != null) {
+            pendingFinalizers++;
+        }
+        try {
+            outcomes = tryBody(statement, initial);
+        }
+        finally {
+            if (statement.finallyBody() != null) {
+                pendingFinalizers--;
+            }
+        }
+        if (statement.finallyBody() == null) {
+            return merge(outcomes);
+        }
+        final List<Path> result = new ArrayList<>();
+        for (final Path path : merge(outcomes)) {
+            for (final Path finished : walk(
+                statement.finallyBody(),
+                List.of(path.withExit(Exit.NORMAL))
+            )) {
+                result.add(
+                    finished.exit() == Exit.NORMAL
+                        ? finished.withExit(path.exit())
+                        : finished
+                );
+            }
+        }
+        return merge(result);
+    }
+
+    private List<Path> tryBody(
+        final TryStatement statement,
+        final Path initial
+    ) {
+        final List<Path> prefixes = new ArrayList<>();
+        prefixes.add(initial);
+        List<Path> body = List.of(initial);
+        for (final BlockItem item : statement.body().items()) {
+            body = walk(item, body);
+            for (final Path path : body) {
+                prefixes.add(path.withExit(Exit.NORMAL));
+            }
+        }
+        final List<Path> outcomes = new ArrayList<>(body);
+        final Path caught = normal(merge(prefixes));
+        if (caught != null) {
+            for (final CatchClause clause : statement.catches()) {
+                outcomes.addAll(walk(clause.body(), List.of(caught)));
+            }
+        }
+        return merge(outcomes);
     }
 
     private List<Path> loop(

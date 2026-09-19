@@ -1,0 +1,206 @@
+const failure: IOException | IllegalArgumentException =
+    new IllegalArgumentException("union");
+
+try {
+    throw failure;
+} catch (e: IllegalArgumentException) {
+    print(e.getMessage());
+}
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "failure" (1:7-1:14)
+COLON (1:14-1:15)
+IDENTIFIER "IOException" (1:16-1:27)
+PIPE (1:28-1:29)
+IDENTIFIER "IllegalArgumentException" (1:30-1:54)
+EQUAL (1:55-1:56)
+NEW (2:5-2:8)
+IDENTIFIER "IllegalArgumentException" (2:9-2:33)
+LEFT_PAREN (2:33-2:34)
+STRING_LITERAL "\"union\"" (2:34-2:41)
+RIGHT_PAREN (2:41-2:42)
+SEMICOLON (2:42-2:43)
+TRY (4:1-4:4)
+LEFT_BRACE (4:5-4:6)
+THROW (5:5-5:10)
+IDENTIFIER "failure" (5:11-5:18)
+SEMICOLON (5:18-5:19)
+RIGHT_BRACE (6:1-6:2)
+CATCH (6:3-6:8)
+LEFT_PAREN (6:9-6:10)
+IDENTIFIER "e" (6:10-6:11)
+COLON (6:11-6:12)
+IDENTIFIER "IllegalArgumentException" (6:13-6:37)
+RIGHT_PAREN (6:37-6:38)
+LEFT_BRACE (6:39-6:40)
+IDENTIFIER "print" (7:5-7:10)
+LEFT_PAREN (7:10-7:11)
+IDENTIFIER "e" (7:11-7:12)
+DOT (7:12-7:13)
+IDENTIFIER "getMessage" (7:13-7:23)
+LEFT_PAREN (7:23-7:24)
+RIGHT_PAREN (7:24-7:25)
+RIGHT_PAREN (7:25-7:26)
+SEMICOLON (7:26-7:27)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (VariableDeclaration
+    range: 1:1-2:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "failure"
+    )
+    (UnionTypeNode
+      range: 1:16-1:54
+      (NamedTypeNode
+        range: 1:16-1:27
+        name: "IOException"
+      )
+      (NamedTypeNode
+        range: 1:30-1:54
+        name: "IllegalArgumentException"
+      )
+    )
+    (NewExpression
+      range: 2:5-2:42
+      (IdentifierExpression
+        range: 2:9-2:33
+        name: "IllegalArgumentException"
+      )
+      (LiteralExpression
+        range: 2:34-2:41
+        kind: STRING
+        text: "\"union\""
+      )
+    )
+  )
+  (TryStatement
+    range: 4:1-8:2
+    (BlockStatement
+      range: 4:5-6:2
+      (ThrowStatement
+        range: 5:5-5:19
+        (IdentifierExpression
+          range: 5:11-5:18
+          name: "failure"
+        )
+      )
+    )
+    (CatchClause
+      range: 6:3-8:2
+      (IdentifierDeclaration
+        range: 6:10-6:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 6:13-6:37
+        name: "IllegalArgumentException"
+      )
+      (BlockStatement
+        range: 6:39-8:2
+        (ExpressionStatement
+          range: 7:5-7:27
+          (CallExpression
+            range: 7:5-7:26
+            (IdentifierExpression
+              range: 7:5-7:10
+              name: "print"
+            )
+            (CallExpression
+              range: 7:11-7:25
+              (MemberExpression
+                range: 7:11-7:23
+                (IdentifierExpression
+                  range: 7:11-7:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 7:13-7:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:5-2:42 -> IllegalArgumentException
+  2:9-2:33 -> IllegalArgumentException
+  2:34-2:41 -> string
+  5:11-5:18 -> IOException | IllegalArgumentException
+  7:5-7:10 -> (any) => void
+  7:5-7:26 -> void
+  7:11-7:12 -> IllegalArgumentException
+  7:11-7:23 -> () => string | null
+  7:11-7:25 -> string | null
+  7:13-7:23 -> () => string | null
+
+Resolved types:
+  1:16-1:27 -> IOException
+  1:16-1:54 -> IOException | IllegalArgumentException
+  1:30-1:54 -> IllegalArgumentException
+  2:5-2:42 -> IllegalArgumentException
+  6:13-6:37 -> IllegalArgumentException
+
+Conversions:
+  2:5-2:42 -> IllegalArgumentException -> IOException | IllegalArgumentException
+
+Declarations:
+  1:7-1:14 -> const failure: IOException | IllegalArgumentException
+  6:10-6:11 -> const e: IllegalArgumentException
+
+References:
+  2:9-2:33 -> 2:5-2:42
+  5:11-5:18 -> 1:7-1:14
+  7:5-7:10 -> builtin print
+  7:11-7:12 -> 6:10-6:11
+  7:13-7:23 -> 7:11-7:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field failure Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW java/lang/IllegalArgumentException
+    DUP
+    LDC "union"
+    INVOKESPECIAL java/lang/IllegalArgumentException.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.failure Ljava/lang/Object;
+   L0:
+    NOP
+    GETSTATIC Test.failure Ljava/lang/Object;
+    CHECKCAST java/lang/Throwable
+    ATHROW
+   L1:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L2
+   L2:
+    RETURN
+    catch java/lang/IllegalArgumentException from L0 to L1 handler L1
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+union
+

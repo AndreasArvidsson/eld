@@ -1,0 +1,412 @@
+try {
+    throw new SQLException("database");
+} catch (e: SQLException) {
+    print(e.getMessage());
+}
+
+try {
+    throw new SocketException("network");
+} catch (e: SocketException) {
+    print(e.getMessage());
+}
+
+try {
+    throw new NoSuchElementException("collection");
+} catch (e: NoSuchElementException) {
+    print(e.getMessage());
+}
+
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+THROW (2:5-2:10)
+NEW (2:11-2:14)
+IDENTIFIER "SQLException" (2:15-2:27)
+LEFT_PAREN (2:27-2:28)
+STRING_LITERAL "\"database\"" (2:28-2:38)
+RIGHT_PAREN (2:38-2:39)
+SEMICOLON (2:39-2:40)
+RIGHT_BRACE (3:1-3:2)
+CATCH (3:3-3:8)
+LEFT_PAREN (3:9-3:10)
+IDENTIFIER "e" (3:10-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "SQLException" (3:13-3:25)
+RIGHT_PAREN (3:25-3:26)
+LEFT_BRACE (3:27-3:28)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "e" (4:11-4:12)
+DOT (4:12-4:13)
+IDENTIFIER "getMessage" (4:13-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+RIGHT_PAREN (4:25-4:26)
+SEMICOLON (4:26-4:27)
+RIGHT_BRACE (5:1-5:2)
+TRY (7:1-7:4)
+LEFT_BRACE (7:5-7:6)
+THROW (8:5-8:10)
+NEW (8:11-8:14)
+IDENTIFIER "SocketException" (8:15-8:30)
+LEFT_PAREN (8:30-8:31)
+STRING_LITERAL "\"network\"" (8:31-8:40)
+RIGHT_PAREN (8:40-8:41)
+SEMICOLON (8:41-8:42)
+RIGHT_BRACE (9:1-9:2)
+CATCH (9:3-9:8)
+LEFT_PAREN (9:9-9:10)
+IDENTIFIER "e" (9:10-9:11)
+COLON (9:11-9:12)
+IDENTIFIER "SocketException" (9:13-9:28)
+RIGHT_PAREN (9:28-9:29)
+LEFT_BRACE (9:30-9:31)
+IDENTIFIER "print" (10:5-10:10)
+LEFT_PAREN (10:10-10:11)
+IDENTIFIER "e" (10:11-10:12)
+DOT (10:12-10:13)
+IDENTIFIER "getMessage" (10:13-10:23)
+LEFT_PAREN (10:23-10:24)
+RIGHT_PAREN (10:24-10:25)
+RIGHT_PAREN (10:25-10:26)
+SEMICOLON (10:26-10:27)
+RIGHT_BRACE (11:1-11:2)
+TRY (13:1-13:4)
+LEFT_BRACE (13:5-13:6)
+THROW (14:5-14:10)
+NEW (14:11-14:14)
+IDENTIFIER "NoSuchElementException" (14:15-14:37)
+LEFT_PAREN (14:37-14:38)
+STRING_LITERAL "\"collection\"" (14:38-14:50)
+RIGHT_PAREN (14:50-14:51)
+SEMICOLON (14:51-14:52)
+RIGHT_BRACE (15:1-15:2)
+CATCH (15:3-15:8)
+LEFT_PAREN (15:9-15:10)
+IDENTIFIER "e" (15:10-15:11)
+COLON (15:11-15:12)
+IDENTIFIER "NoSuchElementException" (15:13-15:35)
+RIGHT_PAREN (15:35-15:36)
+LEFT_BRACE (15:37-15:38)
+IDENTIFIER "print" (16:5-16:10)
+LEFT_PAREN (16:10-16:11)
+IDENTIFIER "e" (16:11-16:12)
+DOT (16:12-16:13)
+IDENTIFIER "getMessage" (16:13-16:23)
+LEFT_PAREN (16:23-16:24)
+RIGHT_PAREN (16:24-16:25)
+RIGHT_PAREN (16:25-16:26)
+SEMICOLON (16:26-16:27)
+RIGHT_BRACE (17:1-17:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:2
+  (TryStatement
+    range: 1:1-5:2
+    (BlockStatement
+      range: 1:5-3:2
+      (ThrowStatement
+        range: 2:5-2:40
+        (NewExpression
+          range: 2:11-2:39
+          (IdentifierExpression
+            range: 2:15-2:27
+            name: "SQLException"
+          )
+          (LiteralExpression
+            range: 2:28-2:38
+            kind: STRING
+            text: "\"database\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 3:3-5:2
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 3:13-3:25
+        name: "SQLException"
+      )
+      (BlockStatement
+        range: 3:27-5:2
+        (ExpressionStatement
+          range: 4:5-4:27
+          (CallExpression
+            range: 4:5-4:26
+            (IdentifierExpression
+              range: 4:5-4:10
+              name: "print"
+            )
+            (CallExpression
+              range: 4:11-4:25
+              (MemberExpression
+                range: 4:11-4:23
+                (IdentifierExpression
+                  range: 4:11-4:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 4:13-4:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (TryStatement
+    range: 7:1-11:2
+    (BlockStatement
+      range: 7:5-9:2
+      (ThrowStatement
+        range: 8:5-8:42
+        (NewExpression
+          range: 8:11-8:41
+          (IdentifierExpression
+            range: 8:15-8:30
+            name: "SocketException"
+          )
+          (LiteralExpression
+            range: 8:31-8:40
+            kind: STRING
+            text: "\"network\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 9:3-11:2
+      (IdentifierDeclaration
+        range: 9:10-9:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 9:13-9:28
+        name: "SocketException"
+      )
+      (BlockStatement
+        range: 9:30-11:2
+        (ExpressionStatement
+          range: 10:5-10:27
+          (CallExpression
+            range: 10:5-10:26
+            (IdentifierExpression
+              range: 10:5-10:10
+              name: "print"
+            )
+            (CallExpression
+              range: 10:11-10:25
+              (MemberExpression
+                range: 10:11-10:23
+                (IdentifierExpression
+                  range: 10:11-10:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 10:13-10:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (TryStatement
+    range: 13:1-17:2
+    (BlockStatement
+      range: 13:5-15:2
+      (ThrowStatement
+        range: 14:5-14:52
+        (NewExpression
+          range: 14:11-14:51
+          (IdentifierExpression
+            range: 14:15-14:37
+            name: "NoSuchElementException"
+          )
+          (LiteralExpression
+            range: 14:38-14:50
+            kind: STRING
+            text: "\"collection\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 15:3-17:2
+      (IdentifierDeclaration
+        range: 15:10-15:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 15:13-15:35
+        name: "NoSuchElementException"
+      )
+      (BlockStatement
+        range: 15:37-17:2
+        (ExpressionStatement
+          range: 16:5-16:27
+          (CallExpression
+            range: 16:5-16:26
+            (IdentifierExpression
+              range: 16:5-16:10
+              name: "print"
+            )
+            (CallExpression
+              range: 16:11-16:25
+              (MemberExpression
+                range: 16:11-16:23
+                (IdentifierExpression
+                  range: 16:11-16:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 16:13-16:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:11-2:39 -> SQLException
+  2:15-2:27 -> SQLException
+  2:28-2:38 -> string
+  4:5-4:10 -> (any) => void
+  4:5-4:26 -> void
+  4:11-4:12 -> SQLException
+  4:11-4:23 -> () => string | null
+  4:11-4:25 -> string | null
+  4:13-4:23 -> () => string | null
+  8:11-8:41 -> SocketException
+  8:15-8:30 -> SocketException
+  8:31-8:40 -> string
+  10:5-10:10 -> (any) => void
+  10:5-10:26 -> void
+  10:11-10:12 -> SocketException
+  10:11-10:23 -> () => string | null
+  10:11-10:25 -> string | null
+  10:13-10:23 -> () => string | null
+  14:11-14:51 -> NoSuchElementException
+  14:15-14:37 -> NoSuchElementException
+  14:38-14:50 -> string
+  16:5-16:10 -> (any) => void
+  16:5-16:26 -> void
+  16:11-16:12 -> NoSuchElementException
+  16:11-16:23 -> () => string | null
+  16:11-16:25 -> string | null
+  16:13-16:23 -> () => string | null
+
+Resolved types:
+  2:11-2:39 -> SQLException
+  3:13-3:25 -> SQLException
+  8:11-8:41 -> SocketException
+  9:13-9:28 -> SocketException
+  14:11-14:51 -> NoSuchElementException
+  15:13-15:35 -> NoSuchElementException
+
+Declarations:
+  3:10-3:11 -> const e: SQLException
+  9:10-9:11 -> const e: SocketException
+  15:10-15:11 -> const e: NoSuchElementException
+
+References:
+  2:15-2:27 -> 2:11-2:39
+  4:5-4:10 -> builtin print
+  4:11-4:12 -> 3:10-3:11
+  4:13-4:23 -> 4:11-4:23
+  8:15-8:30 -> 8:11-8:41
+  10:5-10:10 -> builtin print
+  10:11-10:12 -> 9:10-9:11
+  10:13-10:23 -> 10:11-10:23
+  14:15-14:37 -> 14:11-14:51
+  16:5-16:10 -> builtin print
+  16:11-16:12 -> 15:10-15:11
+  16:13-16:23 -> 16:11-16:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    NEW java/sql/SQLException
+    DUP
+    LDC "database"
+    INVOKESPECIAL java/sql/SQLException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L2
+   L2:
+    NOP
+    NEW java/net/SocketException
+    DUP
+    LDC "network"
+    INVOKESPECIAL java/net/SocketException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L3:
+    ASTORE_1 1
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L4:
+    NOP
+    NEW java/util/NoSuchElementException
+    DUP
+    LDC "collection"
+    INVOKESPECIAL java/util/NoSuchElementException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L5:
+    ASTORE_2 2
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_2 2
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L6:
+    RETURN
+    catch java/sql/SQLException from L0 to L1 handler L1
+    catch java/net/SocketException from L2 to L3 handler L3
+    catch java/util/NoSuchElementException from L4 to L5 handler L5
+    max stack 3 max locals 3
+
+--- OUTPUT ---
+
+database
+network
+collection
+

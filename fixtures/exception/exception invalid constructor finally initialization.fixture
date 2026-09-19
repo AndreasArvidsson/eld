@@ -1,0 +1,114 @@
+class Resource {
+    public const value: i32;
+    public constructor() {
+        try {
+            return;
+        } finally {
+            print("no initialization");
+        }
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Resource" (1:7-1:15)
+LEFT_BRACE (1:16-1:17)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+TRY (4:9-4:12)
+LEFT_BRACE (4:13-4:14)
+RETURN (5:13-5:19)
+SEMICOLON (5:19-5:20)
+RIGHT_BRACE (6:9-6:10)
+FINALLY (6:11-6:18)
+LEFT_BRACE (6:19-6:20)
+IDENTIFIER "print" (7:13-7:18)
+LEFT_PAREN (7:18-7:19)
+STRING_LITERAL "\"no initialization\"" (7:19-7:38)
+RIGHT_PAREN (7:38-7:39)
+SEMICOLON (7:39-7:40)
+RIGHT_BRACE (8:9-8:10)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:2
+  (ClassDeclaration
+    range: 1:1-10:2
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "Resource"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-9:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-9:6
+        (BlockStatement
+          range: 3:26-9:6
+          (TryStatement
+            range: 4:9-8:10
+            (BlockStatement
+              range: 4:13-6:10
+              (ReturnStatement
+                range: 5:13-5:20
+                value: null
+              )
+            )
+            (BlockStatement
+              range: 6:19-8:10
+              (ExpressionStatement
+                range: 7:13-7:40
+                (CallExpression
+                  range: 7:13-7:39
+                  (IdentifierExpression
+                    range: 7:13-7:18
+                    name: "print"
+                  )
+                  (LiteralExpression
+                    range: 7:19-7:38
+                    kind: STRING
+                    text: "\"no initialization\""
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Field 'value' is not definitely initialized at 3:12-9:6

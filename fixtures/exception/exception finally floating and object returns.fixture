@@ -1,0 +1,346 @@
+func floating() f64 {
+    try {
+        return 1.5;
+    } finally {
+        print("float cleanup");
+    }
+}
+func object() IOException {
+    try {
+        return new IOException("saved");
+    } finally {
+        print("object cleanup");
+    }
+}
+print(floating());
+print(object().getMessage());
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "floating" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+RIGHT_PAREN (1:15-1:16)
+IDENTIFIER "f64" (1:17-1:20)
+LEFT_BRACE (1:21-1:22)
+TRY (2:5-2:8)
+LEFT_BRACE (2:9-2:10)
+RETURN (3:9-3:15)
+FLOAT_LITERAL "1.5" (3:16-3:19)
+SEMICOLON (3:19-3:20)
+RIGHT_BRACE (4:5-4:6)
+FINALLY (4:7-4:14)
+LEFT_BRACE (4:15-4:16)
+IDENTIFIER "print" (5:9-5:14)
+LEFT_PAREN (5:14-5:15)
+STRING_LITERAL "\"float cleanup\"" (5:15-5:30)
+RIGHT_PAREN (5:30-5:31)
+SEMICOLON (5:31-5:32)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+FUNC (8:1-8:5)
+IDENTIFIER "object" (8:6-8:12)
+LEFT_PAREN (8:12-8:13)
+RIGHT_PAREN (8:13-8:14)
+IDENTIFIER "IOException" (8:15-8:26)
+LEFT_BRACE (8:27-8:28)
+TRY (9:5-9:8)
+LEFT_BRACE (9:9-9:10)
+RETURN (10:9-10:15)
+NEW (10:16-10:19)
+IDENTIFIER "IOException" (10:20-10:31)
+LEFT_PAREN (10:31-10:32)
+STRING_LITERAL "\"saved\"" (10:32-10:39)
+RIGHT_PAREN (10:39-10:40)
+SEMICOLON (10:40-10:41)
+RIGHT_BRACE (11:5-11:6)
+FINALLY (11:7-11:14)
+LEFT_BRACE (11:15-11:16)
+IDENTIFIER "print" (12:9-12:14)
+LEFT_PAREN (12:14-12:15)
+STRING_LITERAL "\"object cleanup\"" (12:15-12:31)
+RIGHT_PAREN (12:31-12:32)
+SEMICOLON (12:32-12:33)
+RIGHT_BRACE (13:5-13:6)
+RIGHT_BRACE (14:1-14:2)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "floating" (15:7-15:15)
+LEFT_PAREN (15:15-15:16)
+RIGHT_PAREN (15:16-15:17)
+RIGHT_PAREN (15:17-15:18)
+SEMICOLON (15:18-15:19)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "object" (16:7-16:13)
+LEFT_PAREN (16:13-16:14)
+RIGHT_PAREN (16:14-16:15)
+DOT (16:15-16:16)
+IDENTIFIER "getMessage" (16:16-16:26)
+LEFT_PAREN (16:26-16:27)
+RIGHT_PAREN (16:27-16:28)
+RIGHT_PAREN (16:28-16:29)
+SEMICOLON (16:29-16:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:30
+  (FunctionDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "floating"
+    )
+    (NamedTypeNode
+      range: 1:17-1:20
+      name: "f64"
+    )
+    (BlockStatement
+      range: 1:21-7:2
+      (TryStatement
+        range: 2:5-6:6
+        (BlockStatement
+          range: 2:9-4:6
+          (ReturnStatement
+            range: 3:9-3:20
+            (LiteralExpression
+              range: 3:16-3:19
+              kind: FLOAT
+              text: "1.5"
+            )
+          )
+        )
+        (BlockStatement
+          range: 4:15-6:6
+          (ExpressionStatement
+            range: 5:9-5:32
+            (CallExpression
+              range: 5:9-5:31
+              (IdentifierExpression
+                range: 5:9-5:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 5:15-5:30
+                kind: STRING
+                text: "\"float cleanup\""
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 8:1-14:2
+    (IdentifierDeclaration
+      range: 8:6-8:12
+      name: "object"
+    )
+    (NamedTypeNode
+      range: 8:15-8:26
+      name: "IOException"
+    )
+    (BlockStatement
+      range: 8:27-14:2
+      (TryStatement
+        range: 9:5-13:6
+        (BlockStatement
+          range: 9:9-11:6
+          (ReturnStatement
+            range: 10:9-10:41
+            (NewExpression
+              range: 10:16-10:40
+              (IdentifierExpression
+                range: 10:20-10:31
+                name: "IOException"
+              )
+              (LiteralExpression
+                range: 10:32-10:39
+                kind: STRING
+                text: "\"saved\""
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 11:15-13:6
+          (ExpressionStatement
+            range: 12:9-12:33
+            (CallExpression
+              range: 12:9-12:32
+              (IdentifierExpression
+                range: 12:9-12:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 12:15-12:31
+                kind: STRING
+                text: "\"object cleanup\""
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:19
+    (CallExpression
+      range: 15:1-15:18
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:17
+        (IdentifierExpression
+          range: 15:7-15:15
+          name: "floating"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:30
+    (CallExpression
+      range: 16:1-16:29
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:28
+        (MemberExpression
+          range: 16:7-16:26
+          (CallExpression
+            range: 16:7-16:15
+            (IdentifierExpression
+              range: 16:7-16:13
+              name: "object"
+            )
+          )
+          (IdentifierExpression
+            range: 16:16-16:26
+            name: "getMessage"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:19 -> f64
+  5:9-5:14 -> (any) => void
+  5:9-5:31 -> void
+  5:15-5:30 -> string
+  10:16-10:40 -> IOException
+  10:20-10:31 -> IOException
+  10:32-10:39 -> string
+  12:9-12:14 -> (any) => void
+  12:9-12:32 -> void
+  12:15-12:31 -> string
+  15:1-15:6 -> (any) => void
+  15:1-15:18 -> void
+  15:7-15:15 -> () => f64
+  15:7-15:17 -> f64
+  16:1-16:6 -> (any) => void
+  16:1-16:29 -> void
+  16:7-16:13 -> () => IOException
+  16:7-16:15 -> IOException
+  16:7-16:26 -> () => string | null
+  16:7-16:28 -> string | null
+  16:16-16:26 -> () => string | null
+
+Resolved types:
+  1:17-1:20 -> f64
+  8:15-8:26 -> IOException
+  10:16-10:40 -> IOException
+
+Declarations:
+  1:6-1:14 -> floating() => f64
+  8:6-8:12 -> object() => IOException
+
+References:
+  5:9-5:14 -> builtin print
+  10:20-10:31 -> 10:16-10:40
+  12:9-12:14 -> builtin print
+  15:1-15:6 -> builtin print
+  15:7-15:15 -> 1:6-1:14
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 8:6-8:12
+  16:16-16:26 -> 16:7-16:26
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method floating()D flags [PUBLIC, STATIC]
+   L0:
+    NOP
+    LDC2_W 1.5
+    DSTORE_0 0
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "float cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    DLOAD_0 0
+    DRETURN
+   L2:
+    ATHROW
+   L3:
+    ASTORE_2 2
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "float cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_2 2
+    ATHROW
+    catch all from L0 to L1 handler L3
+    max stack 2 max locals 3
+  method object()Ljava/io/IOException; flags [PUBLIC, STATIC]
+   L0:
+    NOP
+    NEW java/io/IOException
+    DUP
+    LDC "saved"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ASTORE_0 0
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "object cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_0 0
+    ARETURN
+   L2:
+    ATHROW
+   L3:
+    ASTORE_1 1
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "object cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_1 1
+    ATHROW
+    catch all from L0 to L1 handler L3
+    max stack 3 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.floating()D
+    INVOKEVIRTUAL java/io/PrintStream.println(D)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.object()Ljava/io/IOException;
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+float cleanup
+1.5
+object cleanup
+saved
+

@@ -1,0 +1,203 @@
+func run() i32 {
+    while (true) {
+        try {
+            while (true) {
+                return 7;
+            }
+        } finally {
+            break;
+        }
+    }
+    return 9;
+}
+print(run());
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "run" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+IDENTIFIER "i32" (1:12-1:15)
+LEFT_BRACE (1:16-1:17)
+WHILE (2:5-2:10)
+LEFT_PAREN (2:11-2:12)
+BOOLEAN_LITERAL "true" (2:12-2:16)
+RIGHT_PAREN (2:16-2:17)
+LEFT_BRACE (2:18-2:19)
+TRY (3:9-3:12)
+LEFT_BRACE (3:13-3:14)
+WHILE (4:13-4:18)
+LEFT_PAREN (4:19-4:20)
+BOOLEAN_LITERAL "true" (4:20-4:24)
+RIGHT_PAREN (4:24-4:25)
+LEFT_BRACE (4:26-4:27)
+RETURN (5:17-5:23)
+INTEGER_LITERAL "7" (5:24-5:25)
+SEMICOLON (5:25-5:26)
+RIGHT_BRACE (6:13-6:14)
+RIGHT_BRACE (7:9-7:10)
+FINALLY (7:11-7:18)
+LEFT_BRACE (7:19-7:20)
+BREAK (8:13-8:18)
+SEMICOLON (8:18-8:19)
+RIGHT_BRACE (9:9-9:10)
+RIGHT_BRACE (10:5-10:6)
+RETURN (11:5-11:11)
+INTEGER_LITERAL "9" (11:12-11:13)
+SEMICOLON (11:13-11:14)
+RIGHT_BRACE (12:1-12:2)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "run" (13:7-13:10)
+LEFT_PAREN (13:10-13:11)
+RIGHT_PAREN (13:11-13:12)
+RIGHT_PAREN (13:12-13:13)
+SEMICOLON (13:13-13:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:14
+  (FunctionDeclaration
+    range: 1:1-12:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "run"
+    )
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:16-12:2
+      (WhileStatement
+        range: 2:5-10:6
+        (LiteralExpression
+          range: 2:12-2:16
+          kind: BOOL
+          text: "true"
+        )
+        (BlockStatement
+          range: 2:18-10:6
+          (TryStatement
+            range: 3:9-9:10
+            (BlockStatement
+              range: 3:13-7:10
+              (WhileStatement
+                range: 4:13-6:14
+                (LiteralExpression
+                  range: 4:20-4:24
+                  kind: BOOL
+                  text: "true"
+                )
+                (BlockStatement
+                  range: 4:26-6:14
+                  (ReturnStatement
+                    range: 5:17-5:26
+                    (LiteralExpression
+                      range: 5:24-5:25
+                      kind: INT
+                      text: "7"
+                    )
+                  )
+                )
+              )
+            )
+            (BlockStatement
+              range: 7:19-9:10
+              (BreakStatement
+                range: 8:13-8:19
+              )
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 11:5-11:14
+        (LiteralExpression
+          range: 11:12-11:13
+          kind: INT
+          text: "9"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:14
+    (CallExpression
+      range: 13:1-13:13
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:12
+        (IdentifierExpression
+          range: 13:7-13:10
+          name: "run"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:16 -> bool
+  4:20-4:24 -> bool
+  5:24-5:25 -> i32
+  11:12-11:13 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:13 -> void
+  13:7-13:10 -> () => i32
+  13:7-13:12 -> i32
+
+Resolved types:
+  1:12-1:15 -> i32
+
+Declarations:
+  1:6-1:9 -> run() => i32
+
+References:
+  13:1-13:6 -> builtin print
+  13:7-13:10 -> 1:6-1:9
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method run()I flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IFEQ L5
+   L0:
+    NOP
+    ICONST_1 1
+    IFEQ L3
+    LDC 7
+    ISTORE_0 0
+   L1:
+    GOTO L5
+   L2:
+    ATHROW
+   L3:
+    GOTO L5
+   L4:
+    ASTORE_1 1
+    GOTO L5
+   L5:
+    LDC 9
+    IRETURN
+    catch all from L0 to L1 handler L4
+    max stack 1 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.run()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+9
+

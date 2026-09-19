@@ -1,0 +1,413 @@
+try {
+    print("normal");
+} finally {
+    print("normal cleanup");
+}
+try {
+    throw new IOException("caught");
+} catch (e: IOException) {
+    print(e.getMessage());
+} finally {
+    print("caught cleanup");
+}
+try {} catch (e: Exception) {
+    print("wrong empty catch");
+} finally {
+    print("empty cleanup");
+}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+IDENTIFIER "print" (2:5-2:10)
+LEFT_PAREN (2:10-2:11)
+STRING_LITERAL "\"normal\"" (2:11-2:19)
+RIGHT_PAREN (2:19-2:20)
+SEMICOLON (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+FINALLY (3:3-3:10)
+LEFT_BRACE (3:11-3:12)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+STRING_LITERAL "\"normal cleanup\"" (4:11-4:27)
+RIGHT_PAREN (4:27-4:28)
+SEMICOLON (4:28-4:29)
+RIGHT_BRACE (5:1-5:2)
+TRY (6:1-6:4)
+LEFT_BRACE (6:5-6:6)
+THROW (7:5-7:10)
+NEW (7:11-7:14)
+IDENTIFIER "IOException" (7:15-7:26)
+LEFT_PAREN (7:26-7:27)
+STRING_LITERAL "\"caught\"" (7:27-7:35)
+RIGHT_PAREN (7:35-7:36)
+SEMICOLON (7:36-7:37)
+RIGHT_BRACE (8:1-8:2)
+CATCH (8:3-8:8)
+LEFT_PAREN (8:9-8:10)
+IDENTIFIER "e" (8:10-8:11)
+COLON (8:11-8:12)
+IDENTIFIER "IOException" (8:13-8:24)
+RIGHT_PAREN (8:24-8:25)
+LEFT_BRACE (8:26-8:27)
+IDENTIFIER "print" (9:5-9:10)
+LEFT_PAREN (9:10-9:11)
+IDENTIFIER "e" (9:11-9:12)
+DOT (9:12-9:13)
+IDENTIFIER "getMessage" (9:13-9:23)
+LEFT_PAREN (9:23-9:24)
+RIGHT_PAREN (9:24-9:25)
+RIGHT_PAREN (9:25-9:26)
+SEMICOLON (9:26-9:27)
+RIGHT_BRACE (10:1-10:2)
+FINALLY (10:3-10:10)
+LEFT_BRACE (10:11-10:12)
+IDENTIFIER "print" (11:5-11:10)
+LEFT_PAREN (11:10-11:11)
+STRING_LITERAL "\"caught cleanup\"" (11:11-11:27)
+RIGHT_PAREN (11:27-11:28)
+SEMICOLON (11:28-11:29)
+RIGHT_BRACE (12:1-12:2)
+TRY (13:1-13:4)
+LEFT_BRACE (13:5-13:6)
+RIGHT_BRACE (13:6-13:7)
+CATCH (13:8-13:13)
+LEFT_PAREN (13:14-13:15)
+IDENTIFIER "e" (13:15-13:16)
+COLON (13:16-13:17)
+IDENTIFIER "Exception" (13:18-13:27)
+RIGHT_PAREN (13:27-13:28)
+LEFT_BRACE (13:29-13:30)
+IDENTIFIER "print" (14:5-14:10)
+LEFT_PAREN (14:10-14:11)
+STRING_LITERAL "\"wrong empty catch\"" (14:11-14:30)
+RIGHT_PAREN (14:30-14:31)
+SEMICOLON (14:31-14:32)
+RIGHT_BRACE (15:1-15:2)
+FINALLY (15:3-15:10)
+LEFT_BRACE (15:11-15:12)
+IDENTIFIER "print" (16:5-16:10)
+LEFT_PAREN (16:10-16:11)
+STRING_LITERAL "\"empty cleanup\"" (16:11-16:26)
+RIGHT_PAREN (16:26-16:27)
+SEMICOLON (16:27-16:28)
+RIGHT_BRACE (17:1-17:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:2
+  (TryStatement
+    range: 1:1-5:2
+    (BlockStatement
+      range: 1:5-3:2
+      (ExpressionStatement
+        range: 2:5-2:21
+        (CallExpression
+          range: 2:5-2:20
+          (IdentifierExpression
+            range: 2:5-2:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 2:11-2:19
+            kind: STRING
+            text: "\"normal\""
+          )
+        )
+      )
+    )
+    (BlockStatement
+      range: 3:11-5:2
+      (ExpressionStatement
+        range: 4:5-4:29
+        (CallExpression
+          range: 4:5-4:28
+          (IdentifierExpression
+            range: 4:5-4:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 4:11-4:27
+            kind: STRING
+            text: "\"normal cleanup\""
+          )
+        )
+      )
+    )
+  )
+  (TryStatement
+    range: 6:1-12:2
+    (BlockStatement
+      range: 6:5-8:2
+      (ThrowStatement
+        range: 7:5-7:37
+        (NewExpression
+          range: 7:11-7:36
+          (IdentifierExpression
+            range: 7:15-7:26
+            name: "IOException"
+          )
+          (LiteralExpression
+            range: 7:27-7:35
+            kind: STRING
+            text: "\"caught\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 8:3-10:2
+      (IdentifierDeclaration
+        range: 8:10-8:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 8:13-8:24
+        name: "IOException"
+      )
+      (BlockStatement
+        range: 8:26-10:2
+        (ExpressionStatement
+          range: 9:5-9:27
+          (CallExpression
+            range: 9:5-9:26
+            (IdentifierExpression
+              range: 9:5-9:10
+              name: "print"
+            )
+            (CallExpression
+              range: 9:11-9:25
+              (MemberExpression
+                range: 9:11-9:23
+                (IdentifierExpression
+                  range: 9:11-9:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 9:13-9:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (BlockStatement
+      range: 10:11-12:2
+      (ExpressionStatement
+        range: 11:5-11:29
+        (CallExpression
+          range: 11:5-11:28
+          (IdentifierExpression
+            range: 11:5-11:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 11:11-11:27
+            kind: STRING
+            text: "\"caught cleanup\""
+          )
+        )
+      )
+    )
+  )
+  (TryStatement
+    range: 13:1-17:2
+    (BlockStatement
+      range: 13:5-13:7
+    )
+    (CatchClause
+      range: 13:8-15:2
+      (IdentifierDeclaration
+        range: 13:15-13:16
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 13:18-13:27
+        name: "Exception"
+      )
+      (BlockStatement
+        range: 13:29-15:2
+        (ExpressionStatement
+          range: 14:5-14:32
+          (CallExpression
+            range: 14:5-14:31
+            (IdentifierExpression
+              range: 14:5-14:10
+              name: "print"
+            )
+            (LiteralExpression
+              range: 14:11-14:30
+              kind: STRING
+              text: "\"wrong empty catch\""
+            )
+          )
+        )
+      )
+    )
+    (BlockStatement
+      range: 15:11-17:2
+      (ExpressionStatement
+        range: 16:5-16:28
+        (CallExpression
+          range: 16:5-16:27
+          (IdentifierExpression
+            range: 16:5-16:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 16:11-16:26
+            kind: STRING
+            text: "\"empty cleanup\""
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:5-2:10 -> (any) => void
+  2:5-2:20 -> void
+  2:11-2:19 -> string
+  4:5-4:10 -> (any) => void
+  4:5-4:28 -> void
+  4:11-4:27 -> string
+  7:11-7:36 -> IOException
+  7:15-7:26 -> IOException
+  7:27-7:35 -> string
+  9:5-9:10 -> (any) => void
+  9:5-9:26 -> void
+  9:11-9:12 -> IOException
+  9:11-9:23 -> () => string | null
+  9:11-9:25 -> string | null
+  9:13-9:23 -> () => string | null
+  11:5-11:10 -> (any) => void
+  11:5-11:28 -> void
+  11:11-11:27 -> string
+  14:5-14:10 -> (any) => void
+  14:5-14:31 -> void
+  14:11-14:30 -> string
+  16:5-16:10 -> (any) => void
+  16:5-16:27 -> void
+  16:11-16:26 -> string
+
+Resolved types:
+  7:11-7:36 -> IOException
+  8:13-8:24 -> IOException
+  13:18-13:27 -> Exception
+
+Declarations:
+  8:10-8:11 -> const e: IOException
+  13:15-13:16 -> const e: Exception
+
+References:
+  2:5-2:10 -> builtin print
+  4:5-4:10 -> builtin print
+  7:15-7:26 -> 7:11-7:36
+  9:5-9:10 -> builtin print
+  9:11-9:12 -> 8:10-8:11
+  9:13-9:23 -> 9:11-9:23
+  11:5-11:10 -> builtin print
+  14:5-14:10 -> builtin print
+  16:5-16:10 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "normal"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "normal cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L3
+   L2:
+    ASTORE_0 0
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "normal cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_0 0
+    ATHROW
+   L3:
+    NOP
+    NEW java/io/IOException
+    DUP
+    LDC "caught"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L4:
+    ASTORE_1 1
+   L5:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L6:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "caught cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L8
+   L7:
+    ASTORE_2 2
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "caught cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_2 2
+    ATHROW
+   L8:
+    NOP
+   L9:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "empty cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L14
+   L10:
+    ASTORE_3 3
+   L11:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wrong empty catch"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L12:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "empty cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L14
+   L13:
+    ASTORE 4
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "empty cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD 4
+    ATHROW
+   L14:
+    RETURN
+    catch all from L0 to L1 handler L2
+    catch java/io/IOException from L3 to L4 handler L4
+    catch all from L3 to L4 handler L7
+    catch all from L5 to L6 handler L7
+    catch java/lang/Exception from L8 to L9 handler L10
+    catch all from L8 to L9 handler L13
+    catch all from L11 to L12 handler L13
+    max stack 3 max locals 5
+
+--- OUTPUT ---
+
+normal
+normal cleanup
+caught
+caught cleanup
+empty cleanup
+

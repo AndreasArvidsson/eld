@@ -120,6 +120,15 @@ public final class Parser {
                 return parseForStatement(token);
             case FUNC:
                 return parseFunctionDeclaration(token);
+            case TRY:
+                return parseTryStatement(token);
+            case THROW:
+                final Expression thrown = parseExpression();
+                final Token throwEnd = expect(TokenType.SEMICOLON);
+                return new ThrowStatement(
+                    thrown,
+                    token.range().union(throwEnd.range())
+                );
             case RETURN:
                 return parseReturnStatement(token);
             case YIELD:
@@ -142,6 +151,45 @@ public final class Parser {
                 position--;
                 return parseExpressionStatement();
         }
+    }
+
+    private TryStatement parseTryStatement(final Token keyword) {
+        final BlockStatement body = parseBlockStatement();
+        final List<CatchClause> catches = new ArrayList<>();
+        Range range = keyword.range().union(body.range());
+        while (match(TokenType.CATCH)) {
+            final Token catchKeyword = tokens.get(position - 1);
+            expect(TokenType.LEFT_PAREN);
+            final Token name = expect(TokenType.IDENTIFIER);
+            expect(TokenType.COLON);
+            final TypeNode type = parseType();
+            expect(TokenType.RIGHT_PAREN);
+            final BlockStatement catchBody = parseBlockStatement();
+            catches.add(
+                new CatchClause(
+                    new IdentifierDeclaration(name.text(), name.range()),
+                    type,
+                    catchBody,
+                    catchKeyword.range().union(catchBody.range())
+                )
+            );
+            range = range.union(catchBody.range());
+        }
+        final BlockStatement finallyBody;
+        if (match(TokenType.FINALLY)) {
+            finallyBody = parseBlockStatement();
+            range = range.union(finallyBody.range());
+        }
+        else {
+            finallyBody = null;
+        }
+        if (catches.isEmpty() && finallyBody == null) {
+            throw new ParserException(
+                keyword.range(),
+                "A try statement requires catch or finally"
+            );
+        }
+        return new TryStatement(body, List.copyOf(catches), finallyBody, range);
     }
 
     private BreakStatement parseBreakStatement(final Token keyword) {

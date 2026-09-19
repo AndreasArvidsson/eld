@@ -1,0 +1,366 @@
+var index = 0;
+while (index < 4) {
+    index++;
+    try {
+        if (index == 1) {
+            continue;
+        }
+        if (index == 3) {
+            break;
+        }
+        print("body");
+    } finally {
+        print(index);
+    }
+}
+print("done");
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "index" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+WHILE (2:1-2:6)
+LEFT_PAREN (2:7-2:8)
+IDENTIFIER "index" (2:8-2:13)
+LESS (2:14-2:15)
+INTEGER_LITERAL "4" (2:16-2:17)
+RIGHT_PAREN (2:17-2:18)
+LEFT_BRACE (2:19-2:20)
+IDENTIFIER "index" (3:5-3:10)
+PLUS_PLUS (3:10-3:12)
+SEMICOLON (3:12-3:13)
+TRY (4:5-4:8)
+LEFT_BRACE (4:9-4:10)
+IF (5:9-5:11)
+LEFT_PAREN (5:12-5:13)
+IDENTIFIER "index" (5:13-5:18)
+EQUAL_EQUAL (5:19-5:21)
+INTEGER_LITERAL "1" (5:22-5:23)
+RIGHT_PAREN (5:23-5:24)
+LEFT_BRACE (5:25-5:26)
+CONTINUE (6:13-6:21)
+SEMICOLON (6:21-6:22)
+RIGHT_BRACE (7:9-7:10)
+IF (8:9-8:11)
+LEFT_PAREN (8:12-8:13)
+IDENTIFIER "index" (8:13-8:18)
+EQUAL_EQUAL (8:19-8:21)
+INTEGER_LITERAL "3" (8:22-8:23)
+RIGHT_PAREN (8:23-8:24)
+LEFT_BRACE (8:25-8:26)
+BREAK (9:13-9:18)
+SEMICOLON (9:18-9:19)
+RIGHT_BRACE (10:9-10:10)
+IDENTIFIER "print" (11:9-11:14)
+LEFT_PAREN (11:14-11:15)
+STRING_LITERAL "\"body\"" (11:15-11:21)
+RIGHT_PAREN (11:21-11:22)
+SEMICOLON (11:22-11:23)
+RIGHT_BRACE (12:5-12:6)
+FINALLY (12:7-12:14)
+LEFT_BRACE (12:15-12:16)
+IDENTIFIER "print" (13:9-13:14)
+LEFT_PAREN (13:14-13:15)
+IDENTIFIER "index" (13:15-13:20)
+RIGHT_PAREN (13:20-13:21)
+SEMICOLON (13:21-13:22)
+RIGHT_BRACE (14:5-14:6)
+RIGHT_BRACE (15:1-15:2)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+STRING_LITERAL "\"done\"" (16:7-16:13)
+RIGHT_PAREN (16:13-16:14)
+SEMICOLON (16:14-16:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:15
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "index"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (WhileStatement
+    range: 2:1-15:2
+    (BinaryExpression
+      range: 2:8-2:17
+      (IdentifierExpression
+        range: 2:8-2:13
+        name: "index"
+      )
+      operator: LESS
+      (LiteralExpression
+        range: 2:16-2:17
+        kind: INT
+        text: "4"
+      )
+    )
+    (BlockStatement
+      range: 2:19-15:2
+      (ExpressionStatement
+        range: 3:5-3:13
+        (PostfixExpression
+          range: 3:5-3:12
+          (IdentifierExpression
+            range: 3:5-3:10
+            name: "index"
+          )
+          operator: INCREMENT
+        )
+      )
+      (TryStatement
+        range: 4:5-14:6
+        (BlockStatement
+          range: 4:9-12:6
+          (ExpressionStatement
+            range: 5:9-7:10
+            (IfExpression
+              range: 5:9-7:10
+              (BinaryExpression
+                range: 5:13-5:23
+                (IdentifierExpression
+                  range: 5:13-5:18
+                  name: "index"
+                )
+                operator: EQUAL
+                (LiteralExpression
+                  range: 5:22-5:23
+                  kind: INT
+                  text: "1"
+                )
+              )
+              (BlockStatement
+                range: 5:25-7:10
+                (ContinueStatement
+                  range: 6:13-6:22
+                )
+              )
+              elseBranch: null
+            )
+          )
+          (ExpressionStatement
+            range: 8:9-10:10
+            (IfExpression
+              range: 8:9-10:10
+              (BinaryExpression
+                range: 8:13-8:23
+                (IdentifierExpression
+                  range: 8:13-8:18
+                  name: "index"
+                )
+                operator: EQUAL
+                (LiteralExpression
+                  range: 8:22-8:23
+                  kind: INT
+                  text: "3"
+                )
+              )
+              (BlockStatement
+                range: 8:25-10:10
+                (BreakStatement
+                  range: 9:13-9:19
+                )
+              )
+              elseBranch: null
+            )
+          )
+          (ExpressionStatement
+            range: 11:9-11:23
+            (CallExpression
+              range: 11:9-11:22
+              (IdentifierExpression
+                range: 11:9-11:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 11:15-11:21
+                kind: STRING
+                text: "\"body\""
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 12:15-14:6
+          (ExpressionStatement
+            range: 13:9-13:22
+            (CallExpression
+              range: 13:9-13:21
+              (IdentifierExpression
+                range: 13:9-13:14
+                name: "print"
+              )
+              (IdentifierExpression
+                range: 13:15-13:20
+                name: "index"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:15
+    (CallExpression
+      range: 16:1-16:14
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 16:7-16:13
+        kind: STRING
+        text: "\"done\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  2:8-2:13 -> i32
+  2:8-2:17 -> bool
+  2:16-2:17 -> i32
+  3:5-3:10 -> i32
+  3:5-3:12 -> i32
+  5:9-7:10 -> void
+  5:13-5:18 -> i32
+  5:13-5:23 -> bool
+  5:22-5:23 -> i32
+  8:9-10:10 -> void
+  8:13-8:18 -> i32
+  8:13-8:23 -> bool
+  8:22-8:23 -> i32
+  11:9-11:14 -> (any) => void
+  11:9-11:22 -> void
+  11:15-11:21 -> string
+  13:9-13:14 -> (any) => void
+  13:9-13:21 -> void
+  13:15-13:20 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:14 -> void
+  16:7-16:13 -> string
+
+Declarations:
+  1:5-1:10 -> var index: i32
+
+References:
+  2:8-2:13 -> 1:5-1:10
+  3:5-3:10 -> 1:5-1:10
+  5:13-5:18 -> 1:5-1:10
+  8:13-8:18 -> 1:5-1:10
+  11:9-11:14 -> builtin print
+  13:9-13:14 -> builtin print
+  13:15-13:20 -> 1:5-1:10
+  16:1-16:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field index I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.index I
+   L0:
+    GETSTATIC Test.index I
+    LDC 4
+    IF_ICMPLT L1
+    ICONST_0 0
+    GOTO L2
+   L1:
+    ICONST_1 1
+   L2:
+    IFEQ L17
+    GETSTATIC Test.index I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test.index I
+    POP
+   L3:
+    NOP
+    GETSTATIC Test.index I
+    LDC 1
+    IF_ICMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    IFEQ L8
+   L6:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GOTO L0
+   L7:
+    ATHROW
+   L8:
+    GETSTATIC Test.index I
+    LDC 3
+    IF_ICMPEQ L9
+    ICONST_0 0
+    GOTO L10
+   L9:
+    ICONST_1 1
+   L10:
+    IFEQ L13
+   L11:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GOTO L17
+   L12:
+    ATHROW
+   L13:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "body"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L14:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GOTO L16
+   L15:
+    ASTORE_0 0
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    ALOAD_0 0
+    ATHROW
+   L16:
+    GOTO L0
+   L17:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "done"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    catch all from L3 to L6 handler L15
+    catch all from L8 to L11 handler L15
+    catch all from L13 to L14 handler L15
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+1
+body
+2
+3
+done
+

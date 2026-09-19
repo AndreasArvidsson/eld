@@ -1622,9 +1622,14 @@ public final class BytecodeGenerator {
                 || type instanceof BuiltinFunctionType
                 || type instanceof ClassType
                 || type instanceof InterfaceType
-                || type instanceof UnionType
         ) {
             return "Ljava/lang/Object;";
+        }
+        if (type instanceof UnionType) {
+            final String representation = descriptor(type);
+            return representation.equals("Ljava/lang/String;")
+                ? representation
+                : "Ljava/lang/Object;";
         }
         return type == BuiltinType.I8 || type == BuiltinType.I16
             ? "I"
@@ -1734,6 +1739,7 @@ public final class BytecodeGenerator {
     private static final class Loop {
         private final Label continueTarget;
         private final Label breakTarget;
+        private int tryDepth;
         private boolean hasContinue;
         private boolean hasBreak;
 
@@ -1751,10 +1757,58 @@ public final class BytecodeGenerator {
             new IdentityHashMap<>();
         private final Deque<Loop> loops = new ArrayDeque<>();
 
-        private record YieldTarget(Label label, boolean discarded) {
+        private record YieldTarget(
+            Label label, boolean discarded, int tryDepth
+        ) {
         }
 
         private final Deque<YieldTarget> yieldTargets = new ArrayDeque<>();
+
+        private record ProtectedRange(Label start, Label end) {
+        }
+
+        private final class ProtectedRegion {
+            private final List<ProtectedRange> ranges = new ArrayList<>();
+            private @Nullable Label start;
+
+            void open() {
+                start = method.newLabel();
+                method.labelBinding(start);
+                // Empty try blocks still need a nonempty protected JVM range.
+                method.nop();
+            }
+
+            void close() {
+                if (start != null) {
+                    final Label end = method.newLabel();
+                    method.labelBinding(end);
+                    ranges.add(new ProtectedRange(start, end));
+                    start = null;
+                }
+            }
+        }
+
+        private static final class TryFrame {
+            private final @Nullable BlockStatement finallyBody;
+            private ProtectedRegion region;
+            private final List<Loop> lexicalLoops;
+            private final List<YieldTarget> lexicalYields;
+
+            TryFrame(
+                final @Nullable BlockStatement finallyBody,
+                final ProtectedRegion region,
+                final List<Loop> lexicalLoops,
+                final List<YieldTarget> lexicalYields
+            ) {
+                this.finallyBody = finallyBody;
+                this.region = region;
+                this.lexicalLoops = lexicalLoops;
+                this.lexicalYields = lexicalYields;
+            }
+        }
+
+        private final Deque<TryFrame> tryFrames = new ArrayDeque<>();
+
         private final Type returnType;
         private int nextLocal;
         private final IdentityHashMap<Expression, Integer> expressionTemporaries =
@@ -1912,15 +1966,51 @@ public final class BytecodeGenerator {
                     }
                     discard(statement.expression());
                 }
+                case ThrowStatement statement -> {
+                    expression(statement.value());
+                    if (
+                        semanticModel.getExpressionType(
+                            statement.value()
+                        ) instanceof UnionType
+                    ) {
+                        method.checkcast(classDesc("java/lang/Throwable"));
+                    }
+                    method.athrow();
+                    return false;
+                }
+                case TryStatement statement -> {
+                    return tryStatement(statement);
+                }
                 case YieldStatement statement -> {
                     final YieldTarget target = yieldTargets.element();
                     if (target.discarded()) {
                         discard(statement.value());
+                        abrupt(
+                            target.tryDepth(),
+                            () -> method.branch(GOTO, target.label())
+                        );
                     }
                     else {
+                        final Type type =
+                            semanticModel.getEffectiveType(statement.value());
                         expression(statement.value());
+                        if (tryFrames.size() == target.tryDepth()) {
+                            method.branch(GOTO, target.label());
+                        }
+                        else {
+                            final int saved = nextLocal;
+                            nextLocal += slots(type);
+                            method.with(
+                                localInstruction(storeOpcode(type), saved)
+                            );
+                            abrupt(target.tryDepth(), () -> {
+                                method.with(
+                                    localInstruction(loadOpcode(type), saved)
+                                );
+                                method.branch(GOTO, target.label());
+                            });
+                        }
                     }
-                    method.branch(GOTO, target.label());
                     return false;
                 }
                 case ReturnStatement statement -> {
@@ -1928,7 +2018,28 @@ public final class BytecodeGenerator {
                     if (value != null) {
                         expression(value);
                     }
-                    method.with(simpleInstruction(returnOpcode(returnType)));
+                    if (tryFrames.isEmpty()) {
+                        method
+                            .with(simpleInstruction(returnOpcode(returnType)));
+                    }
+                    else if (value == null) {
+                        abrupt(0, () -> method.return_());
+                    }
+                    else {
+                        final int saved = nextLocal;
+                        nextLocal += slots(returnType);
+                        method.with(
+                            localInstruction(storeOpcode(returnType), saved)
+                        );
+                        abrupt(0, () -> {
+                            method.with(
+                                localInstruction(loadOpcode(returnType), saved)
+                            );
+                            method.with(
+                                simpleInstruction(returnOpcode(returnType))
+                            );
+                        });
+                    }
                     return false;
                 }
                 case WhileStatement statement -> {
@@ -2027,7 +2138,11 @@ public final class BytecodeGenerator {
                         throw unsupported(statement, "Break outside a loop");
                     }
                     loops.element().hasBreak = true;
-                    method.branch(GOTO, loops.element().breakTarget);
+                    final Loop loop = loops.element();
+                    abrupt(
+                        loop.tryDepth,
+                        () -> method.branch(GOTO, loop.breakTarget)
+                    );
                     return false;
                 }
                 case ContinueStatement statement -> {
@@ -2035,11 +2150,157 @@ public final class BytecodeGenerator {
                         throw unsupported(statement, "Continue outside a loop");
                     }
                     loops.element().hasContinue = true;
-                    method.branch(GOTO, loops.element().continueTarget);
+                    final Loop loop = loops.element();
+                    abrupt(
+                        loop.tryDepth,
+                        () -> method.branch(GOTO, loop.continueTarget)
+                    );
                     return false;
                 }
                 default -> throw unsupported(item, "Unsupported declaration");
             }
+            return true;
+        }
+
+        private void abrupt(final int retainedDepth, final Runnable exit) {
+            final List<TryFrame> exited = new ArrayList<>();
+            boolean reachable = true;
+            while (tryFrames.size() > retainedDepth) {
+                final TryFrame frame = tryFrames.pop();
+                frame.region.close();
+                exited.add(frame);
+                if (frame.finallyBody != null && !finallyBlock(frame)) {
+                    reachable = false;
+                    break;
+                }
+            }
+            if (reachable) {
+                exit.run();
+            }
+            for (int i = exited.size() - 1; i >= 0; i--) {
+                final TryFrame frame = exited.get(i);
+                tryFrames.push(frame);
+                frame.region.open();
+            }
+        }
+
+        private boolean tryStatement(final TryStatement statement) {
+            final Label end = method.newLabel();
+            final List<Label> handlers =
+                statement.catches()
+                    .stream()
+                    .map(clause -> method.newLabel())
+                    .toList();
+            final Label finallyHandler = method.newLabel();
+            final ProtectedRegion body = new ProtectedRegion();
+            final TryFrame frame =
+                new TryFrame(
+                    statement.finallyBody(),
+                    body,
+                    List.copyOf(loops),
+                    List.copyOf(yieldTargets)
+                );
+            tryFrames.push(frame);
+            body.open();
+            final boolean bodyFallsThrough = block(statement.body());
+            body.close();
+            tryFrames.pop();
+            boolean reachable = finishTryPath(frame, bodyFallsThrough, end);
+            final List<ProtectedRegion> catchRegions = new ArrayList<>();
+            for (int i = 0; i < statement.catches().size(); i++) {
+                final CatchClause clause = statement.catches().get(i);
+                method.labelBinding(handlers.get(i));
+                final Symbol symbol = semanticModel.getSymbol(clause.name());
+                method.astore(local(symbol));
+                final ProtectedRegion region = new ProtectedRegion();
+                catchRegions.add(region);
+                frame.region = region;
+                tryFrames.push(frame);
+                region.open();
+                final boolean catchFallsThrough = block(clause.body());
+                region.close();
+                tryFrames.pop();
+                reachable |= finishTryPath(frame, catchFallsThrough, end);
+            }
+            if (statement.finallyBody() != null) {
+                method.labelBinding(finallyHandler);
+                final int thrown = nextLocal++;
+                method.astore(thrown);
+                if (finallyBlock(frame)) {
+                    method.aload(thrown);
+                    method.athrow();
+                }
+            }
+            for (int i = 0; i < handlers.size(); i++) {
+                final ClassDesc type =
+                    classDesc(
+                        typeOwner(
+                            semanticModel.getResolvedType(
+                                statement.catches().get(i).type()
+                            )
+                        )
+                    );
+                for (final ProtectedRange range : body.ranges) {
+                    method.exceptionCatch(
+                        range.start(),
+                        range.end(),
+                        handlers.get(i),
+                        type
+                    );
+                }
+            }
+            if (statement.finallyBody() != null) {
+                for (final ProtectedRange range : body.ranges) {
+                    method.exceptionCatchAll(
+                        range.start(),
+                        range.end(),
+                        finallyHandler
+                    );
+                }
+                for (final ProtectedRegion region : catchRegions) {
+                    for (final ProtectedRange range : region.ranges) {
+                        method.exceptionCatchAll(
+                            range.start(),
+                            range.end(),
+                            finallyHandler
+                        );
+                    }
+                }
+            }
+            method.labelBinding(end);
+            return reachable;
+        }
+
+        private boolean finallyBlock(final TryFrame frame) {
+            final List<Loop> previousLoops = List.copyOf(loops);
+            final List<YieldTarget> previousYields = List.copyOf(yieldTargets);
+            loops.clear();
+            loops.addAll(frame.lexicalLoops);
+            yieldTargets.clear();
+            yieldTargets.addAll(frame.lexicalYields);
+            try {
+                return block(Objects.requireNonNull(frame.finallyBody));
+            }
+            finally {
+                loops.clear();
+                loops.addAll(previousLoops);
+                yieldTargets.clear();
+                yieldTargets.addAll(previousYields);
+            }
+        }
+
+        private boolean finishTryPath(
+            final TryFrame frame,
+            final boolean reachable,
+            final Label end
+        ) {
+            if (!reachable) {
+                return false;
+            }
+            if (frame.finallyBody != null && !finallyBlock(frame)) {
+                return false;
+            }
+            method.branch(GOTO, end);
             return true;
         }
 
@@ -2059,7 +2320,8 @@ public final class BytecodeGenerator {
             expression(selection.subject());
             method.with(localInstruction(storeOpcode(subjectType), subject));
             final Label end = method.newLabel();
-            yieldTargets.push(new YieldTarget(end, discarded));
+            yieldTargets
+                .push(new YieldTarget(end, discarded, tryFrames.size()));
             for (final SwitchBranch branch : selection.branches()) {
                 final Label body = method.newLabel();
                 final Label next = method.newLabel();
@@ -2182,7 +2444,8 @@ public final class BytecodeGenerator {
                         .toList()
                 );
             }
-            yieldTargets.push(new YieldTarget(end, discarded));
+            yieldTargets
+                .push(new YieldTarget(end, discarded, tryFrames.size()));
             for (int index = 0; index < selection.branches().size(); index++) {
                 method.labelBinding(bodies.get(index));
                 if (
@@ -2256,6 +2519,7 @@ public final class BytecodeGenerator {
         }
 
         private boolean loopBody(final BlockStatement body, final Loop loop) {
+            loop.tryDepth = tryFrames.size();
             loops.push(loop);
             final boolean reachable = block(body);
             loops.pop();
@@ -2589,7 +2853,8 @@ public final class BytecodeGenerator {
                 }
                 case IfExpression conditional -> {
                     final Label end = method.newLabel();
-                    yieldTargets.push(new YieldTarget(end, false));
+                    yieldTargets
+                        .push(new YieldTarget(end, false, tryFrames.size()));
                     conditional(conditional, end);
                     yieldTargets.pop();
                 }
@@ -2597,7 +2862,7 @@ public final class BytecodeGenerator {
                 case AssignmentExpression assignment -> assign(assignment);
                 case CallExpression call -> call(call);
                 case MemberExpression member -> member(member);
-                case ThisExpression self -> {
+                case ThisExpression ignored -> {
                     method.aload(0);
                     if (lexicalReceiverOwner != null) {
                         method.fieldAccess(

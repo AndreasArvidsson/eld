@@ -1,0 +1,334 @@
+func run() i32 {
+    try {
+        return 1;
+    } catch (e: IOException) {
+        print("wrong catch");
+        return 2;
+    } finally {
+        throw new IOException("cleanup");
+    }
+}
+try {
+    run();
+} catch (e: IOException) {
+    print(e.getMessage());
+}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "run" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+IDENTIFIER "i32" (1:12-1:15)
+LEFT_BRACE (1:16-1:17)
+TRY (2:5-2:8)
+LEFT_BRACE (2:9-2:10)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+CATCH (4:7-4:12)
+LEFT_PAREN (4:13-4:14)
+IDENTIFIER "e" (4:14-4:15)
+COLON (4:15-4:16)
+IDENTIFIER "IOException" (4:17-4:28)
+RIGHT_PAREN (4:28-4:29)
+LEFT_BRACE (4:30-4:31)
+IDENTIFIER "print" (5:9-5:14)
+LEFT_PAREN (5:14-5:15)
+STRING_LITERAL "\"wrong catch\"" (5:15-5:28)
+RIGHT_PAREN (5:28-5:29)
+SEMICOLON (5:29-5:30)
+RETURN (6:9-6:15)
+INTEGER_LITERAL "2" (6:16-6:17)
+SEMICOLON (6:17-6:18)
+RIGHT_BRACE (7:5-7:6)
+FINALLY (7:7-7:14)
+LEFT_BRACE (7:15-7:16)
+THROW (8:9-8:14)
+NEW (8:15-8:18)
+IDENTIFIER "IOException" (8:19-8:30)
+LEFT_PAREN (8:30-8:31)
+STRING_LITERAL "\"cleanup\"" (8:31-8:40)
+RIGHT_PAREN (8:40-8:41)
+SEMICOLON (8:41-8:42)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+TRY (11:1-11:4)
+LEFT_BRACE (11:5-11:6)
+IDENTIFIER "run" (12:5-12:8)
+LEFT_PAREN (12:8-12:9)
+RIGHT_PAREN (12:9-12:10)
+SEMICOLON (12:10-12:11)
+RIGHT_BRACE (13:1-13:2)
+CATCH (13:3-13:8)
+LEFT_PAREN (13:9-13:10)
+IDENTIFIER "e" (13:10-13:11)
+COLON (13:11-13:12)
+IDENTIFIER "IOException" (13:13-13:24)
+RIGHT_PAREN (13:24-13:25)
+LEFT_BRACE (13:26-13:27)
+IDENTIFIER "print" (14:5-14:10)
+LEFT_PAREN (14:10-14:11)
+IDENTIFIER "e" (14:11-14:12)
+DOT (14:12-14:13)
+IDENTIFIER "getMessage" (14:13-14:23)
+LEFT_PAREN (14:23-14:24)
+RIGHT_PAREN (14:24-14:25)
+RIGHT_PAREN (14:25-14:26)
+SEMICOLON (14:26-14:27)
+RIGHT_BRACE (15:1-15:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-15:2
+  (FunctionDeclaration
+    range: 1:1-10:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "run"
+    )
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:16-10:2
+      (TryStatement
+        range: 2:5-9:6
+        (BlockStatement
+          range: 2:9-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+        (CatchClause
+          range: 4:7-7:6
+          (IdentifierDeclaration
+            range: 4:14-4:15
+            name: "e"
+          )
+          (NamedTypeNode
+            range: 4:17-4:28
+            name: "IOException"
+          )
+          (BlockStatement
+            range: 4:30-7:6
+            (ExpressionStatement
+              range: 5:9-5:30
+              (CallExpression
+                range: 5:9-5:29
+                (IdentifierExpression
+                  range: 5:9-5:14
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 5:15-5:28
+                  kind: STRING
+                  text: "\"wrong catch\""
+                )
+              )
+            )
+            (ReturnStatement
+              range: 6:9-6:18
+              (LiteralExpression
+                range: 6:16-6:17
+                kind: INT
+                text: "2"
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 7:15-9:6
+          (ThrowStatement
+            range: 8:9-8:42
+            (NewExpression
+              range: 8:15-8:41
+              (IdentifierExpression
+                range: 8:19-8:30
+                name: "IOException"
+              )
+              (LiteralExpression
+                range: 8:31-8:40
+                kind: STRING
+                text: "\"cleanup\""
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (TryStatement
+    range: 11:1-15:2
+    (BlockStatement
+      range: 11:5-13:2
+      (ExpressionStatement
+        range: 12:5-12:11
+        (CallExpression
+          range: 12:5-12:10
+          (IdentifierExpression
+            range: 12:5-12:8
+            name: "run"
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 13:3-15:2
+      (IdentifierDeclaration
+        range: 13:10-13:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 13:13-13:24
+        name: "IOException"
+      )
+      (BlockStatement
+        range: 13:26-15:2
+        (ExpressionStatement
+          range: 14:5-14:27
+          (CallExpression
+            range: 14:5-14:26
+            (IdentifierExpression
+              range: 14:5-14:10
+              name: "print"
+            )
+            (CallExpression
+              range: 14:11-14:25
+              (MemberExpression
+                range: 14:11-14:23
+                (IdentifierExpression
+                  range: 14:11-14:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 14:13-14:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  5:9-5:14 -> (any) => void
+  5:9-5:29 -> void
+  5:15-5:28 -> string
+  6:16-6:17 -> i32
+  8:15-8:41 -> IOException
+  8:19-8:30 -> IOException
+  8:31-8:40 -> string
+  12:5-12:8 -> () => i32
+  12:5-12:10 -> i32
+  14:5-14:10 -> (any) => void
+  14:5-14:26 -> void
+  14:11-14:12 -> IOException
+  14:11-14:23 -> () => string | null
+  14:11-14:25 -> string | null
+  14:13-14:23 -> () => string | null
+
+Resolved types:
+  1:12-1:15 -> i32
+  4:17-4:28 -> IOException
+  8:15-8:41 -> IOException
+  13:13-13:24 -> IOException
+
+Declarations:
+  1:6-1:9 -> run() => i32
+  4:14-4:15 -> const e: IOException
+  13:10-13:11 -> const e: IOException
+
+References:
+  5:9-5:14 -> builtin print
+  8:19-8:30 -> 8:15-8:41
+  12:5-12:8 -> 1:6-1:9
+  14:5-14:10 -> builtin print
+  14:11-14:12 -> 13:10-13:11
+  14:13-14:23 -> 14:11-14:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method run()I flags [PUBLIC, STATIC]
+   L0:
+    NOP
+    LDC 1
+    ISTORE_0 0
+   L1:
+    NEW java/io/IOException
+    DUP
+    LDC "cleanup"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L2:
+    ATHROW
+   L3:
+    ASTORE_1 1
+   L4:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wrong catch"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    LDC 2
+    ISTORE_2 2
+   L5:
+    NEW java/io/IOException
+    DUP
+    LDC "cleanup"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L6:
+    ATHROW
+   L7:
+    ASTORE_3 3
+    NEW java/io/IOException
+    DUP
+    LDC "cleanup"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+    catch java/io/IOException from L0 to L1 handler L3
+    catch all from L0 to L1 handler L7
+    catch all from L4 to L5 handler L7
+    max stack 3 max locals 4
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    INVOKESTATIC Test.run()I
+    POP
+   L1:
+    GOTO L3
+   L2:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L3
+   L3:
+    RETURN
+    catch java/io/IOException from L0 to L1 handler L2
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+cleanup
+

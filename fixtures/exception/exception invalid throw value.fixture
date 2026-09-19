@@ -1,0 +1,25 @@
+throw "error";
+
+--- TOKENS ---
+
+THROW (1:1-1:6)
+STRING_LITERAL "\"error\"" (1:7-1:14)
+SEMICOLON (1:14-1:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:15
+  (ThrowStatement
+    range: 1:1-1:15
+    (LiteralExpression
+      range: 1:7-1:14
+      kind: STRING
+      text: "\"error\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expected a JVM throwable type, found string at 1:7-1:14

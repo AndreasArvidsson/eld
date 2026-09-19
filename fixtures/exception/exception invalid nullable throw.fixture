@@ -1,0 +1,58 @@
+const error: Exception | null = null;
+throw error;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "error" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "Exception" (1:14-1:23)
+PIPE (1:24-1:25)
+NULL (1:26-1:30)
+EQUAL (1:31-1:32)
+NULL (1:33-1:37)
+SEMICOLON (1:37-1:38)
+THROW (2:1-2:6)
+IDENTIFIER "error" (2:7-2:12)
+SEMICOLON (2:12-2:13)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:13
+  (VariableDeclaration
+    range: 1:1-1:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "error"
+    )
+    (UnionTypeNode
+      range: 1:14-1:30
+      (NamedTypeNode
+        range: 1:14-1:23
+        name: "Exception"
+      )
+      (NamedTypeNode
+        range: 1:26-1:30
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:33-1:37
+      kind: NULL
+      text: "null"
+    )
+  )
+  (ThrowStatement
+    range: 2:1-2:13
+    (IdentifierExpression
+      range: 2:7-2:12
+      name: "error"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expected a JVM throwable type, found Exception | null at 2:7-2:12

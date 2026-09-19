@@ -1,0 +1,578 @@
+var value = 7;
+func saved() i32 {
+    try {
+        return value;
+    } finally {
+        value = 9;
+        print("saved cleanup");
+    }
+}
+func nested() i64 {
+    try {
+        try {
+            return 42;
+        } finally {
+            print("inner");
+        }
+    } finally {
+        print("outer");
+    }
+}
+func overridden() i32 {
+    try {
+        return 1;
+    } finally {
+        return 2;
+    }
+}
+print(saved());
+print(value);
+print(nested());
+print(overridden());
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "7" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+FUNC (2:1-2:5)
+IDENTIFIER "saved" (2:6-2:11)
+LEFT_PAREN (2:11-2:12)
+RIGHT_PAREN (2:12-2:13)
+IDENTIFIER "i32" (2:14-2:17)
+LEFT_BRACE (2:18-2:19)
+TRY (3:5-3:8)
+LEFT_BRACE (3:9-3:10)
+RETURN (4:9-4:15)
+IDENTIFIER "value" (4:16-4:21)
+SEMICOLON (4:21-4:22)
+RIGHT_BRACE (5:5-5:6)
+FINALLY (5:7-5:14)
+LEFT_BRACE (5:15-5:16)
+IDENTIFIER "value" (6:9-6:14)
+EQUAL (6:15-6:16)
+INTEGER_LITERAL "9" (6:17-6:18)
+SEMICOLON (6:18-6:19)
+IDENTIFIER "print" (7:9-7:14)
+LEFT_PAREN (7:14-7:15)
+STRING_LITERAL "\"saved cleanup\"" (7:15-7:30)
+RIGHT_PAREN (7:30-7:31)
+SEMICOLON (7:31-7:32)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+FUNC (10:1-10:5)
+IDENTIFIER "nested" (10:6-10:12)
+LEFT_PAREN (10:12-10:13)
+RIGHT_PAREN (10:13-10:14)
+IDENTIFIER "i64" (10:15-10:18)
+LEFT_BRACE (10:19-10:20)
+TRY (11:5-11:8)
+LEFT_BRACE (11:9-11:10)
+TRY (12:9-12:12)
+LEFT_BRACE (12:13-12:14)
+RETURN (13:13-13:19)
+INTEGER_LITERAL "42" (13:20-13:22)
+SEMICOLON (13:22-13:23)
+RIGHT_BRACE (14:9-14:10)
+FINALLY (14:11-14:18)
+LEFT_BRACE (14:19-14:20)
+IDENTIFIER "print" (15:13-15:18)
+LEFT_PAREN (15:18-15:19)
+STRING_LITERAL "\"inner\"" (15:19-15:26)
+RIGHT_PAREN (15:26-15:27)
+SEMICOLON (15:27-15:28)
+RIGHT_BRACE (16:9-16:10)
+RIGHT_BRACE (17:5-17:6)
+FINALLY (17:7-17:14)
+LEFT_BRACE (17:15-17:16)
+IDENTIFIER "print" (18:9-18:14)
+LEFT_PAREN (18:14-18:15)
+STRING_LITERAL "\"outer\"" (18:15-18:22)
+RIGHT_PAREN (18:22-18:23)
+SEMICOLON (18:23-18:24)
+RIGHT_BRACE (19:5-19:6)
+RIGHT_BRACE (20:1-20:2)
+FUNC (21:1-21:5)
+IDENTIFIER "overridden" (21:6-21:16)
+LEFT_PAREN (21:16-21:17)
+RIGHT_PAREN (21:17-21:18)
+IDENTIFIER "i32" (21:19-21:22)
+LEFT_BRACE (21:23-21:24)
+TRY (22:5-22:8)
+LEFT_BRACE (22:9-22:10)
+RETURN (23:9-23:15)
+INTEGER_LITERAL "1" (23:16-23:17)
+SEMICOLON (23:17-23:18)
+RIGHT_BRACE (24:5-24:6)
+FINALLY (24:7-24:14)
+LEFT_BRACE (24:15-24:16)
+RETURN (25:9-25:15)
+INTEGER_LITERAL "2" (25:16-25:17)
+SEMICOLON (25:17-25:18)
+RIGHT_BRACE (26:5-26:6)
+RIGHT_BRACE (27:1-27:2)
+IDENTIFIER "print" (28:1-28:6)
+LEFT_PAREN (28:6-28:7)
+IDENTIFIER "saved" (28:7-28:12)
+LEFT_PAREN (28:12-28:13)
+RIGHT_PAREN (28:13-28:14)
+RIGHT_PAREN (28:14-28:15)
+SEMICOLON (28:15-28:16)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "value" (29:7-29:12)
+RIGHT_PAREN (29:12-29:13)
+SEMICOLON (29:13-29:14)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "nested" (30:7-30:13)
+LEFT_PAREN (30:13-30:14)
+RIGHT_PAREN (30:14-30:15)
+RIGHT_PAREN (30:15-30:16)
+SEMICOLON (30:16-30:17)
+IDENTIFIER "print" (31:1-31:6)
+LEFT_PAREN (31:6-31:7)
+IDENTIFIER "overridden" (31:7-31:17)
+LEFT_PAREN (31:17-31:18)
+RIGHT_PAREN (31:18-31:19)
+RIGHT_PAREN (31:19-31:20)
+SEMICOLON (31:20-31:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-31:21
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "7"
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-9:2
+    (IdentifierDeclaration
+      range: 2:6-2:11
+      name: "saved"
+    )
+    (NamedTypeNode
+      range: 2:14-2:17
+      name: "i32"
+    )
+    (BlockStatement
+      range: 2:18-9:2
+      (TryStatement
+        range: 3:5-8:6
+        (BlockStatement
+          range: 3:9-5:6
+          (ReturnStatement
+            range: 4:9-4:22
+            (IdentifierExpression
+              range: 4:16-4:21
+              name: "value"
+            )
+          )
+        )
+        (BlockStatement
+          range: 5:15-8:6
+          (ExpressionStatement
+            range: 6:9-6:19
+            (AssignmentExpression
+              range: 6:9-6:18
+              (IdentifierExpression
+                range: 6:9-6:14
+                name: "value"
+              )
+              (LiteralExpression
+                range: 6:17-6:18
+                kind: INT
+                text: "9"
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 7:9-7:32
+            (CallExpression
+              range: 7:9-7:31
+              (IdentifierExpression
+                range: 7:9-7:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 7:15-7:30
+                kind: STRING
+                text: "\"saved cleanup\""
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 10:1-20:2
+    (IdentifierDeclaration
+      range: 10:6-10:12
+      name: "nested"
+    )
+    (NamedTypeNode
+      range: 10:15-10:18
+      name: "i64"
+    )
+    (BlockStatement
+      range: 10:19-20:2
+      (TryStatement
+        range: 11:5-19:6
+        (BlockStatement
+          range: 11:9-17:6
+          (TryStatement
+            range: 12:9-16:10
+            (BlockStatement
+              range: 12:13-14:10
+              (ReturnStatement
+                range: 13:13-13:23
+                (LiteralExpression
+                  range: 13:20-13:22
+                  kind: INT
+                  text: "42"
+                )
+              )
+            )
+            (BlockStatement
+              range: 14:19-16:10
+              (ExpressionStatement
+                range: 15:13-15:28
+                (CallExpression
+                  range: 15:13-15:27
+                  (IdentifierExpression
+                    range: 15:13-15:18
+                    name: "print"
+                  )
+                  (LiteralExpression
+                    range: 15:19-15:26
+                    kind: STRING
+                    text: "\"inner\""
+                  )
+                )
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 17:15-19:6
+          (ExpressionStatement
+            range: 18:9-18:24
+            (CallExpression
+              range: 18:9-18:23
+              (IdentifierExpression
+                range: 18:9-18:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 18:15-18:22
+                kind: STRING
+                text: "\"outer\""
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 21:1-27:2
+    (IdentifierDeclaration
+      range: 21:6-21:16
+      name: "overridden"
+    )
+    (NamedTypeNode
+      range: 21:19-21:22
+      name: "i32"
+    )
+    (BlockStatement
+      range: 21:23-27:2
+      (TryStatement
+        range: 22:5-26:6
+        (BlockStatement
+          range: 22:9-24:6
+          (ReturnStatement
+            range: 23:9-23:18
+            (LiteralExpression
+              range: 23:16-23:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+        (BlockStatement
+          range: 24:15-26:6
+          (ReturnStatement
+            range: 25:9-25:18
+            (LiteralExpression
+              range: 25:16-25:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 28:1-28:16
+    (CallExpression
+      range: 28:1-28:15
+      (IdentifierExpression
+        range: 28:1-28:6
+        name: "print"
+      )
+      (CallExpression
+        range: 28:7-28:14
+        (IdentifierExpression
+          range: 28:7-28:12
+          name: "saved"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:14
+    (CallExpression
+      range: 29:1-29:13
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 29:7-29:12
+        name: "value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:17
+    (CallExpression
+      range: 30:1-30:16
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (CallExpression
+        range: 30:7-30:15
+        (IdentifierExpression
+          range: 30:7-30:13
+          name: "nested"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 31:1-31:21
+    (CallExpression
+      range: 31:1-31:20
+      (IdentifierExpression
+        range: 31:1-31:6
+        name: "print"
+      )
+      (CallExpression
+        range: 31:7-31:19
+        (IdentifierExpression
+          range: 31:7-31:17
+          name: "overridden"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  4:16-4:21 -> i32
+  6:9-6:14 -> i32
+  6:9-6:18 -> i32
+  6:17-6:18 -> i32
+  7:9-7:14 -> (any) => void
+  7:9-7:31 -> void
+  7:15-7:30 -> string
+  13:20-13:22 -> i32
+  15:13-15:18 -> (any) => void
+  15:13-15:27 -> void
+  15:19-15:26 -> string
+  18:9-18:14 -> (any) => void
+  18:9-18:23 -> void
+  18:15-18:22 -> string
+  23:16-23:17 -> i32
+  25:16-25:17 -> i32
+  28:1-28:6 -> (any) => void
+  28:1-28:15 -> void
+  28:7-28:12 -> () => i32
+  28:7-28:14 -> i32
+  29:1-29:6 -> (any) => void
+  29:1-29:13 -> void
+  29:7-29:12 -> i32
+  30:1-30:6 -> (any) => void
+  30:1-30:16 -> void
+  30:7-30:13 -> () => i64
+  30:7-30:15 -> i64
+  31:1-31:6 -> (any) => void
+  31:1-31:20 -> void
+  31:7-31:17 -> () => i32
+  31:7-31:19 -> i32
+
+Resolved types:
+  2:14-2:17 -> i32
+  10:15-10:18 -> i64
+  21:19-21:22 -> i32
+
+Conversions:
+  13:20-13:22 -> i32 -> i64
+
+Declarations:
+  1:5-1:10 -> var value: i32
+  2:6-2:11 -> saved() => i32
+  10:6-10:12 -> nested() => i64
+  21:6-21:16 -> overridden() => i32
+
+References:
+  4:16-4:21 -> 1:5-1:10
+  6:9-6:14 -> 1:5-1:10
+  7:9-7:14 -> builtin print
+  15:13-15:18 -> builtin print
+  18:9-18:14 -> builtin print
+  28:1-28:6 -> builtin print
+  28:7-28:12 -> 2:6-2:11
+  29:1-29:6 -> builtin print
+  29:7-29:12 -> 1:5-1:10
+  30:1-30:6 -> builtin print
+  30:7-30:13 -> 10:6-10:12
+  31:1-31:6 -> builtin print
+  31:7-31:17 -> 21:6-21:16
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC]
+  method saved()I flags [PUBLIC, STATIC]
+   L0:
+    NOP
+    GETSTATIC Test.value I
+    ISTORE_0 0
+   L1:
+    LDC 9
+    DUP
+    PUTSTATIC Test.value I
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "saved cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ILOAD_0 0
+    IRETURN
+   L2:
+    ATHROW
+   L3:
+    ASTORE_1 1
+    LDC 9
+    DUP
+    PUTSTATIC Test.value I
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "saved cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_1 1
+    ATHROW
+    catch all from L0 to L1 handler L3
+    max stack 2 max locals 2
+  method nested()J flags [PUBLIC, STATIC]
+   L0:
+    NOP
+   L1:
+    NOP
+    LDC 42
+    I2L
+    LSTORE_0 0
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "inner"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "outer"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    LLOAD_0 0
+    LRETURN
+   L4:
+    NOP
+    ATHROW
+   L5:
+    ASTORE_2 2
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "inner"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_2 2
+    ATHROW
+   L6:
+    ASTORE_3 3
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "outer"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_3 3
+    ATHROW
+    catch all from L1 to L2 handler L5
+    catch all from L0 to L3 handler L6
+    catch all from L5 to L6 handler L6
+    max stack 2 max locals 4
+  method overridden()I flags [PUBLIC, STATIC]
+   L0:
+    NOP
+    LDC 1
+    ISTORE_0 0
+   L1:
+    LDC 2
+    IRETURN
+   L2:
+    ATHROW
+   L3:
+    ASTORE_1 1
+    LDC 2
+    IRETURN
+    catch all from L0 to L1 handler L3
+    max stack 1 max locals 2
+  method <clinit>()V flags [STATIC]
+    LDC 7
+    PUTSTATIC Test.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.saved()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.nested()J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.overridden()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+saved cleanup
+7
+9
+inner
+outer
+42
+2
+

@@ -1,0 +1,309 @@
+const small: i8 = 7;
+try {
+    throw new IndexOutOfBoundsException(small);
+} catch (e: IndexOutOfBoundsException) {
+    print("i8");
+}
+
+const medium: i16 = 300;
+try {
+    throw new IndexOutOfBoundsException(medium);
+} catch (e: IndexOutOfBoundsException) {
+    print("i16");
+}
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "small" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "7" (1:19-1:20)
+SEMICOLON (1:20-1:21)
+TRY (2:1-2:4)
+LEFT_BRACE (2:5-2:6)
+THROW (3:5-3:10)
+NEW (3:11-3:14)
+IDENTIFIER "IndexOutOfBoundsException" (3:15-3:40)
+LEFT_PAREN (3:40-3:41)
+IDENTIFIER "small" (3:41-3:46)
+RIGHT_PAREN (3:46-3:47)
+SEMICOLON (3:47-3:48)
+RIGHT_BRACE (4:1-4:2)
+CATCH (4:3-4:8)
+LEFT_PAREN (4:9-4:10)
+IDENTIFIER "e" (4:10-4:11)
+COLON (4:11-4:12)
+IDENTIFIER "IndexOutOfBoundsException" (4:13-4:38)
+RIGHT_PAREN (4:38-4:39)
+LEFT_BRACE (4:40-4:41)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+STRING_LITERAL "\"i8\"" (5:11-5:15)
+RIGHT_PAREN (5:15-5:16)
+SEMICOLON (5:16-5:17)
+RIGHT_BRACE (6:1-6:2)
+CONST (8:1-8:6)
+IDENTIFIER "medium" (8:7-8:13)
+COLON (8:13-8:14)
+IDENTIFIER "i16" (8:15-8:18)
+EQUAL (8:19-8:20)
+INTEGER_LITERAL "300" (8:21-8:24)
+SEMICOLON (8:24-8:25)
+TRY (9:1-9:4)
+LEFT_BRACE (9:5-9:6)
+THROW (10:5-10:10)
+NEW (10:11-10:14)
+IDENTIFIER "IndexOutOfBoundsException" (10:15-10:40)
+LEFT_PAREN (10:40-10:41)
+IDENTIFIER "medium" (10:41-10:47)
+RIGHT_PAREN (10:47-10:48)
+SEMICOLON (10:48-10:49)
+RIGHT_BRACE (11:1-11:2)
+CATCH (11:3-11:8)
+LEFT_PAREN (11:9-11:10)
+IDENTIFIER "e" (11:10-11:11)
+COLON (11:11-11:12)
+IDENTIFIER "IndexOutOfBoundsException" (11:13-11:38)
+RIGHT_PAREN (11:38-11:39)
+LEFT_BRACE (11:40-11:41)
+IDENTIFIER "print" (12:5-12:10)
+LEFT_PAREN (12:10-12:11)
+STRING_LITERAL "\"i16\"" (12:11-12:16)
+RIGHT_PAREN (12:16-12:17)
+SEMICOLON (12:17-12:18)
+RIGHT_BRACE (13:1-13:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:2
+  (VariableDeclaration
+    range: 1:1-1:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "small"
+    )
+    (NamedTypeNode
+      range: 1:14-1:16
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 1:19-1:20
+      kind: INT
+      text: "7"
+    )
+  )
+  (TryStatement
+    range: 2:1-6:2
+    (BlockStatement
+      range: 2:5-4:2
+      (ThrowStatement
+        range: 3:5-3:48
+        (NewExpression
+          range: 3:11-3:47
+          (IdentifierExpression
+            range: 3:15-3:40
+            name: "IndexOutOfBoundsException"
+          )
+          (IdentifierExpression
+            range: 3:41-3:46
+            name: "small"
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 4:3-6:2
+      (IdentifierDeclaration
+        range: 4:10-4:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 4:13-4:38
+        name: "IndexOutOfBoundsException"
+      )
+      (BlockStatement
+        range: 4:40-6:2
+        (ExpressionStatement
+          range: 5:5-5:17
+          (CallExpression
+            range: 5:5-5:16
+            (IdentifierExpression
+              range: 5:5-5:10
+              name: "print"
+            )
+            (LiteralExpression
+              range: 5:11-5:15
+              kind: STRING
+              text: "\"i8\""
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (VariableDeclaration
+    range: 8:1-8:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:13
+      name: "medium"
+    )
+    (NamedTypeNode
+      range: 8:15-8:18
+      name: "i16"
+    )
+    (LiteralExpression
+      range: 8:21-8:24
+      kind: INT
+      text: "300"
+    )
+  )
+  (TryStatement
+    range: 9:1-13:2
+    (BlockStatement
+      range: 9:5-11:2
+      (ThrowStatement
+        range: 10:5-10:49
+        (NewExpression
+          range: 10:11-10:48
+          (IdentifierExpression
+            range: 10:15-10:40
+            name: "IndexOutOfBoundsException"
+          )
+          (IdentifierExpression
+            range: 10:41-10:47
+            name: "medium"
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 11:3-13:2
+      (IdentifierDeclaration
+        range: 11:10-11:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 11:13-11:38
+        name: "IndexOutOfBoundsException"
+      )
+      (BlockStatement
+        range: 11:40-13:2
+        (ExpressionStatement
+          range: 12:5-12:18
+          (CallExpression
+            range: 12:5-12:17
+            (IdentifierExpression
+              range: 12:5-12:10
+              name: "print"
+            )
+            (LiteralExpression
+              range: 12:11-12:16
+              kind: STRING
+              text: "\"i16\""
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:20 -> i32
+  3:11-3:47 -> IndexOutOfBoundsException
+  3:15-3:40 -> IndexOutOfBoundsException
+  3:41-3:46 -> i8
+  5:5-5:10 -> (any) => void
+  5:5-5:16 -> void
+  5:11-5:15 -> string
+  8:21-8:24 -> i32
+  10:11-10:48 -> IndexOutOfBoundsException
+  10:15-10:40 -> IndexOutOfBoundsException
+  10:41-10:47 -> i16
+  12:5-12:10 -> (any) => void
+  12:5-12:17 -> void
+  12:11-12:16 -> string
+
+Resolved types:
+  1:14-1:16 -> i8
+  3:11-3:47 -> IndexOutOfBoundsException
+  4:13-4:38 -> IndexOutOfBoundsException
+  8:15-8:18 -> i16
+  10:11-10:48 -> IndexOutOfBoundsException
+  11:13-11:38 -> IndexOutOfBoundsException
+
+Conversions:
+  1:19-1:20 -> i32 -> i8
+  3:41-3:46 -> i8 -> i32
+  8:21-8:24 -> i32 -> i16
+  10:41-10:47 -> i16 -> i32
+
+Declarations:
+  1:7-1:12 -> const small: i8
+  4:10-4:11 -> const e: IndexOutOfBoundsException
+  8:7-8:13 -> const medium: i16
+  11:10-11:11 -> const e: IndexOutOfBoundsException
+
+References:
+  3:15-3:40 -> 3:11-3:47
+  3:41-3:46 -> 1:7-1:12
+  5:5-5:10 -> builtin print
+  10:15-10:40 -> 10:11-10:48
+  10:41-10:47 -> 8:7-8:13
+  12:5-12:10 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field small B flags [PUBLIC, STATIC, FINAL] = 7
+  field medium S flags [PUBLIC, STATIC, FINAL] = 300
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    NEW java/lang/IndexOutOfBoundsException
+    DUP
+    GETSTATIC Test.small B
+    INVOKESPECIAL java/lang/IndexOutOfBoundsException.<init>(I)V
+    ATHROW
+   L1:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "i8"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L2
+   L2:
+    NOP
+    NEW java/lang/IndexOutOfBoundsException
+    DUP
+    GETSTATIC Test.medium S
+    INVOKESPECIAL java/lang/IndexOutOfBoundsException.<init>(I)V
+    ATHROW
+   L3:
+    ASTORE_1 1
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "i16"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L4:
+    RETURN
+    catch java/lang/IndexOutOfBoundsException from L0 to L1 handler L1
+    catch java/lang/IndexOutOfBoundsException from L2 to L3 handler L3
+    max stack 3 max locals 2
+
+--- OUTPUT ---
+
+i8
+i16
+

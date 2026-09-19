@@ -1,0 +1,306 @@
+const cause: Throwable = new IOException("cause");
+try {
+    throw new RuntimeException("outer", cause);
+} catch (e: RuntimeException) {
+    print(e.getMessage());
+    const actual = e.getCause();
+    print(actual == cause);
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "cause" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "Throwable" (1:14-1:23)
+EQUAL (1:24-1:25)
+NEW (1:26-1:29)
+IDENTIFIER "IOException" (1:30-1:41)
+LEFT_PAREN (1:41-1:42)
+STRING_LITERAL "\"cause\"" (1:42-1:49)
+RIGHT_PAREN (1:49-1:50)
+SEMICOLON (1:50-1:51)
+TRY (2:1-2:4)
+LEFT_BRACE (2:5-2:6)
+THROW (3:5-3:10)
+NEW (3:11-3:14)
+IDENTIFIER "RuntimeException" (3:15-3:31)
+LEFT_PAREN (3:31-3:32)
+STRING_LITERAL "\"outer\"" (3:32-3:39)
+COMMA (3:39-3:40)
+IDENTIFIER "cause" (3:41-3:46)
+RIGHT_PAREN (3:46-3:47)
+SEMICOLON (3:47-3:48)
+RIGHT_BRACE (4:1-4:2)
+CATCH (4:3-4:8)
+LEFT_PAREN (4:9-4:10)
+IDENTIFIER "e" (4:10-4:11)
+COLON (4:11-4:12)
+IDENTIFIER "RuntimeException" (4:13-4:29)
+RIGHT_PAREN (4:29-4:30)
+LEFT_BRACE (4:31-4:32)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+IDENTIFIER "e" (5:11-5:12)
+DOT (5:12-5:13)
+IDENTIFIER "getMessage" (5:13-5:23)
+LEFT_PAREN (5:23-5:24)
+RIGHT_PAREN (5:24-5:25)
+RIGHT_PAREN (5:25-5:26)
+SEMICOLON (5:26-5:27)
+CONST (6:5-6:10)
+IDENTIFIER "actual" (6:11-6:17)
+EQUAL (6:18-6:19)
+IDENTIFIER "e" (6:20-6:21)
+DOT (6:21-6:22)
+IDENTIFIER "getCause" (6:22-6:30)
+LEFT_PAREN (6:30-6:31)
+RIGHT_PAREN (6:31-6:32)
+SEMICOLON (6:32-6:33)
+IDENTIFIER "print" (7:5-7:10)
+LEFT_PAREN (7:10-7:11)
+IDENTIFIER "actual" (7:11-7:17)
+EQUAL_EQUAL (7:18-7:20)
+IDENTIFIER "cause" (7:21-7:26)
+RIGHT_PAREN (7:26-7:27)
+SEMICOLON (7:27-7:28)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (VariableDeclaration
+    range: 1:1-1:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "cause"
+    )
+    (NamedTypeNode
+      range: 1:14-1:23
+      name: "Throwable"
+    )
+    (NewExpression
+      range: 1:26-1:50
+      (IdentifierExpression
+        range: 1:30-1:41
+        name: "IOException"
+      )
+      (LiteralExpression
+        range: 1:42-1:49
+        kind: STRING
+        text: "\"cause\""
+      )
+    )
+  )
+  (TryStatement
+    range: 2:1-8:2
+    (BlockStatement
+      range: 2:5-4:2
+      (ThrowStatement
+        range: 3:5-3:48
+        (NewExpression
+          range: 3:11-3:47
+          (IdentifierExpression
+            range: 3:15-3:31
+            name: "RuntimeException"
+          )
+          (LiteralExpression
+            range: 3:32-3:39
+            kind: STRING
+            text: "\"outer\""
+          )
+          (IdentifierExpression
+            range: 3:41-3:46
+            name: "cause"
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 4:3-8:2
+      (IdentifierDeclaration
+        range: 4:10-4:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 4:13-4:29
+        name: "RuntimeException"
+      )
+      (BlockStatement
+        range: 4:31-8:2
+        (ExpressionStatement
+          range: 5:5-5:27
+          (CallExpression
+            range: 5:5-5:26
+            (IdentifierExpression
+              range: 5:5-5:10
+              name: "print"
+            )
+            (CallExpression
+              range: 5:11-5:25
+              (MemberExpression
+                range: 5:11-5:23
+                (IdentifierExpression
+                  range: 5:11-5:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 5:13-5:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+        (VariableDeclaration
+          range: 6:5-6:33
+          mutability: CONST
+          (IdentifierDeclaration
+            range: 6:11-6:17
+            name: "actual"
+          )
+          type: null
+          (CallExpression
+            range: 6:20-6:32
+            (MemberExpression
+              range: 6:20-6:30
+              (IdentifierExpression
+                range: 6:20-6:21
+                name: "e"
+              )
+              (IdentifierExpression
+                range: 6:22-6:30
+                name: "getCause"
+              )
+            )
+          )
+        )
+        (ExpressionStatement
+          range: 7:5-7:28
+          (CallExpression
+            range: 7:5-7:27
+            (IdentifierExpression
+              range: 7:5-7:10
+              name: "print"
+            )
+            (BinaryExpression
+              range: 7:11-7:26
+              (IdentifierExpression
+                range: 7:11-7:17
+                name: "actual"
+              )
+              operator: EQUAL
+              (IdentifierExpression
+                range: 7:21-7:26
+                name: "cause"
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:26-1:50 -> IOException
+  1:30-1:41 -> IOException
+  1:42-1:49 -> string
+  3:11-3:47 -> RuntimeException
+  3:15-3:31 -> RuntimeException
+  3:32-3:39 -> string
+  3:41-3:46 -> Throwable
+  5:5-5:10 -> (any) => void
+  5:5-5:26 -> void
+  5:11-5:12 -> RuntimeException
+  5:11-5:23 -> () => string | null
+  5:11-5:25 -> string | null
+  5:13-5:23 -> () => string | null
+  6:20-6:21 -> RuntimeException
+  6:20-6:30 -> () => Throwable | null
+  6:20-6:32 -> Throwable | null
+  6:22-6:30 -> () => Throwable | null
+  7:5-7:10 -> (any) => void
+  7:5-7:27 -> void
+  7:11-7:17 -> Throwable | null
+  7:11-7:26 -> bool
+  7:21-7:26 -> Throwable
+
+Resolved types:
+  1:14-1:23 -> Throwable
+  1:26-1:50 -> IOException
+  3:11-3:47 -> RuntimeException
+  4:13-4:29 -> RuntimeException
+
+Conversions:
+  7:21-7:26 -> Throwable -> Throwable | null
+
+Declarations:
+  1:7-1:12 -> const cause: Throwable
+  4:10-4:11 -> const e: RuntimeException
+  6:11-6:17 -> const actual: Throwable | null
+
+References:
+  1:30-1:41 -> 1:26-1:50
+  3:15-3:31 -> 3:11-3:47
+  3:41-3:46 -> 1:7-1:12
+  5:5-5:10 -> builtin print
+  5:11-5:12 -> 4:10-4:11
+  5:13-5:23 -> 5:11-5:23
+  6:20-6:21 -> 4:10-4:11
+  6:22-6:30 -> 6:20-6:30
+  7:5-7:10 -> builtin print
+  7:11-7:17 -> 6:11-6:17
+  7:21-7:26 -> 1:7-1:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field cause Ljava/lang/Throwable; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW java/io/IOException
+    DUP
+    LDC "cause"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.cause Ljava/lang/Throwable;
+   L0:
+    NOP
+    NEW java/lang/RuntimeException
+    DUP
+    LDC "outer"
+    GETSTATIC Test.cause Ljava/lang/Throwable;
+    INVOKESPECIAL java/lang/RuntimeException.<init>(Ljava/lang/String;Ljava/lang/Throwable;)V
+    ATHROW
+   L1:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getCause()Ljava/lang/Throwable;
+    CHECKCAST java/lang/Throwable
+    ASTORE_1 1
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    GETSTATIC Test.cause Ljava/lang/Throwable;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GOTO L2
+   L2:
+    RETURN
+    catch java/lang/RuntimeException from L0 to L1 handler L1
+    max stack 4 max locals 2
+
+--- OUTPUT ---
+
+outer
+true
+

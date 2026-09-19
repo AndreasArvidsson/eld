@@ -1,0 +1,439 @@
+const matcher = Regex.compile(r"(?<optional>x)?y").matcher("y");
+print(matcher.matches());
+const numbered: string | null = matcher.group(1);
+const named: string | null = matcher.group("optional");
+print(numbered == null);
+print(named == null);
+print(matcher.group());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "matcher" (1:7-1:14)
+EQUAL (1:15-1:16)
+IDENTIFIER "Regex" (1:17-1:22)
+DOT (1:22-1:23)
+IDENTIFIER "compile" (1:23-1:30)
+LEFT_PAREN (1:30-1:31)
+RAW_STRING_LITERAL "\"(?<optional>x)?y\"" (1:31-1:50)
+RIGHT_PAREN (1:50-1:51)
+DOT (1:51-1:52)
+IDENTIFIER "matcher" (1:52-1:59)
+LEFT_PAREN (1:59-1:60)
+STRING_LITERAL "\"y\"" (1:60-1:63)
+RIGHT_PAREN (1:63-1:64)
+SEMICOLON (1:64-1:65)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "matcher" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "matches" (2:15-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+CONST (3:1-3:6)
+IDENTIFIER "numbered" (3:7-3:15)
+COLON (3:15-3:16)
+IDENTIFIER "string" (3:17-3:23)
+PIPE (3:24-3:25)
+NULL (3:26-3:30)
+EQUAL (3:31-3:32)
+IDENTIFIER "matcher" (3:33-3:40)
+DOT (3:40-3:41)
+IDENTIFIER "group" (3:41-3:46)
+LEFT_PAREN (3:46-3:47)
+INTEGER_LITERAL "1" (3:47-3:48)
+RIGHT_PAREN (3:48-3:49)
+SEMICOLON (3:49-3:50)
+CONST (4:1-4:6)
+IDENTIFIER "named" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "string" (4:14-4:20)
+PIPE (4:21-4:22)
+NULL (4:23-4:27)
+EQUAL (4:28-4:29)
+IDENTIFIER "matcher" (4:30-4:37)
+DOT (4:37-4:38)
+IDENTIFIER "group" (4:38-4:43)
+LEFT_PAREN (4:43-4:44)
+STRING_LITERAL "\"optional\"" (4:44-4:54)
+RIGHT_PAREN (4:54-4:55)
+SEMICOLON (4:55-4:56)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "numbered" (5:7-5:15)
+EQUAL_EQUAL (5:16-5:18)
+NULL (5:19-5:23)
+RIGHT_PAREN (5:23-5:24)
+SEMICOLON (5:24-5:25)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "named" (6:7-6:12)
+EQUAL_EQUAL (6:13-6:15)
+NULL (6:16-6:20)
+RIGHT_PAREN (6:20-6:21)
+SEMICOLON (6:21-6:22)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "matcher" (7:7-7:14)
+DOT (7:14-7:15)
+IDENTIFIER "group" (7:15-7:20)
+LEFT_PAREN (7:20-7:21)
+RIGHT_PAREN (7:21-7:22)
+RIGHT_PAREN (7:22-7:23)
+SEMICOLON (7:23-7:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:24
+  (VariableDeclaration
+    range: 1:1-1:65
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "matcher"
+    )
+    type: null
+    (CallExpression
+      range: 1:17-1:64
+      (MemberExpression
+        range: 1:17-1:59
+        (CallExpression
+          range: 1:17-1:51
+          (MemberExpression
+            range: 1:17-1:30
+            (IdentifierExpression
+              range: 1:17-1:22
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 1:23-1:30
+              name: "compile"
+            )
+          )
+          (LiteralExpression
+            range: 1:31-1:50
+            kind: RAW_STRING
+            text: "\"(?<optional>x)?y\""
+          )
+        )
+        (IdentifierExpression
+          range: 1:52-1:59
+          name: "matcher"
+        )
+      )
+      (LiteralExpression
+        range: 1:60-1:63
+        kind: STRING
+        text: "\"y\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:26
+    (CallExpression
+      range: 2:1-2:25
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:24
+        (MemberExpression
+          range: 2:7-2:22
+          (IdentifierExpression
+            range: 2:7-2:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 2:15-2:22
+            name: "matches"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "numbered"
+    )
+    (UnionTypeNode
+      range: 3:17-3:30
+      (NamedTypeNode
+        range: 3:17-3:23
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 3:26-3:30
+        name: "null"
+      )
+    )
+    (CallExpression
+      range: 3:33-3:49
+      (MemberExpression
+        range: 3:33-3:46
+        (IdentifierExpression
+          range: 3:33-3:40
+          name: "matcher"
+        )
+        (IdentifierExpression
+          range: 3:41-3:46
+          name: "group"
+        )
+      )
+      (LiteralExpression
+        range: 3:47-3:48
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "named"
+    )
+    (UnionTypeNode
+      range: 4:14-4:27
+      (NamedTypeNode
+        range: 4:14-4:20
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 4:23-4:27
+        name: "null"
+      )
+    )
+    (CallExpression
+      range: 4:30-4:55
+      (MemberExpression
+        range: 4:30-4:43
+        (IdentifierExpression
+          range: 4:30-4:37
+          name: "matcher"
+        )
+        (IdentifierExpression
+          range: 4:38-4:43
+          name: "group"
+        )
+      )
+      (LiteralExpression
+        range: 4:44-4:54
+        kind: STRING
+        text: "\"optional\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:25
+    (CallExpression
+      range: 5:1-5:24
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 5:7-5:23
+        (IdentifierExpression
+          range: 5:7-5:15
+          name: "numbered"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 5:19-5:23
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:22
+    (CallExpression
+      range: 6:1-6:21
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:20
+        (IdentifierExpression
+          range: 6:7-6:12
+          name: "named"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 6:16-6:20
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:24
+    (CallExpression
+      range: 7:1-7:23
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:22
+        (MemberExpression
+          range: 7:7-7:20
+          (IdentifierExpression
+            range: 7:7-7:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 7:15-7:20
+            name: "group"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:17-1:22 -> Regex
+  1:17-1:30 -> (string) => Regex
+  1:17-1:51 -> Regex
+  1:17-1:59 -> (string) => Matcher
+  1:17-1:64 -> Matcher
+  1:23-1:30 -> (string) => Regex
+  1:31-1:50 -> string
+  1:52-1:59 -> (string) => Matcher
+  1:60-1:63 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:25 -> void
+  2:7-2:14 -> Matcher
+  2:7-2:22 -> () => bool
+  2:7-2:24 -> bool
+  2:15-2:22 -> () => bool
+  3:33-3:40 -> Matcher
+  3:33-3:46 -> (i32) => string | null
+  3:33-3:49 -> string | null
+  3:41-3:46 -> (i32) => string | null
+  3:47-3:48 -> i32
+  4:30-4:37 -> Matcher
+  4:30-4:43 -> (string) => string | null
+  4:30-4:55 -> string | null
+  4:38-4:43 -> (string) => string | null
+  4:44-4:54 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:24 -> void
+  5:7-5:15 -> string | null
+  5:7-5:23 -> bool
+  5:19-5:23 -> null
+  6:1-6:6 -> (any) => void
+  6:1-6:21 -> void
+  6:7-6:12 -> string | null
+  6:7-6:20 -> bool
+  6:16-6:20 -> null
+  7:1-7:6 -> (any) => void
+  7:1-7:23 -> void
+  7:7-7:14 -> Matcher
+  7:7-7:20 -> () => string
+  7:7-7:22 -> string
+  7:15-7:20 -> () => string
+
+Resolved types:
+  3:17-3:23 -> string
+  3:17-3:30 -> string | null
+  3:26-3:30 -> null
+  4:14-4:20 -> string
+  4:14-4:27 -> string | null
+  4:23-4:27 -> null
+
+Conversions:
+  5:19-5:23 -> null -> string | null
+  6:16-6:20 -> null -> string | null
+
+Declarations:
+  1:7-1:14 -> const matcher: Matcher
+  3:7-3:15 -> const numbered: string | null
+  4:7-4:12 -> const named: string | null
+
+References:
+  1:17-1:22 -> 1:17-1:22
+  1:23-1:30 -> 1:17-1:30
+  1:52-1:59 -> 1:17-1:59
+  2:1-2:6 -> builtin print
+  2:7-2:14 -> 1:7-1:14
+  2:15-2:22 -> 2:7-2:22
+  3:33-3:40 -> 1:7-1:14
+  3:41-3:46 -> 3:33-3:46
+  4:30-4:37 -> 1:7-1:14
+  4:38-4:43 -> 4:30-4:43
+  5:1-5:6 -> builtin print
+  5:7-5:15 -> 3:7-3:15
+  6:1-6:6 -> builtin print
+  6:7-6:12 -> 4:7-4:12
+  7:1-7:6 -> builtin print
+  7:7-7:14 -> 1:7-1:14
+  7:15-7:20 -> 7:7-7:20
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field matcher Ljava/util/regex/Matcher; flags [PUBLIC, STATIC, FINAL]
+  field numbered Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
+  field named Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC "(?<optional>x)?y"
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    LDC "y"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC 1
+    INVOKEVIRTUAL java/util/regex/Matcher.group(I)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    PUTSTATIC Test.numbered Ljava/lang/String;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    LDC "optional"
+    INVOKEVIRTUAL java/util/regex/Matcher.group(Ljava/lang/String;)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    PUTSTATIC Test.named Ljava/lang/String;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.numbered Ljava/lang/String;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.named Ljava/lang/String;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.group()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+true
+y
+

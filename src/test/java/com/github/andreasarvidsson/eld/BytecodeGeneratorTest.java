@@ -53,6 +53,137 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void nullableStringsUseStringPrintOverload() {
+        final ClassModel module = inspect("""
+            func show(value: string | null) { print(value); }
+            """);
+        final InvokeInstruction println =
+            module.methods()
+                .stream()
+                .filter(method -> method.methodName().equalsString("show"))
+                .flatMap(method -> BytecodeUtil.instructions(method).stream())
+                .filter(InvokeInstruction.class::isInstance)
+                .map(InvokeInstruction.class::cast)
+                .filter(call -> call.name().equalsString("println"))
+                .findFirst()
+                .orElseThrow();
+        assertEquals("(Ljava/lang/String;)V", println.type().stringValue());
+    }
+
+    @Test
+    void exceptionsUseJvmHandlersAndPreserveCheckedIdentity() throws Exception {
+        final String source = """
+            const original: IOException = new IOException("checked");
+            func fail() { throw original; }
+            func forward() { fail(); }
+            func caught() bool {
+                try { forward(); }
+                catch (e: IOException) { return e == original; }
+                return false;
+            }
+            """;
+        final Class<?> module = compileClass(source, "Test");
+        assertEquals(
+            java.io.IOException.class,
+            module.getField("original").getType()
+        );
+        assertEquals(true, module.getMethod("caught").invoke(null));
+        final InvocationTargetException thrown =
+            assertThrows(
+                InvocationTargetException.class,
+                () -> module.getMethod("forward").invoke(null)
+            );
+        assertSame(module.getField("original").get(null), thrown.getCause());
+        final ClassModel model = inspect(source);
+        final var fail =
+            model.methods()
+                .stream()
+                .filter(method -> method.methodName().equalsString("fail"))
+                .findFirst()
+                .orElseThrow();
+        assertTrue(
+            BytecodeUtil.instructions(fail)
+                .stream()
+                .anyMatch(instruction -> instruction.opcode() == Opcode.ATHROW)
+        );
+        assertTrue(
+            fail.findAttribute(java.lang.classfile.Attributes.exceptions())
+                .isEmpty()
+        );
+        final var caught =
+            model.methods()
+                .stream()
+                .filter(method -> method.methodName().equalsString("caught"))
+                .findFirst()
+                .orElseThrow();
+        final var handlers = caught.code().orElseThrow().exceptionHandlers();
+        assertEquals(1, handlers.size());
+        assertEquals(
+            "java/io/IOException",
+            handlers.getFirst().catchType().orElseThrow().asInternalName()
+        );
+    }
+
+    @Test
+    void finallyPreservesSavedValuesAndOverridesAbruptExits() throws Exception {
+        final Class<?> module =
+            compileClass(
+                """
+                    var value: i64 = 7;
+                    func saved() i64 { try { return value; } finally { value = 9; } }
+                    func overridden() i32 { try { return 1; } finally { return 2; } }
+                    func recovered() i32 { try { throw new IOException("old"); } finally { return 3; } }
+                    func outerHandler() i32 {
+                        try {
+                            try { return 1; } finally { throw new IOException("cleanup"); }
+                        } catch (e: IOException) { return 4; }
+                    }
+                    """,
+                "Test"
+            );
+        assertEquals(7L, module.getMethod("saved").invoke(null));
+        assertEquals(9L, module.getField("value").get(null));
+        assertEquals(2, module.getMethod("overridden").invoke(null));
+        assertEquals(3, module.getMethod("recovered").invoke(null));
+        assertEquals(4, module.getMethod("outerHandler").invoke(null));
+    }
+
+    @Test
+    void constructorsTrackThrowCatchAndFinallyInitialization()
+        throws Exception {
+        final Class<?> module = compileClass("""
+            class Resource {
+                public const value: i32;
+                public constructor() {
+                    try { throw new IOException("io"); }
+                    catch (e: IOException) { this.value = 7; }
+                }
+            }
+            const resource = new Resource();
+            const value = resource.value;
+            """, "Test");
+        assertEquals(7, module.getField("value").get(null));
+        assertThrows(SemanticException.class, () -> compileClass("""
+            class Resource {
+                public const value: i32;
+                public constructor() {
+                    try { this.value = 1; }
+                    catch (e: IOException) {}
+                }
+            }
+            """, "Test"));
+        assertThrows(SemanticException.class, () -> compileClass("""
+            class Resource {
+                public const value: i32;
+                public constructor() {
+                    try { this.value = 1; }
+                    finally { this.value = 2; }
+                }
+            }
+            """, "Test"));
+    }
+
+    @Test
     void regexUsesJavaPatternAndMatcher() throws Exception {
         final Class<?> module =
             compileClass(

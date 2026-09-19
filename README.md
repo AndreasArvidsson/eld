@@ -85,6 +85,27 @@ if (matcher.find()) {
 }
 ```
 
+## Exceptions
+
+Eld uses JVM exceptions directly. Use `throw` with a Java throwable and bind
+catch variables with the normal `name: Type` syntax:
+
+```text
+func read() {
+    throw new IOException("Read failed");
+}
+
+try {
+    read();
+} catch (e: IOException) {
+    print(e.getMessage());
+} catch (e: RuntimeException) {
+    print(e.getMessage());
+} finally {
+    print("cleanup");
+}
+```
+
 ## Arrays, slices, and tuples
 
 ```text

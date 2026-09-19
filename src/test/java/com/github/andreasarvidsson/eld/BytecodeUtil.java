@@ -196,6 +196,21 @@ public class BytecodeUtil {
                         text.append('\n');
                     }
                 }
+                for (final var handler : code.exceptionHandlers()) {
+                    text.append("    catch ")
+                        .append(
+                            handler.catchType()
+                                .map(type -> type.asInternalName())
+                                .orElse("all")
+                        )
+                        .append(" from L")
+                        .append(labels.get(handler.tryStart()))
+                        .append(" to L")
+                        .append(labels.get(handler.tryEnd()))
+                        .append(" handler L")
+                        .append(labels.get(handler.handler()))
+                        .append('\n');
+                }
                 text.append("    max stack ")
                     .append(
                         ((java.lang.classfile.attribute.CodeAttribute) code)

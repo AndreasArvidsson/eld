@@ -1,0 +1,47 @@
+try {}
+catch (e: string) {}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+RIGHT_BRACE (1:6-1:7)
+CATCH (2:1-2:6)
+LEFT_PAREN (2:7-2:8)
+IDENTIFIER "e" (2:8-2:9)
+COLON (2:9-2:10)
+IDENTIFIER "string" (2:11-2:17)
+RIGHT_PAREN (2:17-2:18)
+LEFT_BRACE (2:19-2:20)
+RIGHT_BRACE (2:20-2:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:21
+  (TryStatement
+    range: 1:1-2:21
+    (BlockStatement
+      range: 1:5-1:7
+    )
+    (CatchClause
+      range: 2:1-2:21
+      (IdentifierDeclaration
+        range: 2:8-2:9
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 2:11-2:17
+        name: "string"
+      )
+      (BlockStatement
+        range: 2:19-2:21
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expected a JVM throwable type, found string at 2:11-2:17

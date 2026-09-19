@@ -1,0 +1,17 @@
+try {} catch (e) {}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+RIGHT_BRACE (1:6-1:7)
+CATCH (1:8-1:13)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "e" (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+LEFT_BRACE (1:18-1:19)
+RIGHT_BRACE (1:19-1:20)
+
+--- AST ---
+
+ParserException: Expected COLON, but found RIGHT_PAREN at 1:16-1:17

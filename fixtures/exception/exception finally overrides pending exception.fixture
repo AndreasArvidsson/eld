@@ -1,0 +1,346 @@
+func recovered() i32 {
+    try {
+        throw new IOException("discarded");
+    } finally {
+        return 3;
+    }
+}
+print(recovered());
+try {
+    try {
+        throw new IOException("old");
+    } finally {
+        throw new IllegalStateException("new");
+    }
+} catch (e: IllegalStateException) {
+    print(e.getMessage());
+}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "recovered" (1:6-1:15)
+LEFT_PAREN (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+IDENTIFIER "i32" (1:18-1:21)
+LEFT_BRACE (1:22-1:23)
+TRY (2:5-2:8)
+LEFT_BRACE (2:9-2:10)
+THROW (3:9-3:14)
+NEW (3:15-3:18)
+IDENTIFIER "IOException" (3:19-3:30)
+LEFT_PAREN (3:30-3:31)
+STRING_LITERAL "\"discarded\"" (3:31-3:42)
+RIGHT_PAREN (3:42-3:43)
+SEMICOLON (3:43-3:44)
+RIGHT_BRACE (4:5-4:6)
+FINALLY (4:7-4:14)
+LEFT_BRACE (4:15-4:16)
+RETURN (5:9-5:15)
+INTEGER_LITERAL "3" (5:16-5:17)
+SEMICOLON (5:17-5:18)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "recovered" (8:7-8:16)
+LEFT_PAREN (8:16-8:17)
+RIGHT_PAREN (8:17-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+TRY (9:1-9:4)
+LEFT_BRACE (9:5-9:6)
+TRY (10:5-10:8)
+LEFT_BRACE (10:9-10:10)
+THROW (11:9-11:14)
+NEW (11:15-11:18)
+IDENTIFIER "IOException" (11:19-11:30)
+LEFT_PAREN (11:30-11:31)
+STRING_LITERAL "\"old\"" (11:31-11:36)
+RIGHT_PAREN (11:36-11:37)
+SEMICOLON (11:37-11:38)
+RIGHT_BRACE (12:5-12:6)
+FINALLY (12:7-12:14)
+LEFT_BRACE (12:15-12:16)
+THROW (13:9-13:14)
+NEW (13:15-13:18)
+IDENTIFIER "IllegalStateException" (13:19-13:40)
+LEFT_PAREN (13:40-13:41)
+STRING_LITERAL "\"new\"" (13:41-13:46)
+RIGHT_PAREN (13:46-13:47)
+SEMICOLON (13:47-13:48)
+RIGHT_BRACE (14:5-14:6)
+RIGHT_BRACE (15:1-15:2)
+CATCH (15:3-15:8)
+LEFT_PAREN (15:9-15:10)
+IDENTIFIER "e" (15:10-15:11)
+COLON (15:11-15:12)
+IDENTIFIER "IllegalStateException" (15:13-15:34)
+RIGHT_PAREN (15:34-15:35)
+LEFT_BRACE (15:36-15:37)
+IDENTIFIER "print" (16:5-16:10)
+LEFT_PAREN (16:10-16:11)
+IDENTIFIER "e" (16:11-16:12)
+DOT (16:12-16:13)
+IDENTIFIER "getMessage" (16:13-16:23)
+LEFT_PAREN (16:23-16:24)
+RIGHT_PAREN (16:24-16:25)
+RIGHT_PAREN (16:25-16:26)
+SEMICOLON (16:26-16:27)
+RIGHT_BRACE (17:1-17:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:2
+  (FunctionDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:6-1:15
+      name: "recovered"
+    )
+    (NamedTypeNode
+      range: 1:18-1:21
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:22-7:2
+      (TryStatement
+        range: 2:5-6:6
+        (BlockStatement
+          range: 2:9-4:6
+          (ThrowStatement
+            range: 3:9-3:44
+            (NewExpression
+              range: 3:15-3:43
+              (IdentifierExpression
+                range: 3:19-3:30
+                name: "IOException"
+              )
+              (LiteralExpression
+                range: 3:31-3:42
+                kind: STRING
+                text: "\"discarded\""
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 4:15-6:6
+          (ReturnStatement
+            range: 5:9-5:18
+            (LiteralExpression
+              range: 5:16-5:17
+              kind: INT
+              text: "3"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:18
+        (IdentifierExpression
+          range: 8:7-8:16
+          name: "recovered"
+        )
+      )
+    )
+  )
+  (TryStatement
+    range: 9:1-17:2
+    (BlockStatement
+      range: 9:5-15:2
+      (TryStatement
+        range: 10:5-14:6
+        (BlockStatement
+          range: 10:9-12:6
+          (ThrowStatement
+            range: 11:9-11:38
+            (NewExpression
+              range: 11:15-11:37
+              (IdentifierExpression
+                range: 11:19-11:30
+                name: "IOException"
+              )
+              (LiteralExpression
+                range: 11:31-11:36
+                kind: STRING
+                text: "\"old\""
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 12:15-14:6
+          (ThrowStatement
+            range: 13:9-13:48
+            (NewExpression
+              range: 13:15-13:47
+              (IdentifierExpression
+                range: 13:19-13:40
+                name: "IllegalStateException"
+              )
+              (LiteralExpression
+                range: 13:41-13:46
+                kind: STRING
+                text: "\"new\""
+              )
+            )
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 15:3-17:2
+      (IdentifierDeclaration
+        range: 15:10-15:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 15:13-15:34
+        name: "IllegalStateException"
+      )
+      (BlockStatement
+        range: 15:36-17:2
+        (ExpressionStatement
+          range: 16:5-16:27
+          (CallExpression
+            range: 16:5-16:26
+            (IdentifierExpression
+              range: 16:5-16:10
+              name: "print"
+            )
+            (CallExpression
+              range: 16:11-16:25
+              (MemberExpression
+                range: 16:11-16:23
+                (IdentifierExpression
+                  range: 16:11-16:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 16:13-16:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:15-3:43 -> IOException
+  3:19-3:30 -> IOException
+  3:31-3:42 -> string
+  5:16-5:17 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:16 -> () => i32
+  8:7-8:18 -> i32
+  11:15-11:37 -> IOException
+  11:19-11:30 -> IOException
+  11:31-11:36 -> string
+  13:15-13:47 -> IllegalStateException
+  13:19-13:40 -> IllegalStateException
+  13:41-13:46 -> string
+  16:5-16:10 -> (any) => void
+  16:5-16:26 -> void
+  16:11-16:12 -> IllegalStateException
+  16:11-16:23 -> () => string | null
+  16:11-16:25 -> string | null
+  16:13-16:23 -> () => string | null
+
+Resolved types:
+  1:18-1:21 -> i32
+  3:15-3:43 -> IOException
+  11:15-11:37 -> IOException
+  13:15-13:47 -> IllegalStateException
+  15:13-15:34 -> IllegalStateException
+
+Declarations:
+  1:6-1:15 -> recovered() => i32
+  15:10-15:11 -> const e: IllegalStateException
+
+References:
+  3:19-3:30 -> 3:15-3:43
+  8:1-8:6 -> builtin print
+  8:7-8:16 -> 1:6-1:15
+  11:19-11:30 -> 11:15-11:37
+  13:19-13:40 -> 13:15-13:47
+  16:5-16:10 -> builtin print
+  16:11-16:12 -> 15:10-15:11
+  16:13-16:23 -> 16:11-16:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method recovered()I flags [PUBLIC, STATIC]
+   L0:
+    NOP
+    NEW java/io/IOException
+    DUP
+    LDC "discarded"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ASTORE_0 0
+    LDC 3
+    IRETURN
+    catch all from L0 to L1 handler L1
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.recovered()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+   L0:
+    NOP
+   L1:
+    NOP
+    NEW java/io/IOException
+    DUP
+    LDC "old"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L2:
+    ASTORE_0 0
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "new"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L3:
+    ASTORE_1 1
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L4:
+    RETURN
+    catch all from L1 to L2 handler L2
+    catch java/lang/IllegalStateException from L0 to L3 handler L3
+    max stack 3 max locals 2
+
+--- OUTPUT ---
+
+3
+new
+

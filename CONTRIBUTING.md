@@ -218,7 +218,6 @@ Immutable by default with `mut` keyword
 
 ### Miscellaneous
 
-- Exceptions
 - Something similar to pythons dir() and help()
 - Refactor large files
 - Export & import

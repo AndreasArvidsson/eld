@@ -1,0 +1,251 @@
+var index = 0;
+while (index < 3) {
+    index++;
+    try {
+        break;
+    } finally {
+        if (index < 3) {
+            continue;
+        }
+    }
+}
+print(index);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "index" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+WHILE (2:1-2:6)
+LEFT_PAREN (2:7-2:8)
+IDENTIFIER "index" (2:8-2:13)
+LESS (2:14-2:15)
+INTEGER_LITERAL "3" (2:16-2:17)
+RIGHT_PAREN (2:17-2:18)
+LEFT_BRACE (2:19-2:20)
+IDENTIFIER "index" (3:5-3:10)
+PLUS_PLUS (3:10-3:12)
+SEMICOLON (3:12-3:13)
+TRY (4:5-4:8)
+LEFT_BRACE (4:9-4:10)
+BREAK (5:9-5:14)
+SEMICOLON (5:14-5:15)
+RIGHT_BRACE (6:5-6:6)
+FINALLY (6:7-6:14)
+LEFT_BRACE (6:15-6:16)
+IF (7:9-7:11)
+LEFT_PAREN (7:12-7:13)
+IDENTIFIER "index" (7:13-7:18)
+LESS (7:19-7:20)
+INTEGER_LITERAL "3" (7:21-7:22)
+RIGHT_PAREN (7:22-7:23)
+LEFT_BRACE (7:24-7:25)
+CONTINUE (8:13-8:21)
+SEMICOLON (8:21-8:22)
+RIGHT_BRACE (9:9-9:10)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "index" (12:7-12:12)
+RIGHT_PAREN (12:12-12:13)
+SEMICOLON (12:13-12:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:14
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "index"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (WhileStatement
+    range: 2:1-11:2
+    (BinaryExpression
+      range: 2:8-2:17
+      (IdentifierExpression
+        range: 2:8-2:13
+        name: "index"
+      )
+      operator: LESS
+      (LiteralExpression
+        range: 2:16-2:17
+        kind: INT
+        text: "3"
+      )
+    )
+    (BlockStatement
+      range: 2:19-11:2
+      (ExpressionStatement
+        range: 3:5-3:13
+        (PostfixExpression
+          range: 3:5-3:12
+          (IdentifierExpression
+            range: 3:5-3:10
+            name: "index"
+          )
+          operator: INCREMENT
+        )
+      )
+      (TryStatement
+        range: 4:5-10:6
+        (BlockStatement
+          range: 4:9-6:6
+          (BreakStatement
+            range: 5:9-5:15
+          )
+        )
+        (BlockStatement
+          range: 6:15-10:6
+          (ExpressionStatement
+            range: 7:9-9:10
+            (IfExpression
+              range: 7:9-9:10
+              (BinaryExpression
+                range: 7:13-7:22
+                (IdentifierExpression
+                  range: 7:13-7:18
+                  name: "index"
+                )
+                operator: LESS
+                (LiteralExpression
+                  range: 7:21-7:22
+                  kind: INT
+                  text: "3"
+                )
+              )
+              (BlockStatement
+                range: 7:24-9:10
+                (ContinueStatement
+                  range: 8:13-8:22
+                )
+              )
+              elseBranch: null
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:14
+    (CallExpression
+      range: 12:1-12:13
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:7-12:12
+        name: "index"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  2:8-2:13 -> i32
+  2:8-2:17 -> bool
+  2:16-2:17 -> i32
+  3:5-3:10 -> i32
+  3:5-3:12 -> i32
+  7:9-9:10 -> void
+  7:13-7:18 -> i32
+  7:13-7:22 -> bool
+  7:21-7:22 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:13 -> void
+  12:7-12:12 -> i32
+
+Declarations:
+  1:5-1:10 -> var index: i32
+
+References:
+  2:8-2:13 -> 1:5-1:10
+  3:5-3:10 -> 1:5-1:10
+  7:13-7:18 -> 1:5-1:10
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 1:5-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field index I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.index I
+   L0:
+    GETSTATIC Test.index I
+    LDC 3
+    IF_ICMPLT L1
+    ICONST_0 0
+    GOTO L2
+   L1:
+    ICONST_1 1
+   L2:
+    IFEQ L13
+    GETSTATIC Test.index I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test.index I
+    POP
+   L3:
+    NOP
+   L4:
+    GETSTATIC Test.index I
+    LDC 3
+    IF_ICMPLT L5
+    ICONST_0 0
+    GOTO L6
+   L5:
+    ICONST_1 1
+   L6:
+    IFEQ L7
+    GOTO L0
+   L7:
+    GOTO L13
+   L8:
+    ATHROW
+   L9:
+    ASTORE_0 0
+    GETSTATIC Test.index I
+    LDC 3
+    IF_ICMPLT L10
+    ICONST_0 0
+    GOTO L11
+   L10:
+    ICONST_1 1
+   L11:
+    IFEQ L12
+    GOTO L0
+   L12:
+    ALOAD_0 0
+    ATHROW
+   L13:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    catch all from L3 to L4 handler L9
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+3
+

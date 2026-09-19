@@ -1,0 +1,256 @@
+class Resource {
+    public const value: i32;
+    public constructor() {
+        try {
+            return;
+        } finally {
+            this.value = 7;
+        }
+    }
+}
+const resource = new Resource();
+print(resource.value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Resource" (1:7-1:15)
+LEFT_BRACE (1:16-1:17)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+TRY (4:9-4:12)
+LEFT_BRACE (4:13-4:14)
+RETURN (5:13-5:19)
+SEMICOLON (5:19-5:20)
+RIGHT_BRACE (6:9-6:10)
+FINALLY (6:11-6:18)
+LEFT_BRACE (6:19-6:20)
+THIS (7:13-7:17)
+DOT (7:17-7:18)
+IDENTIFIER "value" (7:18-7:23)
+EQUAL (7:24-7:25)
+INTEGER_LITERAL "7" (7:26-7:27)
+SEMICOLON (7:27-7:28)
+RIGHT_BRACE (8:9-8:10)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+CONST (11:1-11:6)
+IDENTIFIER "resource" (11:7-11:15)
+EQUAL (11:16-11:17)
+NEW (11:18-11:21)
+IDENTIFIER "Resource" (11:22-11:30)
+LEFT_PAREN (11:30-11:31)
+RIGHT_PAREN (11:31-11:32)
+SEMICOLON (11:32-11:33)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "resource" (12:7-12:15)
+DOT (12:15-12:16)
+IDENTIFIER "value" (12:16-12:21)
+RIGHT_PAREN (12:21-12:22)
+SEMICOLON (12:22-12:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:23
+  (ClassDeclaration
+    range: 1:1-10:2
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "Resource"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-9:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-9:6
+        (BlockStatement
+          range: 3:26-9:6
+          (TryStatement
+            range: 4:9-8:10
+            (BlockStatement
+              range: 4:13-6:10
+              (ReturnStatement
+                range: 5:13-5:20
+                value: null
+              )
+            )
+            (BlockStatement
+              range: 6:19-8:10
+              (ExpressionStatement
+                range: 7:13-7:28
+                (AssignmentExpression
+                  range: 7:13-7:27
+                  (MemberExpression
+                    range: 7:13-7:23
+                    (ThisExpression
+                      range: 7:13-7:17
+                    )
+                    (IdentifierExpression
+                      range: 7:18-7:23
+                      name: "value"
+                    )
+                  )
+                  (LiteralExpression
+                    range: 7:26-7:27
+                    kind: INT
+                    text: "7"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:15
+      name: "resource"
+    )
+    type: null
+    (NewExpression
+      range: 11:18-11:32
+      (IdentifierExpression
+        range: 11:22-11:30
+        name: "Resource"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:23
+    (CallExpression
+      range: 12:1-12:22
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:21
+        (IdentifierExpression
+          range: 12:7-12:15
+          name: "resource"
+        )
+        (IdentifierExpression
+          range: 12:16-12:21
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:13-7:17 -> Resource
+  7:13-7:23 -> i32
+  7:13-7:27 -> i32
+  7:18-7:23 -> i32
+  7:26-7:27 -> i32
+  11:18-11:32 -> Resource
+  11:22-11:30 -> Resource
+  12:1-12:6 -> (any) => void
+  12:1-12:22 -> void
+  12:7-12:15 -> Resource
+  12:7-12:21 -> i32
+  12:16-12:21 -> i32
+
+Resolved types:
+  2:25-2:28 -> i32
+
+Declarations:
+  1:7-1:15 -> class Resource
+  2:18-2:23 -> const value: i32
+  3:12-9:6 -> constructor()
+  11:7-11:15 -> const resource: Resource
+
+References:
+  7:18-7:23 -> 2:18-2:23
+  11:22-11:30 -> 1:7-1:15
+  12:1-12:6 -> builtin print
+  12:7-12:15 -> 11:7-11:15
+  12:16-12:21 -> 2:18-2:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Resource
+  inner class Test$Resource flags [PUBLIC, STATIC]
+  field resource LTest$Resource; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Resource
+    DUP
+    INVOKESPECIAL Test$Resource.<init>()V
+    PUTSTATIC Test.resource LTest$Resource;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resource LTest$Resource;
+    GETFIELD Test$Resource.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Resource flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+   L0:
+    NOP
+   L1:
+    ALOAD_0 0
+    LDC 7
+    DUP_X1
+    PUTFIELD Test$Resource.value I
+    POP
+    RETURN
+   L2:
+    ATHROW
+   L3:
+    ASTORE_1 1
+    ALOAD_0 0
+    LDC 7
+    DUP_X1
+    PUTFIELD Test$Resource.value I
+    POP
+    ALOAD_1 1
+    ATHROW
+    catch all from L0 to L1 handler L3
+    max stack 3 max locals 2
+
+--- OUTPUT ---
+
+7
+

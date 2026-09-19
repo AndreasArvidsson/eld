@@ -1,0 +1,186 @@
+try {
+    throw new IllegalArgumentException("Invalid value");
+} catch (e: IllegalArgumentException) {
+    print(e.getMessage());
+}
+print("continued");
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+THROW (2:5-2:10)
+NEW (2:11-2:14)
+IDENTIFIER "IllegalArgumentException" (2:15-2:39)
+LEFT_PAREN (2:39-2:40)
+STRING_LITERAL "\"Invalid value\"" (2:40-2:55)
+RIGHT_PAREN (2:55-2:56)
+SEMICOLON (2:56-2:57)
+RIGHT_BRACE (3:1-3:2)
+CATCH (3:3-3:8)
+LEFT_PAREN (3:9-3:10)
+IDENTIFIER "e" (3:10-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "IllegalArgumentException" (3:13-3:37)
+RIGHT_PAREN (3:37-3:38)
+LEFT_BRACE (3:39-3:40)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "e" (4:11-4:12)
+DOT (4:12-4:13)
+IDENTIFIER "getMessage" (4:13-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+RIGHT_PAREN (4:25-4:26)
+SEMICOLON (4:26-4:27)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"continued\"" (6:7-6:18)
+RIGHT_PAREN (6:18-6:19)
+SEMICOLON (6:19-6:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:20
+  (TryStatement
+    range: 1:1-5:2
+    (BlockStatement
+      range: 1:5-3:2
+      (ThrowStatement
+        range: 2:5-2:57
+        (NewExpression
+          range: 2:11-2:56
+          (IdentifierExpression
+            range: 2:15-2:39
+            name: "IllegalArgumentException"
+          )
+          (LiteralExpression
+            range: 2:40-2:55
+            kind: STRING
+            text: "\"Invalid value\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 3:3-5:2
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 3:13-3:37
+        name: "IllegalArgumentException"
+      )
+      (BlockStatement
+        range: 3:39-5:2
+        (ExpressionStatement
+          range: 4:5-4:27
+          (CallExpression
+            range: 4:5-4:26
+            (IdentifierExpression
+              range: 4:5-4:10
+              name: "print"
+            )
+            (CallExpression
+              range: 4:11-4:25
+              (MemberExpression
+                range: 4:11-4:23
+                (IdentifierExpression
+                  range: 4:11-4:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 4:13-4:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (ExpressionStatement
+    range: 6:1-6:20
+    (CallExpression
+      range: 6:1-6:19
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 6:7-6:18
+        kind: STRING
+        text: "\"continued\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:11-2:56 -> IllegalArgumentException
+  2:15-2:39 -> IllegalArgumentException
+  2:40-2:55 -> string
+  4:5-4:10 -> (any) => void
+  4:5-4:26 -> void
+  4:11-4:12 -> IllegalArgumentException
+  4:11-4:23 -> () => string | null
+  4:11-4:25 -> string | null
+  4:13-4:23 -> () => string | null
+  6:1-6:6 -> (any) => void
+  6:1-6:19 -> void
+  6:7-6:18 -> string
+
+Resolved types:
+  2:11-2:56 -> IllegalArgumentException
+  3:13-3:37 -> IllegalArgumentException
+
+Declarations:
+  3:10-3:11 -> const e: IllegalArgumentException
+
+References:
+  2:15-2:39 -> 2:11-2:56
+  4:5-4:10 -> builtin print
+  4:11-4:12 -> 3:10-3:11
+  4:13-4:23 -> 4:11-4:23
+  6:1-6:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    NEW java/lang/IllegalArgumentException
+    DUP
+    LDC "Invalid value"
+    INVOKESPECIAL java/lang/IllegalArgumentException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L2
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "continued"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    catch java/lang/IllegalArgumentException from L0 to L1 handler L1
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+Invalid value
+continued
+

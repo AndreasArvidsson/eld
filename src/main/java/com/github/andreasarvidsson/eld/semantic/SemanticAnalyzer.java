@@ -64,6 +64,9 @@ import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
+import com.github.andreasarvidsson.eld.parser.TryStatement;
+import com.github.andreasarvidsson.eld.parser.ThrowStatement;
+import com.github.andreasarvidsson.eld.parser.CatchClause;
 import com.github.andreasarvidsson.eld.parser.SliceExpression;
 import com.github.andreasarvidsson.eld.parser.Statement;
 import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
@@ -257,10 +260,88 @@ public final class SemanticAnalyzer {
                 analyzeBreakStatement(breakStatement, context);
             case YieldStatement yieldStatement ->
                 analyzeYieldStatement(yieldStatement, context);
+            case ThrowStatement thrown -> {
+                final Type type = analyzeExpression(thrown.value(), context);
+                requireThrowable(type, thrown.value().range());
+            }
+            case TryStatement guarded -> analyzeTryStatement(guarded, context);
             case ReturnStatement returnStatement ->
                 analyzeReturnStatement(returnStatement, context);
             case BlockStatement blockStatement ->
                 analyzeBlockStatement(blockStatement, context);
+        }
+    }
+
+    private static void requireThrowable(final Type type, final Range range) {
+        if (!isThrowable(type)) {
+            throw new SemanticException(
+                range,
+                "Expected a JVM throwable type, found %s",
+                type
+            );
+        }
+    }
+
+    private static boolean isThrowable(final Type type) {
+        if (type instanceof UnionType union) {
+            return union.memberTypes()
+                .stream()
+                .allMatch(SemanticAnalyzer::isThrowable);
+        }
+        return type instanceof InterfaceType javaType
+            && javaType.javaClass() != null
+            && Throwable.class.isAssignableFrom(javaType.javaClass());
+    }
+
+    private static void requireCatchType(final Type type, final Range range) {
+        if (!(type instanceof InterfaceType)) {
+            throw new SemanticException(
+                range,
+                "Expected a JVM throwable type, found %s",
+                type
+            );
+        }
+        requireThrowable(type, range);
+    }
+
+    private void analyzeTryStatement(
+        final TryStatement statement,
+        final SemanticContext context
+    ) {
+        analyzeBlockStatement(statement.body(), context);
+        final List<Type> previous = new ArrayList<>();
+        for (final CatchClause clause : statement.catches()) {
+            final Type type = resolveType(clause.type(), context);
+            requireCatchType(type, clause.type().range());
+            if (
+                previous.stream()
+                    .anyMatch(caught -> model.isSubtype(type, caught))
+            ) {
+                throw new SemanticException(
+                    clause.type().range(),
+                    "Unreachable catch for %s: an earlier catch handles this type",
+                    type
+                );
+            }
+            previous.add(type);
+            final Scope scope = new Scope(context.scope());
+            final VariableSymbol symbol =
+                new VariableSymbol(clause.name(), type, Mutability.CONST);
+            scope.declare(symbol);
+            model.setSymbol(clause.name(), symbol);
+            analyzeBlockStatement(
+                clause.body(),
+                new SemanticContext(
+                    scope,
+                    context.function(),
+                    context.loopDepth(),
+                    context.yields(),
+                    context.yieldType()
+                )
+            );
+        }
+        if (statement.finallyBody() != null) {
+            analyzeBlockStatement(statement.finallyBody(), context);
         }
     }
 
@@ -1692,6 +1773,12 @@ public final class SemanticAnalyzer {
         return switch (item) {
             case YieldStatement ignored -> true;
             case ReturnStatement ignored -> true;
+            case ThrowStatement ignored -> true;
+            case TryStatement statement -> (statement.finallyBody() != null
+                && producesValue(statement.finallyBody()))
+                || (producesValue(statement.body()) && statement.catches()
+                    .stream()
+                    .allMatch(clause -> producesValue(clause.body())));
             case BlockStatement block -> {
                 boolean produced = false;
                 for (final BlockItem child : block.items()) {
@@ -2015,6 +2102,74 @@ public final class SemanticAnalyzer {
                 yield type;
             }
         };
+    }
+
+    private boolean canAssignJavaArgument(
+        final Type from,
+        final Type to,
+        final Expression expression
+    ) {
+        if (
+            model.isSubtype(from, to)
+                || (to == BuiltinType.ANY && from != BuiltinType.VOID)
+        ) {
+            return true;
+        }
+        if (to instanceof UnionType union) {
+            return union.memberTypes()
+                .stream()
+                .anyMatch(
+                    member -> canAssignJavaArgument(from, member, expression)
+                );
+        }
+        if (
+            from instanceof BuiltinType source
+                && to instanceof BuiltinType target
+                && (source.isInteger() || source.isFloating())
+                && (target.isInteger() || target.isFloating())
+        ) {
+            if (target.isFloating() && isFloatingLiteral(expression)) {
+                return true;
+            }
+            final BigInteger literal = integerLiteral(expression);
+            if (literal != null && target.isInteger()) {
+                return literal.bitLength() < target.bits();
+            }
+            return (source.isInteger()
+                && (target.isFloating() || target.bits() >= source.bits()))
+                || (source.isFloating() && target.isFloating()
+                    && target.bits() >= source.bits());
+        }
+        return false;
+    }
+
+    private boolean isMoreSpecificJavaParameter(
+        final Type candidate,
+        final Type other
+    ) {
+        if (candidate.equals(other)) {
+            return false;
+        }
+        if (model.isSubtype(candidate, other)) {
+            return true;
+        }
+        if (
+            candidate instanceof BuiltinType source
+                && other instanceof BuiltinType target
+                && (source.isInteger() || source.isFloating())
+                && (target.isInteger() || target.isFloating())
+        ) {
+            final boolean widens =
+                source.isInteger()
+                    ? target.isFloating() || target.bits() >= source.bits()
+                    : target.isFloating() && target.bits() >= source.bits();
+            final boolean widensBack =
+                target.isInteger()
+                    ? source.isFloating() || source.bits() >= target.bits()
+                    : source.isFloating() && source.bits() >= target.bits();
+            return widens && !widensBack;
+        }
+        return false;
     }
 
     private @Nullable Type resolveAssignType(
@@ -2577,9 +2732,12 @@ public final class SemanticAnalyzer {
                         candidates = candidates.stream().filter(candidate -> {
                             for (int i = 0; i < arguments.size(); i++) {
                                 if (
-                                    !model.isSubtype(
+                                    !canAssignJavaArgument(
                                         arguments.get(i),
-                                        candidate.type().parameterTypes().get(i)
+                                        candidate.type()
+                                            .parameterTypes()
+                                            .get(i),
+                                        supplied.get(i)
                                     )
                                 ) {
                                     return false;
@@ -2764,13 +2922,14 @@ public final class SemanticAnalyzer {
                             final Type actual =
                                 analyzeExpression(argument, context);
                             candidates.removeIf(
-                                constructor -> !model.isSubtype(
+                                constructor -> !canAssignJavaArgument(
                                     actual,
                                     JavaTypes.resolve(
                                         constructor
                                             .getGenericParameterTypes()[0],
                                         javaType
-                                    )
+                                    ),
+                                    argument
                                 )
                             );
                         }
@@ -2778,13 +2937,17 @@ public final class SemanticAnalyzer {
                         candidates.removeIf(
                             constructor -> applicable.stream()
                                 .anyMatch(
-                                    other -> constructor
-                                        .getParameterTypes()[0] != other
-                                            .getParameterTypes()[0]
-                                        && constructor.getParameterTypes()[0]
-                                            .isAssignableFrom(
-                                                other.getParameterTypes()[0]
-                                            )
+                                    other -> isMoreSpecificJavaParameter(
+                                        JavaTypes.resolve(
+                                            other.getGenericParameterTypes()[0],
+                                            javaType
+                                        ),
+                                        JavaTypes.resolve(
+                                            constructor
+                                                .getGenericParameterTypes()[0],
+                                            javaType
+                                        )
+                                    )
                                 )
                         );
                     }

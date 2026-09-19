@@ -1,0 +1,362 @@
+const matcher = Regex.compile("(x)").matcher("x");
+print(matcher.find());
+const index: i8 = 1;
+print(matcher.group(index));
+print(matcher.start(index));
+print(matcher.end(index));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "matcher" (1:7-1:14)
+EQUAL (1:15-1:16)
+IDENTIFIER "Regex" (1:17-1:22)
+DOT (1:22-1:23)
+IDENTIFIER "compile" (1:23-1:30)
+LEFT_PAREN (1:30-1:31)
+STRING_LITERAL "\"(x)\"" (1:31-1:36)
+RIGHT_PAREN (1:36-1:37)
+DOT (1:37-1:38)
+IDENTIFIER "matcher" (1:38-1:45)
+LEFT_PAREN (1:45-1:46)
+STRING_LITERAL "\"x\"" (1:46-1:49)
+RIGHT_PAREN (1:49-1:50)
+SEMICOLON (1:50-1:51)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "matcher" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "find" (2:15-2:19)
+LEFT_PAREN (2:19-2:20)
+RIGHT_PAREN (2:20-2:21)
+RIGHT_PAREN (2:21-2:22)
+SEMICOLON (2:22-2:23)
+CONST (3:1-3:6)
+IDENTIFIER "index" (3:7-3:12)
+COLON (3:12-3:13)
+IDENTIFIER "i8" (3:14-3:16)
+EQUAL (3:17-3:18)
+INTEGER_LITERAL "1" (3:19-3:20)
+SEMICOLON (3:20-3:21)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "matcher" (4:7-4:14)
+DOT (4:14-4:15)
+IDENTIFIER "group" (4:15-4:20)
+LEFT_PAREN (4:20-4:21)
+IDENTIFIER "index" (4:21-4:26)
+RIGHT_PAREN (4:26-4:27)
+RIGHT_PAREN (4:27-4:28)
+SEMICOLON (4:28-4:29)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "matcher" (5:7-5:14)
+DOT (5:14-5:15)
+IDENTIFIER "start" (5:15-5:20)
+LEFT_PAREN (5:20-5:21)
+IDENTIFIER "index" (5:21-5:26)
+RIGHT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+SEMICOLON (5:28-5:29)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "matcher" (6:7-6:14)
+DOT (6:14-6:15)
+IDENTIFIER "end" (6:15-6:18)
+LEFT_PAREN (6:18-6:19)
+IDENTIFIER "index" (6:19-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:27
+  (VariableDeclaration
+    range: 1:1-1:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "matcher"
+    )
+    type: null
+    (CallExpression
+      range: 1:17-1:50
+      (MemberExpression
+        range: 1:17-1:45
+        (CallExpression
+          range: 1:17-1:37
+          (MemberExpression
+            range: 1:17-1:30
+            (IdentifierExpression
+              range: 1:17-1:22
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 1:23-1:30
+              name: "compile"
+            )
+          )
+          (LiteralExpression
+            range: 1:31-1:36
+            kind: STRING
+            text: "\"(x)\""
+          )
+        )
+        (IdentifierExpression
+          range: 1:38-1:45
+          name: "matcher"
+        )
+      )
+      (LiteralExpression
+        range: 1:46-1:49
+        kind: STRING
+        text: "\"x\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:23
+    (CallExpression
+      range: 2:1-2:22
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:21
+        (MemberExpression
+          range: 2:7-2:19
+          (IdentifierExpression
+            range: 2:7-2:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 2:15-2:19
+            name: "find"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "index"
+    )
+    (NamedTypeNode
+      range: 3:14-3:16
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 3:19-3:20
+      kind: INT
+      text: "1"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:29
+    (CallExpression
+      range: 4:1-4:28
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:27
+        (MemberExpression
+          range: 4:7-4:20
+          (IdentifierExpression
+            range: 4:7-4:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 4:15-4:20
+            name: "group"
+          )
+        )
+        (IdentifierExpression
+          range: 4:21-4:26
+          name: "index"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:29
+    (CallExpression
+      range: 5:1-5:28
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:27
+        (MemberExpression
+          range: 5:7-5:20
+          (IdentifierExpression
+            range: 5:7-5:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 5:15-5:20
+            name: "start"
+          )
+        )
+        (IdentifierExpression
+          range: 5:21-5:26
+          name: "index"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:27
+    (CallExpression
+      range: 6:1-6:26
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:25
+        (MemberExpression
+          range: 6:7-6:18
+          (IdentifierExpression
+            range: 6:7-6:14
+            name: "matcher"
+          )
+          (IdentifierExpression
+            range: 6:15-6:18
+            name: "end"
+          )
+        )
+        (IdentifierExpression
+          range: 6:19-6:24
+          name: "index"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:17-1:22 -> Regex
+  1:17-1:30 -> (string) => Regex
+  1:17-1:37 -> Regex
+  1:17-1:45 -> (string) => Matcher
+  1:17-1:50 -> Matcher
+  1:23-1:30 -> (string) => Regex
+  1:31-1:36 -> string
+  1:38-1:45 -> (string) => Matcher
+  1:46-1:49 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:22 -> void
+  2:7-2:14 -> Matcher
+  2:7-2:19 -> () => bool
+  2:7-2:21 -> bool
+  2:15-2:19 -> () => bool
+  3:19-3:20 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:28 -> void
+  4:7-4:14 -> Matcher
+  4:7-4:20 -> (i32) => string | null
+  4:7-4:27 -> string | null
+  4:15-4:20 -> (i32) => string | null
+  4:21-4:26 -> i8
+  5:1-5:6 -> (any) => void
+  5:1-5:28 -> void
+  5:7-5:14 -> Matcher
+  5:7-5:20 -> (i32) => i32
+  5:7-5:27 -> i32
+  5:15-5:20 -> (i32) => i32
+  5:21-5:26 -> i8
+  6:1-6:6 -> (any) => void
+  6:1-6:26 -> void
+  6:7-6:14 -> Matcher
+  6:7-6:18 -> (i32) => i32
+  6:7-6:25 -> i32
+  6:15-6:18 -> (i32) => i32
+  6:19-6:24 -> i8
+
+Resolved types:
+  3:14-3:16 -> i8
+
+Conversions:
+  3:19-3:20 -> i32 -> i8
+  4:21-4:26 -> i8 -> i32
+  5:21-5:26 -> i8 -> i32
+  6:19-6:24 -> i8 -> i32
+
+Declarations:
+  1:7-1:14 -> const matcher: Matcher
+  3:7-3:12 -> const index: i8
+
+References:
+  1:17-1:22 -> 1:17-1:22
+  1:23-1:30 -> 1:17-1:30
+  1:38-1:45 -> 1:17-1:45
+  2:1-2:6 -> builtin print
+  2:7-2:14 -> 1:7-1:14
+  2:15-2:19 -> 2:7-2:19
+  4:1-4:6 -> builtin print
+  4:7-4:14 -> 1:7-1:14
+  4:15-4:20 -> 4:7-4:20
+  4:21-4:26 -> 3:7-3:12
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 1:7-1:14
+  5:15-5:20 -> 5:7-5:20
+  5:21-5:26 -> 3:7-3:12
+  6:1-6:6 -> builtin print
+  6:7-6:14 -> 1:7-1:14
+  6:15-6:18 -> 6:7-6:18
+  6:19-6:24 -> 3:7-3:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field matcher Ljava/util/regex/Matcher; flags [PUBLIC, STATIC, FINAL]
+  field index B flags [PUBLIC, STATIC, FINAL] = 1
+  method <clinit>()V flags [STATIC]
+    LDC "(x)"
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    LDC "x"
+    INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+    CHECKCAST java/util/regex/Matcher
+    PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    INVOKEVIRTUAL java/util/regex/Matcher.find()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC Test.index B
+    INVOKEVIRTUAL java/util/regex/Matcher.group(I)Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC Test.index B
+    INVOKEVIRTUAL java/util/regex/Matcher.start(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.matcher Ljava/util/regex/Matcher;
+    GETSTATIC Test.index B
+    INVOKEVIRTUAL java/util/regex/Matcher.end(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+x
+0
+1
+

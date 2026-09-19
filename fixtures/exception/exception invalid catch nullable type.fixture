@@ -1,0 +1,56 @@
+try {}
+catch (e: Exception | null) {}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+RIGHT_BRACE (1:6-1:7)
+CATCH (2:1-2:6)
+LEFT_PAREN (2:7-2:8)
+IDENTIFIER "e" (2:8-2:9)
+COLON (2:9-2:10)
+IDENTIFIER "Exception" (2:11-2:20)
+PIPE (2:21-2:22)
+NULL (2:23-2:27)
+RIGHT_PAREN (2:27-2:28)
+LEFT_BRACE (2:29-2:30)
+RIGHT_BRACE (2:30-2:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:31
+  (TryStatement
+    range: 1:1-2:31
+    (BlockStatement
+      range: 1:5-1:7
+    )
+    (CatchClause
+      range: 2:1-2:31
+      (IdentifierDeclaration
+        range: 2:8-2:9
+        name: "e"
+      )
+      (UnionTypeNode
+        range: 2:11-2:27
+        (NamedTypeNode
+          range: 2:11-2:20
+          name: "Exception"
+        )
+        (NamedTypeNode
+          range: 2:23-2:27
+          name: "null"
+        )
+      )
+      (BlockStatement
+        range: 2:29-2:31
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expected a JVM throwable type, found Exception | null at 2:11-2:27

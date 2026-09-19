@@ -1,0 +1,265 @@
+try {
+    Regex.compile("[");
+} catch (e: PatternSyntaxException) {
+    print(e.getDescription());
+    print(e.getPattern());
+} finally {
+    print("cleanup");
+}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+IDENTIFIER "Regex" (2:5-2:10)
+DOT (2:10-2:11)
+IDENTIFIER "compile" (2:11-2:18)
+LEFT_PAREN (2:18-2:19)
+STRING_LITERAL "\"[\"" (2:19-2:22)
+RIGHT_PAREN (2:22-2:23)
+SEMICOLON (2:23-2:24)
+RIGHT_BRACE (3:1-3:2)
+CATCH (3:3-3:8)
+LEFT_PAREN (3:9-3:10)
+IDENTIFIER "e" (3:10-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "PatternSyntaxException" (3:13-3:35)
+RIGHT_PAREN (3:35-3:36)
+LEFT_BRACE (3:37-3:38)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "e" (4:11-4:12)
+DOT (4:12-4:13)
+IDENTIFIER "getDescription" (4:13-4:27)
+LEFT_PAREN (4:27-4:28)
+RIGHT_PAREN (4:28-4:29)
+RIGHT_PAREN (4:29-4:30)
+SEMICOLON (4:30-4:31)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+IDENTIFIER "e" (5:11-5:12)
+DOT (5:12-5:13)
+IDENTIFIER "getPattern" (5:13-5:23)
+LEFT_PAREN (5:23-5:24)
+RIGHT_PAREN (5:24-5:25)
+RIGHT_PAREN (5:25-5:26)
+SEMICOLON (5:26-5:27)
+RIGHT_BRACE (6:1-6:2)
+FINALLY (6:3-6:10)
+LEFT_BRACE (6:11-6:12)
+IDENTIFIER "print" (7:5-7:10)
+LEFT_PAREN (7:10-7:11)
+STRING_LITERAL "\"cleanup\"" (7:11-7:20)
+RIGHT_PAREN (7:20-7:21)
+SEMICOLON (7:21-7:22)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (TryStatement
+    range: 1:1-8:2
+    (BlockStatement
+      range: 1:5-3:2
+      (ExpressionStatement
+        range: 2:5-2:24
+        (CallExpression
+          range: 2:5-2:23
+          (MemberExpression
+            range: 2:5-2:18
+            (IdentifierExpression
+              range: 2:5-2:10
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 2:11-2:18
+              name: "compile"
+            )
+          )
+          (LiteralExpression
+            range: 2:19-2:22
+            kind: STRING
+            text: "\"[\""
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 3:3-6:2
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 3:13-3:35
+        name: "PatternSyntaxException"
+      )
+      (BlockStatement
+        range: 3:37-6:2
+        (ExpressionStatement
+          range: 4:5-4:31
+          (CallExpression
+            range: 4:5-4:30
+            (IdentifierExpression
+              range: 4:5-4:10
+              name: "print"
+            )
+            (CallExpression
+              range: 4:11-4:29
+              (MemberExpression
+                range: 4:11-4:27
+                (IdentifierExpression
+                  range: 4:11-4:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 4:13-4:27
+                  name: "getDescription"
+                )
+              )
+            )
+          )
+        )
+        (ExpressionStatement
+          range: 5:5-5:27
+          (CallExpression
+            range: 5:5-5:26
+            (IdentifierExpression
+              range: 5:5-5:10
+              name: "print"
+            )
+            (CallExpression
+              range: 5:11-5:25
+              (MemberExpression
+                range: 5:11-5:23
+                (IdentifierExpression
+                  range: 5:11-5:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 5:13-5:23
+                  name: "getPattern"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (BlockStatement
+      range: 6:11-8:2
+      (ExpressionStatement
+        range: 7:5-7:22
+        (CallExpression
+          range: 7:5-7:21
+          (IdentifierExpression
+            range: 7:5-7:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 7:11-7:20
+            kind: STRING
+            text: "\"cleanup\""
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:5-2:10 -> Regex
+  2:5-2:18 -> (string) => Regex
+  2:5-2:23 -> Regex
+  2:11-2:18 -> (string) => Regex
+  2:19-2:22 -> string
+  4:5-4:10 -> (any) => void
+  4:5-4:30 -> void
+  4:11-4:12 -> PatternSyntaxException
+  4:11-4:27 -> () => string
+  4:11-4:29 -> string
+  4:13-4:27 -> () => string
+  5:5-5:10 -> (any) => void
+  5:5-5:26 -> void
+  5:11-5:12 -> PatternSyntaxException
+  5:11-5:23 -> () => string
+  5:11-5:25 -> string
+  5:13-5:23 -> () => string
+  7:5-7:10 -> (any) => void
+  7:5-7:21 -> void
+  7:11-7:20 -> string
+
+Resolved types:
+  3:13-3:35 -> PatternSyntaxException
+
+Declarations:
+  3:10-3:11 -> const e: PatternSyntaxException
+
+References:
+  2:5-2:10 -> 2:5-2:10
+  2:11-2:18 -> 2:5-2:18
+  4:5-4:10 -> builtin print
+  4:11-4:12 -> 3:10-3:11
+  4:13-4:27 -> 4:11-4:27
+  5:5-5:10 -> builtin print
+  5:11-5:12 -> 3:10-3:11
+  5:13-5:23 -> 5:11-5:23
+  7:5-7:10 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+   L0:
+    NOP
+    LDC "["
+    INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
+    CHECKCAST java/util/regex/Pattern
+    POP
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L2:
+    ASTORE_0 0
+   L3:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/util/regex/PatternSyntaxException.getDescription()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/util/regex/PatternSyntaxException.getPattern()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L4:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L5:
+    ASTORE_1 1
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "cleanup"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_1 1
+    ATHROW
+   L6:
+    RETURN
+    catch java/util/regex/PatternSyntaxException from L0 to L1 handler L2
+    catch all from L0 to L1 handler L5
+    catch all from L3 to L4 handler L5
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+Unclosed character class
+[
+cleanup
+

@@ -1,0 +1,322 @@
+const original: IOException = new IOException("read failed");
+func read() {
+    throw original;
+}
+func forward() {
+    read();
+}
+try {
+    forward();
+} catch (e: IOException) {
+    print(e == original);
+    print(e.getMessage());
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "original" (1:7-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "IOException" (1:17-1:28)
+EQUAL (1:29-1:30)
+NEW (1:31-1:34)
+IDENTIFIER "IOException" (1:35-1:46)
+LEFT_PAREN (1:46-1:47)
+STRING_LITERAL "\"read failed\"" (1:47-1:60)
+RIGHT_PAREN (1:60-1:61)
+SEMICOLON (1:61-1:62)
+FUNC (2:1-2:5)
+IDENTIFIER "read" (2:6-2:10)
+LEFT_PAREN (2:10-2:11)
+RIGHT_PAREN (2:11-2:12)
+LEFT_BRACE (2:13-2:14)
+THROW (3:5-3:10)
+IDENTIFIER "original" (3:11-3:19)
+SEMICOLON (3:19-3:20)
+RIGHT_BRACE (4:1-4:2)
+FUNC (5:1-5:5)
+IDENTIFIER "forward" (5:6-5:13)
+LEFT_PAREN (5:13-5:14)
+RIGHT_PAREN (5:14-5:15)
+LEFT_BRACE (5:16-5:17)
+IDENTIFIER "read" (6:5-6:9)
+LEFT_PAREN (6:9-6:10)
+RIGHT_PAREN (6:10-6:11)
+SEMICOLON (6:11-6:12)
+RIGHT_BRACE (7:1-7:2)
+TRY (8:1-8:4)
+LEFT_BRACE (8:5-8:6)
+IDENTIFIER "forward" (9:5-9:12)
+LEFT_PAREN (9:12-9:13)
+RIGHT_PAREN (9:13-9:14)
+SEMICOLON (9:14-9:15)
+RIGHT_BRACE (10:1-10:2)
+CATCH (10:3-10:8)
+LEFT_PAREN (10:9-10:10)
+IDENTIFIER "e" (10:10-10:11)
+COLON (10:11-10:12)
+IDENTIFIER "IOException" (10:13-10:24)
+RIGHT_PAREN (10:24-10:25)
+LEFT_BRACE (10:26-10:27)
+IDENTIFIER "print" (11:5-11:10)
+LEFT_PAREN (11:10-11:11)
+IDENTIFIER "e" (11:11-11:12)
+EQUAL_EQUAL (11:13-11:15)
+IDENTIFIER "original" (11:16-11:24)
+RIGHT_PAREN (11:24-11:25)
+SEMICOLON (11:25-11:26)
+IDENTIFIER "print" (12:5-12:10)
+LEFT_PAREN (12:10-12:11)
+IDENTIFIER "e" (12:11-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "getMessage" (12:13-12:23)
+LEFT_PAREN (12:23-12:24)
+RIGHT_PAREN (12:24-12:25)
+RIGHT_PAREN (12:25-12:26)
+SEMICOLON (12:26-12:27)
+RIGHT_BRACE (13:1-13:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:2
+  (VariableDeclaration
+    range: 1:1-1:62
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "original"
+    )
+    (NamedTypeNode
+      range: 1:17-1:28
+      name: "IOException"
+    )
+    (NewExpression
+      range: 1:31-1:61
+      (IdentifierExpression
+        range: 1:35-1:46
+        name: "IOException"
+      )
+      (LiteralExpression
+        range: 1:47-1:60
+        kind: STRING
+        text: "\"read failed\""
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-4:2
+    (IdentifierDeclaration
+      range: 2:6-2:10
+      name: "read"
+    )
+    returnType: null
+    (BlockStatement
+      range: 2:13-4:2
+      (ThrowStatement
+        range: 3:5-3:20
+        (IdentifierExpression
+          range: 3:11-3:19
+          name: "original"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:6-5:13
+      name: "forward"
+    )
+    returnType: null
+    (BlockStatement
+      range: 5:16-7:2
+      (ExpressionStatement
+        range: 6:5-6:12
+        (CallExpression
+          range: 6:5-6:11
+          (IdentifierExpression
+            range: 6:5-6:9
+            name: "read"
+          )
+        )
+      )
+    )
+  )
+  (TryStatement
+    range: 8:1-13:2
+    (BlockStatement
+      range: 8:5-10:2
+      (ExpressionStatement
+        range: 9:5-9:15
+        (CallExpression
+          range: 9:5-9:14
+          (IdentifierExpression
+            range: 9:5-9:12
+            name: "forward"
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 10:3-13:2
+      (IdentifierDeclaration
+        range: 10:10-10:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 10:13-10:24
+        name: "IOException"
+      )
+      (BlockStatement
+        range: 10:26-13:2
+        (ExpressionStatement
+          range: 11:5-11:26
+          (CallExpression
+            range: 11:5-11:25
+            (IdentifierExpression
+              range: 11:5-11:10
+              name: "print"
+            )
+            (BinaryExpression
+              range: 11:11-11:24
+              (IdentifierExpression
+                range: 11:11-11:12
+                name: "e"
+              )
+              operator: EQUAL
+              (IdentifierExpression
+                range: 11:16-11:24
+                name: "original"
+              )
+            )
+          )
+        )
+        (ExpressionStatement
+          range: 12:5-12:27
+          (CallExpression
+            range: 12:5-12:26
+            (IdentifierExpression
+              range: 12:5-12:10
+              name: "print"
+            )
+            (CallExpression
+              range: 12:11-12:25
+              (MemberExpression
+                range: 12:11-12:23
+                (IdentifierExpression
+                  range: 12:11-12:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 12:13-12:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:31-1:61 -> IOException
+  1:35-1:46 -> IOException
+  1:47-1:60 -> string
+  3:11-3:19 -> IOException
+  6:5-6:9 -> () => void
+  6:5-6:11 -> void
+  9:5-9:12 -> () => void
+  9:5-9:14 -> void
+  11:5-11:10 -> (any) => void
+  11:5-11:25 -> void
+  11:11-11:12 -> IOException
+  11:11-11:24 -> bool
+  11:16-11:24 -> IOException
+  12:5-12:10 -> (any) => void
+  12:5-12:26 -> void
+  12:11-12:12 -> IOException
+  12:11-12:23 -> () => string | null
+  12:11-12:25 -> string | null
+  12:13-12:23 -> () => string | null
+
+Resolved types:
+  1:17-1:28 -> IOException
+  1:31-1:61 -> IOException
+  10:13-10:24 -> IOException
+
+Declarations:
+  1:7-1:15 -> const original: IOException
+  2:6-2:10 -> read() => void
+  5:6-5:13 -> forward() => void
+  10:10-10:11 -> const e: IOException
+
+References:
+  1:35-1:46 -> 1:31-1:61
+  3:11-3:19 -> 1:7-1:15
+  6:5-6:9 -> 2:6-2:10
+  9:5-9:12 -> 5:6-5:13
+  11:5-11:10 -> builtin print
+  11:11-11:12 -> 10:10-10:11
+  11:16-11:24 -> 1:7-1:15
+  12:5-12:10 -> builtin print
+  12:11-12:12 -> 10:10-10:11
+  12:13-12:23 -> 12:11-12:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field original Ljava/io/IOException; flags [PUBLIC, STATIC, FINAL]
+  method read()V flags [PUBLIC, STATIC]
+    GETSTATIC Test.original Ljava/io/IOException;
+    ATHROW
+    max stack 1 max locals 0
+  method forward()V flags [PUBLIC, STATIC]
+    INVOKESTATIC Test.read()V
+    RETURN
+    max stack 0 max locals 0
+  method <clinit>()V flags [STATIC]
+    NEW java/io/IOException
+    DUP
+    LDC "read failed"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.original Ljava/io/IOException;
+   L0:
+    NOP
+    INVOKESTATIC Test.forward()V
+   L1:
+    GOTO L5
+   L2:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETSTATIC Test.original Ljava/io/IOException;
+    IF_ACMPEQ L3
+    ICONST_0 0
+    GOTO L4
+   L3:
+    ICONST_1 1
+   L4:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L5
+   L5:
+    RETURN
+    catch java/io/IOException from L0 to L1 handler L2
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+true
+read failed
+

@@ -1,0 +1,269 @@
+class Resource {
+    public const value: i32;
+    public constructor() {
+        try {
+            throw new IOException("read");
+        } catch (e: IOException) {
+            this.value = 8;
+        }
+    }
+}
+print(new Resource().value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Resource" (1:7-1:15)
+LEFT_BRACE (1:16-1:17)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+TRY (4:9-4:12)
+LEFT_BRACE (4:13-4:14)
+THROW (5:13-5:18)
+NEW (5:19-5:22)
+IDENTIFIER "IOException" (5:23-5:34)
+LEFT_PAREN (5:34-5:35)
+STRING_LITERAL "\"read\"" (5:35-5:41)
+RIGHT_PAREN (5:41-5:42)
+SEMICOLON (5:42-5:43)
+RIGHT_BRACE (6:9-6:10)
+CATCH (6:11-6:16)
+LEFT_PAREN (6:17-6:18)
+IDENTIFIER "e" (6:18-6:19)
+COLON (6:19-6:20)
+IDENTIFIER "IOException" (6:21-6:32)
+RIGHT_PAREN (6:32-6:33)
+LEFT_BRACE (6:34-6:35)
+THIS (7:13-7:17)
+DOT (7:17-7:18)
+IDENTIFIER "value" (7:18-7:23)
+EQUAL (7:24-7:25)
+INTEGER_LITERAL "8" (7:26-7:27)
+SEMICOLON (7:27-7:28)
+RIGHT_BRACE (8:9-8:10)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+NEW (11:7-11:10)
+IDENTIFIER "Resource" (11:11-11:19)
+LEFT_PAREN (11:19-11:20)
+RIGHT_PAREN (11:20-11:21)
+DOT (11:21-11:22)
+IDENTIFIER "value" (11:22-11:27)
+RIGHT_PAREN (11:27-11:28)
+SEMICOLON (11:28-11:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:29
+  (ClassDeclaration
+    range: 1:1-10:2
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "Resource"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-9:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-9:6
+        (BlockStatement
+          range: 3:26-9:6
+          (TryStatement
+            range: 4:9-8:10
+            (BlockStatement
+              range: 4:13-6:10
+              (ThrowStatement
+                range: 5:13-5:43
+                (NewExpression
+                  range: 5:19-5:42
+                  (IdentifierExpression
+                    range: 5:23-5:34
+                    name: "IOException"
+                  )
+                  (LiteralExpression
+                    range: 5:35-5:41
+                    kind: STRING
+                    text: "\"read\""
+                  )
+                )
+              )
+            )
+            (CatchClause
+              range: 6:11-8:10
+              (IdentifierDeclaration
+                range: 6:18-6:19
+                name: "e"
+              )
+              (NamedTypeNode
+                range: 6:21-6:32
+                name: "IOException"
+              )
+              (BlockStatement
+                range: 6:34-8:10
+                (ExpressionStatement
+                  range: 7:13-7:28
+                  (AssignmentExpression
+                    range: 7:13-7:27
+                    (MemberExpression
+                      range: 7:13-7:23
+                      (ThisExpression
+                        range: 7:13-7:17
+                      )
+                      (IdentifierExpression
+                        range: 7:18-7:23
+                        name: "value"
+                      )
+                    )
+                    (LiteralExpression
+                      range: 7:26-7:27
+                      kind: INT
+                      text: "8"
+                    )
+                  )
+                )
+              )
+            )
+            finallyBody: null
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:29
+    (CallExpression
+      range: 11:1-11:28
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 11:7-11:27
+        (NewExpression
+          range: 11:7-11:21
+          (IdentifierExpression
+            range: 11:11-11:19
+            name: "Resource"
+          )
+        )
+        (IdentifierExpression
+          range: 11:22-11:27
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:19-5:42 -> IOException
+  5:23-5:34 -> IOException
+  5:35-5:41 -> string
+  7:13-7:17 -> Resource
+  7:13-7:23 -> i32
+  7:13-7:27 -> i32
+  7:18-7:23 -> i32
+  7:26-7:27 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:28 -> void
+  11:7-11:21 -> Resource
+  11:7-11:27 -> i32
+  11:11-11:19 -> Resource
+  11:22-11:27 -> i32
+
+Resolved types:
+  2:25-2:28 -> i32
+  5:19-5:42 -> IOException
+  6:21-6:32 -> IOException
+
+Declarations:
+  1:7-1:15 -> class Resource
+  2:18-2:23 -> const value: i32
+  3:12-9:6 -> constructor()
+  6:18-6:19 -> const e: IOException
+
+References:
+  5:23-5:34 -> 5:19-5:42
+  7:18-7:23 -> 2:18-2:23
+  11:1-11:6 -> builtin print
+  11:11-11:19 -> 1:7-1:15
+  11:22-11:27 -> 2:18-2:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Resource
+  inner class Test$Resource flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Resource
+    DUP
+    INVOKESPECIAL Test$Resource.<init>()V
+    GETFIELD Test$Resource.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Resource flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+   L0:
+    NOP
+    NEW java/io/IOException
+    DUP
+    LDC "read"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ASTORE_1 1
+    NOP
+    ALOAD_0 0
+    LDC 8
+    DUP_X1
+    PUTFIELD Test$Resource.value I
+    POP
+    GOTO L2
+   L2:
+    RETURN
+    catch java/io/IOException from L0 to L1 handler L1
+    max stack 3 max locals 2
+
+--- OUTPUT ---
+
+8
+

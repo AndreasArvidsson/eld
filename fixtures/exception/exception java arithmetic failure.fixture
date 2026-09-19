@@ -1,0 +1,203 @@
+var divisor = 0;
+try {
+    print(7 / divisor);
+} catch (e: ArithmeticException) {
+    print("arithmetic");
+}
+print("continued");
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "divisor" (1:5-1:12)
+EQUAL (1:13-1:14)
+INTEGER_LITERAL "0" (1:15-1:16)
+SEMICOLON (1:16-1:17)
+TRY (2:1-2:4)
+LEFT_BRACE (2:5-2:6)
+IDENTIFIER "print" (3:5-3:10)
+LEFT_PAREN (3:10-3:11)
+INTEGER_LITERAL "7" (3:11-3:12)
+SLASH (3:13-3:14)
+IDENTIFIER "divisor" (3:15-3:22)
+RIGHT_PAREN (3:22-3:23)
+SEMICOLON (3:23-3:24)
+RIGHT_BRACE (4:1-4:2)
+CATCH (4:3-4:8)
+LEFT_PAREN (4:9-4:10)
+IDENTIFIER "e" (4:10-4:11)
+COLON (4:11-4:12)
+IDENTIFIER "ArithmeticException" (4:13-4:32)
+RIGHT_PAREN (4:32-4:33)
+LEFT_BRACE (4:34-4:35)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+STRING_LITERAL "\"arithmetic\"" (5:11-5:23)
+RIGHT_PAREN (5:23-5:24)
+SEMICOLON (5:24-5:25)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"continued\"" (7:7-7:18)
+RIGHT_PAREN (7:18-7:19)
+SEMICOLON (7:19-7:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:20
+  (VariableDeclaration
+    range: 1:1-1:17
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:12
+      name: "divisor"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:15-1:16
+      kind: INT
+      text: "0"
+    )
+  )
+  (TryStatement
+    range: 2:1-6:2
+    (BlockStatement
+      range: 2:5-4:2
+      (ExpressionStatement
+        range: 3:5-3:24
+        (CallExpression
+          range: 3:5-3:23
+          (IdentifierExpression
+            range: 3:5-3:10
+            name: "print"
+          )
+          (BinaryExpression
+            range: 3:11-3:22
+            (LiteralExpression
+              range: 3:11-3:12
+              kind: INT
+              text: "7"
+            )
+            operator: DIVIDE
+            (IdentifierExpression
+              range: 3:15-3:22
+              name: "divisor"
+            )
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 4:3-6:2
+      (IdentifierDeclaration
+        range: 4:10-4:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 4:13-4:32
+        name: "ArithmeticException"
+      )
+      (BlockStatement
+        range: 4:34-6:2
+        (ExpressionStatement
+          range: 5:5-5:25
+          (CallExpression
+            range: 5:5-5:24
+            (IdentifierExpression
+              range: 5:5-5:10
+              name: "print"
+            )
+            (LiteralExpression
+              range: 5:11-5:23
+              kind: STRING
+              text: "\"arithmetic\""
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+  (ExpressionStatement
+    range: 7:1-7:20
+    (CallExpression
+      range: 7:1-7:19
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 7:7-7:18
+        kind: STRING
+        text: "\"continued\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:15-1:16 -> i32
+  3:5-3:10 -> (any) => void
+  3:5-3:23 -> void
+  3:11-3:12 -> i32
+  3:11-3:22 -> i32
+  3:15-3:22 -> i32
+  5:5-5:10 -> (any) => void
+  5:5-5:24 -> void
+  5:11-5:23 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:19 -> void
+  7:7-7:18 -> string
+
+Resolved types:
+  4:13-4:32 -> ArithmeticException
+
+Declarations:
+  1:5-1:12 -> var divisor: i32
+  4:10-4:11 -> const e: ArithmeticException
+
+References:
+  3:5-3:10 -> builtin print
+  3:15-3:22 -> 1:5-1:12
+  5:5-5:10 -> builtin print
+  7:1-7:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field divisor I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.divisor I
+   L0:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 7
+    GETSTATIC Test.divisor I
+    IDIV
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+   L1:
+    GOTO L3
+   L2:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "arithmetic"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L3
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "continued"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    catch java/lang/ArithmeticException from L0 to L1 handler L2
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+arithmetic
+continued
+

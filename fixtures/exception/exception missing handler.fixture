@@ -1,0 +1,11 @@
+try {}
+
+--- TOKENS ---
+
+TRY (1:1-1:4)
+LEFT_BRACE (1:5-1:6)
+RIGHT_BRACE (1:6-1:7)
+
+--- AST ---
+
+ParserException: A try statement requires catch or finally at 1:1-1:4
