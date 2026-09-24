@@ -169,12 +169,6 @@ mvn -N -q spotless:apply
 
 ### Export & import
 
-- Remove default exports. All exports must be named.
-- Imports are always named and do not use braces.
-- Aliasing and wildcard imports are supported.
-
-Valid
-
 ```ts
 // foo and bar are named imports
 import foo, bar from "lib"
@@ -184,42 +178,25 @@ import foo as bar from "lib"
 import * as lib from "lib"
 
 export const foo = 0;
-```
-
-Invalid
-
-```ts
-import { foo } from "lib";
-// foo here is a default export
-import foo from "lib";
-
-export default foo;
+// Or
+public const foo = 0;
 ```
 
 ### Immutable collections and objects
 
-Mutable by default with `readonly` keyword
-
-| Type                      | Array mutable? | Elements mutable through array? |
-| ------------------------- | -------------: | ------------------------------: |
-| `[Foo]`                   |            yes |                             yes |
-| `readonly [Foo]`          |             no |                             yes |
-| `(readonly Foo]`          |            yes |                              no |
-| `readonly [readonly Foo]` |             no |                              no |
-
-Immutable by default with `mut` keyword
-
-| Type            | Array mutable? | Elements mutable through array? |
-| --------------- | -------------: | ------------------------------: |
-| `[Foo]`         |             no |                              no |
-| `mut [Foo]`     |            yes |                              no |
-| `(mut Foo]`     |             no |                             yes |
-| `mut [mut Foo]` |            yes |                             yes |
+| Type                | Array mutable? | Elements mutable through array? |
+| ------------------- | -------------: | ------------------------------: |
+| `[Foo]`             |            yes |                             yes |
+| `const [Foo]`       |             no |                             yes |
+| `[const Foo]`       |            yes |                              no |
+| `const [const Foo]` |             no |                              no |
 
 ### Miscellaneous
 
 - Refactor large files
 - Export & import
+- Tuples as map keys and switch conditions (using hash value?)
+- Classes map keys and switch conditions (using hash value?)
 - Ubiquitous toString and equals methods
 - Immutable collections and objects
 - Overloaded functions
