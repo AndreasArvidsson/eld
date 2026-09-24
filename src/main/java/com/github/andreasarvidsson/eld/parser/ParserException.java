@@ -1,16 +1,22 @@
 package com.github.andreasarvidsson.eld.parser;
 
-import java.util.Objects;
-
 import org.jspecify.annotations.Nullable;
-
+import com.github.andreasarvidsson.eld.BaseException;
+import com.github.andreasarvidsson.eld.Range;
+import com.github.andreasarvidsson.eld.lexer.Token;
 import com.google.errorprone.annotations.FormatMethod;
 import com.google.errorprone.annotations.FormatString;
 
-import com.github.andreasarvidsson.eld.BaseException;
-import com.github.andreasarvidsson.eld.Range;
-
 public class ParserException extends BaseException {
+
+    public static ParserException unexpected(final Token token) {
+        return new ParserException(
+            token.range(),
+            "Unexpected %s",
+            token.type()
+        );
+    }
+
     @FormatMethod
     public ParserException(
         final Range range,

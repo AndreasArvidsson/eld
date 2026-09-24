@@ -1,8 +1,16 @@
-interface Method { value() i32; }
-interface Field { const value: () => i32; }
+interface Method {
+    func value() i32;
+}
+interface Field {
+    const value: () => i32;
+}
 var calls = 0;
-const old: Method = {value: () => 7};
-func source() Method { calls++; return old; }
+const old: Method = {
+    value: () => 7
+};
+func source() Method {
+    calls++; return old;
+}
 const copy: Field = {...source()};
 print(calls);
 print(copy.value());
@@ -12,164 +20,165 @@ print(copy.value());
 INTERFACE (1:1-1:10)
 IDENTIFIER "Method" (1:11-1:17)
 LEFT_BRACE (1:18-1:19)
-IDENTIFIER "value" (1:20-1:25)
-LEFT_PAREN (1:25-1:26)
-RIGHT_PAREN (1:26-1:27)
-IDENTIFIER "i32" (1:28-1:31)
-SEMICOLON (1:31-1:32)
-RIGHT_BRACE (1:33-1:34)
-INTERFACE (2:1-2:10)
-IDENTIFIER "Field" (2:11-2:16)
-LEFT_BRACE (2:17-2:18)
-CONST (2:19-2:24)
-IDENTIFIER "value" (2:25-2:30)
-COLON (2:30-2:31)
-LEFT_PAREN (2:32-2:33)
-RIGHT_PAREN (2:33-2:34)
-ARROW (2:35-2:37)
-IDENTIFIER "i32" (2:38-2:41)
-SEMICOLON (2:41-2:42)
-RIGHT_BRACE (2:43-2:44)
-VAR (3:1-3:4)
-IDENTIFIER "calls" (3:5-3:10)
-EQUAL (3:11-3:12)
-INTEGER_LITERAL "0" (3:13-3:14)
-SEMICOLON (3:14-3:15)
-CONST (4:1-4:6)
-IDENTIFIER "old" (4:7-4:10)
-COLON (4:10-4:11)
-IDENTIFIER "Method" (4:12-4:18)
-EQUAL (4:19-4:20)
-LEFT_BRACE (4:21-4:22)
-IDENTIFIER "value" (4:22-4:27)
-COLON (4:27-4:28)
-LEFT_PAREN (4:29-4:30)
-RIGHT_PAREN (4:30-4:31)
-ARROW (4:32-4:34)
-INTEGER_LITERAL "7" (4:35-4:36)
-RIGHT_BRACE (4:36-4:37)
-SEMICOLON (4:37-4:38)
-FUNC (5:1-5:5)
-IDENTIFIER "source" (5:6-5:12)
-LEFT_PAREN (5:12-5:13)
-RIGHT_PAREN (5:13-5:14)
-IDENTIFIER "Method" (5:15-5:21)
-LEFT_BRACE (5:22-5:23)
-IDENTIFIER "calls" (5:24-5:29)
-PLUS_PLUS (5:29-5:31)
-SEMICOLON (5:31-5:32)
-RETURN (5:33-5:39)
-IDENTIFIER "old" (5:40-5:43)
-SEMICOLON (5:43-5:44)
-RIGHT_BRACE (5:45-5:46)
-CONST (6:1-6:6)
-IDENTIFIER "copy" (6:7-6:11)
-COLON (6:11-6:12)
-IDENTIFIER "Field" (6:13-6:18)
-EQUAL (6:19-6:20)
-LEFT_BRACE (6:21-6:22)
-ELLIPSIS (6:22-6:25)
-IDENTIFIER "source" (6:25-6:31)
-LEFT_PAREN (6:31-6:32)
-RIGHT_PAREN (6:32-6:33)
-RIGHT_BRACE (6:33-6:34)
-SEMICOLON (6:34-6:35)
-IDENTIFIER "print" (7:1-7:6)
-LEFT_PAREN (7:6-7:7)
-IDENTIFIER "calls" (7:7-7:12)
-RIGHT_PAREN (7:12-7:13)
-SEMICOLON (7:13-7:14)
-IDENTIFIER "print" (8:1-8:6)
-LEFT_PAREN (8:6-8:7)
-IDENTIFIER "copy" (8:7-8:11)
-DOT (8:11-8:12)
-IDENTIFIER "value" (8:12-8:17)
-LEFT_PAREN (8:17-8:18)
-RIGHT_PAREN (8:18-8:19)
-RIGHT_PAREN (8:19-8:20)
-SEMICOLON (8:20-8:21)
+FUNC (2:5-2:9)
+IDENTIFIER "value" (2:10-2:15)
+LEFT_PAREN (2:15-2:16)
+RIGHT_PAREN (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "Field" (4:11-4:16)
+LEFT_BRACE (4:17-4:18)
+CONST (5:5-5:10)
+IDENTIFIER "value" (5:11-5:16)
+COLON (5:16-5:17)
+LEFT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+ARROW (5:21-5:23)
+IDENTIFIER "i32" (5:24-5:27)
+SEMICOLON (5:27-5:28)
+RIGHT_BRACE (6:1-6:2)
+VAR (7:1-7:4)
+IDENTIFIER "calls" (7:5-7:10)
+EQUAL (7:11-7:12)
+INTEGER_LITERAL "0" (7:13-7:14)
+SEMICOLON (7:14-7:15)
+CONST (8:1-8:6)
+IDENTIFIER "old" (8:7-8:10)
+COLON (8:10-8:11)
+IDENTIFIER "Method" (8:12-8:18)
+EQUAL (8:19-8:20)
+LEFT_BRACE (8:21-8:22)
+IDENTIFIER "value" (9:5-9:10)
+COLON (9:10-9:11)
+LEFT_PAREN (9:12-9:13)
+RIGHT_PAREN (9:13-9:14)
+ARROW (9:15-9:17)
+INTEGER_LITERAL "7" (9:18-9:19)
+RIGHT_BRACE (10:1-10:2)
+SEMICOLON (10:2-10:3)
+FUNC (11:1-11:5)
+IDENTIFIER "source" (11:6-11:12)
+LEFT_PAREN (11:12-11:13)
+RIGHT_PAREN (11:13-11:14)
+IDENTIFIER "Method" (11:15-11:21)
+LEFT_BRACE (11:22-11:23)
+IDENTIFIER "calls" (12:5-12:10)
+PLUS_PLUS (12:10-12:12)
+SEMICOLON (12:12-12:13)
+RETURN (12:14-12:20)
+IDENTIFIER "old" (12:21-12:24)
+SEMICOLON (12:24-12:25)
+RIGHT_BRACE (13:1-13:2)
+CONST (14:1-14:6)
+IDENTIFIER "copy" (14:7-14:11)
+COLON (14:11-14:12)
+IDENTIFIER "Field" (14:13-14:18)
+EQUAL (14:19-14:20)
+LEFT_BRACE (14:21-14:22)
+ELLIPSIS (14:22-14:25)
+IDENTIFIER "source" (14:25-14:31)
+LEFT_PAREN (14:31-14:32)
+RIGHT_PAREN (14:32-14:33)
+RIGHT_BRACE (14:33-14:34)
+SEMICOLON (14:34-14:35)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "calls" (15:7-15:12)
+RIGHT_PAREN (15:12-15:13)
+SEMICOLON (15:13-15:14)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "copy" (16:7-16:11)
+DOT (16:11-16:12)
+IDENTIFIER "value" (16:12-16:17)
+LEFT_PAREN (16:17-16:18)
+RIGHT_PAREN (16:18-16:19)
+RIGHT_PAREN (16:19-16:20)
+SEMICOLON (16:20-16:21)
 
 --- AST ---
 
 (Program
-  range: 1:1-8:21
+  range: 1:1-16:21
   (InterfaceDeclaration
-    range: 1:1-1:34
+    range: 1:1-3:2
     (IdentifierDeclaration
       range: 1:11-1:17
       name: "Method"
     )
     (InterfaceMethodDeclaration
-      range: 1:20-1:32
+      range: 2:5-2:22
       (IdentifierDeclaration
-        range: 1:20-1:25
+        range: 2:10-2:15
         name: "value"
       )
       (NamedTypeNode
-        range: 1:28-1:31
+        range: 2:18-2:21
         name: "i32"
       )
     )
   )
   (InterfaceDeclaration
-    range: 2:1-2:44
+    range: 4:1-6:2
     (IdentifierDeclaration
-      range: 2:11-2:16
+      range: 4:11-4:16
       name: "Field"
     )
     (UninitializedVariableDeclaration
-      range: 2:19-2:42
+      range: 5:5-5:28
       mutability: CONST
       (IdentifierDeclaration
-        range: 2:25-2:30
+        range: 5:11-5:16
         name: "value"
       )
       (FunctionTypeNode
-        range: 2:32-2:41
+        range: 5:18-5:27
         (NamedTypeNode
-          range: 2:38-2:41
+          range: 5:24-5:27
           name: "i32"
         )
       )
     )
   )
   (VariableDeclaration
-    range: 3:1-3:15
+    range: 7:1-7:15
     mutability: VAR
     (IdentifierDeclaration
-      range: 3:5-3:10
+      range: 7:5-7:10
       name: "calls"
     )
     type: null
     (LiteralExpression
-      range: 3:13-3:14
+      range: 7:13-7:14
       kind: INT
       text: "0"
     )
   )
   (VariableDeclaration
-    range: 4:1-4:38
+    range: 8:1-10:3
     mutability: CONST
     (IdentifierDeclaration
-      range: 4:7-4:10
+      range: 8:7-8:10
       name: "old"
     )
     (NamedTypeNode
-      range: 4:12-4:18
+      range: 8:12-8:18
       name: "Method"
     )
     (ObjectExpression
-      range: 4:21-4:37
+      range: 8:21-10:2
       (ObjectMember
-        range: 4:22-4:36
+        range: 9:5-9:19
         (IdentifierDeclaration
-          range: 4:22-4:27
+          range: 9:5-9:10
           name: "value"
         )
         (LambdaExpression
-          range: 4:29-4:36
+          range: 9:12-9:19
           (LiteralExpression
-            range: 4:35-4:36
+            range: 9:18-9:19
             kind: INT
             text: "7"
           )
@@ -178,56 +187,56 @@ SEMICOLON (8:20-8:21)
     )
   )
   (FunctionDeclaration
-    range: 5:1-5:46
+    range: 11:1-13:2
     (IdentifierDeclaration
-      range: 5:6-5:12
+      range: 11:6-11:12
       name: "source"
     )
     (NamedTypeNode
-      range: 5:15-5:21
+      range: 11:15-11:21
       name: "Method"
     )
     (BlockStatement
-      range: 5:22-5:46
+      range: 11:22-13:2
       (ExpressionStatement
-        range: 5:24-5:32
+        range: 12:5-12:13
         (PostfixExpression
-          range: 5:24-5:31
+          range: 12:5-12:12
           (IdentifierExpression
-            range: 5:24-5:29
+            range: 12:5-12:10
             name: "calls"
           )
           operator: INCREMENT
         )
       )
       (ReturnStatement
-        range: 5:33-5:44
+        range: 12:14-12:25
         (IdentifierExpression
-          range: 5:40-5:43
+          range: 12:21-12:24
           name: "old"
         )
       )
     )
   )
   (VariableDeclaration
-    range: 6:1-6:35
+    range: 14:1-14:35
     mutability: CONST
     (IdentifierDeclaration
-      range: 6:7-6:11
+      range: 14:7-14:11
       name: "copy"
     )
     (NamedTypeNode
-      range: 6:13-6:18
+      range: 14:13-14:18
       name: "Field"
     )
     (ObjectExpression
-      range: 6:21-6:34
+      range: 14:21-14:34
       (ObjectSpread
-        range: 6:22-6:33
+        range: 14:22-14:33
         (CallExpression
-          range: 6:25-6:33
+          range: 14:25-14:33
           (IdentifierExpression
-            range: 6:25-6:31
+            range: 14:25-14:31
             name: "source"
           )
         )
@@ -235,37 +244,37 @@ SEMICOLON (8:20-8:21)
     )
   )
   (ExpressionStatement
-    range: 7:1-7:14
+    range: 15:1-15:14
     (CallExpression
-      range: 7:1-7:13
+      range: 15:1-15:13
       (IdentifierExpression
-        range: 7:1-7:6
+        range: 15:1-15:6
         name: "print"
       )
       (IdentifierExpression
-        range: 7:7-7:12
+        range: 15:7-15:12
         name: "calls"
       )
     )
   )
   (ExpressionStatement
-    range: 8:1-8:21
+    range: 16:1-16:21
     (CallExpression
-      range: 8:1-8:20
+      range: 16:1-16:20
       (IdentifierExpression
-        range: 8:1-8:6
+        range: 16:1-16:6
         name: "print"
       )
       (CallExpression
-        range: 8:7-8:19
+        range: 16:7-16:19
         (MemberExpression
-          range: 8:7-8:17
+          range: 16:7-16:17
           (IdentifierExpression
-            range: 8:7-8:11
+            range: 16:7-16:11
             name: "copy"
           )
           (IdentifierExpression
-            range: 8:12-8:17
+            range: 16:12-16:17
             name: "value"
           )
         )
@@ -277,56 +286,56 @@ SEMICOLON (8:20-8:21)
 --- SEMANTIC ---
 
 Expression types:
-  3:13-3:14 -> i32
-  4:21-4:37 -> Method
-  4:29-4:36 -> () => i32
-  4:35-4:36 -> i32
-  5:24-5:29 -> i32
-  5:24-5:31 -> i32
-  5:40-5:43 -> Method
-  6:21-6:34 -> Field
-  6:22-6:33 -> () => i32
-  6:22-6:33 -> () => i32
-  6:25-6:31 -> () => Method
-  6:25-6:33 -> Method
-  7:1-7:6 -> (any) => void
-  7:1-7:13 -> void
-  7:7-7:12 -> i32
-  8:1-8:6 -> (any) => void
-  8:1-8:20 -> void
-  8:7-8:11 -> Field
-  8:7-8:17 -> () => i32
-  8:7-8:19 -> i32
-  8:12-8:17 -> () => i32
+  7:13-7:14 -> i32
+  8:21-10:2 -> Method
+  9:12-9:19 -> () => i32
+  9:18-9:19 -> i32
+  12:5-12:10 -> i32
+  12:5-12:12 -> i32
+  12:21-12:24 -> Method
+  14:21-14:34 -> Field
+  14:22-14:33 -> () => i32
+  14:22-14:33 -> () => i32
+  14:25-14:31 -> () => Method
+  14:25-14:33 -> Method
+  15:1-15:6 -> (any) => void
+  15:1-15:13 -> void
+  15:7-15:12 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:20 -> void
+  16:7-16:11 -> Field
+  16:7-16:17 -> () => i32
+  16:7-16:19 -> i32
+  16:12-16:17 -> () => i32
 
 Resolved types:
-  1:28-1:31 -> i32
-  2:32-2:41 -> () => i32
-  2:38-2:41 -> i32
-  4:12-4:18 -> Method
-  5:15-5:21 -> Method
-  6:13-6:18 -> Field
+  2:18-2:21 -> i32
+  5:18-5:27 -> () => i32
+  5:24-5:27 -> i32
+  8:12-8:18 -> Method
+  11:15-11:21 -> Method
+  14:13-14:18 -> Field
 
 Declarations:
   1:11-1:17 -> interface Method
-  1:20-1:25 -> value() => i32
-  2:11-2:16 -> interface Field
-  2:25-2:30 -> const value: () => i32
-  3:5-3:10 -> var calls: i32
-  4:7-4:10 -> const old: Method
-  5:6-5:12 -> source() => Method
-  6:7-6:11 -> const copy: Field
+  2:10-2:15 -> value() => i32
+  4:11-4:16 -> interface Field
+  5:11-5:16 -> const value: () => i32
+  7:5-7:10 -> var calls: i32
+  8:7-8:10 -> const old: Method
+  11:6-11:12 -> source() => Method
+  14:7-14:11 -> const copy: Field
 
 References:
-  5:24-5:29 -> 3:5-3:10
-  5:40-5:43 -> 4:7-4:10
-  6:22-6:33 -> 1:20-1:25
-  6:25-6:31 -> 5:6-5:12
-  7:1-7:6 -> builtin print
-  7:7-7:12 -> 3:5-3:10
-  8:1-8:6 -> builtin print
-  8:7-8:11 -> 6:7-6:11
-  8:12-8:17 -> 2:25-2:30
+  12:5-12:10 -> 7:5-7:10
+  12:21-12:24 -> 8:7-8:10
+  14:22-14:33 -> 2:10-2:15
+  14:25-14:31 -> 11:6-11:12
+  15:1-15:6 -> builtin print
+  15:7-15:12 -> 7:5-7:10
+  16:1-16:6 -> builtin print
+  16:7-16:11 -> 14:7-14:11
+  16:12-16:17 -> 5:11-5:16
 
 --- BYTECODE ---
 

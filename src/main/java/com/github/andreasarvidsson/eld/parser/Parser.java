@@ -302,64 +302,14 @@ public final class Parser {
         final List<@NonNull InterfaceMemberDeclaration> members =
             new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-            final Token start = current();
-            final Mutability mutability =
-                match(TokenType.CONST)
-                    ? Mutability.CONST
-                    : match(TokenType.VAR) ? Mutability.VAR : null;
-            final Token memberName = expect(TokenType.IDENTIFIER);
-            final IdentifierDeclaration id =
-                new IdentifierDeclaration(
-                    memberName.text(),
-                    memberName.range()
-                );
-            if (mutability == null && match(TokenType.LEFT_PAREN)) {
-                final List<@NonNull FunctionParameter> parameters =
-                    new ArrayList<>();
-                if (!check(TokenType.RIGHT_PAREN)) {
-                    do {
-                        final FunctionParameter parameter =
-                            parseFunctionParameter();
-                        if (parameter.defaultValue() != null) {
-                            throw new ParserException(
-                                parameter.defaultValue().range(),
-                                "Interface parameters cannot have default values"
-                            );
-                        }
-                        parameters.add(parameter);
-                    } while (match(TokenType.COMMA));
-                }
-                expect(TokenType.RIGHT_PAREN);
-                final TypeNode returnType =
-                    check(TokenType.SEMICOLON) ? null : parseType();
-                final Token end = expect(TokenType.SEMICOLON);
-                members.add(
-                    new InterfaceMethodDeclaration(
-                        id,
-                        parameters,
-                        returnType,
-                        start.range().union(end.range())
-                    )
-                );
+            if (check(TokenType.FUNC)) {
+                members.add(parseInterfaceMethod());
+            }
+            else if (check(TokenType.CONST) || check(TokenType.VAR)) {
+                members.add(parseInterfaceVariable());
             }
             else {
-                if (mutability == null) {
-                    throw new ParserException(
-                        start.range(),
-                        "Interface fields require a const or var modifier"
-                    );
-                }
-                expect(TokenType.COLON);
-                final TypeNode type = parseType();
-                final Token end = expect(TokenType.SEMICOLON);
-                members.add(
-                    new UninitializedVariableDeclaration(
-                        mutability,
-                        id,
-                        type,
-                        start.range().union(end.range())
-                    )
-                );
+                throw ParserException.unexpected(current());
             }
         }
         final Token end = expect(TokenType.RIGHT_BRACE);
@@ -367,6 +317,64 @@ public final class Parser {
             new IdentifierDeclaration(name.text(), name.range()),
             parents,
             members,
+            keyword.range().union(end.range())
+        );
+    }
+
+    private InterfaceMethodDeclaration parseInterfaceMethod() {
+        final Token keyword = expect(TokenType.FUNC);
+        final Token name = expect(TokenType.IDENTIFIER);
+        final IdentifierDeclaration id =
+            new IdentifierDeclaration(name.text(), name.range());
+        expect(TokenType.LEFT_PAREN);
+        final List<@NonNull FunctionParameter> parameters = new ArrayList<>();
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                final FunctionParameter parameter = parseFunctionParameter();
+                if (parameter.defaultValue() != null) {
+                    throw new ParserException(
+                        parameter.defaultValue().range(),
+                        "Interface parameters cannot have default values"
+                    );
+                }
+                parameters.add(parameter);
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.RIGHT_PAREN);
+        final TypeNode returnType =
+            check(TokenType.SEMICOLON) ? null : parseType();
+        final Token end = expect(TokenType.SEMICOLON);
+        return new InterfaceMethodDeclaration(
+            id,
+            parameters,
+            returnType,
+            keyword.range().union(end.range())
+        );
+    }
+
+    private UninitializedVariableDeclaration parseInterfaceVariable() {
+        final Mutability mutability =
+            check(TokenType.CONST) ? Mutability.CONST : Mutability.VAR;
+        final Token keyword =
+            expect(
+                mutability == Mutability.CONST ? TokenType.CONST : TokenType.VAR
+            );
+        if (check(TokenType.FUNC)) {
+            throw new ParserException(
+                current().range(),
+                "Interface methods cannot have a const or var modifier"
+            );
+        }
+        final Token name = expect(TokenType.IDENTIFIER);
+        final IdentifierDeclaration id =
+            new IdentifierDeclaration(name.text(), name.range());
+        expect(TokenType.COLON);
+        final TypeNode type = parseType();
+        final Token end = expect(TokenType.SEMICOLON);
+        return new UninitializedVariableDeclaration(
+            mutability,
+            id,
+            type,
             keyword.range().union(end.range())
         );
     }
@@ -1198,4 +1206,5 @@ public final class Parser {
 
         return token;
     }
+
 }

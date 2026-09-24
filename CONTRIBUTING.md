@@ -220,7 +220,6 @@ Immutable by default with `mut` keyword
 
 - Refactor large files
 - Export & import
-- Improve test performance
 - Ubiquitous toString and equals methods
 - Immutable collections and objects
 - Overloaded functions

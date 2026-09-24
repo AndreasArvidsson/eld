@@ -14,7 +14,8 @@ print(copy.value(extra=5));
 print(again.value());
 print(again.value(1, 4));
 interface Target {
-    const base: i32; value(n: i32, extra: i64) i64;
+    const base: i32;
+    func value(n: i32, extra: i64) i64;
 }
 const typed: Target = {...source};
 print(typed.value(20, 3));
@@ -147,46 +148,47 @@ IDENTIFIER "base" (17:11-17:15)
 COLON (17:15-17:16)
 IDENTIFIER "i32" (17:17-17:20)
 SEMICOLON (17:20-17:21)
-IDENTIFIER "value" (17:22-17:27)
-LEFT_PAREN (17:27-17:28)
-IDENTIFIER "n" (17:28-17:29)
-COLON (17:29-17:30)
-IDENTIFIER "i32" (17:31-17:34)
-COMMA (17:34-17:35)
-IDENTIFIER "extra" (17:36-17:41)
-COLON (17:41-17:42)
-IDENTIFIER "i64" (17:43-17:46)
-RIGHT_PAREN (17:46-17:47)
-IDENTIFIER "i64" (17:48-17:51)
-SEMICOLON (17:51-17:52)
-RIGHT_BRACE (18:1-18:2)
-CONST (19:1-19:6)
-IDENTIFIER "typed" (19:7-19:12)
-COLON (19:12-19:13)
-IDENTIFIER "Target" (19:14-19:20)
-EQUAL (19:21-19:22)
-LEFT_BRACE (19:23-19:24)
-ELLIPSIS (19:24-19:27)
-IDENTIFIER "source" (19:27-19:33)
-RIGHT_BRACE (19:33-19:34)
-SEMICOLON (19:34-19:35)
-IDENTIFIER "print" (20:1-20:6)
-LEFT_PAREN (20:6-20:7)
+FUNC (18:5-18:9)
+IDENTIFIER "value" (18:10-18:15)
+LEFT_PAREN (18:15-18:16)
+IDENTIFIER "n" (18:16-18:17)
+COLON (18:17-18:18)
+IDENTIFIER "i32" (18:19-18:22)
+COMMA (18:22-18:23)
+IDENTIFIER "extra" (18:24-18:29)
+COLON (18:29-18:30)
+IDENTIFIER "i64" (18:31-18:34)
+RIGHT_PAREN (18:34-18:35)
+IDENTIFIER "i64" (18:36-18:39)
+SEMICOLON (18:39-18:40)
+RIGHT_BRACE (19:1-19:2)
+CONST (20:1-20:6)
 IDENTIFIER "typed" (20:7-20:12)
-DOT (20:12-20:13)
-IDENTIFIER "value" (20:13-20:18)
-LEFT_PAREN (20:18-20:19)
-INTEGER_LITERAL "20" (20:19-20:21)
-COMMA (20:21-20:22)
-INTEGER_LITERAL "3" (20:23-20:24)
-RIGHT_PAREN (20:24-20:25)
-RIGHT_PAREN (20:25-20:26)
-SEMICOLON (20:26-20:27)
+COLON (20:12-20:13)
+IDENTIFIER "Target" (20:14-20:20)
+EQUAL (20:21-20:22)
+LEFT_BRACE (20:23-20:24)
+ELLIPSIS (20:24-20:27)
+IDENTIFIER "source" (20:27-20:33)
+RIGHT_BRACE (20:33-20:34)
+SEMICOLON (20:34-20:35)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "typed" (21:7-21:12)
+DOT (21:12-21:13)
+IDENTIFIER "value" (21:13-21:18)
+LEFT_PAREN (21:18-21:19)
+INTEGER_LITERAL "20" (21:19-21:21)
+COMMA (21:21-21:22)
+INTEGER_LITERAL "3" (21:23-21:24)
+RIGHT_PAREN (21:24-21:25)
+RIGHT_PAREN (21:25-21:26)
+SEMICOLON (21:26-21:27)
 
 --- AST ---
 
 (Program
-  range: 1:1-20:27
+  range: 1:1-21:27
   (ClassDeclaration
     range: 1:1-6:2
     (IdentifierDeclaration
@@ -509,7 +511,7 @@ SEMICOLON (20:26-20:27)
     )
   )
   (InterfaceDeclaration
-    range: 16:1-18:2
+    range: 16:1-19:2
     (IdentifierDeclaration
       range: 16:11-16:17
       name: "Target"
@@ -527,93 +529,93 @@ SEMICOLON (20:26-20:27)
       )
     )
     (InterfaceMethodDeclaration
-      range: 17:22-17:52
+      range: 18:5-18:40
       (IdentifierDeclaration
-        range: 17:22-17:27
+        range: 18:10-18:15
         name: "value"
       )
       (FunctionParameter
-        range: 17:28-17:34
+        range: 18:16-18:22
         (IdentifierDeclaration
-          range: 17:28-17:29
+          range: 18:16-18:17
           name: "n"
         )
         (NamedTypeNode
-          range: 17:31-17:34
+          range: 18:19-18:22
           name: "i32"
         )
         optional: false
         defaultValue: null
       )
       (FunctionParameter
-        range: 17:36-17:46
+        range: 18:24-18:34
         (IdentifierDeclaration
-          range: 17:36-17:41
+          range: 18:24-18:29
           name: "extra"
         )
         (NamedTypeNode
-          range: 17:43-17:46
+          range: 18:31-18:34
           name: "i64"
         )
         optional: false
         defaultValue: null
       )
       (NamedTypeNode
-        range: 17:48-17:51
+        range: 18:36-18:39
         name: "i64"
       )
     )
   )
   (VariableDeclaration
-    range: 19:1-19:35
+    range: 20:1-20:35
     mutability: CONST
     (IdentifierDeclaration
-      range: 19:7-19:12
+      range: 20:7-20:12
       name: "typed"
     )
     (NamedTypeNode
-      range: 19:14-19:20
+      range: 20:14-20:20
       name: "Target"
     )
     (ObjectExpression
-      range: 19:23-19:34
+      range: 20:23-20:34
       (ObjectSpread
-        range: 19:24-19:33
+        range: 20:24-20:33
         (IdentifierExpression
-          range: 19:27-19:33
+          range: 20:27-20:33
           name: "source"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 20:1-20:27
+    range: 21:1-21:27
     (CallExpression
-      range: 20:1-20:26
+      range: 21:1-21:26
       (IdentifierExpression
-        range: 20:1-20:6
+        range: 21:1-21:6
         name: "print"
       )
       (CallExpression
-        range: 20:7-20:25
+        range: 21:7-21:25
         (MemberExpression
-          range: 20:7-20:18
+          range: 21:7-21:18
           (IdentifierExpression
-            range: 20:7-20:12
+            range: 21:7-21:12
             name: "typed"
           )
           (IdentifierExpression
-            range: 20:13-20:18
+            range: 21:13-21:18
             name: "value"
           )
         )
         (LiteralExpression
-          range: 20:19-20:21
+          range: 21:19-21:21
           kind: INT
           text: "20"
         )
         (LiteralExpression
-          range: 20:23-20:24
+          range: 21:23-21:24
           kind: INT
           text: "3"
         )
@@ -686,37 +688,37 @@ Expression types:
   15:13-15:18 -> (i32, i64) => i64
   15:19-15:20 -> i32
   15:22-15:23 -> i32
-  19:23-19:34 -> Target
-  19:24-19:33 -> (i32, i64) => i64
-  19:24-19:33 -> (i32, i64) => i64
-  19:24-19:33 -> i32
-  19:24-19:33 -> i32
-  19:27-19:33 -> Source
-  20:1-20:6 -> (any) => void
-  20:1-20:26 -> void
-  20:7-20:12 -> Target
-  20:7-20:18 -> (i32, i64) => i64
-  20:7-20:25 -> i64
-  20:13-20:18 -> (i32, i64) => i64
-  20:19-20:21 -> i32
-  20:23-20:24 -> i32
+  20:23-20:34 -> Target
+  20:24-20:33 -> (i32, i64) => i64
+  20:24-20:33 -> (i32, i64) => i64
+  20:24-20:33 -> i32
+  20:24-20:33 -> i32
+  20:27-20:33 -> Source
+  21:1-21:6 -> (any) => void
+  21:1-21:26 -> void
+  21:7-21:12 -> Target
+  21:7-21:18 -> (i32, i64) => i64
+  21:7-21:25 -> i64
+  21:13-21:18 -> (i32, i64) => i64
+  21:19-21:21 -> i32
+  21:23-21:24 -> i32
 
 Resolved types:
   3:26-3:29 -> i32
   3:50-3:53 -> i64
   3:59-3:62 -> i64
   17:17-17:20 -> i32
-  17:31-17:34 -> i32
-  17:43-17:46 -> i64
-  17:48-17:51 -> i64
-  19:14-19:20 -> Target
+  18:19-18:22 -> i32
+  18:31-18:34 -> i64
+  18:36-18:39 -> i64
+  20:14-20:20 -> Target
 
 Conversions:
   3:56-3:57 -> i32 -> i64
   4:16-4:17 -> i32 -> i64
   13:24-13:25 -> i32 -> i64
   15:22-15:23 -> i32 -> i64
-  20:23-20:24 -> i32 -> i64
+  21:23-21:24 -> i32 -> i64
 
 Declarations:
   1:7-1:13 -> class Source
@@ -729,10 +731,10 @@ Declarations:
   9:7-9:12 -> const again: $spread1
   16:11-16:17 -> interface Target
   17:11-17:15 -> const base: i32
-  17:22-17:27 -> value(i32, i64) => i64
-  17:28-17:29 -> const n: i32
-  17:36-17:41 -> const extra: i64
-  19:7-19:12 -> const typed: Target
+  18:10-18:15 -> value(i32, i64) => i64
+  18:16-18:17 -> const n: i32
+  18:24-18:29 -> const extra: i64
+  20:7-20:12 -> const typed: Target
 
 References:
   3:37-3:41 -> 2:16-2:20
@@ -762,12 +764,12 @@ References:
   15:1-15:6 -> builtin print
   15:7-15:12 -> 9:7-9:12
   15:13-15:18 -> 3:17-3:22
-  19:24-19:33 -> 2:16-2:20
-  19:24-19:33 -> 3:17-3:22
-  19:27-19:33 -> 7:7-7:13
-  20:1-20:6 -> builtin print
-  20:7-20:12 -> 19:7-19:12
-  20:13-20:18 -> 17:22-17:27
+  20:24-20:33 -> 2:16-2:20
+  20:24-20:33 -> 3:17-3:22
+  20:27-20:33 -> 7:7-7:13
+  21:1-21:6 -> builtin print
+  21:7-21:12 -> 20:7-20:12
+  21:13-21:18 -> 18:10-18:15
 
 Named arguments:
   13:18-13:23 -> parameter 3:43-3:48

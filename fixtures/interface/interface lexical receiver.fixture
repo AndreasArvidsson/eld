@@ -1,5 +1,5 @@
 interface Reader {
-    read() i32;
+    func read() i32;
 }
 class Box {
     var value = 9;
@@ -23,11 +23,12 @@ print(reader.read());
 INTERFACE (1:1-1:10)
 IDENTIFIER "Reader" (1:11-1:17)
 LEFT_BRACE (1:18-1:19)
-IDENTIFIER "read" (2:5-2:9)
-LEFT_PAREN (2:9-2:10)
-RIGHT_PAREN (2:10-2:11)
-IDENTIFIER "i32" (2:12-2:15)
-SEMICOLON (2:15-2:16)
+FUNC (2:5-2:9)
+IDENTIFIER "read" (2:10-2:14)
+LEFT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+SEMICOLON (2:20-2:21)
 RIGHT_BRACE (3:1-3:2)
 CLASS (4:1-4:6)
 IDENTIFIER "Box" (4:7-4:10)
@@ -118,13 +119,13 @@ SEMICOLON (19:21-19:22)
       name: "Reader"
     )
     (InterfaceMethodDeclaration
-      range: 2:5-2:16
+      range: 2:5-2:21
       (IdentifierDeclaration
-        range: 2:5-2:9
+        range: 2:10-2:14
         name: "read"
       )
       (NamedTypeNode
-        range: 2:12-2:15
+        range: 2:17-2:20
         name: "i32"
       )
     )
@@ -338,13 +339,13 @@ Expression types:
   19:14-19:18 -> () => i32
 
 Resolved types:
-  2:12-2:15 -> i32
+  2:17-2:20 -> i32
   6:24-6:30 -> Reader
   9:30-9:36 -> Reader
 
 Declarations:
   1:11-1:17 -> interface Reader
-  2:5-2:9 -> read() => i32
+  2:10-2:14 -> read() => i32
   4:7-4:10 -> class Box
   5:9-5:14 -> var value: i32
   6:17-6:21 -> make() => Reader
@@ -355,13 +356,13 @@ Declarations:
 References:
   10:38-10:43 -> 5:9-5:14
   12:24-12:29 -> 9:23-9:28
-  12:30-12:34 -> 2:5-2:9
+  12:30-12:34 -> 2:10-2:14
   17:17-17:20 -> 4:7-4:10
   18:16-18:19 -> 17:7-17:10
   18:20-18:24 -> 6:17-6:21
   19:1-19:6 -> builtin print
   19:7-19:13 -> 18:7-18:13
-  19:14-19:18 -> 2:5-2:9
+  19:14-19:18 -> 2:10-2:14
 
 --- BYTECODE ---
 

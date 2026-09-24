@@ -1,5 +1,5 @@
 interface Operation {
-    var apply() i32;
+    var func apply() i32;
 }
 
 --- TOKENS ---
@@ -8,13 +8,14 @@ INTERFACE (1:1-1:10)
 IDENTIFIER "Operation" (1:11-1:20)
 LEFT_BRACE (1:21-1:22)
 VAR (2:5-2:8)
-IDENTIFIER "apply" (2:9-2:14)
-LEFT_PAREN (2:14-2:15)
-RIGHT_PAREN (2:15-2:16)
-IDENTIFIER "i32" (2:17-2:20)
-SEMICOLON (2:20-2:21)
+FUNC (2:9-2:13)
+IDENTIFIER "apply" (2:14-2:19)
+LEFT_PAREN (2:19-2:20)
+RIGHT_PAREN (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+SEMICOLON (2:25-2:26)
 RIGHT_BRACE (3:1-3:2)
 
 --- AST ---
 
-ParserException: Expected COLON, but found LEFT_PAREN at 2:14-2:15
+ParserException: Interface methods cannot have a const or var modifier at 2:9-2:13

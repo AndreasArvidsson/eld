@@ -1,14 +1,34 @@
-interface Operation { const value: i32; add(n: i32) i32; }
-const old: Operation = { value: 10, add: (n) => n + 1 };
+interface Operation {
+    const value: i32; func add(n: i32) i32;
+}
+const old: Operation = {
+    value: 10, add: (n) => n + 1
+};
 const copied: Operation = { ...old, value: 5 };
 const inferred = { ...copied };
-const override: Operation = { ...old, add: (n) => n + 2 };
-class Base { public const value = 20; const hidden = 1; }
-class Child extends Base { public const other = 2; }
-interface Value { const value: i32; const other: i32; }
+const override: Operation = {
+    ...old,
+    add: (n) => n + 2
+};
+class Base {
+    public const value = 20; const hidden = 1;
+}
+class Child extends Base {
+    public const other = 2;
+}
+interface Value {
+    const value: i32;
+    const other: i32;
+}
 const classCopy: Value = { ...new Child() };
-interface Method { compute() i32; }
-class MethodBase { public func compute() i32 { return 7; } }
+interface Method {
+    func compute() i32;
+}
+class MethodBase {
+    public func compute() i32 {
+        return 7;
+    }
+}
 class MethodChild extends MethodBase {}
 const method: Method = { ...new MethodChild() };
 print([copied.add(4), inferred.add(5), override.add(4), classCopy.value, classCopy.other, method.compute()]);
@@ -18,317 +38,319 @@ print([copied.add(4), inferred.add(5), override.add(4), classCopy.value, classCo
 INTERFACE (1:1-1:10)
 IDENTIFIER "Operation" (1:11-1:20)
 LEFT_BRACE (1:21-1:22)
-CONST (1:23-1:28)
-IDENTIFIER "value" (1:29-1:34)
-COLON (1:34-1:35)
-IDENTIFIER "i32" (1:36-1:39)
-SEMICOLON (1:39-1:40)
-IDENTIFIER "add" (1:41-1:44)
-LEFT_PAREN (1:44-1:45)
-IDENTIFIER "n" (1:45-1:46)
-COLON (1:46-1:47)
-IDENTIFIER "i32" (1:48-1:51)
-RIGHT_PAREN (1:51-1:52)
-IDENTIFIER "i32" (1:53-1:56)
-SEMICOLON (1:56-1:57)
-RIGHT_BRACE (1:58-1:59)
-CONST (2:1-2:6)
-IDENTIFIER "old" (2:7-2:10)
-COLON (2:10-2:11)
-IDENTIFIER "Operation" (2:12-2:21)
-EQUAL (2:22-2:23)
-LEFT_BRACE (2:24-2:25)
-IDENTIFIER "value" (2:26-2:31)
-COLON (2:31-2:32)
-INTEGER_LITERAL "10" (2:33-2:35)
-COMMA (2:35-2:36)
-IDENTIFIER "add" (2:37-2:40)
-COLON (2:40-2:41)
-LEFT_PAREN (2:42-2:43)
-IDENTIFIER "n" (2:43-2:44)
-RIGHT_PAREN (2:44-2:45)
-ARROW (2:46-2:48)
-IDENTIFIER "n" (2:49-2:50)
-PLUS (2:51-2:52)
-INTEGER_LITERAL "1" (2:53-2:54)
-RIGHT_BRACE (2:55-2:56)
-SEMICOLON (2:56-2:57)
-CONST (3:1-3:6)
-IDENTIFIER "copied" (3:7-3:13)
-COLON (3:13-3:14)
-IDENTIFIER "Operation" (3:15-3:24)
-EQUAL (3:25-3:26)
-LEFT_BRACE (3:27-3:28)
-ELLIPSIS (3:29-3:32)
-IDENTIFIER "old" (3:32-3:35)
-COMMA (3:35-3:36)
-IDENTIFIER "value" (3:37-3:42)
-COLON (3:42-3:43)
-INTEGER_LITERAL "5" (3:44-3:45)
-RIGHT_BRACE (3:46-3:47)
-SEMICOLON (3:47-3:48)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+FUNC (2:23-2:27)
+IDENTIFIER "add" (2:28-2:31)
+LEFT_PAREN (2:31-2:32)
+IDENTIFIER "n" (2:32-2:33)
+COLON (2:33-2:34)
+IDENTIFIER "i32" (2:35-2:38)
+RIGHT_PAREN (2:38-2:39)
+IDENTIFIER "i32" (2:40-2:43)
+SEMICOLON (2:43-2:44)
+RIGHT_BRACE (3:1-3:2)
 CONST (4:1-4:6)
-IDENTIFIER "inferred" (4:7-4:15)
-EQUAL (4:16-4:17)
-LEFT_BRACE (4:18-4:19)
-ELLIPSIS (4:20-4:23)
-IDENTIFIER "copied" (4:23-4:29)
-RIGHT_BRACE (4:30-4:31)
-SEMICOLON (4:31-4:32)
-CONST (5:1-5:6)
-IDENTIFIER "override" (5:7-5:15)
-COLON (5:15-5:16)
-IDENTIFIER "Operation" (5:17-5:26)
-EQUAL (5:27-5:28)
-LEFT_BRACE (5:29-5:30)
-ELLIPSIS (5:31-5:34)
-IDENTIFIER "old" (5:34-5:37)
-COMMA (5:37-5:38)
-IDENTIFIER "add" (5:39-5:42)
-COLON (5:42-5:43)
-LEFT_PAREN (5:44-5:45)
-IDENTIFIER "n" (5:45-5:46)
-RIGHT_PAREN (5:46-5:47)
-ARROW (5:48-5:50)
-IDENTIFIER "n" (5:51-5:52)
-PLUS (5:53-5:54)
-INTEGER_LITERAL "2" (5:55-5:56)
-RIGHT_BRACE (5:57-5:58)
-SEMICOLON (5:58-5:59)
-CLASS (6:1-6:6)
-IDENTIFIER "Base" (6:7-6:11)
-LEFT_BRACE (6:12-6:13)
-PUBLIC (6:14-6:20)
-CONST (6:21-6:26)
-IDENTIFIER "value" (6:27-6:32)
-EQUAL (6:33-6:34)
-INTEGER_LITERAL "20" (6:35-6:37)
-SEMICOLON (6:37-6:38)
-CONST (6:39-6:44)
-IDENTIFIER "hidden" (6:45-6:51)
-EQUAL (6:52-6:53)
-INTEGER_LITERAL "1" (6:54-6:55)
-SEMICOLON (6:55-6:56)
-RIGHT_BRACE (6:57-6:58)
-CLASS (7:1-7:6)
-IDENTIFIER "Child" (7:7-7:12)
-EXTENDS (7:13-7:20)
-IDENTIFIER "Base" (7:21-7:25)
-LEFT_BRACE (7:26-7:27)
-PUBLIC (7:28-7:34)
-CONST (7:35-7:40)
-IDENTIFIER "other" (7:41-7:46)
-EQUAL (7:47-7:48)
-INTEGER_LITERAL "2" (7:49-7:50)
-SEMICOLON (7:50-7:51)
-RIGHT_BRACE (7:52-7:53)
-INTERFACE (8:1-8:10)
-IDENTIFIER "Value" (8:11-8:16)
-LEFT_BRACE (8:17-8:18)
-CONST (8:19-8:24)
-IDENTIFIER "value" (8:25-8:30)
-COLON (8:30-8:31)
-IDENTIFIER "i32" (8:32-8:35)
-SEMICOLON (8:35-8:36)
-CONST (8:37-8:42)
-IDENTIFIER "other" (8:43-8:48)
-COLON (8:48-8:49)
-IDENTIFIER "i32" (8:50-8:53)
-SEMICOLON (8:53-8:54)
-RIGHT_BRACE (8:55-8:56)
+IDENTIFIER "old" (4:7-4:10)
+COLON (4:10-4:11)
+IDENTIFIER "Operation" (4:12-4:21)
+EQUAL (4:22-4:23)
+LEFT_BRACE (4:24-4:25)
+IDENTIFIER "value" (5:5-5:10)
+COLON (5:10-5:11)
+INTEGER_LITERAL "10" (5:12-5:14)
+COMMA (5:14-5:15)
+IDENTIFIER "add" (5:16-5:19)
+COLON (5:19-5:20)
+LEFT_PAREN (5:21-5:22)
+IDENTIFIER "n" (5:22-5:23)
+RIGHT_PAREN (5:23-5:24)
+ARROW (5:25-5:27)
+IDENTIFIER "n" (5:28-5:29)
+PLUS (5:30-5:31)
+INTEGER_LITERAL "1" (5:32-5:33)
+RIGHT_BRACE (6:1-6:2)
+SEMICOLON (6:2-6:3)
+CONST (7:1-7:6)
+IDENTIFIER "copied" (7:7-7:13)
+COLON (7:13-7:14)
+IDENTIFIER "Operation" (7:15-7:24)
+EQUAL (7:25-7:26)
+LEFT_BRACE (7:27-7:28)
+ELLIPSIS (7:29-7:32)
+IDENTIFIER "old" (7:32-7:35)
+COMMA (7:35-7:36)
+IDENTIFIER "value" (7:37-7:42)
+COLON (7:42-7:43)
+INTEGER_LITERAL "5" (7:44-7:45)
+RIGHT_BRACE (7:46-7:47)
+SEMICOLON (7:47-7:48)
+CONST (8:1-8:6)
+IDENTIFIER "inferred" (8:7-8:15)
+EQUAL (8:16-8:17)
+LEFT_BRACE (8:18-8:19)
+ELLIPSIS (8:20-8:23)
+IDENTIFIER "copied" (8:23-8:29)
+RIGHT_BRACE (8:30-8:31)
+SEMICOLON (8:31-8:32)
 CONST (9:1-9:6)
-IDENTIFIER "classCopy" (9:7-9:16)
-COLON (9:16-9:17)
-IDENTIFIER "Value" (9:18-9:23)
-EQUAL (9:24-9:25)
-LEFT_BRACE (9:26-9:27)
-ELLIPSIS (9:28-9:31)
-NEW (9:31-9:34)
-IDENTIFIER "Child" (9:35-9:40)
-LEFT_PAREN (9:40-9:41)
-RIGHT_PAREN (9:41-9:42)
-RIGHT_BRACE (9:43-9:44)
-SEMICOLON (9:44-9:45)
-INTERFACE (10:1-10:10)
-IDENTIFIER "Method" (10:11-10:17)
-LEFT_BRACE (10:18-10:19)
-IDENTIFIER "compute" (10:20-10:27)
-LEFT_PAREN (10:27-10:28)
-RIGHT_PAREN (10:28-10:29)
-IDENTIFIER "i32" (10:30-10:33)
-SEMICOLON (10:33-10:34)
-RIGHT_BRACE (10:35-10:36)
-CLASS (11:1-11:6)
-IDENTIFIER "MethodBase" (11:7-11:17)
-LEFT_BRACE (11:18-11:19)
-PUBLIC (11:20-11:26)
-FUNC (11:27-11:31)
-IDENTIFIER "compute" (11:32-11:39)
-LEFT_PAREN (11:39-11:40)
-RIGHT_PAREN (11:40-11:41)
-IDENTIFIER "i32" (11:42-11:45)
-LEFT_BRACE (11:46-11:47)
-RETURN (11:48-11:54)
-INTEGER_LITERAL "7" (11:55-11:56)
-SEMICOLON (11:56-11:57)
-RIGHT_BRACE (11:58-11:59)
-RIGHT_BRACE (11:60-11:61)
-CLASS (12:1-12:6)
-IDENTIFIER "MethodChild" (12:7-12:18)
-EXTENDS (12:19-12:26)
-IDENTIFIER "MethodBase" (12:27-12:37)
-LEFT_BRACE (12:38-12:39)
-RIGHT_BRACE (12:39-12:40)
-CONST (13:1-13:6)
-IDENTIFIER "method" (13:7-13:13)
-COLON (13:13-13:14)
-IDENTIFIER "Method" (13:15-13:21)
-EQUAL (13:22-13:23)
-LEFT_BRACE (13:24-13:25)
-ELLIPSIS (13:26-13:29)
-NEW (13:29-13:32)
-IDENTIFIER "MethodChild" (13:33-13:44)
-LEFT_PAREN (13:44-13:45)
-RIGHT_PAREN (13:45-13:46)
-RIGHT_BRACE (13:47-13:48)
-SEMICOLON (13:48-13:49)
-IDENTIFIER "print" (14:1-14:6)
-LEFT_PAREN (14:6-14:7)
-LEFT_BRACKET (14:7-14:8)
-IDENTIFIER "copied" (14:8-14:14)
-DOT (14:14-14:15)
-IDENTIFIER "add" (14:15-14:18)
-LEFT_PAREN (14:18-14:19)
-INTEGER_LITERAL "4" (14:19-14:20)
-RIGHT_PAREN (14:20-14:21)
-COMMA (14:21-14:22)
-IDENTIFIER "inferred" (14:23-14:31)
-DOT (14:31-14:32)
-IDENTIFIER "add" (14:32-14:35)
-LEFT_PAREN (14:35-14:36)
-INTEGER_LITERAL "5" (14:36-14:37)
-RIGHT_PAREN (14:37-14:38)
-COMMA (14:38-14:39)
-IDENTIFIER "override" (14:40-14:48)
-DOT (14:48-14:49)
-IDENTIFIER "add" (14:49-14:52)
-LEFT_PAREN (14:52-14:53)
-INTEGER_LITERAL "4" (14:53-14:54)
-RIGHT_PAREN (14:54-14:55)
-COMMA (14:55-14:56)
-IDENTIFIER "classCopy" (14:57-14:66)
-DOT (14:66-14:67)
-IDENTIFIER "value" (14:67-14:72)
-COMMA (14:72-14:73)
-IDENTIFIER "classCopy" (14:74-14:83)
-DOT (14:83-14:84)
-IDENTIFIER "other" (14:84-14:89)
-COMMA (14:89-14:90)
-IDENTIFIER "method" (14:91-14:97)
-DOT (14:97-14:98)
-IDENTIFIER "compute" (14:98-14:105)
-LEFT_PAREN (14:105-14:106)
-RIGHT_PAREN (14:106-14:107)
-RIGHT_BRACKET (14:107-14:108)
-RIGHT_PAREN (14:108-14:109)
-SEMICOLON (14:109-14:110)
+IDENTIFIER "override" (9:7-9:15)
+COLON (9:15-9:16)
+IDENTIFIER "Operation" (9:17-9:26)
+EQUAL (9:27-9:28)
+LEFT_BRACE (9:29-9:30)
+ELLIPSIS (10:5-10:8)
+IDENTIFIER "old" (10:8-10:11)
+COMMA (10:11-10:12)
+IDENTIFIER "add" (11:5-11:8)
+COLON (11:8-11:9)
+LEFT_PAREN (11:10-11:11)
+IDENTIFIER "n" (11:11-11:12)
+RIGHT_PAREN (11:12-11:13)
+ARROW (11:14-11:16)
+IDENTIFIER "n" (11:17-11:18)
+PLUS (11:19-11:20)
+INTEGER_LITERAL "2" (11:21-11:22)
+RIGHT_BRACE (12:1-12:2)
+SEMICOLON (12:2-12:3)
+CLASS (13:1-13:6)
+IDENTIFIER "Base" (13:7-13:11)
+LEFT_BRACE (13:12-13:13)
+PUBLIC (14:5-14:11)
+CONST (14:12-14:17)
+IDENTIFIER "value" (14:18-14:23)
+EQUAL (14:24-14:25)
+INTEGER_LITERAL "20" (14:26-14:28)
+SEMICOLON (14:28-14:29)
+CONST (14:30-14:35)
+IDENTIFIER "hidden" (14:36-14:42)
+EQUAL (14:43-14:44)
+INTEGER_LITERAL "1" (14:45-14:46)
+SEMICOLON (14:46-14:47)
+RIGHT_BRACE (15:1-15:2)
+CLASS (16:1-16:6)
+IDENTIFIER "Child" (16:7-16:12)
+EXTENDS (16:13-16:20)
+IDENTIFIER "Base" (16:21-16:25)
+LEFT_BRACE (16:26-16:27)
+PUBLIC (17:5-17:11)
+CONST (17:12-17:17)
+IDENTIFIER "other" (17:18-17:23)
+EQUAL (17:24-17:25)
+INTEGER_LITERAL "2" (17:26-17:27)
+SEMICOLON (17:27-17:28)
+RIGHT_BRACE (18:1-18:2)
+INTERFACE (19:1-19:10)
+IDENTIFIER "Value" (19:11-19:16)
+LEFT_BRACE (19:17-19:18)
+CONST (20:5-20:10)
+IDENTIFIER "value" (20:11-20:16)
+COLON (20:16-20:17)
+IDENTIFIER "i32" (20:18-20:21)
+SEMICOLON (20:21-20:22)
+CONST (21:5-21:10)
+IDENTIFIER "other" (21:11-21:16)
+COLON (21:16-21:17)
+IDENTIFIER "i32" (21:18-21:21)
+SEMICOLON (21:21-21:22)
+RIGHT_BRACE (22:1-22:2)
+CONST (23:1-23:6)
+IDENTIFIER "classCopy" (23:7-23:16)
+COLON (23:16-23:17)
+IDENTIFIER "Value" (23:18-23:23)
+EQUAL (23:24-23:25)
+LEFT_BRACE (23:26-23:27)
+ELLIPSIS (23:28-23:31)
+NEW (23:31-23:34)
+IDENTIFIER "Child" (23:35-23:40)
+LEFT_PAREN (23:40-23:41)
+RIGHT_PAREN (23:41-23:42)
+RIGHT_BRACE (23:43-23:44)
+SEMICOLON (23:44-23:45)
+INTERFACE (24:1-24:10)
+IDENTIFIER "Method" (24:11-24:17)
+LEFT_BRACE (24:18-24:19)
+FUNC (25:5-25:9)
+IDENTIFIER "compute" (25:10-25:17)
+LEFT_PAREN (25:17-25:18)
+RIGHT_PAREN (25:18-25:19)
+IDENTIFIER "i32" (25:20-25:23)
+SEMICOLON (25:23-25:24)
+RIGHT_BRACE (26:1-26:2)
+CLASS (27:1-27:6)
+IDENTIFIER "MethodBase" (27:7-27:17)
+LEFT_BRACE (27:18-27:19)
+PUBLIC (28:5-28:11)
+FUNC (28:12-28:16)
+IDENTIFIER "compute" (28:17-28:24)
+LEFT_PAREN (28:24-28:25)
+RIGHT_PAREN (28:25-28:26)
+IDENTIFIER "i32" (28:27-28:30)
+LEFT_BRACE (28:31-28:32)
+RETURN (29:9-29:15)
+INTEGER_LITERAL "7" (29:16-29:17)
+SEMICOLON (29:17-29:18)
+RIGHT_BRACE (30:5-30:6)
+RIGHT_BRACE (31:1-31:2)
+CLASS (32:1-32:6)
+IDENTIFIER "MethodChild" (32:7-32:18)
+EXTENDS (32:19-32:26)
+IDENTIFIER "MethodBase" (32:27-32:37)
+LEFT_BRACE (32:38-32:39)
+RIGHT_BRACE (32:39-32:40)
+CONST (33:1-33:6)
+IDENTIFIER "method" (33:7-33:13)
+COLON (33:13-33:14)
+IDENTIFIER "Method" (33:15-33:21)
+EQUAL (33:22-33:23)
+LEFT_BRACE (33:24-33:25)
+ELLIPSIS (33:26-33:29)
+NEW (33:29-33:32)
+IDENTIFIER "MethodChild" (33:33-33:44)
+LEFT_PAREN (33:44-33:45)
+RIGHT_PAREN (33:45-33:46)
+RIGHT_BRACE (33:47-33:48)
+SEMICOLON (33:48-33:49)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+LEFT_BRACKET (34:7-34:8)
+IDENTIFIER "copied" (34:8-34:14)
+DOT (34:14-34:15)
+IDENTIFIER "add" (34:15-34:18)
+LEFT_PAREN (34:18-34:19)
+INTEGER_LITERAL "4" (34:19-34:20)
+RIGHT_PAREN (34:20-34:21)
+COMMA (34:21-34:22)
+IDENTIFIER "inferred" (34:23-34:31)
+DOT (34:31-34:32)
+IDENTIFIER "add" (34:32-34:35)
+LEFT_PAREN (34:35-34:36)
+INTEGER_LITERAL "5" (34:36-34:37)
+RIGHT_PAREN (34:37-34:38)
+COMMA (34:38-34:39)
+IDENTIFIER "override" (34:40-34:48)
+DOT (34:48-34:49)
+IDENTIFIER "add" (34:49-34:52)
+LEFT_PAREN (34:52-34:53)
+INTEGER_LITERAL "4" (34:53-34:54)
+RIGHT_PAREN (34:54-34:55)
+COMMA (34:55-34:56)
+IDENTIFIER "classCopy" (34:57-34:66)
+DOT (34:66-34:67)
+IDENTIFIER "value" (34:67-34:72)
+COMMA (34:72-34:73)
+IDENTIFIER "classCopy" (34:74-34:83)
+DOT (34:83-34:84)
+IDENTIFIER "other" (34:84-34:89)
+COMMA (34:89-34:90)
+IDENTIFIER "method" (34:91-34:97)
+DOT (34:97-34:98)
+IDENTIFIER "compute" (34:98-34:105)
+LEFT_PAREN (34:105-34:106)
+RIGHT_PAREN (34:106-34:107)
+RIGHT_BRACKET (34:107-34:108)
+RIGHT_PAREN (34:108-34:109)
+SEMICOLON (34:109-34:110)
 
 --- AST ---
 
 (Program
-  range: 1:1-14:110
+  range: 1:1-34:110
   (InterfaceDeclaration
-    range: 1:1-1:59
+    range: 1:1-3:2
     (IdentifierDeclaration
       range: 1:11-1:20
       name: "Operation"
     )
     (UninitializedVariableDeclaration
-      range: 1:23-1:40
+      range: 2:5-2:22
       mutability: CONST
       (IdentifierDeclaration
-        range: 1:29-1:34
+        range: 2:11-2:16
         name: "value"
       )
       (NamedTypeNode
-        range: 1:36-1:39
+        range: 2:18-2:21
         name: "i32"
       )
     )
     (InterfaceMethodDeclaration
-      range: 1:41-1:57
+      range: 2:23-2:44
       (IdentifierDeclaration
-        range: 1:41-1:44
+        range: 2:28-2:31
         name: "add"
       )
       (FunctionParameter
-        range: 1:45-1:51
+        range: 2:32-2:38
         (IdentifierDeclaration
-          range: 1:45-1:46
+          range: 2:32-2:33
           name: "n"
         )
         (NamedTypeNode
-          range: 1:48-1:51
+          range: 2:35-2:38
           name: "i32"
         )
         optional: false
         defaultValue: null
       )
       (NamedTypeNode
-        range: 1:53-1:56
+        range: 2:40-2:43
         name: "i32"
       )
     )
   )
   (VariableDeclaration
-    range: 2:1-2:57
+    range: 4:1-6:3
     mutability: CONST
     (IdentifierDeclaration
-      range: 2:7-2:10
+      range: 4:7-4:10
       name: "old"
     )
     (NamedTypeNode
-      range: 2:12-2:21
+      range: 4:12-4:21
       name: "Operation"
     )
     (ObjectExpression
-      range: 2:24-2:56
+      range: 4:24-6:2
       (ObjectMember
-        range: 2:26-2:35
+        range: 5:5-5:14
         (IdentifierDeclaration
-          range: 2:26-2:31
+          range: 5:5-5:10
           name: "value"
         )
         (LiteralExpression
-          range: 2:33-2:35
+          range: 5:12-5:14
           kind: INT
           text: "10"
         )
       )
       (ObjectMember
-        range: 2:37-2:54
+        range: 5:16-5:33
         (IdentifierDeclaration
-          range: 2:37-2:40
+          range: 5:16-5:19
           name: "add"
         )
         (LambdaExpression
-          range: 2:42-2:54
+          range: 5:21-5:33
           (LambdaParameter
-            range: 2:43-2:44
+            range: 5:22-5:23
             (IdentifierDeclaration
-              range: 2:43-2:44
+              range: 5:22-5:23
               name: "n"
             )
           )
           (BinaryExpression
-            range: 2:49-2:54
+            range: 5:28-5:33
             (IdentifierExpression
-              range: 2:49-2:50
+              range: 5:28-5:29
               name: "n"
             )
             operator: ADD
             (LiteralExpression
-              range: 2:53-2:54
+              range: 5:32-5:33
               kind: INT
               text: "1"
             )
@@ -338,33 +360,33 @@ SEMICOLON (14:109-14:110)
     )
   )
   (VariableDeclaration
-    range: 3:1-3:48
+    range: 7:1-7:48
     mutability: CONST
     (IdentifierDeclaration
-      range: 3:7-3:13
+      range: 7:7-7:13
       name: "copied"
     )
     (NamedTypeNode
-      range: 3:15-3:24
+      range: 7:15-7:24
       name: "Operation"
     )
     (ObjectExpression
-      range: 3:27-3:47
+      range: 7:27-7:47
       (ObjectSpread
-        range: 3:29-3:35
+        range: 7:29-7:35
         (IdentifierExpression
-          range: 3:32-3:35
+          range: 7:32-7:35
           name: "old"
         )
       )
       (ObjectMember
-        range: 3:37-3:45
+        range: 7:37-7:45
         (IdentifierDeclaration
-          range: 3:37-3:42
+          range: 7:37-7:42
           name: "value"
         )
         (LiteralExpression
-          range: 3:44-3:45
+          range: 7:44-7:45
           kind: INT
           text: "5"
         )
@@ -372,68 +394,68 @@ SEMICOLON (14:109-14:110)
     )
   )
   (VariableDeclaration
-    range: 4:1-4:32
+    range: 8:1-8:32
     mutability: CONST
     (IdentifierDeclaration
-      range: 4:7-4:15
+      range: 8:7-8:15
       name: "inferred"
     )
     type: null
     (ObjectExpression
-      range: 4:18-4:31
+      range: 8:18-8:31
       (ObjectSpread
-        range: 4:20-4:29
+        range: 8:20-8:29
         (IdentifierExpression
-          range: 4:23-4:29
+          range: 8:23-8:29
           name: "copied"
         )
       )
     )
   )
   (VariableDeclaration
-    range: 5:1-5:59
+    range: 9:1-12:3
     mutability: CONST
     (IdentifierDeclaration
-      range: 5:7-5:15
+      range: 9:7-9:15
       name: "override"
     )
     (NamedTypeNode
-      range: 5:17-5:26
+      range: 9:17-9:26
       name: "Operation"
     )
     (ObjectExpression
-      range: 5:29-5:58
+      range: 9:29-12:2
       (ObjectSpread
-        range: 5:31-5:37
+        range: 10:5-10:11
         (IdentifierExpression
-          range: 5:34-5:37
+          range: 10:8-10:11
           name: "old"
         )
       )
       (ObjectMember
-        range: 5:39-5:56
+        range: 11:5-11:22
         (IdentifierDeclaration
-          range: 5:39-5:42
+          range: 11:5-11:8
           name: "add"
         )
         (LambdaExpression
-          range: 5:44-5:56
+          range: 11:10-11:22
           (LambdaParameter
-            range: 5:45-5:46
+            range: 11:11-11:12
             (IdentifierDeclaration
-              range: 5:45-5:46
+              range: 11:11-11:12
               name: "n"
             )
           )
           (BinaryExpression
-            range: 5:51-5:56
+            range: 11:17-11:22
             (IdentifierExpression
-              range: 5:51-5:52
+              range: 11:17-11:18
               name: "n"
             )
             operator: ADD
             (LiteralExpression
-              range: 5:55-5:56
+              range: 11:21-11:22
               kind: INT
               text: "2"
             )
@@ -443,43 +465,43 @@ SEMICOLON (14:109-14:110)
     )
   )
   (ClassDeclaration
-    range: 6:1-6:58
+    range: 13:1-15:2
     (IdentifierDeclaration
-      range: 6:7-6:11
+      range: 13:7-13:11
       name: "Base"
     )
     superClass: null
     (MemberDeclaration
-      range: 6:14-6:38
+      range: 14:5-14:29
       visibility: PUBLIC
       (VariableDeclaration
-        range: 6:21-6:38
+        range: 14:12-14:29
         mutability: CONST
         (IdentifierDeclaration
-          range: 6:27-6:32
+          range: 14:18-14:23
           name: "value"
         )
         type: null
         (LiteralExpression
-          range: 6:35-6:37
+          range: 14:26-14:28
           kind: INT
           text: "20"
         )
       )
     )
     (MemberDeclaration
-      range: 6:39-6:56
+      range: 14:30-14:47
       visibility: PRIVATE
       (VariableDeclaration
-        range: 6:39-6:56
+        range: 14:30-14:47
         mutability: CONST
         (IdentifierDeclaration
-          range: 6:45-6:51
+          range: 14:36-14:42
           name: "hidden"
         )
         type: null
         (LiteralExpression
-          range: 6:54-6:55
+          range: 14:45-14:46
           kind: INT
           text: "1"
         )
@@ -487,28 +509,28 @@ SEMICOLON (14:109-14:110)
     )
   )
   (ClassDeclaration
-    range: 7:1-7:53
+    range: 16:1-18:2
     (IdentifierDeclaration
-      range: 7:7-7:12
+      range: 16:7-16:12
       name: "Child"
     )
     (IdentifierExpression
-      range: 7:21-7:25
+      range: 16:21-16:25
       name: "Base"
     )
     (MemberDeclaration
-      range: 7:28-7:51
+      range: 17:5-17:28
       visibility: PUBLIC
       (VariableDeclaration
-        range: 7:35-7:51
+        range: 17:12-17:28
         mutability: CONST
         (IdentifierDeclaration
-          range: 7:41-7:46
+          range: 17:18-17:23
           name: "other"
         )
         type: null
         (LiteralExpression
-          range: 7:49-7:50
+          range: 17:26-17:27
           kind: INT
           text: "2"
         )
@@ -516,55 +538,55 @@ SEMICOLON (14:109-14:110)
     )
   )
   (InterfaceDeclaration
-    range: 8:1-8:56
+    range: 19:1-22:2
     (IdentifierDeclaration
-      range: 8:11-8:16
+      range: 19:11-19:16
       name: "Value"
     )
     (UninitializedVariableDeclaration
-      range: 8:19-8:36
+      range: 20:5-20:22
       mutability: CONST
       (IdentifierDeclaration
-        range: 8:25-8:30
+        range: 20:11-20:16
         name: "value"
       )
       (NamedTypeNode
-        range: 8:32-8:35
+        range: 20:18-20:21
         name: "i32"
       )
     )
     (UninitializedVariableDeclaration
-      range: 8:37-8:54
+      range: 21:5-21:22
       mutability: CONST
       (IdentifierDeclaration
-        range: 8:43-8:48
+        range: 21:11-21:16
         name: "other"
       )
       (NamedTypeNode
-        range: 8:50-8:53
+        range: 21:18-21:21
         name: "i32"
       )
     )
   )
   (VariableDeclaration
-    range: 9:1-9:45
+    range: 23:1-23:45
     mutability: CONST
     (IdentifierDeclaration
-      range: 9:7-9:16
+      range: 23:7-23:16
       name: "classCopy"
     )
     (NamedTypeNode
-      range: 9:18-9:23
+      range: 23:18-23:23
       name: "Value"
     )
     (ObjectExpression
-      range: 9:26-9:44
+      range: 23:26-23:44
       (ObjectSpread
-        range: 9:28-9:42
+        range: 23:28-23:42
         (NewExpression
-          range: 9:31-9:42
+          range: 23:31-23:42
           (IdentifierExpression
-            range: 9:35-9:40
+            range: 23:35-23:40
             name: "Child"
           )
         )
@@ -572,49 +594,49 @@ SEMICOLON (14:109-14:110)
     )
   )
   (InterfaceDeclaration
-    range: 10:1-10:36
+    range: 24:1-26:2
     (IdentifierDeclaration
-      range: 10:11-10:17
+      range: 24:11-24:17
       name: "Method"
     )
     (InterfaceMethodDeclaration
-      range: 10:20-10:34
+      range: 25:5-25:24
       (IdentifierDeclaration
-        range: 10:20-10:27
+        range: 25:10-25:17
         name: "compute"
       )
       (NamedTypeNode
-        range: 10:30-10:33
+        range: 25:20-25:23
         name: "i32"
       )
     )
   )
   (ClassDeclaration
-    range: 11:1-11:61
+    range: 27:1-31:2
     (IdentifierDeclaration
-      range: 11:7-11:17
+      range: 27:7-27:17
       name: "MethodBase"
     )
     superClass: null
     (MemberDeclaration
-      range: 11:20-11:59
+      range: 28:5-30:6
       visibility: PUBLIC
       (FunctionDeclaration
-        range: 11:27-11:59
+        range: 28:12-30:6
         (IdentifierDeclaration
-          range: 11:32-11:39
+          range: 28:17-28:24
           name: "compute"
         )
         (NamedTypeNode
-          range: 11:42-11:45
+          range: 28:27-28:30
           name: "i32"
         )
         (BlockStatement
-          range: 11:46-11:59
+          range: 28:31-30:6
           (ReturnStatement
-            range: 11:48-11:57
+            range: 29:9-29:18
             (LiteralExpression
-              range: 11:55-11:56
+              range: 29:16-29:17
               kind: INT
               text: "7"
             )
@@ -624,35 +646,35 @@ SEMICOLON (14:109-14:110)
     )
   )
   (ClassDeclaration
-    range: 12:1-12:40
+    range: 32:1-32:40
     (IdentifierDeclaration
-      range: 12:7-12:18
+      range: 32:7-32:18
       name: "MethodChild"
     )
     (IdentifierExpression
-      range: 12:27-12:37
+      range: 32:27-32:37
       name: "MethodBase"
     )
   )
   (VariableDeclaration
-    range: 13:1-13:49
+    range: 33:1-33:49
     mutability: CONST
     (IdentifierDeclaration
-      range: 13:7-13:13
+      range: 33:7-33:13
       name: "method"
     )
     (NamedTypeNode
-      range: 13:15-13:21
+      range: 33:15-33:21
       name: "Method"
     )
     (ObjectExpression
-      range: 13:24-13:48
+      range: 33:24-33:48
       (ObjectSpread
-        range: 13:26-13:46
+        range: 33:26-33:46
         (NewExpression
-          range: 13:29-13:46
+          range: 33:29-33:46
           (IdentifierExpression
-            range: 13:33-13:44
+            range: 33:33-33:44
             name: "MethodChild"
           )
         )
@@ -660,104 +682,104 @@ SEMICOLON (14:109-14:110)
     )
   )
   (ExpressionStatement
-    range: 14:1-14:110
+    range: 34:1-34:110
     (CallExpression
-      range: 14:1-14:109
+      range: 34:1-34:109
       (IdentifierExpression
-        range: 14:1-14:6
+        range: 34:1-34:6
         name: "print"
       )
       (ArrayExpression
-        range: 14:7-14:108
+        range: 34:7-34:108
         (CallExpression
-          range: 14:8-14:21
+          range: 34:8-34:21
           (MemberExpression
-            range: 14:8-14:18
+            range: 34:8-34:18
             (IdentifierExpression
-              range: 14:8-14:14
+              range: 34:8-34:14
               name: "copied"
             )
             (IdentifierExpression
-              range: 14:15-14:18
+              range: 34:15-34:18
               name: "add"
             )
           )
           (LiteralExpression
-            range: 14:19-14:20
+            range: 34:19-34:20
             kind: INT
             text: "4"
           )
         )
         (CallExpression
-          range: 14:23-14:38
+          range: 34:23-34:38
           (MemberExpression
-            range: 14:23-14:35
+            range: 34:23-34:35
             (IdentifierExpression
-              range: 14:23-14:31
+              range: 34:23-34:31
               name: "inferred"
             )
             (IdentifierExpression
-              range: 14:32-14:35
+              range: 34:32-34:35
               name: "add"
             )
           )
           (LiteralExpression
-            range: 14:36-14:37
+            range: 34:36-34:37
             kind: INT
             text: "5"
           )
         )
         (CallExpression
-          range: 14:40-14:55
+          range: 34:40-34:55
           (MemberExpression
-            range: 14:40-14:52
+            range: 34:40-34:52
             (IdentifierExpression
-              range: 14:40-14:48
+              range: 34:40-34:48
               name: "override"
             )
             (IdentifierExpression
-              range: 14:49-14:52
+              range: 34:49-34:52
               name: "add"
             )
           )
           (LiteralExpression
-            range: 14:53-14:54
+            range: 34:53-34:54
             kind: INT
             text: "4"
           )
         )
         (MemberExpression
-          range: 14:57-14:72
+          range: 34:57-34:72
           (IdentifierExpression
-            range: 14:57-14:66
+            range: 34:57-34:66
             name: "classCopy"
           )
           (IdentifierExpression
-            range: 14:67-14:72
+            range: 34:67-34:72
             name: "value"
           )
         )
         (MemberExpression
-          range: 14:74-14:89
+          range: 34:74-34:89
           (IdentifierExpression
-            range: 14:74-14:83
+            range: 34:74-34:83
             name: "classCopy"
           )
           (IdentifierExpression
-            range: 14:84-14:89
+            range: 34:84-34:89
             name: "other"
           )
         )
         (CallExpression
-          range: 14:91-14:107
+          range: 34:91-34:107
           (MemberExpression
-            range: 14:91-14:105
+            range: 34:91-34:105
             (IdentifierExpression
-              range: 14:91-14:97
+              range: 34:91-34:97
               name: "method"
             )
             (IdentifierExpression
-              range: 14:98-14:105
+              range: 34:98-34:105
               name: "compute"
             )
           )
@@ -770,155 +792,155 @@ SEMICOLON (14:109-14:110)
 --- SEMANTIC ---
 
 Expression types:
-  2:24-2:56 -> Operation
-  2:33-2:35 -> i32
-  2:42-2:54 -> (i32) => i32
-  2:49-2:50 -> i32
-  2:49-2:54 -> i32
-  2:53-2:54 -> i32
-  3:27-3:47 -> Operation
-  3:29-3:35 -> (i32) => i32
-  3:29-3:35 -> (i32) => i32
-  3:29-3:35 -> i32
-  3:29-3:35 -> i32
-  3:32-3:35 -> Operation
-  3:44-3:45 -> i32
-  4:18-4:31 -> $spread1
-  4:20-4:29 -> (i32) => i32
-  4:20-4:29 -> (i32) => i32
-  4:20-4:29 -> i32
-  4:20-4:29 -> i32
-  4:23-4:29 -> Operation
-  5:29-5:58 -> Operation
-  5:31-5:37 -> (i32) => i32
-  5:31-5:37 -> (i32) => i32
-  5:31-5:37 -> i32
-  5:31-5:37 -> i32
-  5:34-5:37 -> Operation
-  5:44-5:56 -> (i32) => i32
-  5:51-5:52 -> i32
-  5:51-5:56 -> i32
-  5:55-5:56 -> i32
-  6:35-6:37 -> i32
-  6:54-6:55 -> i32
-  7:21-7:25 -> Base
-  7:49-7:50 -> i32
-  9:26-9:44 -> Value
-  9:28-9:42 -> i32
-  9:28-9:42 -> i32
-  9:28-9:42 -> i32
-  9:28-9:42 -> i32
-  9:31-9:42 -> Child
-  9:35-9:40 -> Child
-  11:55-11:56 -> i32
-  12:27-12:37 -> MethodBase
-  13:24-13:48 -> Method
-  13:26-13:46 -> () => i32
-  13:26-13:46 -> () => i32
-  13:29-13:46 -> MethodChild
-  13:33-13:44 -> MethodChild
-  14:1-14:6 -> (any) => void
-  14:1-14:109 -> void
-  14:7-14:108 -> [i32]
-  14:8-14:14 -> Operation
-  14:8-14:18 -> (i32) => i32
-  14:8-14:21 -> i32
-  14:15-14:18 -> (i32) => i32
-  14:19-14:20 -> i32
-  14:23-14:31 -> $spread1
-  14:23-14:35 -> (i32) => i32
-  14:23-14:38 -> i32
-  14:32-14:35 -> (i32) => i32
-  14:36-14:37 -> i32
-  14:40-14:48 -> Operation
-  14:40-14:52 -> (i32) => i32
-  14:40-14:55 -> i32
-  14:49-14:52 -> (i32) => i32
-  14:53-14:54 -> i32
-  14:57-14:66 -> Value
-  14:57-14:72 -> i32
-  14:67-14:72 -> i32
-  14:74-14:83 -> Value
-  14:74-14:89 -> i32
-  14:84-14:89 -> i32
-  14:91-14:97 -> Method
-  14:91-14:105 -> () => i32
-  14:91-14:107 -> i32
-  14:98-14:105 -> () => i32
+  4:24-6:2 -> Operation
+  5:12-5:14 -> i32
+  5:21-5:33 -> (i32) => i32
+  5:28-5:29 -> i32
+  5:28-5:33 -> i32
+  5:32-5:33 -> i32
+  7:27-7:47 -> Operation
+  7:29-7:35 -> (i32) => i32
+  7:29-7:35 -> (i32) => i32
+  7:29-7:35 -> i32
+  7:29-7:35 -> i32
+  7:32-7:35 -> Operation
+  7:44-7:45 -> i32
+  8:18-8:31 -> $spread1
+  8:20-8:29 -> (i32) => i32
+  8:20-8:29 -> (i32) => i32
+  8:20-8:29 -> i32
+  8:20-8:29 -> i32
+  8:23-8:29 -> Operation
+  9:29-12:2 -> Operation
+  10:5-10:11 -> (i32) => i32
+  10:5-10:11 -> (i32) => i32
+  10:5-10:11 -> i32
+  10:5-10:11 -> i32
+  10:8-10:11 -> Operation
+  11:10-11:22 -> (i32) => i32
+  11:17-11:18 -> i32
+  11:17-11:22 -> i32
+  11:21-11:22 -> i32
+  14:26-14:28 -> i32
+  14:45-14:46 -> i32
+  16:21-16:25 -> Base
+  17:26-17:27 -> i32
+  23:26-23:44 -> Value
+  23:28-23:42 -> i32
+  23:28-23:42 -> i32
+  23:28-23:42 -> i32
+  23:28-23:42 -> i32
+  23:31-23:42 -> Child
+  23:35-23:40 -> Child
+  29:16-29:17 -> i32
+  32:27-32:37 -> MethodBase
+  33:24-33:48 -> Method
+  33:26-33:46 -> () => i32
+  33:26-33:46 -> () => i32
+  33:29-33:46 -> MethodChild
+  33:33-33:44 -> MethodChild
+  34:1-34:6 -> (any) => void
+  34:1-34:109 -> void
+  34:7-34:108 -> [i32]
+  34:8-34:14 -> Operation
+  34:8-34:18 -> (i32) => i32
+  34:8-34:21 -> i32
+  34:15-34:18 -> (i32) => i32
+  34:19-34:20 -> i32
+  34:23-34:31 -> $spread1
+  34:23-34:35 -> (i32) => i32
+  34:23-34:38 -> i32
+  34:32-34:35 -> (i32) => i32
+  34:36-34:37 -> i32
+  34:40-34:48 -> Operation
+  34:40-34:52 -> (i32) => i32
+  34:40-34:55 -> i32
+  34:49-34:52 -> (i32) => i32
+  34:53-34:54 -> i32
+  34:57-34:66 -> Value
+  34:57-34:72 -> i32
+  34:67-34:72 -> i32
+  34:74-34:83 -> Value
+  34:74-34:89 -> i32
+  34:84-34:89 -> i32
+  34:91-34:97 -> Method
+  34:91-34:105 -> () => i32
+  34:91-34:107 -> i32
+  34:98-34:105 -> () => i32
 
 Resolved types:
-  1:36-1:39 -> i32
-  1:48-1:51 -> i32
-  1:53-1:56 -> i32
-  2:12-2:21 -> Operation
-  3:15-3:24 -> Operation
-  5:17-5:26 -> Operation
-  8:32-8:35 -> i32
-  8:50-8:53 -> i32
-  9:18-9:23 -> Value
-  10:30-10:33 -> i32
-  11:42-11:45 -> i32
-  13:15-13:21 -> Method
+  2:18-2:21 -> i32
+  2:35-2:38 -> i32
+  2:40-2:43 -> i32
+  4:12-4:21 -> Operation
+  7:15-7:24 -> Operation
+  9:17-9:26 -> Operation
+  20:18-20:21 -> i32
+  21:18-21:21 -> i32
+  23:18-23:23 -> Value
+  25:20-25:23 -> i32
+  28:27-28:30 -> i32
+  33:15-33:21 -> Method
 
 Declarations:
   1:11-1:20 -> interface Operation
-  1:29-1:34 -> const value: i32
-  1:41-1:44 -> add(i32) => i32
-  1:45-1:46 -> const n: i32
-  2:7-2:10 -> const old: Operation
-  2:43-2:44 -> const n: i32
-  3:7-3:13 -> const copied: Operation
-  4:7-4:15 -> const inferred: $spread1
-  5:7-5:15 -> const override: Operation
-  5:45-5:46 -> const n: i32
-  6:7-6:11 -> class Base
-  6:27-6:32 -> const value: i32
-  6:45-6:51 -> const hidden: i32
-  7:7-7:12 -> class Child
-  7:41-7:46 -> const other: i32
-  8:11-8:16 -> interface Value
-  8:25-8:30 -> const value: i32
-  8:43-8:48 -> const other: i32
-  9:7-9:16 -> const classCopy: Value
-  10:11-10:17 -> interface Method
-  10:20-10:27 -> compute() => i32
-  11:7-11:17 -> class MethodBase
-  11:32-11:39 -> compute() => i32
-  12:7-12:18 -> class MethodChild
-  13:7-13:13 -> const method: Method
+  2:11-2:16 -> const value: i32
+  2:28-2:31 -> add(i32) => i32
+  2:32-2:33 -> const n: i32
+  4:7-4:10 -> const old: Operation
+  5:22-5:23 -> const n: i32
+  7:7-7:13 -> const copied: Operation
+  8:7-8:15 -> const inferred: $spread1
+  9:7-9:15 -> const override: Operation
+  11:11-11:12 -> const n: i32
+  13:7-13:11 -> class Base
+  14:18-14:23 -> const value: i32
+  14:36-14:42 -> const hidden: i32
+  16:7-16:12 -> class Child
+  17:18-17:23 -> const other: i32
+  19:11-19:16 -> interface Value
+  20:11-20:16 -> const value: i32
+  21:11-21:16 -> const other: i32
+  23:7-23:16 -> const classCopy: Value
+  24:11-24:17 -> interface Method
+  25:10-25:17 -> compute() => i32
+  27:7-27:17 -> class MethodBase
+  28:17-28:24 -> compute() => i32
+  32:7-32:18 -> class MethodChild
+  33:7-33:13 -> const method: Method
 
 References:
-  2:49-2:50 -> 2:43-2:44
-  3:29-3:35 -> 1:29-1:34
-  3:29-3:35 -> 1:41-1:44
-  3:32-3:35 -> 2:7-2:10
-  4:20-4:29 -> 1:29-1:34
-  4:20-4:29 -> 1:41-1:44
-  4:23-4:29 -> 3:7-3:13
-  5:31-5:37 -> 1:29-1:34
-  5:31-5:37 -> 1:41-1:44
-  5:34-5:37 -> 2:7-2:10
-  5:51-5:52 -> 5:45-5:46
-  7:21-7:25 -> 6:7-6:11
-  9:28-9:42 -> 6:27-6:32
-  9:28-9:42 -> 7:41-7:46
-  9:35-9:40 -> 7:7-7:12
-  12:27-12:37 -> 11:7-11:17
-  13:26-13:46 -> 11:32-11:39
-  13:33-13:44 -> 12:7-12:18
-  14:1-14:6 -> builtin print
-  14:8-14:14 -> 3:7-3:13
-  14:15-14:18 -> 1:41-1:44
-  14:23-14:31 -> 4:7-4:15
-  14:32-14:35 -> 1:41-1:44
-  14:40-14:48 -> 5:7-5:15
-  14:49-14:52 -> 1:41-1:44
-  14:57-14:66 -> 9:7-9:16
-  14:67-14:72 -> 8:25-8:30
-  14:74-14:83 -> 9:7-9:16
-  14:84-14:89 -> 8:43-8:48
-  14:91-14:97 -> 13:7-13:13
-  14:98-14:105 -> 10:20-10:27
+  5:28-5:29 -> 5:22-5:23
+  7:29-7:35 -> 2:11-2:16
+  7:29-7:35 -> 2:28-2:31
+  7:32-7:35 -> 4:7-4:10
+  8:20-8:29 -> 2:11-2:16
+  8:20-8:29 -> 2:28-2:31
+  8:23-8:29 -> 7:7-7:13
+  10:5-10:11 -> 2:11-2:16
+  10:5-10:11 -> 2:28-2:31
+  10:8-10:11 -> 4:7-4:10
+  11:17-11:18 -> 11:11-11:12
+  16:21-16:25 -> 13:7-13:11
+  23:28-23:42 -> 14:18-14:23
+  23:28-23:42 -> 17:18-17:23
+  23:35-23:40 -> 16:7-16:12
+  32:27-32:37 -> 27:7-27:17
+  33:26-33:46 -> 28:17-28:24
+  33:33-33:44 -> 32:7-32:18
+  34:1-34:6 -> builtin print
+  34:8-34:14 -> 7:7-7:13
+  34:15-34:18 -> 2:28-2:31
+  34:23-34:31 -> 8:7-8:15
+  34:32-34:35 -> 2:28-2:31
+  34:40-34:48 -> 9:7-9:15
+  34:49-34:52 -> 2:28-2:31
+  34:57-34:66 -> 23:7-23:16
+  34:67-34:72 -> 20:11-20:16
+  34:74-34:83 -> 23:7-23:16
+  34:84-34:89 -> 21:11-21:16
+  34:91-34:97 -> 33:7-33:13
+  34:98-34:105 -> 25:10-25:17
 
 --- BYTECODE ---
 

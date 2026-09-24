@@ -1,5 +1,5 @@
 interface Reader {
-    read() i32;
+    func read() i32;
 }
 class Base {
     public var value: i32;
@@ -23,11 +23,12 @@ print(child.value);
 INTERFACE (1:1-1:10)
 IDENTIFIER "Reader" (1:11-1:17)
 LEFT_BRACE (1:18-1:19)
-IDENTIFIER "read" (2:5-2:9)
-LEFT_PAREN (2:9-2:10)
-RIGHT_PAREN (2:10-2:11)
-IDENTIFIER "i32" (2:12-2:15)
-SEMICOLON (2:15-2:16)
+FUNC (2:5-2:9)
+IDENTIFIER "read" (2:10-2:14)
+LEFT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+SEMICOLON (2:20-2:21)
 RIGHT_BRACE (3:1-3:2)
 CLASS (4:1-4:6)
 IDENTIFIER "Base" (4:7-4:11)
@@ -120,13 +121,13 @@ SEMICOLON (19:19-19:20)
       name: "Reader"
     )
     (InterfaceMethodDeclaration
-      range: 2:5-2:16
+      range: 2:5-2:21
       (IdentifierDeclaration
-        range: 2:5-2:9
+        range: 2:10-2:14
         name: "read"
       )
       (NamedTypeNode
-        range: 2:12-2:15
+        range: 2:17-2:20
         name: "i32"
       )
     )
@@ -348,7 +349,7 @@ Expression types:
   19:13-19:18 -> i32
 
 Resolved types:
-  2:12-2:15 -> i32
+  2:17-2:20 -> i32
   5:23-5:26 -> i32
   6:31-6:34 -> i32
   11:31-11:34 -> i32
@@ -356,7 +357,7 @@ Resolved types:
 
 Declarations:
   1:11-1:17 -> interface Reader
-  2:5-2:9 -> read() => i32
+  2:10-2:14 -> read() => i32
   4:7-4:11 -> class Base
   5:16-5:21 -> var value: i32
   6:12-8:6 -> constructor(value: i32)
@@ -373,7 +374,7 @@ References:
   10:21-10:25 -> 4:7-4:11
   13:25-13:30 -> 11:24-11:29
   15:15-15:21 -> 12:15-12:21
-  15:22-15:26 -> 2:5-2:9
+  15:22-15:26 -> 2:10-2:14
   18:19-18:24 -> 10:7-10:12
   19:1-19:6 -> builtin print
   19:7-19:12 -> 18:7-18:12

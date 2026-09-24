@@ -42,8 +42,8 @@ class Counter {
 interface Person {
     const name: string;
     var age: i32;
-    greeting() string;
-    rename(name: string);
+    func greeting() string;
+    func rename(name: string);
 }
 ```
 
