@@ -2,91 +2,47 @@ package com.github.andreasarvidsson.eld.semantic;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
-import com.github.andreasarvidsson.eld.parser.ArrayExpression;
-import com.github.andreasarvidsson.eld.parser.ArraySpread;
-import com.github.andreasarvidsson.eld.parser.ObjectEntry;
-import com.github.andreasarvidsson.eld.parser.ObjectMember;
-import com.github.andreasarvidsson.eld.parser.ObjectSpread;
-import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstNode;
-import com.github.andreasarvidsson.eld.parser.AstTraversal;
-import com.github.andreasarvidsson.eld.parser.BinaryExpression;
-import com.github.andreasarvidsson.eld.parser.BinaryOperator;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
-import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
 import com.github.andreasarvidsson.eld.parser.DoWhileStatement;
-import com.github.andreasarvidsson.eld.parser.ElseIfBranch;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.ForEachStatement;
 import com.github.andreasarvidsson.eld.parser.ForStatement;
-import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
-import com.github.andreasarvidsson.eld.parser.FunctionTypeNode;
-import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
-import com.github.andreasarvidsson.eld.parser.InterfaceMethodDeclaration;
-import com.github.andreasarvidsson.eld.parser.LambdaExpression;
-import com.github.andreasarvidsson.eld.parser.LiteralExpression;
-import com.github.andreasarvidsson.eld.parser.LiteralKind;
-import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
-import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
-import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
-import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
-import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
 import com.github.andreasarvidsson.eld.parser.TryStatement;
 import com.github.andreasarvidsson.eld.parser.ThrowStatement;
 import com.github.andreasarvidsson.eld.parser.CatchClause;
-import com.github.andreasarvidsson.eld.parser.SliceExpression;
 import com.github.andreasarvidsson.eld.parser.Statement;
-import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
 import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
-import com.github.andreasarvidsson.eld.parser.SwitchBranch;
-import com.github.andreasarvidsson.eld.parser.SwitchBranchBlockBody;
-import com.github.andreasarvidsson.eld.parser.SwitchBranchBody;
-import com.github.andreasarvidsson.eld.parser.SwitchBranchExpressionBody;
-import com.github.andreasarvidsson.eld.parser.SwitchElseBranch;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
-import com.github.andreasarvidsson.eld.parser.ThisExpression;
-import com.github.andreasarvidsson.eld.parser.TupleExpression;
-import com.github.andreasarvidsson.eld.parser.TupleTypeNode;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
-import com.github.andreasarvidsson.eld.parser.UnaryExpression;
-import com.github.andreasarvidsson.eld.parser.UnaryOperator;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
-import com.github.andreasarvidsson.eld.parser.UnionTypeNode;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.Visibility;
 import com.github.andreasarvidsson.eld.parser.WhileStatement;
@@ -94,14 +50,21 @@ import com.github.andreasarvidsson.eld.parser.YieldStatement;
 
 public final class SemanticAnalyzer {
     private final SemanticModel model = new SemanticModel();
+    private final SemanticAnalyzerExpressions expressions =
+        new SemanticAnalyzerExpressions(this, model);
+    private final SemanticAnalyzerDeclarations declarations =
+        new SemanticAnalyzerDeclarations(this, model);
+    private final SemanticAnalyzerObjects objects =
+        new SemanticAnalyzerObjects(this, model);
+    private final SemanticAnalyzerStatements statements =
+        new SemanticAnalyzerStatements(this, model);
+    private final SemanticAnalyzerTypes types =
+        new SemanticAnalyzerTypes(model);
     private final Map<ClassType, Scope> classScopes = new HashMap<>();
     private final Map<ClassType, Map<String, FunctionSymbol>> classMethods =
         new HashMap<>();
     private final IdentityHashMap<ObjectExpression, InterfaceType> inferredObjects =
         new IdentityHashMap<>();
-    private boolean analyzingCallee;
-    private int callArity = -1;
-    private List<Expression> javaCallArguments = List.of();
     private @Nullable ClassType currentInstance;
     private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
@@ -134,7 +97,7 @@ public final class SemanticAnalyzer {
         }
     }
 
-    private void analyzeBlockStatement(
+    public void analyzeBlockStatement(
         final BlockStatement block,
         final SemanticContext context
     ) {
@@ -193,7 +156,7 @@ public final class SemanticAnalyzer {
         }
     }
 
-    private void analyzeStatement(
+    public void analyzeStatement(
         final Statement statement,
         final SemanticContext context
     ) {
@@ -221,7 +184,7 @@ public final class SemanticAnalyzer {
                 final boolean previous = analyzingSuperArguments;
                 analyzingSuperArguments = true;
                 try {
-                    analyzeConstructorArguments(
+                    expressions.analyzeConstructorArguments(
                         superclass,
                         call.arguments(),
                         call.range(),
@@ -352,3603 +315,396 @@ public final class SemanticAnalyzer {
         final ClassDeclaration declaration,
         final SemanticContext context
     ) {
-        final ClassType previous = currentAccessClass;
-        currentAccessClass = new ClassType(declaration.name().name());
-        try {
-            analyzeClassMembers(declaration, context);
-        }
-        finally {
-            currentAccessClass = previous;
-        }
-    }
-
-    private void analyzeClassMembers(
-        final ClassDeclaration declaration,
-        final SemanticContext context
-    ) {
-        final ClassType classType = new ClassType(declaration.name().name());
-        final ClassSymbol classSymbol =
-            new ClassSymbol(declaration.name(), classType);
-        model.setSymbol(declaration.name(), classSymbol);
-        context.scope().declare(classSymbol);
-        final List<InterfaceType> implemented = new ArrayList<>();
-        for (final TypeNode node : declaration.implementedInterfaces()) {
-            final Type type = resolveType(node, context);
-            if (!(type instanceof InterfaceType contract)) {
-                throw new SemanticException(
-                    node.range(),
-                    "'implements' requires an interface"
-                );
-            }
-            if (
-                contract.javaClass() != null
-                    && contract.javaClass() != Comparable.class
-                    && contract.javaClass() != java.util.Comparator.class
-            ) {
-                throw new SemanticException(
-                    node.range(),
-                    "Only Comparable and Comparator can be implemented from the Java collection API"
-                );
-            }
-            if (
-                contract.javaClass() != null && implemented.stream()
-                    .anyMatch(
-                        previous -> previous.javaClass() == contract.javaClass()
-                    )
-            ) {
-                throw new SemanticException(
-                    node.range(),
-                    "Duplicate implemented Java interface: %s",
-                    contract.name()
-                );
-            }
-            if (implemented.contains(contract)) {
-                throw new SemanticException(
-                    node.range(),
-                    "Duplicate implemented interface: %s",
-                    contract
-                );
-            }
-            implemented.add(contract);
-        }
-        model.setImplementedInterfaces(classType, implemented);
-        final IdentifierExpression superclassName = declaration.superClass();
-        if (superclassName != null) {
-            final Type base =
-                analyzeIdentifierExpression(superclassName, context);
-            if (
-                !(model.getReference(superclassName) instanceof ClassSymbol)
-                    || !(base instanceof ClassType superclass)
-            ) {
-                throw new SemanticException(
-                    superclassName.range(),
-                    "'extends' requires a class name"
-                );
-            }
-            if (
-                superclass.equals(classType)
-                    || model.isSubclassOf(superclass, classType)
-            ) {
-                throw new SemanticException(
-                    superclassName.range(),
-                    "Class inheritance cannot be cyclic"
-                );
-            }
-            model.setSuperclass(classType, superclass);
-            if (
-                !canAccess(
-                    superclass,
-                    model.getConstructorVisibility(superclass)
-                )
-            ) {
-                throw new SemanticException(
-                    superclassName.range(),
-                    "Base constructor of class %s is private",
-                    superclass.name()
-                );
-            }
-        }
-        final Scope members = new Scope(null);
-        classScopes.put(classType, members);
-        classMethods.put(classType, new LinkedHashMap<>());
-        ConstructorDeclaration constructor = null;
-        model.setConstructorVisibility(classType, Visibility.PUBLIC);
-        for (final MemberDeclaration memberDeclaration : declaration
-            .members()) {
-            final Declaration member = memberDeclaration.declaration();
-            if (member instanceof ConstructorDeclaration candidate) {
-                if (constructor != null) {
-                    throw new SemanticException(
-                        candidate.range(),
-                        "A class may only declare one constructor"
-                    );
-                }
-                constructor = candidate;
-                model.setConstructorVisibility(
-                    classType,
-                    memberDeclaration.visibility()
-                );
-            }
-            else if (
-                !(member instanceof VariableDeclaration)
-                    && !(member instanceof UninitializedVariableDeclaration)
-                    && !(member instanceof FunctionDeclaration)
-            ) {
-                throw new SemanticException(
-                    member.range(),
-                    "Class bodies may only contain fields, methods, and constructors"
-                );
-            }
-        }
-        final boolean explicitSuper =
-            constructor != null && constructor.hasExplicitSuperCall();
-        final ClassType superclass = model.getSuperclass(classType);
-        if (explicitSuper && superclass == null) {
-            throw new SemanticException(
-                Objects.requireNonNull(constructor).range(),
-                "'super(...)' requires a superclass"
-            );
-        }
-        if (superclass != null && !explicitSuper) {
-            for (final FunctionParameter parameter : model
-                .getConstructorParameters(superclass)) {
-                if (!parameter.omittable()) {
-                    throw new SemanticException(
-                        Objects.requireNonNull(superclassName).range(),
-                        "Base constructor requires argument: %s",
-                        parameter.name().name()
-                    );
-                }
-            }
-        }
-        final List<Type> parameterTypes = new ArrayList<>();
-        if (constructor != null) {
-            for (final FunctionParameter parameter : constructor.parameters()) {
-                final Type type = resolveParameterType(parameter, context);
-                parameterTypes.add(type);
-                model.setSymbol(
-                    parameter.name(),
-                    new VariableSymbol(parameter.name(), type, Mutability.CONST)
-                );
-            }
-        }
-        final FunctionType constructorType =
-            new FunctionType(parameterTypes, BuiltinType.VOID);
-        model.setConstructor(classType, constructorType);
-        model.setConstructorParameters(
-            classType,
-            constructor != null ? constructor.parameters() : List.of()
-        );
-        if (constructor != null) {
-            model.setConstructorSymbol(
-                constructor,
-                new ConstructorSymbol(constructor, constructorType)
-            );
-        }
-        for (final MemberDeclaration memberDeclaration : declaration
-            .members()) {
-            final Declaration member = memberDeclaration.declaration();
-            if (member instanceof VariableDeclaration field) {
-                analyzeVariableDeclaration(field, context, members);
-            }
-            else if (member instanceof UninitializedVariableDeclaration field) {
-                final Type type = resolveType(field.type(), context);
-                final VariableSymbol symbol =
-                    new VariableSymbol(field.name(), type, field.mutability());
-                members.declare(symbol);
-                model.setSymbol(field.name(), symbol);
-            }
-        }
-        for (final MemberDeclaration memberDeclaration : declaration
-            .members()) {
-            if (
-                memberDeclaration
-                    .declaration() instanceof FunctionDeclaration method
-            ) {
-                registerFunction(
-                    method,
-                    context,
-                    members.resolveLocal(
-                        method.name().name()
-                    ) instanceof VariableSymbol ? new Scope(null) : members
-                );
-                final FunctionSymbol function =
-                    (FunctionSymbol) model.getSymbol(method.name());
-                if (
-                    Objects.requireNonNull(classMethods.get(classType))
-                        .putIfAbsent(function.name(), function) != null
-                ) {
-                    throw new SemanticException(
-                        method.range(),
-                        "Duplicate method: %s",
-                        function.name()
-                    );
-                }
-            }
-        }
-        for (final MemberDeclaration memberDeclaration : declaration
-            .members()) {
-            final Declaration member = memberDeclaration.declaration();
-            final IdentifierDeclaration name = switch (member) {
-                case VariableDeclaration field -> field.name();
-                case UninitializedVariableDeclaration field -> field.name();
-                case FunctionDeclaration method -> method.name();
-                default -> null;
-            };
-            if (name != null) {
-                model.setMemberVisibility(
-                    model.getSymbol(name),
-                    memberDeclaration.visibility()
-                );
-                model.setClassMemberOwner(model.getSymbol(name), classType);
-                validateInheritedMember(classType, model.getSymbol(name));
-            }
-        }
-        validateInterfaces(classType, declaration);
-        final ClassType previousInstance = currentInstance;
-        final ConstructorDeclaration previousConstructor = currentConstructor;
-        currentInstance = classType;
-        try {
-            for (final MemberDeclaration memberDeclaration : declaration
-                .members()) {
-                final Declaration member = memberDeclaration.declaration();
-                if (member instanceof FunctionDeclaration method) {
-                    analyzeFunctionBody(method, context);
-                }
-            }
-            if (constructor != null) {
-                currentConstructor = constructor;
-                final Scope scope = new Scope(context.scope());
-                for (final FunctionParameter parameter : constructor
-                    .parameters()) {
-                    analyzeParameterDefault(
-                        parameter,
-                        new SemanticContext(scope, null, 0)
-                    );
-                    scope.declare(model.getSymbol(parameter.name()));
-                }
-                analyzeBlockStatement(
-                    constructor.body(),
-                    new SemanticContext(scope, null, 0)
-                );
-            }
-            new FieldInitializationAnalyzer(model, declaration)
-                .analyze(constructor);
-        }
-        finally {
-            currentInstance = previousInstance;
-            currentConstructor = previousConstructor;
-        }
+        declarations.analyzeClassDeclaration(declaration, context);
     }
 
     private void analyzeInterfaceDeclaration(
         final InterfaceDeclaration declaration,
         final SemanticContext context
     ) {
-        final InterfaceType type = new InterfaceType(declaration.name().name());
-        final InterfaceSymbol symbol =
-            new InterfaceSymbol(declaration.name(), type);
-        context.scope().declare(symbol);
-        model.setSymbol(declaration.name(), symbol);
-        final List<InterfaceType> parents = new ArrayList<>();
-        final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
-        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
-        for (final TypeNode node : declaration.superInterfaces()) {
-            final Type parent = resolveType(node, context);
-            if (!(parent instanceof InterfaceType contract)) {
-                throw new SemanticException(
-                    node.range(),
-                    "Interfaces may only extend interfaces"
-                );
-            }
-            if (contract.equals(type)) {
-                throw new SemanticException(
-                    node.range(),
-                    "Interface inheritance cannot be cyclic"
-                );
-            }
-            if (parents.contains(contract)) {
-                throw new SemanticException(
-                    node.range(),
-                    "Duplicate superinterface: %s",
-                    contract
-                );
-            }
-            if (
-                contract.javaClass() != null
-                    && contract.javaClass() != Comparable.class
-                    && contract.javaClass() != Comparator.class
-            ) {
-                throw new SemanticException(
-                    node.range(),
-                    "Only Comparable and Comparator can be extended from the Java collection API"
-                );
-            }
-            parents.add(contract);
-            mergeContract(fields, model.getInterface(contract).fields(), node);
-            mergeContract(
-                methods,
-                model.getInterface(contract).methods(),
-                node
-            );
-        }
-        final Set<String> ownFields = new java.util.HashSet<>();
-        final Set<String> ownMethods = new java.util.HashSet<>();
-        for (final var member : declaration.members()) {
-            if (member instanceof UninitializedVariableDeclaration field) {
-                if (!ownFields.add(field.name().name())) {
-                    throw new SemanticException(
-                        field.range(),
-                        "Duplicate interface field: %s",
-                        field.name().name()
-                    );
-                }
-                final VariableSymbol value =
-                    new VariableSymbol(
-                        field.name(),
-                        resolveType(field.type(), context),
-                        field.mutability()
-                    );
-                mergeContract(fields, Map.of(value.name(), value), field);
-                fields.put(value.name(), value);
-                model.setSymbol(field.name(), value);
-                model.setMemberVisibility(value, Visibility.PUBLIC);
-            }
-            else if (member instanceof InterfaceMethodDeclaration method) {
-                if (!ownMethods.add(method.name().name())) {
-                    throw new SemanticException(
-                        method.range(),
-                        "Duplicate interface method: %s",
-                        method.name().name()
-                    );
-                }
-                final List<Type> parameters = new ArrayList<>();
-                final Scope scope = new Scope(context.scope());
-                for (final FunctionParameter parameter : method.parameters()) {
-                    final Type parameterType =
-                        resolveParameterType(parameter, context);
-                    parameters.add(parameterType);
-                    final VariableSymbol value =
-                        new VariableSymbol(
-                            parameter.name(),
-                            parameterType,
-                            Mutability.CONST
-                        );
-                    model.setSymbol(parameter.name(), value);
-                    analyzeParameterDefault(
-                        parameter,
-                        new SemanticContext(scope, null, 0)
-                    );
-                    scope.declare(value);
-                }
-                final FunctionSymbol value =
-                    new FunctionSymbol(
-                        method.name(),
-                        new FunctionType(
-                            parameters,
-                            method.returnType() == null
-                                ? BuiltinType.VOID
-                                : resolveType(method.returnType(), context)
-                        )
-                    );
-                mergeContract(methods, Map.of(value.name(), value), method);
-                methods.put(value.name(), value);
-                model.setSymbol(method.name(), value);
-                model.setMemberVisibility(value, Visibility.PUBLIC);
-                model.setFunctionParameters(
-                    value,
-                    method.parameters()
-                        .stream()
-                        .map(FunctionParameter::name)
-                        .toList()
-                );
-            }
-        }
-        model.setInterface(
-            type,
-            new InterfaceContract(List.copyOf(parents), fields, methods)
-        );
+        declarations.analyzeInterfaceDeclaration(declaration, context);
     }
 
-    private <S extends Symbol> void mergeContract(
-        final Map<String, S> target,
-        final Map<String, S> source,
-        final AstNode node
-    ) {
-        for (final var entry : source.entrySet()) {
-            final S previous =
-                target.putIfAbsent(entry.getKey(), entry.getValue());
-            if (
-                previous != null && (!previous.type()
-                    .equals(entry.getValue().type())
-                    || (previous instanceof VariableSymbol oldField
-                        && entry.getValue() instanceof VariableSymbol newField
-                        && oldField.mutability() != newField.mutability()))
-            ) {
-                throw new SemanticException(
-                    node.range(),
-                    "Conflicting interface member '%s'",
-                    entry.getKey()
-                );
-            }
-        }
-    }
-
-    private void validateInterfaces(
-        final ClassType type,
-        final ClassDeclaration declaration
-    ) {
-        final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
-        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
-        for (ClassType current = type; current != null; current =
-            model.getSuperclass(current)) {
-            for (final InterfaceType contract : model
-                .getImplementedInterfaces(current)) {
-                mergeContract(
-                    fields,
-                    model.getInterface(contract).fields(),
-                    declaration
-                );
-                mergeContract(
-                    methods,
-                    model.getInterface(contract).methods(),
-                    declaration
-                );
-            }
-        }
-        final Map<String, VariableSymbol> implementations =
-            new LinkedHashMap<>();
-        final List<Symbol> required = new ArrayList<>(fields.values());
-        required.addAll(methods.values());
-        for (final Symbol contract : required) {
-            final ClassType owner =
-                contract instanceof VariableSymbol
-                    ? classFieldOwner(type, contract.name())
-                    : memberOwner(type, contract.name());
-            final Symbol implementation =
-                contract instanceof FunctionSymbol
-                    ? classMethod(type, contract.name())
-                    : owner == null
-                        ? null
-                        : Objects.requireNonNull(classScopes.get(owner))
-                            .resolveLocal(contract.name());
-            if (implementation == null) {
-                throw new SemanticException(
-                    declaration.range(),
-                    "Class %s does not implement interface member '%s'",
-                    type,
-                    contract.name()
-                );
-            }
-            if (
-                model.getMemberVisibility(implementation) != Visibility.PUBLIC
-            ) {
-                throw new SemanticException(
-                    implementation.range(),
-                    "Interface member '%s' must be public",
-                    contract.name()
-                );
-            }
-            if (
-                !contract.type().equals(implementation.type())
-                    || (contract instanceof FunctionSymbol) != (implementation instanceof FunctionSymbol)
-            ) {
-                throw new SemanticException(
-                    implementation.range(),
-                    "Interface member '%s' expects %s, found %s",
-                    contract.name(),
-                    contract.type(),
-                    implementation.type()
-                );
-            }
-            if (implementation instanceof VariableSymbol field) {
-                if (
-                    contract instanceof VariableSymbol requiredField
-                        && field.mutability() != requiredField.mutability()
-                ) {
-                    throw new SemanticException(
-                        field.range(),
-                        "Interface field '%s' must be %s",
-                        field.name(),
-                        requiredField.mutability() == Mutability.VAR
-                            ? "mutable"
-                            : "constant"
-                    );
-                }
-                implementations.put(field.name(), field);
-            }
-        }
-        model.setInterfaceFields(type, implementations);
-    }
-
-    private void analyzeObjectExpression(
+    public void analyzeObjectExpression(
         final ObjectExpression object,
         final SemanticContext context,
         final InterfaceType type
     ) {
-        final InterfaceContract contract = model.getInterface(type);
-        if (
-            type.javaClass() != null && type.javaClass() != Comparable.class
-                && type.javaClass() != Comparator.class
-        ) {
-            throw new SemanticException(
-                object.range(),
-                "Java collection types require a Java collection instance"
-            );
-        }
-        final List<ObjectEntry> evaluation = new ArrayList<>();
-        final Map<String, ObjectMember> effective = new LinkedHashMap<>();
-        final Set<String> explicitNames = new HashSet<>();
-        for (final ObjectEntry entry : object.members()) {
-            if (entry instanceof ObjectSpread spread) {
-                evaluation.add(spread);
-                final Type source = analyzeExpression(spread.value(), context);
-                final Map<String, Symbol> supplied =
-                    spreadSymbols(source, spread.range());
-                for (final var suppliedMember : supplied.entrySet()) {
-                    final String name = suppliedMember.getKey();
-                    final IdentifierExpression identifier =
-                        new IdentifierExpression(name, spread.range());
-                    final MemberExpression access =
-                        new MemberExpression(
-                            spread.value(),
-                            identifier,
-                            spread.range()
-                        );
-                    final ObjectMember member =
-                        new ObjectMember(
-                            new IdentifierDeclaration(name, spread.range()),
-                            access,
-                            spread.range()
-                        );
-                    final boolean previous = analyzingCallee;
-                    analyzingCallee =
-                        suppliedMember.getValue() instanceof FunctionSymbol;
-                    try {
-                        analyzeExpression(access, context);
-                    }
-                    finally {
-                        analyzingCallee = previous;
-                    }
-                    if (suppliedMember.getValue() instanceof FunctionSymbol) {
-                        model.setSpreadMethod(member);
-                    }
-                    evaluation.add(member);
-                    effective.put(name, member);
-                }
-            }
-            else {
-                final ObjectMember member = (ObjectMember) entry;
-                final String name = member.name().name();
-                if (!explicitNames.add(name)) {
-                    throw new SemanticException(
-                        member.range(),
-                        "Duplicate object member '%s'",
-                        name
-                    );
-                }
-                evaluation.add(member);
-                effective.put(name, member);
-            }
-        }
-        final Set<String> present = effective.keySet();
-        model.setObjectMembers(
-            object,
-            new ArrayList<>(effective.values()),
-            evaluation
-        );
-        // Analyze overridden values too, without validating them against the final contract.
-        for (final ObjectEntry entry : evaluation) {
-            if (
-                entry instanceof ObjectMember member
-                    && !member.equals(effective.get(member.name().name()))
-                    && !(member.value() instanceof MemberExpression
-                        && model.isSpreadMethod(member))
-            ) {
-                final Symbol target =
-                    contract.fields().containsKey(member.name().name())
-                        ? contract.fields().get(member.name().name())
-                        : contract.methods().get(member.name().name());
-                final Type actual =
-                    analyzeExpression(
-                        member.value(),
-                        context,
-                        target == null ? null : target.type()
-                    );
-                if (actual == BuiltinType.VOID) {
-                    throw new SemanticException(
-                        member.value().range(),
-                        "Object member '%s' requires a value",
-                        member.name().name()
-                    );
-                }
-            }
-        }
-        for (final ObjectMember member : effective.values()) {
-            final String name = member.name().name();
-            final VariableSymbol field = contract.fields().get(name);
-            final FunctionSymbol method = contract.methods().get(name);
-            if (field == null && method == null) {
-                throw new SemanticException(
-                    member.range(),
-                    "Unknown object member '%s' of interface %s",
-                    name,
-                    type
-                );
-            }
-            if (field != null && method != null) {
-                throw new SemanticException(
-                    member.range(),
-                    "Object member '%s' cannot implement both a field and a method",
-                    name
-                );
-            }
-            final Symbol symbol =
-                field != null ? field : Objects.requireNonNull(method);
-            if (
-                method != null && !model.isSpreadMethod(member)
-                    && !(unwrap(member.value()) instanceof LambdaExpression)
-            ) {
-                throw new SemanticException(
-                    member.value().range(),
-                    "Interface method '%s' requires a lambda",
-                    name
-                );
-            }
-            final Type actual =
-                model.isSpreadMethod(member)
-                    ? model.getExpressionType(member.value())
-                    : analyzeExpression(member.value(), context, symbol.type());
-            if (
-                resolveAssignType(actual, symbol.type(), member.value()) == null
-            ) {
-                throw new SemanticException(
-                    member.value().range(),
-                    "Member '%s' expects %s, found %s",
-                    name,
-                    symbol.type(),
-                    actual
-                );
-            }
-        }
-        final Set<String> required =
-            new java.util.LinkedHashSet<>(contract.fields().keySet());
-        required.addAll(contract.methods().keySet());
-        for (final String name : required) {
-            if (!present.contains(name)) {
-                throw new SemanticException(
-                    object.range(),
-                    "Object literal does not implement %s: missing member '%s'",
-                    type,
-                    name
-                );
-            }
-        }
+        objects.analyzeObjectExpression(object, context, type);
     }
 
-    private InterfaceType inferSpreadObject(
+    public InterfaceType inferSpreadObject(
         final ObjectExpression object,
         final SemanticContext context
     ) {
-        final InterfaceType existing = inferredObjects.get(object);
-        if (existing != null) {
-            return existing;
-        }
-        final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
-        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
-        for (final ObjectEntry entry : object.members()) {
-            if (entry instanceof ObjectSpread spread) {
-                final Map<String, Symbol> symbols =
-                    spreadSymbols(
-                        analyzeExpression(spread.value(), context),
-                        spread.range()
-                    );
-                for (final Symbol symbol : symbols.values()) {
-                    fields.remove(symbol.name());
-                    methods.remove(symbol.name());
-                    if (symbol instanceof VariableSymbol field) {
-                        fields.put(field.name(), field);
-                    }
-                    else if (symbol instanceof FunctionSymbol method) {
-                        methods.put(method.name(), method);
-                    }
-                }
-            }
-            else {
-                final ObjectMember member = (ObjectMember) entry;
-                final String name = member.name().name();
-                final FunctionSymbol method = methods.get(name);
-                final Type value =
-                    analyzeExpression(
-                        member.value(),
-                        context,
-                        method == null ? null : method.type()
-                    );
-                if (method == null) {
-                    fields.put(
-                        name,
-                        new VariableSymbol(
-                            member.name(),
-                            value,
-                            Mutability.CONST
-                        )
-                    );
-                }
-            }
-        }
-        final InterfaceType type =
-            new InterfaceType("$spread" + model.getInterfaceTypes().size());
-        model.setInterface(
-            type,
-            new InterfaceContract(List.of(), fields, methods)
-        );
-        inferredObjects.put(object, type);
-        return type;
+        return objects.inferSpreadObject(object, context);
     }
 
-    private Map<String, Symbol> spreadSymbols(
-        final Type source,
-        final Range range
-    ) {
-        final Map<String, Symbol> result = new LinkedHashMap<>();
-        if (
-            source instanceof InterfaceType contract
-                && contract.javaClass() == null
-        ) {
-            result.putAll(model.getInterface(contract).fields());
-            result.putAll(model.getInterface(contract).methods());
-        }
-        else if (source instanceof ClassType cls) {
-            for (ClassType current = cls; current != null; current =
-                model.getSuperclass(current)) {
-                for (final FunctionSymbol method : classMethods
-                    .getOrDefault(current, Map.of())
-                    .values()) {
-                    if (
-                        model.getMemberVisibility(method) == Visibility.PUBLIC
-                    ) {
-                        result.putIfAbsent(method.name(), method);
-                    }
-                }
-                final Scope scope = classScopes.get(current);
-                if (scope != null) {
-                    for (final Symbol symbol : scope.symbols()) {
-                        if (
-                            symbol instanceof VariableSymbol
-                                && model.getMemberVisibility(
-                                    symbol
-                                ) == Visibility.PUBLIC
-                        ) {
-                            result.putIfAbsent(symbol.name(), symbol);
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            throw new SemanticException(
-                range,
-                "Object spread requires a statically known Eld object type, found %s",
-                source
-            );
-        }
-        return result;
-    }
-
-    private @Nullable ClassType classFieldOwner(
+    public @Nullable ClassType classFieldOwner(
         final ClassType type,
         final String name
     ) {
-        for (ClassType current = type; current != null; current =
-            model.getSuperclass(current)) {
-            final Scope members = classScopes.get(current);
-            if (
-                members != null
-                    && members.resolveLocal(name) instanceof VariableSymbol
-            ) {
-                return current;
-            }
-        }
-        return null;
+        return objects.classFieldOwner(type, name);
     }
 
-    private @Nullable ClassType classMethodOwner(
+    public @Nullable ClassType classMethodOwner(
         final ClassType type,
         final String name
     ) {
-        for (ClassType current = type; current != null; current =
-            model.getSuperclass(current)) {
-            if (
-                classMethods.getOrDefault(current, Map.of()).containsKey(name)
-            ) {
-                return current;
-            }
-        }
-        return null;
+        return objects.classMethodOwner(type, name);
     }
 
-    private @Nullable FunctionSymbol classMethod(
+    public @Nullable FunctionSymbol classMethod(
         final ClassType type,
         final String name
     ) {
-        for (ClassType current = type; current != null; current =
-            model.getSuperclass(current)) {
-            final FunctionSymbol method =
-                classMethods.getOrDefault(current, Map.of()).get(name);
-            if (method != null) {
-                return method;
-            }
-        }
-        return null;
+        return objects.classMethod(type, name);
     }
 
-    private boolean canAccess(
+    public boolean canAccess(
         final ClassType owner,
         final Visibility visibility
     ) {
-        return visibility == Visibility.PUBLIC
-            || owner.equals(currentAccessClass)
-            || (visibility == Visibility.PROTECTED && currentAccessClass != null
-                && model.isSubclassOf(currentAccessClass, owner));
+        return objects.canAccess(owner, visibility);
     }
 
-    private @Nullable ClassType memberOwner(
+    public @Nullable ClassType memberOwner(
         final ClassType type,
         final String name
     ) {
-        for (ClassType current = type; current != null; current =
-            model.getSuperclass(current)) {
-            final Scope scope = classScopes.get(current);
-            if (scope != null && scope.resolveLocal(name) != null) {
-                return current;
-            }
-        }
-        return null;
-    }
-
-    private void validateInheritedMember(
-        final ClassType type,
-        final Symbol symbol
-    ) {
-        final ClassType base = model.getSuperclass(type);
-        if (base == null) {
-            return;
-        }
-        final ClassType methodOwner =
-            symbol instanceof FunctionSymbol
-                ? classMethodOwner(base, symbol.name())
-                : null;
-        final ClassType owner =
-            methodOwner != null
-                ? methodOwner
-                : memberOwner(base, symbol.name());
-        if (owner == null) {
-            return;
-        }
-        final Symbol inherited =
-            methodOwner != null
-                ? Objects.requireNonNull(classMethod(base, symbol.name()))
-                : Objects.requireNonNull(
-                    Objects.requireNonNull(classScopes.get(owner))
-                        .resolveLocal(symbol.name())
-                );
-        final Visibility visibility = model.getMemberVisibility(inherited);
-        if (visibility == Visibility.PRIVATE) {
-            return;
-        }
-        if (
-            symbol instanceof FunctionSymbol
-                && inherited instanceof FunctionSymbol
-        ) {
-            if (!symbol.type().equals(inherited.type())) {
-                throw new SemanticException(
-                    symbol.range(),
-                    "Overriding method '%s' must have the same signature",
-                    symbol.name()
-                );
-            }
-            final Visibility declared = model.getMemberVisibility(symbol);
-            if (
-                declared == Visibility.PRIVATE
-                    || (visibility == Visibility.PUBLIC
-                        && declared != Visibility.PUBLIC)
-            ) {
-                throw new SemanticException(
-                    symbol.range(),
-                    "Overriding method '%s' cannot reduce visibility",
-                    symbol.name()
-                );
-            }
-        }
-        else if (
-            symbol instanceof FunctionSymbol
-                || inherited instanceof FunctionSymbol
-        ) {
-            throw new SemanticException(
-                symbol.range(),
-                "Inherited member '%s' has a different declaration kind",
-                symbol.name()
-            );
-        }
+        return objects.memberOwner(type, name);
     }
 
     private void analyzeForStatement(
         final ForStatement statement,
         final SemanticContext context
     ) {
-        final SemanticContext loopContext =
-            new SemanticContext(
-                new Scope(context.scope()),
-                context.function(),
-                context.loopDepth() + 1,
-                context.yields(),
-                context.yieldType()
-            );
-
-        final Statement initializer = statement.initializer();
-        final Expression condition = statement.condition();
-        final Expression update = statement.update();
-
-        if (initializer != null) {
-            analyzeStatement(initializer, loopContext);
-        }
-
-        if (condition != null) {
-            final Type conditionType =
-                analyzeExpression(condition, loopContext);
-            if (conditionType != BuiltinType.BOOL) {
-                throw new SemanticException(
-                    condition.range(),
-                    "For condition must be bool, found %s",
-                    conditionType
-                );
-            }
-        }
-
-        if (update != null) {
-            analyzeDiscardedExpression(update, loopContext);
-        }
-
-        analyzeBlockStatement(statement.body(), loopContext);
+        statements.analyzeForStatement(statement, context);
     }
 
     private void analyzeForEachStatement(
         final ForEachStatement statement,
         final SemanticContext context
     ) {
-        final SemanticContext loopContext =
-            new SemanticContext(
-                new Scope(context.scope()),
-                context.function(),
-                context.loopDepth() + 1,
-                context.yields(),
-                context.yieldType()
-            );
-        final Type iterableType =
-            analyzeExpression(statement.iterable(), loopContext);
-        if (!(iterableType instanceof ArrayType arrayType)) {
-            throw new SemanticException(
-                statement.iterable().range(),
-                "For-each iterable must be an array, found %s",
-                iterableType
-            );
-        }
-        final IdentifierDeclaration index = statement.index();
-
-        final VariableSymbol valueSymbol =
-            new VariableSymbol(
-                statement.value(),
-                arrayType.elementType(),
-                Mutability.CONST
-            );
-
-        model.setSymbol(statement.value(), valueSymbol);
-        loopContext.scope().declare(valueSymbol);
-
-        if (index != null) {
-            final VariableSymbol indexSymbol =
-                new VariableSymbol(index, BuiltinType.I32, Mutability.CONST);
-            model.setSymbol(index, indexSymbol);
-            loopContext.scope().declare(indexSymbol);
-        }
-
-        analyzeBlockStatement(statement.body(), loopContext);
+        statements.analyzeForEachStatement(statement, context);
     }
 
     private void analyzeWhileStatement(
         final WhileStatement statement,
         final SemanticContext context
     ) {
-        final Type conditionType =
-            analyzeExpression(statement.condition(), context);
-
-        if (conditionType != BuiltinType.BOOL) {
-            throw new SemanticException(
-                statement.condition().range(),
-                "While condition must be bool, found %s",
-                conditionType
-            );
-        }
-
-        final SemanticContext loopContext =
-            new SemanticContext(
-                context.scope(),
-                context.function(),
-                context.loopDepth() + 1,
-                context.yields(),
-                context.yieldType()
-            );
-
-        analyzeBlockStatement(statement.body(), loopContext);
+        statements.analyzeWhileStatement(statement, context);
     }
 
     private void analyzeDoWhileStatement(
         final DoWhileStatement statement,
         final SemanticContext context
     ) {
-        final Type conditionType =
-            analyzeExpression(statement.condition(), context);
-
-        if (conditionType != BuiltinType.BOOL) {
-            throw new SemanticException(
-                statement.condition().range(),
-                "Do-while condition must be bool, found %s",
-                conditionType
-            );
-        }
-
-        final SemanticContext loopContext =
-            new SemanticContext(
-                context.scope(),
-                context.function(),
-                context.loopDepth() + 1,
-                context.yields(),
-                context.yieldType()
-            );
-
-        analyzeBlockStatement(statement.body(), loopContext);
+        statements.analyzeDoWhileStatement(statement, context);
     }
 
     private void analyzeIfExpressionBranches(
-        final IfExpression statement,
+        final IfExpression expression,
         final SemanticContext context
     ) {
-        final Type conditionType =
-            analyzeExpression(statement.condition(), context);
-
-        if (conditionType != BuiltinType.BOOL) {
-            throw new SemanticException(
-                statement.condition().range(),
-                "If condition must be bool, found %s",
-                conditionType
-            );
-        }
-
-        analyzeBlockStatement(statement.thenBranch(), context);
-
-        for (final ElseIfBranch branch : statement.elifBranches()) {
-            final Type branchConditionType =
-                analyzeExpression(branch.condition(), context);
-
-            if (branchConditionType != BuiltinType.BOOL) {
-                throw new SemanticException(
-                    branch.condition().range(),
-                    "Else-if condition must be bool, found %s",
-                    branchConditionType
-                );
-            }
-
-            analyzeBlockStatement(branch.branch(), context);
-        }
-
-        final @Nullable Statement elseBranch = statement.elseBranch();
-
-        if (elseBranch != null) {
-            analyzeStatement(elseBranch, context);
-        }
+        statements.analyzeIfExpressionBranches(expression, context);
     }
 
     private void analyzeContinueStatement(
         final ContinueStatement statement,
         final SemanticContext context
     ) {
-        if (!context.isWithinLoop()) {
-            throw new SemanticException(
-                statement.range(),
-                "A 'continue' statement can only be used within an enclosing loop"
-            );
-        }
+        statements.analyzeContinueStatement(statement, context);
     }
 
     private void analyzeBreakStatement(
         final BreakStatement statement,
         final SemanticContext context
     ) {
-        if (!context.isWithinLoop()) {
-            throw new SemanticException(
-                statement.range(),
-                "A 'break' statement can only be used within an enclosing loop"
-            );
-        }
+        statements.analyzeBreakStatement(statement, context);
     }
 
     private void analyzeYieldStatement(
         final YieldStatement statement,
         final SemanticContext context
     ) {
-        final List<YieldStatement> yields = context.yields();
-        if (yields == null) {
-            throw new SemanticException(
-                statement.range(),
-                "A 'yield' statement can only be used within an enclosing if or switch expression"
-            );
-        }
-        final Type expected = context.yieldType();
-        final Type actual =
-            analyzeExpression(statement.value(), context, expected);
-        if (actual == BuiltinType.VOID) {
-            throw new SemanticException(
-                statement.range(),
-                "A yield statement must produce a value"
-            );
-        }
-        if (
-            expected != null && resolveAssignType(
-                actual,
-                expected,
-                statement.value()
-            ) == null
-        ) {
-            throw new SemanticException(
-                statement.value().range(),
-                "Cannot assign %s to %s",
-                actual,
-                expected
-            );
-        }
-        yields.add(statement);
+        statements.analyzeYieldStatement(statement, context);
     }
 
     private void analyzeDiscardedExpression(
         final Expression expression,
         final SemanticContext context
     ) {
-        if (expression instanceof SwitchExpression selection) {
-            analyzeSwitchExpression(selection, context, false);
-            model.setExpressionType(selection, BuiltinType.VOID);
-        }
-        else if (expression instanceof GroupingExpression grouping) {
-            analyzeDiscardedExpression(grouping.expression(), context);
-            model.setExpressionType(
-                grouping,
-                model.getExpressionType(grouping.expression())
-            );
-        }
-        else {
-            analyzeExpression(expression, context);
-        }
+        statements.analyzeDiscardedExpression(expression, context);
     }
 
-    private Type analyzeSwitchExpression(
+    public Type analyzeSwitchExpression(
         final SwitchExpression expression,
         final SemanticContext context,
         final boolean requireValue
     ) {
-        return analyzeSwitchExpression(expression, context, requireValue, null);
+        return statements
+            .analyzeSwitchExpression(expression, context, requireValue);
     }
 
-    private Type analyzeSwitchExpression(
+    public Type analyzeSwitchExpression(
         final SwitchExpression expression,
         final SemanticContext context,
         final boolean requireValue,
         final @Nullable Type expected
     ) {
-        final Type subjectType =
-            analyzeExpression(expression.subject(), context);
-        if (subjectType == BuiltinType.VOID) {
-            throw new SemanticException(
-                expression.subject().range(),
-                "A switch subject must produce a value"
-            );
-        }
-        if (requireValue && expression.elseBranch() == null) {
-            throw new SemanticException(
-                expression.range(),
-                "A switch expression requires an else branch"
-            );
-        }
-        final List<SwitchBranchBody> bodies = new ArrayList<>();
-        for (final SwitchBranch branch : expression.branches()) {
-            for (final Expression match : branch.matches()) {
-                final Type matchType = analyzeExpression(match, context);
-                if (
-                    !subjectType.equals(matchType)
-                        && !((subjectType instanceof UnionType
-                            || subjectType == BuiltinType.ANY)
-                            && resolveAssignType(
-                                matchType,
-                                subjectType,
-                                match
-                            ) != null)
-                ) {
-                    throw new SemanticException(
-                        match.range(),
-                        "Switch match type %s does not match subject type %s",
-                        matchType,
-                        subjectType
-                    );
-                }
-            }
-            bodies.add(branch.body());
-        }
-        final SwitchElseBranch elseBranch = expression.elseBranch();
-        if (elseBranch != null) {
-            bodies.add(elseBranch.body());
-        }
-        Type result = BuiltinType.VOID;
-        for (final SwitchBranchBody body : bodies) {
-            final List<YieldStatement> yields = new ArrayList<>();
-            final SemanticContext branchContext =
-                new SemanticContext(
-                    context.scope(),
-                    context.function(),
-                    requireValue ? 0 : context.loopDepth(),
-                    yields,
-                    expected
-                );
-            final List<Expression> values = new ArrayList<>();
-            if (body instanceof SwitchBranchExpressionBody compact) {
-                if (requireValue) {
-                    final Type actual =
-                        analyzeExpression(
-                            compact.expression(),
-                            branchContext,
-                            expected
-                        );
-                    if (
-                        expected != null && resolveAssignType(
-                            actual,
-                            expected,
-                            compact.expression()
-                        ) == null
-                    ) {
-                        throw new SemanticException(
-                            compact.range(),
-                            "Cannot assign %s to %s",
-                            actual,
-                            expected
-                        );
-                    }
-                    values.add(compact.expression());
-                }
-                else {
-                    analyzeDiscardedExpression(
-                        compact.expression(),
-                        branchContext
-                    );
-                }
-            }
-            else if (body instanceof SwitchBranchBlockBody block) {
-                analyzeStatement(block.block(), branchContext);
-                if (requireValue && !producesValue(block.block())) {
-                    throw new SemanticException(
-                        body.range(),
-                        "Every branch of a switch expression must yield a value"
-                    );
-                }
-            }
-            for (final YieldStatement statement : yields) {
-                values.add(statement.value());
-            }
-            if (requireValue) {
-                for (final Expression value : values) {
-                    final Type type = model.getEffectiveType(value);
-                    if (type == BuiltinType.VOID) {
-                        throw new SemanticException(
-                            value.range(),
-                            "Every branch of a switch expression must produce a value"
-                        );
-                    }
-                    result =
-                        result == BuiltinType.VOID
-                            ? type
-                            : commonBranchType(result, type, value);
-                }
-            }
-        }
-        if (requireValue && result == BuiltinType.VOID) {
-            throw new SemanticException(
-                expression.range(),
-                "A switch expression must produce a value"
-            );
-        }
-        return result;
+        return statements.analyzeSwitchExpression(
+            expression,
+            context,
+            requireValue,
+            expected
+        );
     }
 
-    private Type analyzeIfExpression(
+    public Type analyzeIfExpression(
         final IfExpression expression,
         final SemanticContext context
     ) {
-        return analyzeIfExpression(expression, context, null);
+        return statements.analyzeIfExpression(expression, context);
     }
 
-    private Type analyzeIfExpression(
+    public Type analyzeIfExpression(
         final IfExpression expression,
         final SemanticContext context,
         final @Nullable Type expected
     ) {
-        final List<YieldStatement> yields = new ArrayList<>();
-        final SemanticContext branchContext =
-            new SemanticContext(
-                context.scope(),
-                context.function(),
-                0,
-                yields,
-                expected
-            );
-        final BlockStatement otherwise = expression.elseBranch();
-        if (otherwise == null) {
-            throw new SemanticException(
-                expression.range(),
-                "An if expression requires an else branch"
-            );
-        }
-        analyzeIfExpressionBranches(expression, branchContext);
-        if (
-            !producesValue(expression.thenBranch()) || !producesValue(otherwise)
-                || expression.elifBranches()
-                    .stream()
-                    .anyMatch(branch -> !producesValue(branch.branch()))
-                || yields.isEmpty()
-        ) {
-            throw new SemanticException(
-                expression.range(),
-                "Every branch of an if expression must yield a value"
-            );
-        }
-        Type result = model.getEffectiveType(yields.getFirst().value());
-        for (final YieldStatement statement : yields) {
-            final Type type = model.getEffectiveType(statement.value());
-            result = commonBranchType(result, type, statement.value());
-        }
-        return result;
+        return statements.analyzeIfExpression(expression, context, expected);
     }
 
-    private Type analyzeTernaryExpression(
+    public Type analyzeTernaryExpression(
         final TernaryExpression expression,
         final SemanticContext context
     ) {
-        final Type condition =
-            analyzeExpression(expression.condition(), context);
-        if (condition != BuiltinType.BOOL) {
-            throw new SemanticException(
-                expression.condition().range(),
-                "Ternary condition must be bool, found %s",
-                condition
-            );
-        }
-        final Type thenType =
-            analyzeExpression(expression.thenBranch(), context);
-        final Type elseType =
-            analyzeExpression(expression.elseBranch(), context);
-        if (thenType == BuiltinType.VOID || elseType == BuiltinType.VOID) {
-            throw new SemanticException(
-                expression.range(),
-                "Ternary branches must produce values"
-            );
-        }
-        return commonBranchType(thenType, elseType, expression.elseBranch());
+        return statements.analyzeTernaryExpression(expression, context);
     }
 
-    private Type commonBranchType(
+    public Type commonBranchType(
         final Type left,
         final Type right,
         final AstNode node
     ) {
-        if (model.isSubtype(left, right)) {
-            return right;
-        }
-        if (model.isSubtype(right, left)) {
-            return left;
-        }
-        if (left.equals(right)) {
-            return left;
-        }
-        if (
-            left instanceof ClassType leftClass
-                && right instanceof ClassType rightClass
-        ) {
-            final ClassType common =
-                model.commonClassType(leftClass, rightClass);
-            if (common != null) {
-                return common;
-            }
-        }
-        throw new SemanticException(
-            node.range(),
-            "Incompatible branch types: %s and %s",
-            left,
-            right
-        );
-    }
-
-    private boolean producesValue(final BlockItem item) {
-        return switch (item) {
-            case YieldStatement _ -> true;
-            case ReturnStatement _ -> true;
-            case ThrowStatement _ -> true;
-            case TryStatement statement -> (statement.finallyBody() != null
-                && producesValue(statement.finallyBody()))
-                || (producesValue(statement.body()) && statement.catches()
-                    .stream()
-                    .allMatch(clause -> producesValue(clause.body())));
-            case BlockStatement block -> {
-                boolean produced = false;
-                for (final BlockItem child : block.items()) {
-                    if (
-                        child instanceof BreakStatement
-                            || child instanceof ContinueStatement
-                    ) {
-                        break;
-                    }
-                    if (producesValue(child)) {
-                        produced = true;
-                        break;
-                    }
-                }
-                yield produced;
-            }
-            case ExpressionStatement statement when statement
-                .expression() instanceof IfExpression conditional ->
-                conditional.elseBranch() != null
-                    && producesValue(conditional.thenBranch())
-                    && producesValue(
-                        Objects.requireNonNull(conditional.elseBranch())
-                    )
-                    && conditional.elifBranches()
-                        .stream()
-                        .allMatch(branch -> producesValue(branch.branch()));
-            default -> false;
-        };
+        return statements.commonBranchType(left, right, node);
     }
 
     private void analyzeReturnStatement(
         final ReturnStatement statement,
         final SemanticContext context
     ) {
-        final List<ReturnStatement> inferredReturns =
-            lambdaReturns.get(context.function());
-        if (inferredReturns != null) {
-            if (statement.value() != null) {
-                analyzeExpression(statement.value(), context);
-            }
-            inferredReturns.add(statement);
-            return;
-        }
-        if (currentConstructor != null && context.function() == null) {
-            if (statement.value() != null) {
-                throw new SemanticException(
-                    statement.range(),
-                    "A constructor cannot return a value"
-                );
-            }
-            return;
-        }
-        final FunctionSymbol function = context.function();
-
-        if (function == null) {
-            throw new SemanticException(
-                statement.range(),
-                "A 'return' statement can only be used within an enclosing function"
-            );
-        }
-
-        final @Nullable Expression value = statement.value();
-        final Type returnType = function.type().returnType();
-
-        if (value == null) {
-            if (returnType.equals(BuiltinType.VOID)) {
-                return;
-            }
-            throw new SemanticException(
-                statement.range(),
-                "Return statement must return a value of type %s",
-                returnType
-            );
-        }
-
-        final Type valueType = analyzeExpression(value, context, returnType);
-        final @Nullable Type resolvedType =
-            resolveAssignType(valueType, returnType, value);
-
-        if (resolvedType == null) {
-            throw new SemanticException(
-                statement.range(),
-                "Type mismatch: cannot return %s from function with return type %s",
-                valueType,
-                returnType
-            );
-        }
+        statements.analyzeReturnStatement(statement, context);
     }
 
     private void analyzeVariableDeclaration(
         final VariableDeclaration declaration,
         final SemanticContext context
     ) {
-        analyzeVariableDeclaration(declaration, context, context.scope());
-    }
-
-    private void analyzeVariableDeclaration(
-        final VariableDeclaration declaration,
-        final SemanticContext context,
-        final Scope destination
-    ) {
-        final TypeNode typeNode = declaration.type();
-        final Expression initializer = declaration.initializer();
-        final Type declaredType =
-            typeNode != null ? resolveType(typeNode, context) : null;
-        Type initializerType =
-            analyzeExpression(initializer, context, declaredType);
-
-        if (initializerType == BuiltinType.VOID) {
-            throw new SemanticException(
-                declaration.range(),
-                "A variable initializer must produce a value"
-            );
-        }
-
-        if (declaredType != null) {
-            final @Nullable Type resolvedInitializerType =
-                resolveAssignType(initializerType, declaredType, initializer);
-            if (resolvedInitializerType == null) {
-                throw new SemanticException(
-                    initializer.range(),
-                    "Type mismatch: cannot assign %s to %s",
-                    initializerType,
-                    declaredType
-                );
-            }
-            initializerType = resolvedInitializerType;
-        }
-
-        final VariableSymbol symbol =
-            new VariableSymbol(
-                declaration.name(),
-                declaredType != null
-                    ? declaredType
-                    : Objects.requireNonNull(initializerType),
-                declaration.mutability()
-            );
-
-        destination.declare(symbol);
-        model.setSymbol(declaration.name(), symbol);
+        statements.analyzeVariableDeclaration(declaration, context);
     }
 
     private void analyzeFunctionDeclaration(
         final FunctionDeclaration declaration,
         final SemanticContext context
     ) {
-        // TODO: Verify that the parent is program or class body
-        registerFunction(declaration, context, context.scope());
-        analyzeFunctionBody(declaration, context);
+        statements.analyzeFunctionDeclaration(declaration, context);
     }
 
-    private void registerFunction(
+    public void analyzeFunctionBody(
+        final FunctionDeclaration declaration,
+        final SemanticContext context
+    ) {
+        statements.analyzeFunctionBody(declaration, context);
+    }
+
+    public void analyzeParameterDefault(
+        final FunctionParameter parameter,
+        final SemanticContext context
+    ) {
+        statements.analyzeParameterDefault(parameter, context);
+    }
+
+    public Type resolveParameterType(
+        final FunctionParameter parameter,
+        final SemanticContext context
+    ) {
+        return statements.resolveParameterType(parameter, context);
+    }
+
+    public void analyzeVariableDeclaration(
+        final VariableDeclaration declaration,
+        final SemanticContext context,
+        final Scope destination
+    ) {
+        statements
+            .analyzeVariableDeclaration(declaration, context, destination);
+    }
+
+    public void registerFunction(
         final FunctionDeclaration declaration,
         final SemanticContext context,
         final Scope destination
     ) {
-        final List<@NonNull Type> parameterTypes = new ArrayList<>();
-        final Scope functionScope = new Scope(context.scope());
-
-        for (final FunctionParameter param : declaration.parameters()) {
-            final TypeNode typeNode = param.type();
-            final Type paramType = resolveParameterType(param, context);
-            final VariableSymbol paramSymbol =
-                new VariableSymbol(param.name(), paramType, Mutability.CONST);
-            model.setResolvedType(typeNode, paramType);
-            model.setSymbol(param.name(), paramSymbol);
-            functionScope.declare(paramSymbol);
-            parameterTypes.add(paramType);
-        }
-
-        final Type returnType =
-            declaration.returnType() != null
-                ? resolveType(
-                    Objects.requireNonNull(declaration.returnType()),
-                    context
-                )
-                : BuiltinType.VOID;
-
-        final FunctionSymbol symbol =
-            new FunctionSymbol(
-                declaration.name(),
-                new FunctionType(
-                    Objects.requireNonNull(parameterTypes),
-                    returnType
-                )
-            );
-
-        destination.declare(symbol);
-        model.setSymbol(declaration.name(), symbol);
-
-        model.setFunctionParameters(
-            symbol,
-            declaration.parameters()
-                .stream()
-                .map(FunctionParameter::name)
-                .toList()
-        );
-
+        statements.registerFunction(declaration, context, destination);
     }
 
-    private void analyzeFunctionBody(
-        final FunctionDeclaration declaration,
-        final SemanticContext context
+    public void validateInheritedMember(
+        final ClassType type,
+        final Symbol symbol
     ) {
-        final FunctionSymbol symbol =
-            (FunctionSymbol) model.getSymbol(declaration.name());
-        final Scope functionScope = new Scope(context.scope());
-        for (final FunctionParameter parameter : declaration.parameters()) {
-            analyzeParameterDefault(
-                parameter,
-                new SemanticContext(functionScope, symbol, 0)
-            );
-            functionScope.declare(model.getSymbol(parameter.name()));
-        }
-        final SemanticContext functionContext =
-            new SemanticContext(functionScope, symbol, 0);
-
-        analyzeBlockStatement(declaration.body(), functionContext);
+        objects.validateInheritedMember(type, symbol);
     }
 
-    private Type resolveParameterType(
-        final FunctionParameter parameter,
-        final SemanticContext context
-    ) {
-        if (parameter.optional() && parameter.defaultValue() != null) {
-            throw new SemanticException(
-                parameter.range(),
-                "A parameter with a default value cannot also be optional; remove '?'"
-            );
-        }
-        final Type declared = resolveType(parameter.type(), context);
-        final List<Type> members =
-            new ArrayList<>(
-                declared instanceof UnionType union
-                    ? union.memberTypes()
-                    : List.of(declared)
-            );
-        if (!members.contains(BuiltinType.NULL)) {
-            members.add(BuiltinType.NULL);
-        }
-        final Type type =
-            parameter.optional() ? UnionType.of(members) : declared;
-        model.setParameterDetails(parameter);
-        model.setResolvedType(parameter.type(), type);
-        return type;
-    }
-
-    private void analyzeParameterDefault(
-        final FunctionParameter parameter,
-        final SemanticContext context
-    ) {
-        final Expression value = parameter.defaultValue();
-        if (value == null) {
-            return;
-        }
-        final Type expected = model.getSymbol(parameter.name()).type();
-        final boolean previous = analyzingConstructorDefault;
-        final Type actual;
-        analyzingConstructorDefault =
-            currentConstructor != null && context.function() == null;
-        try {
-            actual = analyzeExpression(value, context, expected);
-        }
-        finally {
-            analyzingConstructorDefault = previous;
-        }
-        if (resolveAssignType(actual, expected, value) == null) {
-            throw new SemanticException(
-                value.range(),
-                "Cannot use %s as default value for %s",
-                actual,
-                expected
-            );
-        }
-    }
-
-    private Type resolveType(
+    public Type resolveType(
         final TypeNode typeNode,
         final SemanticContext context
     ) {
-        return switch (typeNode) {
-            case NamedTypeNode named -> resolveNamedType(named, context);
-            case TupleTypeNode tuple -> {
-                final Type type =
-                    new TupleType(
-                        tuple.elementTypes()
-                            .stream()
-                            .map(element -> resolveType(element, context))
-                            .toList()
-                    );
-                model.setResolvedType(tuple, type);
-                yield type;
-            }
-            case ArrayTypeNode array -> {
-                final Type type =
-                    new ArrayType(resolveType(array.elementType(), context));
-                model.setResolvedType(array, type);
-                yield type;
-            }
-            case FunctionTypeNode function -> {
-                final TypeNode returnTypeNode = function.returnType();
-                final Type returnType =
-                    returnTypeNode == null
-                        ? BuiltinType.VOID
-                        : resolveType(returnTypeNode, context);
-                final List<Type> parameterTypes = new ArrayList<>();
-                for (final TypeNode paramTypeNode : function.parameterTypes()) {
-                    parameterTypes.add(resolveType(paramTypeNode, context));
-                }
-                final Type type = new FunctionType(parameterTypes, returnType);
-                model.setResolvedType(function, type);
-                yield type;
-            }
-            case UnionTypeNode union -> {
-                final List<Type> memberTypes = new ArrayList<>();
-                for (final TypeNode memberTypeNode : union.memberTypes()) {
-                    memberTypes.add(resolveType(memberTypeNode, context));
-                }
-                final Type type = UnionType.of(memberTypes);
-                model.setResolvedType(union, type);
-                yield type;
-            }
-        };
+        return types.resolveType(typeNode, context);
     }
 
-    private boolean canAssignJavaArgument(
+    public boolean canAssignJavaArgument(
         final Type from,
         final Type to,
         final Expression expression
     ) {
-        if (
-            model.isSubtype(from, to)
-                || (to == BuiltinType.ANY && from != BuiltinType.VOID)
-        ) {
-            return true;
-        }
-        if (to instanceof UnionType union) {
-            return union.memberTypes()
-                .stream()
-                .anyMatch(
-                    member -> canAssignJavaArgument(from, member, expression)
-                );
-        }
-        if (
-            from instanceof BuiltinType source
-                && to instanceof BuiltinType target
-                && (source.isInteger() || source.isFloating())
-                && (target.isInteger() || target.isFloating())
-        ) {
-            if (target.isFloating() && isFloatingLiteral(expression)) {
-                return true;
-            }
-            final BigInteger literal = integerLiteral(expression);
-            if (literal != null && target.isInteger()) {
-                return literal.bitLength() < target.bits();
-            }
-            return (source.isInteger()
-                && (target.isFloating() || target.bits() >= source.bits()))
-                || (source.isFloating() && target.isFloating()
-                    && target.bits() >= source.bits());
-        }
-        return false;
+        return types.canAssignJavaArgument(from, to, expression);
     }
 
-    private boolean isMoreSpecificJavaParameter(
+    public boolean isMoreSpecificJavaParameter(
         final Type candidate,
         final Type other
     ) {
-        if (candidate.equals(other)) {
-            return false;
-        }
-        if (model.isSubtype(candidate, other)) {
-            return true;
-        }
-        if (
-            candidate instanceof BuiltinType source
-                && other instanceof BuiltinType target
-                && (source.isInteger() || source.isFloating())
-                && (target.isInteger() || target.isFloating())
-        ) {
-            final boolean widens =
-                source.isInteger()
-                    ? target.isFloating() || target.bits() >= source.bits()
-                    : target.isFloating() && target.bits() >= source.bits();
-            final boolean widensBack =
-                target.isInteger()
-                    ? source.isFloating() || source.bits() >= target.bits()
-                    : source.isFloating() && source.bits() >= target.bits();
-            return widens && !widensBack;
-        }
-        return false;
+        return types.isMoreSpecificJavaParameter(candidate, other);
     }
 
-    private @Nullable Type resolveAssignType(
+    public @Nullable Type resolveAssignType(
         final Type from,
         final Type to,
         final Expression fromExpression
     ) {
-
-        // TODO: Extend this to handle more complex type assignability rules, such as
-        // subtyping and type coercion.
-
-        if (
-            fromExpression instanceof TupleExpression tuple
-                && to instanceof TupleType target
-        ) {
-            if (tuple.elements().size() != target.elementTypes().size()) {
-                return null;
-            }
-            for (int i = 0; i < tuple.elements().size(); i++) {
-                final Expression element = tuple.elements().get(i);
-                if (
-                    resolveAssignType(
-                        model.getExpressionType(element),
-                        target.elementTypes().get(i),
-                        element
-                    ) == null
-                ) {
-                    return null;
-                }
-            }
-            model.setExpressionType(tuple, to);
-            return to;
-        }
-        if (from.equals(to)) {
-            return from;
-        }
-        if (model.isSubtype(from, to)) {
-            if (
-                JavaTypes.boxedClass(from) != null
-                    && to instanceof InterfaceType
-            ) {
-                model.setConversionType(fromExpression, to);
-            }
-            return to;
-        }
-        if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
-            model.setConversionType(fromExpression, to);
-            return to;
-        }
-
-        if (to instanceof UnionType union) {
-            if (union.contains(from)) {
-                model.setUnionConversion(fromExpression, from, union);
-                return to;
-            }
-            if (from instanceof UnionType source) {
-                for (final Type sourceMember : source.memberTypes()) {
-                    final boolean assignable =
-                        union.memberTypes()
-                            .stream()
-                            .anyMatch(
-                                member -> model.isSubtype(sourceMember, member)
-                            );
-                    if (!assignable) {
-                        // Numeric coercions between union members still require runtime dispatch.
-                        return null;
-                    }
-                }
-                model.setConversionType(fromExpression, to);
-                return to;
-            }
-            for (final Type member : union.memberTypes()) {
-                if (
-                    (member instanceof ClassType
-                        || member instanceof InterfaceType)
-                        && resolveAssignType(
-                            from,
-                            member,
-                            fromExpression
-                        ) != null
-                ) {
-                    model.setUnionConversion(fromExpression, member, union);
-                    return to;
-                }
-            }
-            // Exact members take priority above; numeric alternatives use a stable order.
-            for (final BuiltinType member : BuiltinType.values()) {
-                if (
-                    from instanceof BuiltinType
-                        && union.memberTypes().contains(member)
-                        && resolveAssignType(
-                            from,
-                            member,
-                            fromExpression
-                        ) != null
-                ) {
-                    model.setUnionConversion(fromExpression, member, union);
-                    return to;
-                }
-            }
-            return null;
-        }
-
-        if (
-            fromExpression instanceof ArrayExpression array
-                && to instanceof ArrayType target
-        ) {
-            for (final Expression element : array.elements()) {
-                if (
-                    resolveAssignType(
-                        model.getExpressionType(element),
-                        target.elementType(),
-                        element
-                    ) == null
-                ) {
-                    return null;
-                }
-            }
-            model.setExpressionType(array, to);
-            return to;
-        }
-        if (
-            from instanceof BuiltinType source
-                && to instanceof BuiltinType target
-                && (source.isInteger() || source.isFloating())
-                && (target.isInteger() || target.isFloating())
-        ) {
-            if (target.isFloating() && isFloatingLiteral(fromExpression)) {
-                model.setConversionType(fromExpression, target);
-                return target;
-            }
-            final BigInteger literal = integerLiteral(fromExpression);
-            if (literal != null && target.isInteger()) {
-                if (literal.bitLength() >= target.bits()) {
-                    return null;
-                }
-                model.setConversionType(fromExpression, to);
-                return to;
-            }
-            if (
-                !((source.isInteger()
-                    && (target.isFloating() || target.bits() >= source.bits()))
-                    || (source.isFloating() && target.isFloating()
-                        && target.bits() >= source.bits()))
-            ) {
-                return null;
-            }
-            model.setConversionType(fromExpression, to);
-            return to;
-        }
-
-        return null;
+        return types.resolveAssignType(from, to, fromExpression);
     }
 
-    private Type resolveNamedType(
+    public Type resolveNamedType(
         final NamedTypeNode named,
         final SemanticContext context
     ) {
-        final Class<?> javaClass = JavaTypes.findClass(named.name());
-        if (
-            javaClass != null && context.scope().resolve(named.name()) == null
-        ) {
-            if (
-                named.typeArguments()
-                    .size() != javaClass.getTypeParameters().length
-            ) {
-                throw new SemanticException(
-                    named.range(),
-                    "%s requires %s type arguments, found %s",
-                    named.name(),
-                    javaClass.getTypeParameters().length,
-                    named.typeArguments().size()
-                );
-            }
-            final List<Type> arguments =
-                named.typeArguments()
-                    .stream()
-                    .map(argument -> resolveType(argument, context))
-                    .toList();
-            if (arguments.contains(BuiltinType.VOID)) {
-                throw new SemanticException(
-                    named.range(),
-                    "A Java generic type argument must produce a value"
-                );
-            }
-            final InterfaceType type = JavaTypes.type(named.name(), arguments);
-            model.setResolvedType(named, type);
-            return type;
-        }
-        if (!named.typeArguments().isEmpty()) {
-            throw new SemanticException(
-                named.range(),
-                "Type %s does not accept type arguments",
-                named.name()
-            );
-        }
-        final Type type = switch (named.name()) {
-            case "i8" -> BuiltinType.I8;
-            case "i16" -> BuiltinType.I16;
-            case "i32" -> BuiltinType.I32;
-            case "i64" -> BuiltinType.I64;
-            case "f32" -> BuiltinType.F32;
-            case "f64" -> BuiltinType.F64;
-            case "char" -> BuiltinType.CHAR;
-            case "bool" -> BuiltinType.BOOL;
-            case "string" -> BuiltinType.STRING;
-            case "null" -> BuiltinType.NULL;
-            case "any" -> BuiltinType.ANY;
-            default -> {
-                final Symbol symbol = context.scope().resolve(named.name());
-                if (symbol instanceof InterfaceSymbol contract) {
-                    yield contract.type();
-                }
-                if (!(symbol instanceof ClassSymbol classSymbol)) {
-                    throw new SemanticException(
-                        named.range(),
-                        "Unknown type: %s",
-                        named.name()
-                    );
-                }
-                yield classSymbol.type();
-            }
-        };
-
-        model.setResolvedType(named, type);
-
-        return type;
+        return types.resolveNamedType(named, context);
     }
 
-    private Type analyzeExpression(
+    public Type analyzeExpression(
         final Expression expression,
         final SemanticContext context,
         final @Nullable Type expected
     ) {
-        if (
-            expression instanceof ArrayExpression array
-                && expected instanceof InterfaceType list
-                && list.javaClass() != null
-                && list.javaClass().isAssignableFrom(java.util.ArrayList.class)
-                && list.typeArguments().size() == 1
-        ) {
-            if (
-                array.elements()
-                    .stream()
-                    .anyMatch(ArraySpread.class::isInstance)
-            ) {
-                throw new SemanticException(
-                    array.range(),
-                    "Array spread requires an Eld array target"
-                );
-            }
-            final Type elementType = list.typeArguments().getFirst();
-            for (final Expression element : array.elements()) {
-                final Type actual =
-                    analyzeExpression(element, context, elementType);
-                if (resolveAssignType(actual, elementType, element) == null) {
-                    throw new SemanticException(
-                        element.range(),
-                        "Cannot use %s as list element %s",
-                        actual,
-                        elementType
-                    );
-                }
-            }
-            model.setExpressionType(array, list);
-            return list;
-        }
-        if (
-            expected instanceof FunctionType
-                && expression instanceof MemberExpression
-        ) {
-            final boolean previousCallee = analyzingCallee;
-            analyzingCallee = true;
-            try {
-                return analyzeExpression(expression, context);
-            }
-            finally {
-                analyzingCallee = previousCallee;
-            }
-        }
-        if (expression instanceof ObjectExpression object) {
-            Type target = expected;
-            if (expected instanceof UnionType union) {
-                final List<Type> contracts =
-                    union.memberTypes()
-                        .stream()
-                        .filter(InterfaceType.class::isInstance)
-                        .toList();
-                target = contracts.size() == 1 ? contracts.getFirst() : null;
-            }
-            if (
-                target == null && object.members()
-                    .stream()
-                    .anyMatch(ObjectSpread.class::isInstance)
-            ) {
-                target = inferSpreadObject(object, context);
-            }
-            if (!(target instanceof InterfaceType contract)) {
-                throw new SemanticException(
-                    object.range(),
-                    "Object literal requires an expected interface type"
-                );
-            }
-            analyzeObjectExpression(object, context, contract);
-            model.setExpressionType(object, contract);
-            return contract;
-        }
-        if (expression instanceof LambdaExpression lambda) {
-            if (
-                expected instanceof InterfaceType comparator
-                    && comparator.javaClass() == java.util.Comparator.class
-            ) {
-                analyzeLambdaExpression(
-                    lambda,
-                    context,
-                    JavaTypes.comparatorFunction(comparator)
-                );
-                model.setExpressionType(lambda, comparator);
-                return comparator;
-            }
-            final Type type =
-                analyzeLambdaExpression(lambda, context, expected);
-            model.setExpressionType(lambda, type);
-            return type;
-        }
-        if (
-            expected == BuiltinType.ANY || expected instanceof UnionType
-                || expected instanceof InterfaceType
-        ) {
-            if (expression instanceof IfExpression conditional) {
-                final Type type =
-                    analyzeIfExpression(conditional, context, expected);
-                model.setExpressionType(expression, type);
-                return type;
-            }
-            if (expression instanceof SwitchExpression selection) {
-                final Type type =
-                    analyzeSwitchExpression(selection, context, true, expected);
-                model.setExpressionType(expression, type);
-                return type;
-            }
-        }
-        if (
-            expected instanceof TupleType target
-                && expression instanceof TupleExpression tuple
-                && tuple.elements().size() == target.elementTypes().size()
-        ) {
-            return analyzeTupleExpression(tuple, context, target);
-        }
-        if (
-            (expected instanceof UnionType || expected == BuiltinType.ANY
-                || expected instanceof InterfaceType)
-                && expression instanceof TernaryExpression ternary
-        ) {
-            if (
-                analyzeExpression(
-                    ternary.condition(),
-                    context
-                ) != BuiltinType.BOOL
-            ) {
-                throw new SemanticException(
-                    ternary.condition().range(),
-                    "Ternary condition must be bool"
-                );
-            }
-            for (final Expression branch : List
-                .of(ternary.thenBranch(), ternary.elseBranch())) {
-                final Type actual =
-                    analyzeExpression(branch, context, expected);
-                if (resolveAssignType(actual, expected, branch) == null) {
-                    throw new SemanticException(
-                        branch.range(),
-                        "Cannot assign %s to %s",
-                        actual,
-                        expected
-                    );
-                }
-            }
-            model.setExpressionType(ternary, expected);
-            return expected;
-        }
-        if (
-            expected instanceof ArrayType target
-                && expression instanceof ArrayExpression array
-                && (requiresContextualElements(target.elementType())
-                    || array.elements()
-                        .stream()
-                        .anyMatch(ArraySpread.class::isInstance))
-        ) {
-            for (final Expression element : array.elements()) {
-                final Type actual =
-                    analyzeExpression(element, context, target.elementType());
-                if (
-                    resolveAssignType(
-                        actual,
-                        target.elementType(),
-                        element
-                    ) == null
-                ) {
-                    throw new SemanticException(
-                        element.range(),
-                        "Cannot assign %s to %s",
-                        actual,
-                        target.elementType()
-                    );
-                }
-            }
-            model.setExpressionType(array, target);
-            return target;
-        }
-        if (
-            expression instanceof GroupingExpression grouping
-                && expected != null
-        ) {
-            final Type type =
-                analyzeExpression(grouping.expression(), context, expected);
-            model.setExpressionType(grouping, type);
-            return type;
-        }
-        return analyzeExpression(expression, context);
+        return expressions.analyzeExpression(expression, context, expected);
     }
 
-    private Type analyzeTupleExpression(
-        final TupleExpression tuple,
-        final SemanticContext context,
-        final TupleType target
-    ) {
-        for (int i = 0; i < tuple.elements().size(); i++) {
-            final Expression element = tuple.elements().get(i);
-            final Type wanted = target.elementTypes().get(i);
-            final Type actual = analyzeExpression(element, context, wanted);
-            if (resolveAssignType(actual, wanted, element) == null) {
-                throw new SemanticException(
-                    element.range(),
-                    "Cannot assign %s to %s",
-                    actual,
-                    wanted
-                );
-            }
-        }
-        model.setExpressionType(tuple, target);
-        return target;
-    }
-
-    private static boolean requiresContextualElements(final Type type) {
-        return type instanceof InterfaceType || type instanceof FunctionType
-            || (type instanceof TupleType tuple && tuple.elementTypes()
-                .stream()
-                .anyMatch(SemanticAnalyzer::requiresContextualElements))
-            || type instanceof UnionType
-            || type == BuiltinType.ANY
-            || (type instanceof ArrayType array
-                && requiresContextualElements(array.elementType()));
-    }
-
-    private Type analyzeExpression(
+    public Type analyzeExpression(
         final Expression expression,
         final SemanticContext context
     ) {
-
-        final Type type = switch (expression) {
-            case MemberExpression member -> {
-                final boolean memberCallee = analyzingCallee;
-                final Type target;
-                analyzingCallee = false;
-                try {
-                    if (
-                        member
-                            .target() instanceof IdentifierExpression identifier
-                            && context.scope()
-                                .resolve(identifier.name()) == null
-                            && JavaTypes.findClass(identifier.name()) != null
-                    ) {
-                        final JavaClassSymbol symbol =
-                            new JavaClassSymbol(
-                                JavaTypes.type(identifier.name(), List.of()),
-                                identifier.range()
-                            );
-                        model.setReference(identifier, symbol);
-                        model.setExpressionType(identifier, symbol.type());
-                        target = symbol.type();
-                    }
-                    else {
-                        target = analyzeExpression(member.target(), context);
-                    }
-                }
-                finally {
-                    analyzingCallee = memberCallee;
-                }
-                if (
-                    target instanceof ArrayType array
-                        && member.member().name().equals("sort")
-                ) {
-                    final Type element = array.elementType();
-                    if (!analyzingCallee) {
-                        throw new SemanticException(
-                            member.range(),
-                            "Array sorting must be called with sort()"
-                        );
-                    }
-                    if (
-                        element == BuiltinType.BOOL
-                            || !model.hasNaturalOrder(element)
-                    ) {
-                        throw new SemanticException(
-                            member.range(),
-                            "Array sorting requires a supported naturally ordered element type, found %s",
-                            element
-                        );
-                    }
-                    model.setMemberOwner(member, array);
-                    model.setReference(
-                        member.member(),
-                        new BuiltinFunctionSymbol(
-                            "sort",
-                            BuiltinFunctionType.ARRAY_SORT
-                        )
-                    );
-                    model.setExpressionType(
-                        member.member(),
-                        BuiltinFunctionType.ARRAY_SORT
-                    );
-                    yield BuiltinFunctionType.ARRAY_SORT;
-                }
-                final InterfaceType javaTarget =
-                    target instanceof InterfaceType contract
-                        && contract.javaClass() != null
-                            ? contract
-                            : JavaTypes.boxedClass(target) != null
-                                ? new InterfaceType(
-                                    target.toString(),
-                                    List.of(),
-                                    JavaTypes.boxedClass(target)
-                                )
-                                : null;
-                if (javaTarget != null) {
-                    List<JavaMethodSymbol> candidates =
-                        JavaTypes.methods(
-                            javaTarget,
-                            member.member().name(),
-                            callArity,
-                            member.range(),
-                            member
-                                .target() instanceof IdentifierExpression identifier
-                                && model.getReference(
-                                    identifier
-                                ) instanceof JavaClassSymbol
-                        );
-                    if (candidates.size() > 1 && analyzingCallee) {
-                        final List<Expression> supplied = javaCallArguments;
-                        final List<Type> arguments =
-                            supplied.stream()
-                                .map(
-                                    argument -> analyzeExpression(
-                                        argument,
-                                        context
-                                    )
-                                )
-                                .toList();
-                        candidates = candidates.stream().filter(candidate -> {
-                            for (int i = 0; i < arguments.size(); i++) {
-                                if (
-                                    !canAssignJavaArgument(
-                                        arguments.get(i),
-                                        candidate.type()
-                                            .parameterTypes()
-                                            .get(i),
-                                        supplied.get(i)
-                                    )
-                                ) {
-                                    return false;
-                                }
-                            }
-                            return true;
-                        }).toList();
-                    }
-                    if (candidates.size() != 1) {
-                        throw new SemanticException(
-                            member.range(),
-                            candidates.isEmpty()
-                                ? "Unknown Java method '%s' with %s arguments on %s"
-                                : "Ambiguous Java method '%s' with %s arguments on %s",
-                            member.member().name(),
-                            callArity,
-                            target
-                        );
-                    }
-                    if (
-                        member.member().name().equals("sort") && callArity == 0
-                    ) {
-                        final Type element =
-                            javaTarget.typeArguments().getFirst();
-                        if (!model.hasNaturalOrder(element)) {
-                            throw new SemanticException(
-                                member.range(),
-                                "Natural sorting requires %s to implement Comparable<%s>",
-                                element,
-                                element
-                            );
-                        }
-                    }
-                    final JavaMethodSymbol symbol = candidates.getFirst();
-                    model.setMemberOwner(member, target);
-                    model.setReference(member.member(), symbol);
-                    model.setExpressionType(member.member(), symbol.type());
-                    yield symbol.type();
-                }
-                if (target instanceof InterfaceType contract) {
-                    final InterfaceContract members =
-                        model.getInterface(contract);
-                    Symbol symbol =
-                        analyzingCallee
-                            ? members.methods().get(member.member().name())
-                            : members.fields().get(member.member().name());
-                    if (symbol == null) {
-                        symbol = members.fields().get(member.member().name());
-                    }
-                    if (symbol == null) {
-                        symbol = members.methods().get(member.member().name());
-                    }
-                    if (symbol == null) {
-                        throw new SemanticException(
-                            member.member().range(),
-                            "Unknown member '%s' of interface %s",
-                            member.member().name(),
-                            contract
-                        );
-                    }
-                    model.setMemberOwner(member, contract);
-                    model.setReference(member.member(), symbol);
-                    model.setExpressionType(member.member(), symbol.type());
-                    yield symbol.type();
-                }
-                if (!(target instanceof ClassType classType)) {
-                    throw new SemanticException(
-                        member.target().range(),
-                        "Member access requires a class instance"
-                    );
-                }
-                final ClassType methodOwner =
-                    analyzingCallee
-                        ? classMethodOwner(classType, member.member().name())
-                        : null;
-                final ClassType fieldOwner =
-                    classFieldOwner(classType, member.member().name());
-                final ClassType owner =
-                    methodOwner != null
-                        ? methodOwner
-                        : fieldOwner != null
-                            ? fieldOwner
-                            : memberOwner(classType, member.member().name());
-                final Scope scope =
-                    owner == null ? null : classScopes.get(owner);
-                final Symbol symbol =
-                    methodOwner != null
-                        ? classMethod(classType, member.member().name())
-                        : scope == null
-                            ? null
-                            : scope.resolveLocal(member.member().name());
-                if (symbol == null) {
-                    throw new SemanticException(
-                        member.member().range(),
-                        "Unknown member '%s' of class %s",
-                        member.member().name(),
-                        classType.name()
-                    );
-                }
-                model.setMemberOwner(member, Objects.requireNonNull(owner));
-                if (
-                    !canAccess(
-                        Objects.requireNonNull(owner),
-                        model.getMemberVisibility(symbol)
-                    )
-                ) {
-                    throw new SemanticException(
-                        member.member().range(),
-                        "Member '%s' of class %s is %s",
-                        member.member().name(),
-                        owner.name(),
-                        model
-                            .getMemberVisibility(symbol) == Visibility.PROTECTED
-                                ? "protected"
-                                : "private"
-                    );
-                }
-                model.setReference(member.member(), symbol);
-                model.setExpressionType(member.member(), symbol.type());
-                yield symbol.type();
-            }
-            case NewExpression creation -> {
-                if (
-                    JavaTypes.findClass(creation.className().name()) != null
-                        && context.scope()
-                            .resolve(creation.className().name()) == null
-                ) {
-                    final InterfaceType javaType =
-                        (InterfaceType) resolveNamedType(
-                            new NamedTypeNode(
-                                creation.className().name(),
-                                creation.typeArguments(),
-                                creation.range()
-                            ),
-                            context
-                        );
-                    final Class<?> javaClass =
-                        Objects.requireNonNull(javaType.javaClass());
-                    if (javaClass.isInterface()) {
-                        throw new SemanticException(
-                            creation.range(),
-                            "'new' requires a concrete Java collection class"
-                        );
-                    }
-                    final List<java.lang.reflect.Constructor<?>> candidates =
-                        new ArrayList<>();
-                    for (final var constructor : javaClass.getConstructors()) {
-                        if (
-                            constructor.getParameterCount() != creation
-                                .arguments()
-                                .size()
-                        ) {
-                            continue;
-                        }
-                        try {
-                            for (final var parameter : constructor
-                                .getGenericParameterTypes()) {
-                                JavaTypes.resolve(parameter, javaType);
-                            }
-                            candidates.add(constructor);
-                        }
-                        catch (IllegalArgumentException ignored) {
-                            // This constructor belongs to an API outside the exposed aliases.
-                        }
-                    }
-                    if (
-                        candidates.size() > 1
-                            && creation.arguments().size() == 1
-                    ) {
-                        final Expression argument =
-                            unwrap(creation.arguments().getFirst());
-                        if (
-                            argument instanceof LambdaExpression
-                                || argument instanceof ObjectExpression
-                        ) {
-                            candidates.removeIf(
-                                constructor -> constructor
-                                    .getParameterTypes()[0] != java.util.Comparator.class
-                            );
-                        }
-                        else {
-                            final Type actual =
-                                analyzeExpression(argument, context);
-                            candidates.removeIf(
-                                constructor -> !canAssignJavaArgument(
-                                    actual,
-                                    JavaTypes.resolve(
-                                        constructor
-                                            .getGenericParameterTypes()[0],
-                                        javaType
-                                    ),
-                                    argument
-                                )
-                            );
-                        }
-                        final var applicable = List.copyOf(candidates);
-                        candidates.removeIf(
-                            constructor -> applicable.stream()
-                                .anyMatch(
-                                    other -> isMoreSpecificJavaParameter(
-                                        JavaTypes.resolve(
-                                            other.getGenericParameterTypes()[0],
-                                            javaType
-                                        ),
-                                        JavaTypes.resolve(
-                                            constructor
-                                                .getGenericParameterTypes()[0],
-                                            javaType
-                                        )
-                                    )
-                                )
-                        );
-                    }
-                    if (candidates.size() != 1) {
-                        throw new SemanticException(
-                            creation.range(),
-                            "No unique supported constructor for %s with %s arguments",
-                            javaType,
-                            creation.arguments().size()
-                        );
-                    }
-                    final var constructor = candidates.getFirst();
-                    for (int i = 0; i < creation.arguments().size(); i++) {
-                        final Expression argument = creation.arguments().get(i);
-                        final Type wanted =
-                            JavaTypes.resolve(
-                                constructor.getGenericParameterTypes()[i],
-                                javaType
-                            );
-                        final Type actual =
-                            analyzeExpression(argument, context, wanted);
-                        if (
-                            resolveAssignType(actual, wanted, argument) == null
-                        ) {
-                            throw new SemanticException(
-                                argument.range(),
-                                "Cannot pass %s as %s",
-                                actual,
-                                wanted
-                            );
-                        }
-                    }
-                    model.setReference(
-                        creation.className(),
-                        new JavaClassSymbol(javaType, creation.range())
-                    );
-                    model.setExpressionType(creation.className(), javaType);
-                    model.setJavaConstructor(creation, constructor);
-                    yield javaType;
-                }
-                if (!creation.typeArguments().isEmpty()) {
-                    throw new SemanticException(
-                        creation.range(),
-                        "Type %s does not accept type arguments",
-                        creation.className().name()
-                    );
-                }
-                final Type classType =
-                    analyzeIdentifierExpression(creation.className(), context);
-                if (
-                    !(model.getReference(
-                        creation.className()
-                    ) instanceof ClassSymbol)
-                ) {
-                    throw new SemanticException(
-                        creation.className().range(),
-                        "'new' requires a class name"
-                    );
-                }
-                if (
-                    !canAccess(
-                        (ClassType) classType,
-                        model.getConstructorVisibility((ClassType) classType)
-                    )
-                ) {
-                    throw new SemanticException(
-                        creation.className().range(),
-                        "Constructor of class %s is %s",
-                        creation.className().name(),
-                        model.getConstructorVisibility(
-                            (ClassType) classType
-                        ) == Visibility.PROTECTED ? "protected" : "private"
-                    );
-                }
-                analyzeConstructorArguments(
-                    (ClassType) classType,
-                    creation.arguments(),
-                    creation.range(),
-                    context
-                );
-                yield classType;
-            }
-            case ThisExpression self -> {
-                if (analyzingSuperArguments) {
-                    throw new SemanticException(
-                        self.range(),
-                        "Super constructor arguments cannot access 'this' before base initialization"
-                    );
-                }
-                if (analyzingConstructorDefault) {
-                    throw new SemanticException(
-                        self.range(),
-                        "Constructor defaults cannot access 'this' before initialization"
-                    );
-                }
-                if (currentInstance == null) {
-                    throw new SemanticException(
-                        self.range(),
-                        "'this' is only available in instance methods and constructors"
-                    );
-                }
-                yield currentInstance;
-            }
-            case FormatStringExpression format -> {
-                for (final Expression part : format.parts()) {
-                    if (analyzeExpression(part, context) == BuiltinType.VOID) {
-                        throw new SemanticException(
-                            part.range(),
-                            "Cannot interpolate a void expression"
-                        );
-                    }
-                }
-                yield BuiltinType.STRING;
-            }
-            case LiteralExpression literal -> analyzeLiteralExpression(literal);
-            case IdentifierExpression identifier ->
-                analyzeIdentifierExpression(identifier, context);
-            case TupleExpression tuple -> new TupleType(
-                tuple.elements()
-                    .stream()
-                    .map(element -> analyzeExpression(element, context))
-                    .toList()
-            );
-            case ArraySpread spread -> {
-                final Type source =
-                    analyzeExpression(spread.expression(), context);
-                if (!(source instanceof ArrayType sourceArray)) {
-                    throw new SemanticException(
-                        spread.range(),
-                        "Array spread requires an Eld array, found %s",
-                        source
-                    );
-                }
-                yield sourceArray.elementType();
-            }
-            case ArrayExpression array ->
-                analyzeArrayExpression(array, context);
-            case BinaryExpression binary ->
-                analyzeBinaryExpression(binary, context);
-            case UnaryExpression unary ->
-                analyzeUnaryExpression(unary, context);
-            case PostfixExpression postfix ->
-                analyzePostfixExpression(postfix, context);
-            case NamedArgumentExpression named -> throw new SemanticException(
-                named.range(),
-                "Named arguments are only valid in function calls"
-            );
-            case CallExpression call -> analyzeCallExpression(call, context);
-            case GroupingExpression grouping ->
-                analyzeExpression(grouping.expression(), context);
-            case SubscriptExpression index ->
-                analyzeIndexExpression(index, context);
-            case SliceExpression slice ->
-                analyzeSliceExpression(slice, context);
-            case AssignmentExpression assignment ->
-                analyzeAssignmentExpression(assignment, context);
-            case TernaryExpression ternary ->
-                analyzeTernaryExpression(ternary, context);
-            case IfExpression conditional ->
-                analyzeIfExpression(conditional, context);
-            case SwitchExpression selection ->
-                analyzeSwitchExpression(selection, context, true);
-            case ObjectExpression object ->
-                analyzeExpression(object, context, null);
-            case LambdaExpression lambda ->
-                analyzeLambdaExpression(lambda, context, null);
-        };
-
-        model.setExpressionType(expression, type);
-
-        return type;
+        return expressions.analyzeExpression(expression, context);
     }
 
-    private void analyzeConstructorArguments(
-        final ClassType classType,
-        final List<Expression> arguments,
-        final Range range,
-        final SemanticContext context
-    ) {
-        final FunctionType constructor = model.getConstructor(classType);
-        if (arguments.size() > constructor.parameterTypes().size()) {
-            throw new SemanticException(
-                range,
-                "Expected %s constructor arguments, found %s",
-                constructor.parameterTypes().size(),
-                arguments.size()
-            );
-        }
-        for (int i = 0; i < arguments.size(); i++) {
-            final Expression argument = arguments.get(i);
-            final Type expectedType = constructor.parameterTypes().get(i);
-            final Type actual =
-                analyzeExpression(argument, context, expectedType);
-            if (resolveAssignType(actual, expectedType, argument) == null) {
-                throw new SemanticException(
-                    argument.range(),
-                    "Cannot assign %s to %s",
-                    actual,
-                    expectedType
-                );
-            }
-        }
-        final List<FunctionParameter> parameters =
-            model.getConstructorParameters(classType);
-        for (int i = arguments.size(); i < parameters.size(); i++) {
-            if (!parameters.get(i).omittable()) {
-                throw new SemanticException(
-                    range,
-                    "Missing required constructor argument: %s",
-                    parameters.get(i).name().name()
-                );
-            }
-        }
-    }
-
-    private Type analyzeLambdaExpression(
-        final LambdaExpression lambda,
+    public Type analyzeExpressionAsCallee(
+        final Expression expression,
         final SemanticContext context,
-        final @Nullable Type expected
+        final boolean callee
     ) {
-        final FunctionType target =
-            expected instanceof FunctionType function ? function : null;
-        if (!lambda.parameters().isEmpty() && target == null) {
-            throw new SemanticException(
-                lambda.range(),
-                "Lambda parameters require an expected function type"
-            );
-        }
-        if (
-            target != null
-                && target.parameterTypes().size() != lambda.parameters().size()
-        ) {
-            throw new SemanticException(
-                lambda.range(),
-                "Lambda parameter count does not match expected function type"
-            );
-        }
-        final Scope scope = new Scope(context.scope());
-        final List<Type> parameterTypes =
-            target != null ? target.parameterTypes() : List.of();
-        for (int i = 0; i < lambda.parameters().size(); i++) {
-            final var name = lambda.parameters().get(i).name();
-            final VariableSymbol parameter =
-                new VariableSymbol(
-                    name,
-                    parameterTypes.get(i),
-                    Mutability.CONST
-                );
-            scope.declare(parameter);
-            model.setSymbol(name, parameter);
-        }
-        final FunctionSymbol symbol =
-            new FunctionSymbol(
-                new IdentifierDeclaration("$lambda", lambda.range()),
-                new FunctionType(
-                    parameterTypes,
-                    target != null ? target.returnType() : BuiltinType.ANY
-                )
-            );
-        final SemanticContext lambdaContext =
-            new SemanticContext(scope, symbol, 0);
-        final Type returnType;
-        if (lambda.body() instanceof Expression expression) {
-            final Type actual =
-                analyzeExpression(
-                    expression,
-                    lambdaContext,
-                    target != null ? target.returnType() : null
-                );
-            returnType = target != null ? target.returnType() : actual;
-            if (resolveAssignType(actual, returnType, expression) == null) {
-                throw new SemanticException(
-                    expression.range(),
-                    "Cannot return %s from lambda returning %s",
-                    actual,
-                    returnType
-                );
-            }
-        }
-        else {
-            final List<ReturnStatement> returns = new ArrayList<>();
-            if (target == null) {
-                lambdaReturns.put(symbol, returns);
-            }
-            try {
-                analyzeBlockStatement(
-                    (BlockStatement) lambda.body(),
-                    lambdaContext
-                );
-            }
-            finally {
-                lambdaReturns.remove(symbol);
-            }
-            Type inferred = returns.isEmpty() ? BuiltinType.VOID : null;
-            for (final ReturnStatement statement : returns) {
-                final Type type =
-                    statement.value() != null
-                        ? model.getExpressionType(statement.value())
-                        : BuiltinType.VOID;
-                inferred =
-                    inferred == null
-                        ? type
-                        : commonBranchType(inferred, type, statement);
-            }
-            returnType =
-                target != null
-                    ? target.returnType()
-                    : Objects.requireNonNull(inferred);
-            for (final ReturnStatement statement : returns) {
-                if (statement.value() != null) {
-                    resolveAssignType(
-                        model.getExpressionType(statement.value()),
-                        returnType,
-                        statement.value()
-                    );
-                }
-            }
-        }
-        final Set<Symbol> declared =
-            Collections.newSetFromMap(new IdentityHashMap<>());
-        AstTraversal.walk(lambda, node -> {
-            final Symbol declaration = model.findDeclaredSymbol(node);
-            if (declaration != null) {
-                declared.add(declaration);
-            }
-        });
-        final List<Symbol> captures = new ArrayList<>();
-        AstTraversal.walk(lambda.body(), node -> {
-            if (node instanceof IdentifierExpression identifier) {
-                final Symbol reference = model.getReference(identifier);
-                if (
-                    reference instanceof VariableSymbol
-                        && !declared.contains(reference)
-                        && !captures.contains(reference)
-                ) {
-                    captures.add(reference);
-                }
-            }
-        });
-        model.setLambdaCaptures(lambda, captures);
-        return new FunctionType(parameterTypes, returnType);
+        return expressions
+            .analyzeExpressionAsCallee(expression, context, callee);
     }
 
-    private Type analyzeCallExpression(
-        final CallExpression call,
-        final SemanticContext context
-    ) {
-        final boolean previousCallee = analyzingCallee;
-        final int previousArity = callArity;
-        final List<Expression> previousArguments = javaCallArguments;
-        final Type type;
-        analyzingCallee = true;
-        callArity = call.arguments().size();
-        javaCallArguments = call.arguments();
-        try {
-            type = analyzeExpression(call.callee(), context);
-        }
-        finally {
-            analyzingCallee = previousCallee;
-            callArity = previousArity;
-            javaCallArguments = previousArguments;
-        }
-        if (type == BuiltinFunctionType.ARRAY_SORT) {
-            if (!call.arguments().isEmpty()) {
-                throw new SemanticException(
-                    call.range(),
-                    "Array sorting expects no arguments"
-                );
-            }
-            return BuiltinType.VOID;
-        }
-        if (type == BuiltinFunctionType.PRINT) {
-            if (call.arguments().size() > 1) {
-                throw new SemanticException(
-                    call.range(),
-                    "Print expects zero or one argument, found %s",
-                    call.arguments().size()
-                );
-            }
-            for (final Expression argument : call.arguments()) {
-                if (analyzeExpression(argument, context) == BuiltinType.VOID) {
-                    throw new SemanticException(
-                        argument.range(),
-                        "A print argument must produce a value"
-                    );
-                }
-            }
-            return BuiltinType.VOID;
-        }
-        if (
-            type == BuiltinFunctionType.DIR || type == BuiltinFunctionType.HELP
-        ) {
-            final String name =
-                type == BuiltinFunctionType.DIR ? "Dir" : "Help";
-            if (call.arguments().size() != 1) {
-                throw new SemanticException(
-                    call.range(),
-                    "%s expects one argument, found %s",
-                    name,
-                    call.arguments().size()
-                );
-            }
-            final Expression argument = call.arguments().getFirst();
-            if (analyzeExpression(argument, context) == BuiltinType.VOID) {
-                throw new SemanticException(
-                    argument.range(),
-                    "A %s argument must produce a value",
-                    name.toLowerCase(Locale.ROOT)
-                );
-            }
-            return type == BuiltinFunctionType.DIR
-                ? new ArrayType(BuiltinType.STRING)
-                : BuiltinType.VOID;
-        }
-        if (!(type instanceof FunctionType function)) {
-            throw new SemanticException(
-                call.callee().range(),
-                "Expression is not callable: %s",
-                type
-            );
-        }
-        if (call.arguments().size() > function.parameterTypes().size()) {
-            throw new SemanticException(
-                call.range(),
-                "Expected %s arguments, found %s",
-                function.parameterTypes().size(),
-                call.arguments().size()
-            );
-        }
-        Expression callee = call.callee();
-        while (callee instanceof GroupingExpression grouping) {
-            callee = grouping.expression();
-        }
-        final IdentifierExpression functionName =
-            callee instanceof IdentifierExpression identifier
-                ? identifier
-                : callee instanceof MemberExpression member
-                    ? member.member()
-                    : null;
-        final List<IdentifierDeclaration> declarations =
-            functionName != null && model
-                .getReference(functionName) instanceof FunctionSymbol symbol
-                    ? model.getFunctionParameters(symbol)
-                    : List.of();
-        final List<String> names =
-            declarations.stream().map(IdentifierDeclaration::name).toList();
-        final List<Integer> parameters = new ArrayList<>();
-        final boolean[] assigned =
-            new boolean[function.parameterTypes().size()];
-        boolean seenNamed = false;
-        for (int i = 0; i < call.arguments().size(); i++) {
-            final Expression supplied = call.arguments().get(i);
-            final Expression argument;
-            final int parameter;
-            if (supplied instanceof NamedArgumentExpression named) {
-                seenNamed = true;
-                if (names.isEmpty()) {
-                    throw new SemanticException(
-                        named.range(),
-                        "Named arguments require a declared function"
-                    );
-                }
-                parameter = names.indexOf(named.name().name());
-                if (parameter < 0) {
-                    throw new SemanticException(
-                        named.name().range(),
-                        "Unknown parameter: %s",
-                        named.name().name()
-                    );
-                }
-                argument = named.value();
-            }
-            else {
-                if (seenNamed) {
-                    throw new SemanticException(
-                        supplied.range(),
-                        "Positional arguments must precede named arguments"
-                    );
-                }
-                parameter = i;
-                argument = supplied;
-            }
-            if (assigned[parameter]) {
-                throw new SemanticException(
-                    supplied.range(),
-                    "Argument supplied more than once for parameter: %s",
-                    names.get(parameter)
-                );
-            }
-            assigned[parameter] = true;
-            parameters.add(parameter);
-            if (supplied instanceof NamedArgumentExpression named) {
-                model.setNamedArgument(
-                    named.name(),
-                    declarations.get(parameter)
-                );
-            }
-            final Type expected = function.parameterTypes().get(parameter);
-            final Type actual = analyzeExpression(argument, context, expected);
-            if (resolveAssignType(actual, expected, argument) == null) {
-                throw new SemanticException(
-                    argument.range(),
-                    "Cannot pass %s as %s",
-                    actual,
-                    expected
-                );
-            }
-        }
-        for (int i = 0; i < assigned.length; i++) {
-            if (
-                !assigned[i] && (declarations.isEmpty()
-                    || !model.getParameterDetails(declarations.get(i))
-                        .omittable())
-            ) {
-                throw new SemanticException(
-                    call.range(),
-                    "Expected %s arguments, found %s",
-                    function.parameterTypes().size(),
-                    call.arguments().size()
-                );
-            }
-        }
-        model.setArgumentParameters(call, parameters);
-        return function.returnType();
-    }
-
-    private Type analyzeIndexExpression(
-        final SubscriptExpression subscript,
-        final SemanticContext context
-    ) {
-        final Type target = analyzeExpression(subscript.target(), context);
-        if (target instanceof TupleType tuple) {
-            analyzeExpression(subscript.index(), context);
-            final BigInteger index = integerLiteral(subscript.index());
-            if (
-                index == null || index.signum() < 0
-                    || index.compareTo(
-                        BigInteger.valueOf(tuple.elementTypes().size())
-                    ) >= 0
-            ) {
-                throw new SemanticException(
-                    subscript.index().range(),
-                    "Tuple index must be an integer literal between 0 and %s",
-                    tuple.elementTypes().size() - 1
-                );
-            }
-            return tuple.elementTypes().get(index.intValue());
-        }
-        if (!(target instanceof ArrayType array)) {
-            throw new SemanticException(
-                subscript.range(),
-                "Subscript requires an array target"
-            );
-        }
-        final Type index = analyzeExpression(subscript.index(), context);
-        if (!isValidSubscriptIndex(index)) {
-            throw new SemanticException(
-                subscript.range(),
-                "Subscript requires an i8, i16, or i32 index"
-            );
-        }
-        return array.elementType();
-    }
-
-    private Type analyzeSliceExpression(
-        final SliceExpression slice,
-        final SemanticContext context
-    ) {
-        final Type target = analyzeExpression(slice.target(), context);
-        final Expression start = slice.startIndex();
-        final Expression end = slice.endIndex();
-        final Type startIndex =
-            start == null ? null : analyzeExpression(start, context);
-        final Type endIndex =
-            end == null ? null : analyzeExpression(end, context);
-        if (!(target instanceof ArrayType array)) {
-            throw new SemanticException(
-                slice.range(),
-                "Slicing requires an array target"
-            );
-        }
-        if (startIndex != null && !isValidSubscriptIndex(startIndex)) {
-            throw new SemanticException(
-                Objects.requireNonNull(start).range(),
-                "Slice start index must be an i8, i16, or i32"
-            );
-        }
-        if (endIndex != null && !isValidSubscriptIndex(endIndex)) {
-            throw new SemanticException(
-                Objects.requireNonNull(end).range(),
-                "Slice end index must be an i8, i16, or i32"
-            );
-        }
-        return array;
-    }
-
-    private boolean isValidSubscriptIndex(final Type index) {
-        return index instanceof BuiltinType builtin && builtin.isInteger()
-            && builtin != BuiltinType.I64;
-    }
-
-    private Type analyzeAssignmentExpression(
-        final AssignmentExpression assignment,
-        final SemanticContext context
-    ) {
-        final Type target = analyzeExpression(assignment.target(), context);
-        if (
-            !(currentConstructor != null && context.function() == null
-                && unwrap(
-                    assignment.target()
-                ) instanceof MemberExpression member
-                && unwrap(member.target()) instanceof ThisExpression
-                && model.getMemberOwner(member).equals(currentInstance)
-                && model
-                    .getReference(member.member()) instanceof VariableSymbol)
-        ) {
-            requireWritable(assignment.target());
-        }
-        final Type value =
-            analyzeExpression(assignment.value(), context, target);
-        if (resolveAssignType(value, target, assignment.value()) == null) {
-            throw new SemanticException(
-                assignment.range(),
-                "Cannot assign %s to %s",
-                value,
-                target
-            );
-        }
-        return target;
-    }
-
-    private static Expression unwrap(final Expression expression) {
-        return expression instanceof GroupingExpression grouping
-            ? unwrap(grouping.expression())
-            : expression;
-    }
-
-    private void requireWritable(final Expression expression) {
-        if (expression instanceof GroupingExpression grouping) {
-            requireWritable(grouping.expression());
-            return;
-        }
-        if (
-            expression instanceof MemberExpression member
-                && model.getReference(
-                    member.member()
-                ) instanceof VariableSymbol variable
-                && variable.mutability() == Mutability.VAR
-        ) {
-            return;
-        }
-        if (expression instanceof SubscriptExpression subscript) {
-            if (
-                model.getExpressionType(subscript.target()) instanceof TupleType
-            ) {
-                throw new SemanticException(
-                    expression.range(),
-                    "Tuple elements are not writable"
-                );
-            }
-            return;
-        }
-        if (
-            expression instanceof IdentifierExpression identifier
-                && model
-                    .getReference(identifier) instanceof VariableSymbol variable
-                && variable.mutability() == Mutability.VAR
-        ) {
-            return;
-        }
-        throw new SemanticException(
-            expression.range(),
-            "Expression is not writable"
-        );
-    }
-
-    private Type analyzePostfixExpression(
-        final PostfixExpression postfix,
-        final SemanticContext context
-    ) {
-        final Type type = analyzeExpression(postfix.operand(), context);
-        requireWritable(postfix.operand());
-
-        if (!numeric(type)) {
-            throw new SemanticException(
-                postfix.range(),
-                "Increment requires a numeric operand"
-            );
-        }
-
-        model.setExpressionType(postfix, type);
-        return type;
-    }
-
-    private Type analyzeBinaryExpression(
-        final BinaryExpression binary,
-        final SemanticContext context
-    ) {
-        final Type leftType = analyzeExpression(binary.left(), context);
-        final Type rightType = analyzeExpression(binary.right(), context);
-        boolean unionEquality = false;
-        if (
-            binary.operator() == BinaryOperator.EQUAL
-                || binary.operator() == BinaryOperator.NOT_EQUAL
-        ) {
-            if (leftType instanceof UnionType || leftType == BuiltinType.ANY) {
-                unionEquality =
-                    resolveAssignType(
-                        rightType,
-                        leftType,
-                        binary.right()
-                    ) != null;
-            }
-            if (
-                !unionEquality && (rightType instanceof UnionType
-                    || rightType == BuiltinType.ANY)
-            ) {
-                unionEquality =
-                    resolveAssignType(
-                        leftType,
-                        rightType,
-                        binary.left()
-                    ) != null;
-            }
-        }
-        Type resolvedType = leftType;
-        final boolean compatibleNumbers =
-            numeric(leftType) && numeric(rightType);
-        final boolean relatedClasses =
-            leftType instanceof ClassType leftClass
-                && rightType instanceof ClassType rightClass
-                && model.commonClassType(leftClass, rightClass) != null;
-        final boolean valid = switch (binary.operator()) {
-            case AND, OR ->
-                leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
-            case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
-                || ((leftType instanceof InterfaceType
-                    || rightType instanceof InterfaceType)
-                    && (model.isSubtype(leftType, rightType)
-                        || model.isSubtype(rightType, leftType)))
-                || relatedClasses
-                || (leftType.equals(rightType) && leftType != BuiltinType.VOID);
-            case ADD -> compatibleNumbers || (leftType == BuiltinType.STRING
-                && rightType == BuiltinType.STRING);
-            default -> compatibleNumbers;
-        };
-        if (!valid) {
-            throw new SemanticException(
-                binary.range(),
-                "Operator %s is not applicable to %s and %s",
-                binary.operator(),
-                leftType,
-                rightType
-            );
-        }
-
-        // TODO: Extend this to handle more complex type assignability rules, such as
-        // subtyping and type coercion.
-
-        if (compatibleNumbers) {
-            resolvedType = promotedNumericType(leftType, rightType);
-            if (!leftType.equals(resolvedType)) {
-                model.setConversionType(binary.left(), resolvedType);
-            }
-            if (!rightType.equals(resolvedType)) {
-                model.setConversionType(binary.right(), resolvedType);
-            }
-        }
-
-        final Type resultType =
-            binary.operator().isBool() ? BuiltinType.BOOL : resolvedType;
-        model.setExpressionType(binary, resultType);
-        return resultType;
-    }
-
-    private Type analyzeUnaryExpression(
-        final UnaryExpression unary,
-        final SemanticContext context
-    ) {
-        final BigInteger signedLiteral = integerLiteral(unary);
-        if (signedLiteral != null) {
-            final Type type = integerType(signedLiteral, unary);
-            setLiteralType(unary.operand(), type);
-            return type;
-        }
-        final Type operandType = analyzeExpression(unary.operand(), context);
-        switch (unary.operator()) {
-            case INCREMENT, DECREMENT -> {
-                requireWritable(unary.operand());
-                if (!numeric(operandType)) {
-                    throw new SemanticException(
-                        unary.range(),
-                        "Increment requires a numeric operand"
-                    );
-                }
-            }
-            case NOT -> {
-                if (operandType != BuiltinType.BOOL) {
-                    throw new SemanticException(
-                        unary.range(),
-                        "Logical negation requires bool"
-                    );
-                }
-            }
-            case PLUS, MINUS -> {
-                if (!numeric(operandType)) {
-                    throw new SemanticException(
-                        unary.range(),
-                        "Unary arithmetic requires a numeric operand"
-                    );
-                }
-            }
-        }
-
-        final Type resultType =
-            unary.operator() == UnaryOperator.PLUS
-                || unary.operator() == UnaryOperator.MINUS
-                    ? promotedNumericType(operandType, BuiltinType.I32)
-                    : operandType;
-        if (!operandType.equals(resultType)) {
-            model.setConversionType(unary.operand(), resultType);
-        }
-        model.setExpressionType(unary, resultType);
-        return resultType;
-    }
-
-    private Type analyzeIdentifierExpression(
+    public Type analyzeIdentifierExpression(
         final IdentifierExpression identifier,
         final SemanticContext context
     ) {
-        final @Nullable Symbol symbol =
-            context.scope().resolve(identifier.name());
-
-        if (symbol == null) {
-            throw new SemanticException(
-                identifier.range(),
-                "Undefined identifier: '%s'",
-                identifier.name()
-            );
-        }
-
-        final Type type = symbol.type();
-        model.setExpressionType(identifier, type);
-        model.setReference(identifier, symbol);
-        return type;
+        return expressions.analyzeIdentifierExpression(identifier, context);
     }
 
-    // Java binary numeric promotion: double, float, long, otherwise int.
-    private static BuiltinType promotedNumericType(
-        final Type left,
-        final Type right
+    public Map<ClassType, Scope> classScopes() {
+        return classScopes;
+    }
+
+    public Map<ClassType, Map<String, FunctionSymbol>> classMethods() {
+        return classMethods;
+    }
+
+    public IdentityHashMap<ObjectExpression, InterfaceType> inferredObjects() {
+        return inferredObjects;
+    }
+
+    public @Nullable ClassType currentAccessClass() {
+        return currentAccessClass;
+    }
+
+    public void setCurrentAccessClass(final @Nullable ClassType type) {
+        currentAccessClass = type;
+    }
+
+    public void setCurrentInstance(final @Nullable ClassType type) {
+        currentInstance = type;
+    }
+
+    public @Nullable ConstructorDeclaration currentConstructor() {
+        return currentConstructor;
+    }
+
+    public void setCurrentConstructor(
+        final @Nullable ConstructorDeclaration constructor
     ) {
-        if (left == BuiltinType.F64 || right == BuiltinType.F64) {
-            return BuiltinType.F64;
-        }
-        if (left == BuiltinType.F32 || right == BuiltinType.F32) {
-            return BuiltinType.F32;
-        }
-        if (left == BuiltinType.I64 || right == BuiltinType.I64) {
-            return BuiltinType.I64;
-        }
-        return BuiltinType.I32;
+        currentConstructor = constructor;
     }
 
-    private static boolean numeric(final Type type) {
-        return type instanceof BuiltinType builtin
-            && (builtin.isInteger() || builtin.isFloating()
-                || builtin == BuiltinType.CHAR);
+    public @Nullable List<ReturnStatement> lambdaReturns(
+        final FunctionSymbol symbol
+    ) {
+        return lambdaReturns.get(symbol);
     }
 
-    private static boolean isFloatingLiteral(final Expression expression) {
-        if (expression instanceof LiteralExpression literal) {
-            return literal.kind() == LiteralKind.FLOAT;
-        }
-        if (expression instanceof GroupingExpression grouping) {
-            return isFloatingLiteral(grouping.expression());
-        }
-        return expression instanceof UnaryExpression unary
-            && (unary.operator() == UnaryOperator.PLUS
-                || unary.operator() == UnaryOperator.MINUS)
-            && isFloatingLiteral(unary.operand());
+    public void setAnalyzingConstructorDefault(final boolean analyzing) {
+        analyzingConstructorDefault = analyzing;
+    }
+
+    @Nullable
+    public Scope classScope(final ClassType type) {
+        return classScopes.get(type);
+    }
+
+    public boolean isAnalyzingConstructorDefault() {
+        return analyzingConstructorDefault;
+    }
+
+    public boolean isAnalyzingSuperArguments() {
+        return analyzingSuperArguments;
+    }
+
+    @Nullable
+    public ClassType currentInstance() {
+        return currentInstance;
+    }
+
+    public boolean isInConstructor() {
+        return currentConstructor != null;
+    }
+
+    public void setLambdaReturns(
+        final FunctionSymbol symbol,
+        final List<ReturnStatement> returns
+    ) {
+        lambdaReturns.put(symbol, returns);
+    }
+
+    public void clearLambdaReturns(final FunctionSymbol symbol) {
+        lambdaReturns.remove(symbol);
     }
 
     public static @Nullable BigInteger integerLiteral(
         final Expression expression
     ) {
-        if (
-            expression instanceof LiteralExpression literal
-                && literal.kind() == LiteralKind.INT
-        ) {
-            return new BigInteger(literal.text().replace("_", ""));
-        }
-        if (expression instanceof GroupingExpression grouping) {
-            return integerLiteral(grouping.expression());
-        }
-        if (
-            expression instanceof UnaryExpression unary
-                && (unary.operator() == UnaryOperator.MINUS
-                    || unary.operator() == UnaryOperator.PLUS)
-        ) {
-            final BigInteger value = integerLiteral(unary.operand());
-            return value == null
-                ? null
-                : unary.operator() == UnaryOperator.MINUS
-                    ? value.negate()
-                    : value;
-        }
-        return null;
-    }
-
-    private static Type integerType(
-        final BigInteger value,
-        final Expression expression
-    ) {
-        if (value.bitLength() < 32) {
-            return BuiltinType.I32;
-        }
-        if (value.bitLength() < 64) {
-            return BuiltinType.I64;
-        }
-        throw new SemanticException(
-            expression.range(),
-            "Integer literal is outside the i64 range"
-        );
-    }
-
-    private void setLiteralType(final Expression expression, final Type type) {
-        model.setExpressionType(expression, type);
-        if (expression instanceof GroupingExpression grouping) {
-            setLiteralType(grouping.expression(), type);
-        }
-        if (expression instanceof UnaryExpression unary) {
-            setLiteralType(unary.operand(), type);
-        }
-    }
-
-    private Type analyzeLiteralExpression(final LiteralExpression literal) {
-        final Type type = switch (literal.kind()) {
-            case INT -> integerType(
-                new BigInteger(literal.text().replace("_", "")),
-                literal
-            );
-            case FLOAT -> BuiltinType.F64;
-            case CHAR -> BuiltinType.CHAR;
-            case BOOL -> BuiltinType.BOOL;
-            case STRING, RAW_STRING -> BuiltinType.STRING;
-            case NULL -> BuiltinType.NULL;
-        };
-
-        model.setExpressionType(literal, type);
-
-        return type;
-    }
-
-    private ArrayType analyzeArrayExpression(
-        final ArrayExpression array,
-        final SemanticContext context
-    ) {
-        final List<@NonNull Type> elementTypes = new ArrayList<>();
-
-        for (final Expression element : array.elements()) {
-            elementTypes.add(analyzeExpression(element, context));
-        }
-
-        // Elements must share a type; class instances can share a base type.
-        Type elementType =
-            elementTypes.isEmpty()
-                ? BuiltinType.NULL
-                : Objects.requireNonNull(elementTypes.get(0));
-
-        if (elementType == BuiltinType.VOID) {
-            throw new SemanticException(
-                array.range(),
-                "Array elements must produce values"
-            );
-        }
-
-        for (final Type type : elementTypes) {
-            if (!type.equals(elementType)) {
-                if (
-                    elementType instanceof ClassType left
-                        && type instanceof ClassType right
-                ) {
-                    final ClassType common = model.commonClassType(left, right);
-                    if (common != null) {
-                        elementType = common;
-                        continue;
-                    }
-                }
-                throw new SemanticException(
-                    array.range(),
-                    "Array elements must have the same type"
-                );
-            }
-        }
-
-        final ArrayType type = new ArrayType(elementType);
-        model.setExpressionType(array, type);
-        return type;
+        return SemanticAnalyzerExpressions.integerLiteral(expression);
     }
 }

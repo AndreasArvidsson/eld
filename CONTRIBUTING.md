@@ -198,7 +198,10 @@ public const foo = 0;
 - Tuples as map keys and switch conditions (using hash value?)
 - Classes map keys and switch conditions (using hash value?)
 - Ubiquitous toString and equals methods
+- String std lib
+- Collections std lib
 - Immutable collections and objects
+- async, await, Promise
 - Overloaded functions
 - Operator overloading
 - Regex literals: `const re: regex = /^\d+$`;
