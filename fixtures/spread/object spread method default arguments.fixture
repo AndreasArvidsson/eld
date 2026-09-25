@@ -10,7 +10,7 @@ const again = {...copy};
 source.base = 10;
 print(copy.value());
 print(copy.value(3));
-print(copy.value(extra=5));
+print(copy.value(extra: 5));
 print(again.value());
 print(again.value(1, 4));
 interface Target {
@@ -114,11 +114,11 @@ DOT (13:11-13:12)
 IDENTIFIER "value" (13:12-13:17)
 LEFT_PAREN (13:17-13:18)
 IDENTIFIER "extra" (13:18-13:23)
-EQUAL (13:23-13:24)
-INTEGER_LITERAL "5" (13:24-13:25)
-RIGHT_PAREN (13:25-13:26)
+COLON (13:23-13:24)
+INTEGER_LITERAL "5" (13:25-13:26)
 RIGHT_PAREN (13:26-13:27)
-SEMICOLON (13:27-13:28)
+RIGHT_PAREN (13:27-13:28)
+SEMICOLON (13:28-13:29)
 IDENTIFIER "print" (14:1-14:6)
 LEFT_PAREN (14:6-14:7)
 IDENTIFIER "again" (14:7-14:12)
@@ -417,15 +417,15 @@ SEMICOLON (21:26-21:27)
     )
   )
   (ExpressionStatement
-    range: 13:1-13:28
+    range: 13:1-13:29
     (CallExpression
-      range: 13:1-13:27
+      range: 13:1-13:28
       (IdentifierExpression
         range: 13:1-13:6
         name: "print"
       )
       (CallExpression
-        range: 13:7-13:26
+        range: 13:7-13:27
         (MemberExpression
           range: 13:7-13:17
           (IdentifierExpression
@@ -438,13 +438,13 @@ SEMICOLON (21:26-21:27)
           )
         )
         (NamedArgumentExpression
-          range: 13:18-13:25
+          range: 13:18-13:26
           (IdentifierDeclaration
             range: 13:18-13:23
             name: "extra"
           )
           (LiteralExpression
-            range: 13:24-13:25
+            range: 13:25-13:26
             kind: INT
             text: "5"
           )
@@ -668,12 +668,12 @@ Expression types:
   12:12-12:17 -> (i32, i64) => i64
   12:18-12:19 -> i32
   13:1-13:6 -> (any) => void
-  13:1-13:27 -> void
+  13:1-13:28 -> void
   13:7-13:11 -> $spread0
   13:7-13:17 -> (i32, i64) => i64
-  13:7-13:26 -> i64
+  13:7-13:27 -> i64
   13:12-13:17 -> (i32, i64) => i64
-  13:24-13:25 -> i32
+  13:25-13:26 -> i32
   14:1-14:6 -> (any) => void
   14:1-14:21 -> void
   14:7-14:12 -> $spread1
@@ -716,7 +716,7 @@ Resolved types:
 Conversions:
   3:56-3:57 -> i32 -> i64
   4:16-4:17 -> i32 -> i64
-  13:24-13:25 -> i32 -> i64
+  13:25-13:26 -> i32 -> i64
   15:22-15:23 -> i32 -> i64
   21:23-21:24 -> i32 -> i64
 

@@ -1297,11 +1297,11 @@ class BytecodeGeneratorTest {
                     func supplied() i32 | null { return optional(7); }
                     func explicitNull() i32 | null { return optional(null); }
                     func first() f64 { return defaults(); }
-                    func second() f64 { return defaults(b=5); }
+                    func second() f64 { return defaults(b: 5); }
                     func explicit() f64 { return defaults(0, 0); }
-                    func grouped() f64 { return (defaults)(b=1, a=2); }
+                    func grouped() f64 { return (defaults)(b: 1, a: 2); }
                     func mixed(a?: i32, b: i32 = 4, c: i32) i32 { return b + c; }
-                    func skipped() i32 { return mixed(c=3); }
+                    func skipped() i32 { return mixed(c: 3); }
                     func nullable(value?: i32 | string) any { return value; }
                     func nullableValue() any { return nullable("hello"); }
                     """
@@ -1686,7 +1686,7 @@ class BytecodeGeneratorTest {
                 const pair = (foo, true);
                 const getter = foo.getValue;
                 const bound = getter();
-                const exact = foo.compare(b=2.5, a=1);
+                const exact = foo.compare(b: 2.5, a: 1);
                 const same = foo.identity(foo) == foo;
                 func use(value: Foo) i32 { value.value = 6; value.value++; return value.getValue(); }
                 func identity(value: Foo) Foo { return value; }
@@ -1852,7 +1852,7 @@ class BytecodeGeneratorTest {
                     const foo = new Foo();
                     const before = foo.value++;
                     const assigned = foo.value = 8;
-                    const result = foo.add(amount=2);
+                    const result = foo.add(amount: 2);
                     const callback = foo.add;
                     const bound = callback(3);
                     const fresh = new Foo().value;
@@ -1944,7 +1944,7 @@ class BytecodeGeneratorTest {
             "const value = new Missing();",
             "const Foo = 1; const value = new Foo();",
             "class Foo { public constructor() {} } const value = new Foo(1);",
-            "class Foo { public constructor() {} } const value = new Foo(value=1);"
+            "class Foo { public constructor() {} } const value = new Foo(value: 1);"
         )) {
             final Program program =
                 new Parser(new Lexer(source).getTokens()).parse();
@@ -2286,15 +2286,15 @@ class BytecodeGeneratorTest {
         final Class<?> type = compile("""
             func isLess(a: i32, b: i32) bool { return a < b; }
             func positional() bool { return isLess(5, 2); }
-            func named() bool { return isLess(b=5, a=2); }
-            func mixed() bool { return isLess(2, b=5); }
-            func grouped() bool { return (isLess)(b=5, a=2); }
+            func named() bool { return isLess(b: 5, a: 2); }
+            func mixed() bool { return isLess(2, b: 5); }
+            func grouped() bool { return (isLess)(b: 5, a: 2); }
             func combine(a: i64, b: f64) f64 { return a * 10 + b; }
-            func converted() f64 { return combine(b=2, a=3); }
+            func converted() f64 { return combine(b: 2, a: 3); }
             func next(value: i32) i32 { print(value); return value; }
             func pair(a: i32, b: i32) i32 { return a * 10 + b; }
             func ordered() i32 {
-                return pair(b=next(1), a=next(2));
+                return pair(b: next(1), a: next(2));
             }
             """);
         assertEquals(false, type.getMethod("positional").invoke(null));
@@ -2320,12 +2320,12 @@ class BytecodeGeneratorTest {
     @Test
     void rejectsInvalidNamedArguments() {
         for (final String call : List.of(
-            "f(a=1, unknown=2);",
-            "f(a=1, a=2);",
-            "f(1, a=2);",
-            "f(a=1, 2);",
-            "f(a=1);",
-            "f(a=true, b=2);"
+            "f(a: 1, unknown: 2);",
+            "f(a: 1, a: 2);",
+            "f(1, a: 2);",
+            "f(a: 1, 2);",
+            "f(a: 1);",
+            "f(a: true, b: 2);"
         )) {
             assertThrows(
                 SemanticException.class,
@@ -2333,10 +2333,13 @@ class BytecodeGeneratorTest {
                 call
             );
         }
-        assertThrows(SemanticException.class, () -> compile("print(value=1);"));
         assertThrows(
             SemanticException.class,
-            () -> compile("func f(a: i32) {}\nconst alias = f;\nalias(a=1);")
+            () -> compile("print(value: 1);")
+        );
+        assertThrows(
+            SemanticException.class,
+            () -> compile("func f(a: i32) {}\nconst alias = f;\nalias(a: 1);")
         );
     }
 

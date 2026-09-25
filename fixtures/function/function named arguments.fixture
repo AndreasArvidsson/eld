@@ -3,7 +3,7 @@ func isLess(a: i32, b: i32) bool {
 }
 
 print(isLess(5, 2));
-print(isLess(b=5, a=2));
+print(isLess(b: 5, a: 2));
 
 --- TOKENS ---
 
@@ -41,20 +41,20 @@ LEFT_PAREN (6:6-6:7)
 IDENTIFIER "isLess" (6:7-6:13)
 LEFT_PAREN (6:13-6:14)
 IDENTIFIER "b" (6:14-6:15)
-EQUAL (6:15-6:16)
-INTEGER_LITERAL "5" (6:16-6:17)
-COMMA (6:17-6:18)
-IDENTIFIER "a" (6:19-6:20)
-EQUAL (6:20-6:21)
-INTEGER_LITERAL "2" (6:21-6:22)
-RIGHT_PAREN (6:22-6:23)
-RIGHT_PAREN (6:23-6:24)
-SEMICOLON (6:24-6:25)
+COLON (6:15-6:16)
+INTEGER_LITERAL "5" (6:17-6:18)
+COMMA (6:18-6:19)
+IDENTIFIER "a" (6:20-6:21)
+COLON (6:21-6:22)
+INTEGER_LITERAL "2" (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
 
 --- AST ---
 
 (Program
-  range: 1:1-6:25
+  range: 1:1-6:27
   (FunctionDeclaration
     range: 1:1-3:2
     (IdentifierDeclaration
@@ -138,39 +138,39 @@ SEMICOLON (6:24-6:25)
     )
   )
   (ExpressionStatement
-    range: 6:1-6:25
+    range: 6:1-6:27
     (CallExpression
-      range: 6:1-6:24
+      range: 6:1-6:26
       (IdentifierExpression
         range: 6:1-6:6
         name: "print"
       )
       (CallExpression
-        range: 6:7-6:23
+        range: 6:7-6:25
         (IdentifierExpression
           range: 6:7-6:13
           name: "isLess"
         )
         (NamedArgumentExpression
-          range: 6:14-6:17
+          range: 6:14-6:18
           (IdentifierDeclaration
             range: 6:14-6:15
             name: "b"
           )
           (LiteralExpression
-            range: 6:16-6:17
+            range: 6:17-6:18
             kind: INT
             text: "5"
           )
         )
         (NamedArgumentExpression
-          range: 6:19-6:22
+          range: 6:20-6:24
           (IdentifierDeclaration
-            range: 6:19-6:20
+            range: 6:20-6:21
             name: "a"
           )
           (LiteralExpression
-            range: 6:21-6:22
+            range: 6:23-6:24
             kind: INT
             text: "2"
           )
@@ -193,11 +193,11 @@ Expression types:
   5:14-5:15 -> i32
   5:17-5:18 -> i32
   6:1-6:6 -> (any) => void
-  6:1-6:24 -> void
+  6:1-6:26 -> void
   6:7-6:13 -> (i32, i32) => bool
-  6:7-6:23 -> bool
-  6:16-6:17 -> i32
-  6:21-6:22 -> i32
+  6:7-6:25 -> bool
+  6:17-6:18 -> i32
+  6:23-6:24 -> i32
 
 Resolved types:
   1:16-1:19 -> i32
@@ -219,7 +219,7 @@ References:
 
 Named arguments:
   6:14-6:15 -> parameter 1:21-1:22
-  6:19-6:20 -> parameter 1:13-1:14
+  6:20-6:21 -> parameter 1:13-1:14
 
 --- BYTECODE ---
 

@@ -177,9 +177,10 @@ import foo as bar from "lib"
 // Wildcard is supported
 import * as lib from "lib"
 
-export const foo = 0;
-// Or
+// Visible from all other modules
 public const foo = 0;
+// Visible from other modules in the same folder or in descending folders
+protected const bar = 0;
 ```
 
 ### Immutable collections and objects
@@ -193,14 +194,18 @@ public const foo = 0;
 
 ### Miscellaneous
 
-- Refactor large files
 - Export & import
-- Tuples as map keys and switch conditions (using hash value?)
-- Classes map keys and switch conditions (using hash value?)
-- Ubiquitous toString and equals methods
+- Remove object literal and replace with record. Add copy method to records to replace object spread operator
+- Ubiquitous toString, equals, hashCode methods
+- Tuples as map keys and switch conditions (using hashCode and equals)
+- Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
+- Switch type narrowing
 - String std lib
 - Collections std lib
 - Immutable collections and objects
+- Vscode extension with syntax highlighting
+- LSP
+- Warnings in addition to errors
 - async, await, Promise
 - Overloaded functions
 - Operator overloading

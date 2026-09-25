@@ -156,8 +156,8 @@ const combined: [i32] = [0, ...first, ...second, 5];
 
 ```text
 add(1, 2);
-add(b=2, a=1);
-add(1, b=2);
+add(b: 2, a: 1);
+add(1, b: 2);
 const callback = add;
 callback(1, 2);
 ```
@@ -172,7 +172,7 @@ func optional(foo?: i32) i32 | null { return foo; }
 func defaulted(foo: i32 = 0) i32 { return foo; }
 optional(); // null
 defaulted(); // 0
-defaulted(foo=5); // 5
+defaulted(foo: 5); // 5
 ```
 
 An optional parameter accepts its declared type or `null`. Omission supplies

@@ -62,7 +62,7 @@ public class ParserExpressions extends ParserBase {
 
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
-                if (check(TokenType.IDENTIFIER) && check(1, TokenType.EQUAL)) {
+                if (check(TokenType.IDENTIFIER) && check(1, TokenType.COLON)) {
                     final Token name = advance();
                     advance();
                     final Expression value = parseExpression();
