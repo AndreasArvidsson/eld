@@ -1,0 +1,68 @@
+const (foo: bool, bar) = (1, 2);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+LEFT_PAREN (1:7-1:8)
+IDENTIFIER "foo" (1:8-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "bool" (1:13-1:17)
+COMMA (1:17-1:18)
+IDENTIFIER "bar" (1:19-1:22)
+RIGHT_PAREN (1:22-1:23)
+EQUAL (1:24-1:25)
+LEFT_PAREN (1:26-1:27)
+INTEGER_LITERAL "1" (1:27-1:28)
+COMMA (1:28-1:29)
+INTEGER_LITERAL "2" (1:30-1:31)
+RIGHT_PAREN (1:31-1:32)
+SEMICOLON (1:32-1:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:33
+  (DestructuringDeclaration
+    range: 1:1-1:33
+    mutability: CONST
+    (TuplePattern
+      range: 1:7-1:23
+      (IdentifierPattern
+        range: 1:8-1:17
+        (IdentifierDeclaration
+          range: 1:8-1:11
+          name: "foo"
+        )
+        (NamedTypeNode
+          range: 1:13-1:17
+          name: "bool"
+        )
+      )
+      (IdentifierPattern
+        range: 1:19-1:22
+        (IdentifierDeclaration
+          range: 1:19-1:22
+          name: "bar"
+        )
+        type: null
+      )
+    )
+    (TupleExpression
+      range: 1:26-1:32
+      (LiteralExpression
+        range: 1:27-1:28
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:30-1:31
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot assign i32 to bool at 1:8-1:17

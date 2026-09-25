@@ -1,0 +1,81 @@
+var foo = 0;
+(foo, bar) = (1, 2);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "foo" (1:5-1:8)
+EQUAL (1:9-1:10)
+INTEGER_LITERAL "0" (1:11-1:12)
+SEMICOLON (1:12-1:13)
+LEFT_PAREN (2:1-2:2)
+IDENTIFIER "foo" (2:2-2:5)
+COMMA (2:5-2:6)
+IDENTIFIER "bar" (2:7-2:10)
+RIGHT_PAREN (2:10-2:11)
+EQUAL (2:12-2:13)
+LEFT_PAREN (2:14-2:15)
+INTEGER_LITERAL "1" (2:15-2:16)
+COMMA (2:16-2:17)
+INTEGER_LITERAL "2" (2:18-2:19)
+RIGHT_PAREN (2:19-2:20)
+SEMICOLON (2:20-2:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:21
+  (VariableDeclaration
+    range: 1:1-1:13
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:8
+      name: "foo"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:11-1:12
+      kind: INT
+      text: "0"
+    )
+  )
+  (DestructuringAssignmentStatement
+    range: 2:1-2:21
+    (TuplePattern
+      range: 2:1-2:11
+      (IdentifierPattern
+        range: 2:2-2:5
+        (IdentifierDeclaration
+          range: 2:2-2:5
+          name: "foo"
+        )
+        type: null
+      )
+      (IdentifierPattern
+        range: 2:7-2:10
+        (IdentifierDeclaration
+          range: 2:7-2:10
+          name: "bar"
+        )
+        type: null
+      )
+    )
+    (TupleExpression
+      range: 2:14-2:20
+      (LiteralExpression
+        range: 2:15-2:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 2:18-2:19
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'bar' at 2:7-2:10

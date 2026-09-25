@@ -1,0 +1,70 @@
+record Rec(value: i32);
+const rec = Rec(1);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Rec" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "value" (1:12-1:17)
+COLON (1:17-1:18)
+IDENTIFIER "i32" (1:19-1:22)
+RIGHT_PAREN (1:22-1:23)
+SEMICOLON (1:23-1:24)
+CONST (2:1-2:6)
+IDENTIFIER "rec" (2:7-2:10)
+EQUAL (2:11-2:12)
+IDENTIFIER "Rec" (2:13-2:16)
+LEFT_PAREN (2:16-2:17)
+INTEGER_LITERAL "1" (2:17-2:18)
+RIGHT_PAREN (2:18-2:19)
+SEMICOLON (2:19-2:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:20
+  (RecordDeclaration
+    range: 1:1-1:24
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Rec"
+    )
+    (RecordParameter
+      range: 1:12-1:22
+      (IdentifierDeclaration
+        range: 1:12-1:17
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:19-1:22
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:20
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "rec"
+    )
+    type: null
+    (CallExpression
+      range: 2:13-2:19
+      (IdentifierExpression
+        range: 2:13-2:16
+        name: "Rec"
+      )
+      (LiteralExpression
+        range: 2:17-2:18
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expression is not callable: Rec at 2:13-2:16

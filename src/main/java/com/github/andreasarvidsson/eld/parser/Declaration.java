@@ -4,5 +4,5 @@ public sealed interface Declaration extends BlockItem
     permits VariableDeclaration, ClassDeclaration, RecordDeclaration,
     FunctionDeclaration, IdentifierDeclaration, ConstructorDeclaration,
     UninitializedVariableDeclaration, InterfaceDeclaration,
-    TypeAliasDeclaration {
+    TypeAliasDeclaration, DestructuringDeclaration {
 }

@@ -132,6 +132,9 @@ public final class Parser extends ParserBase {
                 return new ExpressionStatement(selection, selection.range());
             default:
                 goBack();
+                if (destructuringAssignmentFollows()) {
+                    return parseDestructuringAssignment();
+                }
                 return parseExpressionStatement();
         }
     }
@@ -729,6 +732,21 @@ public final class Parser extends ParserBase {
         final Mutability mutability,
         final boolean field
     ) {
+        if (
+            !field
+                && (check(TokenType.LEFT_PAREN) || check(TokenType.LEFT_BRACE))
+        ) {
+            final Pattern pattern = parsePattern(true);
+            expect(TokenType.EQUAL);
+            final Expression initializer = parserExpressions.parseExpression();
+            final Token semicolon = expect(TokenType.SEMICOLON);
+            return new DestructuringDeclaration(
+                mutability,
+                pattern,
+                initializer,
+                keyword.range().union(semicolon.range())
+            );
+        }
         final Token name = expect(TokenType.IDENTIFIER);
         final @Nullable TypeNode type =
             match(TokenType.COLON) ? parseType() : null;
@@ -760,6 +778,153 @@ public final class Parser extends ParserBase {
             type,
             initializer,
             range
+        );
+    }
+
+    private boolean destructuringAssignmentFollows() {
+        if (!check(TokenType.LEFT_PAREN) && !check(TokenType.LEFT_BRACE)) {
+            return false;
+        }
+        final TokenType open =
+            check(TokenType.LEFT_PAREN)
+                ? TokenType.LEFT_PAREN
+                : TokenType.LEFT_BRACE;
+        final TokenType close =
+            open == TokenType.LEFT_PAREN
+                ? TokenType.RIGHT_PAREN
+                : TokenType.RIGHT_BRACE;
+        int depth = 0;
+        boolean comma = false;
+        for (int offset = 0; !isAtEnd(offset); offset++) {
+            final TokenType type = peek(offset).type();
+            if (type == open) {
+                depth++;
+            }
+            else if (type == close) {
+                depth--;
+                if (depth == 0) {
+                    return check(offset + 1, TokenType.EQUAL)
+                        && (open == TokenType.LEFT_BRACE || comma);
+                }
+            }
+            else if (type == TokenType.COMMA && depth == 1) {
+                comma = true;
+            }
+        }
+        return false;
+    }
+
+    private DestructuringAssignmentStatement parseDestructuringAssignment() {
+        final Pattern pattern = parsePattern(false);
+        expect(TokenType.EQUAL);
+        final Expression value = parserExpressions.parseExpression();
+        final Token semicolon = expect(TokenType.SEMICOLON);
+        return new DestructuringAssignmentStatement(
+            pattern,
+            value,
+            pattern.range().union(semicolon.range())
+        );
+    }
+
+    private Pattern parsePattern(final boolean declaration) {
+        if (check(TokenType.LEFT_PAREN)) {
+            return parseTuplePattern(declaration);
+        }
+        return parseRecordPattern(declaration);
+    }
+
+    private TuplePattern parseTuplePattern(final boolean declaration) {
+        final Token open = expect(TokenType.LEFT_PAREN);
+        final List<Pattern> elements = new ArrayList<>();
+        do {
+            elements.add(parseIdentifierPattern(declaration, true));
+        } while (match(TokenType.COMMA));
+        final Token close = expect(TokenType.RIGHT_PAREN);
+        if (elements.size() < 2) {
+            throw new ParserException(
+                open.range().union(close.range()),
+                "A tuple pattern requires at least 2 elements"
+            );
+        }
+        return new TuplePattern(
+            List.copyOf(elements),
+            open.range().union(close.range())
+        );
+    }
+
+    private RecordPattern parseRecordPattern(final boolean declaration) {
+        final Token open = expect(TokenType.LEFT_BRACE);
+        final List<RecordPatternField> fields = new ArrayList<>();
+        if (!check(TokenType.RIGHT_BRACE)) {
+            do {
+                final Token component = expect(TokenType.IDENTIFIER);
+                final IdentifierDeclaration componentName =
+                    new IdentifierDeclaration(
+                        component.text(),
+                        component.range()
+                    );
+                final Pattern target;
+                if (match(TokenType.AS)) {
+                    target = parseIdentifierPattern(declaration, true);
+                }
+                else {
+                    target =
+                        parseIdentifierPattern(component, declaration, true);
+                }
+                fields.add(
+                    new RecordPatternField(
+                        componentName,
+                        target,
+                        component.range().union(target.range())
+                    )
+                );
+            } while (match(TokenType.COMMA));
+        }
+        final Token close = expect(TokenType.RIGHT_BRACE);
+        return new RecordPattern(
+            List.copyOf(fields),
+            open.range().union(close.range())
+        );
+    }
+
+    private Pattern parseIdentifierPattern(
+        final boolean declaration,
+        final boolean allowType
+    ) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        return parseIdentifierPattern(name, declaration, allowType);
+    }
+
+    private Pattern parseIdentifierPattern(
+        final Token name,
+        final boolean declaration,
+        final boolean allowType
+    ) {
+        if (name.text().equals("_")) {
+            if (check(TokenType.COLON)) {
+                throw new ParserException(
+                    current().range(),
+                    "A discard pattern cannot have a type"
+                );
+            }
+            return new DiscardPattern(name.range());
+        }
+        final TypeNode type =
+            declaration && allowType && match(TokenType.COLON)
+                ? parseType()
+                : null;
+        if (!declaration && check(TokenType.COLON)) {
+            throw new ParserException(
+                current().range(),
+                "Assignment patterns cannot declare types"
+            );
+        }
+        final IdentifierDeclaration identifier =
+            new IdentifierDeclaration(name.text(), name.range());
+        return new IdentifierPattern(
+            identifier,
+            type,
+            type == null ? name.range() : name.range().union(type.range())
         );
     }
 

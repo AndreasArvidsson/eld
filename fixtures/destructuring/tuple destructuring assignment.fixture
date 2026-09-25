@@ -1,0 +1,223 @@
+var foo = 0;
+var bar = 0;
+(foo, bar) = (1, 2);
+print(foo);
+print(bar);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "foo" (1:5-1:8)
+EQUAL (1:9-1:10)
+INTEGER_LITERAL "0" (1:11-1:12)
+SEMICOLON (1:12-1:13)
+VAR (2:1-2:4)
+IDENTIFIER "bar" (2:5-2:8)
+EQUAL (2:9-2:10)
+INTEGER_LITERAL "0" (2:11-2:12)
+SEMICOLON (2:12-2:13)
+LEFT_PAREN (3:1-3:2)
+IDENTIFIER "foo" (3:2-3:5)
+COMMA (3:5-3:6)
+IDENTIFIER "bar" (3:7-3:10)
+RIGHT_PAREN (3:10-3:11)
+EQUAL (3:12-3:13)
+LEFT_PAREN (3:14-3:15)
+INTEGER_LITERAL "1" (3:15-3:16)
+COMMA (3:16-3:17)
+INTEGER_LITERAL "2" (3:18-3:19)
+RIGHT_PAREN (3:19-3:20)
+SEMICOLON (3:20-3:21)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "foo" (4:7-4:10)
+RIGHT_PAREN (4:10-4:11)
+SEMICOLON (4:11-4:12)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "bar" (5:7-5:10)
+RIGHT_PAREN (5:10-5:11)
+SEMICOLON (5:11-5:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:12
+  (VariableDeclaration
+    range: 1:1-1:13
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:8
+      name: "foo"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:11-1:12
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:13
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:8
+      name: "bar"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:11-2:12
+      kind: INT
+      text: "0"
+    )
+  )
+  (DestructuringAssignmentStatement
+    range: 3:1-3:21
+    (TuplePattern
+      range: 3:1-3:11
+      (IdentifierPattern
+        range: 3:2-3:5
+        (IdentifierDeclaration
+          range: 3:2-3:5
+          name: "foo"
+        )
+        type: null
+      )
+      (IdentifierPattern
+        range: 3:7-3:10
+        (IdentifierDeclaration
+          range: 3:7-3:10
+          name: "bar"
+        )
+        type: null
+      )
+    )
+    (TupleExpression
+      range: 3:14-3:20
+      (LiteralExpression
+        range: 3:15-3:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 3:18-3:19
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:12
+    (CallExpression
+      range: 4:1-4:11
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 4:7-4:10
+        name: "foo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:12
+    (CallExpression
+      range: 5:1-5:11
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:10
+        name: "bar"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:11-1:12 -> i32
+  2:11-2:12 -> i32
+  3:2-3:5 -> i32
+  3:7-3:10 -> i32
+  3:14-3:20 -> (i32, i32)
+  3:15-3:16 -> i32
+  3:18-3:19 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:11 -> void
+  4:7-4:10 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:11 -> void
+  5:7-5:10 -> i32
+
+Declarations:
+  1:5-1:8 -> var foo: i32
+  2:5-2:8 -> var bar: i32
+
+References:
+  3:2-3:5 -> 1:5-1:8
+  3:7-3:10 -> 2:5-2:8
+  4:1-4:6 -> builtin print
+  4:7-4:10 -> 1:5-1:8
+  5:1-5:6 -> builtin print
+  5:7-5:10 -> 2:5-2:8
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo I flags [PUBLIC, STATIC]
+  field bar I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.foo I
+    LDC 0
+    PUTSTATIC Test.bar I
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    ASTORE_0 0
+    ALOAD_0 0
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_1 1
+    ALOAD_0 0
+    LDC 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_2 2
+    ILOAD_1 1
+    PUTSTATIC Test.foo I
+    ILOAD_2 2
+    PUTSTATIC Test.bar I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bar I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 6 max locals 3
+
+--- OUTPUT ---
+
+1
+2
+

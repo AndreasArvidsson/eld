@@ -1,0 +1,129 @@
+record Rec(foo: i32, bar: i32);
+const {foo as value, bar as value} = new Rec(1, 2);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Rec" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "foo" (1:12-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+COMMA (1:20-1:21)
+IDENTIFIER "bar" (1:22-1:25)
+COLON (1:25-1:26)
+IDENTIFIER "i32" (1:27-1:30)
+RIGHT_PAREN (1:30-1:31)
+SEMICOLON (1:31-1:32)
+CONST (2:1-2:6)
+LEFT_BRACE (2:7-2:8)
+IDENTIFIER "foo" (2:8-2:11)
+AS (2:12-2:14)
+IDENTIFIER "value" (2:15-2:20)
+COMMA (2:20-2:21)
+IDENTIFIER "bar" (2:22-2:25)
+AS (2:26-2:28)
+IDENTIFIER "value" (2:29-2:34)
+RIGHT_BRACE (2:34-2:35)
+EQUAL (2:36-2:37)
+NEW (2:38-2:41)
+IDENTIFIER "Rec" (2:42-2:45)
+LEFT_PAREN (2:45-2:46)
+INTEGER_LITERAL "1" (2:46-2:47)
+COMMA (2:47-2:48)
+INTEGER_LITERAL "2" (2:49-2:50)
+RIGHT_PAREN (2:50-2:51)
+SEMICOLON (2:51-2:52)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:52
+  (RecordDeclaration
+    range: 1:1-1:32
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Rec"
+    )
+    (RecordParameter
+      range: 1:12-1:20
+      (IdentifierDeclaration
+        range: 1:12-1:15
+        name: "foo"
+      )
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "i32"
+      )
+    )
+    (RecordParameter
+      range: 1:22-1:30
+      (IdentifierDeclaration
+        range: 1:22-1:25
+        name: "bar"
+      )
+      (NamedTypeNode
+        range: 1:27-1:30
+        name: "i32"
+      )
+    )
+  )
+  (DestructuringDeclaration
+    range: 2:1-2:52
+    mutability: CONST
+    (RecordPattern
+      range: 2:7-2:35
+      (RecordPatternField
+        range: 2:8-2:20
+        (IdentifierDeclaration
+          range: 2:8-2:11
+          name: "foo"
+        )
+        (IdentifierPattern
+          range: 2:15-2:20
+          (IdentifierDeclaration
+            range: 2:15-2:20
+            name: "value"
+          )
+          type: null
+        )
+      )
+      (RecordPatternField
+        range: 2:22-2:34
+        (IdentifierDeclaration
+          range: 2:22-2:25
+          name: "bar"
+        )
+        (IdentifierPattern
+          range: 2:29-2:34
+          (IdentifierDeclaration
+            range: 2:29-2:34
+            name: "value"
+          )
+          type: null
+        )
+      )
+    )
+    (NewExpression
+      range: 2:38-2:51
+      (IdentifierExpression
+        range: 2:42-2:45
+        name: "Rec"
+      )
+      (LiteralExpression
+        range: 2:46-2:47
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 2:49-2:50
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Symbol already declared: value at 2:29-2:34

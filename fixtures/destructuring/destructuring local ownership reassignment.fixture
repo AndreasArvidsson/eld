@@ -1,0 +1,189 @@
+var shared = [3, 1, 2];
+const func mutate() {
+    var local = [1];
+    var ignored = 0;
+    (local, ignored) = (shared, 0);
+    local.sort();
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "shared" (1:5-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "3" (1:15-1:16)
+COMMA (1:16-1:17)
+INTEGER_LITERAL "1" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "2" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+SEMICOLON (1:23-1:24)
+CONST (2:1-2:6)
+FUNC (2:7-2:11)
+IDENTIFIER "mutate" (2:12-2:18)
+LEFT_PAREN (2:18-2:19)
+RIGHT_PAREN (2:19-2:20)
+LEFT_BRACE (2:21-2:22)
+VAR (3:5-3:8)
+IDENTIFIER "local" (3:9-3:14)
+EQUAL (3:15-3:16)
+LEFT_BRACKET (3:17-3:18)
+INTEGER_LITERAL "1" (3:18-3:19)
+RIGHT_BRACKET (3:19-3:20)
+SEMICOLON (3:20-3:21)
+VAR (4:5-4:8)
+IDENTIFIER "ignored" (4:9-4:16)
+EQUAL (4:17-4:18)
+INTEGER_LITERAL "0" (4:19-4:20)
+SEMICOLON (4:20-4:21)
+LEFT_PAREN (5:5-5:6)
+IDENTIFIER "local" (5:6-5:11)
+COMMA (5:11-5:12)
+IDENTIFIER "ignored" (5:13-5:20)
+RIGHT_PAREN (5:20-5:21)
+EQUAL (5:22-5:23)
+LEFT_PAREN (5:24-5:25)
+IDENTIFIER "shared" (5:25-5:31)
+COMMA (5:31-5:32)
+INTEGER_LITERAL "0" (5:33-5:34)
+RIGHT_PAREN (5:34-5:35)
+SEMICOLON (5:35-5:36)
+IDENTIFIER "local" (6:5-6:10)
+DOT (6:10-6:11)
+IDENTIFIER "sort" (6:11-6:15)
+LEFT_PAREN (6:15-6:16)
+RIGHT_PAREN (6:16-6:17)
+SEMICOLON (6:17-6:18)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:11
+      name: "shared"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:23
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 1:18-1:19
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-7:2
+    CONST
+    (IdentifierDeclaration
+      range: 2:12-2:18
+      name: "mutate"
+    )
+    returnType: null
+    (BlockStatement
+      range: 2:21-7:2
+      (VariableDeclaration
+        range: 3:5-3:21
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 3:9-3:14
+          name: "local"
+        )
+        type: null
+        (ArrayExpression
+          range: 3:17-3:20
+          (LiteralExpression
+            range: 3:18-3:19
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 4:5-4:21
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 4:9-4:16
+          name: "ignored"
+        )
+        type: null
+        (LiteralExpression
+          range: 4:19-4:20
+          kind: INT
+          text: "0"
+        )
+      )
+      (DestructuringAssignmentStatement
+        range: 5:5-5:36
+        (TuplePattern
+          range: 5:5-5:21
+          (IdentifierPattern
+            range: 5:6-5:11
+            (IdentifierDeclaration
+              range: 5:6-5:11
+              name: "local"
+            )
+            type: null
+          )
+          (IdentifierPattern
+            range: 5:13-5:20
+            (IdentifierDeclaration
+              range: 5:13-5:20
+              name: "ignored"
+            )
+            type: null
+          )
+        )
+        (TupleExpression
+          range: 5:24-5:35
+          (IdentifierExpression
+            range: 5:25-5:31
+            name: "shared"
+          )
+          (LiteralExpression
+            range: 5:33-5:34
+            kind: INT
+            text: "0"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 6:5-6:18
+        (CallExpression
+          range: 6:5-6:17
+          (MemberExpression
+            range: 6:5-6:15
+            (IdentifierExpression
+              range: 6:5-6:10
+              name: "local"
+            )
+            (IdentifierExpression
+              range: 6:11-6:15
+              name: "sort"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'mutate' cannot call non-const function 'sort' at 6:5-6:17

@@ -1,0 +1,143 @@
+record Rec(foo: i32, bar: i32);
+var foo = 0;
+{foo, bar} = new Rec(1, 2);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Rec" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "foo" (1:12-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+COMMA (1:20-1:21)
+IDENTIFIER "bar" (1:22-1:25)
+COLON (1:25-1:26)
+IDENTIFIER "i32" (1:27-1:30)
+RIGHT_PAREN (1:30-1:31)
+SEMICOLON (1:31-1:32)
+VAR (2:1-2:4)
+IDENTIFIER "foo" (2:5-2:8)
+EQUAL (2:9-2:10)
+INTEGER_LITERAL "0" (2:11-2:12)
+SEMICOLON (2:12-2:13)
+LEFT_BRACE (3:1-3:2)
+IDENTIFIER "foo" (3:2-3:5)
+COMMA (3:5-3:6)
+IDENTIFIER "bar" (3:7-3:10)
+RIGHT_BRACE (3:10-3:11)
+EQUAL (3:12-3:13)
+NEW (3:14-3:17)
+IDENTIFIER "Rec" (3:18-3:21)
+LEFT_PAREN (3:21-3:22)
+INTEGER_LITERAL "1" (3:22-3:23)
+COMMA (3:23-3:24)
+INTEGER_LITERAL "2" (3:25-3:26)
+RIGHT_PAREN (3:26-3:27)
+SEMICOLON (3:27-3:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:28
+  (RecordDeclaration
+    range: 1:1-1:32
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Rec"
+    )
+    (RecordParameter
+      range: 1:12-1:20
+      (IdentifierDeclaration
+        range: 1:12-1:15
+        name: "foo"
+      )
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "i32"
+      )
+    )
+    (RecordParameter
+      range: 1:22-1:30
+      (IdentifierDeclaration
+        range: 1:22-1:25
+        name: "bar"
+      )
+      (NamedTypeNode
+        range: 1:27-1:30
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:13
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:8
+      name: "foo"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:11-2:12
+      kind: INT
+      text: "0"
+    )
+  )
+  (DestructuringAssignmentStatement
+    range: 3:1-3:28
+    (RecordPattern
+      range: 3:1-3:11
+      (RecordPatternField
+        range: 3:2-3:5
+        (IdentifierDeclaration
+          range: 3:2-3:5
+          name: "foo"
+        )
+        (IdentifierPattern
+          range: 3:2-3:5
+          (IdentifierDeclaration
+            range: 3:2-3:5
+            name: "foo"
+          )
+          type: null
+        )
+      )
+      (RecordPatternField
+        range: 3:7-3:10
+        (IdentifierDeclaration
+          range: 3:7-3:10
+          name: "bar"
+        )
+        (IdentifierPattern
+          range: 3:7-3:10
+          (IdentifierDeclaration
+            range: 3:7-3:10
+            name: "bar"
+          )
+          type: null
+        )
+      )
+    )
+    (NewExpression
+      range: 3:14-3:27
+      (IdentifierExpression
+        range: 3:18-3:21
+        name: "Rec"
+      )
+      (LiteralExpression
+        range: 3:22-3:23
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 3:25-3:26
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Undefined identifier: 'bar' at 3:7-3:10

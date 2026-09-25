@@ -34,6 +34,9 @@ import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
 import com.github.andreasarvidsson.eld.parser.DoWhileStatement;
+import com.github.andreasarvidsson.eld.parser.DestructuringAssignmentStatement;
+import com.github.andreasarvidsson.eld.parser.DestructuringDeclaration;
+import com.github.andreasarvidsson.eld.parser.DiscardPattern;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.ForEachStatement;
@@ -42,6 +45,7 @@ import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
+import com.github.andreasarvidsson.eld.parser.IdentifierPattern;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.IgnoreStatement;
 import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
@@ -58,6 +62,8 @@ import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
+import com.github.andreasarvidsson.eld.parser.RecordPattern;
+import com.github.andreasarvidsson.eld.parser.RecordPatternField;
 import com.github.andreasarvidsson.eld.parser.TryStatement;
 import com.github.andreasarvidsson.eld.parser.ThrowStatement;
 import com.github.andreasarvidsson.eld.parser.ThisExpression;
@@ -70,6 +76,7 @@ import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
+import com.github.andreasarvidsson.eld.parser.TuplePattern;
 import com.github.andreasarvidsson.eld.parser.TypeAliasDeclaration;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -247,6 +254,20 @@ public final class SemanticAnalyzer {
                 "Const function '%s' cannot modify non-local data",
                 context.declaration().name().name()
             );
+        }
+        if (node instanceof DestructuringAssignmentStatement assignment) {
+            AstTraversal.walk(assignment.pattern(), target -> {
+                if (
+                    target instanceof IdentifierPattern identifier
+                        && !isAllowedWrite(identifier, active)
+                ) {
+                    throw new SemanticException(
+                        identifier.range(),
+                        "Const function '%s' cannot modify non-local data",
+                        context.declaration().name().name()
+                    );
+                }
+            });
         }
         if (node instanceof CallExpression call) {
             validateConstantCall(call, active);
@@ -777,6 +798,16 @@ public final class SemanticAnalyzer {
             && isLocallyOwned(subscript.target(), context);
     }
 
+    private boolean isAllowedWrite(
+        final IdentifierPattern pattern,
+        final EffectContext context
+    ) {
+        final Symbol symbol = model.getPatternSymbol(pattern);
+        return symbol instanceof VariableSymbol variable
+            && (isLocalBinding(variable, context)
+                || isConstructedField(variable, context));
+    }
+
     private boolean isLocalBinding(
         final VariableSymbol variable,
         final EffectContext context
@@ -842,9 +873,14 @@ public final class SemanticAnalyzer {
         final boolean reassigned =
             AstTraversal.anyMatch(
                 context.scope(),
-                node -> node instanceof AssignmentExpression assignment
+                node -> (node instanceof AssignmentExpression assignment
                     && Objects
-                        .equals(directVariable(assignment.target()), variable)
+                        .equals(directVariable(assignment.target()), variable))
+                    || (node instanceof DestructuringAssignmentStatement destructuring
+                        && patternWritesVariable(
+                            destructuring.pattern(),
+                            variable
+                        ))
             );
         visiting.remove(variable);
         return fresh && !reassigned;
@@ -1018,6 +1054,14 @@ public final class SemanticAnalyzer {
                 return;
             }
             if (
+                node instanceof DestructuringAssignmentStatement assignment
+                    && (patternWritesReceiverField(assignment.pattern())
+                        || containsThisExpression(assignment.value()))
+            ) {
+                mutates[0] = true;
+                return;
+            }
+            if (
                 node instanceof PostfixExpression postfix
                     && receiverField(postfix.operand())
             ) {
@@ -1105,6 +1149,26 @@ public final class SemanticAnalyzer {
         return target instanceof IdentifierExpression identifier
             && model.findReference(identifier) instanceof VariableSymbol field
             && model.findClassMemberOwner(field) != null;
+    }
+
+    private boolean patternWritesReceiverField(final AstNode pattern) {
+        return AstTraversal.anyMatch(
+            pattern,
+            node -> node instanceof IdentifierPattern identifier && model
+                .getPatternSymbol(identifier) instanceof VariableSymbol field
+                && model.findClassMemberOwner(field) != null
+        );
+    }
+
+    private boolean patternWritesVariable(
+        final AstNode pattern,
+        final VariableSymbol variable
+    ) {
+        return AstTraversal.anyMatch(
+            pattern,
+            node -> node instanceof IdentifierPattern identifier
+                && Objects.equals(model.getPatternSymbol(identifier), variable)
+        );
     }
 
     private @Nullable FunctionSymbol receiverMethod(
@@ -1224,6 +1288,8 @@ public final class SemanticAnalyzer {
         switch (declaration) {
             case VariableDeclaration variableDeclaration ->
                 analyzeVariableDeclaration(variableDeclaration, context);
+            case DestructuringDeclaration destructuring ->
+                analyzeDestructuringDeclaration(destructuring, context);
             case FunctionDeclaration functionDeclaration ->
                 analyzeFunctionDeclaration(
                     functionDeclaration,
@@ -1264,11 +1330,226 @@ public final class SemanticAnalyzer {
         }
     }
 
+    private void analyzeDestructuringDeclaration(
+        final DestructuringDeclaration declaration,
+        final SemanticContext context
+    ) {
+        final Type source =
+            expressions.analyzeExpression(declaration.initializer(), context);
+        if (source == BuiltinType.VOID) {
+            throw new SemanticException(
+                declaration.initializer().range(),
+                "A destructuring initializer must produce a value"
+            );
+        }
+        analyzePattern(
+            declaration.pattern(),
+            source,
+            context,
+            declaration.mutability(),
+            true
+        );
+    }
+
+    private void analyzeDestructuringAssignment(
+        final DestructuringAssignmentStatement assignment,
+        final SemanticContext context
+    ) {
+        final Type source =
+            expressions.analyzeExpression(assignment.value(), context);
+        analyzePattern(
+            assignment.pattern(),
+            source,
+            context,
+            Mutability.VAR,
+            false
+        );
+    }
+
+    private void analyzePattern(
+        final com.github.andreasarvidsson.eld.parser.Pattern pattern,
+        final Type source,
+        final SemanticContext context,
+        final Mutability mutability,
+        final boolean declaration
+    ) {
+        if (pattern instanceof DiscardPattern) {
+            return;
+        }
+        if (pattern instanceof IdentifierPattern identifier) {
+            analyzeIdentifierPattern(
+                identifier,
+                source,
+                context,
+                mutability,
+                declaration
+            );
+            return;
+        }
+        if (pattern instanceof TuplePattern tuple) {
+            final Type valueType = ConstType.unwrap(source);
+            if (!(valueType instanceof TupleType type)) {
+                throw new SemanticException(
+                    pattern.range(),
+                    "Expected tuple, found %s",
+                    source
+                );
+            }
+            if (tuple.elements().size() != type.elementTypes().size()) {
+                throw new SemanticException(
+                    pattern.range(),
+                    "Expected tuple with %s elements, found %s",
+                    tuple.elements().size(),
+                    type.elementTypes().size()
+                );
+            }
+            for (int i = 0; i < tuple.elements().size(); i++) {
+                analyzePattern(
+                    tuple.elements().get(i),
+                    type.elementTypes().get(i),
+                    context,
+                    mutability,
+                    declaration
+                );
+            }
+            return;
+        }
+        final RecordPattern record = (RecordPattern) pattern;
+        final Type selected = ConstType.unwrap(source);
+        if (
+            !(selected instanceof ClassType recordType)
+                || model.findRecordDeclaration(recordType) == null
+        ) {
+            throw new SemanticException(
+                record.range(),
+                "Expected record, found %s",
+                source
+            );
+        }
+        model.setRecordPatternType(record, recordType);
+        final RecordDeclaration recordDeclaration =
+            Objects.requireNonNull(model.findRecordDeclaration(recordType));
+        final Map<String, Type> components = new HashMap<>();
+        for (final var parameter : recordDeclaration.parameters()) {
+            components.put(
+                parameter.name().name(),
+                model.getResolvedType(parameter.type())
+            );
+        }
+        final Set<String> selectedComponents = new HashSet<>();
+        for (final RecordPatternField field : record.fields()) {
+            final String name = field.component().name();
+            final Type componentType = components.get(name);
+            if (componentType == null) {
+                throw new SemanticException(
+                    field.component().range(),
+                    "Unknown record component '%s' on %s",
+                    name,
+                    recordType
+                );
+            }
+            if (!selectedComponents.add(name)) {
+                throw new SemanticException(
+                    field.component().range(),
+                    "Duplicate record component '%s'",
+                    name
+                );
+            }
+            analyzePattern(
+                field.target(),
+                componentType,
+                context,
+                mutability,
+                declaration
+            );
+        }
+    }
+
+    private void analyzeIdentifierPattern(
+        final IdentifierPattern pattern,
+        final Type source,
+        final SemanticContext context,
+        final Mutability mutability,
+        final boolean declaration
+    ) {
+        final Symbol symbol;
+        final Type conversionType;
+        if (declaration) {
+            final @Nullable TypeNode explicitType = pattern.type();
+            final Type target =
+                explicitType == null
+                    ? source
+                    : types.resolveType(explicitType, context);
+            conversionType = requirePatternAssignment(source, target, pattern);
+            final VariableSymbol variable =
+                new VariableSymbol(pattern.name(), target, mutability);
+            context.scope().declare(variable);
+            model.setSymbol(pattern.name(), variable);
+            model.setVariableOwner(variable, context.function());
+            if (
+                context.function() == null && currentConstructor != null
+                    && currentInstance != null
+            ) {
+                model.setConstructorVariableOwner(variable, currentInstance);
+            }
+            symbol = variable;
+        }
+        else {
+            final @Nullable Symbol resolved =
+                context.scope().resolve(pattern.name().name());
+            if (resolved == null) {
+                throw new SemanticException(
+                    pattern.name().range(),
+                    "Undefined identifier: '%s'",
+                    pattern.name().name()
+                );
+            }
+            if (
+                !(resolved instanceof VariableSymbol variable)
+                    || variable.mutability() != Mutability.VAR
+            ) {
+                throw new SemanticException(
+                    pattern.name().range(),
+                    "Expression is not writable"
+                );
+            }
+            conversionType =
+                requirePatternAssignment(source, variable.type(), pattern);
+            symbol = variable;
+            model.setReference(pattern, symbol);
+        }
+        model.setPatternBinding(pattern, symbol, source, conversionType);
+    }
+
+    private Type requirePatternAssignment(
+        final Type source,
+        final Type target,
+        final IdentifierPattern pattern
+    ) {
+        final IdentifierExpression extracted =
+            new IdentifierExpression(pattern.name().name(), pattern.range());
+        model.setExpressionType(extracted, source);
+        if (types.resolveAssignType(source, target, extracted) == null) {
+            throw new SemanticException(
+                pattern.range(),
+                "Cannot assign %s to %s",
+                source,
+                target
+            );
+        }
+        final Type effective = model.getEffectiveType(extracted);
+        return effective instanceof UnionType
+            ? model.getUnionMemberType(extracted)
+            : effective;
+    }
+
     public void analyzeStatement(
         final Statement statement,
         final SemanticContext context
     ) {
         switch (statement) {
+            case DestructuringAssignmentStatement destructuring ->
+                analyzeDestructuringAssignment(destructuring, context);
             case SuperConstructorCall call -> {
                 if (
                     currentConstructor == null || context.function() != null

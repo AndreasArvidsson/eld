@@ -27,6 +27,8 @@ import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
+import com.github.andreasarvidsson.eld.parser.IdentifierPattern;
+import com.github.andreasarvidsson.eld.parser.RecordPattern;
 
 import java.util.Set;
 import java.util.Collections;
@@ -60,7 +62,7 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<AstNode, Symbol> declarations =
         new IdentityHashMap<>();
-    private final IdentityHashMap<IdentifierExpression, Symbol> references =
+    private final IdentityHashMap<AstNode, Symbol> references =
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
         new IdentityHashMap<>();
@@ -107,6 +109,48 @@ public final class SemanticModel {
         Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<FunctionSymbol, Type> asyncResultTypes =
         new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierPattern, Symbol> patternSymbols =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierPattern, Type> patternSourceTypes =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierPattern, Type> patternConversionTypes =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<RecordPattern, ClassType> recordPatternTypes =
+        new IdentityHashMap<>();
+
+    public void setPatternBinding(
+        final IdentifierPattern pattern,
+        final Symbol symbol,
+        final Type sourceType,
+        final Type conversionType
+    ) {
+        patternSymbols.put(pattern, symbol);
+        patternSourceTypes.put(pattern, sourceType);
+        patternConversionTypes.put(pattern, conversionType);
+    }
+
+    public Symbol getPatternSymbol(final IdentifierPattern pattern) {
+        return Objects.requireNonNull(patternSymbols.get(pattern));
+    }
+
+    public Type getPatternSourceType(final IdentifierPattern pattern) {
+        return Objects.requireNonNull(patternSourceTypes.get(pattern));
+    }
+
+    public Type getPatternConversionType(final IdentifierPattern pattern) {
+        return Objects.requireNonNull(patternConversionTypes.get(pattern));
+    }
+
+    public void setRecordPatternType(
+        final RecordPattern pattern,
+        final ClassType type
+    ) {
+        recordPatternTypes.put(pattern, type);
+    }
+
+    public ClassType getRecordPatternType(final RecordPattern pattern) {
+        return Objects.requireNonNull(recordPatternTypes.get(pattern));
+    }
 
     public void setAsyncResultType(
         final FunctionSymbol function,
@@ -668,6 +712,13 @@ public final class SemanticModel {
         final Symbol symbol
     ) {
         references.put(expression, symbol);
+    }
+
+    public void setReference(
+        final IdentifierPattern pattern,
+        final Symbol symbol
+    ) {
+        references.put(pattern, symbol);
     }
 
     public Symbol getReference(final IdentifierExpression expression) {

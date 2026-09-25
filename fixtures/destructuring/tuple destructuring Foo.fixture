@@ -1,0 +1,158 @@
+class Foo {}
+const (foo, bar) = (new Foo(), new Foo());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+RIGHT_BRACE (1:12-1:13)
+CONST (2:1-2:6)
+LEFT_PAREN (2:7-2:8)
+IDENTIFIER "foo" (2:8-2:11)
+COMMA (2:11-2:12)
+IDENTIFIER "bar" (2:13-2:16)
+RIGHT_PAREN (2:16-2:17)
+EQUAL (2:18-2:19)
+LEFT_PAREN (2:20-2:21)
+NEW (2:21-2:24)
+IDENTIFIER "Foo" (2:25-2:28)
+LEFT_PAREN (2:28-2:29)
+RIGHT_PAREN (2:29-2:30)
+COMMA (2:30-2:31)
+NEW (2:32-2:35)
+IDENTIFIER "Foo" (2:36-2:39)
+LEFT_PAREN (2:39-2:40)
+RIGHT_PAREN (2:40-2:41)
+RIGHT_PAREN (2:41-2:42)
+SEMICOLON (2:42-2:43)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:43
+  (ClassDeclaration
+    range: 1:1-1:13
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+  )
+  (DestructuringDeclaration
+    range: 2:1-2:43
+    mutability: CONST
+    (TuplePattern
+      range: 2:7-2:17
+      (IdentifierPattern
+        range: 2:8-2:11
+        (IdentifierDeclaration
+          range: 2:8-2:11
+          name: "foo"
+        )
+        type: null
+      )
+      (IdentifierPattern
+        range: 2:13-2:16
+        (IdentifierDeclaration
+          range: 2:13-2:16
+          name: "bar"
+        )
+        type: null
+      )
+    )
+    (TupleExpression
+      range: 2:20-2:42
+      (NewExpression
+        range: 2:21-2:30
+        (IdentifierExpression
+          range: 2:25-2:28
+          name: "Foo"
+        )
+      )
+      (NewExpression
+        range: 2:32-2:41
+        (IdentifierExpression
+          range: 2:36-2:39
+          name: "Foo"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:8-2:11 -> Foo
+  2:13-2:16 -> Foo
+  2:20-2:42 -> (Foo, Foo)
+  2:21-2:30 -> Foo
+  2:25-2:28 -> Foo
+  2:32-2:41 -> Foo
+  2:36-2:39 -> Foo
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:8-2:11 -> const foo: Foo
+  2:13-2:16 -> const bar: Foo
+
+References:
+  2:25-2:28 -> 1:7-1:10
+  2:36-2:39 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field foo LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  field bar LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    AASTORE
+    DUP
+    LDC 1
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    ASTORE_0 0
+    ALOAD_0 0
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    ASTORE_1 1
+    ALOAD_0 0
+    LDC 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    ASTORE_2 2
+    ALOAD_1 1
+    PUTSTATIC Test.foo LTest$Foo;
+    ALOAD_2 2
+    PUTSTATIC Test.bar LTest$Foo;
+    RETURN
+    max stack 7 max locals 3
+
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+

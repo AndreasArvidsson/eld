@@ -85,10 +85,52 @@ public final class BytecodeGenerator {
         new LinkedHashMap<>();
     private final List<String> objectNameOrder = new ArrayList<>();
 
+    private static List<IdentifierPattern> patternBindings(
+        final Pattern pattern
+    ) {
+        final List<IdentifierPattern> result = new ArrayList<>();
+        collectPatternBindings(pattern, result);
+        return result;
+    }
+
+    private static void collectPatternBindings(
+        final Pattern pattern,
+        final List<IdentifierPattern> result
+    ) {
+        if (pattern instanceof IdentifierPattern identifier) {
+            result.add(identifier);
+        }
+        else if (pattern instanceof TuplePattern tuple) {
+            tuple.elements()
+                .forEach(element -> collectPatternBindings(element, result));
+        }
+        else if (pattern instanceof RecordPattern record) {
+            record.fields()
+                .forEach(
+                    field -> collectPatternBindings(field.target(), result)
+                );
+        }
+    }
+
+    private void addPatternGlobals(
+        final IdentityHashMap<Symbol, String> globals,
+        final DestructuringDeclaration declaration
+    ) {
+        for (final IdentifierPattern binding : patternBindings(
+            declaration.pattern()
+        )) {
+            final Symbol symbol = semanticModel.getPatternSymbol(binding);
+            globals.put(symbol, symbol.name());
+        }
+    }
+
     private record ObjectInfo(
         String owner, List<Symbol> captures, boolean receiver,
         String constructorDescriptor
     ) {
+    }
+
+    private record PatternValue(IdentifierPattern binding, int local) {
     }
 
     public BytecodeGenerator(
@@ -532,6 +574,9 @@ public final class BytecodeGenerator {
                     final Symbol symbol =
                         semanticModel.getSymbol(variable.name());
                     globals.put(symbol, symbol.name());
+                }
+                else if (item instanceof DestructuringDeclaration pattern) {
+                    addPatternGlobals(globals, pattern);
                 }
             }
             for (final var member : declaration.members()) {
@@ -1013,6 +1058,9 @@ public final class BytecodeGenerator {
                     final Symbol symbol =
                         semanticModel.getSymbol(variable.name());
                     globals.put(symbol, symbol.name());
+                }
+                else if (item instanceof DestructuringDeclaration pattern) {
+                    addPatternGlobals(globals, pattern);
                 }
             }
             final IdentityHashMap<Symbol, String> members =
@@ -1791,6 +1839,26 @@ public final class BytecodeGenerator {
         }
         final int[] nextField = {fieldIndex};
         AstTraversal.walk(function.body(), node -> {
+            if (node instanceof DestructuringDeclaration destructuring) {
+                for (final IdentifierPattern binding : patternBindings(
+                    destructuring.pattern()
+                )) {
+                    final Symbol bindingSymbol =
+                        semanticModel.getPatternSymbol(binding);
+                    if (
+                        !fields.containsKey(bindingSymbol) && liveAcrossAwait(
+                            bindingSymbol,
+                            destructuring,
+                            destructuring.initializer().range().end(),
+                            function.body(),
+                            awaits
+                        )
+                    ) {
+                        fields.put(bindingSymbol, "$local" + nextField[0]++);
+                    }
+                }
+                return;
+            }
             final Symbol local;
             final Position definition;
             if (node instanceof VariableDeclaration variable) {
@@ -2374,6 +2442,9 @@ public final class BytecodeGenerator {
                         semanticModel.getSymbol(variable.name());
                     globals.put(symbol, symbol.name());
                 }
+                else if (item instanceof DestructuringDeclaration pattern) {
+                    addPatternGlobals(globals, pattern);
+                }
             }
             for (final BlockItem item : program.items()
                 .subList(previousItems, program.items().size())) {
@@ -2401,6 +2472,28 @@ public final class BytecodeGenerator {
                         fieldSignature(symbol.type()),
                         constantValue
                     );
+                }
+                else if (item instanceof DestructuringDeclaration pattern) {
+                    initializers.add(item);
+                    for (final IdentifierPattern binding : patternBindings(
+                        pattern.pattern()
+                    )) {
+                        final Symbol symbol =
+                            semanticModel.getPatternSymbol(binding);
+                        globals.put(symbol, symbol.name());
+                        generateField(
+                            writer,
+                            ACC_PUBLIC | ACC_STATIC
+                                | (moduleName.equals("Test")
+                                    && pattern.mutability() == Mutability.CONST
+                                        ? ACC_FINAL
+                                        : 0),
+                            symbol.name(),
+                            descriptor(symbol.type()),
+                            fieldSignature(symbol.type()),
+                            null
+                        );
+                    }
                 }
                 else if (item instanceof ClassDeclaration declaration) {
                     final String name = className(declaration);
@@ -3742,6 +3835,11 @@ public final class BytecodeGenerator {
                     }
                     store(symbol);
                 }
+                case DestructuringDeclaration declaration -> destructure(
+                    declaration.pattern(),
+                    declaration.initializer(),
+                    true
+                );
                 case DeclarationStatement declaration -> {
                     return item(declaration.declaration());
                 }
@@ -3757,6 +3855,11 @@ public final class BytecodeGenerator {
                     }
                     discard(statement.expression());
                 }
+                case DestructuringAssignmentStatement assignment -> destructure(
+                    assignment.pattern(),
+                    assignment.value(),
+                    false
+                );
                 case IgnoreStatement statement ->
                     discard(statement.expression());
                 case ThrowStatement statement -> {
@@ -6555,6 +6658,164 @@ public final class BytecodeGenerator {
                 MethodTypeDesc.ofDescriptor("([Ljava/lang/Object;)V"),
                 false
             );
+        }
+
+        private void destructure(
+            final Pattern pattern,
+            final Expression source,
+            final boolean declaration
+        ) {
+            expression(source);
+            final int sourceLocal = nextLocal++;
+            method.astore(sourceLocal);
+            final List<PatternValue> values = new ArrayList<>();
+            extractPatternValues(pattern, sourceLocal, values);
+
+            if (declaration) {
+                for (final PatternValue value : values) {
+                    final Symbol symbol =
+                        semanticModel.getPatternSymbol(value.binding());
+                    if (cell(symbol)) {
+                        method.iconst_1();
+                        if (reference(symbol.type())) {
+                            method.anewarray(classDesc("java/lang/Object"));
+                        }
+                        else {
+                            method.newarray(
+                                RuntimeAbi.array(symbol.type()).creationKind
+                            );
+                        }
+                        method.astore(local(symbol));
+                    }
+                }
+            }
+            for (final PatternValue value : values) {
+                final Symbol symbol =
+                    semanticModel.getPatternSymbol(value.binding());
+                prepareStore(symbol);
+                method.with(
+                    localInstruction(loadOpcode(symbol.type()), value.local())
+                );
+                store(symbol);
+            }
+        }
+
+        private void extractPatternValues(
+            final Pattern pattern,
+            final int sourceLocal,
+            final List<PatternValue> values
+        ) {
+            if (pattern instanceof TuplePattern tuplePattern) {
+                for (int i = 0; i < tuplePattern.elements().size(); i++) {
+                    final Pattern element = tuplePattern.elements().get(i);
+                    if (element instanceof DiscardPattern) {
+                        continue;
+                    }
+                    final IdentifierPattern binding =
+                        (IdentifierPattern) element;
+                    method.aload(sourceLocal);
+                    method.ldc(i);
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc(
+                            "com/github/andreasarvidsson/eld/runtime/EldTuple"
+                        ),
+                        "get",
+                        MethodTypeDesc.ofDescriptor("(I)Ljava/lang/Object;"),
+                        false
+                    );
+                    final Type sourceType =
+                        semanticModel.getPatternSourceType(binding);
+                    readObject(sourceType);
+                    savePatternValue(binding, sourceType, values);
+                }
+                return;
+            }
+            final RecordPattern record = (RecordPattern) pattern;
+            final ClassType recordType =
+                semanticModel.getRecordPatternType(record);
+            final String owner =
+                internalName(ClassDesc.ofDescriptor(descriptor(recordType)));
+            for (final RecordPatternField field : record.fields()) {
+                if (field.target() instanceof DiscardPattern) {
+                    continue;
+                }
+                final IdentifierPattern binding =
+                    (IdentifierPattern) field.target();
+                final Type sourceType =
+                    semanticModel.getPatternSourceType(binding);
+                method.aload(sourceLocal);
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(owner),
+                    field.component().name(),
+                    MethodTypeDesc.ofDescriptor("()" + descriptor(sourceType)),
+                    false
+                );
+                savePatternValue(binding, sourceType, values);
+            }
+        }
+
+        private void savePatternValue(
+            final IdentifierPattern binding,
+            final Type sourceType,
+            final List<PatternValue> values
+        ) {
+            final Type targetType =
+                semanticModel.getPatternSymbol(binding).type();
+            convertPatternValue(
+                sourceType,
+                targetType,
+                semanticModel.getPatternConversionType(binding)
+            );
+            final int valueLocal = reserve(targetType);
+            method.with(localInstruction(storeOpcode(targetType), valueLocal));
+            values.add(new PatternValue(binding, valueLocal));
+        }
+
+        private void convertPatternValue(
+            final Type source,
+            final Type target,
+            final Type conversion
+        ) {
+            final Type targetValue = ConstType.unwrap(target);
+            if (
+                targetValue == BuiltinType.ANY
+                    || (targetValue instanceof InterfaceType
+                        && JavaTypes.boxedClass(source) != null)
+            ) {
+                box(source);
+            }
+            else if (targetValue instanceof UnionType) {
+                if (!(source instanceof UnionType)) {
+                    if (
+                        conversion instanceof InterfaceType
+                            && JavaTypes.boxedClass(source) != null
+                    ) {
+                        box(source);
+                    }
+                    else {
+                        convert(source, conversion);
+                        box(conversion);
+                    }
+                }
+                final String descriptor = descriptor(target);
+                if (
+                    !referenceAssignable(
+                        boxedDescriptor(conversion),
+                        descriptor
+                    )
+                ) {
+                    method.checkcast(
+                        classDesc(
+                            internalName(ClassDesc.ofDescriptor(descriptor))
+                        )
+                    );
+                }
+            }
+            else {
+                convert(source, target);
+            }
         }
 
         private void tupleGet(final SubscriptExpression index) {

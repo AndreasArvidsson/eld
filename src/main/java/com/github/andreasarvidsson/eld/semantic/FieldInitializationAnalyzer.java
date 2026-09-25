@@ -165,6 +165,10 @@ final class FieldInitializationAnalyzer {
                 return walk(statement.declaration(), paths);
             case VariableDeclaration variable:
                 return walk(variable.initializer(), paths);
+            case DestructuringDeclaration destructuring:
+                return walk(destructuring.initializer(), paths);
+            case DestructuringAssignmentStatement destructuring:
+                return walk(destructuring.value(), paths);
             case ExpressionStatement statement:
                 return walk(statement.expression(), paths);
             case SuperConstructorCall call: {

@@ -1,0 +1,318 @@
+var calls = 0;
+func run() (i32, i32) {
+    calls++;
+    return (1, 2);
+}
+const (first, second) = run();
+print(calls);
+print(first);
+print(second);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "calls" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+FUNC (2:1-2:5)
+IDENTIFIER "run" (2:6-2:9)
+LEFT_PAREN (2:9-2:10)
+RIGHT_PAREN (2:10-2:11)
+LEFT_PAREN (2:12-2:13)
+IDENTIFIER "i32" (2:13-2:16)
+COMMA (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+RIGHT_PAREN (2:21-2:22)
+LEFT_BRACE (2:23-2:24)
+IDENTIFIER "calls" (3:5-3:10)
+PLUS_PLUS (3:10-3:12)
+SEMICOLON (3:12-3:13)
+RETURN (4:5-4:11)
+LEFT_PAREN (4:12-4:13)
+INTEGER_LITERAL "1" (4:13-4:14)
+COMMA (4:14-4:15)
+INTEGER_LITERAL "2" (4:16-4:17)
+RIGHT_PAREN (4:17-4:18)
+SEMICOLON (4:18-4:19)
+RIGHT_BRACE (5:1-5:2)
+CONST (6:1-6:6)
+LEFT_PAREN (6:7-6:8)
+IDENTIFIER "first" (6:8-6:13)
+COMMA (6:13-6:14)
+IDENTIFIER "second" (6:15-6:21)
+RIGHT_PAREN (6:21-6:22)
+EQUAL (6:23-6:24)
+IDENTIFIER "run" (6:25-6:28)
+LEFT_PAREN (6:28-6:29)
+RIGHT_PAREN (6:29-6:30)
+SEMICOLON (6:30-6:31)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "calls" (7:7-7:12)
+RIGHT_PAREN (7:12-7:13)
+SEMICOLON (7:13-7:14)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "first" (8:7-8:12)
+RIGHT_PAREN (8:12-8:13)
+SEMICOLON (8:13-8:14)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "second" (9:7-9:13)
+RIGHT_PAREN (9:13-9:14)
+SEMICOLON (9:14-9:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:15
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "calls"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-5:2
+    (IdentifierDeclaration
+      range: 2:6-2:9
+      name: "run"
+    )
+    (TupleTypeNode
+      range: 2:12-2:22
+      (NamedTypeNode
+        range: 2:13-2:16
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+    (BlockStatement
+      range: 2:23-5:2
+      (ExpressionStatement
+        range: 3:5-3:13
+        (PostfixExpression
+          range: 3:5-3:12
+          (IdentifierExpression
+            range: 3:5-3:10
+            name: "calls"
+          )
+          operator: INCREMENT
+        )
+      )
+      (ReturnStatement
+        range: 4:5-4:19
+        (TupleExpression
+          range: 4:12-4:18
+          (LiteralExpression
+            range: 4:13-4:14
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 4:16-4:17
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (DestructuringDeclaration
+    range: 6:1-6:31
+    mutability: CONST
+    (TuplePattern
+      range: 6:7-6:22
+      (IdentifierPattern
+        range: 6:8-6:13
+        (IdentifierDeclaration
+          range: 6:8-6:13
+          name: "first"
+        )
+        type: null
+      )
+      (IdentifierPattern
+        range: 6:15-6:21
+        (IdentifierDeclaration
+          range: 6:15-6:21
+          name: "second"
+        )
+        type: null
+      )
+    )
+    (CallExpression
+      range: 6:25-6:30
+      (IdentifierExpression
+        range: 6:25-6:28
+        name: "run"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:14
+    (CallExpression
+      range: 7:1-7:13
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:12
+        name: "calls"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:14
+    (CallExpression
+      range: 8:1-8:13
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:12
+        name: "first"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:15
+    (CallExpression
+      range: 9:1-9:14
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 9:7-9:13
+        name: "second"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  3:5-3:10 -> i32
+  3:5-3:12 -> i32
+  4:12-4:18 -> (i32, i32)
+  4:13-4:14 -> i32
+  4:16-4:17 -> i32
+  6:8-6:13 -> i32
+  6:15-6:21 -> i32
+  6:25-6:28 -> () => (i32, i32)
+  6:25-6:30 -> (i32, i32)
+  7:1-7:6 -> (any) => void
+  7:1-7:13 -> void
+  7:7-7:12 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:13 -> void
+  8:7-8:12 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:14 -> void
+  9:7-9:13 -> i32
+
+Resolved types:
+  2:12-2:22 -> (i32, i32)
+  2:13-2:16 -> i32
+  2:18-2:21 -> i32
+
+Declarations:
+  1:5-1:10 -> var calls: i32
+  2:6-2:9 -> func run() => (i32, i32)
+  6:8-6:13 -> const first: i32
+  6:15-6:21 -> const second: i32
+
+References:
+  3:5-3:10 -> 1:5-1:10
+  6:25-6:28 -> 2:6-2:9
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 1:5-1:10
+  8:1-8:6 -> builtin print
+  8:7-8:12 -> 6:8-6:13
+  9:1-9:6 -> builtin print
+  9:7-9:13 -> 6:15-6:21
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field calls I flags [PUBLIC, STATIC]
+  field first I flags [PUBLIC, STATIC, FINAL]
+  field second I flags [PUBLIC, STATIC, FINAL]
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC]
+    GETSTATIC Test.calls I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test.calls I
+    POP
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    ARETURN
+    max stack 6 max locals 0
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.calls I
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    ASTORE_0 0
+    ALOAD_0 0
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_1 1
+    ALOAD_0 0
+    LDC 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_2 2
+    ILOAD_1 1
+    PUTSTATIC Test.first I
+    ILOAD_2 2
+    PUTSTATIC Test.second I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calls I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.second I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 3
+
+--- OUTPUT ---
+
+1
+1
+2
+

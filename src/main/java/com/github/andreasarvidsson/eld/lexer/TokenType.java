@@ -21,6 +21,7 @@ public enum TokenType {
     EXTENDS,
     INTERFACE,
     IMPLEMENTS,
+    AS,
     NEW,
     CONSTRUCTOR,
     THIS,

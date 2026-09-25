@@ -185,12 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- tuple unpacking:
-  - const (name, value) = run();
-  - (name, \_) = run(); // discard second argument
-  - (name) = run(); // ambiguous/wrong: looks like ordinary assignment
-  - `_` should be a standardized DiscardPattern
-
 - Export & import
 - Ubiquitous toString, equals, hashCode methods
 - Tuples as map keys and switch conditions (using hashCode and equals)
@@ -201,6 +195,7 @@ protected const bar = 0;
 - abstract classes?
 - String std lib
 - Collections std lib
+- Stop using IdentifiedDeclaration in assignment expressions?
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion

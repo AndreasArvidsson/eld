@@ -1,0 +1,51 @@
+const (foo, bar) = 42;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+LEFT_PAREN (1:7-1:8)
+IDENTIFIER "foo" (1:8-1:11)
+COMMA (1:11-1:12)
+IDENTIFIER "bar" (1:13-1:16)
+RIGHT_PAREN (1:16-1:17)
+EQUAL (1:18-1:19)
+INTEGER_LITERAL "42" (1:20-1:22)
+SEMICOLON (1:22-1:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:23
+  (DestructuringDeclaration
+    range: 1:1-1:23
+    mutability: CONST
+    (TuplePattern
+      range: 1:7-1:17
+      (IdentifierPattern
+        range: 1:8-1:11
+        (IdentifierDeclaration
+          range: 1:8-1:11
+          name: "foo"
+        )
+        type: null
+      )
+      (IdentifierPattern
+        range: 1:13-1:16
+        (IdentifierDeclaration
+          range: 1:13-1:16
+          name: "bar"
+        )
+        type: null
+      )
+    )
+    (LiteralExpression
+      range: 1:20-1:22
+      kind: INT
+      text: "42"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Expected tuple, found i32 at 1:7-1:17

@@ -1,0 +1,176 @@
+record Rec(value: i32);
+class Example {
+    const value: i32;
+    constructor() {
+        const {value as copy} = new Rec(this.value);
+        this.value = 1;
+    }
+}
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Rec" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "value" (1:12-1:17)
+COLON (1:17-1:18)
+IDENTIFIER "i32" (1:19-1:22)
+RIGHT_PAREN (1:22-1:23)
+SEMICOLON (1:23-1:24)
+CLASS (2:1-2:6)
+IDENTIFIER "Example" (2:7-2:14)
+LEFT_BRACE (2:15-2:16)
+CONST (3:5-3:10)
+IDENTIFIER "value" (3:11-3:16)
+COLON (3:16-3:17)
+IDENTIFIER "i32" (3:18-3:21)
+SEMICOLON (3:21-3:22)
+CONSTRUCTOR (4:5-4:16)
+LEFT_PAREN (4:16-4:17)
+RIGHT_PAREN (4:17-4:18)
+LEFT_BRACE (4:19-4:20)
+CONST (5:9-5:14)
+LEFT_BRACE (5:15-5:16)
+IDENTIFIER "value" (5:16-5:21)
+AS (5:22-5:24)
+IDENTIFIER "copy" (5:25-5:29)
+RIGHT_BRACE (5:29-5:30)
+EQUAL (5:31-5:32)
+NEW (5:33-5:36)
+IDENTIFIER "Rec" (5:37-5:40)
+LEFT_PAREN (5:40-5:41)
+THIS (5:41-5:45)
+DOT (5:45-5:46)
+IDENTIFIER "value" (5:46-5:51)
+RIGHT_PAREN (5:51-5:52)
+SEMICOLON (5:52-5:53)
+THIS (6:9-6:13)
+DOT (6:13-6:14)
+IDENTIFIER "value" (6:14-6:19)
+EQUAL (6:20-6:21)
+INTEGER_LITERAL "1" (6:22-6:23)
+SEMICOLON (6:23-6:24)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (RecordDeclaration
+    range: 1:1-1:24
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Rec"
+    )
+    (RecordParameter
+      range: 1:12-1:22
+      (IdentifierDeclaration
+        range: 1:12-1:17
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:19-1:22
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 2:1-8:2
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 3:5-3:22
+      visibility: PRIVATE
+      (UninitializedVariableDeclaration
+        range: 3:5-3:22
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 3:11-3:16
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 3:18-3:21
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-7:6
+      visibility: PRIVATE
+      (ConstructorDeclaration
+        range: 4:5-7:6
+        (BlockStatement
+          range: 4:19-7:6
+          (DestructuringDeclaration
+            range: 5:9-5:53
+            mutability: CONST
+            (RecordPattern
+              range: 5:15-5:30
+              (RecordPatternField
+                range: 5:16-5:29
+                (IdentifierDeclaration
+                  range: 5:16-5:21
+                  name: "value"
+                )
+                (IdentifierPattern
+                  range: 5:25-5:29
+                  (IdentifierDeclaration
+                    range: 5:25-5:29
+                    name: "copy"
+                  )
+                  type: null
+                )
+              )
+            )
+            (NewExpression
+              range: 5:33-5:52
+              (IdentifierExpression
+                range: 5:37-5:40
+                name: "Rec"
+              )
+              (MemberExpression
+                range: 5:41-5:51
+                (ThisExpression
+                  range: 5:41-5:45
+                )
+                (IdentifierExpression
+                  range: 5:46-5:51
+                  name: "value"
+                )
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 6:9-6:24
+            (AssignmentExpression
+              range: 6:9-6:23
+              (MemberExpression
+                range: 6:9-6:19
+                (ThisExpression
+                  range: 6:9-6:13
+                )
+                (IdentifierExpression
+                  range: 6:14-6:19
+                  name: "value"
+                )
+              )
+              (LiteralExpression
+                range: 6:22-6:23
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Field 'value' is read before initialization at 5:41-5:51

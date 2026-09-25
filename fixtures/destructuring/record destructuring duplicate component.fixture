@@ -1,0 +1,127 @@
+record Rec(foo: i32, bar: i32);
+const {foo, foo as baz} = new Rec(1, 2);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Rec" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "foo" (1:12-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+COMMA (1:20-1:21)
+IDENTIFIER "bar" (1:22-1:25)
+COLON (1:25-1:26)
+IDENTIFIER "i32" (1:27-1:30)
+RIGHT_PAREN (1:30-1:31)
+SEMICOLON (1:31-1:32)
+CONST (2:1-2:6)
+LEFT_BRACE (2:7-2:8)
+IDENTIFIER "foo" (2:8-2:11)
+COMMA (2:11-2:12)
+IDENTIFIER "foo" (2:13-2:16)
+AS (2:17-2:19)
+IDENTIFIER "baz" (2:20-2:23)
+RIGHT_BRACE (2:23-2:24)
+EQUAL (2:25-2:26)
+NEW (2:27-2:30)
+IDENTIFIER "Rec" (2:31-2:34)
+LEFT_PAREN (2:34-2:35)
+INTEGER_LITERAL "1" (2:35-2:36)
+COMMA (2:36-2:37)
+INTEGER_LITERAL "2" (2:38-2:39)
+RIGHT_PAREN (2:39-2:40)
+SEMICOLON (2:40-2:41)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:41
+  (RecordDeclaration
+    range: 1:1-1:32
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Rec"
+    )
+    (RecordParameter
+      range: 1:12-1:20
+      (IdentifierDeclaration
+        range: 1:12-1:15
+        name: "foo"
+      )
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "i32"
+      )
+    )
+    (RecordParameter
+      range: 1:22-1:30
+      (IdentifierDeclaration
+        range: 1:22-1:25
+        name: "bar"
+      )
+      (NamedTypeNode
+        range: 1:27-1:30
+        name: "i32"
+      )
+    )
+  )
+  (DestructuringDeclaration
+    range: 2:1-2:41
+    mutability: CONST
+    (RecordPattern
+      range: 2:7-2:24
+      (RecordPatternField
+        range: 2:8-2:11
+        (IdentifierDeclaration
+          range: 2:8-2:11
+          name: "foo"
+        )
+        (IdentifierPattern
+          range: 2:8-2:11
+          (IdentifierDeclaration
+            range: 2:8-2:11
+            name: "foo"
+          )
+          type: null
+        )
+      )
+      (RecordPatternField
+        range: 2:13-2:23
+        (IdentifierDeclaration
+          range: 2:13-2:16
+          name: "foo"
+        )
+        (IdentifierPattern
+          range: 2:20-2:23
+          (IdentifierDeclaration
+            range: 2:20-2:23
+            name: "baz"
+          )
+          type: null
+        )
+      )
+    )
+    (NewExpression
+      range: 2:27-2:40
+      (IdentifierExpression
+        range: 2:31-2:34
+        name: "Rec"
+      )
+      (LiteralExpression
+        range: 2:35-2:36
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 2:38-2:39
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Duplicate record component 'foo' at 2:13-2:16
