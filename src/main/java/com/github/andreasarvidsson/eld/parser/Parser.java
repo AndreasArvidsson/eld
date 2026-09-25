@@ -700,6 +700,14 @@ public final class Parser extends ParserBase {
     }
 
     private TypeNode parseTypeMember() {
+        final Token constant = matchToken(TokenType.CONST);
+        if (constant != null) {
+            final TypeNode type = parseTypeMember();
+            return new ConstTypeNode(
+                type,
+                constant.range().union(type.range())
+            );
+        }
         final Token open = matchToken(TokenType.LEFT_PAREN);
         if (open != null) {
             final List<TypeNode> elementTypes = new ArrayList<>();
@@ -714,7 +722,8 @@ public final class Parser extends ParserBase {
                 final TypeNode returnType =
                     check(TokenType.IDENTIFIER) || check(TokenType.NULL)
                         || check(TokenType.LEFT_PAREN)
-                        || check(TokenType.LEFT_BRACKET) ? parseType() : null;
+                        || check(TokenType.LEFT_BRACKET)
+                        || check(TokenType.CONST) ? parseType() : null;
                 return new FunctionTypeNode(
                     elementTypes,
                     returnType,

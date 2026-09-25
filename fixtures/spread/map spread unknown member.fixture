@@ -2,7 +2,6 @@ const old = {"value": 1, "extra": 2};
 const value = {...old};
 print(value);
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

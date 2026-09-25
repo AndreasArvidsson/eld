@@ -20,7 +20,6 @@ print(adjusted.total);
 print(adjusted.ratio);
 print(adjusted.note);
 
-
 --- TOKENS ---
 
 RECORD (1:1-1:7)

@@ -16,7 +16,6 @@ print(calls);
 print(result.get("value"));
 print(old.get("value"));
 
-
 --- TOKENS ---
 
 VAR (1:1-1:4)

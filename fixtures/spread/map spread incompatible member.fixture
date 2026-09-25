@@ -1,7 +1,6 @@
 const old: Map<string, string> = {"value": "a"};
 const value: Map<string, i32> = {...old};
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

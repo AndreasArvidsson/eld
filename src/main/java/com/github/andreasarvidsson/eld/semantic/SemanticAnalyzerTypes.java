@@ -6,6 +6,7 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
+import com.github.andreasarvidsson.eld.parser.ConstTypeNode;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.FunctionTypeNode;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
@@ -42,6 +43,26 @@ public final class SemanticAnalyzerTypes {
                 final Type type =
                     new ArrayType(resolveType(array.elementType(), context));
                 model.setResolvedType(array, type);
+                yield type;
+            }
+            case ConstTypeNode constant -> {
+                final Type resolved = resolveType(constant.type(), context);
+                if (
+                    !(resolved instanceof ArrayType)
+                        && !(resolved instanceof ClassType)
+                        && !(resolved instanceof InterfaceType)
+                ) {
+                    throw new SemanticException(
+                        constant.range(),
+                        "Only objects and collections can be const, found %s",
+                        resolved
+                    );
+                }
+                final Type type =
+                    resolved instanceof ConstType
+                        ? resolved
+                        : new ConstType(resolved);
+                model.setResolvedType(constant, type);
                 yield type;
             }
             case FunctionTypeNode function -> {
@@ -246,6 +267,15 @@ public final class SemanticAnalyzerTypes {
         final Type to,
         final Expression fromExpression
     ) {
+        if (to instanceof ConstType target) {
+            final Type source = ConstType.unwrap(from);
+            if (
+                resolveAssignType(source, target.type(), fromExpression) != null
+            ) {
+                return to;
+            }
+            return null;
+        }
         if (
             fromExpression instanceof TupleExpression tuple
                 && to instanceof TupleType target
@@ -309,7 +339,8 @@ public final class SemanticAnalyzerTypes {
             for (final Type member : union.memberTypes()) {
                 if (
                     (member instanceof ClassType
-                        || member instanceof InterfaceType)
+                        || member instanceof InterfaceType
+                        || member instanceof ConstType)
                         && resolveAssignType(
                             from,
                             member,
@@ -335,6 +366,10 @@ public final class SemanticAnalyzerTypes {
                     return to;
                 }
             }
+            return null;
+        }
+
+        if (from instanceof ConstType) {
             return null;
         }
 

@@ -1,0 +1,1708 @@
+class Foo {
+    public var value: i32;
+    public constructor(value: i32) {
+        this.value = value;
+    }
+}
+
+const mutable: [Foo] = [new Foo(1)];
+mutable[0] = new Foo(2);
+mutable[0].value = 3;
+
+const fixed: const [Foo] = [new Foo(4)];
+fixed[0].value = 5;
+const fixedView: const [Foo] = mutable;
+
+const fixedElements: [const Foo] = [new Foo(6)];
+fixedElements[0] = new Foo(7);
+
+const fixedBoth: const [const Foo] = [new Foo(8)];
+
+const object: const Foo = new Foo(9);
+const optional: const Foo | null = object;
+const copied: [Foo] = [...fixed];
+
+func identity(value: const Foo) const Foo {
+    return value;
+}
+
+func consume(value: any) i32 {
+    return 1;
+}
+
+print(mutable[0].value);
+print(fixed[0].value);
+print(fixedElements[0].value);
+print(fixedBoth[0].value);
+print(object.value);
+print(identity(object).value);
+print(consume(object));
+print(consume(fixed));
+print(consume(optional));
+print(fixedView[0].value);
+print(copied[0].value);
+for (value : fixed) {
+    print(value.value);
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "i32" (2:23-2:26)
+SEMICOLON (2:26-2:27)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "value" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+RIGHT_PAREN (3:34-3:35)
+LEFT_BRACE (3:36-3:37)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+EQUAL (4:20-4:21)
+IDENTIFIER "value" (4:22-4:27)
+SEMICOLON (4:27-4:28)
+RIGHT_BRACE (5:5-5:6)
+RIGHT_BRACE (6:1-6:2)
+CONST (8:1-8:6)
+IDENTIFIER "mutable" (8:7-8:14)
+COLON (8:14-8:15)
+LEFT_BRACKET (8:16-8:17)
+IDENTIFIER "Foo" (8:17-8:20)
+RIGHT_BRACKET (8:20-8:21)
+EQUAL (8:22-8:23)
+LEFT_BRACKET (8:24-8:25)
+NEW (8:25-8:28)
+IDENTIFIER "Foo" (8:29-8:32)
+LEFT_PAREN (8:32-8:33)
+INTEGER_LITERAL "1" (8:33-8:34)
+RIGHT_PAREN (8:34-8:35)
+RIGHT_BRACKET (8:35-8:36)
+SEMICOLON (8:36-8:37)
+IDENTIFIER "mutable" (9:1-9:8)
+LEFT_BRACKET (9:8-9:9)
+INTEGER_LITERAL "0" (9:9-9:10)
+RIGHT_BRACKET (9:10-9:11)
+EQUAL (9:12-9:13)
+NEW (9:14-9:17)
+IDENTIFIER "Foo" (9:18-9:21)
+LEFT_PAREN (9:21-9:22)
+INTEGER_LITERAL "2" (9:22-9:23)
+RIGHT_PAREN (9:23-9:24)
+SEMICOLON (9:24-9:25)
+IDENTIFIER "mutable" (10:1-10:8)
+LEFT_BRACKET (10:8-10:9)
+INTEGER_LITERAL "0" (10:9-10:10)
+RIGHT_BRACKET (10:10-10:11)
+DOT (10:11-10:12)
+IDENTIFIER "value" (10:12-10:17)
+EQUAL (10:18-10:19)
+INTEGER_LITERAL "3" (10:20-10:21)
+SEMICOLON (10:21-10:22)
+CONST (12:1-12:6)
+IDENTIFIER "fixed" (12:7-12:12)
+COLON (12:12-12:13)
+CONST (12:14-12:19)
+LEFT_BRACKET (12:20-12:21)
+IDENTIFIER "Foo" (12:21-12:24)
+RIGHT_BRACKET (12:24-12:25)
+EQUAL (12:26-12:27)
+LEFT_BRACKET (12:28-12:29)
+NEW (12:29-12:32)
+IDENTIFIER "Foo" (12:33-12:36)
+LEFT_PAREN (12:36-12:37)
+INTEGER_LITERAL "4" (12:37-12:38)
+RIGHT_PAREN (12:38-12:39)
+RIGHT_BRACKET (12:39-12:40)
+SEMICOLON (12:40-12:41)
+IDENTIFIER "fixed" (13:1-13:6)
+LEFT_BRACKET (13:6-13:7)
+INTEGER_LITERAL "0" (13:7-13:8)
+RIGHT_BRACKET (13:8-13:9)
+DOT (13:9-13:10)
+IDENTIFIER "value" (13:10-13:15)
+EQUAL (13:16-13:17)
+INTEGER_LITERAL "5" (13:18-13:19)
+SEMICOLON (13:19-13:20)
+CONST (14:1-14:6)
+IDENTIFIER "fixedView" (14:7-14:16)
+COLON (14:16-14:17)
+CONST (14:18-14:23)
+LEFT_BRACKET (14:24-14:25)
+IDENTIFIER "Foo" (14:25-14:28)
+RIGHT_BRACKET (14:28-14:29)
+EQUAL (14:30-14:31)
+IDENTIFIER "mutable" (14:32-14:39)
+SEMICOLON (14:39-14:40)
+CONST (16:1-16:6)
+IDENTIFIER "fixedElements" (16:7-16:20)
+COLON (16:20-16:21)
+LEFT_BRACKET (16:22-16:23)
+CONST (16:23-16:28)
+IDENTIFIER "Foo" (16:29-16:32)
+RIGHT_BRACKET (16:32-16:33)
+EQUAL (16:34-16:35)
+LEFT_BRACKET (16:36-16:37)
+NEW (16:37-16:40)
+IDENTIFIER "Foo" (16:41-16:44)
+LEFT_PAREN (16:44-16:45)
+INTEGER_LITERAL "6" (16:45-16:46)
+RIGHT_PAREN (16:46-16:47)
+RIGHT_BRACKET (16:47-16:48)
+SEMICOLON (16:48-16:49)
+IDENTIFIER "fixedElements" (17:1-17:14)
+LEFT_BRACKET (17:14-17:15)
+INTEGER_LITERAL "0" (17:15-17:16)
+RIGHT_BRACKET (17:16-17:17)
+EQUAL (17:18-17:19)
+NEW (17:20-17:23)
+IDENTIFIER "Foo" (17:24-17:27)
+LEFT_PAREN (17:27-17:28)
+INTEGER_LITERAL "7" (17:28-17:29)
+RIGHT_PAREN (17:29-17:30)
+SEMICOLON (17:30-17:31)
+CONST (19:1-19:6)
+IDENTIFIER "fixedBoth" (19:7-19:16)
+COLON (19:16-19:17)
+CONST (19:18-19:23)
+LEFT_BRACKET (19:24-19:25)
+CONST (19:25-19:30)
+IDENTIFIER "Foo" (19:31-19:34)
+RIGHT_BRACKET (19:34-19:35)
+EQUAL (19:36-19:37)
+LEFT_BRACKET (19:38-19:39)
+NEW (19:39-19:42)
+IDENTIFIER "Foo" (19:43-19:46)
+LEFT_PAREN (19:46-19:47)
+INTEGER_LITERAL "8" (19:47-19:48)
+RIGHT_PAREN (19:48-19:49)
+RIGHT_BRACKET (19:49-19:50)
+SEMICOLON (19:50-19:51)
+CONST (21:1-21:6)
+IDENTIFIER "object" (21:7-21:13)
+COLON (21:13-21:14)
+CONST (21:15-21:20)
+IDENTIFIER "Foo" (21:21-21:24)
+EQUAL (21:25-21:26)
+NEW (21:27-21:30)
+IDENTIFIER "Foo" (21:31-21:34)
+LEFT_PAREN (21:34-21:35)
+INTEGER_LITERAL "9" (21:35-21:36)
+RIGHT_PAREN (21:36-21:37)
+SEMICOLON (21:37-21:38)
+CONST (22:1-22:6)
+IDENTIFIER "optional" (22:7-22:15)
+COLON (22:15-22:16)
+CONST (22:17-22:22)
+IDENTIFIER "Foo" (22:23-22:26)
+PIPE (22:27-22:28)
+NULL (22:29-22:33)
+EQUAL (22:34-22:35)
+IDENTIFIER "object" (22:36-22:42)
+SEMICOLON (22:42-22:43)
+CONST (23:1-23:6)
+IDENTIFIER "copied" (23:7-23:13)
+COLON (23:13-23:14)
+LEFT_BRACKET (23:15-23:16)
+IDENTIFIER "Foo" (23:16-23:19)
+RIGHT_BRACKET (23:19-23:20)
+EQUAL (23:21-23:22)
+LEFT_BRACKET (23:23-23:24)
+ELLIPSIS (23:24-23:27)
+IDENTIFIER "fixed" (23:27-23:32)
+RIGHT_BRACKET (23:32-23:33)
+SEMICOLON (23:33-23:34)
+FUNC (25:1-25:5)
+IDENTIFIER "identity" (25:6-25:14)
+LEFT_PAREN (25:14-25:15)
+IDENTIFIER "value" (25:15-25:20)
+COLON (25:20-25:21)
+CONST (25:22-25:27)
+IDENTIFIER "Foo" (25:28-25:31)
+RIGHT_PAREN (25:31-25:32)
+CONST (25:33-25:38)
+IDENTIFIER "Foo" (25:39-25:42)
+LEFT_BRACE (25:43-25:44)
+RETURN (26:5-26:11)
+IDENTIFIER "value" (26:12-26:17)
+SEMICOLON (26:17-26:18)
+RIGHT_BRACE (27:1-27:2)
+FUNC (29:1-29:5)
+IDENTIFIER "consume" (29:6-29:13)
+LEFT_PAREN (29:13-29:14)
+IDENTIFIER "value" (29:14-29:19)
+COLON (29:19-29:20)
+IDENTIFIER "any" (29:21-29:24)
+RIGHT_PAREN (29:24-29:25)
+IDENTIFIER "i32" (29:26-29:29)
+LEFT_BRACE (29:30-29:31)
+RETURN (30:5-30:11)
+INTEGER_LITERAL "1" (30:12-30:13)
+SEMICOLON (30:13-30:14)
+RIGHT_BRACE (31:1-31:2)
+IDENTIFIER "print" (33:1-33:6)
+LEFT_PAREN (33:6-33:7)
+IDENTIFIER "mutable" (33:7-33:14)
+LEFT_BRACKET (33:14-33:15)
+INTEGER_LITERAL "0" (33:15-33:16)
+RIGHT_BRACKET (33:16-33:17)
+DOT (33:17-33:18)
+IDENTIFIER "value" (33:18-33:23)
+RIGHT_PAREN (33:23-33:24)
+SEMICOLON (33:24-33:25)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+IDENTIFIER "fixed" (34:7-34:12)
+LEFT_BRACKET (34:12-34:13)
+INTEGER_LITERAL "0" (34:13-34:14)
+RIGHT_BRACKET (34:14-34:15)
+DOT (34:15-34:16)
+IDENTIFIER "value" (34:16-34:21)
+RIGHT_PAREN (34:21-34:22)
+SEMICOLON (34:22-34:23)
+IDENTIFIER "print" (35:1-35:6)
+LEFT_PAREN (35:6-35:7)
+IDENTIFIER "fixedElements" (35:7-35:20)
+LEFT_BRACKET (35:20-35:21)
+INTEGER_LITERAL "0" (35:21-35:22)
+RIGHT_BRACKET (35:22-35:23)
+DOT (35:23-35:24)
+IDENTIFIER "value" (35:24-35:29)
+RIGHT_PAREN (35:29-35:30)
+SEMICOLON (35:30-35:31)
+IDENTIFIER "print" (36:1-36:6)
+LEFT_PAREN (36:6-36:7)
+IDENTIFIER "fixedBoth" (36:7-36:16)
+LEFT_BRACKET (36:16-36:17)
+INTEGER_LITERAL "0" (36:17-36:18)
+RIGHT_BRACKET (36:18-36:19)
+DOT (36:19-36:20)
+IDENTIFIER "value" (36:20-36:25)
+RIGHT_PAREN (36:25-36:26)
+SEMICOLON (36:26-36:27)
+IDENTIFIER "print" (37:1-37:6)
+LEFT_PAREN (37:6-37:7)
+IDENTIFIER "object" (37:7-37:13)
+DOT (37:13-37:14)
+IDENTIFIER "value" (37:14-37:19)
+RIGHT_PAREN (37:19-37:20)
+SEMICOLON (37:20-37:21)
+IDENTIFIER "print" (38:1-38:6)
+LEFT_PAREN (38:6-38:7)
+IDENTIFIER "identity" (38:7-38:15)
+LEFT_PAREN (38:15-38:16)
+IDENTIFIER "object" (38:16-38:22)
+RIGHT_PAREN (38:22-38:23)
+DOT (38:23-38:24)
+IDENTIFIER "value" (38:24-38:29)
+RIGHT_PAREN (38:29-38:30)
+SEMICOLON (38:30-38:31)
+IDENTIFIER "print" (39:1-39:6)
+LEFT_PAREN (39:6-39:7)
+IDENTIFIER "consume" (39:7-39:14)
+LEFT_PAREN (39:14-39:15)
+IDENTIFIER "object" (39:15-39:21)
+RIGHT_PAREN (39:21-39:22)
+RIGHT_PAREN (39:22-39:23)
+SEMICOLON (39:23-39:24)
+IDENTIFIER "print" (40:1-40:6)
+LEFT_PAREN (40:6-40:7)
+IDENTIFIER "consume" (40:7-40:14)
+LEFT_PAREN (40:14-40:15)
+IDENTIFIER "fixed" (40:15-40:20)
+RIGHT_PAREN (40:20-40:21)
+RIGHT_PAREN (40:21-40:22)
+SEMICOLON (40:22-40:23)
+IDENTIFIER "print" (41:1-41:6)
+LEFT_PAREN (41:6-41:7)
+IDENTIFIER "consume" (41:7-41:14)
+LEFT_PAREN (41:14-41:15)
+IDENTIFIER "optional" (41:15-41:23)
+RIGHT_PAREN (41:23-41:24)
+RIGHT_PAREN (41:24-41:25)
+SEMICOLON (41:25-41:26)
+IDENTIFIER "print" (42:1-42:6)
+LEFT_PAREN (42:6-42:7)
+IDENTIFIER "fixedView" (42:7-42:16)
+LEFT_BRACKET (42:16-42:17)
+INTEGER_LITERAL "0" (42:17-42:18)
+RIGHT_BRACKET (42:18-42:19)
+DOT (42:19-42:20)
+IDENTIFIER "value" (42:20-42:25)
+RIGHT_PAREN (42:25-42:26)
+SEMICOLON (42:26-42:27)
+IDENTIFIER "print" (43:1-43:6)
+LEFT_PAREN (43:6-43:7)
+IDENTIFIER "copied" (43:7-43:13)
+LEFT_BRACKET (43:13-43:14)
+INTEGER_LITERAL "0" (43:14-43:15)
+RIGHT_BRACKET (43:15-43:16)
+DOT (43:16-43:17)
+IDENTIFIER "value" (43:17-43:22)
+RIGHT_PAREN (43:22-43:23)
+SEMICOLON (43:23-43:24)
+FOR (44:1-44:4)
+LEFT_PAREN (44:5-44:6)
+IDENTIFIER "value" (44:6-44:11)
+COLON (44:12-44:13)
+IDENTIFIER "fixed" (44:14-44:19)
+RIGHT_PAREN (44:19-44:20)
+LEFT_BRACE (44:21-44:22)
+IDENTIFIER "print" (45:5-45:10)
+LEFT_PAREN (45:10-45:11)
+IDENTIFIER "value" (45:11-45:16)
+DOT (45:16-45:17)
+IDENTIFIER "value" (45:17-45:22)
+RIGHT_PAREN (45:22-45:23)
+SEMICOLON (45:23-45:24)
+RIGHT_BRACE (46:1-46:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-46:2
+  (ClassDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:27
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:23-2:26
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-5:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-5:6
+        (FunctionParameter
+          range: 3:24-3:34
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:31-3:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:36-5:6
+          (ExpressionStatement
+            range: 4:9-4:28
+            (AssignmentExpression
+              range: 4:9-4:27
+              (MemberExpression
+                range: 4:9-4:19
+                (ThisExpression
+                  range: 4:9-4:13
+                )
+                (IdentifierExpression
+                  range: 4:14-4:19
+                  name: "value"
+                )
+              )
+              (IdentifierExpression
+                range: 4:22-4:27
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "mutable"
+    )
+    (ArrayTypeNode
+      range: 8:16-8:21
+      (NamedTypeNode
+        range: 8:17-8:20
+        name: "Foo"
+      )
+    )
+    (ArrayExpression
+      range: 8:24-8:36
+      (NewExpression
+        range: 8:25-8:35
+        (IdentifierExpression
+          range: 8:29-8:32
+          name: "Foo"
+        )
+        (LiteralExpression
+          range: 8:33-8:34
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:25
+    (AssignmentExpression
+      range: 9:1-9:24
+      (SubscriptExpression
+        range: 9:1-9:11
+        (IdentifierExpression
+          range: 9:1-9:8
+          name: "mutable"
+        )
+        (LiteralExpression
+          range: 9:9-9:10
+          kind: INT
+          text: "0"
+        )
+      )
+      (NewExpression
+        range: 9:14-9:24
+        (IdentifierExpression
+          range: 9:18-9:21
+          name: "Foo"
+        )
+        (LiteralExpression
+          range: 9:22-9:23
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:22
+    (AssignmentExpression
+      range: 10:1-10:21
+      (MemberExpression
+        range: 10:1-10:17
+        (SubscriptExpression
+          range: 10:1-10:11
+          (IdentifierExpression
+            range: 10:1-10:8
+            name: "mutable"
+          )
+          (LiteralExpression
+            range: 10:9-10:10
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 10:12-10:17
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 10:20-10:21
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "fixed"
+    )
+    (ConstTypeNode
+      range: 12:14-12:25
+      (ArrayTypeNode
+        range: 12:20-12:25
+        (NamedTypeNode
+          range: 12:21-12:24
+          name: "Foo"
+        )
+      )
+    )
+    (ArrayExpression
+      range: 12:28-12:40
+      (NewExpression
+        range: 12:29-12:39
+        (IdentifierExpression
+          range: 12:33-12:36
+          name: "Foo"
+        )
+        (LiteralExpression
+          range: 12:37-12:38
+          kind: INT
+          text: "4"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:20
+    (AssignmentExpression
+      range: 13:1-13:19
+      (MemberExpression
+        range: 13:1-13:15
+        (SubscriptExpression
+          range: 13:1-13:9
+          (IdentifierExpression
+            range: 13:1-13:6
+            name: "fixed"
+          )
+          (LiteralExpression
+            range: 13:7-13:8
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 13:10-13:15
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 13:18-13:19
+        kind: INT
+        text: "5"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:16
+      name: "fixedView"
+    )
+    (ConstTypeNode
+      range: 14:18-14:29
+      (ArrayTypeNode
+        range: 14:24-14:29
+        (NamedTypeNode
+          range: 14:25-14:28
+          name: "Foo"
+        )
+      )
+    )
+    (IdentifierExpression
+      range: 14:32-14:39
+      name: "mutable"
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:20
+      name: "fixedElements"
+    )
+    (ArrayTypeNode
+      range: 16:22-16:33
+      (ConstTypeNode
+        range: 16:23-16:32
+        (NamedTypeNode
+          range: 16:29-16:32
+          name: "Foo"
+        )
+      )
+    )
+    (ArrayExpression
+      range: 16:36-16:48
+      (NewExpression
+        range: 16:37-16:47
+        (IdentifierExpression
+          range: 16:41-16:44
+          name: "Foo"
+        )
+        (LiteralExpression
+          range: 16:45-16:46
+          kind: INT
+          text: "6"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:31
+    (AssignmentExpression
+      range: 17:1-17:30
+      (SubscriptExpression
+        range: 17:1-17:17
+        (IdentifierExpression
+          range: 17:1-17:14
+          name: "fixedElements"
+        )
+        (LiteralExpression
+          range: 17:15-17:16
+          kind: INT
+          text: "0"
+        )
+      )
+      (NewExpression
+        range: 17:20-17:30
+        (IdentifierExpression
+          range: 17:24-17:27
+          name: "Foo"
+        )
+        (LiteralExpression
+          range: 17:28-17:29
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:16
+      name: "fixedBoth"
+    )
+    (ConstTypeNode
+      range: 19:18-19:35
+      (ArrayTypeNode
+        range: 19:24-19:35
+        (ConstTypeNode
+          range: 19:25-19:34
+          (NamedTypeNode
+            range: 19:31-19:34
+            name: "Foo"
+          )
+        )
+      )
+    )
+    (ArrayExpression
+      range: 19:38-19:50
+      (NewExpression
+        range: 19:39-19:49
+        (IdentifierExpression
+          range: 19:43-19:46
+          name: "Foo"
+        )
+        (LiteralExpression
+          range: 19:47-19:48
+          kind: INT
+          text: "8"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:13
+      name: "object"
+    )
+    (ConstTypeNode
+      range: 21:15-21:24
+      (NamedTypeNode
+        range: 21:21-21:24
+        name: "Foo"
+      )
+    )
+    (NewExpression
+      range: 21:27-21:37
+      (IdentifierExpression
+        range: 21:31-21:34
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 21:35-21:36
+        kind: INT
+        text: "9"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:15
+      name: "optional"
+    )
+    (UnionTypeNode
+      range: 22:17-22:33
+      (ConstTypeNode
+        range: 22:17-22:26
+        (NamedTypeNode
+          range: 22:23-22:26
+          name: "Foo"
+        )
+      )
+      (NamedTypeNode
+        range: 22:29-22:33
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 22:36-22:42
+      name: "object"
+    )
+  )
+  (VariableDeclaration
+    range: 23:1-23:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 23:7-23:13
+      name: "copied"
+    )
+    (ArrayTypeNode
+      range: 23:15-23:20
+      (NamedTypeNode
+        range: 23:16-23:19
+        name: "Foo"
+      )
+    )
+    (ArrayExpression
+      range: 23:23-23:33
+      (ArraySpread
+        range: 23:24-23:32
+        (IdentifierExpression
+          range: 23:27-23:32
+          name: "fixed"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 25:1-27:2
+    (IdentifierDeclaration
+      range: 25:6-25:14
+      name: "identity"
+    )
+    (FunctionParameter
+      range: 25:15-25:31
+      (IdentifierDeclaration
+        range: 25:15-25:20
+        name: "value"
+      )
+      (ConstTypeNode
+        range: 25:22-25:31
+        (NamedTypeNode
+          range: 25:28-25:31
+          name: "Foo"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (ConstTypeNode
+      range: 25:33-25:42
+      (NamedTypeNode
+        range: 25:39-25:42
+        name: "Foo"
+      )
+    )
+    (BlockStatement
+      range: 25:43-27:2
+      (ReturnStatement
+        range: 26:5-26:18
+        (IdentifierExpression
+          range: 26:12-26:17
+          name: "value"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 29:1-31:2
+    (IdentifierDeclaration
+      range: 29:6-29:13
+      name: "consume"
+    )
+    (FunctionParameter
+      range: 29:14-29:24
+      (IdentifierDeclaration
+        range: 29:14-29:19
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 29:21-29:24
+        name: "any"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 29:26-29:29
+      name: "i32"
+    )
+    (BlockStatement
+      range: 29:30-31:2
+      (ReturnStatement
+        range: 30:5-30:14
+        (LiteralExpression
+          range: 30:12-30:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 33:1-33:25
+    (CallExpression
+      range: 33:1-33:24
+      (IdentifierExpression
+        range: 33:1-33:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 33:7-33:23
+        (SubscriptExpression
+          range: 33:7-33:17
+          (IdentifierExpression
+            range: 33:7-33:14
+            name: "mutable"
+          )
+          (LiteralExpression
+            range: 33:15-33:16
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 33:18-33:23
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 34:1-34:23
+    (CallExpression
+      range: 34:1-34:22
+      (IdentifierExpression
+        range: 34:1-34:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 34:7-34:21
+        (SubscriptExpression
+          range: 34:7-34:15
+          (IdentifierExpression
+            range: 34:7-34:12
+            name: "fixed"
+          )
+          (LiteralExpression
+            range: 34:13-34:14
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 34:16-34:21
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 35:1-35:31
+    (CallExpression
+      range: 35:1-35:30
+      (IdentifierExpression
+        range: 35:1-35:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 35:7-35:29
+        (SubscriptExpression
+          range: 35:7-35:23
+          (IdentifierExpression
+            range: 35:7-35:20
+            name: "fixedElements"
+          )
+          (LiteralExpression
+            range: 35:21-35:22
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 35:24-35:29
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 36:1-36:27
+    (CallExpression
+      range: 36:1-36:26
+      (IdentifierExpression
+        range: 36:1-36:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 36:7-36:25
+        (SubscriptExpression
+          range: 36:7-36:19
+          (IdentifierExpression
+            range: 36:7-36:16
+            name: "fixedBoth"
+          )
+          (LiteralExpression
+            range: 36:17-36:18
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 36:20-36:25
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 37:1-37:21
+    (CallExpression
+      range: 37:1-37:20
+      (IdentifierExpression
+        range: 37:1-37:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 37:7-37:19
+        (IdentifierExpression
+          range: 37:7-37:13
+          name: "object"
+        )
+        (IdentifierExpression
+          range: 37:14-37:19
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 38:1-38:31
+    (CallExpression
+      range: 38:1-38:30
+      (IdentifierExpression
+        range: 38:1-38:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 38:7-38:29
+        (CallExpression
+          range: 38:7-38:23
+          (IdentifierExpression
+            range: 38:7-38:15
+            name: "identity"
+          )
+          (IdentifierExpression
+            range: 38:16-38:22
+            name: "object"
+          )
+        )
+        (IdentifierExpression
+          range: 38:24-38:29
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 39:1-39:24
+    (CallExpression
+      range: 39:1-39:23
+      (IdentifierExpression
+        range: 39:1-39:6
+        name: "print"
+      )
+      (CallExpression
+        range: 39:7-39:22
+        (IdentifierExpression
+          range: 39:7-39:14
+          name: "consume"
+        )
+        (IdentifierExpression
+          range: 39:15-39:21
+          name: "object"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 40:1-40:23
+    (CallExpression
+      range: 40:1-40:22
+      (IdentifierExpression
+        range: 40:1-40:6
+        name: "print"
+      )
+      (CallExpression
+        range: 40:7-40:21
+        (IdentifierExpression
+          range: 40:7-40:14
+          name: "consume"
+        )
+        (IdentifierExpression
+          range: 40:15-40:20
+          name: "fixed"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 41:1-41:26
+    (CallExpression
+      range: 41:1-41:25
+      (IdentifierExpression
+        range: 41:1-41:6
+        name: "print"
+      )
+      (CallExpression
+        range: 41:7-41:24
+        (IdentifierExpression
+          range: 41:7-41:14
+          name: "consume"
+        )
+        (IdentifierExpression
+          range: 41:15-41:23
+          name: "optional"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 42:1-42:27
+    (CallExpression
+      range: 42:1-42:26
+      (IdentifierExpression
+        range: 42:1-42:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 42:7-42:25
+        (SubscriptExpression
+          range: 42:7-42:19
+          (IdentifierExpression
+            range: 42:7-42:16
+            name: "fixedView"
+          )
+          (LiteralExpression
+            range: 42:17-42:18
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 42:20-42:25
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 43:1-43:24
+    (CallExpression
+      range: 43:1-43:23
+      (IdentifierExpression
+        range: 43:1-43:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 43:7-43:22
+        (SubscriptExpression
+          range: 43:7-43:16
+          (IdentifierExpression
+            range: 43:7-43:13
+            name: "copied"
+          )
+          (LiteralExpression
+            range: 43:14-43:15
+            kind: INT
+            text: "0"
+          )
+        )
+        (IdentifierExpression
+          range: 43:17-43:22
+          name: "value"
+        )
+      )
+    )
+  )
+  (ForEachStatement
+    range: 44:1-46:2
+    (IdentifierDeclaration
+      range: 44:6-44:11
+      name: "value"
+    )
+    index: null
+    (IdentifierExpression
+      range: 44:14-44:19
+      name: "fixed"
+    )
+    (BlockStatement
+      range: 44:21-46:2
+      (ExpressionStatement
+        range: 45:5-45:24
+        (CallExpression
+          range: 45:5-45:23
+          (IdentifierExpression
+            range: 45:5-45:10
+            name: "print"
+          )
+          (MemberExpression
+            range: 45:11-45:22
+            (IdentifierExpression
+              range: 45:11-45:16
+              name: "value"
+            )
+            (IdentifierExpression
+              range: 45:17-45:22
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:9-4:13 -> Foo
+  4:9-4:19 -> i32
+  4:9-4:27 -> i32
+  4:14-4:19 -> i32
+  4:22-4:27 -> i32
+  8:24-8:36 -> [Foo]
+  8:25-8:35 -> Foo
+  8:29-8:32 -> Foo
+  8:33-8:34 -> i32
+  9:1-9:8 -> [Foo]
+  9:1-9:11 -> Foo
+  9:1-9:24 -> Foo
+  9:9-9:10 -> i32
+  9:14-9:24 -> Foo
+  9:18-9:21 -> Foo
+  9:22-9:23 -> i32
+  10:1-10:8 -> [Foo]
+  10:1-10:11 -> Foo
+  10:1-10:17 -> i32
+  10:1-10:21 -> i32
+  10:9-10:10 -> i32
+  10:12-10:17 -> i32
+  10:20-10:21 -> i32
+  12:28-12:40 -> [Foo]
+  12:29-12:39 -> Foo
+  12:33-12:36 -> Foo
+  12:37-12:38 -> i32
+  13:1-13:6 -> const [Foo]
+  13:1-13:9 -> Foo
+  13:1-13:15 -> i32
+  13:1-13:19 -> i32
+  13:7-13:8 -> i32
+  13:10-13:15 -> i32
+  13:18-13:19 -> i32
+  14:32-14:39 -> [Foo]
+  16:36-16:48 -> [const Foo]
+  16:37-16:47 -> Foo
+  16:41-16:44 -> Foo
+  16:45-16:46 -> i32
+  17:1-17:14 -> [const Foo]
+  17:1-17:17 -> const Foo
+  17:1-17:30 -> const Foo
+  17:15-17:16 -> i32
+  17:20-17:30 -> Foo
+  17:24-17:27 -> Foo
+  17:28-17:29 -> i32
+  19:38-19:50 -> [const Foo]
+  19:39-19:49 -> Foo
+  19:43-19:46 -> Foo
+  19:47-19:48 -> i32
+  21:27-21:37 -> Foo
+  21:31-21:34 -> Foo
+  21:35-21:36 -> i32
+  22:36-22:42 -> const Foo
+  23:23-23:33 -> [Foo]
+  23:24-23:32 -> Foo
+  23:27-23:32 -> const [Foo]
+  26:12-26:17 -> const Foo
+  30:12-30:13 -> i32
+  33:1-33:6 -> (any) => void
+  33:1-33:24 -> void
+  33:7-33:14 -> [Foo]
+  33:7-33:17 -> Foo
+  33:7-33:23 -> i32
+  33:15-33:16 -> i32
+  33:18-33:23 -> i32
+  34:1-34:6 -> (any) => void
+  34:1-34:22 -> void
+  34:7-34:12 -> const [Foo]
+  34:7-34:15 -> Foo
+  34:7-34:21 -> i32
+  34:13-34:14 -> i32
+  34:16-34:21 -> i32
+  35:1-35:6 -> (any) => void
+  35:1-35:30 -> void
+  35:7-35:20 -> [const Foo]
+  35:7-35:23 -> const Foo
+  35:7-35:29 -> i32
+  35:21-35:22 -> i32
+  35:24-35:29 -> i32
+  36:1-36:6 -> (any) => void
+  36:1-36:26 -> void
+  36:7-36:16 -> const [const Foo]
+  36:7-36:19 -> const Foo
+  36:7-36:25 -> i32
+  36:17-36:18 -> i32
+  36:20-36:25 -> i32
+  37:1-37:6 -> (any) => void
+  37:1-37:20 -> void
+  37:7-37:13 -> const Foo
+  37:7-37:19 -> i32
+  37:14-37:19 -> i32
+  38:1-38:6 -> (any) => void
+  38:1-38:30 -> void
+  38:7-38:15 -> (const Foo) => const Foo
+  38:7-38:23 -> const Foo
+  38:7-38:29 -> i32
+  38:16-38:22 -> const Foo
+  38:24-38:29 -> i32
+  39:1-39:6 -> (any) => void
+  39:1-39:23 -> void
+  39:7-39:14 -> (any) => i32
+  39:7-39:22 -> i32
+  39:15-39:21 -> const Foo
+  40:1-40:6 -> (any) => void
+  40:1-40:22 -> void
+  40:7-40:14 -> (any) => i32
+  40:7-40:21 -> i32
+  40:15-40:20 -> const [Foo]
+  41:1-41:6 -> (any) => void
+  41:1-41:25 -> void
+  41:7-41:14 -> (any) => i32
+  41:7-41:24 -> i32
+  41:15-41:23 -> const Foo | null
+  42:1-42:6 -> (any) => void
+  42:1-42:26 -> void
+  42:7-42:16 -> const [Foo]
+  42:7-42:19 -> Foo
+  42:7-42:25 -> i32
+  42:17-42:18 -> i32
+  42:20-42:25 -> i32
+  43:1-43:6 -> (any) => void
+  43:1-43:23 -> void
+  43:7-43:13 -> [Foo]
+  43:7-43:16 -> Foo
+  43:7-43:22 -> i32
+  43:14-43:15 -> i32
+  43:17-43:22 -> i32
+  44:14-44:19 -> const [Foo]
+  45:5-45:10 -> (any) => void
+  45:5-45:23 -> void
+  45:11-45:16 -> Foo
+  45:11-45:22 -> i32
+  45:17-45:22 -> i32
+
+Resolved types:
+  2:23-2:26 -> i32
+  3:31-3:34 -> i32
+  8:16-8:21 -> [Foo]
+  8:17-8:20 -> Foo
+  12:14-12:25 -> const [Foo]
+  12:20-12:25 -> [Foo]
+  12:21-12:24 -> Foo
+  14:18-14:29 -> const [Foo]
+  14:24-14:29 -> [Foo]
+  14:25-14:28 -> Foo
+  16:22-16:33 -> [const Foo]
+  16:23-16:32 -> const Foo
+  16:29-16:32 -> Foo
+  19:18-19:35 -> const [const Foo]
+  19:24-19:35 -> [const Foo]
+  19:25-19:34 -> const Foo
+  19:31-19:34 -> Foo
+  21:15-21:24 -> const Foo
+  21:21-21:24 -> Foo
+  22:17-22:26 -> const Foo
+  22:17-22:33 -> const Foo | null
+  22:23-22:26 -> Foo
+  22:29-22:33 -> null
+  23:15-23:20 -> [Foo]
+  23:16-23:19 -> Foo
+  25:22-25:31 -> const Foo
+  25:28-25:31 -> Foo
+  25:33-25:42 -> const Foo
+  25:39-25:42 -> Foo
+  29:21-29:24 -> any
+  29:26-29:29 -> i32
+
+Conversions:
+  22:36-22:42 -> const Foo -> const Foo | null
+  39:15-39:21 -> const Foo -> any
+  40:15-40:20 -> const [Foo] -> any
+  41:15-41:23 -> const Foo | null -> any
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:16-2:21 -> var value: i32
+  3:12-5:6 -> constructor(value: i32)
+  3:24-3:29 -> const value: i32
+  8:7-8:14 -> const mutable: [Foo]
+  12:7-12:12 -> const fixed: const [Foo]
+  14:7-14:16 -> const fixedView: const [Foo]
+  16:7-16:20 -> const fixedElements: [const Foo]
+  19:7-19:16 -> const fixedBoth: const [const Foo]
+  21:7-21:13 -> const object: const Foo
+  22:7-22:15 -> const optional: const Foo | null
+  23:7-23:13 -> const copied: [Foo]
+  25:6-25:14 -> identity(const Foo) => const Foo
+  25:15-25:20 -> const value: const Foo
+  29:6-29:13 -> consume(any) => i32
+  29:14-29:19 -> const value: any
+  44:6-44:11 -> const value: Foo
+
+References:
+  4:14-4:19 -> 2:16-2:21
+  4:22-4:27 -> 3:24-3:29
+  8:29-8:32 -> 1:7-1:10
+  9:1-9:8 -> 8:7-8:14
+  9:18-9:21 -> 1:7-1:10
+  10:1-10:8 -> 8:7-8:14
+  10:12-10:17 -> 2:16-2:21
+  12:33-12:36 -> 1:7-1:10
+  13:1-13:6 -> 12:7-12:12
+  13:10-13:15 -> 2:16-2:21
+  14:32-14:39 -> 8:7-8:14
+  16:41-16:44 -> 1:7-1:10
+  17:1-17:14 -> 16:7-16:20
+  17:24-17:27 -> 1:7-1:10
+  19:43-19:46 -> 1:7-1:10
+  21:31-21:34 -> 1:7-1:10
+  22:36-22:42 -> 21:7-21:13
+  23:27-23:32 -> 12:7-12:12
+  26:12-26:17 -> 25:15-25:20
+  33:1-33:6 -> builtin print
+  33:7-33:14 -> 8:7-8:14
+  33:18-33:23 -> 2:16-2:21
+  34:1-34:6 -> builtin print
+  34:7-34:12 -> 12:7-12:12
+  34:16-34:21 -> 2:16-2:21
+  35:1-35:6 -> builtin print
+  35:7-35:20 -> 16:7-16:20
+  35:24-35:29 -> 2:16-2:21
+  36:1-36:6 -> builtin print
+  36:7-36:16 -> 19:7-19:16
+  36:20-36:25 -> 2:16-2:21
+  37:1-37:6 -> builtin print
+  37:7-37:13 -> 21:7-21:13
+  37:14-37:19 -> 2:16-2:21
+  38:1-38:6 -> builtin print
+  38:7-38:15 -> 25:6-25:14
+  38:16-38:22 -> 21:7-21:13
+  38:24-38:29 -> 2:16-2:21
+  39:1-39:6 -> builtin print
+  39:7-39:14 -> 29:6-29:13
+  39:15-39:21 -> 21:7-21:13
+  40:1-40:6 -> builtin print
+  40:7-40:14 -> 29:6-29:13
+  40:15-40:20 -> 12:7-12:12
+  41:1-41:6 -> builtin print
+  41:7-41:14 -> 29:6-29:13
+  41:15-41:23 -> 22:7-22:15
+  42:1-42:6 -> builtin print
+  42:7-42:16 -> 14:7-14:16
+  42:20-42:25 -> 2:16-2:21
+  43:1-43:6 -> builtin print
+  43:7-43:13 -> 23:7-23:13
+  43:17-43:22 -> 2:16-2:21
+  44:14-44:19 -> 12:7-12:12
+  45:5-45:10 -> builtin print
+  45:11-45:16 -> 44:6-44:11
+  45:17-45:22 -> 2:16-2:21
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field fixedView Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field fixedElements Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field fixedBoth Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field object LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  field optional LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  field copied Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method identity(LTest$Foo;)LTest$Foo; flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    ARETURN
+    max stack 1 max locals 1
+  method consume(Ljava/lang/Object;)I flags [PUBLIC, STATIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Foo
+    DUP
+    LDC 1
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    NEW Test$Foo
+    DUP
+    LDC 2
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    DUP_X2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.set(ILjava/lang/Object;)V
+    POP
+    GETSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    LDC 3
+    DUP_X1
+    PUTFIELD Test$Foo.value I
+    POP
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Foo
+    DUP
+    LDC 4
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    LDC 5
+    DUP_X1
+    PUTFIELD Test$Foo.value I
+    POP
+    GETSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    PUTSTATIC Test.fixedView Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Foo
+    DUP
+    LDC 6
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.fixedElements Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC Test.fixedElements Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    NEW Test$Foo
+    DUP
+    LDC 7
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    DUP_X2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.set(ILjava/lang/Object;)V
+    POP
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    NEW Test$Foo
+    DUP
+    LDC 8
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.fixedBoth Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW Test$Foo
+    DUP
+    LDC 9
+    INVOKESPECIAL Test$Foo.<init>(I)V
+    PUTSTATIC Test.object LTest$Foo;
+    GETSTATIC Test.object LTest$Foo;
+    PUTSTATIC Test.optional LTest$Foo;
+    ICONST_0 0
+    ISTORE_0 0
+    GETSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ASTORE_1 1
+    ALOAD_1 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    ISTORE_2 2
+    ILOAD_0 0
+    ILOAD_2 2
+    IADD
+    ISTORE_0 0
+    ILOAD_0 0
+    ANEWARRAY java/lang/Object
+    ASTORE_3 3
+    ICONST_0 0
+    ISTORE 4
+    ALOAD_1 1
+    ALOAD_3 3
+    ILOAD 4
+    ILOAD_2 2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.copyTo([Ljava/lang/Object;II)V
+    ILOAD 4
+    ILOAD_2 2
+    IADD
+    ISTORE 4
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    ALOAD_3 3
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.copied Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.fixedElements Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.fixedBoth Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.object LTest$Foo;
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.object LTest$Foo;
+    INVOKESTATIC Test.identity(LTest$Foo;)LTest$Foo;
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.object LTest$Foo;
+    INVOKESTATIC Test.consume(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKESTATIC Test.consume(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.optional LTest$Foo;
+    INVOKESTATIC Test.consume(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.fixedView Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.copied Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    ASTORE 5
+    ICONST_0 0
+    ISTORE 6
+   L0:
+    ILOAD 6
+    ALOAD 5
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    IF_ICMPGE L1
+    ALOAD 5
+    ILOAD 6
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Foo
+    ASTORE 7
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD 7
+    GETFIELD Test$Foo.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    IINC 6 1
+    GOTO L0
+   L1:
+    RETURN
+    max stack 8 max locals 8
+
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Foo.value I
+    POP
+    RETURN
+    max stack 3 max locals 2
+
+--- OUTPUT ---
+
+3
+5
+7
+8
+9
+9
+1
+1
+1
+3
+5
+5
+

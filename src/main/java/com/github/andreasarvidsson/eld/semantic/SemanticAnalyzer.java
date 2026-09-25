@@ -2,20 +2,25 @@ package com.github.andreasarvidsson.eld.semantic;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.AwaitExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
+import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
@@ -35,11 +40,16 @@ import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
+import com.github.andreasarvidsson.eld.parser.MemberExpression;
+import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import com.github.andreasarvidsson.eld.parser.TryStatement;
 import com.github.andreasarvidsson.eld.parser.ThrowStatement;
+import com.github.andreasarvidsson.eld.parser.ThisExpression;
+import com.github.andreasarvidsson.eld.parser.UnaryExpression;
+import com.github.andreasarvidsson.eld.parser.UnaryOperator;
 import com.github.andreasarvidsson.eld.parser.CatchClause;
 import com.github.andreasarvidsson.eld.parser.Statement;
 import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
@@ -77,6 +87,14 @@ public final class SemanticAnalyzer {
     private boolean analyzingSuperArguments;
     private final IdentityHashMap<FunctionSymbol, List<ReturnStatement>> lambdaReturns =
         new IdentityHashMap<>();
+    private final List<ConstMethodUse> constMethodUses = new ArrayList<>();
+    private final IdentityHashMap<FunctionSymbol, Boolean> mutatingMethods =
+        new IdentityHashMap<>();
+
+    private record ConstMethodUse(
+        MemberExpression expression, FunctionSymbol function
+    ) {
+    }
 
     public SemanticModel analyze(final Program program) {
         final Scope builtinScope = new Scope(null);
@@ -89,8 +107,237 @@ public final class SemanticAnalyzer {
             new SemanticContext(globalScope, null, 0);
 
         analyzeProgram(program, context);
+        validateConstMethodUses();
 
         return model;
+    }
+
+    public void recordConstMethodUse(
+        final MemberExpression expression,
+        final FunctionSymbol function
+    ) {
+        constMethodUses.add(new ConstMethodUse(expression, function));
+    }
+
+    private void validateConstMethodUses() {
+        for (final ConstMethodUse use : constMethodUses) {
+            if (
+                mutatesReceiver(
+                    use.function(),
+                    Collections.newSetFromMap(new IdentityHashMap<>())
+                )
+            ) {
+                throw new SemanticException(
+                    use.expression().range(),
+                    "Cannot call mutating method '%s' through a const object",
+                    use.function().name()
+                );
+            }
+        }
+    }
+
+    private boolean mutatesReceiver(
+        final FunctionSymbol function,
+        final Set<FunctionSymbol> visiting
+    ) {
+        final Boolean cached = mutatingMethods.get(function);
+        if (cached != null) {
+            return cached;
+        }
+        final FunctionDeclaration declaration =
+            model.getFunctionDeclaration(function);
+        if (!visiting.add(function)) {
+            return false;
+        }
+        if (declaration == null) {
+            final InterfaceType owner = interfaceMethodOwner(function);
+            if (owner == null) {
+                visiting.remove(function);
+                return true;
+            }
+            final boolean mutates =
+                classMethods.keySet()
+                    .stream()
+                    .filter(type -> model.isSubtype(type, owner))
+                    .map(type -> classMethod(type, function.name()))
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .anyMatch(method -> mutatesReceiver(method, visiting));
+            visiting.remove(function);
+            mutatingMethods.put(function, mutates);
+            return mutates;
+        }
+        final boolean[] mutates = {false};
+        AstTraversal.walk(declaration.body(), node -> {
+            if (mutates[0]) {
+                return;
+            }
+            if (
+                node instanceof AssignmentExpression assignment
+                    && receiverField(assignment.target())
+            ) {
+                mutates[0] = true;
+                return;
+            }
+            if (
+                node instanceof PostfixExpression postfix
+                    && receiverField(postfix.operand())
+            ) {
+                mutates[0] = true;
+                return;
+            }
+            if (
+                node instanceof UnaryExpression unary
+                    && (unary.operator() == UnaryOperator.INCREMENT
+                        || unary.operator() == UnaryOperator.DECREMENT)
+                    && receiverField(unary.operand())
+            ) {
+                mutates[0] = true;
+                return;
+            }
+            if (node instanceof CallExpression call) {
+                final FunctionSymbol called = receiverMethod(call.callee());
+                if (
+                    (called != null && mutatesReceiver(called, visiting))
+                        || call.arguments()
+                            .stream()
+                            .anyMatch(this::containsThisExpression)
+                ) {
+                    mutates[0] = true;
+                }
+                return;
+            }
+            if (
+                node instanceof ReturnStatement returned
+                    && returned.value() != null
+                    && containsThisExpression(returned.value())
+            ) {
+                mutates[0] = true;
+                return;
+            }
+            if (
+                node instanceof VariableDeclaration variable
+                    && containsThisExpression(variable.initializer())
+            ) {
+                mutates[0] = true;
+            }
+        });
+        final ClassType owner = model.findClassMemberOwner(function);
+        if (owner != null && !mutates[0]) {
+            mutates[0] =
+                classMethods.keySet()
+                    .stream()
+                    .filter(type -> !type.equals(owner))
+                    .filter(type -> model.isSubclassOf(type, owner))
+                    .map(type -> classMethod(type, function.name()))
+                    .filter(Objects::nonNull)
+                    .filter(method -> method != function)
+                    .distinct()
+                    .anyMatch(method -> mutatesReceiver(method, visiting));
+        }
+        visiting.remove(function);
+        mutatingMethods.put(function, mutates[0]);
+        return mutates[0];
+    }
+
+    private @Nullable InterfaceType interfaceMethodOwner(
+        final FunctionSymbol function
+    ) {
+        return model.getInterfaceTypes()
+            .stream()
+            .filter(
+                type -> model.getInterface(type)
+                    .methods()
+                    .values()
+                    .stream()
+                    .anyMatch(method -> method == function)
+            )
+            .findFirst()
+            .orElse(null);
+    }
+
+    private boolean receiverField(final Expression expression) {
+        final Expression target =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        if (target instanceof MemberExpression member) {
+            return isThisExpression(
+                member.target()
+            ) && model.getReference(member.member()) instanceof VariableSymbol;
+        }
+        return target instanceof IdentifierExpression identifier
+            && model.findReference(identifier) instanceof VariableSymbol field
+            && model.findClassMemberOwner(field) != null;
+    }
+
+    private @Nullable FunctionSymbol receiverMethod(
+        final Expression expression
+    ) {
+        final Expression callee =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        if (
+            callee instanceof MemberExpression member
+                && isThisExpression(member.target())
+                && model.getReference(
+                    member.member()
+                ) instanceof FunctionSymbol method
+        ) {
+            return method;
+        }
+        if (
+            callee instanceof IdentifierExpression identifier
+                && model
+                    .findReference(identifier) instanceof FunctionSymbol method
+                && model.findClassMemberOwner(method) != null
+        ) {
+            return method;
+        }
+        return null;
+    }
+
+    private boolean isThisExpression(final Expression expression) {
+        return SemanticAnalyzerExpressionOperations
+            .unwrap(expression) instanceof ThisExpression;
+    }
+
+    private boolean containsThisExpression(final Expression expression) {
+        return containsThisValue(expression);
+    }
+
+    private boolean containsThisValue(final AstNode node) {
+        if (node instanceof ThisExpression) {
+            return true;
+        }
+        // A member value is distinct from the receiver used to obtain it.
+        if (node instanceof MemberExpression) {
+            return false;
+        }
+        for (final var component : node.getClass().getRecordComponents()) {
+            try {
+                final Object value = component.getAccessor().invoke(node);
+                if (
+                    value instanceof AstNode child && containsThisValue(child)
+                ) {
+                    return true;
+                }
+                if (value instanceof Iterable<?> children) {
+                    for (final Object child : children) {
+                        if (
+                            child instanceof AstNode ast
+                                && containsThisValue(ast)
+                        ) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (final ReflectiveOperationException exception) {
+                throw new IllegalStateException(
+                    "Cannot inspect receiver escape",
+                    exception
+                );
+            }
+        }
+        return false;
     }
 
     private void analyzeProgram(
@@ -283,13 +530,13 @@ public final class SemanticAnalyzer {
                 .stream()
                 .allMatch(SemanticAnalyzer::isThrowable);
         }
-        return type instanceof InterfaceType javaType
+        return ConstType.unwrap(type) instanceof InterfaceType javaType
             && javaType.javaClass() != null
             && Throwable.class.isAssignableFrom(javaType.javaClass());
     }
 
     private static void requireCatchType(final Type type, final Range range) {
-        if (!(type instanceof InterfaceType)) {
+        if (!(ConstType.unwrap(type) instanceof InterfaceType)) {
             throw new SemanticException(
                 range,
                 "Expected a JVM throwable type, found %s",

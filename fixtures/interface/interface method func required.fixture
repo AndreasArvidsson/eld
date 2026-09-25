@@ -2,7 +2,6 @@ interface Operation {
     apply(value: i32) i32;
 }
 
-
 --- TOKENS ---
 
 INTERFACE (1:1-1:10)

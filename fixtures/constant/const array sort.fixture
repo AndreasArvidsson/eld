@@ -1,0 +1,83 @@
+const values: const [i32] = [2, 1];
+values.sort();
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+CONST (1:15-1:20)
+LEFT_BRACKET (1:21-1:22)
+IDENTIFIER "i32" (1:22-1:25)
+RIGHT_BRACKET (1:25-1:26)
+EQUAL (1:27-1:28)
+LEFT_BRACKET (1:29-1:30)
+INTEGER_LITERAL "2" (1:30-1:31)
+COMMA (1:31-1:32)
+INTEGER_LITERAL "1" (1:33-1:34)
+RIGHT_BRACKET (1:34-1:35)
+SEMICOLON (1:35-1:36)
+IDENTIFIER "values" (2:1-2:7)
+DOT (2:7-2:8)
+IDENTIFIER "sort" (2:8-2:12)
+LEFT_PAREN (2:12-2:13)
+RIGHT_PAREN (2:13-2:14)
+SEMICOLON (2:14-2:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:15
+  (VariableDeclaration
+    range: 1:1-1:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (ConstTypeNode
+      range: 1:15-1:26
+      (ArrayTypeNode
+        range: 1:21-1:26
+        (NamedTypeNode
+          range: 1:22-1:25
+          name: "i32"
+        )
+      )
+    )
+    (ArrayExpression
+      range: 1:29-1:35
+      (LiteralExpression
+        range: 1:30-1:31
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:33-1:34
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:15
+    (CallExpression
+      range: 2:1-2:14
+      (MemberExpression
+        range: 2:1-2:12
+        (IdentifierExpression
+          range: 2:1-2:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 2:8-2:12
+          name: "sort"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot sort a const array at 2:1-2:12

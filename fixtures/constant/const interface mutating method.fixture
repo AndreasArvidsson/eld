@@ -1,0 +1,226 @@
+interface Counter {
+    func increment() i32;
+}
+class Value implements Counter {
+    var value = 0;
+    public func increment() i32 {
+        this.value++;
+        return this.value;
+    }
+}
+const value: const Counter = new Value();
+print(value.increment());
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Counter" (1:11-1:18)
+LEFT_BRACE (1:19-1:20)
+FUNC (2:5-2:9)
+IDENTIFIER "increment" (2:10-2:19)
+LEFT_PAREN (2:19-2:20)
+RIGHT_PAREN (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+SEMICOLON (2:25-2:26)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Value" (4:7-4:12)
+IMPLEMENTS (4:13-4:23)
+IDENTIFIER "Counter" (4:24-4:31)
+LEFT_BRACE (4:32-4:33)
+VAR (5:5-5:8)
+IDENTIFIER "value" (5:9-5:14)
+EQUAL (5:15-5:16)
+INTEGER_LITERAL "0" (5:17-5:18)
+SEMICOLON (5:18-5:19)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "increment" (6:17-6:26)
+LEFT_PAREN (6:26-6:27)
+RIGHT_PAREN (6:27-6:28)
+IDENTIFIER "i32" (6:29-6:32)
+LEFT_BRACE (6:33-6:34)
+THIS (7:9-7:13)
+DOT (7:13-7:14)
+IDENTIFIER "value" (7:14-7:19)
+PLUS_PLUS (7:19-7:21)
+SEMICOLON (7:21-7:22)
+RETURN (8:9-8:15)
+THIS (8:16-8:20)
+DOT (8:20-8:21)
+IDENTIFIER "value" (8:21-8:26)
+SEMICOLON (8:26-8:27)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+CONST (11:1-11:6)
+IDENTIFIER "value" (11:7-11:12)
+COLON (11:12-11:13)
+CONST (11:14-11:19)
+IDENTIFIER "Counter" (11:20-11:27)
+EQUAL (11:28-11:29)
+NEW (11:30-11:33)
+IDENTIFIER "Value" (11:34-11:39)
+LEFT_PAREN (11:39-11:40)
+RIGHT_PAREN (11:40-11:41)
+SEMICOLON (11:41-11:42)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "value" (12:7-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "increment" (12:13-12:22)
+LEFT_PAREN (12:22-12:23)
+RIGHT_PAREN (12:23-12:24)
+RIGHT_PAREN (12:24-12:25)
+SEMICOLON (12:25-12:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:26
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:18
+      name: "Counter"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:26
+      (IdentifierDeclaration
+        range: 2:10-2:19
+        name: "increment"
+      )
+      (NamedTypeNode
+        range: 2:22-2:25
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-10:2
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "Value"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:24-4:31
+      name: "Counter"
+    )
+    (MemberDeclaration
+      range: 5:5-5:19
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 5:5-5:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:9-5:14
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:17-5:18
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-9:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-9:6
+        (IdentifierDeclaration
+          range: 6:17-6:26
+          name: "increment"
+        )
+        (NamedTypeNode
+          range: 6:29-6:32
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:33-9:6
+          (ExpressionStatement
+            range: 7:9-7:22
+            (PostfixExpression
+              range: 7:9-7:21
+              (MemberExpression
+                range: 7:9-7:19
+                (ThisExpression
+                  range: 7:9-7:13
+                )
+                (IdentifierExpression
+                  range: 7:14-7:19
+                  name: "value"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+          (ReturnStatement
+            range: 8:9-8:27
+            (MemberExpression
+              range: 8:16-8:26
+              (ThisExpression
+                range: 8:16-8:20
+              )
+              (IdentifierExpression
+                range: 8:21-8:26
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "value"
+    )
+    (ConstTypeNode
+      range: 11:14-11:27
+      (NamedTypeNode
+        range: 11:20-11:27
+        name: "Counter"
+      )
+    )
+    (NewExpression
+      range: 11:30-11:41
+      (IdentifierExpression
+        range: 11:34-11:39
+        name: "Value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:26
+    (CallExpression
+      range: 12:1-12:25
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:24
+        (MemberExpression
+          range: 12:7-12:22
+          (IdentifierExpression
+            range: 12:7-12:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 12:13-12:22
+            name: "increment"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot call mutating method 'increment' through a const object at 12:7-12:22

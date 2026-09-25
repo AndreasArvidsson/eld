@@ -1,0 +1,116 @@
+class Foo {
+    public var value = 1;
+}
+
+const foo: const Foo = new Foo();
+foo.value = 2;
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "1" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "foo" (5:7-5:10)
+COLON (5:10-5:11)
+CONST (5:12-5:17)
+IDENTIFIER "Foo" (5:18-5:21)
+EQUAL (5:22-5:23)
+NEW (5:24-5:27)
+IDENTIFIER "Foo" (5:28-5:31)
+LEFT_PAREN (5:31-5:32)
+RIGHT_PAREN (5:32-5:33)
+SEMICOLON (5:33-5:34)
+IDENTIFIER "foo" (6:1-6:4)
+DOT (6:4-6:5)
+IDENTIFIER "value" (6:5-6:10)
+EQUAL (6:11-6:12)
+INTEGER_LITERAL "2" (6:13-6:14)
+SEMICOLON (6:14-6:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:15
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "foo"
+    )
+    (ConstTypeNode
+      range: 5:12-5:21
+      (NamedTypeNode
+        range: 5:18-5:21
+        name: "Foo"
+      )
+    )
+    (NewExpression
+      range: 5:24-5:33
+      (IdentifierExpression
+        range: 5:28-5:31
+        name: "Foo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:15
+    (AssignmentExpression
+      range: 6:1-6:14
+      (MemberExpression
+        range: 6:1-6:10
+        (IdentifierExpression
+          range: 6:1-6:4
+          name: "foo"
+        )
+        (IdentifierExpression
+          range: 6:5-6:10
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 6:13-6:14
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot modify a member through a const object at 6:1-6:10

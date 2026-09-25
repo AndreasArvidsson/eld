@@ -269,14 +269,15 @@ public final class SemanticAnalyzerObjects {
         final Range range
     ) {
         final Map<String, Symbol> result = new LinkedHashMap<>();
+        final Type spreadSource = ConstType.unwrap(source);
         if (
-            source instanceof InterfaceType contract
+            spreadSource instanceof InterfaceType contract
                 && contract.javaClass() == null
         ) {
             result.putAll(model.getInterface(contract).fields());
             result.putAll(model.getInterface(contract).methods());
         }
-        else if (source instanceof ClassType cls) {
+        else if (spreadSource instanceof ClassType cls) {
             for (ClassType current = cls; current != null; current =
                 model.getSuperclass(current)) {
                 for (final FunctionSymbol method : analyzer.classMethods()

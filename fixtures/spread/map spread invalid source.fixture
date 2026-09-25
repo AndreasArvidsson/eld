@@ -1,6 +1,5 @@
 const value = {...10};
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

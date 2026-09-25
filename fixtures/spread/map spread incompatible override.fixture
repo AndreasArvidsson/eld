@@ -1,7 +1,6 @@
 const old = {"value": 1};
 const value = {...old, "value": "a"};
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

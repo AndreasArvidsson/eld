@@ -2,7 +2,6 @@ const old: Map<string, i64> = {"value": 7};
 const copy: Map<string, i64> = {...old, "other": 9};
 print(copy);
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

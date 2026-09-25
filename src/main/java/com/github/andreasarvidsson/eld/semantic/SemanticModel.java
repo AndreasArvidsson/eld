@@ -24,6 +24,7 @@ import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
+import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 
 import java.util.Set;
 import java.util.Collections;
@@ -60,6 +61,8 @@ public final class SemanticModel {
     private final IdentityHashMap<IdentifierExpression, Symbol> references =
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<FunctionSymbol, FunctionDeclaration> functionDeclarations =
         new IdentityHashMap<>();
     private final IdentityHashMap<IdentifierDeclaration, IdentifierDeclaration> namedArguments =
         new IdentityHashMap<>();
@@ -104,6 +107,19 @@ public final class SemanticModel {
 
     public boolean isAsync(final FunctionSymbol function) {
         return asyncResultTypes.containsKey(function);
+    }
+
+    public void setFunctionDeclaration(
+        final FunctionSymbol function,
+        final FunctionDeclaration declaration
+    ) {
+        functionDeclarations.put(function, declaration);
+    }
+
+    public @Nullable FunctionDeclaration getFunctionDeclaration(
+        final FunctionSymbol function
+    ) {
+        return functionDeclarations.get(function);
     }
 
     public void setPromiseMethod(
@@ -247,6 +263,12 @@ public final class SemanticModel {
         if (source.equals(target)) {
             return true;
         }
+        if (target instanceof ConstType constant) {
+            return isSubtype(ConstType.unwrap(source), constant.type());
+        }
+        if (source instanceof ConstType) {
+            return false;
+        }
         if (
             source instanceof ClassType type && target instanceof ClassType base
         ) {
@@ -287,7 +309,9 @@ public final class SemanticModel {
     }
 
     public boolean hasNaturalOrder(final Type type) {
-        return JavaTypes.hasNaturalOrder(type) || hasNaturalOrder(type, type);
+        final Type unqualified = ConstType.unwrap(type);
+        return JavaTypes.hasNaturalOrder(unqualified)
+            || hasNaturalOrder(unqualified, unqualified);
     }
 
     private boolean hasNaturalOrder(final Type type, final Type element) {

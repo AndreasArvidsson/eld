@@ -2,7 +2,6 @@ const base = {"first": 1, "second": 2};
 const nested = {...{...base, "second": 3}, "third": 4};
 print(nested);
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

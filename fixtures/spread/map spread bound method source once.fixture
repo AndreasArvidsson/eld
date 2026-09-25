@@ -8,7 +8,6 @@ const copy = {...source()};
 print(calls);
 print(copy.get("value"));
 
-
 --- TOKENS ---
 
 VAR (1:1-1:4)

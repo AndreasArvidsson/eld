@@ -111,7 +111,7 @@ public final class SemanticAnalyzerStatements {
             );
         final Type iterableType =
             analyzer.analyzeExpression(statement.iterable(), loopContext);
-        if (!(iterableType instanceof ArrayType arrayType)) {
+        if (!(ConstType.unwrap(iterableType) instanceof ArrayType arrayType)) {
             throw new SemanticException(
                 statement.iterable().range(),
                 "For-each iterable must be an array, found %s",
@@ -823,6 +823,7 @@ public final class SemanticAnalyzerStatements {
 
         destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
+        model.setFunctionDeclaration(symbol, declaration);
         if (declaration.async()) {
             model.setAsyncResultType(symbol, returnType);
         }

@@ -1,13 +1,15 @@
 package com.github.andreasarvidsson.eld.semantic;
 
-import java.math.BigInteger;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -51,6 +53,54 @@ import com.github.andreasarvidsson.eld.parser.UnaryExpression;
 import com.github.andreasarvidsson.eld.parser.Visibility;
 
 public final class SemanticAnalyzerExpressions {
+    private static final Set<String> MUTATING_COLLECTION_METHODS =
+        Set.of(
+            "add",
+            "addAll",
+            "clear",
+            "compute",
+            "computeIfAbsent",
+            "computeIfPresent",
+            "merge",
+            "offer",
+            "offerFirst",
+            "offerLast",
+            "poll",
+            "pollFirst",
+            "pollLast",
+            "pop",
+            "push",
+            "put",
+            "putAll",
+            "putIfAbsent",
+            "remove",
+            "removeAll",
+            "removeFirst",
+            "removeIf",
+            "removeLast",
+            "replace",
+            "replaceAll",
+            "retainAll",
+            "set",
+            "sort"
+        );
+    private static final Set<String> COLLECTION_VIEW_METHODS =
+        Set.of(
+            "descendingMap",
+            "descendingSet",
+            "entrySet",
+            "headMap",
+            "headSet",
+            "keySet",
+            "navigableKeySet",
+            "reversed",
+            "subList",
+            "subMap",
+            "subSet",
+            "tailMap",
+            "tailSet",
+            "values"
+        );
     private final SemanticAnalyzer analyzer;
     private final SemanticModel model;
     private final SemanticAnalyzerExpectedExpressions expectedExpressions;
@@ -152,7 +202,8 @@ public final class SemanticAnalyzerExpressions {
                 finally {
                     analyzingCallee = memberCallee;
                 }
-                if (target instanceof PromiseSourceType source) {
+                final Type memberTarget = ConstType.unwrap(target);
+                if (memberTarget instanceof PromiseSourceType source) {
                     final String name = member.member().name();
                     if (
                         eldApiMethod(PromiseSource.class, name, false) == null
@@ -222,7 +273,7 @@ public final class SemanticAnalyzerExpressions {
                     model.setExpressionType(member.member(), symbol.type());
                     yield symbol.type();
                 }
-                if (target instanceof PromiseType promise) {
+                if (memberTarget instanceof PromiseType promise) {
                     final String name = member.member().name();
                     if (eldApiMethod(EldPromise.class, name, false) == null) {
                         throw new SemanticException(
@@ -237,9 +288,15 @@ public final class SemanticAnalyzerExpressions {
                     );
                 }
                 if (
-                    target instanceof ArrayType array
+                    memberTarget instanceof ArrayType array
                         && member.member().name().equals("sort")
                 ) {
+                    if (target instanceof ConstType) {
+                        throw new SemanticException(
+                            member.range(),
+                            "Cannot sort a const array"
+                        );
+                    }
                     final Type element = array.elementType();
                     if (!analyzingCallee) {
                         throw new SemanticException(
@@ -272,14 +329,14 @@ public final class SemanticAnalyzerExpressions {
                     yield BuiltinFunctionType.ARRAY_SORT;
                 }
                 final InterfaceType javaTarget =
-                    target instanceof InterfaceType contract
+                    memberTarget instanceof InterfaceType contract
                         && contract.javaClass() != null
                             ? contract
-                            : JavaTypes.boxedClass(target) != null
+                            : JavaTypes.boxedClass(memberTarget) != null
                                 ? new InterfaceType(
-                                    target.toString(),
+                                    memberTarget.toString(),
                                     List.of(),
-                                    JavaTypes.boxedClass(target)
+                                    JavaTypes.boxedClass(memberTarget)
                                 )
                                 : null;
                 if (javaTarget != null) {
@@ -349,12 +406,24 @@ public final class SemanticAnalyzerExpressions {
                         }
                     }
                     final JavaMethodSymbol symbol = candidates.getFirst();
-                    model.setMemberOwner(member, target);
+                    if (
+                        target instanceof ConstType
+                            && mutatesCollection(javaTarget, symbol.method())
+                    ) {
+                        throw new SemanticException(
+                            member.range(),
+                            "Cannot call mutating method '%s' through a const collection",
+                            symbol.name()
+                        );
+                    }
+                    model.setMemberOwner(member, memberTarget);
                     model.setReference(member.member(), symbol);
-                    model.setExpressionType(member.member(), symbol.type());
-                    yield symbol.type();
+                    final FunctionType exposedType =
+                        collectionMethodType(target, symbol);
+                    model.setExpressionType(member.member(), exposedType);
+                    yield exposedType;
                 }
-                if (target instanceof InterfaceType contract) {
+                if (memberTarget instanceof InterfaceType contract) {
                     final InterfaceContract members =
                         model.getInterface(contract);
                     Symbol symbol =
@@ -378,9 +447,15 @@ public final class SemanticAnalyzerExpressions {
                     model.setMemberOwner(member, contract);
                     model.setReference(member.member(), symbol);
                     model.setExpressionType(member.member(), symbol.type());
+                    if (
+                        target instanceof ConstType
+                            && symbol instanceof FunctionSymbol function
+                    ) {
+                        analyzer.recordConstMethodUse(member, function);
+                    }
                     yield symbol.type();
                 }
-                if (!(target instanceof ClassType classType)) {
+                if (!(memberTarget instanceof ClassType classType)) {
                     throw new SemanticException(
                         member.target().range(),
                         "Member access requires a class instance"
@@ -437,6 +512,12 @@ public final class SemanticAnalyzerExpressions {
                 }
                 model.setReference(member.member(), symbol);
                 model.setExpressionType(member.member(), symbol.type());
+                if (
+                    target instanceof ConstType
+                        && symbol instanceof FunctionSymbol function
+                ) {
+                    analyzer.recordConstMethodUse(member, function);
+                }
                 yield symbol.type();
             }
             case NewExpression creation -> {
@@ -688,7 +769,9 @@ public final class SemanticAnalyzerExpressions {
             case ArraySpread spread -> {
                 final Type source =
                     analyzeExpression(spread.expression(), context);
-                if (!(source instanceof ArrayType sourceArray)) {
+                if (
+                    !(ConstType.unwrap(source) instanceof ArrayType sourceArray)
+                ) {
                     throw new SemanticException(
                         spread.range(),
                         "Array spread requires an Eld array, found %s",
@@ -734,6 +817,40 @@ public final class SemanticAnalyzerExpressions {
 
         model.setExpressionType(expression, type);
 
+        return type;
+    }
+
+    private static boolean mutatesCollection(
+        final InterfaceType target,
+        final Method method
+    ) {
+        final Class<?> javaClass = Objects.requireNonNull(target.javaClass());
+        return (Collection.class.isAssignableFrom(javaClass)
+            || Map.class.isAssignableFrom(javaClass))
+            && MUTATING_COLLECTION_METHODS.contains(method.getName());
+    }
+
+    private static FunctionType collectionMethodType(
+        final Type target,
+        final JavaMethodSymbol method
+    ) {
+        final FunctionType type = method.type();
+        final Type returned = type.returnType();
+        if (
+            target instanceof ConstType
+                && COLLECTION_VIEW_METHODS.contains(method.name())
+                && ConstType.unwrap(returned) instanceof InterfaceType view
+                && view.javaClass() != null
+                && (Collection.class.isAssignableFrom(view.javaClass())
+                    || Map.class.isAssignableFrom(view.javaClass()))
+        ) {
+            return new FunctionType(
+                type.parameterTypes(),
+                returned instanceof ConstType
+                    ? returned
+                    : new ConstType(returned)
+            );
+        }
         return type;
     }
 
@@ -1315,7 +1432,7 @@ public final class SemanticAnalyzerExpressions {
         }
         final Expression values = call.arguments().getFirst();
         final Type valuesType = analyzeExpression(values, context);
-        if (!(valuesType instanceof ArrayType array)) {
+        if (!(ConstType.unwrap(valuesType) instanceof ArrayType array)) {
             throw new SemanticException(
                 values.range(),
                 "Promise.all expects an array, found %s",

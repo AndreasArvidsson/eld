@@ -2,7 +2,6 @@ func effect() { print("effect"); }
 const old = {"value": 7};
 const copy = {"value": effect(), ...old};
 
-
 --- TOKENS ---
 
 FUNC (1:1-1:5)

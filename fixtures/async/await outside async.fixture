@@ -2,7 +2,6 @@ func run() {
     await 42;
 }
 
-
 --- TOKENS ---
 
 FUNC (1:1-1:5)

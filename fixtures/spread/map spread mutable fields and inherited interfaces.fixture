@@ -4,7 +4,6 @@ copied.put("value", 3);
 print(original);
 print(copied);
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

@@ -45,6 +45,7 @@ import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
 import com.github.andreasarvidsson.eld.semantic.ClassType;
+import com.github.andreasarvidsson.eld.semantic.ConstType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceContract;
 import com.github.andreasarvidsson.eld.semantic.VariableSymbol;
@@ -2728,9 +2729,10 @@ public final class BytecodeGenerator {
     }
 
     private String typeOwner(final Type type) {
-        return type instanceof ClassType cls
+        final Type unqualified = ConstType.unwrap(type);
+        return unqualified instanceof ClassType cls
             ? classOwner(cls)
-            : interfaceOwner((InterfaceType) type);
+            : interfaceOwner((InterfaceType) unqualified);
     }
 
     private @Nullable Type generatedReferenceType(final String owner) {
@@ -2785,6 +2787,7 @@ public final class BytecodeGenerator {
                 "Lcom/github/andreasarvidsson/eld/runtime/EldPromise;";
             case PromiseSourceType _ ->
                 "Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;";
+            case ConstType constant -> descriptor(constant.type());
         };
     }
 
@@ -2807,6 +2810,9 @@ public final class BytecodeGenerator {
     }
 
     private String genericSignature(final Type type) {
+        if (type instanceof ConstType constant) {
+            return genericSignature(constant.type());
+        }
         if (type == BuiltinType.VOID) {
             return "Ljava/lang/Void;";
         }
@@ -2848,6 +2854,9 @@ public final class BytecodeGenerator {
     }
 
     private @Nullable String fieldSignature(final Type type) {
+        if (type instanceof ConstType constant) {
+            return fieldSignature(constant.type());
+        }
         if (
             type instanceof InterfaceType contract
                 && !contract.typeArguments().isEmpty()
@@ -2978,7 +2987,7 @@ public final class BytecodeGenerator {
     }
 
     private static @Nullable String boxedOwner(final Type type) {
-        if (!(type instanceof BuiltinType builtin)) {
+        if (!(ConstType.unwrap(type) instanceof BuiltinType builtin)) {
             return null;
         }
         return switch (builtin) {
@@ -2995,14 +3004,15 @@ public final class BytecodeGenerator {
     }
 
     private String printArgumentDescriptor(final Type type) {
+        final Type unqualified = ConstType.unwrap(type);
         if (
-            type instanceof ArrayType || type instanceof TupleType
-                || type instanceof FunctionType
-                || type instanceof BuiltinFunctionType
-                || type instanceof ClassType
-                || type instanceof InterfaceType
-                || type instanceof PromiseType
-                || type instanceof PromiseSourceType
+            unqualified instanceof ArrayType || unqualified instanceof TupleType
+                || unqualified instanceof FunctionType
+                || unqualified instanceof BuiltinFunctionType
+                || unqualified instanceof ClassType
+                || unqualified instanceof InterfaceType
+                || unqualified instanceof PromiseType
+                || unqualified instanceof PromiseSourceType
         ) {
             return "Ljava/lang/Object;";
         }
@@ -3027,17 +3037,23 @@ public final class BytecodeGenerator {
     }
 
     private static boolean reference(final Type type) {
-        return type instanceof UnionType || type instanceof BuiltinFunctionType
-            || type instanceof ClassType
-            || type instanceof InterfaceType
-            || type instanceof ArrayType
-            || type instanceof TupleType
-            || type instanceof FunctionType
-            || type instanceof PromiseType
-            || type instanceof PromiseSourceType
-            || type == BuiltinType.STRING
-            || type == BuiltinType.NULL
-            || type == BuiltinType.ANY;
+        final Type unqualified = ConstType.unwrap(type);
+        return unqualified instanceof UnionType
+            || unqualified instanceof BuiltinFunctionType
+            || unqualified instanceof ClassType
+            || unqualified instanceof InterfaceType
+            || unqualified instanceof ArrayType
+            || unqualified instanceof TupleType
+            || unqualified instanceof FunctionType
+            || unqualified instanceof PromiseType
+            || unqualified instanceof PromiseSourceType
+            || unqualified == BuiltinType.STRING
+            || unqualified == BuiltinType.NULL
+            || unqualified == BuiltinType.ANY;
+    }
+
+    private static ArrayType arrayType(final Type type) {
+        return (ArrayType) ConstType.unwrap(type);
     }
 
     private Opcode opcode(final Type type, final Opcode base) {
@@ -3426,7 +3442,7 @@ public final class BytecodeGenerator {
             final Runnable emitValue = () -> {
                 expression(expression);
                 final ArrayType array =
-                    (ArrayType) semanticModel.getExpressionType(expression);
+                    arrayType(semanticModel.getExpressionType(expression));
                 arrayCall(array.elementType(), RuntimeAbi.ArrayMethod.COPY);
             };
             if (persistent) {
@@ -5154,7 +5170,8 @@ public final class BytecodeGenerator {
         }
 
         private void readObject(final Type type) {
-            if (type instanceof ArrayType array) {
+            final Type unqualified = ConstType.unwrap(type);
+            if (unqualified instanceof ArrayType array) {
                 method.ldc(
                     RuntimeAbi.array(array.elementType()).elementDescriptor
                 );
@@ -5177,7 +5194,7 @@ public final class BytecodeGenerator {
             final String owner = boxedOwner(type);
             if (owner != null) {
                 method.checkcast(classDesc(owner));
-                final String valueMethod = switch ((BuiltinType) type) {
+                final String valueMethod = switch ((BuiltinType) unqualified) {
                     case I8 -> "byteValue";
                     case I16 -> "shortValue";
                     case I32 -> "intValue";
@@ -6124,8 +6141,7 @@ public final class BytecodeGenerator {
                     (MemberExpression) unwrap(call.callee());
                 expression(member.target());
                 final ArrayType array =
-                    (ArrayType) semanticModel
-                        .getExpressionType(member.target());
+                    arrayType(semanticModel.getExpressionType(member.target()));
                 method.invoke(
                     INVOKEVIRTUAL,
                     classDesc(RuntimeAbi.array(array.elementType()).owner),
@@ -6587,8 +6603,7 @@ public final class BytecodeGenerator {
 
         private void spreadArray(final ArrayExpression array) {
             final Type element =
-                ((ArrayType) semanticModel.getExpressionType(array))
-                    .elementType();
+                arrayType(semanticModel.getExpressionType(array)).elementType();
             final RuntimeAbi.ArrayKind runtime = RuntimeAbi.array(element);
             final List<Integer> values = new ArrayList<>();
             final List<Integer> lengths = new ArrayList<>();
@@ -6601,9 +6616,9 @@ public final class BytecodeGenerator {
                 final int value = nextLocal;
                 if (entry instanceof ArraySpread spread) {
                     final Type sourceElement =
-                        ((ArrayType) semanticModel
-                            .getExpressionType(spread.expression()))
-                            .elementType();
+                        arrayType(
+                            semanticModel.getExpressionType(spread.expression())
+                        ).elementType();
                     expression(spread.expression());
                     // Snapshot only when later expressions might mutate the contributed range.
                     if (
@@ -6663,9 +6678,9 @@ public final class BytecodeGenerator {
                 final Expression entry = array.elements().get(i);
                 if (entry instanceof ArraySpread spread) {
                     final Type sourceElement =
-                        ((ArrayType) semanticModel
-                            .getExpressionType(spread.expression()))
-                            .elementType();
+                        arrayType(
+                            semanticModel.getExpressionType(spread.expression())
+                        ).elementType();
                     final RuntimeAbi.ArrayKind sourceRuntime =
                         RuntimeAbi.array(sourceElement);
                     if (
@@ -6777,8 +6792,7 @@ public final class BytecodeGenerator {
                 return;
             }
             final Type element =
-                ((ArrayType) semanticModel.getExpressionType(array))
-                    .elementType();
+                arrayType(semanticModel.getExpressionType(array)).elementType();
             final RuntimeAbi.ArrayKind runtime = RuntimeAbi.array(element);
             method.new_(classDesc(runtime.owner));
             method.dup();
@@ -6932,8 +6946,7 @@ public final class BytecodeGenerator {
                 expression(end);
             }
             arrayCall(
-                ((ArrayType) semanticModel.getExpressionType(slice))
-                    .elementType(),
+                arrayType(semanticModel.getExpressionType(slice)).elementType(),
                 start == null
                     ? (end == null
                         ? RuntimeAbi.ArrayMethod.COPY

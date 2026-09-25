@@ -1,7 +1,6 @@
 const old: Map<string, i32> | null = null;
 const value = {...old};
 
-
 --- TOKENS ---
 
 CONST (1:1-1:6)

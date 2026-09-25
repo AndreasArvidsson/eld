@@ -1,0 +1,107 @@
+const values: const Map<string, i32> = {"value": 1};
+values.put("other", 2);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+CONST (1:15-1:20)
+IDENTIFIER "Map" (1:21-1:24)
+LESS (1:24-1:25)
+IDENTIFIER "string" (1:25-1:31)
+COMMA (1:31-1:32)
+IDENTIFIER "i32" (1:33-1:36)
+GREATER (1:36-1:37)
+EQUAL (1:38-1:39)
+LEFT_BRACE (1:40-1:41)
+STRING_LITERAL "\"value\"" (1:41-1:48)
+COLON (1:48-1:49)
+INTEGER_LITERAL "1" (1:50-1:51)
+RIGHT_BRACE (1:51-1:52)
+SEMICOLON (1:52-1:53)
+IDENTIFIER "values" (2:1-2:7)
+DOT (2:7-2:8)
+IDENTIFIER "put" (2:8-2:11)
+LEFT_PAREN (2:11-2:12)
+STRING_LITERAL "\"other\"" (2:12-2:19)
+COMMA (2:19-2:20)
+INTEGER_LITERAL "2" (2:21-2:22)
+RIGHT_PAREN (2:22-2:23)
+SEMICOLON (2:23-2:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:24
+  (VariableDeclaration
+    range: 1:1-1:53
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (ConstTypeNode
+      range: 1:15-1:37
+      (NamedTypeNode
+        range: 1:21-1:37
+        name: "Map"
+        (NamedTypeNode
+          range: 1:25-1:31
+          name: "string"
+        )
+        (NamedTypeNode
+          range: 1:33-1:36
+          name: "i32"
+        )
+      )
+    )
+    (MapExpression
+      range: 1:40-1:52
+      (MapEntry
+        range: 1:41-1:51
+        (LiteralExpression
+          range: 1:41-1:48
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 1:50-1:51
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:24
+    (CallExpression
+      range: 2:1-2:23
+      (MemberExpression
+        range: 2:1-2:11
+        (IdentifierExpression
+          range: 2:1-2:7
+          name: "values"
+        )
+        (IdentifierExpression
+          range: 2:8-2:11
+          name: "put"
+        )
+      )
+      (LiteralExpression
+        range: 2:12-2:19
+        kind: STRING
+        text: "\"other\""
+      )
+      (LiteralExpression
+        range: 2:21-2:22
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot call mutating method 'put' through a const collection at 2:1-2:11

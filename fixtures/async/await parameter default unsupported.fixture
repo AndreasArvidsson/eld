@@ -4,7 +4,6 @@ async func run(value: i32 = await Promise.resolve(1)) {
 
 ignore run();
 
-
 --- TOKENS ---
 
 ASYNC (1:1-1:6)

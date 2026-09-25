@@ -183,30 +183,19 @@ public const foo = 0;
 protected const bar = 0;
 ```
 
-### Immutable collections and objects
-
-Objects: `const foo: const Foo = new Foo();`
-
-| Type                | Array mutable? | Elements mutable through array? |
-| ------------------- | -------------: | ------------------------------: |
-| `[Foo]`             |            yes |                             yes |
-| `const [Foo]`       |             no |                             yes |
-| `[const Foo]`       |            yes |                              no |
-| `const [const Foo]` |             no |                              no |
-
 ### Miscellaneous
 
 - tuple unpacking:
   - const (name, value) = run();
   - (name, \_) = run(); // discard second argument
   - (name) = run(); // ambiguous/wrong: looks like ordinary assignment
+  - `_` should be a standardized DiscardPattern
 
-  Pattern
-  IdentifierPattern
-  DiscardPattern
-  TuplePattern
-
-- Immutable collections and objects
+- Constant functions. Apply to normal functions and methods in classes. A constant function are not allowed to modify any data outside of local variables to the function. Can't modify variables in closure or in this. Allowed to read from them though. This is like a consequence free function.
+  `const funk() {}`
+- final methods. This is the same as in Java where you cannot derive/override the function in a deriving class.
+  `final funk() {}`
+  A method can be both const and final
 
 - Export & import
 - Ubiquitous toString, equals, hashCode methods

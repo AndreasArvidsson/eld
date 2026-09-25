@@ -49,7 +49,8 @@ public final class SemanticAnalyzerExpressionOperations {
     ) {
         final Type target =
             expressions.analyzeExpression(subscript.target(), context);
-        if (target instanceof TupleType tuple) {
+        final Type indexed = ConstType.unwrap(target);
+        if (indexed instanceof TupleType tuple) {
             expressions.analyzeExpression(subscript.index(), context);
             final BigInteger index = integerLiteral(subscript.index());
             if (
@@ -66,7 +67,7 @@ public final class SemanticAnalyzerExpressionOperations {
             }
             return tuple.elementTypes().get(index.intValue());
         }
-        if (!(target instanceof ArrayType array)) {
+        if (!(indexed instanceof ArrayType array)) {
             throw new SemanticException(
                 subscript.range(),
                 "Subscript requires an array target"
@@ -89,6 +90,7 @@ public final class SemanticAnalyzerExpressionOperations {
     ) {
         final Type target =
             expressions.analyzeExpression(slice.target(), context);
+        final Type sliced = ConstType.unwrap(target);
         final Expression start = slice.startIndex();
         final Expression end = slice.endIndex();
         final Type startIndex =
@@ -97,7 +99,7 @@ public final class SemanticAnalyzerExpressionOperations {
                 : expressions.analyzeExpression(start, context);
         final Type endIndex =
             end == null ? null : expressions.analyzeExpression(end, context);
-        if (!(target instanceof ArrayType array)) {
+        if (!(sliced instanceof ArrayType array)) {
             throw new SemanticException(
                 slice.range(),
                 "Slicing requires an array target"
@@ -170,17 +172,38 @@ public final class SemanticAnalyzerExpressionOperations {
             return;
         }
         if (
-            expression instanceof MemberExpression member
-                && model.getReference(
-                    member.member()
-                ) instanceof VariableSymbol variable
-                && variable.mutability() == Mutability.VAR
+            expression instanceof MemberExpression member && model.getReference(
+                member.member()
+            ) instanceof VariableSymbol variable
         ) {
+            if (variable.mutability() == Mutability.CONST) {
+                throw new SemanticException(
+                    expression.range(),
+                    "Cannot assign to const member '%s'",
+                    variable.name()
+                );
+            }
+            if (model.getExpressionType(member.target()) instanceof ConstType) {
+                throw new SemanticException(
+                    expression.range(),
+                    "Cannot modify a member through a const object"
+                );
+            }
             return;
         }
         if (expression instanceof SubscriptExpression subscript) {
             if (
-                model.getExpressionType(subscript.target()) instanceof TupleType
+                model.getExpressionType(subscript.target()) instanceof ConstType
+            ) {
+                throw new SemanticException(
+                    expression.range(),
+                    "Cannot modify an element through a const array"
+                );
+            }
+            if (
+                ConstType.unwrap(
+                    model.getExpressionType(subscript.target())
+                ) instanceof TupleType
             ) {
                 throw new SemanticException(
                     expression.range(),
@@ -256,18 +279,20 @@ public final class SemanticAnalyzerExpressionOperations {
             }
         }
         Type resolvedType = leftType;
+        final Type leftValueType = ConstType.unwrap(leftType);
+        final Type rightValueType = ConstType.unwrap(rightType);
         final boolean compatibleNumbers =
             numeric(leftType) && numeric(rightType);
         final boolean relatedClasses =
-            leftType instanceof ClassType leftClass
-                && rightType instanceof ClassType rightClass
+            leftValueType instanceof ClassType leftClass
+                && rightValueType instanceof ClassType rightClass
                 && model.commonClassType(leftClass, rightClass) != null;
         final boolean valid = switch (binary.operator()) {
             case AND, OR ->
                 leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
             case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
-                || ((leftType instanceof InterfaceType
-                    || rightType instanceof InterfaceType)
+                || ((leftValueType instanceof InterfaceType
+                    || rightValueType instanceof InterfaceType)
                     && (model.isSubtype(leftType, rightType)
                         || model.isSubtype(rightType, leftType)))
                 || relatedClasses
@@ -669,7 +694,8 @@ public final class SemanticAnalyzerExpressionOperations {
 
     public static @Nullable InterfaceType mapType(final Type type) {
         if (
-            type instanceof InterfaceType map && map.javaClass() != null
+            ConstType.unwrap(type) instanceof InterfaceType map
+                && map.javaClass() != null
                 && java.util.Map.class.isAssignableFrom(map.javaClass())
                 && map.typeArguments().size() == 2
         ) {

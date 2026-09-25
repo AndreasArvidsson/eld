@@ -39,9 +39,11 @@ public final class SemanticAnalyzerExpectedExpressions {
         final SemanticContext context,
         final @Nullable Type expected
     ) {
+        final @Nullable Type expectedType =
+            expected == null ? null : ConstType.unwrap(expected);
         if (
             expression instanceof MapExpression map
-                && expected instanceof InterfaceType target
+                && expectedType instanceof InterfaceType target
                 && SemanticAnalyzerExpressionOperations.mapType(target) != null
                 && target.javaClass() != null
                 && target.javaClass()
@@ -81,11 +83,11 @@ public final class SemanticAnalyzerExpectedExpressions {
                 }
             }
             model.setExpressionType(map, target);
-            return target;
+            return expected instanceof ConstType ? expected : target;
         }
         if (
             expression instanceof ArrayExpression array
-                && expected instanceof InterfaceType list
+                && expectedType instanceof InterfaceType list
                 && list.javaClass() != null
                 && list.javaClass().isAssignableFrom(java.util.ArrayList.class)
                 && list.typeArguments().size() == 1
@@ -117,7 +119,7 @@ public final class SemanticAnalyzerExpectedExpressions {
                 }
             }
             model.setExpressionType(array, list);
-            return list;
+            return expected instanceof ConstType ? expected : list;
         }
         if (
             expected instanceof FunctionType
@@ -127,8 +129,8 @@ public final class SemanticAnalyzerExpectedExpressions {
                 .analyzeExpressionAsCallee(expression, context, true);
         }
         if (expression instanceof ObjectExpression object) {
-            Type target = expected;
-            if (expected instanceof UnionType union) {
+            Type target = expectedType;
+            if (expectedType instanceof UnionType union) {
                 final List<Type> contracts =
                     union.memberTypes()
                         .stream()
@@ -151,11 +153,11 @@ public final class SemanticAnalyzerExpectedExpressions {
             }
             analyzer.analyzeObjectExpression(object, context, contract);
             model.setExpressionType(object, contract);
-            return contract;
+            return expected instanceof ConstType ? expected : contract;
         }
         if (expression instanceof LambdaExpression lambda) {
             if (
-                expected instanceof InterfaceType comparator
+                expectedType instanceof InterfaceType comparator
                     && comparator.javaClass() == java.util.Comparator.class
             ) {
                 expressions.analyzeLambdaExpression(
@@ -164,7 +166,7 @@ public final class SemanticAnalyzerExpectedExpressions {
                     JavaTypes.comparatorFunction(comparator)
                 );
                 model.setExpressionType(lambda, comparator);
-                return comparator;
+                return expected instanceof ConstType ? expected : comparator;
             }
             final Type type =
                 expressions.analyzeLambdaExpression(lambda, context, expected);
@@ -172,8 +174,8 @@ public final class SemanticAnalyzerExpectedExpressions {
             return type;
         }
         if (
-            expected == BuiltinType.ANY || expected instanceof UnionType
-                || expected instanceof InterfaceType
+            expectedType == BuiltinType.ANY || expectedType instanceof UnionType
+                || expectedType instanceof InterfaceType
         ) {
             if (expression instanceof IfExpression conditional) {
                 final Type type =
@@ -195,15 +197,17 @@ public final class SemanticAnalyzerExpectedExpressions {
             }
         }
         if (
-            expected instanceof TupleType target
+            expectedType instanceof TupleType target
                 && expression instanceof TupleExpression tuple
                 && tuple.elements().size() == target.elementTypes().size()
         ) {
             return analyzeTupleExpression(tuple, context, target);
         }
         if (
-            (expected instanceof UnionType || expected == BuiltinType.ANY
-                || expected instanceof InterfaceType)
+            expected != null
+                && (expectedType instanceof UnionType
+                    || expectedType == BuiltinType.ANY
+                    || expectedType instanceof InterfaceType)
                 && expression instanceof TernaryExpression ternary
         ) {
             if (
@@ -236,7 +240,7 @@ public final class SemanticAnalyzerExpectedExpressions {
             return expected;
         }
         if (
-            expected instanceof ArrayType target
+            expectedType instanceof ArrayType target
                 && expression instanceof ArrayExpression array
                 && (requiresContextualElements(target.elementType())
                     || array.elements()
@@ -262,7 +266,7 @@ public final class SemanticAnalyzerExpectedExpressions {
                 }
             }
             model.setExpressionType(array, target);
-            return target;
+            return expected instanceof ConstType ? expected : target;
         }
         if (
             expression instanceof GroupingExpression grouping
@@ -317,15 +321,17 @@ public final class SemanticAnalyzerExpectedExpressions {
     }
 
     private static boolean requiresContextualElements(final Type type) {
-        return type instanceof InterfaceType || type instanceof FunctionType
-            || (type instanceof TupleType tuple && tuple.elementTypes()
+        final Type unqualified = ConstType.unwrap(type);
+        return unqualified instanceof InterfaceType
+            || unqualified instanceof FunctionType
+            || (unqualified instanceof TupleType tuple && tuple.elementTypes()
                 .stream()
                 .anyMatch(
                     SemanticAnalyzerExpectedExpressions::requiresContextualElements
                 ))
-            || type instanceof UnionType
-            || type == BuiltinType.ANY
-            || (type instanceof ArrayType array
+            || unqualified instanceof UnionType
+            || unqualified == BuiltinType.ANY
+            || (unqualified instanceof ArrayType array
                 && requiresContextualElements(array.elementType()));
     }
 
