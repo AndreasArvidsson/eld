@@ -212,6 +212,11 @@ public final class SemanticAnalyzerExpressions {
                     if (
                         eldApiMethod(PromiseSource.class, name, false) == null
                     ) {
+                        final Type objectMethod =
+                            resolveObjectMethod(member, memberTarget);
+                        if (objectMethod != null) {
+                            yield objectMethod;
+                        }
                         throw new SemanticException(
                             member.member().range(),
                             "Unknown member '%s' of %s",
@@ -280,6 +285,11 @@ public final class SemanticAnalyzerExpressions {
                 if (memberTarget instanceof PromiseType promise) {
                     final String name = member.member().name();
                     if (eldApiMethod(EldPromise.class, name, false) == null) {
+                        final Type objectMethod =
+                            resolveObjectMethod(member, memberTarget);
+                        if (objectMethod != null) {
+                            yield objectMethod;
+                        }
                         throw new SemanticException(
                             member.member().range(),
                             "Unknown member '%s' of %s",
@@ -331,6 +341,16 @@ public final class SemanticAnalyzerExpressions {
                         BuiltinFunctionType.ARRAY_SORT
                     );
                     yield BuiltinFunctionType.ARRAY_SORT;
+                }
+                if (
+                    !(memberTarget instanceof ClassType)
+                        && !(memberTarget instanceof InterfaceType)
+                ) {
+                    final Type objectMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (objectMethod != null) {
+                        yield objectMethod;
+                    }
                 }
                 final InterfaceType javaTarget =
                     memberTarget instanceof InterfaceType contract
@@ -385,11 +405,18 @@ public final class SemanticAnalyzerExpressions {
                         }).toList();
                     }
                     if (candidates.size() != 1) {
+                        if (candidates.isEmpty()) {
+                            final Type objectMethod =
+                                resolveObjectMethod(member, memberTarget);
+                            if (objectMethod != null) {
+                                yield objectMethod;
+                            }
+                        }
                         throw new SemanticException(
                             member.range(),
                             candidates.isEmpty()
-                                ? "Unknown Java method '%s' with %s arguments on %s"
-                                : "Ambiguous Java method '%s' with %s arguments on %s",
+                                ? "Unknown method '%s' with %s arguments on %s"
+                                : "Ambiguous method '%s' with %s arguments on %s",
                             member.member().name(),
                             callArity,
                             target
@@ -441,6 +468,11 @@ public final class SemanticAnalyzerExpressions {
                         symbol = members.methods().get(member.member().name());
                     }
                     if (symbol == null) {
+                        final Type objectMethod =
+                            resolveObjectMethod(member, memberTarget);
+                        if (objectMethod != null) {
+                            yield objectMethod;
+                        }
                         throw new SemanticException(
                             member.member().range(),
                             "Unknown member '%s' of interface %s",
@@ -489,6 +521,11 @@ public final class SemanticAnalyzerExpressions {
                             ? null
                             : scope.resolveLocal(member.member().name());
                 if (symbol == null) {
+                    final Type objectMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (objectMethod != null) {
+                        yield objectMethod;
+                    }
                     throw new SemanticException(
                         member.member().range(),
                         "Unknown member '%s' of class %s",
@@ -822,6 +859,33 @@ public final class SemanticAnalyzerExpressions {
         model.setExpressionType(expression, type);
 
         return type;
+    }
+
+    private @Nullable Type resolveObjectMethod(
+        final MemberExpression member,
+        final Type target
+    ) {
+        if (
+            target instanceof BuiltinType builtin
+                && builtin != BuiltinType.STRING
+                && builtin != BuiltinType.ANY
+                && builtin != BuiltinType.NULL
+        ) {
+            return null;
+        }
+        final JavaMethodSymbol method =
+            JavaTypes.objectMethod(
+                member.member().name(),
+                callArity,
+                member.range()
+            );
+        if (method == null) {
+            return null;
+        }
+        model.setMemberOwner(member, target);
+        model.setReference(member.member(), method);
+        model.setExpressionType(member.member(), method.type());
+        return method.type();
     }
 
     static boolean mutatesCollection(

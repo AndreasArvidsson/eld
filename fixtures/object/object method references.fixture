@@ -1,0 +1,593 @@
+record Point(x: i32, y: i32);
+
+const point = new Point(1, 2);
+const equals: (any) => bool = point.equals;
+const hashCode: () => i32 = point.hashCode;
+const toString: () => string = point.toString;
+
+print(equals(new Point(1, 2)));
+print(hashCode() == point.hashCode());
+print(toString());
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Point" (1:8-1:13)
+LEFT_PAREN (1:13-1:14)
+IDENTIFIER "x" (1:14-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+COMMA (1:20-1:21)
+IDENTIFIER "y" (1:22-1:23)
+COLON (1:23-1:24)
+IDENTIFIER "i32" (1:25-1:28)
+RIGHT_PAREN (1:28-1:29)
+SEMICOLON (1:29-1:30)
+CONST (3:1-3:6)
+IDENTIFIER "point" (3:7-3:12)
+EQUAL (3:13-3:14)
+NEW (3:15-3:18)
+IDENTIFIER "Point" (3:19-3:24)
+LEFT_PAREN (3:24-3:25)
+INTEGER_LITERAL "1" (3:25-3:26)
+COMMA (3:26-3:27)
+INTEGER_LITERAL "2" (3:28-3:29)
+RIGHT_PAREN (3:29-3:30)
+SEMICOLON (3:30-3:31)
+CONST (4:1-4:6)
+IDENTIFIER "equals" (4:7-4:13)
+COLON (4:13-4:14)
+LEFT_PAREN (4:15-4:16)
+IDENTIFIER "any" (4:16-4:19)
+RIGHT_PAREN (4:19-4:20)
+ARROW (4:21-4:23)
+IDENTIFIER "bool" (4:24-4:28)
+EQUAL (4:29-4:30)
+IDENTIFIER "point" (4:31-4:36)
+DOT (4:36-4:37)
+IDENTIFIER "equals" (4:37-4:43)
+SEMICOLON (4:43-4:44)
+CONST (5:1-5:6)
+IDENTIFIER "hashCode" (5:7-5:15)
+COLON (5:15-5:16)
+LEFT_PAREN (5:17-5:18)
+RIGHT_PAREN (5:18-5:19)
+ARROW (5:20-5:22)
+IDENTIFIER "i32" (5:23-5:26)
+EQUAL (5:27-5:28)
+IDENTIFIER "point" (5:29-5:34)
+DOT (5:34-5:35)
+IDENTIFIER "hashCode" (5:35-5:43)
+SEMICOLON (5:43-5:44)
+CONST (6:1-6:6)
+IDENTIFIER "toString" (6:7-6:15)
+COLON (6:15-6:16)
+LEFT_PAREN (6:17-6:18)
+RIGHT_PAREN (6:18-6:19)
+ARROW (6:20-6:22)
+IDENTIFIER "string" (6:23-6:29)
+EQUAL (6:30-6:31)
+IDENTIFIER "point" (6:32-6:37)
+DOT (6:37-6:38)
+IDENTIFIER "toString" (6:38-6:46)
+SEMICOLON (6:46-6:47)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "equals" (8:7-8:13)
+LEFT_PAREN (8:13-8:14)
+NEW (8:14-8:17)
+IDENTIFIER "Point" (8:18-8:23)
+LEFT_PAREN (8:23-8:24)
+INTEGER_LITERAL "1" (8:24-8:25)
+COMMA (8:25-8:26)
+INTEGER_LITERAL "2" (8:27-8:28)
+RIGHT_PAREN (8:28-8:29)
+RIGHT_PAREN (8:29-8:30)
+RIGHT_PAREN (8:30-8:31)
+SEMICOLON (8:31-8:32)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "hashCode" (9:7-9:15)
+LEFT_PAREN (9:15-9:16)
+RIGHT_PAREN (9:16-9:17)
+EQUAL_EQUAL (9:18-9:20)
+IDENTIFIER "point" (9:21-9:26)
+DOT (9:26-9:27)
+IDENTIFIER "hashCode" (9:27-9:35)
+LEFT_PAREN (9:35-9:36)
+RIGHT_PAREN (9:36-9:37)
+RIGHT_PAREN (9:37-9:38)
+SEMICOLON (9:38-9:39)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "toString" (10:7-10:15)
+LEFT_PAREN (10:15-10:16)
+RIGHT_PAREN (10:16-10:17)
+RIGHT_PAREN (10:17-10:18)
+SEMICOLON (10:18-10:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:19
+  (RecordDeclaration
+    range: 1:1-1:30
+    (IdentifierDeclaration
+      range: 1:8-1:13
+      name: "Point"
+    )
+    (RecordParameter
+      range: 1:14-1:20
+      (IdentifierDeclaration
+        range: 1:14-1:15
+        name: "x"
+      )
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "i32"
+      )
+    )
+    (RecordParameter
+      range: 1:22-1:28
+      (IdentifierDeclaration
+        range: 1:22-1:23
+        name: "y"
+      )
+      (NamedTypeNode
+        range: 1:25-1:28
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "point"
+    )
+    type: null
+    (NewExpression
+      range: 3:15-3:30
+      (IdentifierExpression
+        range: 3:19-3:24
+        name: "Point"
+      )
+      (LiteralExpression
+        range: 3:25-3:26
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 3:28-3:29
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "equals"
+    )
+    (FunctionTypeNode
+      range: 4:15-4:28
+      (NamedTypeNode
+        range: 4:16-4:19
+        name: "any"
+      )
+      (NamedTypeNode
+        range: 4:24-4:28
+        name: "bool"
+      )
+    )
+    (MemberExpression
+      range: 4:31-4:43
+      (IdentifierExpression
+        range: 4:31-4:36
+        name: "point"
+      )
+      (IdentifierExpression
+        range: 4:37-4:43
+        name: "equals"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "hashCode"
+    )
+    (FunctionTypeNode
+      range: 5:17-5:26
+      (NamedTypeNode
+        range: 5:23-5:26
+        name: "i32"
+      )
+    )
+    (MemberExpression
+      range: 5:29-5:43
+      (IdentifierExpression
+        range: 5:29-5:34
+        name: "point"
+      )
+      (IdentifierExpression
+        range: 5:35-5:43
+        name: "hashCode"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:15
+      name: "toString"
+    )
+    (FunctionTypeNode
+      range: 6:17-6:29
+      (NamedTypeNode
+        range: 6:23-6:29
+        name: "string"
+      )
+    )
+    (MemberExpression
+      range: 6:32-6:46
+      (IdentifierExpression
+        range: 6:32-6:37
+        name: "point"
+      )
+      (IdentifierExpression
+        range: 6:38-6:46
+        name: "toString"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:32
+    (CallExpression
+      range: 8:1-8:31
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:30
+        (IdentifierExpression
+          range: 8:7-8:13
+          name: "equals"
+        )
+        (NewExpression
+          range: 8:14-8:29
+          (IdentifierExpression
+            range: 8:18-8:23
+            name: "Point"
+          )
+          (LiteralExpression
+            range: 8:24-8:25
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 8:27-8:28
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:39
+    (CallExpression
+      range: 9:1-9:38
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:37
+        (CallExpression
+          range: 9:7-9:17
+          (IdentifierExpression
+            range: 9:7-9:15
+            name: "hashCode"
+          )
+        )
+        operator: EQUAL
+        (CallExpression
+          range: 9:21-9:37
+          (MemberExpression
+            range: 9:21-9:35
+            (IdentifierExpression
+              range: 9:21-9:26
+              name: "point"
+            )
+            (IdentifierExpression
+              range: 9:27-9:35
+              name: "hashCode"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:19
+    (CallExpression
+      range: 10:1-10:18
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:17
+        (IdentifierExpression
+          range: 10:7-10:15
+          name: "toString"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:30 -> Point
+  1:1-1:30 -> string
+  1:8-1:13 -> Point
+  1:14-1:15 -> i32
+  1:14-1:20 -> Point
+  1:14-1:20 -> i32
+  1:14-1:20 -> string
+  1:22-1:23 -> i32
+  1:22-1:28 -> Point
+  1:22-1:28 -> i32
+  1:22-1:28 -> string
+  3:15-3:30 -> Point
+  3:19-3:24 -> Point
+  3:25-3:26 -> i32
+  3:28-3:29 -> i32
+  4:31-4:36 -> Point
+  4:31-4:43 -> (any) => bool
+  4:37-4:43 -> (any) => bool
+  5:29-5:34 -> Point
+  5:29-5:43 -> () => i32
+  5:35-5:43 -> () => i32
+  6:32-6:37 -> Point
+  6:32-6:46 -> () => string
+  6:38-6:46 -> () => string
+  8:1-8:6 -> (any) => void
+  8:1-8:31 -> void
+  8:7-8:13 -> (any) => bool
+  8:7-8:30 -> bool
+  8:14-8:29 -> Point
+  8:18-8:23 -> Point
+  8:24-8:25 -> i32
+  8:27-8:28 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:38 -> void
+  9:7-9:15 -> () => i32
+  9:7-9:17 -> i32
+  9:7-9:37 -> bool
+  9:21-9:26 -> Point
+  9:21-9:35 -> () => i32
+  9:21-9:37 -> i32
+  9:27-9:35 -> () => i32
+  10:1-10:6 -> (any) => void
+  10:1-10:18 -> void
+  10:7-10:15 -> () => string
+  10:7-10:17 -> string
+
+Resolved types:
+  1:8-1:13 -> Point
+  1:8-1:13 -> string
+  1:17-1:20 -> i32
+  1:25-1:28 -> i32
+  4:15-4:28 -> (any) => bool
+  4:16-4:19 -> any
+  4:24-4:28 -> bool
+  5:17-5:26 -> () => i32
+  5:23-5:26 -> i32
+  6:17-6:29 -> () => string
+  6:23-6:29 -> string
+
+Conversions:
+  8:14-8:29 -> Point -> any
+
+Declarations:
+  1:1-1:30 -> constructor(x: i32, y: i32)
+  1:8-1:13 -> class Point
+  1:8-1:13 -> func copy(i32, i32) => Point
+  1:8-1:13 -> func toString() => string
+  1:14-1:15 -> const x: i32
+  1:22-1:23 -> const y: i32
+  3:7-3:12 -> const point: Point
+  4:7-4:13 -> const equals: (any) => bool
+  5:7-5:15 -> const hashCode: () => i32
+  6:7-6:15 -> const toString: () => string
+
+References:
+  1:8-1:13 -> 1:8-1:13
+  1:14-1:15 -> 1:14-1:15
+  1:22-1:23 -> 1:22-1:23
+  3:19-3:24 -> 1:8-1:13
+  4:31-4:36 -> 3:7-3:12
+  4:37-4:43 -> 4:31-4:43
+  5:29-5:34 -> 3:7-3:12
+  5:35-5:43 -> 5:29-5:43
+  6:32-6:37 -> 3:7-3:12
+  6:38-6:46 -> 1:8-1:13
+  8:1-8:6 -> builtin print
+  8:7-8:13 -> 4:7-4:13
+  8:18-8:23 -> 1:8-1:13
+  9:1-9:6 -> builtin print
+  9:7-9:15 -> 5:7-5:15
+  9:21-9:26 -> 3:7-3:12
+  9:27-9:35 -> 9:21-9:35
+  10:1-10:6 -> builtin print
+  10:7-10:15 -> 6:7-6:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Point
+  inner class Test$Point flags [PUBLIC, STATIC, FINAL]
+  field point LTest$Point; flags [PUBLIC, STATIC, FINAL]
+  field equals Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field hashCode Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field toString Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Point
+    DUP
+    LDC 1
+    LDC 2
+    INVOKESPECIAL Test$Point.<init>(II)V
+    PUTSTATIC Test.point LTest$Point;
+    LDC MethodHandleDesc[VIRTUAL/Test$Point::equals(Test$Point,Object)boolean]
+    GETSTATIC Test.point LTest$Point;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[(Object)boolean]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.equals Ljava/lang/invoke/MethodHandle;
+    LDC MethodHandleDesc[VIRTUAL/Test$Point::hashCode(Test$Point)int]
+    GETSTATIC Test.point LTest$Point;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[()int]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.hashCode Ljava/lang/invoke/MethodHandle;
+    LDC MethodHandleDesc[VIRTUAL/Test$Point::toString(Test$Point)String]
+    GETSTATIC Test.point LTest$Point;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.toString Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.equals Ljava/lang/invoke/MethodHandle;
+    NEW Test$Point
+    DUP
+    LDC 1
+    LDC 2
+    INVOKESPECIAL Test$Point.<init>(II)V
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.hashCode Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
+    GETSTATIC Test.point LTest$Point;
+    INVOKEVIRTUAL Test$Point.hashCode()I
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.toString Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 6 max locals 0
+
+class Test$Point extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest host Test
+  inner class Test$Point flags [PUBLIC, STATIC, FINAL]
+  record component x I
+  record component y I
+  field x I flags [PRIVATE, FINAL]
+  field y I flags [PRIVATE, FINAL]
+  method x()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Point.x I
+    IRETURN
+    max stack 1 max locals 1
+  method y()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Point.y I
+    IRETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Point("
+    ALOAD_1 1
+    LDC 6
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(II)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Point.x I
+    POP
+    ALOAD_0 0
+    ILOAD_2 2
+    DUP_X1
+    PUTFIELD Test$Point.y I
+    POP
+    RETURN
+    max stack 3 max locals 3
+  method copy(II)LTest$Point; flags [PUBLIC]
+    NEW Test$Point
+    DUP
+    ILOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL Test$Point.<init>(II)V
+    ARETURN
+    max stack 4 max locals 3
+  method copy(III)LTest$Point; flags [PUBLIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Point.x()I
+    ISTORE_1 1
+   L0:
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L1
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Point.y()I
+    ISTORE_2 2
+   L1:
+    ALOAD_0 0
+    ILOAD_1 1
+    ILOAD_2 2
+    INVOKEVIRTUAL Test$Point.copy(II)LTest$Point;
+    ARETURN
+    max stack 3 max locals 4
+
+--- OUTPUT ---
+
+true
+true
+Point(x=1, y=2)
+

@@ -109,4 +109,4 @@ SEMICOLON (2:27-2:28)
 
 --- SEMANTIC ---
 
-SemanticException: Unknown Java method 'group' with 1 arguments on Matcher at 2:7-2:20
+SemanticException: Unknown method 'group' with 1 arguments on Matcher at 2:7-2:20

@@ -65,4 +65,4 @@ SEMICOLON (2:14-2:15)
 
 --- SEMANTIC ---
 
-SemanticException: Unknown Java method 'sort' with 0 arguments on Collection<i32> at 2:1-2:12
+SemanticException: Unknown method 'sort' with 0 arguments on Collection<i32> at 2:1-2:12

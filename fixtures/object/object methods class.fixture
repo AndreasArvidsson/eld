@@ -1,0 +1,410 @@
+class Box {}
+
+const first = new Box();
+const second = new Box();
+
+print(first.equals(first));
+print(first.equals(second));
+print(first.hashCode() == first.hashCode());
+print(first.toString() == first.toString());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Box" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+RIGHT_BRACE (1:12-1:13)
+CONST (3:1-3:6)
+IDENTIFIER "first" (3:7-3:12)
+EQUAL (3:13-3:14)
+NEW (3:15-3:18)
+IDENTIFIER "Box" (3:19-3:22)
+LEFT_PAREN (3:22-3:23)
+RIGHT_PAREN (3:23-3:24)
+SEMICOLON (3:24-3:25)
+CONST (4:1-4:6)
+IDENTIFIER "second" (4:7-4:13)
+EQUAL (4:14-4:15)
+NEW (4:16-4:19)
+IDENTIFIER "Box" (4:20-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+SEMICOLON (4:25-4:26)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "first" (6:7-6:12)
+DOT (6:12-6:13)
+IDENTIFIER "equals" (6:13-6:19)
+LEFT_PAREN (6:19-6:20)
+IDENTIFIER "first" (6:20-6:25)
+RIGHT_PAREN (6:25-6:26)
+RIGHT_PAREN (6:26-6:27)
+SEMICOLON (6:27-6:28)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "first" (7:7-7:12)
+DOT (7:12-7:13)
+IDENTIFIER "equals" (7:13-7:19)
+LEFT_PAREN (7:19-7:20)
+IDENTIFIER "second" (7:20-7:26)
+RIGHT_PAREN (7:26-7:27)
+RIGHT_PAREN (7:27-7:28)
+SEMICOLON (7:28-7:29)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "first" (8:7-8:12)
+DOT (8:12-8:13)
+IDENTIFIER "hashCode" (8:13-8:21)
+LEFT_PAREN (8:21-8:22)
+RIGHT_PAREN (8:22-8:23)
+EQUAL_EQUAL (8:24-8:26)
+IDENTIFIER "first" (8:27-8:32)
+DOT (8:32-8:33)
+IDENTIFIER "hashCode" (8:33-8:41)
+LEFT_PAREN (8:41-8:42)
+RIGHT_PAREN (8:42-8:43)
+RIGHT_PAREN (8:43-8:44)
+SEMICOLON (8:44-8:45)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "first" (9:7-9:12)
+DOT (9:12-9:13)
+IDENTIFIER "toString" (9:13-9:21)
+LEFT_PAREN (9:21-9:22)
+RIGHT_PAREN (9:22-9:23)
+EQUAL_EQUAL (9:24-9:26)
+IDENTIFIER "first" (9:27-9:32)
+DOT (9:32-9:33)
+IDENTIFIER "toString" (9:33-9:41)
+LEFT_PAREN (9:41-9:42)
+RIGHT_PAREN (9:42-9:43)
+RIGHT_PAREN (9:43-9:44)
+SEMICOLON (9:44-9:45)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:45
+  (ClassDeclaration
+    range: 1:1-1:13
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Box"
+    )
+    superClass: null
+  )
+  (VariableDeclaration
+    range: 3:1-3:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "first"
+    )
+    type: null
+    (NewExpression
+      range: 3:15-3:24
+      (IdentifierExpression
+        range: 3:19-3:22
+        name: "Box"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "second"
+    )
+    type: null
+    (NewExpression
+      range: 4:16-4:25
+      (IdentifierExpression
+        range: 4:20-4:23
+        name: "Box"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:28
+    (CallExpression
+      range: 6:1-6:27
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:26
+        (MemberExpression
+          range: 6:7-6:19
+          (IdentifierExpression
+            range: 6:7-6:12
+            name: "first"
+          )
+          (IdentifierExpression
+            range: 6:13-6:19
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 6:20-6:25
+          name: "first"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:29
+    (CallExpression
+      range: 7:1-7:28
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:27
+        (MemberExpression
+          range: 7:7-7:19
+          (IdentifierExpression
+            range: 7:7-7:12
+            name: "first"
+          )
+          (IdentifierExpression
+            range: 7:13-7:19
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 7:20-7:26
+          name: "second"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:45
+    (CallExpression
+      range: 8:1-8:44
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:43
+        (CallExpression
+          range: 8:7-8:23
+          (MemberExpression
+            range: 8:7-8:21
+            (IdentifierExpression
+              range: 8:7-8:12
+              name: "first"
+            )
+            (IdentifierExpression
+              range: 8:13-8:21
+              name: "hashCode"
+            )
+          )
+        )
+        operator: EQUAL
+        (CallExpression
+          range: 8:27-8:43
+          (MemberExpression
+            range: 8:27-8:41
+            (IdentifierExpression
+              range: 8:27-8:32
+              name: "first"
+            )
+            (IdentifierExpression
+              range: 8:33-8:41
+              name: "hashCode"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:45
+    (CallExpression
+      range: 9:1-9:44
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:43
+        (CallExpression
+          range: 9:7-9:23
+          (MemberExpression
+            range: 9:7-9:21
+            (IdentifierExpression
+              range: 9:7-9:12
+              name: "first"
+            )
+            (IdentifierExpression
+              range: 9:13-9:21
+              name: "toString"
+            )
+          )
+        )
+        operator: EQUAL
+        (CallExpression
+          range: 9:27-9:43
+          (MemberExpression
+            range: 9:27-9:41
+            (IdentifierExpression
+              range: 9:27-9:32
+              name: "first"
+            )
+            (IdentifierExpression
+              range: 9:33-9:41
+              name: "toString"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:15-3:24 -> Box
+  3:19-3:22 -> Box
+  4:16-4:25 -> Box
+  4:20-4:23 -> Box
+  6:1-6:6 -> (any) => void
+  6:1-6:27 -> void
+  6:7-6:12 -> Box
+  6:7-6:19 -> (any) => bool
+  6:7-6:26 -> bool
+  6:13-6:19 -> (any) => bool
+  6:20-6:25 -> Box
+  7:1-7:6 -> (any) => void
+  7:1-7:28 -> void
+  7:7-7:12 -> Box
+  7:7-7:19 -> (any) => bool
+  7:7-7:27 -> bool
+  7:13-7:19 -> (any) => bool
+  7:20-7:26 -> Box
+  8:1-8:6 -> (any) => void
+  8:1-8:44 -> void
+  8:7-8:12 -> Box
+  8:7-8:21 -> () => i32
+  8:7-8:23 -> i32
+  8:7-8:43 -> bool
+  8:13-8:21 -> () => i32
+  8:27-8:32 -> Box
+  8:27-8:41 -> () => i32
+  8:27-8:43 -> i32
+  8:33-8:41 -> () => i32
+  9:1-9:6 -> (any) => void
+  9:1-9:44 -> void
+  9:7-9:12 -> Box
+  9:7-9:21 -> () => string
+  9:7-9:23 -> string
+  9:7-9:43 -> bool
+  9:13-9:21 -> () => string
+  9:27-9:32 -> Box
+  9:27-9:41 -> () => string
+  9:27-9:43 -> string
+  9:33-9:41 -> () => string
+
+Conversions:
+  6:20-6:25 -> Box -> any
+  7:20-7:26 -> Box -> any
+
+Declarations:
+  1:7-1:10 -> class Box
+  3:7-3:12 -> const first: Box
+  4:7-4:13 -> const second: Box
+
+References:
+  3:19-3:22 -> 1:7-1:10
+  4:20-4:23 -> 1:7-1:10
+  6:1-6:6 -> builtin print
+  6:7-6:12 -> 3:7-3:12
+  6:13-6:19 -> 6:7-6:19
+  6:20-6:25 -> 3:7-3:12
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 3:7-3:12
+  7:13-7:19 -> 7:7-7:19
+  7:20-7:26 -> 4:7-4:13
+  8:1-8:6 -> builtin print
+  8:7-8:12 -> 3:7-3:12
+  8:13-8:21 -> 8:7-8:21
+  8:27-8:32 -> 3:7-3:12
+  8:33-8:41 -> 8:27-8:41
+  9:1-9:6 -> builtin print
+  9:7-9:12 -> 3:7-3:12
+  9:13-9:21 -> 9:7-9:21
+  9:27-9:32 -> 3:7-3:12
+  9:33-9:41 -> 9:27-9:41
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Box
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field first LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field second LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.first LTest$Box;
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.second LTest$Box;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
+    GETSTATIC Test.second LTest$Box;
+    INVOKEVIRTUAL Test$Box.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.hashCode()I
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.hashCode()I
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+true
+false
+true
+true
+

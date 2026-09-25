@@ -6335,8 +6335,11 @@ public final class BytecodeGenerator {
             final FunctionType type = (FunctionType) calleeType;
             final Expression callee = unwrap(call.callee());
             if (
-                callee instanceof MemberExpression member && semanticModel
-                    .getMemberOwner(member) instanceof PromiseSourceType
+                callee instanceof MemberExpression member
+                    && semanticModel
+                        .getMemberOwner(member) instanceof PromiseSourceType
+                    && semanticModel
+                        .getReference(member.member()) instanceof FunctionSymbol
             ) {
                 expression(member.target());
                 if (!call.arguments().isEmpty()) {
@@ -6396,11 +6399,7 @@ public final class BytecodeGenerator {
                     isStatic
                         ? INVOKESTATIC
                         : isInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
-                    classDesc(
-                        javaMethod.getDeclaringClass()
-                            .getName()
-                            .replace('.', '/')
-                    ),
+                    javaMethodOwner(member, javaMethod),
                     function.name(),
                     MethodTypeDesc.ofDescriptor(
                         javaMethodDescriptor(javaMethod).descriptorString()
@@ -7284,6 +7283,42 @@ public final class BytecodeGenerator {
             return typeOwner(semanticModel.getMemberOwner(member));
         }
 
+        private ClassDesc javaMethodOwner(
+            final MemberExpression member,
+            final Method method
+        ) {
+            if (method.getDeclaringClass() != Object.class) {
+                return classDesc(
+                    method.getDeclaringClass().getName().replace('.', '/')
+                );
+            }
+            final Type owner = semanticModel.getMemberOwner(member);
+            return switch (owner) {
+                case ClassType _ -> classDesc(memberOwner(member));
+                case BuiltinType builtin when builtin == BuiltinType.STRING ->
+                    classDesc("java/lang/String");
+                case ArrayType array ->
+                    classDesc(RuntimeAbi.array(array.elementType()).owner);
+                case TupleType _ -> classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/EldTuple"
+                );
+                case FunctionType _ ->
+                    classDesc("java/lang/invoke/MethodHandle");
+                case BuiltinFunctionType builtin -> classDesc(
+                    builtin == BuiltinFunctionType.PRINT
+                        ? "java/io/PrintStream"
+                        : "java/lang/invoke/MethodHandle"
+                );
+                case PromiseType _ -> classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/EldPromise"
+                );
+                case PromiseSourceType _ -> classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/PromiseSource"
+                );
+                default -> classDesc("java/lang/Object");
+            };
+        }
+
         private void memberReceiver(final MemberExpression member) {
             expression(member.target());
         }
@@ -7322,11 +7357,7 @@ public final class BytecodeGenerator {
                             : isInterface
                                 ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
                                 : DirectMethodHandleDesc.Kind.VIRTUAL,
-                        classDesc(
-                            javaMethod.getDeclaringClass()
-                                .getName()
-                                .replace('.', '/')
-                        ),
+                        javaMethodOwner(member, javaMethod),
                         function.name(),
                         MethodTypeDesc.ofDescriptor(
                             javaMethodDescriptor(javaMethod).descriptorString()

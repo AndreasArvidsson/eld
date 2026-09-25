@@ -28,6 +28,8 @@ import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 
 /** Thin source aliases for JDK APIs. */
 public final class JavaTypes {
+    private static final InterfaceType OBJECT =
+        new InterfaceType("any", List.of(), Object.class);
     private static final List<String> EXCEPTION_PACKAGES =
         List.of(
             "java.lang.",
@@ -248,6 +250,37 @@ public final class JavaTypes {
             }
         }
         return List.copyOf(result.values());
+    }
+
+    public static @Nullable JavaMethodSymbol objectMethod(
+        final String name,
+        final int arity,
+        final Range range
+    ) {
+        if (
+            !name.equals("toString") && !name.equals("equals")
+                && !name.equals("hashCode")
+        ) {
+            return null;
+        }
+        for (final var method : Object.class.getMethods()) {
+            if (
+                method.getName().equals(name)
+                    && (arity < 0 || method.getParameterCount() == arity)
+            ) {
+                return new JavaMethodSymbol(
+                    method,
+                    new FunctionType(
+                        Arrays.stream(method.getGenericParameterTypes())
+                            .map(parameter -> resolve(parameter, OBJECT))
+                            .toList(),
+                        resolve(method.getGenericReturnType(), OBJECT)
+                    ),
+                    range
+                );
+            }
+        }
+        return null;
     }
 
     public static Type resolve(

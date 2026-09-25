@@ -186,7 +186,6 @@ protected const bar = 0;
 ### Miscellaneous
 
 - Export & import
-- Ubiquitous toString, equals, hashCode methods
 - Tuples as map keys and switch conditions (using hashCode and equals)
 - Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
 - Switch type narrowing
