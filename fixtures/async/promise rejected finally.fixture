@@ -1,0 +1,356 @@
+async func run() {
+    try {
+        await Promise.reject(new Exception("rejected"));
+    }
+    catch (e: Exception) {
+        print("catch");
+    }
+    finally {
+        print("finally");
+    }
+
+    print("after");
+}
+
+ignore run();
+
+--- TOKENS ---
+
+ASYNC (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "run" (1:12-1:15)
+LEFT_PAREN (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+LEFT_BRACE (1:18-1:19)
+TRY (2:5-2:8)
+LEFT_BRACE (2:9-2:10)
+AWAIT (3:9-3:14)
+IDENTIFIER "Promise" (3:15-3:22)
+DOT (3:22-3:23)
+IDENTIFIER "reject" (3:23-3:29)
+LEFT_PAREN (3:29-3:30)
+NEW (3:30-3:33)
+IDENTIFIER "Exception" (3:34-3:43)
+LEFT_PAREN (3:43-3:44)
+STRING_LITERAL "\"rejected\"" (3:44-3:54)
+RIGHT_PAREN (3:54-3:55)
+RIGHT_PAREN (3:55-3:56)
+SEMICOLON (3:56-3:57)
+RIGHT_BRACE (4:5-4:6)
+CATCH (5:5-5:10)
+LEFT_PAREN (5:11-5:12)
+IDENTIFIER "e" (5:12-5:13)
+COLON (5:13-5:14)
+IDENTIFIER "Exception" (5:15-5:24)
+RIGHT_PAREN (5:24-5:25)
+LEFT_BRACE (5:26-5:27)
+IDENTIFIER "print" (6:9-6:14)
+LEFT_PAREN (6:14-6:15)
+STRING_LITERAL "\"catch\"" (6:15-6:22)
+RIGHT_PAREN (6:22-6:23)
+SEMICOLON (6:23-6:24)
+RIGHT_BRACE (7:5-7:6)
+FINALLY (8:5-8:12)
+LEFT_BRACE (8:13-8:14)
+IDENTIFIER "print" (9:9-9:14)
+LEFT_PAREN (9:14-9:15)
+STRING_LITERAL "\"finally\"" (9:15-9:24)
+RIGHT_PAREN (9:24-9:25)
+SEMICOLON (9:25-9:26)
+RIGHT_BRACE (10:5-10:6)
+IDENTIFIER "print" (12:5-12:10)
+LEFT_PAREN (12:10-12:11)
+STRING_LITERAL "\"after\"" (12:11-12:18)
+RIGHT_PAREN (12:18-12:19)
+SEMICOLON (12:19-12:20)
+RIGHT_BRACE (13:1-13:2)
+IGNORE (15:1-15:7)
+IDENTIFIER "run" (15:8-15:11)
+LEFT_PAREN (15:11-15:12)
+RIGHT_PAREN (15:12-15:13)
+SEMICOLON (15:13-15:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-15:14
+  (FunctionDeclaration
+    range: 1:1-13:2
+    async: true
+    (IdentifierDeclaration
+      range: 1:12-1:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:18-13:2
+      (TryStatement
+        range: 2:5-10:6
+        (BlockStatement
+          range: 2:9-4:6
+          (ExpressionStatement
+            range: 3:9-3:57
+            (AwaitExpression
+              range: 3:9-3:56
+              (CallExpression
+                range: 3:15-3:56
+                (MemberExpression
+                  range: 3:15-3:29
+                  (IdentifierExpression
+                    range: 3:15-3:22
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 3:23-3:29
+                    name: "reject"
+                  )
+                )
+                (NewExpression
+                  range: 3:30-3:55
+                  (IdentifierExpression
+                    range: 3:34-3:43
+                    name: "Exception"
+                  )
+                  (LiteralExpression
+                    range: 3:44-3:54
+                    kind: STRING
+                    text: "\"rejected\""
+                  )
+                )
+              )
+            )
+          )
+        )
+        (CatchClause
+          range: 5:5-7:6
+          (IdentifierDeclaration
+            range: 5:12-5:13
+            name: "e"
+          )
+          (NamedTypeNode
+            range: 5:15-5:24
+            name: "Exception"
+          )
+          (BlockStatement
+            range: 5:26-7:6
+            (ExpressionStatement
+              range: 6:9-6:24
+              (CallExpression
+                range: 6:9-6:23
+                (IdentifierExpression
+                  range: 6:9-6:14
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 6:15-6:22
+                  kind: STRING
+                  text: "\"catch\""
+                )
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 8:13-10:6
+          (ExpressionStatement
+            range: 9:9-9:26
+            (CallExpression
+              range: 9:9-9:25
+              (IdentifierExpression
+                range: 9:9-9:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 9:15-9:24
+                kind: STRING
+                text: "\"finally\""
+              )
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 12:5-12:20
+        (CallExpression
+          range: 12:5-12:19
+          (IdentifierExpression
+            range: 12:5-12:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 12:11-12:18
+            kind: STRING
+            text: "\"after\""
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 15:1-15:14
+    (CallExpression
+      range: 15:8-15:13
+      (IdentifierExpression
+        range: 15:8-15:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:9-3:56 -> any
+  3:15-3:56 -> Promise<any>
+  3:30-3:55 -> Exception
+  3:34-3:43 -> Exception
+  3:44-3:54 -> string
+  6:9-6:14 -> (any) => void
+  6:9-6:23 -> void
+  6:15-6:22 -> string
+  9:9-9:14 -> (any) => void
+  9:9-9:25 -> void
+  9:15-9:24 -> string
+  12:5-12:10 -> (any) => void
+  12:5-12:19 -> void
+  12:11-12:18 -> string
+  15:8-15:11 -> () => Promise<void>
+  15:8-15:13 -> Promise<void>
+
+Resolved types:
+  3:30-3:55 -> Exception
+  5:15-5:24 -> Exception
+
+Declarations:
+  1:12-1:15 -> run() => Promise<void>
+  5:12-5:13 -> const e: Exception
+
+References:
+  3:34-3:43 -> 3:30-3:55
+  6:9-6:14 -> builtin print
+  9:9-9:14 -> builtin print
+  12:5-12:10 -> builtin print
+  15:8-15:11 -> 1:12-1:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 1 max locals 0
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    NOP
+    NEW java/lang/Exception
+    DUP
+    LDC "rejected"
+    INVOKESPECIAL java/lang/Exception.<init>(Ljava/lang/String;)V
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.reject(Ljava/lang/Throwable;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "finally"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L8
+   L4:
+    ASTORE_3 3
+   L5:
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "catch"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L6:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "finally"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L8
+   L7:
+    ASTORE 4
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "finally"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD 4
+    ATHROW
+   L8:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "after"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L9:
+    ASTORE 5
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 5
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch java/lang/Exception from L1 to L3 handler L4
+    catch all from L1 to L3 handler L7
+    catch all from L5 to L6 handler L7
+    catch all from L1 to L9 handler L9
+    max stack 3 max locals 6
+
+--- OUTPUT ---
+
+catch
+finally
+after
+

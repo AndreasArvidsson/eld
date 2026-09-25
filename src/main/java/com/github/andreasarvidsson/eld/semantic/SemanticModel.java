@@ -1,6 +1,7 @@
 package com.github.andreasarvidsson.eld.semantic;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
@@ -64,6 +65,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
+    private final IdentityHashMap<CallExpression, Method> promiseMethods =
+        new IdentityHashMap<>();
     private final IdentityHashMap<NewExpression, List<Integer>> constructorArgumentParameters =
         new IdentityHashMap<>();
     private final Map<ClassType, FunctionType> constructors = new HashMap<>();
@@ -85,6 +88,34 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final Set<ClassDeclaration> loweredRecordClasses =
         Collections.newSetFromMap(new IdentityHashMap<>());
+    private final IdentityHashMap<FunctionSymbol, Type> asyncResultTypes =
+        new IdentityHashMap<>();
+
+    public void setAsyncResultType(
+        final FunctionSymbol function,
+        final Type resultType
+    ) {
+        asyncResultTypes.put(function, resultType);
+    }
+
+    public @Nullable Type getAsyncResultType(final FunctionSymbol function) {
+        return asyncResultTypes.get(function);
+    }
+
+    public boolean isAsync(final FunctionSymbol function) {
+        return asyncResultTypes.containsKey(function);
+    }
+
+    public void setPromiseMethod(
+        final CallExpression call,
+        final Method method
+    ) {
+        promiseMethods.put(call, method);
+    }
+
+    public @Nullable Method getPromiseMethod(final CallExpression call) {
+        return promiseMethods.get(call);
+    }
 
     public void setRecordClass(
         final RecordDeclaration record,
@@ -522,6 +553,12 @@ public final class SemanticModel {
 
     public Symbol getReference(final IdentifierExpression expression) {
         return Objects.requireNonNull(references.get(expression));
+    }
+
+    public @Nullable Symbol findReference(
+        final IdentifierExpression expression
+    ) {
+        return references.get(expression);
     }
 
     public void setFunctionParameters(

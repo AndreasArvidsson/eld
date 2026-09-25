@@ -3,7 +3,6 @@ package com.github.andreasarvidsson.eld;
 import static org.junit.jupiter.api.Assertions.*;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassModel;
-import java.lang.classfile.FieldModel;
 import java.lang.classfile.Opcode;
 import java.lang.classfile.instruction.*;
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +15,7 @@ import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.semantic.ArrayType;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
 import com.github.andreasarvidsson.eld.runtime.EldArray;
+import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
 
 class PrimitiveArrayTest {
     private record ArrayExample(String literal, Object value) {

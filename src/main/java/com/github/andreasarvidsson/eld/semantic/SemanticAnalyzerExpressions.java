@@ -1,6 +1,8 @@
 package com.github.andreasarvidsson.eld.semantic;
 
 import java.math.BigInteger;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -10,8 +12,12 @@ import java.util.Objects;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
+import com.github.andreasarvidsson.eld.runtime.EldApi;
+import com.github.andreasarvidsson.eld.runtime.EldPromise;
+import com.github.andreasarvidsson.eld.runtime.PromiseSource;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.ArraySpread;
+import com.github.andreasarvidsson.eld.parser.AwaitExpression;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
@@ -99,6 +105,25 @@ public final class SemanticAnalyzerExpressions {
     ) {
 
         final Type type = switch (expression) {
+            case AwaitExpression awaited -> {
+                final FunctionSymbol function = context.function();
+                if (function == null || !model.isAsync(function)) {
+                    throw new SemanticException(
+                        awaited.range(),
+                        "Await is only allowed inside an async function"
+                    );
+                }
+                final Type operand =
+                    analyzeExpression(awaited.expression(), context);
+                if (!(operand instanceof PromiseType promise)) {
+                    throw new SemanticException(
+                        awaited.expression().range(),
+                        "Expected Promise<T>, found %s",
+                        operand
+                    );
+                }
+                yield promise.valueType();
+            }
             case MemberExpression member -> {
                 final boolean memberCallee = analyzingCallee;
                 final Type target;
@@ -126,6 +151,90 @@ public final class SemanticAnalyzerExpressions {
                 }
                 finally {
                     analyzingCallee = memberCallee;
+                }
+                if (target instanceof PromiseSourceType source) {
+                    final String name = member.member().name();
+                    if (
+                        eldApiMethod(PromiseSource.class, name, false) == null
+                    ) {
+                        throw new SemanticException(
+                            member.member().range(),
+                            "Unknown member '%s' of %s",
+                            name,
+                            source
+                        );
+                    }
+                    final IdentifierDeclaration declaration =
+                        new IdentifierDeclaration(
+                            name,
+                            member.member().range()
+                        );
+                    final Symbol symbol;
+                    if (name.equals("promise") && !analyzingCallee) {
+                        symbol =
+                            new VariableSymbol(
+                                declaration,
+                                new PromiseType(source.valueType()),
+                                Mutability.CONST
+                            );
+                    }
+                    else if (name.equals("resolve") && analyzingCallee) {
+                        symbol =
+                            new FunctionSymbol(
+                                declaration,
+                                new FunctionType(
+                                    source.valueType() == BuiltinType.VOID
+                                        ? List.of()
+                                        : List.of(source.valueType()),
+                                    BuiltinType.VOID
+                                )
+                            );
+                    }
+                    else if (name.equals("reject") && analyzingCallee) {
+                        symbol =
+                            new FunctionSymbol(
+                                declaration,
+                                new FunctionType(
+                                    List.of(
+                                        new InterfaceType(
+                                            "Throwable",
+                                            List.of(),
+                                            Throwable.class
+                                        )
+                                    ),
+                                    BuiltinType.VOID
+                                )
+                            );
+                    }
+                    else {
+                        throw new SemanticException(
+                            member.member().range(),
+                            "Unknown member '%s' of %s",
+                            name,
+                            source
+                        );
+                    }
+                    if (symbol instanceof FunctionSymbol function) {
+                        model.setFunctionParameters(function, List.of());
+                    }
+                    model.setMemberOwner(member, source);
+                    model.setReference(member.member(), symbol);
+                    model.setExpressionType(member.member(), symbol.type());
+                    yield symbol.type();
+                }
+                if (target instanceof PromiseType promise) {
+                    final String name = member.member().name();
+                    if (eldApiMethod(EldPromise.class, name, false) == null) {
+                        throw new SemanticException(
+                            member.member().range(),
+                            "Unknown member '%s' of %s",
+                            name,
+                            promise
+                        );
+                    }
+                    throw new IllegalStateException(
+                        "Unsupported Promise API member: " + name
+                    );
                 }
                 if (
                     target instanceof ArrayType array
@@ -331,6 +440,29 @@ public final class SemanticAnalyzerExpressions {
                 yield symbol.type();
             }
             case NewExpression creation -> {
+                if (creation.className().name().equals("PromiseSource")) {
+                    if (creation.typeArguments().size() > 1) {
+                        throw new SemanticException(
+                            creation.range(),
+                            "PromiseSource expects zero or one type argument, found %s",
+                            creation.typeArguments().size()
+                        );
+                    }
+                    if (!creation.arguments().isEmpty()) {
+                        throw new SemanticException(
+                            creation.range(),
+                            "PromiseSource expects no constructor arguments"
+                        );
+                    }
+                    final Type valueType =
+                        creation.typeArguments().isEmpty()
+                            ? BuiltinType.VOID
+                            : analyzer.resolveType(
+                                creation.typeArguments().getFirst(),
+                                context
+                            );
+                    yield new PromiseSourceType(valueType);
+                }
                 if (
                     JavaTypes.findClass(creation.className().name()) != null
                         && context.scope()
@@ -877,6 +1009,11 @@ public final class SemanticAnalyzerExpressions {
         final CallExpression call,
         final SemanticContext context
     ) {
+        final Method promiseMethod = promiseMethod(call, context);
+        if (promiseMethod != null) {
+            model.setPromiseMethod(call, promiseMethod);
+            return analyzePromiseCall(call, context, promiseMethod);
+        }
         final boolean previousCallee = analyzingCallee;
         final int previousArity = callArity;
         final List<Expression> previousArguments = javaCallArguments;
@@ -1056,6 +1193,160 @@ public final class SemanticAnalyzerExpressions {
         }
         model.setArgumentParameters(call, parameters);
         return function.returnType();
+    }
+
+    private @Nullable Method promiseMethod(
+        final CallExpression call,
+        final SemanticContext context
+    ) {
+        final Expression callee = unwrap(call.callee());
+        if (!(callee instanceof MemberExpression member)) {
+            return null;
+        }
+        final Expression target = unwrap(member.target());
+        if (
+            !(target instanceof IdentifierExpression identifier)
+                || !identifier.name().equals("Promise")
+                || context.scope().resolve(identifier.name()) != null
+        ) {
+            return null;
+        }
+        final Method method =
+            eldApiMethod(EldPromise.class, member.member().name(), true);
+        if (method != null) {
+            return method;
+        }
+        throw new SemanticException(
+            member.member().range(),
+            "Unknown static Promise method '%s'",
+            member.member().name()
+        );
+    }
+
+    private static @Nullable Method eldApiMethod(
+        final Class<?> owner,
+        final String name,
+        final boolean staticMethod
+    ) {
+        for (final Method method : owner.getDeclaredMethods()) {
+            if (
+                Modifier.isStatic(method.getModifiers()) == staticMethod
+                    && method.isAnnotationPresent(EldApi.class)
+                    && method.getName().equals(name)
+            ) {
+                return method;
+            }
+        }
+        return null;
+    }
+
+    private Type analyzePromiseCall(
+        final CallExpression call,
+        final SemanticContext context,
+        final Method method
+    ) {
+        return switch (method.getName()) {
+            case "resolve" -> analyzePromiseResolve(call, context);
+            case "reject" -> analyzePromiseReject(call, context);
+            case "all" -> analyzePromiseAll(call, context);
+            default -> throw new IllegalStateException(
+                "Unsupported Promise API method: " + method
+            );
+        };
+    }
+
+    private Type analyzePromiseResolve(
+        final CallExpression call,
+        final SemanticContext context
+    ) {
+        if (call.arguments().size() > 1) {
+            throw new SemanticException(
+                call.range(),
+                "Promise.resolve expects zero or one argument, found %s",
+                call.arguments().size()
+            );
+        }
+        final Type valueType;
+        if (call.arguments().isEmpty()) {
+            valueType = BuiltinType.VOID;
+        }
+        else {
+            final Expression value = call.arguments().getFirst();
+            valueType = analyzeExpression(value, context);
+            if (valueType == BuiltinType.VOID) {
+                throw new SemanticException(
+                    value.range(),
+                    "Promise.resolve argument must produce a value"
+                );
+            }
+        }
+        return valueType instanceof PromiseType promise
+            ? promise
+            : new PromiseType(valueType);
+    }
+
+    private Type analyzePromiseReject(
+        final CallExpression call,
+        final SemanticContext context
+    ) {
+        if (call.arguments().size() != 1) {
+            throw new SemanticException(
+                call.range(),
+                "Promise.reject expects one argument, found %s",
+                call.arguments().size()
+            );
+        }
+        final Expression error = call.arguments().getFirst();
+        final Type errorType = analyzeExpression(error, context);
+        SemanticAnalyzer.requireThrowable(errorType, error.range());
+        return new PromiseType(BuiltinType.ANY);
+    }
+
+    private Type analyzePromiseAll(
+        final CallExpression call,
+        final SemanticContext context
+    ) {
+        if (call.arguments().size() != 1) {
+            throw new SemanticException(
+                call.range(),
+                "Promise.all expects one argument, found %s",
+                call.arguments().size()
+            );
+        }
+        final Expression values = call.arguments().getFirst();
+        final Type valuesType = analyzeExpression(values, context);
+        if (!(valuesType instanceof ArrayType array)) {
+            throw new SemanticException(
+                values.range(),
+                "Promise.all expects an array, found %s",
+                valuesType
+            );
+        }
+        final Type valueType;
+        if (
+            array.elementType() == BuiltinType.NULL
+                && values instanceof ArrayExpression literal
+                && literal.elements().isEmpty()
+        ) {
+            valueType = BuiltinType.ANY;
+        }
+        else if (array.elementType() instanceof PromiseType promise) {
+            valueType = promise.valueType();
+        }
+        else {
+            throw new SemanticException(
+                values.range(),
+                "Promise.all expects [Promise<T>], found %s",
+                valuesType
+            );
+        }
+        if (valueType == BuiltinType.VOID) {
+            throw new SemanticException(
+                values.range(),
+                "Promise.all cannot collect Promise<void> values"
+            );
+        }
+        return new PromiseType(new ArrayType(valueType));
     }
 
     public static Expression unwrap(final Expression expression) {

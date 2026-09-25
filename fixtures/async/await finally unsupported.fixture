@@ -1,0 +1,119 @@
+async func run() {
+    try {
+        print("try");
+    } finally {
+        await Promise.resolve();
+    }
+}
+
+ignore run();
+
+
+--- TOKENS ---
+
+ASYNC (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "run" (1:12-1:15)
+LEFT_PAREN (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+LEFT_BRACE (1:18-1:19)
+TRY (2:5-2:8)
+LEFT_BRACE (2:9-2:10)
+IDENTIFIER "print" (3:9-3:14)
+LEFT_PAREN (3:14-3:15)
+STRING_LITERAL "\"try\"" (3:15-3:20)
+RIGHT_PAREN (3:20-3:21)
+SEMICOLON (3:21-3:22)
+RIGHT_BRACE (4:5-4:6)
+FINALLY (4:7-4:14)
+LEFT_BRACE (4:15-4:16)
+AWAIT (5:9-5:14)
+IDENTIFIER "Promise" (5:15-5:22)
+DOT (5:22-5:23)
+IDENTIFIER "resolve" (5:23-5:30)
+LEFT_PAREN (5:30-5:31)
+RIGHT_PAREN (5:31-5:32)
+SEMICOLON (5:32-5:33)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+IGNORE (9:1-9:7)
+IDENTIFIER "run" (9:8-9:11)
+LEFT_PAREN (9:11-9:12)
+RIGHT_PAREN (9:12-9:13)
+SEMICOLON (9:13-9:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:14
+  (FunctionDeclaration
+    range: 1:1-7:2
+    async: true
+    (IdentifierDeclaration
+      range: 1:12-1:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:18-7:2
+      (TryStatement
+        range: 2:5-6:6
+        (BlockStatement
+          range: 2:9-4:6
+          (ExpressionStatement
+            range: 3:9-3:22
+            (CallExpression
+              range: 3:9-3:21
+              (IdentifierExpression
+                range: 3:9-3:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 3:15-3:20
+                kind: STRING
+                text: "\"try\""
+              )
+            )
+          )
+        )
+        (BlockStatement
+          range: 4:15-6:6
+          (ExpressionStatement
+            range: 5:9-5:33
+            (AwaitExpression
+              range: 5:9-5:32
+              (CallExpression
+                range: 5:15-5:32
+                (MemberExpression
+                  range: 5:15-5:30
+                  (IdentifierExpression
+                    range: 5:15-5:22
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 5:23-5:30
+                    name: "resolve"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 9:1-9:14
+    (CallExpression
+      range: 9:8-9:13
+      (IdentifierExpression
+        range: 9:8-9:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Await is not yet supported inside a finally block at 5:9-5:32

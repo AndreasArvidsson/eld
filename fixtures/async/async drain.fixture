@@ -1,0 +1,388 @@
+const source = new PromiseSource<i32>();
+
+async func run() {
+    print("before");
+    const value = await source.promise;
+    print(value);
+    print("after");
+}
+
+ignore run();
+print("outside");
+
+source.resolve(42);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "source" (1:7-1:13)
+EQUAL (1:14-1:15)
+NEW (1:16-1:19)
+IDENTIFIER "PromiseSource" (1:20-1:33)
+LESS (1:33-1:34)
+IDENTIFIER "i32" (1:34-1:37)
+GREATER (1:37-1:38)
+LEFT_PAREN (1:38-1:39)
+RIGHT_PAREN (1:39-1:40)
+SEMICOLON (1:40-1:41)
+ASYNC (3:1-3:6)
+FUNC (3:7-3:11)
+IDENTIFIER "run" (3:12-3:15)
+LEFT_PAREN (3:15-3:16)
+RIGHT_PAREN (3:16-3:17)
+LEFT_BRACE (3:18-3:19)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+STRING_LITERAL "\"before\"" (4:11-4:19)
+RIGHT_PAREN (4:19-4:20)
+SEMICOLON (4:20-4:21)
+CONST (5:5-5:10)
+IDENTIFIER "value" (5:11-5:16)
+EQUAL (5:17-5:18)
+AWAIT (5:19-5:24)
+IDENTIFIER "source" (5:25-5:31)
+DOT (5:31-5:32)
+IDENTIFIER "promise" (5:32-5:39)
+SEMICOLON (5:39-5:40)
+IDENTIFIER "print" (6:5-6:10)
+LEFT_PAREN (6:10-6:11)
+IDENTIFIER "value" (6:11-6:16)
+RIGHT_PAREN (6:16-6:17)
+SEMICOLON (6:17-6:18)
+IDENTIFIER "print" (7:5-7:10)
+LEFT_PAREN (7:10-7:11)
+STRING_LITERAL "\"after\"" (7:11-7:18)
+RIGHT_PAREN (7:18-7:19)
+SEMICOLON (7:19-7:20)
+RIGHT_BRACE (8:1-8:2)
+IGNORE (10:1-10:7)
+IDENTIFIER "run" (10:8-10:11)
+LEFT_PAREN (10:11-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+STRING_LITERAL "\"outside\"" (11:7-11:16)
+RIGHT_PAREN (11:16-11:17)
+SEMICOLON (11:17-11:18)
+IDENTIFIER "source" (13:1-13:7)
+DOT (13:7-13:8)
+IDENTIFIER "resolve" (13:8-13:15)
+LEFT_PAREN (13:15-13:16)
+INTEGER_LITERAL "42" (13:16-13:18)
+RIGHT_PAREN (13:18-13:19)
+SEMICOLON (13:19-13:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:20
+  (VariableDeclaration
+    range: 1:1-1:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "source"
+    )
+    type: null
+    (NewExpression
+      range: 1:16-1:40
+      (IdentifierExpression
+        range: 1:20-1:33
+        name: "PromiseSource"
+      )
+      (NamedTypeNode
+        range: 1:34-1:37
+        name: "i32"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 3:1-8:2
+    async: true
+    (IdentifierDeclaration
+      range: 3:12-3:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 3:18-8:2
+      (ExpressionStatement
+        range: 4:5-4:21
+        (CallExpression
+          range: 4:5-4:20
+          (IdentifierExpression
+            range: 4:5-4:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 4:11-4:19
+            kind: STRING
+            text: "\"before\""
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 5:5-5:40
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 5:11-5:16
+          name: "value"
+        )
+        type: null
+        (AwaitExpression
+          range: 5:19-5:39
+          (MemberExpression
+            range: 5:25-5:39
+            (IdentifierExpression
+              range: 5:25-5:31
+              name: "source"
+            )
+            (IdentifierExpression
+              range: 5:32-5:39
+              name: "promise"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 6:5-6:18
+        (CallExpression
+          range: 6:5-6:17
+          (IdentifierExpression
+            range: 6:5-6:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 6:11-6:16
+            name: "value"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 7:5-7:20
+        (CallExpression
+          range: 7:5-7:19
+          (IdentifierExpression
+            range: 7:5-7:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 7:11-7:18
+            kind: STRING
+            text: "\"after\""
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:8-10:13
+      (IdentifierExpression
+        range: 10:8-10:11
+        name: "run"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:18
+    (CallExpression
+      range: 11:1-11:17
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 11:7-11:16
+        kind: STRING
+        text: "\"outside\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:20
+    (CallExpression
+      range: 13:1-13:19
+      (MemberExpression
+        range: 13:1-13:15
+        (IdentifierExpression
+          range: 13:1-13:7
+          name: "source"
+        )
+        (IdentifierExpression
+          range: 13:8-13:15
+          name: "resolve"
+        )
+      )
+      (LiteralExpression
+        range: 13:16-13:18
+        kind: INT
+        text: "42"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:40 -> PromiseSource<i32>
+  4:5-4:10 -> (any) => void
+  4:5-4:20 -> void
+  4:11-4:19 -> string
+  5:19-5:39 -> i32
+  5:25-5:31 -> PromiseSource<i32>
+  5:25-5:39 -> Promise<i32>
+  5:32-5:39 -> Promise<i32>
+  6:5-6:10 -> (any) => void
+  6:5-6:17 -> void
+  6:11-6:16 -> i32
+  7:5-7:10 -> (any) => void
+  7:5-7:19 -> void
+  7:11-7:18 -> string
+  10:8-10:11 -> () => Promise<void>
+  10:8-10:13 -> Promise<void>
+  11:1-11:6 -> (any) => void
+  11:1-11:17 -> void
+  11:7-11:16 -> string
+  13:1-13:7 -> PromiseSource<i32>
+  13:1-13:15 -> (i32) => void
+  13:1-13:19 -> void
+  13:8-13:15 -> (i32) => void
+  13:16-13:18 -> i32
+
+Resolved types:
+  1:34-1:37 -> i32
+
+Declarations:
+  1:7-1:13 -> const source: PromiseSource<i32>
+  3:12-3:15 -> run() => Promise<void>
+  5:11-5:16 -> const value: i32
+
+References:
+  4:5-4:10 -> builtin print
+  5:25-5:31 -> 1:7-1:13
+  5:32-5:39 -> 5:32-5:39
+  6:5-6:10 -> builtin print
+  6:11-6:16 -> 5:11-5:16
+  7:5-7:10 -> builtin print
+  10:8-10:11 -> 3:12-3:15
+  11:1-11:6 -> builtin print
+  13:1-13:7 -> 1:7-1:13
+  13:8-13:15 -> 13:8-13:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  field source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [PUBLIC, STATIC, FINAL]
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "outside"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    LDC 42
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "before"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_3 3
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ILOAD_3 3
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "after"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L4:
+    ASTORE 4
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 4
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L4 handler L4
+    max stack 3 max locals 5
+
+--- OUTPUT ---
+
+before
+outside
+42
+after
+

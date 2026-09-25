@@ -6,6 +6,8 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.AstNode;
+import com.github.andreasarvidsson.eld.parser.AstTraversal;
+import com.github.andreasarvidsson.eld.parser.AwaitExpression;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
@@ -18,6 +20,9 @@ import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.ForEachStatement;
 import com.github.andreasarvidsson.eld.parser.ForStatement;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
+import com.github.andreasarvidsson.eld.parser.CallExpression;
+import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
+import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
@@ -302,8 +307,41 @@ public final class SemanticAnalyzerStatements {
             );
         }
         else {
-            analyzer.analyzeExpression(expression, context);
+            final Type type = analyzer.analyzeExpression(expression, context);
+            if (type instanceof PromiseType) {
+                final String producer = promiseProducer(expression);
+                if (producer == null) {
+                    throw new SemanticException(
+                        expression.range(),
+                        "Promise is not awaited or otherwise used"
+                    );
+                }
+                throw new SemanticException(
+                    expression.range(),
+                    "Promise returned by '%s' is not awaited or otherwise used",
+                    producer
+                );
+            }
         }
+    }
+
+    private static @Nullable String promiseProducer(
+        final Expression expression
+    ) {
+        if (!(expression instanceof CallExpression call)) {
+            return null;
+        }
+        Expression callee = call.callee();
+        while (callee instanceof GroupingExpression grouping) {
+            callee = grouping.expression();
+        }
+        if (callee instanceof IdentifierExpression identifier) {
+            return identifier.name();
+        }
+        if (callee instanceof MemberExpression member) {
+            return member.member().name();
+        }
+        return null;
     }
 
     public Type analyzeSwitchExpression(
@@ -641,7 +679,9 @@ public final class SemanticAnalyzerStatements {
         }
 
         final @Nullable Expression value = statement.value();
-        final Type returnType = function.type().returnType();
+        final Type asyncResult = model.getAsyncResultType(function);
+        final Type returnType =
+            asyncResult != null ? asyncResult : function.type().returnType();
 
         if (value == null) {
             if (returnType.equals(BuiltinType.VOID)) {
@@ -770,17 +810,22 @@ public final class SemanticAnalyzerStatements {
                 )
                 : BuiltinType.VOID;
 
+        final Type callableReturnType =
+            declaration.async() ? new PromiseType(returnType) : returnType;
         final FunctionSymbol symbol =
             new FunctionSymbol(
                 declaration.name(),
                 new FunctionType(
                     Objects.requireNonNull(parameterTypes),
-                    returnType
+                    callableReturnType
                 )
             );
 
         destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
+        if (declaration.async()) {
+            model.setAsyncResultType(symbol, returnType);
+        }
 
         model.setFunctionParameters(
             symbol,
@@ -846,6 +891,12 @@ public final class SemanticAnalyzerStatements {
         final Expression value = parameter.defaultValue();
         if (value == null) {
             return;
+        }
+        if (AstTraversal.anyMatch(value, AwaitExpression.class::isInstance)) {
+            throw new SemanticException(
+                value.range(),
+                "Await is not allowed in a parameter default value"
+            );
         }
         final Type expected = model.getSymbol(parameter.name()).type();
         final boolean previous = analyzer.isAnalyzingConstructorDefault();

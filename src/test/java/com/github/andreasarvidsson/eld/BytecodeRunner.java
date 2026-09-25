@@ -158,48 +158,55 @@ public final class BytecodeRunner {
 
     private static void workerLoop() throws IOException {
         final DataInputStream input = new DataInputStream(System.in);
-        final DataOutputStream output =
-            new DataOutputStream(new FileOutputStream(FileDescriptor.out));
-        while (true) {
-            final int count;
-            try {
-                count = input.readInt();
-            }
-            catch (final EOFException e) {
-                return;
-            }
-            final Map<String, byte[]> classes = new LinkedHashMap<>();
-            for (int i = 0; i < count; i++) {
-                final String name = input.readUTF();
-                classes.put(name, input.readNBytes(input.readInt()));
-            }
-            final ByteArrayOutputStream captured = new ByteArrayOutputStream();
-            boolean success = true;
-            try (final PrintStream stream =
-                new PrintStream(captured, true, StandardCharsets.UTF_8)) {
-                final PrintStream previousOut = System.out;
-                final PrintStream previousErr = System.err;
-                System.setOut(stream);
-                System.setErr(stream);
+        try (final DataOutputStream output =
+            new DataOutputStream(new FileOutputStream(FileDescriptor.out))) {
+            while (true) {
+                final int count;
                 try {
-                    final ModuleLoader loader = new ModuleLoader();
-                    loader.add(classes);
-                    Class.forName("Test", true, loader);
+                    count = input.readInt();
                 }
-                catch (final Throwable error) {
-                    success = false;
-                    error.printStackTrace(stream);
+                catch (final EOFException e) {
+                    return;
                 }
-                finally {
-                    System.setOut(previousOut);
-                    System.setErr(previousErr);
+                final Map<String, byte[]> classes = new LinkedHashMap<>();
+                for (int i = 0; i < count; i++) {
+                    final String name = input.readUTF();
+                    classes.put(name, input.readNBytes(input.readInt()));
                 }
+                final ByteArrayOutputStream captured =
+                    new ByteArrayOutputStream();
+                boolean success = true;
+                try (final PrintStream stream =
+                    new PrintStream(captured, true, StandardCharsets.UTF_8)) {
+                    final PrintStream previousOut = System.out;
+                    final PrintStream previousErr = System.err;
+                    System.setOut(stream);
+                    System.setErr(stream);
+                    try {
+                        final ModuleLoader loader = new ModuleLoader();
+                        loader.add(classes);
+                        Class.forName("Test", true, loader);
+                        Class.forName(
+                            "com.github.andreasarvidsson.eld.runtime.EldScheduler",
+                            true,
+                            loader
+                        ).getMethod("drain").invoke(null);
+                    }
+                    catch (final Throwable error) {
+                        success = false;
+                        error.printStackTrace(stream);
+                    }
+                    finally {
+                        System.setOut(previousOut);
+                        System.setErr(previousErr);
+                    }
+                }
+                final byte[] bytes = captured.toByteArray();
+                output.writeBoolean(success);
+                output.writeInt(bytes.length);
+                output.write(bytes);
+                output.flush();
             }
-            final byte[] bytes = captured.toByteArray();
-            output.writeBoolean(success);
-            output.writeInt(bytes.length);
-            output.write(bytes);
-            output.flush();
         }
     }
 }

@@ -19,6 +19,7 @@ import java.lang.constant.DirectMethodHandleDesc;
 import java.lang.constant.DynamicCallSiteDesc;
 import java.lang.constant.MethodHandleDesc;
 import java.lang.constant.MethodTypeDesc;
+import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -37,6 +38,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.*;
+import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
 import com.github.andreasarvidsson.eld.semantic.ArrayType;
 import com.github.andreasarvidsson.eld.semantic.TupleType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionSymbol;
@@ -55,6 +57,8 @@ import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.semantic.UnionType;
 import com.github.andreasarvidsson.eld.semantic.JavaMethodSymbol;
 import com.github.andreasarvidsson.eld.semantic.JavaTypes;
+import com.github.andreasarvidsson.eld.semantic.PromiseType;
+import com.github.andreasarvidsson.eld.semantic.PromiseSourceType;
 
 /** Generates a Java 21 module named Test and its declared classes. */
 public final class BytecodeGenerator {
@@ -67,6 +71,10 @@ public final class BytecodeGenerator {
     private @Nullable ClassBuilder currentWriter;
     private int nextLambda;
     private int nextObject;
+    private int nextAsyncFrame;
+    private final IdentityHashMap<FunctionDeclaration, String> asyncFrameNames =
+        new IdentityHashMap<>();
+    private final List<String> asyncFrameNameOrder = new ArrayList<>();
     private final IdentityHashMap<ObjectExpression, String> objectNames =
         new IdentityHashMap<>();
     private final Map<String, byte[]> objectClasses = new LinkedHashMap<>();
@@ -133,6 +141,15 @@ public final class BytecodeGenerator {
                         || item instanceof InterfaceDeclaration
                         || AstTraversal
                             .anyMatch(item, ObjectExpression.class::isInstance)
+                        || AstTraversal.anyMatch(
+                            item,
+                            node -> node instanceof FunctionDeclaration function
+                                && function.async()
+                                && AstTraversal.anyMatch(
+                                    function.body(),
+                                    AwaitExpression.class::isInstance
+                                )
+                        )
                 )
         ) {
             throw new IllegalStateException(
@@ -152,6 +169,9 @@ public final class BytecodeGenerator {
     public Map<String, byte[]> generateClasses() {
         nextLambda = 0;
         nextObject = 0;
+        nextAsyncFrame = 0;
+        asyncFrameNames.clear();
+        asyncFrameNameOrder.clear();
         objectClasses.clear();
         objectTypes.clear();
         objects.clear();
@@ -164,6 +184,16 @@ public final class BytecodeGenerator {
                     final String name = moduleName + "$$object" + nextObject++;
                     objectNames.put(object, name);
                     objectNameOrder.add(name);
+                }
+                if (
+                    node instanceof FunctionDeclaration function
+                        && function.async()
+                        && AstTraversal.anyMatch(
+                            function.body(),
+                            AwaitExpression.class::isInstance
+                        )
+                ) {
+                    asyncFrameName(function);
                 }
             });
         }
@@ -1176,6 +1206,345 @@ public final class BytecodeGenerator {
     ) {
     }
 
+    private record AsyncStateMachine(
+        String owner, String promiseOwner, String resumeName,
+        String resumeDescriptor,
+        IdentityHashMap<AwaitExpression, Integer> states,
+        IdentityHashMap<AwaitExpression, Label> labels,
+        IdentityHashMap<AwaitExpression, Boolean> discarded,
+        IdentityHashMap<Expression, Integer> spills,
+        IdentityHashMap<ForEachStatement, Integer> loopIndexes
+    ) {
+    }
+
+    private String asyncFrameName(final FunctionDeclaration function) {
+        final String existing = asyncFrameNames.get(function);
+        if (existing != null) {
+            return existing;
+        }
+        final String name = moduleName + "$$async" + nextAsyncFrame++;
+        asyncFrameNames.put(function, name);
+        asyncFrameNameOrder.add(name);
+        return name;
+    }
+
+    private static Expression unwrapGrouping(final Expression expression) {
+        return expression instanceof GroupingExpression grouping
+            ? unwrapGrouping(grouping.expression())
+            : expression;
+    }
+
+    private void addAsyncSpill(
+        final IdentityHashMap<Expression, Integer> spills,
+        final Expression expression
+    ) {
+        spills.computeIfAbsent(expression, ignored -> spills.size());
+    }
+
+    private static boolean containsAwaitNode(final AstNode node) {
+        return AstTraversal.anyMatch(node, AwaitExpression.class::isInstance);
+    }
+
+    private static boolean hasLaterAwait(
+        final List<Expression> operands,
+        final int index
+    ) {
+        return operands.subList(index + 1, operands.size())
+            .stream()
+            .anyMatch(BytecodeGenerator::containsAwaitNode);
+    }
+
+    private List<Expression> asyncCallOperands(final CallExpression call) {
+        final List<Expression> operands = new ArrayList<>();
+        if (semanticModel.getPromiseMethod(call) == null) {
+            final Expression callee = unwrapGrouping(call.callee());
+            if (callee instanceof MemberExpression member) {
+                final Symbol memberSymbol =
+                    semanticModel.getReference(member.member());
+                final boolean staticJava =
+                    memberSymbol instanceof JavaMethodSymbol javaMethod
+                        && java.lang.reflect.Modifier
+                            .isStatic(javaMethod.method().getModifiers());
+                if (!staticJava) {
+                    operands.add(member.target());
+                }
+            }
+            else if (!(callee instanceof IdentifierExpression)) {
+                operands.add(call.callee());
+            }
+        }
+        for (final Expression supplied : call.arguments()) {
+            operands.add(
+                supplied instanceof NamedArgumentExpression named
+                    ? named.value()
+                    : supplied
+            );
+        }
+        return operands;
+    }
+
+    private List<Expression> asyncCompoundOperands(
+        final Expression expression
+    ) {
+        final List<Expression> operands = new ArrayList<>();
+        switch (expression) {
+            case FormatStringExpression format ->
+                operands.addAll(format.parts());
+            case TupleExpression tuple -> operands.addAll(tuple.elements());
+            case ArrayExpression array -> {
+                for (final Expression element : array.elements()) {
+                    operands.add(
+                        element instanceof ArraySpread spread
+                            ? spread.expression()
+                            : element
+                    );
+                }
+            }
+            case MapExpression map -> {
+                for (final MapElement element : map.elements()) {
+                    if (element instanceof MapEntry entry) {
+                        operands.add(entry.key());
+                        operands.add(entry.value());
+                    }
+                    else {
+                        operands.add(((MapSpread) element).expression());
+                    }
+                }
+            }
+            case ObjectExpression object -> {
+                final InterfaceContract contract =
+                    semanticModel.getInterface(
+                        (InterfaceType) semanticModel.getExpressionType(object)
+                    );
+                for (final ObjectEntry entry : semanticModel
+                    .getObjectEvaluation(object)) {
+                    if (entry instanceof ObjectSpread spread) {
+                        operands.add(spread.value());
+                        continue;
+                    }
+                    final ObjectMember member = (ObjectMember) entry;
+                    if (
+                        (semanticModel.isSpreadMethod(member)
+                            && !contract.fields()
+                                .containsKey(member.name().name()))
+                            || (contract.methods()
+                                .containsKey(member.name().name())
+                                && unwrapGrouping(
+                                    member.value()
+                                ) instanceof LambdaExpression)
+                    ) {
+                        continue;
+                    }
+                    operands.add(member.value());
+                }
+            }
+            case NewExpression creation -> {
+                for (final Expression supplied : creation.arguments()) {
+                    operands.add(
+                        supplied instanceof NamedArgumentExpression named
+                            ? named.value()
+                            : supplied
+                    );
+                }
+            }
+            case SubscriptExpression index -> {
+                operands.add(index.target());
+                operands.add(index.index());
+            }
+            case SliceExpression slice -> {
+                operands.add(slice.target());
+                if (slice.startIndex() != null) {
+                    operands.add(slice.startIndex());
+                }
+                if (slice.endIndex() != null) {
+                    operands.add(slice.endIndex());
+                }
+            }
+            case AssignmentExpression assignment -> {
+                final Expression target = unwrapGrouping(assignment.target());
+                if (target instanceof MemberExpression member) {
+                    operands.add(member.target());
+                }
+                else if (target instanceof SubscriptExpression index) {
+                    operands.add(index.target());
+                    operands.add(index.index());
+                }
+                operands.add(assignment.value());
+            }
+            case UnaryExpression unary -> {
+                final Expression target = unwrapGrouping(unary.operand());
+                if (target instanceof MemberExpression member) {
+                    operands.add(member.target());
+                }
+                else if (target instanceof SubscriptExpression index) {
+                    operands.add(index.target());
+                    operands.add(index.index());
+                }
+            }
+            case PostfixExpression postfix -> {
+                final Expression target = unwrapGrouping(postfix.operand());
+                if (target instanceof MemberExpression member) {
+                    operands.add(member.target());
+                }
+                else if (target instanceof SubscriptExpression index) {
+                    operands.add(index.target());
+                    operands.add(index.index());
+                }
+            }
+            default -> {
+                // The expression does not require operand preservation.
+            }
+        }
+        return operands;
+    }
+
+    private void collectAsyncStorage(
+        final BlockStatement body,
+        final IdentityHashMap<Expression, Integer> spills,
+        final IdentityHashMap<ForEachStatement, Integer> loopIndexes
+    ) {
+        AstTraversal.walk(body, node -> {
+            if (
+                node instanceof ForEachStatement loop && AstTraversal
+                    .anyMatch(loop.body(), AwaitExpression.class::isInstance)
+            ) {
+                loopIndexes
+                    .computeIfAbsent(loop, ignored -> loopIndexes.size());
+                addAsyncSpill(spills, loop.iterable());
+            }
+            if (
+                !(node instanceof Expression expression) || !AstTraversal
+                    .anyMatch(expression, AwaitExpression.class::isInstance)
+            ) {
+                return;
+            }
+            if (expression instanceof CallExpression call) {
+                final List<Expression> operands = asyncCallOperands(call);
+                for (int i = 0; i < operands.size(); i++) {
+                    if (hasLaterAwait(operands, i)) {
+                        addAsyncSpill(spills, operands.get(i));
+                    }
+                }
+                return;
+            }
+            if (expression instanceof MapExpression map) {
+                addAsyncSpill(spills, map);
+                for (final MapElement element : map.elements()) {
+                    if (
+                        element instanceof MapEntry entry
+                            && containsAwaitNode(entry.value())
+                    ) {
+                        addAsyncSpill(spills, entry.key());
+                    }
+                }
+                return;
+            }
+            if (
+                expression instanceof BinaryExpression binary && AstTraversal
+                    .anyMatch(binary.right(), AwaitExpression.class::isInstance)
+            ) {
+                addAsyncSpill(spills, binary.left());
+            }
+            final List<Expression> operands = asyncCompoundOperands(expression);
+            for (int i = 0; i < operands.size(); i++) {
+                if (hasLaterAwait(operands, i)) {
+                    addAsyncSpill(spills, operands.get(i));
+                }
+            }
+        });
+    }
+
+    private boolean liveAcrossAwait(
+        final Symbol symbol,
+        final AstNode declaration,
+        final Position definition,
+        final BlockStatement body,
+        final List<AwaitExpression> awaits
+    ) {
+        final boolean[] live = {false};
+        AstTraversal.walk(body, node -> {
+            if (
+                live[0] || !(node instanceof IdentifierExpression identifier)
+                    || !Objects
+                        .equals(semanticModel.findReference(identifier), symbol)
+            ) {
+                return;
+            }
+            for (final AwaitExpression awaited : awaits) {
+                if (
+                    definition.compareTo(awaited.range().start()) <= 0
+                        && awaited.range()
+                            .end()
+                            .compareTo(identifier.range().start()) <= 0
+                ) {
+                    live[0] = true;
+                    return;
+                }
+            }
+        });
+        if (live[0]) {
+            return true;
+        }
+        AstTraversal.walk(body, node -> {
+            if (live[0] || !(node instanceof Statement loop)) {
+                return;
+            }
+            final List<AstNode> repeated = switch (loop) {
+                case WhileStatement statement ->
+                    List.of(statement.condition(), statement.body());
+                case DoWhileStatement statement ->
+                    List.of(statement.body(), statement.condition());
+                case ForStatement statement -> {
+                    final List<AstNode> nodes = new ArrayList<>();
+                    if (statement.condition() != null) {
+                        nodes.add(statement.condition());
+                    }
+                    nodes.add(statement.body());
+                    if (statement.update() != null) {
+                        nodes.add(statement.update());
+                    }
+                    yield nodes;
+                }
+                case ForEachStatement statement -> List.of(statement.body());
+                default -> List.of();
+            };
+            if (
+                repeated.isEmpty()
+                    || (loop instanceof ForEachStatement
+                        && Objects.equals(declaration, loop))
+                    || repeated.stream()
+                        .anyMatch(
+                            part -> AstTraversal.anyMatch(
+                                part,
+                                child -> Objects.equals(child, declaration)
+                            )
+                        )
+                    || repeated.stream()
+                        .noneMatch(
+                            part -> AstTraversal.anyMatch(
+                                part,
+                                AwaitExpression.class::isInstance
+                            )
+                        )
+            ) {
+                return;
+            }
+            live[0] =
+                repeated.stream()
+                    .anyMatch(
+                        part -> AstTraversal.anyMatch(
+                            part,
+                            child -> child instanceof IdentifierExpression identifier
+                                && Objects.equals(
+                                    semanticModel.findReference(identifier),
+                                    symbol
+                                )
+                        )
+                    );
+        });
+        return live[0];
+    }
+
     private void generateFunction(
         final ClassBuilder writer,
         final FunctionDeclaration function,
@@ -1184,6 +1553,21 @@ public final class BytecodeGenerator {
     ) {
         final FunctionSymbol symbol =
             (FunctionSymbol) semanticModel.getSymbol(function.name());
+        if (function.async()) {
+            generateAsyncFunction(writer, function, symbol, globals, instance);
+            generateDefaultOverload(
+                writer,
+                methodName(symbol),
+                symbol.type(),
+                function.parameters(),
+                globals,
+                instance,
+                instance == null
+                    ? Visibility.PUBLIC
+                    : semanticModel.getMemberVisibility(symbol)
+            );
+            return;
+        }
         generateMethod(
             writer,
             visibilityAccess(
@@ -1221,6 +1605,602 @@ public final class BytecodeGenerator {
                 ? Visibility.PUBLIC
                 : semanticModel.getMemberVisibility(symbol)
         );
+    }
+
+    private void generateAsyncFunction(
+        final ClassBuilder writer,
+        final FunctionDeclaration function,
+        final FunctionSymbol symbol,
+        final IdentityHashMap<Symbol, String> globals,
+        final @Nullable InstanceContext instance
+    ) {
+        final Type resultType =
+            Objects.requireNonNull(semanticModel.getAsyncResultType(symbol));
+        final List<AwaitExpression> awaits = new ArrayList<>();
+        AstTraversal.walk(function.body(), node -> {
+            if (node instanceof AwaitExpression awaited) {
+                awaits.add(awaited);
+            }
+        });
+        final IdentityHashMap<Expression, Integer> spills =
+            new IdentityHashMap<>();
+        final IdentityHashMap<ForEachStatement, Integer> loopIndexes =
+            new IdentityHashMap<>();
+        collectAsyncStorage(function.body(), spills, loopIndexes);
+        if (!awaits.isEmpty()) {
+            generateSuspendingAsyncFunction(
+                writer,
+                function,
+                symbol,
+                globals,
+                instance,
+                resultType,
+                awaits,
+                spills,
+                loopIndexes
+            );
+            return;
+        }
+        final FunctionType bodyType =
+            new FunctionType(symbol.type().parameterTypes(), resultType);
+        final String bodyName = "$async$" + methodName(symbol);
+        final int staticFlag = instance == null ? ACC_STATIC : 0;
+        generateMethod(
+            writer,
+            ACC_PRIVATE | ACC_SYNTHETIC | staticFlag,
+            bodyName,
+            methodDescriptor(bodyType),
+            methodSignature(bodyType),
+            method -> {
+                final MethodGenerator generator =
+                    new MethodGenerator(method, globals, resultType, instance);
+                for (final FunctionParameter parameter : function
+                    .parameters()) {
+                    generator.local(semanticModel.getSymbol(parameter.name()));
+                }
+                generator.finish(generator.block(function.body()));
+            }
+        );
+        generateMethod(
+            writer,
+            visibilityAccess(
+                instance == null
+                    ? Visibility.PUBLIC
+                    : semanticModel.getMemberVisibility(symbol)
+            ) | staticFlag,
+            methodName(symbol),
+            methodDescriptor(symbol.type()),
+            methodSignature(symbol.type()),
+            method -> {
+                final String sourceOwner =
+                    "com/github/andreasarvidsson/eld/runtime/PromiseSource";
+                int parameterSlot = instance == null ? 0 : 1;
+                final int sourceSlot =
+                    parameterSlot + bodyType.parameterTypes()
+                        .stream()
+                        .mapToInt(BytecodeGenerator::slots)
+                        .sum();
+                method.new_(classDesc(sourceOwner));
+                method.dup();
+                method.invoke(
+                    INVOKESPECIAL,
+                    classDesc(sourceOwner),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+                method.astore(sourceSlot);
+                final Label start = method.newLabel();
+                final Label end = method.newLabel();
+                final Label handler = method.newLabel();
+                final Label complete = method.newLabel();
+                method.labelBinding(start);
+                method.aload(sourceSlot);
+                if (instance != null) {
+                    method.aload(0);
+                }
+                for (final Type parameter : bodyType.parameterTypes()) {
+                    method.with(
+                        localInstruction(loadOpcode(parameter), parameterSlot)
+                    );
+                    parameterSlot += slots(parameter);
+                }
+                method.invoke(
+                    instance == null ? INVOKESTATIC : INVOKESPECIAL,
+                    classDesc(instance == null ? moduleName : instance.owner()),
+                    bodyName,
+                    MethodTypeDesc.ofDescriptor(methodDescriptor(bodyType)),
+                    false
+                );
+                if (resultType != BuiltinType.VOID) {
+                    boxValue(method, resultType);
+                }
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(sourceOwner),
+                    "resolve",
+                    MethodTypeDesc.ofDescriptor(
+                        resultType == BuiltinType.VOID
+                            ? "()V"
+                            : "(Ljava/lang/Object;)V"
+                    ),
+                    false
+                );
+                method.labelBinding(end);
+                method.branch(GOTO, complete);
+                method.labelBinding(handler);
+                final int errorSlot = sourceSlot + 1;
+                method.astore(errorSlot);
+                method.aload(sourceSlot);
+                method.aload(errorSlot);
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(sourceOwner),
+                    "reject",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;)V"),
+                    false
+                );
+                method.labelBinding(complete);
+                method.aload(sourceSlot);
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(sourceOwner),
+                    "promise",
+                    MethodTypeDesc.ofDescriptor(
+                        "()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;"
+                    ),
+                    false
+                );
+                method.areturn();
+                method.exceptionCatchAll(start, end, handler);
+            }
+        );
+    }
+
+    private void generateSuspendingAsyncFunction(
+        final ClassBuilder writer,
+        final FunctionDeclaration function,
+        final FunctionSymbol symbol,
+        final IdentityHashMap<Symbol, String> globals,
+        final @Nullable InstanceContext instance,
+        final Type resultType,
+        final List<AwaitExpression> awaits,
+        final IdentityHashMap<Expression, Integer> spills,
+        final IdentityHashMap<ForEachStatement, Integer> loopIndexes
+    ) {
+        final String sourceOwner =
+            "com/github/andreasarvidsson/eld/runtime/PromiseSource";
+        final String promiseOwner =
+            "com/github/andreasarvidsson/eld/runtime/EldPromise";
+        final String frameOwner = asyncFrameName(function);
+        final String resumeName = "resume";
+        final String resumeDescriptor =
+            "(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V";
+        final IdentityHashMap<Symbol, String> fields = new IdentityHashMap<>();
+        int fieldIndex = 0;
+        for (final FunctionParameter parameter : function.parameters()) {
+            final Symbol parameterSymbol =
+                semanticModel.getSymbol(parameter.name());
+            fields.put(parameterSymbol, "$local" + fieldIndex++);
+        }
+        final int[] nextField = {fieldIndex};
+        AstTraversal.walk(function.body(), node -> {
+            final Symbol local;
+            final Position definition;
+            if (node instanceof VariableDeclaration variable) {
+                local = semanticModel.getSymbol(variable.name());
+                definition = variable.initializer().range().end();
+            }
+            else if (node instanceof CatchClause clause) {
+                local = semanticModel.getSymbol(clause.name());
+                definition = clause.name().range().end();
+            }
+            else if (node instanceof ForEachStatement loop) {
+                local = semanticModel.getSymbol(loop.value());
+                definition = loop.iterable().range().end();
+            }
+            else {
+                return;
+            }
+            if (
+                !fields.containsKey(local) && liveAcrossAwait(
+                    local,
+                    node,
+                    definition,
+                    function.body(),
+                    awaits
+                )
+            ) {
+                fields.put(local, "$local" + nextField[0]++);
+            }
+            if (node instanceof ForEachStatement loop && loop.index() != null) {
+                final Symbol index = semanticModel.getSymbol(loop.index());
+                if (
+                    liveAcrossAwait(
+                        index,
+                        loop,
+                        loop.iterable().range().end(),
+                        function.body(),
+                        awaits
+                    )
+                ) {
+                    fields.computeIfAbsent(
+                        index,
+                        ignored -> "$local" + nextField[0]++
+                    );
+                }
+            }
+        });
+
+        final ClassBuilder savedWriter = currentWriter;
+        try {
+            objectClasses.put(
+                frameOwner,
+                generateAsyncFrame(
+                    frameOwner,
+                    sourceOwner,
+                    promiseOwner,
+                    resumeName,
+                    resumeDescriptor,
+                    function,
+                    globals,
+                    instance,
+                    resultType,
+                    awaits,
+                    fields,
+                    spills,
+                    loopIndexes
+                )
+            );
+        }
+        finally {
+            currentWriter = savedWriter;
+        }
+
+        generateMethod(
+            writer,
+            visibilityAccess(
+                instance == null
+                    ? Visibility.PUBLIC
+                    : semanticModel.getMemberVisibility(symbol)
+            ) | (instance == null ? ACC_STATIC : 0),
+            methodName(symbol),
+            methodDescriptor(symbol.type()),
+            methodSignature(symbol.type()),
+            method -> {
+                int parameterSlot = instance == null ? 0 : 1;
+                final int frameSlot =
+                    parameterSlot + symbol.type()
+                        .parameterTypes()
+                        .stream()
+                        .mapToInt(BytecodeGenerator::slots)
+                        .sum();
+                method.new_(classDesc(frameOwner));
+                method.dup();
+                method.invoke(
+                    INVOKESPECIAL,
+                    classDesc(frameOwner),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+                method.astore(frameSlot);
+                if (instance != null) {
+                    method.aload(frameSlot);
+                    method.aload(0);
+                    method.fieldAccess(
+                        PUTFIELD,
+                        classDesc(frameOwner),
+                        "$receiver",
+                        ClassDesc.ofDescriptor("L" + instance.owner() + ";")
+                    );
+                }
+                for (final FunctionParameter parameter : function
+                    .parameters()) {
+                    final Symbol parameterSymbol =
+                        semanticModel.getSymbol(parameter.name());
+                    method.aload(frameSlot);
+                    method.with(
+                        localInstruction(
+                            loadOpcode(parameterSymbol.type()),
+                            parameterSlot
+                        )
+                    );
+                    method.fieldAccess(
+                        PUTFIELD,
+                        classDesc(frameOwner),
+                        Objects.requireNonNull(fields.get(parameterSymbol)),
+                        ClassDesc
+                            .ofDescriptor(descriptor(parameterSymbol.type()))
+                    );
+                    parameterSlot += slots(parameterSymbol.type());
+                }
+                method.aload(frameSlot);
+                method.aconst_null();
+                method.aconst_null();
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc(frameOwner),
+                    resumeName,
+                    MethodTypeDesc.ofDescriptor(resumeDescriptor),
+                    false
+                );
+                method.aload(frameSlot);
+                method.fieldAccess(
+                    GETFIELD,
+                    classDesc(frameOwner),
+                    "$source",
+                    ClassDesc.ofDescriptor("L" + sourceOwner + ";")
+                );
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(sourceOwner),
+                    "promise",
+                    MethodTypeDesc.ofDescriptor("()L" + promiseOwner + ";"),
+                    false
+                );
+                method.areturn();
+            }
+        );
+    }
+
+    private byte[] generateAsyncFrame(
+        final String frameOwner,
+        final String sourceOwner,
+        final String promiseOwner,
+        final String resumeName,
+        final String resumeDescriptor,
+        final FunctionDeclaration function,
+        final IdentityHashMap<Symbol, String> globals,
+        final @Nullable InstanceContext lexicalInstance,
+        final Type resultType,
+        final List<AwaitExpression> awaits,
+        final IdentityHashMap<Symbol, String> fields,
+        final IdentityHashMap<Expression, Integer> spills,
+        final IdentityHashMap<ForEachStatement, Integer> loopIndexes
+    ) {
+        return classFile().build(classDesc(frameOwner), frame -> {
+            frame.withVersion(JAVA_21_VERSION, 0);
+            frame.withFlags(ACC_FINAL | ACC_SUPER | ACC_SYNTHETIC);
+            frame.withSuperclass(classDesc("java/lang/Object"));
+            currentWriter = frame;
+            frame.with(NestHostAttribute.of(classDesc(moduleName)));
+
+            generateField(
+                frame,
+                ACC_FINAL | ACC_SYNTHETIC,
+                "$source",
+                "L" + sourceOwner + ";",
+                null,
+                null
+            );
+            generateField(frame, ACC_SYNTHETIC, "$state", "I", null, null);
+            if (lexicalInstance != null) {
+                generateField(
+                    frame,
+                    ACC_SYNTHETIC,
+                    "$receiver",
+                    "L" + lexicalInstance.owner() + ";",
+                    null,
+                    null
+                );
+            }
+            for (final var entry : fields.entrySet()
+                .stream()
+                .sorted(
+                    Comparator.comparingInt(
+                        entry -> Integer.parseInt(
+                            entry.getValue().substring("$local".length())
+                        )
+                    )
+                )
+                .toList()) {
+                generateField(
+                    frame,
+                    ACC_SYNTHETIC,
+                    entry.getValue(),
+                    descriptor(entry.getKey().type()),
+                    null,
+                    null
+                );
+            }
+            if (!spills.isEmpty()) {
+                generateField(
+                    frame,
+                    ACC_PRIVATE | ACC_FINAL | ACC_SYNTHETIC,
+                    "$spills",
+                    "[Ljava/lang/Object;",
+                    null,
+                    null
+                );
+            }
+            if (!loopIndexes.isEmpty()) {
+                generateField(
+                    frame,
+                    ACC_PRIVATE | ACC_FINAL | ACC_SYNTHETIC,
+                    "$loopIndexes",
+                    "[I",
+                    null,
+                    null
+                );
+            }
+            generateMethod(frame, 0, "<init>", "()V", null, constructor -> {
+                constructor.aload(0);
+                constructor.invoke(
+                    INVOKESPECIAL,
+                    classDesc("java/lang/Object"),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+                constructor.aload(0);
+                constructor.new_(classDesc(sourceOwner));
+                constructor.dup();
+                constructor.invoke(
+                    INVOKESPECIAL,
+                    classDesc(sourceOwner),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+                constructor.fieldAccess(
+                    PUTFIELD,
+                    classDesc(frameOwner),
+                    "$source",
+                    ClassDesc.ofDescriptor("L" + sourceOwner + ";")
+                );
+                if (!spills.isEmpty()) {
+                    constructor.aload(0);
+                    constructor.ldc(spills.size());
+                    constructor.anewarray(classDesc("java/lang/Object"));
+                    constructor.fieldAccess(
+                        PUTFIELD,
+                        classDesc(frameOwner),
+                        "$spills",
+                        ClassDesc.ofDescriptor("[Ljava/lang/Object;")
+                    );
+                }
+                if (!loopIndexes.isEmpty()) {
+                    constructor.aload(0);
+                    constructor.ldc(loopIndexes.size());
+                    constructor.newarray(TypeKind.INT);
+                    constructor.fieldAccess(
+                        PUTFIELD,
+                        classDesc(frameOwner),
+                        "$loopIndexes",
+                        ClassDesc.ofDescriptor("[I")
+                    );
+                }
+                constructor.return_();
+            });
+            generateMethod(
+                frame,
+                ACC_STATIC | ACC_SYNTHETIC,
+                resumeName,
+                resumeDescriptor,
+                null,
+                method -> {
+                    method.aload(0);
+                    method.checkcast(classDesc(frameOwner));
+                    method.astore(0);
+                    final IdentityHashMap<AwaitExpression, Label> labels =
+                        new IdentityHashMap<>();
+                    for (final AwaitExpression awaited : awaits) {
+                        labels.put(awaited, method.newLabel());
+                    }
+                    final Label initial = method.newLabel();
+                    final Label invalidState = method.newLabel();
+                    method.aload(0);
+                    method.fieldAccess(
+                        GETFIELD,
+                        classDesc(frameOwner),
+                        "$state",
+                        ClassDesc.ofDescriptor("I")
+                    );
+                    final List<SwitchCase> states = new ArrayList<>();
+                    states.add(SwitchCase.of(0, initial));
+                    for (int i = 0; i < awaits.size(); i++) {
+                        states.add(
+                            SwitchCase.of(
+                                i + 1,
+                                Objects
+                                    .requireNonNull(labels.get(awaits.get(i)))
+                            )
+                        );
+                    }
+                    method.tableswitch(0, awaits.size(), invalidState, states);
+                    method.labelBinding(invalidState);
+                    method.new_(classDesc("java/lang/IllegalStateException"));
+                    method.dup();
+                    method.ldc("Invalid async state");
+                    method.invoke(
+                        INVOKESPECIAL,
+                        classDesc("java/lang/IllegalStateException"),
+                        "<init>",
+                        MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"),
+                        false
+                    );
+                    method.athrow();
+
+                    final Label start = method.newLabel();
+                    final Label end = method.newLabel();
+                    final Label handler = method.newLabel();
+                    method.labelBinding(start);
+                    method.labelBinding(initial);
+                    final MethodGenerator generator =
+                        new MethodGenerator(
+                            method,
+                            globals,
+                            BuiltinType.VOID,
+                            new InstanceContext(frameOwner, fields)
+                        );
+                    generator.reserveLocals(3);
+                    generator.asyncCompletionField(frameOwner, resultType);
+                    generator.asyncStateMachine(
+                        frameOwner,
+                        promiseOwner,
+                        resumeName,
+                        resumeDescriptor,
+                        function.body(),
+                        awaits,
+                        labels,
+                        spills,
+                        loopIndexes
+                    );
+                    if (lexicalInstance != null) {
+                        generator.lexicalInstance(lexicalInstance);
+                    }
+                    generator.finish(generator.block(function.body()));
+                    method.labelBinding(end);
+                    method.exceptionCatchAll(start, end, handler);
+                    method.labelBinding(handler);
+                    final int failure = generator.reserve(BuiltinType.ANY);
+                    method.astore(failure);
+                    generator.loadAsyncSource();
+                    method.aload(failure);
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc(sourceOwner),
+                        "reject",
+                        MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;)V"),
+                        false
+                    );
+                    method.return_();
+                }
+            );
+        });
+    }
+
+    private static boolean discardedAwait(
+        final BlockItem item,
+        final AwaitExpression awaited
+    ) {
+        final boolean[] discarded = {false};
+        AstTraversal.walk(item, node -> {
+            if (
+                (node instanceof ExpressionStatement statement
+                    && Objects.equals(statement.expression(), awaited))
+                    || (node instanceof IgnoreStatement ignored
+                        && Objects.equals(ignored.expression(), awaited))
+            ) {
+                discarded[0] = true;
+            }
+        });
+        return discarded[0];
+    }
+
+    private void boxValue(final CodeBuilder method, final Type type) {
+        final String owner = boxedOwner(type);
+        if (owner != null) {
+            method.invoke(
+                INVOKESTATIC,
+                classDesc(owner),
+                "valueOf",
+                MethodTypeDesc
+                    .ofDescriptor("(" + descriptor(type) + ")L" + owner + ";"),
+                false
+            );
+        }
     }
 
     private String defaultDescriptor(final FunctionType type) {
@@ -1370,6 +2350,9 @@ public final class BytecodeGenerator {
             currentWriter = writer;
             for (final String objectName : objectNameOrder) {
                 nestMembers.add(classDesc(objectName));
+            }
+            for (final String asyncFrameName : asyncFrameNameOrder) {
+                nestMembers.add(classDesc(asyncFrameName));
             }
 
             final IdentityHashMap<Symbol, String> globals =
@@ -1798,6 +2781,10 @@ public final class BytecodeGenerator {
                     : "Ljava/lang/invoke/MethodHandle;";
             case ClassType classType -> "L" + classOwner(classType) + ";";
             case InterfaceType contract -> "L" + interfaceOwner(contract) + ";";
+            case PromiseType _ ->
+                "Lcom/github/andreasarvidsson/eld/runtime/EldPromise;";
+            case PromiseSourceType _ ->
+                "Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;";
         };
     }
 
@@ -1820,6 +2807,9 @@ public final class BytecodeGenerator {
     }
 
     private String genericSignature(final Type type) {
+        if (type == BuiltinType.VOID) {
+            return "Ljava/lang/Void;";
+        }
         if (
             type instanceof InterfaceType contract
                 && !contract.typeArguments().isEmpty()
@@ -1829,6 +2819,14 @@ public final class BytecodeGenerator {
                     .stream()
                     .map(this::genericSignature)
                     .collect(Collectors.joining("", "<", ">;"));
+        }
+        if (type instanceof PromiseType promise) {
+            return "Lcom/github/andreasarvidsson/eld/runtime/EldPromise<"
+                + genericSignature(promise.valueType()) + ">;";
+        }
+        if (type instanceof PromiseSourceType source) {
+            return "Lcom/github/andreasarvidsson/eld/runtime/PromiseSource<"
+                + genericSignature(source.valueType()) + ">;";
         }
         return boxedDescriptor(type);
     }
@@ -2003,6 +3001,8 @@ public final class BytecodeGenerator {
                 || type instanceof BuiltinFunctionType
                 || type instanceof ClassType
                 || type instanceof InterfaceType
+                || type instanceof PromiseType
+                || type instanceof PromiseSourceType
         ) {
             return "Ljava/lang/Object;";
         }
@@ -2033,6 +3033,8 @@ public final class BytecodeGenerator {
             || type instanceof ArrayType
             || type instanceof TupleType
             || type instanceof FunctionType
+            || type instanceof PromiseType
+            || type instanceof PromiseSourceType
             || type == BuiltinType.STRING
             || type == BuiltinType.NULL
             || type == BuiltinType.ANY;
@@ -2192,6 +3194,18 @@ public final class BytecodeGenerator {
 
         private final Type returnType;
         private int nextLocal;
+        private @Nullable String asyncSourceOwner;
+        private @Nullable Type asyncResultType;
+        private @Nullable AsyncStateMachine asyncStateMachine;
+        private @Nullable InstanceContext lexicalInstance;
+        private final IdentityHashMap<Expression, Boolean> frameTemporaries =
+            new IdentityHashMap<>();
+        private final IdentityHashMap<Expression, Boolean> formattedTemporaries =
+            new IdentityHashMap<>();
+        private final IdentityHashMap<Expression, Integer> formattedLocalTemporaries =
+            new IdentityHashMap<>();
+        private final IdentityHashMap<Expression, Boolean> preparedCompounds =
+            new IdentityHashMap<>();
         private final IdentityHashMap<Expression, Integer> expressionTemporaries =
             new IdentityHashMap<>();
         private boolean beforeBaseInitialization;
@@ -2233,7 +3247,359 @@ public final class BytecodeGenerator {
             });
         }
 
+        private void reserveLocals(final int count) {
+            nextLocal = Math.max(nextLocal, count);
+        }
+
+        private int reserve(final Type type) {
+            final int slot = nextLocal;
+            nextLocal += slots(type);
+            return slot;
+        }
+
+        private void asyncCompletionField(
+            final String owner,
+            final Type resultType
+        ) {
+            asyncSourceOwner = owner;
+            asyncResultType = resultType;
+        }
+
+        private void asyncStateMachine(
+            final String owner,
+            final String promiseOwner,
+            final String resumeName,
+            final String resumeDescriptor,
+            final BlockStatement body,
+            final List<AwaitExpression> awaits,
+            final IdentityHashMap<AwaitExpression, Label> labels,
+            final IdentityHashMap<Expression, Integer> spills,
+            final IdentityHashMap<ForEachStatement, Integer> loopIndexes
+        ) {
+            final IdentityHashMap<AwaitExpression, Integer> states =
+                new IdentityHashMap<>();
+            final IdentityHashMap<AwaitExpression, Boolean> discarded =
+                new IdentityHashMap<>();
+            for (int i = 0; i < awaits.size(); i++) {
+                final AwaitExpression awaited = awaits.get(i);
+                states.put(awaited, i + 1);
+                if (discardedAwait(body, awaited)) {
+                    discarded.put(awaited, true);
+                }
+            }
+            asyncStateMachine =
+                new AsyncStateMachine(
+                    owner,
+                    promiseOwner,
+                    resumeName,
+                    resumeDescriptor,
+                    states,
+                    labels,
+                    discarded,
+                    spills,
+                    loopIndexes
+                );
+        }
+
+        private void lexicalInstance(final InstanceContext lexical) {
+            lexicalInstance = lexical;
+            lexicalReceiverOwner = lexical.owner();
+        }
+
+        private boolean containsAwait(final AstNode node) {
+            return asyncStateMachine != null && AstTraversal
+                .anyMatch(node, AwaitExpression.class::isInstance);
+        }
+
+        private void saveFrameTemporary(final Expression expression) {
+            saveFrameTemporary(expression, () -> expression(expression));
+        }
+
+        private void saveLocalTemporary(final Expression expression) {
+            saveLocalTemporary(
+                expression,
+                semanticModel.getEffectiveType(expression),
+                () -> expression(expression)
+            );
+        }
+
+        private void saveLocalTemporary(
+            final Expression expression,
+            final Type storageType,
+            final Runnable emitValue
+        ) {
+            emitValue.run();
+            final int value = reserve(storageType);
+            method.with(localInstruction(storeOpcode(storageType), value));
+            expressionTemporaries.put(expression, value);
+        }
+
+        private void saveTemporary(
+            final Expression expression,
+            final boolean persistent
+        ) {
+            if (persistent) {
+                saveFrameTemporary(expression);
+            }
+            else {
+                saveLocalTemporary(expression);
+            }
+        }
+
+        private void saveFrameTemporary(
+            final Expression expression,
+            final Runnable emitValue
+        ) {
+            saveFrameTemporary(
+                expression,
+                semanticModel.getEffectiveType(expression),
+                emitValue
+            );
+        }
+
+        private void saveFrameTemporary(
+            final Expression expression,
+            final Type storageType,
+            final Runnable emitValue
+        ) {
+            emitValue.run();
+            final int value = reserve(storageType);
+            method.with(localInstruction(storeOpcode(storageType), value));
+            method.aload(0);
+            method.fieldAccess(
+                GETFIELD,
+                classDesc(Objects.requireNonNull(asyncStateMachine).owner()),
+                "$spills",
+                ClassDesc.ofDescriptor("[Ljava/lang/Object;")
+            );
+            method.ldc(
+                Objects
+                    .requireNonNull(asyncStateMachine.spills().get(expression))
+            );
+            method.with(localInstruction(loadOpcode(storageType), value));
+            box(storageType);
+            method.aastore();
+            frameTemporaries.put(expression, true);
+        }
+
+        private void saveFormattedTemporary(
+            final Expression expression,
+            final boolean persistent
+        ) {
+            final String argument =
+                printArgumentDescriptor(
+                    semanticModel.getEffectiveType(expression)
+                );
+            final Runnable emitValue = () -> {
+                expression(expression);
+                if (!argument.equals("Ljava/lang/String;")) {
+                    method.invoke(
+                        INVOKESTATIC,
+                        classDesc("java/lang/String"),
+                        "valueOf",
+                        MethodTypeDesc.ofDescriptor(
+                            "(" + argument + ")Ljava/lang/String;"
+                        ),
+                        false
+                    );
+                }
+            };
+            if (persistent) {
+                saveFrameTemporary(expression, BuiltinType.STRING, emitValue);
+            }
+            else {
+                saveLocalTemporary(expression, BuiltinType.STRING, emitValue);
+                formattedLocalTemporaries.put(
+                    expression,
+                    Objects.requireNonNull(
+                        expressionTemporaries.remove(expression)
+                    )
+                );
+            }
+            formattedTemporaries.put(expression, true);
+        }
+
+        private void saveArraySpreadTemporary(
+            final Expression expression,
+            final boolean persistent
+        ) {
+            final Runnable emitValue = () -> {
+                expression(expression);
+                final ArrayType array =
+                    (ArrayType) semanticModel.getExpressionType(expression);
+                arrayCall(array.elementType(), RuntimeAbi.ArrayMethod.COPY);
+            };
+            if (persistent) {
+                saveFrameTemporary(expression, emitValue);
+            }
+            else {
+                saveLocalTemporary(
+                    expression,
+                    semanticModel.getEffectiveType(expression),
+                    emitValue
+                );
+            }
+        }
+
+        private void saveMapSpreadTemporary(
+            final Expression expression,
+            final boolean persistent
+        ) {
+            final Runnable emitValue = () -> {
+                method.new_(classDesc("java/util/LinkedHashMap"));
+                method.dup();
+                expression(expression);
+                method.invoke(
+                    INVOKESPECIAL,
+                    classDesc("java/util/LinkedHashMap"),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("(Ljava/util/Map;)V"),
+                    false
+                );
+            };
+            if (persistent) {
+                saveFrameTemporary(expression, emitValue);
+            }
+            else {
+                saveLocalTemporary(
+                    expression,
+                    semanticModel.getEffectiveType(expression),
+                    emitValue
+                );
+            }
+        }
+
+        private void loadFrameTemporary(final Expression expression) {
+            loadFrameTemporary(
+                expression,
+                semanticModel.getEffectiveType(expression)
+            );
+        }
+
+        private void loadFrameTemporary(
+            final Expression expression,
+            final Type storageType
+        ) {
+            method.aload(0);
+            method.fieldAccess(
+                GETFIELD,
+                classDesc(Objects.requireNonNull(asyncStateMachine).owner()),
+                "$spills",
+                ClassDesc.ofDescriptor("[Ljava/lang/Object;")
+            );
+            method.ldc(
+                Objects
+                    .requireNonNull(asyncStateMachine.spills().get(expression))
+            );
+            method.aaload();
+            readObject(storageType);
+        }
+
+        private List<Expression> prepareCompoundExpression(
+            final Expression expression
+        ) {
+            if (
+                !containsAwait(expression)
+                    || preparedCompounds.containsKey(expression)
+                    || expression instanceof CallExpression
+                    || expression instanceof MapExpression
+            ) {
+                return List.of();
+            }
+            final List<Expression> operands = asyncCompoundOperands(expression);
+            if (operands.isEmpty()) {
+                return List.of();
+            }
+            final IdentityHashMap<Expression, Boolean> arraySpreads =
+                new IdentityHashMap<>();
+            final IdentityHashMap<Expression, Boolean> mapSpreads =
+                new IdentityHashMap<>();
+            if (expression instanceof ArrayExpression array) {
+                for (final Expression element : array.elements()) {
+                    if (element instanceof ArraySpread spread) {
+                        arraySpreads.put(spread.expression(), true);
+                    }
+                }
+            }
+            else if (expression instanceof MapExpression map) {
+                for (final MapElement element : map.elements()) {
+                    if (element instanceof MapSpread spread) {
+                        mapSpreads.put(spread.expression(), true);
+                    }
+                }
+            }
+            preparedCompounds.put(expression, true);
+            for (int i = 0; i < operands.size(); i++) {
+                final Expression operand = operands.get(i);
+                final boolean persistent = hasLaterAwait(operands, i);
+                if (expression instanceof FormatStringExpression) {
+                    saveFormattedTemporary(operand, persistent);
+                }
+                else if (arraySpreads.containsKey(operand)) {
+                    saveArraySpreadTemporary(operand, persistent);
+                }
+                else if (mapSpreads.containsKey(operand)) {
+                    saveMapSpreadTemporary(operand, persistent);
+                }
+                else {
+                    saveTemporary(operand, persistent);
+                }
+            }
+            return operands;
+        }
+
+        private void loadAsyncSource() {
+            if (asyncSourceOwner != null) {
+                method.aload(0);
+                method.fieldAccess(
+                    GETFIELD,
+                    classDesc(asyncSourceOwner),
+                    "$source",
+                    ClassDesc.ofDescriptor(
+                        "Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;"
+                    )
+                );
+                return;
+            }
+            throw new IllegalStateException("No async completion source");
+        }
+
+        private void resolveAsyncVoid() {
+            loadAsyncSource();
+            method.invoke(
+                INVOKEVIRTUAL,
+                classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/PromiseSource"
+                ),
+                "resolve",
+                MethodTypeDesc.ofDescriptor("()V"),
+                false
+            );
+            method.return_();
+        }
+
         private void finish(final boolean reachable) {
+            if (asyncSourceOwner != null) {
+                if (reachable && asyncResultType == BuiltinType.VOID) {
+                    resolveAsyncVoid();
+                }
+                else if (reachable) {
+                    method.new_(classDesc("java/lang/IllegalStateException"));
+                    method.dup();
+                    method.ldc(
+                        "Async function completed without returning a value"
+                    );
+                    method.invoke(
+                        INVOKESPECIAL,
+                        classDesc("java/lang/IllegalStateException"),
+                        "<init>",
+                        MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"),
+                        false
+                    );
+                    method.athrow();
+                }
+                return;
+            }
             if (reachable && returnType == BuiltinType.VOID) {
                 method.return_();
             }
@@ -2327,9 +3693,29 @@ public final class BytecodeGenerator {
                         }
                         method.astore(local(symbol));
                     }
-                    prepareStore(symbol);
                     final Expression initializer = variable.initializer();
-                    expression(initializer);
+                    if (
+                        asyncStateMachine != null && instance != null
+                            && instance.members().containsKey(symbol)
+                            && AstTraversal.anyMatch(
+                                initializer,
+                                AwaitExpression.class::isInstance
+                            )
+                    ) {
+                        expression(initializer);
+                        final int value = reserve(symbol.type());
+                        method.with(
+                            localInstruction(storeOpcode(symbol.type()), value)
+                        );
+                        prepareStore(symbol);
+                        method.with(
+                            localInstruction(loadOpcode(symbol.type()), value)
+                        );
+                    }
+                    else {
+                        prepareStore(symbol);
+                        expression(initializer);
+                    }
                     store(symbol);
                 }
                 case DeclarationStatement declaration -> {
@@ -2347,6 +3733,8 @@ public final class BytecodeGenerator {
                     }
                     discard(statement.expression());
                 }
+                case IgnoreStatement statement ->
+                    discard(statement.expression());
                 case ThrowStatement statement -> {
                     expression(statement.value());
                     if (
@@ -2396,6 +3784,42 @@ public final class BytecodeGenerator {
                 }
                 case ReturnStatement statement -> {
                     final Expression value = statement.value();
+                    if (asyncSourceOwner != null) {
+                        if (value == null) {
+                            abrupt(0, this::resolveAsyncVoid);
+                        }
+                        else {
+                            final Type resultType =
+                                Objects.requireNonNull(asyncResultType);
+                            expression(value);
+                            final int saved = reserve(resultType);
+                            method.with(
+                                localInstruction(storeOpcode(resultType), saved)
+                            );
+                            abrupt(0, () -> {
+                                loadAsyncSource();
+                                method.with(
+                                    localInstruction(
+                                        loadOpcode(resultType),
+                                        saved
+                                    )
+                                );
+                                box(resultType);
+                                method.invoke(
+                                    INVOKEVIRTUAL,
+                                    classDesc(
+                                        "com/github/andreasarvidsson/eld/runtime/PromiseSource"
+                                    ),
+                                    "resolve",
+                                    MethodTypeDesc
+                                        .ofDescriptor("(Ljava/lang/Object;)V"),
+                                    false
+                                );
+                                method.return_();
+                            });
+                        }
+                        return false;
+                    }
                     if (value != null) {
                         expression(value);
                     }
@@ -2592,7 +4016,18 @@ public final class BytecodeGenerator {
                 final CatchClause clause = statement.catches().get(i);
                 method.labelBinding(handlers.get(i));
                 final Symbol symbol = semanticModel.getSymbol(clause.name());
-                method.astore(local(symbol));
+                if (
+                    instance != null && instance.members().containsKey(symbol)
+                ) {
+                    final int thrown = reserve(BuiltinType.ANY);
+                    method.astore(thrown);
+                    prepareStore(symbol);
+                    method.aload(thrown);
+                    store(symbol);
+                }
+                else {
+                    method.astore(local(symbol));
+                }
                 final ProtectedRegion region = new ProtectedRegion();
                 catchRegions.add(region);
                 frame.region = region;
@@ -2908,6 +4343,56 @@ public final class BytecodeGenerator {
         }
 
         private void forEach(final ForEachStatement statement) {
+            if (
+                asyncStateMachine != null
+                    && asyncStateMachine.loopIndexes().containsKey(statement)
+            ) {
+                final int loopIndex =
+                    Objects.requireNonNull(
+                        asyncStateMachine.loopIndexes().get(statement)
+                    );
+                final Symbol value = semanticModel.getSymbol(statement.value());
+                saveFrameTemporary(statement.iterable());
+                loadLoopIndexes();
+                method.ldc(loopIndex);
+                method.iconst_0();
+                method.iastore();
+                final Label start = method.newLabel();
+                final Label next = method.newLabel();
+                final Label end = method.newLabel();
+                method.labelBinding(start);
+                loadLoopIndex(loopIndex);
+                loadFrameTemporary(statement.iterable());
+                arrayCall(value.type(), RuntimeAbi.ArrayMethod.SIZE);
+                method.branch(IF_ICMPGE, end);
+                prepareStore(value);
+                loadFrameTemporary(statement.iterable());
+                loadLoopIndex(loopIndex);
+                arrayGet(value.type());
+                store(value);
+                final IdentifierDeclaration indexName = statement.index();
+                if (indexName != null) {
+                    final Symbol index = semanticModel.getSymbol(indexName);
+                    prepareStore(index);
+                    loadLoopIndex(loopIndex);
+                    store(index);
+                }
+                final Loop loop = new Loop(next, end);
+                if (loopBody(statement.body(), loop) || loop.hasContinue) {
+                    method.labelBinding(next);
+                    loadLoopIndexes();
+                    method.ldc(loopIndex);
+                    method.dup2();
+                    method.iaload();
+                    method.iconst_1();
+                    method.iadd();
+                    method.iastore();
+                    method.branch(GOTO, start);
+                }
+                method.labelBinding(end);
+                frameTemporaries.remove(statement.iterable());
+                return;
+            }
             final int array = nextLocal++;
             final int index = nextLocal++;
             final Symbol value = semanticModel.getSymbol(statement.value());
@@ -2943,6 +4428,22 @@ public final class BytecodeGenerator {
             method.labelBinding(end);
         }
 
+        private void loadLoopIndexes() {
+            method.aload(0);
+            method.fieldAccess(
+                GETFIELD,
+                classDesc(Objects.requireNonNull(asyncStateMachine).owner()),
+                "$loopIndexes",
+                ClassDesc.ofDescriptor("[I")
+            );
+        }
+
+        private void loadLoopIndex(final int index) {
+            loadLoopIndexes();
+            method.ldc(index);
+            method.iaload();
+        }
+
         private void load(final Symbol symbol) {
             if (BuiltinFunctionSymbol.PRINT.equals(symbol)) {
                 method.fieldAccess(
@@ -2974,28 +4475,37 @@ public final class BytecodeGenerator {
             }
             else if (symbol instanceof FunctionSymbol function) {
                 final boolean instanceMethod =
-                    instance != null && instance.members().containsKey(symbol);
-                method
-                    .ldc(
-                        MethodHandleDesc
-                            .ofMethod(
-                                instanceMethod
-                                    ? DirectMethodHandleDesc.Kind.VIRTUAL
-                                    : DirectMethodHandleDesc.Kind.STATIC,
-                                classDesc(
-                                    instanceMethod
-                                        ? Objects.requireNonNull(instance)
-                                            .owner()
-                                        : moduleName
-                                ),
-                                methodName(function),
-                                MethodTypeDesc.ofDescriptor(
-                                    methodDescriptor(function.type())
-                                )
-                            )
-                    );
+                    (instance != null && instance.members().containsKey(symbol))
+                        || (lexicalInstance != null
+                            && lexicalInstance.members().containsKey(symbol));
+                final String methodOwner =
+                    !instanceMethod
+                        ? moduleName
+                        : lexicalInstance != null
+                            && lexicalInstance.members().containsKey(symbol)
+                                ? lexicalInstance.owner()
+                                : Objects.requireNonNull(instance).owner();
+                method.ldc(
+                    MethodHandleDesc.ofMethod(
+                        instanceMethod
+                            ? DirectMethodHandleDesc.Kind.VIRTUAL
+                            : DirectMethodHandleDesc.Kind.STATIC,
+                        classDesc(instanceMethod ? methodOwner : moduleName),
+                        methodName(function),
+                        MethodTypeDesc
+                            .ofDescriptor(methodDescriptor(function.type()))
+                    )
+                );
                 if (instanceMethod) {
-                    method.aload(0);
+                    if (
+                        lexicalInstance != null
+                            && lexicalInstance.members().containsKey(symbol)
+                    ) {
+                        loadLexicalReceiver();
+                    }
+                    else {
+                        method.aload(0);
+                    }
                     method.invoke(
                         INVOKEVIRTUAL,
                         classDesc("java/lang/invoke/MethodHandle"),
@@ -3015,6 +4525,19 @@ public final class BytecodeGenerator {
                     GETFIELD,
                     classDesc(instance.owner()),
                     Objects.requireNonNull(instance.members().get(symbol)),
+                    ClassDesc.ofDescriptor(descriptor(symbol.type()))
+                );
+            }
+            else if (
+                lexicalInstance != null
+                    && lexicalInstance.members().containsKey(symbol)
+            ) {
+                loadLexicalReceiver();
+                method.fieldAccess(
+                    GETFIELD,
+                    classDesc(lexicalInstance.owner()),
+                    Objects
+                        .requireNonNull(lexicalInstance.members().get(symbol)),
                     ClassDesc.ofDescriptor(descriptor(symbol.type()))
                 );
             }
@@ -3066,7 +4589,26 @@ public final class BytecodeGenerator {
                 method.aload(0);
                 return true;
             }
+            if (
+                lexicalInstance != null
+                    && lexicalInstance.members().containsKey(symbol)
+            ) {
+                loadLexicalReceiver();
+                return true;
+            }
             return false;
+        }
+
+        private void loadLexicalReceiver() {
+            method.aload(0);
+            method.fieldAccess(
+                GETFIELD,
+                classDesc(Objects.requireNonNull(instance).owner()),
+                "$receiver",
+                ClassDesc.ofDescriptor(
+                    "L" + Objects.requireNonNull(lexicalInstance).owner() + ";"
+                )
+            );
         }
 
         // Instance stores expect the receiver below the value on the stack.
@@ -3090,6 +4632,18 @@ public final class BytecodeGenerator {
                     ClassDesc.ofDescriptor(descriptor(symbol.type()))
                 );
             }
+            else if (
+                lexicalInstance != null
+                    && lexicalInstance.members().containsKey(symbol)
+            ) {
+                method.fieldAccess(
+                    PUTFIELD,
+                    classDesc(lexicalInstance.owner()),
+                    Objects
+                        .requireNonNull(lexicalInstance.members().get(symbol)),
+                    ClassDesc.ofDescriptor(descriptor(symbol.type()))
+                );
+            }
             else if (globals.containsKey(symbol)) {
                 method.fieldAccess(
                     PUTSTATIC,
@@ -3108,6 +4662,17 @@ public final class BytecodeGenerator {
         private void discard(final Expression expression) {
             expression(expression);
             if (
+                expression instanceof AwaitExpression awaited
+                    && asyncStateMachine != null
+                    && asyncStateMachine.discarded().containsKey(awaited)
+            ) {
+                return;
+            }
+            final Integer temporary = expressionTemporaries.get(expression);
+            if (temporary != null && temporary < 0) {
+                return;
+            }
+            if (
                 semanticModel.getEffectiveType(expression) != BuiltinType.VOID
             ) {
                 method.with(
@@ -3121,105 +4686,137 @@ public final class BytecodeGenerator {
         }
 
         private void expression(final Expression expression) {
-            final Integer temporary = expressionTemporaries.get(expression);
-            if (temporary != null) {
-                method.with(
-                    localInstruction(
-                        loadOpcode(semanticModel.getEffectiveType(expression)),
-                        temporary
-                    )
-                );
+            if (frameTemporaries.containsKey(expression)) {
+                loadFrameTemporary(expression);
                 return;
             }
-
-            if (
-                expression instanceof UnaryExpression unary
-                    && SemanticAnalyzer.integerLiteral(unary) != null
-            ) {
+            final Integer savedTemporary =
+                expressionTemporaries.get(expression);
+            if (savedTemporary != null) {
+                if (savedTemporary >= 0) {
+                    method.with(
+                        localInstruction(
+                            loadOpcode(
+                                semanticModel.getEffectiveType(expression)
+                            ),
+                            savedTemporary
+                        )
+                    );
+                }
+                return;
+            }
+            final List<Expression> preparedOperands =
+                prepareCompoundExpression(expression);
+            try {
                 if (
-                    semanticModel
-                        .getEffectiveType(expression) instanceof UnionType
-                        || semanticModel.getEffectiveType(
-                            expression
-                        ) instanceof InterfaceType
-                        || semanticModel
-                            .getEffectiveType(expression) == BuiltinType.ANY
+                    expression instanceof UnaryExpression unary
+                        && SemanticAnalyzer.integerLiteral(unary) != null
                 ) {
-                    final var value =
-                        Objects.requireNonNull(
-                            SemanticAnalyzer.integerLiteral(unary)
-                        );
                     if (
                         semanticModel
-                            .getExpressionType(expression) == BuiltinType.I64
+                            .getEffectiveType(expression) instanceof UnionType
+                            || semanticModel.getEffectiveType(
+                                expression
+                            ) instanceof InterfaceType
+                            || semanticModel
+                                .getEffectiveType(expression) == BuiltinType.ANY
                     ) {
-                        method.ldc(value.longValueExact());
+                        final var value =
+                            Objects.requireNonNull(
+                                SemanticAnalyzer.integerLiteral(unary)
+                            );
+                        if (
+                            semanticModel.getExpressionType(
+                                expression
+                            ) == BuiltinType.I64
+                        ) {
+                            method.ldc(value.longValueExact());
+                        }
+                        else {
+                            method.ldc(value.intValueExact());
+                        }
+                        convertExpression(expression);
+                        return;
                     }
-                    else {
-                        method.ldc(value.intValueExact());
-                    }
-                    convertExpression(expression);
+                    method.ldc(
+                        (ConstantDesc) Objects
+                            .requireNonNull(constantValue(unary))
+                    );
                     return;
                 }
-                method.ldc(
-                    (ConstantDesc) Objects.requireNonNull(constantValue(unary))
-                );
-                return;
-            }
-            switch (expression) {
-                case FormatStringExpression format -> {
-                    method.new_(classDesc("java/lang/StringBuilder"));
-                    method.dup();
-                    method.invoke(
-                        INVOKESPECIAL,
-                        classDesc("java/lang/StringBuilder"),
-                        "<init>",
-                        MethodTypeDesc.ofDescriptor("()V"),
-                        false
-                    );
-                    for (final Expression part : format.parts()) {
-                        expression(part);
-                        final String argument =
-                            printArgumentDescriptor(
-                                semanticModel.getEffectiveType(part)
+                switch (expression) {
+                    case FormatStringExpression format -> {
+                        method.new_(classDesc("java/lang/StringBuilder"));
+                        method.dup();
+                        method.invoke(
+                            INVOKESPECIAL,
+                            classDesc("java/lang/StringBuilder"),
+                            "<init>",
+                            MethodTypeDesc.ofDescriptor("()V"),
+                            false
+                        );
+                        for (final Expression part : format.parts()) {
+                            final boolean formatted =
+                                formattedTemporaries.containsKey(part);
+                            if (formatted) {
+                                final Integer local =
+                                    formattedLocalTemporaries.get(part);
+                                if (local != null) {
+                                    method.aload(local);
+                                }
+                                else {
+                                    loadFrameTemporary(
+                                        part,
+                                        BuiltinType.STRING
+                                    );
+                                }
+                            }
+                            else {
+                                expression(part);
+                            }
+                            final String argument =
+                                formatted
+                                    ? "Ljava/lang/String;"
+                                    : printArgumentDescriptor(
+                                        semanticModel.getEffectiveType(part)
+                                    );
+                            method.invoke(
+                                INVOKEVIRTUAL,
+                                classDesc("java/lang/StringBuilder"),
+                                "append",
+                                MethodTypeDesc.ofDescriptor(
+                                    "(" + argument
+                                        + ")Ljava/lang/StringBuilder;"
+                                ),
+                                false
                             );
+                        }
                         method.invoke(
                             INVOKEVIRTUAL,
                             classDesc("java/lang/StringBuilder"),
-                            "append",
-                            MethodTypeDesc.ofDescriptor(
-                                "(" + argument + ")Ljava/lang/StringBuilder;"
-                            ),
+                            "toString",
+                            MethodTypeDesc.ofDescriptor("()Ljava/lang/String;"),
                             false
                         );
                     }
-                    method.invoke(
-                        INVOKEVIRTUAL,
-                        classDesc("java/lang/StringBuilder"),
-                        "toString",
-                        MethodTypeDesc.ofDescriptor("()Ljava/lang/String;"),
-                        false
-                    );
-                }
-                case LiteralExpression literal -> literal(literal);
-                case IdentifierExpression identifier ->
-                    load(semanticModel.getReference(identifier));
-                case GroupingExpression grouping ->
-                    expression(grouping.expression());
-                case BinaryExpression binary -> binary(binary);
-                case UnaryExpression unary -> {
-                    switch (unary.operator()) {
-                        case INCREMENT,
-                            DECREMENT -> increment(
-                                unary.operand(),
-                                unary.operator() == UnaryOperator.INCREMENT,
-                                false
-                            );
-                        case PLUS -> expression(unary.operand());
-                        case MINUS -> {
-                            expression(unary.operand());
-                            method
-                                .with(
+                    case LiteralExpression literal -> literal(literal);
+                    case IdentifierExpression identifier ->
+                        load(semanticModel.getReference(identifier));
+                    case GroupingExpression grouping ->
+                        expression(grouping.expression());
+                    case BinaryExpression binary -> binary(binary);
+                    case UnaryExpression unary -> {
+                        switch (unary.operator()) {
+                            case INCREMENT,
+                                DECREMENT -> increment(
+                                    unary.operand(),
+                                    unary.operator() == UnaryOperator.INCREMENT,
+                                    false
+                                );
+                            case PLUS -> expression(unary.operand());
+                            case MINUS -> {
+                                expression(unary.operand());
+                                method.with(
                                     simpleInstruction(
                                         opcode(
                                             semanticModel
@@ -3228,154 +4825,282 @@ public final class BytecodeGenerator {
                                         )
                                     )
                                 );
-                            narrow(semanticModel.getExpressionType(unary));
-                        }
-                        case NOT -> {
-                            expression(unary.operand());
-                            booleanResult(IFEQ);
-                        }
-                    }
-                }
-                case PostfixExpression postfix -> increment(
-                    postfix.operand(),
-                    postfix.operator() == PostfixOperator.INCREMENT,
-                    true
-                );
-                case TernaryExpression ternary -> {
-                    final Label otherwise = method.newLabel();
-                    final Label end = method.newLabel();
-                    expression(ternary.condition());
-                    method.branch(IFEQ, otherwise);
-                    expression(ternary.thenBranch());
-                    method.branch(GOTO, end);
-                    method.labelBinding(otherwise);
-                    expression(ternary.elseBranch());
-                    method.labelBinding(end);
-                }
-                case IfExpression conditional -> {
-                    final Label end = method.newLabel();
-                    yieldTargets
-                        .push(new YieldTarget(end, false, tryFrames.size()));
-                    conditional(conditional, end);
-                    yieldTargets.pop();
-                }
-                case SwitchExpression selection -> selection(selection);
-                case AssignmentExpression assignment -> assign(assignment);
-                case CallExpression call -> call(call);
-                case MemberExpression member -> member(member);
-                case ThisExpression _ -> {
-                    method.aload(0);
-                    if (lexicalReceiverOwner != null) {
-                        method.fieldAccess(
-                            GETFIELD,
-                            classDesc(Objects.requireNonNull(instance).owner()),
-                            "$receiver",
-                            ClassDesc
-                                .ofDescriptor("L" + lexicalReceiverOwner + ";")
-                        );
-                    }
-                }
-                case NewExpression creation -> {
-                    if (
-                        semanticModel.getExpressionType(
-                            creation
-                        ) instanceof InterfaceType javaType
-                    ) {
-                        final var constructor =
-                            semanticModel.getJavaConstructor(creation);
-                        final String owner = interfaceOwner(javaType);
-                        method.new_(classDesc(owner));
-                        method.dup();
-                        for (int i = 0; i < creation.arguments().size(); i++) {
-                            final Expression argument =
-                                creation.arguments().get(i);
-                            expression(argument);
-                            if (
-                                !constructor.getParameterTypes()[i]
-                                    .isPrimitive()
-                            ) {
-                                box(semanticModel.getEffectiveType(argument));
+                                narrow(semanticModel.getExpressionType(unary));
+                            }
+                            case NOT -> {
+                                expression(unary.operand());
+                                booleanResult(IFEQ);
                             }
                         }
+                    }
+                    case PostfixExpression postfix -> increment(
+                        postfix.operand(),
+                        postfix.operator() == PostfixOperator.INCREMENT,
+                        true
+                    );
+                    case TernaryExpression ternary -> {
+                        final Label otherwise = method.newLabel();
+                        final Label end = method.newLabel();
+                        expression(ternary.condition());
+                        method.branch(IFEQ, otherwise);
+                        expression(ternary.thenBranch());
+                        method.branch(GOTO, end);
+                        method.labelBinding(otherwise);
+                        expression(ternary.elseBranch());
+                        method.labelBinding(end);
+                    }
+                    case IfExpression conditional -> {
+                        final Label end = method.newLabel();
+                        yieldTargets.push(
+                            new YieldTarget(end, false, tryFrames.size())
+                        );
+                        conditional(conditional, end);
+                        yieldTargets.pop();
+                    }
+                    case SwitchExpression selection -> selection(selection);
+                    case AssignmentExpression assignment -> assign(assignment);
+                    case CallExpression call -> call(call);
+                    case AwaitExpression awaited -> {
+                        if (asyncStateMachine != null) {
+                            final AsyncStateMachine stateMachine =
+                                asyncStateMachine;
+                            expression(awaited.expression());
+                            method.aload(0);
+                            method.ldc(
+                                Objects.requireNonNull(
+                                    stateMachine.states().get(awaited)
+                                )
+                            );
+                            method.fieldAccess(
+                                PUTFIELD,
+                                classDesc(stateMachine.owner()),
+                                "$state",
+                                ClassDesc.ofDescriptor("I")
+                            );
+                            method.ldc(
+                                MethodHandleDesc.ofMethod(
+                                    DirectMethodHandleDesc.Kind.STATIC,
+                                    classDesc(stateMachine.owner()),
+                                    stateMachine.resumeName(),
+                                    MethodTypeDesc.ofDescriptor(
+                                        stateMachine.resumeDescriptor()
+                                    )
+                                )
+                            );
+                            method.aload(0);
+                            method.invoke(
+                                INVOKEVIRTUAL,
+                                classDesc(stateMachine.promiseOwner()),
+                                "then",
+                                MethodTypeDesc.ofDescriptor(
+                                    "(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V"
+                                ),
+                                false
+                            );
+                            method.return_();
+                            method.labelBinding(
+                                Objects.requireNonNull(
+                                    stateMachine.labels().get(awaited)
+                                )
+                            );
+                            final Label value = method.newLabel();
+                            method.aload(2);
+                            method.branch(IFNULL, value);
+                            method.aload(2);
+                            method.athrow();
+                            method.labelBinding(value);
+                            final Type valueType =
+                                ((PromiseType) semanticModel
+                                    .getExpressionType(awaited.expression()))
+                                    .valueType();
+                            if (
+                                valueType != BuiltinType.VOID
+                                    && !stateMachine.discarded()
+                                        .containsKey(awaited)
+                            ) {
+                                method.aload(1);
+                                readObject(valueType);
+                            }
+                            break;
+                        }
+                        expression(awaited.expression());
+                        method.invoke(
+                            INVOKEVIRTUAL,
+                            classDesc(
+                                "com/github/andreasarvidsson/eld/runtime/EldPromise"
+                            ),
+                            "awaitNow",
+                            MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"),
+                            false
+                        );
+                        final Type valueType =
+                            ((PromiseType) semanticModel
+                                .getExpressionType(awaited.expression()))
+                                .valueType();
+                        if (valueType == BuiltinType.VOID) {
+                            method.pop();
+                        }
+                        else {
+                            readObject(valueType);
+                        }
+                    }
+                    case MemberExpression member -> member(member);
+                    case ThisExpression _ -> {
+                        method.aload(0);
+                        if (lexicalReceiverOwner != null) {
+                            method.fieldAccess(
+                                GETFIELD,
+                                classDesc(
+                                    Objects.requireNonNull(instance).owner()
+                                ),
+                                "$receiver",
+                                ClassDesc.ofDescriptor(
+                                    "L" + lexicalReceiverOwner + ";"
+                                )
+                            );
+                        }
+                    }
+                    case NewExpression creation -> {
+                        if (
+                            semanticModel.getExpressionType(
+                                creation
+                            ) instanceof PromiseSourceType
+                        ) {
+                            final String owner =
+                                "com/github/andreasarvidsson/eld/runtime/PromiseSource";
+                            method.new_(classDesc(owner));
+                            method.dup();
+                            method.invoke(
+                                INVOKESPECIAL,
+                                classDesc(owner),
+                                "<init>",
+                                MethodTypeDesc.ofDescriptor("()V"),
+                                false
+                            );
+                            break;
+                        }
+                        if (
+                            semanticModel.getExpressionType(
+                                creation
+                            ) instanceof InterfaceType javaType
+                        ) {
+                            final var constructor =
+                                semanticModel.getJavaConstructor(creation);
+                            final String owner = interfaceOwner(javaType);
+                            method.new_(classDesc(owner));
+                            method.dup();
+                            for (int i = 0; i < creation.arguments()
+                                .size(); i++) {
+                                final Expression argument =
+                                    creation.arguments().get(i);
+                                expression(argument);
+                                if (
+                                    !constructor.getParameterTypes()[i]
+                                        .isPrimitive()
+                                ) {
+                                    box(
+                                        semanticModel.getEffectiveType(argument)
+                                    );
+                                }
+                            }
+                            method
+                                .invoke(
+                                    INVOKESPECIAL,
+                                    classDesc(owner),
+                                    "<init>",
+                                    MethodTypeDesc.ofDescriptor(
+                                        MethodTypeDesc
+                                            .of(
+                                                ClassDesc.ofDescriptor("V"),
+                                                Arrays
+                                                    .stream(
+                                                        constructor
+                                                            .getParameterTypes()
+                                                    )
+                                                    .map(
+                                                        type -> type
+                                                            .describeConstable()
+                                                            .orElseThrow()
+                                                    )
+                                                    .toArray(ClassDesc[]::new)
+                                            )
+                                            .descriptorString()
+                                    ),
+                                    false
+                                );
+                            break;
+                        }
+                        final String name =
+                            ((ClassType) semanticModel
+                                .getExpressionType(creation)).name();
+                        final String owner =
+                            classOwners
+                                .getOrDefault(name, moduleName + "$" + name);
+                        method.new_(classDesc(owner));
+                        method.dup();
+                        final FunctionType constructorType =
+                            semanticModel.getConstructor(
+                                (ClassType) semanticModel
+                                    .getExpressionType(creation)
+                            );
+                        constructorArguments(creation, constructorType);
+                        final boolean omitted =
+                            creation.arguments().size() < constructorType
+                                .parameterTypes()
+                                .size();
                         method.invoke(
                             INVOKESPECIAL,
                             classDesc(owner),
                             "<init>",
                             MethodTypeDesc.ofDescriptor(
-                                MethodTypeDesc
-                                    .of(
-                                        ClassDesc.ofDescriptor("V"),
-                                        Arrays
-                                            .stream(
-                                                constructor.getParameterTypes()
-                                            )
-                                            .map(
-                                                type -> type.describeConstable()
-                                                    .orElseThrow()
-                                            )
-                                            .toArray(ClassDesc[]::new)
-                                    )
-                                    .descriptorString()
+                                omitted
+                                    ? defaultDescriptor(constructorType)
+                                    : methodDescriptor(constructorType)
                             ),
                             false
                         );
-                        break;
                     }
-                    final String name =
-                        ((ClassType) semanticModel.getExpressionType(creation))
-                            .name();
-                    final String owner =
-                        classOwners.getOrDefault(name, moduleName + "$" + name);
-                    method.new_(classDesc(owner));
-                    method.dup();
-                    final FunctionType constructorType =
-                        semanticModel.getConstructor(
-                            (ClassType) semanticModel
-                                .getExpressionType(creation)
-                        );
-                    constructorArguments(creation, constructorType);
-                    final boolean omitted =
-                        creation.arguments()
-                            .size() < constructorType.parameterTypes().size();
-                    method.invoke(
-                        INVOKESPECIAL,
-                        classDesc(owner),
-                        "<init>",
-                        MethodTypeDesc.ofDescriptor(
-                            omitted
-                                ? defaultDescriptor(constructorType)
-                                : methodDescriptor(constructorType)
-                        ),
-                        false
+                    case NamedArgumentExpression named -> throw unsupported(
+                        named,
+                        "Named argument outside a call"
                     );
-                }
-                case NamedArgumentExpression named ->
-                    throw unsupported(named, "Named argument outside a call");
-                case TupleExpression tuple -> tuple(tuple);
-                case ArraySpread spread -> throw unsupported(
-                    spread,
-                    "Array spread must be compiled in an array literal"
-                );
-                case ArrayExpression array -> array(array);
-                case MapExpression map -> map(map);
-                case SubscriptExpression index -> {
-                    if (
-                        semanticModel.getExpressionType(
-                            index.target()
-                        ) instanceof TupleType
-                    ) {
-                        tupleGet(index);
+                    case TupleExpression tuple -> tuple(tuple);
+                    case ArraySpread spread -> throw unsupported(
+                        spread,
+                        "Array spread must be compiled in an array literal"
+                    );
+                    case ArrayExpression array -> array(array);
+                    case MapExpression map -> map(map);
+                    case SubscriptExpression index -> {
+                        if (
+                            semanticModel.getExpressionType(
+                                index.target()
+                            ) instanceof TupleType
+                        ) {
+                            tupleGet(index);
+                        }
+                        else {
+                            arrayIndex(index);
+                            arrayGet(semanticModel.getExpressionType(index));
+                        }
                     }
-                    else {
-                        arrayIndex(index);
-                        arrayGet(semanticModel.getExpressionType(index));
-                    }
+                    case SliceExpression slice -> slice(slice);
+                    case ObjectExpression object -> object(object);
+                    case LambdaExpression lambda -> lambda(lambda);
                 }
-                case SliceExpression slice -> slice(slice);
-                case ObjectExpression object -> object(object);
-                case LambdaExpression lambda -> lambda(lambda);
+                convertExpression(expression);
             }
-            convertExpression(expression);
+            finally {
+                for (final Expression operand : preparedOperands) {
+                    frameTemporaries.remove(operand);
+                    formattedTemporaries.remove(operand);
+                    formattedLocalTemporaries.remove(operand);
+                    expressionTemporaries.remove(operand);
+                }
+                if (!preparedOperands.isEmpty()) {
+                    preparedCompounds.remove(expression);
+                }
+            }
         }
 
         private void convertExpression(final Expression expression) {
@@ -3429,6 +5154,26 @@ public final class BytecodeGenerator {
         }
 
         private void readObject(final Type type) {
+            if (type instanceof ArrayType array) {
+                method.ldc(
+                    RuntimeAbi.array(array.elementType()).elementDescriptor
+                );
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc(
+                        "com/github/andreasarvidsson/eld/runtime/EldArray"
+                    ),
+                    "fromObjectArray",
+                    MethodTypeDesc.ofDescriptor(
+                        "(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;"
+                    ),
+                    false
+                );
+                method.checkcast(
+                    classDesc(RuntimeAbi.array(array.elementType()).owner)
+                );
+                return;
+            }
             final String owner = boxedOwner(type);
             if (owner != null) {
                 method.checkcast(classDesc(owner));
@@ -4266,9 +6011,114 @@ public final class BytecodeGenerator {
             }
         }
 
+        private void promiseCall(
+            final CallExpression call,
+            final Method promiseMethod
+        ) {
+            switch (promiseMethod.getName()) {
+                case "resolve" -> {
+                    if (call.arguments().isEmpty()) {
+                        method.invoke(
+                            INVOKESTATIC,
+                            classDesc(
+                                "com/github/andreasarvidsson/eld/runtime/EldPromise"
+                            ),
+                            "resolve",
+                            MethodTypeDesc.ofDescriptor(
+                                "()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;"
+                            ),
+                            false
+                        );
+                        return;
+                    }
+                    final Expression value = call.arguments().getFirst();
+                    expression(value);
+                    if (
+                        semanticModel
+                            .getEffectiveType(value) instanceof PromiseType
+                    ) {
+                        return;
+                    }
+                    box(semanticModel.getEffectiveType(value));
+                    method.invoke(
+                        INVOKESTATIC,
+                        classDesc(
+                            "com/github/andreasarvidsson/eld/runtime/EldPromise"
+                        ),
+                        "resolve",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;"
+                        ),
+                        false
+                    );
+                }
+                case "reject" -> {
+                    expression(call.arguments().getFirst());
+                    method.invoke(
+                        INVOKESTATIC,
+                        classDesc(
+                            "com/github/andreasarvidsson/eld/runtime/EldPromise"
+                        ),
+                        "reject",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Throwable;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;"
+                        ),
+                        false
+                    );
+                }
+                case "all" -> {
+                    expression(call.arguments().getFirst());
+                    method.invoke(
+                        INVOKESTATIC,
+                        classDesc(
+                            "com/github/andreasarvidsson/eld/runtime/EldPromise"
+                        ),
+                        "all",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;"
+                        ),
+                        false
+                    );
+                }
+                default -> throw new IllegalStateException(
+                    "Unsupported Promise API method: " + promiseMethod
+                );
+            }
+        }
+
         private void call(final CallExpression call) {
-            final Type calleeType =
-                semanticModel.getExpressionType(call.callee());
+            final Method promiseMethod = semanticModel.getPromiseMethod(call);
+            final @Nullable Type preparedCalleeType =
+                promiseMethod == null
+                    ? semanticModel.getExpressionType(call.callee())
+                    : null;
+            if (
+                containsAwait(call) && !preparedCompounds.containsKey(call)
+                    && promiseMethod == null
+                    && preparedCalleeType != BuiltinFunctionType.PRINT
+            ) {
+                preparedCompounds.put(call, true);
+                final List<Expression> operands = asyncCallOperands(call);
+                for (int i = 0; i < operands.size(); i++) {
+                    saveTemporary(operands.get(i), hasLaterAwait(operands, i));
+                }
+                try {
+                    call(call);
+                }
+                finally {
+                    for (final Expression operand : operands) {
+                        frameTemporaries.remove(operand);
+                        expressionTemporaries.remove(operand);
+                    }
+                    preparedCompounds.remove(call);
+                }
+                return;
+            }
+            if (promiseMethod != null) {
+                promiseCall(call, promiseMethod);
+                return;
+            }
+            final Type calleeType = Objects.requireNonNull(preparedCalleeType);
             if (calleeType == BuiltinFunctionType.ARRAY_SORT) {
                 final MemberExpression member =
                     (MemberExpression) unwrap(call.callee());
@@ -4286,9 +6136,34 @@ public final class BytecodeGenerator {
                 return;
             }
             if (calleeType == BuiltinFunctionType.PRINT) {
-                expression(call.callee());
-                for (final Expression argument : call.arguments()) {
+                if (
+                    asyncStateMachine != null && call.arguments()
+                        .stream()
+                        .anyMatch(
+                            argument -> AstTraversal.anyMatch(
+                                argument,
+                                AwaitExpression.class::isInstance
+                            )
+                        )
+                ) {
+                    final Expression argument = call.arguments().getFirst();
+                    final Type argumentType =
+                        semanticModel.getEffectiveType(argument);
                     expression(argument);
+                    final int value = reserve(argumentType);
+                    method.with(
+                        localInstruction(storeOpcode(argumentType), value)
+                    );
+                    expression(call.callee());
+                    method.with(
+                        localInstruction(loadOpcode(argumentType), value)
+                    );
+                }
+                else {
+                    expression(call.callee());
+                    for (final Expression argument : call.arguments()) {
+                        expression(argument);
+                    }
                 }
                 final String argumentDescriptor =
                     call.arguments().isEmpty()
@@ -4332,6 +6207,35 @@ public final class BytecodeGenerator {
             }
             final FunctionType type = (FunctionType) calleeType;
             final Expression callee = unwrap(call.callee());
+            if (
+                callee instanceof MemberExpression member && semanticModel
+                    .getMemberOwner(member) instanceof PromiseSourceType
+            ) {
+                expression(member.target());
+                if (!call.arguments().isEmpty()) {
+                    final Expression argument = call.arguments().getFirst();
+                    expression(argument);
+                    if (member.member().name().equals("resolve")) {
+                        box(semanticModel.getEffectiveType(argument));
+                    }
+                }
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(
+                        "com/github/andreasarvidsson/eld/runtime/PromiseSource"
+                    ),
+                    member.member().name(),
+                    MethodTypeDesc.ofDescriptor(
+                        member.member().name().equals("resolve")
+                            ? call.arguments().isEmpty()
+                                ? "()V"
+                                : "(Ljava/lang/Object;)V"
+                            : "(Ljava/lang/Throwable;)V"
+                    ),
+                    false
+                );
+                return;
+            }
             if (
                 callee instanceof MemberExpression member
                     && semanticModel.getReference(
@@ -4409,17 +6313,32 @@ public final class BytecodeGenerator {
                     ) instanceof FunctionSymbol function
             ) {
                 final boolean instanceMethod =
-                    instance != null
-                        && instance.members().containsKey(function);
+                    (instance != null
+                        && instance.members().containsKey(function))
+                        || (lexicalInstance != null
+                            && lexicalInstance.members().containsKey(function));
                 if (instanceMethod) {
-                    method.aload(0);
+                    if (
+                        lexicalInstance != null
+                            && lexicalInstance.members().containsKey(function)
+                    ) {
+                        loadLexicalReceiver();
+                    }
+                    else {
+                        method.aload(0);
+                    }
                 }
                 callArguments(call);
                 method.invoke(
                     instanceMethod ? INVOKEVIRTUAL : INVOKESTATIC,
                     classDesc(
                         instanceMethod
-                            ? Objects.requireNonNull(instance).owner()
+                            ? lexicalInstance != null
+                                && lexicalInstance.members()
+                                    .containsKey(function)
+                                        ? lexicalInstance.owner()
+                                        : Objects.requireNonNull(instance)
+                                            .owner()
                             : moduleName
                     ),
                     methodName(function),
@@ -4688,7 +6607,9 @@ public final class BytecodeGenerator {
                     expression(spread.expression());
                     // Snapshot only when later expressions might mutate the contributed range.
                     if (
-                        array.elements()
+                        !frameTemporaries.containsKey(
+                            spread.expression()
+                        ) && array.elements()
                             .subList(entryIndex + 1, array.elements().size())
                             .stream()
                             .anyMatch(
@@ -4895,6 +6816,10 @@ public final class BytecodeGenerator {
         }
 
         private void map(final MapExpression map) {
+            if (containsAwait(map)) {
+                asyncMap(map);
+                return;
+            }
             method.new_(classDesc("java/util/LinkedHashMap"));
             method.dup();
             method.invoke(
@@ -4933,6 +6858,67 @@ public final class BytecodeGenerator {
                     );
                 }
             }
+        }
+
+        private void asyncMap(final MapExpression map) {
+            saveFrameTemporary(map, () -> {
+                method.new_(classDesc("java/util/LinkedHashMap"));
+                method.dup();
+                method.invoke(
+                    INVOKESPECIAL,
+                    classDesc("java/util/LinkedHashMap"),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+            });
+            frameTemporaries.remove(map);
+            for (final MapElement element : map.elements()) {
+                if (element instanceof MapEntry entry) {
+                    final boolean valueAwaits = containsAwait(entry.value());
+                    if (containsAwait(entry.key()) || valueAwaits) {
+                        saveTemporary(entry.key(), valueAwaits);
+                    }
+                    if (valueAwaits) {
+                        saveLocalTemporary(entry.value());
+                    }
+                    loadFrameTemporary(map);
+                    expression(entry.key());
+                    box(semanticModel.getEffectiveType(entry.key()));
+                    expression(entry.value());
+                    box(semanticModel.getEffectiveType(entry.value()));
+                    method.invoke(
+                        INVOKEINTERFACE,
+                        classDesc("java/util/Map"),
+                        "put",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+                        ),
+                        true
+                    );
+                    method.pop();
+                    frameTemporaries.remove(entry.key());
+                    expressionTemporaries.remove(entry.key());
+                    expressionTemporaries.remove(entry.value());
+                }
+                else if (element instanceof MapSpread spread) {
+                    final Expression source = spread.expression();
+                    if (containsAwait(source)) {
+                        saveLocalTemporary(source);
+                    }
+                    loadFrameTemporary(map);
+                    expression(source);
+                    method.invoke(
+                        INVOKEINTERFACE,
+                        classDesc("java/util/Map"),
+                        "putAll",
+                        MethodTypeDesc.ofDescriptor("(Ljava/util/Map;)V"),
+                        true
+                    );
+                    expressionTemporaries.remove(source);
+                }
+            }
+            loadFrameTemporary(map);
         }
 
         private void slice(final SliceExpression slice) {
@@ -5022,6 +7008,25 @@ public final class BytecodeGenerator {
 
         private void member(final MemberExpression member) {
             final Symbol symbol = semanticModel.getReference(member.member());
+            if (
+                semanticModel
+                    .getMemberOwner(member) instanceof PromiseSourceType
+                    && member.member().name().equals("promise")
+            ) {
+                memberReceiver(member);
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(
+                        "com/github/andreasarvidsson/eld/runtime/PromiseSource"
+                    ),
+                    "promise",
+                    MethodTypeDesc.ofDescriptor(
+                        "()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;"
+                    ),
+                    false
+                );
+                return;
+            }
             if (symbol instanceof JavaMethodSymbol function) {
                 final var javaMethod = function.method();
                 final boolean isInterface =
@@ -5143,8 +7148,27 @@ public final class BytecodeGenerator {
             final Expression target = unwrap(assignment.target());
             if (target instanceof IdentifierExpression identifier) {
                 final Symbol symbol = semanticModel.getReference(identifier);
-                final boolean instanceField = prepareStore(symbol);
-                expression(assignment.value());
+                final boolean containsAwait =
+                    asyncStateMachine != null && AstTraversal.anyMatch(
+                        assignment.value(),
+                        AwaitExpression.class::isInstance
+                    );
+                final boolean instanceField;
+                if (containsAwait) {
+                    expression(assignment.value());
+                    final int value = reserve(symbol.type());
+                    method.with(
+                        localInstruction(storeOpcode(symbol.type()), value)
+                    );
+                    instanceField = prepareStore(symbol);
+                    method.with(
+                        localInstruction(loadOpcode(symbol.type()), value)
+                    );
+                }
+                else {
+                    instanceField = prepareStore(symbol);
+                    expression(assignment.value());
+                }
                 method.with(
                     simpleInstruction(
                         slots(symbol.type()) == 2
@@ -5346,8 +7370,22 @@ public final class BytecodeGenerator {
                 return;
             }
             final Type type = semanticModel.getEffectiveType(binary.left());
-            expression(binary.left());
-            expression(binary.right());
+            final boolean spilled =
+                asyncStateMachine != null && containsAwait(binary.right());
+            if (spilled) {
+                saveFrameTemporary(binary.left());
+                expression(binary.right());
+                final Type rightType =
+                    semanticModel.getEffectiveType(binary.right());
+                final int right = reserve(rightType);
+                method.with(localInstruction(storeOpcode(rightType), right));
+                loadFrameTemporary(binary.left());
+                method.with(localInstruction(loadOpcode(rightType), right));
+            }
+            else {
+                expression(binary.left());
+                expression(binary.right());
+            }
             if (operator == BinaryOperator.ADD && type == BuiltinType.STRING) {
                 method.invoke(
                     INVOKEVIRTUAL,
@@ -5357,6 +7395,9 @@ public final class BytecodeGenerator {
                         .ofDescriptor("(Ljava/lang/String;)Ljava/lang/String;"),
                     false
                 );
+                if (spilled) {
+                    frameTemporaries.remove(binary.left());
+                }
                 return;
             }
             if (operator.isBool()) {
@@ -5440,6 +7481,9 @@ public final class BytecodeGenerator {
                         booleanResult(opcode);
                     }
                 }
+                if (spilled) {
+                    frameTemporaries.remove(binary.left());
+                }
                 return;
             }
             method.with(simpleInstruction(opcode(type, switch (operator) {
@@ -5454,6 +7498,9 @@ public final class BytecodeGenerator {
                 );
             })));
             narrow(type);
+            if (spilled) {
+                frameTemporaries.remove(binary.left());
+            }
         }
 
         private void booleanResult(final Opcode opcode) {

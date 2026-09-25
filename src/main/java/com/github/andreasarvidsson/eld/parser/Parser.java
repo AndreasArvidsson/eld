@@ -87,7 +87,10 @@ public final class Parser extends ParserBase {
             case FOR:
                 return parseForStatement(token);
             case FUNC:
-                return parseFunctionDeclaration(token);
+                return parseFunctionDeclaration(token, false);
+            case ASYNC:
+                expect(TokenType.FUNC);
+                return parseFunctionDeclaration(token, true);
             case TRY:
                 return parseTryStatement(token);
             case THROW:
@@ -99,6 +102,13 @@ public final class Parser extends ParserBase {
                 );
             case RETURN:
                 return parseReturnStatement(token);
+            case IGNORE:
+                final Expression ignored = parserExpressions.parseExpression();
+                final Token ignoreEnd = expect(TokenType.SEMICOLON);
+                return new IgnoreStatement(
+                    ignored,
+                    token.range().union(ignoreEnd.range())
+                );
             case YIELD:
                 final Expression value = parserExpressions.parseExpression();
                 final Token end = expect(TokenType.SEMICOLON);
@@ -222,6 +232,7 @@ public final class Parser extends ParserBase {
                 !check(TokenType.VAR) && !check(TokenType.CONST)
                     && !check(TokenType.FUNC)
                     && !check(TokenType.CONSTRUCTOR)
+                    && !check(TokenType.ASYNC)
             ) {
                 throw new ParserException(
                     current().range(),
@@ -243,8 +254,10 @@ public final class Parser extends ParserBase {
             else {
                 member =
                     check(TokenType.FUNC)
-                        ? parseFunctionDeclaration(advance())
-                        : parseConstructorDeclaration(advance());
+                        ? parseFunctionDeclaration(advance(), false)
+                        : check(TokenType.ASYNC)
+                            ? parseAsyncFunctionDeclaration()
+                            : parseConstructorDeclaration(advance());
             }
             members.add(
                 new MemberDeclaration(
@@ -309,14 +322,16 @@ public final class Parser extends ParserBase {
                     check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
                         ? advance()
                         : null;
-                if (!check(TokenType.FUNC)) {
+                if (!check(TokenType.FUNC) && !check(TokenType.ASYNC)) {
                     throw new ParserException(
                         current().range(),
                         "Record bodies may only contain methods"
                     );
                 }
                 final FunctionDeclaration method =
-                    parseFunctionDeclaration(advance());
+                    check(TokenType.ASYNC)
+                        ? parseAsyncFunctionDeclaration()
+                        : parseFunctionDeclaration(advance(), false);
                 if (method.name().name().equals("copy")) {
                     throw new ParserException(
                         method.name().range(),
@@ -471,7 +486,16 @@ public final class Parser extends ParserBase {
         return new ReturnStatement(value, range);
     }
 
-    private FunctionDeclaration parseFunctionDeclaration(final Token keyword) {
+    private FunctionDeclaration parseAsyncFunctionDeclaration() {
+        final Token keyword = expect(TokenType.ASYNC);
+        expect(TokenType.FUNC);
+        return parseFunctionDeclaration(keyword, true);
+    }
+
+    private FunctionDeclaration parseFunctionDeclaration(
+        final Token keyword,
+        final boolean async
+    ) {
         final Token name = expect(TokenType.IDENTIFIER);
         final IdentifierDeclaration nameId =
             new IdentifierDeclaration(name.text(), name.range());
@@ -488,6 +512,7 @@ public final class Parser extends ParserBase {
         final BlockStatement body = parseBlockStatement();
         final Range range = keyword.range().union(body.range());
         return new FunctionDeclaration(
+            async,
             nameId,
             parameters,
             returnType,

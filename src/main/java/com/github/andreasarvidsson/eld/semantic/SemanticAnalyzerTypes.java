@@ -397,6 +397,27 @@ public final class SemanticAnalyzerTypes {
         final NamedTypeNode named,
         final SemanticContext context
     ) {
+        if (
+            named.name().equals("Promise")
+                || named.name().equals("PromiseSource")
+        ) {
+            if (named.typeArguments().size() != 1) {
+                throw new SemanticException(
+                    named.range(),
+                    "%s requires 1 type argument, found %s",
+                    named.name(),
+                    named.typeArguments().size()
+                );
+            }
+            final Type argument =
+                resolveType(named.typeArguments().getFirst(), context);
+            final Type type =
+                named.name().equals("Promise")
+                    ? new PromiseType(argument)
+                    : new PromiseSourceType(argument);
+            model.setResolvedType(named, type);
+            return type;
+        }
         final Class<?> javaClass = JavaTypes.findClass(named.name());
         if (
             javaClass != null && context.scope().resolve(named.name()) == null

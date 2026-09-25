@@ -2,6 +2,7 @@ package com.github.andreasarvidsson.eld;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
 
 final class ModuleLoader extends ClassLoader {
     private final Map<String, byte[]> definitions = new HashMap<>();

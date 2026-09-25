@@ -11,3 +11,10 @@
   - `mvn -N -q spotless:check`
 - Tests can be run with:
   - `mvn test`
+
+## Do
+
+- Verify format with spotless check. If you get a spotless error run `mvn spotless:apply`.
+- Verify that tests pass.
+- When adding new logic/syntax test behavior in `.fixture` files.
+- Import Java classes. Don't use the full package path in the code implementation.

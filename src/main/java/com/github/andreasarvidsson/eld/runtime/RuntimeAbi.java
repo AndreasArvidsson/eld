@@ -1,4 +1,4 @@
-package com.github.andreasarvidsson.eld;
+package com.github.andreasarvidsson.eld.runtime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,23 +6,11 @@ import org.jspecify.annotations.Nullable;
 import java.lang.classfile.TypeKind;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
 import com.github.andreasarvidsson.eld.semantic.Type;
-import com.github.andreasarvidsson.eld.runtime.EldArray;
-import com.github.andreasarvidsson.eld.runtime.EldByteArray;
-import com.github.andreasarvidsson.eld.runtime.EldShortArray;
-import com.github.andreasarvidsson.eld.runtime.EldTuple;
-import com.github.andreasarvidsson.eld.runtime.EldIntArray;
-import com.github.andreasarvidsson.eld.runtime.EldLongArray;
-import com.github.andreasarvidsson.eld.runtime.EldFloatArray;
-import com.github.andreasarvidsson.eld.runtime.EldDoubleArray;
-import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
-import com.github.andreasarvidsson.eld.runtime.EldCharArray;
-import com.github.andreasarvidsson.eld.runtime.EldObjectArray;
-import com.github.andreasarvidsson.eld.runtime.Introspection;
 
-final class RuntimeAbi {
-    static final String EMPTY_ARRAY_CONSTRUCTOR = "()V";
+final public class RuntimeAbi {
+    public static final String EMPTY_ARRAY_CONSTRUCTOR = "()V";
 
-    enum ArrayKind {
+    public enum ArrayKind {
         BYTE(BuiltinType.I8, EldByteArray.class, "B", TypeKind.BYTE),
         SHORT(BuiltinType.I16, EldShortArray.class, "S", TypeKind.SHORT),
         INT(BuiltinType.I32, EldIntArray.class, "I", TypeKind.INT),
@@ -38,14 +26,14 @@ final class RuntimeAbi {
             TypeKind.REFERENCE
         );
 
-        final @Nullable BuiltinType element;
-        final Class<?> runtimeClass;
-        final String owner;
-        final String descriptor;
-        final String elementDescriptor;
-        final String backingDescriptor;
-        final String constructorDescriptor;
-        final TypeKind creationKind;
+        public final @Nullable BuiltinType element;
+        public final Class<?> runtimeClass;
+        public final String owner;
+        public final String descriptor;
+        public final String elementDescriptor;
+        public final String backingDescriptor;
+        public final String constructorDescriptor;
+        public final TypeKind creationKind;
 
         ArrayKind(
             final @Nullable BuiltinType element,
@@ -63,7 +51,7 @@ final class RuntimeAbi {
             this.creationKind = creationKind;
         }
 
-        String methodDescriptor(final ArrayMethod method) {
+        public String methodDescriptor(final ArrayMethod method) {
             return switch (method) {
                 case SIZE -> "()I";
                 case GET -> "(I)" + elementDescriptor;
@@ -76,7 +64,7 @@ final class RuntimeAbi {
         }
     }
 
-    enum ArrayMethod {
+    public enum ArrayMethod {
         SIZE("size"),
         GET("get"),
         SET("set"),
@@ -86,7 +74,7 @@ final class RuntimeAbi {
         SLICE_TO("sliceTo"),
         SLICE("slice");
 
-        final String methodName;
+        public final String methodName;
 
         ArrayMethod(final String methodName) {
             this.methodName = methodName;
@@ -94,7 +82,7 @@ final class RuntimeAbi {
 
     }
 
-    static ArrayKind array(final Type element) {
+    public static ArrayKind array(final Type element) {
         if (!(element instanceof BuiltinType builtin)) {
             return ArrayKind.OBJECT;
         }
@@ -114,11 +102,17 @@ final class RuntimeAbi {
         };
     }
 
-    static List<Class<?>> runtimeClasses() {
+    public static List<Class<?>> runtimeClasses() {
         final ArrayList<Class<?>> classes = new ArrayList<>();
         classes.add(EldArray.class);
         classes.add(EldTuple.class);
         classes.add(Introspection.class);
+        classes.add(EldPromise.class);
+        classes.add(EldApi.class);
+        classes.add(EldPromise.State.class);
+        classes.add(EldPromise.Continuation.class);
+        classes.add(EldScheduler.class);
+        classes.add(PromiseSource.class);
         for (final ArrayKind array : ArrayKind.values()) {
             classes.add(array.runtimeClass);
         }

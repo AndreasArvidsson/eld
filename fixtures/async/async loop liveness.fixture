@@ -1,0 +1,1005 @@
+async func run() {
+    const whileBase = 10;
+    var whileIndex = 0;
+    while (whileIndex < 2) {
+        print(whileBase + whileIndex);
+        whileIndex++;
+        await Promise.resolve();
+    }
+
+    const doBase = 20;
+    var doIndex = 0;
+    do {
+        print(doBase + doIndex);
+        doIndex++;
+        await Promise.resolve();
+    } while (doIndex < 2);
+
+    const forBase = 30;
+    for (var forIndex = 0; forIndex < 2; forIndex++) {
+        print(forBase + forIndex);
+        await Promise.resolve();
+    }
+
+    const eachBase = 40;
+    for (item : [0, 1]) {
+        print(eachBase + item);
+        await Promise.resolve();
+    }
+}
+
+ignore run();
+
+
+--- TOKENS ---
+
+ASYNC (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "run" (1:12-1:15)
+LEFT_PAREN (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+LEFT_BRACE (1:18-1:19)
+CONST (2:5-2:10)
+IDENTIFIER "whileBase" (2:11-2:20)
+EQUAL (2:21-2:22)
+INTEGER_LITERAL "10" (2:23-2:25)
+SEMICOLON (2:25-2:26)
+VAR (3:5-3:8)
+IDENTIFIER "whileIndex" (3:9-3:19)
+EQUAL (3:20-3:21)
+INTEGER_LITERAL "0" (3:22-3:23)
+SEMICOLON (3:23-3:24)
+WHILE (4:5-4:10)
+LEFT_PAREN (4:11-4:12)
+IDENTIFIER "whileIndex" (4:12-4:22)
+LESS (4:23-4:24)
+INTEGER_LITERAL "2" (4:25-4:26)
+RIGHT_PAREN (4:26-4:27)
+LEFT_BRACE (4:28-4:29)
+IDENTIFIER "print" (5:9-5:14)
+LEFT_PAREN (5:14-5:15)
+IDENTIFIER "whileBase" (5:15-5:24)
+PLUS (5:25-5:26)
+IDENTIFIER "whileIndex" (5:27-5:37)
+RIGHT_PAREN (5:37-5:38)
+SEMICOLON (5:38-5:39)
+IDENTIFIER "whileIndex" (6:9-6:19)
+PLUS_PLUS (6:19-6:21)
+SEMICOLON (6:21-6:22)
+AWAIT (7:9-7:14)
+IDENTIFIER "Promise" (7:15-7:22)
+DOT (7:22-7:23)
+IDENTIFIER "resolve" (7:23-7:30)
+LEFT_PAREN (7:30-7:31)
+RIGHT_PAREN (7:31-7:32)
+SEMICOLON (7:32-7:33)
+RIGHT_BRACE (8:5-8:6)
+CONST (10:5-10:10)
+IDENTIFIER "doBase" (10:11-10:17)
+EQUAL (10:18-10:19)
+INTEGER_LITERAL "20" (10:20-10:22)
+SEMICOLON (10:22-10:23)
+VAR (11:5-11:8)
+IDENTIFIER "doIndex" (11:9-11:16)
+EQUAL (11:17-11:18)
+INTEGER_LITERAL "0" (11:19-11:20)
+SEMICOLON (11:20-11:21)
+DO (12:5-12:7)
+LEFT_BRACE (12:8-12:9)
+IDENTIFIER "print" (13:9-13:14)
+LEFT_PAREN (13:14-13:15)
+IDENTIFIER "doBase" (13:15-13:21)
+PLUS (13:22-13:23)
+IDENTIFIER "doIndex" (13:24-13:31)
+RIGHT_PAREN (13:31-13:32)
+SEMICOLON (13:32-13:33)
+IDENTIFIER "doIndex" (14:9-14:16)
+PLUS_PLUS (14:16-14:18)
+SEMICOLON (14:18-14:19)
+AWAIT (15:9-15:14)
+IDENTIFIER "Promise" (15:15-15:22)
+DOT (15:22-15:23)
+IDENTIFIER "resolve" (15:23-15:30)
+LEFT_PAREN (15:30-15:31)
+RIGHT_PAREN (15:31-15:32)
+SEMICOLON (15:32-15:33)
+RIGHT_BRACE (16:5-16:6)
+WHILE (16:7-16:12)
+LEFT_PAREN (16:13-16:14)
+IDENTIFIER "doIndex" (16:14-16:21)
+LESS (16:22-16:23)
+INTEGER_LITERAL "2" (16:24-16:25)
+RIGHT_PAREN (16:25-16:26)
+SEMICOLON (16:26-16:27)
+CONST (18:5-18:10)
+IDENTIFIER "forBase" (18:11-18:18)
+EQUAL (18:19-18:20)
+INTEGER_LITERAL "30" (18:21-18:23)
+SEMICOLON (18:23-18:24)
+FOR (19:5-19:8)
+LEFT_PAREN (19:9-19:10)
+VAR (19:10-19:13)
+IDENTIFIER "forIndex" (19:14-19:22)
+EQUAL (19:23-19:24)
+INTEGER_LITERAL "0" (19:25-19:26)
+SEMICOLON (19:26-19:27)
+IDENTIFIER "forIndex" (19:28-19:36)
+LESS (19:37-19:38)
+INTEGER_LITERAL "2" (19:39-19:40)
+SEMICOLON (19:40-19:41)
+IDENTIFIER "forIndex" (19:42-19:50)
+PLUS_PLUS (19:50-19:52)
+RIGHT_PAREN (19:52-19:53)
+LEFT_BRACE (19:54-19:55)
+IDENTIFIER "print" (20:9-20:14)
+LEFT_PAREN (20:14-20:15)
+IDENTIFIER "forBase" (20:15-20:22)
+PLUS (20:23-20:24)
+IDENTIFIER "forIndex" (20:25-20:33)
+RIGHT_PAREN (20:33-20:34)
+SEMICOLON (20:34-20:35)
+AWAIT (21:9-21:14)
+IDENTIFIER "Promise" (21:15-21:22)
+DOT (21:22-21:23)
+IDENTIFIER "resolve" (21:23-21:30)
+LEFT_PAREN (21:30-21:31)
+RIGHT_PAREN (21:31-21:32)
+SEMICOLON (21:32-21:33)
+RIGHT_BRACE (22:5-22:6)
+CONST (24:5-24:10)
+IDENTIFIER "eachBase" (24:11-24:19)
+EQUAL (24:20-24:21)
+INTEGER_LITERAL "40" (24:22-24:24)
+SEMICOLON (24:24-24:25)
+FOR (25:5-25:8)
+LEFT_PAREN (25:9-25:10)
+IDENTIFIER "item" (25:10-25:14)
+COLON (25:15-25:16)
+LEFT_BRACKET (25:17-25:18)
+INTEGER_LITERAL "0" (25:18-25:19)
+COMMA (25:19-25:20)
+INTEGER_LITERAL "1" (25:21-25:22)
+RIGHT_BRACKET (25:22-25:23)
+RIGHT_PAREN (25:23-25:24)
+LEFT_BRACE (25:25-25:26)
+IDENTIFIER "print" (26:9-26:14)
+LEFT_PAREN (26:14-26:15)
+IDENTIFIER "eachBase" (26:15-26:23)
+PLUS (26:24-26:25)
+IDENTIFIER "item" (26:26-26:30)
+RIGHT_PAREN (26:30-26:31)
+SEMICOLON (26:31-26:32)
+AWAIT (27:9-27:14)
+IDENTIFIER "Promise" (27:15-27:22)
+DOT (27:22-27:23)
+IDENTIFIER "resolve" (27:23-27:30)
+LEFT_PAREN (27:30-27:31)
+RIGHT_PAREN (27:31-27:32)
+SEMICOLON (27:32-27:33)
+RIGHT_BRACE (28:5-28:6)
+RIGHT_BRACE (29:1-29:2)
+IGNORE (31:1-31:7)
+IDENTIFIER "run" (31:8-31:11)
+LEFT_PAREN (31:11-31:12)
+RIGHT_PAREN (31:12-31:13)
+SEMICOLON (31:13-31:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-31:14
+  (FunctionDeclaration
+    range: 1:1-29:2
+    async: true
+    (IdentifierDeclaration
+      range: 1:12-1:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:18-29:2
+      (VariableDeclaration
+        range: 2:5-2:26
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:11-2:20
+          name: "whileBase"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:23-2:25
+          kind: INT
+          text: "10"
+        )
+      )
+      (VariableDeclaration
+        range: 3:5-3:24
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 3:9-3:19
+          name: "whileIndex"
+        )
+        type: null
+        (LiteralExpression
+          range: 3:22-3:23
+          kind: INT
+          text: "0"
+        )
+      )
+      (WhileStatement
+        range: 4:5-8:6
+        (BinaryExpression
+          range: 4:12-4:26
+          (IdentifierExpression
+            range: 4:12-4:22
+            name: "whileIndex"
+          )
+          operator: LESS
+          (LiteralExpression
+            range: 4:25-4:26
+            kind: INT
+            text: "2"
+          )
+        )
+        (BlockStatement
+          range: 4:28-8:6
+          (ExpressionStatement
+            range: 5:9-5:39
+            (CallExpression
+              range: 5:9-5:38
+              (IdentifierExpression
+                range: 5:9-5:14
+                name: "print"
+              )
+              (BinaryExpression
+                range: 5:15-5:37
+                (IdentifierExpression
+                  range: 5:15-5:24
+                  name: "whileBase"
+                )
+                operator: ADD
+                (IdentifierExpression
+                  range: 5:27-5:37
+                  name: "whileIndex"
+                )
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 6:9-6:22
+            (PostfixExpression
+              range: 6:9-6:21
+              (IdentifierExpression
+                range: 6:9-6:19
+                name: "whileIndex"
+              )
+              operator: INCREMENT
+            )
+          )
+          (ExpressionStatement
+            range: 7:9-7:33
+            (AwaitExpression
+              range: 7:9-7:32
+              (CallExpression
+                range: 7:15-7:32
+                (MemberExpression
+                  range: 7:15-7:30
+                  (IdentifierExpression
+                    range: 7:15-7:22
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 7:23-7:30
+                    name: "resolve"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 10:5-10:23
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 10:11-10:17
+          name: "doBase"
+        )
+        type: null
+        (LiteralExpression
+          range: 10:20-10:22
+          kind: INT
+          text: "20"
+        )
+      )
+      (VariableDeclaration
+        range: 11:5-11:21
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 11:9-11:16
+          name: "doIndex"
+        )
+        type: null
+        (LiteralExpression
+          range: 11:19-11:20
+          kind: INT
+          text: "0"
+        )
+      )
+      (DoWhileStatement
+        range: 12:5-16:27
+        (BlockStatement
+          range: 12:8-16:6
+          (ExpressionStatement
+            range: 13:9-13:33
+            (CallExpression
+              range: 13:9-13:32
+              (IdentifierExpression
+                range: 13:9-13:14
+                name: "print"
+              )
+              (BinaryExpression
+                range: 13:15-13:31
+                (IdentifierExpression
+                  range: 13:15-13:21
+                  name: "doBase"
+                )
+                operator: ADD
+                (IdentifierExpression
+                  range: 13:24-13:31
+                  name: "doIndex"
+                )
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 14:9-14:19
+            (PostfixExpression
+              range: 14:9-14:18
+              (IdentifierExpression
+                range: 14:9-14:16
+                name: "doIndex"
+              )
+              operator: INCREMENT
+            )
+          )
+          (ExpressionStatement
+            range: 15:9-15:33
+            (AwaitExpression
+              range: 15:9-15:32
+              (CallExpression
+                range: 15:15-15:32
+                (MemberExpression
+                  range: 15:15-15:30
+                  (IdentifierExpression
+                    range: 15:15-15:22
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 15:23-15:30
+                    name: "resolve"
+                  )
+                )
+              )
+            )
+          )
+        )
+        (BinaryExpression
+          range: 16:14-16:25
+          (IdentifierExpression
+            range: 16:14-16:21
+            name: "doIndex"
+          )
+          operator: LESS
+          (LiteralExpression
+            range: 16:24-16:25
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 18:5-18:24
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 18:11-18:18
+          name: "forBase"
+        )
+        type: null
+        (LiteralExpression
+          range: 18:21-18:23
+          kind: INT
+          text: "30"
+        )
+      )
+      (ForStatement
+        range: 19:5-22:6
+        (DeclarationStatement
+          range: 19:10-19:27
+          (VariableDeclaration
+            range: 19:10-19:27
+            mutability: VAR
+            (IdentifierDeclaration
+              range: 19:14-19:22
+              name: "forIndex"
+            )
+            type: null
+            (LiteralExpression
+              range: 19:25-19:26
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+        (BinaryExpression
+          range: 19:28-19:40
+          (IdentifierExpression
+            range: 19:28-19:36
+            name: "forIndex"
+          )
+          operator: LESS
+          (LiteralExpression
+            range: 19:39-19:40
+            kind: INT
+            text: "2"
+          )
+        )
+        (PostfixExpression
+          range: 19:42-19:52
+          (IdentifierExpression
+            range: 19:42-19:50
+            name: "forIndex"
+          )
+          operator: INCREMENT
+        )
+        (BlockStatement
+          range: 19:54-22:6
+          (ExpressionStatement
+            range: 20:9-20:35
+            (CallExpression
+              range: 20:9-20:34
+              (IdentifierExpression
+                range: 20:9-20:14
+                name: "print"
+              )
+              (BinaryExpression
+                range: 20:15-20:33
+                (IdentifierExpression
+                  range: 20:15-20:22
+                  name: "forBase"
+                )
+                operator: ADD
+                (IdentifierExpression
+                  range: 20:25-20:33
+                  name: "forIndex"
+                )
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 21:9-21:33
+            (AwaitExpression
+              range: 21:9-21:32
+              (CallExpression
+                range: 21:15-21:32
+                (MemberExpression
+                  range: 21:15-21:30
+                  (IdentifierExpression
+                    range: 21:15-21:22
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 21:23-21:30
+                    name: "resolve"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 24:5-24:25
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 24:11-24:19
+          name: "eachBase"
+        )
+        type: null
+        (LiteralExpression
+          range: 24:22-24:24
+          kind: INT
+          text: "40"
+        )
+      )
+      (ForEachStatement
+        range: 25:5-28:6
+        (IdentifierDeclaration
+          range: 25:10-25:14
+          name: "item"
+        )
+        index: null
+        (ArrayExpression
+          range: 25:17-25:23
+          (LiteralExpression
+            range: 25:18-25:19
+            kind: INT
+            text: "0"
+          )
+          (LiteralExpression
+            range: 25:21-25:22
+            kind: INT
+            text: "1"
+          )
+        )
+        (BlockStatement
+          range: 25:25-28:6
+          (ExpressionStatement
+            range: 26:9-26:32
+            (CallExpression
+              range: 26:9-26:31
+              (IdentifierExpression
+                range: 26:9-26:14
+                name: "print"
+              )
+              (BinaryExpression
+                range: 26:15-26:30
+                (IdentifierExpression
+                  range: 26:15-26:23
+                  name: "eachBase"
+                )
+                operator: ADD
+                (IdentifierExpression
+                  range: 26:26-26:30
+                  name: "item"
+                )
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 27:9-27:33
+            (AwaitExpression
+              range: 27:9-27:32
+              (CallExpression
+                range: 27:15-27:32
+                (MemberExpression
+                  range: 27:15-27:30
+                  (IdentifierExpression
+                    range: 27:15-27:22
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 27:23-27:30
+                    name: "resolve"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 31:1-31:14
+    (CallExpression
+      range: 31:8-31:13
+      (IdentifierExpression
+        range: 31:8-31:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:23-2:25 -> i32
+  3:22-3:23 -> i32
+  4:12-4:22 -> i32
+  4:12-4:26 -> bool
+  4:25-4:26 -> i32
+  5:9-5:14 -> (any) => void
+  5:9-5:38 -> void
+  5:15-5:24 -> i32
+  5:15-5:37 -> i32
+  5:27-5:37 -> i32
+  6:9-6:19 -> i32
+  6:9-6:21 -> i32
+  7:9-7:32 -> void
+  7:15-7:32 -> Promise<void>
+  10:20-10:22 -> i32
+  11:19-11:20 -> i32
+  13:9-13:14 -> (any) => void
+  13:9-13:32 -> void
+  13:15-13:21 -> i32
+  13:15-13:31 -> i32
+  13:24-13:31 -> i32
+  14:9-14:16 -> i32
+  14:9-14:18 -> i32
+  15:9-15:32 -> void
+  15:15-15:32 -> Promise<void>
+  16:14-16:21 -> i32
+  16:14-16:25 -> bool
+  16:24-16:25 -> i32
+  18:21-18:23 -> i32
+  19:25-19:26 -> i32
+  19:28-19:36 -> i32
+  19:28-19:40 -> bool
+  19:39-19:40 -> i32
+  19:42-19:50 -> i32
+  19:42-19:52 -> i32
+  20:9-20:14 -> (any) => void
+  20:9-20:34 -> void
+  20:15-20:22 -> i32
+  20:15-20:33 -> i32
+  20:25-20:33 -> i32
+  21:9-21:32 -> void
+  21:15-21:32 -> Promise<void>
+  24:22-24:24 -> i32
+  25:17-25:23 -> [i32]
+  25:18-25:19 -> i32
+  25:21-25:22 -> i32
+  26:9-26:14 -> (any) => void
+  26:9-26:31 -> void
+  26:15-26:23 -> i32
+  26:15-26:30 -> i32
+  26:26-26:30 -> i32
+  27:9-27:32 -> void
+  27:15-27:32 -> Promise<void>
+  31:8-31:11 -> () => Promise<void>
+  31:8-31:13 -> Promise<void>
+
+Declarations:
+  1:12-1:15 -> run() => Promise<void>
+  2:11-2:20 -> const whileBase: i32
+  3:9-3:19 -> var whileIndex: i32
+  10:11-10:17 -> const doBase: i32
+  11:9-11:16 -> var doIndex: i32
+  18:11-18:18 -> const forBase: i32
+  19:14-19:22 -> var forIndex: i32
+  24:11-24:19 -> const eachBase: i32
+  25:10-25:14 -> const item: i32
+
+References:
+  4:12-4:22 -> 3:9-3:19
+  5:9-5:14 -> builtin print
+  5:15-5:24 -> 2:11-2:20
+  5:27-5:37 -> 3:9-3:19
+  6:9-6:19 -> 3:9-3:19
+  13:9-13:14 -> builtin print
+  13:15-13:21 -> 10:11-10:17
+  13:24-13:31 -> 11:9-11:16
+  14:9-14:16 -> 11:9-11:16
+  16:14-16:21 -> 11:9-11:16
+  19:28-19:36 -> 19:14-19:22
+  19:42-19:50 -> 19:14-19:22
+  20:9-20:14 -> builtin print
+  20:15-20:22 -> 18:11-18:18
+  20:25-20:33 -> 19:14-19:22
+  26:9-26:14 -> builtin print
+  26:15-26:23 -> 24:11-24:19
+  26:26-26:30 -> 25:10-25:14
+  31:8-31:11 -> 1:12-1:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 1 max locals 0
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  field $local0 I flags [SYNTHETIC]
+  field $local1 I flags [SYNTHETIC]
+  field $local2 I flags [SYNTHETIC]
+  field $local3 I flags [SYNTHETIC]
+  field $local4 I flags [SYNTHETIC]
+  field $local5 I flags [SYNTHETIC]
+  field $local6 I flags [SYNTHETIC]
+  field $spills [Ljava/lang/Object; flags [PRIVATE, FINAL, SYNTHETIC]
+  field $loopIndexes [I flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD_0 0
+    LDC 1
+    ANEWARRAY java/lang/Object
+    PUTFIELD Test$$async0.$spills [Ljava/lang/Object;
+    ALOAD_0 0
+    LDC 1
+    NEWARRAY INT
+    PUTFIELD Test$$async0.$loopIndexes [I
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..4 default L0 0:L1 1:L5 2:L9 3:L16 4:L20
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ALOAD_0 0
+    LDC 10
+    PUTFIELD Test$$async0.$local0 I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$$async0.$local1 I
+   L2:
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local1 I
+    LDC 2
+    IF_ICMPLT L3
+    ICONST_0 0
+    GOTO L4
+   L3:
+    ICONST_1 1
+   L4:
+    IFEQ L7
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local0 I
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local1 I
+    IADD
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local1 I
+    DUP_X1
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$$async0.$local1 I
+    POP
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L5:
+    ALOAD_2 2
+    IFNULL L6
+    ALOAD_2 2
+    ATHROW
+   L6:
+    GOTO L2
+   L7:
+    ALOAD_0 0
+    LDC 20
+    PUTFIELD Test$$async0.$local2 I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$$async0.$local3 I
+   L8:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local2 I
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local3 I
+    IADD
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local3 I
+    DUP_X1
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$$async0.$local3 I
+    POP
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L9:
+    ALOAD_2 2
+    IFNULL L10
+    ALOAD_2 2
+    ATHROW
+   L10:
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local3 I
+    LDC 2
+    IF_ICMPLT L11
+    ICONST_0 0
+    GOTO L12
+   L11:
+    ICONST_1 1
+   L12:
+    IFNE L8
+    ALOAD_0 0
+    LDC 30
+    PUTFIELD Test$$async0.$local4 I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$$async0.$local5 I
+   L13:
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local5 I
+    LDC 2
+    IF_ICMPLT L14
+    ICONST_0 0
+    GOTO L15
+   L14:
+    ICONST_1 1
+   L15:
+    IFEQ L18
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local4 I
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local5 I
+    IADD
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 3
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L16:
+    ALOAD_2 2
+    IFNULL L17
+    ALOAD_2 2
+    ATHROW
+   L17:
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local5 I
+    DUP_X1
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$$async0.$local5 I
+    POP
+    GOTO L13
+   L18:
+    ALOAD_0 0
+    LDC 40
+    PUTFIELD Test$$async0.$local6 I
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 2
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 0
+    IASTORE
+    DUP
+    LDC 1
+    LDC 1
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    ASTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    ALOAD_3 3
+    AASTORE
+    ALOAD_0 0
+    GETFIELD Test$$async0.$loopIndexes [I
+    LDC 0
+    ICONST_0 0
+    IASTORE
+   L19:
+    ALOAD_0 0
+    GETFIELD Test$$async0.$loopIndexes [I
+    LDC 0
+    IALOAD
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    AALOAD
+    LDC "I"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    IF_ICMPGE L22
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    AALOAD
+    LDC "I"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    ALOAD_0 0
+    GETFIELD Test$$async0.$loopIndexes [I
+    LDC 0
+    IALOAD
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    ISTORE 4
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local6 I
+    ILOAD 4
+    IADD
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 4
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L20:
+    ALOAD_2 2
+    IFNULL L21
+    ALOAD_2 2
+    ATHROW
+   L21:
+    ALOAD_0 0
+    GETFIELD Test$$async0.$loopIndexes [I
+    LDC 0
+    DUP2
+    IALOAD
+    ICONST_1 1
+    IADD
+    IASTORE
+    GOTO L19
+   L22:
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L23:
+    ASTORE 5
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 5
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L23 handler L23
+    max stack 6 max locals 6
+
+--- OUTPUT ---
+
+10
+11
+20
+21
+30
+31
+40
+41
+

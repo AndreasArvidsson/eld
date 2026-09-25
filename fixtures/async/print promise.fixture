@@ -1,0 +1,785 @@
+const resolvedInt = new PromiseSource<i32>();
+print(resolvedInt.promise);
+resolvedInt.resolve(42);
+print(resolvedInt.promise);
+
+const resolvedNull = new PromiseSource<null>();
+print(resolvedNull.promise);
+resolvedNull.resolve(null);
+print(resolvedNull.promise);
+
+const resolvedVoid = new PromiseSource();
+print(resolvedVoid.promise);
+resolvedVoid.resolve();
+print(resolvedVoid.promise);
+
+print(Promise.resolve(null));
+print(Promise.resolve());
+
+const rejected = new PromiseSource<i32>();
+print(rejected.promise);
+rejected.reject(new IOException("failed"));
+print(rejected.promise);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "resolvedInt" (1:7-1:18)
+EQUAL (1:19-1:20)
+NEW (1:21-1:24)
+IDENTIFIER "PromiseSource" (1:25-1:38)
+LESS (1:38-1:39)
+IDENTIFIER "i32" (1:39-1:42)
+GREATER (1:42-1:43)
+LEFT_PAREN (1:43-1:44)
+RIGHT_PAREN (1:44-1:45)
+SEMICOLON (1:45-1:46)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "resolvedInt" (2:7-2:18)
+DOT (2:18-2:19)
+IDENTIFIER "promise" (2:19-2:26)
+RIGHT_PAREN (2:26-2:27)
+SEMICOLON (2:27-2:28)
+IDENTIFIER "resolvedInt" (3:1-3:12)
+DOT (3:12-3:13)
+IDENTIFIER "resolve" (3:13-3:20)
+LEFT_PAREN (3:20-3:21)
+INTEGER_LITERAL "42" (3:21-3:23)
+RIGHT_PAREN (3:23-3:24)
+SEMICOLON (3:24-3:25)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "resolvedInt" (4:7-4:18)
+DOT (4:18-4:19)
+IDENTIFIER "promise" (4:19-4:26)
+RIGHT_PAREN (4:26-4:27)
+SEMICOLON (4:27-4:28)
+CONST (6:1-6:6)
+IDENTIFIER "resolvedNull" (6:7-6:19)
+EQUAL (6:20-6:21)
+NEW (6:22-6:25)
+IDENTIFIER "PromiseSource" (6:26-6:39)
+LESS (6:39-6:40)
+NULL (6:40-6:44)
+GREATER (6:44-6:45)
+LEFT_PAREN (6:45-6:46)
+RIGHT_PAREN (6:46-6:47)
+SEMICOLON (6:47-6:48)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "resolvedNull" (7:7-7:19)
+DOT (7:19-7:20)
+IDENTIFIER "promise" (7:20-7:27)
+RIGHT_PAREN (7:27-7:28)
+SEMICOLON (7:28-7:29)
+IDENTIFIER "resolvedNull" (8:1-8:13)
+DOT (8:13-8:14)
+IDENTIFIER "resolve" (8:14-8:21)
+LEFT_PAREN (8:21-8:22)
+NULL (8:22-8:26)
+RIGHT_PAREN (8:26-8:27)
+SEMICOLON (8:27-8:28)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "resolvedNull" (9:7-9:19)
+DOT (9:19-9:20)
+IDENTIFIER "promise" (9:20-9:27)
+RIGHT_PAREN (9:27-9:28)
+SEMICOLON (9:28-9:29)
+CONST (11:1-11:6)
+IDENTIFIER "resolvedVoid" (11:7-11:19)
+EQUAL (11:20-11:21)
+NEW (11:22-11:25)
+IDENTIFIER "PromiseSource" (11:26-11:39)
+LEFT_PAREN (11:39-11:40)
+RIGHT_PAREN (11:40-11:41)
+SEMICOLON (11:41-11:42)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "resolvedVoid" (12:7-12:19)
+DOT (12:19-12:20)
+IDENTIFIER "promise" (12:20-12:27)
+RIGHT_PAREN (12:27-12:28)
+SEMICOLON (12:28-12:29)
+IDENTIFIER "resolvedVoid" (13:1-13:13)
+DOT (13:13-13:14)
+IDENTIFIER "resolve" (13:14-13:21)
+LEFT_PAREN (13:21-13:22)
+RIGHT_PAREN (13:22-13:23)
+SEMICOLON (13:23-13:24)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "resolvedVoid" (14:7-14:19)
+DOT (14:19-14:20)
+IDENTIFIER "promise" (14:20-14:27)
+RIGHT_PAREN (14:27-14:28)
+SEMICOLON (14:28-14:29)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "Promise" (16:7-16:14)
+DOT (16:14-16:15)
+IDENTIFIER "resolve" (16:15-16:22)
+LEFT_PAREN (16:22-16:23)
+NULL (16:23-16:27)
+RIGHT_PAREN (16:27-16:28)
+RIGHT_PAREN (16:28-16:29)
+SEMICOLON (16:29-16:30)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "Promise" (17:7-17:14)
+DOT (17:14-17:15)
+IDENTIFIER "resolve" (17:15-17:22)
+LEFT_PAREN (17:22-17:23)
+RIGHT_PAREN (17:23-17:24)
+RIGHT_PAREN (17:24-17:25)
+SEMICOLON (17:25-17:26)
+CONST (19:1-19:6)
+IDENTIFIER "rejected" (19:7-19:15)
+EQUAL (19:16-19:17)
+NEW (19:18-19:21)
+IDENTIFIER "PromiseSource" (19:22-19:35)
+LESS (19:35-19:36)
+IDENTIFIER "i32" (19:36-19:39)
+GREATER (19:39-19:40)
+LEFT_PAREN (19:40-19:41)
+RIGHT_PAREN (19:41-19:42)
+SEMICOLON (19:42-19:43)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "rejected" (20:7-20:15)
+DOT (20:15-20:16)
+IDENTIFIER "promise" (20:16-20:23)
+RIGHT_PAREN (20:23-20:24)
+SEMICOLON (20:24-20:25)
+IDENTIFIER "rejected" (21:1-21:9)
+DOT (21:9-21:10)
+IDENTIFIER "reject" (21:10-21:16)
+LEFT_PAREN (21:16-21:17)
+NEW (21:17-21:20)
+IDENTIFIER "IOException" (21:21-21:32)
+LEFT_PAREN (21:32-21:33)
+STRING_LITERAL "\"failed\"" (21:33-21:41)
+RIGHT_PAREN (21:41-21:42)
+RIGHT_PAREN (21:42-21:43)
+SEMICOLON (21:43-21:44)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "rejected" (22:7-22:15)
+DOT (22:15-22:16)
+IDENTIFIER "promise" (22:16-22:23)
+RIGHT_PAREN (22:23-22:24)
+SEMICOLON (22:24-22:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-22:25
+  (VariableDeclaration
+    range: 1:1-1:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:18
+      name: "resolvedInt"
+    )
+    type: null
+    (NewExpression
+      range: 1:21-1:45
+      (IdentifierExpression
+        range: 1:25-1:38
+        name: "PromiseSource"
+      )
+      (NamedTypeNode
+        range: 1:39-1:42
+        name: "i32"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:28
+    (CallExpression
+      range: 2:1-2:27
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 2:7-2:26
+        (IdentifierExpression
+          range: 2:7-2:18
+          name: "resolvedInt"
+        )
+        (IdentifierExpression
+          range: 2:19-2:26
+          name: "promise"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:25
+    (CallExpression
+      range: 3:1-3:24
+      (MemberExpression
+        range: 3:1-3:20
+        (IdentifierExpression
+          range: 3:1-3:12
+          name: "resolvedInt"
+        )
+        (IdentifierExpression
+          range: 3:13-3:20
+          name: "resolve"
+        )
+      )
+      (LiteralExpression
+        range: 3:21-3:23
+        kind: INT
+        text: "42"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:28
+    (CallExpression
+      range: 4:1-4:27
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 4:7-4:26
+        (IdentifierExpression
+          range: 4:7-4:18
+          name: "resolvedInt"
+        )
+        (IdentifierExpression
+          range: 4:19-4:26
+          name: "promise"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:19
+      name: "resolvedNull"
+    )
+    type: null
+    (NewExpression
+      range: 6:22-6:47
+      (IdentifierExpression
+        range: 6:26-6:39
+        name: "PromiseSource"
+      )
+      (NamedTypeNode
+        range: 6:40-6:44
+        name: "null"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:29
+    (CallExpression
+      range: 7:1-7:28
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 7:7-7:27
+        (IdentifierExpression
+          range: 7:7-7:19
+          name: "resolvedNull"
+        )
+        (IdentifierExpression
+          range: 7:20-7:27
+          name: "promise"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:28
+    (CallExpression
+      range: 8:1-8:27
+      (MemberExpression
+        range: 8:1-8:21
+        (IdentifierExpression
+          range: 8:1-8:13
+          name: "resolvedNull"
+        )
+        (IdentifierExpression
+          range: 8:14-8:21
+          name: "resolve"
+        )
+      )
+      (LiteralExpression
+        range: 8:22-8:26
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:29
+    (CallExpression
+      range: 9:1-9:28
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 9:7-9:27
+        (IdentifierExpression
+          range: 9:7-9:19
+          name: "resolvedNull"
+        )
+        (IdentifierExpression
+          range: 9:20-9:27
+          name: "promise"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:19
+      name: "resolvedVoid"
+    )
+    type: null
+    (NewExpression
+      range: 11:22-11:41
+      (IdentifierExpression
+        range: 11:26-11:39
+        name: "PromiseSource"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:29
+    (CallExpression
+      range: 12:1-12:28
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:27
+        (IdentifierExpression
+          range: 12:7-12:19
+          name: "resolvedVoid"
+        )
+        (IdentifierExpression
+          range: 12:20-12:27
+          name: "promise"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:24
+    (CallExpression
+      range: 13:1-13:23
+      (MemberExpression
+        range: 13:1-13:21
+        (IdentifierExpression
+          range: 13:1-13:13
+          name: "resolvedVoid"
+        )
+        (IdentifierExpression
+          range: 13:14-13:21
+          name: "resolve"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:29
+    (CallExpression
+      range: 14:1-14:28
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:27
+        (IdentifierExpression
+          range: 14:7-14:19
+          name: "resolvedVoid"
+        )
+        (IdentifierExpression
+          range: 14:20-14:27
+          name: "promise"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:30
+    (CallExpression
+      range: 16:1-16:29
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:28
+        (MemberExpression
+          range: 16:7-16:22
+          (IdentifierExpression
+            range: 16:7-16:14
+            name: "Promise"
+          )
+          (IdentifierExpression
+            range: 16:15-16:22
+            name: "resolve"
+          )
+        )
+        (LiteralExpression
+          range: 16:23-16:27
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:26
+    (CallExpression
+      range: 17:1-17:25
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:24
+        (MemberExpression
+          range: 17:7-17:22
+          (IdentifierExpression
+            range: 17:7-17:14
+            name: "Promise"
+          )
+          (IdentifierExpression
+            range: 17:15-17:22
+            name: "resolve"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:15
+      name: "rejected"
+    )
+    type: null
+    (NewExpression
+      range: 19:18-19:42
+      (IdentifierExpression
+        range: 19:22-19:35
+        name: "PromiseSource"
+      )
+      (NamedTypeNode
+        range: 19:36-19:39
+        name: "i32"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:25
+    (CallExpression
+      range: 20:1-20:24
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 20:7-20:23
+        (IdentifierExpression
+          range: 20:7-20:15
+          name: "rejected"
+        )
+        (IdentifierExpression
+          range: 20:16-20:23
+          name: "promise"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:44
+    (CallExpression
+      range: 21:1-21:43
+      (MemberExpression
+        range: 21:1-21:16
+        (IdentifierExpression
+          range: 21:1-21:9
+          name: "rejected"
+        )
+        (IdentifierExpression
+          range: 21:10-21:16
+          name: "reject"
+        )
+      )
+      (NewExpression
+        range: 21:17-21:42
+        (IdentifierExpression
+          range: 21:21-21:32
+          name: "IOException"
+        )
+        (LiteralExpression
+          range: 21:33-21:41
+          kind: STRING
+          text: "\"failed\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:25
+    (CallExpression
+      range: 22:1-22:24
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 22:7-22:23
+        (IdentifierExpression
+          range: 22:7-22:15
+          name: "rejected"
+        )
+        (IdentifierExpression
+          range: 22:16-22:23
+          name: "promise"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:21-1:45 -> PromiseSource<i32>
+  2:1-2:6 -> (any) => void
+  2:1-2:27 -> void
+  2:7-2:18 -> PromiseSource<i32>
+  2:7-2:26 -> Promise<i32>
+  2:19-2:26 -> Promise<i32>
+  3:1-3:12 -> PromiseSource<i32>
+  3:1-3:20 -> (i32) => void
+  3:1-3:24 -> void
+  3:13-3:20 -> (i32) => void
+  3:21-3:23 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:27 -> void
+  4:7-4:18 -> PromiseSource<i32>
+  4:7-4:26 -> Promise<i32>
+  4:19-4:26 -> Promise<i32>
+  6:22-6:47 -> PromiseSource<null>
+  7:1-7:6 -> (any) => void
+  7:1-7:28 -> void
+  7:7-7:19 -> PromiseSource<null>
+  7:7-7:27 -> Promise<null>
+  7:20-7:27 -> Promise<null>
+  8:1-8:13 -> PromiseSource<null>
+  8:1-8:21 -> (null) => void
+  8:1-8:27 -> void
+  8:14-8:21 -> (null) => void
+  8:22-8:26 -> null
+  9:1-9:6 -> (any) => void
+  9:1-9:28 -> void
+  9:7-9:19 -> PromiseSource<null>
+  9:7-9:27 -> Promise<null>
+  9:20-9:27 -> Promise<null>
+  11:22-11:41 -> PromiseSource<void>
+  12:1-12:6 -> (any) => void
+  12:1-12:28 -> void
+  12:7-12:19 -> PromiseSource<void>
+  12:7-12:27 -> Promise<void>
+  12:20-12:27 -> Promise<void>
+  13:1-13:13 -> PromiseSource<void>
+  13:1-13:21 -> () => void
+  13:1-13:23 -> void
+  13:14-13:21 -> () => void
+  14:1-14:6 -> (any) => void
+  14:1-14:28 -> void
+  14:7-14:19 -> PromiseSource<void>
+  14:7-14:27 -> Promise<void>
+  14:20-14:27 -> Promise<void>
+  16:1-16:6 -> (any) => void
+  16:1-16:29 -> void
+  16:7-16:28 -> Promise<null>
+  16:23-16:27 -> null
+  17:1-17:6 -> (any) => void
+  17:1-17:25 -> void
+  17:7-17:24 -> Promise<void>
+  19:18-19:42 -> PromiseSource<i32>
+  20:1-20:6 -> (any) => void
+  20:1-20:24 -> void
+  20:7-20:15 -> PromiseSource<i32>
+  20:7-20:23 -> Promise<i32>
+  20:16-20:23 -> Promise<i32>
+  21:1-21:9 -> PromiseSource<i32>
+  21:1-21:16 -> (Throwable) => void
+  21:1-21:43 -> void
+  21:10-21:16 -> (Throwable) => void
+  21:17-21:42 -> IOException
+  21:21-21:32 -> IOException
+  21:33-21:41 -> string
+  22:1-22:6 -> (any) => void
+  22:1-22:24 -> void
+  22:7-22:15 -> PromiseSource<i32>
+  22:7-22:23 -> Promise<i32>
+  22:16-22:23 -> Promise<i32>
+
+Resolved types:
+  1:39-1:42 -> i32
+  6:40-6:44 -> null
+  19:36-19:39 -> i32
+  21:17-21:42 -> IOException
+
+Declarations:
+  1:7-1:18 -> const resolvedInt: PromiseSource<i32>
+  6:7-6:19 -> const resolvedNull: PromiseSource<null>
+  11:7-11:19 -> const resolvedVoid: PromiseSource<void>
+  19:7-19:15 -> const rejected: PromiseSource<i32>
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:18 -> 1:7-1:18
+  2:19-2:26 -> 2:19-2:26
+  3:1-3:12 -> 1:7-1:18
+  3:13-3:20 -> 3:13-3:20
+  4:1-4:6 -> builtin print
+  4:7-4:18 -> 1:7-1:18
+  4:19-4:26 -> 4:19-4:26
+  7:1-7:6 -> builtin print
+  7:7-7:19 -> 6:7-6:19
+  7:20-7:27 -> 7:20-7:27
+  8:1-8:13 -> 6:7-6:19
+  8:14-8:21 -> 8:14-8:21
+  9:1-9:6 -> builtin print
+  9:7-9:19 -> 6:7-6:19
+  9:20-9:27 -> 9:20-9:27
+  12:1-12:6 -> builtin print
+  12:7-12:19 -> 11:7-11:19
+  12:20-12:27 -> 12:20-12:27
+  13:1-13:13 -> 11:7-11:19
+  13:14-13:21 -> 13:14-13:21
+  14:1-14:6 -> builtin print
+  14:7-14:19 -> 11:7-11:19
+  14:20-14:27 -> 14:20-14:27
+  16:1-16:6 -> builtin print
+  17:1-17:6 -> builtin print
+  20:1-20:6 -> builtin print
+  20:7-20:15 -> 19:7-19:15
+  20:16-20:23 -> 20:16-20:23
+  21:1-21:9 -> 19:7-19:15
+  21:10-21:16 -> 21:10-21:16
+  21:21-21:32 -> 21:17-21:42
+  22:1-22:6 -> builtin print
+  22:7-22:15 -> 19:7-19:15
+  22:16-22:23 -> 22:16-22:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field resolvedInt Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [PUBLIC, STATIC, FINAL]
+  field resolvedNull Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [PUBLIC, STATIC, FINAL]
+  field resolvedVoid Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [PUBLIC, STATIC, FINAL]
+  field rejected Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTSTATIC Test.resolvedInt Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resolvedInt Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.resolvedInt Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    LDC 42
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resolvedInt Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTSTATIC Test.resolvedNull Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resolvedNull Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.resolvedNull Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resolvedNull Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTSTATIC Test.resolvedVoid Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resolvedVoid Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.resolvedVoid Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.resolvedVoid Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTSTATIC Test.rejected Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.rejected Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.rejected Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    NEW java/io/IOException
+    DUP
+    LDC "failed"
+    INVOKESPECIAL java/io/IOException.<init>(Ljava/lang/String;)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.rejected Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+Promise<pending>
+Promise<fulfilled: 42>
+Promise<pending>
+Promise<fulfilled: null>
+Promise<pending>
+Promise<fulfilled: void>
+Promise<fulfilled: null>
+Promise<fulfilled: void>
+Promise<pending>
+Promise<rejected: java.io.IOException: failed>
+

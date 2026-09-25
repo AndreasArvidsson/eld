@@ -10,6 +10,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.AstNode;
+import com.github.andreasarvidsson.eld.parser.AstTraversal;
+import com.github.andreasarvidsson.eld.parser.AwaitExpression;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
@@ -28,6 +30,7 @@ import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
+import com.github.andreasarvidsson.eld.parser.IgnoreStatement;
 import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
@@ -236,6 +239,8 @@ public final class SemanticAnalyzer {
                     );
                 }
             }
+            case IgnoreStatement ignored ->
+                analyzeExpression(ignored.expression(), context);
             case WhileStatement whileStatement ->
                 analyzeWhileStatement(whileStatement, context);
             case DoWhileStatement doWhileStatement ->
@@ -262,7 +267,7 @@ public final class SemanticAnalyzer {
         }
     }
 
-    private static void requireThrowable(final Type type, final Range range) {
+    static void requireThrowable(final Type type, final Range range) {
         if (!isThrowable(type)) {
             throw new SemanticException(
                 range,
@@ -331,8 +336,26 @@ public final class SemanticAnalyzer {
             );
         }
         if (statement.finallyBody() != null) {
+            final @Nullable AwaitExpression awaited =
+                findAwait(statement.finallyBody());
+            if (awaited != null) {
+                throw new SemanticException(
+                    awaited.range(),
+                    "Await is not yet supported inside a finally block"
+                );
+            }
             analyzeBlockStatement(statement.finallyBody(), context);
         }
+    }
+
+    private static @Nullable AwaitExpression findAwait(final AstNode node) {
+        final AwaitExpression[] result = {null};
+        AstTraversal.walk(node, child -> {
+            if (result[0] == null && child instanceof AwaitExpression awaited) {
+                result[0] = awaited;
+            }
+        });
+        return result[0];
     }
 
     private void analyzeClassDeclaration(

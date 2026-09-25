@@ -64,6 +64,12 @@ public class AstPrinter {
 
             try {
                 final Object value = component.getAccessor().invoke(node);
+                if (
+                    component.getName().equals("async")
+                        && Boolean.FALSE.equals(value)
+                ) {
+                    continue;
+                }
                 if (value instanceof List<?>) {
                     append(output, value, depth);
                 }

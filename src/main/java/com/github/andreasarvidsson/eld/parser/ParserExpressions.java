@@ -235,6 +235,13 @@ public class ParserExpressions extends ParserBase {
             case BANG -> UnaryOperator.NOT;
             default -> null;
         };
+        if (token.type() == TokenType.AWAIT) {
+            final Expression operand = parseUnaryExpression();
+            return new AwaitExpression(
+                operand,
+                token.range().union(operand.range())
+            );
+        }
         if (operator != null) {
             final Expression operand = parseUnaryExpression();
             return new UnaryExpression(

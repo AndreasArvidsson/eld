@@ -1,0 +1,949 @@
+const values = [1];
+const properties = {"value": 1};
+
+func mutateValues() i32 {
+    values[0] = 2;
+    return 3;
+}
+
+func mutateProperties() i32 {
+    properties.put("value", 2);
+    return 4;
+}
+
+async func run() {
+    const copiedValues = [
+        ...values,
+        await Promise.resolve(mutateValues()),
+    ];
+    const copiedProperties = {
+        ...properties,
+        "other": await Promise.resolve(mutateProperties()),
+    };
+
+    print(copiedValues);
+    print(copiedProperties.get("value"));
+    print(copiedProperties.get("other"));
+    print(values);
+    print(properties.get("value"));
+}
+
+ignore run();
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+INTEGER_LITERAL "1" (1:17-1:18)
+RIGHT_BRACKET (1:18-1:19)
+SEMICOLON (1:19-1:20)
+CONST (2:1-2:6)
+IDENTIFIER "properties" (2:7-2:17)
+EQUAL (2:18-2:19)
+LEFT_BRACE (2:20-2:21)
+STRING_LITERAL "\"value\"" (2:21-2:28)
+COLON (2:28-2:29)
+INTEGER_LITERAL "1" (2:30-2:31)
+RIGHT_BRACE (2:31-2:32)
+SEMICOLON (2:32-2:33)
+FUNC (4:1-4:5)
+IDENTIFIER "mutateValues" (4:6-4:18)
+LEFT_PAREN (4:18-4:19)
+RIGHT_PAREN (4:19-4:20)
+IDENTIFIER "i32" (4:21-4:24)
+LEFT_BRACE (4:25-4:26)
+IDENTIFIER "values" (5:5-5:11)
+LEFT_BRACKET (5:11-5:12)
+INTEGER_LITERAL "0" (5:12-5:13)
+RIGHT_BRACKET (5:13-5:14)
+EQUAL (5:15-5:16)
+INTEGER_LITERAL "2" (5:17-5:18)
+SEMICOLON (5:18-5:19)
+RETURN (6:5-6:11)
+INTEGER_LITERAL "3" (6:12-6:13)
+SEMICOLON (6:13-6:14)
+RIGHT_BRACE (7:1-7:2)
+FUNC (9:1-9:5)
+IDENTIFIER "mutateProperties" (9:6-9:22)
+LEFT_PAREN (9:22-9:23)
+RIGHT_PAREN (9:23-9:24)
+IDENTIFIER "i32" (9:25-9:28)
+LEFT_BRACE (9:29-9:30)
+IDENTIFIER "properties" (10:5-10:15)
+DOT (10:15-10:16)
+IDENTIFIER "put" (10:16-10:19)
+LEFT_PAREN (10:19-10:20)
+STRING_LITERAL "\"value\"" (10:20-10:27)
+COMMA (10:27-10:28)
+INTEGER_LITERAL "2" (10:29-10:30)
+RIGHT_PAREN (10:30-10:31)
+SEMICOLON (10:31-10:32)
+RETURN (11:5-11:11)
+INTEGER_LITERAL "4" (11:12-11:13)
+SEMICOLON (11:13-11:14)
+RIGHT_BRACE (12:1-12:2)
+ASYNC (14:1-14:6)
+FUNC (14:7-14:11)
+IDENTIFIER "run" (14:12-14:15)
+LEFT_PAREN (14:15-14:16)
+RIGHT_PAREN (14:16-14:17)
+LEFT_BRACE (14:18-14:19)
+CONST (15:5-15:10)
+IDENTIFIER "copiedValues" (15:11-15:23)
+EQUAL (15:24-15:25)
+LEFT_BRACKET (15:26-15:27)
+ELLIPSIS (16:9-16:12)
+IDENTIFIER "values" (16:12-16:18)
+COMMA (16:18-16:19)
+AWAIT (17:9-17:14)
+IDENTIFIER "Promise" (17:15-17:22)
+DOT (17:22-17:23)
+IDENTIFIER "resolve" (17:23-17:30)
+LEFT_PAREN (17:30-17:31)
+IDENTIFIER "mutateValues" (17:31-17:43)
+LEFT_PAREN (17:43-17:44)
+RIGHT_PAREN (17:44-17:45)
+RIGHT_PAREN (17:45-17:46)
+COMMA (17:46-17:47)
+RIGHT_BRACKET (18:5-18:6)
+SEMICOLON (18:6-18:7)
+CONST (19:5-19:10)
+IDENTIFIER "copiedProperties" (19:11-19:27)
+EQUAL (19:28-19:29)
+LEFT_BRACE (19:30-19:31)
+ELLIPSIS (20:9-20:12)
+IDENTIFIER "properties" (20:12-20:22)
+COMMA (20:22-20:23)
+STRING_LITERAL "\"other\"" (21:9-21:16)
+COLON (21:16-21:17)
+AWAIT (21:18-21:23)
+IDENTIFIER "Promise" (21:24-21:31)
+DOT (21:31-21:32)
+IDENTIFIER "resolve" (21:32-21:39)
+LEFT_PAREN (21:39-21:40)
+IDENTIFIER "mutateProperties" (21:40-21:56)
+LEFT_PAREN (21:56-21:57)
+RIGHT_PAREN (21:57-21:58)
+RIGHT_PAREN (21:58-21:59)
+COMMA (21:59-21:60)
+RIGHT_BRACE (22:5-22:6)
+SEMICOLON (22:6-22:7)
+IDENTIFIER "print" (24:5-24:10)
+LEFT_PAREN (24:10-24:11)
+IDENTIFIER "copiedValues" (24:11-24:23)
+RIGHT_PAREN (24:23-24:24)
+SEMICOLON (24:24-24:25)
+IDENTIFIER "print" (25:5-25:10)
+LEFT_PAREN (25:10-25:11)
+IDENTIFIER "copiedProperties" (25:11-25:27)
+DOT (25:27-25:28)
+IDENTIFIER "get" (25:28-25:31)
+LEFT_PAREN (25:31-25:32)
+STRING_LITERAL "\"value\"" (25:32-25:39)
+RIGHT_PAREN (25:39-25:40)
+RIGHT_PAREN (25:40-25:41)
+SEMICOLON (25:41-25:42)
+IDENTIFIER "print" (26:5-26:10)
+LEFT_PAREN (26:10-26:11)
+IDENTIFIER "copiedProperties" (26:11-26:27)
+DOT (26:27-26:28)
+IDENTIFIER "get" (26:28-26:31)
+LEFT_PAREN (26:31-26:32)
+STRING_LITERAL "\"other\"" (26:32-26:39)
+RIGHT_PAREN (26:39-26:40)
+RIGHT_PAREN (26:40-26:41)
+SEMICOLON (26:41-26:42)
+IDENTIFIER "print" (27:5-27:10)
+LEFT_PAREN (27:10-27:11)
+IDENTIFIER "values" (27:11-27:17)
+RIGHT_PAREN (27:17-27:18)
+SEMICOLON (27:18-27:19)
+IDENTIFIER "print" (28:5-28:10)
+LEFT_PAREN (28:10-28:11)
+IDENTIFIER "properties" (28:11-28:21)
+DOT (28:21-28:22)
+IDENTIFIER "get" (28:22-28:25)
+LEFT_PAREN (28:25-28:26)
+STRING_LITERAL "\"value\"" (28:26-28:33)
+RIGHT_PAREN (28:33-28:34)
+RIGHT_PAREN (28:34-28:35)
+SEMICOLON (28:35-28:36)
+RIGHT_BRACE (29:1-29:2)
+IGNORE (31:1-31:7)
+IDENTIFIER "run" (31:8-31:11)
+LEFT_PAREN (31:11-31:12)
+RIGHT_PAREN (31:12-31:13)
+SEMICOLON (31:13-31:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-31:14
+  (VariableDeclaration
+    range: 1:1-1:20
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:16-1:19
+      (LiteralExpression
+        range: 1:17-1:18
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:17
+      name: "properties"
+    )
+    type: null
+    (MapExpression
+      range: 2:20-2:32
+      (MapEntry
+        range: 2:21-2:31
+        (LiteralExpression
+          range: 2:21-2:28
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 2:30-2:31
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 4:1-7:2
+    (IdentifierDeclaration
+      range: 4:6-4:18
+      name: "mutateValues"
+    )
+    (NamedTypeNode
+      range: 4:21-4:24
+      name: "i32"
+    )
+    (BlockStatement
+      range: 4:25-7:2
+      (ExpressionStatement
+        range: 5:5-5:19
+        (AssignmentExpression
+          range: 5:5-5:18
+          (SubscriptExpression
+            range: 5:5-5:14
+            (IdentifierExpression
+              range: 5:5-5:11
+              name: "values"
+            )
+            (LiteralExpression
+              range: 5:12-5:13
+              kind: INT
+              text: "0"
+            )
+          )
+          (LiteralExpression
+            range: 5:17-5:18
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+      (ReturnStatement
+        range: 6:5-6:14
+        (LiteralExpression
+          range: 6:12-6:13
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 9:1-12:2
+    (IdentifierDeclaration
+      range: 9:6-9:22
+      name: "mutateProperties"
+    )
+    (NamedTypeNode
+      range: 9:25-9:28
+      name: "i32"
+    )
+    (BlockStatement
+      range: 9:29-12:2
+      (ExpressionStatement
+        range: 10:5-10:32
+        (CallExpression
+          range: 10:5-10:31
+          (MemberExpression
+            range: 10:5-10:19
+            (IdentifierExpression
+              range: 10:5-10:15
+              name: "properties"
+            )
+            (IdentifierExpression
+              range: 10:16-10:19
+              name: "put"
+            )
+          )
+          (LiteralExpression
+            range: 10:20-10:27
+            kind: STRING
+            text: "\"value\""
+          )
+          (LiteralExpression
+            range: 10:29-10:30
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+      (ReturnStatement
+        range: 11:5-11:14
+        (LiteralExpression
+          range: 11:12-11:13
+          kind: INT
+          text: "4"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 14:1-29:2
+    async: true
+    (IdentifierDeclaration
+      range: 14:12-14:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 14:18-29:2
+      (VariableDeclaration
+        range: 15:5-18:7
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 15:11-15:23
+          name: "copiedValues"
+        )
+        type: null
+        (ArrayExpression
+          range: 15:26-18:6
+          (ArraySpread
+            range: 16:9-16:18
+            (IdentifierExpression
+              range: 16:12-16:18
+              name: "values"
+            )
+          )
+          (AwaitExpression
+            range: 17:9-17:46
+            (CallExpression
+              range: 17:15-17:46
+              (MemberExpression
+                range: 17:15-17:30
+                (IdentifierExpression
+                  range: 17:15-17:22
+                  name: "Promise"
+                )
+                (IdentifierExpression
+                  range: 17:23-17:30
+                  name: "resolve"
+                )
+              )
+              (CallExpression
+                range: 17:31-17:45
+                (IdentifierExpression
+                  range: 17:31-17:43
+                  name: "mutateValues"
+                )
+              )
+            )
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 19:5-22:7
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 19:11-19:27
+          name: "copiedProperties"
+        )
+        type: null
+        (MapExpression
+          range: 19:30-22:6
+          (MapSpread
+            range: 20:9-20:22
+            (IdentifierExpression
+              range: 20:12-20:22
+              name: "properties"
+            )
+          )
+          (MapEntry
+            range: 21:9-21:59
+            (LiteralExpression
+              range: 21:9-21:16
+              kind: STRING
+              text: "\"other\""
+            )
+            (AwaitExpression
+              range: 21:18-21:59
+              (CallExpression
+                range: 21:24-21:59
+                (MemberExpression
+                  range: 21:24-21:39
+                  (IdentifierExpression
+                    range: 21:24-21:31
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 21:32-21:39
+                    name: "resolve"
+                  )
+                )
+                (CallExpression
+                  range: 21:40-21:58
+                  (IdentifierExpression
+                    range: 21:40-21:56
+                    name: "mutateProperties"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 24:5-24:25
+        (CallExpression
+          range: 24:5-24:24
+          (IdentifierExpression
+            range: 24:5-24:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 24:11-24:23
+            name: "copiedValues"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 25:5-25:42
+        (CallExpression
+          range: 25:5-25:41
+          (IdentifierExpression
+            range: 25:5-25:10
+            name: "print"
+          )
+          (CallExpression
+            range: 25:11-25:40
+            (MemberExpression
+              range: 25:11-25:31
+              (IdentifierExpression
+                range: 25:11-25:27
+                name: "copiedProperties"
+              )
+              (IdentifierExpression
+                range: 25:28-25:31
+                name: "get"
+              )
+            )
+            (LiteralExpression
+              range: 25:32-25:39
+              kind: STRING
+              text: "\"value\""
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 26:5-26:42
+        (CallExpression
+          range: 26:5-26:41
+          (IdentifierExpression
+            range: 26:5-26:10
+            name: "print"
+          )
+          (CallExpression
+            range: 26:11-26:40
+            (MemberExpression
+              range: 26:11-26:31
+              (IdentifierExpression
+                range: 26:11-26:27
+                name: "copiedProperties"
+              )
+              (IdentifierExpression
+                range: 26:28-26:31
+                name: "get"
+              )
+            )
+            (LiteralExpression
+              range: 26:32-26:39
+              kind: STRING
+              text: "\"other\""
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 27:5-27:19
+        (CallExpression
+          range: 27:5-27:18
+          (IdentifierExpression
+            range: 27:5-27:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 27:11-27:17
+            name: "values"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 28:5-28:36
+        (CallExpression
+          range: 28:5-28:35
+          (IdentifierExpression
+            range: 28:5-28:10
+            name: "print"
+          )
+          (CallExpression
+            range: 28:11-28:34
+            (MemberExpression
+              range: 28:11-28:25
+              (IdentifierExpression
+                range: 28:11-28:21
+                name: "properties"
+              )
+              (IdentifierExpression
+                range: 28:22-28:25
+                name: "get"
+              )
+            )
+            (LiteralExpression
+              range: 28:26-28:33
+              kind: STRING
+              text: "\"value\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 31:1-31:14
+    (CallExpression
+      range: 31:8-31:13
+      (IdentifierExpression
+        range: 31:8-31:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-1:19 -> [i32]
+  1:17-1:18 -> i32
+  2:20-2:32 -> Map<string, i32>
+  2:21-2:28 -> string
+  2:30-2:31 -> i32
+  5:5-5:11 -> [i32]
+  5:5-5:14 -> i32
+  5:5-5:18 -> i32
+  5:12-5:13 -> i32
+  5:17-5:18 -> i32
+  6:12-6:13 -> i32
+  10:5-10:15 -> Map<string, i32>
+  10:5-10:19 -> (string, i32) => i32 | null
+  10:5-10:31 -> i32 | null
+  10:16-10:19 -> (string, i32) => i32 | null
+  10:20-10:27 -> string
+  10:29-10:30 -> i32
+  11:12-11:13 -> i32
+  15:26-18:6 -> [i32]
+  16:9-16:18 -> i32
+  16:12-16:18 -> [i32]
+  17:9-17:46 -> i32
+  17:15-17:46 -> Promise<i32>
+  17:31-17:43 -> () => i32
+  17:31-17:45 -> i32
+  19:30-22:6 -> Map<string, i32>
+  20:12-20:22 -> Map<string, i32>
+  21:9-21:16 -> string
+  21:18-21:59 -> i32
+  21:24-21:59 -> Promise<i32>
+  21:40-21:56 -> () => i32
+  21:40-21:58 -> i32
+  24:5-24:10 -> (any) => void
+  24:5-24:24 -> void
+  24:11-24:23 -> [i32]
+  25:5-25:10 -> (any) => void
+  25:5-25:41 -> void
+  25:11-25:27 -> Map<string, i32>
+  25:11-25:31 -> (any) => i32 | null
+  25:11-25:40 -> i32 | null
+  25:28-25:31 -> (any) => i32 | null
+  25:32-25:39 -> string
+  26:5-26:10 -> (any) => void
+  26:5-26:41 -> void
+  26:11-26:27 -> Map<string, i32>
+  26:11-26:31 -> (any) => i32 | null
+  26:11-26:40 -> i32 | null
+  26:28-26:31 -> (any) => i32 | null
+  26:32-26:39 -> string
+  27:5-27:10 -> (any) => void
+  27:5-27:18 -> void
+  27:11-27:17 -> [i32]
+  28:5-28:10 -> (any) => void
+  28:5-28:35 -> void
+  28:11-28:21 -> Map<string, i32>
+  28:11-28:25 -> (any) => i32 | null
+  28:11-28:34 -> i32 | null
+  28:22-28:25 -> (any) => i32 | null
+  28:26-28:33 -> string
+  31:8-31:11 -> () => Promise<void>
+  31:8-31:13 -> Promise<void>
+
+Resolved types:
+  4:21-4:24 -> i32
+  9:25-9:28 -> i32
+
+Conversions:
+  25:32-25:39 -> string -> any
+  26:32-26:39 -> string -> any
+  28:26-28:33 -> string -> any
+
+Declarations:
+  1:7-1:13 -> const values: [i32]
+  2:7-2:17 -> const properties: Map<string, i32>
+  4:6-4:18 -> mutateValues() => i32
+  9:6-9:22 -> mutateProperties() => i32
+  14:12-14:15 -> run() => Promise<void>
+  15:11-15:23 -> const copiedValues: [i32]
+  19:11-19:27 -> const copiedProperties: Map<string, i32>
+
+References:
+  5:5-5:11 -> 1:7-1:13
+  10:5-10:15 -> 2:7-2:17
+  10:16-10:19 -> 10:5-10:19
+  16:12-16:18 -> 1:7-1:13
+  17:31-17:43 -> 4:6-4:18
+  20:12-20:22 -> 2:7-2:17
+  21:40-21:56 -> 9:6-9:22
+  24:5-24:10 -> builtin print
+  24:11-24:23 -> 15:11-15:23
+  25:5-25:10 -> builtin print
+  25:11-25:27 -> 19:11-19:27
+  25:28-25:31 -> 25:11-25:31
+  26:5-26:10 -> builtin print
+  26:11-26:27 -> 19:11-19:27
+  26:28-26:31 -> 26:11-26:31
+  27:5-27:10 -> builtin print
+  27:11-27:17 -> 1:7-1:13
+  28:5-28:10 -> builtin print
+  28:11-28:21 -> 2:7-2:17
+  28:22-28:25 -> 28:11-28:25
+  31:8-31:11 -> 14:12-14:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  field values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field properties Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  method mutateValues()I flags [PUBLIC, STATIC]
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC 0
+    LDC 2
+    DUP_X2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
+    POP
+    LDC 3
+    IRETURN
+    max stack 4 max locals 0
+  method mutateProperties()I flags [PUBLIC, STATIC]
+    GETSTATIC Test.properties Ljava/util/Map;
+    LDC "value"
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    POP
+    LDC 4
+    IRETURN
+    max stack 3 max locals 0
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "value"
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.properties Ljava/util/Map;
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 6 max locals 0
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  field $local0 Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [SYNTHETIC]
+  field $spills [Ljava/lang/Object; flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD_0 0
+    LDC 3
+    ANEWARRAY java/lang/Object
+    PUTFIELD Test$$async0.$spills [Ljava/lang/Object;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..2 default L0 0:L1 1:L2 2:L4
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    ASTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    ALOAD_3 3
+    AASTORE
+    INVOKESTATIC Test.mutateValues()I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 4
+    ICONST_0 0
+    ISTORE 5
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    AALOAD
+    LDC "I"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    ASTORE 6
+    ALOAD 6
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    ISTORE 7
+    ILOAD 5
+    ILOAD 7
+    IADD
+    ISTORE 5
+    ILOAD 4
+    ISTORE 8
+    ILOAD 5
+    ICONST_1 1
+    IADD
+    ISTORE 5
+    ILOAD 5
+    NEWARRAY INT
+    ASTORE 9
+    ICONST_0 0
+    ISTORE 10
+    ALOAD 6
+    ALOAD 9
+    ILOAD 10
+    ILOAD 7
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copyTo([III)V
+    ILOAD 10
+    ILOAD 7
+    IADD
+    ISTORE 10
+    ALOAD 9
+    ILOAD 10
+    ILOAD 8
+    IASTORE
+    IINC 10 1
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    ALOAD 9
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    ASTORE 11
+    ALOAD_0 0
+    ALOAD 11
+    PUTFIELD Test$$async0.$local0 Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    ASTORE 12
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 1
+    ALOAD 12
+    AASTORE
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 1
+    AALOAD
+    CHECKCAST java/util/Map
+    GETSTATIC Test.properties Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    LDC "other"
+    ASTORE 13
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 2
+    ALOAD 13
+    AASTORE
+    INVOKESTATIC Test.mutateProperties()I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L4:
+    ALOAD_2 2
+    IFNULL L5
+    ALOAD_2 2
+    ATHROW
+   L5:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 14
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 1
+    AALOAD
+    CHECKCAST java/util/Map
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 2
+    AALOAD
+    CHECKCAST java/lang/String
+    ILOAD 14
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 1
+    AALOAD
+    CHECKCAST java/util/Map
+    ASTORE 15
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local0 Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD 15
+    LDC "value"
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD 15
+    LDC "other"
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.properties Ljava/util/Map;
+    LDC "value"
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L6:
+    ASTORE 16
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 16
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L6 handler L6
+    max stack 4 max locals 17
+
+--- OUTPUT ---
+
+[1, 3]
+1
+4
+[2]
+2
+

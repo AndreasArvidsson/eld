@@ -96,6 +96,7 @@ public final class RecordLowering {
         );
         final FunctionDeclaration copy =
             new FunctionDeclaration(
+                false,
                 new IdentifierDeclaration("copy", record.name().range()),
                 copyParameters,
                 new NamedTypeNode(
@@ -167,6 +168,7 @@ public final class RecordLowering {
         parts.add(stringLiteral(")", range));
         final FunctionDeclaration method =
             new FunctionDeclaration(
+                false,
                 new IdentifierDeclaration("toString", record.name().range()),
                 List.of(),
                 new NamedTypeNode("string", List.of(), record.name().range()),

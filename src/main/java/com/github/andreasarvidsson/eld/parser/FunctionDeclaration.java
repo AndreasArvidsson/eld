@@ -8,7 +8,8 @@ import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 
 public record FunctionDeclaration(
-    IdentifierDeclaration name, List<@NonNull FunctionParameter> parameters,
-    @Nullable TypeNode returnType, BlockStatement body, Range range
+    boolean async, IdentifierDeclaration name,
+    List<@NonNull FunctionParameter> parameters, @Nullable TypeNode returnType,
+    BlockStatement body, Range range
 ) implements Declaration {
 }

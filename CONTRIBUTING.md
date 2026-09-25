@@ -185,6 +185,8 @@ protected const bar = 0;
 
 ### Immutable collections and objects
 
+Objects: `const foo: const Foo = new Foo();`
+
 | Type                | Array mutable? | Elements mutable through array? |
 | ------------------- | -------------: | ------------------------------: |
 | `[Foo]`             |            yes |                             yes |
@@ -194,6 +196,18 @@ protected const bar = 0;
 
 ### Miscellaneous
 
+- tuple unpacking:
+  - const (name, value) = run();
+  - (name, \_) = run(); // discard second argument
+  - (name) = run(); // ambiguous/wrong: looks like ordinary assignment
+
+  Pattern
+  IdentifierPattern
+  DiscardPattern
+  TuplePattern
+
+- Immutable collections and objects
+
 - Export & import
 - Ubiquitous toString, equals, hashCode methods
 - Tuples as map keys and switch conditions (using hashCode and equals)
@@ -202,12 +216,10 @@ protected const bar = 0;
 - Sealed interfaces
 - String std lib
 - Collections std lib
-- Immutable collections and objects
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion
 - Warnings in addition to errors
-- async, await, Promise
 - Overloaded functions
 - Operator overloading
 - Regex literals: `const re: regex = /^\d+$`;
