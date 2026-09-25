@@ -651,7 +651,7 @@ Expression types:
   31:8-31:13 -> Promise<void>
 
 Declarations:
-  1:12-1:15 -> run() => Promise<void>
+  1:12-1:15 -> func run() => Promise<void>
   2:11-2:20 -> const whileBase: i32
   3:9-3:19 -> var whileIndex: i32
   10:11-10:17 -> const doBase: i32

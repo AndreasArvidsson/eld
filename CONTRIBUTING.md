@@ -191,18 +191,14 @@ protected const bar = 0;
   - (name) = run(); // ambiguous/wrong: looks like ordinary assignment
   - `_` should be a standardized DiscardPattern
 
-- Constant functions. Apply to normal functions and methods in classes. A constant function are not allowed to modify any data outside of local variables to the function. Can't modify variables in closure or in this. Allowed to read from them though. This is like a consequence free function.
-  `const funk() {}`
-- final methods. This is the same as in Java where you cannot derive/override the function in a deriving class.
-  `final funk() {}`
-  A method can be both const and final
-
 - Export & import
 - Ubiquitous toString, equals, hashCode methods
 - Tuples as map keys and switch conditions (using hashCode and equals)
 - Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
 - Switch type narrowing
 - Sealed interfaces
+- final classes?
+- abstract classes?
 - String std lib
 - Collections std lib
 - Vscode extension with syntax highlighting

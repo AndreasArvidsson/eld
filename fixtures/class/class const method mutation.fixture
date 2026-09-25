@@ -1,0 +1,132 @@
+class Counter {
+    var value = 0;
+
+    public const func increment() {
+        this.value++;
+    }
+}
+
+new Counter().increment();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL (2:15-2:16)
+INTEGER_LITERAL "0" (2:17-2:18)
+SEMICOLON (2:18-2:19)
+PUBLIC (4:5-4:11)
+CONST (4:12-4:17)
+FUNC (4:18-4:22)
+IDENTIFIER "increment" (4:23-4:32)
+LEFT_PAREN (4:32-4:33)
+RIGHT_PAREN (4:33-4:34)
+LEFT_BRACE (4:35-4:36)
+THIS (5:9-5:13)
+DOT (5:13-5:14)
+IDENTIFIER "value" (5:14-5:19)
+PLUS_PLUS (5:19-5:21)
+SEMICOLON (5:21-5:22)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+NEW (9:1-9:4)
+IDENTIFIER "Counter" (9:5-9:12)
+LEFT_PAREN (9:12-9:13)
+RIGHT_PAREN (9:13-9:14)
+DOT (9:14-9:15)
+IDENTIFIER "increment" (9:15-9:24)
+LEFT_PAREN (9:24-9:25)
+RIGHT_PAREN (9:25-9:26)
+SEMICOLON (9:26-9:27)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:27
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:19
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:14
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:17-2:18
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-6:6
+        CONST
+        (IdentifierDeclaration
+          range: 4:23-4:32
+          name: "increment"
+        )
+        returnType: null
+        (BlockStatement
+          range: 4:35-6:6
+          (ExpressionStatement
+            range: 5:9-5:22
+            (PostfixExpression
+              range: 5:9-5:21
+              (MemberExpression
+                range: 5:9-5:19
+                (ThisExpression
+                  range: 5:9-5:13
+                )
+                (IdentifierExpression
+                  range: 5:14-5:19
+                  name: "value"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:27
+    (CallExpression
+      range: 9:1-9:26
+      (MemberExpression
+        range: 9:1-9:24
+        (NewExpression
+          range: 9:1-9:14
+          (IdentifierExpression
+            range: 9:5-9:12
+            name: "Counter"
+          )
+        )
+        (IdentifierExpression
+          range: 9:15-9:24
+          name: "increment"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'increment' cannot modify non-local data at 5:9-5:19

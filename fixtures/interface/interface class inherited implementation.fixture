@@ -203,9 +203,9 @@ Resolved types:
 
 Declarations:
   1:11-1:17 -> interface Reader
-  2:10-2:14 -> read() => i32
+  2:10-2:14 -> func read() => i32
   4:7-4:11 -> class Base
-  5:17-5:21 -> read() => i32
+  5:17-5:21 -> func read() => i32
   9:7-9:12 -> class Child
   10:7-10:13 -> const reader: Reader
 

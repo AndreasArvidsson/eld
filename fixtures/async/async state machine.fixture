@@ -1057,15 +1057,15 @@ Declarations:
   4:7-4:13 -> class Runner
   5:12-5:28 -> constructor()
   6:9-6:14 -> var value: i32
-  8:23-8:26 -> run() => Promise<void>
-  14:12-14:20 -> preserve(i32) => Promise<void>
+  8:23-8:26 -> func run() => Promise<void>
+  14:12-14:20 -> func preserve(i32) => Promise<void>
   14:21-14:30 -> const parameter: i32
   15:9-15:14 -> var local: i32
   18:15-18:20 -> const value: i32
-  24:12-24:21 -> skipAwait() => Promise<void>
-  31:12-31:26 -> multipleAwaits() => Promise<void>
+  24:12-24:21 -> func skipAwait() => Promise<void>
+  31:12-31:26 -> func multipleAwaits() => Promise<void>
   32:11-32:14 -> const sum: i32
-  36:12-36:16 -> loop() => Promise<void>
+  36:12-36:16 -> func loop() => Promise<void>
   37:9-37:14 -> var index: i32
 
 References:

@@ -302,11 +302,11 @@ Resolved types:
 
 Declarations:
   1:11-1:20 -> interface Renamable
-  2:10-2:16 -> rename(string) => void
+  2:10-2:16 -> func rename(string) => void
   2:17-2:21 -> const name: string
   4:7-4:13 -> class Person
   5:16-5:20 -> var name: string
-  6:17-6:23 -> rename(string) => void
+  6:17-6:23 -> func rename(string) => void
   6:24-6:28 -> const name: string
   10:7-10:13 -> const person: Person
   11:7-11:13 -> const action: Renamable

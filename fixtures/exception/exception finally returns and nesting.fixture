@@ -440,9 +440,9 @@ Conversions:
 
 Declarations:
   1:5-1:10 -> var value: i32
-  2:6-2:11 -> saved() => i32
-  10:6-10:12 -> nested() => i64
-  21:6-21:16 -> overridden() => i32
+  2:6-2:11 -> func saved() => i32
+  10:6-10:12 -> func nested() => i64
+  21:6-21:16 -> func overridden() => i32
 
 References:
   4:16-4:21 -> 1:5-1:10

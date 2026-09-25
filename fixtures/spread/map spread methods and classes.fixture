@@ -201,8 +201,8 @@ Resolved types:
 Declarations:
   1:1-1:26 -> constructor(value: i32)
   1:8-1:13 -> class Value
-  1:8-1:13 -> copy(i32) => Value
-  1:8-1:13 -> toString() => string
+  1:8-1:13 -> func copy(i32) => Value
+  1:8-1:13 -> func toString() => string
   1:14-1:19 -> const value: i32
   1:14-1:19 -> const value: i32
   1:14-1:19 -> const value: i32

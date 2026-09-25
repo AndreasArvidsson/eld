@@ -253,7 +253,7 @@ Expression types:
   10:8-10:13 -> Promise<void>
 
 Declarations:
-  1:12-1:15 -> run() => Promise<void>
+  1:12-1:15 -> func run() => Promise<void>
 
 References:
   2:5-2:10 -> builtin print

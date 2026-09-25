@@ -1,19 +1,27 @@
 package com.github.andreasarvidsson.eld.semantic;
 
 import java.math.BigInteger;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
+import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.AwaitExpression;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
@@ -37,8 +45,13 @@ import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.IgnoreStatement;
 import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
+import com.github.andreasarvidsson.eld.parser.LambdaExpression;
+import com.github.andreasarvidsson.eld.parser.LiteralExpression;
+import com.github.andreasarvidsson.eld.parser.LiteralKind;
+import com.github.andreasarvidsson.eld.parser.MapExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
+import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
@@ -53,6 +66,7 @@ import com.github.andreasarvidsson.eld.parser.UnaryOperator;
 import com.github.andreasarvidsson.eld.parser.CatchClause;
 import com.github.andreasarvidsson.eld.parser.Statement;
 import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
+import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
@@ -96,6 +110,18 @@ public final class SemanticAnalyzer {
     ) {
     }
 
+    private record EffectContext(
+        @Nullable FunctionSymbol function, @Nullable ClassType construction,
+        AstNode scope, FunctionDeclaration declaration,
+        Set<ClassType> constructing
+    ) {
+    }
+
+    private record BoundJavaCallable(
+        MemberExpression member, JavaMethodSymbol method
+    ) {
+    }
+
     public SemanticModel analyze(final Program program) {
         final Scope builtinScope = new Scope(null);
         builtinScope.declare(BuiltinFunctionSymbol.PRINT);
@@ -107,6 +133,8 @@ public final class SemanticAnalyzer {
             new SemanticContext(globalScope, null, 0);
 
         analyzeProgram(program, context);
+        classifyConstantCallableVariables();
+        validateConstantFunctions();
         validateConstMethodUses();
 
         return model;
@@ -117,6 +145,815 @@ public final class SemanticAnalyzer {
         final FunctionSymbol function
     ) {
         constMethodUses.add(new ConstMethodUse(expression, function));
+    }
+
+    private void validateConstantFunctions() {
+        for (final var entry : model.getFunctionDeclarations().entrySet()) {
+            final FunctionDeclaration declaration = entry.getValue();
+            if (!declaration.constant()) {
+                continue;
+            }
+            for (final FunctionParameter parameter : declaration.parameters()) {
+                if (parameter.defaultValue() != null) {
+                    validateConstantNode(
+                        Objects.requireNonNull(parameter.defaultValue()),
+                        new EffectContext(
+                            entry.getKey(),
+                            null,
+                            declaration.body(),
+                            declaration,
+                            new HashSet<>()
+                        )
+                    );
+                }
+            }
+            validateConstantNode(
+                declaration.body(),
+                new EffectContext(
+                    entry.getKey(),
+                    null,
+                    declaration.body(),
+                    declaration,
+                    new HashSet<>()
+                )
+            );
+        }
+    }
+
+    private void classifyConstantCallableVariables() {
+        for (final VariableSymbol variable : model.getVariableInitializers()
+            .keySet()) {
+            if (
+                referencesConstantFunction(
+                    variable,
+                    Collections.newSetFromMap(new IdentityHashMap<>())
+                )
+            ) {
+                model.setConstantCallable(variable);
+            }
+        }
+    }
+
+    private boolean referencesConstantFunction(
+        final VariableSymbol variable,
+        final Set<VariableSymbol> visiting
+    ) {
+        if (
+            variable.mutability() != Mutability.CONST || !visiting.add(variable)
+        ) {
+            return false;
+        }
+        final Expression initializer = model.findVariableInitializer(variable);
+        if (initializer == null) {
+            return false;
+        }
+        final Symbol referenced =
+            calleeSymbol(
+                SemanticAnalyzerExpressionOperations.unwrap(initializer)
+            );
+        if (referenced instanceof FunctionSymbol function) {
+            return constantCallable(function);
+        }
+        return referenced instanceof VariableSymbol alias
+            && referencesConstantFunction(alias, visiting);
+    }
+
+    private void validateConstantNode(
+        final AstNode node,
+        final EffectContext context
+    ) {
+        final EffectContext active =
+            node instanceof LambdaExpression lambda
+                ? new EffectContext(
+                    model.getLambdaFunction(lambda),
+                    null,
+                    lambda.body(),
+                    context.declaration(),
+                    context.constructing()
+                )
+                : context;
+        final Expression written = switch (node) {
+            case AssignmentExpression assignment -> assignment.target();
+            case PostfixExpression postfix -> postfix.operand();
+            case UnaryExpression unary when unary
+                .operator() == UnaryOperator.INCREMENT
+                || unary.operator() == UnaryOperator.DECREMENT ->
+                unary.operand();
+            default -> null;
+        };
+        if (written != null && !isAllowedWrite(written, active)) {
+            throw new SemanticException(
+                written.range(),
+                "Const function '%s' cannot modify non-local data",
+                context.declaration().name().name()
+            );
+        }
+        if (node instanceof CallExpression call) {
+            validateConstantCall(call, active);
+        }
+        if (node instanceof NewExpression creation) {
+            validateConstruction(creation, active);
+        }
+        for (final var component : node.getClass().getRecordComponents()) {
+            try {
+                final Object value = component.getAccessor().invoke(node);
+                if (value instanceof AstNode child) {
+                    validateConstantNode(child, active);
+                }
+                else if (value instanceof Iterable<?> children) {
+                    for (final Object child : children) {
+                        if (child instanceof AstNode ast) {
+                            validateConstantNode(ast, active);
+                        }
+                    }
+                }
+            }
+            catch (final ReflectiveOperationException exception) {
+                throw new IllegalStateException(
+                    "Cannot validate const function",
+                    exception
+                );
+            }
+        }
+    }
+
+    private void validateConstantCall(
+        final CallExpression call,
+        final EffectContext context
+    ) {
+        final Expression callee =
+            SemanticAnalyzerExpressionOperations.unwrap(call.callee());
+        final Symbol symbol = calleeSymbol(callee);
+        boolean allowed = false;
+        if (symbol instanceof FunctionSymbol function) {
+            allowed = constantCallable(function);
+        }
+        else if (symbol instanceof JavaMethodSymbol method) {
+            allowed =
+                callee instanceof MemberExpression member
+                    && allowedJavaMethod(member, method, context);
+        }
+        else if (symbol instanceof BuiltinFunctionSymbol builtin) {
+            allowed =
+                builtin.type() == BuiltinFunctionType.DIR
+                    || (builtin.type() == BuiltinFunctionType.ARRAY_SORT
+                        && callee instanceof MemberExpression member
+                        && isLocallyOwned(member.target(), context)
+                        && hasConstantNaturalOrder(member));
+        }
+        else if (symbol instanceof VariableSymbol variable) {
+            allowed = constantLocalCallable(variable, context);
+        }
+        if (!allowed) {
+            throw new SemanticException(
+                call.range(),
+                "Const function '%s' cannot call non-const function '%s'",
+                context.declaration().name().name(),
+                symbol != null ? symbol.name() : "<indirect>"
+            );
+        }
+        if (
+            symbol instanceof JavaMethodSymbol method
+                && callee instanceof MemberExpression member
+        ) {
+            validateConstantCollectionCallbacks(call, member, method, context);
+        }
+        else if (symbol instanceof VariableSymbol variable) {
+            final BoundJavaCallable bound =
+                boundJavaCallable(
+                    variable,
+                    Collections.newSetFromMap(new IdentityHashMap<>())
+                );
+            if (bound != null) {
+                validateConstantCollectionCallbacks(
+                    call,
+                    bound.member(),
+                    bound.method(),
+                    context
+                );
+            }
+        }
+    }
+
+    private boolean constantLocalCallable(
+        final VariableSymbol variable,
+        final EffectContext context
+    ) {
+        return constantLocalCallable(
+            variable,
+            context,
+            Collections.newSetFromMap(new IdentityHashMap<>())
+        );
+    }
+
+    private boolean constantLocalCallable(
+        final VariableSymbol variable,
+        final EffectContext context,
+        final Set<VariableSymbol> visiting
+    ) {
+        if (
+            variable.mutability() != Mutability.CONST || !visiting.add(variable)
+        ) {
+            return false;
+        }
+        if (model.isConstantCallable(variable)) {
+            return true;
+        }
+        final boolean local =
+            (context.function() != null && Objects
+                .equals(model.findVariableOwner(variable), context.function()))
+                || (context.construction() != null && Objects.equals(
+                    model.findConstructorVariableOwner(variable),
+                    context.construction()
+                ));
+        if (!local) {
+            return false;
+        }
+        final Expression initializer = model.findVariableInitializer(variable);
+        if (initializer == null) {
+            return false;
+        }
+        final Expression value =
+            SemanticAnalyzerExpressionOperations.unwrap(initializer);
+        if (value instanceof LambdaExpression) {
+            return true;
+        }
+        final Symbol referenced = calleeSymbol(value);
+        if (referenced instanceof FunctionSymbol function) {
+            return constantCallable(function);
+        }
+        if (referenced instanceof VariableSymbol alias) {
+            return constantLocalCallable(alias, context, visiting);
+        }
+        return referenced instanceof JavaMethodSymbol method
+            && value instanceof MemberExpression member
+            && allowedJavaMethod(member, method, context);
+    }
+
+    private @Nullable BoundJavaCallable boundJavaCallable(
+        final VariableSymbol variable,
+        final Set<VariableSymbol> visiting
+    ) {
+        if (
+            variable.mutability() != Mutability.CONST || !visiting.add(variable)
+        ) {
+            return null;
+        }
+        final Expression initializer = model.findVariableInitializer(variable);
+        if (initializer == null) {
+            return null;
+        }
+        final Expression value =
+            SemanticAnalyzerExpressionOperations.unwrap(initializer);
+        final Symbol referenced = calleeSymbol(value);
+        if (
+            referenced instanceof JavaMethodSymbol method
+                && value instanceof MemberExpression member
+        ) {
+            return new BoundJavaCallable(member, method);
+        }
+        return referenced instanceof VariableSymbol alias
+            ? boundJavaCallable(alias, visiting)
+            : null;
+    }
+
+    private void validateConstantCollectionCallbacks(
+        final CallExpression call,
+        final MemberExpression member,
+        final JavaMethodSymbol method,
+        final EffectContext context
+    ) {
+        final Type target = model.getMemberOwner(member);
+        if (
+            !(target instanceof InterfaceType contract)
+                || contract.javaClass() == null
+                || (!Collection.class.isAssignableFrom(contract.javaClass())
+                    && !Map.class.isAssignableFrom(contract.javaClass()))
+        ) {
+            return;
+        }
+        validateImplicitCollectionEffects(member, method, contract, context);
+        final int callbackIndex = switch (method.name()) {
+            case "compute", "computeIfAbsent", "computeIfPresent" -> 1;
+            case "merge" -> 2;
+            case "forEach", "removeIf", "replaceAll", "sort", "toArray" -> 0;
+            default -> -1;
+        };
+        if (method.name().equals("sort") && call.arguments().isEmpty()) {
+            if (hasConstantNaturalOrder(contract)) {
+                return;
+            }
+            throw new SemanticException(
+                call.range(),
+                "Const function '%s' cannot call non-const natural ordering in '%s'",
+                context.declaration().name().name(),
+                method.name()
+            );
+        }
+        if (callbackIndex < 0 || callbackIndex >= call.arguments().size()) {
+            return;
+        }
+        final Expression callback = call.arguments().get(callbackIndex);
+        if (
+            (method.name().equals("sort") && isNullLiteral(callback))
+                ? hasConstantNaturalOrder(contract)
+                : isConstantCallableExpression(callback, context)
+        ) {
+            return;
+        }
+        throw new SemanticException(
+            callback.range(),
+            "Const function '%s' cannot pass a non-const callback to '%s'",
+            context.declaration().name().name(),
+            method.name()
+        );
+    }
+
+    private void validateImplicitCollectionEffects(
+        final MemberExpression member,
+        final JavaMethodSymbol method,
+        final InterfaceType collection,
+        final EffectContext context
+    ) {
+        final Class<?> javaClass =
+            Objects.requireNonNull(collection.javaClass());
+        final String name = method.name();
+        boolean allowed = true;
+        if (
+            (SortedSet.class.isAssignableFrom(javaClass)
+                || SortedMap.class.isAssignableFrom(javaClass)
+                || javaClass == Set.class
+                || javaClass == Map.class)
+                && Set
+                    .of(
+                        "add",
+                        "contains",
+                        "containsKey",
+                        "get",
+                        "headMap",
+                        "headSet",
+                        "put",
+                        "subMap",
+                        "subSet",
+                        "tailMap",
+                        "tailSet"
+                    )
+                    .contains(name)
+        ) {
+            allowed = false;
+        }
+        else if (Set.class.isAssignableFrom(javaClass) && name.equals("add")) {
+            allowed = hasConstantEquality(typeArgument(collection, 0));
+        }
+        else if (name.equals("contains") && isCollection(javaClass)) {
+            allowed = hasConstantEquality(typeArgument(collection, 0));
+        }
+        else if (
+            Map.class.isAssignableFrom(javaClass)
+                && Set.of("containsKey", "get", "put").contains(name)
+        ) {
+            allowed = hasConstantEquality(typeArgument(collection, 0));
+        }
+        else if (
+            Map.class.isAssignableFrom(javaClass)
+                && name.equals("containsValue")
+        ) {
+            allowed = hasConstantEquality(typeArgument(collection, 1));
+        }
+        if (allowed) {
+            return;
+        }
+        throw new SemanticException(
+            member.range(),
+            "Const function '%s' cannot call collection method '%s' because it may invoke non-const element behavior",
+            context.declaration().name().name(),
+            name
+        );
+    }
+
+    private static boolean isCollection(final Class<?> javaClass) {
+        return Collection.class.isAssignableFrom(javaClass)
+            && !SortedSet.class.isAssignableFrom(javaClass);
+    }
+
+    private static Type typeArgument(
+        final InterfaceType collection,
+        final int index
+    ) {
+        return collection.typeArguments().size() > index
+            ? collection.typeArguments().get(index)
+            : BuiltinType.ANY;
+    }
+
+    private boolean hasConstantEquality(final Type type) {
+        final Type unqualified = ConstType.unwrap(type);
+        if (unqualified instanceof ClassType cls) {
+            return hasConstantObjectMethod(cls, "equals")
+                && hasConstantObjectMethod(cls, "hashCode");
+        }
+        if (unqualified instanceof InterfaceType contract) {
+            final List<ClassType> implementations =
+                classMethods.keySet()
+                    .stream()
+                    .filter(cls -> model.isSubtype(cls, contract))
+                    .toList();
+            return !implementations.isEmpty()
+                && implementations.stream().allMatch(this::hasConstantEquality);
+        }
+        return unqualified != BuiltinType.ANY;
+    }
+
+    private boolean hasConstantObjectMethod(
+        final ClassType type,
+        final String name
+    ) {
+        final FunctionSymbol method = classMethod(type, name);
+        return method == null || constantCallable(method);
+    }
+
+    private boolean isConstantCallableExpression(
+        final Expression expression,
+        final EffectContext context
+    ) {
+        final Expression value =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        if (value instanceof LambdaExpression) {
+            return true;
+        }
+        final Symbol referenced = calleeSymbol(value);
+        if (referenced instanceof FunctionSymbol function) {
+            return constantCallable(function);
+        }
+        if (referenced instanceof VariableSymbol variable) {
+            return constantLocalCallable(variable, context);
+        }
+        return referenced instanceof JavaMethodSymbol method
+            && value instanceof MemberExpression member
+            && allowedJavaMethod(member, method, context);
+    }
+
+    private boolean hasConstantNaturalOrder(final MemberExpression member) {
+        final Type target = model.getMemberOwner(member);
+        if (target instanceof ArrayType array) {
+            return hasConstantNaturalOrder(array.elementType());
+        }
+        return target instanceof InterfaceType contract
+            && hasConstantNaturalOrder(contract);
+    }
+
+    private boolean hasConstantNaturalOrder(final InterfaceType collection) {
+        return !collection.typeArguments().isEmpty()
+            && hasConstantNaturalOrder(collection.typeArguments().getFirst());
+    }
+
+    private boolean hasConstantNaturalOrder(final Type element) {
+        final Type unqualified = ConstType.unwrap(element);
+        if (unqualified instanceof ClassType type) {
+            final FunctionSymbol compareTo = classMethod(type, "compareTo");
+            return compareTo != null && constantCallable(compareTo);
+        }
+        if (unqualified instanceof InterfaceType contract) {
+            final FunctionSymbol compareTo =
+                model.getInterface(contract).methods().get("compareTo");
+            return compareTo != null && constantCallable(compareTo);
+        }
+        return model.hasNaturalOrder(unqualified);
+    }
+
+    private static boolean isNullLiteral(final Expression expression) {
+        final Expression value =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        return value instanceof LiteralExpression literal
+            && literal.kind() == LiteralKind.NULL;
+    }
+
+    private boolean allowedJavaMethod(
+        final MemberExpression member,
+        final JavaMethodSymbol method,
+        final EffectContext context
+    ) {
+        final Type target = model.getMemberOwner(member);
+        if (
+            target instanceof InterfaceType contract
+                && contract.javaClass() != null
+                && (Collection.class.isAssignableFrom(contract.javaClass())
+                    || Map.class.isAssignableFrom(contract.javaClass()))
+        ) {
+            return !SemanticAnalyzerExpressions
+                .mutatesCollection(contract, method.method())
+                || isLocallyOwned(member.target(), context);
+        }
+        return pureJavaMethod(method);
+    }
+
+    private boolean pureJavaMethod(final JavaMethodSymbol symbol) {
+        final var method = symbol.method();
+        final Class<?> owner = method.getDeclaringClass();
+        if (
+            method.getName().equals("compareTo")
+                && (owner == Byte.class || owner == Short.class
+                    || owner == Integer.class
+                    || owner == Long.class
+                    || owner == Float.class
+                    || owner == Double.class
+                    || owner == Character.class
+                    || owner == Boolean.class
+                    || owner == String.class
+                    || owner == BigInteger.class)
+        ) {
+            return true;
+        }
+        if (Pattern.class.isAssignableFrom(owner)) {
+            return true;
+        }
+        if (owner == Matcher.class) {
+            return Modifier.isStatic(method.getModifiers())
+                || Set
+                    .of(
+                        "end",
+                        "group",
+                        "groupCount",
+                        "hasAnchoringBounds",
+                        "hasTransparentBounds",
+                        "pattern",
+                        "regionEnd",
+                        "regionStart",
+                        "requireEnd",
+                        "start",
+                        "toMatchResult",
+                        "toString"
+                    )
+                    .contains(method.getName());
+        }
+        if (Throwable.class.isAssignableFrom(owner)) {
+            return Set
+                .of(
+                    "getCause",
+                    "getLocalizedMessage",
+                    "getMessage",
+                    "getStackTrace",
+                    "getSuppressed",
+                    "toString"
+                )
+                .contains(method.getName());
+        }
+        return false;
+    }
+
+    private @Nullable Symbol calleeSymbol(final Expression callee) {
+        if (callee instanceof IdentifierExpression identifier) {
+            return model.findReference(identifier);
+        }
+        if (callee instanceof MemberExpression member) {
+            return model.findReference(member.member());
+        }
+        return null;
+    }
+
+    private boolean constantCallable(final FunctionSymbol function) {
+        final FunctionDeclaration declaration =
+            model.getFunctionDeclaration(function);
+        if (declaration != null) {
+            if (!declaration.constant()) {
+                return false;
+            }
+            final ClassType owner = model.findClassMemberOwner(function);
+            return owner == null || declaration.finalMethod()
+                || model.getMemberVisibility(function) == Visibility.PRIVATE
+                || classMethods.keySet()
+                    .stream()
+                    .filter(type -> !type.equals(owner))
+                    .filter(type -> model.isSubclassOf(type, owner))
+                    .map(type -> classMethod(type, function.name()))
+                    .filter(Objects::nonNull)
+                    .filter(method -> !Objects.equals(method, function))
+                    .distinct()
+                    .allMatch(this::declaredConstant);
+        }
+        final InterfaceType owner = interfaceMethodOwner(function);
+        if (owner == null) {
+            return false;
+        }
+        final List<FunctionSymbol> implementations =
+            classMethods.keySet()
+                .stream()
+                .filter(type -> model.isSubtype(type, owner))
+                .map(type -> classMethod(type, function.name()))
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+        return !implementations.isEmpty()
+            && implementations.stream().allMatch(this::declaredConstant);
+    }
+
+    private boolean declaredConstant(final FunctionSymbol function) {
+        final FunctionDeclaration declaration =
+            model.getFunctionDeclaration(function);
+        return declaration != null && declaration.constant();
+    }
+
+    private boolean isAllowedWrite(
+        final Expression expression,
+        final EffectContext context
+    ) {
+        final Expression target =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        if (target instanceof IdentifierExpression identifier) {
+            if (
+                !(model.findReference(
+                    identifier
+                ) instanceof VariableSymbol variable)
+            ) {
+                return false;
+            }
+            return isLocalBinding(variable, context)
+                || isConstructedField(variable, context);
+        }
+        if (target instanceof MemberExpression member) {
+            return isConstructedReceiver(member.target(), context)
+                || isLocallyOwned(member.target(), context);
+        }
+        return target instanceof SubscriptExpression subscript
+            && isLocallyOwned(subscript.target(), context);
+    }
+
+    private boolean isLocalBinding(
+        final VariableSymbol variable,
+        final EffectContext context
+    ) {
+        return (context.function() != null && Objects
+            .equals(model.findVariableOwner(variable), context.function()))
+            || (context.construction() != null && Objects.equals(
+                model.findConstructorVariableOwner(variable),
+                context.construction()
+            ));
+    }
+
+    private boolean isConstructedField(
+        final VariableSymbol variable,
+        final EffectContext context
+    ) {
+        final ClassType fieldOwner = model.findClassMemberOwner(variable);
+        return context.construction() != null && fieldOwner != null
+            && (Objects.equals(context.construction(), fieldOwner)
+                || model.isSubclassOf(context.construction(), fieldOwner));
+    }
+
+    private boolean isConstructedReceiver(
+        final Expression expression,
+        final EffectContext context
+    ) {
+        return context.construction() != null && isThisExpression(expression);
+    }
+
+    private boolean isLocallyOwned(
+        final Expression expression,
+        final EffectContext context
+    ) {
+        final Expression value =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        if (
+            value instanceof IdentifierExpression identifier && model
+                .findReference(identifier) instanceof VariableSymbol variable
+        ) {
+            return isLocallyOwnedVariable(
+                variable,
+                context,
+                Collections.newSetFromMap(new IdentityHashMap<>())
+            );
+        }
+        return value instanceof NewExpression
+            || value instanceof ArrayExpression
+            || value instanceof MapExpression
+            || value instanceof ObjectExpression;
+    }
+
+    private boolean isLocallyOwnedVariable(
+        final VariableSymbol variable,
+        final EffectContext context,
+        final Set<VariableSymbol> visiting
+    ) {
+        if (!isLocalBinding(variable, context) || !visiting.add(variable)) {
+            return false;
+        }
+        final Expression initializer = model.findVariableInitializer(variable);
+        final boolean fresh =
+            initializer != null && isFreshValue(initializer, context, visiting);
+        final boolean reassigned =
+            AstTraversal.anyMatch(
+                context.scope(),
+                node -> node instanceof AssignmentExpression assignment
+                    && Objects
+                        .equals(directVariable(assignment.target()), variable)
+            );
+        visiting.remove(variable);
+        return fresh && !reassigned;
+    }
+
+    private boolean isFreshValue(
+        final Expression expression,
+        final EffectContext context,
+        final Set<VariableSymbol> visiting
+    ) {
+        final Expression value =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        if (
+            value instanceof NewExpression || value instanceof ArrayExpression
+                || value instanceof MapExpression
+                || value instanceof ObjectExpression
+        ) {
+            return true;
+        }
+        return value instanceof IdentifierExpression identifier
+            && model
+                .findReference(identifier) instanceof VariableSymbol variable
+            && isLocallyOwnedVariable(variable, context, visiting);
+    }
+
+    private @Nullable VariableSymbol directVariable(
+        final Expression expression
+    ) {
+        final Expression target =
+            SemanticAnalyzerExpressionOperations.unwrap(expression);
+        return target instanceof IdentifierExpression identifier && model
+            .findReference(identifier) instanceof VariableSymbol variable
+                ? variable
+                : null;
+    }
+
+    private void validateConstruction(
+        final NewExpression creation,
+        final EffectContext context
+    ) {
+        final Symbol symbol = model.findReference(creation.className());
+        if (!(symbol instanceof ClassSymbol created)) {
+            return;
+        }
+        validateConstruction(created.type(), context);
+    }
+
+    private void validateConstruction(
+        final ClassType type,
+        final EffectContext context
+    ) {
+        if (!context.constructing().add(type)) {
+            return;
+        }
+        try {
+            final ClassType superclass = model.getSuperclass(type);
+            if (superclass != null) {
+                validateConstruction(superclass, context);
+            }
+            final ClassDeclaration declaration =
+                model.findClassDeclaration(type);
+            if (declaration == null) {
+                return;
+            }
+            for (final var member : declaration.members()) {
+                if (member.declaration() instanceof VariableDeclaration field) {
+                    validateConstantNode(
+                        field.initializer(),
+                        new EffectContext(
+                            null,
+                            type,
+                            field.initializer(),
+                            context.declaration(),
+                            context.constructing()
+                        )
+                    );
+                }
+                else if (
+                    member
+                        .declaration() instanceof ConstructorDeclaration constructor
+                ) {
+                    final EffectContext constructorContext =
+                        new EffectContext(
+                            null,
+                            type,
+                            constructor.body(),
+                            context.declaration(),
+                            context.constructing()
+                        );
+                    for (final FunctionParameter parameter : constructor
+                        .parameters()) {
+                        if (parameter.defaultValue() != null) {
+                            validateConstantNode(
+                                Objects
+                                    .requireNonNull(parameter.defaultValue()),
+                                constructorContext
+                            );
+                        }
+                    }
+                    validateConstantNode(
+                        constructor.body(),
+                        constructorContext
+                    );
+                }
+            }
+        }
+        finally {
+            context.constructing().remove(type);
+        }
     }
 
     private void validateConstMethodUses() {
@@ -174,7 +1011,8 @@ public final class SemanticAnalyzer {
             }
             if (
                 node instanceof AssignmentExpression assignment
-                    && receiverField(assignment.target())
+                    && (receiverField(assignment.target())
+                        || containsThisExpression(assignment.value()))
             ) {
                 mutates[0] = true;
                 return;
@@ -231,7 +1069,7 @@ public final class SemanticAnalyzer {
                     .filter(type -> model.isSubclassOf(type, owner))
                     .map(type -> classMethod(type, function.name()))
                     .filter(Objects::nonNull)
-                    .filter(method -> method != function)
+                    .filter(method -> !Objects.equals(method, function))
                     .distinct()
                     .anyMatch(method -> mutatesReceiver(method, visiting));
         }
@@ -250,7 +1088,7 @@ public final class SemanticAnalyzer {
                     .methods()
                     .values()
                     .stream()
-                    .anyMatch(method -> method == function)
+                    .anyMatch(method -> Objects.equals(method, function))
             )
             .findFirst()
             .orElse(null);
@@ -571,6 +1409,7 @@ public final class SemanticAnalyzer {
                 new VariableSymbol(clause.name(), type, Mutability.CONST);
             scope.declare(symbol);
             model.setSymbol(clause.name(), symbol);
+            model.setVariableOwner(symbol, context.function());
             analyzeBlockStatement(
                 clause.body(),
                 new SemanticContext(

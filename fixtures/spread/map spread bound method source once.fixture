@@ -253,7 +253,7 @@ Conversions:
 Declarations:
   1:5-1:10 -> var calls: i32
   2:7-2:10 -> const old: Map<string, i32>
-  3:6-3:12 -> source() => Map<string, i32>
+  3:6-3:12 -> func source() => Map<string, i32>
   7:7-7:11 -> const copy: Map<string, i32>
 
 References:

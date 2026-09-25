@@ -103,7 +103,7 @@ Resolved types:
   1:14-1:20 -> string
 
 Declarations:
-  1:6-1:11 -> value() => string
+  1:6-1:11 -> func value() => string
   5:7-5:10 -> const foo: () => string
 
 References:

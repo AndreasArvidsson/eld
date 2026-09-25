@@ -572,14 +572,14 @@ Resolved types:
   15:20-15:23 -> i32
 
 Declarations:
-  1:6-1:16 -> comparator() => Comparator<i32>
+  1:6-1:16 -> func comparator() => Comparator<i32>
   2:9-2:18 -> var direction: i32
   3:11-3:14 -> const cmp: Comparator<i32>
   3:35-3:36 -> const a: i32
   3:38-3:39 -> const b: i32
   7:7-7:16 -> class Direction
   8:11-8:21 -> const multiplier: i32
-  9:17-9:27 -> comparator() => Comparator<i32>
+  9:17-9:27 -> func comparator() => Comparator<i32>
   10:17-10:18 -> const a: i32
   10:20-10:21 -> const b: i32
   15:7-15:13 -> const values: List<i32>

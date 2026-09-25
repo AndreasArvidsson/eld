@@ -479,8 +479,8 @@ Resolved types:
 Declarations:
   1:5-1:10 -> var calls: i32
   2:7-2:13 -> const source: [i32]
-  3:6-3:12 -> spread() => [i32]
-  6:6-6:11 -> value(i32) => i32
+  3:6-3:12 -> func spread() => [i32]
+  6:6-6:11 -> func value(i32) => i32
   6:12-6:13 -> const n: i32
   9:7-9:13 -> const result: [i32]
 

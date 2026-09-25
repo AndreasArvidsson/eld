@@ -1377,9 +1377,9 @@ Declarations:
   21:7-21:13 -> const object: const Foo
   22:7-22:15 -> const optional: const Foo | null
   23:7-23:13 -> const copied: [Foo]
-  25:6-25:14 -> identity(const Foo) => const Foo
+  25:6-25:14 -> func identity(const Foo) => const Foo
   25:15-25:20 -> const value: const Foo
-  29:6-29:13 -> consume(any) => i32
+  29:6-29:13 -> func consume(any) => i32
   29:14-29:19 -> const value: any
   44:6-44:11 -> const value: Foo
 

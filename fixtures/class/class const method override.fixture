@@ -1,0 +1,460 @@
+class ConstBase {
+    public const func value() i32 {
+        return 1;
+    }
+}
+
+class ConstChild extends ConstBase {
+    public const func value() i32 {
+        return 2;
+    }
+}
+
+class MutableBase {
+    public func value() i32 {
+        return 3;
+    }
+}
+
+class ConstDerived extends MutableBase {
+    public const func value() i32 {
+        return 4;
+    }
+}
+
+print(new ConstChild().value());
+print(new ConstDerived().value());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "ConstBase" (1:7-1:16)
+LEFT_BRACE (1:17-1:18)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "value" (2:23-2:28)
+LEFT_PAREN (2:28-2:29)
+RIGHT_PAREN (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+LEFT_BRACE (2:35-2:36)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "ConstChild" (7:7-7:17)
+EXTENDS (7:18-7:25)
+IDENTIFIER "ConstBase" (7:26-7:35)
+LEFT_BRACE (7:36-7:37)
+PUBLIC (8:5-8:11)
+CONST (8:12-8:17)
+FUNC (8:18-8:22)
+IDENTIFIER "value" (8:23-8:28)
+LEFT_PAREN (8:28-8:29)
+RIGHT_PAREN (8:29-8:30)
+IDENTIFIER "i32" (8:31-8:34)
+LEFT_BRACE (8:35-8:36)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CLASS (13:1-13:6)
+IDENTIFIER "MutableBase" (13:7-13:18)
+LEFT_BRACE (13:19-13:20)
+PUBLIC (14:5-14:11)
+FUNC (14:12-14:16)
+IDENTIFIER "value" (14:17-14:22)
+LEFT_PAREN (14:22-14:23)
+RIGHT_PAREN (14:23-14:24)
+IDENTIFIER "i32" (14:25-14:28)
+LEFT_BRACE (14:29-14:30)
+RETURN (15:9-15:15)
+INTEGER_LITERAL "3" (15:16-15:17)
+SEMICOLON (15:17-15:18)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+CLASS (19:1-19:6)
+IDENTIFIER "ConstDerived" (19:7-19:19)
+EXTENDS (19:20-19:27)
+IDENTIFIER "MutableBase" (19:28-19:39)
+LEFT_BRACE (19:40-19:41)
+PUBLIC (20:5-20:11)
+CONST (20:12-20:17)
+FUNC (20:18-20:22)
+IDENTIFIER "value" (20:23-20:28)
+LEFT_PAREN (20:28-20:29)
+RIGHT_PAREN (20:29-20:30)
+IDENTIFIER "i32" (20:31-20:34)
+LEFT_BRACE (20:35-20:36)
+RETURN (21:9-21:15)
+INTEGER_LITERAL "4" (21:16-21:17)
+SEMICOLON (21:17-21:18)
+RIGHT_BRACE (22:5-22:6)
+RIGHT_BRACE (23:1-23:2)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+NEW (25:7-25:10)
+IDENTIFIER "ConstChild" (25:11-25:21)
+LEFT_PAREN (25:21-25:22)
+RIGHT_PAREN (25:22-25:23)
+DOT (25:23-25:24)
+IDENTIFIER "value" (25:24-25:29)
+LEFT_PAREN (25:29-25:30)
+RIGHT_PAREN (25:30-25:31)
+RIGHT_PAREN (25:31-25:32)
+SEMICOLON (25:32-25:33)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+NEW (26:7-26:10)
+IDENTIFIER "ConstDerived" (26:11-26:23)
+LEFT_PAREN (26:23-26:24)
+RIGHT_PAREN (26:24-26:25)
+DOT (26:25-26:26)
+IDENTIFIER "value" (26:26-26:31)
+LEFT_PAREN (26:31-26:32)
+RIGHT_PAREN (26:32-26:33)
+RIGHT_PAREN (26:33-26:34)
+SEMICOLON (26:34-26:35)
+
+--- AST ---
+
+(Program
+  range: 1:1-26:35
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:16
+      name: "ConstBase"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        CONST
+        (IdentifierDeclaration
+          range: 2:23-2:28
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:31-2:34
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:35-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:17
+      name: "ConstChild"
+    )
+    (IdentifierExpression
+      range: 7:26-7:35
+      name: "ConstBase"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        CONST
+        (IdentifierDeclaration
+          range: 8:23-8:28
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:31-8:34
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:35-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 13:1-17:2
+    (IdentifierDeclaration
+      range: 13:7-13:18
+      name: "MutableBase"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 14:5-16:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 14:12-16:6
+        (IdentifierDeclaration
+          range: 14:17-14:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 14:25-14:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 14:29-16:6
+          (ReturnStatement
+            range: 15:9-15:18
+            (LiteralExpression
+              range: 15:16-15:17
+              kind: INT
+              text: "3"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 19:1-23:2
+    (IdentifierDeclaration
+      range: 19:7-19:19
+      name: "ConstDerived"
+    )
+    (IdentifierExpression
+      range: 19:28-19:39
+      name: "MutableBase"
+    )
+    (MemberDeclaration
+      range: 20:5-22:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 20:12-22:6
+        CONST
+        (IdentifierDeclaration
+          range: 20:23-20:28
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 20:31-20:34
+          name: "i32"
+        )
+        (BlockStatement
+          range: 20:35-22:6
+          (ReturnStatement
+            range: 21:9-21:18
+            (LiteralExpression
+              range: 21:16-21:17
+              kind: INT
+              text: "4"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:33
+    (CallExpression
+      range: 25:1-25:32
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (CallExpression
+        range: 25:7-25:31
+        (MemberExpression
+          range: 25:7-25:29
+          (NewExpression
+            range: 25:7-25:23
+            (IdentifierExpression
+              range: 25:11-25:21
+              name: "ConstChild"
+            )
+          )
+          (IdentifierExpression
+            range: 25:24-25:29
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:35
+    (CallExpression
+      range: 26:1-26:34
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (CallExpression
+        range: 26:7-26:33
+        (MemberExpression
+          range: 26:7-26:31
+          (NewExpression
+            range: 26:7-26:25
+            (IdentifierExpression
+              range: 26:11-26:23
+              name: "ConstDerived"
+            )
+          )
+          (IdentifierExpression
+            range: 26:26-26:31
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:26-7:35 -> ConstBase
+  9:16-9:17 -> i32
+  15:16-15:17 -> i32
+  19:28-19:39 -> MutableBase
+  21:16-21:17 -> i32
+  25:1-25:6 -> (any) => void
+  25:1-25:32 -> void
+  25:7-25:23 -> ConstChild
+  25:7-25:29 -> () => i32
+  25:7-25:31 -> i32
+  25:11-25:21 -> ConstChild
+  25:24-25:29 -> () => i32
+  26:1-26:6 -> (any) => void
+  26:1-26:34 -> void
+  26:7-26:25 -> ConstDerived
+  26:7-26:31 -> () => i32
+  26:7-26:33 -> i32
+  26:11-26:23 -> ConstDerived
+  26:26-26:31 -> () => i32
+
+Resolved types:
+  2:31-2:34 -> i32
+  8:31-8:34 -> i32
+  14:25-14:28 -> i32
+  20:31-20:34 -> i32
+
+Declarations:
+  1:7-1:16 -> class ConstBase
+  2:23-2:28 -> const func value() => i32
+  7:7-7:17 -> class ConstChild
+  8:23-8:28 -> const func value() => i32
+  13:7-13:18 -> class MutableBase
+  14:17-14:22 -> func value() => i32
+  19:7-19:19 -> class ConstDerived
+  20:23-20:28 -> const func value() => i32
+
+References:
+  7:26-7:35 -> 1:7-1:16
+  19:28-19:39 -> 13:7-13:18
+  25:1-25:6 -> builtin print
+  25:11-25:21 -> 7:7-7:17
+  25:24-25:29 -> 8:23-8:28
+  26:1-26:6 -> builtin print
+  26:11-26:23 -> 19:7-19:19
+  26:26-26:31 -> 20:23-20:28
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$ConstBase
+  nest member Test$ConstChild
+  nest member Test$MutableBase
+  nest member Test$ConstDerived
+  inner class Test$ConstBase flags [PUBLIC, STATIC]
+  inner class Test$ConstChild flags [PUBLIC, STATIC]
+  inner class Test$MutableBase flags [PUBLIC, STATIC]
+  inner class Test$ConstDerived flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$ConstChild
+    DUP
+    INVOKESPECIAL Test$ConstChild.<init>()V
+    INVOKEVIRTUAL Test$ConstChild.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$ConstDerived
+    DUP
+    INVOKESPECIAL Test$ConstDerived.<init>()V
+    INVOKEVIRTUAL Test$ConstDerived.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$ConstBase extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$ConstBase flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$ConstChild extends Test$ConstBase version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$ConstChild flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$ConstBase.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$MutableBase extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$MutableBase flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 3
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$ConstDerived extends Test$MutableBase version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$ConstDerived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$MutableBase.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 4
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+2
+4
+

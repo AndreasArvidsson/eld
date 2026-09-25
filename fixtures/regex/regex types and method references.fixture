@@ -461,9 +461,9 @@ Resolved types:
   8:16-8:23 -> Matcher
 
 Declarations:
-  1:6-1:13 -> compile(string) => Regex
+  1:6-1:13 -> func compile(string) => Regex
   1:14-1:21 -> const pattern: string
-  4:6-4:11 -> match(Regex, string) => Matcher
+  4:6-4:11 -> func match(Regex, string) => Matcher
   4:12-4:17 -> const regex: Regex
   4:26-4:30 -> const text: string
   7:7-7:12 -> const regex: Regex

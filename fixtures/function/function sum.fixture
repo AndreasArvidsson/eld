@@ -143,7 +143,7 @@ Resolved types:
   1:26-1:29 -> i32
 
 Declarations:
-  1:6-1:9 -> sum(i32, i32) => i32
+  1:6-1:9 -> func sum(i32, i32) => i32
   1:10-1:11 -> const a: i32
   1:18-1:19 -> const b: i32
 

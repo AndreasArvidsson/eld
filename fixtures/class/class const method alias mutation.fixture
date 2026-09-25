@@ -1,0 +1,157 @@
+class Box {
+    public var value = 0;
+
+    public const func mutate() {
+        var alias = this;
+        alias.value = 1;
+    }
+}
+
+new Box().mutate();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Box" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "0" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+PUBLIC (4:5-4:11)
+CONST (4:12-4:17)
+FUNC (4:18-4:22)
+IDENTIFIER "mutate" (4:23-4:29)
+LEFT_PAREN (4:29-4:30)
+RIGHT_PAREN (4:30-4:31)
+LEFT_BRACE (4:32-4:33)
+VAR (5:9-5:12)
+IDENTIFIER "alias" (5:13-5:18)
+EQUAL (5:19-5:20)
+THIS (5:21-5:25)
+SEMICOLON (5:25-5:26)
+IDENTIFIER "alias" (6:9-6:14)
+DOT (6:14-6:15)
+IDENTIFIER "value" (6:15-6:20)
+EQUAL (6:21-6:22)
+INTEGER_LITERAL "1" (6:23-6:24)
+SEMICOLON (6:24-6:25)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+NEW (10:1-10:4)
+IDENTIFIER "Box" (10:5-10:8)
+LEFT_PAREN (10:8-10:9)
+RIGHT_PAREN (10:9-10:10)
+DOT (10:10-10:11)
+IDENTIFIER "mutate" (10:11-10:17)
+LEFT_PAREN (10:17-10:18)
+RIGHT_PAREN (10:18-10:19)
+SEMICOLON (10:19-10:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:20
+  (ClassDeclaration
+    range: 1:1-8:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Box"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-7:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-7:6
+        CONST
+        (IdentifierDeclaration
+          range: 4:23-4:29
+          name: "mutate"
+        )
+        returnType: null
+        (BlockStatement
+          range: 4:32-7:6
+          (VariableDeclaration
+            range: 5:9-5:26
+            mutability: VAR
+            (IdentifierDeclaration
+              range: 5:13-5:18
+              name: "alias"
+            )
+            type: null
+            (ThisExpression
+              range: 5:21-5:25
+            )
+          )
+          (ExpressionStatement
+            range: 6:9-6:25
+            (AssignmentExpression
+              range: 6:9-6:24
+              (MemberExpression
+                range: 6:9-6:20
+                (IdentifierExpression
+                  range: 6:9-6:14
+                  name: "alias"
+                )
+                (IdentifierExpression
+                  range: 6:15-6:20
+                  name: "value"
+                )
+              )
+              (LiteralExpression
+                range: 6:23-6:24
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:20
+    (CallExpression
+      range: 10:1-10:19
+      (MemberExpression
+        range: 10:1-10:17
+        (NewExpression
+          range: 10:1-10:10
+          (IdentifierExpression
+            range: 10:5-10:8
+            name: "Box"
+          )
+        )
+        (IdentifierExpression
+          range: 10:11-10:17
+          name: "mutate"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'mutate' cannot modify non-local data at 6:9-6:20

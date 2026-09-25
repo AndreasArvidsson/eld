@@ -258,7 +258,7 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> const source: PromiseSource<i32>
-  3:12-3:15 -> run() => Promise<void>
+  3:12-3:15 -> func run() => Promise<void>
   5:11-5:16 -> const value: i32
 
 References:

@@ -60,6 +60,7 @@ public final class SemanticAnalyzerDeclarations {
         final ClassSymbol classSymbol =
             new ClassSymbol(declaration.name(), classType);
         model.setSymbol(declaration.name(), classSymbol);
+        model.setClassDeclaration(classType, declaration);
         context.scope().declare(classSymbol);
         final List<InterfaceType> implemented = new ArrayList<>();
         for (final TypeNode node : declaration.implementedInterfaces()) {

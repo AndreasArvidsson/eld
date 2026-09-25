@@ -332,7 +332,7 @@ Expression types:
   12:8-12:13 -> Promise<void>
 
 Declarations:
-  1:12-1:15 -> run() => Promise<void>
+  1:12-1:15 -> func run() => Promise<void>
   2:11-2:17 -> const values: Map<string, i32>
 
 References:

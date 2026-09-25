@@ -1,0 +1,128 @@
+var constructions = 0;
+
+class Counter {
+    public constructor() {
+        constructions++;
+    }
+}
+
+const func create() {
+    var counter = new Counter();
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "constructions" (1:5-1:18)
+EQUAL (1:19-1:20)
+INTEGER_LITERAL "0" (1:21-1:22)
+SEMICOLON (1:22-1:23)
+CLASS (3:1-3:6)
+IDENTIFIER "Counter" (3:7-3:14)
+LEFT_BRACE (3:15-3:16)
+PUBLIC (4:5-4:11)
+CONSTRUCTOR (4:12-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+LEFT_BRACE (4:26-4:27)
+IDENTIFIER "constructions" (5:9-5:22)
+PLUS_PLUS (5:22-5:24)
+SEMICOLON (5:24-5:25)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+CONST (9:1-9:6)
+FUNC (9:7-9:11)
+IDENTIFIER "create" (9:12-9:18)
+LEFT_PAREN (9:18-9:19)
+RIGHT_PAREN (9:19-9:20)
+LEFT_BRACE (9:21-9:22)
+VAR (10:5-10:8)
+IDENTIFIER "counter" (10:9-10:16)
+EQUAL (10:17-10:18)
+NEW (10:19-10:22)
+IDENTIFIER "Counter" (10:23-10:30)
+LEFT_PAREN (10:30-10:31)
+RIGHT_PAREN (10:31-10:32)
+SEMICOLON (10:32-10:33)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (VariableDeclaration
+    range: 1:1-1:23
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:18
+      name: "constructions"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:21-1:22
+      kind: INT
+      text: "0"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-7:2
+    (IdentifierDeclaration
+      range: 3:7-3:14
+      name: "Counter"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 4:12-6:6
+        (BlockStatement
+          range: 4:26-6:6
+          (ExpressionStatement
+            range: 5:9-5:25
+            (PostfixExpression
+              range: 5:9-5:24
+              (IdentifierExpression
+                range: 5:9-5:22
+                name: "constructions"
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 9:1-11:2
+    CONST
+    (IdentifierDeclaration
+      range: 9:12-9:18
+      name: "create"
+    )
+    returnType: null
+    (BlockStatement
+      range: 9:21-11:2
+      (VariableDeclaration
+        range: 10:5-10:33
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 10:9-10:16
+          name: "counter"
+        )
+        type: null
+        (NewExpression
+          range: 10:19-10:32
+          (IdentifierExpression
+            range: 10:23-10:30
+            name: "Counter"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'create' cannot modify non-local data at 5:9-5:22

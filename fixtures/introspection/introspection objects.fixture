@@ -334,8 +334,8 @@ Declarations:
   1:7-1:14 -> class Counter
   2:16-2:21 -> var value: i32
   3:12-3:28 -> constructor()
-  4:17-4:21 -> next() => i32
-  5:10-5:16 -> hidden() => i32
+  4:17-4:21 -> func next() => i32
+  5:10-5:16 -> func hidden() => i32
   7:7-7:14 -> const counter: Counter
   8:7-8:14 -> const inspect: (any) => [string]
 

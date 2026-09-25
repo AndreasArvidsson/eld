@@ -53,7 +53,9 @@ public final class Parser extends ParserBase {
 
         switch (token.type()) {
             case CONST:
-                return parseVariableDeclaration(token, Mutability.CONST);
+                return functionFollows()
+                    ? parseModifiedFunctionDeclaration(token)
+                    : parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
             case TYPE:
@@ -87,10 +89,11 @@ public final class Parser extends ParserBase {
             case FOR:
                 return parseForStatement(token);
             case FUNC:
-                return parseFunctionDeclaration(token, false);
+                return parseFunctionDeclaration(token, false, List.of());
+            case FINAL:
+                return parseModifiedFunctionDeclaration(token);
             case ASYNC:
-                expect(TokenType.FUNC);
-                return parseFunctionDeclaration(token, true);
+                return parseModifiedFunctionDeclaration(token);
             case TRY:
                 return parseTryStatement(token);
             case THROW:
@@ -228,11 +231,31 @@ public final class Parser extends ParserBase {
                 check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
                     ? advance()
                     : null;
+            int constructorOffset = 0;
+            while (
+                check(constructorOffset, TokenType.CONST)
+                    || check(constructorOffset, TokenType.FINAL)
+                    || check(constructorOffset, TokenType.ASYNC)
+            ) {
+                constructorOffset++;
+            }
             if (
-                !check(TokenType.VAR) && !check(TokenType.CONST)
-                    && !check(TokenType.FUNC)
+                constructorOffset > 0
+                    && check(constructorOffset, TokenType.CONSTRUCTOR)
+            ) {
+                final Token invalidModifier = current();
+                throw new ParserException(
+                    invalidModifier.range()
+                        .union(peek(constructorOffset).range()),
+                    "'%s' is not allowed on constructors",
+                    invalidModifier.text()
+                );
+            }
+            final boolean function = functionDeclarationStartsHere();
+            if (
+                !check(TokenType.VAR) && !(check(TokenType.CONST) && !function)
+                    && !function
                     && !check(TokenType.CONSTRUCTOR)
-                    && !check(TokenType.ASYNC)
             ) {
                 throw new ParserException(
                     current().range(),
@@ -240,7 +263,7 @@ public final class Parser extends ParserBase {
                 );
             }
             final Declaration member;
-            if (check(TokenType.VAR) || check(TokenType.CONST)) {
+            if (check(TokenType.VAR) || (check(TokenType.CONST) && !function)) {
                 final Token fieldKeyword = advance();
                 member =
                     parseVariableDeclaration(
@@ -253,11 +276,9 @@ public final class Parser extends ParserBase {
             }
             else {
                 member =
-                    check(TokenType.FUNC)
-                        ? parseFunctionDeclaration(advance(), false)
-                        : check(TokenType.ASYNC)
-                            ? parseAsyncFunctionDeclaration()
-                            : parseConstructorDeclaration(advance());
+                    function
+                        ? parseModifiedFunctionDeclaration(advance())
+                        : parseConstructorDeclaration(advance());
             }
             members.add(
                 new MemberDeclaration(
@@ -322,16 +343,21 @@ public final class Parser extends ParserBase {
                     check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
                         ? advance()
                         : null;
-                if (!check(TokenType.FUNC) && !check(TokenType.ASYNC)) {
+                final Token finalModifier = functionModifier(TokenType.FINAL);
+                if (finalModifier != null) {
+                    throw new ParserException(
+                        finalModifier.range().union(functionKeyword().range()),
+                        "'final' is not allowed on record methods"
+                    );
+                }
+                if (!functionDeclarationStartsHere()) {
                     throw new ParserException(
                         current().range(),
                         "Record bodies may only contain methods"
                     );
                 }
                 final FunctionDeclaration method =
-                    check(TokenType.ASYNC)
-                        ? parseAsyncFunctionDeclaration()
-                        : parseFunctionDeclaration(advance(), false);
+                    parseModifiedFunctionDeclaration(advance());
                 if (method.name().name().equals("copy")) {
                     throw new ParserException(
                         method.name().range(),
@@ -399,6 +425,13 @@ public final class Parser extends ParserBase {
         final List<@NonNull InterfaceMemberDeclaration> members =
             new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+            final Token finalModifier = functionModifier(TokenType.FINAL);
+            if (finalModifier != null) {
+                throw new ParserException(
+                    finalModifier.range().union(functionKeyword().range()),
+                    "'final' is not allowed on interface methods"
+                );
+            }
             if (check(TokenType.FUNC)) {
                 members.add(parseInterfaceMethod());
             }
@@ -458,8 +491,9 @@ public final class Parser extends ParserBase {
             );
         if (check(TokenType.FUNC)) {
             throw new ParserException(
-                current().range(),
-                "Interface methods cannot have a const or var modifier"
+                keyword.range().union(current().range()),
+                "'%s' is not allowed on interface methods",
+                keyword.text()
             );
         }
         final Token name = expect(TokenType.IDENTIFIER);
@@ -486,15 +520,89 @@ public final class Parser extends ParserBase {
         return new ReturnStatement(value, range);
     }
 
-    private FunctionDeclaration parseAsyncFunctionDeclaration() {
-        final Token keyword = expect(TokenType.ASYNC);
-        expect(TokenType.FUNC);
-        return parseFunctionDeclaration(keyword, true);
+    private boolean functionFollows() {
+        int offset = 0;
+        while (
+            check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.ASYNC)
+        ) {
+            offset++;
+        }
+        return check(offset, TokenType.FUNC);
+    }
+
+    private boolean functionDeclarationStartsHere() {
+        return check(TokenType.FUNC) || functionFollows();
+    }
+
+    private @Nullable Token functionModifier(final TokenType type) {
+        int offset = 0;
+        Token result = null;
+        while (
+            check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.ASYNC)
+        ) {
+            if (check(offset, type)) {
+                result = peek(offset);
+            }
+            offset++;
+        }
+        return check(offset, TokenType.FUNC) ? result : null;
+    }
+
+    private Token functionKeyword() {
+        int offset = 0;
+        while (
+            check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.ASYNC)
+        ) {
+            offset++;
+        }
+        return peek(offset);
+    }
+
+    private FunctionDeclaration parseModifiedFunctionDeclaration(
+        final Token first
+    ) {
+        if (first.type() == TokenType.FUNC) {
+            return parseFunctionDeclaration(first, false, List.of());
+        }
+        final List<FunctionModifier> modifiers = new ArrayList<>();
+        boolean async = false;
+        Token modifier = first;
+        while (modifier.type() != TokenType.FUNC) {
+            if (modifier.type() == TokenType.ASYNC) {
+                if (async) {
+                    throw new ParserException(
+                        modifier.range(),
+                        "Duplicate async function modifier"
+                    );
+                }
+                async = true;
+            }
+            else {
+                final FunctionModifier value =
+                    modifier.type() == TokenType.CONST
+                        ? FunctionModifier.CONST
+                        : FunctionModifier.FINAL;
+                if (modifiers.contains(value)) {
+                    throw new ParserException(
+                        modifier.range(),
+                        "Duplicate function modifier: %s",
+                        modifier.text()
+                    );
+                }
+                modifiers.add(value);
+            }
+            modifier = advance();
+        }
+        return parseFunctionDeclaration(first, async, modifiers);
     }
 
     private FunctionDeclaration parseFunctionDeclaration(
         final Token keyword,
-        final boolean async
+        final boolean async,
+        final List<FunctionModifier> modifiers
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
         final IdentifierDeclaration nameId =
@@ -513,6 +621,7 @@ public final class Parser extends ParserBase {
         final Range range = keyword.range().union(body.range());
         return new FunctionDeclaration(
             async,
+            List.copyOf(modifiers),
             nameId,
             parameters,
             returnType,

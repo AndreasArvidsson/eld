@@ -1,0 +1,84 @@
+func update() {}
+
+const func run() {
+    update();
+}
+
+run();
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "update" (1:6-1:12)
+LEFT_PAREN (1:12-1:13)
+RIGHT_PAREN (1:13-1:14)
+LEFT_BRACE (1:15-1:16)
+RIGHT_BRACE (1:16-1:17)
+CONST (3:1-3:6)
+FUNC (3:7-3:11)
+IDENTIFIER "run" (3:12-3:15)
+LEFT_PAREN (3:15-3:16)
+RIGHT_PAREN (3:16-3:17)
+LEFT_BRACE (3:18-3:19)
+IDENTIFIER "update" (4:5-4:11)
+LEFT_PAREN (4:11-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "run" (7:1-7:4)
+LEFT_PAREN (7:4-7:5)
+RIGHT_PAREN (7:5-7:6)
+SEMICOLON (7:6-7:7)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:7
+  (FunctionDeclaration
+    range: 1:1-1:17
+    (IdentifierDeclaration
+      range: 1:6-1:12
+      name: "update"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:15-1:17
+    )
+  )
+  (FunctionDeclaration
+    range: 3:1-5:2
+    CONST
+    (IdentifierDeclaration
+      range: 3:12-3:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 3:18-5:2
+      (ExpressionStatement
+        range: 4:5-4:14
+        (CallExpression
+          range: 4:5-4:13
+          (IdentifierExpression
+            range: 4:5-4:11
+            name: "update"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:7
+    (CallExpression
+      range: 7:1-7:6
+      (IdentifierExpression
+        range: 7:1-7:4
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'run' cannot call non-const function 'update' at 4:5-4:13

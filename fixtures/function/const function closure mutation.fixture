@@ -1,0 +1,115 @@
+const func mutate() {
+    var value = 0;
+    const action = () => value++;
+    action();
+}
+
+mutate();
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "mutate" (1:12-1:18)
+LEFT_PAREN (1:18-1:19)
+RIGHT_PAREN (1:19-1:20)
+LEFT_BRACE (1:21-1:22)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL (2:15-2:16)
+INTEGER_LITERAL "0" (2:17-2:18)
+SEMICOLON (2:18-2:19)
+CONST (3:5-3:10)
+IDENTIFIER "action" (3:11-3:17)
+EQUAL (3:18-3:19)
+LEFT_PAREN (3:20-3:21)
+RIGHT_PAREN (3:21-3:22)
+ARROW (3:23-3:25)
+IDENTIFIER "value" (3:26-3:31)
+PLUS_PLUS (3:31-3:33)
+SEMICOLON (3:33-3:34)
+IDENTIFIER "action" (4:5-4:11)
+LEFT_PAREN (4:11-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "mutate" (7:1-7:7)
+LEFT_PAREN (7:7-7:8)
+RIGHT_PAREN (7:8-7:9)
+SEMICOLON (7:9-7:10)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:10
+  (FunctionDeclaration
+    range: 1:1-5:2
+    CONST
+    (IdentifierDeclaration
+      range: 1:12-1:18
+      name: "mutate"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:21-5:2
+      (VariableDeclaration
+        range: 2:5-2:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:14
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:17-2:18
+          kind: INT
+          text: "0"
+        )
+      )
+      (VariableDeclaration
+        range: 3:5-3:34
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 3:11-3:17
+          name: "action"
+        )
+        type: null
+        (LambdaExpression
+          range: 3:20-3:33
+          (PostfixExpression
+            range: 3:26-3:33
+            (IdentifierExpression
+              range: 3:26-3:31
+              name: "value"
+            )
+            operator: INCREMENT
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 4:5-4:14
+        (CallExpression
+          range: 4:5-4:13
+          (IdentifierExpression
+            range: 4:5-4:11
+            name: "action"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:10
+    (CallExpression
+      range: 7:1-7:9
+      (IdentifierExpression
+        range: 7:1-7:7
+        name: "mutate"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'mutate' cannot modify non-local data at 3:26-3:31

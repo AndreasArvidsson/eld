@@ -655,11 +655,11 @@ Conversions:
 Declarations:
   1:5-1:10 -> var calls: i32
   2:7-2:10 -> const old: Map<string, i32>
-  3:6-3:12 -> spread(i32) => Map<string, i32>
+  3:6-3:12 -> func spread(i32) => Map<string, i32>
   3:13-3:14 -> const n: i32
-  7:6-7:11 -> value(i32) => i32
+  7:6-7:11 -> func value(i32) => i32
   7:12-7:13 -> const n: i32
-  11:6-11:14 -> property(i32) => Map<string, i32>
+  11:6-11:14 -> func property(i32) => Map<string, i32>
   11:15-11:16 -> const n: i32
   14:7-14:13 -> const result: Map<string, i32>
 

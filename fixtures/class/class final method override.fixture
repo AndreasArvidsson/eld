@@ -1,0 +1,129 @@
+class Base {
+    public final func value() i32 {
+        return 1;
+    }
+}
+
+class Child extends Base {
+    public func value() i32 {
+        return 2;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+FINAL (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "value" (2:23-2:28)
+LEFT_PAREN (2:28-2:29)
+RIGHT_PAREN (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+LEFT_BRACE (2:35-2:36)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Child" (7:7-7:12)
+EXTENDS (7:13-7:20)
+IDENTIFIER "Base" (7:21-7:25)
+LEFT_BRACE (7:26-7:27)
+PUBLIC (8:5-8:11)
+FUNC (8:12-8:16)
+IDENTIFIER "value" (8:17-8:22)
+LEFT_PAREN (8:22-8:23)
+RIGHT_PAREN (8:23-8:24)
+IDENTIFIER "i32" (8:25-8:28)
+LEFT_BRACE (8:29-8:30)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        FINAL
+        (IdentifierDeclaration
+          range: 2:23-2:28
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:31-2:34
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:35-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 7:21-7:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        (IdentifierDeclaration
+          range: 8:17-8:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:25-8:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:29-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot override final method 'value' at 8:17-8:22

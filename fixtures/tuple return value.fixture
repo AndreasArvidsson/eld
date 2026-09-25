@@ -129,7 +129,7 @@ Resolved types:
   1:18-1:22 -> bool
 
 Declarations:
-  1:6-1:9 -> get() => (i32, bool)
+  1:6-1:9 -> func get() => (i32, bool)
   5:7-5:12 -> const value: (i32, bool)
 
 References:

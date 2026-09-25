@@ -137,7 +137,7 @@ Resolved types:
   2:26-2:51 -> Exception
 
 Declarations:
-  1:12-1:15 -> run() => Promise<void>
+  1:12-1:15 -> func run() => Promise<void>
   5:7-5:14 -> const promise: Promise<void>
 
 References:

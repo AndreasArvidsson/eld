@@ -195,7 +195,7 @@ Conversions:
   6:8-6:12 -> null -> i32 | null
 
 Declarations:
-  1:6-1:9 -> foo(i32, i32 | null) => void
+  1:6-1:9 -> func foo(i32, i32 | null) => void
   1:10-1:11 -> const a: i32
   1:18-1:19 -> const b: i32 | null
 

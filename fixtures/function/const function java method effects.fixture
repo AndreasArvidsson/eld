@@ -1,0 +1,169 @@
+const func advance(matcher: Matcher) bool {
+    return matcher.find();
+}
+
+const matcher = Regex.compile("a").matcher("a");
+print(advance(matcher));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "advance" (1:12-1:19)
+LEFT_PAREN (1:19-1:20)
+IDENTIFIER "matcher" (1:20-1:27)
+COLON (1:27-1:28)
+IDENTIFIER "Matcher" (1:29-1:36)
+RIGHT_PAREN (1:36-1:37)
+IDENTIFIER "bool" (1:38-1:42)
+LEFT_BRACE (1:43-1:44)
+RETURN (2:5-2:11)
+IDENTIFIER "matcher" (2:12-2:19)
+DOT (2:19-2:20)
+IDENTIFIER "find" (2:20-2:24)
+LEFT_PAREN (2:24-2:25)
+RIGHT_PAREN (2:25-2:26)
+SEMICOLON (2:26-2:27)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "matcher" (5:7-5:14)
+EQUAL (5:15-5:16)
+IDENTIFIER "Regex" (5:17-5:22)
+DOT (5:22-5:23)
+IDENTIFIER "compile" (5:23-5:30)
+LEFT_PAREN (5:30-5:31)
+STRING_LITERAL "\"a\"" (5:31-5:34)
+RIGHT_PAREN (5:34-5:35)
+DOT (5:35-5:36)
+IDENTIFIER "matcher" (5:36-5:43)
+LEFT_PAREN (5:43-5:44)
+STRING_LITERAL "\"a\"" (5:44-5:47)
+RIGHT_PAREN (5:47-5:48)
+SEMICOLON (5:48-5:49)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "advance" (6:7-6:14)
+LEFT_PAREN (6:14-6:15)
+IDENTIFIER "matcher" (6:15-6:22)
+RIGHT_PAREN (6:22-6:23)
+RIGHT_PAREN (6:23-6:24)
+SEMICOLON (6:24-6:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:25
+  (FunctionDeclaration
+    range: 1:1-3:2
+    CONST
+    (IdentifierDeclaration
+      range: 1:12-1:19
+      name: "advance"
+    )
+    (FunctionParameter
+      range: 1:20-1:36
+      (IdentifierDeclaration
+        range: 1:20-1:27
+        name: "matcher"
+      )
+      (NamedTypeNode
+        range: 1:29-1:36
+        name: "Matcher"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:38-1:42
+      name: "bool"
+    )
+    (BlockStatement
+      range: 1:43-3:2
+      (ReturnStatement
+        range: 2:5-2:27
+        (CallExpression
+          range: 2:12-2:26
+          (MemberExpression
+            range: 2:12-2:24
+            (IdentifierExpression
+              range: 2:12-2:19
+              name: "matcher"
+            )
+            (IdentifierExpression
+              range: 2:20-2:24
+              name: "find"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "matcher"
+    )
+    type: null
+    (CallExpression
+      range: 5:17-5:48
+      (MemberExpression
+        range: 5:17-5:43
+        (CallExpression
+          range: 5:17-5:35
+          (MemberExpression
+            range: 5:17-5:30
+            (IdentifierExpression
+              range: 5:17-5:22
+              name: "Regex"
+            )
+            (IdentifierExpression
+              range: 5:23-5:30
+              name: "compile"
+            )
+          )
+          (LiteralExpression
+            range: 5:31-5:34
+            kind: STRING
+            text: "\"a\""
+          )
+        )
+        (IdentifierExpression
+          range: 5:36-5:43
+          name: "matcher"
+        )
+      )
+      (LiteralExpression
+        range: 5:44-5:47
+        kind: STRING
+        text: "\"a\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:25
+    (CallExpression
+      range: 6:1-6:24
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:23
+        (IdentifierExpression
+          range: 6:7-6:14
+          name: "advance"
+        )
+        (IdentifierExpression
+          range: 6:15-6:22
+          name: "matcher"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'advance' cannot call non-const function 'find' at 2:12-2:26

@@ -287,7 +287,7 @@ Resolved types:
   9:21-9:32 -> IOException
 
 Declarations:
-  1:6-1:9 -> run() => i32
+  1:6-1:9 -> func run() => i32
   9:18-9:19 -> const e: IOException
 
 References:

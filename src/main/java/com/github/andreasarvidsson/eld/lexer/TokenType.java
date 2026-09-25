@@ -26,6 +26,7 @@ public enum TokenType {
     THIS,
     SUPER,
     FUNC,
+    FINAL,
     ASYNC,
     AWAIT,
     IGNORE,

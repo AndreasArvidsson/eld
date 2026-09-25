@@ -1003,11 +1003,11 @@ Declarations:
   1:7-1:11 -> class Base
   2:7-2:12 -> class Child
   3:7-3:14 -> class Sibling
-  5:6-5:11 -> widen(Child | null) => Base | null
+  5:6-5:11 -> func widen(Child | null) => Base | null
   5:12-5:17 -> const value: Child | null
-  8:6-8:13 -> accepts(Base | null) => bool
+  8:6-8:13 -> func accepts(Base | null) => bool
   8:14-8:19 -> const value: Base | null
-  11:6-11:11 -> multi(i32) => Base | null
+  11:6-11:11 -> func multi(i32) => Base | null
   11:12-11:18 -> const choice: i32
   12:9-12:14 -> var value: Child | Sibling | null
   22:5-22:10 -> var child: Child | null

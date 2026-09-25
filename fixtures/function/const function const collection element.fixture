@@ -1,0 +1,365 @@
+class Value {
+    public const func equals(other: any) bool {
+        return false;
+    }
+
+    public const func hashCode() i32 {
+        return 0;
+    }
+}
+
+const func addValue() i32 {
+    var values = new HashSet<Value>();
+    values.add(new Value());
+    return values.size();
+}
+
+print(addValue());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "equals" (2:23-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "other" (2:30-2:35)
+COLON (2:35-2:36)
+IDENTIFIER "any" (2:37-2:40)
+RIGHT_PAREN (2:40-2:41)
+IDENTIFIER "bool" (2:42-2:46)
+LEFT_BRACE (2:47-2:48)
+RETURN (3:9-3:15)
+BOOLEAN_LITERAL "false" (3:16-3:21)
+SEMICOLON (3:21-3:22)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (6:5-6:11)
+CONST (6:12-6:17)
+FUNC (6:18-6:22)
+IDENTIFIER "hashCode" (6:23-6:31)
+LEFT_PAREN (6:31-6:32)
+RIGHT_PAREN (6:32-6:33)
+IDENTIFIER "i32" (6:34-6:37)
+LEFT_BRACE (6:38-6:39)
+RETURN (7:9-7:15)
+INTEGER_LITERAL "0" (7:16-7:17)
+SEMICOLON (7:17-7:18)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (11:1-11:6)
+FUNC (11:7-11:11)
+IDENTIFIER "addValue" (11:12-11:20)
+LEFT_PAREN (11:20-11:21)
+RIGHT_PAREN (11:21-11:22)
+IDENTIFIER "i32" (11:23-11:26)
+LEFT_BRACE (11:27-11:28)
+VAR (12:5-12:8)
+IDENTIFIER "values" (12:9-12:15)
+EQUAL (12:16-12:17)
+NEW (12:18-12:21)
+IDENTIFIER "HashSet" (12:22-12:29)
+LESS (12:29-12:30)
+IDENTIFIER "Value" (12:30-12:35)
+GREATER (12:35-12:36)
+LEFT_PAREN (12:36-12:37)
+RIGHT_PAREN (12:37-12:38)
+SEMICOLON (12:38-12:39)
+IDENTIFIER "values" (13:5-13:11)
+DOT (13:11-13:12)
+IDENTIFIER "add" (13:12-13:15)
+LEFT_PAREN (13:15-13:16)
+NEW (13:16-13:19)
+IDENTIFIER "Value" (13:20-13:25)
+LEFT_PAREN (13:25-13:26)
+RIGHT_PAREN (13:26-13:27)
+RIGHT_PAREN (13:27-13:28)
+SEMICOLON (13:28-13:29)
+RETURN (14:5-14:11)
+IDENTIFIER "values" (14:12-14:18)
+DOT (14:18-14:19)
+IDENTIFIER "size" (14:19-14:23)
+LEFT_PAREN (14:23-14:24)
+RIGHT_PAREN (14:24-14:25)
+SEMICOLON (14:25-14:26)
+RIGHT_BRACE (15:1-15:2)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "addValue" (17:7-17:15)
+LEFT_PAREN (17:15-17:16)
+RIGHT_PAREN (17:16-17:17)
+RIGHT_PAREN (17:17-17:18)
+SEMICOLON (17:18-17:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:19
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        CONST
+        (IdentifierDeclaration
+          range: 2:23-2:29
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:30-2:40
+          (IdentifierDeclaration
+            range: 2:30-2:35
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:37-2:40
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:42-2:46
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:47-4:6
+          (ReturnStatement
+            range: 3:9-3:22
+            (LiteralExpression
+              range: 3:16-3:21
+              kind: BOOL
+              text: "false"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        CONST
+        (IdentifierDeclaration
+          range: 6:23-6:31
+          name: "hashCode"
+        )
+        (NamedTypeNode
+          range: 6:34-6:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:38-8:6
+          (ReturnStatement
+            range: 7:9-7:18
+            (LiteralExpression
+              range: 7:16-7:17
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 11:1-15:2
+    CONST
+    (IdentifierDeclaration
+      range: 11:12-11:20
+      name: "addValue"
+    )
+    (NamedTypeNode
+      range: 11:23-11:26
+      name: "i32"
+    )
+    (BlockStatement
+      range: 11:27-15:2
+      (VariableDeclaration
+        range: 12:5-12:39
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 12:9-12:15
+          name: "values"
+        )
+        type: null
+        (NewExpression
+          range: 12:18-12:38
+          (IdentifierExpression
+            range: 12:22-12:29
+            name: "HashSet"
+          )
+          (NamedTypeNode
+            range: 12:30-12:35
+            name: "Value"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 13:5-13:29
+        (CallExpression
+          range: 13:5-13:28
+          (MemberExpression
+            range: 13:5-13:15
+            (IdentifierExpression
+              range: 13:5-13:11
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 13:12-13:15
+              name: "add"
+            )
+          )
+          (NewExpression
+            range: 13:16-13:27
+            (IdentifierExpression
+              range: 13:20-13:25
+              name: "Value"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 14:5-14:26
+        (CallExpression
+          range: 14:12-14:25
+          (MemberExpression
+            range: 14:12-14:23
+            (IdentifierExpression
+              range: 14:12-14:18
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 14:19-14:23
+              name: "size"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:19
+    (CallExpression
+      range: 17:1-17:18
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:17
+        (IdentifierExpression
+          range: 17:7-17:15
+          name: "addValue"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:21 -> bool
+  7:16-7:17 -> i32
+  12:18-12:38 -> HashSet<Value>
+  12:22-12:29 -> HashSet<Value>
+  13:5-13:11 -> HashSet<Value>
+  13:5-13:15 -> (Value) => bool
+  13:5-13:28 -> bool
+  13:12-13:15 -> (Value) => bool
+  13:16-13:27 -> Value
+  13:20-13:25 -> Value
+  14:12-14:18 -> HashSet<Value>
+  14:12-14:23 -> () => i32
+  14:12-14:25 -> i32
+  14:19-14:23 -> () => i32
+  17:1-17:6 -> (any) => void
+  17:1-17:18 -> void
+  17:7-17:15 -> () => i32
+  17:7-17:17 -> i32
+
+Resolved types:
+  2:37-2:40 -> any
+  2:42-2:46 -> bool
+  6:34-6:37 -> i32
+  11:23-11:26 -> i32
+  12:18-12:38 -> HashSet<Value>
+  12:30-12:35 -> Value
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:23-2:29 -> const func equals(any) => bool
+  2:30-2:35 -> const other: any
+  6:23-6:31 -> const func hashCode() => i32
+  11:12-11:20 -> const func addValue() => i32
+  12:9-12:15 -> var values: HashSet<Value>
+
+References:
+  12:22-12:29 -> 12:18-12:38
+  13:5-13:11 -> 12:9-12:15
+  13:12-13:15 -> 13:5-13:15
+  13:20-13:25 -> 1:7-1:12
+  14:12-14:18 -> 12:9-12:15
+  14:19-14:23 -> 14:12-14:23
+  17:1-17:6 -> builtin print
+  17:7-17:15 -> 11:12-11:20
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method addValue()I flags [PUBLIC, STATIC]
+    NEW java/util/HashSet
+    DUP
+    INVOKESPECIAL java/util/HashSet.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    INVOKEVIRTUAL java/util/HashSet.add(Ljava/lang/Object;)Z
+    POP
+    ALOAD_0 0
+    INVOKEVIRTUAL java/util/HashSet.size()I
+    IRETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.addValue()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC]
+    ICONST_0 0
+    IRETURN
+    max stack 1 max locals 2
+  method hashCode()I flags [PUBLIC]
+    LDC 0
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+1
+

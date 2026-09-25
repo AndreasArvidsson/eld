@@ -235,8 +235,8 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> const values: [i32]
-  3:6-3:12 -> mutate() => i32
-  8:12-8:15 -> run() => Promise<void>
+  3:6-3:12 -> func mutate() => i32
+  8:12-8:15 -> func run() => Promise<void>
 
 References:
   4:5-4:11 -> 1:7-1:13

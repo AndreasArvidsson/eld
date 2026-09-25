@@ -1,0 +1,324 @@
+class Base {
+    const func value() i32 {
+        return 21;
+    }
+
+    public const func doubled() i32 {
+        return this.value() * 2;
+    }
+}
+
+class Derived extends Base {
+    func value() i32 {
+        return 0;
+    }
+}
+
+print(new Derived().doubled());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+CONST (2:5-2:10)
+FUNC (2:11-2:15)
+IDENTIFIER "value" (2:16-2:21)
+LEFT_PAREN (2:21-2:22)
+RIGHT_PAREN (2:22-2:23)
+IDENTIFIER "i32" (2:24-2:27)
+LEFT_BRACE (2:28-2:29)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "21" (3:16-3:18)
+SEMICOLON (3:18-3:19)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (6:5-6:11)
+CONST (6:12-6:17)
+FUNC (6:18-6:22)
+IDENTIFIER "doubled" (6:23-6:30)
+LEFT_PAREN (6:30-6:31)
+RIGHT_PAREN (6:31-6:32)
+IDENTIFIER "i32" (6:33-6:36)
+LEFT_BRACE (6:37-6:38)
+RETURN (7:9-7:15)
+THIS (7:16-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "value" (7:21-7:26)
+LEFT_PAREN (7:26-7:27)
+RIGHT_PAREN (7:27-7:28)
+STAR (7:29-7:30)
+INTEGER_LITERAL "2" (7:31-7:32)
+SEMICOLON (7:32-7:33)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CLASS (11:1-11:6)
+IDENTIFIER "Derived" (11:7-11:14)
+EXTENDS (11:15-11:22)
+IDENTIFIER "Base" (11:23-11:27)
+LEFT_BRACE (11:28-11:29)
+FUNC (12:5-12:9)
+IDENTIFIER "value" (12:10-12:15)
+LEFT_PAREN (12:15-12:16)
+RIGHT_PAREN (12:16-12:17)
+IDENTIFIER "i32" (12:18-12:21)
+LEFT_BRACE (12:22-12:23)
+RETURN (13:9-13:15)
+INTEGER_LITERAL "0" (13:16-13:17)
+SEMICOLON (13:17-13:18)
+RIGHT_BRACE (14:5-14:6)
+RIGHT_BRACE (15:1-15:2)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+NEW (17:7-17:10)
+IDENTIFIER "Derived" (17:11-17:18)
+LEFT_PAREN (17:18-17:19)
+RIGHT_PAREN (17:19-17:20)
+DOT (17:20-17:21)
+IDENTIFIER "doubled" (17:21-17:28)
+LEFT_PAREN (17:28-17:29)
+RIGHT_PAREN (17:29-17:30)
+RIGHT_PAREN (17:30-17:31)
+SEMICOLON (17:31-17:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:32
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 2:5-4:6
+        CONST
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:24-2:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:28-4:6
+          (ReturnStatement
+            range: 3:9-3:19
+            (LiteralExpression
+              range: 3:16-3:18
+              kind: INT
+              text: "21"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        CONST
+        (IdentifierDeclaration
+          range: 6:23-6:30
+          name: "doubled"
+        )
+        (NamedTypeNode
+          range: 6:33-6:36
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:37-8:6
+          (ReturnStatement
+            range: 7:9-7:33
+            (BinaryExpression
+              range: 7:16-7:32
+              (CallExpression
+                range: 7:16-7:28
+                (MemberExpression
+                  range: 7:16-7:26
+                  (ThisExpression
+                    range: 7:16-7:20
+                  )
+                  (IdentifierExpression
+                    range: 7:21-7:26
+                    name: "value"
+                  )
+                )
+              )
+              operator: MULTIPLY
+              (LiteralExpression
+                range: 7:31-7:32
+                kind: INT
+                text: "2"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 11:1-15:2
+    (IdentifierDeclaration
+      range: 11:7-11:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 11:23-11:27
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 12:5-14:6
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 12:5-14:6
+        (IdentifierDeclaration
+          range: 12:10-12:15
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 12:18-12:21
+          name: "i32"
+        )
+        (BlockStatement
+          range: 12:22-14:6
+          (ReturnStatement
+            range: 13:9-13:18
+            (LiteralExpression
+              range: 13:16-13:17
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:32
+    (CallExpression
+      range: 17:1-17:31
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:30
+        (MemberExpression
+          range: 17:7-17:28
+          (NewExpression
+            range: 17:7-17:20
+            (IdentifierExpression
+              range: 17:11-17:18
+              name: "Derived"
+            )
+          )
+          (IdentifierExpression
+            range: 17:21-17:28
+            name: "doubled"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:18 -> i32
+  7:16-7:20 -> Base
+  7:16-7:26 -> () => i32
+  7:16-7:28 -> i32
+  7:16-7:32 -> i32
+  7:21-7:26 -> () => i32
+  7:31-7:32 -> i32
+  11:23-11:27 -> Base
+  13:16-13:17 -> i32
+  17:1-17:6 -> (any) => void
+  17:1-17:31 -> void
+  17:7-17:20 -> Derived
+  17:7-17:28 -> () => i32
+  17:7-17:30 -> i32
+  17:11-17:18 -> Derived
+  17:21-17:28 -> () => i32
+
+Resolved types:
+  2:24-2:27 -> i32
+  6:33-6:36 -> i32
+  12:18-12:21 -> i32
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:16-2:21 -> const func value() => i32
+  6:23-6:30 -> const func doubled() => i32
+  11:7-11:14 -> class Derived
+  12:10-12:15 -> func value() => i32
+
+References:
+  7:21-7:26 -> 2:16-2:21
+  11:23-11:27 -> 1:7-1:11
+  17:1-17:6 -> builtin print
+  17:11-17:18 -> 11:7-11:14
+  17:21-17:28 -> 6:23-6:30
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    INVOKEVIRTUAL Test$Base.doubled()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PRIVATE]
+    LDC 21
+    IRETURN
+    max stack 1 max locals 1
+  method doubled()I flags [PUBLIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Base.value()I
+    LDC 2
+    IMUL
+    IRETURN
+    max stack 2 max locals 1
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PRIVATE]
+    LDC 0
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+42
+

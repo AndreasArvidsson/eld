@@ -627,9 +627,9 @@ Conversions:
 Declarations:
   1:7-1:13 -> const values: [i32]
   2:7-2:17 -> const properties: Map<string, i32>
-  4:6-4:18 -> mutateValues() => i32
-  9:6-9:22 -> mutateProperties() => i32
-  14:12-14:15 -> run() => Promise<void>
+  4:6-4:18 -> func mutateValues() => i32
+  9:6-9:22 -> func mutateProperties() => i32
+  14:12-14:15 -> func run() => Promise<void>
   15:11-15:23 -> const copiedValues: [i32]
   19:11-19:27 -> const copiedProperties: Map<string, i32>
 

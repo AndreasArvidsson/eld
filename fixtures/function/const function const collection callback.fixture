@@ -1,0 +1,344 @@
+const func sorted() i32 {
+    var values: List<i32> = [2, 1];
+    const comparator: Comparator<i32> = (left, right) => left.compareTo(right);
+    values.sort(comparator);
+    return values.get(0);
+}
+
+print(sorted());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "sorted" (1:12-1:18)
+LEFT_PAREN (1:18-1:19)
+RIGHT_PAREN (1:19-1:20)
+IDENTIFIER "i32" (1:21-1:24)
+LEFT_BRACE (1:25-1:26)
+VAR (2:5-2:8)
+IDENTIFIER "values" (2:9-2:15)
+COLON (2:15-2:16)
+IDENTIFIER "List" (2:17-2:21)
+LESS (2:21-2:22)
+IDENTIFIER "i32" (2:22-2:25)
+GREATER (2:25-2:26)
+EQUAL (2:27-2:28)
+LEFT_BRACKET (2:29-2:30)
+INTEGER_LITERAL "2" (2:30-2:31)
+COMMA (2:31-2:32)
+INTEGER_LITERAL "1" (2:33-2:34)
+RIGHT_BRACKET (2:34-2:35)
+SEMICOLON (2:35-2:36)
+CONST (3:5-3:10)
+IDENTIFIER "comparator" (3:11-3:21)
+COLON (3:21-3:22)
+IDENTIFIER "Comparator" (3:23-3:33)
+LESS (3:33-3:34)
+IDENTIFIER "i32" (3:34-3:37)
+GREATER (3:37-3:38)
+EQUAL (3:39-3:40)
+LEFT_PAREN (3:41-3:42)
+IDENTIFIER "left" (3:42-3:46)
+COMMA (3:46-3:47)
+IDENTIFIER "right" (3:48-3:53)
+RIGHT_PAREN (3:53-3:54)
+ARROW (3:55-3:57)
+IDENTIFIER "left" (3:58-3:62)
+DOT (3:62-3:63)
+IDENTIFIER "compareTo" (3:63-3:72)
+LEFT_PAREN (3:72-3:73)
+IDENTIFIER "right" (3:73-3:78)
+RIGHT_PAREN (3:78-3:79)
+SEMICOLON (3:79-3:80)
+IDENTIFIER "values" (4:5-4:11)
+DOT (4:11-4:12)
+IDENTIFIER "sort" (4:12-4:16)
+LEFT_PAREN (4:16-4:17)
+IDENTIFIER "comparator" (4:17-4:27)
+RIGHT_PAREN (4:27-4:28)
+SEMICOLON (4:28-4:29)
+RETURN (5:5-5:11)
+IDENTIFIER "values" (5:12-5:18)
+DOT (5:18-5:19)
+IDENTIFIER "get" (5:19-5:22)
+LEFT_PAREN (5:22-5:23)
+INTEGER_LITERAL "0" (5:23-5:24)
+RIGHT_PAREN (5:24-5:25)
+SEMICOLON (5:25-5:26)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "sorted" (8:7-8:13)
+LEFT_PAREN (8:13-8:14)
+RIGHT_PAREN (8:14-8:15)
+RIGHT_PAREN (8:15-8:16)
+SEMICOLON (8:16-8:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:17
+  (FunctionDeclaration
+    range: 1:1-6:2
+    CONST
+    (IdentifierDeclaration
+      range: 1:12-1:18
+      name: "sorted"
+    )
+    (NamedTypeNode
+      range: 1:21-1:24
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:25-6:2
+      (VariableDeclaration
+        range: 2:5-2:36
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:15
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 2:17-2:26
+          name: "List"
+          (NamedTypeNode
+            range: 2:22-2:25
+            name: "i32"
+          )
+        )
+        (ArrayExpression
+          range: 2:29-2:35
+          (LiteralExpression
+            range: 2:30-2:31
+            kind: INT
+            text: "2"
+          )
+          (LiteralExpression
+            range: 2:33-2:34
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 3:5-3:80
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 3:11-3:21
+          name: "comparator"
+        )
+        (NamedTypeNode
+          range: 3:23-3:38
+          name: "Comparator"
+          (NamedTypeNode
+            range: 3:34-3:37
+            name: "i32"
+          )
+        )
+        (LambdaExpression
+          range: 3:41-3:79
+          (LambdaParameter
+            range: 3:42-3:46
+            (IdentifierDeclaration
+              range: 3:42-3:46
+              name: "left"
+            )
+          )
+          (LambdaParameter
+            range: 3:48-3:53
+            (IdentifierDeclaration
+              range: 3:48-3:53
+              name: "right"
+            )
+          )
+          (CallExpression
+            range: 3:58-3:79
+            (MemberExpression
+              range: 3:58-3:72
+              (IdentifierExpression
+                range: 3:58-3:62
+                name: "left"
+              )
+              (IdentifierExpression
+                range: 3:63-3:72
+                name: "compareTo"
+              )
+            )
+            (IdentifierExpression
+              range: 3:73-3:78
+              name: "right"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 4:5-4:29
+        (CallExpression
+          range: 4:5-4:28
+          (MemberExpression
+            range: 4:5-4:16
+            (IdentifierExpression
+              range: 4:5-4:11
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 4:12-4:16
+              name: "sort"
+            )
+          )
+          (IdentifierExpression
+            range: 4:17-4:27
+            name: "comparator"
+          )
+        )
+      )
+      (ReturnStatement
+        range: 5:5-5:26
+        (CallExpression
+          range: 5:12-5:25
+          (MemberExpression
+            range: 5:12-5:22
+            (IdentifierExpression
+              range: 5:12-5:18
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 5:19-5:22
+              name: "get"
+            )
+          )
+          (LiteralExpression
+            range: 5:23-5:24
+            kind: INT
+            text: "0"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:17
+    (CallExpression
+      range: 8:1-8:16
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:15
+        (IdentifierExpression
+          range: 8:7-8:13
+          name: "sorted"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:29-2:35 -> List<i32>
+  2:30-2:31 -> i32
+  2:33-2:34 -> i32
+  3:41-3:79 -> Comparator<i32>
+  3:58-3:62 -> i32
+  3:58-3:72 -> (i32) => i32
+  3:58-3:79 -> i32
+  3:63-3:72 -> (i32) => i32
+  3:73-3:78 -> i32
+  4:5-4:11 -> List<i32>
+  4:5-4:16 -> (Comparator<i32>) => void
+  4:5-4:28 -> void
+  4:12-4:16 -> (Comparator<i32>) => void
+  4:17-4:27 -> Comparator<i32>
+  5:12-5:18 -> List<i32>
+  5:12-5:22 -> (i32) => i32
+  5:12-5:25 -> i32
+  5:19-5:22 -> (i32) => i32
+  5:23-5:24 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:16 -> void
+  8:7-8:13 -> () => i32
+  8:7-8:15 -> i32
+
+Resolved types:
+  1:21-1:24 -> i32
+  2:17-2:26 -> List<i32>
+  2:22-2:25 -> i32
+  3:23-3:38 -> Comparator<i32>
+  3:34-3:37 -> i32
+
+Declarations:
+  1:12-1:18 -> const func sorted() => i32
+  2:9-2:15 -> var values: List<i32>
+  3:11-3:21 -> const comparator: Comparator<i32>
+  3:42-3:46 -> const left: i32
+  3:48-3:53 -> const right: i32
+
+References:
+  3:58-3:62 -> 3:42-3:46
+  3:63-3:72 -> 3:58-3:72
+  3:73-3:78 -> 3:48-3:53
+  4:5-4:11 -> 2:9-2:15
+  4:12-4:16 -> 4:5-4:16
+  4:17-4:27 -> 3:11-3:21
+  5:12-5:18 -> 2:9-2:15
+  5:19-5:22 -> 5:12-5:22
+  8:1-8:6 -> builtin print
+  8:7-8:13 -> 1:12-1:18
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method $lambda0(II)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ILOAD_0 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ILOAD_1 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    IRETURN
+    max stack 2 max locals 2
+  method sorted()I flags [PUBLIC, STATIC]
+    NEW java/util/ArrayList
+    DUP
+    LDC 2
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
+    DUP
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
+    POP
+    ASTORE_0 0
+    LDC ClassOrInterfaceDesc[Comparator]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int,int)int]
+    INVOKESTATIC java/lang/invoke/MethodHandleProxies.asInterfaceInstance(Ljava/lang/Class;Ljava/lang/invoke/MethodHandle;)Ljava/lang/Object;
+    CHECKCAST java/util/Comparator
+    ASTORE_1 1
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEINTERFACE java/util/List.sort(Ljava/util/Comparator;)V
+    ALOAD_0 0
+    LDC 0
+    INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    IRETURN
+    max stack 3 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.sorted()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+1
+

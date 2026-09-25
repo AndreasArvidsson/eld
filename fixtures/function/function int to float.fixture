@@ -55,7 +55,7 @@ Conversions:
   2:12-2:13 -> i32 -> f32
 
 Declarations:
-  1:6-1:9 -> sum() => f32
+  1:6-1:9 -> func sum() => f32
 
 --- BYTECODE ---
 

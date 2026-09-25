@@ -67,8 +67,8 @@ public class FixtureTest {
         final int outputHeaderIndex = fixture.indexOf(OUTPUT_HEADER);
         final boolean assertFixture = !updateFixture;
         final String source =
-            tokenHeaderIndex < 0
-                ? fixture
+            tokenHeaderIndex == -1
+                ? fixture.stripTrailing()
                 : getContent(fixture, "", 0, tokenHeaderIndex);
         final StringBuilder actualBuilder = new StringBuilder();
         String expected = "";
@@ -81,7 +81,7 @@ public class FixtureTest {
             actualBuilder.append(TOKENS_HEADER);
             if (assertFixture) {
                 assertTrue(
-                    tokenHeaderIndex >= 0,
+                    tokenHeaderIndex > -1,
                     () -> "Missing tokens header delimiter in " + name
                 );
             }
@@ -104,7 +104,7 @@ public class FixtureTest {
             actualBuilder.append(AST_HEADER);
             if (assertFixture) {
                 assertTrue(
-                    astHeaderIndex >= 0,
+                    astHeaderIndex > -1,
                     () -> "Missing AST header delimiter in " + name
                 );
             }
@@ -127,7 +127,7 @@ public class FixtureTest {
             actualBuilder.append(SEMANTIC_HEADER);
             if (assertFixture) {
                 assertTrue(
-                    semanticHeaderIndex >= 0,
+                    semanticHeaderIndex > -1,
                     () -> "Missing semantic header delimiter in " + name
                 );
             }
@@ -151,7 +151,7 @@ public class FixtureTest {
             actualBuilder.append(BYTECODE_HEADER);
             if (assertFixture) {
                 assertTrue(
-                    bytecodeHeaderIndex >= 0,
+                    bytecodeHeaderIndex > -1,
                     () -> "Missing bytecode header delimiter in " + name
                 );
             }
@@ -184,7 +184,7 @@ public class FixtureTest {
             actualBuilder.append(OUTPUT_HEADER);
             if (assertFixture) {
                 assertTrue(
-                    outputHeaderIndex >= 0,
+                    outputHeaderIndex > -1,
                     () -> "Missing output header delimiter in " + name
                 );
             }

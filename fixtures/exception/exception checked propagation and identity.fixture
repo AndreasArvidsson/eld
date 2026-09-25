@@ -252,8 +252,8 @@ Resolved types:
 
 Declarations:
   1:7-1:15 -> const original: IOException
-  2:6-2:10 -> read() => void
-  5:6-5:13 -> forward() => void
+  2:6-2:10 -> func read() => void
+  5:6-5:13 -> func forward() => void
   10:10-10:11 -> const e: IOException
 
 References:

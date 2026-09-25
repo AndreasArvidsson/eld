@@ -1,0 +1,229 @@
+const func double(value: i32) i32 {
+    return value * 2;
+}
+
+const operation = double;
+
+const func calculate() i32 {
+    return operation(21);
+}
+
+print(calculate());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+FUNC (1:7-1:11)
+IDENTIFIER "double" (1:12-1:18)
+LEFT_PAREN (1:18-1:19)
+IDENTIFIER "value" (1:19-1:24)
+COLON (1:24-1:25)
+IDENTIFIER "i32" (1:26-1:29)
+RIGHT_PAREN (1:29-1:30)
+IDENTIFIER "i32" (1:31-1:34)
+LEFT_BRACE (1:35-1:36)
+RETURN (2:5-2:11)
+IDENTIFIER "value" (2:12-2:17)
+STAR (2:18-2:19)
+INTEGER_LITERAL "2" (2:20-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "operation" (5:7-5:16)
+EQUAL (5:17-5:18)
+IDENTIFIER "double" (5:19-5:25)
+SEMICOLON (5:25-5:26)
+CONST (7:1-7:6)
+FUNC (7:7-7:11)
+IDENTIFIER "calculate" (7:12-7:21)
+LEFT_PAREN (7:21-7:22)
+RIGHT_PAREN (7:22-7:23)
+IDENTIFIER "i32" (7:24-7:27)
+LEFT_BRACE (7:28-7:29)
+RETURN (8:5-8:11)
+IDENTIFIER "operation" (8:12-8:21)
+LEFT_PAREN (8:21-8:22)
+INTEGER_LITERAL "21" (8:22-8:24)
+RIGHT_PAREN (8:24-8:25)
+SEMICOLON (8:25-8:26)
+RIGHT_BRACE (9:1-9:2)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "calculate" (11:7-11:16)
+LEFT_PAREN (11:16-11:17)
+RIGHT_PAREN (11:17-11:18)
+RIGHT_PAREN (11:18-11:19)
+SEMICOLON (11:19-11:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:20
+  (FunctionDeclaration
+    range: 1:1-3:2
+    CONST
+    (IdentifierDeclaration
+      range: 1:12-1:18
+      name: "double"
+    )
+    (FunctionParameter
+      range: 1:19-1:29
+      (IdentifierDeclaration
+        range: 1:19-1:24
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:26-1:29
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:31-1:34
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:35-3:2
+      (ReturnStatement
+        range: 2:5-2:22
+        (BinaryExpression
+          range: 2:12-2:21
+          (IdentifierExpression
+            range: 2:12-2:17
+            name: "value"
+          )
+          operator: MULTIPLY
+          (LiteralExpression
+            range: 2:20-2:21
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:16
+      name: "operation"
+    )
+    type: null
+    (IdentifierExpression
+      range: 5:19-5:25
+      name: "double"
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-9:2
+    CONST
+    (IdentifierDeclaration
+      range: 7:12-7:21
+      name: "calculate"
+    )
+    (NamedTypeNode
+      range: 7:24-7:27
+      name: "i32"
+    )
+    (BlockStatement
+      range: 7:28-9:2
+      (ReturnStatement
+        range: 8:5-8:26
+        (CallExpression
+          range: 8:12-8:25
+          (IdentifierExpression
+            range: 8:12-8:21
+            name: "operation"
+          )
+          (LiteralExpression
+            range: 8:22-8:24
+            kind: INT
+            text: "21"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:20
+    (CallExpression
+      range: 11:1-11:19
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:18
+        (IdentifierExpression
+          range: 11:7-11:16
+          name: "calculate"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:17 -> i32
+  2:12-2:21 -> i32
+  2:20-2:21 -> i32
+  5:19-5:25 -> (i32) => i32
+  8:12-8:21 -> (i32) => i32
+  8:12-8:25 -> i32
+  8:22-8:24 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:19 -> void
+  11:7-11:16 -> () => i32
+  11:7-11:18 -> i32
+
+Resolved types:
+  1:26-1:29 -> i32
+  1:31-1:34 -> i32
+  7:24-7:27 -> i32
+
+Declarations:
+  1:12-1:18 -> const func double(i32) => i32
+  1:19-1:24 -> const value: i32
+  5:7-5:16 -> const operation: const (i32) => i32
+  7:12-7:21 -> const func calculate() => i32
+
+References:
+  2:12-2:17 -> 1:19-1:24
+  5:19-5:25 -> 1:12-1:18
+  8:12-8:21 -> 5:7-5:16
+  11:1-11:6 -> builtin print
+  11:7-11:16 -> 7:12-7:21
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field operation Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method double(I)I flags [PUBLIC, STATIC]
+    ILOAD_0 0
+    LDC 2
+    IMUL
+    IRETURN
+    max stack 2 max locals 1
+  method calculate()I flags [PUBLIC, STATIC]
+    GETSTATIC Test.operation Ljava/lang/invoke/MethodHandle;
+    LDC 21
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)I
+    IRETURN
+    max stack 2 max locals 0
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::double(int)int]
+    PUTSTATIC Test.operation Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.calculate()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+42
+

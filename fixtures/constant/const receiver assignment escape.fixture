@@ -1,0 +1,232 @@
+class Foo {
+    public var value = 0;
+
+    public func expose() Foo {
+        var result = new Foo();
+        result = this;
+        return result;
+    }
+}
+
+const foo: const Foo = new Foo();
+const exposed = foo.expose();
+exposed.value = 1;
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "0" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+PUBLIC (4:5-4:11)
+FUNC (4:12-4:16)
+IDENTIFIER "expose" (4:17-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+IDENTIFIER "Foo" (4:26-4:29)
+LEFT_BRACE (4:30-4:31)
+VAR (5:9-5:12)
+IDENTIFIER "result" (5:13-5:19)
+EQUAL (5:20-5:21)
+NEW (5:22-5:25)
+IDENTIFIER "Foo" (5:26-5:29)
+LEFT_PAREN (5:29-5:30)
+RIGHT_PAREN (5:30-5:31)
+SEMICOLON (5:31-5:32)
+IDENTIFIER "result" (6:9-6:15)
+EQUAL (6:16-6:17)
+THIS (6:18-6:22)
+SEMICOLON (6:22-6:23)
+RETURN (7:9-7:15)
+IDENTIFIER "result" (7:16-7:22)
+SEMICOLON (7:22-7:23)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (11:1-11:6)
+IDENTIFIER "foo" (11:7-11:10)
+COLON (11:10-11:11)
+CONST (11:12-11:17)
+IDENTIFIER "Foo" (11:18-11:21)
+EQUAL (11:22-11:23)
+NEW (11:24-11:27)
+IDENTIFIER "Foo" (11:28-11:31)
+LEFT_PAREN (11:31-11:32)
+RIGHT_PAREN (11:32-11:33)
+SEMICOLON (11:33-11:34)
+CONST (12:1-12:6)
+IDENTIFIER "exposed" (12:7-12:14)
+EQUAL (12:15-12:16)
+IDENTIFIER "foo" (12:17-12:20)
+DOT (12:20-12:21)
+IDENTIFIER "expose" (12:21-12:27)
+LEFT_PAREN (12:27-12:28)
+RIGHT_PAREN (12:28-12:29)
+SEMICOLON (12:29-12:30)
+IDENTIFIER "exposed" (13:1-13:8)
+DOT (13:8-13:9)
+IDENTIFIER "value" (13:9-13:14)
+EQUAL (13:15-13:16)
+INTEGER_LITERAL "1" (13:17-13:18)
+SEMICOLON (13:18-13:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:19
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-8:6
+        (IdentifierDeclaration
+          range: 4:17-4:23
+          name: "expose"
+        )
+        (NamedTypeNode
+          range: 4:26-4:29
+          name: "Foo"
+        )
+        (BlockStatement
+          range: 4:30-8:6
+          (VariableDeclaration
+            range: 5:9-5:32
+            mutability: VAR
+            (IdentifierDeclaration
+              range: 5:13-5:19
+              name: "result"
+            )
+            type: null
+            (NewExpression
+              range: 5:22-5:31
+              (IdentifierExpression
+                range: 5:26-5:29
+                name: "Foo"
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 6:9-6:23
+            (AssignmentExpression
+              range: 6:9-6:22
+              (IdentifierExpression
+                range: 6:9-6:15
+                name: "result"
+              )
+              (ThisExpression
+                range: 6:18-6:22
+              )
+            )
+          )
+          (ReturnStatement
+            range: 7:9-7:23
+            (IdentifierExpression
+              range: 7:16-7:22
+              name: "result"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:10
+      name: "foo"
+    )
+    (ConstTypeNode
+      range: 11:12-11:21
+      (NamedTypeNode
+        range: 11:18-11:21
+        name: "Foo"
+      )
+    )
+    (NewExpression
+      range: 11:24-11:33
+      (IdentifierExpression
+        range: 11:28-11:31
+        name: "Foo"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:14
+      name: "exposed"
+    )
+    type: null
+    (CallExpression
+      range: 12:17-12:29
+      (MemberExpression
+        range: 12:17-12:27
+        (IdentifierExpression
+          range: 12:17-12:20
+          name: "foo"
+        )
+        (IdentifierExpression
+          range: 12:21-12:27
+          name: "expose"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:19
+    (AssignmentExpression
+      range: 13:1-13:18
+      (MemberExpression
+        range: 13:1-13:14
+        (IdentifierExpression
+          range: 13:1-13:8
+          name: "exposed"
+        )
+        (IdentifierExpression
+          range: 13:9-13:14
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 13:17-13:18
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot call mutating method 'expose' through a const object at 12:17-12:27

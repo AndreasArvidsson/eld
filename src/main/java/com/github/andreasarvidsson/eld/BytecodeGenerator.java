@@ -575,7 +575,8 @@ public final class BytecodeGenerator {
                         method.parameters(),
                         globals,
                         new InstanceContext(owner, new IdentityHashMap<>()),
-                        Visibility.PUBLIC
+                        Visibility.PUBLIC,
+                        false
                     );
                 }
             }
@@ -1166,7 +1167,8 @@ public final class BytecodeGenerator {
                     semanticModel.getConstructorVisibility(
                         (ClassType) semanticModel.getSymbol(declaration.name())
                             .type()
-                    )
+                    ),
+                    false
                 );
             }
             for (final MemberDeclaration memberDeclaration : declaration
@@ -1565,7 +1567,8 @@ public final class BytecodeGenerator {
                 instance,
                 instance == null
                     ? Visibility.PUBLIC
-                    : semanticModel.getMemberVisibility(symbol)
+                    : semanticModel.getMemberVisibility(symbol),
+                function.finalMethod()
             );
             return;
         }
@@ -1575,7 +1578,8 @@ public final class BytecodeGenerator {
                 instance == null
                     ? Visibility.PUBLIC
                     : semanticModel.getMemberVisibility(symbol)
-            ) | (instance == null ? ACC_STATIC : 0),
+            ) | (instance == null ? ACC_STATIC : 0)
+                | (function.finalMethod() ? ACC_FINAL : 0),
             methodName(symbol),
             methodDescriptor(symbol.type()),
             methodSignature(symbol.type()),
@@ -1604,7 +1608,8 @@ public final class BytecodeGenerator {
             instance,
             instance == null
                 ? Visibility.PUBLIC
-                : semanticModel.getMemberVisibility(symbol)
+                : semanticModel.getMemberVisibility(symbol),
+            function.finalMethod()
         );
     }
 
@@ -1668,7 +1673,7 @@ public final class BytecodeGenerator {
                 instance == null
                     ? Visibility.PUBLIC
                     : semanticModel.getMemberVisibility(symbol)
-            ) | staticFlag,
+            ) | staticFlag | (function.finalMethod() ? ACC_FINAL : 0),
             methodName(symbol),
             methodDescriptor(symbol.type()),
             methodSignature(symbol.type()),
@@ -1864,7 +1869,8 @@ public final class BytecodeGenerator {
                 instance == null
                     ? Visibility.PUBLIC
                     : semanticModel.getMemberVisibility(symbol)
-            ) | (instance == null ? ACC_STATIC : 0),
+            ) | (instance == null ? ACC_STATIC : 0)
+                | (function.finalMethod() ? ACC_FINAL : 0),
             methodName(symbol),
             methodDescriptor(symbol.type()),
             methodSignature(symbol.type()),
@@ -2242,7 +2248,8 @@ public final class BytecodeGenerator {
         final List<FunctionParameter> parameters,
         final IdentityHashMap<Symbol, String> globals,
         final @Nullable InstanceContext instance,
-        final Visibility visibility
+        final Visibility visibility,
+        final boolean finalMethod
     ) {
         if (parameters.stream().noneMatch(FunctionParameter::omittable)) {
             return;
@@ -2250,7 +2257,8 @@ public final class BytecodeGenerator {
         generateMethod(
             writer,
             visibilityAccess(visibility) | ACC_SYNTHETIC
-                | (instance == null ? ACC_STATIC : 0),
+                | (instance == null ? ACC_STATIC : 0)
+                | (finalMethod ? ACC_FINAL : 0),
             name,
             defaultDescriptor(type),
             null,

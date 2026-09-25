@@ -394,7 +394,7 @@ Declarations:
   1:5-1:10 -> var count: i32
   2:7-2:17 -> const expression: () => i32
   3:7-3:13 -> const action: () => void
-  4:6-4:9 -> run() => void
+  4:6-4:9 -> func run() => void
   5:9-5:14 -> var value: i32
   6:11-6:15 -> const next: () => i32
   7:11-7:15 -> const read: () => i32

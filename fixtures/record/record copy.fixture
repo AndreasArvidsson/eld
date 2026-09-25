@@ -867,19 +867,19 @@ Conversions:
 Declarations:
   1:1-5:2 -> constructor(name: string, value: i32)
   1:8-1:15 -> class Options
-  1:8-1:15 -> copy(string, i32) => Options
-  1:8-1:15 -> toString() => string
+  1:8-1:15 -> func copy(string, i32) => Options
+  1:8-1:15 -> func toString() => string
   1:16-1:20 -> const name: string
   1:16-1:20 -> const name: string
   1:16-1:20 -> const name: string
   1:30-1:35 -> const value: i32
   1:30-1:35 -> const value: i32
   1:30-1:35 -> const value: i32
-  2:17-2:22 -> label() => string
+  2:17-2:22 -> func label() => string
   6:1-6:65 -> constructor(total: i64, ratio: f64, note: string | null)
   6:8-6:19 -> class Measurement
-  6:8-6:19 -> copy(i64, f64, string | null) => Measurement
-  6:8-6:19 -> toString() => string
+  6:8-6:19 -> func copy(i64, f64, string | null) => Measurement
+  6:8-6:19 -> func toString() => string
   6:20-6:25 -> const total: i64
   6:20-6:25 -> const total: i64
   6:20-6:25 -> const total: i64

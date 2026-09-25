@@ -262,8 +262,8 @@ Resolved types:
   10:16-10:40 -> IOException
 
 Declarations:
-  1:6-1:14 -> floating() => f64
-  8:6-8:12 -> object() => IOException
+  1:6-1:14 -> func floating() => f64
+  8:6-8:12 -> func object() => IOException
 
 References:
   5:9-5:14 -> builtin print

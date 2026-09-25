@@ -281,10 +281,10 @@ Resolved types:
 
 Declarations:
   1:5-1:10 -> var calls: i32
-  3:6-3:10 -> next() => i32
-  8:6-8:13 -> consume([i32]) => void
+  3:6-3:10 -> func next() => i32
+  8:6-8:13 -> func consume([i32]) => void
   8:14-8:20 -> const values: [i32]
-  12:12-12:15 -> run() => Promise<void>
+  12:12-12:15 -> func run() => Promise<void>
 
 References:
   4:5-4:10 -> 1:5-1:10

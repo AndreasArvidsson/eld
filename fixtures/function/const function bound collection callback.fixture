@@ -1,0 +1,247 @@
+var calls = 0;
+const comparator: Comparator<i32> = (left, right) => {
+    calls++;
+    return left.compareTo(right);
+};
+
+const func sorted() {
+    var values: List<i32> = [2, 1];
+    const sort = values.sort;
+    sort(comparator);
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "calls" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+CONST (2:1-2:6)
+IDENTIFIER "comparator" (2:7-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "Comparator" (2:19-2:29)
+LESS (2:29-2:30)
+IDENTIFIER "i32" (2:30-2:33)
+GREATER (2:33-2:34)
+EQUAL (2:35-2:36)
+LEFT_PAREN (2:37-2:38)
+IDENTIFIER "left" (2:38-2:42)
+COMMA (2:42-2:43)
+IDENTIFIER "right" (2:44-2:49)
+RIGHT_PAREN (2:49-2:50)
+ARROW (2:51-2:53)
+LEFT_BRACE (2:54-2:55)
+IDENTIFIER "calls" (3:5-3:10)
+PLUS_PLUS (3:10-3:12)
+SEMICOLON (3:12-3:13)
+RETURN (4:5-4:11)
+IDENTIFIER "left" (4:12-4:16)
+DOT (4:16-4:17)
+IDENTIFIER "compareTo" (4:17-4:26)
+LEFT_PAREN (4:26-4:27)
+IDENTIFIER "right" (4:27-4:32)
+RIGHT_PAREN (4:32-4:33)
+SEMICOLON (4:33-4:34)
+RIGHT_BRACE (5:1-5:2)
+SEMICOLON (5:2-5:3)
+CONST (7:1-7:6)
+FUNC (7:7-7:11)
+IDENTIFIER "sorted" (7:12-7:18)
+LEFT_PAREN (7:18-7:19)
+RIGHT_PAREN (7:19-7:20)
+LEFT_BRACE (7:21-7:22)
+VAR (8:5-8:8)
+IDENTIFIER "values" (8:9-8:15)
+COLON (8:15-8:16)
+IDENTIFIER "List" (8:17-8:21)
+LESS (8:21-8:22)
+IDENTIFIER "i32" (8:22-8:25)
+GREATER (8:25-8:26)
+EQUAL (8:27-8:28)
+LEFT_BRACKET (8:29-8:30)
+INTEGER_LITERAL "2" (8:30-8:31)
+COMMA (8:31-8:32)
+INTEGER_LITERAL "1" (8:33-8:34)
+RIGHT_BRACKET (8:34-8:35)
+SEMICOLON (8:35-8:36)
+CONST (9:5-9:10)
+IDENTIFIER "sort" (9:11-9:15)
+EQUAL (9:16-9:17)
+IDENTIFIER "values" (9:18-9:24)
+DOT (9:24-9:25)
+IDENTIFIER "sort" (9:25-9:29)
+SEMICOLON (9:29-9:30)
+IDENTIFIER "sort" (10:5-10:9)
+LEFT_PAREN (10:9-10:10)
+IDENTIFIER "comparator" (10:10-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "calls"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-5:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:17
+      name: "comparator"
+    )
+    (NamedTypeNode
+      range: 2:19-2:34
+      name: "Comparator"
+      (NamedTypeNode
+        range: 2:30-2:33
+        name: "i32"
+      )
+    )
+    (LambdaExpression
+      range: 2:37-5:2
+      (LambdaParameter
+        range: 2:38-2:42
+        (IdentifierDeclaration
+          range: 2:38-2:42
+          name: "left"
+        )
+      )
+      (LambdaParameter
+        range: 2:44-2:49
+        (IdentifierDeclaration
+          range: 2:44-2:49
+          name: "right"
+        )
+      )
+      (BlockStatement
+        range: 2:54-5:2
+        (ExpressionStatement
+          range: 3:5-3:13
+          (PostfixExpression
+            range: 3:5-3:12
+            (IdentifierExpression
+              range: 3:5-3:10
+              name: "calls"
+            )
+            operator: INCREMENT
+          )
+        )
+        (ReturnStatement
+          range: 4:5-4:34
+          (CallExpression
+            range: 4:12-4:33
+            (MemberExpression
+              range: 4:12-4:26
+              (IdentifierExpression
+                range: 4:12-4:16
+                name: "left"
+              )
+              (IdentifierExpression
+                range: 4:17-4:26
+                name: "compareTo"
+              )
+            )
+            (IdentifierExpression
+              range: 4:27-4:32
+              name: "right"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-11:2
+    CONST
+    (IdentifierDeclaration
+      range: 7:12-7:18
+      name: "sorted"
+    )
+    returnType: null
+    (BlockStatement
+      range: 7:21-11:2
+      (VariableDeclaration
+        range: 8:5-8:36
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 8:9-8:15
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 8:17-8:26
+          name: "List"
+          (NamedTypeNode
+            range: 8:22-8:25
+            name: "i32"
+          )
+        )
+        (ArrayExpression
+          range: 8:29-8:35
+          (LiteralExpression
+            range: 8:30-8:31
+            kind: INT
+            text: "2"
+          )
+          (LiteralExpression
+            range: 8:33-8:34
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 9:5-9:30
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 9:11-9:15
+          name: "sort"
+        )
+        type: null
+        (MemberExpression
+          range: 9:18-9:29
+          (IdentifierExpression
+            range: 9:18-9:24
+            name: "values"
+          )
+          (IdentifierExpression
+            range: 9:25-9:29
+            name: "sort"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 10:5-10:22
+        (CallExpression
+          range: 10:5-10:21
+          (IdentifierExpression
+            range: 10:5-10:9
+            name: "sort"
+          )
+          (IdentifierExpression
+            range: 10:10-10:20
+            name: "comparator"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'sorted' cannot pass a non-const callback to 'sort' at 10:10-10:20

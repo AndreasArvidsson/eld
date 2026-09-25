@@ -406,7 +406,7 @@ Declarations:
   3:15-5:6 -> constructor(value: i64, extra: i64)
   3:27-3:32 -> const value: i64
   3:39-3:44 -> const extra: i64
-  6:17-6:21 -> read() => i64
+  6:17-6:21 -> func read() => i64
   10:7-10:12 -> class Child
   11:12-13:6 -> constructor(value: i32)
   11:24-11:29 -> const value: i32

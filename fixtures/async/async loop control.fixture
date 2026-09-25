@@ -812,7 +812,7 @@ Expression types:
   42:8-42:13 -> Promise<void>
 
 Declarations:
-  1:12-1:15 -> run() => Promise<void>
+  1:12-1:15 -> func run() => Promise<void>
   2:9-2:14 -> var value: i32
   8:9-8:12 -> var sum: i32
   9:14-9:19 -> var index: i32

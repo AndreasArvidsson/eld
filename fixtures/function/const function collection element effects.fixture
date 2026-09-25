@@ -1,0 +1,215 @@
+var comparisons = 0;
+
+class Value {
+    public func equals(other: any) bool {
+        comparisons++;
+        return false;
+    }
+}
+
+const func contains(values: List<Value>, value: Value) bool {
+    return values.contains(value);
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "comparisons" (1:5-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "0" (1:19-1:20)
+SEMICOLON (1:20-1:21)
+CLASS (3:1-3:6)
+IDENTIFIER "Value" (3:7-3:12)
+LEFT_BRACE (3:13-3:14)
+PUBLIC (4:5-4:11)
+FUNC (4:12-4:16)
+IDENTIFIER "equals" (4:17-4:23)
+LEFT_PAREN (4:23-4:24)
+IDENTIFIER "other" (4:24-4:29)
+COLON (4:29-4:30)
+IDENTIFIER "any" (4:31-4:34)
+RIGHT_PAREN (4:34-4:35)
+IDENTIFIER "bool" (4:36-4:40)
+LEFT_BRACE (4:41-4:42)
+IDENTIFIER "comparisons" (5:9-5:20)
+PLUS_PLUS (5:20-5:22)
+SEMICOLON (5:22-5:23)
+RETURN (6:9-6:15)
+BOOLEAN_LITERAL "false" (6:16-6:21)
+SEMICOLON (6:21-6:22)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+CONST (10:1-10:6)
+FUNC (10:7-10:11)
+IDENTIFIER "contains" (10:12-10:20)
+LEFT_PAREN (10:20-10:21)
+IDENTIFIER "values" (10:21-10:27)
+COLON (10:27-10:28)
+IDENTIFIER "List" (10:29-10:33)
+LESS (10:33-10:34)
+IDENTIFIER "Value" (10:34-10:39)
+GREATER (10:39-10:40)
+COMMA (10:40-10:41)
+IDENTIFIER "value" (10:42-10:47)
+COLON (10:47-10:48)
+IDENTIFIER "Value" (10:49-10:54)
+RIGHT_PAREN (10:54-10:55)
+IDENTIFIER "bool" (10:56-10:60)
+LEFT_BRACE (10:61-10:62)
+RETURN (11:5-11:11)
+IDENTIFIER "values" (11:12-11:18)
+DOT (11:18-11:19)
+IDENTIFIER "contains" (11:19-11:27)
+LEFT_PAREN (11:27-11:28)
+IDENTIFIER "value" (11:28-11:33)
+RIGHT_PAREN (11:33-11:34)
+SEMICOLON (11:34-11:35)
+RIGHT_BRACE (12:1-12:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:2
+  (VariableDeclaration
+    range: 1:1-1:21
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:16
+      name: "comparisons"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:19-1:20
+      kind: INT
+      text: "0"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-8:2
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 4:5-7:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-7:6
+        (IdentifierDeclaration
+          range: 4:17-4:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 4:24-4:34
+          (IdentifierDeclaration
+            range: 4:24-4:29
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 4:31-4:34
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 4:36-4:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 4:41-7:6
+          (ExpressionStatement
+            range: 5:9-5:23
+            (PostfixExpression
+              range: 5:9-5:22
+              (IdentifierExpression
+                range: 5:9-5:20
+                name: "comparisons"
+              )
+              operator: INCREMENT
+            )
+          )
+          (ReturnStatement
+            range: 6:9-6:22
+            (LiteralExpression
+              range: 6:16-6:21
+              kind: BOOL
+              text: "false"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 10:1-12:2
+    CONST
+    (IdentifierDeclaration
+      range: 10:12-10:20
+      name: "contains"
+    )
+    (FunctionParameter
+      range: 10:21-10:40
+      (IdentifierDeclaration
+        range: 10:21-10:27
+        name: "values"
+      )
+      (NamedTypeNode
+        range: 10:29-10:40
+        name: "List"
+        (NamedTypeNode
+          range: 10:34-10:39
+          name: "Value"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 10:42-10:54
+      (IdentifierDeclaration
+        range: 10:42-10:47
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 10:49-10:54
+        name: "Value"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 10:56-10:60
+      name: "bool"
+    )
+    (BlockStatement
+      range: 10:61-12:2
+      (ReturnStatement
+        range: 11:5-11:35
+        (CallExpression
+          range: 11:12-11:34
+          (MemberExpression
+            range: 11:12-11:27
+            (IdentifierExpression
+              range: 11:12-11:18
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 11:19-11:27
+              name: "contains"
+            )
+          )
+          (IdentifierExpression
+            range: 11:28-11:33
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'contains' cannot call collection method 'contains' because it may invoke non-const element behavior at 11:12-11:27

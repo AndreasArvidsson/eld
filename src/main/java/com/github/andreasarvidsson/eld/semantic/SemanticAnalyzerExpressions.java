@@ -57,6 +57,8 @@ public final class SemanticAnalyzerExpressions {
         Set.of(
             "add",
             "addAll",
+            "addFirst",
+            "addLast",
             "clear",
             "compute",
             "computeIfAbsent",
@@ -72,7 +74,9 @@ public final class SemanticAnalyzerExpressions {
             "push",
             "put",
             "putAll",
+            "putFirst",
             "putIfAbsent",
+            "putLast",
             "remove",
             "removeAll",
             "removeFirst",
@@ -820,7 +824,7 @@ public final class SemanticAnalyzerExpressions {
         return type;
     }
 
-    private static boolean mutatesCollection(
+    static boolean mutatesCollection(
         final InterfaceType target,
         final Method method
     ) {
@@ -1035,6 +1039,7 @@ public final class SemanticAnalyzerExpressions {
                     target != null ? target.returnType() : BuiltinType.ANY
                 )
             );
+        model.setLambdaFunction(lambda, symbol);
         final SemanticContext lambdaContext =
             new SemanticContext(scope, symbol, 0);
         final Type returnType;

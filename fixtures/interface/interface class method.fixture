@@ -234,10 +234,10 @@ Resolved types:
 
 Declarations:
   1:11-1:19 -> interface Greeting
-  2:10-2:18 -> greeting() => string
+  2:10-2:18 -> func greeting() => string
   4:7-4:13 -> class Person
   5:18-5:22 -> const name: string
-  6:17-6:25 -> greeting() => string
+  6:17-6:25 -> func greeting() => string
   10:7-10:13 -> const person: Greeting
 
 References:

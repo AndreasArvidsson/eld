@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectMember;
 import com.github.andreasarvidsson.eld.parser.ObjectEntry;
@@ -64,6 +66,18 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, FunctionDeclaration> functionDeclarations =
         new IdentityHashMap<>();
+    private final IdentityHashMap<VariableSymbol, FunctionSymbol> variableOwners =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<VariableSymbol, ClassType> constructorVariableOwners =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<VariableSymbol, Expression> variableInitializers =
+        new IdentityHashMap<>();
+    private final Set<VariableSymbol> constantCallableVariables =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+    private final IdentityHashMap<LambdaExpression, FunctionSymbol> lambdaFunctions =
+        new IdentityHashMap<>();
+    private final Map<ClassType, ClassDeclaration> classDeclarations =
+        new HashMap<>();
     private final IdentityHashMap<IdentifierDeclaration, IdentifierDeclaration> namedArguments =
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
@@ -120,6 +134,87 @@ public final class SemanticModel {
         final FunctionSymbol function
     ) {
         return functionDeclarations.get(function);
+    }
+
+    public Map<FunctionSymbol, FunctionDeclaration> getFunctionDeclarations() {
+        return Collections.unmodifiableMap(functionDeclarations);
+    }
+
+    public void setVariableOwner(
+        final VariableSymbol variable,
+        final @Nullable FunctionSymbol function
+    ) {
+        if (function != null) {
+            variableOwners.put(variable, function);
+        }
+    }
+
+    public @Nullable FunctionSymbol findVariableOwner(
+        final VariableSymbol variable
+    ) {
+        return variableOwners.get(variable);
+    }
+
+    public void setConstructorVariableOwner(
+        final VariableSymbol variable,
+        final ClassType owner
+    ) {
+        constructorVariableOwners.put(variable, owner);
+    }
+
+    public @Nullable ClassType findConstructorVariableOwner(
+        final VariableSymbol variable
+    ) {
+        return constructorVariableOwners.get(variable);
+    }
+
+    public void setVariableInitializer(
+        final VariableSymbol variable,
+        final Expression initializer
+    ) {
+        variableInitializers.put(variable, initializer);
+    }
+
+    public @Nullable Expression findVariableInitializer(
+        final VariableSymbol variable
+    ) {
+        return variableInitializers.get(variable);
+    }
+
+    public Map<VariableSymbol, Expression> getVariableInitializers() {
+        return Collections.unmodifiableMap(variableInitializers);
+    }
+
+    public void setConstantCallable(final VariableSymbol variable) {
+        constantCallableVariables.add(variable);
+    }
+
+    public boolean isConstantCallable(final VariableSymbol variable) {
+        return constantCallableVariables.contains(variable);
+    }
+
+    public void setClassDeclaration(
+        final ClassType type,
+        final ClassDeclaration declaration
+    ) {
+        classDeclarations.put(type, declaration);
+    }
+
+    public @Nullable ClassDeclaration findClassDeclaration(
+        final ClassType type
+    ) {
+        return classDeclarations.get(type);
+    }
+
+    public void setLambdaFunction(
+        final LambdaExpression lambda,
+        final FunctionSymbol function
+    ) {
+        lambdaFunctions.put(lambda, function);
+    }
+
+    public FunctionSymbol getLambdaFunction(final LambdaExpression lambda) {
+        return Objects.requireNonNull(lambdaFunctions.get(lambda));
     }
 
     public void setPromiseMethod(
@@ -642,7 +737,12 @@ public final class SemanticModel {
             conversionTypes,
             (expression, type) -> expressionTypes.get(expression) + ARROW + type
         );
-        appendSection(lines, "Declarations:", declarations);
+        appendSection(
+            lines,
+            "Declarations:",
+            declarations,
+            (declaration, symbol) -> formatDeclaration(symbol)
+        );
         appendSection(
             lines,
             "References:",
@@ -658,6 +758,36 @@ public final class SemanticModel {
             (argument, parameter) -> "parameter " + parameter.range()
         );
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
+    }
+
+    private String formatDeclaration(final Symbol symbol) {
+        if (symbol instanceof FunctionSymbol function) {
+            final FunctionDeclaration declaration =
+                functionDeclarations.get(function);
+            final String modifiers =
+                declaration == null
+                    ? ""
+                    : declaration.modifiers()
+                        .stream()
+                        .map(
+                            modifier -> modifier.toString()
+                                .toLowerCase(Locale.ROOT)
+                        )
+                        .collect(Collectors.joining(" "));
+            final String prefix = modifiers.isEmpty() ? "" : modifiers + " ";
+            return prefix + "func " + symbol;
+        }
+        if (
+            symbol instanceof VariableSymbol variable
+                && isConstantCallable(variable)
+        ) {
+            return "%s %s: const %s".formatted(
+                variable.mutability().toString().toLowerCase(Locale.ROOT),
+                variable.name(),
+                variable.type()
+            );
+        }
+        return symbol.toString();
     }
 
     private static void appendSection(

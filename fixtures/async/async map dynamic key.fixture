@@ -275,8 +275,8 @@ Resolved types:
 
 Declarations:
   1:5-1:10 -> var calls: i32
-  3:6-3:10 -> next() => i32
-  8:12-8:15 -> run() => Promise<void>
+  3:6-3:10 -> func next() => i32
+  8:12-8:15 -> func run() => Promise<void>
   9:11-9:17 -> const values: Map<string, i32>
 
 References:

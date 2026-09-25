@@ -463,10 +463,10 @@ Declarations:
   2:19-2:24 -> var value: i32
   3:15-5:6 -> constructor(value: i32)
   3:27-3:32 -> const value: i32
-  6:17-6:21 -> read() => i32
+  6:17-6:21 -> func read() => i32
   10:7-10:12 -> class Child
-  11:17-11:21 -> read() => i32
-  14:17-14:26 -> reference() => () => i32
+  11:17-11:21 -> func read() => i32
+  14:17-14:26 -> func reference() => () => i32
   18:7-18:15 -> const instance: Base
 
 References:

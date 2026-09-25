@@ -207,12 +207,12 @@ Resolved types:
 Declarations:
   1:1-5:2 -> constructor(name: string)
   1:8-1:11 -> class Foo
-  1:8-1:11 -> copy(string) => Foo
-  1:8-1:11 -> toString() => string
+  1:8-1:11 -> func copy(string) => Foo
+  1:8-1:11 -> func toString() => string
   1:12-1:16 -> const name: string
   1:12-1:16 -> const name: string
   1:12-1:16 -> const name: string
-  2:17-2:22 -> value() => i32
+  2:17-2:22 -> func value() => i32
   7:7-7:10 -> const foo: Foo
 
 References:

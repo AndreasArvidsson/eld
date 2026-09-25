@@ -1,0 +1,86 @@
+var value = 0;
+
+const func mutate() {
+    value++;
+}
+
+mutate();
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+CONST (3:1-3:6)
+FUNC (3:7-3:11)
+IDENTIFIER "mutate" (3:12-3:18)
+LEFT_PAREN (3:18-3:19)
+RIGHT_PAREN (3:19-3:20)
+LEFT_BRACE (3:21-3:22)
+IDENTIFIER "value" (4:5-4:10)
+PLUS_PLUS (4:10-4:12)
+SEMICOLON (4:12-4:13)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "mutate" (7:1-7:7)
+LEFT_PAREN (7:7-7:8)
+RIGHT_PAREN (7:8-7:9)
+SEMICOLON (7:9-7:10)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:10
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (FunctionDeclaration
+    range: 3:1-5:2
+    CONST
+    (IdentifierDeclaration
+      range: 3:12-3:18
+      name: "mutate"
+    )
+    returnType: null
+    (BlockStatement
+      range: 3:21-5:2
+      (ExpressionStatement
+        range: 4:5-4:13
+        (PostfixExpression
+          range: 4:5-4:12
+          (IdentifierExpression
+            range: 4:5-4:10
+            name: "value"
+          )
+          operator: INCREMENT
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:10
+    (CallExpression
+      range: 7:1-7:9
+      (IdentifierExpression
+        range: 7:1-7:7
+        name: "mutate"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'mutate' cannot modify non-local data at 4:5-4:10

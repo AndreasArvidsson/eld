@@ -1,0 +1,286 @@
+class Value {
+    const factor = 2;
+
+    public const final func double(value: i32 = 21) i32 {
+        var result = value * this.factor;
+        return result;
+    }
+}
+
+print(new Value().double());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+CONST (2:5-2:10)
+IDENTIFIER "factor" (2:11-2:17)
+EQUAL (2:18-2:19)
+INTEGER_LITERAL "2" (2:20-2:21)
+SEMICOLON (2:21-2:22)
+PUBLIC (4:5-4:11)
+CONST (4:12-4:17)
+FINAL (4:18-4:23)
+FUNC (4:24-4:28)
+IDENTIFIER "double" (4:29-4:35)
+LEFT_PAREN (4:35-4:36)
+IDENTIFIER "value" (4:36-4:41)
+COLON (4:41-4:42)
+IDENTIFIER "i32" (4:43-4:46)
+EQUAL (4:47-4:48)
+INTEGER_LITERAL "21" (4:49-4:51)
+RIGHT_PAREN (4:51-4:52)
+IDENTIFIER "i32" (4:53-4:56)
+LEFT_BRACE (4:57-4:58)
+VAR (5:9-5:12)
+IDENTIFIER "result" (5:13-5:19)
+EQUAL (5:20-5:21)
+IDENTIFIER "value" (5:22-5:27)
+STAR (5:28-5:29)
+THIS (5:30-5:34)
+DOT (5:34-5:35)
+IDENTIFIER "factor" (5:35-5:41)
+SEMICOLON (5:41-5:42)
+RETURN (6:9-6:15)
+IDENTIFIER "result" (6:16-6:22)
+SEMICOLON (6:22-6:23)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+NEW (10:7-10:10)
+IDENTIFIER "Value" (10:11-10:16)
+LEFT_PAREN (10:16-10:17)
+RIGHT_PAREN (10:17-10:18)
+DOT (10:18-10:19)
+IDENTIFIER "double" (10:19-10:25)
+LEFT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+SEMICOLON (10:28-10:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:29
+  (ClassDeclaration
+    range: 1:1-8:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:22
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:22
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:11-2:17
+          name: "factor"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:20-2:21
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-7:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-7:6
+        CONST
+        FINAL
+        (IdentifierDeclaration
+          range: 4:29-4:35
+          name: "double"
+        )
+        (FunctionParameter
+          range: 4:36-4:51
+          (IdentifierDeclaration
+            range: 4:36-4:41
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 4:43-4:46
+            name: "i32"
+          )
+          optional: false
+          (LiteralExpression
+            range: 4:49-4:51
+            kind: INT
+            text: "21"
+          )
+        )
+        (NamedTypeNode
+          range: 4:53-4:56
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:57-7:6
+          (VariableDeclaration
+            range: 5:9-5:42
+            mutability: VAR
+            (IdentifierDeclaration
+              range: 5:13-5:19
+              name: "result"
+            )
+            type: null
+            (BinaryExpression
+              range: 5:22-5:41
+              (IdentifierExpression
+                range: 5:22-5:27
+                name: "value"
+              )
+              operator: MULTIPLY
+              (MemberExpression
+                range: 5:30-5:41
+                (ThisExpression
+                  range: 5:30-5:34
+                )
+                (IdentifierExpression
+                  range: 5:35-5:41
+                  name: "factor"
+                )
+              )
+            )
+          )
+          (ReturnStatement
+            range: 6:9-6:23
+            (IdentifierExpression
+              range: 6:16-6:22
+              name: "result"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:29
+    (CallExpression
+      range: 10:1-10:28
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:27
+        (MemberExpression
+          range: 10:7-10:25
+          (NewExpression
+            range: 10:7-10:18
+            (IdentifierExpression
+              range: 10:11-10:16
+              name: "Value"
+            )
+          )
+          (IdentifierExpression
+            range: 10:19-10:25
+            name: "double"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:20-2:21 -> i32
+  4:49-4:51 -> i32
+  5:22-5:27 -> i32
+  5:22-5:41 -> i32
+  5:30-5:34 -> Value
+  5:30-5:41 -> i32
+  5:35-5:41 -> i32
+  6:16-6:22 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:28 -> void
+  10:7-10:18 -> Value
+  10:7-10:25 -> (i32) => i32
+  10:7-10:27 -> i32
+  10:11-10:16 -> Value
+  10:19-10:25 -> (i32) => i32
+
+Resolved types:
+  4:43-4:46 -> i32
+  4:53-4:56 -> i32
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:11-2:17 -> const factor: i32
+  4:29-4:35 -> const final func double(i32) => i32
+  4:36-4:41 -> const value: i32
+  5:13-5:19 -> var result: i32
+
+References:
+  5:22-5:27 -> 4:36-4:41
+  5:35-5:41 -> 2:11-2:17
+  6:16-6:22 -> 5:13-5:19
+  10:1-10:6 -> builtin print
+  10:11-10:16 -> 1:7-1:12
+  10:19-10:25 -> 4:29-4:35
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    ICONST_0 0
+    LDC 1
+    INVOKEVIRTUAL Test$Value.double(II)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field factor I flags [PRIVATE, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$Value.factor I
+    RETURN
+    max stack 2 max locals 1
+  method double(I)I flags [PUBLIC, FINAL]
+    ILOAD_1 1
+    ALOAD_0 0
+    GETFIELD Test$Value.factor I
+    IMUL
+    ISTORE_2 2
+    ILOAD_2 2
+    IRETURN
+    max stack 2 max locals 3
+  method double(II)I flags [PUBLIC, FINAL, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
+    IFEQ L0
+    LDC 21
+    ISTORE_1 1
+   L0:
+    ALOAD_0 0
+    ILOAD_1 1
+    INVOKEVIRTUAL Test$Value.double(I)I
+    IRETURN
+    max stack 2 max locals 3
+
+--- OUTPUT ---
+
+42
+

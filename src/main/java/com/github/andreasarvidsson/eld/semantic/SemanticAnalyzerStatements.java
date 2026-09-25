@@ -128,12 +128,14 @@ public final class SemanticAnalyzerStatements {
             );
 
         model.setSymbol(statement.value(), valueSymbol);
+        model.setVariableOwner(valueSymbol, context.function());
         loopContext.scope().declare(valueSymbol);
 
         if (index != null) {
             final VariableSymbol indexSymbol =
                 new VariableSymbol(index, BuiltinType.I32, Mutability.CONST);
             model.setSymbol(index, indexSymbol);
+            model.setVariableOwner(indexSymbol, context.function());
             loopContext.scope().declare(indexSymbol);
         }
 
@@ -764,6 +766,17 @@ public final class SemanticAnalyzerStatements {
 
         destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
+        model.setVariableOwner(symbol, context.function());
+        if (
+            context.function() == null && analyzer.currentConstructor() != null
+                && analyzer.currentInstance() != null
+        ) {
+            model.setConstructorVariableOwner(
+                symbol,
+                Objects.requireNonNull(analyzer.currentInstance())
+            );
+        }
+        model.setVariableInitializer(symbol, initializer);
     }
 
     public void analyzeFunctionDeclaration(
@@ -777,6 +790,12 @@ public final class SemanticAnalyzerStatements {
             throw new SemanticException(
                 declaration.range(),
                 "Functions are only allowed directly in a program or class body"
+            );
+        }
+        if (declaration.finalMethod() && parent instanceof Program) {
+            throw new SemanticException(
+                declaration.range(),
+                "Only class methods can be final"
             );
         }
         registerFunction(declaration, context, context.scope());
@@ -824,6 +843,12 @@ public final class SemanticAnalyzerStatements {
         destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
         model.setFunctionDeclaration(symbol, declaration);
+        for (final FunctionParameter parameter : declaration.parameters()) {
+            model.setVariableOwner(
+                (VariableSymbol) model.getSymbol(parameter.name()),
+                symbol
+            );
+        }
         if (declaration.async()) {
             model.setAsyncResultType(symbol, returnType);
         }

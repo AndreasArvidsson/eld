@@ -413,9 +413,33 @@ public final class SemanticAnalyzerObjects {
             return;
         }
         if (
-            symbol instanceof FunctionSymbol
-                && inherited instanceof FunctionSymbol
+            symbol instanceof FunctionSymbol functionSymbol
+                && inherited instanceof FunctionSymbol inheritedFunction
         ) {
+            final var inheritedDeclaration =
+                model.getFunctionDeclaration(inheritedFunction);
+            if (
+                inheritedDeclaration != null
+                    && inheritedDeclaration.finalMethod()
+            ) {
+                throw new SemanticException(
+                    symbol.range(),
+                    "Cannot override final method '%s'",
+                    symbol.name()
+                );
+            }
+            final var declaration =
+                model.getFunctionDeclaration(functionSymbol);
+            if (
+                inheritedDeclaration != null && inheritedDeclaration.constant()
+                    && (declaration == null || !declaration.constant())
+            ) {
+                throw new SemanticException(
+                    symbol.range(),
+                    "Cannot override const method '%s' with a non-const method",
+                    symbol.name()
+                );
+            }
             if (!symbol.type().equals(inherited.type())) {
                 throw new SemanticException(
                     symbol.range(),

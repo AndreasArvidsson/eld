@@ -312,7 +312,7 @@ Declarations:
   2:16-2:21 -> var value: i32
   3:12-5:6 -> constructor(value: i32)
   3:24-3:29 -> const value: i32
-  6:17-6:25 -> getValue() => i32
+  6:17-6:25 -> func getValue() => i32
   11:7-11:10 -> const foo: Foo
 
 References:

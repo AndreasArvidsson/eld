@@ -158,7 +158,7 @@ Resolved types:
   1:12-1:15 -> i32
 
 Declarations:
-  1:6-1:9 -> run() => i32
+  1:6-1:9 -> func run() => i32
 
 References:
   13:1-13:6 -> builtin print
