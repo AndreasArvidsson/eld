@@ -1,0 +1,405 @@
+interface Named {
+    const name: string;
+}
+
+record Options(name: string, value: i32) implements Named;
+const option: Named = new Options("foo", 10);
+print(option.name);
+print(option);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Named" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "name" (2:11-2:15)
+COLON (2:15-2:16)
+IDENTIFIER "string" (2:17-2:23)
+SEMICOLON (2:23-2:24)
+RIGHT_BRACE (3:1-3:2)
+RECORD (5:1-5:7)
+IDENTIFIER "Options" (5:8-5:15)
+LEFT_PAREN (5:15-5:16)
+IDENTIFIER "name" (5:16-5:20)
+COLON (5:20-5:21)
+IDENTIFIER "string" (5:22-5:28)
+COMMA (5:28-5:29)
+IDENTIFIER "value" (5:30-5:35)
+COLON (5:35-5:36)
+IDENTIFIER "i32" (5:37-5:40)
+RIGHT_PAREN (5:40-5:41)
+IMPLEMENTS (5:42-5:52)
+IDENTIFIER "Named" (5:53-5:58)
+SEMICOLON (5:58-5:59)
+CONST (6:1-6:6)
+IDENTIFIER "option" (6:7-6:13)
+COLON (6:13-6:14)
+IDENTIFIER "Named" (6:15-6:20)
+EQUAL (6:21-6:22)
+NEW (6:23-6:26)
+IDENTIFIER "Options" (6:27-6:34)
+LEFT_PAREN (6:34-6:35)
+STRING_LITERAL "\"foo\"" (6:35-6:40)
+COMMA (6:40-6:41)
+INTEGER_LITERAL "10" (6:42-6:44)
+RIGHT_PAREN (6:44-6:45)
+SEMICOLON (6:45-6:46)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "option" (7:7-7:13)
+DOT (7:13-7:14)
+IDENTIFIER "name" (7:14-7:18)
+RIGHT_PAREN (7:18-7:19)
+SEMICOLON (7:19-7:20)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "option" (8:7-8:13)
+RIGHT_PAREN (8:13-8:14)
+SEMICOLON (8:14-8:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:15
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Named"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:24
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:15
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 2:17-2:23
+        name: "string"
+      )
+    )
+  )
+  (RecordDeclaration
+    range: 5:1-5:59
+    (IdentifierDeclaration
+      range: 5:8-5:15
+      name: "Options"
+    )
+    (RecordParameter
+      range: 5:16-5:28
+      (IdentifierDeclaration
+        range: 5:16-5:20
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 5:22-5:28
+        name: "string"
+      )
+    )
+    (RecordParameter
+      range: 5:30-5:40
+      (IdentifierDeclaration
+        range: 5:30-5:35
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 5:37-5:40
+        name: "i32"
+      )
+    )
+    (NamedTypeNode
+      range: 5:53-5:58
+      name: "Named"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "option"
+    )
+    (NamedTypeNode
+      range: 6:15-6:20
+      name: "Named"
+    )
+    (NewExpression
+      range: 6:23-6:45
+      (IdentifierExpression
+        range: 6:27-6:34
+        name: "Options"
+      )
+      (LiteralExpression
+        range: 6:35-6:40
+        kind: STRING
+        text: "\"foo\""
+      )
+      (LiteralExpression
+        range: 6:42-6:44
+        kind: INT
+        text: "10"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:20
+    (CallExpression
+      range: 7:1-7:19
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 7:7-7:18
+        (IdentifierExpression
+          range: 7:7-7:13
+          name: "option"
+        )
+        (IdentifierExpression
+          range: 7:14-7:18
+          name: "name"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:15
+    (CallExpression
+      range: 8:1-8:14
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:13
+        name: "option"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:1-5:59 -> Options
+  5:1-5:59 -> string
+  5:1-5:59 -> string
+  5:1-5:59 -> string
+  5:8-5:15 -> Options
+  5:16-5:20 -> string
+  5:16-5:20 -> string
+  5:16-5:20 -> string
+  5:16-5:20 -> string
+  5:16-5:20 -> string
+  5:16-5:28 -> Options
+  5:16-5:28 -> Options
+  5:16-5:28 -> Options
+  5:16-5:28 -> string
+  5:16-5:28 -> string
+  5:16-5:28 -> string
+  5:16-5:28 -> string
+  5:16-5:28 -> string
+  5:30-5:35 -> i32
+  5:30-5:35 -> i32
+  5:30-5:35 -> i32
+  5:30-5:35 -> i32
+  5:30-5:35 -> i32
+  5:30-5:40 -> Options
+  5:30-5:40 -> Options
+  5:30-5:40 -> Options
+  5:30-5:40 -> i32
+  5:30-5:40 -> i32
+  5:30-5:40 -> i32
+  5:30-5:40 -> i32
+  5:30-5:40 -> string
+  6:23-6:45 -> Options
+  6:27-6:34 -> Options
+  6:35-6:40 -> string
+  6:42-6:44 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:19 -> void
+  7:7-7:13 -> Named
+  7:7-7:18 -> string
+  7:14-7:18 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:14 -> void
+  8:7-8:13 -> Named
+
+Resolved types:
+  2:17-2:23 -> string
+  5:8-5:15 -> Options
+  5:8-5:15 -> string
+  5:22-5:28 -> string
+  5:37-5:40 -> i32
+  5:53-5:58 -> Named
+  6:15-6:20 -> Named
+
+Declarations:
+  1:11-1:16 -> interface Named
+  2:11-2:15 -> const name: string
+  5:1-5:59 -> constructor(name: string, value: i32)
+  5:8-5:15 -> class Options
+  5:8-5:15 -> copy(string, i32) => Options
+  5:8-5:15 -> toString() => string
+  5:16-5:20 -> const name: string
+  5:16-5:20 -> const name: string
+  5:16-5:20 -> const name: string
+  5:30-5:35 -> const value: i32
+  5:30-5:35 -> const value: i32
+  5:30-5:35 -> const value: i32
+  6:7-6:13 -> const option: Named
+
+References:
+  5:8-5:15 -> 5:8-5:15
+  5:16-5:20 -> 5:16-5:20
+  5:16-5:20 -> 5:16-5:20
+  5:16-5:20 -> 5:16-5:20
+  5:16-5:20 -> 5:16-5:20
+  5:16-5:20 -> 5:16-5:20
+  5:30-5:35 -> 5:30-5:35
+  5:30-5:35 -> 5:30-5:35
+  5:30-5:35 -> 5:30-5:35
+  5:30-5:35 -> 5:30-5:35
+  5:30-5:35 -> 5:30-5:35
+  6:27-6:34 -> 5:8-5:15
+  7:1-7:6 -> builtin print
+  7:7-7:13 -> 6:7-6:13
+  7:14-7:18 -> 2:11-2:15
+  8:1-8:6 -> builtin print
+  8:7-8:13 -> 6:7-6:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Named
+  nest member Test$Options
+  inner class Test$Named flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Options flags [PUBLIC, STATIC, FINAL]
+  field option LTest$Named; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Options
+    DUP
+    LDC "foo"
+    LDC 10
+    INVOKESPECIAL Test$Options.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test.option LTest$Named;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.option LTest$Named;
+    INVOKEINTERFACE Test$Named.$get$name()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.option LTest$Named;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Named extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Named flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$name()Ljava/lang/String; flags [PUBLIC, ABSTRACT, SYNTHETIC]
+
+class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements Test$Named
+  nest host Test
+  inner class Test$Options flags [PUBLIC, STATIC, FINAL]
+  record component name Ljava/lang/String;
+  record component value I
+  field name Ljava/lang/String; flags [PRIVATE, FINAL]
+  field value I flags [PRIVATE, FINAL]
+  method name()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Options.name Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Options.value I
+    IRETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Options("
+    ALOAD_1 1
+    LDC 8
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method $get$name()Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.name()Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method <init>(Ljava/lang/String;I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Options.name Ljava/lang/String;
+    POP
+    ALOAD_0 0
+    ILOAD_2 2
+    DUP_X1
+    PUTFIELD Test$Options.value I
+    POP
+    RETURN
+    max stack 3 max locals 3
+  method copy(Ljava/lang/String;I)LTest$Options; flags [PUBLIC]
+    NEW Test$Options
+    DUP
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL Test$Options.<init>(Ljava/lang/String;I)V
+    ARETURN
+    max stack 4 max locals 3
+  method copy(Ljava/lang/String;II)LTest$Options; flags [PUBLIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.name()Ljava/lang/String;
+    ASTORE_1 1
+   L0:
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L1
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.value()I
+    ISTORE_2 2
+   L1:
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKEVIRTUAL Test$Options.copy(Ljava/lang/String;I)LTest$Options;
+    ARETURN
+    max stack 3 max locals 4
+
+--- OUTPUT ---
+
+foo
+Options(name=foo, value=10)
+

@@ -58,6 +58,8 @@ public final class Parser extends ParserBase {
                 return parseVariableDeclaration(token, Mutability.VAR);
             case CLASS:
                 return parseClassDeclaration(token);
+            case RECORD:
+                return parseRecordDeclaration(token);
             case INTERFACE:
                 return parseInterfaceDeclaration(token);
             case CONSTRUCTOR:
@@ -251,6 +253,104 @@ public final class Parser extends ParserBase {
             implementedInterfaces,
             members,
             range
+        );
+    }
+
+    private RecordDeclaration parseRecordDeclaration(final Token keyword) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        final IdentifierDeclaration recordName =
+            new IdentifierDeclaration(name.text(), name.range());
+        expect(TokenType.LEFT_PAREN);
+        final List<RecordParameter> parameters = new ArrayList<>();
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                final RecordParameter parameter = parseRecordParameter();
+                if (parameter.name().name().equals("copy")) {
+                    throw new ParserException(
+                        parameter.name().range(),
+                        "Record parameter name 'copy' is reserved"
+                    );
+                }
+                parameters.add(parameter);
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.RIGHT_PAREN);
+        final List<@NonNull TypeNode> implementedInterfaces = new ArrayList<>();
+        if (match(TokenType.IMPLEMENTS)) {
+            do {
+                implementedInterfaces.add(parseType());
+            } while (match(TokenType.COMMA));
+        }
+        final List<@NonNull MemberDeclaration> methods = new ArrayList<>();
+        final Token end;
+        if (match(TokenType.SEMICOLON)) {
+            end = peek(-1);
+        }
+        else {
+            expect(TokenType.LEFT_BRACE);
+            while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+                final Token modifier =
+                    check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
+                        ? advance()
+                        : null;
+                if (!check(TokenType.FUNC)) {
+                    throw new ParserException(
+                        current().range(),
+                        "Record bodies may only contain methods"
+                    );
+                }
+                final FunctionDeclaration method =
+                    parseFunctionDeclaration(advance());
+                if (method.name().name().equals("copy")) {
+                    throw new ParserException(
+                        method.name().range(),
+                        "Record method name 'copy' is reserved"
+                    );
+                }
+                methods.add(
+                    new MemberDeclaration(
+                        modifier == null
+                            ? Visibility.PRIVATE
+                            : modifier.type() == TokenType.PROTECTED
+                                ? Visibility.PROTECTED
+                                : Visibility.PUBLIC,
+                        method,
+                        modifier == null
+                            ? method.range()
+                            : modifier.range().union(method.range())
+                    )
+                );
+            }
+            end = expect(TokenType.RIGHT_BRACE);
+        }
+        return new RecordDeclaration(
+            recordName,
+            List.copyOf(parameters),
+            implementedInterfaces,
+            methods,
+            keyword.range().union(end.range())
+        );
+    }
+
+    private RecordParameter parseRecordParameter() {
+        final Token name = expect(TokenType.IDENTIFIER);
+        if (match(TokenType.QUESTION)) {
+            throw new ParserException(
+                peek(-1).range(),
+                "Record parameters cannot be optional"
+            );
+        }
+        expect(TokenType.COLON);
+        final TypeNode type = parseType();
+        if (check(TokenType.EQUAL)) {
+            throw new ParserException(
+                current().range(),
+                "Record parameters cannot have default values"
+            );
+        }
+        return new RecordParameter(
+            new IdentifierDeclaration(name.text(), name.range()),
+            type
         );
     }
 

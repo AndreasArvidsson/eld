@@ -337,7 +337,7 @@ public class ParserExpressions extends ParserBase {
                 }
             }
             case LEFT_BRACKET -> parseArrayExpression(token);
-            case LEFT_BRACE -> parseObjectExpression(token);
+            case LEFT_BRACE -> parseMapExpression(token);
             default -> throw ParserException.expected("expression", token);
         };
     }
@@ -410,34 +410,39 @@ public class ParserExpressions extends ParserBase {
         return new ArrayExpression(elements, range);
     }
 
-    private ObjectExpression parseObjectExpression(final Token open) {
-        final List<@NonNull ObjectEntry> members = new ArrayList<>();
-        while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-            if (check(TokenType.ELLIPSIS)) {
-                final Token spread = advance();
-                final Expression value = parseExpression();
-                members.add(
-                    new ObjectSpread(value, spread.range().union(value.range()))
-                );
-            }
-            else {
-                final Token name = expect(TokenType.IDENTIFIER);
-                expect(TokenType.COLON);
-                final Expression value = parseExpression();
-                members.add(
-                    new ObjectMember(
-                        new IdentifierDeclaration(name.text(), name.range()),
-                        value,
-                        name.range().union(value.range())
-                    )
-                );
-            }
-            if (!match(TokenType.COMMA)) {
-                break;
-            }
+    private MapExpression parseMapExpression(final Token open) {
+        final List<@NonNull MapElement> elements = new ArrayList<>();
+        if (!check(TokenType.RIGHT_BRACE)) {
+            do {
+                if (check(TokenType.RIGHT_BRACE)) {
+                    break;
+                }
+                if (check(TokenType.ELLIPSIS)) {
+                    final Token spread = advance();
+                    final Expression expression = parseExpression();
+                    elements.add(
+                        new MapSpread(
+                            expression,
+                            spread.range().union(expression.range())
+                        )
+                    );
+                }
+                else {
+                    final Expression key = parseExpression();
+                    expect(TokenType.COLON);
+                    final Expression value = parseExpression();
+                    elements.add(
+                        new MapEntry(
+                            key,
+                            value,
+                            key.range().union(value.range())
+                        )
+                    );
+                }
+            } while (match(TokenType.COMMA));
         }
         final Token close = expect(TokenType.RIGHT_BRACE);
-        return new ObjectExpression(members, open.range().union(close.range()));
+        return new MapExpression(elements, open.range().union(close.range()));
     }
 
     private Expression parseSubscriptExpression(final Expression target) {

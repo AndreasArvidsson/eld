@@ -13,6 +13,8 @@ import com.github.andreasarvidsson.eld.parser.ObjectEntry;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
+import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
+import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import java.util.Map;
 import java.util.HashMap;
 import com.github.andreasarvidsson.eld.parser.Expression;
@@ -62,6 +64,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
         new IdentityHashMap<>();
+    private final IdentityHashMap<NewExpression, List<Integer>> constructorArgumentParameters =
+        new IdentityHashMap<>();
     private final Map<ClassType, FunctionType> constructors = new HashMap<>();
     private final Map<ClassType, Visibility> constructorVisibility =
         new HashMap<>();
@@ -75,6 +79,42 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<NewExpression, Constructor<?>> javaConstructors =
         new IdentityHashMap<>();
+    private final IdentityHashMap<RecordDeclaration, ClassDeclaration> recordClasses =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<ClassDeclaration, RecordDeclaration> recordDeclarations =
+        new IdentityHashMap<>();
+    private final Set<ClassDeclaration> loweredRecordClasses =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+
+    public void setRecordClass(
+        final RecordDeclaration record,
+        final ClassDeclaration declaration
+    ) {
+        recordClasses.put(record, declaration);
+        recordDeclarations.put(declaration, record);
+        loweredRecordClasses.add(declaration);
+    }
+
+    public ClassDeclaration getRecordClass(final RecordDeclaration record) {
+        return Objects.requireNonNull(recordClasses.get(record));
+    }
+
+    public boolean isRecordClass(final ClassDeclaration declaration) {
+        return loweredRecordClasses.contains(declaration);
+    }
+
+    public RecordDeclaration getRecordDeclaration(
+        final ClassDeclaration declaration
+    ) {
+        return Objects.requireNonNull(recordDeclarations.get(declaration));
+    }
+
+    public boolean isRecordClass(final ClassType type) {
+        return loweredRecordClasses.stream().anyMatch(declaration -> {
+            final Symbol symbol = declarations.get(declaration.name());
+            return symbol != null && symbol.type().equals(type);
+        });
+    }
 
     public void setObjectMembers(
         final ObjectExpression object,
@@ -154,6 +194,22 @@ public final class SemanticModel {
 
     public ClassType getClassMemberOwner(final Symbol symbol) {
         return Objects.requireNonNull(classMemberOwners.get(symbol));
+    }
+
+    public @Nullable ClassType findClassMemberOwner(final Symbol symbol) {
+        return classMemberOwners.get(symbol);
+    }
+
+    public @Nullable RecordDeclaration findRecordDeclaration(
+        final ClassType type
+    ) {
+        for (final var entry : recordDeclarations.entrySet()) {
+            final Symbol symbol = declarations.get(entry.getKey().name());
+            if (symbol != null && symbol.type().equals(type)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public boolean isSubtype(final Type source, final Type target) {
@@ -497,6 +553,20 @@ public final class SemanticModel {
 
     public List<Integer> getArgumentParameters(final CallExpression call) {
         return Objects.requireNonNull(argumentParameters.get(call));
+    }
+
+    public void setConstructorArgumentParameters(
+        final NewExpression creation,
+        final List<Integer> parameters
+    ) {
+        constructorArgumentParameters.put(creation, List.copyOf(parameters));
+    }
+
+    public List<Integer> getConstructorArgumentParameters(
+        final NewExpression creation
+    ) {
+        return Objects
+            .requireNonNull(constructorArgumentParameters.get(creation));
     }
 
     @Override

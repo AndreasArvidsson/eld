@@ -379,6 +379,12 @@ final class FieldInitializationAnalyzer {
                 return walk(spread.expression(), paths);
             case ArrayExpression array:
                 return sequence(array.elements(), paths);
+            case MapEntry entry:
+                return walk(entry.value(), walk(entry.key(), paths));
+            case MapSpread spread:
+                return walk(spread.expression(), paths);
+            case MapExpression map:
+                return sequence(map.elements(), paths);
             case TupleExpression tuple:
                 return sequence(tuple.elements(), paths);
             case SubscriptExpression subscript:

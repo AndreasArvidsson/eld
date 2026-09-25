@@ -16,6 +16,7 @@ import java.lang.classfile.instruction.*;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDesc;
 import java.lang.constant.DirectMethodHandleDesc;
+import java.lang.constant.DynamicCallSiteDesc;
 import java.lang.constant.MethodHandleDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Optional;
@@ -128,6 +129,7 @@ public final class BytecodeGenerator {
                 .stream()
                 .anyMatch(
                     item -> item instanceof ClassDeclaration
+                        || item instanceof RecordDeclaration
                         || item instanceof InterfaceDeclaration
                         || AstTraversal
                             .anyMatch(item, ObjectExpression.class::isInstance)
@@ -269,6 +271,20 @@ public final class BytecodeGenerator {
                     );
                 }
             }
+            if (item instanceof RecordDeclaration record) {
+                final ClassDeclaration declaration =
+                    semanticModel.getRecordClass(record);
+                final String name = className(declaration);
+                if (
+                    classes
+                        .putIfAbsent(name, generateClass(declaration)) != null
+                ) {
+                    throw unsupported(
+                        record,
+                        "Duplicate record " + record.name().name()
+                    );
+                }
+            }
         }
         classes.putAll(objectClasses);
         return Collections.unmodifiableMap(classes);
@@ -286,9 +302,11 @@ public final class BytecodeGenerator {
                     semanticModel.getSuperclass(generatedClass);
                 return ClassHierarchyInfo.ofClass(
                     classDesc(
-                        superclass == null
-                            ? "java/lang/Object"
-                            : classOwner(superclass)
+                        semanticModel.isRecordClass(generatedClass)
+                            ? "java/lang/Record"
+                            : superclass == null
+                                ? "java/lang/Object"
+                                : classOwner(superclass)
                     )
                 );
             }
@@ -544,7 +562,8 @@ public final class BytecodeGenerator {
         final ClassBuilder writer,
         final String name,
         final String fieldOwner,
-        final Type type
+        final Type type,
+        final boolean delegateToAccessor
     ) {
         generateMethod(
             writer,
@@ -555,12 +574,23 @@ public final class BytecodeGenerator {
             getter -> {
 
                 getter.aload(0);
-                getter.fieldAccess(
-                    GETFIELD,
-                    classDesc(fieldOwner),
-                    name,
-                    ClassDesc.ofDescriptor(descriptor(type))
-                );
+                if (delegateToAccessor) {
+                    getter.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc(fieldOwner),
+                        name,
+                        MethodTypeDesc.ofDescriptor("()" + descriptor(type)),
+                        false
+                    );
+                }
+                else {
+                    getter.fieldAccess(
+                        GETFIELD,
+                        classDesc(fieldOwner),
+                        name,
+                        ClassDesc.ofDescriptor(descriptor(type))
+                    );
+                }
                 getter.with(simpleInstruction(returnOpcode(type)));
 
             }
@@ -613,19 +643,311 @@ public final class BytecodeGenerator {
         return false;
     }
 
+    private void generateRecordAttribute(
+        final ClassBuilder writer,
+        final RecordDeclaration record
+    ) {
+        final List<RecordComponentInfo> components = new ArrayList<>();
+        for (final RecordParameter parameter : record.parameters()) {
+            final Type type = semanticModel.getResolvedType(parameter.type());
+            final String signature = fieldSignature(type);
+            components.add(
+                RecordComponentInfo.of(
+                    parameter.name().name(),
+                    ClassDesc.ofDescriptor(descriptor(type)),
+                    signature == null
+                        ? List.of()
+                        : List.of(
+                            SignatureAttribute.of(
+                                java.lang.classfile.Signature
+                                    .parseFrom(signature)
+                            )
+                        )
+                )
+            );
+        }
+        writer.with(RecordAttribute.of(components));
+    }
+
+    private void generateRecordAccessors(
+        final ClassBuilder writer,
+        final String owner,
+        final RecordDeclaration record
+    ) {
+        for (final RecordParameter parameter : record.parameters()) {
+            final Type type = semanticModel.getResolvedType(parameter.type());
+            generateMethod(
+                writer,
+                ACC_PUBLIC,
+                parameter.name().name(),
+                "()" + descriptor(type),
+                methodSignature(new FunctionType(List.of(), type)),
+                accessor -> {
+                    accessor.aload(0);
+                    accessor.fieldAccess(
+                        GETFIELD,
+                        classDesc(owner),
+                        parameter.name().name(),
+                        ClassDesc.ofDescriptor(descriptor(type))
+                    );
+                    accessor.with(simpleInstruction(returnOpcode(type)));
+                }
+            );
+        }
+    }
+
+    private void generateRecordObjectMethods(
+        final ClassBuilder writer,
+        final String owner,
+        final ClassDeclaration declaration,
+        final RecordDeclaration record
+    ) {
+        if (!declaresRecordMethod(record, "toString", 0)) {
+            generateMethod(
+                writer,
+                ACC_PUBLIC | ACC_FINAL,
+                "toString",
+                "()Ljava/lang/String;",
+                null,
+                method -> {
+                    method.aload(0);
+                    method.invokedynamic(
+                        recordObjectCallSite(
+                            "toString",
+                            MethodTypeDesc.of(
+                                classDesc("java/lang/String"),
+                                classDesc(owner)
+                            ),
+                            owner,
+                            record
+                        )
+                    );
+                    method.astore(1);
+                    method.ldc(record.name().name() + "(");
+                    method.aload(1);
+                    method.ldc(record.name().name().length() + 1);
+                    method.aload(1);
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/String"),
+                        "length",
+                        MethodTypeDesc.ofDescriptor("()I"),
+                        false
+                    );
+                    method.iconst_1();
+                    method.isub();
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/String"),
+                        "substring",
+                        MethodTypeDesc.ofDescriptor("(II)Ljava/lang/String;"),
+                        false
+                    );
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/String"),
+                        "concat",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/String;)Ljava/lang/String;"
+                        ),
+                        false
+                    );
+                    method.ldc(")");
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/String"),
+                        "concat",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/String;)Ljava/lang/String;"
+                        ),
+                        false
+                    );
+                    method.areturn();
+                }
+            );
+        }
+        if (!hasMethod(declaration, "hashCode", "()I")) {
+            generateMethod(
+                writer,
+                ACC_PUBLIC | ACC_FINAL,
+                "hashCode",
+                "()I",
+                null,
+                method -> {
+                    method.aload(0);
+                    method.invokedynamic(
+                        recordObjectCallSite(
+                            "hashCode",
+                            MethodTypeDesc.of(
+                                ClassDesc.ofDescriptor("I"),
+                                classDesc(owner)
+                            ),
+                            owner,
+                            record
+                        )
+                    );
+                    method.ireturn();
+                }
+            );
+        }
+        if (!hasMethod(declaration, "equals", "(Ljava/lang/Object;)Z")) {
+            generateMethod(
+                writer,
+                ACC_PUBLIC | ACC_FINAL,
+                "equals",
+                "(Ljava/lang/Object;)Z",
+                null,
+                method -> {
+                    method.aload(0);
+                    method.aload(1);
+                    method.invokedynamic(
+                        recordObjectCallSite(
+                            "equals",
+                            MethodTypeDesc.of(
+                                ClassDesc.ofDescriptor("Z"),
+                                classDesc(owner),
+                                classDesc("java/lang/Object")
+                            ),
+                            owner,
+                            record
+                        )
+                    );
+                    method.ireturn();
+                }
+            );
+        }
+    }
+
+    private static boolean declaresRecordMethod(
+        final RecordDeclaration record,
+        final String name,
+        final int parameterCount
+    ) {
+        return record.methods()
+            .stream()
+            .map(MemberDeclaration::declaration)
+            .filter(FunctionDeclaration.class::isInstance)
+            .map(FunctionDeclaration.class::cast)
+            .anyMatch(
+                method -> method.name().name().equals(name)
+                    && method.parameters().size() == parameterCount
+            );
+    }
+
+    private String methodName(final FunctionSymbol function) {
+        final ClassType owner = semanticModel.findClassMemberOwner(function);
+        if (owner == null) {
+            return function.name();
+        }
+        final RecordDeclaration record =
+            semanticModel.findRecordDeclaration(owner);
+        if (
+            record != null && record.parameters()
+                .stream()
+                .anyMatch(
+                    parameter -> parameter.name().name().equals(function.name())
+                )
+        ) {
+            return "$" + function.name();
+        }
+        return function.name();
+    }
+
+    private boolean hasMethod(
+        final ClassDeclaration declaration,
+        final String name,
+        final String descriptor
+    ) {
+        return declaration.members()
+            .stream()
+            .map(MemberDeclaration::declaration)
+            .filter(FunctionDeclaration.class::isInstance)
+            .map(FunctionDeclaration.class::cast)
+            .anyMatch(
+                function -> function.name().name().equals(name)
+                    && methodDescriptor(
+                        (FunctionType) semanticModel.getSymbol(function.name())
+                            .type()
+                    ).equals(descriptor)
+            );
+    }
+
+    private DynamicCallSiteDesc recordObjectCallSite(
+        final String methodName,
+        final MethodTypeDesc invocationType,
+        final String owner,
+        final RecordDeclaration record
+    ) {
+        final ClassDesc recordClass = classDesc(owner);
+        final List<ConstantDesc> arguments = new ArrayList<>();
+        arguments.add(recordClass);
+        arguments.add(
+            record.parameters()
+                .stream()
+                .map(parameter -> parameter.name().name())
+                .collect(Collectors.joining(";"))
+        );
+        for (final RecordParameter parameter : record.parameters()) {
+            final Type type = semanticModel.getResolvedType(parameter.type());
+            arguments.add(
+                MethodHandleDesc.ofField(
+                    DirectMethodHandleDesc.Kind.GETTER,
+                    recordClass,
+                    parameter.name().name(),
+                    ClassDesc.ofDescriptor(descriptor(type))
+                )
+            );
+        }
+        final DirectMethodHandleDesc bootstrap =
+            MethodHandleDesc.ofMethod(
+                DirectMethodHandleDesc.Kind.STATIC,
+                classDesc("java/lang/runtime/ObjectMethods"),
+                "bootstrap",
+                MethodTypeDesc.of(
+                    classDesc("java/lang/Object"),
+                    classDesc("java/lang/invoke/MethodHandles$Lookup"),
+                    classDesc("java/lang/String"),
+                    classDesc("java/lang/invoke/TypeDescriptor"),
+                    classDesc("java/lang/Class"),
+                    classDesc("java/lang/String"),
+                    ClassDesc.ofDescriptor("[Ljava/lang/invoke/MethodHandle;")
+                )
+            );
+        return DynamicCallSiteDesc.of(
+            bootstrap,
+            methodName,
+            invocationType,
+            arguments.toArray(ConstantDesc[]::new)
+        );
+    }
+
     private byte[] generateClass(final ClassDeclaration declaration) {
         final String name = className(declaration);
         final ClassType classType =
             (ClassType) semanticModel.getSymbol(declaration.name()).type();
+        final boolean recordClass = semanticModel.isRecordClass(declaration);
+        final @Nullable RecordDeclaration record =
+            recordClass
+                ? semanticModel.getRecordDeclaration(declaration)
+                : null;
         final ClassType superclass = semanticModel.getSuperclass(classType);
         final String superclassOwner =
-            superclass == null ? "java/lang/Object" : classOwner(superclass);
+            recordClass
+                ? "java/lang/Record"
+                : superclass == null
+                    ? "java/lang/Object"
+                    : classOwner(superclass);
         return classFile().build(classDesc(name), writer -> {
             final List<InnerClassInfo> innerClasses = new ArrayList<>();
             final List<ClassDesc> nestMembers = new ArrayList<>();
             writer.withVersion(JAVA_21_VERSION, 0);
-            writer.withFlags(ACC_PUBLIC | ACC_SUPER);
+            writer.withFlags(
+                ACC_PUBLIC | ACC_SUPER | (recordClass ? ACC_FINAL : 0)
+            );
             writer.withSuperclass(classDesc(superclassOwner));
+            if (record != null) {
+                generateRecordAttribute(writer, record);
+            }
             generateClassSignature(
                 writer,
                 classSignature(
@@ -634,13 +956,9 @@ public final class BytecodeGenerator {
                 )
             );
             writer.withInterfaceSymbols(
-                Arrays
-                    .stream(
-                        semanticModel.getImplementedInterfaces(classType)
-                            .stream()
-                            .map(BytecodeGenerator.this::interfaceOwner)
-                            .toArray(String[]::new)
-                    )
+                semanticModel.getImplementedInterfaces(classType)
+                    .stream()
+                    .map(BytecodeGenerator.this::interfaceOwner)
                     .map(BytecodeGenerator::classDesc)
                     .toList()
             );
@@ -653,7 +971,7 @@ public final class BytecodeGenerator {
                     classDesc(name),
                     Optional.of(classDesc(moduleName)),
                     Optional.of(declaration.name().name()),
-                    ACC_PUBLIC | ACC_STATIC
+                    ACC_PUBLIC | ACC_STATIC | (recordClass ? ACC_FINAL : 0)
                 )
             );
             final IdentityHashMap<Symbol, String> globals =
@@ -677,10 +995,12 @@ public final class BytecodeGenerator {
                     // Instance constants must be assigned by each constructor.
                     generateField(
                         writer,
-                        visibilityAccess(memberDeclaration.visibility())
-                            | (variable.mutability() == Mutability.CONST
-                                ? ACC_FINAL
-                                : 0),
+                        recordClass
+                            ? ACC_PRIVATE | ACC_FINAL
+                            : visibilityAccess(memberDeclaration.visibility())
+                                | (variable.mutability() == Mutability.CONST
+                                    ? ACC_FINAL
+                                    : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
                         fieldSignature(symbol.type()),
@@ -690,7 +1010,7 @@ public final class BytecodeGenerator {
                 else if (member instanceof FunctionDeclaration function) {
                     final Symbol symbol =
                         semanticModel.getSymbol(function.name());
-                    members.put(symbol, symbol.name());
+                    members.put(symbol, methodName((FunctionSymbol) symbol));
                 }
                 else if (
                     member instanceof UninitializedVariableDeclaration field
@@ -699,10 +1019,12 @@ public final class BytecodeGenerator {
                     members.put(symbol, symbol.name());
                     generateField(
                         writer,
-                        visibilityAccess(memberDeclaration.visibility())
-                            | (field.mutability() == Mutability.CONST
-                                ? ACC_FINAL
-                                : 0),
+                        recordClass
+                            ? ACC_PRIVATE | ACC_FINAL
+                            : visibilityAccess(memberDeclaration.visibility())
+                                | (field.mutability() == Mutability.CONST
+                                    ? ACC_FINAL
+                                    : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
                         fieldSignature(symbol.type()),
@@ -716,6 +1038,10 @@ public final class BytecodeGenerator {
                     );
                 }
             }
+            if (record != null) {
+                generateRecordAccessors(writer, name, record);
+                generateRecordObjectMethods(writer, name, declaration, record);
+            }
             for (final var entry : semanticModel.getInterfaceFields(classType)
                 .entrySet()) {
                 final VariableSymbol field = entry.getValue();
@@ -723,7 +1049,8 @@ public final class BytecodeGenerator {
                     writer,
                     entry.getKey(),
                     classOwner(semanticModel.getClassMemberOwner(field)),
-                    field.type()
+                    field.type(),
+                    recordClass
                 );
                 if (mutableInterfaceField(classType, entry.getKey())) {
                     generateSetter(
@@ -777,6 +1104,7 @@ public final class BytecodeGenerator {
                         }
                     }
                     initializer.constructorSuperclass = superclass;
+                    initializer.constructorSuperclassOwner = superclassOwner;
                     initializer.constructorFields =
                         declaration.members()
                             .stream()
@@ -814,7 +1142,18 @@ public final class BytecodeGenerator {
                 .members()) {
                 final Declaration member = memberDeclaration.declaration();
                 if (member instanceof FunctionDeclaration function) {
-                    generateFunction(writer, function, globals, instance);
+                    if (
+                        record == null
+                            || declaresRecordMethod(
+                                record,
+                                function.name().name(),
+                                function.parameters().size()
+                            )
+                            || !function.name().name().equals("toString")
+                            || !function.parameters().isEmpty()
+                    ) {
+                        generateFunction(writer, function, globals, instance);
+                    }
                 }
             }
             generateJavaBridges(
@@ -852,7 +1191,7 @@ public final class BytecodeGenerator {
                     ? Visibility.PUBLIC
                     : semanticModel.getMemberVisibility(symbol)
             ) | (instance == null ? ACC_STATIC : 0),
-            symbol.name(),
+            methodName(symbol),
             methodDescriptor(symbol.type()),
             methodSignature(symbol.type()),
             method -> {
@@ -873,7 +1212,7 @@ public final class BytecodeGenerator {
         );
         generateDefaultOverload(
             writer,
-            symbol.name(),
+            methodName(symbol),
             symbol.type(),
             function.parameters(),
             globals,
@@ -885,7 +1224,19 @@ public final class BytecodeGenerator {
     }
 
     private String defaultDescriptor(final FunctionType type) {
-        return methodDescriptor(type).replace(")", "[Z)");
+        return methodDescriptor(type)
+            .replace(")", (longOmissionMask(type) ? "J" : "I") + ")");
+    }
+
+    private static boolean longOmissionMask(final FunctionType type) {
+        final int parameters = type.parameterTypes().size();
+        if (parameters > Long.SIZE) {
+            throw new BytecodeException(
+                "Default arguments support at most %d parameters",
+                Long.SIZE
+            );
+        }
+        return parameters > Integer.SIZE;
     }
 
     private boolean hasDefaultParameters(final FunctionSymbol function) {
@@ -935,16 +1286,27 @@ public final class BytecodeGenerator {
                 for (final FunctionParameter parameter : parameters) {
                     generator.local(semanticModel.getSymbol(parameter.name()));
                 }
-                final int mask = generator.nextLocal++;
+                final boolean longMask = longOmissionMask(type);
+                final int mask = generator.nextLocal;
+                generator.nextLocal += longMask ? 2 : 1;
                 for (int i = 0; i < parameters.size(); i++) {
                     final FunctionParameter parameter = parameters.get(i);
                     if (!parameter.omittable()) {
                         continue;
                     }
                     final Label supplied = method.newLabel();
-                    method.aload(mask);
-                    method.ldc(i);
-                    method.baload();
+                    if (longMask) {
+                        method.lload(mask);
+                        method.ldc(1L << i);
+                        method.land();
+                        method.lconst_0();
+                        method.lcmp();
+                    }
+                    else {
+                        method.iload(mask);
+                        method.ldc(1 << i);
+                        method.iand();
+                    }
                     method.branch(IFEQ, supplied);
                     if (parameter.defaultValue() != null) {
                         generator.expression(parameter.defaultValue());
@@ -1057,6 +1419,19 @@ public final class BytecodeGenerator {
                             Optional.of(classDesc(moduleName)),
                             Optional.of(declaration.name().name()),
                             ACC_PUBLIC | ACC_STATIC
+                        )
+                    );
+                }
+                else if (item instanceof RecordDeclaration record) {
+                    final String name =
+                        className(semanticModel.getRecordClass(record));
+                    nestMembers.add(classDesc(name));
+                    innerClasses.add(
+                        InnerClassInfo.of(
+                            classDesc(name),
+                            Optional.of(classDesc(moduleName)),
+                            Optional.of(record.name().name()),
+                            ACC_PUBLIC | ACC_STATIC | ACC_FINAL
                         )
                     );
                 }
@@ -1822,6 +2197,7 @@ public final class BytecodeGenerator {
             new IdentityHashMap<>();
         private @Nullable String lexicalReceiverOwner;
         private @Nullable ClassType constructorSuperclass;
+        private String constructorSuperclassOwner = "java/lang/Object";
         private List<VariableDeclaration> constructorFields = List.of();
 
         private MethodGenerator(
@@ -1908,15 +2284,11 @@ public final class BytecodeGenerator {
                         omittedValue(type.parameterTypes().get(i));
                     }
                 }
-                omissionMask(assigned);
+                omissionMask(assigned, type);
             }
             method.invoke(
                 INVOKESPECIAL,
-                classDesc(
-                    constructorSuperclass == null
-                        ? "java/lang/Object"
-                        : classOwner(constructorSuperclass)
-                ),
+                classDesc(constructorSuperclassOwner),
                 "<init>",
                 MethodTypeDesc.ofDescriptor(
                     omitted
@@ -2610,7 +2982,7 @@ public final class BytecodeGenerator {
                                             .owner()
                                         : moduleName
                                 ),
-                                symbol.name(),
+                                methodName(function),
                                 MethodTypeDesc.ofDescriptor(
                                     methodDescriptor(function.type())
                                 )
@@ -2950,31 +3322,15 @@ public final class BytecodeGenerator {
                         classOwners.getOrDefault(name, moduleName + "$" + name);
                     method.new_(classDesc(owner));
                     method.dup();
-                    for (final Expression argument : creation.arguments()) {
-                        expression(argument);
-                    }
                     final FunctionType constructorType =
                         semanticModel.getConstructor(
                             (ClassType) semanticModel
                                 .getExpressionType(creation)
                         );
+                    constructorArguments(creation, constructorType);
                     final boolean omitted =
                         creation.arguments()
                             .size() < constructorType.parameterTypes().size();
-                    if (omitted) {
-                        final boolean[] assigned =
-                            new boolean[constructorType.parameterTypes()
-                                .size()];
-                        for (int i = 0; i < assigned.length; i++) {
-                            assigned[i] = i < creation.arguments().size();
-                            if (!assigned[i]) {
-                                omittedValue(
-                                    constructorType.parameterTypes().get(i)
-                                );
-                            }
-                        }
-                        omissionMask(assigned);
-                    }
                     method.invoke(
                         INVOKESPECIAL,
                         classDesc(owner),
@@ -2995,6 +3351,7 @@ public final class BytecodeGenerator {
                     "Array spread must be compiled in an array literal"
                 );
                 case ArrayExpression array -> array(array);
+                case MapExpression map -> map(map);
                 case SubscriptExpression index -> {
                     if (
                         semanticModel.getExpressionType(
@@ -3393,7 +3750,8 @@ public final class BytecodeGenerator {
                             writer,
                             field.name(),
                             info.owner(),
-                            field.type()
+                            field.type(),
+                            false
                         );
                         if (field.mutability() == Mutability.VAR) {
                             generateSetter(
@@ -3584,7 +3942,12 @@ public final class BytecodeGenerator {
                                         );
                                         defaultSlot += slots(parameter);
                                     }
-                                    defaults.aload(defaultSlot);
+                                    if (longOmissionMask(signature)) {
+                                        defaults.lload(defaultSlot);
+                                    }
+                                    else {
+                                        defaults.iload(defaultSlot);
+                                    }
                                     defaults.invoke(
                                         source instanceof InterfaceType
                                             ? INVOKEINTERFACE
@@ -4026,7 +4389,7 @@ public final class BytecodeGenerator {
                             ? INVOKEINTERFACE
                             : INVOKEVIRTUAL,
                     classDesc(memberOwner(member)),
-                    function.name(),
+                    methodName(function),
                     MethodTypeDesc
                         .ofDescriptor(callDescriptor(call, function.type())),
                     semanticModel
@@ -4053,7 +4416,7 @@ public final class BytecodeGenerator {
                             ? Objects.requireNonNull(instance).owner()
                             : moduleName
                     ),
-                    function.name(),
+                    methodName(function),
                     MethodTypeDesc.ofDescriptor(callDescriptor(call, type)),
                     false
                 );
@@ -4090,16 +4453,27 @@ public final class BytecodeGenerator {
             }
         }
 
-        private void omissionMask(final boolean[] assigned) {
-            method.ldc(assigned.length);
-            method.newarray(TypeKind.BOOLEAN);
-            for (int i = 0; i < assigned.length; i++) {
-                if (!assigned[i]) {
-                    method.dup();
-                    method.ldc(i);
-                    method.iconst_1();
-                    method.bastore();
+        private void omissionMask(
+            final boolean[] assigned,
+            final FunctionType type
+        ) {
+            if (longOmissionMask(type)) {
+                long mask = 0;
+                for (int i = 0; i < assigned.length; i++) {
+                    if (!assigned[i]) {
+                        mask |= 1L << i;
+                    }
                 }
+                method.ldc(mask);
+            }
+            else {
+                int mask = 0;
+                for (int i = 0; i < assigned.length; i++) {
+                    if (!assigned[i]) {
+                        mask |= 1 << i;
+                    }
+                }
+                method.ldc(mask);
             }
         }
 
@@ -4152,7 +4526,61 @@ public final class BytecodeGenerator {
                 }
             }
             if (parameters.size() < locals.length) {
-                omissionMask(assigned);
+                omissionMask(assigned, type);
+            }
+        }
+
+        private void constructorArguments(
+            final NewExpression creation,
+            final FunctionType type
+        ) {
+            if (
+                creation.arguments().size() == type.parameterTypes().size()
+                    && creation.arguments()
+                        .stream()
+                        .noneMatch(
+                            argument -> argument instanceof NamedArgumentExpression
+                        )
+            ) {
+                for (final Expression argument : creation.arguments()) {
+                    expression(argument);
+                }
+                return;
+            }
+            final List<Integer> parameters =
+                semanticModel.getConstructorArgumentParameters(creation);
+            final int[] locals = new int[type.parameterTypes().size()];
+            final boolean[] assigned = new boolean[locals.length];
+            for (int i = 0; i < parameters.size(); i++) {
+                final Expression supplied = creation.arguments().get(i);
+                final Expression value =
+                    supplied instanceof NamedArgumentExpression named
+                        ? named.value()
+                        : supplied;
+                final int parameter = parameters.get(i);
+                final Type parameterType = type.parameterTypes().get(parameter);
+                final int slot = nextLocal;
+                nextLocal += slots(parameterType);
+                locals[parameter] = slot;
+                assigned[parameter] = true;
+                expression(value);
+                method.with(localInstruction(storeOpcode(parameterType), slot));
+            }
+            for (int i = 0; i < locals.length; i++) {
+                if (assigned[i]) {
+                    method.with(
+                        localInstruction(
+                            loadOpcode(type.parameterTypes().get(i)),
+                            locals[i]
+                        )
+                    );
+                }
+                else {
+                    omittedValue(type.parameterTypes().get(i));
+                }
+            }
+            if (parameters.size() < locals.length) {
+                omissionMask(assigned, type);
             }
         }
 
@@ -4460,6 +4888,47 @@ public final class BytecodeGenerator {
             );
         }
 
+        private void map(final MapExpression map) {
+            method.new_(classDesc("java/util/LinkedHashMap"));
+            method.dup();
+            method.invoke(
+                INVOKESPECIAL,
+                classDesc("java/util/LinkedHashMap"),
+                "<init>",
+                MethodTypeDesc.ofDescriptor("()V"),
+                false
+            );
+            for (final MapElement element : map.elements()) {
+                method.dup();
+                if (element instanceof MapEntry entry) {
+                    expression(entry.key());
+                    box(semanticModel.getEffectiveType(entry.key()));
+                    expression(entry.value());
+                    box(semanticModel.getEffectiveType(entry.value()));
+                    method.invoke(
+                        INVOKEINTERFACE,
+                        classDesc("java/util/Map"),
+                        "put",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+                        ),
+                        true
+                    );
+                    method.pop();
+                }
+                else if (element instanceof MapSpread spread) {
+                    expression(spread.expression());
+                    method.invoke(
+                        INVOKEINTERFACE,
+                        classDesc("java/util/Map"),
+                        "putAll",
+                        MethodTypeDesc.ofDescriptor("(Ljava/util/Map;)V"),
+                        true
+                    );
+                }
+            }
+        }
+
         private void slice(final SliceExpression slice) {
             expression(slice.target());
             final Expression start = slice.startIndex();
@@ -4610,7 +5079,7 @@ public final class BytecodeGenerator {
                                 ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
                                 : DirectMethodHandleDesc.Kind.VIRTUAL,
                         classDesc(memberOwner(member)),
-                        symbol.name(),
+                        methodName(function),
                         MethodTypeDesc
                             .ofDescriptor(methodDescriptor(function.type()))
                     )
@@ -4637,6 +5106,20 @@ public final class BytecodeGenerator {
                     MethodTypeDesc
                         .ofDescriptor("()" + descriptor(symbol.type())),
                     true
+                );
+            }
+            else if (
+                semanticModel.getMemberOwner(member) instanceof ClassType type
+                    && semanticModel.isRecordClass(type)
+            ) {
+                memberReceiver(member);
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(memberOwner(member)),
+                    symbol.name(),
+                    MethodTypeDesc
+                        .ofDescriptor("()" + descriptor(symbol.type())),
+                    false
                 );
             }
             else {

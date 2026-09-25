@@ -1,0 +1,802 @@
+var calls = 0;
+const old = {"value": 10};
+func spread(n: i32) Map<string, i32> {
+    calls = calls * 10 + n;
+    return old;
+}
+func value(n: i32) i32 {
+    calls = calls * 10 + n;
+    return n;
+}
+func property(n: i32) Map<string, i32> {
+    return {"value": value(n)};
+}
+const result = {"value": value(1), ...spread(2), ...property(3), ...spread(4), ...property(5)};
+print(calls);
+print(result.get("value"));
+print(old.get("value"));
+
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "calls" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+CONST (2:1-2:6)
+IDENTIFIER "old" (2:7-2:10)
+EQUAL (2:11-2:12)
+LEFT_BRACE (2:13-2:14)
+STRING_LITERAL "\"value\"" (2:14-2:21)
+COLON (2:21-2:22)
+INTEGER_LITERAL "10" (2:23-2:25)
+RIGHT_BRACE (2:25-2:26)
+SEMICOLON (2:26-2:27)
+FUNC (3:1-3:5)
+IDENTIFIER "spread" (3:6-3:12)
+LEFT_PAREN (3:12-3:13)
+IDENTIFIER "n" (3:13-3:14)
+COLON (3:14-3:15)
+IDENTIFIER "i32" (3:16-3:19)
+RIGHT_PAREN (3:19-3:20)
+IDENTIFIER "Map" (3:21-3:24)
+LESS (3:24-3:25)
+IDENTIFIER "string" (3:25-3:31)
+COMMA (3:31-3:32)
+IDENTIFIER "i32" (3:33-3:36)
+GREATER (3:36-3:37)
+LEFT_BRACE (3:38-3:39)
+IDENTIFIER "calls" (4:5-4:10)
+EQUAL (4:11-4:12)
+IDENTIFIER "calls" (4:13-4:18)
+STAR (4:19-4:20)
+INTEGER_LITERAL "10" (4:21-4:23)
+PLUS (4:24-4:25)
+IDENTIFIER "n" (4:26-4:27)
+SEMICOLON (4:27-4:28)
+RETURN (5:5-5:11)
+IDENTIFIER "old" (5:12-5:15)
+SEMICOLON (5:15-5:16)
+RIGHT_BRACE (6:1-6:2)
+FUNC (7:1-7:5)
+IDENTIFIER "value" (7:6-7:11)
+LEFT_PAREN (7:11-7:12)
+IDENTIFIER "n" (7:12-7:13)
+COLON (7:13-7:14)
+IDENTIFIER "i32" (7:15-7:18)
+RIGHT_PAREN (7:18-7:19)
+IDENTIFIER "i32" (7:20-7:23)
+LEFT_BRACE (7:24-7:25)
+IDENTIFIER "calls" (8:5-8:10)
+EQUAL (8:11-8:12)
+IDENTIFIER "calls" (8:13-8:18)
+STAR (8:19-8:20)
+INTEGER_LITERAL "10" (8:21-8:23)
+PLUS (8:24-8:25)
+IDENTIFIER "n" (8:26-8:27)
+SEMICOLON (8:27-8:28)
+RETURN (9:5-9:11)
+IDENTIFIER "n" (9:12-9:13)
+SEMICOLON (9:13-9:14)
+RIGHT_BRACE (10:1-10:2)
+FUNC (11:1-11:5)
+IDENTIFIER "property" (11:6-11:14)
+LEFT_PAREN (11:14-11:15)
+IDENTIFIER "n" (11:15-11:16)
+COLON (11:16-11:17)
+IDENTIFIER "i32" (11:18-11:21)
+RIGHT_PAREN (11:21-11:22)
+IDENTIFIER "Map" (11:23-11:26)
+LESS (11:26-11:27)
+IDENTIFIER "string" (11:27-11:33)
+COMMA (11:33-11:34)
+IDENTIFIER "i32" (11:35-11:38)
+GREATER (11:38-11:39)
+LEFT_BRACE (11:40-11:41)
+RETURN (12:5-12:11)
+LEFT_BRACE (12:12-12:13)
+STRING_LITERAL "\"value\"" (12:13-12:20)
+COLON (12:20-12:21)
+IDENTIFIER "value" (12:22-12:27)
+LEFT_PAREN (12:27-12:28)
+IDENTIFIER "n" (12:28-12:29)
+RIGHT_PAREN (12:29-12:30)
+RIGHT_BRACE (12:30-12:31)
+SEMICOLON (12:31-12:32)
+RIGHT_BRACE (13:1-13:2)
+CONST (14:1-14:6)
+IDENTIFIER "result" (14:7-14:13)
+EQUAL (14:14-14:15)
+LEFT_BRACE (14:16-14:17)
+STRING_LITERAL "\"value\"" (14:17-14:24)
+COLON (14:24-14:25)
+IDENTIFIER "value" (14:26-14:31)
+LEFT_PAREN (14:31-14:32)
+INTEGER_LITERAL "1" (14:32-14:33)
+RIGHT_PAREN (14:33-14:34)
+COMMA (14:34-14:35)
+ELLIPSIS (14:36-14:39)
+IDENTIFIER "spread" (14:39-14:45)
+LEFT_PAREN (14:45-14:46)
+INTEGER_LITERAL "2" (14:46-14:47)
+RIGHT_PAREN (14:47-14:48)
+COMMA (14:48-14:49)
+ELLIPSIS (14:50-14:53)
+IDENTIFIER "property" (14:53-14:61)
+LEFT_PAREN (14:61-14:62)
+INTEGER_LITERAL "3" (14:62-14:63)
+RIGHT_PAREN (14:63-14:64)
+COMMA (14:64-14:65)
+ELLIPSIS (14:66-14:69)
+IDENTIFIER "spread" (14:69-14:75)
+LEFT_PAREN (14:75-14:76)
+INTEGER_LITERAL "4" (14:76-14:77)
+RIGHT_PAREN (14:77-14:78)
+COMMA (14:78-14:79)
+ELLIPSIS (14:80-14:83)
+IDENTIFIER "property" (14:83-14:91)
+LEFT_PAREN (14:91-14:92)
+INTEGER_LITERAL "5" (14:92-14:93)
+RIGHT_PAREN (14:93-14:94)
+RIGHT_BRACE (14:94-14:95)
+SEMICOLON (14:95-14:96)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "calls" (15:7-15:12)
+RIGHT_PAREN (15:12-15:13)
+SEMICOLON (15:13-15:14)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "result" (16:7-16:13)
+DOT (16:13-16:14)
+IDENTIFIER "get" (16:14-16:17)
+LEFT_PAREN (16:17-16:18)
+STRING_LITERAL "\"value\"" (16:18-16:25)
+RIGHT_PAREN (16:25-16:26)
+RIGHT_PAREN (16:26-16:27)
+SEMICOLON (16:27-16:28)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "old" (17:7-17:10)
+DOT (17:10-17:11)
+IDENTIFIER "get" (17:11-17:14)
+LEFT_PAREN (17:14-17:15)
+STRING_LITERAL "\"value\"" (17:15-17:22)
+RIGHT_PAREN (17:22-17:23)
+RIGHT_PAREN (17:23-17:24)
+SEMICOLON (17:24-17:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:25
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "calls"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "old"
+    )
+    type: null
+    (MapExpression
+      range: 2:13-2:26
+      (MapEntry
+        range: 2:14-2:25
+        (LiteralExpression
+          range: 2:14-2:21
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 2:23-2:25
+          kind: INT
+          text: "10"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 3:1-6:2
+    (IdentifierDeclaration
+      range: 3:6-3:12
+      name: "spread"
+    )
+    (FunctionParameter
+      range: 3:13-3:19
+      (IdentifierDeclaration
+        range: 3:13-3:14
+        name: "n"
+      )
+      (NamedTypeNode
+        range: 3:16-3:19
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 3:21-3:37
+      name: "Map"
+      (NamedTypeNode
+        range: 3:25-3:31
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 3:33-3:36
+        name: "i32"
+      )
+    )
+    (BlockStatement
+      range: 3:38-6:2
+      (ExpressionStatement
+        range: 4:5-4:28
+        (AssignmentExpression
+          range: 4:5-4:27
+          (IdentifierExpression
+            range: 4:5-4:10
+            name: "calls"
+          )
+          (BinaryExpression
+            range: 4:13-4:27
+            (BinaryExpression
+              range: 4:13-4:23
+              (IdentifierExpression
+                range: 4:13-4:18
+                name: "calls"
+              )
+              operator: MULTIPLY
+              (LiteralExpression
+                range: 4:21-4:23
+                kind: INT
+                text: "10"
+              )
+            )
+            operator: ADD
+            (IdentifierExpression
+              range: 4:26-4:27
+              name: "n"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 5:5-5:16
+        (IdentifierExpression
+          range: 5:12-5:15
+          name: "old"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-10:2
+    (IdentifierDeclaration
+      range: 7:6-7:11
+      name: "value"
+    )
+    (FunctionParameter
+      range: 7:12-7:18
+      (IdentifierDeclaration
+        range: 7:12-7:13
+        name: "n"
+      )
+      (NamedTypeNode
+        range: 7:15-7:18
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 7:20-7:23
+      name: "i32"
+    )
+    (BlockStatement
+      range: 7:24-10:2
+      (ExpressionStatement
+        range: 8:5-8:28
+        (AssignmentExpression
+          range: 8:5-8:27
+          (IdentifierExpression
+            range: 8:5-8:10
+            name: "calls"
+          )
+          (BinaryExpression
+            range: 8:13-8:27
+            (BinaryExpression
+              range: 8:13-8:23
+              (IdentifierExpression
+                range: 8:13-8:18
+                name: "calls"
+              )
+              operator: MULTIPLY
+              (LiteralExpression
+                range: 8:21-8:23
+                kind: INT
+                text: "10"
+              )
+            )
+            operator: ADD
+            (IdentifierExpression
+              range: 8:26-8:27
+              name: "n"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 9:5-9:14
+        (IdentifierExpression
+          range: 9:12-9:13
+          name: "n"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 11:1-13:2
+    (IdentifierDeclaration
+      range: 11:6-11:14
+      name: "property"
+    )
+    (FunctionParameter
+      range: 11:15-11:21
+      (IdentifierDeclaration
+        range: 11:15-11:16
+        name: "n"
+      )
+      (NamedTypeNode
+        range: 11:18-11:21
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 11:23-11:39
+      name: "Map"
+      (NamedTypeNode
+        range: 11:27-11:33
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 11:35-11:38
+        name: "i32"
+      )
+    )
+    (BlockStatement
+      range: 11:40-13:2
+      (ReturnStatement
+        range: 12:5-12:32
+        (MapExpression
+          range: 12:12-12:31
+          (MapEntry
+            range: 12:13-12:30
+            (LiteralExpression
+              range: 12:13-12:20
+              kind: STRING
+              text: "\"value\""
+            )
+            (CallExpression
+              range: 12:22-12:30
+              (IdentifierExpression
+                range: 12:22-12:27
+                name: "value"
+              )
+              (IdentifierExpression
+                range: 12:28-12:29
+                name: "n"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:96
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:13
+      name: "result"
+    )
+    type: null
+    (MapExpression
+      range: 14:16-14:95
+      (MapEntry
+        range: 14:17-14:34
+        (LiteralExpression
+          range: 14:17-14:24
+          kind: STRING
+          text: "\"value\""
+        )
+        (CallExpression
+          range: 14:26-14:34
+          (IdentifierExpression
+            range: 14:26-14:31
+            name: "value"
+          )
+          (LiteralExpression
+            range: 14:32-14:33
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+      (MapSpread
+        range: 14:36-14:48
+        (CallExpression
+          range: 14:39-14:48
+          (IdentifierExpression
+            range: 14:39-14:45
+            name: "spread"
+          )
+          (LiteralExpression
+            range: 14:46-14:47
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+      (MapSpread
+        range: 14:50-14:64
+        (CallExpression
+          range: 14:53-14:64
+          (IdentifierExpression
+            range: 14:53-14:61
+            name: "property"
+          )
+          (LiteralExpression
+            range: 14:62-14:63
+            kind: INT
+            text: "3"
+          )
+        )
+      )
+      (MapSpread
+        range: 14:66-14:78
+        (CallExpression
+          range: 14:69-14:78
+          (IdentifierExpression
+            range: 14:69-14:75
+            name: "spread"
+          )
+          (LiteralExpression
+            range: 14:76-14:77
+            kind: INT
+            text: "4"
+          )
+        )
+      )
+      (MapSpread
+        range: 14:80-14:94
+        (CallExpression
+          range: 14:83-14:94
+          (IdentifierExpression
+            range: 14:83-14:91
+            name: "property"
+          )
+          (LiteralExpression
+            range: 14:92-14:93
+            kind: INT
+            text: "5"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:14
+    (CallExpression
+      range: 15:1-15:13
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 15:7-15:12
+        name: "calls"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:28
+    (CallExpression
+      range: 16:1-16:27
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:26
+        (MemberExpression
+          range: 16:7-16:17
+          (IdentifierExpression
+            range: 16:7-16:13
+            name: "result"
+          )
+          (IdentifierExpression
+            range: 16:14-16:17
+            name: "get"
+          )
+        )
+        (LiteralExpression
+          range: 16:18-16:25
+          kind: STRING
+          text: "\"value\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:25
+    (CallExpression
+      range: 17:1-17:24
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:23
+        (MemberExpression
+          range: 17:7-17:14
+          (IdentifierExpression
+            range: 17:7-17:10
+            name: "old"
+          )
+          (IdentifierExpression
+            range: 17:11-17:14
+            name: "get"
+          )
+        )
+        (LiteralExpression
+          range: 17:15-17:22
+          kind: STRING
+          text: "\"value\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  2:13-2:26 -> Map<string, i32>
+  2:14-2:21 -> string
+  2:23-2:25 -> i32
+  4:5-4:10 -> i32
+  4:5-4:27 -> i32
+  4:13-4:18 -> i32
+  4:13-4:23 -> i32
+  4:13-4:27 -> i32
+  4:21-4:23 -> i32
+  4:26-4:27 -> i32
+  5:12-5:15 -> Map<string, i32>
+  8:5-8:10 -> i32
+  8:5-8:27 -> i32
+  8:13-8:18 -> i32
+  8:13-8:23 -> i32
+  8:13-8:27 -> i32
+  8:21-8:23 -> i32
+  8:26-8:27 -> i32
+  9:12-9:13 -> i32
+  12:12-12:31 -> Map<string, i32>
+  12:13-12:20 -> string
+  12:22-12:27 -> (i32) => i32
+  12:22-12:30 -> i32
+  12:28-12:29 -> i32
+  14:16-14:95 -> Map<string, i32>
+  14:17-14:24 -> string
+  14:26-14:31 -> (i32) => i32
+  14:26-14:34 -> i32
+  14:32-14:33 -> i32
+  14:39-14:45 -> (i32) => Map<string, i32>
+  14:39-14:48 -> Map<string, i32>
+  14:46-14:47 -> i32
+  14:53-14:61 -> (i32) => Map<string, i32>
+  14:53-14:64 -> Map<string, i32>
+  14:62-14:63 -> i32
+  14:69-14:75 -> (i32) => Map<string, i32>
+  14:69-14:78 -> Map<string, i32>
+  14:76-14:77 -> i32
+  14:83-14:91 -> (i32) => Map<string, i32>
+  14:83-14:94 -> Map<string, i32>
+  14:92-14:93 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:13 -> void
+  15:7-15:12 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:27 -> void
+  16:7-16:13 -> Map<string, i32>
+  16:7-16:17 -> (any) => i32 | null
+  16:7-16:26 -> i32 | null
+  16:14-16:17 -> (any) => i32 | null
+  16:18-16:25 -> string
+  17:1-17:6 -> (any) => void
+  17:1-17:24 -> void
+  17:7-17:10 -> Map<string, i32>
+  17:7-17:14 -> (any) => i32 | null
+  17:7-17:23 -> i32 | null
+  17:11-17:14 -> (any) => i32 | null
+  17:15-17:22 -> string
+
+Resolved types:
+  3:16-3:19 -> i32
+  3:21-3:37 -> Map<string, i32>
+  3:25-3:31 -> string
+  3:33-3:36 -> i32
+  7:15-7:18 -> i32
+  7:20-7:23 -> i32
+  11:18-11:21 -> i32
+  11:23-11:39 -> Map<string, i32>
+  11:27-11:33 -> string
+  11:35-11:38 -> i32
+
+Conversions:
+  16:18-16:25 -> string -> any
+  17:15-17:22 -> string -> any
+
+Declarations:
+  1:5-1:10 -> var calls: i32
+  2:7-2:10 -> const old: Map<string, i32>
+  3:6-3:12 -> spread(i32) => Map<string, i32>
+  3:13-3:14 -> const n: i32
+  7:6-7:11 -> value(i32) => i32
+  7:12-7:13 -> const n: i32
+  11:6-11:14 -> property(i32) => Map<string, i32>
+  11:15-11:16 -> const n: i32
+  14:7-14:13 -> const result: Map<string, i32>
+
+References:
+  4:5-4:10 -> 1:5-1:10
+  4:13-4:18 -> 1:5-1:10
+  4:26-4:27 -> 3:13-3:14
+  5:12-5:15 -> 2:7-2:10
+  8:5-8:10 -> 1:5-1:10
+  8:13-8:18 -> 1:5-1:10
+  8:26-8:27 -> 7:12-7:13
+  9:12-9:13 -> 7:12-7:13
+  12:22-12:27 -> 7:6-7:11
+  12:28-12:29 -> 11:15-11:16
+  14:26-14:31 -> 7:6-7:11
+  14:39-14:45 -> 3:6-3:12
+  14:53-14:61 -> 11:6-11:14
+  14:69-14:75 -> 3:6-3:12
+  14:83-14:91 -> 11:6-11:14
+  15:1-15:6 -> builtin print
+  15:7-15:12 -> 1:5-1:10
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 14:7-14:13
+  16:14-16:17 -> 16:7-16:17
+  17:1-17:6 -> builtin print
+  17:7-17:10 -> 2:7-2:10
+  17:11-17:14 -> 17:7-17:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field calls I flags [PUBLIC, STATIC]
+  field old Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  field result Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  method spread(I)Ljava/util/Map; flags [PUBLIC, STATIC]
+    signature (I)Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+    GETSTATIC Test.calls I
+    LDC 10
+    IMUL
+    ILOAD_0 0
+    IADD
+    DUP
+    PUTSTATIC Test.calls I
+    POP
+    GETSTATIC Test.old Ljava/util/Map;
+    ARETURN
+    max stack 2 max locals 1
+  method value(I)I flags [PUBLIC, STATIC]
+    GETSTATIC Test.calls I
+    LDC 10
+    IMUL
+    ILOAD_0 0
+    IADD
+    DUP
+    PUTSTATIC Test.calls I
+    POP
+    ILOAD_0 0
+    IRETURN
+    max stack 2 max locals 1
+  method property(I)Ljava/util/Map; flags [PUBLIC, STATIC]
+    signature (I)Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "value"
+    ILOAD_0 0
+    INVOKESTATIC Test.value(I)I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    ARETURN
+    max stack 4 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.calls I
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "value"
+    LDC 10
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.old Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "value"
+    LDC 1
+    INVOKESTATIC Test.value(I)I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC 2
+    INVOKESTATIC Test.spread(I)Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC 3
+    INVOKESTATIC Test.property(I)Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC 4
+    INVOKESTATIC Test.spread(I)Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC 5
+    INVOKESTATIC Test.property(I)Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    PUTSTATIC Test.result Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calls I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.result Ljava/util/Map;
+    LDC "value"
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.old Ljava/util/Map;
+    LDC "value"
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+12345
+5
+10
+

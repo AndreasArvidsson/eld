@@ -88,10 +88,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method foo(ILjava/lang/Integer;)V flags [PUBLIC, STATIC]
     RETURN
     max stack 0 max locals 2
-  method foo(ILjava/lang/Integer;[Z)V flags [PUBLIC, STATIC, SYNTHETIC]
-    ALOAD_2 2
-    LDC 1
-    BALOAD
+  method foo(ILjava/lang/Integer;I)V flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 2
+    IAND
     IFEQ L0
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     ASTORE_1 1

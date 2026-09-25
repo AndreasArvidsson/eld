@@ -379,17 +379,17 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 3 max locals 3
-  method foo(ILjava/lang/Integer;I[Z)V flags [PUBLIC, STATIC, SYNTHETIC]
-    ALOAD_3 3
-    LDC 1
-    BALOAD
+  method foo(ILjava/lang/Integer;II)V flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 2
+    IAND
     IFEQ L0
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     ASTORE_1 1
    L0:
-    ALOAD_3 3
-    LDC 2
-    BALOAD
+    ILOAD_3 3
+    LDC 4
+    IAND
     IFEQ L1
     INVOKESTATIC Test.getDefault()I
     ISTORE_2 2
@@ -414,13 +414,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ILOAD_0 0
     ALOAD_1 1
     ICONST_0 0
-    LDC 3
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 2
-    ICONST_1 1
-    BASTORE
-    INVOKESTATIC Test.foo(ILjava/lang/Integer;I[Z)V
+    LDC 4
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;II)V
     LDC 1
     ISTORE_2 2
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
@@ -428,15 +423,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ILOAD_2 2
     ALOAD_3 3
     ICONST_0 0
-    LDC 3
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 2
-    ICONST_1 1
-    BASTORE
-    INVOKESTATIC Test.foo(ILjava/lang/Integer;I[Z)V
+    LDC 4
+    INVOKESTATIC Test.foo(ILjava/lang/Integer;II)V
     RETURN
-    max stack 7 max locals 4
+    max stack 4 max locals 4
 
 --- OUTPUT ---
 

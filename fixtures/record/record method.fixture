@@ -1,0 +1,332 @@
+record Foo(name: string) {
+    public func value() i32 {
+        return 1;
+    }
+}
+
+const foo = new Foo("Foo");
+print(foo.value());
+print(foo);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "name" (1:12-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "string" (1:18-1:24)
+RIGHT_PAREN (1:24-1:25)
+LEFT_BRACE (1:26-1:27)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+LEFT_BRACE (2:29-2:30)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CONST (7:1-7:6)
+IDENTIFIER "foo" (7:7-7:10)
+EQUAL (7:11-7:12)
+NEW (7:13-7:16)
+IDENTIFIER "Foo" (7:17-7:20)
+LEFT_PAREN (7:20-7:21)
+STRING_LITERAL "\"Foo\"" (7:21-7:26)
+RIGHT_PAREN (7:26-7:27)
+SEMICOLON (7:27-7:28)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "foo" (8:7-8:10)
+DOT (8:10-8:11)
+IDENTIFIER "value" (8:11-8:16)
+LEFT_PAREN (8:16-8:17)
+RIGHT_PAREN (8:17-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "foo" (9:7-9:10)
+RIGHT_PAREN (9:10-9:11)
+SEMICOLON (9:11-9:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:12
+  (RecordDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Foo"
+    )
+    (RecordParameter
+      range: 1:12-1:24
+      (IdentifierDeclaration
+        range: 1:12-1:16
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 1:18-1:24
+        name: "string"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:29-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "foo"
+    )
+    type: null
+    (NewExpression
+      range: 7:13-7:27
+      (IdentifierExpression
+        range: 7:17-7:20
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 7:21-7:26
+        kind: STRING
+        text: "\"Foo\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:18
+        (MemberExpression
+          range: 8:7-8:16
+          (IdentifierExpression
+            range: 8:7-8:10
+            name: "foo"
+          )
+          (IdentifierExpression
+            range: 8:11-8:16
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:12
+    (CallExpression
+      range: 9:1-9:11
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 9:7-9:10
+        name: "foo"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-5:2 -> Foo
+  1:1-5:2 -> string
+  1:1-5:2 -> string
+  1:1-5:2 -> string
+  1:8-1:11 -> Foo
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:24 -> Foo
+  1:12-1:24 -> Foo
+  1:12-1:24 -> Foo
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  3:16-3:17 -> i32
+  7:13-7:27 -> Foo
+  7:17-7:20 -> Foo
+  7:21-7:26 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:10 -> Foo
+  8:7-8:16 -> () => i32
+  8:7-8:18 -> i32
+  8:11-8:16 -> () => i32
+  9:1-9:6 -> (any) => void
+  9:1-9:11 -> void
+  9:7-9:10 -> Foo
+
+Resolved types:
+  1:8-1:11 -> Foo
+  1:8-1:11 -> string
+  1:18-1:24 -> string
+  2:25-2:28 -> i32
+
+Declarations:
+  1:1-5:2 -> constructor(name: string)
+  1:8-1:11 -> class Foo
+  1:8-1:11 -> copy(string) => Foo
+  1:8-1:11 -> toString() => string
+  1:12-1:16 -> const name: string
+  1:12-1:16 -> const name: string
+  1:12-1:16 -> const name: string
+  2:17-2:22 -> value() => i32
+  7:7-7:10 -> const foo: Foo
+
+References:
+  1:8-1:11 -> 1:8-1:11
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  7:17-7:20 -> 1:8-1:11
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> 7:7-7:10
+  8:11-8:16 -> 2:17-2:22
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 7:7-7:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC, FINAL]
+  field foo LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Foo
+    DUP
+    LDC "Foo"
+    INVOKESPECIAL Test$Foo.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.foo LTest$Foo;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL Test$Foo.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Foo extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC, FINAL]
+  record component name Ljava/lang/String;
+  field name Ljava/lang/String; flags [PRIVATE, FINAL]
+  method name()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Foo.name Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Foo("
+    ALOAD_1 1
+    LDC 4
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(Ljava/lang/String;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Foo.name Ljava/lang/String;
+    POP
+    RETURN
+    max stack 3 max locals 2
+  method copy(Ljava/lang/String;)LTest$Foo; flags [PUBLIC]
+    NEW Test$Foo
+    DUP
+    ALOAD_1 1
+    INVOKESPECIAL Test$Foo.<init>(Ljava/lang/String;)V
+    ARETURN
+    max stack 3 max locals 2
+  method copy(Ljava/lang/String;I)LTest$Foo; flags [PUBLIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Foo.name()Ljava/lang/String;
+    ASTORE_1 1
+   L0:
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL Test$Foo.copy(Ljava/lang/String;)LTest$Foo;
+    ARETURN
+    max stack 2 max locals 3
+  method value()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+1
+Foo(name=Foo)
+

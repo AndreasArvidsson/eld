@@ -142,6 +142,104 @@ public final class SemanticAnalyzerTypes {
         return false;
     }
 
+    public @Nullable Type commonType(final List<Type> types) {
+        if (
+            !types.isEmpty()
+                && types.stream().allMatch(types.getFirst()::equals)
+        ) {
+            return types.getFirst();
+        }
+        final List<Type> members = new ArrayList<>();
+        for (final Type type : types) {
+            addCommonTypeMembers(type, members);
+        }
+        if (members.isEmpty() || members.contains(BuiltinType.VOID)) {
+            return null;
+        }
+        if (members.contains(BuiltinType.ANY)) {
+            return BuiltinType.ANY;
+        }
+        final boolean nullable = members.remove(BuiltinType.NULL);
+        final Type common = commonNonNullType(members);
+        if (common == null) {
+            return nullable && members.isEmpty() ? BuiltinType.NULL : null;
+        }
+        return nullable
+            ? UnionType.of(List.of(common, BuiltinType.NULL))
+            : common;
+    }
+
+    private static void addCommonTypeMembers(
+        final Type type,
+        final List<Type> members
+    ) {
+        if (type instanceof UnionType union) {
+            for (final Type member : union.memberTypes()) {
+                addCommonTypeMembers(member, members);
+            }
+        }
+        else if (!members.contains(type)) {
+            members.add(type);
+        }
+    }
+
+    private @Nullable Type commonNonNullType(final List<Type> types) {
+        if (types.isEmpty()) {
+            return null;
+        }
+        Type result = types.getFirst();
+        for (int i = 1; i < types.size(); i++) {
+            final Type type = types.get(i);
+            if (type.equals(result)) {
+                continue;
+            }
+            if (numeric(result) && numeric(type)) {
+                final BuiltinType left = (BuiltinType) result;
+                final BuiltinType right = (BuiltinType) type;
+                if (left.isInteger() != right.isInteger()) {
+                    return null;
+                }
+                result = promotedNumericType(result, type);
+                continue;
+            }
+            if (
+                result instanceof ClassType left
+                    && type instanceof ClassType right
+            ) {
+                final ClassType common = model.commonClassType(left, right);
+                if (common != null) {
+                    result = common;
+                    continue;
+                }
+            }
+            if (model.isSubtype(result, type)) {
+                result = type;
+                continue;
+            }
+            if (model.isSubtype(type, result)) {
+                continue;
+            }
+            return null;
+        }
+        return result;
+    }
+
+    private static boolean numeric(final Type type) {
+        return type instanceof BuiltinType builtin
+            && (builtin.isInteger() || builtin.isFloating());
+    }
+
+    private static BuiltinType promotedNumericType(
+        final Type left,
+        final Type right
+    ) {
+        final BuiltinType leftBuiltin = (BuiltinType) left;
+        final BuiltinType rightBuiltin = (BuiltinType) right;
+        return leftBuiltin.bits() >= rightBuiltin.bits()
+            ? leftBuiltin
+            : rightBuiltin;
+    }
+
     @Nullable
     public Type resolveAssignType(
         final Type from,

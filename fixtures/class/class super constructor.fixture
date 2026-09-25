@@ -439,12 +439,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     ICONST_0 0
     LDC 1
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 0
-    ICONST_1 1
-    BASTORE
-    INVOKESPECIAL Test$Child.<init>(I[Z)V
+    INVOKESPECIAL Test$Child.<init>(II)V
     INVOKEVIRTUAL Test$Base.read()J
     INVOKEVIRTUAL java/io/PrintStream.println(J)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -455,7 +450,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL Test$Base.read()J
     INVOKEVIRTUAL java/io/PrintStream.println(J)V
     RETURN
-    max stack 8 max locals 0
+    max stack 5 max locals 0
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   nest host Test
@@ -473,10 +468,10 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     POP2
     RETURN
     max stack 5 max locals 5
-  method <init>(JJ[Z)V flags [PROTECTED, SYNTHETIC]
-    ALOAD 5
-    LDC 1
-    BALOAD
+  method <init>(JJI)V flags [PROTECTED, SYNTHETIC]
+    ILOAD 5
+    LDC 2
+    IAND
     IFEQ L0
     LLOAD_1 1
     LDC 1
@@ -505,18 +500,13 @@ class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     I2L
     LCONST_0 0
     LDC 2
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 1
-    ICONST_1 1
-    BASTORE
-    INVOKESPECIAL Test$Base.<init>(JJ[Z)V
+    INVOKESPECIAL Test$Base.<init>(JJI)V
     RETURN
-    max stack 9 max locals 2
-  method <init>(I[Z)V flags [PUBLIC, SYNTHETIC]
-    ALOAD_2 2
-    LDC 0
-    BALOAD
+    max stack 6 max locals 2
+  method <init>(II)V flags [PUBLIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
     IFEQ L0
     LDC 4
     ISTORE_1 1

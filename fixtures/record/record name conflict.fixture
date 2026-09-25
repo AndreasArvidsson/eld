@@ -1,0 +1,322 @@
+record Foo(name: string, value: i32) {
+    public func name() string {
+        return "other";
+    }
+    public func value() {}
+    public func unknown() {}
+}
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "name" (1:12-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "string" (1:18-1:24)
+COMMA (1:24-1:25)
+IDENTIFIER "value" (1:26-1:31)
+COLON (1:31-1:32)
+IDENTIFIER "i32" (1:33-1:36)
+RIGHT_PAREN (1:36-1:37)
+LEFT_BRACE (1:38-1:39)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "name" (2:17-2:21)
+LEFT_PAREN (2:21-2:22)
+RIGHT_PAREN (2:22-2:23)
+IDENTIFIER "string" (2:24-2:30)
+LEFT_BRACE (2:31-2:32)
+RETURN (3:9-3:15)
+STRING_LITERAL "\"other\"" (3:16-3:23)
+SEMICOLON (3:23-3:24)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "value" (5:17-5:22)
+LEFT_PAREN (5:22-5:23)
+RIGHT_PAREN (5:23-5:24)
+LEFT_BRACE (5:25-5:26)
+RIGHT_BRACE (5:26-5:27)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "unknown" (6:17-6:24)
+LEFT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+LEFT_BRACE (6:27-6:28)
+RIGHT_BRACE (6:28-6:29)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (RecordDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Foo"
+    )
+    (RecordParameter
+      range: 1:12-1:24
+      (IdentifierDeclaration
+        range: 1:12-1:16
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 1:18-1:24
+        name: "string"
+      )
+    )
+    (RecordParameter
+      range: 1:26-1:36
+      (IdentifierDeclaration
+        range: 1:26-1:31
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:33-1:36
+        name: "i32"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:21
+          name: "name"
+        )
+        (NamedTypeNode
+          range: 2:24-2:30
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:31-4:6
+          (ReturnStatement
+            range: 3:9-3:24
+            (LiteralExpression
+              range: 3:16-3:23
+              kind: STRING
+              text: "\"other\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:27
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-5:27
+        (IdentifierDeclaration
+          range: 5:17-5:22
+          name: "value"
+        )
+        returnType: null
+        (BlockStatement
+          range: 5:25-5:27
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-6:29
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:29
+        (IdentifierDeclaration
+          range: 6:17-6:24
+          name: "unknown"
+        )
+        returnType: null
+        (BlockStatement
+          range: 6:27-6:29
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-7:2 -> Foo
+  1:1-7:2 -> string
+  1:1-7:2 -> string
+  1:1-7:2 -> string
+  1:8-1:11 -> Foo
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:16 -> string
+  1:12-1:24 -> Foo
+  1:12-1:24 -> Foo
+  1:12-1:24 -> Foo
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:12-1:24 -> string
+  1:26-1:31 -> i32
+  1:26-1:31 -> i32
+  1:26-1:31 -> i32
+  1:26-1:31 -> i32
+  1:26-1:31 -> i32
+  1:26-1:36 -> Foo
+  1:26-1:36 -> Foo
+  1:26-1:36 -> Foo
+  1:26-1:36 -> i32
+  1:26-1:36 -> i32
+  1:26-1:36 -> i32
+  1:26-1:36 -> i32
+  1:26-1:36 -> string
+  3:16-3:23 -> string
+
+Resolved types:
+  1:8-1:11 -> Foo
+  1:8-1:11 -> string
+  1:18-1:24 -> string
+  1:33-1:36 -> i32
+  2:24-2:30 -> string
+
+Declarations:
+  1:1-7:2 -> constructor(name: string, value: i32)
+  1:8-1:11 -> class Foo
+  1:8-1:11 -> copy(string, i32) => Foo
+  1:8-1:11 -> toString() => string
+  1:12-1:16 -> const name: string
+  1:12-1:16 -> const name: string
+  1:12-1:16 -> const name: string
+  1:26-1:31 -> const value: i32
+  1:26-1:31 -> const value: i32
+  1:26-1:31 -> const value: i32
+  2:17-2:21 -> name() => string
+  5:17-5:22 -> value() => void
+  6:17-6:24 -> unknown() => void
+
+References:
+  1:8-1:11 -> 1:8-1:11
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:12-1:16 -> 1:12-1:16
+  1:26-1:31 -> 1:26-1:31
+  1:26-1:31 -> 1:26-1:31
+  1:26-1:31 -> 1:26-1:31
+  1:26-1:31 -> 1:26-1:31
+  1:26-1:31 -> 1:26-1:31
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC, FINAL]
+
+class Test$Foo extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC, FINAL]
+  record component name Ljava/lang/String;
+  record component value I
+  field name Ljava/lang/String; flags [PRIVATE, FINAL]
+  field value I flags [PRIVATE, FINAL]
+  method name()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Foo.name Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Foo.value I
+    IRETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Foo("
+    ALOAD_1 1
+    LDC 4
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(Ljava/lang/String;I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Foo.name Ljava/lang/String;
+    POP
+    ALOAD_0 0
+    ILOAD_2 2
+    DUP_X1
+    PUTFIELD Test$Foo.value I
+    POP
+    RETURN
+    max stack 3 max locals 3
+  method copy(Ljava/lang/String;I)LTest$Foo; flags [PUBLIC]
+    NEW Test$Foo
+    DUP
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL Test$Foo.<init>(Ljava/lang/String;I)V
+    ARETURN
+    max stack 4 max locals 3
+  method copy(Ljava/lang/String;II)LTest$Foo; flags [PUBLIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Foo.name()Ljava/lang/String;
+    ASTORE_1 1
+   L0:
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L1
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Foo.value()I
+    ISTORE_2 2
+   L1:
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKEVIRTUAL Test$Foo.copy(Ljava/lang/String;I)LTest$Foo;
+    ARETURN
+    max stack 3 max locals 4
+  method $name()Ljava/lang/String; flags [PUBLIC]
+    LDC "other"
+    ARETURN
+    max stack 1 max locals 1
+  method $value()V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 1
+  method unknown()V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 1
+
+--- OUTPUT ---
+
+

@@ -16,6 +16,10 @@ import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
+import com.github.andreasarvidsson.eld.parser.MapElement;
+import com.github.andreasarvidsson.eld.parser.MapEntry;
+import com.github.andreasarvidsson.eld.parser.MapExpression;
+import com.github.andreasarvidsson.eld.parser.MapSpread;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.SliceExpression;
@@ -491,34 +495,32 @@ public final class SemanticAnalyzerExpressionOperations {
             elementTypes.add(expressions.analyzeExpression(element, context));
         }
 
-        // Elements must share a type; class instances can share a base type.
-        Type elementType =
-            elementTypes.isEmpty()
-                ? BuiltinType.NULL
-                : Objects.requireNonNull(elementTypes.get(0));
-
-        if (elementType == BuiltinType.VOID) {
+        if (elementTypes.contains(BuiltinType.VOID)) {
             throw new SemanticException(
                 array.range(),
                 "Array elements must produce values"
             );
         }
-
-        for (final Type type : elementTypes) {
-            if (!type.equals(elementType)) {
-                if (
-                    elementType instanceof ClassType left
-                        && type instanceof ClassType right
-                ) {
-                    final ClassType common = model.commonClassType(left, right);
-                    if (common != null) {
-                        elementType = common;
-                        continue;
-                    }
-                }
+        final Type elementType =
+            elementTypes.isEmpty()
+                ? BuiltinType.NULL
+                : analyzer.commonType(elementTypes);
+        if (elementType == null) {
+            throw new SemanticException(
+                array.range(),
+                "Array elements have no common type"
+            );
+        }
+        for (final Expression element : array.elements()) {
+            final Type actual = model.getExpressionType(element);
+            if (
+                analyzer.resolveAssignType(actual, elementType, element) == null
+            ) {
                 throw new SemanticException(
-                    array.range(),
-                    "Array elements must have the same type"
+                    element.range(),
+                    "Cannot use %s as array element %s",
+                    actual,
+                    elementType
                 );
             }
         }
@@ -526,6 +528,149 @@ public final class SemanticAnalyzerExpressionOperations {
         final ArrayType type = new ArrayType(elementType);
         model.setExpressionType(array, type);
         return type;
+    }
+
+    public InterfaceType analyzeMapExpression(
+        final MapExpression map,
+        final SemanticContext context
+    ) {
+        final List<@NonNull Type> keyTypes = new ArrayList<>();
+        final List<@NonNull Type> valueTypes = new ArrayList<>();
+        for (final MapElement element : map.elements()) {
+            if (element instanceof MapEntry entry) {
+                keyTypes
+                    .add(expressions.analyzeExpression(entry.key(), context));
+                valueTypes
+                    .add(expressions.analyzeExpression(entry.value(), context));
+            }
+            else if (element instanceof MapSpread spread) {
+                final Type source =
+                    expressions.analyzeExpression(spread.expression(), context);
+                final InterfaceType sourceMap = mapType(source);
+                if (sourceMap == null) {
+                    throw new SemanticException(
+                        spread.range(),
+                        "Map spread requires a map, found %s",
+                        source
+                    );
+                }
+                keyTypes.add(sourceMap.typeArguments().get(0));
+                valueTypes.add(sourceMap.typeArguments().get(1));
+            }
+        }
+        if (keyTypes.isEmpty()) {
+            throw new SemanticException(
+                map.range(),
+                "Cannot infer the type of an empty map literal"
+            );
+        }
+        final Type keyType = requireCommonMapType(keyTypes, map, "keys");
+        final Type valueType = requireCommonMapType(valueTypes, map, "values");
+        applyMapElementTypes(map, keyType, valueType);
+        final InterfaceType type =
+            JavaTypes.type("Map", List.of(keyType, valueType));
+        model.setExpressionType(map, type);
+        return type;
+    }
+
+    private Type requireCommonMapType(
+        final List<@NonNull Type> types,
+        final MapExpression map,
+        final String elements
+    ) {
+        final Type result = analyzer.commonType(types);
+        if (result == null || result == BuiltinType.VOID) {
+            throw new SemanticException(
+                map.range(),
+                result == BuiltinType.VOID || types.contains(BuiltinType.VOID)
+                    ? "Map %s must produce values"
+                    : "Map %s have no common type",
+                elements
+            );
+        }
+        return result;
+    }
+
+    private void applyMapElementTypes(
+        final MapExpression map,
+        final Type keyType,
+        final Type valueType
+    ) {
+        for (final MapElement element : map.elements()) {
+            if (element instanceof MapEntry entry) {
+                requireMapElementType(entry.key(), keyType, "key");
+                requireMapElementType(entry.value(), valueType, "value");
+            }
+            else if (element instanceof MapSpread spread) {
+                final InterfaceType source =
+                    Objects.requireNonNull(
+                        mapType(model.getExpressionType(spread.expression()))
+                    );
+                requireSpreadElementType(
+                    spread,
+                    source.typeArguments().get(0),
+                    keyType,
+                    "keys"
+                );
+                requireSpreadElementType(
+                    spread,
+                    source.typeArguments().get(1),
+                    valueType,
+                    "values"
+                );
+            }
+        }
+    }
+
+    private void requireMapElementType(
+        final Expression expression,
+        final Type expected,
+        final String element
+    ) {
+        final Type actual = model.getExpressionType(expression);
+        if (analyzer.resolveAssignType(actual, expected, expression) == null) {
+            throw new SemanticException(
+                expression.range(),
+                "Cannot use %s as map %s %s",
+                actual,
+                element,
+                expected
+            );
+        }
+    }
+
+    private void requireSpreadElementType(
+        final MapSpread spread,
+        final Type actual,
+        final Type expected,
+        final String elements
+    ) {
+        final boolean unionMember =
+            expected instanceof UnionType union && union.contains(actual);
+        if (
+            expected != BuiltinType.ANY && !actual.equals(expected)
+                && !unionMember
+                && !model.isSubtype(actual, expected)
+        ) {
+            throw new SemanticException(
+                spread.range(),
+                "Cannot spread map %s %s as %s",
+                elements,
+                actual,
+                expected
+            );
+        }
+    }
+
+    public static @Nullable InterfaceType mapType(final Type type) {
+        if (
+            type instanceof InterfaceType map && map.javaClass() != null
+                && java.util.Map.class.isAssignableFrom(map.javaClass())
+                && map.typeArguments().size() == 2
+        ) {
+            return map;
+        }
+        return null;
     }
 
 }

@@ -1,0 +1,215 @@
+const base = {
+    "foo": 1
+};
+const dynamic: any = "hello";
+const values = {
+    ...base,
+    "bar": dynamic
+};
+
+print(values);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "base" (1:7-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACE (1:14-1:15)
+STRING_LITERAL "\"foo\"" (2:5-2:10)
+COLON (2:10-2:11)
+INTEGER_LITERAL "1" (2:12-2:13)
+RIGHT_BRACE (3:1-3:2)
+SEMICOLON (3:2-3:3)
+CONST (4:1-4:6)
+IDENTIFIER "dynamic" (4:7-4:14)
+COLON (4:14-4:15)
+IDENTIFIER "any" (4:16-4:19)
+EQUAL (4:20-4:21)
+STRING_LITERAL "\"hello\"" (4:22-4:29)
+SEMICOLON (4:29-4:30)
+CONST (5:1-5:6)
+IDENTIFIER "values" (5:7-5:13)
+EQUAL (5:14-5:15)
+LEFT_BRACE (5:16-5:17)
+ELLIPSIS (6:5-6:8)
+IDENTIFIER "base" (6:8-6:12)
+COMMA (6:12-6:13)
+STRING_LITERAL "\"bar\"" (7:5-7:10)
+COLON (7:10-7:11)
+IDENTIFIER "dynamic" (7:12-7:19)
+RIGHT_BRACE (8:1-8:2)
+SEMICOLON (8:2-8:3)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "values" (10:7-10:13)
+RIGHT_PAREN (10:13-10:14)
+SEMICOLON (10:14-10:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:15
+  (VariableDeclaration
+    range: 1:1-3:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "base"
+    )
+    type: null
+    (MapExpression
+      range: 1:14-3:2
+      (MapEntry
+        range: 2:5-2:13
+        (LiteralExpression
+          range: 2:5-2:10
+          kind: STRING
+          text: "\"foo\""
+        )
+        (LiteralExpression
+          range: 2:12-2:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:14
+      name: "dynamic"
+    )
+    (NamedTypeNode
+      range: 4:16-4:19
+      name: "any"
+    )
+    (LiteralExpression
+      range: 4:22-4:29
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-8:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "values"
+    )
+    type: null
+    (MapExpression
+      range: 5:16-8:2
+      (MapSpread
+        range: 6:5-6:12
+        (IdentifierExpression
+          range: 6:8-6:12
+          name: "base"
+        )
+      )
+      (MapEntry
+        range: 7:5-7:19
+        (LiteralExpression
+          range: 7:5-7:10
+          kind: STRING
+          text: "\"bar\""
+        )
+        (IdentifierExpression
+          range: 7:12-7:19
+          name: "dynamic"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:15
+    (CallExpression
+      range: 10:1-10:14
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 10:7-10:13
+        name: "values"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-3:2 -> Map<string, i32>
+  2:5-2:10 -> string
+  2:12-2:13 -> i32
+  4:22-4:29 -> string
+  5:16-8:2 -> Map<string, any>
+  6:8-6:12 -> Map<string, i32>
+  7:5-7:10 -> string
+  7:12-7:19 -> any
+  10:1-10:6 -> (any) => void
+  10:1-10:14 -> void
+  10:7-10:13 -> Map<string, any>
+
+Resolved types:
+  4:16-4:19 -> any
+
+Conversions:
+  4:22-4:29 -> string -> any
+
+Declarations:
+  1:7-1:11 -> const base: Map<string, i32>
+  4:7-4:14 -> const dynamic: any
+  5:7-5:13 -> const values: Map<string, any>
+
+References:
+  6:8-6:12 -> 1:7-1:11
+  7:12-7:19 -> 4:7-4:14
+  10:1-10:6 -> builtin print
+  10:7-10:13 -> 5:7-5:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field base Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  field dynamic Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field values Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "foo"
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.base Ljava/util/Map;
+    LDC "hello"
+    PUTSTATIC Test.dynamic Ljava/lang/Object;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    GETSTATIC Test.base Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC "bar"
+    GETSTATIC Test.dynamic Ljava/lang/Object;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.values Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+{foo=1, bar=hello}
+

@@ -195,16 +195,17 @@ protected const bar = 0;
 ### Miscellaneous
 
 - Export & import
-- Remove object literal and replace with record. Add copy method to records to replace object spread operator
 - Ubiquitous toString, equals, hashCode methods
 - Tuples as map keys and switch conditions (using hashCode and equals)
 - Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
 - Switch type narrowing
+- Sealed interfaces
 - String std lib
 - Collections std lib
 - Immutable collections and objects
 - Vscode extension with syntax highlighting
-- LSP
+- Formatter
+- LSP, linting, code completion
 - Warnings in addition to errors
 - async, await, Promise
 - Overloaded functions

@@ -246,17 +246,17 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 3 max locals 2
-  method foo(II[Z)V flags [PUBLIC, STATIC, SYNTHETIC]
-    ALOAD_2 2
-    LDC 0
-    BALOAD
+  method foo(III)V flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
     IFEQ L0
     LDC 1
     ISTORE_0 0
    L0:
-    ALOAD_2 2
-    LDC 1
-    BALOAD
+    ILOAD_2 2
+    LDC 2
+    IAND
     IFEQ L1
     ILOAD_0 0
     LDC 1
@@ -271,33 +271,19 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     ICONST_0 0
     ICONST_0 0
-    LDC 2
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 0
-    ICONST_1 1
-    BASTORE
-    DUP
-    LDC 1
-    ICONST_1 1
-    BASTORE
-    INVOKESTATIC Test.foo(II[Z)V
+    LDC 3
+    INVOKESTATIC Test.foo(III)V
     LDC 5
     ISTORE_0 0
     ILOAD_0 0
     ICONST_0 0
     LDC 2
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 1
-    ICONST_1 1
-    BASTORE
-    INVOKESTATIC Test.foo(II[Z)V
+    INVOKESTATIC Test.foo(III)V
     LDC 5
     LDC 10
     INVOKESTATIC Test.foo(II)V
     RETURN
-    max stack 6 max locals 1
+    max stack 3 max locals 1
 
 --- OUTPUT ---
 

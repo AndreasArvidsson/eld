@@ -1,0 +1,1294 @@
+record Options(name: string, value: i32) {
+    public func label() string {
+        return f"{this.name}: {this.value}";
+    }
+}
+record Measurement(total: i64, ratio: f64, note: string | null);
+
+const original = new Options("foo", 10);
+const updated = original.copy(value: 5);
+const renamed = updated.copy(name: "bar");
+const duplicate = renamed.copy();
+const measurement = new Measurement(9_000_000_000, 1.5, null);
+const adjusted = measurement.copy(ratio: 2.5);
+print(original.name);
+print(updated.value);
+print(renamed.name);
+print(duplicate.value);
+print(updated.label());
+print(adjusted.total);
+print(adjusted.ratio);
+print(adjusted.note);
+
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Options" (1:8-1:15)
+LEFT_PAREN (1:15-1:16)
+IDENTIFIER "name" (1:16-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "string" (1:22-1:28)
+COMMA (1:28-1:29)
+IDENTIFIER "value" (1:30-1:35)
+COLON (1:35-1:36)
+IDENTIFIER "i32" (1:37-1:40)
+RIGHT_PAREN (1:40-1:41)
+LEFT_BRACE (1:42-1:43)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "label" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "string" (2:25-2:31)
+LEFT_BRACE (2:32-2:33)
+RETURN (3:9-3:15)
+FORMAT_STRING_START (3:16-3:18)
+LEFT_BRACE (3:18-3:19)
+THIS (3:19-3:23)
+DOT (3:23-3:24)
+IDENTIFIER "name" (3:24-3:28)
+RIGHT_BRACE (3:28-3:29)
+STRING_LITERAL "\": \"" (3:29-3:31)
+LEFT_BRACE (3:31-3:32)
+THIS (3:32-3:36)
+DOT (3:36-3:37)
+IDENTIFIER "value" (3:37-3:42)
+RIGHT_BRACE (3:42-3:43)
+FORMAT_STRING_END (3:43-3:44)
+SEMICOLON (3:44-3:45)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+RECORD (6:1-6:7)
+IDENTIFIER "Measurement" (6:8-6:19)
+LEFT_PAREN (6:19-6:20)
+IDENTIFIER "total" (6:20-6:25)
+COLON (6:25-6:26)
+IDENTIFIER "i64" (6:27-6:30)
+COMMA (6:30-6:31)
+IDENTIFIER "ratio" (6:32-6:37)
+COLON (6:37-6:38)
+IDENTIFIER "f64" (6:39-6:42)
+COMMA (6:42-6:43)
+IDENTIFIER "note" (6:44-6:48)
+COLON (6:48-6:49)
+IDENTIFIER "string" (6:50-6:56)
+PIPE (6:57-6:58)
+NULL (6:59-6:63)
+RIGHT_PAREN (6:63-6:64)
+SEMICOLON (6:64-6:65)
+CONST (8:1-8:6)
+IDENTIFIER "original" (8:7-8:15)
+EQUAL (8:16-8:17)
+NEW (8:18-8:21)
+IDENTIFIER "Options" (8:22-8:29)
+LEFT_PAREN (8:29-8:30)
+STRING_LITERAL "\"foo\"" (8:30-8:35)
+COMMA (8:35-8:36)
+INTEGER_LITERAL "10" (8:37-8:39)
+RIGHT_PAREN (8:39-8:40)
+SEMICOLON (8:40-8:41)
+CONST (9:1-9:6)
+IDENTIFIER "updated" (9:7-9:14)
+EQUAL (9:15-9:16)
+IDENTIFIER "original" (9:17-9:25)
+DOT (9:25-9:26)
+IDENTIFIER "copy" (9:26-9:30)
+LEFT_PAREN (9:30-9:31)
+IDENTIFIER "value" (9:31-9:36)
+COLON (9:36-9:37)
+INTEGER_LITERAL "5" (9:38-9:39)
+RIGHT_PAREN (9:39-9:40)
+SEMICOLON (9:40-9:41)
+CONST (10:1-10:6)
+IDENTIFIER "renamed" (10:7-10:14)
+EQUAL (10:15-10:16)
+IDENTIFIER "updated" (10:17-10:24)
+DOT (10:24-10:25)
+IDENTIFIER "copy" (10:25-10:29)
+LEFT_PAREN (10:29-10:30)
+IDENTIFIER "name" (10:30-10:34)
+COLON (10:34-10:35)
+STRING_LITERAL "\"bar\"" (10:36-10:41)
+RIGHT_PAREN (10:41-10:42)
+SEMICOLON (10:42-10:43)
+CONST (11:1-11:6)
+IDENTIFIER "duplicate" (11:7-11:16)
+EQUAL (11:17-11:18)
+IDENTIFIER "renamed" (11:19-11:26)
+DOT (11:26-11:27)
+IDENTIFIER "copy" (11:27-11:31)
+LEFT_PAREN (11:31-11:32)
+RIGHT_PAREN (11:32-11:33)
+SEMICOLON (11:33-11:34)
+CONST (12:1-12:6)
+IDENTIFIER "measurement" (12:7-12:18)
+EQUAL (12:19-12:20)
+NEW (12:21-12:24)
+IDENTIFIER "Measurement" (12:25-12:36)
+LEFT_PAREN (12:36-12:37)
+INTEGER_LITERAL "9_000_000_000" (12:37-12:50)
+COMMA (12:50-12:51)
+FLOAT_LITERAL "1.5" (12:52-12:55)
+COMMA (12:55-12:56)
+NULL (12:57-12:61)
+RIGHT_PAREN (12:61-12:62)
+SEMICOLON (12:62-12:63)
+CONST (13:1-13:6)
+IDENTIFIER "adjusted" (13:7-13:15)
+EQUAL (13:16-13:17)
+IDENTIFIER "measurement" (13:18-13:29)
+DOT (13:29-13:30)
+IDENTIFIER "copy" (13:30-13:34)
+LEFT_PAREN (13:34-13:35)
+IDENTIFIER "ratio" (13:35-13:40)
+COLON (13:40-13:41)
+FLOAT_LITERAL "2.5" (13:42-13:45)
+RIGHT_PAREN (13:45-13:46)
+SEMICOLON (13:46-13:47)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "original" (14:7-14:15)
+DOT (14:15-14:16)
+IDENTIFIER "name" (14:16-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "updated" (15:7-15:14)
+DOT (15:14-15:15)
+IDENTIFIER "value" (15:15-15:20)
+RIGHT_PAREN (15:20-15:21)
+SEMICOLON (15:21-15:22)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "renamed" (16:7-16:14)
+DOT (16:14-16:15)
+IDENTIFIER "name" (16:15-16:19)
+RIGHT_PAREN (16:19-16:20)
+SEMICOLON (16:20-16:21)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "duplicate" (17:7-17:16)
+DOT (17:16-17:17)
+IDENTIFIER "value" (17:17-17:22)
+RIGHT_PAREN (17:22-17:23)
+SEMICOLON (17:23-17:24)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "updated" (18:7-18:14)
+DOT (18:14-18:15)
+IDENTIFIER "label" (18:15-18:20)
+LEFT_PAREN (18:20-18:21)
+RIGHT_PAREN (18:21-18:22)
+RIGHT_PAREN (18:22-18:23)
+SEMICOLON (18:23-18:24)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "adjusted" (19:7-19:15)
+DOT (19:15-19:16)
+IDENTIFIER "total" (19:16-19:21)
+RIGHT_PAREN (19:21-19:22)
+SEMICOLON (19:22-19:23)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "adjusted" (20:7-20:15)
+DOT (20:15-20:16)
+IDENTIFIER "ratio" (20:16-20:21)
+RIGHT_PAREN (20:21-20:22)
+SEMICOLON (20:22-20:23)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "adjusted" (21:7-21:15)
+DOT (21:15-21:16)
+IDENTIFIER "note" (21:16-21:20)
+RIGHT_PAREN (21:20-21:21)
+SEMICOLON (21:21-21:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-21:22
+  (RecordDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:8-1:15
+      name: "Options"
+    )
+    (RecordParameter
+      range: 1:16-1:28
+      (IdentifierDeclaration
+        range: 1:16-1:20
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 1:22-1:28
+        name: "string"
+      )
+    )
+    (RecordParameter
+      range: 1:30-1:40
+      (IdentifierDeclaration
+        range: 1:30-1:35
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:37-1:40
+        name: "i32"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "label"
+        )
+        (NamedTypeNode
+          range: 2:25-2:31
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:32-4:6
+          (ReturnStatement
+            range: 3:9-3:45
+            (FormatStringExpression
+              range: 3:16-3:44
+              (MemberExpression
+                range: 3:19-3:28
+                (ThisExpression
+                  range: 3:19-3:23
+                )
+                (IdentifierExpression
+                  range: 3:24-3:28
+                  name: "name"
+                )
+              )
+              (LiteralExpression
+                range: 3:29-3:31
+                kind: STRING
+                text: "\": \""
+              )
+              (MemberExpression
+                range: 3:32-3:42
+                (ThisExpression
+                  range: 3:32-3:36
+                )
+                (IdentifierExpression
+                  range: 3:37-3:42
+                  name: "value"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (RecordDeclaration
+    range: 6:1-6:65
+    (IdentifierDeclaration
+      range: 6:8-6:19
+      name: "Measurement"
+    )
+    (RecordParameter
+      range: 6:20-6:30
+      (IdentifierDeclaration
+        range: 6:20-6:25
+        name: "total"
+      )
+      (NamedTypeNode
+        range: 6:27-6:30
+        name: "i64"
+      )
+    )
+    (RecordParameter
+      range: 6:32-6:42
+      (IdentifierDeclaration
+        range: 6:32-6:37
+        name: "ratio"
+      )
+      (NamedTypeNode
+        range: 6:39-6:42
+        name: "f64"
+      )
+    )
+    (RecordParameter
+      range: 6:44-6:63
+      (IdentifierDeclaration
+        range: 6:44-6:48
+        name: "note"
+      )
+      (UnionTypeNode
+        range: 6:50-6:63
+        (NamedTypeNode
+          range: 6:50-6:56
+          name: "string"
+        )
+        (NamedTypeNode
+          range: 6:59-6:63
+          name: "null"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:15
+      name: "original"
+    )
+    type: null
+    (NewExpression
+      range: 8:18-8:40
+      (IdentifierExpression
+        range: 8:22-8:29
+        name: "Options"
+      )
+      (LiteralExpression
+        range: 8:30-8:35
+        kind: STRING
+        text: "\"foo\""
+      )
+      (LiteralExpression
+        range: 8:37-8:39
+        kind: INT
+        text: "10"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:14
+      name: "updated"
+    )
+    type: null
+    (CallExpression
+      range: 9:17-9:40
+      (MemberExpression
+        range: 9:17-9:30
+        (IdentifierExpression
+          range: 9:17-9:25
+          name: "original"
+        )
+        (IdentifierExpression
+          range: 9:26-9:30
+          name: "copy"
+        )
+      )
+      (NamedArgumentExpression
+        range: 9:31-9:39
+        (IdentifierDeclaration
+          range: 9:31-9:36
+          name: "value"
+        )
+        (LiteralExpression
+          range: 9:38-9:39
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:14
+      name: "renamed"
+    )
+    type: null
+    (CallExpression
+      range: 10:17-10:42
+      (MemberExpression
+        range: 10:17-10:29
+        (IdentifierExpression
+          range: 10:17-10:24
+          name: "updated"
+        )
+        (IdentifierExpression
+          range: 10:25-10:29
+          name: "copy"
+        )
+      )
+      (NamedArgumentExpression
+        range: 10:30-10:41
+        (IdentifierDeclaration
+          range: 10:30-10:34
+          name: "name"
+        )
+        (LiteralExpression
+          range: 10:36-10:41
+          kind: STRING
+          text: "\"bar\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:16
+      name: "duplicate"
+    )
+    type: null
+    (CallExpression
+      range: 11:19-11:33
+      (MemberExpression
+        range: 11:19-11:31
+        (IdentifierExpression
+          range: 11:19-11:26
+          name: "renamed"
+        )
+        (IdentifierExpression
+          range: 11:27-11:31
+          name: "copy"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:63
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:18
+      name: "measurement"
+    )
+    type: null
+    (NewExpression
+      range: 12:21-12:62
+      (IdentifierExpression
+        range: 12:25-12:36
+        name: "Measurement"
+      )
+      (LiteralExpression
+        range: 12:37-12:50
+        kind: INT
+        text: "9_000_000_000"
+      )
+      (LiteralExpression
+        range: 12:52-12:55
+        kind: FLOAT
+        text: "1.5"
+      )
+      (LiteralExpression
+        range: 12:57-12:61
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:15
+      name: "adjusted"
+    )
+    type: null
+    (CallExpression
+      range: 13:18-13:46
+      (MemberExpression
+        range: 13:18-13:34
+        (IdentifierExpression
+          range: 13:18-13:29
+          name: "measurement"
+        )
+        (IdentifierExpression
+          range: 13:30-13:34
+          name: "copy"
+        )
+      )
+      (NamedArgumentExpression
+        range: 13:35-13:45
+        (IdentifierDeclaration
+          range: 13:35-13:40
+          name: "ratio"
+        )
+        (LiteralExpression
+          range: 13:42-13:45
+          kind: FLOAT
+          text: "2.5"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:22
+    (CallExpression
+      range: 14:1-14:21
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:20
+        (IdentifierExpression
+          range: 14:7-14:15
+          name: "original"
+        )
+        (IdentifierExpression
+          range: 14:16-14:20
+          name: "name"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:22
+    (CallExpression
+      range: 15:1-15:21
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 15:7-15:20
+        (IdentifierExpression
+          range: 15:7-15:14
+          name: "updated"
+        )
+        (IdentifierExpression
+          range: 15:15-15:20
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:21
+    (CallExpression
+      range: 16:1-16:20
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 16:7-16:19
+        (IdentifierExpression
+          range: 16:7-16:14
+          name: "renamed"
+        )
+        (IdentifierExpression
+          range: 16:15-16:19
+          name: "name"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:24
+    (CallExpression
+      range: 17:1-17:23
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 17:7-17:22
+        (IdentifierExpression
+          range: 17:7-17:16
+          name: "duplicate"
+        )
+        (IdentifierExpression
+          range: 17:17-17:22
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:24
+    (CallExpression
+      range: 18:1-18:23
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:22
+        (MemberExpression
+          range: 18:7-18:20
+          (IdentifierExpression
+            range: 18:7-18:14
+            name: "updated"
+          )
+          (IdentifierExpression
+            range: 18:15-18:20
+            name: "label"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:23
+    (CallExpression
+      range: 19:1-19:22
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 19:7-19:21
+        (IdentifierExpression
+          range: 19:7-19:15
+          name: "adjusted"
+        )
+        (IdentifierExpression
+          range: 19:16-19:21
+          name: "total"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:23
+    (CallExpression
+      range: 20:1-20:22
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 20:7-20:21
+        (IdentifierExpression
+          range: 20:7-20:15
+          name: "adjusted"
+        )
+        (IdentifierExpression
+          range: 20:16-20:21
+          name: "ratio"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:22
+    (CallExpression
+      range: 21:1-21:21
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 21:7-21:20
+        (IdentifierExpression
+          range: 21:7-21:15
+          name: "adjusted"
+        )
+        (IdentifierExpression
+          range: 21:16-21:20
+          name: "note"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-5:2 -> Options
+  1:1-5:2 -> string
+  1:1-5:2 -> string
+  1:1-5:2 -> string
+  1:8-1:15 -> Options
+  1:16-1:20 -> string
+  1:16-1:20 -> string
+  1:16-1:20 -> string
+  1:16-1:20 -> string
+  1:16-1:20 -> string
+  1:16-1:28 -> Options
+  1:16-1:28 -> Options
+  1:16-1:28 -> Options
+  1:16-1:28 -> string
+  1:16-1:28 -> string
+  1:16-1:28 -> string
+  1:16-1:28 -> string
+  1:16-1:28 -> string
+  1:30-1:35 -> i32
+  1:30-1:35 -> i32
+  1:30-1:35 -> i32
+  1:30-1:35 -> i32
+  1:30-1:35 -> i32
+  1:30-1:40 -> Options
+  1:30-1:40 -> Options
+  1:30-1:40 -> Options
+  1:30-1:40 -> i32
+  1:30-1:40 -> i32
+  1:30-1:40 -> i32
+  1:30-1:40 -> i32
+  1:30-1:40 -> string
+  3:16-3:44 -> string
+  3:19-3:23 -> Options
+  3:19-3:28 -> string
+  3:24-3:28 -> string
+  3:29-3:31 -> string
+  3:32-3:36 -> Options
+  3:32-3:42 -> i32
+  3:37-3:42 -> i32
+  6:1-6:65 -> Measurement
+  6:1-6:65 -> string
+  6:1-6:65 -> string
+  6:1-6:65 -> string
+  6:8-6:19 -> Measurement
+  6:20-6:25 -> i64
+  6:20-6:25 -> i64
+  6:20-6:25 -> i64
+  6:20-6:25 -> i64
+  6:20-6:25 -> i64
+  6:20-6:30 -> Measurement
+  6:20-6:30 -> Measurement
+  6:20-6:30 -> Measurement
+  6:20-6:30 -> i64
+  6:20-6:30 -> i64
+  6:20-6:30 -> i64
+  6:20-6:30 -> i64
+  6:20-6:30 -> string
+  6:32-6:37 -> f64
+  6:32-6:37 -> f64
+  6:32-6:37 -> f64
+  6:32-6:37 -> f64
+  6:32-6:37 -> f64
+  6:32-6:42 -> Measurement
+  6:32-6:42 -> Measurement
+  6:32-6:42 -> Measurement
+  6:32-6:42 -> f64
+  6:32-6:42 -> f64
+  6:32-6:42 -> f64
+  6:32-6:42 -> f64
+  6:32-6:42 -> string
+  6:44-6:48 -> string | null
+  6:44-6:48 -> string | null
+  6:44-6:48 -> string | null
+  6:44-6:48 -> string | null
+  6:44-6:48 -> string | null
+  6:44-6:63 -> Measurement
+  6:44-6:63 -> Measurement
+  6:44-6:63 -> Measurement
+  6:44-6:63 -> string
+  6:44-6:63 -> string | null
+  6:44-6:63 -> string | null
+  6:44-6:63 -> string | null
+  6:44-6:63 -> string | null
+  8:18-8:40 -> Options
+  8:22-8:29 -> Options
+  8:30-8:35 -> string
+  8:37-8:39 -> i32
+  9:17-9:25 -> Options
+  9:17-9:30 -> (string, i32) => Options
+  9:17-9:40 -> Options
+  9:26-9:30 -> (string, i32) => Options
+  9:38-9:39 -> i32
+  10:17-10:24 -> Options
+  10:17-10:29 -> (string, i32) => Options
+  10:17-10:42 -> Options
+  10:25-10:29 -> (string, i32) => Options
+  10:36-10:41 -> string
+  11:19-11:26 -> Options
+  11:19-11:31 -> (string, i32) => Options
+  11:19-11:33 -> Options
+  11:27-11:31 -> (string, i32) => Options
+  12:21-12:62 -> Measurement
+  12:25-12:36 -> Measurement
+  12:37-12:50 -> i64
+  12:52-12:55 -> f64
+  12:57-12:61 -> null
+  13:18-13:29 -> Measurement
+  13:18-13:34 -> (i64, f64, string | null) => Measurement
+  13:18-13:46 -> Measurement
+  13:30-13:34 -> (i64, f64, string | null) => Measurement
+  13:42-13:45 -> f64
+  14:1-14:6 -> (any) => void
+  14:1-14:21 -> void
+  14:7-14:15 -> Options
+  14:7-14:20 -> string
+  14:16-14:20 -> string
+  15:1-15:6 -> (any) => void
+  15:1-15:21 -> void
+  15:7-15:14 -> Options
+  15:7-15:20 -> i32
+  15:15-15:20 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:20 -> void
+  16:7-16:14 -> Options
+  16:7-16:19 -> string
+  16:15-16:19 -> string
+  17:1-17:6 -> (any) => void
+  17:1-17:23 -> void
+  17:7-17:16 -> Options
+  17:7-17:22 -> i32
+  17:17-17:22 -> i32
+  18:1-18:6 -> (any) => void
+  18:1-18:23 -> void
+  18:7-18:14 -> Options
+  18:7-18:20 -> () => string
+  18:7-18:22 -> string
+  18:15-18:20 -> () => string
+  19:1-19:6 -> (any) => void
+  19:1-19:22 -> void
+  19:7-19:15 -> Measurement
+  19:7-19:21 -> i64
+  19:16-19:21 -> i64
+  20:1-20:6 -> (any) => void
+  20:1-20:22 -> void
+  20:7-20:15 -> Measurement
+  20:7-20:21 -> f64
+  20:16-20:21 -> f64
+  21:1-21:6 -> (any) => void
+  21:1-21:21 -> void
+  21:7-21:15 -> Measurement
+  21:7-21:20 -> string | null
+  21:16-21:20 -> string | null
+
+Resolved types:
+  1:8-1:15 -> Options
+  1:8-1:15 -> string
+  1:22-1:28 -> string
+  1:37-1:40 -> i32
+  2:25-2:31 -> string
+  6:8-6:19 -> Measurement
+  6:8-6:19 -> string
+  6:27-6:30 -> i64
+  6:39-6:42 -> f64
+  6:50-6:56 -> string
+  6:50-6:63 -> string | null
+  6:59-6:63 -> null
+
+Conversions:
+  12:57-12:61 -> null -> string | null
+
+Declarations:
+  1:1-5:2 -> constructor(name: string, value: i32)
+  1:8-1:15 -> class Options
+  1:8-1:15 -> copy(string, i32) => Options
+  1:8-1:15 -> toString() => string
+  1:16-1:20 -> const name: string
+  1:16-1:20 -> const name: string
+  1:16-1:20 -> const name: string
+  1:30-1:35 -> const value: i32
+  1:30-1:35 -> const value: i32
+  1:30-1:35 -> const value: i32
+  2:17-2:22 -> label() => string
+  6:1-6:65 -> constructor(total: i64, ratio: f64, note: string | null)
+  6:8-6:19 -> class Measurement
+  6:8-6:19 -> copy(i64, f64, string | null) => Measurement
+  6:8-6:19 -> toString() => string
+  6:20-6:25 -> const total: i64
+  6:20-6:25 -> const total: i64
+  6:20-6:25 -> const total: i64
+  6:32-6:37 -> const ratio: f64
+  6:32-6:37 -> const ratio: f64
+  6:32-6:37 -> const ratio: f64
+  6:44-6:48 -> const note: string | null
+  6:44-6:48 -> const note: string | null
+  6:44-6:48 -> const note: string | null
+  8:7-8:15 -> const original: Options
+  9:7-9:14 -> const updated: Options
+  10:7-10:14 -> const renamed: Options
+  11:7-11:16 -> const duplicate: Options
+  12:7-12:18 -> const measurement: Measurement
+  13:7-13:15 -> const adjusted: Measurement
+
+References:
+  1:8-1:15 -> 1:8-1:15
+  1:16-1:20 -> 1:16-1:20
+  1:16-1:20 -> 1:16-1:20
+  1:16-1:20 -> 1:16-1:20
+  1:16-1:20 -> 1:16-1:20
+  1:16-1:20 -> 1:16-1:20
+  1:30-1:35 -> 1:30-1:35
+  1:30-1:35 -> 1:30-1:35
+  1:30-1:35 -> 1:30-1:35
+  1:30-1:35 -> 1:30-1:35
+  1:30-1:35 -> 1:30-1:35
+  3:24-3:28 -> 1:16-1:20
+  3:37-3:42 -> 1:30-1:35
+  6:8-6:19 -> 6:8-6:19
+  6:20-6:25 -> 6:20-6:25
+  6:20-6:25 -> 6:20-6:25
+  6:20-6:25 -> 6:20-6:25
+  6:20-6:25 -> 6:20-6:25
+  6:20-6:25 -> 6:20-6:25
+  6:32-6:37 -> 6:32-6:37
+  6:32-6:37 -> 6:32-6:37
+  6:32-6:37 -> 6:32-6:37
+  6:32-6:37 -> 6:32-6:37
+  6:32-6:37 -> 6:32-6:37
+  6:44-6:48 -> 6:44-6:48
+  6:44-6:48 -> 6:44-6:48
+  6:44-6:48 -> 6:44-6:48
+  6:44-6:48 -> 6:44-6:48
+  6:44-6:48 -> 6:44-6:48
+  8:22-8:29 -> 1:8-1:15
+  9:17-9:25 -> 8:7-8:15
+  9:26-9:30 -> 1:8-1:15
+  10:17-10:24 -> 9:7-9:14
+  10:25-10:29 -> 1:8-1:15
+  11:19-11:26 -> 10:7-10:14
+  11:27-11:31 -> 1:8-1:15
+  12:25-12:36 -> 6:8-6:19
+  13:18-13:29 -> 12:7-12:18
+  13:30-13:34 -> 6:8-6:19
+  14:1-14:6 -> builtin print
+  14:7-14:15 -> 8:7-8:15
+  14:16-14:20 -> 1:16-1:20
+  15:1-15:6 -> builtin print
+  15:7-15:14 -> 9:7-9:14
+  15:15-15:20 -> 1:30-1:35
+  16:1-16:6 -> builtin print
+  16:7-16:14 -> 10:7-10:14
+  16:15-16:19 -> 1:16-1:20
+  17:1-17:6 -> builtin print
+  17:7-17:16 -> 11:7-11:16
+  17:17-17:22 -> 1:30-1:35
+  18:1-18:6 -> builtin print
+  18:7-18:14 -> 9:7-9:14
+  18:15-18:20 -> 2:17-2:22
+  19:1-19:6 -> builtin print
+  19:7-19:15 -> 13:7-13:15
+  19:16-19:21 -> 6:20-6:25
+  20:1-20:6 -> builtin print
+  20:7-20:15 -> 13:7-13:15
+  20:16-20:21 -> 6:32-6:37
+  21:1-21:6 -> builtin print
+  21:7-21:15 -> 13:7-13:15
+  21:16-21:20 -> 6:44-6:48
+
+Named arguments:
+  9:31-9:36 -> parameter 1:30-1:35
+  10:30-10:34 -> parameter 1:16-1:20
+  13:35-13:40 -> parameter 6:32-6:37
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Options
+  nest member Test$Measurement
+  inner class Test$Options flags [PUBLIC, STATIC, FINAL]
+  inner class Test$Measurement flags [PUBLIC, STATIC, FINAL]
+  field original LTest$Options; flags [PUBLIC, STATIC, FINAL]
+  field updated LTest$Options; flags [PUBLIC, STATIC, FINAL]
+  field renamed LTest$Options; flags [PUBLIC, STATIC, FINAL]
+  field duplicate LTest$Options; flags [PUBLIC, STATIC, FINAL]
+  field measurement LTest$Measurement; flags [PUBLIC, STATIC, FINAL]
+  field adjusted LTest$Measurement; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Options
+    DUP
+    LDC "foo"
+    LDC 10
+    INVOKESPECIAL Test$Options.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test.original LTest$Options;
+    GETSTATIC Test.original LTest$Options;
+    LDC 5
+    ISTORE_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ILOAD_0 0
+    LDC 1
+    INVOKEVIRTUAL Test$Options.copy(Ljava/lang/String;II)LTest$Options;
+    PUTSTATIC Test.updated LTest$Options;
+    GETSTATIC Test.updated LTest$Options;
+    LDC "bar"
+    ASTORE_1 1
+    ALOAD_1 1
+    ICONST_0 0
+    LDC 2
+    INVOKEVIRTUAL Test$Options.copy(Ljava/lang/String;II)LTest$Options;
+    PUTSTATIC Test.renamed LTest$Options;
+    GETSTATIC Test.renamed LTest$Options;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ICONST_0 0
+    LDC 3
+    INVOKEVIRTUAL Test$Options.copy(Ljava/lang/String;II)LTest$Options;
+    PUTSTATIC Test.duplicate LTest$Options;
+    NEW Test$Measurement
+    DUP
+    LDC2_W 9000000000
+    LDC2_W 1.5
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Measurement.<init>(JDLjava/lang/String;)V
+    PUTSTATIC Test.measurement LTest$Measurement;
+    GETSTATIC Test.measurement LTest$Measurement;
+    LDC2_W 2.5
+    DSTORE_2 2
+    LCONST_0 0
+    DLOAD_2 2
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    LDC 5
+    INVOKEVIRTUAL Test$Measurement.copy(JDLjava/lang/String;I)LTest$Measurement;
+    PUTSTATIC Test.adjusted LTest$Measurement;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.original LTest$Options;
+    INVOKEVIRTUAL Test$Options.name()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.updated LTest$Options;
+    INVOKEVIRTUAL Test$Options.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.renamed LTest$Options;
+    INVOKEVIRTUAL Test$Options.name()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.duplicate LTest$Options;
+    INVOKEVIRTUAL Test$Options.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.updated LTest$Options;
+    INVOKEVIRTUAL Test$Options.label()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.adjusted LTest$Measurement;
+    INVOKEVIRTUAL Test$Measurement.total()J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.adjusted LTest$Measurement;
+    INVOKEVIRTUAL Test$Measurement.ratio()D
+    INVOKEVIRTUAL java/io/PrintStream.println(D)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.adjusted LTest$Measurement;
+    INVOKEVIRTUAL Test$Measurement.note()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 7 max locals 4
+
+class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest host Test
+  inner class Test$Options flags [PUBLIC, STATIC, FINAL]
+  record component name Ljava/lang/String;
+  record component value I
+  field name Ljava/lang/String; flags [PRIVATE, FINAL]
+  field value I flags [PRIVATE, FINAL]
+  method name()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Options.name Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Options.value I
+    IRETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Options("
+    ALOAD_1 1
+    LDC 8
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(Ljava/lang/String;I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Options.name Ljava/lang/String;
+    POP
+    ALOAD_0 0
+    ILOAD_2 2
+    DUP_X1
+    PUTFIELD Test$Options.value I
+    POP
+    RETURN
+    max stack 3 max locals 3
+  method copy(Ljava/lang/String;I)LTest$Options; flags [PUBLIC]
+    NEW Test$Options
+    DUP
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL Test$Options.<init>(Ljava/lang/String;I)V
+    ARETURN
+    max stack 4 max locals 3
+  method copy(Ljava/lang/String;II)LTest$Options; flags [PUBLIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.name()Ljava/lang/String;
+    ASTORE_1 1
+   L0:
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L1
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.value()I
+    ISTORE_2 2
+   L1:
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKEVIRTUAL Test$Options.copy(Ljava/lang/String;I)LTest$Options;
+    ARETURN
+    max stack 3 max locals 4
+  method label()Ljava/lang/String; flags [PUBLIC]
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.name()Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    LDC ": "
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Options.value()I
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 1
+
+class Test$Measurement extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest host Test
+  inner class Test$Measurement flags [PUBLIC, STATIC, FINAL]
+  record component total J
+  record component ratio D
+  record component note Ljava/lang/String;
+  field total J flags [PRIVATE, FINAL]
+  field ratio D flags [PRIVATE, FINAL]
+  field note Ljava/lang/String; flags [PRIVATE, FINAL]
+  method total()J flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Measurement.total J
+    LRETURN
+    max stack 2 max locals 1
+  method ratio()D flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Measurement.ratio D
+    DRETURN
+    max stack 2 max locals 1
+  method note()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Measurement.note Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Measurement("
+    ALOAD_1 1
+    LDC 12
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(JDLjava/lang/String;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    LLOAD_1 1
+    DUP2_X1
+    PUTFIELD Test$Measurement.total J
+    POP2
+    ALOAD_0 0
+    DLOAD_3 3
+    DUP2_X1
+    PUTFIELD Test$Measurement.ratio D
+    POP2
+    ALOAD_0 0
+    ALOAD 5
+    DUP_X1
+    PUTFIELD Test$Measurement.note Ljava/lang/String;
+    POP
+    RETURN
+    max stack 5 max locals 6
+  method copy(JDLjava/lang/String;)LTest$Measurement; flags [PUBLIC]
+    NEW Test$Measurement
+    DUP
+    LLOAD_1 1
+    DLOAD_3 3
+    ALOAD 5
+    INVOKESPECIAL Test$Measurement.<init>(JDLjava/lang/String;)V
+    ARETURN
+    max stack 7 max locals 6
+  method copy(JDLjava/lang/String;I)LTest$Measurement; flags [PUBLIC, SYNTHETIC]
+    ILOAD 6
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Measurement.total()J
+    LSTORE_1 1
+   L0:
+    ILOAD 6
+    LDC 2
+    IAND
+    IFEQ L1
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Measurement.ratio()D
+    DSTORE_3 3
+   L1:
+    ILOAD 6
+    LDC 4
+    IAND
+    IFEQ L2
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Measurement.note()Ljava/lang/String;
+    ASTORE 5
+   L2:
+    ALOAD_0 0
+    LLOAD_1 1
+    DLOAD_3 3
+    ALOAD 5
+    INVOKEVIRTUAL Test$Measurement.copy(JDLjava/lang/String;)LTest$Measurement;
+    ARETURN
+    max stack 6 max locals 7
+
+--- OUTPUT ---
+
+foo
+5
+bar
+5
+foo: 5
+9000000000
+2.5
+null
+

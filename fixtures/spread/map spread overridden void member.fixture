@@ -1,0 +1,136 @@
+func effect() { print("effect"); }
+const old = {"value": 7};
+const copy = {"value": effect(), ...old};
+
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "effect" (1:6-1:12)
+LEFT_PAREN (1:12-1:13)
+RIGHT_PAREN (1:13-1:14)
+LEFT_BRACE (1:15-1:16)
+IDENTIFIER "print" (1:17-1:22)
+LEFT_PAREN (1:22-1:23)
+STRING_LITERAL "\"effect\"" (1:23-1:31)
+RIGHT_PAREN (1:31-1:32)
+SEMICOLON (1:32-1:33)
+RIGHT_BRACE (1:34-1:35)
+CONST (2:1-2:6)
+IDENTIFIER "old" (2:7-2:10)
+EQUAL (2:11-2:12)
+LEFT_BRACE (2:13-2:14)
+STRING_LITERAL "\"value\"" (2:14-2:21)
+COLON (2:21-2:22)
+INTEGER_LITERAL "7" (2:23-2:24)
+RIGHT_BRACE (2:24-2:25)
+SEMICOLON (2:25-2:26)
+CONST (3:1-3:6)
+IDENTIFIER "copy" (3:7-3:11)
+EQUAL (3:12-3:13)
+LEFT_BRACE (3:14-3:15)
+STRING_LITERAL "\"value\"" (3:15-3:22)
+COLON (3:22-3:23)
+IDENTIFIER "effect" (3:24-3:30)
+LEFT_PAREN (3:30-3:31)
+RIGHT_PAREN (3:31-3:32)
+COMMA (3:32-3:33)
+ELLIPSIS (3:34-3:37)
+IDENTIFIER "old" (3:37-3:40)
+RIGHT_BRACE (3:40-3:41)
+SEMICOLON (3:41-3:42)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:42
+  (FunctionDeclaration
+    range: 1:1-1:35
+    (IdentifierDeclaration
+      range: 1:6-1:12
+      name: "effect"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:15-1:35
+      (ExpressionStatement
+        range: 1:17-1:33
+        (CallExpression
+          range: 1:17-1:32
+          (IdentifierExpression
+            range: 1:17-1:22
+            name: "print"
+          )
+          (LiteralExpression
+            range: 1:23-1:31
+            kind: STRING
+            text: "\"effect\""
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "old"
+    )
+    type: null
+    (MapExpression
+      range: 2:13-2:25
+      (MapEntry
+        range: 2:14-2:24
+        (LiteralExpression
+          range: 2:14-2:21
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 2:23-2:24
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:11
+      name: "copy"
+    )
+    type: null
+    (MapExpression
+      range: 3:14-3:41
+      (MapEntry
+        range: 3:15-3:32
+        (LiteralExpression
+          range: 3:15-3:22
+          kind: STRING
+          text: "\"value\""
+        )
+        (CallExpression
+          range: 3:24-3:32
+          (IdentifierExpression
+            range: 3:24-3:30
+            name: "effect"
+          )
+        )
+      )
+      (MapSpread
+        range: 3:34-3:40
+        (IdentifierExpression
+          range: 3:37-3:40
+          name: "old"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Map values must produce values at 3:14-3:41

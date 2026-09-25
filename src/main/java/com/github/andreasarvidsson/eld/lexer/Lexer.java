@@ -20,6 +20,7 @@ public class Lexer {
                 Map.entry("const", TokenType.CONST),
                 Map.entry("var", TokenType.VAR),
                 Map.entry("class", TokenType.CLASS),
+                Map.entry("record", TokenType.RECORD),
                 Map.entry("extends", TokenType.EXTENDS),
                 Map.entry("interface", TokenType.INTERFACE),
                 Map.entry("implements", TokenType.IMPLEMENTS),

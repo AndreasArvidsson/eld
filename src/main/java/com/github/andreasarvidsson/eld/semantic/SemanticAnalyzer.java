@@ -34,6 +34,7 @@ import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
+import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import com.github.andreasarvidsson.eld.parser.TryStatement;
 import com.github.andreasarvidsson.eld.parser.ThrowStatement;
 import com.github.andreasarvidsson.eld.parser.CatchClause;
@@ -138,6 +139,11 @@ public final class SemanticAnalyzer {
                 analyzeInterfaceDeclaration(contract, context);
             case ClassDeclaration classDeclaration ->
                 analyzeClassDeclaration(classDeclaration, context);
+            case RecordDeclaration record -> {
+                final ClassDeclaration lowered = RecordLowering.lower(record);
+                model.setRecordClass(record, lowered);
+                analyzeClassDeclaration(lowered, context);
+            }
             case ConstructorDeclaration constructor ->
                 throw new SemanticException(
                     constructor.range(),
@@ -585,6 +591,10 @@ public final class SemanticAnalyzer {
         final Expression fromExpression
     ) {
         return types.resolveAssignType(from, to, fromExpression);
+    }
+
+    public @Nullable Type commonType(final List<Type> candidates) {
+        return types.commonType(candidates);
     }
 
     public Type resolveNamedType(

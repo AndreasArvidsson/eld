@@ -27,6 +27,7 @@ import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
+import com.github.andreasarvidsson.eld.parser.MapExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
@@ -503,6 +504,7 @@ public final class SemanticAnalyzerExpressions {
                 }
                 analyzeConstructorArguments(
                     (ClassType) classType,
+                    creation,
                     creation.arguments(),
                     creation.range(),
                     context
@@ -565,6 +567,8 @@ public final class SemanticAnalyzerExpressions {
             }
             case ArrayExpression array ->
                 operations.analyzeArrayExpression(array, context);
+            case MapExpression map ->
+                operations.analyzeMapExpression(map, context);
             case BinaryExpression binary ->
                 operations.analyzeBinaryExpression(binary, context);
             case UnaryExpression unary ->
@@ -644,6 +648,98 @@ public final class SemanticAnalyzerExpressions {
                 );
             }
         }
+    }
+
+    private void analyzeConstructorArguments(
+        final ClassType classType,
+        final NewExpression creation,
+        final List<Expression> arguments,
+        final Range range,
+        final SemanticContext context
+    ) {
+        final FunctionType constructor = model.getConstructor(classType);
+        final List<FunctionParameter> declarations =
+            model.getConstructorParameters(classType);
+        if (arguments.size() > constructor.parameterTypes().size()) {
+            throw new SemanticException(
+                range,
+                "Expected %s constructor arguments, found %s",
+                constructor.parameterTypes().size(),
+                arguments.size()
+            );
+        }
+        final List<String> names =
+            declarations.stream()
+                .map(parameter -> parameter.name().name())
+                .toList();
+        final List<Integer> parameters = new ArrayList<>();
+        final boolean[] assigned =
+            new boolean[constructor.parameterTypes().size()];
+        boolean seenNamed = false;
+        for (int i = 0; i < arguments.size(); i++) {
+            final Expression supplied = arguments.get(i);
+            final Expression argument;
+            final int parameter;
+            if (supplied instanceof NamedArgumentExpression named) {
+                seenNamed = true;
+                parameter = names.indexOf(named.name().name());
+                if (parameter < 0) {
+                    throw new SemanticException(
+                        named.name().range(),
+                        "Unknown constructor parameter: %s",
+                        named.name().name()
+                    );
+                }
+                argument = named.value();
+            }
+            else {
+                if (seenNamed) {
+                    throw new SemanticException(
+                        supplied.range(),
+                        "Positional arguments must precede named arguments"
+                    );
+                }
+                parameter = i;
+                argument = supplied;
+            }
+            if (assigned[parameter]) {
+                throw new SemanticException(
+                    supplied.range(),
+                    "Argument supplied more than once for constructor parameter: %s",
+                    names.get(parameter)
+                );
+            }
+            assigned[parameter] = true;
+            parameters.add(parameter);
+            if (supplied instanceof NamedArgumentExpression named) {
+                model.setNamedArgument(
+                    named.name(),
+                    declarations.get(parameter).name()
+                );
+            }
+            final Type expected = constructor.parameterTypes().get(parameter);
+            final Type actual = analyzeExpression(argument, context, expected);
+            if (
+                analyzer.resolveAssignType(actual, expected, argument) == null
+            ) {
+                throw new SemanticException(
+                    argument.range(),
+                    "Cannot assign %s to %s",
+                    actual,
+                    expected
+                );
+            }
+        }
+        for (int i = 0; i < assigned.length; i++) {
+            if (!assigned[i] && !declarations.get(i).omittable()) {
+                throw new SemanticException(
+                    range,
+                    "Missing required constructor argument: %s",
+                    declarations.get(i).name().name()
+                );
+            }
+        }
+        model.setConstructorArgumentParameters(creation, parameters);
     }
 
     public Type analyzeLambdaExpression(

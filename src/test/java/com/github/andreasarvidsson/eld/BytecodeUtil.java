@@ -77,6 +77,20 @@ public class BytecodeUtil {
                             .append('\n')
                     )
             );
+        model.findAttribute(Attributes.record())
+            .ifPresent(record -> record.components().forEach(component -> {
+                text.append("  record component ")
+                    .append(component.name().stringValue())
+                    .append(' ')
+                    .append(component.descriptor().stringValue())
+                    .append('\n');
+                component.findAttribute(Attributes.signature())
+                    .ifPresent(
+                        signature -> text.append("    signature ")
+                            .append(signature.signature().stringValue())
+                            .append('\n')
+                    );
+            }));
         for (final var field : model.fields()) {
             text.append("  field ")
                 .append(field.fieldName().stringValue())

@@ -362,6 +362,7 @@ public final class SemanticAnalyzerStatements {
             bodies.add(elseBranch.body());
         }
         Type result = BuiltinType.VOID;
+        final List<Expression> resultValues = new ArrayList<>();
         for (final SwitchBranchBody body : bodies) {
             final List<YieldStatement> yields = new ArrayList<>();
             final SemanticContext branchContext =
@@ -417,6 +418,7 @@ public final class SemanticAnalyzerStatements {
                 values.add(statement.value());
             }
             if (requireValue) {
+                resultValues.addAll(values);
                 for (final Expression value : values) {
                     final Type type = model.getEffectiveType(value);
                     if (type == BuiltinType.VOID) {
@@ -437,6 +439,9 @@ public final class SemanticAnalyzerStatements {
                 expression.range(),
                 "A switch expression must produce a value"
             );
+        }
+        if (requireValue) {
+            applyCommonType(resultValues, result);
         }
         return result;
     }
@@ -487,6 +492,10 @@ public final class SemanticAnalyzerStatements {
             final Type type = model.getEffectiveType(statement.value());
             result = commonBranchType(result, type, statement.value());
         }
+        applyCommonType(
+            yields.stream().map(YieldStatement::value).toList(),
+            result
+        );
         return result;
     }
 
@@ -513,7 +522,13 @@ public final class SemanticAnalyzerStatements {
                 "Ternary branches must produce values"
             );
         }
-        return commonBranchType(thenType, elseType, expression.elseBranch());
+        final Type result =
+            commonBranchType(thenType, elseType, expression.elseBranch());
+        applyCommonType(
+            List.of(expression.thenBranch(), expression.elseBranch()),
+            result
+        );
+        return result;
     }
 
     public Type commonBranchType(
@@ -521,24 +536,9 @@ public final class SemanticAnalyzerStatements {
         final Type right,
         final AstNode node
     ) {
-        if (model.isSubtype(left, right)) {
-            return right;
-        }
-        if (model.isSubtype(right, left)) {
-            return left;
-        }
-        if (left.equals(right)) {
-            return left;
-        }
-        if (
-            left instanceof ClassType leftClass
-                && right instanceof ClassType rightClass
-        ) {
-            final ClassType common =
-                model.commonClassType(leftClass, rightClass);
-            if (common != null) {
-                return common;
-            }
+        final Type common = analyzer.commonType(List.of(left, right));
+        if (common != null) {
+            return common;
         }
         throw new SemanticException(
             node.range(),
@@ -546,6 +546,23 @@ public final class SemanticAnalyzerStatements {
             left,
             right
         );
+    }
+
+    private void applyCommonType(
+        final List<Expression> expressions,
+        final Type type
+    ) {
+        for (final Expression expression : expressions) {
+            final Type actual = model.getExpressionType(expression);
+            if (analyzer.resolveAssignType(actual, type, expression) == null) {
+                throw new SemanticException(
+                    expression.range(),
+                    "Cannot convert branch type %s to %s",
+                    actual,
+                    type
+                );
+            }
+        }
     }
 
     private boolean producesValue(final BlockItem item) {

@@ -16,6 +16,7 @@ public enum TokenType {
     CONST,
     VAR,
     CLASS,
+    RECORD,
     EXTENDS,
     INTERFACE,
     IMPLEMENTS,

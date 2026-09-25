@@ -1,0 +1,109 @@
+const foo = {
+    "small": 1,
+    "large": 9_000_000_000
+};
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+STRING_LITERAL "\"small\"" (2:5-2:12)
+COLON (2:12-2:13)
+INTEGER_LITERAL "1" (2:14-2:15)
+COMMA (2:15-2:16)
+STRING_LITERAL "\"large\"" (3:5-3:12)
+COLON (3:12-3:13)
+INTEGER_LITERAL "9_000_000_000" (3:14-3:27)
+RIGHT_BRACE (4:1-4:2)
+SEMICOLON (4:2-4:3)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:3
+  (VariableDeclaration
+    range: 1:1-4:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    type: null
+    (MapExpression
+      range: 1:13-4:2
+      (MapEntry
+        range: 2:5-2:15
+        (LiteralExpression
+          range: 2:5-2:12
+          kind: STRING
+          text: "\"small\""
+        )
+        (LiteralExpression
+          range: 2:14-2:15
+          kind: INT
+          text: "1"
+        )
+      )
+      (MapEntry
+        range: 3:5-3:27
+        (LiteralExpression
+          range: 3:5-3:12
+          kind: STRING
+          text: "\"large\""
+        )
+        (LiteralExpression
+          range: 3:14-3:27
+          kind: INT
+          text: "9_000_000_000"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-4:2 -> Map<string, i64>
+  2:5-2:12 -> string
+  2:14-2:15 -> i32
+  3:5-3:12 -> string
+  3:14-3:27 -> i64
+
+Conversions:
+  2:14-2:15 -> i32 -> i64
+
+Declarations:
+  1:7-1:10 -> const foo: Map<string, i64>
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Long;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "small"
+    LDC 1
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC "large"
+    LDC2_W 9000000000
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.foo Ljava/util/Map;
+    RETURN
+    max stack 5 max locals 0
+
+--- OUTPUT ---
+
+

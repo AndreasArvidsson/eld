@@ -70,4 +70,4 @@ SEMICOLON (2:31-2:32)
 
 --- SEMANTIC ---
 
-SemanticException: Array elements must have the same type at 2:16-2:31
+SemanticException: Array elements have no common type at 2:16-2:31

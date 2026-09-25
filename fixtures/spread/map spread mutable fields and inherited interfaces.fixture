@@ -1,0 +1,256 @@
+const original = {"value": 1, "other": 2};
+const copied = {...original};
+copied.put("value", 3);
+print(original);
+print(copied);
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "original" (1:7-1:15)
+EQUAL (1:16-1:17)
+LEFT_BRACE (1:18-1:19)
+STRING_LITERAL "\"value\"" (1:19-1:26)
+COLON (1:26-1:27)
+INTEGER_LITERAL "1" (1:28-1:29)
+COMMA (1:29-1:30)
+STRING_LITERAL "\"other\"" (1:31-1:38)
+COLON (1:38-1:39)
+INTEGER_LITERAL "2" (1:40-1:41)
+RIGHT_BRACE (1:41-1:42)
+SEMICOLON (1:42-1:43)
+CONST (2:1-2:6)
+IDENTIFIER "copied" (2:7-2:13)
+EQUAL (2:14-2:15)
+LEFT_BRACE (2:16-2:17)
+ELLIPSIS (2:17-2:20)
+IDENTIFIER "original" (2:20-2:28)
+RIGHT_BRACE (2:28-2:29)
+SEMICOLON (2:29-2:30)
+IDENTIFIER "copied" (3:1-3:7)
+DOT (3:7-3:8)
+IDENTIFIER "put" (3:8-3:11)
+LEFT_PAREN (3:11-3:12)
+STRING_LITERAL "\"value\"" (3:12-3:19)
+COMMA (3:19-3:20)
+INTEGER_LITERAL "3" (3:21-3:22)
+RIGHT_PAREN (3:22-3:23)
+SEMICOLON (3:23-3:24)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "original" (4:7-4:15)
+RIGHT_PAREN (4:15-4:16)
+SEMICOLON (4:16-4:17)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "copied" (5:7-5:13)
+RIGHT_PAREN (5:13-5:14)
+SEMICOLON (5:14-5:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:15
+  (VariableDeclaration
+    range: 1:1-1:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "original"
+    )
+    type: null
+    (MapExpression
+      range: 1:18-1:42
+      (MapEntry
+        range: 1:19-1:29
+        (LiteralExpression
+          range: 1:19-1:26
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 1:28-1:29
+          kind: INT
+          text: "1"
+        )
+      )
+      (MapEntry
+        range: 1:31-1:41
+        (LiteralExpression
+          range: 1:31-1:38
+          kind: STRING
+          text: "\"other\""
+        )
+        (LiteralExpression
+          range: 1:40-1:41
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "copied"
+    )
+    type: null
+    (MapExpression
+      range: 2:16-2:29
+      (MapSpread
+        range: 2:17-2:28
+        (IdentifierExpression
+          range: 2:20-2:28
+          name: "original"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:24
+    (CallExpression
+      range: 3:1-3:23
+      (MemberExpression
+        range: 3:1-3:11
+        (IdentifierExpression
+          range: 3:1-3:7
+          name: "copied"
+        )
+        (IdentifierExpression
+          range: 3:8-3:11
+          name: "put"
+        )
+      )
+      (LiteralExpression
+        range: 3:12-3:19
+        kind: STRING
+        text: "\"value\""
+      )
+      (LiteralExpression
+        range: 3:21-3:22
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:17
+    (CallExpression
+      range: 4:1-4:16
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 4:7-4:15
+        name: "original"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:15
+    (CallExpression
+      range: 5:1-5:14
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:13
+        name: "copied"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:18-1:42 -> Map<string, i32>
+  1:19-1:26 -> string
+  1:28-1:29 -> i32
+  1:31-1:38 -> string
+  1:40-1:41 -> i32
+  2:16-2:29 -> Map<string, i32>
+  2:20-2:28 -> Map<string, i32>
+  3:1-3:7 -> Map<string, i32>
+  3:1-3:11 -> (string, i32) => i32 | null
+  3:1-3:23 -> i32 | null
+  3:8-3:11 -> (string, i32) => i32 | null
+  3:12-3:19 -> string
+  3:21-3:22 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:16 -> void
+  4:7-4:15 -> Map<string, i32>
+  5:1-5:6 -> (any) => void
+  5:1-5:14 -> void
+  5:7-5:13 -> Map<string, i32>
+
+Declarations:
+  1:7-1:15 -> const original: Map<string, i32>
+  2:7-2:13 -> const copied: Map<string, i32>
+
+References:
+  2:20-2:28 -> 1:7-1:15
+  3:1-3:7 -> 2:7-2:13
+  3:8-3:11 -> 3:1-3:11
+  4:1-4:6 -> builtin print
+  4:7-4:15 -> 1:7-1:15
+  5:1-5:6 -> builtin print
+  5:7-5:13 -> 2:7-2:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field original Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  field copied Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "value"
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC "other"
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.original Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    GETSTATIC Test.original Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    PUTSTATIC Test.copied Ljava/util/Map;
+    GETSTATIC Test.copied Ljava/util/Map;
+    LDC "value"
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.original Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.copied Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+{value=1, other=2}
+{value=3, other=2}
+

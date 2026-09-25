@@ -525,10 +525,10 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     POP
     RETURN
     max stack 3 max locals 2
-  method <init>(I[Z)V flags [PROTECTED, SYNTHETIC]
-    ALOAD_2 2
-    LDC 0
-    BALOAD
+  method <init>(II)V flags [PROTECTED, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
     IFEQ L0
     LDC 4
     ISTORE_1 1
@@ -551,14 +551,9 @@ class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     ALOAD_0 0
     ICONST_0 0
     LDC 1
-    NEWARRAY BOOLEAN
-    DUP
-    LDC 0
-    ICONST_1 1
-    BASTORE
-    INVOKESPECIAL Test$Base.<init>(I[Z)V
+    INVOKESPECIAL Test$Base.<init>(II)V
     RETURN
-    max stack 6 max locals 1
+    max stack 3 max locals 1
   method read()I flags [PUBLIC]
     ALOAD_0 0
     GETFIELD Test$Base.value I

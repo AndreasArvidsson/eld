@@ -16,11 +16,13 @@ import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassModel;
 import java.lang.classfile.FieldModel;
 import java.lang.classfile.Opcode;
+import java.lang.classfile.Attributes;
 import java.lang.classfile.instruction.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -784,14 +786,13 @@ class BytecodeGeneratorTest {
         );
         assertTrue(
             Modifier.isPrivate(
-                secret.getDeclaredMethod("helper", int.class, boolean[].class)
+                secret.getDeclaredMethod("helper", int.class, int.class)
                     .getModifiers()
             )
         );
         assertTrue(
             Modifier.isPublic(
-                secret
-                    .getDeclaredMethod("defaulted", int.class, boolean[].class)
+                secret.getDeclaredMethod("defaulted", int.class, int.class)
                     .getModifiers()
             )
         );
@@ -1316,6 +1317,41 @@ class BytecodeGeneratorTest {
         assertEquals(2, type.getField("calls").get(null));
         assertEquals(7, type.getMethod("skipped").invoke(null));
         assertEquals("hello", type.getMethod("nullableValue").invoke(null));
+    }
+
+    @Test
+    void defaultArgumentsUseLongMaskBeyond32Parameters() throws Exception {
+        final String parameters =
+            java.util.stream.IntStream.range(0, 33)
+                .mapToObj(i -> "p%d?: i32".formatted(i))
+                .collect(java.util.stream.Collectors.joining(", "));
+        final Class<?> type = compile("""
+            func wide(%s) i32 | null { return p32; }
+            func omittedLast() i32 | null { return wide(); }
+            func suppliedLast() i32 | null { return wide(p32: 9); }
+            """.formatted(parameters));
+
+        assertNull(type.getMethod("omittedLast").invoke(null));
+        assertEquals(9, type.getMethod("suppliedLast").invoke(null));
+        final var defaultOverload =
+            Arrays.stream(type.getDeclaredMethods())
+                .filter(method -> method.getName().equals("wide"))
+                .filter(method -> method.getParameterCount() == 34)
+                .findFirst()
+                .orElseThrow();
+        assertTrue(defaultOverload.isSynthetic());
+        assertEquals(long.class, defaultOverload.getParameterTypes()[33]);
+
+        final String excessiveParameters =
+            java.util.stream.IntStream.range(0, 65)
+                .mapToObj(i -> "p%d?: i32".formatted(i))
+                .collect(java.util.stream.Collectors.joining(", "));
+        assertThrows(
+            BytecodeException.class,
+            () -> compile(
+                "func excessive(%s) {}".formatted(excessiveParameters)
+            )
+        );
     }
 
     @Test
@@ -3950,6 +3986,83 @@ class BytecodeGeneratorTest {
         assertEquals(10, type.getField("field").get(instance));
         assertTrue(Modifier.isFinal(type.getField("field").getModifiers()));
         assertFalse(Modifier.isStatic(type.getField("field").getModifiers()));
+    }
+
+    @Test
+    void generatesJvmRecords() throws Exception {
+        final Program program = new Parser(new Lexer("""
+            record Foo(name: string, value: i32) {
+                public func name() string { return "method"; }
+            }
+            """).getTokens()).parse();
+        final var model = new SemanticAnalyzer().analyze(program);
+        final var classes =
+            new BytecodeGenerator(program, model).generateClasses();
+        final ClassModel bytecode =
+            ClassFile.of().parse(classes.get("Test$Foo"));
+        assertEquals(
+            "java/lang/Record",
+            bytecode.superclass().orElseThrow().asInternalName()
+        );
+        assertEquals(
+            List.of("name", "value"),
+            bytecode.findAttribute(Attributes.record())
+                .orElseThrow()
+                .components()
+                .stream()
+                .map(component -> component.name().stringValue())
+                .toList()
+        );
+        final var toStringMethod =
+            bytecode.methods()
+                .stream()
+                .filter(method -> method.methodName().equalsString("toString"))
+                .findFirst()
+                .orElseThrow();
+        assertTrue(
+            BytecodeUtil.instructions(toStringMethod)
+                .stream()
+                .anyMatch(
+                    instruction -> instruction.opcode() == Opcode.INVOKEDYNAMIC
+                )
+        );
+        assertFalse(
+            BytecodeUtil.instructions(toStringMethod)
+                .stream()
+                .filter(NewObjectInstruction.class::isInstance)
+                .map(NewObjectInstruction.class::cast)
+                .anyMatch(
+                    instruction -> instruction.className()
+                        .asInternalName()
+                        .equals("java/lang/StringBuilder")
+                )
+        );
+
+        final Class<?> type = loadClass(classes, "Test$Foo");
+        assertTrue(type.isRecord());
+        assertFalse(java.io.Serializable.class.isAssignableFrom(type));
+        assertEquals(
+            List.of("name", "value"),
+            List.of(type.getRecordComponents())
+                .stream()
+                .map(component -> component.getName())
+                .toList()
+        );
+        for (final String name : List.of("name", "value")) {
+            final int modifiers = type.getDeclaredField(name).getModifiers();
+            assertTrue(Modifier.isPrivate(modifiers));
+            assertTrue(Modifier.isFinal(modifiers));
+        }
+        final Object first =
+            type.getConstructor(String.class, int.class).newInstance("foo", 1);
+        final Object second =
+            type.getConstructor(String.class, int.class).newInstance("foo", 1);
+        assertEquals("foo", type.getMethod("name").invoke(first));
+        assertEquals("method", type.getMethod("$name").invoke(first));
+        assertEquals(1, type.getMethod("value").invoke(first));
+        assertEquals(first, second);
+        assertEquals(first.hashCode(), second.hashCode());
+        assertEquals("Foo(name=foo, value=1)", first.toString());
     }
 
     @Test

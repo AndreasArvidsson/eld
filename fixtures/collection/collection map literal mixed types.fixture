@@ -1,0 +1,68 @@
+const foo = {
+    "int": 1,
+    "float": 2.5
+};
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+STRING_LITERAL "\"int\"" (2:5-2:10)
+COLON (2:10-2:11)
+INTEGER_LITERAL "1" (2:12-2:13)
+COMMA (2:13-2:14)
+STRING_LITERAL "\"float\"" (3:5-3:12)
+COLON (3:12-3:13)
+FLOAT_LITERAL "2.5" (3:14-3:17)
+RIGHT_BRACE (4:1-4:2)
+SEMICOLON (4:2-4:3)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:3
+  (VariableDeclaration
+    range: 1:1-4:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    type: null
+    (MapExpression
+      range: 1:13-4:2
+      (MapEntry
+        range: 2:5-2:13
+        (LiteralExpression
+          range: 2:5-2:10
+          kind: STRING
+          text: "\"int\""
+        )
+        (LiteralExpression
+          range: 2:12-2:13
+          kind: INT
+          text: "1"
+        )
+      )
+      (MapEntry
+        range: 3:5-3:17
+        (LiteralExpression
+          range: 3:5-3:12
+          kind: STRING
+          text: "\"float\""
+        )
+        (LiteralExpression
+          range: 3:14-3:17
+          kind: FLOAT
+          text: "2.5"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Map values have no common type at 1:13-4:2

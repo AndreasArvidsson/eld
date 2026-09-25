@@ -39,6 +39,11 @@ class Counter {
     }
 }
 
+record Point(x: i32, y: i32);
+
+const origin = new Point(0, 0);
+const moved = origin.copy(x: 5);
+
 interface Person {
     const name: string;
     var age: i32;
@@ -134,23 +139,36 @@ print(pair[0]);
 print(pair == (1, "one"));
 ```
 
-## Object and array spread
+## Records and array spread
 
-Use `...` inside object and array literals to create shallow copies and compose values:
+Records are immutable data classes with public fields, a canonical constructor,
+and a `copy` method. Named arguments make selective copies concise:
 
 ```text
-interface Options {
-    const name: string;
-    const value: i32;
+record Options(name: string, value: i32);
+
+record Greeting(name: string) {
+    public func message() string {
+        return f"Hello {this.name}";
+    }
 }
-const old: Options = { name: "foo", value: 10 };
-const updated: Options = { ...old, value: 5 };
-const inferred = { ...old, name: "Bob" };
+
+const old = new Options("foo", 10);
+const updated = old.copy(value: 5);
+const renamed = old.copy(name: "Bob");
+const duplicate = old.copy();
 
 const first = [1, 2];
 const second = [3, 4];
 const combined: [i32] = [0, ...first, ...second, 5];
 ```
+
+Record parameters cannot be optional or have default values. Every argument is
+required when constructing a record; every argument is optional when calling
+its generated `copy` method. A record may implement interfaces by adding
+`implements InterfaceName` after its parameter list. Records may also declare
+methods in a body; without a body, terminate the declaration with a semicolon.
+Records are emitted as JVM records.
 
 ## Calls and function references
 

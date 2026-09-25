@@ -1,0 +1,656 @@
+const old = {"name": "foo", "value": "10"};
+const updated = {...old, "value": "5"};
+const overwritten = {"value": "5", ...old};
+const inferred = {...old, "name": "Bob"};
+const combined = {...old, ...updated, "name": "last"};
+const nested = {...{...old, "name": "inner"}, "value": "6"};
+print(updated);
+print(overwritten);
+print(inferred);
+print(combined);
+print(old);
+print(nested);
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "old" (1:7-1:10)
+EQUAL (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+STRING_LITERAL "\"name\"" (1:14-1:20)
+COLON (1:20-1:21)
+STRING_LITERAL "\"foo\"" (1:22-1:27)
+COMMA (1:27-1:28)
+STRING_LITERAL "\"value\"" (1:29-1:36)
+COLON (1:36-1:37)
+STRING_LITERAL "\"10\"" (1:38-1:42)
+RIGHT_BRACE (1:42-1:43)
+SEMICOLON (1:43-1:44)
+CONST (2:1-2:6)
+IDENTIFIER "updated" (2:7-2:14)
+EQUAL (2:15-2:16)
+LEFT_BRACE (2:17-2:18)
+ELLIPSIS (2:18-2:21)
+IDENTIFIER "old" (2:21-2:24)
+COMMA (2:24-2:25)
+STRING_LITERAL "\"value\"" (2:26-2:33)
+COLON (2:33-2:34)
+STRING_LITERAL "\"5\"" (2:35-2:38)
+RIGHT_BRACE (2:38-2:39)
+SEMICOLON (2:39-2:40)
+CONST (3:1-3:6)
+IDENTIFIER "overwritten" (3:7-3:18)
+EQUAL (3:19-3:20)
+LEFT_BRACE (3:21-3:22)
+STRING_LITERAL "\"value\"" (3:22-3:29)
+COLON (3:29-3:30)
+STRING_LITERAL "\"5\"" (3:31-3:34)
+COMMA (3:34-3:35)
+ELLIPSIS (3:36-3:39)
+IDENTIFIER "old" (3:39-3:42)
+RIGHT_BRACE (3:42-3:43)
+SEMICOLON (3:43-3:44)
+CONST (4:1-4:6)
+IDENTIFIER "inferred" (4:7-4:15)
+EQUAL (4:16-4:17)
+LEFT_BRACE (4:18-4:19)
+ELLIPSIS (4:19-4:22)
+IDENTIFIER "old" (4:22-4:25)
+COMMA (4:25-4:26)
+STRING_LITERAL "\"name\"" (4:27-4:33)
+COLON (4:33-4:34)
+STRING_LITERAL "\"Bob\"" (4:35-4:40)
+RIGHT_BRACE (4:40-4:41)
+SEMICOLON (4:41-4:42)
+CONST (5:1-5:6)
+IDENTIFIER "combined" (5:7-5:15)
+EQUAL (5:16-5:17)
+LEFT_BRACE (5:18-5:19)
+ELLIPSIS (5:19-5:22)
+IDENTIFIER "old" (5:22-5:25)
+COMMA (5:25-5:26)
+ELLIPSIS (5:27-5:30)
+IDENTIFIER "updated" (5:30-5:37)
+COMMA (5:37-5:38)
+STRING_LITERAL "\"name\"" (5:39-5:45)
+COLON (5:45-5:46)
+STRING_LITERAL "\"last\"" (5:47-5:53)
+RIGHT_BRACE (5:53-5:54)
+SEMICOLON (5:54-5:55)
+CONST (6:1-6:6)
+IDENTIFIER "nested" (6:7-6:13)
+EQUAL (6:14-6:15)
+LEFT_BRACE (6:16-6:17)
+ELLIPSIS (6:17-6:20)
+LEFT_BRACE (6:20-6:21)
+ELLIPSIS (6:21-6:24)
+IDENTIFIER "old" (6:24-6:27)
+COMMA (6:27-6:28)
+STRING_LITERAL "\"name\"" (6:29-6:35)
+COLON (6:35-6:36)
+STRING_LITERAL "\"inner\"" (6:37-6:44)
+RIGHT_BRACE (6:44-6:45)
+COMMA (6:45-6:46)
+STRING_LITERAL "\"value\"" (6:47-6:54)
+COLON (6:54-6:55)
+STRING_LITERAL "\"6\"" (6:56-6:59)
+RIGHT_BRACE (6:59-6:60)
+SEMICOLON (6:60-6:61)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "updated" (7:7-7:14)
+RIGHT_PAREN (7:14-7:15)
+SEMICOLON (7:15-7:16)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "overwritten" (8:7-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "inferred" (9:7-9:15)
+RIGHT_PAREN (9:15-9:16)
+SEMICOLON (9:16-9:17)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "combined" (10:7-10:15)
+RIGHT_PAREN (10:15-10:16)
+SEMICOLON (10:16-10:17)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "old" (11:7-11:10)
+RIGHT_PAREN (11:10-11:11)
+SEMICOLON (11:11-11:12)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "nested" (12:7-12:13)
+RIGHT_PAREN (12:13-12:14)
+SEMICOLON (12:14-12:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:15
+  (VariableDeclaration
+    range: 1:1-1:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "old"
+    )
+    type: null
+    (MapExpression
+      range: 1:13-1:43
+      (MapEntry
+        range: 1:14-1:27
+        (LiteralExpression
+          range: 1:14-1:20
+          kind: STRING
+          text: "\"name\""
+        )
+        (LiteralExpression
+          range: 1:22-1:27
+          kind: STRING
+          text: "\"foo\""
+        )
+      )
+      (MapEntry
+        range: 1:29-1:42
+        (LiteralExpression
+          range: 1:29-1:36
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 1:38-1:42
+          kind: STRING
+          text: "\"10\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "updated"
+    )
+    type: null
+    (MapExpression
+      range: 2:17-2:39
+      (MapSpread
+        range: 2:18-2:24
+        (IdentifierExpression
+          range: 2:21-2:24
+          name: "old"
+        )
+      )
+      (MapEntry
+        range: 2:26-2:38
+        (LiteralExpression
+          range: 2:26-2:33
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 2:35-2:38
+          kind: STRING
+          text: "\"5\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:18
+      name: "overwritten"
+    )
+    type: null
+    (MapExpression
+      range: 3:21-3:43
+      (MapEntry
+        range: 3:22-3:34
+        (LiteralExpression
+          range: 3:22-3:29
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 3:31-3:34
+          kind: STRING
+          text: "\"5\""
+        )
+      )
+      (MapSpread
+        range: 3:36-3:42
+        (IdentifierExpression
+          range: 3:39-3:42
+          name: "old"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:15
+      name: "inferred"
+    )
+    type: null
+    (MapExpression
+      range: 4:18-4:41
+      (MapSpread
+        range: 4:19-4:25
+        (IdentifierExpression
+          range: 4:22-4:25
+          name: "old"
+        )
+      )
+      (MapEntry
+        range: 4:27-4:40
+        (LiteralExpression
+          range: 4:27-4:33
+          kind: STRING
+          text: "\"name\""
+        )
+        (LiteralExpression
+          range: 4:35-4:40
+          kind: STRING
+          text: "\"Bob\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "combined"
+    )
+    type: null
+    (MapExpression
+      range: 5:18-5:54
+      (MapSpread
+        range: 5:19-5:25
+        (IdentifierExpression
+          range: 5:22-5:25
+          name: "old"
+        )
+      )
+      (MapSpread
+        range: 5:27-5:37
+        (IdentifierExpression
+          range: 5:30-5:37
+          name: "updated"
+        )
+      )
+      (MapEntry
+        range: 5:39-5:53
+        (LiteralExpression
+          range: 5:39-5:45
+          kind: STRING
+          text: "\"name\""
+        )
+        (LiteralExpression
+          range: 5:47-5:53
+          kind: STRING
+          text: "\"last\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:61
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "nested"
+    )
+    type: null
+    (MapExpression
+      range: 6:16-6:60
+      (MapSpread
+        range: 6:17-6:45
+        (MapExpression
+          range: 6:20-6:45
+          (MapSpread
+            range: 6:21-6:27
+            (IdentifierExpression
+              range: 6:24-6:27
+              name: "old"
+            )
+          )
+          (MapEntry
+            range: 6:29-6:44
+            (LiteralExpression
+              range: 6:29-6:35
+              kind: STRING
+              text: "\"name\""
+            )
+            (LiteralExpression
+              range: 6:37-6:44
+              kind: STRING
+              text: "\"inner\""
+            )
+          )
+        )
+      )
+      (MapEntry
+        range: 6:47-6:59
+        (LiteralExpression
+          range: 6:47-6:54
+          kind: STRING
+          text: "\"value\""
+        )
+        (LiteralExpression
+          range: 6:56-6:59
+          kind: STRING
+          text: "\"6\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:16
+    (CallExpression
+      range: 7:1-7:15
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:14
+        name: "updated"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:18
+        name: "overwritten"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:17
+    (CallExpression
+      range: 9:1-9:16
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 9:7-9:15
+        name: "inferred"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:17
+    (CallExpression
+      range: 10:1-10:16
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 10:7-10:15
+        name: "combined"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:12
+    (CallExpression
+      range: 11:1-11:11
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 11:7-11:10
+        name: "old"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:15
+    (CallExpression
+      range: 12:1-12:14
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:7-12:13
+        name: "nested"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:43 -> Map<string, string>
+  1:14-1:20 -> string
+  1:22-1:27 -> string
+  1:29-1:36 -> string
+  1:38-1:42 -> string
+  2:17-2:39 -> Map<string, string>
+  2:21-2:24 -> Map<string, string>
+  2:26-2:33 -> string
+  2:35-2:38 -> string
+  3:21-3:43 -> Map<string, string>
+  3:22-3:29 -> string
+  3:31-3:34 -> string
+  3:39-3:42 -> Map<string, string>
+  4:18-4:41 -> Map<string, string>
+  4:22-4:25 -> Map<string, string>
+  4:27-4:33 -> string
+  4:35-4:40 -> string
+  5:18-5:54 -> Map<string, string>
+  5:22-5:25 -> Map<string, string>
+  5:30-5:37 -> Map<string, string>
+  5:39-5:45 -> string
+  5:47-5:53 -> string
+  6:16-6:60 -> Map<string, string>
+  6:20-6:45 -> Map<string, string>
+  6:24-6:27 -> Map<string, string>
+  6:29-6:35 -> string
+  6:37-6:44 -> string
+  6:47-6:54 -> string
+  6:56-6:59 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:15 -> void
+  7:7-7:14 -> Map<string, string>
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:18 -> Map<string, string>
+  9:1-9:6 -> (any) => void
+  9:1-9:16 -> void
+  9:7-9:15 -> Map<string, string>
+  10:1-10:6 -> (any) => void
+  10:1-10:16 -> void
+  10:7-10:15 -> Map<string, string>
+  11:1-11:6 -> (any) => void
+  11:1-11:11 -> void
+  11:7-11:10 -> Map<string, string>
+  12:1-12:6 -> (any) => void
+  12:1-12:14 -> void
+  12:7-12:13 -> Map<string, string>
+
+Declarations:
+  1:7-1:10 -> const old: Map<string, string>
+  2:7-2:14 -> const updated: Map<string, string>
+  3:7-3:18 -> const overwritten: Map<string, string>
+  4:7-4:15 -> const inferred: Map<string, string>
+  5:7-5:15 -> const combined: Map<string, string>
+  6:7-6:13 -> const nested: Map<string, string>
+
+References:
+  2:21-2:24 -> 1:7-1:10
+  3:39-3:42 -> 1:7-1:10
+  4:22-4:25 -> 1:7-1:10
+  5:22-5:25 -> 1:7-1:10
+  5:30-5:37 -> 2:7-2:14
+  6:24-6:27 -> 1:7-1:10
+  7:1-7:6 -> builtin print
+  7:7-7:14 -> 2:7-2:14
+  8:1-8:6 -> builtin print
+  8:7-8:18 -> 3:7-3:18
+  9:1-9:6 -> builtin print
+  9:7-9:15 -> 4:7-4:15
+  10:1-10:6 -> builtin print
+  10:7-10:15 -> 5:7-5:15
+  11:1-11:6 -> builtin print
+  11:7-11:10 -> 1:7-1:10
+  12:1-12:6 -> builtin print
+  12:7-12:13 -> 6:7-6:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field old Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  field updated Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  field overwritten Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  field inferred Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  field combined Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  field nested Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "name"
+    LDC "foo"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC "value"
+    LDC "10"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.old Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    GETSTATIC Test.old Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC "value"
+    LDC "5"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.updated Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "value"
+    LDC "5"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    GETSTATIC Test.old Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    PUTSTATIC Test.overwritten Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    GETSTATIC Test.old Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC "name"
+    LDC "Bob"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.inferred Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    GETSTATIC Test.old Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    GETSTATIC Test.updated Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC "name"
+    LDC "last"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.combined Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    GETSTATIC Test.old Ljava/util/Map;
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC "name"
+    LDC "inner"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
+    DUP
+    LDC "value"
+    LDC "6"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.nested Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.updated Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.overwritten Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.inferred Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.combined Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.old Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nested Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 6 max locals 0
+
+--- OUTPUT ---
+
+{name=foo, value=5}
+{value=10, name=foo}
+{name=Bob, value=10}
+{name=last, value=5}
+{name=foo, value=10}
+{name=inner, value=6}
+

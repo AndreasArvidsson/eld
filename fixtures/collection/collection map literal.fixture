@@ -1,0 +1,347 @@
+const values = {
+    "foo": 1,
+    "bar": 2,
+    "baz": 3
+};
+const typed: Map<string, i64> = {"answer": 42};
+const empty: Map<string, i32> = {};
+print(values);
+print(typed);
+print(empty);
+
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+EQUAL (1:14-1:15)
+LEFT_BRACE (1:16-1:17)
+STRING_LITERAL "\"foo\"" (2:5-2:10)
+COLON (2:10-2:11)
+INTEGER_LITERAL "1" (2:12-2:13)
+COMMA (2:13-2:14)
+STRING_LITERAL "\"bar\"" (3:5-3:10)
+COLON (3:10-3:11)
+INTEGER_LITERAL "2" (3:12-3:13)
+COMMA (3:13-3:14)
+STRING_LITERAL "\"baz\"" (4:5-4:10)
+COLON (4:10-4:11)
+INTEGER_LITERAL "3" (4:12-4:13)
+RIGHT_BRACE (5:1-5:2)
+SEMICOLON (5:2-5:3)
+CONST (6:1-6:6)
+IDENTIFIER "typed" (6:7-6:12)
+COLON (6:12-6:13)
+IDENTIFIER "Map" (6:14-6:17)
+LESS (6:17-6:18)
+IDENTIFIER "string" (6:18-6:24)
+COMMA (6:24-6:25)
+IDENTIFIER "i64" (6:26-6:29)
+GREATER (6:29-6:30)
+EQUAL (6:31-6:32)
+LEFT_BRACE (6:33-6:34)
+STRING_LITERAL "\"answer\"" (6:34-6:42)
+COLON (6:42-6:43)
+INTEGER_LITERAL "42" (6:44-6:46)
+RIGHT_BRACE (6:46-6:47)
+SEMICOLON (6:47-6:48)
+CONST (7:1-7:6)
+IDENTIFIER "empty" (7:7-7:12)
+COLON (7:12-7:13)
+IDENTIFIER "Map" (7:14-7:17)
+LESS (7:17-7:18)
+IDENTIFIER "string" (7:18-7:24)
+COMMA (7:24-7:25)
+IDENTIFIER "i32" (7:26-7:29)
+GREATER (7:29-7:30)
+EQUAL (7:31-7:32)
+LEFT_BRACE (7:33-7:34)
+RIGHT_BRACE (7:34-7:35)
+SEMICOLON (7:35-7:36)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "values" (8:7-8:13)
+RIGHT_PAREN (8:13-8:14)
+SEMICOLON (8:14-8:15)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "typed" (9:7-9:12)
+RIGHT_PAREN (9:12-9:13)
+SEMICOLON (9:13-9:14)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "empty" (10:7-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:14
+  (VariableDeclaration
+    range: 1:1-5:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    type: null
+    (MapExpression
+      range: 1:16-5:2
+      (MapEntry
+        range: 2:5-2:13
+        (LiteralExpression
+          range: 2:5-2:10
+          kind: STRING
+          text: "\"foo\""
+        )
+        (LiteralExpression
+          range: 2:12-2:13
+          kind: INT
+          text: "1"
+        )
+      )
+      (MapEntry
+        range: 3:5-3:13
+        (LiteralExpression
+          range: 3:5-3:10
+          kind: STRING
+          text: "\"bar\""
+        )
+        (LiteralExpression
+          range: 3:12-3:13
+          kind: INT
+          text: "2"
+        )
+      )
+      (MapEntry
+        range: 4:5-4:13
+        (LiteralExpression
+          range: 4:5-4:10
+          kind: STRING
+          text: "\"baz\""
+        )
+        (LiteralExpression
+          range: 4:12-4:13
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:12
+      name: "typed"
+    )
+    (NamedTypeNode
+      range: 6:14-6:30
+      name: "Map"
+      (NamedTypeNode
+        range: 6:18-6:24
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 6:26-6:29
+        name: "i64"
+      )
+    )
+    (MapExpression
+      range: 6:33-6:47
+      (MapEntry
+        range: 6:34-6:46
+        (LiteralExpression
+          range: 6:34-6:42
+          kind: STRING
+          text: "\"answer\""
+        )
+        (LiteralExpression
+          range: 6:44-6:46
+          kind: INT
+          text: "42"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "empty"
+    )
+    (NamedTypeNode
+      range: 7:14-7:30
+      name: "Map"
+      (NamedTypeNode
+        range: 7:18-7:24
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 7:26-7:29
+        name: "i32"
+      )
+    )
+    (MapExpression
+      range: 7:33-7:35
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:15
+    (CallExpression
+      range: 8:1-8:14
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:13
+        name: "values"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:14
+    (CallExpression
+      range: 9:1-9:13
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 9:7-9:12
+        name: "typed"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:1-10:13
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 10:7-10:12
+        name: "empty"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:16-5:2 -> Map<string, i32>
+  2:5-2:10 -> string
+  2:12-2:13 -> i32
+  3:5-3:10 -> string
+  3:12-3:13 -> i32
+  4:5-4:10 -> string
+  4:12-4:13 -> i32
+  6:33-6:47 -> Map<string, i64>
+  6:34-6:42 -> string
+  6:44-6:46 -> i32
+  7:33-7:35 -> Map<string, i32>
+  8:1-8:6 -> (any) => void
+  8:1-8:14 -> void
+  8:7-8:13 -> Map<string, i32>
+  9:1-9:6 -> (any) => void
+  9:1-9:13 -> void
+  9:7-9:12 -> Map<string, i64>
+  10:1-10:6 -> (any) => void
+  10:1-10:13 -> void
+  10:7-10:12 -> Map<string, i32>
+
+Resolved types:
+  6:14-6:30 -> Map<string, i64>
+  6:18-6:24 -> string
+  6:26-6:29 -> i64
+  7:14-7:30 -> Map<string, i32>
+  7:18-7:24 -> string
+  7:26-7:29 -> i32
+
+Conversions:
+  6:44-6:46 -> i32 -> i64
+
+Declarations:
+  1:7-1:13 -> const values: Map<string, i32>
+  6:7-6:12 -> const typed: Map<string, i64>
+  7:7-7:12 -> const empty: Map<string, i32>
+
+References:
+  8:1-8:6 -> builtin print
+  8:7-8:13 -> 1:7-1:13
+  9:1-9:6 -> builtin print
+  9:7-9:12 -> 6:7-6:12
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 7:7-7:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field values Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  field typed Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Long;>;
+  field empty Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "foo"
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC "bar"
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC "baz"
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.values Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "answer"
+    LDC 42
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.typed Ljava/util/Map;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    PUTSTATIC Test.empty Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.typed Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.empty Ljava/util/Map;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 5 max locals 0
+
+--- OUTPUT ---
+
+{foo=1, bar=2, baz=3}
+{answer=42}
+{}
+

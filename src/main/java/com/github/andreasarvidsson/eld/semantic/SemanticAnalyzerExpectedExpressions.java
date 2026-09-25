@@ -11,6 +11,10 @@ import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
+import com.github.andreasarvidsson.eld.parser.MapElement;
+import com.github.andreasarvidsson.eld.parser.MapEntry;
+import com.github.andreasarvidsson.eld.parser.MapExpression;
+import com.github.andreasarvidsson.eld.parser.MapSpread;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
@@ -36,6 +40,50 @@ public final class SemanticAnalyzerExpectedExpressions {
         final SemanticContext context,
         final @Nullable Type expected
     ) {
+        if (
+            expression instanceof MapExpression map
+                && expected instanceof InterfaceType target
+                && SemanticAnalyzerExpressionOperations.mapType(target) != null
+                && target.javaClass() != null
+                && target.javaClass()
+                    .isAssignableFrom(java.util.LinkedHashMap.class)
+        ) {
+            final Type keyType = target.typeArguments().get(0);
+            final Type valueType = target.typeArguments().get(1);
+            for (final MapElement element : map.elements()) {
+                if (element instanceof MapEntry entry) {
+                    requireMapElement(entry.key(), context, keyType, "key");
+                    requireMapElement(
+                        entry.value(),
+                        context,
+                        valueType,
+                        "value"
+                    );
+                }
+                else if (element instanceof MapSpread spread) {
+                    final Type source =
+                        analyzeExpression(spread.expression(), context);
+                    if (
+                        SemanticAnalyzerExpressionOperations
+                            .mapType(source) == null
+                            || analyzer.resolveAssignType(
+                                source,
+                                target,
+                                spread.expression()
+                            ) == null
+                    ) {
+                        throw new SemanticException(
+                            spread.range(),
+                            "Cannot spread %s into %s",
+                            source,
+                            target
+                        );
+                    }
+                }
+            }
+            model.setExpressionType(map, target);
+            return target;
+        }
         if (
             expression instanceof ArrayExpression array
                 && expected instanceof InterfaceType list
@@ -227,6 +275,24 @@ public final class SemanticAnalyzerExpectedExpressions {
             return type;
         }
         return analyzeExpression(expression, context);
+    }
+
+    private void requireMapElement(
+        final Expression expression,
+        final SemanticContext context,
+        final Type expected,
+        final String element
+    ) {
+        final Type actual = analyzeExpression(expression, context, expected);
+        if (analyzer.resolveAssignType(actual, expected, expression) == null) {
+            throw new SemanticException(
+                expression.range(),
+                "Cannot use %s as map %s %s",
+                actual,
+                element,
+                expected
+            );
+        }
     }
 
     private Type analyzeTupleExpression(
