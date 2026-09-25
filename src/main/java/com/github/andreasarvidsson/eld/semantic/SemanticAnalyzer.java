@@ -43,6 +43,7 @@ import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
+import com.github.andreasarvidsson.eld.parser.TypeAliasDeclaration;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.Visibility;
@@ -149,6 +150,13 @@ public final class SemanticAnalyzer {
                 final ClassDeclaration lowered = RecordLowering.lower(record);
                 model.setRecordClass(record, lowered);
                 analyzeClassDeclaration(lowered, context);
+            }
+            case TypeAliasDeclaration alias -> {
+                final Type type = types.resolveType(alias.type(), context);
+                final TypeAliasSymbol symbol =
+                    new TypeAliasSymbol(alias.name(), type);
+                context.scope().declare(symbol);
+                model.setSymbol(alias.name(), symbol);
             }
             case ConstructorDeclaration constructor ->
                 throw new SemanticException(

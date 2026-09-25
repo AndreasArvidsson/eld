@@ -19,6 +19,7 @@ public class Lexer {
             Map.ofEntries(
                 Map.entry("const", TokenType.CONST),
                 Map.entry("var", TokenType.VAR),
+                Map.entry("type", TokenType.TYPE),
                 Map.entry("class", TokenType.CLASS),
                 Map.entry("record", TokenType.RECORD),
                 Map.entry("extends", TokenType.EXTENDS),

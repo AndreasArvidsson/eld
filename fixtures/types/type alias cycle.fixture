@@ -1,0 +1,64 @@
+type A = B;
+type B = C;
+type C = A;
+
+--- TOKENS ---
+
+TYPE (1:1-1:5)
+IDENTIFIER "A" (1:6-1:7)
+EQUAL (1:8-1:9)
+IDENTIFIER "B" (1:10-1:11)
+SEMICOLON (1:11-1:12)
+TYPE (2:1-2:5)
+IDENTIFIER "B" (2:6-2:7)
+EQUAL (2:8-2:9)
+IDENTIFIER "C" (2:10-2:11)
+SEMICOLON (2:11-2:12)
+TYPE (3:1-3:5)
+IDENTIFIER "C" (3:6-3:7)
+EQUAL (3:8-3:9)
+IDENTIFIER "A" (3:10-3:11)
+SEMICOLON (3:11-3:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:12
+  (TypeAliasDeclaration
+    range: 1:1-1:12
+    (IdentifierDeclaration
+      range: 1:6-1:7
+      name: "A"
+    )
+    (NamedTypeNode
+      range: 1:10-1:11
+      name: "B"
+    )
+  )
+  (TypeAliasDeclaration
+    range: 2:1-2:12
+    (IdentifierDeclaration
+      range: 2:6-2:7
+      name: "B"
+    )
+    (NamedTypeNode
+      range: 2:10-2:11
+      name: "C"
+    )
+  )
+  (TypeAliasDeclaration
+    range: 3:1-3:12
+    (IdentifierDeclaration
+      range: 3:6-3:7
+      name: "C"
+    )
+    (NamedTypeNode
+      range: 3:10-3:11
+      name: "A"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Unknown type: B at 1:10-1:11

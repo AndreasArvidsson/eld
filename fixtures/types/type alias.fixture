@@ -1,0 +1,144 @@
+type Foo = i32 | string;
+type Bar = Foo;
+const foo: Foo = 0;
+const bar: Bar = "hello";
+
+--- TOKENS ---
+
+TYPE (1:1-1:5)
+IDENTIFIER "Foo" (1:6-1:9)
+EQUAL (1:10-1:11)
+IDENTIFIER "i32" (1:12-1:15)
+PIPE (1:16-1:17)
+IDENTIFIER "string" (1:18-1:24)
+SEMICOLON (1:24-1:25)
+TYPE (2:1-2:5)
+IDENTIFIER "Bar" (2:6-2:9)
+EQUAL (2:10-2:11)
+IDENTIFIER "Foo" (2:12-2:15)
+SEMICOLON (2:15-2:16)
+CONST (3:1-3:6)
+IDENTIFIER "foo" (3:7-3:10)
+COLON (3:10-3:11)
+IDENTIFIER "Foo" (3:12-3:15)
+EQUAL (3:16-3:17)
+INTEGER_LITERAL "0" (3:18-3:19)
+SEMICOLON (3:19-3:20)
+CONST (4:1-4:6)
+IDENTIFIER "bar" (4:7-4:10)
+COLON (4:10-4:11)
+IDENTIFIER "Bar" (4:12-4:15)
+EQUAL (4:16-4:17)
+STRING_LITERAL "\"hello\"" (4:18-4:25)
+SEMICOLON (4:25-4:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:26
+  (TypeAliasDeclaration
+    range: 1:1-1:25
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "Foo"
+    )
+    (UnionTypeNode
+      range: 1:12-1:24
+      (NamedTypeNode
+        range: 1:12-1:15
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 1:18-1:24
+        name: "string"
+      )
+    )
+  )
+  (TypeAliasDeclaration
+    range: 2:1-2:16
+    (IdentifierDeclaration
+      range: 2:6-2:9
+      name: "Bar"
+    )
+    (NamedTypeNode
+      range: 2:12-2:15
+      name: "Foo"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:20
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "foo"
+    )
+    (NamedTypeNode
+      range: 3:12-3:15
+      name: "Foo"
+    )
+    (LiteralExpression
+      range: 3:18-3:19
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "bar"
+    )
+    (NamedTypeNode
+      range: 4:12-4:15
+      name: "Bar"
+    )
+    (LiteralExpression
+      range: 4:18-4:25
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:18-3:19 -> i32
+  4:18-4:25 -> string
+
+Resolved types:
+  1:12-1:15 -> i32
+  1:12-1:24 -> i32 | string
+  1:18-1:24 -> string
+  2:12-2:15 -> i32 | string
+  3:12-3:15 -> i32 | string
+  4:12-4:15 -> i32 | string
+
+Conversions:
+  3:18-3:19 -> i32 -> i32 | string
+  4:18-4:25 -> string -> i32 | string
+
+Declarations:
+  1:6-1:9 -> type Foo = i32 | string
+  2:6-2:9 -> type Bar = i32 | string
+  3:7-3:10 -> const foo: i32 | string
+  4:7-4:10 -> const bar: i32 | string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field bar Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.foo Ljava/lang/Object;
+    LDC "hello"
+    PUTSTATIC Test.bar Ljava/lang/Object;
+    RETURN
+    max stack 1 max locals 0
+
+--- OUTPUT ---
+
+

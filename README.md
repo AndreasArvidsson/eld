@@ -365,6 +365,14 @@ Precedence, highest to lowest:
 | `T \| U`                  | A union accepting either type; `T \| null` makes a type nullable. |
 | `Foo`                     | An instance of a declared class `Foo`.                            |
 
+Type aliases give a reusable name to any type and have no runtime
+representation.
+
+```text
+type Foo = i32 | string;
+const value: Foo = "hello";
+```
+
 ### Numeric rules
 
 1. Integer literals infer `i32` when they fit, otherwise `i64`. An explicit

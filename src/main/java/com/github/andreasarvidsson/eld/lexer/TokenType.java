@@ -15,6 +15,7 @@ public enum TokenType {
     // Keywords
     CONST,
     VAR,
+    TYPE,
     CLASS,
     RECORD,
     EXTENDS,

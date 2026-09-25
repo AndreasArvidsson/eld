@@ -2120,6 +2120,30 @@ class BytecodeGeneratorTest {
     }
 
     @Test
+    void typeAliasesCanNameUnionTypes() throws Exception {
+        final Class<?> type = compile("""
+            type Foo = i32 | string;
+            type Bar = Foo;
+            const integer: Foo = 7;
+            const text: Bar = "hello";
+            func identity(value: Foo) Bar { return value; }
+            func local() bool {
+                type Flag = bool;
+                const result: Flag = true;
+                return result;
+            }
+            """);
+
+        assertEquals(7, type.getField("integer").get(null));
+        assertEquals("hello", type.getField("text").get(null));
+        assertEquals(
+            "alias",
+            type.getMethod("identity", Object.class).invoke(null, "alias")
+        );
+        assertEquals(true, type.getMethod("local").invoke(null));
+    }
+
+    @Test
     void anyBranchTargetsStillRequireValuesAndCompleteBranches() {
         for (final String source : List.of(
             "const value = if (true) { yield 5; } else { yield 0.5; };",

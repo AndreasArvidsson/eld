@@ -56,6 +56,8 @@ public final class Parser extends ParserBase {
                 return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
+            case TYPE:
+                return parseTypeAliasDeclaration(token);
             case CLASS:
                 return parseClassDeclaration(token);
             case RECORD:
@@ -119,6 +121,20 @@ public final class Parser extends ParserBase {
                 goBack();
                 return parseExpressionStatement();
         }
+    }
+
+    private TypeAliasDeclaration parseTypeAliasDeclaration(
+        final Token keyword
+    ) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        expect(TokenType.EQUAL);
+        final TypeNode type = parseType();
+        final Token semicolon = expect(TokenType.SEMICOLON);
+        return new TypeAliasDeclaration(
+            new IdentifierDeclaration(name.text(), name.range()),
+            type,
+            keyword.range().union(semicolon.range())
+        );
     }
 
     private TryStatement parseTryStatement(final Token keyword) {

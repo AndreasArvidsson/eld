@@ -452,6 +452,9 @@ public final class SemanticAnalyzerTypes {
                 if (symbol instanceof InterfaceSymbol contract) {
                     yield contract.type();
                 }
+                if (symbol instanceof TypeAliasSymbol alias) {
+                    yield alias.type();
+                }
                 if (!(symbol instanceof ClassSymbol classSymbol)) {
                     throw new SemanticException(
                         named.range(),

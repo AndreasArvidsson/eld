@@ -194,7 +194,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- type Foo = i32 | string
 - Export & import
 - Ubiquitous toString, equals, hashCode methods
 - Tuples as map keys and switch conditions (using hashCode and equals)

@@ -1453,7 +1453,10 @@ public final class BytecodeGenerator {
                         )
                     );
                 }
-                else if (!(item instanceof FunctionDeclaration)) {
+                else if (
+                    !(item instanceof FunctionDeclaration
+                        || item instanceof TypeAliasDeclaration)
+                ) {
                     initializers.add(item);
                 }
             }
@@ -2304,6 +2307,9 @@ public final class BytecodeGenerator {
 
         private boolean item(final BlockItem item) {
             switch (item) {
+                case TypeAliasDeclaration _ -> {
+                    // Type aliases have no runtime representation.
+                }
                 case SuperConstructorCall call ->
                     initializeBase(call.arguments());
                 case VariableDeclaration variable -> {

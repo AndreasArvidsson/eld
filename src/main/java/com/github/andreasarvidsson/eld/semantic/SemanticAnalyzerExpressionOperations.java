@@ -369,6 +369,14 @@ public final class SemanticAnalyzerExpressionOperations {
             );
         }
 
+        if (symbol instanceof TypeAliasSymbol) {
+            throw new SemanticException(
+                identifier.range(),
+                "Type alias '%s' cannot be used as a value",
+                identifier.name()
+            );
+        }
+
         final Type type = symbol.type();
         model.setExpressionType(identifier, type);
         model.setReference(identifier, symbol);
