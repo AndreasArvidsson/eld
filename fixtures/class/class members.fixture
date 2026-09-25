@@ -5,7 +5,7 @@ class Counter {
     public func next() i32 {
         return this.count++;
     }
-   public  func invoke() i32 {
+   public func invoke() i32 {
         const callback = this.next;
         return callback();
     }
@@ -48,12 +48,12 @@ PLUS_PLUS (6:26-6:28)
 SEMICOLON (6:28-6:29)
 RIGHT_BRACE (7:5-7:6)
 PUBLIC (8:4-8:10)
-FUNC (8:12-8:16)
-IDENTIFIER "invoke" (8:17-8:23)
-LEFT_PAREN (8:23-8:24)
-RIGHT_PAREN (8:24-8:25)
-IDENTIFIER "i32" (8:26-8:29)
-LEFT_BRACE (8:30-8:31)
+FUNC (8:11-8:15)
+IDENTIFIER "invoke" (8:16-8:22)
+LEFT_PAREN (8:22-8:23)
+RIGHT_PAREN (8:23-8:24)
+IDENTIFIER "i32" (8:25-8:28)
+LEFT_BRACE (8:29-8:30)
 CONST (9:9-9:14)
 IDENTIFIER "callback" (9:15-9:23)
 EQUAL (9:24-9:25)
@@ -165,17 +165,17 @@ RIGHT_BRACE (12:1-12:2)
       range: 8:4-11:6
       visibility: PUBLIC
       (FunctionDeclaration
-        range: 8:12-11:6
+        range: 8:11-11:6
         (IdentifierDeclaration
-          range: 8:17-8:23
+          range: 8:16-8:22
           name: "invoke"
         )
         (NamedTypeNode
-          range: 8:26-8:29
+          range: 8:25-8:28
           name: "i32"
         )
         (BlockStatement
-          range: 8:30-11:6
+          range: 8:29-11:6
           (VariableDeclaration
             range: 9:9-9:36
             mutability: CONST
@@ -228,7 +228,7 @@ Expression types:
 
 Resolved types:
   5:24-5:27 -> i32
-  8:26-8:29 -> i32
+  8:25-8:28 -> i32
 
 Declarations:
   1:7-1:14 -> class Counter
@@ -236,7 +236,7 @@ Declarations:
   3:11-3:18 -> const initial: i32
   4:19-4:24 -> var count: i32
   5:17-5:21 -> next() => i32
-  8:17-8:23 -> invoke() => i32
+  8:16-8:22 -> invoke() => i32
   9:15-9:23 -> const callback: () => i32
 
 References:

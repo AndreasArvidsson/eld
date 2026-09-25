@@ -9,6 +9,7 @@ import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
+import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.DoWhileStatement;
 import com.github.andreasarvidsson.eld.parser.ElseIfBranch;
@@ -22,6 +23,7 @@ import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
+import com.github.andreasarvidsson.eld.parser.Program;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
 import com.github.andreasarvidsson.eld.parser.TryStatement;
 import com.github.andreasarvidsson.eld.parser.ThrowStatement;
@@ -726,9 +728,17 @@ public final class SemanticAnalyzerStatements {
 
     public void analyzeFunctionDeclaration(
         final FunctionDeclaration declaration,
-        final SemanticContext context
+        final SemanticContext context,
+        final AstNode parent
     ) {
-        // TODO: Verify that the parent is program or class body
+        if (
+            !(parent instanceof Program || parent instanceof ClassDeclaration)
+        ) {
+            throw new SemanticException(
+                declaration.range(),
+                "Functions are only allowed directly in a program or class body"
+            );
+        }
         registerFunction(declaration, context, context.scope());
         analyzeFunctionBody(declaration, context);
     }

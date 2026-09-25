@@ -94,7 +94,7 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         for (final @NonNull BlockItem item : program.items()) {
-            analyzeBlockItem(item, context);
+            analyzeBlockItem(item, context, program);
         }
     }
 
@@ -111,30 +111,36 @@ public final class SemanticAnalyzer {
                 context.yieldType()
             );
         for (final BlockItem item : block.items()) {
-            analyzeBlockItem(item, blockContext);
+            analyzeBlockItem(item, blockContext, block);
         }
     }
 
     private void analyzeBlockItem(
         final BlockItem item,
-        final SemanticContext context
+        final SemanticContext context,
+        final AstNode parent
     ) {
         switch (item) {
             case Declaration declaration ->
-                analyzeDeclaration(declaration, context);
+                analyzeDeclaration(declaration, context, parent);
             case Statement statement -> analyzeStatement(statement, context);
         }
     }
 
     private void analyzeDeclaration(
         final Declaration declaration,
-        final SemanticContext context
+        final SemanticContext context,
+        final AstNode parent
     ) {
         switch (declaration) {
             case VariableDeclaration variableDeclaration ->
                 analyzeVariableDeclaration(variableDeclaration, context);
             case FunctionDeclaration functionDeclaration ->
-                analyzeFunctionDeclaration(functionDeclaration, context);
+                analyzeFunctionDeclaration(
+                    functionDeclaration,
+                    context,
+                    parent
+                );
             case InterfaceDeclaration contract ->
                 analyzeInterfaceDeclaration(contract, context);
             case ClassDeclaration classDeclaration ->
@@ -202,7 +208,11 @@ public final class SemanticAnalyzer {
                 }
             }
             case DeclarationStatement declarationStatement ->
-                analyzeDeclaration(declarationStatement.declaration(), context);
+                analyzeDeclaration(
+                    declarationStatement.declaration(),
+                    context,
+                    declarationStatement
+                );
             case ExpressionStatement expressionStatement -> {
                 if (
                     expressionStatement
@@ -513,9 +523,10 @@ public final class SemanticAnalyzer {
 
     private void analyzeFunctionDeclaration(
         final FunctionDeclaration declaration,
-        final SemanticContext context
+        final SemanticContext context,
+        final AstNode parent
     ) {
-        statements.analyzeFunctionDeclaration(declaration, context);
+        statements.analyzeFunctionDeclaration(declaration, context, parent);
     }
 
     public void analyzeFunctionBody(
