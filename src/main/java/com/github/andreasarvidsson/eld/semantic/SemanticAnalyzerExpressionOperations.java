@@ -286,9 +286,6 @@ public final class SemanticAnalyzerExpressionOperations {
             );
         }
 
-        // TODO: Extend this to handle more complex type assignability rules, such as
-        // subtyping and type coercion.
-
         if (compatibleNumbers) {
             resolvedType = promotedNumericType(leftType, rightType);
             if (!leftType.equals(resolvedType)) {

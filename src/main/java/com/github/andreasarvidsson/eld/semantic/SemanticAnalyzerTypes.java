@@ -246,10 +246,6 @@ public final class SemanticAnalyzerTypes {
         final Type to,
         final Expression fromExpression
     ) {
-
-        // TODO: Extend this to handle more complex type assignability rules, such as
-        // subtyping and type coercion.
-
         if (
             fromExpression instanceof TupleExpression tuple
                 && to instanceof TupleType target

@@ -1,6 +1,5 @@
 package com.github.andreasarvidsson.eld.semantic;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;

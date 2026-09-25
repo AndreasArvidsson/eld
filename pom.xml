@@ -13,6 +13,7 @@
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
+        <maven.jar.forceCreation>true</maven.jar.forceCreation>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
