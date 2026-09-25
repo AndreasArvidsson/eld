@@ -15,4 +15,4 @@ RIGHT_BRACE (3:1-3:2)
 
 --- AST ---
 
-ParserException: Unexpected IDENTIFIER at 2:5-2:10
+ParserException: Expected interface member, but found IDENTIFIER at 2:5-2:10

@@ -1,0 +1,30 @@
+func outer() {
+    if (true) {
+        func inner() {}
+    }
+}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "outer" (1:6-1:11)
+LEFT_PAREN (1:11-1:12)
+RIGHT_PAREN (1:12-1:13)
+LEFT_BRACE (1:14-1:15)
+IF (2:5-2:7)
+LEFT_PAREN (2:8-2:9)
+BOOLEAN_LITERAL "true" (2:9-2:13)
+RIGHT_PAREN (2:13-2:14)
+LEFT_BRACE (2:15-2:16)
+FUNC (3:9-3:13)
+IDENTIFIER "inner" (3:14-3:19)
+LEFT_PAREN (3:19-3:20)
+RIGHT_PAREN (3:20-3:21)
+LEFT_BRACE (3:22-3:23)
+RIGHT_BRACE (3:23-3:24)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+ParserException: Expected statement, but found FUNC at 3:9-3:13

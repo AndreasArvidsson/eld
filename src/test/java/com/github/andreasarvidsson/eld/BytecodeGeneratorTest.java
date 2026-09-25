@@ -37,6 +37,7 @@ import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.Parser;
+import com.github.andreasarvidsson.eld.parser.ParserException;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.PostfixOperator;
 import com.github.andreasarvidsson.eld.parser.Program;
@@ -1680,7 +1681,6 @@ class BytecodeGeneratorTest {
             "class Foo { public const value = 1; public constructor() { this.value = 2; } }",
             "class Foo { public constructor(value: i32) { value = 2; } }",
             "class Foo { public constructor() {} public constructor(value: i32) {} }",
-            "constructor() {}",
             "class Foo { public constructor() {} public func replace() { this = new Foo(); } }"
         )) {
             assertThrows(
@@ -1690,13 +1690,14 @@ class BytecodeGeneratorTest {
             );
         }
         for (final String source : List.of(
+            "constructor() {}",
             "class Foo { public constructor() {} print(1); }",
             "class Foo { public constructor() {} public var value; }",
             "class Foo { public constructor() void {} }",
             "class Foo { public constructor() {} Foo(value: i32) {} }"
         )) {
             assertThrows(
-                com.github.andreasarvidsson.eld.parser.ParserException.class,
+                ParserException.class,
                 () -> new Parser(new Lexer(source).getTokens()).parse(),
                 source
             );
@@ -2124,11 +2125,11 @@ class BytecodeGeneratorTest {
         final Class<?> type = compile("""
             type Foo = i32 | string;
             type Bar = Foo;
+            type Flag = bool;
             const integer: Foo = 7;
             const text: Bar = "hello";
             func identity(value: Foo) Bar { return value; }
             func local() bool {
-                type Flag = bool;
                 const result: Flag = true;
                 return result;
             }

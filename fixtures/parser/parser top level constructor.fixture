@@ -1,0 +1,13 @@
+constructor() {}
+
+--- TOKENS ---
+
+CONSTRUCTOR (1:1-1:12)
+LEFT_PAREN (1:12-1:13)
+RIGHT_PAREN (1:13-1:14)
+LEFT_BRACE (1:15-1:16)
+RIGHT_BRACE (1:16-1:17)
+
+--- AST ---
+
+ParserException: Expected statement, but found CONSTRUCTOR at 1:1-1:12

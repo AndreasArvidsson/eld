@@ -1,0 +1,24 @@
+record Foo(name: string) {
+    const value = 1;
+}
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "name" (1:12-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "string" (1:18-1:24)
+RIGHT_PAREN (1:24-1:25)
+LEFT_BRACE (1:26-1:27)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+EQUAL (2:17-2:18)
+INTEGER_LITERAL "1" (2:19-2:20)
+SEMICOLON (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Expected record member, but found CONST at 2:5-2:10

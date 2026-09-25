@@ -160,16 +160,6 @@ public final class SemanticAnalyzerDeclarations {
                     memberDeclaration.visibility()
                 );
             }
-            else if (
-                !(member instanceof VariableDeclaration)
-                    && !(member instanceof UninitializedVariableDeclaration)
-                    && !(member instanceof FunctionDeclaration)
-            ) {
-                throw new SemanticException(
-                    member.range(),
-                    "Class bodies may only contain fields, methods, and constructors"
-                );
-            }
         }
         final boolean explicitSuper =
             constructor != null && constructor.hasExplicitSuperCall();

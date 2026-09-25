@@ -11,7 +11,6 @@ import com.github.andreasarvidsson.eld.parser.AwaitExpression;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
-import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.DoWhileStatement;
 import com.github.andreasarvidsson.eld.parser.ElseIfBranch;
@@ -784,14 +783,6 @@ public final class SemanticAnalyzerStatements {
         final SemanticContext context,
         final AstNode parent
     ) {
-        if (
-            !(parent instanceof Program || parent instanceof ClassDeclaration)
-        ) {
-            throw new SemanticException(
-                declaration.range(),
-                "Functions are only allowed directly in a program or class body"
-            );
-        }
         if (declaration.finalMethod() && parent instanceof Program) {
             throw new SemanticException(
                 declaration.range(),

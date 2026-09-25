@@ -1,0 +1,21 @@
+func foo() {
+    constructor() {}
+}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+LEFT_BRACE (1:12-1:13)
+CONSTRUCTOR (2:5-2:16)
+LEFT_PAREN (2:16-2:17)
+RIGHT_PAREN (2:17-2:18)
+LEFT_BRACE (2:19-2:20)
+RIGHT_BRACE (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Expected statement, but found CONSTRUCTOR at 2:5-2:16

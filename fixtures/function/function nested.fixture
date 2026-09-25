@@ -19,32 +19,4 @@ RIGHT_BRACE (3:1-3:2)
 
 --- AST ---
 
-(Program
-  range: 1:1-3:2
-  (FunctionDeclaration
-    range: 1:1-3:2
-    (IdentifierDeclaration
-      range: 1:6-1:9
-      name: "foo"
-    )
-    returnType: null
-    (BlockStatement
-      range: 1:12-3:2
-      (FunctionDeclaration
-        range: 2:5-2:18
-        (IdentifierDeclaration
-          range: 2:10-2:13
-          name: "bar"
-        )
-        returnType: null
-        (BlockStatement
-          range: 2:16-2:18
-        )
-      )
-    )
-  )
-)
-
---- SEMANTIC ---
-
-SemanticException: Functions are only allowed directly in a program or class body at 2:5-2:18
+ParserException: Expected statement, but found FUNC at 2:5-2:9

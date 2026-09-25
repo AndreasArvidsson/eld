@@ -1,0 +1,19 @@
+interface Outer {
+    record Inner();
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Outer" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+RECORD (2:5-2:11)
+IDENTIFIER "Inner" (2:12-2:17)
+LEFT_PAREN (2:17-2:18)
+RIGHT_PAREN (2:18-2:19)
+SEMICOLON (2:19-2:20)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Expected interface member, but found RECORD at 2:5-2:11

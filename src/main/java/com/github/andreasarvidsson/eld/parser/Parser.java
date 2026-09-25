@@ -21,7 +21,7 @@ public final class Parser extends ParserBase {
         final List<@NonNull BlockItem> items = new ArrayList<>();
 
         while (!isAtEnd()) {
-            items.add(parseBlockItem());
+            items.add(parseTopLevelItem());
         }
 
         if (items.isEmpty()) {
@@ -39,7 +39,7 @@ public final class Parser extends ParserBase {
         final List<@NonNull BlockItem> items = new ArrayList<>();
 
         while (!isAtEnd() && !check(TokenType.RIGHT_BRACE)) {
-            items.add(parseBlockItem());
+            items.add(parseStatement());
         }
 
         final Token close = expect(TokenType.RIGHT_BRACE);
@@ -48,26 +48,55 @@ public final class Parser extends ParserBase {
         return new BlockStatement(items, range);
     }
 
-    private BlockItem parseBlockItem() {
+    private BlockItem parseTopLevelItem() {
+        if (
+            (check(TokenType.FINAL) || check(TokenType.ASYNC))
+                && !functionDeclarationStartsHere()
+        ) {
+            throw ParserException.expected("top-level declaration", current());
+        }
+        return switch (current().type()) {
+            case CONST, VAR, TYPE, CLASS, RECORD, INTERFACE, FUNC, FINAL,
+                ASYNC -> parseTopLevelDeclaration();
+            case PUBLIC, PROTECTED -> throw ParserException
+                .expected("top-level declaration", current());
+            default -> parseStatement();
+        };
+    }
+
+    private Declaration parseTopLevelDeclaration() {
+        final Token token = advance();
+        return switch (token.type()) {
+            case CONST -> functionFollows()
+                ? parseModifiedFunctionDeclaration(token)
+                : parseVariableDeclaration(token, Mutability.CONST);
+            case VAR -> parseVariableDeclaration(token, Mutability.VAR);
+            case TYPE -> parseTypeAliasDeclaration(token);
+            case CLASS -> parseClassDeclaration(token);
+            case RECORD -> parseRecordDeclaration(token);
+            case INTERFACE -> parseInterfaceDeclaration(token);
+            case FUNC -> parseFunctionDeclaration(token, false, List.of());
+            case FINAL, ASYNC -> parseModifiedFunctionDeclaration(token);
+            default -> throw new IllegalStateException(
+                "Unexpected top-level declaration token: " + token.type()
+            );
+        };
+    }
+
+    private BlockItem parseStatement() {
         final Token token = advance();
 
         switch (token.type()) {
             case CONST:
-                return functionFollows()
-                    ? parseModifiedFunctionDeclaration(token)
-                    : parseVariableDeclaration(token, Mutability.CONST);
+                if (functionFollows()) {
+                    throw ParserException.expected("statement", token);
+                }
+                return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
-            case TYPE:
-                return parseTypeAliasDeclaration(token);
-            case CLASS:
-                return parseClassDeclaration(token);
-            case RECORD:
-                return parseRecordDeclaration(token);
-            case INTERFACE:
-                return parseInterfaceDeclaration(token);
-            case CONSTRUCTOR:
-                return parseConstructorDeclaration(token);
+            case TYPE, CLASS, RECORD, INTERFACE, CONSTRUCTOR, FUNC, FINAL,
+                ASYNC, PUBLIC, PROTECTED:
+                throw ParserException.expected("statement", token);
             case SUPER:
                 final CallExpression superCall =
                     parserExpressions.parseCallExpression(
@@ -88,12 +117,6 @@ public final class Parser extends ParserBase {
                 return parseDoWhileStatement(token);
             case FOR:
                 return parseForStatement(token);
-            case FUNC:
-                return parseFunctionDeclaration(token, false, List.of());
-            case FINAL:
-                return parseModifiedFunctionDeclaration(token);
-            case ASYNC:
-                return parseModifiedFunctionDeclaration(token);
             case TRY:
                 return parseTryStatement(token);
             case THROW:
@@ -230,72 +253,7 @@ public final class Parser extends ParserBase {
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull MemberDeclaration> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-            final Token modifier =
-                check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
-                    ? advance()
-                    : null;
-            int constructorOffset = 0;
-            while (
-                check(constructorOffset, TokenType.CONST)
-                    || check(constructorOffset, TokenType.FINAL)
-                    || check(constructorOffset, TokenType.ASYNC)
-            ) {
-                constructorOffset++;
-            }
-            if (
-                constructorOffset > 0
-                    && check(constructorOffset, TokenType.CONSTRUCTOR)
-            ) {
-                final Token invalidModifier = current();
-                throw new ParserException(
-                    invalidModifier.range()
-                        .union(peek(constructorOffset).range()),
-                    "'%s' is not allowed on constructors",
-                    invalidModifier.text()
-                );
-            }
-            final boolean function = functionDeclarationStartsHere();
-            if (
-                !check(TokenType.VAR) && !(check(TokenType.CONST) && !function)
-                    && !function
-                    && !check(TokenType.CONSTRUCTOR)
-            ) {
-                throw new ParserException(
-                    current().range(),
-                    "Class bodies may only contain fields, methods, and constructors"
-                );
-            }
-            final Declaration member;
-            if (check(TokenType.VAR) || (check(TokenType.CONST) && !function)) {
-                final Token fieldKeyword = advance();
-                member =
-                    parseVariableDeclaration(
-                        fieldKeyword,
-                        fieldKeyword.type() == TokenType.VAR
-                            ? Mutability.VAR
-                            : Mutability.CONST,
-                        true
-                    );
-            }
-            else {
-                member =
-                    function
-                        ? parseModifiedFunctionDeclaration(advance())
-                        : parseConstructorDeclaration(advance());
-            }
-            members.add(
-                new MemberDeclaration(
-                    modifier == null
-                        ? Visibility.PRIVATE
-                        : modifier.type() == TokenType.PROTECTED
-                            ? Visibility.PROTECTED
-                            : Visibility.PUBLIC,
-                    member,
-                    modifier != null
-                        ? modifier.range().union(member.range())
-                        : member.range()
-                )
-            );
+            members.add(parseClassMember());
         }
         final Token close = expect(TokenType.RIGHT_BRACE);
         final Range range = keyword.range().union(close.range());
@@ -306,6 +264,69 @@ public final class Parser extends ParserBase {
             implementedInterfaces,
             members,
             range
+        );
+    }
+
+    private MemberDeclaration parseClassMember() {
+        final Token modifier =
+            check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
+                ? advance()
+                : null;
+        int constructorOffset = 0;
+        while (
+            check(constructorOffset, TokenType.CONST)
+                || check(constructorOffset, TokenType.FINAL)
+                || check(constructorOffset, TokenType.ASYNC)
+        ) {
+            constructorOffset++;
+        }
+        if (
+            constructorOffset > 0
+                && check(constructorOffset, TokenType.CONSTRUCTOR)
+        ) {
+            final Token invalidModifier = current();
+            throw new ParserException(
+                invalidModifier.range().union(peek(constructorOffset).range()),
+                "'%s' is not allowed on constructors",
+                invalidModifier.text()
+            );
+        }
+        final boolean function = functionDeclarationStartsHere();
+        if (
+            !check(TokenType.VAR) && !(check(TokenType.CONST) && !function)
+                && !function
+                && !check(TokenType.CONSTRUCTOR)
+        ) {
+            throw ParserException.expected("class member", current());
+        }
+        final Declaration member;
+        if (check(TokenType.VAR) || (check(TokenType.CONST) && !function)) {
+            final Token fieldKeyword = advance();
+            member =
+                parseVariableDeclaration(
+                    fieldKeyword,
+                    fieldKeyword.type() == TokenType.VAR
+                        ? Mutability.VAR
+                        : Mutability.CONST,
+                    true
+                );
+        }
+        else {
+            member =
+                function
+                    ? parseModifiedFunctionDeclaration(advance())
+                    : parseConstructorDeclaration(advance());
+        }
+        return new MemberDeclaration(
+            modifier == null
+                ? Visibility.PRIVATE
+                : modifier.type() == TokenType.PROTECTED
+                    ? Visibility.PROTECTED
+                    : Visibility.PUBLIC,
+            member,
+            modifier != null
+                ? modifier.range().union(member.range())
+                : member.range()
         );
     }
 
@@ -342,44 +363,7 @@ public final class Parser extends ParserBase {
         else {
             expect(TokenType.LEFT_BRACE);
             while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-                final Token modifier =
-                    check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
-                        ? advance()
-                        : null;
-                final Token finalModifier = functionModifier(TokenType.FINAL);
-                if (finalModifier != null) {
-                    throw new ParserException(
-                        finalModifier.range().union(functionKeyword().range()),
-                        "'final' is not allowed on record methods"
-                    );
-                }
-                if (!functionDeclarationStartsHere()) {
-                    throw new ParserException(
-                        current().range(),
-                        "Record bodies may only contain methods"
-                    );
-                }
-                final FunctionDeclaration method =
-                    parseModifiedFunctionDeclaration(advance());
-                if (method.name().name().equals("copy")) {
-                    throw new ParserException(
-                        method.name().range(),
-                        "Record method name 'copy' is reserved"
-                    );
-                }
-                methods.add(
-                    new MemberDeclaration(
-                        modifier == null
-                            ? Visibility.PRIVATE
-                            : modifier.type() == TokenType.PROTECTED
-                                ? Visibility.PROTECTED
-                                : Visibility.PUBLIC,
-                        method,
-                        modifier == null
-                            ? method.range()
-                            : modifier.range().union(method.range())
-                    )
-                );
+                methods.add(parseRecordMember());
             }
             end = expect(TokenType.RIGHT_BRACE);
         }
@@ -389,6 +373,42 @@ public final class Parser extends ParserBase {
             implementedInterfaces,
             methods,
             keyword.range().union(end.range())
+        );
+    }
+
+    private MemberDeclaration parseRecordMember() {
+        final Token modifier =
+            check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
+                ? advance()
+                : null;
+        final Token finalModifier = functionModifier(TokenType.FINAL);
+        if (finalModifier != null) {
+            throw new ParserException(
+                finalModifier.range().union(functionKeyword().range()),
+                "'final' is not allowed on record methods"
+            );
+        }
+        if (!functionDeclarationStartsHere()) {
+            throw ParserException.expected("record member", current());
+        }
+        final FunctionDeclaration method =
+            parseModifiedFunctionDeclaration(advance());
+        if (method.name().name().equals("copy")) {
+            throw new ParserException(
+                method.name().range(),
+                "Record method name 'copy' is reserved"
+            );
+        }
+        return new MemberDeclaration(
+            modifier == null
+                ? Visibility.PRIVATE
+                : modifier.type() == TokenType.PROTECTED
+                    ? Visibility.PROTECTED
+                    : Visibility.PUBLIC,
+            method,
+            modifier == null
+                ? method.range()
+                : modifier.range().union(method.range())
         );
     }
 
@@ -428,22 +448,7 @@ public final class Parser extends ParserBase {
         final List<@NonNull InterfaceMemberDeclaration> members =
             new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
-            final Token finalModifier = functionModifier(TokenType.FINAL);
-            if (finalModifier != null) {
-                throw new ParserException(
-                    finalModifier.range().union(functionKeyword().range()),
-                    "'final' is not allowed on interface methods"
-                );
-            }
-            if (check(TokenType.FUNC)) {
-                members.add(parseInterfaceMethod());
-            }
-            else if (check(TokenType.CONST) || check(TokenType.VAR)) {
-                members.add(parseInterfaceVariable());
-            }
-            else {
-                throw ParserException.unexpected(current());
-            }
+            members.add(parseInterfaceMember());
         }
         final Token end = expect(TokenType.RIGHT_BRACE);
         return new InterfaceDeclaration(
@@ -452,6 +457,23 @@ public final class Parser extends ParserBase {
             members,
             keyword.range().union(end.range())
         );
+    }
+
+    private InterfaceMemberDeclaration parseInterfaceMember() {
+        final Token finalModifier = functionModifier(TokenType.FINAL);
+        if (finalModifier != null) {
+            throw new ParserException(
+                finalModifier.range().union(functionKeyword().range()),
+                "'final' is not allowed on interface methods"
+            );
+        }
+        if (check(TokenType.FUNC)) {
+            return parseInterfaceMethod();
+        }
+        if (check(TokenType.CONST) || check(TokenType.VAR)) {
+            return parseInterfaceVariable();
+        }
+        throw ParserException.expected("interface member", current());
     }
 
     private InterfaceMethodDeclaration parseInterfaceMethod() {

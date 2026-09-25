@@ -1312,21 +1312,11 @@ public final class SemanticAnalyzer {
                 context.scope().declare(symbol);
                 model.setSymbol(alias.name(), symbol);
             }
-            case ConstructorDeclaration constructor ->
-                throw new SemanticException(
-                    constructor.range(),
-                    "Constructors are only allowed directly in a class"
+            case ConstructorDeclaration _,UninitializedVariableDeclaration _,IdentifierDeclaration _ ->
+                throw new IllegalStateException(
+                    "Unexpected declaration in executable context: "
+                        + declaration
                 );
-            case UninitializedVariableDeclaration field ->
-                throw new SemanticException(
-                    field.range(),
-                    "Uninitialized declarations are only allowed directly in a class"
-                );
-            case IdentifierDeclaration _ -> throw new SemanticException(
-                declaration.range(),
-                "Unexpected declaration: %s",
-                declaration
-            );
         }
     }
 

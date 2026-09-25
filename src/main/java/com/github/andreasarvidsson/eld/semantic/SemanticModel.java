@@ -878,15 +878,13 @@ public final class SemanticModel {
                             .apply(entry.getKey(), entry.getValue())
                     )
             )
-            .forEach(
-                entry -> lines
-                    .add(
-                        "  " + Objects.requireNonNull(entry.getKey()).range()
-                            + ARROW
-                            + formatValue
-                                .apply(entry.getKey(), entry.getValue())
-                    )
-            );
+            .map(
+                entry -> "  " + Objects.requireNonNull(entry.getKey()).range()
+                    + ARROW
+                    + formatValue.apply(entry.getKey(), entry.getValue())
+            )
+            .distinct()
+            .forEach(lines::add);
         lines.add("");
     }
 
