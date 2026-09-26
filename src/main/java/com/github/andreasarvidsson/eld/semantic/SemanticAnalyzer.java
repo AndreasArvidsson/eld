@@ -72,6 +72,7 @@ import com.github.andreasarvidsson.eld.parser.UnaryExpression;
 import com.github.andreasarvidsson.eld.parser.UnaryOperator;
 import com.github.andreasarvidsson.eld.parser.CatchClause;
 import com.github.andreasarvidsson.eld.parser.Statement;
+import com.github.andreasarvidsson.eld.parser.StaticInitializerDeclaration;
 import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
@@ -105,6 +106,7 @@ public final class SemanticAnalyzer {
     private @Nullable ClassType currentInstance;
     private @Nullable ClassType currentAccessClass;
     private @Nullable ConstructorDeclaration currentConstructor;
+    private boolean analyzingStaticInitializer;
     private boolean analyzingConstructorDefault;
     private boolean analyzingSuperArguments;
     private final IdentityHashMap<FunctionSymbol, List<ReturnStatement>> lambdaReturns =
@@ -1344,7 +1346,7 @@ public final class SemanticAnalyzer {
                 context.scope().declare(symbol);
                 model.setSymbol(alias.name(), symbol);
             }
-            case ConstructorDeclaration _,UninitializedVariableDeclaration _,IdentifierDeclaration _ ->
+            case ConstructorDeclaration _,UninitializedVariableDeclaration _,IdentifierDeclaration _,StaticInitializerDeclaration _ ->
                 throw new IllegalStateException(
                     "Unexpected declaration in executable context: "
                         + declaration
@@ -2098,6 +2100,14 @@ public final class SemanticAnalyzer {
         final @Nullable ConstructorDeclaration constructor
     ) {
         currentConstructor = constructor;
+    }
+
+    public boolean isAnalyzingStaticInitializer() {
+        return analyzingStaticInitializer;
+    }
+
+    public void setAnalyzingStaticInitializer(final boolean value) {
+        analyzingStaticInitializer = value;
     }
 
     public @Nullable List<ReturnStatement> lambdaReturns(

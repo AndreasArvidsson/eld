@@ -34,6 +34,7 @@ public class Lexer {
                 Map.entry("final", TokenType.FINAL),
                 Map.entry("override", TokenType.OVERRIDE),
                 Map.entry("async", TokenType.ASYNC),
+                Map.entry("static", TokenType.STATIC),
                 Map.entry("await", TokenType.AWAIT),
                 Map.entry("ignore", TokenType.IGNORE),
                 Map.entry("public", TokenType.PUBLIC),

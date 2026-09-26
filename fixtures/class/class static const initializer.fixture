@@ -1,0 +1,185 @@
+class Example {
+    public static const value: i32;
+
+    static {
+        Example.value = 42;
+    }
+}
+print(Example.value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+IDENTIFIER "value" (2:25-2:30)
+COLON (2:30-2:31)
+IDENTIFIER "i32" (2:32-2:35)
+SEMICOLON (2:35-2:36)
+STATIC (4:5-4:11)
+LEFT_BRACE (4:12-4:13)
+IDENTIFIER "Example" (5:9-5:16)
+DOT (5:16-5:17)
+IDENTIFIER "value" (5:17-5:22)
+EQUAL (5:23-5:24)
+INTEGER_LITERAL "42" (5:25-5:27)
+SEMICOLON (5:27-5:28)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "Example" (8:7-8:14)
+DOT (8:14-8:15)
+IDENTIFIER "value" (8:15-8:20)
+RIGHT_PAREN (8:20-8:21)
+SEMICOLON (8:21-8:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:22
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:36
+      visibility: PUBLIC
+      staticMember: true
+      (UninitializedVariableDeclaration
+        range: 2:19-2:36
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:25-2:30
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:32-2:35
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 4:5-6:6
+        (BlockStatement
+          range: 4:12-6:6
+          (ExpressionStatement
+            range: 5:9-5:28
+            (AssignmentExpression
+              range: 5:9-5:27
+              (MemberExpression
+                range: 5:9-5:22
+                (IdentifierExpression
+                  range: 5:9-5:16
+                  name: "Example"
+                )
+                (IdentifierExpression
+                  range: 5:17-5:22
+                  name: "value"
+                )
+              )
+              (LiteralExpression
+                range: 5:25-5:27
+                kind: INT
+                text: "42"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:22
+    (CallExpression
+      range: 8:1-8:21
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:20
+        (IdentifierExpression
+          range: 8:7-8:14
+          name: "Example"
+        )
+        (IdentifierExpression
+          range: 8:15-8:20
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:9-5:16 -> Example
+  5:9-5:22 -> i32
+  5:9-5:27 -> i32
+  5:17-5:22 -> i32
+  5:25-5:27 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:21 -> void
+  8:7-8:14 -> Example
+  8:7-8:20 -> i32
+  8:15-8:20 -> i32
+
+Resolved types:
+  2:32-2:35 -> i32
+
+Declarations:
+  1:7-1:14 -> class Example
+  2:25-2:30 -> const value: i32
+
+References:
+  5:9-5:16 -> 1:7-1:14
+  5:17-5:22 -> 2:25-2:30
+  8:1-8:6 -> builtin print
+  8:7-8:14 -> 1:7-1:14
+  8:15-8:20 -> 2:25-2:30
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Example
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Example.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Example flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 42
+    DUP
+    PUTSTATIC Test$Example.value I
+    POP
+    RETURN
+    max stack 2 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+42
+

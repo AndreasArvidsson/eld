@@ -56,6 +56,7 @@ public final class RecordLowering {
             members.add(
                 new MemberDeclaration(
                     Visibility.PUBLIC,
+                    false,
                     new UninitializedVariableDeclaration(
                         Mutability.CONST,
                         identifier(componentName, parameter),
@@ -87,6 +88,7 @@ public final class RecordLowering {
         members.add(
             new MemberDeclaration(
                 Visibility.PUBLIC,
+                false,
                 new ConstructorDeclaration(
                     constructorParameters,
                     new BlockStatement(assignments, range),
@@ -124,8 +126,9 @@ public final class RecordLowering {
                 ),
                 range
             );
-        members
-            .add(new MemberDeclaration(Visibility.PUBLIC, copy, copy.range()));
+        members.add(
+            new MemberDeclaration(Visibility.PUBLIC, false, copy, copy.range())
+        );
         if (!declaresToString(record)) {
             members.add(toStringMethod(record));
         }
@@ -186,7 +189,7 @@ public final class RecordLowering {
                 ),
                 range
             );
-        return new MemberDeclaration(Visibility.PUBLIC, method, range);
+        return new MemberDeclaration(Visibility.PUBLIC, false, method, range);
     }
 
     private static LiteralExpression stringLiteral(

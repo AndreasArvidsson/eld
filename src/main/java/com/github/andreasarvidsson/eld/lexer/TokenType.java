@@ -30,6 +30,7 @@ public enum TokenType {
     FINAL,
     OVERRIDE,
     ASYNC,
+    STATIC,
     AWAIT,
     IGNORE,
     PUBLIC,

@@ -1,0 +1,677 @@
+class Example {
+    static async func privateValue() i32 {
+        return await Promise.resolve(40);
+    }
+
+    protected static async func protectedValue() i32 {
+        return await Promise.resolve(2);
+    }
+
+    public static async func value() i32 {
+        return await Example.privateValue();
+    }
+}
+
+async func run() {
+    print(await Example.value());
+}
+ignore run();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+STATIC (2:5-2:11)
+ASYNC (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "privateValue" (2:23-2:35)
+LEFT_PAREN (2:35-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "i32" (2:38-2:41)
+LEFT_BRACE (2:42-2:43)
+RETURN (3:9-3:15)
+AWAIT (3:16-3:21)
+IDENTIFIER "Promise" (3:22-3:29)
+DOT (3:29-3:30)
+IDENTIFIER "resolve" (3:30-3:37)
+LEFT_PAREN (3:37-3:38)
+INTEGER_LITERAL "40" (3:38-3:40)
+RIGHT_PAREN (3:40-3:41)
+SEMICOLON (3:41-3:42)
+RIGHT_BRACE (4:5-4:6)
+PROTECTED (6:5-6:14)
+STATIC (6:15-6:21)
+ASYNC (6:22-6:27)
+FUNC (6:28-6:32)
+IDENTIFIER "protectedValue" (6:33-6:47)
+LEFT_PAREN (6:47-6:48)
+RIGHT_PAREN (6:48-6:49)
+IDENTIFIER "i32" (6:50-6:53)
+LEFT_BRACE (6:54-6:55)
+RETURN (7:9-7:15)
+AWAIT (7:16-7:21)
+IDENTIFIER "Promise" (7:22-7:29)
+DOT (7:29-7:30)
+IDENTIFIER "resolve" (7:30-7:37)
+LEFT_PAREN (7:37-7:38)
+INTEGER_LITERAL "2" (7:38-7:39)
+RIGHT_PAREN (7:39-7:40)
+SEMICOLON (7:40-7:41)
+RIGHT_BRACE (8:5-8:6)
+PUBLIC (10:5-10:11)
+STATIC (10:12-10:18)
+ASYNC (10:19-10:24)
+FUNC (10:25-10:29)
+IDENTIFIER "value" (10:30-10:35)
+LEFT_PAREN (10:35-10:36)
+RIGHT_PAREN (10:36-10:37)
+IDENTIFIER "i32" (10:38-10:41)
+LEFT_BRACE (10:42-10:43)
+RETURN (11:9-11:15)
+AWAIT (11:16-11:21)
+IDENTIFIER "Example" (11:22-11:29)
+DOT (11:29-11:30)
+IDENTIFIER "privateValue" (11:30-11:42)
+LEFT_PAREN (11:42-11:43)
+RIGHT_PAREN (11:43-11:44)
+SEMICOLON (11:44-11:45)
+RIGHT_BRACE (12:5-12:6)
+RIGHT_BRACE (13:1-13:2)
+ASYNC (15:1-15:6)
+FUNC (15:7-15:11)
+IDENTIFIER "run" (15:12-15:15)
+LEFT_PAREN (15:15-15:16)
+RIGHT_PAREN (15:16-15:17)
+LEFT_BRACE (15:18-15:19)
+IDENTIFIER "print" (16:5-16:10)
+LEFT_PAREN (16:10-16:11)
+AWAIT (16:11-16:16)
+IDENTIFIER "Example" (16:17-16:24)
+DOT (16:24-16:25)
+IDENTIFIER "value" (16:25-16:30)
+LEFT_PAREN (16:30-16:31)
+RIGHT_PAREN (16:31-16:32)
+RIGHT_PAREN (16:32-16:33)
+SEMICOLON (16:33-16:34)
+RIGHT_BRACE (17:1-17:2)
+IGNORE (18:1-18:7)
+IDENTIFIER "run" (18:8-18:11)
+LEFT_PAREN (18:11-18:12)
+RIGHT_PAREN (18:12-18:13)
+SEMICOLON (18:13-18:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-18:14
+  (ClassDeclaration
+    range: 1:1-13:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PRIVATE
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:12-4:6
+        async: true
+        (IdentifierDeclaration
+          range: 2:23-2:35
+          name: "privateValue"
+        )
+        (NamedTypeNode
+          range: 2:38-2:41
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:42-4:6
+          (ReturnStatement
+            range: 3:9-3:42
+            (AwaitExpression
+              range: 3:16-3:41
+              (CallExpression
+                range: 3:22-3:41
+                (MemberExpression
+                  range: 3:22-3:37
+                  (IdentifierExpression
+                    range: 3:22-3:29
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 3:30-3:37
+                    name: "resolve"
+                  )
+                )
+                (LiteralExpression
+                  range: 3:38-3:40
+                  kind: INT
+                  text: "40"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PROTECTED
+      staticMember: true
+      (FunctionDeclaration
+        range: 6:22-8:6
+        async: true
+        (IdentifierDeclaration
+          range: 6:33-6:47
+          name: "protectedValue"
+        )
+        (NamedTypeNode
+          range: 6:50-6:53
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:54-8:6
+          (ReturnStatement
+            range: 7:9-7:41
+            (AwaitExpression
+              range: 7:16-7:40
+              (CallExpression
+                range: 7:22-7:40
+                (MemberExpression
+                  range: 7:22-7:37
+                  (IdentifierExpression
+                    range: 7:22-7:29
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 7:30-7:37
+                    name: "resolve"
+                  )
+                )
+                (LiteralExpression
+                  range: 7:38-7:39
+                  kind: INT
+                  text: "2"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 10:5-12:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 10:19-12:6
+        async: true
+        (IdentifierDeclaration
+          range: 10:30-10:35
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 10:38-10:41
+          name: "i32"
+        )
+        (BlockStatement
+          range: 10:42-12:6
+          (ReturnStatement
+            range: 11:9-11:45
+            (AwaitExpression
+              range: 11:16-11:44
+              (CallExpression
+                range: 11:22-11:44
+                (MemberExpression
+                  range: 11:22-11:42
+                  (IdentifierExpression
+                    range: 11:22-11:29
+                    name: "Example"
+                  )
+                  (IdentifierExpression
+                    range: 11:30-11:42
+                    name: "privateValue"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 15:1-17:2
+    async: true
+    (IdentifierDeclaration
+      range: 15:12-15:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 15:18-17:2
+      (ExpressionStatement
+        range: 16:5-16:34
+        (CallExpression
+          range: 16:5-16:33
+          (IdentifierExpression
+            range: 16:5-16:10
+            name: "print"
+          )
+          (AwaitExpression
+            range: 16:11-16:32
+            (CallExpression
+              range: 16:17-16:32
+              (MemberExpression
+                range: 16:17-16:30
+                (IdentifierExpression
+                  range: 16:17-16:24
+                  name: "Example"
+                )
+                (IdentifierExpression
+                  range: 16:25-16:30
+                  name: "value"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 18:1-18:14
+    (CallExpression
+      range: 18:8-18:13
+      (IdentifierExpression
+        range: 18:8-18:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:41 -> i32
+  3:22-3:41 -> Promise<i32>
+  3:38-3:40 -> i32
+  7:16-7:40 -> i32
+  7:22-7:40 -> Promise<i32>
+  7:38-7:39 -> i32
+  11:16-11:44 -> i32
+  11:22-11:29 -> Example
+  11:22-11:42 -> () => Promise<i32>
+  11:22-11:44 -> Promise<i32>
+  11:30-11:42 -> () => Promise<i32>
+  16:5-16:10 -> (any) => void
+  16:5-16:33 -> void
+  16:11-16:32 -> i32
+  16:17-16:24 -> Example
+  16:17-16:30 -> () => Promise<i32>
+  16:17-16:32 -> Promise<i32>
+  16:25-16:30 -> () => Promise<i32>
+  18:8-18:11 -> () => Promise<void>
+  18:8-18:13 -> Promise<void>
+
+Resolved types:
+  2:38-2:41 -> i32
+  6:50-6:53 -> i32
+  10:38-10:41 -> i32
+
+Declarations:
+  1:7-1:14 -> class Example
+  2:23-2:35 -> func privateValue() => Promise<i32>
+  6:33-6:47 -> func protectedValue() => Promise<i32>
+  10:30-10:35 -> func value() => Promise<i32>
+  15:12-15:15 -> func run() => Promise<void>
+
+References:
+  11:22-11:29 -> 1:7-1:14
+  11:30-11:42 -> 2:23-2:35
+  16:5-16:10 -> builtin print
+  16:17-16:24 -> 1:7-1:14
+  16:25-16:30 -> 10:30-10:35
+  18:8-18:11 -> 15:12-15:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  nest member Test$$async1
+  nest member Test$$async2
+  nest member Test$$async3
+  nest member Test$Example
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async3
+    DUP
+    INVOKESPECIAL Test$$async3.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async3.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async3.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 1 max locals 0
+
+class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method privateValue()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PRIVATE, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method protectedValue()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PROTECTED, STATIC]
+    NEW Test$$async1
+    DUP
+    INVOKESPECIAL Test$$async1.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async1.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async1.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method value()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async2
+    DUP
+    INVOKESPECIAL Test$$async2.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async2.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async2.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+
+class Test$$async3 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async3.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async3
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async3.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    INVOKESTATIC Test$Example.value()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async3.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async3::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_3 3
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ILOAD_3 3
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    ALOAD_0 0
+    GETFIELD Test$$async3.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L4:
+    ASTORE 4
+    ALOAD_0 0
+    GETFIELD Test$$async3.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 4
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L4 handler L4
+    max stack 3 max locals 5
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    LDC 40
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ILOAD_3 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+    RETURN
+   L4:
+    ASTORE 4
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 4
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L4 handler L4
+    max stack 3 max locals 5
+
+class Test$$async1 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async1.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async1
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async1.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async1.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async1::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async1.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ILOAD_3 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+    RETURN
+   L4:
+    ASTORE 4
+    ALOAD_0 0
+    GETFIELD Test$$async1.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 4
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L4 handler L4
+    max stack 3 max locals 5
+
+class Test$$async2 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async2.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async2
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async2.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    INVOKESTATIC Test$Example.privateValue()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async2.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async2::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async2.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ILOAD_3 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+    RETURN
+   L4:
+    ASTORE 4
+    ALOAD_0 0
+    GETFIELD Test$$async2.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 4
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L4 handler L4
+    max stack 3 max locals 5
+
+--- OUTPUT ---
+
+40
+

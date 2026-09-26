@@ -1,0 +1,158 @@
+class Owner {
+    public static const value: i32;
+
+    static {
+        Owner.value = 1;
+    }
+}
+
+class Other {
+    static {
+        Owner.value = 2;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Owner" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+IDENTIFIER "value" (2:25-2:30)
+COLON (2:30-2:31)
+IDENTIFIER "i32" (2:32-2:35)
+SEMICOLON (2:35-2:36)
+STATIC (4:5-4:11)
+LEFT_BRACE (4:12-4:13)
+IDENTIFIER "Owner" (5:9-5:14)
+DOT (5:14-5:15)
+IDENTIFIER "value" (5:15-5:20)
+EQUAL (5:21-5:22)
+INTEGER_LITERAL "1" (5:23-5:24)
+SEMICOLON (5:24-5:25)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+CLASS (9:1-9:6)
+IDENTIFIER "Other" (9:7-9:12)
+LEFT_BRACE (9:13-9:14)
+STATIC (10:5-10:11)
+LEFT_BRACE (10:12-10:13)
+IDENTIFIER "Owner" (11:9-11:14)
+DOT (11:14-11:15)
+IDENTIFIER "value" (11:15-11:20)
+EQUAL (11:21-11:22)
+INTEGER_LITERAL "2" (11:23-11:24)
+SEMICOLON (11:24-11:25)
+RIGHT_BRACE (12:5-12:6)
+RIGHT_BRACE (13:1-13:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:2
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Owner"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:36
+      visibility: PUBLIC
+      staticMember: true
+      (UninitializedVariableDeclaration
+        range: 2:19-2:36
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:25-2:30
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:32-2:35
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 4:5-6:6
+        (BlockStatement
+          range: 4:12-6:6
+          (ExpressionStatement
+            range: 5:9-5:25
+            (AssignmentExpression
+              range: 5:9-5:24
+              (MemberExpression
+                range: 5:9-5:20
+                (IdentifierExpression
+                  range: 5:9-5:14
+                  name: "Owner"
+                )
+                (IdentifierExpression
+                  range: 5:15-5:20
+                  name: "value"
+                )
+              )
+              (LiteralExpression
+                range: 5:23-5:24
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-13:2
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "Other"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 10:5-12:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 10:5-12:6
+        (BlockStatement
+          range: 10:12-12:6
+          (ExpressionStatement
+            range: 11:9-11:25
+            (AssignmentExpression
+              range: 11:9-11:24
+              (MemberExpression
+                range: 11:9-11:20
+                (IdentifierExpression
+                  range: 11:9-11:14
+                  name: "Owner"
+                )
+                (IdentifierExpression
+                  range: 11:15-11:20
+                  name: "value"
+                )
+              )
+              (LiteralExpression
+                range: 11:23-11:24
+                kind: INT
+                text: "2"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot assign to const member 'value' at 11:9-11:20

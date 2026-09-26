@@ -1,0 +1,443 @@
+class Counter {
+    public static var value = 40;
+
+    public static func add(amount: i32 = 2) i32 {
+        Counter.value = Counter.value + amount;
+        return Counter.value;
+    }
+}
+
+print(Counter.value);
+print(Counter.add());
+Counter.value = 7;
+print(Counter.add(3));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+VAR (2:19-2:22)
+IDENTIFIER "value" (2:23-2:28)
+EQUAL (2:29-2:30)
+INTEGER_LITERAL "40" (2:31-2:33)
+SEMICOLON (2:33-2:34)
+PUBLIC (4:5-4:11)
+STATIC (4:12-4:18)
+FUNC (4:19-4:23)
+IDENTIFIER "add" (4:24-4:27)
+LEFT_PAREN (4:27-4:28)
+IDENTIFIER "amount" (4:28-4:34)
+COLON (4:34-4:35)
+IDENTIFIER "i32" (4:36-4:39)
+EQUAL (4:40-4:41)
+INTEGER_LITERAL "2" (4:42-4:43)
+RIGHT_PAREN (4:43-4:44)
+IDENTIFIER "i32" (4:45-4:48)
+LEFT_BRACE (4:49-4:50)
+IDENTIFIER "Counter" (5:9-5:16)
+DOT (5:16-5:17)
+IDENTIFIER "value" (5:17-5:22)
+EQUAL (5:23-5:24)
+IDENTIFIER "Counter" (5:25-5:32)
+DOT (5:32-5:33)
+IDENTIFIER "value" (5:33-5:38)
+PLUS (5:39-5:40)
+IDENTIFIER "amount" (5:41-5:47)
+SEMICOLON (5:47-5:48)
+RETURN (6:9-6:15)
+IDENTIFIER "Counter" (6:16-6:23)
+DOT (6:23-6:24)
+IDENTIFIER "value" (6:24-6:29)
+SEMICOLON (6:29-6:30)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "Counter" (10:7-10:14)
+DOT (10:14-10:15)
+IDENTIFIER "value" (10:15-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "Counter" (11:7-11:14)
+DOT (11:14-11:15)
+IDENTIFIER "add" (11:15-11:18)
+LEFT_PAREN (11:18-11:19)
+RIGHT_PAREN (11:19-11:20)
+RIGHT_PAREN (11:20-11:21)
+SEMICOLON (11:21-11:22)
+IDENTIFIER "Counter" (12:1-12:8)
+DOT (12:8-12:9)
+IDENTIFIER "value" (12:9-12:14)
+EQUAL (12:15-12:16)
+INTEGER_LITERAL "7" (12:17-12:18)
+SEMICOLON (12:18-12:19)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "Counter" (13:7-13:14)
+DOT (13:14-13:15)
+IDENTIFIER "add" (13:15-13:18)
+LEFT_PAREN (13:18-13:19)
+INTEGER_LITERAL "3" (13:19-13:20)
+RIGHT_PAREN (13:20-13:21)
+RIGHT_PAREN (13:21-13:22)
+SEMICOLON (13:22-13:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:23
+  (ClassDeclaration
+    range: 1:1-8:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:34
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 2:19-2:34
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:23-2:28
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:31-2:33
+          kind: INT
+          text: "40"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-7:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 4:19-7:6
+        (IdentifierDeclaration
+          range: 4:24-4:27
+          name: "add"
+        )
+        (FunctionParameter
+          range: 4:28-4:43
+          (IdentifierDeclaration
+            range: 4:28-4:34
+            name: "amount"
+          )
+          (NamedTypeNode
+            range: 4:36-4:39
+            name: "i32"
+          )
+          optional: false
+          (LiteralExpression
+            range: 4:42-4:43
+            kind: INT
+            text: "2"
+          )
+        )
+        (NamedTypeNode
+          range: 4:45-4:48
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:49-7:6
+          (ExpressionStatement
+            range: 5:9-5:48
+            (AssignmentExpression
+              range: 5:9-5:47
+              (MemberExpression
+                range: 5:9-5:22
+                (IdentifierExpression
+                  range: 5:9-5:16
+                  name: "Counter"
+                )
+                (IdentifierExpression
+                  range: 5:17-5:22
+                  name: "value"
+                )
+              )
+              (BinaryExpression
+                range: 5:25-5:47
+                (MemberExpression
+                  range: 5:25-5:38
+                  (IdentifierExpression
+                    range: 5:25-5:32
+                    name: "Counter"
+                  )
+                  (IdentifierExpression
+                    range: 5:33-5:38
+                    name: "value"
+                  )
+                )
+                operator: ADD
+                (IdentifierExpression
+                  range: 5:41-5:47
+                  name: "amount"
+                )
+              )
+            )
+          )
+          (ReturnStatement
+            range: 6:9-6:30
+            (MemberExpression
+              range: 6:16-6:29
+              (IdentifierExpression
+                range: 6:16-6:23
+                name: "Counter"
+              )
+              (IdentifierExpression
+                range: 6:24-6:29
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:22
+    (CallExpression
+      range: 10:1-10:21
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 10:7-10:20
+        (IdentifierExpression
+          range: 10:7-10:14
+          name: "Counter"
+        )
+        (IdentifierExpression
+          range: 10:15-10:20
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:22
+    (CallExpression
+      range: 11:1-11:21
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:20
+        (MemberExpression
+          range: 11:7-11:18
+          (IdentifierExpression
+            range: 11:7-11:14
+            name: "Counter"
+          )
+          (IdentifierExpression
+            range: 11:15-11:18
+            name: "add"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:19
+    (AssignmentExpression
+      range: 12:1-12:18
+      (MemberExpression
+        range: 12:1-12:14
+        (IdentifierExpression
+          range: 12:1-12:8
+          name: "Counter"
+        )
+        (IdentifierExpression
+          range: 12:9-12:14
+          name: "value"
+        )
+      )
+      (LiteralExpression
+        range: 12:17-12:18
+        kind: INT
+        text: "7"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:23
+    (CallExpression
+      range: 13:1-13:22
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:21
+        (MemberExpression
+          range: 13:7-13:18
+          (IdentifierExpression
+            range: 13:7-13:14
+            name: "Counter"
+          )
+          (IdentifierExpression
+            range: 13:15-13:18
+            name: "add"
+          )
+        )
+        (LiteralExpression
+          range: 13:19-13:20
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:31-2:33 -> i32
+  4:42-4:43 -> i32
+  5:9-5:16 -> Counter
+  5:9-5:22 -> i32
+  5:9-5:47 -> i32
+  5:17-5:22 -> i32
+  5:25-5:32 -> Counter
+  5:25-5:38 -> i32
+  5:25-5:47 -> i32
+  5:33-5:38 -> i32
+  5:41-5:47 -> i32
+  6:16-6:23 -> Counter
+  6:16-6:29 -> i32
+  6:24-6:29 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:21 -> void
+  10:7-10:14 -> Counter
+  10:7-10:20 -> i32
+  10:15-10:20 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:21 -> void
+  11:7-11:14 -> Counter
+  11:7-11:18 -> (i32) => i32
+  11:7-11:20 -> i32
+  11:15-11:18 -> (i32) => i32
+  12:1-12:8 -> Counter
+  12:1-12:14 -> i32
+  12:1-12:18 -> i32
+  12:9-12:14 -> i32
+  12:17-12:18 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:22 -> void
+  13:7-13:14 -> Counter
+  13:7-13:18 -> (i32) => i32
+  13:7-13:21 -> i32
+  13:15-13:18 -> (i32) => i32
+  13:19-13:20 -> i32
+
+Resolved types:
+  4:36-4:39 -> i32
+  4:45-4:48 -> i32
+
+Declarations:
+  1:7-1:14 -> class Counter
+  2:23-2:28 -> var value: i32
+  4:24-4:27 -> func add(i32) => i32
+  4:28-4:34 -> const amount: i32
+
+References:
+  5:9-5:16 -> 1:7-1:14
+  5:17-5:22 -> 2:23-2:28
+  5:25-5:32 -> 1:7-1:14
+  5:33-5:38 -> 2:23-2:28
+  5:41-5:47 -> 4:28-4:34
+  6:16-6:23 -> 1:7-1:14
+  6:24-6:29 -> 2:23-2:28
+  10:1-10:6 -> builtin print
+  10:7-10:14 -> 1:7-1:14
+  10:15-10:20 -> 2:23-2:28
+  11:1-11:6 -> builtin print
+  11:7-11:14 -> 1:7-1:14
+  11:15-11:18 -> 4:24-4:27
+  12:1-12:8 -> 1:7-1:14
+  12:9-12:14 -> 2:23-2:28
+  13:1-13:6 -> builtin print
+  13:7-13:14 -> 1:7-1:14
+  13:15-13:18 -> 4:24-4:27
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Counter.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_0 0
+    LDC 1
+    INVOKESTATIC Test$Counter.add(II)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC 7
+    DUP
+    PUTSTATIC Test$Counter.value I
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 3
+    INVOKESTATIC Test$Counter.add(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 40
+    PUTSTATIC Test$Counter.value I
+    RETURN
+    max stack 1 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method add(I)I flags [PUBLIC, STATIC]
+    GETSTATIC Test$Counter.value I
+    ILOAD_0 0
+    IADD
+    DUP
+    PUTSTATIC Test$Counter.value I
+    POP
+    GETSTATIC Test$Counter.value I
+    IRETURN
+    max stack 2 max locals 1
+  method add(II)I flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_1 1
+    LDC 1
+    IAND
+    IFEQ L0
+    LDC 2
+    ISTORE_0 0
+   L0:
+    ILOAD_0 0
+    INVOKESTATIC Test$Counter.add(I)I
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+40
+42
+10
+

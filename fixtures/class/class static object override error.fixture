@@ -1,0 +1,71 @@
+class Example {
+    public static override func toString() string {
+        return "example";
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+OVERRIDE (2:19-2:27)
+FUNC (2:28-2:32)
+IDENTIFIER "toString" (2:33-2:41)
+LEFT_PAREN (2:41-2:42)
+RIGHT_PAREN (2:42-2:43)
+IDENTIFIER "string" (2:44-2:50)
+LEFT_BRACE (2:51-2:52)
+RETURN (3:9-3:15)
+STRING_LITERAL "\"example\"" (3:16-3:25)
+SEMICOLON (3:25-3:26)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-4:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 2:33-2:41
+          name: "toString"
+        )
+        (NamedTypeNode
+          range: 2:44-2:50
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:51-4:6
+          (ReturnStatement
+            range: 3:9-3:26
+            (LiteralExpression
+              range: 3:16-3:25
+              kind: STRING
+              text: "\"example\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Static method 'toString' cannot override instance method at 2:33-2:41

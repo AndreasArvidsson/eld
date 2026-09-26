@@ -1,0 +1,191 @@
+class Base {
+    public static func create() Base {
+        return new Base();
+    }
+}
+
+class Derived extends Base {}
+
+const value = Derived.create();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "create" (2:24-2:30)
+LEFT_PAREN (2:30-2:31)
+RIGHT_PAREN (2:31-2:32)
+IDENTIFIER "Base" (2:33-2:37)
+LEFT_BRACE (2:38-2:39)
+RETURN (3:9-3:15)
+NEW (3:16-3:19)
+IDENTIFIER "Base" (3:20-3:24)
+LEFT_PAREN (3:24-3:25)
+RIGHT_PAREN (3:25-3:26)
+SEMICOLON (3:26-3:27)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Derived" (7:7-7:14)
+EXTENDS (7:15-7:22)
+IDENTIFIER "Base" (7:23-7:27)
+LEFT_BRACE (7:28-7:29)
+RIGHT_BRACE (7:29-7:30)
+CONST (9:1-9:6)
+IDENTIFIER "value" (9:7-9:12)
+EQUAL (9:13-9:14)
+IDENTIFIER "Derived" (9:15-9:22)
+DOT (9:22-9:23)
+IDENTIFIER "create" (9:23-9:29)
+LEFT_PAREN (9:29-9:30)
+RIGHT_PAREN (9:30-9:31)
+SEMICOLON (9:31-9:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:32
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-4:6
+        (IdentifierDeclaration
+          range: 2:24-2:30
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 2:33-2:37
+          name: "Base"
+        )
+        (BlockStatement
+          range: 2:38-4:6
+          (ReturnStatement
+            range: 3:9-3:27
+            (NewExpression
+              range: 3:16-3:26
+              (IdentifierExpression
+                range: 3:20-3:24
+                name: "Base"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-7:30
+    (IdentifierDeclaration
+      range: 7:7-7:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 7:23-7:27
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "value"
+    )
+    type: null
+    (CallExpression
+      range: 9:15-9:31
+      (MemberExpression
+        range: 9:15-9:29
+        (IdentifierExpression
+          range: 9:15-9:22
+          name: "Derived"
+        )
+        (IdentifierExpression
+          range: 9:23-9:29
+          name: "create"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:26 -> Base
+  3:20-3:24 -> Base
+  7:23-7:27 -> Base
+  9:15-9:22 -> Derived
+  9:15-9:29 -> () => Base
+  9:15-9:31 -> Base
+  9:23-9:29 -> () => Base
+
+Resolved types:
+  2:33-2:37 -> Base
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:24-2:30 -> func create() => Base
+  7:7-7:14 -> class Derived
+  9:7-9:12 -> const value: Base
+
+References:
+  3:20-3:24 -> 1:7-1:11
+  7:23-7:27 -> 1:7-1:11
+  9:15-9:22 -> 7:7-7:14
+  9:23-9:29 -> 2:24-2:30
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field value LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test$Base.create()LTest$Base;
+    PUTSTATIC Test.value LTest$Base;
+    RETURN
+    max stack 1 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()LTest$Base; flags [PUBLIC, STATIC]
+    NEW Test$Base
+    DUP
+    INVOKESPECIAL Test$Base.<init>()V
+    ARETURN
+    max stack 2 max locals 0
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+

@@ -37,6 +37,7 @@ final class FieldInitializationAnalyzer {
     private int pendingFinalizers;
     private final SemanticModel model;
     private final ClassDeclaration declaration;
+    private final boolean staticFields;
     private final Set<Symbol> fields = new HashSet<>();
     private final Set<Symbol> defaults = new HashSet<>();
 
@@ -44,18 +45,58 @@ final class FieldInitializationAnalyzer {
         final SemanticModel model,
         final ClassDeclaration declaration
     ) {
+        this(model, declaration, false);
+    }
+
+    FieldInitializationAnalyzer(
+        final SemanticModel model,
+        final ClassDeclaration declaration,
+        final boolean staticFields
+    ) {
         this.model = model;
         this.declaration = declaration;
+        this.staticFields = staticFields;
         for (final MemberDeclaration memberDeclaration : declaration
             .members()) {
+            if (memberDeclaration.staticMember() != staticFields) {
+                continue;
+            }
             final Declaration member = memberDeclaration.declaration();
-            if (member instanceof VariableDeclaration field) {
+            if (!staticFields && member instanceof VariableDeclaration field) {
                 final Symbol symbol = model.getSymbol(field.name());
                 fields.add(symbol);
                 defaults.add(symbol);
             }
             else if (member instanceof UninitializedVariableDeclaration field) {
-                fields.add(model.getSymbol(field.name()));
+                final Symbol symbol = model.getSymbol(field.name());
+                if (!staticFields || model.isUninitializedStaticField(symbol)) {
+                    fields.add(symbol);
+                }
+            }
+        }
+    }
+
+    void analyzeStaticInitializers() {
+        List<Path> paths =
+            List.of(new Path(Set.of(), Set.of(), Exit.NORMAL, true, true));
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            if (!memberDeclaration.staticMember()) {
+                continue;
+            }
+            final Declaration member = memberDeclaration.declaration();
+            if (member instanceof VariableDeclaration field) {
+                paths = walk(field.initializer(), paths);
+            }
+            else if (
+                member instanceof StaticInitializerDeclaration initializer
+            ) {
+                paths = walk(initializer.body(), paths);
+            }
+        }
+        for (final Path path : paths) {
+            if (path.exit() == Exit.NORMAL) {
+                requireComplete(path, declaration);
             }
         }
     }
@@ -68,6 +109,9 @@ final class FieldInitializationAnalyzer {
         if (constructor == null) {
             for (final MemberDeclaration memberDeclaration : declaration
                 .members()) {
+                if (memberDeclaration.staticMember()) {
+                    continue;
+                }
                 final Declaration member = memberDeclaration.declaration();
                 if (member instanceof UninitializedVariableDeclaration field) {
                     throw new SemanticException(
@@ -115,12 +159,12 @@ final class FieldInitializationAnalyzer {
     }
 
     private @Nullable Symbol ownField(final Expression expression) {
-        if (
-            unwrap(expression) instanceof MemberExpression member
-                && unwrap(member.target()) instanceof ThisExpression
-        ) {
+        if (unwrap(expression) instanceof MemberExpression member) {
             final Symbol symbol = model.getReference(member.member());
-            if (fields.contains(symbol)) {
+            if (
+                fields.contains(symbol) && (staticFields
+                    || unwrap(member.target()) instanceof ThisExpression)
+            ) {
                 return symbol;
             }
         }
@@ -210,9 +254,9 @@ final class FieldInitializationAnalyzer {
                     requireComplete(path, statement);
                 }
                 return List.of(path.withExit(Exit.RETURN));
-            case BreakStatement ignored:
+            case BreakStatement _:
                 return List.of(path.withExit(Exit.BREAK));
-            case ContinueStatement ignored:
+            case ContinueStatement _:
                 return List.of(path.withExit(Exit.CONTINUE));
             case YieldStatement statement:
                 return changeExit(

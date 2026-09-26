@@ -420,6 +420,30 @@ public final class SemanticAnalyzerObjects {
             symbol instanceof FunctionSymbol functionSymbol
                 && inherited instanceof FunctionSymbol inheritedFunction
         ) {
+            final boolean staticMethod = model.isStaticMember(functionSymbol);
+            final boolean inheritedStaticMethod =
+                model.isStaticMember(inheritedFunction);
+            if (staticMethod != inheritedStaticMethod) {
+                throw new SemanticException(
+                    symbol.range(),
+                    "%s method '%s' cannot override %s method",
+                    staticMethod ? "Static" : "Instance",
+                    symbol.name(),
+                    inheritedStaticMethod ? "static" : "instance"
+                );
+            }
+            final var declaration =
+                model.getFunctionDeclaration(functionSymbol);
+            if (staticMethod) {
+                if (declaration != null && declaration.overrideMethod()) {
+                    throw new SemanticException(
+                        symbol.range(),
+                        "Static method '%s' cannot be marked override",
+                        symbol.name()
+                    );
+                }
+                return;
+            }
             final var inheritedDeclaration =
                 model.getFunctionDeclaration(inheritedFunction);
             if (
@@ -432,8 +456,6 @@ public final class SemanticAnalyzerObjects {
                     symbol.name()
                 );
             }
-            final var declaration =
-                model.getFunctionDeclaration(functionSymbol);
             if (
                 inheritedDeclaration != null && inheritedDeclaration.constant()
                     && (declaration == null || !declaration.constant())
@@ -496,6 +518,13 @@ public final class SemanticAnalyzerObjects {
         final boolean objectOverride =
             objectMethod != null && model
                 .isOverrideCompatible(function.type(), objectMethod.type());
+        if (objectOverride && model.isStaticMember(function)) {
+            throw new SemanticException(
+                function.range(),
+                "Static method '%s' cannot override instance method",
+                function.name()
+            );
+        }
         validateOverrideModifier(function, objectOverride);
         if (
             objectOverride

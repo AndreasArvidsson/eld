@@ -1,0 +1,91 @@
+interface Example {
+    const value: i32;
+}
+class Implementation implements Example {
+    public static const value = 42;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Example" (1:11-1:18)
+LEFT_BRACE (1:19-1:20)
+CONST (2:5-2:10)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+SEMICOLON (2:21-2:22)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Implementation" (4:7-4:21)
+IMPLEMENTS (4:22-4:32)
+IDENTIFIER "Example" (4:33-4:40)
+LEFT_BRACE (4:41-4:42)
+PUBLIC (5:5-5:11)
+STATIC (5:12-5:18)
+CONST (5:19-5:24)
+IDENTIFIER "value" (5:25-5:30)
+EQUAL (5:31-5:32)
+INTEGER_LITERAL "42" (5:33-5:35)
+SEMICOLON (5:35-5:36)
+RIGHT_BRACE (6:1-6:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:18
+      name: "Example"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:22
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:21
+      name: "Implementation"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:33-4:40
+      name: "Example"
+    )
+    (MemberDeclaration
+      range: 5:5-5:36
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 5:19-5:36
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 5:25-5:30
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:33-5:35
+          kind: INT
+          text: "42"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Interface member 'value' must be an instance member at 5:25-5:30

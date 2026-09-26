@@ -1,0 +1,189 @@
+class Example {
+    public static const base = 20;
+    public static const doubled = Example.base * 2;
+}
+print(Example.doubled);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+IDENTIFIER "base" (2:25-2:29)
+EQUAL (2:30-2:31)
+INTEGER_LITERAL "20" (2:32-2:34)
+SEMICOLON (2:34-2:35)
+PUBLIC (3:5-3:11)
+STATIC (3:12-3:18)
+CONST (3:19-3:24)
+IDENTIFIER "doubled" (3:25-3:32)
+EQUAL (3:33-3:34)
+IDENTIFIER "Example" (3:35-3:42)
+DOT (3:42-3:43)
+IDENTIFIER "base" (3:43-3:47)
+STAR (3:48-3:49)
+INTEGER_LITERAL "2" (3:50-3:51)
+SEMICOLON (3:51-3:52)
+RIGHT_BRACE (4:1-4:2)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "Example" (5:7-5:14)
+DOT (5:14-5:15)
+IDENTIFIER "doubled" (5:15-5:22)
+RIGHT_PAREN (5:22-5:23)
+SEMICOLON (5:23-5:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:24
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:35
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 2:19-2:35
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:25-2:29
+          name: "base"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:32-2:34
+          kind: INT
+          text: "20"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:52
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 3:19-3:52
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 3:25-3:32
+          name: "doubled"
+        )
+        type: null
+        (BinaryExpression
+          range: 3:35-3:51
+          (MemberExpression
+            range: 3:35-3:47
+            (IdentifierExpression
+              range: 3:35-3:42
+              name: "Example"
+            )
+            (IdentifierExpression
+              range: 3:43-3:47
+              name: "base"
+            )
+          )
+          operator: MULTIPLY
+          (LiteralExpression
+            range: 3:50-3:51
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:24
+    (CallExpression
+      range: 5:1-5:23
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 5:7-5:22
+        (IdentifierExpression
+          range: 5:7-5:14
+          name: "Example"
+        )
+        (IdentifierExpression
+          range: 5:15-5:22
+          name: "doubled"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:32-2:34 -> i32
+  3:35-3:42 -> Example
+  3:35-3:47 -> i32
+  3:35-3:51 -> i32
+  3:43-3:47 -> i32
+  3:50-3:51 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:23 -> void
+  5:7-5:14 -> Example
+  5:7-5:22 -> i32
+  5:15-5:22 -> i32
+
+Declarations:
+  1:7-1:14 -> class Example
+  2:25-2:29 -> const base: i32
+  3:25-3:32 -> const doubled: i32
+
+References:
+  3:35-3:42 -> 1:7-1:14
+  3:43-3:47 -> 2:25-2:29
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 1:7-1:14
+  5:15-5:22 -> 3:25-3:32
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Example
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Example.doubled I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Example flags [PUBLIC, STATIC]
+  field base I flags [PUBLIC, STATIC, FINAL]
+  field doubled I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 20
+    PUTSTATIC Test$Example.base I
+    GETSTATIC Test$Example.base I
+    LDC 2
+    IMUL
+    PUTSTATIC Test$Example.doubled I
+    RETURN
+    max stack 2 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+40
+

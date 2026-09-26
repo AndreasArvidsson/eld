@@ -141,6 +141,20 @@ public final class SemanticAnalyzerExpressionOperations {
                     .equals(analyzer.currentInstance())
                 && model
                     .getReference(member.member()) instanceof VariableSymbol)
+                && !(analyzer.isAnalyzingStaticInitializer()
+                    && context.function() == null
+                    && unwrap(
+                        assignment.target()
+                    ) instanceof MemberExpression memberExpression
+                    && model.isUninitializedStaticField(
+                        model.getReference(memberExpression.member())
+                    )
+                    && Objects.equals(
+                        model.getClassMemberOwner(
+                            model.getReference(memberExpression.member())
+                        ),
+                        analyzer.currentAccessClass()
+                    ))
         ) {
             requireWritable(assignment.target());
         }
@@ -398,6 +412,18 @@ public final class SemanticAnalyzerExpressionOperations {
             throw new SemanticException(
                 identifier.range(),
                 "Type alias '%s' cannot be used as a value",
+                identifier.name()
+            );
+        }
+
+        if (
+            model.findClassMemberOwner(symbol) != null
+                && !model.isStaticMember(symbol)
+                && analyzer.currentInstance() == null
+        ) {
+            throw new SemanticException(
+                identifier.range(),
+                "Instance member '%s' is not available in a static member",
                 identifier.name()
             );
         }

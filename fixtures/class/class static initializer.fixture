@@ -1,0 +1,328 @@
+class Example {
+    public static var value = 1;
+
+    static {
+        print("initializing");
+        Example.value = Example.value + 1;
+    }
+
+    static {
+        Example.value = Example.value * 2;
+    }
+}
+
+print(Example.value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+VAR (2:19-2:22)
+IDENTIFIER "value" (2:23-2:28)
+EQUAL (2:29-2:30)
+INTEGER_LITERAL "1" (2:31-2:32)
+SEMICOLON (2:32-2:33)
+STATIC (4:5-4:11)
+LEFT_BRACE (4:12-4:13)
+IDENTIFIER "print" (5:9-5:14)
+LEFT_PAREN (5:14-5:15)
+STRING_LITERAL "\"initializing\"" (5:15-5:29)
+RIGHT_PAREN (5:29-5:30)
+SEMICOLON (5:30-5:31)
+IDENTIFIER "Example" (6:9-6:16)
+DOT (6:16-6:17)
+IDENTIFIER "value" (6:17-6:22)
+EQUAL (6:23-6:24)
+IDENTIFIER "Example" (6:25-6:32)
+DOT (6:32-6:33)
+IDENTIFIER "value" (6:33-6:38)
+PLUS (6:39-6:40)
+INTEGER_LITERAL "1" (6:41-6:42)
+SEMICOLON (6:42-6:43)
+RIGHT_BRACE (7:5-7:6)
+STATIC (9:5-9:11)
+LEFT_BRACE (9:12-9:13)
+IDENTIFIER "Example" (10:9-10:16)
+DOT (10:16-10:17)
+IDENTIFIER "value" (10:17-10:22)
+EQUAL (10:23-10:24)
+IDENTIFIER "Example" (10:25-10:32)
+DOT (10:32-10:33)
+IDENTIFIER "value" (10:33-10:38)
+STAR (10:39-10:40)
+INTEGER_LITERAL "2" (10:41-10:42)
+SEMICOLON (10:42-10:43)
+RIGHT_BRACE (11:5-11:6)
+RIGHT_BRACE (12:1-12:2)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "Example" (14:7-14:14)
+DOT (14:14-14:15)
+IDENTIFIER "value" (14:15-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:22
+  (ClassDeclaration
+    range: 1:1-12:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:33
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 2:19-2:33
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:23-2:28
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:31-2:32
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-7:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 4:5-7:6
+        (BlockStatement
+          range: 4:12-7:6
+          (ExpressionStatement
+            range: 5:9-5:31
+            (CallExpression
+              range: 5:9-5:30
+              (IdentifierExpression
+                range: 5:9-5:14
+                name: "print"
+              )
+              (LiteralExpression
+                range: 5:15-5:29
+                kind: STRING
+                text: "\"initializing\""
+              )
+            )
+          )
+          (ExpressionStatement
+            range: 6:9-6:43
+            (AssignmentExpression
+              range: 6:9-6:42
+              (MemberExpression
+                range: 6:9-6:22
+                (IdentifierExpression
+                  range: 6:9-6:16
+                  name: "Example"
+                )
+                (IdentifierExpression
+                  range: 6:17-6:22
+                  name: "value"
+                )
+              )
+              (BinaryExpression
+                range: 6:25-6:42
+                (MemberExpression
+                  range: 6:25-6:38
+                  (IdentifierExpression
+                    range: 6:25-6:32
+                    name: "Example"
+                  )
+                  (IdentifierExpression
+                    range: 6:33-6:38
+                    name: "value"
+                  )
+                )
+                operator: ADD
+                (LiteralExpression
+                  range: 6:41-6:42
+                  kind: INT
+                  text: "1"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 9:5-11:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 9:5-11:6
+        (BlockStatement
+          range: 9:12-11:6
+          (ExpressionStatement
+            range: 10:9-10:43
+            (AssignmentExpression
+              range: 10:9-10:42
+              (MemberExpression
+                range: 10:9-10:22
+                (IdentifierExpression
+                  range: 10:9-10:16
+                  name: "Example"
+                )
+                (IdentifierExpression
+                  range: 10:17-10:22
+                  name: "value"
+                )
+              )
+              (BinaryExpression
+                range: 10:25-10:42
+                (MemberExpression
+                  range: 10:25-10:38
+                  (IdentifierExpression
+                    range: 10:25-10:32
+                    name: "Example"
+                  )
+                  (IdentifierExpression
+                    range: 10:33-10:38
+                    name: "value"
+                  )
+                )
+                operator: MULTIPLY
+                (LiteralExpression
+                  range: 10:41-10:42
+                  kind: INT
+                  text: "2"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:22
+    (CallExpression
+      range: 14:1-14:21
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:20
+        (IdentifierExpression
+          range: 14:7-14:14
+          name: "Example"
+        )
+        (IdentifierExpression
+          range: 14:15-14:20
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:31-2:32 -> i32
+  5:9-5:14 -> (any) => void
+  5:9-5:30 -> void
+  5:15-5:29 -> string
+  6:9-6:16 -> Example
+  6:9-6:22 -> i32
+  6:9-6:42 -> i32
+  6:17-6:22 -> i32
+  6:25-6:32 -> Example
+  6:25-6:38 -> i32
+  6:25-6:42 -> i32
+  6:33-6:38 -> i32
+  6:41-6:42 -> i32
+  10:9-10:16 -> Example
+  10:9-10:22 -> i32
+  10:9-10:42 -> i32
+  10:17-10:22 -> i32
+  10:25-10:32 -> Example
+  10:25-10:38 -> i32
+  10:25-10:42 -> i32
+  10:33-10:38 -> i32
+  10:41-10:42 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:21 -> void
+  14:7-14:14 -> Example
+  14:7-14:20 -> i32
+  14:15-14:20 -> i32
+
+Declarations:
+  1:7-1:14 -> class Example
+  2:23-2:28 -> var value: i32
+
+References:
+  5:9-5:14 -> builtin print
+  6:9-6:16 -> 1:7-1:14
+  6:17-6:22 -> 2:23-2:28
+  6:25-6:32 -> 1:7-1:14
+  6:33-6:38 -> 2:23-2:28
+  10:9-10:16 -> 1:7-1:14
+  10:17-10:22 -> 2:23-2:28
+  10:25-10:32 -> 1:7-1:14
+  10:33-10:38 -> 2:23-2:28
+  14:1-14:6 -> builtin print
+  14:7-14:14 -> 1:7-1:14
+  14:15-14:20 -> 2:23-2:28
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Example
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Example.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Example flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    PUTSTATIC Test$Example.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "initializing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC Test$Example.value I
+    LDC 1
+    IADD
+    DUP
+    PUTSTATIC Test$Example.value I
+    POP
+    GETSTATIC Test$Example.value I
+    LDC 2
+    IMUL
+    DUP
+    PUTSTATIC Test$Example.value I
+    POP
+    RETURN
+    max stack 2 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+initializing
+4
+

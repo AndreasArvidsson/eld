@@ -185,16 +185,15 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Static class members
 - Tuples as map keys and switch conditions (using hashCode and equals)
 - Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
-- Switch type narrowing
+- Type narrowing on conditional branching. if/switch/ternary. Don't create a new variable: type narrow existing instead.
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
 - abstract classes?
 - String std lib
 - Collections std lib
-- Stop using IdentifiedDeclaration in assignment expressions?
+- Stop using IdentifierDeclaration in assignment expressions?
 - Overloaded functions
 - Export & import
 - Vscode extension with syntax highlighting

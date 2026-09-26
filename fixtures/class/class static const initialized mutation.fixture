@@ -1,0 +1,99 @@
+class Example {
+    static const value = 1;
+
+    static {
+        Example.value = 2;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+STATIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+EQUAL (2:24-2:25)
+INTEGER_LITERAL "1" (2:26-2:27)
+SEMICOLON (2:27-2:28)
+STATIC (4:5-4:11)
+LEFT_BRACE (4:12-4:13)
+IDENTIFIER "Example" (5:9-5:16)
+DOT (5:16-5:17)
+IDENTIFIER "value" (5:17-5:22)
+EQUAL (5:23-5:24)
+INTEGER_LITERAL "2" (5:25-5:26)
+SEMICOLON (5:26-5:27)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:28
+      visibility: PRIVATE
+      staticMember: true
+      (VariableDeclaration
+        range: 2:12-2:28
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:26-2:27
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 4:5-6:6
+        (BlockStatement
+          range: 4:12-6:6
+          (ExpressionStatement
+            range: 5:9-5:27
+            (AssignmentExpression
+              range: 5:9-5:26
+              (MemberExpression
+                range: 5:9-5:22
+                (IdentifierExpression
+                  range: 5:9-5:16
+                  name: "Example"
+                )
+                (IdentifierExpression
+                  range: 5:17-5:22
+                  name: "value"
+                )
+              )
+              (LiteralExpression
+                range: 5:25-5:26
+                kind: INT
+                text: "2"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot assign to const member 'value' at 5:9-5:22

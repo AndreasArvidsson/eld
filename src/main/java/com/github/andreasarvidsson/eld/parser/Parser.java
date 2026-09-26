@@ -60,6 +60,10 @@ public final class Parser extends ParserBase {
                 OVERRIDE, ASYNC -> parseTopLevelDeclaration();
             case PUBLIC, PROTECTED -> throw ParserException
                 .expected("top-level declaration", current());
+            case STATIC -> throw new ParserException(
+                current().range(),
+                "'static' is only allowed on class members"
+            );
             default -> parseStatement();
         };
     }
@@ -273,6 +277,24 @@ public final class Parser extends ParserBase {
             check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
                 ? advance()
                 : null;
+        final Token staticModifier = match(TokenType.STATIC) ? peek(-1) : null;
+        if (staticModifier != null && check(TokenType.LEFT_BRACE)) {
+            if (modifier != null) {
+                throw new ParserException(
+                    modifier.range().union(staticModifier.range()),
+                    "'%s' is not allowed on static initializers",
+                    modifier.text()
+                );
+            }
+            final BlockStatement body = parseBlockStatement();
+            final Range range = staticModifier.range().union(body.range());
+            return new MemberDeclaration(
+                Visibility.PRIVATE,
+                true,
+                new StaticInitializerDeclaration(body, range),
+                range
+            );
+        }
         int constructorOffset = 0;
         while (
             check(constructorOffset, TokenType.CONST)
@@ -291,6 +313,12 @@ public final class Parser extends ParserBase {
                 invalidModifier.range().union(peek(constructorOffset).range()),
                 "'%s' is not allowed on constructors",
                 invalidModifier.text()
+            );
+        }
+        if (staticModifier != null && check(TokenType.CONSTRUCTOR)) {
+            throw new ParserException(
+                staticModifier.range().union(current().range()),
+                "'static' is not allowed on constructors"
             );
         }
         final boolean function = functionDeclarationStartsHere();
@@ -319,16 +347,21 @@ public final class Parser extends ParserBase {
                     ? parseModifiedFunctionDeclaration(advance())
                     : parseConstructorDeclaration(advance());
         }
+        final Range range =
+            modifier != null
+                ? modifier.range().union(member.range())
+                : staticModifier != null
+                    ? staticModifier.range().union(member.range())
+                    : member.range();
         return new MemberDeclaration(
             modifier == null
                 ? Visibility.PRIVATE
                 : modifier.type() == TokenType.PROTECTED
                     ? Visibility.PROTECTED
                     : Visibility.PUBLIC,
+            staticModifier != null,
             member,
-            modifier != null
-                ? modifier.range().union(member.range())
-                : member.range()
+            range
         );
     }
 
@@ -407,6 +440,7 @@ public final class Parser extends ParserBase {
                 : modifier.type() == TokenType.PROTECTED
                     ? Visibility.PROTECTED
                     : Visibility.PUBLIC,
+            false,
             method,
             modifier == null
                 ? method.range()

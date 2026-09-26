@@ -1,0 +1,231 @@
+class Base {
+    public static func create() Base {
+        return new Base();
+    }
+
+    public func value() i32 {
+        return 1;
+    }
+}
+class Derived extends Base {
+    public static override func create() Derived {
+        return new Derived();
+    }
+}
+print(Derived.create().value());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "create" (2:24-2:30)
+LEFT_PAREN (2:30-2:31)
+RIGHT_PAREN (2:31-2:32)
+IDENTIFIER "Base" (2:33-2:37)
+LEFT_BRACE (2:38-2:39)
+RETURN (3:9-3:15)
+NEW (3:16-3:19)
+IDENTIFIER "Base" (3:20-3:24)
+LEFT_PAREN (3:24-3:25)
+RIGHT_PAREN (3:25-3:26)
+SEMICOLON (3:26-3:27)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "value" (6:17-6:22)
+LEFT_PAREN (6:22-6:23)
+RIGHT_PAREN (6:23-6:24)
+IDENTIFIER "i32" (6:25-6:28)
+LEFT_BRACE (6:29-6:30)
+RETURN (7:9-7:15)
+INTEGER_LITERAL "1" (7:16-7:17)
+SEMICOLON (7:17-7:18)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CLASS (10:1-10:6)
+IDENTIFIER "Derived" (10:7-10:14)
+EXTENDS (10:15-10:22)
+IDENTIFIER "Base" (10:23-10:27)
+LEFT_BRACE (10:28-10:29)
+PUBLIC (11:5-11:11)
+STATIC (11:12-11:18)
+OVERRIDE (11:19-11:27)
+FUNC (11:28-11:32)
+IDENTIFIER "create" (11:33-11:39)
+LEFT_PAREN (11:39-11:40)
+RIGHT_PAREN (11:40-11:41)
+IDENTIFIER "Derived" (11:42-11:49)
+LEFT_BRACE (11:50-11:51)
+RETURN (12:9-12:15)
+NEW (12:16-12:19)
+IDENTIFIER "Derived" (12:20-12:27)
+LEFT_PAREN (12:27-12:28)
+RIGHT_PAREN (12:28-12:29)
+SEMICOLON (12:29-12:30)
+RIGHT_BRACE (13:5-13:6)
+RIGHT_BRACE (14:1-14:2)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "Derived" (15:7-15:14)
+DOT (15:14-15:15)
+IDENTIFIER "create" (15:15-15:21)
+LEFT_PAREN (15:21-15:22)
+RIGHT_PAREN (15:22-15:23)
+DOT (15:23-15:24)
+IDENTIFIER "value" (15:24-15:29)
+LEFT_PAREN (15:29-15:30)
+RIGHT_PAREN (15:30-15:31)
+RIGHT_PAREN (15:31-15:32)
+SEMICOLON (15:32-15:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-15:33
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-4:6
+        (IdentifierDeclaration
+          range: 2:24-2:30
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 2:33-2:37
+          name: "Base"
+        )
+        (BlockStatement
+          range: 2:38-4:6
+          (ReturnStatement
+            range: 3:9-3:27
+            (NewExpression
+              range: 3:16-3:26
+              (IdentifierExpression
+                range: 3:20-3:24
+                name: "Base"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 6:25-6:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:29-8:6
+          (ReturnStatement
+            range: 7:9-7:18
+            (LiteralExpression
+              range: 7:16-7:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 10:1-14:2
+    (IdentifierDeclaration
+      range: 10:7-10:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 10:23-10:27
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 11:5-13:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 11:19-13:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 11:33-11:39
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 11:42-11:49
+          name: "Derived"
+        )
+        (BlockStatement
+          range: 11:50-13:6
+          (ReturnStatement
+            range: 12:9-12:30
+            (NewExpression
+              range: 12:16-12:29
+              (IdentifierExpression
+                range: 12:20-12:27
+                name: "Derived"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:33
+    (CallExpression
+      range: 15:1-15:32
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:31
+        (MemberExpression
+          range: 15:7-15:29
+          (CallExpression
+            range: 15:7-15:23
+            (MemberExpression
+              range: 15:7-15:21
+              (IdentifierExpression
+                range: 15:7-15:14
+                name: "Derived"
+              )
+              (IdentifierExpression
+                range: 15:15-15:21
+                name: "create"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 15:24-15:29
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Static method 'create' cannot be marked override at 11:33-11:39

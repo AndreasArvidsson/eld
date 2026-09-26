@@ -22,6 +22,7 @@ import com.github.andreasarvidsson.eld.parser.InterfaceMethodDeclaration;
 import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
+import com.github.andreasarvidsson.eld.parser.StaticInitializerDeclaration;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -233,33 +234,36 @@ public final class SemanticAnalyzerDeclarations {
         }
         for (final MemberDeclaration memberDeclaration : declaration
             .members()) {
-            final Declaration member = memberDeclaration.declaration();
-            if (member instanceof VariableDeclaration field) {
-                analyzer.analyzeVariableDeclaration(field, context, members);
-            }
-            else if (member instanceof UninitializedVariableDeclaration field) {
-                final Type type = analyzer.resolveType(field.type(), context);
-                final VariableSymbol symbol =
-                    new VariableSymbol(field.name(), type, field.mutability());
-                members.declare(symbol);
-                model.setSymbol(field.name(), symbol);
-            }
-        }
-        for (final MemberDeclaration memberDeclaration : declaration
-            .members()) {
             if (
                 memberDeclaration
                     .declaration() instanceof FunctionDeclaration method
             ) {
+                final boolean fieldWithSameName =
+                    declaration.members()
+                        .stream()
+                        .map(MemberDeclaration::declaration)
+                        .anyMatch(member -> switch (member) {
+                            case VariableDeclaration field -> field.name()
+                                .name()
+                                .equals(method.name().name());
+                            case UninitializedVariableDeclaration field ->
+                                field.name()
+                                    .name()
+                                    .equals(method.name().name());
+                            default -> false;
+                        });
                 analyzer.registerFunction(
                     method,
                     context,
-                    members.resolveLocal(
-                        method.name().name()
-                    ) instanceof VariableSymbol ? new Scope(null) : members
+                    fieldWithSameName ? new Scope(null) : members
                 );
                 final FunctionSymbol function =
                     (FunctionSymbol) model.getSymbol(method.name());
+                setClassMemberMetadata(
+                    memberDeclaration,
+                    method.name(),
+                    classType
+                );
                 if (
                     Objects
                         .requireNonNull(analyzer.classMethods().get(classType))
@@ -276,6 +280,36 @@ public final class SemanticAnalyzerDeclarations {
         for (final MemberDeclaration memberDeclaration : declaration
             .members()) {
             final Declaration member = memberDeclaration.declaration();
+            if (member instanceof VariableDeclaration field) {
+                analyzer.analyzeVariableDeclaration(field, context, members);
+                setClassMemberMetadata(
+                    memberDeclaration,
+                    field.name(),
+                    classType
+                );
+            }
+            else if (member instanceof UninitializedVariableDeclaration field) {
+                final Type type = analyzer.resolveType(field.type(), context);
+                final VariableSymbol symbol =
+                    new VariableSymbol(field.name(), type, field.mutability());
+                members.declare(symbol);
+                model.setSymbol(field.name(), symbol);
+                setClassMemberMetadata(
+                    memberDeclaration,
+                    field.name(),
+                    classType
+                );
+                if (
+                    memberDeclaration.staticMember()
+                        && field.mutability() == Mutability.CONST
+                ) {
+                    model.setUninitializedStaticField(symbol);
+                }
+            }
+        }
+        for (final MemberDeclaration memberDeclaration : declaration
+            .members()) {
+            final Declaration member = memberDeclaration.declaration();
             final IdentifierDeclaration name = switch (member) {
                 case VariableDeclaration field -> field.name();
                 case UninitializedVariableDeclaration field -> field.name();
@@ -283,11 +317,6 @@ public final class SemanticAnalyzerDeclarations {
                 default -> null;
             };
             if (name != null) {
-                model.setMemberVisibility(
-                    model.getSymbol(name),
-                    memberDeclaration.visibility()
-                );
-                model.setClassMemberOwner(model.getSymbol(name), classType);
                 analyzer
                     .validateInheritedMember(classType, model.getSymbol(name));
             }
@@ -302,9 +331,32 @@ public final class SemanticAnalyzerDeclarations {
                 .members()) {
                 final Declaration member = memberDeclaration.declaration();
                 if (member instanceof FunctionDeclaration method) {
+                    final @Nullable ClassType methodInstance =
+                        memberDeclaration.staticMember() ? null : classType;
+                    analyzer.setCurrentInstance(methodInstance);
                     analyzer.analyzeFunctionBody(method, context);
                 }
+                else if (
+                    member instanceof StaticInitializerDeclaration initializer
+                ) {
+                    analyzer.setCurrentInstance(null);
+                    analyzer.setAnalyzingStaticInitializer(true);
+                    try {
+                        analyzer.analyzeBlockStatement(
+                            initializer.body(),
+                            new SemanticContext(
+                                new Scope(context.scope()),
+                                null,
+                                0
+                            )
+                        );
+                    }
+                    finally {
+                        analyzer.setAnalyzingStaticInitializer(false);
+                    }
+                }
             }
+            analyzer.setCurrentInstance(classType);
             if (constructor != null) {
                 analyzer.setCurrentConstructor(constructor);
                 final Scope scope = new Scope(context.scope());
@@ -323,10 +375,25 @@ public final class SemanticAnalyzerDeclarations {
             }
             new FieldInitializationAnalyzer(model, declaration)
                 .analyze(constructor);
+            new FieldInitializationAnalyzer(model, declaration, true)
+                .analyzeStaticInitializers();
         }
         finally {
             analyzer.setCurrentInstance(previousInstance);
             analyzer.setCurrentConstructor(previousConstructor);
+        }
+    }
+
+    private void setClassMemberMetadata(
+        final MemberDeclaration memberDeclaration,
+        final IdentifierDeclaration name,
+        final ClassType classType
+    ) {
+        final Symbol symbol = model.getSymbol(name);
+        model.setMemberVisibility(symbol, memberDeclaration.visibility());
+        model.setClassMemberOwner(symbol, classType);
+        if (memberDeclaration.staticMember()) {
+            model.setStaticMember(symbol);
         }
     }
 
@@ -574,6 +641,13 @@ public final class SemanticAnalyzerDeclarations {
                     declaration.range(),
                     "Class %s does not implement interface member '%s'",
                     type,
+                    contract.name()
+                );
+            }
+            if (model.isStaticMember(implementation)) {
+                throw new SemanticException(
+                    implementation.range(),
+                    "Interface member '%s' must be an instance member",
                     contract.name()
                 );
             }

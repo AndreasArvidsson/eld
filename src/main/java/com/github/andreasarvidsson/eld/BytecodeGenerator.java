@@ -72,6 +72,7 @@ public final class BytecodeGenerator {
     private final SemanticModel semanticModel;
     private final Map<String, String> classOwners;
     private @Nullable ClassBuilder currentWriter;
+    private String currentOwner;
     private int nextLambda;
     private int nextObject;
     private int nextAsyncFrame;
@@ -171,6 +172,7 @@ public final class BytecodeGenerator {
         this.program = program;
         this.semanticModel = semanticModel;
         this.moduleName = moduleName;
+        this.currentOwner = moduleName;
         this.parentName = parentName;
         this.previousItems = previousItems;
     }
@@ -208,8 +210,9 @@ public final class BytecodeGenerator {
      * Returns class files keyed by JVM binary name, in module-first order.
      * Top-level class Foo is emitted as Test$Foo, a static member of Test.
      * Load or write every returned class file, not just the module.
-     * Class fields and methods are instance members. Field initializers run in
-     * source order before the constructor body; const fields are final.
+     * Class fields and methods are instance members unless declared static.
+     * Instance field initializers run in source order before the constructor
+     * body; const fields are final.
      */
     public Map<String, byte[]> generateClasses() {
         nextLambda = 0;
@@ -559,6 +562,7 @@ public final class BytecodeGenerator {
             );
 
             currentWriter = writer;
+            currentOwner = owner;
 
             writer.with(NestHostAttribute.of(classDesc(moduleName)));
             innerClasses.add(
@@ -1043,6 +1047,7 @@ public final class BytecodeGenerator {
             );
 
             currentWriter = writer;
+            currentOwner = name;
 
             writer.with(NestHostAttribute.of(classDesc(moduleName)));
             innerClasses.add(
@@ -1073,13 +1078,17 @@ public final class BytecodeGenerator {
                 if (member instanceof VariableDeclaration variable) {
                     final Symbol symbol =
                         semanticModel.getSymbol(variable.name());
-                    members.put(symbol, symbol.name());
-                    // Instance constants must be assigned by each constructor.
+                    if (!memberDeclaration.staticMember()) {
+                        members.put(symbol, symbol.name());
+                    }
                     generateField(
                         writer,
                         recordClass
                             ? ACC_PRIVATE | ACC_FINAL
                             : visibilityAccess(memberDeclaration.visibility())
+                                | (memberDeclaration.staticMember()
+                                    ? ACC_STATIC
+                                    : 0)
                                 | (variable.mutability() == Mutability.CONST
                                     ? ACC_FINAL
                                     : 0),
@@ -1092,18 +1101,26 @@ public final class BytecodeGenerator {
                 else if (member instanceof FunctionDeclaration function) {
                     final Symbol symbol =
                         semanticModel.getSymbol(function.name());
-                    members.put(symbol, methodName((FunctionSymbol) symbol));
+                    if (!memberDeclaration.staticMember()) {
+                        members
+                            .put(symbol, methodName((FunctionSymbol) symbol));
+                    }
                 }
                 else if (
                     member instanceof UninitializedVariableDeclaration field
                 ) {
                     final Symbol symbol = semanticModel.getSymbol(field.name());
-                    members.put(symbol, symbol.name());
+                    if (!memberDeclaration.staticMember()) {
+                        members.put(symbol, symbol.name());
+                    }
                     generateField(
                         writer,
                         recordClass
                             ? ACC_PRIVATE | ACC_FINAL
                             : visibilityAccess(memberDeclaration.visibility())
+                                | (memberDeclaration.staticMember()
+                                    ? ACC_STATIC
+                                    : 0)
                                 | (field.mutability() == Mutability.CONST
                                     ? ACC_FINAL
                                     : 0),
@@ -1144,6 +1161,41 @@ public final class BytecodeGenerator {
                 }
             }
             final InstanceContext instance = new InstanceContext(name, members);
+            final List<BlockItem> staticInitializers =
+                declaration.members()
+                    .stream()
+                    .filter(MemberDeclaration::staticMember)
+                    .map(MemberDeclaration::declaration)
+                    .<BlockItem>map(member -> switch (member) {
+                        case VariableDeclaration field -> field;
+                        case StaticInitializerDeclaration initializer ->
+                            initializer.body();
+                        default -> null;
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
+            if (!staticInitializers.isEmpty()) {
+                generateMethod(
+                    writer,
+                    ACC_STATIC,
+                    "<clinit>",
+                    "()V",
+                    null,
+                    method -> {
+                        final MethodGenerator initializer =
+                            new MethodGenerator(
+                                method,
+                                globals,
+                                BuiltinType.VOID,
+                                null
+                            );
+                        for (final BlockItem item : staticInitializers) {
+                            initializer.item(item);
+                        }
+                        method.return_();
+                    }
+                );
+            }
             final ConstructorDeclaration declarationConstructor =
                 declaration.members()
                     .stream()
@@ -1190,6 +1242,7 @@ public final class BytecodeGenerator {
                     initializer.constructorFields =
                         declaration.members()
                             .stream()
+                            .filter(member -> !member.staticMember())
                             .map(MemberDeclaration::declaration)
                             .filter(VariableDeclaration.class::isInstance)
                             .map(VariableDeclaration.class::cast)
@@ -1235,7 +1288,12 @@ public final class BytecodeGenerator {
                             || !function.name().name().equals("toString")
                             || !function.parameters().isEmpty()
                     ) {
-                        generateFunction(writer, function, globals, instance);
+                        generateFunction(
+                            writer,
+                            function,
+                            globals,
+                            memberDeclaration.staticMember() ? null : instance
+                        );
                         generateOverrideBridges(writer, name, function);
                     }
                 }
@@ -1316,11 +1374,13 @@ public final class BytecodeGenerator {
             if (callee instanceof MemberExpression member) {
                 final Symbol memberSymbol =
                     semanticModel.getReference(member.member());
-                final boolean staticJava =
-                    memberSymbol instanceof JavaMethodSymbol javaMethod
-                        && java.lang.reflect.Modifier
-                            .isStatic(javaMethod.method().getModifiers());
-                if (!staticJava) {
+                final boolean staticMethod =
+                    (memberSymbol instanceof JavaMethodSymbol javaMethod
+                        && java.lang.reflect.Modifier.isStatic(
+                            javaMethod.method().getModifiers()
+                        ))
+                        || semanticModel.isStaticMember(memberSymbol);
+                if (!staticMethod) {
                     operands.add(member.target());
                 }
             }
@@ -1417,7 +1477,12 @@ public final class BytecodeGenerator {
             }
             case AssignmentExpression assignment -> {
                 final Expression target = unwrapGrouping(assignment.target());
-                if (target instanceof MemberExpression member) {
+                if (
+                    target instanceof MemberExpression member
+                        && !semanticModel.isStaticMember(
+                            semanticModel.getReference(member.member())
+                        )
+                ) {
                     operands.add(member.target());
                 }
                 else if (target instanceof SubscriptExpression index) {
@@ -1428,7 +1493,12 @@ public final class BytecodeGenerator {
             }
             case UnaryExpression unary -> {
                 final Expression target = unwrapGrouping(unary.operand());
-                if (target instanceof MemberExpression member) {
+                if (
+                    target instanceof MemberExpression member
+                        && !semanticModel.isStaticMember(
+                            semanticModel.getReference(member.member())
+                        )
+                ) {
                     operands.add(member.target());
                 }
                 else if (target instanceof SubscriptExpression index) {
@@ -1438,7 +1508,12 @@ public final class BytecodeGenerator {
             }
             case PostfixExpression postfix -> {
                 final Expression target = unwrapGrouping(postfix.operand());
-                if (target instanceof MemberExpression member) {
+                if (
+                    target instanceof MemberExpression member
+                        && !semanticModel.isStaticMember(
+                            semanticModel.getReference(member.member())
+                        )
+                ) {
                     operands.add(member.target());
                 }
                 else if (target instanceof SubscriptExpression index) {
@@ -1608,6 +1683,8 @@ public final class BytecodeGenerator {
     ) {
         final FunctionSymbol symbol =
             (FunctionSymbol) semanticModel.getSymbol(function.name());
+        final boolean classMember =
+            semanticModel.findClassMemberOwner(symbol) != null;
         if (function.async()) {
             generateAsyncFunction(writer, function, symbol, globals, instance);
             generateDefaultOverload(
@@ -1617,9 +1694,9 @@ public final class BytecodeGenerator {
                 function.parameters(),
                 globals,
                 instance,
-                instance == null
-                    ? Visibility.PUBLIC
-                    : semanticModel.getMemberVisibility(symbol),
+                classMember
+                    ? semanticModel.getMemberVisibility(symbol)
+                    : Visibility.PUBLIC,
                 function.finalMethod()
             );
             return;
@@ -1627,9 +1704,9 @@ public final class BytecodeGenerator {
         generateMethod(
             writer,
             visibilityAccess(
-                instance == null
-                    ? Visibility.PUBLIC
-                    : semanticModel.getMemberVisibility(symbol)
+                classMember
+                    ? semanticModel.getMemberVisibility(symbol)
+                    : Visibility.PUBLIC
             ) | (instance == null ? ACC_STATIC : 0)
                 | (function.finalMethod() ? ACC_FINAL : 0),
             methodName(symbol),
@@ -1658,9 +1735,9 @@ public final class BytecodeGenerator {
             function.parameters(),
             globals,
             instance,
-            instance == null
-                ? Visibility.PUBLIC
-                : semanticModel.getMemberVisibility(symbol),
+            classMember
+                ? semanticModel.getMemberVisibility(symbol)
+                : Visibility.PUBLIC,
             function.finalMethod()
         );
     }
@@ -1722,9 +1799,9 @@ public final class BytecodeGenerator {
         generateMethod(
             writer,
             visibilityAccess(
-                instance == null
-                    ? Visibility.PUBLIC
-                    : semanticModel.getMemberVisibility(symbol)
+                semanticModel.findClassMemberOwner(symbol) != null
+                    ? semanticModel.getMemberVisibility(symbol)
+                    : Visibility.PUBLIC
             ) | staticFlag | (function.finalMethod() ? ACC_FINAL : 0),
             methodName(symbol),
             methodDescriptor(symbol.type()),
@@ -1765,7 +1842,9 @@ public final class BytecodeGenerator {
                 }
                 method.invoke(
                     instance == null ? INVOKESTATIC : INVOKESPECIAL,
-                    classDesc(instance == null ? moduleName : instance.owner()),
+                    classDesc(
+                        instance == null ? currentOwner : instance.owner()
+                    ),
                     bodyName,
                     MethodTypeDesc.ofDescriptor(methodDescriptor(bodyType)),
                     false
@@ -1938,9 +2017,9 @@ public final class BytecodeGenerator {
         generateMethod(
             writer,
             visibilityAccess(
-                instance == null
-                    ? Visibility.PUBLIC
-                    : semanticModel.getMemberVisibility(symbol)
+                semanticModel.findClassMemberOwner(symbol) != null
+                    ? semanticModel.getMemberVisibility(symbol)
+                    : Visibility.PUBLIC
             ) | (instance == null ? ACC_STATIC : 0)
                 | (function.finalMethod() ? ACC_FINAL : 0),
             methodName(symbol),
@@ -2406,7 +2485,9 @@ public final class BytecodeGenerator {
                             : interfaceOwnerName(instance.owner())
                                 ? INVOKEINTERFACE
                                 : INVOKEVIRTUAL,
-                    classDesc(instance == null ? moduleName : instance.owner()),
+                    classDesc(
+                        instance == null ? currentOwner : instance.owner()
+                    ),
                     name,
                     MethodTypeDesc.ofDescriptor(methodDescriptor(type)),
                     instance != null && interfaceOwnerName(instance.owner())
@@ -2429,6 +2510,7 @@ public final class BytecodeGenerator {
             writer.withSuperclass(classDesc(parentName));
 
             currentWriter = writer;
+            currentOwner = moduleName;
             for (final String objectName : objectNameOrder) {
                 nestMembers.add(classDesc(objectName));
             }
@@ -3460,7 +3542,8 @@ public final class BytecodeGenerator {
             this.globals = globals;
             this.returnType = returnType;
             this.instance = instance;
-            this.lambdaOwner = instance == null ? moduleName : instance.owner();
+            this.lambdaOwner =
+                instance == null ? currentOwner : instance.owner();
             this.nextLocal = instance == null ? 0 : 1;
         }
 
@@ -3901,6 +3984,10 @@ public final class BytecodeGenerator {
                 case TypeAliasDeclaration _ -> {
                     // Type aliases have no runtime representation.
                 }
+                case StaticInitializerDeclaration _ -> throw unsupported(
+                    item,
+                    "Static initializer outside class initialization"
+                );
                 case SuperConstructorCall call ->
                     initializeBase(call.arguments());
                 case VariableDeclaration variable -> {
@@ -4714,18 +4801,20 @@ public final class BytecodeGenerator {
                         || (lexicalInstance != null
                             && lexicalInstance.members().containsKey(symbol));
                 final String methodOwner =
-                    !instanceMethod
-                        ? moduleName
-                        : lexicalInstance != null
-                            && lexicalInstance.members().containsKey(symbol)
-                                ? lexicalInstance.owner()
-                                : Objects.requireNonNull(instance).owner();
+                    semanticModel.isStaticMember(symbol)
+                        ? classOwner(semanticModel.getClassMemberOwner(symbol))
+                        : !instanceMethod
+                            ? moduleName
+                            : lexicalInstance != null
+                                && lexicalInstance.members().containsKey(symbol)
+                                    ? lexicalInstance.owner()
+                                    : Objects.requireNonNull(instance).owner();
                 method.ldc(
                     MethodHandleDesc.ofMethod(
                         instanceMethod
                             ? DirectMethodHandleDesc.Kind.VIRTUAL
                             : DirectMethodHandleDesc.Kind.STATIC,
-                        classDesc(instanceMethod ? methodOwner : moduleName),
+                        classDesc(methodOwner),
                         methodName(function),
                         MethodTypeDesc
                             .ofDescriptor(methodDescriptor(function.type()))
@@ -4751,6 +4840,16 @@ public final class BytecodeGenerator {
                         false
                     );
                 }
+            }
+            else if (semanticModel.isStaticMember(symbol)) {
+                method.fieldAccess(
+                    GETSTATIC,
+                    classDesc(
+                        classOwner(semanticModel.getClassMemberOwner(symbol))
+                    ),
+                    symbol.name(),
+                    ClassDesc.ofDescriptor(descriptor(symbol.type()))
+                );
             }
             else if (
                 instance != null && instance.members().containsKey(symbol)
@@ -4820,6 +4919,9 @@ public final class BytecodeGenerator {
         }
 
         private boolean prepareStore(final Symbol symbol) {
+            if (semanticModel.isStaticMember(symbol)) {
+                return false;
+            }
             if (instance != null && instance.members().containsKey(symbol)) {
                 method.aload(0);
                 return true;
@@ -4859,7 +4961,19 @@ public final class BytecodeGenerator {
                 method.with(simpleInstruction(arrayStoreOpcode(symbol.type())));
                 return;
             }
-            if (instance != null && instance.members().containsKey(symbol)) {
+            if (semanticModel.isStaticMember(symbol)) {
+                method.fieldAccess(
+                    PUTSTATIC,
+                    classDesc(
+                        classOwner(semanticModel.getClassMemberOwner(symbol))
+                    ),
+                    symbol.name(),
+                    ClassDesc.ofDescriptor(descriptor(symbol.type()))
+                );
+            }
+            else if (
+                instance != null && instance.members().containsKey(symbol)
+            ) {
                 method.fieldAccess(
                     PUTFIELD,
                     classDesc(instance.owner()),
@@ -6528,15 +6642,17 @@ public final class BytecodeGenerator {
                 memberReceiver(member);
                 callArguments(call);
                 method.invoke(
-                    semanticModel
-                        .getMemberOwner(member) instanceof InterfaceType
-                            ? INVOKEINTERFACE
-                            : INVOKEVIRTUAL,
+                    semanticModel.isStaticMember(function)
+                        ? INVOKESTATIC
+                        : semanticModel
+                            .getMemberOwner(member) instanceof InterfaceType
+                                ? INVOKEINTERFACE
+                                : INVOKEVIRTUAL,
                     classDesc(memberOwner(member)),
                     methodName(function),
                     MethodTypeDesc
                         .ofDescriptor(callDescriptor(call, function.type())),
-                    semanticModel
+                    !semanticModel.isStaticMember(function) && semanticModel
                         .getMemberOwner(member) instanceof InterfaceType
                 );
             }
@@ -6566,14 +6682,18 @@ public final class BytecodeGenerator {
                 method.invoke(
                     instanceMethod ? INVOKEVIRTUAL : INVOKESTATIC,
                     classDesc(
-                        instanceMethod
-                            ? lexicalInstance != null
-                                && lexicalInstance.members()
-                                    .containsKey(function)
-                                        ? lexicalInstance.owner()
-                                        : Objects.requireNonNull(instance)
-                                            .owner()
-                            : moduleName
+                        semanticModel.isStaticMember(function)
+                            ? classOwner(
+                                semanticModel.getClassMemberOwner(function)
+                            )
+                            : instanceMethod
+                                ? lexicalInstance != null
+                                    && lexicalInstance.members()
+                                        .containsKey(function)
+                                            ? lexicalInstance.owner()
+                                            : Objects.requireNonNull(instance)
+                                                .owner()
+                                : moduleName
                     ),
                     methodName(function),
                     MethodTypeDesc.ofDescriptor(callDescriptor(call, type)),
@@ -7431,7 +7551,12 @@ public final class BytecodeGenerator {
         }
 
         private void memberReceiver(final MemberExpression member) {
-            expression(member.target());
+            if (
+                !semanticModel
+                    .isStaticMember(semanticModel.getReference(member.member()))
+            ) {
+                expression(member.target());
+            }
         }
 
         private void member(final MemberExpression member) {
@@ -7509,8 +7634,11 @@ public final class BytecodeGenerator {
             if (symbol instanceof FunctionSymbol function) {
                 method.ldc(
                     MethodHandleDesc.ofMethod(
-                        semanticModel
-                            .getMemberOwner(member) instanceof InterfaceType
+                        semanticModel.isStaticMember(function)
+                            ? DirectMethodHandleDesc.Kind.STATIC
+                            : semanticModel.getMemberOwner(
+                                member
+                            ) instanceof InterfaceType
                                 ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
                                 : DirectMethodHandleDesc.Kind.VIRTUAL,
                         classDesc(memberOwner(member)),
@@ -7519,16 +7647,18 @@ public final class BytecodeGenerator {
                             .ofDescriptor(methodDescriptor(function.type()))
                     )
                 );
-                memberReceiver(member);
-                method.invoke(
-                    INVOKEVIRTUAL,
-                    classDesc("java/lang/invoke/MethodHandle"),
-                    "bindTo",
-                    MethodTypeDesc.ofDescriptor(
-                        "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;"
-                    ),
-                    false
-                );
+                if (!semanticModel.isStaticMember(function)) {
+                    memberReceiver(member);
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/invoke/MethodHandle"),
+                        "bindTo",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;"
+                        ),
+                        false
+                    );
+                }
             }
             else if (
                 semanticModel.getMemberOwner(member) instanceof InterfaceType
@@ -7560,7 +7690,7 @@ public final class BytecodeGenerator {
             else {
                 memberReceiver(member);
                 method.fieldAccess(
-                    GETFIELD,
+                    semanticModel.isStaticMember(symbol) ? GETSTATIC : GETFIELD,
                     classDesc(memberOwner(member)),
                     symbol.name(),
                     ClassDesc.ofDescriptor(descriptor(symbol.type()))
@@ -7604,10 +7734,18 @@ public final class BytecodeGenerator {
             }
             else if (target instanceof MemberExpression member) {
                 final Type type = semanticModel.getExpressionType(member);
+                final boolean staticMember =
+                    semanticModel.isStaticMember(
+                        semanticModel.getReference(member.member())
+                    );
                 memberReceiver(member);
                 expression(assignment.value());
                 method.with(
-                    simpleInstruction(slots(type) == 2 ? DUP2_X1 : DUP_X1)
+                    simpleInstruction(
+                        slots(type) == 2
+                            ? staticMember ? DUP2 : DUP2_X1
+                            : staticMember ? DUP : DUP_X1
+                    )
                 );
                 storeMember(member, type);
             }
@@ -7645,7 +7783,9 @@ public final class BytecodeGenerator {
             }
             else {
                 method.fieldAccess(
-                    PUTFIELD,
+                    semanticModel.isStaticMember(
+                        semanticModel.getReference(member.member())
+                    ) ? PUTSTATIC : PUTFIELD,
                     classDesc(memberOwner(member)),
                     name,
                     ClassDesc.ofDescriptor(descriptor(type))
@@ -7686,38 +7826,62 @@ public final class BytecodeGenerator {
                 store(symbol);
             }
             else if (target instanceof MemberExpression member) {
-                memberReceiver(member);
-                method.dup();
-                if (
-                    semanticModel
-                        .getMemberOwner(member) instanceof InterfaceType
-                ) {
-                    method.invoke(
-                        INVOKEINTERFACE,
-                        classDesc(memberOwner(member)),
-                        "$get$" + semanticModel.getReference(member.member())
-                            .name(),
-                        MethodTypeDesc.ofDescriptor("()" + descriptor(type)),
-                        true
+                final boolean staticMember =
+                    semanticModel.isStaticMember(
+                        semanticModel.getReference(member.member())
                     );
-                }
-                else {
+                if (staticMember) {
                     method.fieldAccess(
-                        GETFIELD,
+                        GETSTATIC,
                         classDesc(memberOwner(member)),
                         semanticModel.getReference(member.member()).name(),
                         ClassDesc.ofDescriptor(descriptor(type))
                     );
                 }
+                else {
+                    memberReceiver(member);
+                    method.dup();
+                    if (
+                        semanticModel
+                            .getMemberOwner(member) instanceof InterfaceType
+                    ) {
+                        method.invoke(
+                            INVOKEINTERFACE,
+                            classDesc(memberOwner(member)),
+                            "$get$" + semanticModel
+                                .getReference(member.member())
+                                .name(),
+                            MethodTypeDesc
+                                .ofDescriptor("()" + descriptor(type)),
+                            true
+                        );
+                    }
+                    else {
+                        method.fieldAccess(
+                            GETFIELD,
+                            classDesc(memberOwner(member)),
+                            semanticModel.getReference(member.member()).name(),
+                            ClassDesc.ofDescriptor(descriptor(type))
+                        );
+                    }
+                }
                 if (postfix) {
                     method.with(
-                        simpleInstruction(slots(type) == 2 ? DUP2_X1 : DUP_X1)
+                        simpleInstruction(
+                            slots(type) == 2
+                                ? staticMember ? DUP2 : DUP2_X1
+                                : staticMember ? DUP : DUP_X1
+                        )
                     );
                 }
                 addOne(type, increase);
                 if (!postfix) {
                     method.with(
-                        simpleInstruction(slots(type) == 2 ? DUP2_X1 : DUP_X1)
+                        simpleInstruction(
+                            slots(type) == 2
+                                ? staticMember ? DUP2 : DUP2_X1
+                                : staticMember ? DUP : DUP_X1
+                        )
                     );
                 }
                 storeMember(member, type);

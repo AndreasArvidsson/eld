@@ -458,6 +458,27 @@ public final class SemanticModel {
         return classMemberOwners.get(symbol);
     }
 
+    private final Set<Symbol> staticMembers =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<Symbol> uninitializedStaticFields =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+
+    public void setStaticMember(final Symbol symbol) {
+        staticMembers.add(symbol);
+    }
+
+    public boolean isStaticMember(final Symbol symbol) {
+        return staticMembers.contains(symbol);
+    }
+
+    public void setUninitializedStaticField(final Symbol symbol) {
+        uninitializedStaticFields.add(symbol);
+    }
+
+    public boolean isUninitializedStaticField(final Symbol symbol) {
+        return uninitializedStaticFields.contains(symbol);
+    }
+
     public @Nullable RecordDeclaration findRecordDeclaration(
         final ClassType type
     ) {

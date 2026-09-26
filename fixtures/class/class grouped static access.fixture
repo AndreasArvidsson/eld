@@ -1,0 +1,308 @@
+class Example {
+    public static const value = 40;
+
+    public static func add(amount: i32 = 2) i32 {
+        return Example.value + amount;
+    }
+}
+
+print((Example).value);
+print((Example).add());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+IDENTIFIER "value" (2:25-2:30)
+EQUAL (2:31-2:32)
+INTEGER_LITERAL "40" (2:33-2:35)
+SEMICOLON (2:35-2:36)
+PUBLIC (4:5-4:11)
+STATIC (4:12-4:18)
+FUNC (4:19-4:23)
+IDENTIFIER "add" (4:24-4:27)
+LEFT_PAREN (4:27-4:28)
+IDENTIFIER "amount" (4:28-4:34)
+COLON (4:34-4:35)
+IDENTIFIER "i32" (4:36-4:39)
+EQUAL (4:40-4:41)
+INTEGER_LITERAL "2" (4:42-4:43)
+RIGHT_PAREN (4:43-4:44)
+IDENTIFIER "i32" (4:45-4:48)
+LEFT_BRACE (4:49-4:50)
+RETURN (5:9-5:15)
+IDENTIFIER "Example" (5:16-5:23)
+DOT (5:23-5:24)
+IDENTIFIER "value" (5:24-5:29)
+PLUS (5:30-5:31)
+IDENTIFIER "amount" (5:32-5:38)
+SEMICOLON (5:38-5:39)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+LEFT_PAREN (9:7-9:8)
+IDENTIFIER "Example" (9:8-9:15)
+RIGHT_PAREN (9:15-9:16)
+DOT (9:16-9:17)
+IDENTIFIER "value" (9:17-9:22)
+RIGHT_PAREN (9:22-9:23)
+SEMICOLON (9:23-9:24)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+LEFT_PAREN (10:7-10:8)
+IDENTIFIER "Example" (10:8-10:15)
+RIGHT_PAREN (10:15-10:16)
+DOT (10:16-10:17)
+IDENTIFIER "add" (10:17-10:20)
+LEFT_PAREN (10:20-10:21)
+RIGHT_PAREN (10:21-10:22)
+RIGHT_PAREN (10:22-10:23)
+SEMICOLON (10:23-10:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:24
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:36
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 2:19-2:36
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:25-2:30
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:33-2:35
+          kind: INT
+          text: "40"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 4:19-6:6
+        (IdentifierDeclaration
+          range: 4:24-4:27
+          name: "add"
+        )
+        (FunctionParameter
+          range: 4:28-4:43
+          (IdentifierDeclaration
+            range: 4:28-4:34
+            name: "amount"
+          )
+          (NamedTypeNode
+            range: 4:36-4:39
+            name: "i32"
+          )
+          optional: false
+          (LiteralExpression
+            range: 4:42-4:43
+            kind: INT
+            text: "2"
+          )
+        )
+        (NamedTypeNode
+          range: 4:45-4:48
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:49-6:6
+          (ReturnStatement
+            range: 5:9-5:39
+            (BinaryExpression
+              range: 5:16-5:38
+              (MemberExpression
+                range: 5:16-5:29
+                (IdentifierExpression
+                  range: 5:16-5:23
+                  name: "Example"
+                )
+                (IdentifierExpression
+                  range: 5:24-5:29
+                  name: "value"
+                )
+              )
+              operator: ADD
+              (IdentifierExpression
+                range: 5:32-5:38
+                name: "amount"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:24
+    (CallExpression
+      range: 9:1-9:23
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 9:7-9:22
+        (GroupingExpression
+          range: 9:7-9:16
+          (IdentifierExpression
+            range: 9:8-9:15
+            name: "Example"
+          )
+        )
+        (IdentifierExpression
+          range: 9:17-9:22
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:24
+    (CallExpression
+      range: 10:1-10:23
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:22
+        (MemberExpression
+          range: 10:7-10:20
+          (GroupingExpression
+            range: 10:7-10:16
+            (IdentifierExpression
+              range: 10:8-10:15
+              name: "Example"
+            )
+          )
+          (IdentifierExpression
+            range: 10:17-10:20
+            name: "add"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:33-2:35 -> i32
+  4:42-4:43 -> i32
+  5:16-5:23 -> Example
+  5:16-5:29 -> i32
+  5:16-5:38 -> i32
+  5:24-5:29 -> i32
+  5:32-5:38 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:23 -> void
+  9:7-9:16 -> Example
+  9:7-9:22 -> i32
+  9:8-9:15 -> Example
+  9:17-9:22 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:23 -> void
+  10:7-10:16 -> Example
+  10:7-10:20 -> (i32) => i32
+  10:7-10:22 -> i32
+  10:8-10:15 -> Example
+  10:17-10:20 -> (i32) => i32
+
+Resolved types:
+  4:36-4:39 -> i32
+  4:45-4:48 -> i32
+
+Declarations:
+  1:7-1:14 -> class Example
+  2:25-2:30 -> const value: i32
+  4:24-4:27 -> func add(i32) => i32
+  4:28-4:34 -> const amount: i32
+
+References:
+  5:16-5:23 -> 1:7-1:14
+  5:24-5:29 -> 2:25-2:30
+  5:32-5:38 -> 4:28-4:34
+  9:1-9:6 -> builtin print
+  9:8-9:15 -> 1:7-1:14
+  9:17-9:22 -> 2:25-2:30
+  10:1-10:6 -> builtin print
+  10:8-10:15 -> 1:7-1:14
+  10:17-10:20 -> 4:24-4:27
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Example
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Example.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_0 0
+    LDC 1
+    INVOKESTATIC Test$Example.add(II)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Example flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 40
+    PUTSTATIC Test$Example.value I
+    RETURN
+    max stack 1 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method add(I)I flags [PUBLIC, STATIC]
+    GETSTATIC Test$Example.value I
+    ILOAD_0 0
+    IADD
+    IRETURN
+    max stack 2 max locals 1
+  method add(II)I flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_1 1
+    LDC 1
+    IAND
+    IFEQ L0
+    LDC 2
+    ISTORE_0 0
+   L0:
+    ILOAD_0 0
+    INVOKESTATIC Test$Example.add(I)I
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+40
+42
+

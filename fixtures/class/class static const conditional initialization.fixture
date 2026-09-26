@@ -1,0 +1,120 @@
+class Example {
+    static const value: i32;
+
+    static {
+        if (true) {
+            Example.value = 1;
+        }
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+STATIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+STATIC (4:5-4:11)
+LEFT_BRACE (4:12-4:13)
+IF (5:9-5:11)
+LEFT_PAREN (5:12-5:13)
+BOOLEAN_LITERAL "true" (5:13-5:17)
+RIGHT_PAREN (5:17-5:18)
+LEFT_BRACE (5:19-5:20)
+IDENTIFIER "Example" (6:13-6:20)
+DOT (6:20-6:21)
+IDENTIFIER "value" (6:21-6:26)
+EQUAL (6:27-6:28)
+INTEGER_LITERAL "1" (6:29-6:30)
+SEMICOLON (6:30-6:31)
+RIGHT_BRACE (7:9-7:10)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:2
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PRIVATE
+      staticMember: true
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-8:6
+      visibility: PRIVATE
+      staticMember: true
+      (StaticInitializerDeclaration
+        range: 4:5-8:6
+        (BlockStatement
+          range: 4:12-8:6
+          (ExpressionStatement
+            range: 5:9-7:10
+            (IfExpression
+              range: 5:9-7:10
+              (LiteralExpression
+                range: 5:13-5:17
+                kind: BOOL
+                text: "true"
+              )
+              (BlockStatement
+                range: 5:19-7:10
+                (ExpressionStatement
+                  range: 6:13-6:31
+                  (AssignmentExpression
+                    range: 6:13-6:30
+                    (MemberExpression
+                      range: 6:13-6:26
+                      (IdentifierExpression
+                        range: 6:13-6:20
+                        name: "Example"
+                      )
+                      (IdentifierExpression
+                        range: 6:21-6:26
+                        name: "value"
+                      )
+                    )
+                    (LiteralExpression
+                      range: 6:29-6:30
+                      kind: INT
+                      text: "1"
+                    )
+                  )
+                )
+              )
+              elseBranch: null
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Field 'value' is not definitely initialized at 1:1-9:2

@@ -1,0 +1,200 @@
+class Example {
+    public static const value = Example.create();
+
+    public static func create() i32 {
+        return 42;
+    }
+}
+print(Example.value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Example" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+IDENTIFIER "value" (2:25-2:30)
+EQUAL (2:31-2:32)
+IDENTIFIER "Example" (2:33-2:40)
+DOT (2:40-2:41)
+IDENTIFIER "create" (2:41-2:47)
+LEFT_PAREN (2:47-2:48)
+RIGHT_PAREN (2:48-2:49)
+SEMICOLON (2:49-2:50)
+PUBLIC (4:5-4:11)
+STATIC (4:12-4:18)
+FUNC (4:19-4:23)
+IDENTIFIER "create" (4:24-4:30)
+LEFT_PAREN (4:30-4:31)
+RIGHT_PAREN (4:31-4:32)
+IDENTIFIER "i32" (4:33-4:36)
+LEFT_BRACE (4:37-4:38)
+RETURN (5:9-5:15)
+INTEGER_LITERAL "42" (5:16-5:18)
+SEMICOLON (5:18-5:19)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "Example" (8:7-8:14)
+DOT (8:14-8:15)
+IDENTIFIER "value" (8:15-8:20)
+RIGHT_PAREN (8:20-8:21)
+SEMICOLON (8:21-8:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:22
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Example"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:50
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 2:19-2:50
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:25-2:30
+          name: "value"
+        )
+        type: null
+        (CallExpression
+          range: 2:33-2:49
+          (MemberExpression
+            range: 2:33-2:47
+            (IdentifierExpression
+              range: 2:33-2:40
+              name: "Example"
+            )
+            (IdentifierExpression
+              range: 2:41-2:47
+              name: "create"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-6:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 4:19-6:6
+        (IdentifierDeclaration
+          range: 4:24-4:30
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 4:33-4:36
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:37-6:6
+          (ReturnStatement
+            range: 5:9-5:19
+            (LiteralExpression
+              range: 5:16-5:18
+              kind: INT
+              text: "42"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:22
+    (CallExpression
+      range: 8:1-8:21
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:20
+        (IdentifierExpression
+          range: 8:7-8:14
+          name: "Example"
+        )
+        (IdentifierExpression
+          range: 8:15-8:20
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:33-2:40 -> Example
+  2:33-2:47 -> () => i32
+  2:33-2:49 -> i32
+  2:41-2:47 -> () => i32
+  5:16-5:18 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:21 -> void
+  8:7-8:14 -> Example
+  8:7-8:20 -> i32
+  8:15-8:20 -> i32
+
+Resolved types:
+  4:33-4:36 -> i32
+
+Declarations:
+  1:7-1:14 -> class Example
+  2:25-2:30 -> const value: i32
+  4:24-4:30 -> func create() => i32
+
+References:
+  2:33-2:40 -> 1:7-1:14
+  2:41-2:47 -> 4:24-4:30
+  8:1-8:6 -> builtin print
+  8:7-8:14 -> 1:7-1:14
+  8:15-8:20 -> 2:25-2:30
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Example
+  inner class Test$Example flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Example.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Example flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test$Example.create()I
+    PUTSTATIC Test$Example.value I
+    RETURN
+    max stack 1 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()I flags [PUBLIC, STATIC]
+    LDC 42
+    IRETURN
+    max stack 1 max locals 0
+
+--- OUTPUT ---
+
+42
+

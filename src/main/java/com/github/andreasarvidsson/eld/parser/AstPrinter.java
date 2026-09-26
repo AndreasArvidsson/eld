@@ -65,7 +65,8 @@ public class AstPrinter {
             try {
                 final Object value = component.getAccessor().invoke(node);
                 if (
-                    component.getName().equals("async")
+                    (component.getName().equals("async")
+                        || component.getName().equals("staticMember"))
                         && Boolean.FALSE.equals(value)
                 ) {
                     continue;

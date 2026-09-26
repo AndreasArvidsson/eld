@@ -207,6 +207,13 @@ public final class SemanticAnalyzerExpressions {
                     analyzingCallee = memberCallee;
                 }
                 final Type memberTarget = ConstType.unwrap(target);
+                final boolean classTarget =
+                    unwrap(
+                        member.target()
+                    ) instanceof IdentifierExpression identifier
+                        && model.getReference(
+                            identifier
+                        ) instanceof ClassDeclarationSymbol;
                 if (memberTarget instanceof PromiseSourceType source) {
                     final String name = member.member().name();
                     if (
@@ -531,6 +538,22 @@ public final class SemanticAnalyzerExpressions {
                     throw new SemanticException(
                         member.member().range(),
                         "Unknown member '%s' of class %s",
+                        member.member().name(),
+                        classType.name()
+                    );
+                }
+                if (classTarget && !model.isStaticMember(symbol)) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Instance member '%s' cannot be accessed on class %s",
+                        member.member().name(),
+                        classType.name()
+                    );
+                }
+                if (!classTarget && model.isStaticMember(symbol)) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Static member '%s' must be accessed on class %s",
                         member.member().name(),
                         classType.name()
                     );
