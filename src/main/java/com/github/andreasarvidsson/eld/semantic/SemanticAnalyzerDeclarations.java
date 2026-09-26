@@ -20,6 +20,7 @@ import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
 import com.github.andreasarvidsson.eld.parser.InterfaceMethodDeclaration;
 import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
+import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
@@ -41,11 +42,27 @@ public final class SemanticAnalyzerDeclarations {
         final ClassDeclaration declaration,
         final SemanticContext context
     ) {
+        analyzeClassDeclaration(declaration, context, null);
+    }
+
+    public void analyzeRecordDeclaration(
+        final RecordDeclaration record,
+        final ClassDeclaration declaration,
+        final SemanticContext context
+    ) {
+        analyzeClassDeclaration(declaration, context, record);
+    }
+
+    private void analyzeClassDeclaration(
+        final ClassDeclaration declaration,
+        final SemanticContext context,
+        final @Nullable RecordDeclaration record
+    ) {
         final @Nullable ClassType previous = analyzer.currentAccessClass();
         analyzer
             .setCurrentAccessClass(new ClassType(declaration.name().name()));
         try {
-            analyzeClassMembers(declaration, context);
+            analyzeClassMembers(declaration, context, record);
         }
         finally {
             analyzer.setCurrentAccessClass(previous);
@@ -54,11 +71,14 @@ public final class SemanticAnalyzerDeclarations {
 
     private void analyzeClassMembers(
         final ClassDeclaration declaration,
-        final SemanticContext context
+        final SemanticContext context,
+        final @Nullable RecordDeclaration record
     ) {
         final ClassType classType = new ClassType(declaration.name().name());
-        final ClassSymbol classSymbol =
-            new ClassSymbol(declaration.name(), classType);
+        final ClassDeclarationSymbol classSymbol =
+            record == null
+                ? new ClassSymbol(declaration.name(), classType)
+                : new RecordSymbol(record, classType);
         model.setSymbol(declaration.name(), classSymbol);
         model.setClassDeclaration(classType, declaration);
         context.scope().declare(classSymbol);
@@ -108,7 +128,9 @@ public final class SemanticAnalyzerDeclarations {
             final Type base =
                 analyzer.analyzeIdentifierExpression(superclassName, context);
             if (
-                !(model.getReference(superclassName) instanceof ClassSymbol)
+                !(model.getReference(
+                    superclassName
+                ) instanceof ClassDeclarationSymbol)
                     || !(base instanceof ClassType superclass)
             ) {
                 throw new SemanticException(
@@ -196,6 +218,9 @@ public final class SemanticAnalyzerDeclarations {
         }
         final FunctionType constructorType =
             new FunctionType(parameterTypes, BuiltinType.VOID);
+        if (classSymbol instanceof RecordSymbol recordSymbol) {
+            recordSymbol.setComponentTypes(parameterTypes);
+        }
         model.setConstructor(classType, constructorType);
         model.setConstructorParameters(
             classType,
@@ -318,6 +343,8 @@ public final class SemanticAnalyzerDeclarations {
         final List<InterfaceType> parents = new ArrayList<>();
         final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
         final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
+        final Map<String, List<FunctionSymbol>> inheritedMethods =
+            new LinkedHashMap<>();
         for (final TypeNode node : declaration.superInterfaces()) {
             final Type parent = analyzer.resolveType(node, context);
             if (!(parent instanceof InterfaceType contract)) {
@@ -351,11 +378,13 @@ public final class SemanticAnalyzerDeclarations {
             }
             parents.add(contract);
             mergeContract(fields, model.getInterface(contract).fields(), node);
-            mergeContract(
-                methods,
-                model.getInterface(contract).methods(),
-                node
-            );
+            model.getInterface(contract)
+                .methods()
+                .forEach(
+                    (name, method) -> inheritedMethods
+                        .computeIfAbsent(name, _ -> new ArrayList<>())
+                        .add(method)
+                );
         }
         final Set<String> ownFields = new java.util.HashSet<>();
         final Set<String> ownMethods = new java.util.HashSet<>();
@@ -417,7 +446,22 @@ public final class SemanticAnalyzerDeclarations {
                                     .resolveType(method.returnType(), context)
                         )
                     );
-                mergeContract(methods, Map.of(value.name(), value), method);
+                if (
+                    inheritedMethods.getOrDefault(value.name(), List.of())
+                        .stream()
+                        .anyMatch(
+                            inherited -> !model.isOverrideCompatible(
+                                value.type(),
+                                inherited.type()
+                            )
+                        )
+                ) {
+                    throw new SemanticException(
+                        method.range(),
+                        "Conflicting interface member '%s'",
+                        value.name()
+                    );
+                }
                 methods.put(value.name(), value);
                 model.setSymbol(method.name(), value);
                 model.setMemberVisibility(value, Visibility.PUBLIC);
@@ -429,6 +473,34 @@ public final class SemanticAnalyzerDeclarations {
                         .toList()
                 );
             }
+        }
+        for (final var entry : inheritedMethods.entrySet()) {
+            if (ownMethods.contains(entry.getKey())) {
+                continue;
+            }
+            final FunctionSymbol resolved =
+                entry.getValue()
+                    .stream()
+                    .filter(
+                        candidate -> entry.getValue()
+                            .stream()
+                            .allMatch(
+                                inherited -> model.isOverrideCompatible(
+                                    candidate.type(),
+                                    inherited.type()
+                                )
+                            )
+                    )
+                    .findFirst()
+                    .orElse(null);
+            if (resolved == null) {
+                throw new SemanticException(
+                    declaration.range(),
+                    "Conflicting interface member '%s'",
+                    entry.getKey()
+                );
+            }
+            methods.put(entry.getKey(), resolved);
         }
         model.setInterface(
             type,
@@ -444,12 +516,15 @@ public final class SemanticAnalyzerDeclarations {
         for (final var entry : source.entrySet()) {
             final S previous =
                 target.putIfAbsent(entry.getKey(), entry.getValue());
+            if (previous == null) {
+                continue;
+            }
+            final S current = entry.getValue();
             if (
-                previous != null && (!previous.type()
-                    .equals(entry.getValue().type())
+                !previous.type().equals(current.type())
                     || (previous instanceof VariableSymbol oldField
-                        && entry.getValue() instanceof VariableSymbol newField
-                        && oldField.mutability() != newField.mutability()))
+                        && current instanceof VariableSymbol newField
+                        && oldField.mutability() != newField.mutability())
             ) {
                 throw new SemanticException(
                     node.range(),
@@ -465,7 +540,7 @@ public final class SemanticAnalyzerDeclarations {
         final ClassDeclaration declaration
     ) {
         final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
-        final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
+        final List<FunctionSymbol> methods = new ArrayList<>();
         for (ClassType current = type; current != null; current =
             model.getSuperclass(current)) {
             for (final InterfaceType contract : model
@@ -475,17 +550,13 @@ public final class SemanticAnalyzerDeclarations {
                     model.getInterface(contract).fields(),
                     declaration
                 );
-                mergeContract(
-                    methods,
-                    model.getInterface(contract).methods(),
-                    declaration
-                );
+                methods.addAll(model.getInterface(contract).methods().values());
             }
         }
         final Map<String, VariableSymbol> implementations =
             new LinkedHashMap<>();
         final List<Symbol> required = new ArrayList<>(fields.values());
-        required.addAll(methods.values());
+        required.addAll(methods);
         for (final Symbol contract : required) {
             final ClassType owner =
                 contract instanceof VariableSymbol
@@ -516,16 +587,31 @@ public final class SemanticAnalyzerDeclarations {
                     contract.name()
                 );
             }
-            if (
-                !contract.type().equals(implementation.type())
-                    || (contract instanceof FunctionSymbol) != (implementation instanceof FunctionSymbol)
-            ) {
+            final boolean compatible =
+                (contract instanceof FunctionSymbol contractFunction
+                    && implementation instanceof FunctionSymbol implementationFunction)
+                        ? model.isOverrideCompatible(
+                            implementationFunction.type(),
+                            contractFunction.type()
+                        )
+                        : contract.type().equals(implementation.type())
+                            && (contract instanceof FunctionSymbol) == (implementation instanceof FunctionSymbol);
+            if (!compatible) {
                 throw new SemanticException(
                     implementation.range(),
                     "Interface member '%s' expects %s, found %s",
                     contract.name(),
                     contract.type(),
                     implementation.type()
+                );
+            }
+            if (
+                contract instanceof FunctionSymbol contractFunction
+                    && implementation instanceof FunctionSymbol implementationFunction
+            ) {
+                model.addOverrideBridge(
+                    implementationFunction,
+                    contractFunction.type()
                 );
             }
             if (implementation instanceof VariableSymbol field) {

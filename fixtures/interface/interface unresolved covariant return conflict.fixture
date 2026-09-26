@@ -1,0 +1,126 @@
+interface First {}
+interface Second {}
+
+interface FirstFactory {
+    func create() First;
+}
+
+interface SecondFactory {
+    func create() Second;
+}
+
+interface ConflictingFactory extends FirstFactory, SecondFactory {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "First" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+RIGHT_BRACE (1:18-1:19)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Second" (2:11-2:17)
+LEFT_BRACE (2:18-2:19)
+RIGHT_BRACE (2:19-2:20)
+INTERFACE (4:1-4:10)
+IDENTIFIER "FirstFactory" (4:11-4:23)
+LEFT_BRACE (4:24-4:25)
+FUNC (5:5-5:9)
+IDENTIFIER "create" (5:10-5:16)
+LEFT_PAREN (5:16-5:17)
+RIGHT_PAREN (5:17-5:18)
+IDENTIFIER "First" (5:19-5:24)
+SEMICOLON (5:24-5:25)
+RIGHT_BRACE (6:1-6:2)
+INTERFACE (8:1-8:10)
+IDENTIFIER "SecondFactory" (8:11-8:24)
+LEFT_BRACE (8:25-8:26)
+FUNC (9:5-9:9)
+IDENTIFIER "create" (9:10-9:16)
+LEFT_PAREN (9:16-9:17)
+RIGHT_PAREN (9:17-9:18)
+IDENTIFIER "Second" (9:19-9:25)
+SEMICOLON (9:25-9:26)
+RIGHT_BRACE (10:1-10:2)
+INTERFACE (12:1-12:10)
+IDENTIFIER "ConflictingFactory" (12:11-12:29)
+EXTENDS (12:30-12:37)
+IDENTIFIER "FirstFactory" (12:38-12:50)
+COMMA (12:50-12:51)
+IDENTIFIER "SecondFactory" (12:52-12:65)
+LEFT_BRACE (12:66-12:67)
+RIGHT_BRACE (12:67-12:68)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:68
+  (InterfaceDeclaration
+    range: 1:1-1:19
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "First"
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:20
+    (IdentifierDeclaration
+      range: 2:11-2:17
+      name: "Second"
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:23
+      name: "FirstFactory"
+    )
+    (InterfaceMethodDeclaration
+      range: 5:5-5:25
+      (IdentifierDeclaration
+        range: 5:10-5:16
+        name: "create"
+      )
+      (NamedTypeNode
+        range: 5:19-5:24
+        name: "First"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 8:1-10:2
+    (IdentifierDeclaration
+      range: 8:11-8:24
+      name: "SecondFactory"
+    )
+    (InterfaceMethodDeclaration
+      range: 9:5-9:26
+      (IdentifierDeclaration
+        range: 9:10-9:16
+        name: "create"
+      )
+      (NamedTypeNode
+        range: 9:19-9:25
+        name: "Second"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 12:1-12:68
+    (IdentifierDeclaration
+      range: 12:11-12:29
+      name: "ConflictingFactory"
+    )
+    (NamedTypeNode
+      range: 12:38-12:50
+      name: "FirstFactory"
+    )
+    (NamedTypeNode
+      range: 12:52-12:65
+      name: "SecondFactory"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Conflicting interface member 'create' at 12:1-12:68

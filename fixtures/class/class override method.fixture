@@ -1,0 +1,275 @@
+class Base {
+    public func value() i32 {
+        return 1;
+    }
+}
+
+class Derived extends Base {
+    public override func value() i32 {
+        return 2;
+    }
+}
+
+const value: Base = new Derived();
+print(value.value());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+LEFT_BRACE (2:29-2:30)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Derived" (7:7-7:14)
+EXTENDS (7:15-7:22)
+IDENTIFIER "Base" (7:23-7:27)
+LEFT_BRACE (7:28-7:29)
+PUBLIC (8:5-8:11)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "value" (8:26-8:31)
+LEFT_PAREN (8:31-8:32)
+RIGHT_PAREN (8:32-8:33)
+IDENTIFIER "i32" (8:34-8:37)
+LEFT_BRACE (8:38-8:39)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CONST (13:1-13:6)
+IDENTIFIER "value" (13:7-13:12)
+COLON (13:12-13:13)
+IDENTIFIER "Base" (13:14-13:18)
+EQUAL (13:19-13:20)
+NEW (13:21-13:24)
+IDENTIFIER "Derived" (13:25-13:32)
+LEFT_PAREN (13:32-13:33)
+RIGHT_PAREN (13:33-13:34)
+SEMICOLON (13:34-13:35)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "value" (14:7-14:12)
+DOT (14:12-14:13)
+IDENTIFIER "value" (14:13-14:18)
+LEFT_PAREN (14:18-14:19)
+RIGHT_PAREN (14:19-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:22
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:29-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 7:23-7:27
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:26-8:31
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:34-8:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:38-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 13:14-13:18
+      name: "Base"
+    )
+    (NewExpression
+      range: 13:21-13:34
+      (IdentifierExpression
+        range: 13:25-13:32
+        name: "Derived"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:22
+    (CallExpression
+      range: 14:1-14:21
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:20
+        (MemberExpression
+          range: 14:7-14:18
+          (IdentifierExpression
+            range: 14:7-14:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 14:13-14:18
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:23-7:27 -> Base
+  9:16-9:17 -> i32
+  13:21-13:34 -> Derived
+  13:25-13:32 -> Derived
+  14:1-14:6 -> (any) => void
+  14:1-14:21 -> void
+  14:7-14:12 -> Base
+  14:7-14:18 -> () => i32
+  14:7-14:20 -> i32
+  14:13-14:18 -> () => i32
+
+Resolved types:
+  2:25-2:28 -> i32
+  8:34-8:37 -> i32
+  13:14-13:18 -> Base
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:17-2:22 -> func value() => i32
+  7:7-7:14 -> class Derived
+  8:26-8:31 -> override func value() => i32
+  13:7-13:12 -> const value: Base
+
+References:
+  7:23-7:27 -> 1:7-1:11
+  13:25-13:32 -> 7:7-7:14
+  14:1-14:6 -> builtin print
+  14:7-14:12 -> 13:7-13:12
+  14:13-14:18 -> 2:17-2:22
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field value LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    PUTSTATIC Test.value LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Base;
+    INVOKEVIRTUAL Test$Base.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+2
+

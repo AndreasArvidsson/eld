@@ -29,11 +29,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.Nullable;
@@ -1234,6 +1236,7 @@ public final class BytecodeGenerator {
                             || !function.parameters().isEmpty()
                     ) {
                         generateFunction(writer, function, globals, instance);
+                        generateOverrideBridges(writer, name, function);
                     }
                 }
             }
@@ -3047,6 +3050,57 @@ public final class BytecodeGenerator {
                     );
                     method.ireturn();
 
+                }
+            );
+        }
+    }
+
+    private void generateOverrideBridges(
+        final ClassBuilder writer,
+        final String owner,
+        final FunctionDeclaration declaration
+    ) {
+        final FunctionSymbol function =
+            (FunctionSymbol) semanticModel.getSymbol(declaration.name());
+        final String implementationDescriptor =
+            methodDescriptor(function.type());
+        final Set<String> generated = new HashSet<>();
+        for (final FunctionType inherited : semanticModel
+            .getOverrideBridges(function)) {
+            final String bridgeDescriptor = methodDescriptor(inherited);
+            if (
+                bridgeDescriptor.equals(implementationDescriptor)
+                    || !generated.add(bridgeDescriptor)
+            ) {
+                continue;
+            }
+            generateMethod(
+                writer,
+                visibilityAccess(semanticModel.getMemberVisibility(function))
+                    | ACC_BRIDGE | ACC_SYNTHETIC,
+                methodName(function),
+                bridgeDescriptor,
+                null,
+                method -> {
+                    method.aload(0);
+                    int slot = 1;
+                    for (final Type parameter : function.type()
+                        .parameterTypes()) {
+                        method.with(
+                            localInstruction(loadOpcode(parameter), slot)
+                        );
+                        slot += slots(parameter);
+                    }
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc(owner),
+                        methodName(function),
+                        MethodTypeDesc.ofDescriptor(implementationDescriptor),
+                        false
+                    );
+                    method.with(
+                        simpleInstruction(returnOpcode(inherited.returnType()))
+                    );
                 }
             );
         }
@@ -7309,6 +7363,9 @@ public final class BytecodeGenerator {
                         ? "java/io/PrintStream"
                         : "java/lang/invoke/MethodHandle"
                 );
+                case InterfaceType contract when contract.javaClass() != null
+                    && !contract.javaClass().isInterface() ->
+                    classDesc(contract.javaClass().getName().replace('.', '/'));
                 case PromiseType _ -> classDesc(
                     "com/github/andreasarvidsson/eld/runtime/EldPromise"
                 );

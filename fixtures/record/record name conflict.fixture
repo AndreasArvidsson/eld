@@ -161,12 +161,7 @@ Resolved types:
   2:24-2:30 -> string
 
 Declarations:
-  1:1-7:2 -> constructor(name: string, value: i32)
-  1:8-1:11 -> class Foo
-  1:8-1:11 -> func copy(string, i32) => Foo
-  1:8-1:11 -> func toString() => string
-  1:12-1:16 -> const name: string
-  1:26-1:31 -> const value: i32
+  1:8-1:11 -> record Foo(name: string, value: i32)
   2:17-2:21 -> func name() => string
   5:17-5:22 -> func value() => void
   6:17-6:24 -> func unknown() => void

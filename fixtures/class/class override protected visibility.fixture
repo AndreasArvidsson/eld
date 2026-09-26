@@ -1,0 +1,327 @@
+class Base {
+    protected func value() i32 {
+        return 1;
+    }
+}
+
+class Middle extends Base {
+    protected override func value() i32 {
+        return 2;
+    }
+}
+
+class Derived extends Middle {
+    public override func value() i32 {
+        return 3;
+    }
+}
+
+print(new Derived().value());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PROTECTED (2:5-2:14)
+FUNC (2:15-2:19)
+IDENTIFIER "value" (2:20-2:25)
+LEFT_PAREN (2:25-2:26)
+RIGHT_PAREN (2:26-2:27)
+IDENTIFIER "i32" (2:28-2:31)
+LEFT_BRACE (2:32-2:33)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Middle" (7:7-7:13)
+EXTENDS (7:14-7:21)
+IDENTIFIER "Base" (7:22-7:26)
+LEFT_BRACE (7:27-7:28)
+PROTECTED (8:5-8:14)
+OVERRIDE (8:15-8:23)
+FUNC (8:24-8:28)
+IDENTIFIER "value" (8:29-8:34)
+LEFT_PAREN (8:34-8:35)
+RIGHT_PAREN (8:35-8:36)
+IDENTIFIER "i32" (8:37-8:40)
+LEFT_BRACE (8:41-8:42)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CLASS (13:1-13:6)
+IDENTIFIER "Derived" (13:7-13:14)
+EXTENDS (13:15-13:22)
+IDENTIFIER "Middle" (13:23-13:29)
+LEFT_BRACE (13:30-13:31)
+PUBLIC (14:5-14:11)
+OVERRIDE (14:12-14:20)
+FUNC (14:21-14:25)
+IDENTIFIER "value" (14:26-14:31)
+LEFT_PAREN (14:31-14:32)
+RIGHT_PAREN (14:32-14:33)
+IDENTIFIER "i32" (14:34-14:37)
+LEFT_BRACE (14:38-14:39)
+RETURN (15:9-15:15)
+INTEGER_LITERAL "3" (15:16-15:17)
+SEMICOLON (15:17-15:18)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+NEW (19:7-19:10)
+IDENTIFIER "Derived" (19:11-19:18)
+LEFT_PAREN (19:18-19:19)
+RIGHT_PAREN (19:19-19:20)
+DOT (19:20-19:21)
+IDENTIFIER "value" (19:21-19:26)
+LEFT_PAREN (19:26-19:27)
+RIGHT_PAREN (19:27-19:28)
+RIGHT_PAREN (19:28-19:29)
+SEMICOLON (19:29-19:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-19:30
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PROTECTED
+      (FunctionDeclaration
+        range: 2:15-4:6
+        (IdentifierDeclaration
+          range: 2:20-2:25
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:28-2:31
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:32-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:13
+      name: "Middle"
+    )
+    (IdentifierExpression
+      range: 7:22-7:26
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PROTECTED
+      (FunctionDeclaration
+        range: 8:15-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:29-8:34
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:37-8:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:41-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 13:1-17:2
+    (IdentifierDeclaration
+      range: 13:7-13:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 13:23-13:29
+      name: "Middle"
+    )
+    (MemberDeclaration
+      range: 14:5-16:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 14:12-16:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 14:26-14:31
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 14:34-14:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 14:38-16:6
+          (ReturnStatement
+            range: 15:9-15:18
+            (LiteralExpression
+              range: 15:16-15:17
+              kind: INT
+              text: "3"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:30
+    (CallExpression
+      range: 19:1-19:29
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (CallExpression
+        range: 19:7-19:28
+        (MemberExpression
+          range: 19:7-19:26
+          (NewExpression
+            range: 19:7-19:20
+            (IdentifierExpression
+              range: 19:11-19:18
+              name: "Derived"
+            )
+          )
+          (IdentifierExpression
+            range: 19:21-19:26
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:22-7:26 -> Base
+  9:16-9:17 -> i32
+  13:23-13:29 -> Middle
+  15:16-15:17 -> i32
+  19:1-19:6 -> (any) => void
+  19:1-19:29 -> void
+  19:7-19:20 -> Derived
+  19:7-19:26 -> () => i32
+  19:7-19:28 -> i32
+  19:11-19:18 -> Derived
+  19:21-19:26 -> () => i32
+
+Resolved types:
+  2:28-2:31 -> i32
+  8:37-8:40 -> i32
+  14:34-14:37 -> i32
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:20-2:25 -> func value() => i32
+  7:7-7:13 -> class Middle
+  8:29-8:34 -> override func value() => i32
+  13:7-13:14 -> class Derived
+  14:26-14:31 -> override func value() => i32
+
+References:
+  7:22-7:26 -> 1:7-1:11
+  13:23-13:29 -> 7:7-7:13
+  19:1-19:6 -> builtin print
+  19:11-19:18 -> 13:7-13:14
+  19:21-19:26 -> 14:26-14:31
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Middle
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Middle flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    INVOKEVIRTUAL Test$Derived.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PROTECTED]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Middle extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Middle flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PROTECTED]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Derived extends Test$Middle version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Middle.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 3
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+3
+

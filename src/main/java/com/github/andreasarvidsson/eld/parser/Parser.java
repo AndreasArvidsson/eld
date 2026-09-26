@@ -50,14 +50,14 @@ public final class Parser extends ParserBase {
 
     private BlockItem parseTopLevelItem() {
         if (
-            (check(TokenType.FINAL) || check(TokenType.ASYNC))
-                && !functionDeclarationStartsHere()
+            (check(TokenType.FINAL) || check(TokenType.OVERRIDE)
+                || check(TokenType.ASYNC)) && !functionDeclarationStartsHere()
         ) {
             throw ParserException.expected("top-level declaration", current());
         }
         return switch (current().type()) {
             case CONST, VAR, TYPE, CLASS, RECORD, INTERFACE, FUNC, FINAL,
-                ASYNC -> parseTopLevelDeclaration();
+                OVERRIDE, ASYNC -> parseTopLevelDeclaration();
             case PUBLIC, PROTECTED -> throw ParserException
                 .expected("top-level declaration", current());
             default -> parseStatement();
@@ -76,7 +76,8 @@ public final class Parser extends ParserBase {
             case RECORD -> parseRecordDeclaration(token);
             case INTERFACE -> parseInterfaceDeclaration(token);
             case FUNC -> parseFunctionDeclaration(token, false, List.of());
-            case FINAL, ASYNC -> parseModifiedFunctionDeclaration(token);
+            case FINAL, OVERRIDE, ASYNC ->
+                parseModifiedFunctionDeclaration(token);
             default -> throw new IllegalStateException(
                 "Unexpected top-level declaration token: " + token.type()
             );
@@ -95,7 +96,7 @@ public final class Parser extends ParserBase {
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
             case TYPE, CLASS, RECORD, INTERFACE, CONSTRUCTOR, FUNC, FINAL,
-                ASYNC, PUBLIC, PROTECTED:
+                OVERRIDE, ASYNC, PUBLIC, PROTECTED:
                 throw ParserException.expected("statement", token);
             case SUPER:
                 final CallExpression superCall =
@@ -276,6 +277,7 @@ public final class Parser extends ParserBase {
         while (
             check(constructorOffset, TokenType.CONST)
                 || check(constructorOffset, TokenType.FINAL)
+                || check(constructorOffset, TokenType.OVERRIDE)
                 || check(constructorOffset, TokenType.ASYNC)
         ) {
             constructorOffset++;
@@ -549,6 +551,7 @@ public final class Parser extends ParserBase {
         int offset = 0;
         while (
             check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.OVERRIDE)
                 || check(offset, TokenType.ASYNC)
         ) {
             offset++;
@@ -565,6 +568,7 @@ public final class Parser extends ParserBase {
         Token result = null;
         while (
             check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.OVERRIDE)
                 || check(offset, TokenType.ASYNC)
         ) {
             if (check(offset, type)) {
@@ -579,6 +583,7 @@ public final class Parser extends ParserBase {
         int offset = 0;
         while (
             check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.OVERRIDE)
                 || check(offset, TokenType.ASYNC)
         ) {
             offset++;
@@ -606,10 +611,14 @@ public final class Parser extends ParserBase {
                 async = true;
             }
             else {
-                final FunctionModifier value =
-                    modifier.type() == TokenType.CONST
-                        ? FunctionModifier.CONST
-                        : FunctionModifier.FINAL;
+                final FunctionModifier value = switch (modifier.type()) {
+                    case CONST -> FunctionModifier.CONST;
+                    case FINAL -> FunctionModifier.FINAL;
+                    case OVERRIDE -> FunctionModifier.OVERRIDE;
+                    default -> throw new IllegalStateException(
+                        "Unexpected function modifier: " + modifier.type()
+                    );
+                };
                 if (modifiers.contains(value)) {
                     throw new ParserException(
                         modifier.range(),

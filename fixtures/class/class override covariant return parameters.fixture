@@ -1,0 +1,733 @@
+class Value {
+    public func value() i32 {
+        return 1;
+    }
+}
+
+class DetailedValue extends Value {
+    public override func value() i32 {
+        return 2;
+    }
+}
+
+class Base {
+    public func create(reference: Value, count: i32, wide: i64, ratio: f64) Value {
+        return new Value();
+    }
+}
+
+class Derived extends Base {
+    public override func create(reference: Value, count: i32, wide: i64, ratio: f64) DetailedValue {
+        return new DetailedValue();
+    }
+}
+
+const base: Base = new Derived();
+const wide: i64 = 2;
+const ratio: f64 = 3.0;
+print(base.create(new Value(), 1, wide, ratio).value());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+LEFT_BRACE (2:29-2:30)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "DetailedValue" (7:7-7:20)
+EXTENDS (7:21-7:28)
+IDENTIFIER "Value" (7:29-7:34)
+LEFT_BRACE (7:35-7:36)
+PUBLIC (8:5-8:11)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "value" (8:26-8:31)
+LEFT_PAREN (8:31-8:32)
+RIGHT_PAREN (8:32-8:33)
+IDENTIFIER "i32" (8:34-8:37)
+LEFT_BRACE (8:38-8:39)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CLASS (13:1-13:6)
+IDENTIFIER "Base" (13:7-13:11)
+LEFT_BRACE (13:12-13:13)
+PUBLIC (14:5-14:11)
+FUNC (14:12-14:16)
+IDENTIFIER "create" (14:17-14:23)
+LEFT_PAREN (14:23-14:24)
+IDENTIFIER "reference" (14:24-14:33)
+COLON (14:33-14:34)
+IDENTIFIER "Value" (14:35-14:40)
+COMMA (14:40-14:41)
+IDENTIFIER "count" (14:42-14:47)
+COLON (14:47-14:48)
+IDENTIFIER "i32" (14:49-14:52)
+COMMA (14:52-14:53)
+IDENTIFIER "wide" (14:54-14:58)
+COLON (14:58-14:59)
+IDENTIFIER "i64" (14:60-14:63)
+COMMA (14:63-14:64)
+IDENTIFIER "ratio" (14:65-14:70)
+COLON (14:70-14:71)
+IDENTIFIER "f64" (14:72-14:75)
+RIGHT_PAREN (14:75-14:76)
+IDENTIFIER "Value" (14:77-14:82)
+LEFT_BRACE (14:83-14:84)
+RETURN (15:9-15:15)
+NEW (15:16-15:19)
+IDENTIFIER "Value" (15:20-15:25)
+LEFT_PAREN (15:25-15:26)
+RIGHT_PAREN (15:26-15:27)
+SEMICOLON (15:27-15:28)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+CLASS (19:1-19:6)
+IDENTIFIER "Derived" (19:7-19:14)
+EXTENDS (19:15-19:22)
+IDENTIFIER "Base" (19:23-19:27)
+LEFT_BRACE (19:28-19:29)
+PUBLIC (20:5-20:11)
+OVERRIDE (20:12-20:20)
+FUNC (20:21-20:25)
+IDENTIFIER "create" (20:26-20:32)
+LEFT_PAREN (20:32-20:33)
+IDENTIFIER "reference" (20:33-20:42)
+COLON (20:42-20:43)
+IDENTIFIER "Value" (20:44-20:49)
+COMMA (20:49-20:50)
+IDENTIFIER "count" (20:51-20:56)
+COLON (20:56-20:57)
+IDENTIFIER "i32" (20:58-20:61)
+COMMA (20:61-20:62)
+IDENTIFIER "wide" (20:63-20:67)
+COLON (20:67-20:68)
+IDENTIFIER "i64" (20:69-20:72)
+COMMA (20:72-20:73)
+IDENTIFIER "ratio" (20:74-20:79)
+COLON (20:79-20:80)
+IDENTIFIER "f64" (20:81-20:84)
+RIGHT_PAREN (20:84-20:85)
+IDENTIFIER "DetailedValue" (20:86-20:99)
+LEFT_BRACE (20:100-20:101)
+RETURN (21:9-21:15)
+NEW (21:16-21:19)
+IDENTIFIER "DetailedValue" (21:20-21:33)
+LEFT_PAREN (21:33-21:34)
+RIGHT_PAREN (21:34-21:35)
+SEMICOLON (21:35-21:36)
+RIGHT_BRACE (22:5-22:6)
+RIGHT_BRACE (23:1-23:2)
+CONST (25:1-25:6)
+IDENTIFIER "base" (25:7-25:11)
+COLON (25:11-25:12)
+IDENTIFIER "Base" (25:13-25:17)
+EQUAL (25:18-25:19)
+NEW (25:20-25:23)
+IDENTIFIER "Derived" (25:24-25:31)
+LEFT_PAREN (25:31-25:32)
+RIGHT_PAREN (25:32-25:33)
+SEMICOLON (25:33-25:34)
+CONST (26:1-26:6)
+IDENTIFIER "wide" (26:7-26:11)
+COLON (26:11-26:12)
+IDENTIFIER "i64" (26:13-26:16)
+EQUAL (26:17-26:18)
+INTEGER_LITERAL "2" (26:19-26:20)
+SEMICOLON (26:20-26:21)
+CONST (27:1-27:6)
+IDENTIFIER "ratio" (27:7-27:12)
+COLON (27:12-27:13)
+IDENTIFIER "f64" (27:14-27:17)
+EQUAL (27:18-27:19)
+FLOAT_LITERAL "3.0" (27:20-27:23)
+SEMICOLON (27:23-27:24)
+IDENTIFIER "print" (28:1-28:6)
+LEFT_PAREN (28:6-28:7)
+IDENTIFIER "base" (28:7-28:11)
+DOT (28:11-28:12)
+IDENTIFIER "create" (28:12-28:18)
+LEFT_PAREN (28:18-28:19)
+NEW (28:19-28:22)
+IDENTIFIER "Value" (28:23-28:28)
+LEFT_PAREN (28:28-28:29)
+RIGHT_PAREN (28:29-28:30)
+COMMA (28:30-28:31)
+INTEGER_LITERAL "1" (28:32-28:33)
+COMMA (28:33-28:34)
+IDENTIFIER "wide" (28:35-28:39)
+COMMA (28:39-28:40)
+IDENTIFIER "ratio" (28:41-28:46)
+RIGHT_PAREN (28:46-28:47)
+DOT (28:47-28:48)
+IDENTIFIER "value" (28:48-28:53)
+LEFT_PAREN (28:53-28:54)
+RIGHT_PAREN (28:54-28:55)
+RIGHT_PAREN (28:55-28:56)
+SEMICOLON (28:56-28:57)
+
+--- AST ---
+
+(Program
+  range: 1:1-28:57
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:29-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:20
+      name: "DetailedValue"
+    )
+    (IdentifierExpression
+      range: 7:29-7:34
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:26-8:31
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:34-8:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:38-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 13:1-17:2
+    (IdentifierDeclaration
+      range: 13:7-13:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 14:5-16:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 14:12-16:6
+        (IdentifierDeclaration
+          range: 14:17-14:23
+          name: "create"
+        )
+        (FunctionParameter
+          range: 14:24-14:40
+          (IdentifierDeclaration
+            range: 14:24-14:33
+            name: "reference"
+          )
+          (NamedTypeNode
+            range: 14:35-14:40
+            name: "Value"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 14:42-14:52
+          (IdentifierDeclaration
+            range: 14:42-14:47
+            name: "count"
+          )
+          (NamedTypeNode
+            range: 14:49-14:52
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 14:54-14:63
+          (IdentifierDeclaration
+            range: 14:54-14:58
+            name: "wide"
+          )
+          (NamedTypeNode
+            range: 14:60-14:63
+            name: "i64"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 14:65-14:75
+          (IdentifierDeclaration
+            range: 14:65-14:70
+            name: "ratio"
+          )
+          (NamedTypeNode
+            range: 14:72-14:75
+            name: "f64"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 14:77-14:82
+          name: "Value"
+        )
+        (BlockStatement
+          range: 14:83-16:6
+          (ReturnStatement
+            range: 15:9-15:28
+            (NewExpression
+              range: 15:16-15:27
+              (IdentifierExpression
+                range: 15:20-15:25
+                name: "Value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 19:1-23:2
+    (IdentifierDeclaration
+      range: 19:7-19:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 19:23-19:27
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 20:5-22:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 20:12-22:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 20:26-20:32
+          name: "create"
+        )
+        (FunctionParameter
+          range: 20:33-20:49
+          (IdentifierDeclaration
+            range: 20:33-20:42
+            name: "reference"
+          )
+          (NamedTypeNode
+            range: 20:44-20:49
+            name: "Value"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 20:51-20:61
+          (IdentifierDeclaration
+            range: 20:51-20:56
+            name: "count"
+          )
+          (NamedTypeNode
+            range: 20:58-20:61
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 20:63-20:72
+          (IdentifierDeclaration
+            range: 20:63-20:67
+            name: "wide"
+          )
+          (NamedTypeNode
+            range: 20:69-20:72
+            name: "i64"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 20:74-20:84
+          (IdentifierDeclaration
+            range: 20:74-20:79
+            name: "ratio"
+          )
+          (NamedTypeNode
+            range: 20:81-20:84
+            name: "f64"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 20:86-20:99
+          name: "DetailedValue"
+        )
+        (BlockStatement
+          range: 20:100-22:6
+          (ReturnStatement
+            range: 21:9-21:36
+            (NewExpression
+              range: 21:16-21:35
+              (IdentifierExpression
+                range: 21:20-21:33
+                name: "DetailedValue"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 25:1-25:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 25:7-25:11
+      name: "base"
+    )
+    (NamedTypeNode
+      range: 25:13-25:17
+      name: "Base"
+    )
+    (NewExpression
+      range: 25:20-25:33
+      (IdentifierExpression
+        range: 25:24-25:31
+        name: "Derived"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 26:1-26:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 26:7-26:11
+      name: "wide"
+    )
+    (NamedTypeNode
+      range: 26:13-26:16
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 26:19-26:20
+      kind: INT
+      text: "2"
+    )
+  )
+  (VariableDeclaration
+    range: 27:1-27:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 27:7-27:12
+      name: "ratio"
+    )
+    (NamedTypeNode
+      range: 27:14-27:17
+      name: "f64"
+    )
+    (LiteralExpression
+      range: 27:20-27:23
+      kind: FLOAT
+      text: "3.0"
+    )
+  )
+  (ExpressionStatement
+    range: 28:1-28:57
+    (CallExpression
+      range: 28:1-28:56
+      (IdentifierExpression
+        range: 28:1-28:6
+        name: "print"
+      )
+      (CallExpression
+        range: 28:7-28:55
+        (MemberExpression
+          range: 28:7-28:53
+          (CallExpression
+            range: 28:7-28:47
+            (MemberExpression
+              range: 28:7-28:18
+              (IdentifierExpression
+                range: 28:7-28:11
+                name: "base"
+              )
+              (IdentifierExpression
+                range: 28:12-28:18
+                name: "create"
+              )
+            )
+            (NewExpression
+              range: 28:19-28:30
+              (IdentifierExpression
+                range: 28:23-28:28
+                name: "Value"
+              )
+            )
+            (LiteralExpression
+              range: 28:32-28:33
+              kind: INT
+              text: "1"
+            )
+            (IdentifierExpression
+              range: 28:35-28:39
+              name: "wide"
+            )
+            (IdentifierExpression
+              range: 28:41-28:46
+              name: "ratio"
+            )
+          )
+          (IdentifierExpression
+            range: 28:48-28:53
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:29-7:34 -> Value
+  9:16-9:17 -> i32
+  15:16-15:27 -> Value
+  15:20-15:25 -> Value
+  19:23-19:27 -> Base
+  21:16-21:35 -> DetailedValue
+  21:20-21:33 -> DetailedValue
+  25:20-25:33 -> Derived
+  25:24-25:31 -> Derived
+  26:19-26:20 -> i32
+  27:20-27:23 -> f64
+  28:1-28:6 -> (any) => void
+  28:1-28:56 -> void
+  28:7-28:11 -> Base
+  28:7-28:18 -> (Value, i32, i64, f64) => Value
+  28:7-28:47 -> Value
+  28:7-28:53 -> () => i32
+  28:7-28:55 -> i32
+  28:12-28:18 -> (Value, i32, i64, f64) => Value
+  28:19-28:30 -> Value
+  28:23-28:28 -> Value
+  28:32-28:33 -> i32
+  28:35-28:39 -> i64
+  28:41-28:46 -> f64
+  28:48-28:53 -> () => i32
+
+Resolved types:
+  2:25-2:28 -> i32
+  8:34-8:37 -> i32
+  14:35-14:40 -> Value
+  14:49-14:52 -> i32
+  14:60-14:63 -> i64
+  14:72-14:75 -> f64
+  14:77-14:82 -> Value
+  20:44-20:49 -> Value
+  20:58-20:61 -> i32
+  20:69-20:72 -> i64
+  20:81-20:84 -> f64
+  20:86-20:99 -> DetailedValue
+  25:13-25:17 -> Base
+  26:13-26:16 -> i64
+  27:14-27:17 -> f64
+
+Conversions:
+  26:19-26:20 -> i32 -> i64
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:17-2:22 -> func value() => i32
+  7:7-7:20 -> class DetailedValue
+  8:26-8:31 -> override func value() => i32
+  13:7-13:11 -> class Base
+  14:17-14:23 -> func create(Value, i32, i64, f64) => Value
+  14:24-14:33 -> const reference: Value
+  14:42-14:47 -> const count: i32
+  14:54-14:58 -> const wide: i64
+  14:65-14:70 -> const ratio: f64
+  19:7-19:14 -> class Derived
+  20:26-20:32 -> override func create(Value, i32, i64, f64) => DetailedValue
+  20:33-20:42 -> const reference: Value
+  20:51-20:56 -> const count: i32
+  20:63-20:67 -> const wide: i64
+  20:74-20:79 -> const ratio: f64
+  25:7-25:11 -> const base: Base
+  26:7-26:11 -> const wide: i64
+  27:7-27:12 -> const ratio: f64
+
+References:
+  7:29-7:34 -> 1:7-1:12
+  15:20-15:25 -> 1:7-1:12
+  19:23-19:27 -> 13:7-13:11
+  21:20-21:33 -> 7:7-7:20
+  25:24-25:31 -> 19:7-19:14
+  28:1-28:6 -> builtin print
+  28:7-28:11 -> 25:7-25:11
+  28:12-28:18 -> 14:17-14:23
+  28:23-28:28 -> 1:7-1:12
+  28:35-28:39 -> 26:7-26:11
+  28:41-28:46 -> 27:7-27:12
+  28:48-28:53 -> 2:17-2:22
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$DetailedValue
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field base LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  field wide J flags [PUBLIC, STATIC, FINAL] = 2
+  field ratio D flags [PUBLIC, STATIC, FINAL] = 3.0
+  method <clinit>()V flags [STATIC]
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    PUTSTATIC Test.base LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.base LTest$Base;
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    LDC 1
+    GETSTATIC Test.wide J
+    GETSTATIC Test.ratio D
+    INVOKEVIRTUAL Test$Base.create(LTest$Value;IJD)LTest$Value;
+    INVOKEVIRTUAL Test$Value.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 8 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Value.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create(LTest$Value;IJD)LTest$Value; flags [PUBLIC]
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    ARETURN
+    max stack 2 max locals 7
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create(LTest$Value;IJD)LTest$DetailedValue; flags [PUBLIC]
+    NEW Test$DetailedValue
+    DUP
+    INVOKESPECIAL Test$DetailedValue.<init>()V
+    ARETURN
+    max stack 2 max locals 7
+  method create(LTest$Value;IJD)LTest$Value; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    LLOAD_3 3
+    DLOAD 5
+    INVOKEVIRTUAL Test$Derived.create(LTest$Value;IJD)LTest$DetailedValue;
+    ARETURN
+    max stack 7 max locals 7
+
+--- OUTPUT ---
+
+2
+

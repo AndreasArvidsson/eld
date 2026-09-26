@@ -1,0 +1,91 @@
+class Value {
+    public func equals(other: any) bool {
+        return this == other;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "equals" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "other" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "any" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+IDENTIFIER "bool" (2:36-2:40)
+LEFT_BRACE (2:41-2:42)
+RETURN (3:9-3:15)
+THIS (3:16-3:20)
+EQUAL_EQUAL (3:21-3:23)
+IDENTIFIER "other" (3:24-3:29)
+SEMICOLON (3:29-3:30)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:36-2:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:41-4:6
+          (ReturnStatement
+            range: 3:9-3:30
+            (BinaryExpression
+              range: 3:16-3:29
+              (ThisExpression
+                range: 3:16-3:20
+              )
+              operator: EQUAL
+              (IdentifierExpression
+                range: 3:24-3:29
+                name: "other"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Overriding method 'equals' must be marked override at 2:17-2:23

@@ -1,5 +1,5 @@
 class Box {
-    public func equals(other: any) bool {
+    public override func equals(other: any) bool {
         return true;
     }
 }
@@ -18,15 +18,16 @@ CLASS (1:1-1:6)
 IDENTIFIER "Box" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
 PUBLIC (2:5-2:11)
-FUNC (2:12-2:16)
-IDENTIFIER "equals" (2:17-2:23)
-LEFT_PAREN (2:23-2:24)
-IDENTIFIER "other" (2:24-2:29)
-COLON (2:29-2:30)
-IDENTIFIER "any" (2:31-2:34)
-RIGHT_PAREN (2:34-2:35)
-IDENTIFIER "bool" (2:36-2:40)
-LEFT_BRACE (2:41-2:42)
+OVERRIDE (2:12-2:20)
+FUNC (2:21-2:25)
+IDENTIFIER "equals" (2:26-2:32)
+LEFT_PAREN (2:32-2:33)
+IDENTIFIER "other" (2:33-2:38)
+COLON (2:38-2:39)
+IDENTIFIER "any" (2:40-2:43)
+RIGHT_PAREN (2:43-2:44)
+IDENTIFIER "bool" (2:45-2:49)
+LEFT_BRACE (2:50-2:51)
 RETURN (3:9-3:15)
 BOOLEAN_LITERAL "true" (3:16-3:20)
 SEMICOLON (3:20-3:21)
@@ -115,29 +116,30 @@ SEMICOLON (13:44-13:45)
       visibility: PUBLIC
       (FunctionDeclaration
         range: 2:12-4:6
+        OVERRIDE
         (IdentifierDeclaration
-          range: 2:17-2:23
+          range: 2:26-2:32
           name: "equals"
         )
         (FunctionParameter
-          range: 2:24-2:34
+          range: 2:33-2:43
           (IdentifierDeclaration
-            range: 2:24-2:29
+            range: 2:33-2:38
             name: "other"
           )
           (NamedTypeNode
-            range: 2:31-2:34
+            range: 2:40-2:43
             name: "any"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 2:36-2:40
+          range: 2:45-2:49
           name: "bool"
         )
         (BlockStatement
-          range: 2:41-4:6
+          range: 2:50-4:6
           (ReturnStatement
             range: 3:9-3:21
             (LiteralExpression
@@ -370,8 +372,8 @@ Expression types:
   13:33-13:41 -> () => string
 
 Resolved types:
-  2:31-2:34 -> any
-  2:36-2:40 -> bool
+  2:40-2:43 -> any
+  2:45-2:49 -> bool
 
 Conversions:
   10:20-10:25 -> Box -> any
@@ -379,8 +381,8 @@ Conversions:
 
 Declarations:
   1:7-1:10 -> class Box
-  2:17-2:23 -> func equals(any) => bool
-  2:24-2:29 -> const other: any
+  2:26-2:32 -> override func equals(any) => bool
+  2:33-2:38 -> const other: any
   7:7-7:12 -> const first: Box
   8:7-8:13 -> const second: Box
 
@@ -389,11 +391,11 @@ References:
   8:20-8:23 -> 1:7-1:10
   10:1-10:6 -> builtin print
   10:7-10:12 -> 7:7-7:12
-  10:13-10:19 -> 2:17-2:23
+  10:13-10:19 -> 2:26-2:32
   10:20-10:25 -> 7:7-7:12
   11:1-11:6 -> builtin print
   11:7-11:12 -> 7:7-7:12
-  11:13-11:19 -> 2:17-2:23
+  11:13-11:19 -> 2:26-2:32
   11:20-11:26 -> 8:7-8:13
   12:1-12:6 -> builtin print
   12:7-12:12 -> 7:7-7:12

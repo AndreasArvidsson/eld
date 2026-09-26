@@ -342,11 +342,7 @@ Declarations:
   3:11-3:16 -> interface Named
   4:11-4:15 -> const name: string
   5:10-5:15 -> func label() => string
-  8:1-12:2 -> constructor(value: i32)
-  8:8-8:11 -> class Foo
-  8:8-8:11 -> func copy(i32) => Foo
-  8:8-8:11 -> func toString() => string
-  8:12-8:17 -> const value: i32
+  8:8-8:11 -> record Foo(value: i32)
   9:17-9:22 -> func label() => string
   14:7-14:10 -> class Bar
   15:18-15:23 -> const value: i32

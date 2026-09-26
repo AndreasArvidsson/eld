@@ -1,0 +1,86 @@
+interface Reader {
+    func run();
+}
+
+class Impl implements Reader {
+    public override func run() {}
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Reader" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+FUNC (2:5-2:9)
+IDENTIFIER "run" (2:10-2:13)
+LEFT_PAREN (2:13-2:14)
+RIGHT_PAREN (2:14-2:15)
+SEMICOLON (2:15-2:16)
+RIGHT_BRACE (3:1-3:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Impl" (5:7-5:11)
+IMPLEMENTS (5:12-5:22)
+IDENTIFIER "Reader" (5:23-5:29)
+LEFT_BRACE (5:30-5:31)
+PUBLIC (6:5-6:11)
+OVERRIDE (6:12-6:20)
+FUNC (6:21-6:25)
+IDENTIFIER "run" (6:26-6:29)
+LEFT_PAREN (6:29-6:30)
+RIGHT_PAREN (6:30-6:31)
+LEFT_BRACE (6:32-6:33)
+RIGHT_BRACE (6:33-6:34)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:16
+      (IdentifierDeclaration
+        range: 2:10-2:13
+        name: "run"
+      )
+      returnType: null
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:7-5:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:23-5:29
+      name: "Reader"
+    )
+    (MemberDeclaration
+      range: 6:5-6:34
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:34
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 6:26-6:29
+          name: "run"
+        )
+        returnType: null
+        (BlockStatement
+          range: 6:32-6:34
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Method 'run' is marked override but has no compatible inherited method at 6:26-6:29

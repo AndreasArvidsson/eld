@@ -13,6 +13,7 @@ import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
+import com.github.andreasarvidsson.eld.parser.FunctionModifier;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
@@ -170,7 +171,7 @@ public final class RecordLowering {
         final FunctionDeclaration method =
             new FunctionDeclaration(
                 false,
-                List.of(),
+                List.of(FunctionModifier.OVERRIDE),
                 new IdentifierDeclaration("toString", record.name().range()),
                 List.of(),
                 new NamedTypeNode("string", List.of(), record.name().range()),

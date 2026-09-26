@@ -1,0 +1,329 @@
+interface Reader {
+    func read() i32;
+}
+
+interface NamedReader extends Reader {
+    const name: string;
+}
+
+class Impl implements NamedReader {
+    public const name = "reader";
+
+    public func read() i32 {
+        return 7;
+    }
+}
+
+const reader: Reader = new Impl();
+print(reader.read());
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Reader" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+FUNC (2:5-2:9)
+IDENTIFIER "read" (2:10-2:14)
+LEFT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+SEMICOLON (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (5:1-5:10)
+IDENTIFIER "NamedReader" (5:11-5:22)
+EXTENDS (5:23-5:30)
+IDENTIFIER "Reader" (5:31-5:37)
+LEFT_BRACE (5:38-5:39)
+CONST (6:5-6:10)
+IDENTIFIER "name" (6:11-6:15)
+COLON (6:15-6:16)
+IDENTIFIER "string" (6:17-6:23)
+SEMICOLON (6:23-6:24)
+RIGHT_BRACE (7:1-7:2)
+CLASS (9:1-9:6)
+IDENTIFIER "Impl" (9:7-9:11)
+IMPLEMENTS (9:12-9:22)
+IDENTIFIER "NamedReader" (9:23-9:34)
+LEFT_BRACE (9:35-9:36)
+PUBLIC (10:5-10:11)
+CONST (10:12-10:17)
+IDENTIFIER "name" (10:18-10:22)
+EQUAL (10:23-10:24)
+STRING_LITERAL "\"reader\"" (10:25-10:33)
+SEMICOLON (10:33-10:34)
+PUBLIC (12:5-12:11)
+FUNC (12:12-12:16)
+IDENTIFIER "read" (12:17-12:21)
+LEFT_PAREN (12:21-12:22)
+RIGHT_PAREN (12:22-12:23)
+IDENTIFIER "i32" (12:24-12:27)
+LEFT_BRACE (12:28-12:29)
+RETURN (13:9-13:15)
+INTEGER_LITERAL "7" (13:16-13:17)
+SEMICOLON (13:17-13:18)
+RIGHT_BRACE (14:5-14:6)
+RIGHT_BRACE (15:1-15:2)
+CONST (17:1-17:6)
+IDENTIFIER "reader" (17:7-17:13)
+COLON (17:13-17:14)
+IDENTIFIER "Reader" (17:15-17:21)
+EQUAL (17:22-17:23)
+NEW (17:24-17:27)
+IDENTIFIER "Impl" (17:28-17:32)
+LEFT_PAREN (17:32-17:33)
+RIGHT_PAREN (17:33-17:34)
+SEMICOLON (17:34-17:35)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "reader" (18:7-18:13)
+DOT (18:13-18:14)
+IDENTIFIER "read" (18:14-18:18)
+LEFT_PAREN (18:18-18:19)
+RIGHT_PAREN (18:19-18:20)
+RIGHT_PAREN (18:20-18:21)
+SEMICOLON (18:21-18:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-18:22
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:21
+      (IdentifierDeclaration
+        range: 2:10-2:14
+        name: "read"
+      )
+      (NamedTypeNode
+        range: 2:17-2:20
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:11-5:22
+      name: "NamedReader"
+    )
+    (NamedTypeNode
+      range: 5:31-5:37
+      name: "Reader"
+    )
+    (UninitializedVariableDeclaration
+      range: 6:5-6:24
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 6:11-6:15
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 6:17-6:23
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-15:2
+    (IdentifierDeclaration
+      range: 9:7-9:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 9:23-9:34
+      name: "NamedReader"
+    )
+    (MemberDeclaration
+      range: 10:5-10:34
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 10:12-10:34
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 10:18-10:22
+          name: "name"
+        )
+        type: null
+        (LiteralExpression
+          range: 10:25-10:33
+          kind: STRING
+          text: "\"reader\""
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 12:5-14:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 12:12-14:6
+        (IdentifierDeclaration
+          range: 12:17-12:21
+          name: "read"
+        )
+        (NamedTypeNode
+          range: 12:24-12:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 12:28-14:6
+          (ReturnStatement
+            range: 13:9-13:18
+            (LiteralExpression
+              range: 13:16-13:17
+              kind: INT
+              text: "7"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 17:1-17:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 17:7-17:13
+      name: "reader"
+    )
+    (NamedTypeNode
+      range: 17:15-17:21
+      name: "Reader"
+    )
+    (NewExpression
+      range: 17:24-17:34
+      (IdentifierExpression
+        range: 17:28-17:32
+        name: "Impl"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:22
+    (CallExpression
+      range: 18:1-18:21
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:20
+        (MemberExpression
+          range: 18:7-18:18
+          (IdentifierExpression
+            range: 18:7-18:13
+            name: "reader"
+          )
+          (IdentifierExpression
+            range: 18:14-18:18
+            name: "read"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  10:25-10:33 -> string
+  13:16-13:17 -> i32
+  17:24-17:34 -> Impl
+  17:28-17:32 -> Impl
+  18:1-18:6 -> (any) => void
+  18:1-18:21 -> void
+  18:7-18:13 -> Reader
+  18:7-18:18 -> () => i32
+  18:7-18:20 -> i32
+  18:14-18:18 -> () => i32
+
+Resolved types:
+  2:17-2:20 -> i32
+  5:31-5:37 -> Reader
+  6:17-6:23 -> string
+  9:23-9:34 -> NamedReader
+  12:24-12:27 -> i32
+  17:15-17:21 -> Reader
+
+Declarations:
+  1:11-1:17 -> interface Reader
+  2:10-2:14 -> func read() => i32
+  5:11-5:22 -> interface NamedReader
+  6:11-6:15 -> const name: string
+  9:7-9:11 -> class Impl
+  10:18-10:22 -> const name: string
+  12:17-12:21 -> func read() => i32
+  17:7-17:13 -> const reader: Reader
+
+References:
+  17:28-17:32 -> 9:7-9:11
+  18:1-18:6 -> builtin print
+  18:7-18:13 -> 17:7-17:13
+  18:14-18:18 -> 2:10-2:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Reader
+  nest member Test$NamedReader
+  nest member Test$Impl
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$NamedReader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  field reader LTest$Reader; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Impl
+    DUP
+    INVOKESPECIAL Test$Impl.<init>()V
+    PUTSTATIC Test.reader LTest$Reader;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
+
+class Test$NamedReader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  implements Test$Reader
+  nest host Test
+  inner class Test$NamedReader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$name()Ljava/lang/String; flags [PUBLIC, ABSTRACT, SYNTHETIC]
+
+class Test$Impl extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$NamedReader
+  nest host Test
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  field name Ljava/lang/String; flags [PUBLIC, FINAL]
+  method $get$name()Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Impl.name Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "reader"
+    PUTFIELD Test$Impl.name Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 1
+  method read()I flags [PUBLIC]
+    LDC 7
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+7
+

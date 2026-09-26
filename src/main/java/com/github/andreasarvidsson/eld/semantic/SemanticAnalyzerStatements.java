@@ -789,6 +789,12 @@ public final class SemanticAnalyzerStatements {
                 "Only class methods can be final"
             );
         }
+        if (declaration.overrideMethod() && parent instanceof Program) {
+            throw new SemanticException(
+                declaration.range(),
+                "Only class methods can use override"
+            );
+        }
         registerFunction(declaration, context, context.scope());
         analyzeFunctionBody(declaration, context);
     }
@@ -828,7 +834,8 @@ public final class SemanticAnalyzerStatements {
                 new FunctionType(
                     Objects.requireNonNull(parameterTypes),
                     callableReturnType
-                )
+                ),
+                declaration.modifiers()
             );
 
         destination.declare(symbol);

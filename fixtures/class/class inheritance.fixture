@@ -8,7 +8,7 @@ class Base {
     }
 }
 class Child extends Base {
-    public func read() i32 {
+    public override func read() i32 {
         return this.value + 2;
     }
     public func reference() () => i32 {
@@ -67,12 +67,13 @@ EXTENDS (10:13-10:20)
 IDENTIFIER "Base" (10:21-10:25)
 LEFT_BRACE (10:26-10:27)
 PUBLIC (11:5-11:11)
-FUNC (11:12-11:16)
-IDENTIFIER "read" (11:17-11:21)
-LEFT_PAREN (11:21-11:22)
-RIGHT_PAREN (11:22-11:23)
-IDENTIFIER "i32" (11:24-11:27)
-LEFT_BRACE (11:28-11:29)
+OVERRIDE (11:12-11:20)
+FUNC (11:21-11:25)
+IDENTIFIER "read" (11:26-11:30)
+LEFT_PAREN (11:30-11:31)
+RIGHT_PAREN (11:31-11:32)
+IDENTIFIER "i32" (11:33-11:36)
+LEFT_BRACE (11:37-11:38)
 RETURN (12:9-12:15)
 THIS (12:16-12:20)
 DOT (12:20-12:21)
@@ -258,16 +259,17 @@ SEMICOLON (20:33-20:34)
       visibility: PUBLIC
       (FunctionDeclaration
         range: 11:12-13:6
+        OVERRIDE
         (IdentifierDeclaration
-          range: 11:17-11:21
+          range: 11:26-11:30
           name: "read"
         )
         (NamedTypeNode
-          range: 11:24-11:27
+          range: 11:33-11:36
           name: "i32"
         )
         (BlockStatement
-          range: 11:28-13:6
+          range: 11:37-13:6
           (ReturnStatement
             range: 12:9-12:31
             (BinaryExpression
@@ -453,7 +455,7 @@ Resolved types:
   2:26-2:29 -> i32
   3:34-3:37 -> i32
   6:24-6:27 -> i32
-  11:24-11:27 -> i32
+  11:33-11:36 -> i32
   14:29-14:38 -> () => i32
   14:35-14:38 -> i32
   18:17-18:21 -> Base
@@ -465,7 +467,7 @@ Declarations:
   3:27-3:32 -> const value: i32
   6:17-6:21 -> func read() => i32
   10:7-10:12 -> class Child
-  11:17-11:21 -> func read() => i32
+  11:26-11:30 -> override func read() => i32
   14:17-14:26 -> func reference() => () => i32
   18:7-18:15 -> const instance: Base
 
@@ -475,7 +477,7 @@ References:
   7:21-7:26 -> 2:19-2:24
   10:21-10:25 -> 1:7-1:11
   12:21-12:26 -> 2:19-2:24
-  15:27-15:31 -> 11:17-11:21
+  15:27-15:31 -> 11:26-11:30
   18:28-18:33 -> 10:7-10:12
   19:1-19:6 -> builtin print
   19:7-19:15 -> 18:7-18:15

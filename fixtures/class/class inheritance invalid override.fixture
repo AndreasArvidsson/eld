@@ -2,7 +2,7 @@ class Base {
     public func read() {}
 }
 class Child extends Base {
-    protected func read() {}
+    protected override func read() {}
 }
 
 --- TOKENS ---
@@ -24,12 +24,13 @@ EXTENDS (4:13-4:20)
 IDENTIFIER "Base" (4:21-4:25)
 LEFT_BRACE (4:26-4:27)
 PROTECTED (5:5-5:14)
-FUNC (5:15-5:19)
-IDENTIFIER "read" (5:20-5:24)
-LEFT_PAREN (5:24-5:25)
-RIGHT_PAREN (5:25-5:26)
-LEFT_BRACE (5:27-5:28)
-RIGHT_BRACE (5:28-5:29)
+OVERRIDE (5:15-5:23)
+FUNC (5:24-5:28)
+IDENTIFIER "read" (5:29-5:33)
+LEFT_PAREN (5:33-5:34)
+RIGHT_PAREN (5:34-5:35)
+LEFT_BRACE (5:36-5:37)
+RIGHT_BRACE (5:37-5:38)
 RIGHT_BRACE (6:1-6:2)
 
 --- AST ---
@@ -70,17 +71,18 @@ RIGHT_BRACE (6:1-6:2)
       name: "Base"
     )
     (MemberDeclaration
-      range: 5:5-5:29
+      range: 5:5-5:38
       visibility: PROTECTED
       (FunctionDeclaration
-        range: 5:15-5:29
+        range: 5:15-5:38
+        OVERRIDE
         (IdentifierDeclaration
-          range: 5:20-5:24
+          range: 5:29-5:33
           name: "read"
         )
         returnType: null
         (BlockStatement
-          range: 5:27-5:29
+          range: 5:36-5:38
         )
       )
     )
@@ -89,4 +91,4 @@ RIGHT_BRACE (6:1-6:2)
 
 --- SEMANTIC ---
 
-SemanticException: Overriding method 'read' cannot reduce visibility at 5:20-5:24
+SemanticException: Overriding method 'read' cannot reduce visibility at 5:29-5:33

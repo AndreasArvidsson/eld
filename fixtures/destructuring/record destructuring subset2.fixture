@@ -222,13 +222,7 @@ Resolved types:
   1:37-1:40 -> i32
 
 Declarations:
-  1:1-1:42 -> constructor(foo: i32, bar: i32, baz: i32)
-  1:8-1:11 -> class Rec
-  1:8-1:11 -> func copy(i32, i32, i32) => Rec
-  1:8-1:11 -> func toString() => string
-  1:12-1:15 -> const foo: i32
-  1:22-1:25 -> const bar: i32
-  1:32-1:35 -> const baz: i32
+  1:8-1:11 -> record Rec(foo: i32, bar: i32, baz: i32)
   2:8-2:11 -> const baz: i32
   2:13-2:16 -> const foo: i32
 

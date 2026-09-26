@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectMember;
 import com.github.andreasarvidsson.eld.parser.ObjectEntry;
@@ -62,11 +61,15 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<AstNode, Symbol> declarations =
         new IdentityHashMap<>();
+    private final Set<AstNode> syntheticDeclarations =
+        Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<AstNode, Symbol> references =
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, FunctionDeclaration> functionDeclarations =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<FunctionSymbol, List<FunctionType>> overrideBridges =
         new IdentityHashMap<>();
     private final IdentityHashMap<VariableSymbol, FunctionSymbol> variableOwners =
         new IdentityHashMap<>();
@@ -182,6 +185,44 @@ public final class SemanticModel {
 
     public Map<FunctionSymbol, FunctionDeclaration> getFunctionDeclarations() {
         return Collections.unmodifiableMap(functionDeclarations);
+    }
+
+    public boolean isOverrideCompatible(
+        final FunctionType implementation,
+        final FunctionType inherited
+    ) {
+        final Type implementationReturn = implementation.returnType();
+        final Type inheritedReturn = inherited.returnType();
+        final boolean compatibleReturn =
+            (implementationReturn instanceof PromiseType implementationPromise
+                && inheritedReturn instanceof PromiseType inheritedPromise)
+                    ? isSubtype(
+                        implementationPromise.valueType(),
+                        inheritedPromise.valueType()
+                    )
+                    : isSubtype(implementationReturn, inheritedReturn);
+        return implementation.parameterTypes()
+            .equals(inherited.parameterTypes()) && compatibleReturn;
+    }
+
+    public void addOverrideBridge(
+        final FunctionSymbol function,
+        final FunctionType inherited
+    ) {
+        if (function.type().equals(inherited)) {
+            return;
+        }
+        final List<FunctionType> bridges =
+            overrideBridges.computeIfAbsent(function, _ -> new ArrayList<>());
+        if (!bridges.contains(inherited)) {
+            bridges.add(inherited);
+        }
+    }
+
+    public List<FunctionType> getOverrideBridges(
+        final FunctionSymbol function
+    ) {
+        return overrideBridges.getOrDefault(function, List.of());
     }
 
     public void setVariableOwner(
@@ -703,6 +744,10 @@ public final class SemanticModel {
         declarations.put(declaration, symbol);
     }
 
+    public void setSyntheticDeclaration(final AstNode declaration) {
+        syntheticDeclarations.add(declaration);
+    }
+
     public Symbol getSymbol(final IdentifierDeclaration declaration) {
         return Objects.requireNonNull(declarations.get(declaration));
     }
@@ -779,6 +824,9 @@ public final class SemanticModel {
     @Override
     public String toString() {
         final List<String> lines = new ArrayList<>();
+        final IdentityHashMap<AstNode, Symbol> sourceDeclarations =
+            new IdentityHashMap<>(declarations);
+        syntheticDeclarations.forEach(sourceDeclarations::remove);
         appendSection(lines, "Expression types:", expressionTypes);
         appendSection(lines, "Resolved types:", resolvedTypes);
 
@@ -791,7 +839,7 @@ public final class SemanticModel {
         appendSection(
             lines,
             "Declarations:",
-            declarations,
+            sourceDeclarations,
             (declaration, symbol) -> formatDeclaration(symbol)
         );
         appendSection(
@@ -812,22 +860,6 @@ public final class SemanticModel {
     }
 
     private String formatDeclaration(final Symbol symbol) {
-        if (symbol instanceof FunctionSymbol function) {
-            final FunctionDeclaration declaration =
-                functionDeclarations.get(function);
-            final String modifiers =
-                declaration == null
-                    ? ""
-                    : declaration.modifiers()
-                        .stream()
-                        .map(
-                            modifier -> modifier.toString()
-                                .toLowerCase(Locale.ROOT)
-                        )
-                        .collect(Collectors.joining(" "));
-            final String prefix = modifiers.isEmpty() ? "" : modifiers + " ";
-            return prefix + "func " + symbol;
-        }
         if (
             symbol instanceof VariableSymbol variable
                 && isConstantCallable(variable)

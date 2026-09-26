@@ -401,12 +401,7 @@ Conversions:
   8:14-8:29 -> Point -> any
 
 Declarations:
-  1:1-1:30 -> constructor(x: i32, y: i32)
-  1:8-1:13 -> class Point
-  1:8-1:13 -> func copy(i32, i32) => Point
-  1:8-1:13 -> func toString() => string
-  1:14-1:15 -> const x: i32
-  1:22-1:23 -> const y: i32
+  1:8-1:13 -> record Point(x: i32, y: i32)
   3:7-3:12 -> const point: Point
   4:7-4:13 -> const equals: (any) => bool
   5:7-5:15 -> const hashCode: () => i32

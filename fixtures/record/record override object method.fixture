@@ -1,0 +1,239 @@
+record Value(value: i32) {
+    public override func toString() string {
+        return "value";
+    }
+}
+
+print(new Value(1).toString());
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Value" (1:8-1:13)
+LEFT_PAREN (1:13-1:14)
+IDENTIFIER "value" (1:14-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "i32" (1:21-1:24)
+RIGHT_PAREN (1:24-1:25)
+LEFT_BRACE (1:26-1:27)
+PUBLIC (2:5-2:11)
+OVERRIDE (2:12-2:20)
+FUNC (2:21-2:25)
+IDENTIFIER "toString" (2:26-2:34)
+LEFT_PAREN (2:34-2:35)
+RIGHT_PAREN (2:35-2:36)
+IDENTIFIER "string" (2:37-2:43)
+LEFT_BRACE (2:44-2:45)
+RETURN (3:9-3:15)
+STRING_LITERAL "\"value\"" (3:16-3:23)
+SEMICOLON (3:23-3:24)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+NEW (7:7-7:10)
+IDENTIFIER "Value" (7:11-7:16)
+LEFT_PAREN (7:16-7:17)
+INTEGER_LITERAL "1" (7:17-7:18)
+RIGHT_PAREN (7:18-7:19)
+DOT (7:19-7:20)
+IDENTIFIER "toString" (7:20-7:28)
+LEFT_PAREN (7:28-7:29)
+RIGHT_PAREN (7:29-7:30)
+RIGHT_PAREN (7:30-7:31)
+SEMICOLON (7:31-7:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:32
+  (RecordDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:8-1:13
+      name: "Value"
+    )
+    (RecordParameter
+      range: 1:14-1:24
+      (IdentifierDeclaration
+        range: 1:14-1:19
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:21-1:24
+        name: "i32"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 2:26-2:34
+          name: "toString"
+        )
+        (NamedTypeNode
+          range: 2:37-2:43
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:44-4:6
+          (ReturnStatement
+            range: 3:9-3:24
+            (LiteralExpression
+              range: 3:16-3:23
+              kind: STRING
+              text: "\"value\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:32
+    (CallExpression
+      range: 7:1-7:31
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:30
+        (MemberExpression
+          range: 7:7-7:28
+          (NewExpression
+            range: 7:7-7:19
+            (IdentifierExpression
+              range: 7:11-7:16
+              name: "Value"
+            )
+            (LiteralExpression
+              range: 7:17-7:18
+              kind: INT
+              text: "1"
+            )
+          )
+          (IdentifierExpression
+            range: 7:20-7:28
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-5:2 -> Value
+  1:8-1:13 -> Value
+  1:14-1:19 -> i32
+  1:14-1:24 -> Value
+  1:14-1:24 -> i32
+  3:16-3:23 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:31 -> void
+  7:7-7:19 -> Value
+  7:7-7:28 -> () => string
+  7:7-7:30 -> string
+  7:11-7:16 -> Value
+  7:17-7:18 -> i32
+  7:20-7:28 -> () => string
+
+Resolved types:
+  1:8-1:13 -> Value
+  1:21-1:24 -> i32
+  2:37-2:43 -> string
+
+Declarations:
+  1:8-1:13 -> record Value(value: i32)
+  2:26-2:34 -> override func toString() => string
+
+References:
+  1:8-1:13 -> 1:8-1:13
+  1:14-1:19 -> 1:14-1:19
+  7:1-7:6 -> builtin print
+  7:11-7:16 -> 1:8-1:13
+  7:20-7:28 -> 2:26-2:34
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  inner class Test$Value flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    LDC 1
+    INVOKESPECIAL Test$Value.<init>(I)V
+    INVOKEVIRTUAL Test$Value.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Value extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC, FINAL]
+  record component value I
+  field value I flags [PRIVATE, FINAL]
+  method value()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Value.value I
+    IRETURN
+    max stack 1 max locals 1
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(I)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    DUP_X1
+    PUTFIELD Test$Value.value I
+    POP
+    RETURN
+    max stack 3 max locals 2
+  method copy(I)LTest$Value; flags [PUBLIC]
+    NEW Test$Value
+    DUP
+    ILOAD_1 1
+    INVOKESPECIAL Test$Value.<init>(I)V
+    ARETURN
+    max stack 3 max locals 2
+  method copy(II)LTest$Value; flags [PUBLIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Value.value()I
+    ISTORE_1 1
+   L0:
+    ALOAD_0 0
+    ILOAD_1 1
+    INVOKEVIRTUAL Test$Value.copy(I)LTest$Value;
+    ARETURN
+    max stack 2 max locals 3
+  method toString()Ljava/lang/String; flags [PUBLIC]
+    LDC "value"
+    ARETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+value
+

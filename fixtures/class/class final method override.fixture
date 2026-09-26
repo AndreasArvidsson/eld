@@ -5,7 +5,7 @@ class Base {
 }
 
 class Child extends Base {
-    public func value() i32 {
+    public override func value() i32 {
         return 2;
     }
 }
@@ -34,12 +34,13 @@ EXTENDS (7:13-7:20)
 IDENTIFIER "Base" (7:21-7:25)
 LEFT_BRACE (7:26-7:27)
 PUBLIC (8:5-8:11)
-FUNC (8:12-8:16)
-IDENTIFIER "value" (8:17-8:22)
-LEFT_PAREN (8:22-8:23)
-RIGHT_PAREN (8:23-8:24)
-IDENTIFIER "i32" (8:25-8:28)
-LEFT_BRACE (8:29-8:30)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "value" (8:26-8:31)
+LEFT_PAREN (8:31-8:32)
+RIGHT_PAREN (8:32-8:33)
+IDENTIFIER "i32" (8:34-8:37)
+LEFT_BRACE (8:38-8:39)
 RETURN (9:9-9:15)
 INTEGER_LITERAL "2" (9:16-9:17)
 SEMICOLON (9:17-9:18)
@@ -100,16 +101,17 @@ RIGHT_BRACE (11:1-11:2)
       visibility: PUBLIC
       (FunctionDeclaration
         range: 8:12-10:6
+        OVERRIDE
         (IdentifierDeclaration
-          range: 8:17-8:22
+          range: 8:26-8:31
           name: "value"
         )
         (NamedTypeNode
-          range: 8:25-8:28
+          range: 8:34-8:37
           name: "i32"
         )
         (BlockStatement
-          range: 8:29-10:6
+          range: 8:38-10:6
           (ReturnStatement
             range: 9:9-9:18
             (LiteralExpression
@@ -126,4 +128,4 @@ RIGHT_BRACE (11:1-11:2)
 
 --- SEMANTIC ---
 
-SemanticException: Cannot override final method 'value' at 8:17-8:22
+SemanticException: Cannot override final method 'value' at 8:26-8:31

@@ -5,7 +5,7 @@ class Base {
 }
 class Child extends Base {
     var value = 0;
-    public func read() i32 {
+    public override func read() i32 {
         this.value++;
         return this.value;
     }
@@ -41,12 +41,13 @@ EQUAL (7:15-7:16)
 INTEGER_LITERAL "0" (7:17-7:18)
 SEMICOLON (7:18-7:19)
 PUBLIC (8:5-8:11)
-FUNC (8:12-8:16)
-IDENTIFIER "read" (8:17-8:21)
-LEFT_PAREN (8:21-8:22)
-RIGHT_PAREN (8:22-8:23)
-IDENTIFIER "i32" (8:24-8:27)
-LEFT_BRACE (8:28-8:29)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "read" (8:26-8:30)
+LEFT_PAREN (8:30-8:31)
+RIGHT_PAREN (8:31-8:32)
+IDENTIFIER "i32" (8:33-8:36)
+LEFT_BRACE (8:37-8:38)
 THIS (9:9-9:13)
 DOT (9:13-9:14)
 IDENTIFIER "value" (9:14-9:19)
@@ -151,16 +152,17 @@ SEMICOLON (14:20-14:21)
       visibility: PUBLIC
       (FunctionDeclaration
         range: 8:12-11:6
+        OVERRIDE
         (IdentifierDeclaration
-          range: 8:17-8:21
+          range: 8:26-8:30
           name: "read"
         )
         (NamedTypeNode
-          range: 8:24-8:27
+          range: 8:33-8:36
           name: "i32"
         )
         (BlockStatement
-          range: 8:28-11:6
+          range: 8:37-11:6
           (ExpressionStatement
             range: 9:9-9:22
             (PostfixExpression

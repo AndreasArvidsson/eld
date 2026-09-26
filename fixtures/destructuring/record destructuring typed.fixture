@@ -212,12 +212,7 @@ Conversions:
   2:25-2:33 -> i32 -> i64
 
 Declarations:
-  1:1-1:32 -> constructor(foo: i32, bar: i32)
-  1:8-1:11 -> class Rec
-  1:8-1:11 -> func copy(i32, i32) => Rec
-  1:8-1:11 -> func toString() => string
-  1:12-1:15 -> const foo: i32
-  1:22-1:25 -> const bar: i32
+  1:8-1:11 -> record Rec(foo: i32, bar: i32)
   2:8-2:11 -> const foo: i64
   2:25-2:28 -> const baz: i64
 

@@ -4,7 +4,7 @@ import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 
 public record ClassSymbol(IdentifierDeclaration declaration, ClassType type)
-    implements Symbol {
+    implements ClassDeclarationSymbol {
 
     @Override
     public String name() {

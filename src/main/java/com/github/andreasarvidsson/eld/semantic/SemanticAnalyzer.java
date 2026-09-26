@@ -53,6 +53,7 @@ import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 import com.github.andreasarvidsson.eld.parser.MapExpression;
+import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
@@ -922,7 +923,7 @@ public final class SemanticAnalyzer {
         final EffectContext context
     ) {
         final Symbol symbol = model.findReference(creation.className());
-        if (!(symbol instanceof ClassSymbol created)) {
+        if (!(symbol instanceof ClassDeclarationSymbol created)) {
             return;
         }
         validateConstruction(created.type(), context);
@@ -1303,7 +1304,38 @@ public final class SemanticAnalyzer {
             case RecordDeclaration record -> {
                 final ClassDeclaration lowered = RecordLowering.lower(record);
                 model.setRecordClass(record, lowered);
-                analyzeClassDeclaration(lowered, context);
+                for (final MemberDeclaration member : lowered.members()) {
+                    if (record.methods().contains(member)) {
+                        continue;
+                    }
+                    final Declaration generated = member.declaration();
+                    if (
+                        generated instanceof ConstructorDeclaration constructor
+                    ) {
+                        model.setSyntheticDeclaration(constructor);
+                        constructor.parameters()
+                            .forEach(
+                                parameter -> model
+                                    .setSyntheticDeclaration(parameter.name())
+                            );
+                    }
+                    else if (
+                        generated instanceof FunctionDeclaration function
+                    ) {
+                        model.setSyntheticDeclaration(function.name());
+                        function.parameters()
+                            .forEach(
+                                parameter -> model
+                                    .setSyntheticDeclaration(parameter.name())
+                            );
+                    }
+                    else if (
+                        generated instanceof UninitializedVariableDeclaration field
+                    ) {
+                        model.setSyntheticDeclaration(field.name());
+                    }
+                }
+                declarations.analyzeRecordDeclaration(record, lowered, context);
             }
             case TypeAliasDeclaration alias -> {
                 final Type type = types.resolveType(alias.type(), context);

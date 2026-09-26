@@ -32,6 +32,7 @@ public class Lexer {
                 Map.entry("super", TokenType.SUPER),
                 Map.entry("func", TokenType.FUNC),
                 Map.entry("final", TokenType.FINAL),
+                Map.entry("override", TokenType.OVERRIDE),
                 Map.entry("async", TokenType.ASYNC),
                 Map.entry("await", TokenType.AWAIT),
                 Map.entry("ignore", TokenType.IGNORE),

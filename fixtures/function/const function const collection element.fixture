@@ -1,9 +1,9 @@
 class Value {
-    public const func equals(other: any) bool {
+    public const override func equals(other: any) bool {
         return false;
     }
 
-    public const func hashCode() i32 {
+    public const override func hashCode() i32 {
         return 0;
     }
 }
@@ -23,27 +23,29 @@ IDENTIFIER "Value" (1:7-1:12)
 LEFT_BRACE (1:13-1:14)
 PUBLIC (2:5-2:11)
 CONST (2:12-2:17)
-FUNC (2:18-2:22)
-IDENTIFIER "equals" (2:23-2:29)
-LEFT_PAREN (2:29-2:30)
-IDENTIFIER "other" (2:30-2:35)
-COLON (2:35-2:36)
-IDENTIFIER "any" (2:37-2:40)
-RIGHT_PAREN (2:40-2:41)
-IDENTIFIER "bool" (2:42-2:46)
-LEFT_BRACE (2:47-2:48)
+OVERRIDE (2:18-2:26)
+FUNC (2:27-2:31)
+IDENTIFIER "equals" (2:32-2:38)
+LEFT_PAREN (2:38-2:39)
+IDENTIFIER "other" (2:39-2:44)
+COLON (2:44-2:45)
+IDENTIFIER "any" (2:46-2:49)
+RIGHT_PAREN (2:49-2:50)
+IDENTIFIER "bool" (2:51-2:55)
+LEFT_BRACE (2:56-2:57)
 RETURN (3:9-3:15)
 BOOLEAN_LITERAL "false" (3:16-3:21)
 SEMICOLON (3:21-3:22)
 RIGHT_BRACE (4:5-4:6)
 PUBLIC (6:5-6:11)
 CONST (6:12-6:17)
-FUNC (6:18-6:22)
-IDENTIFIER "hashCode" (6:23-6:31)
-LEFT_PAREN (6:31-6:32)
-RIGHT_PAREN (6:32-6:33)
-IDENTIFIER "i32" (6:34-6:37)
-LEFT_BRACE (6:38-6:39)
+OVERRIDE (6:18-6:26)
+FUNC (6:27-6:31)
+IDENTIFIER "hashCode" (6:32-6:40)
+LEFT_PAREN (6:40-6:41)
+RIGHT_PAREN (6:41-6:42)
+IDENTIFIER "i32" (6:43-6:46)
+LEFT_BRACE (6:47-6:48)
 RETURN (7:9-7:15)
 INTEGER_LITERAL "0" (7:16-7:17)
 SEMICOLON (7:17-7:18)
@@ -110,29 +112,30 @@ SEMICOLON (17:18-17:19)
       (FunctionDeclaration
         range: 2:12-4:6
         CONST
+        OVERRIDE
         (IdentifierDeclaration
-          range: 2:23-2:29
+          range: 2:32-2:38
           name: "equals"
         )
         (FunctionParameter
-          range: 2:30-2:40
+          range: 2:39-2:49
           (IdentifierDeclaration
-            range: 2:30-2:35
+            range: 2:39-2:44
             name: "other"
           )
           (NamedTypeNode
-            range: 2:37-2:40
+            range: 2:46-2:49
             name: "any"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 2:42-2:46
+          range: 2:51-2:55
           name: "bool"
         )
         (BlockStatement
-          range: 2:47-4:6
+          range: 2:56-4:6
           (ReturnStatement
             range: 3:9-3:22
             (LiteralExpression
@@ -150,16 +153,17 @@ SEMICOLON (17:18-17:19)
       (FunctionDeclaration
         range: 6:12-8:6
         CONST
+        OVERRIDE
         (IdentifierDeclaration
-          range: 6:23-6:31
+          range: 6:32-6:40
           name: "hashCode"
         )
         (NamedTypeNode
-          range: 6:34-6:37
+          range: 6:43-6:46
           name: "i32"
         )
         (BlockStatement
-          range: 6:38-8:6
+          range: 6:47-8:6
           (ReturnStatement
             range: 7:9-7:18
             (LiteralExpression
@@ -290,18 +294,18 @@ Expression types:
   17:7-17:17 -> i32
 
 Resolved types:
-  2:37-2:40 -> any
-  2:42-2:46 -> bool
-  6:34-6:37 -> i32
+  2:46-2:49 -> any
+  2:51-2:55 -> bool
+  6:43-6:46 -> i32
   11:23-11:26 -> i32
   12:18-12:38 -> HashSet<Value>
   12:30-12:35 -> Value
 
 Declarations:
   1:7-1:12 -> class Value
-  2:23-2:29 -> const func equals(any) => bool
-  2:30-2:35 -> const other: any
-  6:23-6:31 -> const func hashCode() => i32
+  2:32-2:38 -> const override func equals(any) => bool
+  2:39-2:44 -> const other: any
+  6:32-6:40 -> const override func hashCode() => i32
   11:12-11:20 -> const func addValue() => i32
   12:9-12:15 -> var values: HashSet<Value>
 

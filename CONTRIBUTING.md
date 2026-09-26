@@ -185,21 +185,22 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Export & import
+- Static class members
 - Tuples as map keys and switch conditions (using hashCode and equals)
 - Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
 - Switch type narrowing
-- Sealed interfaces
-- final classes?
+- Sealed classes/interfaces
+- final classes? Probably not necessary if we have sealed classes
 - abstract classes?
 - String std lib
 - Collections std lib
 - Stop using IdentifiedDeclaration in assignment expressions?
+- Overloaded functions
+- Export & import
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion
 - Warnings in addition to errors
-- Overloaded functions
 - Operator overloading
 - Regex literals: `const re: regex = /^\d+$`;
 - Methods like `indexOf` should return `null` instead of `-1` on failure.

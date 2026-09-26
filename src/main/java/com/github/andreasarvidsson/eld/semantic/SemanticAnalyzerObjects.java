@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
+import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.ObjectEntry;
 import com.github.andreasarvidsson.eld.parser.ObjectMember;
 import com.github.andreasarvidsson.eld.parser.ObjectSpread;
@@ -388,6 +389,7 @@ public final class SemanticAnalyzerObjects {
     ) {
         final ClassType base = model.getSuperclass(type);
         if (base == null) {
+            validateImplicitOverride(type, symbol);
             return;
         }
         final ClassType methodOwner =
@@ -399,6 +401,7 @@ public final class SemanticAnalyzerObjects {
                 ? methodOwner
                 : memberOwner(base, symbol.name());
         if (owner == null) {
+            validateImplicitOverride(type, symbol);
             return;
         }
         final Symbol inherited =
@@ -410,6 +413,7 @@ public final class SemanticAnalyzerObjects {
                 );
         final Visibility visibility = model.getMemberVisibility(inherited);
         if (visibility == Visibility.PRIVATE) {
+            validateImplicitOverride(type, symbol);
             return;
         }
         if (
@@ -440,13 +444,21 @@ public final class SemanticAnalyzerObjects {
                     symbol.name()
                 );
             }
-            if (!symbol.type().equals(inherited.type())) {
+            if (
+                !model.isOverrideCompatible(
+                    functionSymbol.type(),
+                    inheritedFunction.type()
+                )
+            ) {
                 throw new SemanticException(
                     symbol.range(),
-                    "Overriding method '%s' must have the same signature",
+                    "Overriding method '%s' must have matching parameter types and a covariant return type",
                     symbol.name()
                 );
             }
+            validateOverrideModifier(functionSymbol, true);
+            model.addOverrideBridge(functionSymbol, inheritedFunction.type());
+            addInterfaceOverrideBridges(type, functionSymbol);
             final Visibility declared = model.getMemberVisibility(symbol);
             if (
                 declared == Visibility.PRIVATE
@@ -468,6 +480,89 @@ public final class SemanticAnalyzerObjects {
                 symbol.range(),
                 "Inherited member '%s' has a different declaration kind",
                 symbol.name()
+            );
+        }
+    }
+
+    private void validateImplicitOverride(
+        final ClassType type,
+        final Symbol symbol
+    ) {
+        if (!(symbol instanceof FunctionSymbol function)) {
+            return;
+        }
+        final JavaMethodSymbol objectMethod =
+            JavaTypes.objectMethod(
+                function.name(),
+                function.type().parameterTypes().size(),
+                function.range()
+            );
+        final boolean objectOverride =
+            objectMethod != null && model
+                .isOverrideCompatible(function.type(), objectMethod.type());
+        addInterfaceOverrideBridges(type, function);
+        validateOverrideModifier(function, objectOverride);
+        if (
+            objectOverride
+                && model.getMemberVisibility(function) != Visibility.PUBLIC
+        ) {
+            throw new SemanticException(
+                function.range(),
+                "Overriding method '%s' cannot reduce visibility",
+                function.name()
+            );
+        }
+    }
+
+    private boolean addInterfaceOverrideBridges(
+        final ClassType type,
+        final FunctionSymbol function
+    ) {
+        boolean compatible = false;
+        final List<InterfaceType> pending =
+            new java.util.ArrayList<>(model.getImplementedInterfaces(type));
+        final Set<InterfaceType> visited = new java.util.HashSet<>();
+        while (!pending.isEmpty()) {
+            final InterfaceType interfaceType = pending.removeLast();
+            if (!visited.add(interfaceType)) {
+                continue;
+            }
+            final InterfaceContract contract =
+                model.getInterface(interfaceType);
+            pending.addAll(contract.superInterfaces());
+            final FunctionSymbol inherited =
+                contract.methods().get(function.name());
+            if (
+                inherited != null && model
+                    .isOverrideCompatible(function.type(), inherited.type())
+            ) {
+                compatible = true;
+                model.addOverrideBridge(function, inherited.type());
+            }
+        }
+        return compatible;
+    }
+
+    private void validateOverrideModifier(
+        final FunctionSymbol function,
+        final boolean compatible
+    ) {
+        final FunctionDeclaration declaration =
+            model.getFunctionDeclaration(function);
+        final boolean override =
+            declaration != null && declaration.overrideMethod();
+        if (override && !compatible) {
+            throw new SemanticException(
+                function.range(),
+                "Method '%s' is marked override but has no compatible inherited method",
+                function.name()
+            );
+        }
+        if (!override && compatible) {
+            throw new SemanticException(
+                function.range(),
+                "Overriding method '%s' must be marked override",
+                function.name()
             );
         }
     }

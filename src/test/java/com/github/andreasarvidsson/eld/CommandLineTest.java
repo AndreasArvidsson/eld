@@ -45,7 +45,7 @@ class CommandLineTest {
             );
             session.evaluate("""
                 class Child extends Base {
-                    public func read() i32 { return this.value + 2; }
+                    public override func read() i32 { return this.value + 2; }
                 }
                 const child = new Child();
                 """);

@@ -627,7 +627,7 @@ class BytecodeGeneratorTest {
                 }
                 class Child extends Base {
                     public var own = 4;
-                    public func compute(amount: i32 = 5) i32 { return this.helper() + amount + 10; }
+                    public override func compute(amount: i32 = 5) i32 { return this.helper() + amount + 10; }
                     public func increase() i32 {
                         const update = () => { this.value++; return this.helper(); };
                         return update();
@@ -688,8 +688,8 @@ class BytecodeGeneratorTest {
             compileClass(
                 """
                     class Base { public func value() i32 { return 1; } }
-                    class Left extends Base { public func value() i32 { return 2; } }
-                    class Right extends Base { public func value() i32 { return 3; } }
+                    class Left extends Base { public override func value() i32 { return 2; } }
+                    class Right extends Base { public override func value() i32 { return 3; } }
                     func choose(flag: bool) Base { return flag ? new Left() : new Right(); }
                     func identity() bool {
                         const child = new Left();

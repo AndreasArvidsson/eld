@@ -28,6 +28,7 @@ public enum TokenType {
     SUPER,
     FUNC,
     FINAL,
+    OVERRIDE,
     ASYNC,
     AWAIT,
     IGNORE,

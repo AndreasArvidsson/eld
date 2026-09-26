@@ -1,0 +1,465 @@
+class Value {
+    public func value() i32 {
+        return 1;
+    }
+}
+
+class DetailedValue extends Value {
+    public override func value() i32 {
+        return 2;
+    }
+}
+
+interface Factory {
+    func create() Value;
+}
+
+class Base {
+    public func create() DetailedValue {
+        return new DetailedValue();
+    }
+}
+
+class Child extends Base implements Factory {}
+
+const factory: Factory = new Child();
+print(factory.create().value());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+LEFT_BRACE (2:29-2:30)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "DetailedValue" (7:7-7:20)
+EXTENDS (7:21-7:28)
+IDENTIFIER "Value" (7:29-7:34)
+LEFT_BRACE (7:35-7:36)
+PUBLIC (8:5-8:11)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "value" (8:26-8:31)
+LEFT_PAREN (8:31-8:32)
+RIGHT_PAREN (8:32-8:33)
+IDENTIFIER "i32" (8:34-8:37)
+LEFT_BRACE (8:38-8:39)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+INTERFACE (13:1-13:10)
+IDENTIFIER "Factory" (13:11-13:18)
+LEFT_BRACE (13:19-13:20)
+FUNC (14:5-14:9)
+IDENTIFIER "create" (14:10-14:16)
+LEFT_PAREN (14:16-14:17)
+RIGHT_PAREN (14:17-14:18)
+IDENTIFIER "Value" (14:19-14:24)
+SEMICOLON (14:24-14:25)
+RIGHT_BRACE (15:1-15:2)
+CLASS (17:1-17:6)
+IDENTIFIER "Base" (17:7-17:11)
+LEFT_BRACE (17:12-17:13)
+PUBLIC (18:5-18:11)
+FUNC (18:12-18:16)
+IDENTIFIER "create" (18:17-18:23)
+LEFT_PAREN (18:23-18:24)
+RIGHT_PAREN (18:24-18:25)
+IDENTIFIER "DetailedValue" (18:26-18:39)
+LEFT_BRACE (18:40-18:41)
+RETURN (19:9-19:15)
+NEW (19:16-19:19)
+IDENTIFIER "DetailedValue" (19:20-19:33)
+LEFT_PAREN (19:33-19:34)
+RIGHT_PAREN (19:34-19:35)
+SEMICOLON (19:35-19:36)
+RIGHT_BRACE (20:5-20:6)
+RIGHT_BRACE (21:1-21:2)
+CLASS (23:1-23:6)
+IDENTIFIER "Child" (23:7-23:12)
+EXTENDS (23:13-23:20)
+IDENTIFIER "Base" (23:21-23:25)
+IMPLEMENTS (23:26-23:36)
+IDENTIFIER "Factory" (23:37-23:44)
+LEFT_BRACE (23:45-23:46)
+RIGHT_BRACE (23:46-23:47)
+CONST (25:1-25:6)
+IDENTIFIER "factory" (25:7-25:14)
+COLON (25:14-25:15)
+IDENTIFIER "Factory" (25:16-25:23)
+EQUAL (25:24-25:25)
+NEW (25:26-25:29)
+IDENTIFIER "Child" (25:30-25:35)
+LEFT_PAREN (25:35-25:36)
+RIGHT_PAREN (25:36-25:37)
+SEMICOLON (25:37-25:38)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+IDENTIFIER "factory" (26:7-26:14)
+DOT (26:14-26:15)
+IDENTIFIER "create" (26:15-26:21)
+LEFT_PAREN (26:21-26:22)
+RIGHT_PAREN (26:22-26:23)
+DOT (26:23-26:24)
+IDENTIFIER "value" (26:24-26:29)
+LEFT_PAREN (26:29-26:30)
+RIGHT_PAREN (26:30-26:31)
+RIGHT_PAREN (26:31-26:32)
+SEMICOLON (26:32-26:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-26:33
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:29-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:20
+      name: "DetailedValue"
+    )
+    (IdentifierExpression
+      range: 7:29-7:34
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:26-8:31
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:34-8:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:38-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 13:1-15:2
+    (IdentifierDeclaration
+      range: 13:11-13:18
+      name: "Factory"
+    )
+    (InterfaceMethodDeclaration
+      range: 14:5-14:25
+      (IdentifierDeclaration
+        range: 14:10-14:16
+        name: "create"
+      )
+      (NamedTypeNode
+        range: 14:19-14:24
+        name: "Value"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 17:1-21:2
+    (IdentifierDeclaration
+      range: 17:7-17:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 18:5-20:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 18:12-20:6
+        (IdentifierDeclaration
+          range: 18:17-18:23
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 18:26-18:39
+          name: "DetailedValue"
+        )
+        (BlockStatement
+          range: 18:40-20:6
+          (ReturnStatement
+            range: 19:9-19:36
+            (NewExpression
+              range: 19:16-19:35
+              (IdentifierExpression
+                range: 19:20-19:33
+                name: "DetailedValue"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 23:1-23:47
+    (IdentifierDeclaration
+      range: 23:7-23:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 23:21-23:25
+      name: "Base"
+    )
+    (NamedTypeNode
+      range: 23:37-23:44
+      name: "Factory"
+    )
+  )
+  (VariableDeclaration
+    range: 25:1-25:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 25:7-25:14
+      name: "factory"
+    )
+    (NamedTypeNode
+      range: 25:16-25:23
+      name: "Factory"
+    )
+    (NewExpression
+      range: 25:26-25:37
+      (IdentifierExpression
+        range: 25:30-25:35
+        name: "Child"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:33
+    (CallExpression
+      range: 26:1-26:32
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (CallExpression
+        range: 26:7-26:31
+        (MemberExpression
+          range: 26:7-26:29
+          (CallExpression
+            range: 26:7-26:23
+            (MemberExpression
+              range: 26:7-26:21
+              (IdentifierExpression
+                range: 26:7-26:14
+                name: "factory"
+              )
+              (IdentifierExpression
+                range: 26:15-26:21
+                name: "create"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 26:24-26:29
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:29-7:34 -> Value
+  9:16-9:17 -> i32
+  19:16-19:35 -> DetailedValue
+  19:20-19:33 -> DetailedValue
+  23:21-23:25 -> Base
+  25:26-25:37 -> Child
+  25:30-25:35 -> Child
+  26:1-26:6 -> (any) => void
+  26:1-26:32 -> void
+  26:7-26:14 -> Factory
+  26:7-26:21 -> () => Value
+  26:7-26:23 -> Value
+  26:7-26:29 -> () => i32
+  26:7-26:31 -> i32
+  26:15-26:21 -> () => Value
+  26:24-26:29 -> () => i32
+
+Resolved types:
+  2:25-2:28 -> i32
+  8:34-8:37 -> i32
+  14:19-14:24 -> Value
+  18:26-18:39 -> DetailedValue
+  23:37-23:44 -> Factory
+  25:16-25:23 -> Factory
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:17-2:22 -> func value() => i32
+  7:7-7:20 -> class DetailedValue
+  8:26-8:31 -> override func value() => i32
+  13:11-13:18 -> interface Factory
+  14:10-14:16 -> func create() => Value
+  17:7-17:11 -> class Base
+  18:17-18:23 -> func create() => DetailedValue
+  23:7-23:12 -> class Child
+  25:7-25:14 -> const factory: Factory
+
+References:
+  7:29-7:34 -> 1:7-1:12
+  19:20-19:33 -> 7:7-7:20
+  23:21-23:25 -> 17:7-17:11
+  25:30-25:35 -> 23:7-23:12
+  26:1-26:6 -> builtin print
+  26:7-26:14 -> 25:7-25:14
+  26:15-26:21 -> 14:10-14:16
+  26:24-26:29 -> 2:17-2:22
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$DetailedValue
+  nest member Test$Factory
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  inner class Test$Factory flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field factory LTest$Factory; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.factory LTest$Factory;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.factory LTest$Factory;
+    INVOKEINTERFACE Test$Factory.create()LTest$Value;
+    INVOKEVIRTUAL Test$Value.value()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Value.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Factory extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Factory flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method create()LTest$Value; flags [PUBLIC, ABSTRACT]
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()LTest$DetailedValue; flags [PUBLIC]
+    NEW Test$DetailedValue
+    DUP
+    INVOKESPECIAL Test$DetailedValue.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+  method create()LTest$Value; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Base.create()LTest$DetailedValue;
+    ARETURN
+    max stack 1 max locals 1
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Factory
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+2
+

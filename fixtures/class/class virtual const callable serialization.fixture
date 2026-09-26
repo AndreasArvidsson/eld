@@ -3,7 +3,7 @@ class Base {
 }
 
 class Derived extends Base {
-    public func value() {}
+    public override func value() {}
 }
 
 --- TOKENS ---
@@ -26,12 +26,13 @@ EXTENDS (5:15-5:22)
 IDENTIFIER "Base" (5:23-5:27)
 LEFT_BRACE (5:28-5:29)
 PUBLIC (6:5-6:11)
-FUNC (6:12-6:16)
-IDENTIFIER "value" (6:17-6:22)
-LEFT_PAREN (6:22-6:23)
-RIGHT_PAREN (6:23-6:24)
-LEFT_BRACE (6:25-6:26)
-RIGHT_BRACE (6:26-6:27)
+OVERRIDE (6:12-6:20)
+FUNC (6:21-6:25)
+IDENTIFIER "value" (6:26-6:31)
+LEFT_PAREN (6:31-6:32)
+RIGHT_PAREN (6:32-6:33)
+LEFT_BRACE (6:34-6:35)
+RIGHT_BRACE (6:35-6:36)
 RIGHT_BRACE (7:1-7:2)
 
 --- AST ---
@@ -73,17 +74,18 @@ RIGHT_BRACE (7:1-7:2)
       name: "Base"
     )
     (MemberDeclaration
-      range: 6:5-6:27
+      range: 6:5-6:36
       visibility: PUBLIC
       (FunctionDeclaration
-        range: 6:12-6:27
+        range: 6:12-6:36
+        OVERRIDE
         (IdentifierDeclaration
-          range: 6:17-6:22
+          range: 6:26-6:31
           name: "value"
         )
         returnType: null
         (BlockStatement
-          range: 6:25-6:27
+          range: 6:34-6:36
         )
       )
     )
@@ -92,4 +94,4 @@ RIGHT_BRACE (7:1-7:2)
 
 --- SEMANTIC ---
 
-SemanticException: Cannot override const method 'value' with a non-const method at 6:17-6:22
+SemanticException: Cannot override const method 'value' with a non-const method at 6:26-6:31

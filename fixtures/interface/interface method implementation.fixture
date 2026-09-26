@@ -1,0 +1,148 @@
+interface Reader {
+    func read() i32;
+}
+
+class Impl implements Reader {
+    public func read() i32 {
+        return 1;
+    }
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Reader" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+FUNC (2:5-2:9)
+IDENTIFIER "read" (2:10-2:14)
+LEFT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+SEMICOLON (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Impl" (5:7-5:11)
+IMPLEMENTS (5:12-5:22)
+IDENTIFIER "Reader" (5:23-5:29)
+LEFT_BRACE (5:30-5:31)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "read" (6:17-6:21)
+LEFT_PAREN (6:21-6:22)
+RIGHT_PAREN (6:22-6:23)
+IDENTIFIER "i32" (6:24-6:27)
+LEFT_BRACE (6:28-6:29)
+RETURN (7:9-7:15)
+INTEGER_LITERAL "1" (7:16-7:17)
+SEMICOLON (7:17-7:18)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:2
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:21
+      (IdentifierDeclaration
+        range: 2:10-2:14
+        name: "read"
+      )
+      (NamedTypeNode
+        range: 2:17-2:20
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-9:2
+    (IdentifierDeclaration
+      range: 5:7-5:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:23-5:29
+      name: "Reader"
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        (IdentifierDeclaration
+          range: 6:17-6:21
+          name: "read"
+        )
+        (NamedTypeNode
+          range: 6:24-6:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:28-8:6
+          (ReturnStatement
+            range: 7:9-7:18
+            (LiteralExpression
+              range: 7:16-7:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:16-7:17 -> i32
+
+Resolved types:
+  2:17-2:20 -> i32
+  5:23-5:29 -> Reader
+  6:24-6:27 -> i32
+
+Declarations:
+  1:11-1:17 -> interface Reader
+  2:10-2:14 -> func read() => i32
+  5:7-5:11 -> class Impl
+  6:17-6:21 -> func read() => i32
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Reader
+  nest member Test$Impl
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Impl flags [PUBLIC, STATIC]
+
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
+
+class Test$Impl extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Reader
+  nest host Test
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method read()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+

@@ -19,4 +19,8 @@ public record FunctionDeclaration(
     public boolean finalMethod() {
         return modifiers.contains(FunctionModifier.FINAL);
     }
+
+    public boolean overrideMethod() {
+        return modifiers.contains(FunctionModifier.OVERRIDE);
+    }
 }

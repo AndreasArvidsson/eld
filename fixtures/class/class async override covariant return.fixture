@@ -1,0 +1,649 @@
+class Value {
+    public func value() i32 {
+        return 1;
+    }
+}
+
+class DetailedValue extends Value {
+    public override func value() i32 {
+        return 2;
+    }
+}
+
+class Base {
+    public async func create() Value {
+        return new Value();
+    }
+}
+
+class Derived extends Base {
+    public override async func create() DetailedValue {
+        return new DetailedValue();
+    }
+}
+
+async func run() {
+    const base: Base = new Derived();
+    print((await base.create()).value());
+}
+
+ignore run();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+LEFT_BRACE (2:29-2:30)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "DetailedValue" (7:7-7:20)
+EXTENDS (7:21-7:28)
+IDENTIFIER "Value" (7:29-7:34)
+LEFT_BRACE (7:35-7:36)
+PUBLIC (8:5-8:11)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "value" (8:26-8:31)
+LEFT_PAREN (8:31-8:32)
+RIGHT_PAREN (8:32-8:33)
+IDENTIFIER "i32" (8:34-8:37)
+LEFT_BRACE (8:38-8:39)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CLASS (13:1-13:6)
+IDENTIFIER "Base" (13:7-13:11)
+LEFT_BRACE (13:12-13:13)
+PUBLIC (14:5-14:11)
+ASYNC (14:12-14:17)
+FUNC (14:18-14:22)
+IDENTIFIER "create" (14:23-14:29)
+LEFT_PAREN (14:29-14:30)
+RIGHT_PAREN (14:30-14:31)
+IDENTIFIER "Value" (14:32-14:37)
+LEFT_BRACE (14:38-14:39)
+RETURN (15:9-15:15)
+NEW (15:16-15:19)
+IDENTIFIER "Value" (15:20-15:25)
+LEFT_PAREN (15:25-15:26)
+RIGHT_PAREN (15:26-15:27)
+SEMICOLON (15:27-15:28)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+CLASS (19:1-19:6)
+IDENTIFIER "Derived" (19:7-19:14)
+EXTENDS (19:15-19:22)
+IDENTIFIER "Base" (19:23-19:27)
+LEFT_BRACE (19:28-19:29)
+PUBLIC (20:5-20:11)
+OVERRIDE (20:12-20:20)
+ASYNC (20:21-20:26)
+FUNC (20:27-20:31)
+IDENTIFIER "create" (20:32-20:38)
+LEFT_PAREN (20:38-20:39)
+RIGHT_PAREN (20:39-20:40)
+IDENTIFIER "DetailedValue" (20:41-20:54)
+LEFT_BRACE (20:55-20:56)
+RETURN (21:9-21:15)
+NEW (21:16-21:19)
+IDENTIFIER "DetailedValue" (21:20-21:33)
+LEFT_PAREN (21:33-21:34)
+RIGHT_PAREN (21:34-21:35)
+SEMICOLON (21:35-21:36)
+RIGHT_BRACE (22:5-22:6)
+RIGHT_BRACE (23:1-23:2)
+ASYNC (25:1-25:6)
+FUNC (25:7-25:11)
+IDENTIFIER "run" (25:12-25:15)
+LEFT_PAREN (25:15-25:16)
+RIGHT_PAREN (25:16-25:17)
+LEFT_BRACE (25:18-25:19)
+CONST (26:5-26:10)
+IDENTIFIER "base" (26:11-26:15)
+COLON (26:15-26:16)
+IDENTIFIER "Base" (26:17-26:21)
+EQUAL (26:22-26:23)
+NEW (26:24-26:27)
+IDENTIFIER "Derived" (26:28-26:35)
+LEFT_PAREN (26:35-26:36)
+RIGHT_PAREN (26:36-26:37)
+SEMICOLON (26:37-26:38)
+IDENTIFIER "print" (27:5-27:10)
+LEFT_PAREN (27:10-27:11)
+LEFT_PAREN (27:11-27:12)
+AWAIT (27:12-27:17)
+IDENTIFIER "base" (27:18-27:22)
+DOT (27:22-27:23)
+IDENTIFIER "create" (27:23-27:29)
+LEFT_PAREN (27:29-27:30)
+RIGHT_PAREN (27:30-27:31)
+RIGHT_PAREN (27:31-27:32)
+DOT (27:32-27:33)
+IDENTIFIER "value" (27:33-27:38)
+LEFT_PAREN (27:38-27:39)
+RIGHT_PAREN (27:39-27:40)
+RIGHT_PAREN (27:40-27:41)
+SEMICOLON (27:41-27:42)
+RIGHT_BRACE (28:1-28:2)
+IGNORE (30:1-30:7)
+IDENTIFIER "run" (30:8-30:11)
+LEFT_PAREN (30:11-30:12)
+RIGHT_PAREN (30:12-30:13)
+SEMICOLON (30:13-30:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-30:14
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:29-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:20
+      name: "DetailedValue"
+    )
+    (IdentifierExpression
+      range: 7:29-7:34
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:26-8:31
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 8:34-8:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:38-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 13:1-17:2
+    (IdentifierDeclaration
+      range: 13:7-13:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 14:5-16:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 14:12-16:6
+        async: true
+        (IdentifierDeclaration
+          range: 14:23-14:29
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 14:32-14:37
+          name: "Value"
+        )
+        (BlockStatement
+          range: 14:38-16:6
+          (ReturnStatement
+            range: 15:9-15:28
+            (NewExpression
+              range: 15:16-15:27
+              (IdentifierExpression
+                range: 15:20-15:25
+                name: "Value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 19:1-23:2
+    (IdentifierDeclaration
+      range: 19:7-19:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 19:23-19:27
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 20:5-22:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 20:12-22:6
+        async: true
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 20:32-20:38
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 20:41-20:54
+          name: "DetailedValue"
+        )
+        (BlockStatement
+          range: 20:55-22:6
+          (ReturnStatement
+            range: 21:9-21:36
+            (NewExpression
+              range: 21:16-21:35
+              (IdentifierExpression
+                range: 21:20-21:33
+                name: "DetailedValue"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 25:1-28:2
+    async: true
+    (IdentifierDeclaration
+      range: 25:12-25:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 25:18-28:2
+      (VariableDeclaration
+        range: 26:5-26:38
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 26:11-26:15
+          name: "base"
+        )
+        (NamedTypeNode
+          range: 26:17-26:21
+          name: "Base"
+        )
+        (NewExpression
+          range: 26:24-26:37
+          (IdentifierExpression
+            range: 26:28-26:35
+            name: "Derived"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 27:5-27:42
+        (CallExpression
+          range: 27:5-27:41
+          (IdentifierExpression
+            range: 27:5-27:10
+            name: "print"
+          )
+          (CallExpression
+            range: 27:11-27:40
+            (MemberExpression
+              range: 27:11-27:38
+              (GroupingExpression
+                range: 27:11-27:32
+                (AwaitExpression
+                  range: 27:12-27:31
+                  (CallExpression
+                    range: 27:18-27:31
+                    (MemberExpression
+                      range: 27:18-27:29
+                      (IdentifierExpression
+                        range: 27:18-27:22
+                        name: "base"
+                      )
+                      (IdentifierExpression
+                        range: 27:23-27:29
+                        name: "create"
+                      )
+                    )
+                  )
+                )
+              )
+              (IdentifierExpression
+                range: 27:33-27:38
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 30:1-30:14
+    (CallExpression
+      range: 30:8-30:13
+      (IdentifierExpression
+        range: 30:8-30:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:29-7:34 -> Value
+  9:16-9:17 -> i32
+  15:16-15:27 -> Value
+  15:20-15:25 -> Value
+  19:23-19:27 -> Base
+  21:16-21:35 -> DetailedValue
+  21:20-21:33 -> DetailedValue
+  26:24-26:37 -> Derived
+  26:28-26:35 -> Derived
+  27:5-27:10 -> (any) => void
+  27:5-27:41 -> void
+  27:11-27:32 -> Value
+  27:11-27:38 -> () => i32
+  27:11-27:40 -> i32
+  27:12-27:31 -> Value
+  27:18-27:22 -> Base
+  27:18-27:29 -> () => Promise<Value>
+  27:18-27:31 -> Promise<Value>
+  27:23-27:29 -> () => Promise<Value>
+  27:33-27:38 -> () => i32
+  30:8-30:11 -> () => Promise<void>
+  30:8-30:13 -> Promise<void>
+
+Resolved types:
+  2:25-2:28 -> i32
+  8:34-8:37 -> i32
+  14:32-14:37 -> Value
+  20:41-20:54 -> DetailedValue
+  26:17-26:21 -> Base
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:17-2:22 -> func value() => i32
+  7:7-7:20 -> class DetailedValue
+  8:26-8:31 -> override func value() => i32
+  13:7-13:11 -> class Base
+  14:23-14:29 -> func create() => Promise<Value>
+  19:7-19:14 -> class Derived
+  20:32-20:38 -> override func create() => Promise<DetailedValue>
+  25:12-25:15 -> func run() => Promise<void>
+  26:11-26:15 -> const base: Base
+
+References:
+  7:29-7:34 -> 1:7-1:12
+  15:20-15:25 -> 1:7-1:12
+  19:23-19:27 -> 13:7-13:11
+  21:20-21:33 -> 7:7-7:20
+  26:28-26:35 -> 19:7-19:14
+  27:5-27:10 -> builtin print
+  27:18-27:22 -> 26:11-26:15
+  27:23-27:29 -> 14:23-14:29
+  27:33-27:38 -> 2:17-2:22
+  30:8-30:11 -> 25:12-25:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  nest member Test$Value
+  nest member Test$DetailedValue
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 1 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Value.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method $async$create()LTest$Value; flags [PRIVATE, SYNTHETIC]
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+  method create()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC]
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    ASTORE_1 1
+   L0:
+    ALOAD_1 1
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.$async$create()LTest$Value;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+   L1:
+    GOTO L3
+   L2:
+    ASTORE_2 2
+    ALOAD_1 1
+    ALOAD_2 2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+   L3:
+    ALOAD_1 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    catch all from L0 to L1 handler L2
+    max stack 2 max locals 3
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method $async$create()LTest$DetailedValue; flags [PRIVATE, SYNTHETIC]
+    NEW Test$DetailedValue
+    DUP
+    INVOKESPECIAL Test$DetailedValue.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+  method create()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC]
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    ASTORE_1 1
+   L0:
+    ALOAD_1 1
+    ALOAD_0 0
+    INVOKESPECIAL Test$Derived.$async$create()LTest$DetailedValue;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve(Ljava/lang/Object;)V
+   L1:
+    GOTO L3
+   L2:
+    ASTORE_2 2
+    ALOAD_1 1
+    ALOAD_2 2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+   L3:
+    ALOAD_1 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    catch all from L0 to L1 handler L2
+    max stack 2 max locals 3
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..1 default L0 0:L1 1:L2
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    ASTORE_3 3
+    ALOAD_3 3
+    INVOKEVIRTUAL Test$Base.create()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST Test$Value
+    ASTORE 4
+    ALOAD 4
+    INVOKEVIRTUAL Test$Value.value()I
+    ISTORE 5
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ILOAD 5
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L4:
+    ASTORE 6
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 6
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L4 handler L4
+    max stack 3 max locals 7
+
+--- OUTPUT ---
+
+2
+

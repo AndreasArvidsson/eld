@@ -364,17 +364,19 @@ public final class SemanticAnalyzerExpressions {
                                 )
                                 : null;
                 if (javaTarget != null) {
+                    final boolean staticTarget =
+                        member
+                            .target() instanceof IdentifierExpression identifier
+                            && model.getReference(
+                                identifier
+                            ) instanceof JavaClassSymbol;
                     List<JavaMethodSymbol> candidates =
                         JavaTypes.methods(
                             javaTarget,
                             member.member().name(),
                             callArity,
                             member.range(),
-                            member
-                                .target() instanceof IdentifierExpression identifier
-                                && model.getReference(
-                                    identifier
-                                ) instanceof JavaClassSymbol
+                            staticTarget
                         );
                     if (candidates.size() > 1 && analyzingCallee) {
                         final List<Expression> supplied = javaCallArguments;
@@ -405,7 +407,7 @@ public final class SemanticAnalyzerExpressions {
                         }).toList();
                     }
                     if (candidates.size() != 1) {
-                        if (candidates.isEmpty()) {
+                        if (candidates.isEmpty() && !staticTarget) {
                             final Type objectMethod =
                                 resolveObjectMethod(member, memberTarget);
                             if (objectMethod != null) {
@@ -734,7 +736,7 @@ public final class SemanticAnalyzerExpressions {
                 if (
                     !(model.getReference(
                         creation.className()
-                    ) instanceof ClassSymbol)
+                    ) instanceof ClassDeclarationSymbol)
                 ) {
                     throw new SemanticException(
                         creation.className().range(),

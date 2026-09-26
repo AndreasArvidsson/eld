@@ -1,0 +1,588 @@
+interface First {}
+interface Second {}
+
+class Combined implements First, Second {}
+
+interface FirstFactory {
+    func create() First;
+}
+
+interface SecondFactory {
+    func create() Second;
+}
+
+class Factory implements FirstFactory, SecondFactory {
+    public func create() Combined {
+        return new Combined();
+    }
+}
+
+const first: FirstFactory = new Factory();
+const second: SecondFactory = new Factory();
+const firstValue = first.create();
+const secondValue = second.create();
+print(firstValue.equals(firstValue));
+print(secondValue.equals(secondValue));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "First" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+RIGHT_BRACE (1:18-1:19)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Second" (2:11-2:17)
+LEFT_BRACE (2:18-2:19)
+RIGHT_BRACE (2:19-2:20)
+CLASS (4:1-4:6)
+IDENTIFIER "Combined" (4:7-4:15)
+IMPLEMENTS (4:16-4:26)
+IDENTIFIER "First" (4:27-4:32)
+COMMA (4:32-4:33)
+IDENTIFIER "Second" (4:34-4:40)
+LEFT_BRACE (4:41-4:42)
+RIGHT_BRACE (4:42-4:43)
+INTERFACE (6:1-6:10)
+IDENTIFIER "FirstFactory" (6:11-6:23)
+LEFT_BRACE (6:24-6:25)
+FUNC (7:5-7:9)
+IDENTIFIER "create" (7:10-7:16)
+LEFT_PAREN (7:16-7:17)
+RIGHT_PAREN (7:17-7:18)
+IDENTIFIER "First" (7:19-7:24)
+SEMICOLON (7:24-7:25)
+RIGHT_BRACE (8:1-8:2)
+INTERFACE (10:1-10:10)
+IDENTIFIER "SecondFactory" (10:11-10:24)
+LEFT_BRACE (10:25-10:26)
+FUNC (11:5-11:9)
+IDENTIFIER "create" (11:10-11:16)
+LEFT_PAREN (11:16-11:17)
+RIGHT_PAREN (11:17-11:18)
+IDENTIFIER "Second" (11:19-11:25)
+SEMICOLON (11:25-11:26)
+RIGHT_BRACE (12:1-12:2)
+CLASS (14:1-14:6)
+IDENTIFIER "Factory" (14:7-14:14)
+IMPLEMENTS (14:15-14:25)
+IDENTIFIER "FirstFactory" (14:26-14:38)
+COMMA (14:38-14:39)
+IDENTIFIER "SecondFactory" (14:40-14:53)
+LEFT_BRACE (14:54-14:55)
+PUBLIC (15:5-15:11)
+FUNC (15:12-15:16)
+IDENTIFIER "create" (15:17-15:23)
+LEFT_PAREN (15:23-15:24)
+RIGHT_PAREN (15:24-15:25)
+IDENTIFIER "Combined" (15:26-15:34)
+LEFT_BRACE (15:35-15:36)
+RETURN (16:9-16:15)
+NEW (16:16-16:19)
+IDENTIFIER "Combined" (16:20-16:28)
+LEFT_PAREN (16:28-16:29)
+RIGHT_PAREN (16:29-16:30)
+SEMICOLON (16:30-16:31)
+RIGHT_BRACE (17:5-17:6)
+RIGHT_BRACE (18:1-18:2)
+CONST (20:1-20:6)
+IDENTIFIER "first" (20:7-20:12)
+COLON (20:12-20:13)
+IDENTIFIER "FirstFactory" (20:14-20:26)
+EQUAL (20:27-20:28)
+NEW (20:29-20:32)
+IDENTIFIER "Factory" (20:33-20:40)
+LEFT_PAREN (20:40-20:41)
+RIGHT_PAREN (20:41-20:42)
+SEMICOLON (20:42-20:43)
+CONST (21:1-21:6)
+IDENTIFIER "second" (21:7-21:13)
+COLON (21:13-21:14)
+IDENTIFIER "SecondFactory" (21:15-21:28)
+EQUAL (21:29-21:30)
+NEW (21:31-21:34)
+IDENTIFIER "Factory" (21:35-21:42)
+LEFT_PAREN (21:42-21:43)
+RIGHT_PAREN (21:43-21:44)
+SEMICOLON (21:44-21:45)
+CONST (22:1-22:6)
+IDENTIFIER "firstValue" (22:7-22:17)
+EQUAL (22:18-22:19)
+IDENTIFIER "first" (22:20-22:25)
+DOT (22:25-22:26)
+IDENTIFIER "create" (22:26-22:32)
+LEFT_PAREN (22:32-22:33)
+RIGHT_PAREN (22:33-22:34)
+SEMICOLON (22:34-22:35)
+CONST (23:1-23:6)
+IDENTIFIER "secondValue" (23:7-23:18)
+EQUAL (23:19-23:20)
+IDENTIFIER "second" (23:21-23:27)
+DOT (23:27-23:28)
+IDENTIFIER "create" (23:28-23:34)
+LEFT_PAREN (23:34-23:35)
+RIGHT_PAREN (23:35-23:36)
+SEMICOLON (23:36-23:37)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "firstValue" (24:7-24:17)
+DOT (24:17-24:18)
+IDENTIFIER "equals" (24:18-24:24)
+LEFT_PAREN (24:24-24:25)
+IDENTIFIER "firstValue" (24:25-24:35)
+RIGHT_PAREN (24:35-24:36)
+RIGHT_PAREN (24:36-24:37)
+SEMICOLON (24:37-24:38)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+IDENTIFIER "secondValue" (25:7-25:18)
+DOT (25:18-25:19)
+IDENTIFIER "equals" (25:19-25:25)
+LEFT_PAREN (25:25-25:26)
+IDENTIFIER "secondValue" (25:26-25:37)
+RIGHT_PAREN (25:37-25:38)
+RIGHT_PAREN (25:38-25:39)
+SEMICOLON (25:39-25:40)
+
+--- AST ---
+
+(Program
+  range: 1:1-25:40
+  (InterfaceDeclaration
+    range: 1:1-1:19
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "First"
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:20
+    (IdentifierDeclaration
+      range: 2:11-2:17
+      name: "Second"
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-4:43
+    (IdentifierDeclaration
+      range: 4:7-4:15
+      name: "Combined"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:27-4:32
+      name: "First"
+    )
+    (NamedTypeNode
+      range: 4:34-4:40
+      name: "Second"
+    )
+  )
+  (InterfaceDeclaration
+    range: 6:1-8:2
+    (IdentifierDeclaration
+      range: 6:11-6:23
+      name: "FirstFactory"
+    )
+    (InterfaceMethodDeclaration
+      range: 7:5-7:25
+      (IdentifierDeclaration
+        range: 7:10-7:16
+        name: "create"
+      )
+      (NamedTypeNode
+        range: 7:19-7:24
+        name: "First"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 10:1-12:2
+    (IdentifierDeclaration
+      range: 10:11-10:24
+      name: "SecondFactory"
+    )
+    (InterfaceMethodDeclaration
+      range: 11:5-11:26
+      (IdentifierDeclaration
+        range: 11:10-11:16
+        name: "create"
+      )
+      (NamedTypeNode
+        range: 11:19-11:25
+        name: "Second"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 14:1-18:2
+    (IdentifierDeclaration
+      range: 14:7-14:14
+      name: "Factory"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 14:26-14:38
+      name: "FirstFactory"
+    )
+    (NamedTypeNode
+      range: 14:40-14:53
+      name: "SecondFactory"
+    )
+    (MemberDeclaration
+      range: 15:5-17:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 15:12-17:6
+        (IdentifierDeclaration
+          range: 15:17-15:23
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 15:26-15:34
+          name: "Combined"
+        )
+        (BlockStatement
+          range: 15:35-17:6
+          (ReturnStatement
+            range: 16:9-16:31
+            (NewExpression
+              range: 16:16-16:30
+              (IdentifierExpression
+                range: 16:20-16:28
+                name: "Combined"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:12
+      name: "first"
+    )
+    (NamedTypeNode
+      range: 20:14-20:26
+      name: "FirstFactory"
+    )
+    (NewExpression
+      range: 20:29-20:42
+      (IdentifierExpression
+        range: 20:33-20:40
+        name: "Factory"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:13
+      name: "second"
+    )
+    (NamedTypeNode
+      range: 21:15-21:28
+      name: "SecondFactory"
+    )
+    (NewExpression
+      range: 21:31-21:44
+      (IdentifierExpression
+        range: 21:35-21:42
+        name: "Factory"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:17
+      name: "firstValue"
+    )
+    type: null
+    (CallExpression
+      range: 22:20-22:34
+      (MemberExpression
+        range: 22:20-22:32
+        (IdentifierExpression
+          range: 22:20-22:25
+          name: "first"
+        )
+        (IdentifierExpression
+          range: 22:26-22:32
+          name: "create"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 23:1-23:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 23:7-23:18
+      name: "secondValue"
+    )
+    type: null
+    (CallExpression
+      range: 23:21-23:36
+      (MemberExpression
+        range: 23:21-23:34
+        (IdentifierExpression
+          range: 23:21-23:27
+          name: "second"
+        )
+        (IdentifierExpression
+          range: 23:28-23:34
+          name: "create"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:38
+    (CallExpression
+      range: 24:1-24:37
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (CallExpression
+        range: 24:7-24:36
+        (MemberExpression
+          range: 24:7-24:24
+          (IdentifierExpression
+            range: 24:7-24:17
+            name: "firstValue"
+          )
+          (IdentifierExpression
+            range: 24:18-24:24
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 24:25-24:35
+          name: "firstValue"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:40
+    (CallExpression
+      range: 25:1-25:39
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (CallExpression
+        range: 25:7-25:38
+        (MemberExpression
+          range: 25:7-25:25
+          (IdentifierExpression
+            range: 25:7-25:18
+            name: "secondValue"
+          )
+          (IdentifierExpression
+            range: 25:19-25:25
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 25:26-25:37
+          name: "secondValue"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  16:16-16:30 -> Combined
+  16:20-16:28 -> Combined
+  20:29-20:42 -> Factory
+  20:33-20:40 -> Factory
+  21:31-21:44 -> Factory
+  21:35-21:42 -> Factory
+  22:20-22:25 -> FirstFactory
+  22:20-22:32 -> () => First
+  22:20-22:34 -> First
+  22:26-22:32 -> () => First
+  23:21-23:27 -> SecondFactory
+  23:21-23:34 -> () => Second
+  23:21-23:36 -> Second
+  23:28-23:34 -> () => Second
+  24:1-24:6 -> (any) => void
+  24:1-24:37 -> void
+  24:7-24:17 -> First
+  24:7-24:24 -> (any) => bool
+  24:7-24:36 -> bool
+  24:18-24:24 -> (any) => bool
+  24:25-24:35 -> First
+  25:1-25:6 -> (any) => void
+  25:1-25:39 -> void
+  25:7-25:18 -> Second
+  25:7-25:25 -> (any) => bool
+  25:7-25:38 -> bool
+  25:19-25:25 -> (any) => bool
+  25:26-25:37 -> Second
+
+Resolved types:
+  4:27-4:32 -> First
+  4:34-4:40 -> Second
+  7:19-7:24 -> First
+  11:19-11:25 -> Second
+  14:26-14:38 -> FirstFactory
+  14:40-14:53 -> SecondFactory
+  15:26-15:34 -> Combined
+  20:14-20:26 -> FirstFactory
+  21:15-21:28 -> SecondFactory
+
+Conversions:
+  24:25-24:35 -> First -> any
+  25:26-25:37 -> Second -> any
+
+Declarations:
+  1:11-1:16 -> interface First
+  2:11-2:17 -> interface Second
+  4:7-4:15 -> class Combined
+  6:11-6:23 -> interface FirstFactory
+  7:10-7:16 -> func create() => First
+  10:11-10:24 -> interface SecondFactory
+  11:10-11:16 -> func create() => Second
+  14:7-14:14 -> class Factory
+  15:17-15:23 -> func create() => Combined
+  20:7-20:12 -> const first: FirstFactory
+  21:7-21:13 -> const second: SecondFactory
+  22:7-22:17 -> const firstValue: First
+  23:7-23:18 -> const secondValue: Second
+
+References:
+  16:20-16:28 -> 4:7-4:15
+  20:33-20:40 -> 14:7-14:14
+  21:35-21:42 -> 14:7-14:14
+  22:20-22:25 -> 20:7-20:12
+  22:26-22:32 -> 7:10-7:16
+  23:21-23:27 -> 21:7-21:13
+  23:28-23:34 -> 11:10-11:16
+  24:1-24:6 -> builtin print
+  24:7-24:17 -> 22:7-22:17
+  24:18-24:24 -> 24:7-24:24
+  24:25-24:35 -> 22:7-22:17
+  25:1-25:6 -> builtin print
+  25:7-25:18 -> 23:7-23:18
+  25:19-25:25 -> 25:7-25:25
+  25:26-25:37 -> 23:7-23:18
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$First
+  nest member Test$Second
+  nest member Test$Combined
+  nest member Test$FirstFactory
+  nest member Test$SecondFactory
+  nest member Test$Factory
+  inner class Test$First flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Second flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Combined flags [PUBLIC, STATIC]
+  inner class Test$FirstFactory flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$SecondFactory flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Factory flags [PUBLIC, STATIC]
+  field first LTest$FirstFactory; flags [PUBLIC, STATIC, FINAL]
+  field second LTest$SecondFactory; flags [PUBLIC, STATIC, FINAL]
+  field firstValue LTest$First; flags [PUBLIC, STATIC, FINAL]
+  field secondValue LTest$Second; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Factory
+    DUP
+    INVOKESPECIAL Test$Factory.<init>()V
+    PUTSTATIC Test.first LTest$FirstFactory;
+    NEW Test$Factory
+    DUP
+    INVOKESPECIAL Test$Factory.<init>()V
+    PUTSTATIC Test.second LTest$SecondFactory;
+    GETSTATIC Test.first LTest$FirstFactory;
+    INVOKEINTERFACE Test$FirstFactory.create()LTest$First;
+    PUTSTATIC Test.firstValue LTest$First;
+    GETSTATIC Test.second LTest$SecondFactory;
+    INVOKEINTERFACE Test$SecondFactory.create()LTest$Second;
+    PUTSTATIC Test.secondValue LTest$Second;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.firstValue LTest$First;
+    GETSTATIC Test.firstValue LTest$First;
+    INVOKEVIRTUAL java/lang/Object.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.secondValue LTest$Second;
+    GETSTATIC Test.secondValue LTest$Second;
+    INVOKEVIRTUAL java/lang/Object.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$First extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$First flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$Second extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Second flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$Combined extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$First
+  implements Test$Second
+  nest host Test
+  inner class Test$Combined flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$FirstFactory extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$FirstFactory flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method create()LTest$First; flags [PUBLIC, ABSTRACT]
+
+class Test$SecondFactory extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$SecondFactory flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method create()LTest$Second; flags [PUBLIC, ABSTRACT]
+
+class Test$Factory extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$FirstFactory
+  implements Test$SecondFactory
+  nest host Test
+  inner class Test$Factory flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()LTest$Combined; flags [PUBLIC]
+    NEW Test$Combined
+    DUP
+    INVOKESPECIAL Test$Combined.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+  method create()LTest$Second; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Factory.create()LTest$Combined;
+    ARETURN
+    max stack 1 max locals 1
+  method create()LTest$First; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Factory.create()LTest$Combined;
+    ARETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+true
+true
+

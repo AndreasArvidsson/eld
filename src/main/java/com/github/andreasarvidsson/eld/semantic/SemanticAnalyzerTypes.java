@@ -511,7 +511,7 @@ public final class SemanticAnalyzerTypes {
                 if (symbol instanceof TypeAliasSymbol alias) {
                     yield alias.type();
                 }
-                if (!(symbol instanceof ClassSymbol classSymbol)) {
+                if (!(symbol instanceof ClassDeclarationSymbol classSymbol)) {
                     throw new SemanticException(
                         named.range(),
                         "Unknown type: %s",
