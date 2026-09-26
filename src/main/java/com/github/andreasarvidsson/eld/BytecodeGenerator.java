@@ -1376,9 +1376,8 @@ public final class BytecodeGenerator {
                     semanticModel.getReference(member.member());
                 final boolean staticMethod =
                     (memberSymbol instanceof JavaMethodSymbol javaMethod
-                        && java.lang.reflect.Modifier.isStatic(
-                            javaMethod.method().getModifiers()
-                        ))
+                        && java.lang.reflect.Modifier
+                            .isStatic(javaMethod.method().getModifiers()))
                         || semanticModel.isStaticMember(memberSymbol);
                 if (!staticMethod) {
                     operands.add(member.target());
@@ -7848,9 +7847,9 @@ public final class BytecodeGenerator {
                         method.invoke(
                             INVOKEINTERFACE,
                             classDesc(memberOwner(member)),
-                            "$get$" + semanticModel
-                                .getReference(member.member())
-                                .name(),
+                            "$get$"
+                                + semanticModel.getReference(member.member())
+                                    .name(),
                             MethodTypeDesc
                                 .ofDescriptor("()" + descriptor(type)),
                             true
