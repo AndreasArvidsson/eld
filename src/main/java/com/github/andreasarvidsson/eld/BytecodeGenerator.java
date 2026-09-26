@@ -2827,6 +2827,7 @@ public final class BytecodeGenerator {
                 case GREATER_EQUAL -> a >= b ? 1 : 0;
                 case AND -> a != 0 && b != 0 ? 1 : 0;
                 case OR -> a != 0 || b != 0 ? 1 : 0;
+                case INSTANCEOF -> null;
             };
         }
         if (left instanceof Float a && right instanceof Float b) {
@@ -4472,7 +4473,52 @@ public final class BytecodeGenerator {
                             localInstruction(loadOpcode(subjectType), subject)
                         );
                         expression(match);
-                        if (reference(subjectType)) {
+                        if (semanticModel.isSwitchDualMatch(match)) {
+                            final int matchLocal = nextLocal++;
+                            method.with(localInstruction(ASTORE, matchLocal));
+                            method.with(localInstruction(ALOAD, matchLocal));
+                            method.invoke(
+                                INVOKESTATIC,
+                                classDesc("java/util/Objects"),
+                                "equals",
+                                MethodTypeDesc.ofDescriptor(
+                                    "(Ljava/lang/Object;Ljava/lang/Object;)Z"
+                                ),
+                                false
+                            );
+                            method.branch(IFNE, body);
+                            method.with(
+                                localInstruction(
+                                    loadOpcode(subjectType),
+                                    subject
+                                )
+                            );
+                            method.with(localInstruction(ALOAD, matchLocal));
+                            method.with(simpleInstruction(SWAP));
+                            method.invoke(
+                                INVOKEVIRTUAL,
+                                classDesc("java/lang/Class"),
+                                "isInstance",
+                                MethodTypeDesc
+                                    .ofDescriptor("(Ljava/lang/Object;)Z"),
+                                false
+                            );
+                            method.branch(IFNE, body);
+                            continue;
+                        }
+                        if (semanticModel.isSwitchTypeMatch(match)) {
+                            method.with(simpleInstruction(SWAP));
+                            method.invoke(
+                                INVOKEVIRTUAL,
+                                classDesc("java/lang/Class"),
+                                "isInstance",
+                                MethodTypeDesc
+                                    .ofDescriptor("(Ljava/lang/Object;)Z"),
+                                false
+                            );
+                            method.branch(IFNE, body);
+                        }
+                        else if (reference(subjectType)) {
                             method.invoke(
                                 INVOKESTATIC,
                                 classDesc("java/util/Objects"),
@@ -5156,8 +5202,16 @@ public final class BytecodeGenerator {
                         );
                     }
                     case LiteralExpression literal -> literal(literal);
-                    case IdentifierExpression identifier ->
-                        load(semanticModel.getReference(identifier));
+                    case IdentifierExpression identifier -> {
+                        final Symbol symbol =
+                            semanticModel.getReference(identifier);
+                        load(symbol);
+                        final Type narrowed =
+                            semanticModel.findNarrowedType(identifier);
+                        if (narrowed != null && reference(symbol.type())) {
+                            readObject(narrowed);
+                        }
+                    }
                     case GroupingExpression grouping ->
                         expression(grouping.expression());
                     case BinaryExpression binary -> binary(binary);
@@ -7811,10 +7865,15 @@ public final class BytecodeGenerator {
                 final Symbol symbol = semanticModel.getReference(identifier);
                 final boolean instanceField = prepareStore(symbol);
                 load(symbol);
+                final boolean boxedStorage =
+                    reference(symbol.type()) && !symbol.type().equals(type);
+                if (boxedStorage) {
+                    readObject(type);
+                }
                 if (postfix) {
                     method.with(
                         simpleInstruction(
-                            slots(symbol.type()) == 2
+                            slots(type) == 2
                                 ? (instanceField ? DUP2_X1 : DUP2)
                                 : (instanceField ? DUP_X1 : DUP)
                         )
@@ -7824,11 +7883,14 @@ public final class BytecodeGenerator {
                 if (!postfix) {
                     method.with(
                         simpleInstruction(
-                            slots(symbol.type()) == 2
+                            slots(type) == 2
                                 ? (instanceField ? DUP2_X1 : DUP2)
                                 : (instanceField ? DUP_X1 : DUP)
                         )
                     );
+                }
+                if (boxedStorage) {
+                    box(type);
                 }
                 store(symbol);
             }
@@ -7980,6 +8042,20 @@ public final class BytecodeGenerator {
             else {
                 expression(binary.left());
                 expression(binary.right());
+            }
+            if (operator == BinaryOperator.INSTANCEOF) {
+                method.with(simpleInstruction(SWAP));
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc("java/lang/Class"),
+                    "isInstance",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                    false
+                );
+                if (spilled) {
+                    frameTemporaries.remove(binary.left());
+                }
+                return;
             }
             if (operator == BinaryOperator.ADD && type == BuiltinType.STRING) {
                 method.invoke(

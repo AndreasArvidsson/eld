@@ -8,6 +8,7 @@ public enum BinaryOperator {
     MODULO,
     EQUAL,
     NOT_EQUAL,
+    INSTANCEOF,
     LESS,
     LESS_EQUAL,
     GREATER,
@@ -17,8 +18,8 @@ public enum BinaryOperator {
 
     public boolean isBool() {
         return switch (this) {
-            case EQUAL, NOT_EQUAL, LESS, LESS_EQUAL, GREATER, GREATER_EQUAL,
-                AND, OR -> true;
+            case EQUAL, NOT_EQUAL, INSTANCEOF, LESS, LESS_EQUAL, GREATER,
+                GREATER_EQUAL, AND, OR -> true;
 
             default -> false;
         };

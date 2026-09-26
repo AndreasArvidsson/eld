@@ -438,19 +438,19 @@ Declarations:
 References:
   2:1-2:6 -> builtin print
   2:7-2:12 -> 1:7-1:12
-  2:13-2:22 -> 2:7-2:22
+  2:13-2:22 -> Comparable<i32>.compareTo(i32): i32
   4:1-4:6 -> builtin print
   4:7-4:15 -> 3:7-3:15
   5:17-5:22 -> 1:7-1:12
-  5:23-5:32 -> 5:17-5:32
+  5:23-5:32 -> Comparable<i32>.compareTo(i32): i32
   6:1-6:6 -> builtin print
   6:7-6:14 -> 5:7-5:14
   8:1-8:6 -> builtin print
   8:7-8:15 -> 7:7-7:15
-  8:16-8:25 -> 8:7-8:25
+  8:16-8:25 -> Comparable<i32>.compareTo(i32): i32
   10:1-10:6 -> builtin print
   10:7-10:11 -> 9:7-9:11
-  10:12-10:21 -> 10:7-10:21
+  10:12-10:21 -> Comparable<string>.compareTo(string): i32
 
 --- BYTECODE ---
 

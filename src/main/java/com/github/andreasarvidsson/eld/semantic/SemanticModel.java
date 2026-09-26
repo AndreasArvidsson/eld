@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectMember;
 import com.github.andreasarvidsson.eld.parser.ObjectEntry;
@@ -51,7 +52,15 @@ public final class SemanticModel {
         Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<MemberExpression, Type> memberOwners =
         new IdentityHashMap<>();
+    private final IdentityHashMap<IdentifierExpression, Type> memberReferenceOwners =
+        new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> expressionTypes =
+        new IdentityHashMap<>();
+    private final Set<Expression> switchTypeMatches =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<Expression> switchDualMatches =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+    private final IdentityHashMap<IdentifierExpression, Type> narrowedTypes =
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> conversionTypes =
         new IdentityHashMap<>();
@@ -698,6 +707,10 @@ public final class SemanticModel {
         return capturedMutable.contains(symbol);
     }
 
+    public void markCapturedMutable(final VariableSymbol variable) {
+        capturedMutable.add(variable);
+    }
+
     public @Nullable Symbol findDeclaredSymbol(final AstNode node) {
         return declarations.get(node);
     }
@@ -745,6 +758,7 @@ public final class SemanticModel {
         final Type owner
     ) {
         memberOwners.put(expression, owner);
+        memberReferenceOwners.put(expression.member(), owner);
     }
 
     public Type getMemberOwner(final MemberExpression expression) {
@@ -760,6 +774,39 @@ public final class SemanticModel {
 
     public Type getExpressionType(final Expression expression) {
         return Objects.requireNonNull(expressionTypes.get(expression));
+    }
+
+    public void setSwitchTypeMatch(final Expression expression) {
+        switchTypeMatches.add(expression);
+    }
+
+    public boolean isSwitchTypeMatch(final Expression expression) {
+        return switchTypeMatches.contains(expression);
+    }
+
+    public void setSwitchDualMatch(final Expression expression) {
+        switchDualMatches.add(expression);
+    }
+
+    public boolean isSwitchDualMatch(final Expression expression) {
+        return switchDualMatches.contains(expression);
+    }
+
+    public void setNarrowedType(
+        final IdentifierExpression expression,
+        final Type type
+    ) {
+        narrowedTypes.put(expression, type);
+    }
+
+    public @Nullable Type findNarrowedType(
+        final IdentifierExpression expression
+    ) {
+        return narrowedTypes.get(expression);
+    }
+
+    public void clearNarrowedType(final IdentifierExpression expression) {
+        narrowedTypes.remove(expression);
     }
 
     public void setConversionType(
@@ -891,6 +938,12 @@ public final class SemanticModel {
             new IdentityHashMap<>(declarations);
         syntheticDeclarations.forEach(sourceDeclarations::remove);
         appendSection(lines, "Expression types:", expressionTypes);
+        appendSection(
+            lines,
+            "Narrowed types:",
+            narrowedTypes,
+            (expression, type) -> getReference(expression).type() + ARROW + type
+        );
         appendSection(lines, "Resolved types:", resolvedTypes);
 
         appendSection(
@@ -915,9 +968,30 @@ public final class SemanticModel {
             lines,
             "References:",
             references,
-            (expression, symbol) -> symbol instanceof BuiltinFunctionSymbol
-                ? "builtin " + symbol.name()
-                : symbol.range().toString()
+            (expression, symbol) -> {
+                if (symbol instanceof BuiltinFunctionSymbol) {
+                    return "builtin " + symbol.name();
+                }
+                if (
+                    expression instanceof IdentifierExpression identifier
+                        && symbol instanceof JavaMethodSymbol method
+                ) {
+                    final Type owner = memberReferenceOwners.get(identifier);
+                    if (owner != null) {
+                        return "%s.%s(%s): %s".formatted(
+                            owner,
+                            method.name(),
+                            method.type()
+                                .parameterTypes()
+                                .stream()
+                                .map(Type::toString)
+                                .collect(Collectors.joining(", ")),
+                            method.type().returnType()
+                        );
+                    }
+                }
+                return symbol.range().toString();
+            }
         );
         appendSection(
             lines,

@@ -264,7 +264,7 @@ References:
   8:7-8:12 -> 1:5-1:10
   9:1-9:6 -> builtin print
   9:7-9:11 -> 7:7-7:11
-  9:12-9:15 -> 9:7-9:15
+  9:12-9:15 -> Map<string, i32>.get(any): i32 | null
 
 --- BYTECODE ---
 

@@ -547,6 +547,17 @@ public final class SemanticAnalyzerExpressions {
                         : scope == null
                             ? null
                             : scope.resolveLocal(member.member().name());
+                if (
+                    analyzingCallee && !classTarget
+                        && symbol instanceof FunctionSymbol function
+                        && !acceptsArgumentCount(function, callArity)
+                ) {
+                    final Type objectMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (objectMethod != null) {
+                        yield objectMethod;
+                    }
+                }
                 if (symbol == null) {
                     final Type objectMethod =
                         resolveObjectMethod(member, memberTarget);
@@ -877,7 +888,18 @@ public final class SemanticAnalyzerExpressions {
                 named.range(),
                 "Named arguments are only valid in function calls"
             );
-            case CallExpression call -> analyzeCallExpression(call, context);
+            case CallExpression call -> {
+                final Type result = analyzeCallExpression(call, context);
+                if (
+                    !(call.callee() instanceof IdentifierExpression identifier
+                        && model.findReference(
+                            identifier
+                        ) instanceof BuiltinFunctionSymbol)
+                ) {
+                    context.scope().invalidateCapturedNarrowing(model);
+                }
+                yield result;
+            }
             case GroupingExpression grouping ->
                 analyzeExpression(grouping.expression(), context);
             case SubscriptExpression index ->
@@ -900,6 +922,10 @@ public final class SemanticAnalyzerExpressions {
 
         model.setExpressionType(expression, type);
 
+        if (expression instanceof NewExpression) {
+            context.scope().invalidateCapturedNarrowing(model);
+        }
+
         return type;
     }
 
@@ -919,7 +945,8 @@ public final class SemanticAnalyzerExpressions {
             JavaTypes.objectMethod(
                 member.member().name(),
                 callArity,
-                member.range()
+                member.range(),
+                target
             );
         if (method == null) {
             return null;
@@ -928,6 +955,32 @@ public final class SemanticAnalyzerExpressions {
         model.setReference(member.member(), method);
         model.setExpressionType(member.member(), method.type());
         return method.type();
+    }
+
+    private boolean acceptsArgumentCount(
+        final FunctionSymbol function,
+        final int count
+    ) {
+        if (count < 0) {
+            return true;
+        }
+        final int total = function.type().parameterTypes().size();
+        if (count > total) {
+            return false;
+        }
+        final List<IdentifierDeclaration> parameters =
+            model.getFunctionParameters(function);
+        if (parameters.size() != total) {
+            return count == total;
+        }
+        final long required =
+            parameters.stream()
+                .filter(
+                    parameter -> !model.getParameterDetails(parameter)
+                        .omittable()
+                )
+                .count();
+        return count >= required;
     }
 
     static boolean mutatesCollection(
@@ -1143,7 +1196,7 @@ public final class SemanticAnalyzerExpressions {
                 "Lambda parameter count does not match expected function type"
             );
         }
-        final Scope scope = new Scope(context.scope());
+        final Scope scope = new Scope(context.scope(), false, true);
         final List<Type> parameterTypes =
             target != null ? target.parameterTypes() : List.of();
         for (int i = 0; i < lambda.parameters().size(); i++) {
@@ -1425,6 +1478,16 @@ public final class SemanticAnalyzerExpressions {
             if (
                 analyzer.resolveAssignType(actual, expected, argument) == null
             ) {
+                final Type objectResult =
+                    resolveOverloadedObjectMethod(
+                        call,
+                        callee,
+                        supplied,
+                        actual
+                    );
+                if (objectResult != null) {
+                    return objectResult;
+                }
                 throw new SemanticException(
                     argument.range(),
                     "Cannot pass %s as %s",
@@ -1449,6 +1512,53 @@ public final class SemanticAnalyzerExpressions {
         }
         model.setArgumentParameters(call, parameters);
         return function.returnType();
+    }
+
+    private @Nullable Type resolveOverloadedObjectMethod(
+        final CallExpression call,
+        final Expression callee,
+        final Expression supplied,
+        final Type actual
+    ) {
+        if (
+            !(callee instanceof MemberExpression member)
+                || !member.member().name().equals("equals")
+                || !(model.getReference(
+                    member.member()
+                ) instanceof FunctionSymbol function)
+                || model.isStaticMember(function)
+                || supplied instanceof NamedArgumentExpression
+                || call.arguments().size() != 1
+        ) {
+            return null;
+        }
+        final Type owner =
+            ConstType.unwrap(model.getExpressionType(member.target()));
+        if (!(owner instanceof ClassType || owner instanceof InterfaceType)) {
+            return null;
+        }
+        final JavaMethodSymbol method =
+            JavaTypes.objectMethod("equals", 1, member.range(), owner);
+        if (
+            method == null || analyzer.resolveAssignType(
+                actual,
+                method.type().parameterTypes().getFirst(),
+                supplied
+            ) == null
+        ) {
+            return null;
+        }
+        model.setMemberOwner(member, owner);
+        model.setReference(member.member(), method);
+        model.setExpressionType(member.member(), method.type());
+        model.setExpressionType(member, method.type());
+        Expression expression = call.callee();
+        while (expression instanceof GroupingExpression grouping) {
+            model.setExpressionType(grouping, method.type());
+            expression = grouping.expression();
+        }
+        model.setArgumentParameters(call, List.of(0));
+        return method.type().returnType();
     }
 
     private @Nullable Method promiseMethod(

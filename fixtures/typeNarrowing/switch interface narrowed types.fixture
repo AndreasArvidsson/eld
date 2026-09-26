@@ -1,0 +1,355 @@
+interface Base {}
+class DerivedA implements Base {}
+class DerivedB implements Base {}
+const value: Base = new DerivedA();
+
+switch (value) {
+    case DerivedA => print(value.getClass().getSimpleName())
+    case DerivedB => print(value)
+    else => print(value)
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Base" (1:11-1:15)
+LEFT_BRACE (1:16-1:17)
+RIGHT_BRACE (1:17-1:18)
+CLASS (2:1-2:6)
+IDENTIFIER "DerivedA" (2:7-2:15)
+IMPLEMENTS (2:16-2:26)
+IDENTIFIER "Base" (2:27-2:31)
+LEFT_BRACE (2:32-2:33)
+RIGHT_BRACE (2:33-2:34)
+CLASS (3:1-3:6)
+IDENTIFIER "DerivedB" (3:7-3:15)
+IMPLEMENTS (3:16-3:26)
+IDENTIFIER "Base" (3:27-3:31)
+LEFT_BRACE (3:32-3:33)
+RIGHT_BRACE (3:33-3:34)
+CONST (4:1-4:6)
+IDENTIFIER "value" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "Base" (4:14-4:18)
+EQUAL (4:19-4:20)
+NEW (4:21-4:24)
+IDENTIFIER "DerivedA" (4:25-4:33)
+LEFT_PAREN (4:33-4:34)
+RIGHT_PAREN (4:34-4:35)
+SEMICOLON (4:35-4:36)
+SWITCH (6:1-6:7)
+LEFT_PAREN (6:8-6:9)
+IDENTIFIER "value" (6:9-6:14)
+RIGHT_PAREN (6:14-6:15)
+LEFT_BRACE (6:16-6:17)
+CASE (7:5-7:9)
+IDENTIFIER "DerivedA" (7:10-7:18)
+ARROW (7:19-7:21)
+IDENTIFIER "print" (7:22-7:27)
+LEFT_PAREN (7:27-7:28)
+IDENTIFIER "value" (7:28-7:33)
+DOT (7:33-7:34)
+IDENTIFIER "getClass" (7:34-7:42)
+LEFT_PAREN (7:42-7:43)
+RIGHT_PAREN (7:43-7:44)
+DOT (7:44-7:45)
+IDENTIFIER "getSimpleName" (7:45-7:58)
+LEFT_PAREN (7:58-7:59)
+RIGHT_PAREN (7:59-7:60)
+RIGHT_PAREN (7:60-7:61)
+CASE (8:5-8:9)
+IDENTIFIER "DerivedB" (8:10-8:18)
+ARROW (8:19-8:21)
+IDENTIFIER "print" (8:22-8:27)
+LEFT_PAREN (8:27-8:28)
+IDENTIFIER "value" (8:28-8:33)
+RIGHT_PAREN (8:33-8:34)
+ELSE (9:5-9:9)
+ARROW (9:10-9:12)
+IDENTIFIER "print" (9:13-9:18)
+LEFT_PAREN (9:18-9:19)
+IDENTIFIER "value" (9:19-9:24)
+RIGHT_PAREN (9:24-9:25)
+RIGHT_BRACE (10:1-10:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:2
+  (InterfaceDeclaration
+    range: 1:1-1:18
+    (IdentifierDeclaration
+      range: 1:11-1:15
+      name: "Base"
+    )
+  )
+  (ClassDeclaration
+    range: 2:1-2:34
+    (IdentifierDeclaration
+      range: 2:7-2:15
+      name: "DerivedA"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 2:27-2:31
+      name: "Base"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-3:34
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "DerivedB"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 3:27-3:31
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 4:14-4:18
+      name: "Base"
+    )
+    (NewExpression
+      range: 4:21-4:35
+      (IdentifierExpression
+        range: 4:25-4:33
+        name: "DerivedA"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-10:2
+    (SwitchExpression
+      range: 6:1-10:2
+      (IdentifierExpression
+        range: 6:9-6:14
+        name: "value"
+      )
+      (SwitchBranch
+        range: 7:5-7:61
+        (IdentifierExpression
+          range: 7:10-7:18
+          name: "DerivedA"
+        )
+        (SwitchBranchExpressionBody
+          range: 7:22-7:61
+          (CallExpression
+            range: 7:22-7:61
+            (IdentifierExpression
+              range: 7:22-7:27
+              name: "print"
+            )
+            (CallExpression
+              range: 7:28-7:60
+              (MemberExpression
+                range: 7:28-7:58
+                (CallExpression
+                  range: 7:28-7:44
+                  (MemberExpression
+                    range: 7:28-7:42
+                    (IdentifierExpression
+                      range: 7:28-7:33
+                      name: "value"
+                    )
+                    (IdentifierExpression
+                      range: 7:34-7:42
+                      name: "getClass"
+                    )
+                  )
+                )
+                (IdentifierExpression
+                  range: 7:45-7:58
+                  name: "getSimpleName"
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 8:5-8:34
+        (IdentifierExpression
+          range: 8:10-8:18
+          name: "DerivedB"
+        )
+        (SwitchBranchExpressionBody
+          range: 8:22-8:34
+          (CallExpression
+            range: 8:22-8:34
+            (IdentifierExpression
+              range: 8:22-8:27
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 8:28-8:33
+              name: "value"
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 9:5-9:25
+        (SwitchBranchExpressionBody
+          range: 9:13-9:25
+          (CallExpression
+            range: 9:13-9:25
+            (IdentifierExpression
+              range: 9:13-9:18
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 9:19-9:24
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:21-4:35 -> DerivedA
+  4:25-4:33 -> DerivedA
+  6:1-10:2 -> void
+  6:9-6:14 -> Base
+  7:10-7:18 -> Type<DerivedA>
+  7:22-7:27 -> (any) => void
+  7:22-7:61 -> void
+  7:28-7:33 -> DerivedA
+  7:28-7:42 -> () => Type<DerivedA>
+  7:28-7:44 -> Type<DerivedA>
+  7:28-7:58 -> () => string
+  7:28-7:60 -> string
+  7:34-7:42 -> () => Type<DerivedA>
+  7:45-7:58 -> () => string
+  8:10-8:18 -> Type<DerivedB>
+  8:22-8:27 -> (any) => void
+  8:22-8:34 -> void
+  8:28-8:33 -> DerivedB
+  9:13-9:18 -> (any) => void
+  9:13-9:25 -> void
+  9:19-9:24 -> Base
+
+Narrowed types:
+  7:28-7:33 -> Base -> DerivedA
+  8:28-8:33 -> Base -> DerivedB
+
+Resolved types:
+  2:27-2:31 -> Base
+  3:27-3:31 -> Base
+  4:14-4:18 -> Base
+
+Declarations:
+  1:11-1:15 -> interface Base
+  2:7-2:15 -> class DerivedA
+  3:7-3:15 -> class DerivedB
+  4:7-4:12 -> const value: Base
+
+References:
+  4:25-4:33 -> 2:7-2:15
+  6:9-6:14 -> 4:7-4:12
+  7:10-7:18 -> 2:7-2:15
+  7:22-7:27 -> builtin print
+  7:28-7:33 -> 4:7-4:12
+  7:34-7:42 -> DerivedA.getClass(): Type<DerivedA>
+  7:45-7:58 -> Type<DerivedA>.getSimpleName(): string
+  8:10-8:18 -> 3:7-3:15
+  8:22-8:27 -> builtin print
+  8:28-8:33 -> 4:7-4:12
+  9:13-9:18 -> builtin print
+  9:19-9:24 -> 4:7-4:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$DerivedA
+  nest member Test$DerivedB
+  inner class Test$Base flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$DerivedA flags [PUBLIC, STATIC]
+  inner class Test$DerivedB flags [PUBLIC, STATIC]
+  field value LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$DerivedA
+    DUP
+    INVOKESPECIAL Test$DerivedA.<init>()V
+    PUTSTATIC Test.value LTest$Base;
+    GETSTATIC Test.value LTest$Base;
+    ASTORE_0 0
+    ALOAD_0 0
+    LDC ClassOrInterfaceDesc[Test$DerivedA]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFNE L0
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Base;
+    CHECKCAST Test$DerivedA
+    INVOKEVIRTUAL Test$DerivedA.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L1:
+    ALOAD_0 0
+    LDC ClassOrInterfaceDesc[Test$DerivedB]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFNE L2
+    GOTO L3
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Base;
+    CHECKCAST Test$DerivedB
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GOTO L4
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Base;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+   L4:
+    RETURN
+    max stack 2 max locals 1
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$DerivedA extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Base
+  nest host Test
+  inner class Test$DerivedA flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$DerivedB extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Base
+  nest host Test
+  inner class Test$DerivedB flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+DerivedA
+

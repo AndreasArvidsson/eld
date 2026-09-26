@@ -1,0 +1,75 @@
+class Value {
+    public override func getClass() Type<Value> {
+        return Value;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+OVERRIDE (2:12-2:20)
+FUNC (2:21-2:25)
+IDENTIFIER "getClass" (2:26-2:34)
+LEFT_PAREN (2:34-2:35)
+RIGHT_PAREN (2:35-2:36)
+IDENTIFIER "Type" (2:37-2:41)
+LESS (2:41-2:42)
+IDENTIFIER "Value" (2:42-2:47)
+GREATER (2:47-2:48)
+LEFT_BRACE (2:49-2:50)
+RETURN (3:9-3:15)
+IDENTIFIER "Value" (3:16-3:21)
+SEMICOLON (3:21-3:22)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 2:26-2:34
+          name: "getClass"
+        )
+        (NamedTypeNode
+          range: 2:37-2:48
+          name: "Type"
+          (NamedTypeNode
+            range: 2:42-2:47
+            name: "Value"
+          )
+        )
+        (BlockStatement
+          range: 2:49-4:6
+          (ReturnStatement
+            range: 3:9-3:22
+            (IdentifierExpression
+              range: 3:16-3:21
+              name: "Value"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot override final method 'getClass' at 2:26-2:34

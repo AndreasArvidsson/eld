@@ -187,7 +187,7 @@ References:
   4:42-4:47 -> 1:7-1:12
   5:1-5:6 -> builtin print
   5:7-5:12 -> 4:7-4:12
-  5:13-5:16 -> 5:7-5:16
+  5:13-5:16 -> Map<Type<First>, string>.get(any): string | null
   5:17-5:22 -> 3:7-3:12
 
 --- BYTECODE ---

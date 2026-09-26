@@ -222,7 +222,7 @@ References:
   6:23-6:34 -> 6:19-6:52
   9:9-9:14 -> builtin print
   9:15-9:16 -> 8:14-8:15
-  9:17-9:27 -> 9:15-9:27
+  9:17-9:27 -> IOException.getMessage(): string | null
   13:1-13:6 -> builtin print
   13:7-13:10 -> 1:6-1:9
 

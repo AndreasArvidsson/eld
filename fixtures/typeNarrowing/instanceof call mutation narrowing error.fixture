@@ -1,0 +1,268 @@
+class Base {}
+class DerivedA extends Base {
+    public func label() string { return "A"; }
+}
+class DerivedB extends Base {}
+var value: Base = new DerivedA();
+func change() Type<DerivedA> {
+    value = new DerivedB();
+    return DerivedA;
+}
+if (value instanceof change()) {
+    print(value.label());
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+CLASS (2:1-2:6)
+IDENTIFIER "DerivedA" (2:7-2:15)
+EXTENDS (2:16-2:23)
+IDENTIFIER "Base" (2:24-2:28)
+LEFT_BRACE (2:29-2:30)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "label" (3:17-3:22)
+LEFT_PAREN (3:22-3:23)
+RIGHT_PAREN (3:23-3:24)
+IDENTIFIER "string" (3:25-3:31)
+LEFT_BRACE (3:32-3:33)
+RETURN (3:34-3:40)
+STRING_LITERAL "\"A\"" (3:41-3:44)
+SEMICOLON (3:44-3:45)
+RIGHT_BRACE (3:46-3:47)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "DerivedB" (5:7-5:15)
+EXTENDS (5:16-5:23)
+IDENTIFIER "Base" (5:24-5:28)
+LEFT_BRACE (5:29-5:30)
+RIGHT_BRACE (5:30-5:31)
+VAR (6:1-6:4)
+IDENTIFIER "value" (6:5-6:10)
+COLON (6:10-6:11)
+IDENTIFIER "Base" (6:12-6:16)
+EQUAL (6:17-6:18)
+NEW (6:19-6:22)
+IDENTIFIER "DerivedA" (6:23-6:31)
+LEFT_PAREN (6:31-6:32)
+RIGHT_PAREN (6:32-6:33)
+SEMICOLON (6:33-6:34)
+FUNC (7:1-7:5)
+IDENTIFIER "change" (7:6-7:12)
+LEFT_PAREN (7:12-7:13)
+RIGHT_PAREN (7:13-7:14)
+IDENTIFIER "Type" (7:15-7:19)
+LESS (7:19-7:20)
+IDENTIFIER "DerivedA" (7:20-7:28)
+GREATER (7:28-7:29)
+LEFT_BRACE (7:30-7:31)
+IDENTIFIER "value" (8:5-8:10)
+EQUAL (8:11-8:12)
+NEW (8:13-8:16)
+IDENTIFIER "DerivedB" (8:17-8:25)
+LEFT_PAREN (8:25-8:26)
+RIGHT_PAREN (8:26-8:27)
+SEMICOLON (8:27-8:28)
+RETURN (9:5-9:11)
+IDENTIFIER "DerivedA" (9:12-9:20)
+SEMICOLON (9:20-9:21)
+RIGHT_BRACE (10:1-10:2)
+IF (11:1-11:3)
+LEFT_PAREN (11:4-11:5)
+IDENTIFIER "value" (11:5-11:10)
+INSTANCEOF (11:11-11:21)
+IDENTIFIER "change" (11:22-11:28)
+LEFT_PAREN (11:28-11:29)
+RIGHT_PAREN (11:29-11:30)
+RIGHT_PAREN (11:30-11:31)
+LEFT_BRACE (11:32-11:33)
+IDENTIFIER "print" (12:5-12:10)
+LEFT_PAREN (12:10-12:11)
+IDENTIFIER "value" (12:11-12:16)
+DOT (12:16-12:17)
+IDENTIFIER "label" (12:17-12:22)
+LEFT_PAREN (12:22-12:23)
+RIGHT_PAREN (12:23-12:24)
+RIGHT_PAREN (12:24-12:25)
+SEMICOLON (12:25-12:26)
+RIGHT_BRACE (13:1-13:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:2
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-4:2
+    (IdentifierDeclaration
+      range: 2:7-2:15
+      name: "DerivedA"
+    )
+    (IdentifierExpression
+      range: 2:24-2:28
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 3:5-3:47
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:47
+        (IdentifierDeclaration
+          range: 3:17-3:22
+          name: "label"
+        )
+        (NamedTypeNode
+          range: 3:25-3:31
+          name: "string"
+        )
+        (BlockStatement
+          range: 3:32-3:47
+          (ReturnStatement
+            range: 3:34-3:45
+            (LiteralExpression
+              range: 3:41-3:44
+              kind: STRING
+              text: "\"A\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-5:31
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "DerivedB"
+    )
+    (IdentifierExpression
+      range: 5:24-5:28
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:34
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 6:5-6:10
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 6:12-6:16
+      name: "Base"
+    )
+    (NewExpression
+      range: 6:19-6:33
+      (IdentifierExpression
+        range: 6:23-6:31
+        name: "DerivedA"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-10:2
+    (IdentifierDeclaration
+      range: 7:6-7:12
+      name: "change"
+    )
+    (NamedTypeNode
+      range: 7:15-7:29
+      name: "Type"
+      (NamedTypeNode
+        range: 7:20-7:28
+        name: "DerivedA"
+      )
+    )
+    (BlockStatement
+      range: 7:30-10:2
+      (ExpressionStatement
+        range: 8:5-8:28
+        (AssignmentExpression
+          range: 8:5-8:27
+          (IdentifierExpression
+            range: 8:5-8:10
+            name: "value"
+          )
+          (NewExpression
+            range: 8:13-8:27
+            (IdentifierExpression
+              range: 8:17-8:25
+              name: "DerivedB"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 9:5-9:21
+        (IdentifierExpression
+          range: 9:12-9:20
+          name: "DerivedA"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-13:2
+    (IfExpression
+      range: 11:1-13:2
+      (BinaryExpression
+        range: 11:5-11:30
+        (IdentifierExpression
+          range: 11:5-11:10
+          name: "value"
+        )
+        operator: INSTANCEOF
+        (CallExpression
+          range: 11:22-11:30
+          (IdentifierExpression
+            range: 11:22-11:28
+            name: "change"
+          )
+        )
+      )
+      (BlockStatement
+        range: 11:32-13:2
+        (ExpressionStatement
+          range: 12:5-12:26
+          (CallExpression
+            range: 12:5-12:25
+            (IdentifierExpression
+              range: 12:5-12:10
+              name: "print"
+            )
+            (CallExpression
+              range: 12:11-12:24
+              (MemberExpression
+                range: 12:11-12:22
+                (IdentifierExpression
+                  range: 12:11-12:16
+                  name: "value"
+                )
+                (IdentifierExpression
+                  range: 12:17-12:22
+                  name: "label"
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Unknown member 'label' of class Base at 12:17-12:22

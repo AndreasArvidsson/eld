@@ -1,5 +1,6 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -515,6 +516,16 @@ public final class SemanticAnalyzerObjects {
                 function.type().parameterTypes().size(),
                 function.range()
             );
+        if (
+            objectMethod != null
+                && Modifier.isFinal(objectMethod.method().getModifiers())
+        ) {
+            throw new SemanticException(
+                function.range(),
+                "Cannot override final method '%s'",
+                function.name()
+            );
+        }
         final boolean objectOverride =
             objectMethod != null && model
                 .isOverrideCompatible(function.type(), objectMethod.type());

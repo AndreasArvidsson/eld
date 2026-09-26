@@ -26,6 +26,7 @@ public class Lexer {
                 Map.entry("interface", TokenType.INTERFACE),
                 Map.entry("implements", TokenType.IMPLEMENTS),
                 Map.entry("as", TokenType.AS),
+                Map.entry("instanceof", TokenType.INSTANCEOF),
                 Map.entry("new", TokenType.NEW),
                 Map.entry("constructor", TokenType.CONSTRUCTOR),
                 Map.entry("this", TokenType.THIS),

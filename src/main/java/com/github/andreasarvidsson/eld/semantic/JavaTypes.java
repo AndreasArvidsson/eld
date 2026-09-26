@@ -123,7 +123,8 @@ public final class JavaTypes {
             "headMap",
             "tailMap",
             "keySet",
-            "values"
+            "values",
+            "getSimpleName"
         );
 
     public static @Nullable Class<?> findClass(String name) {
@@ -275,9 +276,19 @@ public final class JavaTypes {
         final int arity,
         final Range range
     ) {
+        return objectMethod(name, arity, range, BuiltinType.ANY);
+    }
+
+    public static @Nullable JavaMethodSymbol objectMethod(
+        final String name,
+        final int arity,
+        final Range range,
+        final Type owner
+    ) {
         if (
             !name.equals("toString") && !name.equals("equals")
                 && !name.equals("hashCode")
+                && !name.equals("getClass")
         ) {
             return null;
         }
@@ -292,7 +303,9 @@ public final class JavaTypes {
                         Arrays.stream(method.getGenericParameterTypes())
                             .map(parameter -> resolve(parameter, OBJECT))
                             .toList(),
-                        resolve(method.getGenericReturnType(), OBJECT)
+                        name.equals("getClass")
+                            ? classType(owner)
+                            : resolve(method.getGenericReturnType(), OBJECT)
                     ),
                     range
                 );

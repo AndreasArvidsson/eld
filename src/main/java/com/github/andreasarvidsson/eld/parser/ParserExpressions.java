@@ -20,6 +20,7 @@ public class ParserExpressions extends ParserBase {
                 Map.entry(TokenType.PERCENT, BinaryOperator.MODULO),
                 Map.entry(TokenType.EQUAL_EQUAL, BinaryOperator.EQUAL),
                 Map.entry(TokenType.BANG_EQUAL, BinaryOperator.NOT_EQUAL),
+                Map.entry(TokenType.INSTANCEOF, BinaryOperator.INSTANCEOF),
                 Map.entry(TokenType.LESS, BinaryOperator.LESS),
                 Map.entry(TokenType.LESS_EQUAL, BinaryOperator.LESS_EQUAL),
                 Map.entry(TokenType.GREATER, BinaryOperator.GREATER),
@@ -218,7 +219,7 @@ public class ParserExpressions extends ParserBase {
             case OR -> 1;
             case AND -> 2;
             case EQUAL, NOT_EQUAL -> 3;
-            case LESS, LESS_EQUAL, GREATER, GREATER_EQUAL -> 4;
+            case LESS, LESS_EQUAL, GREATER, GREATER_EQUAL, INSTANCEOF -> 4;
             case ADD, SUBTRACT -> 5;
             case MULTIPLY, DIVIDE, MODULO -> 6;
         };

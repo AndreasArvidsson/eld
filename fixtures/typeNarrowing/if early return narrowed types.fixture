@@ -1,0 +1,214 @@
+func run(value: i32 | null) {
+    if (value == null) {
+        return;
+    }
+    print(value + 1);
+}
+run(1);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "run" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "value" (1:10-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+PIPE (1:21-1:22)
+NULL (1:23-1:27)
+RIGHT_PAREN (1:27-1:28)
+LEFT_BRACE (1:29-1:30)
+IF (2:5-2:7)
+LEFT_PAREN (2:8-2:9)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL_EQUAL (2:15-2:17)
+NULL (2:18-2:22)
+RIGHT_PAREN (2:22-2:23)
+LEFT_BRACE (2:24-2:25)
+RETURN (3:9-3:15)
+SEMICOLON (3:15-3:16)
+RIGHT_BRACE (4:5-4:6)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+IDENTIFIER "value" (5:11-5:16)
+PLUS (5:17-5:18)
+INTEGER_LITERAL "1" (5:19-5:20)
+RIGHT_PAREN (5:20-5:21)
+SEMICOLON (5:21-5:22)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "run" (7:1-7:4)
+LEFT_PAREN (7:4-7:5)
+INTEGER_LITERAL "1" (7:5-7:6)
+RIGHT_PAREN (7:6-7:7)
+SEMICOLON (7:7-7:8)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:8
+  (FunctionDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "run"
+    )
+    (FunctionParameter
+      range: 1:10-1:27
+      (IdentifierDeclaration
+        range: 1:10-1:15
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 1:17-1:27
+        (NamedTypeNode
+          range: 1:17-1:20
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 1:23-1:27
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:29-6:2
+      (ExpressionStatement
+        range: 2:5-4:6
+        (IfExpression
+          range: 2:5-4:6
+          (BinaryExpression
+            range: 2:9-2:22
+            (IdentifierExpression
+              range: 2:9-2:14
+              name: "value"
+            )
+            operator: EQUAL
+            (LiteralExpression
+              range: 2:18-2:22
+              kind: NULL
+              text: "null"
+            )
+          )
+          (BlockStatement
+            range: 2:24-4:6
+            (ReturnStatement
+              range: 3:9-3:16
+              value: null
+            )
+          )
+          elseBranch: null
+        )
+      )
+      (ExpressionStatement
+        range: 5:5-5:22
+        (CallExpression
+          range: 5:5-5:21
+          (IdentifierExpression
+            range: 5:5-5:10
+            name: "print"
+          )
+          (BinaryExpression
+            range: 5:11-5:20
+            (IdentifierExpression
+              range: 5:11-5:16
+              name: "value"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 5:19-5:20
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:8
+    (CallExpression
+      range: 7:1-7:7
+      (IdentifierExpression
+        range: 7:1-7:4
+        name: "run"
+      )
+      (LiteralExpression
+        range: 7:5-7:6
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:5-4:6 -> void
+  2:9-2:14 -> i32 | null
+  2:9-2:22 -> bool
+  2:18-2:22 -> null
+  5:5-5:10 -> (any) => void
+  5:5-5:21 -> void
+  5:11-5:16 -> i32
+  5:11-5:20 -> i32
+  5:19-5:20 -> i32
+  7:1-7:4 -> (i32 | null) => void
+  7:1-7:7 -> void
+  7:5-7:6 -> i32
+
+Narrowed types:
+  5:11-5:16 -> i32 | null -> i32
+
+Resolved types:
+  1:17-1:20 -> i32
+  1:17-1:27 -> i32 | null
+  1:23-1:27 -> null
+
+Conversions:
+  2:18-2:22 -> null -> i32 | null
+  7:5-7:6 -> i32 -> i32 | null
+
+Declarations:
+  1:6-1:9 -> func run(i32 | null) => void
+  1:10-1:15 -> const value: i32 | null
+
+References:
+  2:9-2:14 -> 1:10-1:15
+  5:5-5:10 -> builtin print
+  5:11-5:16 -> 1:10-1:15
+  7:1-7:4 -> 1:6-1:9
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method run(Ljava/lang/Integer;)V flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFEQ L0
+    RETURN
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 1
+    IADD
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC Test.run(Ljava/lang/Integer;)V
+    RETURN
+    max stack 1 max locals 0
+
+--- OUTPUT ---
+
+2
+

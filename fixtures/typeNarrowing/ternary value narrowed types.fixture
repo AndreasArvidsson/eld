@@ -1,0 +1,157 @@
+const value: string | null = "hello";
+
+print(value != null ? value : value);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "string" (1:14-1:20)
+PIPE (1:21-1:22)
+NULL (1:23-1:27)
+EQUAL (1:28-1:29)
+STRING_LITERAL "\"hello\"" (1:30-1:37)
+SEMICOLON (1:37-1:38)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "value" (3:7-3:12)
+BANG_EQUAL (3:13-3:15)
+NULL (3:16-3:20)
+QUESTION (3:21-3:22)
+IDENTIFIER "value" (3:23-3:28)
+COLON (3:29-3:30)
+IDENTIFIER "value" (3:31-3:36)
+RIGHT_PAREN (3:36-3:37)
+SEMICOLON (3:37-3:38)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:38
+  (VariableDeclaration
+    range: 1:1-1:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (UnionTypeNode
+      range: 1:14-1:27
+      (NamedTypeNode
+        range: 1:14-1:20
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:23-1:27
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:30-1:37
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:38
+    (CallExpression
+      range: 3:1-3:37
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (TernaryExpression
+        range: 3:7-3:36
+        (BinaryExpression
+          range: 3:7-3:20
+          (IdentifierExpression
+            range: 3:7-3:12
+            name: "value"
+          )
+          operator: NOT_EQUAL
+          (LiteralExpression
+            range: 3:16-3:20
+            kind: NULL
+            text: "null"
+          )
+        )
+        (IdentifierExpression
+          range: 3:23-3:28
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 3:31-3:36
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:30-1:37 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:37 -> void
+  3:7-3:12 -> string | null
+  3:7-3:20 -> bool
+  3:7-3:36 -> string | null
+  3:16-3:20 -> null
+  3:23-3:28 -> string
+  3:31-3:36 -> null
+
+Narrowed types:
+  3:23-3:28 -> string | null -> string
+  3:31-3:36 -> string | null -> null
+
+Resolved types:
+  1:14-1:20 -> string
+  1:14-1:27 -> string | null
+  1:23-1:27 -> null
+
+Conversions:
+  1:30-1:37 -> string -> string | null
+  3:16-3:20 -> null -> string | null
+  3:23-3:28 -> string -> string | null
+  3:31-3:36 -> null -> string | null
+
+Declarations:
+  1:7-1:12 -> const value: string | null
+
+References:
+  3:1-3:6 -> builtin print
+  3:7-3:12 -> 1:7-1:12
+  3:23-3:28 -> 1:7-1:12
+  3:31-3:36 -> 1:7-1:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC "hello"
+    PUTSTATIC Test.value Ljava/lang/String;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1 1
+    IXOR
+    IFEQ L0
+    GETSTATIC Test.value Ljava/lang/String;
+    CHECKCAST java/lang/String
+    GOTO L1
+   L0:
+    GETSTATIC Test.value Ljava/lang/String;
+    CHECKCAST java/lang/String
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+hello
+

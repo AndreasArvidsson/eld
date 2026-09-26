@@ -130,8 +130,19 @@ public final class SemanticAnalyzerExpressionOperations {
         final AssignmentExpression assignment,
         final SemanticContext context
     ) {
-        final Type target =
+        Type target =
             expressions.analyzeExpression(assignment.target(), context);
+        final Expression unwrappedTarget = unwrap(assignment.target());
+        VariableSymbol assignedVariable = null;
+        if (
+            unwrappedTarget instanceof IdentifierExpression identifier && model
+                .getReference(identifier) instanceof VariableSymbol variable
+        ) {
+            assignedVariable = variable;
+            target = variable.type();
+            model.setExpressionType(identifier, target);
+            model.clearNarrowedType(identifier);
+        }
         if (
             !(analyzer.isInConstructor() && context.function() == null
                 && unwrap(
@@ -171,6 +182,9 @@ public final class SemanticAnalyzerExpressionOperations {
                 value,
                 target
             );
+        }
+        if (assignedVariable != null) {
+            context.scope().reset(assignedVariable);
         }
         return target;
     }
@@ -266,8 +280,28 @@ public final class SemanticAnalyzerExpressionOperations {
     ) {
         final Type leftType =
             expressions.analyzeExpression(binary.left(), context);
+        SemanticContext rightContext = context;
+        if (
+            binary.operator() == BinaryOperator.AND
+                || binary.operator() == BinaryOperator.OR
+        ) {
+            final Scope rightScope = new Scope(context.scope());
+            new TypeNarrowing(model).condition(
+                binary.left(),
+                rightScope,
+                binary.operator() == BinaryOperator.AND
+            );
+            rightContext =
+                new SemanticContext(
+                    rightScope,
+                    context.function(),
+                    context.loopDepth(),
+                    context.yields(),
+                    context.yieldType()
+                );
+        }
         final Type rightType =
-            expressions.analyzeExpression(binary.right(), context);
+            expressions.analyzeExpression(binary.right(), rightContext);
         boolean unionEquality = false;
         if (
             binary.operator() == BinaryOperator.EQUAL
@@ -305,6 +339,12 @@ public final class SemanticAnalyzerExpressionOperations {
         final boolean valid = switch (binary.operator()) {
             case AND, OR ->
                 leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
+            case INSTANCEOF -> JavaTypes.isClassType(rightValueType)
+                && (leftValueType instanceof UnionType
+                    || !(leftValueType instanceof BuiltinType builtin)
+                    || builtin == BuiltinType.ANY
+                    || builtin == BuiltinType.NULL
+                    || builtin == BuiltinType.STRING);
             case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
                 || ((leftValueType instanceof InterfaceType
                     || rightValueType instanceof InterfaceType)
@@ -452,7 +492,23 @@ public final class SemanticAnalyzerExpressionOperations {
             symbol instanceof ClassDeclarationSymbol
                 || symbol instanceof InterfaceSymbol
                     ? JavaTypes.classType(symbol.type())
-                    : symbol.type();
+                    : symbol instanceof VariableSymbol variable
+                        ? context.scope().typeOf(variable)
+                        : symbol.type();
+        if (symbol instanceof VariableSymbol && !type.equals(symbol.type())) {
+            model.setNarrowedType(identifier, type);
+        }
+        if (
+            symbol instanceof VariableSymbol variable
+                && variable.mutability() == Mutability.VAR
+                && context.function() != null
+                && !Objects.equals(
+                    model.findVariableOwner(variable),
+                    context.function()
+                )
+        ) {
+            model.markCapturedMutable(variable);
+        }
         model.setExpressionType(identifier, type);
         model.setReference(identifier, symbol);
         return type;

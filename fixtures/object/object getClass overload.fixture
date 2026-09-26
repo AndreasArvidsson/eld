@@ -1,0 +1,265 @@
+class Foo {
+    public func getClass(value: i32) string {
+        return "overload";
+    }
+}
+
+print(new Foo().getClass(1));
+print(new Foo().getClass().getSimpleName());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "getClass" (2:17-2:25)
+LEFT_PAREN (2:25-2:26)
+IDENTIFIER "value" (2:26-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "i32" (2:33-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+LEFT_BRACE (2:45-2:46)
+RETURN (3:9-3:15)
+STRING_LITERAL "\"overload\"" (3:16-3:26)
+SEMICOLON (3:26-3:27)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+NEW (7:7-7:10)
+IDENTIFIER "Foo" (7:11-7:14)
+LEFT_PAREN (7:14-7:15)
+RIGHT_PAREN (7:15-7:16)
+DOT (7:16-7:17)
+IDENTIFIER "getClass" (7:17-7:25)
+LEFT_PAREN (7:25-7:26)
+INTEGER_LITERAL "1" (7:26-7:27)
+RIGHT_PAREN (7:27-7:28)
+RIGHT_PAREN (7:28-7:29)
+SEMICOLON (7:29-7:30)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+NEW (8:7-8:10)
+IDENTIFIER "Foo" (8:11-8:14)
+LEFT_PAREN (8:14-8:15)
+RIGHT_PAREN (8:15-8:16)
+DOT (8:16-8:17)
+IDENTIFIER "getClass" (8:17-8:25)
+LEFT_PAREN (8:25-8:26)
+RIGHT_PAREN (8:26-8:27)
+DOT (8:27-8:28)
+IDENTIFIER "getSimpleName" (8:28-8:41)
+LEFT_PAREN (8:41-8:42)
+RIGHT_PAREN (8:42-8:43)
+RIGHT_PAREN (8:43-8:44)
+SEMICOLON (8:44-8:45)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:45
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:25
+          name: "getClass"
+        )
+        (FunctionParameter
+          range: 2:26-2:36
+          (IdentifierDeclaration
+            range: 2:26-2:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:33-2:36
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:38-2:44
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:45-4:6
+          (ReturnStatement
+            range: 3:9-3:27
+            (LiteralExpression
+              range: 3:16-3:26
+              kind: STRING
+              text: "\"overload\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:30
+    (CallExpression
+      range: 7:1-7:29
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:28
+        (MemberExpression
+          range: 7:7-7:25
+          (NewExpression
+            range: 7:7-7:16
+            (IdentifierExpression
+              range: 7:11-7:14
+              name: "Foo"
+            )
+          )
+          (IdentifierExpression
+            range: 7:17-7:25
+            name: "getClass"
+          )
+        )
+        (LiteralExpression
+          range: 7:26-7:27
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:45
+    (CallExpression
+      range: 8:1-8:44
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:43
+        (MemberExpression
+          range: 8:7-8:41
+          (CallExpression
+            range: 8:7-8:27
+            (MemberExpression
+              range: 8:7-8:25
+              (NewExpression
+                range: 8:7-8:16
+                (IdentifierExpression
+                  range: 8:11-8:14
+                  name: "Foo"
+                )
+              )
+              (IdentifierExpression
+                range: 8:17-8:25
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 8:28-8:41
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:26 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:29 -> void
+  7:7-7:16 -> Foo
+  7:7-7:25 -> (i32) => string
+  7:7-7:28 -> string
+  7:11-7:14 -> Foo
+  7:17-7:25 -> (i32) => string
+  7:26-7:27 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:44 -> void
+  8:7-8:16 -> Foo
+  8:7-8:25 -> () => Type<Foo>
+  8:7-8:27 -> Type<Foo>
+  8:7-8:41 -> () => string
+  8:7-8:43 -> string
+  8:11-8:14 -> Foo
+  8:17-8:25 -> () => Type<Foo>
+  8:28-8:41 -> () => string
+
+Resolved types:
+  2:33-2:36 -> i32
+  2:38-2:44 -> string
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:17-2:25 -> func getClass(i32) => string
+  2:26-2:31 -> const value: i32
+
+References:
+  7:1-7:6 -> builtin print
+  7:11-7:14 -> 1:7-1:10
+  7:17-7:25 -> 2:17-2:25
+  8:1-8:6 -> builtin print
+  8:11-8:14 -> 1:7-1:10
+  8:17-8:25 -> Foo.getClass(): Type<Foo>
+  8:28-8:41 -> Type<Foo>.getSimpleName(): string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    LDC 1
+    INVOKEVIRTUAL Test$Foo.getClass(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    INVOKEVIRTUAL Test$Foo.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method getClass(I)Ljava/lang/String; flags [PUBLIC]
+    LDC "overload"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+overload
+Foo
+

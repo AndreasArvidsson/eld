@@ -665,45 +665,45 @@ Declarations:
 
 References:
   1:22-1:27 -> 1:22-1:27
-  1:28-1:35 -> 1:22-1:35
+  1:28-1:35 -> Regex.compile(string): Regex
   2:26-2:31 -> 1:7-1:12
-  2:32-2:39 -> 2:26-2:39
+  2:32-2:39 -> Regex.matcher(string): Matcher
   3:1-3:6 -> builtin print
   3:7-3:14 -> 2:7-2:14
-  3:15-3:24 -> 3:7-3:24
+  3:15-3:24 -> Matcher.lookingAt(): bool
   4:1-4:6 -> builtin print
   4:7-4:14 -> 2:7-2:14
-  4:15-4:22 -> 4:7-4:22
+  4:15-4:22 -> Matcher.matches(): bool
   5:1-5:6 -> builtin print
   5:7-5:14 -> 2:7-2:14
-  5:15-5:20 -> 5:7-5:20
-  5:28-5:35 -> 5:7-5:35
+  5:15-5:20 -> Matcher.reset(string): Matcher
+  5:28-5:35 -> Matcher.matches(): bool
   6:1-6:6 -> builtin print
   6:7-6:14 -> 2:7-2:14
-  6:15-6:22 -> 6:7-6:22
-  6:25-6:32 -> 6:7-6:32
+  6:15-6:22 -> Matcher.pattern(): Regex
+  6:25-6:32 -> Regex.pattern(): string
   7:1-7:6 -> builtin print
   7:7-7:14 -> 2:7-2:14
-  7:15-7:20 -> 7:7-7:20
-  7:23-7:27 -> 7:7-7:27
+  7:15-7:20 -> Matcher.reset(): Matcher
+  7:23-7:27 -> Matcher.find(): bool
   8:1-8:6 -> builtin print
   8:7-8:14 -> 2:7-2:14
-  8:15-8:20 -> 8:7-8:20
-  8:30-8:36 -> 8:7-8:36
-  8:43-8:50 -> 8:7-8:50
+  8:15-8:20 -> Matcher.reset(string): Matcher
+  8:30-8:36 -> Matcher.region(i32, i32): Matcher
+  8:43-8:50 -> Matcher.matches(): bool
   9:1-9:6 -> builtin print
   9:7-9:14 -> 2:7-2:14
-  9:15-9:26 -> 9:7-9:26
+  9:15-9:26 -> Matcher.regionStart(): i32
   10:1-10:6 -> builtin print
   10:7-10:14 -> 2:7-2:14
-  10:15-10:24 -> 10:7-10:24
+  10:15-10:24 -> Matcher.regionEnd(): i32
   11:1-11:6 -> builtin print
   11:7-11:14 -> 2:7-2:14
-  11:15-11:25 -> 11:7-11:25
+  11:15-11:25 -> Matcher.usePattern(Regex): Matcher
   11:26-11:31 -> 11:26-11:31
-  11:32-11:39 -> 11:26-11:39
-  11:48-11:53 -> 11:7-11:53
-  11:61-11:68 -> 11:7-11:68
+  11:32-11:39 -> Regex.compile(string): Regex
+  11:48-11:53 -> Matcher.reset(string): Matcher
+  11:61-11:68 -> Matcher.matches(): bool
 
 --- BYTECODE ---
 

@@ -1,9 +1,10 @@
 interface Animal {}
 class Dog implements Animal {}
+class Cat {}
 
 const value: Animal = new Dog();
 switch (value) {
-    case Dog => print("type")
+    case Cat => print("type")
     else => print("instance")
 }
 
@@ -19,40 +20,44 @@ IMPLEMENTS (2:11-2:21)
 IDENTIFIER "Animal" (2:22-2:28)
 LEFT_BRACE (2:29-2:30)
 RIGHT_BRACE (2:30-2:31)
-CONST (4:1-4:6)
-IDENTIFIER "value" (4:7-4:12)
-COLON (4:12-4:13)
-IDENTIFIER "Animal" (4:14-4:20)
-EQUAL (4:21-4:22)
-NEW (4:23-4:26)
-IDENTIFIER "Dog" (4:27-4:30)
-LEFT_PAREN (4:30-4:31)
-RIGHT_PAREN (4:31-4:32)
-SEMICOLON (4:32-4:33)
-SWITCH (5:1-5:7)
-LEFT_PAREN (5:8-5:9)
-IDENTIFIER "value" (5:9-5:14)
-RIGHT_PAREN (5:14-5:15)
-LEFT_BRACE (5:16-5:17)
-CASE (6:5-6:9)
-IDENTIFIER "Dog" (6:10-6:13)
-ARROW (6:14-6:16)
-IDENTIFIER "print" (6:17-6:22)
-LEFT_PAREN (6:22-6:23)
-STRING_LITERAL "\"type\"" (6:23-6:29)
-RIGHT_PAREN (6:29-6:30)
-ELSE (7:5-7:9)
-ARROW (7:10-7:12)
-IDENTIFIER "print" (7:13-7:18)
-LEFT_PAREN (7:18-7:19)
-STRING_LITERAL "\"instance\"" (7:19-7:29)
+CLASS (3:1-3:6)
+IDENTIFIER "Cat" (3:7-3:10)
+LEFT_BRACE (3:11-3:12)
+RIGHT_BRACE (3:12-3:13)
+CONST (5:1-5:6)
+IDENTIFIER "value" (5:7-5:12)
+COLON (5:12-5:13)
+IDENTIFIER "Animal" (5:14-5:20)
+EQUAL (5:21-5:22)
+NEW (5:23-5:26)
+IDENTIFIER "Dog" (5:27-5:30)
+LEFT_PAREN (5:30-5:31)
+RIGHT_PAREN (5:31-5:32)
+SEMICOLON (5:32-5:33)
+SWITCH (6:1-6:7)
+LEFT_PAREN (6:8-6:9)
+IDENTIFIER "value" (6:9-6:14)
+RIGHT_PAREN (6:14-6:15)
+LEFT_BRACE (6:16-6:17)
+CASE (7:5-7:9)
+IDENTIFIER "Cat" (7:10-7:13)
+ARROW (7:14-7:16)
+IDENTIFIER "print" (7:17-7:22)
+LEFT_PAREN (7:22-7:23)
+STRING_LITERAL "\"type\"" (7:23-7:29)
 RIGHT_PAREN (7:29-7:30)
-RIGHT_BRACE (8:1-8:2)
+ELSE (8:5-8:9)
+ARROW (8:10-8:12)
+IDENTIFIER "print" (8:13-8:18)
+LEFT_PAREN (8:18-8:19)
+STRING_LITERAL "\"instance\"" (8:19-8:29)
+RIGHT_PAREN (8:29-8:30)
+RIGHT_BRACE (9:1-9:2)
 
 --- AST ---
 
 (Program
-  range: 1:1-8:2
+  range: 1:1-9:2
   (InterfaceDeclaration
     range: 1:1-1:20
     (IdentifierDeclaration
@@ -72,49 +77,57 @@ RIGHT_BRACE (8:1-8:2)
       name: "Animal"
     )
   )
+  (ClassDeclaration
+    range: 3:1-3:13
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "Cat"
+    )
+    superClass: null
+  )
   (VariableDeclaration
-    range: 4:1-4:33
+    range: 5:1-5:33
     mutability: CONST
     (IdentifierDeclaration
-      range: 4:7-4:12
+      range: 5:7-5:12
       name: "value"
     )
     (NamedTypeNode
-      range: 4:14-4:20
+      range: 5:14-5:20
       name: "Animal"
     )
     (NewExpression
-      range: 4:23-4:32
+      range: 5:23-5:32
       (IdentifierExpression
-        range: 4:27-4:30
+        range: 5:27-5:30
         name: "Dog"
       )
     )
   )
   (ExpressionStatement
-    range: 5:1-8:2
+    range: 6:1-9:2
     (SwitchExpression
-      range: 5:1-8:2
+      range: 6:1-9:2
       (IdentifierExpression
-        range: 5:9-5:14
+        range: 6:9-6:14
         name: "value"
       )
       (SwitchBranch
-        range: 6:5-6:30
+        range: 7:5-7:30
         (IdentifierExpression
-          range: 6:10-6:13
-          name: "Dog"
+          range: 7:10-7:13
+          name: "Cat"
         )
         (SwitchBranchExpressionBody
-          range: 6:17-6:30
+          range: 7:17-7:30
           (CallExpression
-            range: 6:17-6:30
+            range: 7:17-7:30
             (IdentifierExpression
-              range: 6:17-6:22
+              range: 7:17-7:22
               name: "print"
             )
             (LiteralExpression
-              range: 6:23-6:29
+              range: 7:23-7:29
               kind: STRING
               text: "\"type\""
             )
@@ -122,17 +135,17 @@ RIGHT_BRACE (8:1-8:2)
         )
       )
       (SwitchElseBranch
-        range: 7:5-7:30
+        range: 8:5-8:30
         (SwitchBranchExpressionBody
-          range: 7:13-7:30
+          range: 8:13-8:30
           (CallExpression
-            range: 7:13-7:30
+            range: 8:13-8:30
             (IdentifierExpression
-              range: 7:13-7:18
+              range: 8:13-8:18
               name: "print"
             )
             (LiteralExpression
-              range: 7:19-7:29
+              range: 8:19-8:29
               kind: STRING
               text: "\"instance\""
             )
@@ -145,4 +158,4 @@ RIGHT_BRACE (8:1-8:2)
 
 --- SEMANTIC ---
 
-SemanticException: Switch match type Type<Dog> does not match subject type Animal at 6:10-6:13
+SemanticException: Switch match type Type<Cat> does not match subject type Animal at 7:10-7:13

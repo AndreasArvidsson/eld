@@ -1,0 +1,179 @@
+var value: string | null = "hello";
+var other = 0;
+if (value != null) {
+    (value, other) = (null, 1);
+    print(value + "!");
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "string" (1:12-1:18)
+PIPE (1:19-1:20)
+NULL (1:21-1:25)
+EQUAL (1:26-1:27)
+STRING_LITERAL "\"hello\"" (1:28-1:35)
+SEMICOLON (1:35-1:36)
+VAR (2:1-2:4)
+IDENTIFIER "other" (2:5-2:10)
+EQUAL (2:11-2:12)
+INTEGER_LITERAL "0" (2:13-2:14)
+SEMICOLON (2:14-2:15)
+IF (3:1-3:3)
+LEFT_PAREN (3:4-3:5)
+IDENTIFIER "value" (3:5-3:10)
+BANG_EQUAL (3:11-3:13)
+NULL (3:14-3:18)
+RIGHT_PAREN (3:18-3:19)
+LEFT_BRACE (3:20-3:21)
+LEFT_PAREN (4:5-4:6)
+IDENTIFIER "value" (4:6-4:11)
+COMMA (4:11-4:12)
+IDENTIFIER "other" (4:13-4:18)
+RIGHT_PAREN (4:18-4:19)
+EQUAL (4:20-4:21)
+LEFT_PAREN (4:22-4:23)
+NULL (4:23-4:27)
+COMMA (4:27-4:28)
+INTEGER_LITERAL "1" (4:29-4:30)
+RIGHT_PAREN (4:30-4:31)
+SEMICOLON (4:31-4:32)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+IDENTIFIER "value" (5:11-5:16)
+PLUS (5:17-5:18)
+STRING_LITERAL "\"!\"" (5:19-5:22)
+RIGHT_PAREN (5:22-5:23)
+SEMICOLON (5:23-5:24)
+RIGHT_BRACE (6:1-6:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:2
+  (VariableDeclaration
+    range: 1:1-1:36
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (UnionTypeNode
+      range: 1:12-1:25
+      (NamedTypeNode
+        range: 1:12-1:18
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:21-1:25
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:28-1:35
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:10
+      name: "other"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:13-2:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-6:2
+    (IfExpression
+      range: 3:1-6:2
+      (BinaryExpression
+        range: 3:5-3:18
+        (IdentifierExpression
+          range: 3:5-3:10
+          name: "value"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 3:14-3:18
+          kind: NULL
+          text: "null"
+        )
+      )
+      (BlockStatement
+        range: 3:20-6:2
+        (DestructuringAssignmentStatement
+          range: 4:5-4:32
+          (TuplePattern
+            range: 4:5-4:19
+            (IdentifierPattern
+              range: 4:6-4:11
+              (IdentifierDeclaration
+                range: 4:6-4:11
+                name: "value"
+              )
+              type: null
+            )
+            (IdentifierPattern
+              range: 4:13-4:18
+              (IdentifierDeclaration
+                range: 4:13-4:18
+                name: "other"
+              )
+              type: null
+            )
+          )
+          (TupleExpression
+            range: 4:22-4:31
+            (LiteralExpression
+              range: 4:23-4:27
+              kind: NULL
+              text: "null"
+            )
+            (LiteralExpression
+              range: 4:29-4:30
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+        (ExpressionStatement
+          range: 5:5-5:24
+          (CallExpression
+            range: 5:5-5:23
+            (IdentifierExpression
+              range: 5:5-5:10
+              name: "print"
+            )
+            (BinaryExpression
+              range: 5:11-5:22
+              (IdentifierExpression
+                range: 5:11-5:16
+                name: "value"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 5:19-5:22
+                kind: STRING
+                text: "\"!\""
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Operator ADD is not applicable to string | null and string at 5:11-5:22

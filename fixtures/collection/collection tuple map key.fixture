@@ -196,10 +196,10 @@ Declarations:
 References:
   2:1-2:6 -> builtin print
   2:7-2:13 -> 1:7-1:13
-  2:14-2:17 -> 2:7-2:17
+  2:14-2:17 -> Map<(i32, string), string>.get(any): string | null
   3:1-3:6 -> builtin print
   3:7-3:13 -> 1:7-1:13
-  3:14-3:25 -> 3:7-3:25
+  3:14-3:25 -> Map<(i32, string), string>.containsKey(any): bool
 
 --- BYTECODE ---
 

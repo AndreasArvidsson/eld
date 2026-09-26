@@ -1,0 +1,260 @@
+var value: string | null = "hello";
+const flag = false;
+
+if (value != null) {
+    if (flag) {
+        value = null;
+    }
+    else {
+        print(value + "!");
+    }
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "string" (1:12-1:18)
+PIPE (1:19-1:20)
+NULL (1:21-1:25)
+EQUAL (1:26-1:27)
+STRING_LITERAL "\"hello\"" (1:28-1:35)
+SEMICOLON (1:35-1:36)
+CONST (2:1-2:6)
+IDENTIFIER "flag" (2:7-2:11)
+EQUAL (2:12-2:13)
+BOOLEAN_LITERAL "false" (2:14-2:19)
+SEMICOLON (2:19-2:20)
+IF (4:1-4:3)
+LEFT_PAREN (4:4-4:5)
+IDENTIFIER "value" (4:5-4:10)
+BANG_EQUAL (4:11-4:13)
+NULL (4:14-4:18)
+RIGHT_PAREN (4:18-4:19)
+LEFT_BRACE (4:20-4:21)
+IF (5:5-5:7)
+LEFT_PAREN (5:8-5:9)
+IDENTIFIER "flag" (5:9-5:13)
+RIGHT_PAREN (5:13-5:14)
+LEFT_BRACE (5:15-5:16)
+IDENTIFIER "value" (6:9-6:14)
+EQUAL (6:15-6:16)
+NULL (6:17-6:21)
+SEMICOLON (6:21-6:22)
+RIGHT_BRACE (7:5-7:6)
+ELSE (8:5-8:9)
+LEFT_BRACE (8:10-8:11)
+IDENTIFIER "print" (9:9-9:14)
+LEFT_PAREN (9:14-9:15)
+IDENTIFIER "value" (9:15-9:20)
+PLUS (9:21-9:22)
+STRING_LITERAL "\"!\"" (9:23-9:26)
+RIGHT_PAREN (9:26-9:27)
+SEMICOLON (9:27-9:28)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (VariableDeclaration
+    range: 1:1-1:36
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (UnionTypeNode
+      range: 1:12-1:25
+      (NamedTypeNode
+        range: 1:12-1:18
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:21-1:25
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:28-1:35
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:20
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:11
+      name: "flag"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:14-2:19
+      kind: BOOL
+      text: "false"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-11:2
+    (IfExpression
+      range: 4:1-11:2
+      (BinaryExpression
+        range: 4:5-4:18
+        (IdentifierExpression
+          range: 4:5-4:10
+          name: "value"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 4:14-4:18
+          kind: NULL
+          text: "null"
+        )
+      )
+      (BlockStatement
+        range: 4:20-11:2
+        (ExpressionStatement
+          range: 5:5-10:6
+          (IfExpression
+            range: 5:5-10:6
+            (IdentifierExpression
+              range: 5:9-5:13
+              name: "flag"
+            )
+            (BlockStatement
+              range: 5:15-7:6
+              (ExpressionStatement
+                range: 6:9-6:22
+                (AssignmentExpression
+                  range: 6:9-6:21
+                  (IdentifierExpression
+                    range: 6:9-6:14
+                    name: "value"
+                  )
+                  (LiteralExpression
+                    range: 6:17-6:21
+                    kind: NULL
+                    text: "null"
+                  )
+                )
+              )
+            )
+            (BlockStatement
+              range: 8:10-10:6
+              (ExpressionStatement
+                range: 9:9-9:28
+                (CallExpression
+                  range: 9:9-9:27
+                  (IdentifierExpression
+                    range: 9:9-9:14
+                    name: "print"
+                  )
+                  (BinaryExpression
+                    range: 9:15-9:26
+                    (IdentifierExpression
+                      range: 9:15-9:20
+                      name: "value"
+                    )
+                    operator: ADD
+                    (LiteralExpression
+                      range: 9:23-9:26
+                      kind: STRING
+                      text: "\"!\""
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:28-1:35 -> string
+  2:14-2:19 -> bool
+  4:1-11:2 -> void
+  4:5-4:10 -> string | null
+  4:5-4:18 -> bool
+  4:14-4:18 -> null
+  5:5-10:6 -> void
+  5:9-5:13 -> bool
+  6:9-6:14 -> string | null
+  6:9-6:21 -> string | null
+  6:17-6:21 -> null
+  9:9-9:14 -> (any) => void
+  9:9-9:27 -> void
+  9:15-9:20 -> string
+  9:15-9:26 -> string
+  9:23-9:26 -> string
+
+Narrowed types:
+  9:15-9:20 -> string | null -> string
+
+Resolved types:
+  1:12-1:18 -> string
+  1:12-1:25 -> string | null
+  1:21-1:25 -> null
+
+Conversions:
+  1:28-1:35 -> string -> string | null
+  4:14-4:18 -> null -> string | null
+  6:17-6:21 -> null -> string | null
+
+Declarations:
+  1:5-1:10 -> var value: string | null
+  2:7-2:11 -> const flag: bool
+
+References:
+  4:5-4:10 -> 1:5-1:10
+  5:9-5:13 -> 2:7-2:11
+  6:9-6:14 -> 1:5-1:10
+  9:9-9:14 -> builtin print
+  9:15-9:20 -> 1:5-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Ljava/lang/String; flags [PUBLIC, STATIC]
+  field flag Z flags [PUBLIC, STATIC, FINAL] = 0
+  method <clinit>()V flags [STATIC]
+    LDC "hello"
+    PUTSTATIC Test.value Ljava/lang/String;
+    GETSTATIC Test.value Ljava/lang/String;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1 1
+    IXOR
+    IFEQ L2
+    GETSTATIC Test.flag Z
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    DUP
+    PUTSTATIC Test.value Ljava/lang/String;
+    POP
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    CHECKCAST java/lang/String
+    LDC "!"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L1:
+    GOTO L2
+   L2:
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+hello!
+

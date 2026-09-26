@@ -273,7 +273,7 @@ References:
   15:7-15:15 -> 1:6-1:14
   16:1-16:6 -> builtin print
   16:7-16:13 -> 8:6-8:12
-  16:16-16:26 -> 16:7-16:26
+  16:16-16:26 -> IOException.getMessage(): string | null
 
 --- BYTECODE ---
 

@@ -22,6 +22,7 @@ public enum TokenType {
     INTERFACE,
     IMPLEMENTS,
     AS,
+    INSTANCEOF,
     NEW,
     CONSTRUCTOR,
     THIS,

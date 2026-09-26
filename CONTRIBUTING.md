@@ -185,15 +185,15 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Type narrowing on conditional branching. if/switch/ternary. Don't create a new variable: type narrow existing instead the way typescript is doing. Add a new fixture header "Narrowed types" provided by the semantic analyzer.
+- Stop using IdentifierDeclaration in destruction pattern assignment expressions?
+- Overloaded functions
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
 - abstract classes?
 - String std lib
 - Collections std lib
-- Stop using IdentifierDeclaration in assignment expressions?
-- Overloaded functions
 - Export & import
+- prohibit syntax like `if (value != null && (value = null) == null)`?
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion

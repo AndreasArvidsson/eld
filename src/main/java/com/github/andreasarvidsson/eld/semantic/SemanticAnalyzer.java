@@ -1569,6 +1569,7 @@ public final class SemanticAnalyzer {
                 requirePatternAssignment(source, variable.type(), pattern);
             symbol = variable;
             model.setReference(pattern, symbol);
+            context.scope().reset(variable);
         }
         model.setPatternBinding(pattern, symbol, source, conversionType);
     }

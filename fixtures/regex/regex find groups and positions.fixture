@@ -545,38 +545,38 @@ Declarations:
 
 References:
   1:15-1:20 -> 1:15-1:20
-  1:21-1:28 -> 1:15-1:28
+  1:21-1:28 -> Regex.compile(string): Regex
   2:26-2:31 -> 1:7-1:12
-  2:32-2:39 -> 2:26-2:39
+  2:32-2:39 -> Regex.matcher(string): Matcher
   3:8-3:15 -> 2:7-2:14
-  3:16-3:20 -> 3:8-3:20
+  3:16-3:20 -> Matcher.find(): bool
   4:5-4:10 -> builtin print
   4:11-4:18 -> 2:7-2:14
-  4:19-4:24 -> 4:11-4:24
+  4:19-4:24 -> Matcher.group(): string
   5:5-5:10 -> builtin print
   5:11-5:18 -> 2:7-2:14
-  5:19-5:24 -> 5:11-5:24
+  5:19-5:24 -> Matcher.group(i32): string | null
   6:5-6:10 -> builtin print
   6:11-6:18 -> 2:7-2:14
-  6:19-6:24 -> 6:11-6:24
+  6:19-6:24 -> Matcher.group(string): string | null
   7:5-7:10 -> builtin print
   7:11-7:18 -> 2:7-2:14
-  7:19-7:24 -> 7:11-7:24
+  7:19-7:24 -> Matcher.start(): i32
   8:5-8:10 -> builtin print
   8:11-8:18 -> 2:7-2:14
-  8:19-8:24 -> 8:11-8:24
+  8:19-8:24 -> Matcher.start(string): i32
   9:5-9:10 -> builtin print
   9:11-9:18 -> 2:7-2:14
-  9:19-9:22 -> 9:11-9:22
+  9:19-9:22 -> Matcher.end(i32): i32
   11:1-11:6 -> builtin print
   11:7-11:14 -> 2:7-2:14
-  11:15-11:25 -> 11:7-11:25
+  11:15-11:25 -> Matcher.groupCount(): i32
   12:1-12:6 -> builtin print
   12:7-12:14 -> 2:7-2:14
-  12:15-12:19 -> 12:7-12:19
+  12:15-12:19 -> Matcher.find(i32): bool
   13:1-13:6 -> builtin print
   13:7-13:14 -> 2:7-2:14
-  13:15-13:20 -> 13:7-13:20
+  13:15-13:20 -> Matcher.group(): string
 
 --- BYTECODE ---
 

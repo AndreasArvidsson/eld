@@ -1,0 +1,67 @@
+class Value {
+    public func getClass() bool {
+        return true;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "getClass" (2:17-2:25)
+LEFT_PAREN (2:25-2:26)
+RIGHT_PAREN (2:26-2:27)
+IDENTIFIER "bool" (2:28-2:32)
+LEFT_BRACE (2:33-2:34)
+RETURN (3:9-3:15)
+BOOLEAN_LITERAL "true" (3:16-3:20)
+SEMICOLON (3:20-3:21)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:25
+          name: "getClass"
+        )
+        (NamedTypeNode
+          range: 2:28-2:32
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:33-4:6
+          (ReturnStatement
+            range: 3:9-3:21
+            (LiteralExpression
+              range: 3:16-3:20
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot override final method 'getClass' at 2:17-2:25

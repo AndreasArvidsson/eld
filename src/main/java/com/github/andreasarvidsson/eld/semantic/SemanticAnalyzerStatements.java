@@ -47,6 +47,7 @@ import com.github.andreasarvidsson.eld.parser.YieldStatement;
 public final class SemanticAnalyzerStatements {
     private final SemanticAnalyzer analyzer;
     private final SemanticModel model;
+    private final TypeNarrowing narrowing;
 
     public SemanticAnalyzerStatements(
         final SemanticAnalyzer analyzer,
@@ -54,6 +55,20 @@ public final class SemanticAnalyzerStatements {
     ) {
         this.analyzer = analyzer;
         this.model = model;
+        this.narrowing = new TypeNarrowing(model);
+    }
+
+    SemanticContext withScope(
+        final SemanticContext context,
+        final Scope scope
+    ) {
+        return new SemanticContext(
+            scope,
+            context.function(),
+            context.loopDepth(),
+            context.yields(),
+            context.yieldType()
+        );
     }
 
     public void analyzeForStatement(
@@ -210,11 +225,23 @@ public final class SemanticAnalyzerStatements {
             );
         }
 
-        analyzer.analyzeBlockStatement(statement.thenBranch(), context);
+        final Scope thenScope = new Scope(context.scope(), true);
+        narrowing.condition(statement.condition(), thenScope, true);
+        analyzer.analyzeBlockStatement(
+            statement.thenBranch(),
+            withScope(context, thenScope)
+        );
+
+        final Scope remaining = new Scope(context.scope(), true);
+        narrowing.condition(statement.condition(), remaining, false);
+        final List<Scope> elifScopes = new ArrayList<>();
 
         for (final ElseIfBranch branch : statement.elifBranches()) {
             final Type branchConditionType =
-                analyzer.analyzeExpression(branch.condition(), context);
+                analyzer.analyzeExpression(
+                    branch.condition(),
+                    withScope(context, remaining)
+                );
 
             if (branchConditionType != BuiltinType.BOOL) {
                 throw new SemanticException(
@@ -224,13 +251,30 @@ public final class SemanticAnalyzerStatements {
                 );
             }
 
-            analyzer.analyzeBlockStatement(branch.branch(), context);
+            final Scope branchScope = new Scope(remaining, true);
+            elifScopes.add(branchScope);
+            narrowing.condition(branch.condition(), branchScope, true);
+            analyzer.analyzeBlockStatement(
+                branch.branch(),
+                withScope(context, branchScope)
+            );
+            narrowing.condition(branch.condition(), remaining, false);
         }
 
         final @Nullable Statement elseBranch = statement.elseBranch();
 
         if (elseBranch != null) {
-            analyzer.analyzeStatement(elseBranch, context);
+            analyzer
+                .analyzeStatement(elseBranch, withScope(context, remaining));
+        }
+        thenScope.mergeAssignments();
+        elifScopes.forEach(Scope::mergeAssignments);
+        remaining.mergeAssignments();
+        if (
+            elseBranch == null && statement.elifBranches().isEmpty()
+                && exitsCurrentFlow(statement.thenBranch())
+        ) {
+            narrowing.condition(statement.condition(), context.scope(), false);
         }
     }
 
@@ -367,11 +411,6 @@ public final class SemanticAnalyzerStatements {
                 "A switch subject must produce a value"
             );
         }
-        analyzer.requireConstantEquality(
-            subjectType,
-            expression.subject().range(),
-            "Switch subject"
-        );
         if (requireValue && expression.elseBranch() == null) {
             throw new SemanticException(
                 expression.range(),
@@ -383,6 +422,18 @@ public final class SemanticAnalyzerStatements {
             for (final Expression match : branch.matches()) {
                 final Type matchType =
                     analyzer.analyzeExpression(match, context);
+                if (switchTypePattern(matchType, subjectType)) {
+                    model.setSwitchTypeMatch(match);
+                    if (switchMatchSubtype(matchType, subjectType)) {
+                        model.setSwitchDualMatch(match);
+                    }
+                    continue;
+                }
+                analyzer.requireConstantEquality(
+                    subjectType,
+                    expression.subject().range(),
+                    "Switch subject"
+                );
                 if (
                     !switchMatchSubtype(matchType, subjectType)
                         || ((subjectType instanceof UnionType
@@ -410,11 +461,39 @@ public final class SemanticAnalyzerStatements {
         }
         Type result = BuiltinType.VOID;
         final List<Expression> resultValues = new ArrayList<>();
-        for (final SwitchBranchBody body : bodies) {
+        final List<Scope> branchScopes = new ArrayList<>();
+        final boolean stableSubject =
+            !TypeNarrowing.hasMutation(expression.subject())
+                && expression.branches()
+                    .stream()
+                    .flatMap(branch -> branch.matches().stream())
+                    .noneMatch(TypeNarrowing::hasMutation);
+        for (int index = 0; index < bodies.size(); index++) {
+            final SwitchBranchBody body = bodies.get(index);
             final List<YieldStatement> yields = new ArrayList<>();
+            final Scope branchScope = new Scope(context.scope(), true);
+            branchScopes.add(branchScope);
+            if (stableSubject) {
+                for (int previous = 0; previous < index; previous++) {
+                    narrowing.match(
+                        expression.subject(),
+                        expression.branches().get(previous).matches(),
+                        branchScope,
+                        false
+                    );
+                }
+                if (index < expression.branches().size()) {
+                    narrowing.match(
+                        expression.subject(),
+                        expression.branches().get(index).matches(),
+                        branchScope,
+                        true
+                    );
+                }
+            }
             final SemanticContext branchContext =
                 new SemanticContext(
-                    context.scope(),
+                    branchScope,
                     context.function(),
                     requireValue ? 0 : context.loopDepth(),
                     yields,
@@ -490,6 +569,7 @@ public final class SemanticAnalyzerStatements {
         if (requireValue) {
             applyCommonType(resultValues, result);
         }
+        branchScopes.forEach(Scope::mergeAssignments);
         return result;
     }
 
@@ -511,6 +591,29 @@ public final class SemanticAnalyzerStatements {
         }
         return model.isSubtype(match, subject)
             || numericWidening(match, subject);
+    }
+
+    private boolean switchTypePattern(
+        final Type matchType,
+        final Type subjectType
+    ) {
+        final Type match = ConstType.unwrap(matchType);
+        final Type subject = ConstType.unwrap(subjectType);
+        if (
+            !(match instanceof InterfaceType classToken)
+                || !JavaTypes.isClassType(classToken)
+                || JavaTypes.isClassType(subject)
+        ) {
+            return false;
+        }
+        final Type represented = classToken.typeArguments().getFirst();
+        if (subject instanceof UnionType union) {
+            return union.memberTypes()
+                .stream()
+                .anyMatch(member -> model.isSubtype(represented, member));
+        }
+        return subject == BuiltinType.ANY
+            || model.isSubtype(represented, subject);
     }
 
     private boolean numericWidening(final Type from, final Type to) {
@@ -591,10 +694,20 @@ public final class SemanticAnalyzerStatements {
                 condition
             );
         }
+        final Scope thenScope = new Scope(context.scope(), true);
+        narrowing.condition(expression.condition(), thenScope, true);
         final Type thenType =
-            analyzer.analyzeExpression(expression.thenBranch(), context);
+            analyzer.analyzeExpression(
+                expression.thenBranch(),
+                withScope(context, thenScope)
+            );
+        final Scope elseScope = new Scope(context.scope(), true);
+        narrowing.condition(expression.condition(), elseScope, false);
         final Type elseType =
-            analyzer.analyzeExpression(expression.elseBranch(), context);
+            analyzer.analyzeExpression(
+                expression.elseBranch(),
+                withScope(context, elseScope)
+            );
         if (thenType == BuiltinType.VOID || elseType == BuiltinType.VOID) {
             throw new SemanticException(
                 expression.range(),
@@ -607,6 +720,8 @@ public final class SemanticAnalyzerStatements {
             List.of(expression.thenBranch(), expression.elseBranch()),
             result
         );
+        thenScope.mergeAssignments();
+        elseScope.mergeAssignments();
         return result;
     }
 
@@ -642,6 +757,26 @@ public final class SemanticAnalyzerStatements {
                 );
             }
         }
+    }
+
+    private boolean exitsCurrentFlow(final BlockItem item) {
+        return switch (item) {
+            case ReturnStatement _ -> true;
+            case ThrowStatement _ -> true;
+            case BlockStatement block ->
+                block.items().stream().anyMatch(this::exitsCurrentFlow);
+            case ExpressionStatement statement when statement
+                .expression() instanceof IfExpression conditional ->
+                conditional.elseBranch() != null
+                    && exitsCurrentFlow(conditional.thenBranch())
+                    && exitsCurrentFlow(
+                        Objects.requireNonNull(conditional.elseBranch())
+                    )
+                    && conditional.elifBranches()
+                        .stream()
+                        .allMatch(branch -> exitsCurrentFlow(branch.branch()));
+            default -> false;
+        };
     }
 
     private boolean producesValue(final BlockItem item) {
@@ -905,7 +1040,7 @@ public final class SemanticAnalyzerStatements {
     ) {
         final FunctionSymbol symbol =
             (FunctionSymbol) model.getSymbol(declaration.name());
-        final Scope functionScope = new Scope(context.scope());
+        final Scope functionScope = new Scope(context.scope(), false, true);
         for (final FunctionParameter parameter : declaration.parameters()) {
             analyzeParameterDefault(
                 parameter,

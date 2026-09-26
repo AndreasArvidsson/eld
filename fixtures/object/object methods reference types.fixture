@@ -786,44 +786,44 @@ Declarations:
 
 References:
   7:15-7:20 -> 7:15-7:20
-  7:21-7:28 -> 7:15-7:28
+  7:21-7:28 -> Regex.compile(string): Regex
   9:1-9:6 -> builtin print
   9:7-9:11 -> 1:7-1:11
-  9:12-9:18 -> 9:7-9:18
+  9:12-9:18 -> string.equals(any): bool
   10:1-10:6 -> builtin print
   10:7-10:12 -> 2:7-2:12
-  10:13-10:21 -> 10:7-10:21
+  10:13-10:21 -> [i32].toString(): string
   11:1-11:6 -> builtin print
   11:7-11:12 -> 3:7-3:12
-  11:13-11:19 -> 11:7-11:19
+  11:13-11:19 -> (i32, bool).equals(any): bool
   12:1-12:6 -> builtin print
   12:7-12:15 -> 4:7-4:15
-  12:16-12:24 -> 12:7-12:24
+  12:16-12:24 -> () => i32.hashCode(): i32
   12:30-12:38 -> 4:7-4:15
-  12:39-12:47 -> 12:30-12:47
+  12:39-12:47 -> () => i32.hashCode(): i32
   13:1-13:6 -> builtin print
   13:7-13:14 -> 5:7-5:14
-  13:15-13:21 -> 13:7-13:21
+  13:15-13:21 -> Promise<i32>.equals(any): bool
   13:22-13:29 -> 5:7-5:14
   14:1-14:6 -> builtin print
   14:7-14:13 -> 6:7-6:13
-  14:14-14:20 -> 14:7-14:20
+  14:14-14:20 -> PromiseSource<i32>.equals(any): bool
   14:21-14:27 -> 6:7-6:13
   15:1-15:6 -> builtin print
   15:7-15:12 -> builtin print
-  15:13-15:19 -> 15:7-15:19
+  15:13-15:19 -> (any) => void.equals(any): bool
   15:20-15:25 -> builtin print
   16:1-16:6 -> builtin print
   16:7-16:10 -> builtin dir
-  16:11-16:17 -> 16:7-16:17
+  16:11-16:17 -> (any) => [string].equals(any): bool
   16:18-16:21 -> builtin dir
   17:1-17:6 -> builtin print
   17:7-17:11 -> builtin help
-  17:12-17:18 -> 17:7-17:18
+  17:12-17:18 -> (any) => void.equals(any): bool
   17:19-17:23 -> builtin help
   18:1-18:6 -> builtin print
   18:7-18:12 -> 7:7-7:12
-  18:13-18:21 -> 18:7-18:21
+  18:13-18:21 -> Regex.toString(): string
 
 --- BYTECODE ---
 

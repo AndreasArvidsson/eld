@@ -1,5 +1,6 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
@@ -222,10 +223,27 @@ public final class SemanticAnalyzerExpectedExpressions {
                     "Ternary condition must be bool"
                 );
             }
-            for (final Expression branch : List
-                .of(ternary.thenBranch(), ternary.elseBranch())) {
+            final List<Scope> branchScopes = new ArrayList<>();
+            for (int branchIndex = 0; branchIndex < 2; branchIndex++) {
+                final boolean thenBranch = branchIndex == 0;
+                final Expression branch =
+                    thenBranch ? ternary.thenBranch() : ternary.elseBranch();
+                final Scope branchScope = new Scope(context.scope(), true);
+                branchScopes.add(branchScope);
+                new TypeNarrowing(model)
+                    .condition(ternary.condition(), branchScope, thenBranch);
                 final Type actual =
-                    analyzeExpression(branch, context, expected);
+                    analyzeExpression(
+                        branch,
+                        new SemanticContext(
+                            branchScope,
+                            context.function(),
+                            context.loopDepth(),
+                            context.yields(),
+                            context.yieldType()
+                        ),
+                        expected
+                    );
                 if (
                     analyzer.resolveAssignType(actual, expected, branch) == null
                 ) {
@@ -237,6 +255,7 @@ public final class SemanticAnalyzerExpectedExpressions {
                     );
                 }
             }
+            branchScopes.forEach(Scope::mergeAssignments);
             model.setExpressionType(ternary, expected);
             return expected;
         }

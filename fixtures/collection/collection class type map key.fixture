@@ -153,7 +153,7 @@ References:
   4:32-4:38 -> 2:7-2:13
   5:1-5:6 -> builtin print
   5:7-5:12 -> 4:7-4:12
-  5:13-5:16 -> 5:7-5:16
+  5:13-5:16 -> Map<Type<any>, string>.get(any): string | null
   5:17-5:23 -> 2:7-2:13
 
 --- BYTECODE ---
