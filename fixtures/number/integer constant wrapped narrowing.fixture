@@ -1,0 +1,306 @@
+const value: i8 = 2_000_000_000 + 2_000_000_000 - 2_000_000_000 - 1_999_999_999;
+const wrapped: i8 = 2_000_000_000 + 2_000_000_000 + 294_967_297;
+const division: i8 = (2_000_000_000 + 2_000_000_000) / 2_000_000_000;
+print(value);
+print(wrapped);
+print(division);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "2_000_000_000" (1:19-1:32)
+PLUS (1:33-1:34)
+INTEGER_LITERAL "2_000_000_000" (1:35-1:48)
+MINUS (1:49-1:50)
+INTEGER_LITERAL "2_000_000_000" (1:51-1:64)
+MINUS (1:65-1:66)
+INTEGER_LITERAL "1_999_999_999" (1:67-1:80)
+SEMICOLON (1:80-1:81)
+CONST (2:1-2:6)
+IDENTIFIER "wrapped" (2:7-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "i8" (2:16-2:18)
+EQUAL (2:19-2:20)
+INTEGER_LITERAL "2_000_000_000" (2:21-2:34)
+PLUS (2:35-2:36)
+INTEGER_LITERAL "2_000_000_000" (2:37-2:50)
+PLUS (2:51-2:52)
+INTEGER_LITERAL "294_967_297" (2:53-2:64)
+SEMICOLON (2:64-2:65)
+CONST (3:1-3:6)
+IDENTIFIER "division" (3:7-3:15)
+COLON (3:15-3:16)
+IDENTIFIER "i8" (3:17-3:19)
+EQUAL (3:20-3:21)
+LEFT_PAREN (3:22-3:23)
+INTEGER_LITERAL "2_000_000_000" (3:23-3:36)
+PLUS (3:37-3:38)
+INTEGER_LITERAL "2_000_000_000" (3:39-3:52)
+RIGHT_PAREN (3:52-3:53)
+SLASH (3:54-3:55)
+INTEGER_LITERAL "2_000_000_000" (3:56-3:69)
+SEMICOLON (3:69-3:70)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "value" (4:7-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "wrapped" (5:7-5:14)
+RIGHT_PAREN (5:14-5:15)
+SEMICOLON (5:15-5:16)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "division" (6:7-6:15)
+RIGHT_PAREN (6:15-6:16)
+SEMICOLON (6:16-6:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:17
+  (VariableDeclaration
+    range: 1:1-1:81
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:14-1:16
+      name: "i8"
+    )
+    (BinaryExpression
+      range: 1:19-1:80
+      (BinaryExpression
+        range: 1:19-1:64
+        (BinaryExpression
+          range: 1:19-1:48
+          (LiteralExpression
+            range: 1:19-1:32
+            kind: INT
+            text: "2_000_000_000"
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 1:35-1:48
+            kind: INT
+            text: "2_000_000_000"
+          )
+        )
+        operator: SUBTRACT
+        (LiteralExpression
+          range: 1:51-1:64
+          kind: INT
+          text: "2_000_000_000"
+        )
+      )
+      operator: SUBTRACT
+      (LiteralExpression
+        range: 1:67-1:80
+        kind: INT
+        text: "1_999_999_999"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:65
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "wrapped"
+    )
+    (NamedTypeNode
+      range: 2:16-2:18
+      name: "i8"
+    )
+    (BinaryExpression
+      range: 2:21-2:64
+      (BinaryExpression
+        range: 2:21-2:50
+        (LiteralExpression
+          range: 2:21-2:34
+          kind: INT
+          text: "2_000_000_000"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 2:37-2:50
+          kind: INT
+          text: "2_000_000_000"
+        )
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 2:53-2:64
+        kind: INT
+        text: "294_967_297"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:70
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "division"
+    )
+    (NamedTypeNode
+      range: 3:17-3:19
+      name: "i8"
+    )
+    (BinaryExpression
+      range: 3:22-3:69
+      (GroupingExpression
+        range: 3:22-3:53
+        (BinaryExpression
+          range: 3:23-3:52
+          (LiteralExpression
+            range: 3:23-3:36
+            kind: INT
+            text: "2_000_000_000"
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 3:39-3:52
+            kind: INT
+            text: "2_000_000_000"
+          )
+        )
+      )
+      operator: DIVIDE
+      (LiteralExpression
+        range: 3:56-3:69
+        kind: INT
+        text: "2_000_000_000"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:14
+    (CallExpression
+      range: 4:1-4:13
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 4:7-4:12
+        name: "value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:16
+    (CallExpression
+      range: 5:1-5:15
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:14
+        name: "wrapped"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:17
+    (CallExpression
+      range: 6:1-6:16
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 6:7-6:15
+        name: "division"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:32 -> i32
+  1:19-1:48 -> i32
+  1:19-1:64 -> i32
+  1:19-1:80 -> i32
+  1:35-1:48 -> i32
+  1:51-1:64 -> i32
+  1:67-1:80 -> i32
+  2:21-2:34 -> i32
+  2:21-2:50 -> i32
+  2:21-2:64 -> i32
+  2:37-2:50 -> i32
+  2:53-2:64 -> i32
+  3:22-3:53 -> i32
+  3:22-3:69 -> i32
+  3:23-3:36 -> i32
+  3:23-3:52 -> i32
+  3:39-3:52 -> i32
+  3:56-3:69 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:13 -> void
+  4:7-4:12 -> i8
+  5:1-5:6 -> (any) => void
+  5:1-5:15 -> void
+  5:7-5:14 -> i8
+  6:1-6:6 -> (any) => void
+  6:1-6:16 -> void
+  6:7-6:15 -> i8
+
+Resolved types:
+  1:14-1:16 -> i8
+  2:16-2:18 -> i8
+  3:17-3:19 -> i8
+
+Conversions:
+  1:19-1:80 -> i32 -> i8
+  2:21-2:64 -> i32 -> i8
+  3:22-3:69 -> i32 -> i8
+
+Declarations:
+  1:7-1:12 -> const value: i8
+  2:7-2:14 -> const wrapped: i8
+  3:7-3:15 -> const division: i8
+
+References:
+  4:1-4:6 -> builtin print
+  4:7-4:12 -> 1:7-1:12
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 2:7-2:14
+  6:1-6:6 -> builtin print
+  6:7-6:15 -> 3:7-3:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value B flags [PUBLIC, STATIC, FINAL] = 1
+  field wrapped B flags [PUBLIC, STATIC, FINAL] = 1
+  field division B flags [PUBLIC, STATIC, FINAL] = 0
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.wrapped B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.division B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+1
+1
+0
+

@@ -715,13 +715,13 @@ Expression types:
   3:26-3:31 -> [i8]
   3:33-3:42 -> i16
   3:36-3:42 -> [i16]
-  3:44-3:45 -> i32
+  3:44-3:45 -> i64
   4:24-4:39 -> [f64]
   4:25-4:33 -> i64
   4:28-4:33 -> [i64]
   4:35-4:38 -> f64
   5:23-5:28 -> [f32]
-  5:24-5:27 -> f64
+  5:24-5:27 -> f32
   6:25-6:36 -> [f64]
   6:26-6:35 -> f32
   6:29-6:35 -> [f32]
@@ -809,9 +809,7 @@ Conversions:
   2:24-2:25 -> i32 -> i16
   3:23-3:31 -> i8 -> i64
   3:33-3:42 -> i16 -> i64
-  3:44-3:45 -> i32 -> i64
   4:25-4:33 -> i64 -> f64
-  5:24-5:27 -> f64 -> f32
   6:26-6:35 -> f32 -> f64
   12:23-12:31 -> i8 -> any
   12:33-12:41 -> bool -> any
@@ -922,8 +920,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ILOAD 4
     IADD
     ISTORE_0 0
-    LDC 4
-    I2L
+    LDC2_W 4
     LSTORE 5
     ILOAD_0 0
     ICONST_1 1
@@ -1048,8 +1045,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEWARRAY FLOAT
     DUP
     LDC 0
-    LDC2_W 1.0
-    D2F
+    LDC 1.0
     FASTORE
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
     PUTSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
@@ -1386,7 +1382,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.boxed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    max stack 7 max locals 61
+    max stack 6 max locals 61
 
 --- OUTPUT ---
 

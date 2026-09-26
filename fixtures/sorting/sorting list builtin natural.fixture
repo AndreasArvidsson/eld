@@ -865,13 +865,13 @@ Expression types:
   3:29-3:30 -> i32
   3:32-3:33 -> i32
   4:26-4:35 -> List<i64>
-  4:27-4:28 -> i32
-  4:30-4:31 -> i32
-  4:33-4:34 -> i32
+  4:27-4:28 -> i64
+  4:30-4:31 -> i64
+  4:33-4:34 -> i64
   5:27-5:42 -> List<f32>
-  5:28-5:31 -> f64
-  5:33-5:36 -> f64
-  5:38-5:41 -> f64
+  5:28-5:31 -> f32
+  5:33-5:36 -> f32
+  5:38-5:41 -> f32
   6:28-6:43 -> List<f64>
   6:29-6:32 -> f64
   6:34-6:37 -> f64
@@ -979,12 +979,6 @@ Conversions:
   2:28-2:29 -> i32 -> i16
   2:31-2:32 -> i32 -> i16
   2:34-2:35 -> i32 -> i16
-  4:27-4:28 -> i32 -> i64
-  4:30-4:31 -> i32 -> i64
-  4:33-4:34 -> i32 -> i64
-  5:28-5:31 -> f64 -> f32
-  5:33-5:36 -> f64 -> f32
-  5:38-5:41 -> f64 -> f32
 
 Declarations:
   1:7-1:12 -> const bytes: List<i8>
@@ -1128,20 +1122,17 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 3
     INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
-    LDC 3
-    I2L
+    LDC2_W 3
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC 1
-    I2L
+    LDC2_W 1
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC 2
-    I2L
+    LDC2_W 2
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
@@ -1151,20 +1142,17 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 3
     INVOKESPECIAL java/util/ArrayList.<init>(I)V
     DUP
-    LDC2_W 3.0
-    D2F
+    LDC 3.0
     INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
     INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC2_W 1.0
-    D2F
+    LDC 1.0
     INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
     INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP
     DUP
-    LDC2_W 2.0
-    D2F
+    LDC 2.0
     INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
     INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
     POP

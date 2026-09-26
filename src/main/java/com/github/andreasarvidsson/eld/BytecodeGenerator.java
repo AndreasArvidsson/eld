@@ -56,6 +56,7 @@ import com.github.andreasarvidsson.eld.semantic.FunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.FunctionType;
 import com.github.andreasarvidsson.eld.semantic.SemanticModel;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
+import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzerExpressionOperations;
 import com.github.andreasarvidsson.eld.semantic.Symbol;
 import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.semantic.UnionType;
@@ -2777,7 +2778,10 @@ public final class BytecodeGenerator {
     private @Nullable Object constantUnary(final UnaryExpression unary) {
         final java.math.BigInteger value =
             SemanticAnalyzer.integerLiteral(unary);
-        if (value != null) {
+        if (
+            value != null && SemanticAnalyzerExpressionOperations
+                .simpleIntegerLiteral(unary)
+        ) {
             if (semanticModel.getExpressionType(unary) == BuiltinType.I64) {
                 return value.longValueExact();
             }
@@ -5112,7 +5116,8 @@ public final class BytecodeGenerator {
             try {
                 if (
                     expression instanceof UnaryExpression unary
-                        && SemanticAnalyzer.integerLiteral(unary) != null
+                        && SemanticAnalyzerExpressionOperations
+                            .simpleIntegerLiteral(unary)
                 ) {
                     if (
                         semanticModel
@@ -5522,10 +5527,13 @@ public final class BytecodeGenerator {
             ) {
                 box(from);
             }
-            else if (to instanceof UnionType) {
+            else if (to instanceof UnionType unionType) {
                 final Type member =
                     semanticModel.getUnionMemberType(expression);
-                if (!(from instanceof UnionType)) {
+                if (from instanceof UnionType sourceUnion) {
+                    convertUnionMembers(sourceUnion, unionType);
+                }
+                else {
                     if (
                         member instanceof InterfaceType
                             && JavaTypes.boxedClass(from) != null
@@ -5553,6 +5561,65 @@ public final class BytecodeGenerator {
             }
             else {
                 convert(from, to);
+            }
+        }
+
+        private void convertUnionMembers(
+            final UnionType source,
+            final UnionType target
+        ) {
+            final Label end = method.newLabel();
+            boolean converted = false;
+            for (final Type member : source.memberTypes()) {
+                if (
+                    !(member instanceof BuiltinType numeric)
+                        || target.memberTypes()
+                            .stream()
+                            .anyMatch(
+                                destination -> semanticModel
+                                    .isSubtype(member, destination)
+                            )
+                ) {
+                    continue;
+                }
+                BuiltinType destination = null;
+                for (final BuiltinType candidate : BuiltinType.values()) {
+                    if (
+                        target.memberTypes().contains(candidate)
+                            && numeric.canWidenTo(candidate)
+                    ) {
+                        destination = candidate;
+                        break;
+                    }
+                }
+                if (destination == null) {
+                    throw new IllegalStateException(
+                        "Cannot convert union member " + member + " to "
+                            + target
+                    );
+                }
+                final Label next = method.newLabel();
+                method.dup();
+                method
+                    .ldc(classDesc(Objects.requireNonNull(boxedOwner(member))));
+                method.with(simpleInstruction(SWAP));
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc("java/lang/Class"),
+                    "isInstance",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                    false
+                );
+                method.branch(IFEQ, next);
+                readObject(member);
+                convert(member, destination);
+                box(destination);
+                method.branch(GOTO, end);
+                method.labelBinding(next);
+                converted = true;
+            }
+            if (converted) {
+                method.labelBinding(end);
             }
         }
 
@@ -6370,7 +6437,36 @@ public final class BytecodeGenerator {
                 return;
             }
             if (from instanceof UnionType) {
-                readObject(to);
+                if (
+                    to instanceof BuiltinType numeric
+                        && (numeric.isInteger() || numeric.isFloating())
+                ) {
+                    method.checkcast(classDesc("java/lang/Number"));
+                    final String valueMethod = switch (numeric) {
+                        case I8, I16, I32 -> "intValue";
+                        case I64 -> "longValue";
+                        case F32 -> "floatValue";
+                        case F64 -> "doubleValue";
+                        default ->
+                            throw new IllegalArgumentException("Not numeric");
+                    };
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/Number"),
+                        valueMethod,
+                        MethodTypeDesc.ofDescriptor(
+                            "()" + (numeric == BuiltinType.I8
+                                || numeric == BuiltinType.I16
+                                    ? "I"
+                                    : descriptor(to))
+                        ),
+                        false
+                    );
+                    narrow(to);
+                }
+                else {
+                    readObject(to);
+                }
                 return;
             }
             if (from == BuiltinType.I64) {

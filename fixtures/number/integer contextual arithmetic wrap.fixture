@@ -1,0 +1,919 @@
+const addOverflow: i64 = 9_223_372_036_854_775_807 + 1;
+const addUnderflow: i64 = -9_223_372_036_854_775_808 + -1;
+const subtractOverflow: i64 = 9_223_372_036_854_775_807 - -1;
+const subtractUnderflow: i64 = -9_223_372_036_854_775_808 - 1;
+const multiplyPositive: i64 = 9_223_372_036_854_775_807 * 2;
+const multiplyNegative: i64 = -9_223_372_036_854_775_808 * 2;
+const divideOverflow: i64 = -9_223_372_036_854_775_808 / -1;
+const negateMinimum: i64 = -(-9_223_372_036_854_775_808);
+const inferred = -(-2_147_483_648);
+const boxed: any = -(-2_147_483_648);
+const union: i32 | string = -(-2_147_483_648);
+
+print(addOverflow);
+print(addUnderflow);
+print(subtractOverflow);
+print(subtractUnderflow);
+print(multiplyPositive);
+print(multiplyNegative);
+print(divideOverflow);
+print(negateMinimum);
+print(inferred);
+print(boxed);
+print(union);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "addOverflow" (1:7-1:18)
+COLON (1:18-1:19)
+IDENTIFIER "i64" (1:20-1:23)
+EQUAL (1:24-1:25)
+INTEGER_LITERAL "9_223_372_036_854_775_807" (1:26-1:51)
+PLUS (1:52-1:53)
+INTEGER_LITERAL "1" (1:54-1:55)
+SEMICOLON (1:55-1:56)
+CONST (2:1-2:6)
+IDENTIFIER "addUnderflow" (2:7-2:19)
+COLON (2:19-2:20)
+IDENTIFIER "i64" (2:21-2:24)
+EQUAL (2:25-2:26)
+MINUS (2:27-2:28)
+INTEGER_LITERAL "9_223_372_036_854_775_808" (2:28-2:53)
+PLUS (2:54-2:55)
+MINUS (2:56-2:57)
+INTEGER_LITERAL "1" (2:57-2:58)
+SEMICOLON (2:58-2:59)
+CONST (3:1-3:6)
+IDENTIFIER "subtractOverflow" (3:7-3:23)
+COLON (3:23-3:24)
+IDENTIFIER "i64" (3:25-3:28)
+EQUAL (3:29-3:30)
+INTEGER_LITERAL "9_223_372_036_854_775_807" (3:31-3:56)
+MINUS (3:57-3:58)
+MINUS (3:59-3:60)
+INTEGER_LITERAL "1" (3:60-3:61)
+SEMICOLON (3:61-3:62)
+CONST (4:1-4:6)
+IDENTIFIER "subtractUnderflow" (4:7-4:24)
+COLON (4:24-4:25)
+IDENTIFIER "i64" (4:26-4:29)
+EQUAL (4:30-4:31)
+MINUS (4:32-4:33)
+INTEGER_LITERAL "9_223_372_036_854_775_808" (4:33-4:58)
+MINUS (4:59-4:60)
+INTEGER_LITERAL "1" (4:61-4:62)
+SEMICOLON (4:62-4:63)
+CONST (5:1-5:6)
+IDENTIFIER "multiplyPositive" (5:7-5:23)
+COLON (5:23-5:24)
+IDENTIFIER "i64" (5:25-5:28)
+EQUAL (5:29-5:30)
+INTEGER_LITERAL "9_223_372_036_854_775_807" (5:31-5:56)
+STAR (5:57-5:58)
+INTEGER_LITERAL "2" (5:59-5:60)
+SEMICOLON (5:60-5:61)
+CONST (6:1-6:6)
+IDENTIFIER "multiplyNegative" (6:7-6:23)
+COLON (6:23-6:24)
+IDENTIFIER "i64" (6:25-6:28)
+EQUAL (6:29-6:30)
+MINUS (6:31-6:32)
+INTEGER_LITERAL "9_223_372_036_854_775_808" (6:32-6:57)
+STAR (6:58-6:59)
+INTEGER_LITERAL "2" (6:60-6:61)
+SEMICOLON (6:61-6:62)
+CONST (7:1-7:6)
+IDENTIFIER "divideOverflow" (7:7-7:21)
+COLON (7:21-7:22)
+IDENTIFIER "i64" (7:23-7:26)
+EQUAL (7:27-7:28)
+MINUS (7:29-7:30)
+INTEGER_LITERAL "9_223_372_036_854_775_808" (7:30-7:55)
+SLASH (7:56-7:57)
+MINUS (7:58-7:59)
+INTEGER_LITERAL "1" (7:59-7:60)
+SEMICOLON (7:60-7:61)
+CONST (8:1-8:6)
+IDENTIFIER "negateMinimum" (8:7-8:20)
+COLON (8:20-8:21)
+IDENTIFIER "i64" (8:22-8:25)
+EQUAL (8:26-8:27)
+MINUS (8:28-8:29)
+LEFT_PAREN (8:29-8:30)
+MINUS (8:30-8:31)
+INTEGER_LITERAL "9_223_372_036_854_775_808" (8:31-8:56)
+RIGHT_PAREN (8:56-8:57)
+SEMICOLON (8:57-8:58)
+CONST (9:1-9:6)
+IDENTIFIER "inferred" (9:7-9:15)
+EQUAL (9:16-9:17)
+MINUS (9:18-9:19)
+LEFT_PAREN (9:19-9:20)
+MINUS (9:20-9:21)
+INTEGER_LITERAL "2_147_483_648" (9:21-9:34)
+RIGHT_PAREN (9:34-9:35)
+SEMICOLON (9:35-9:36)
+CONST (10:1-10:6)
+IDENTIFIER "boxed" (10:7-10:12)
+COLON (10:12-10:13)
+IDENTIFIER "any" (10:14-10:17)
+EQUAL (10:18-10:19)
+MINUS (10:20-10:21)
+LEFT_PAREN (10:21-10:22)
+MINUS (10:22-10:23)
+INTEGER_LITERAL "2_147_483_648" (10:23-10:36)
+RIGHT_PAREN (10:36-10:37)
+SEMICOLON (10:37-10:38)
+CONST (11:1-11:6)
+IDENTIFIER "union" (11:7-11:12)
+COLON (11:12-11:13)
+IDENTIFIER "i32" (11:14-11:17)
+PIPE (11:18-11:19)
+IDENTIFIER "string" (11:20-11:26)
+EQUAL (11:27-11:28)
+MINUS (11:29-11:30)
+LEFT_PAREN (11:30-11:31)
+MINUS (11:31-11:32)
+INTEGER_LITERAL "2_147_483_648" (11:32-11:45)
+RIGHT_PAREN (11:45-11:46)
+SEMICOLON (11:46-11:47)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "addOverflow" (13:7-13:18)
+RIGHT_PAREN (13:18-13:19)
+SEMICOLON (13:19-13:20)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "addUnderflow" (14:7-14:19)
+RIGHT_PAREN (14:19-14:20)
+SEMICOLON (14:20-14:21)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "subtractOverflow" (15:7-15:23)
+RIGHT_PAREN (15:23-15:24)
+SEMICOLON (15:24-15:25)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "subtractUnderflow" (16:7-16:24)
+RIGHT_PAREN (16:24-16:25)
+SEMICOLON (16:25-16:26)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "multiplyPositive" (17:7-17:23)
+RIGHT_PAREN (17:23-17:24)
+SEMICOLON (17:24-17:25)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "multiplyNegative" (18:7-18:23)
+RIGHT_PAREN (18:23-18:24)
+SEMICOLON (18:24-18:25)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "divideOverflow" (19:7-19:21)
+RIGHT_PAREN (19:21-19:22)
+SEMICOLON (19:22-19:23)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "negateMinimum" (20:7-20:20)
+RIGHT_PAREN (20:20-20:21)
+SEMICOLON (20:21-20:22)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "inferred" (21:7-21:15)
+RIGHT_PAREN (21:15-21:16)
+SEMICOLON (21:16-21:17)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "boxed" (22:7-22:12)
+RIGHT_PAREN (22:12-22:13)
+SEMICOLON (22:13-22:14)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "union" (23:7-23:12)
+RIGHT_PAREN (23:12-23:13)
+SEMICOLON (23:13-23:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-23:14
+  (VariableDeclaration
+    range: 1:1-1:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:18
+      name: "addOverflow"
+    )
+    (NamedTypeNode
+      range: 1:20-1:23
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 1:26-1:55
+      (LiteralExpression
+        range: 1:26-1:51
+        kind: INT
+        text: "9_223_372_036_854_775_807"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 1:54-1:55
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:59
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:19
+      name: "addUnderflow"
+    )
+    (NamedTypeNode
+      range: 2:21-2:24
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 2:27-2:58
+      (UnaryExpression
+        range: 2:27-2:53
+        operator: MINUS
+        (LiteralExpression
+          range: 2:28-2:53
+          kind: INT
+          text: "9_223_372_036_854_775_808"
+        )
+      )
+      operator: ADD
+      (UnaryExpression
+        range: 2:56-2:58
+        operator: MINUS
+        (LiteralExpression
+          range: 2:57-2:58
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:62
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:23
+      name: "subtractOverflow"
+    )
+    (NamedTypeNode
+      range: 3:25-3:28
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 3:31-3:61
+      (LiteralExpression
+        range: 3:31-3:56
+        kind: INT
+        text: "9_223_372_036_854_775_807"
+      )
+      operator: SUBTRACT
+      (UnaryExpression
+        range: 3:59-3:61
+        operator: MINUS
+        (LiteralExpression
+          range: 3:60-3:61
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:63
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:24
+      name: "subtractUnderflow"
+    )
+    (NamedTypeNode
+      range: 4:26-4:29
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 4:32-4:62
+      (UnaryExpression
+        range: 4:32-4:58
+        operator: MINUS
+        (LiteralExpression
+          range: 4:33-4:58
+          kind: INT
+          text: "9_223_372_036_854_775_808"
+        )
+      )
+      operator: SUBTRACT
+      (LiteralExpression
+        range: 4:61-4:62
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:61
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:23
+      name: "multiplyPositive"
+    )
+    (NamedTypeNode
+      range: 5:25-5:28
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 5:31-5:60
+      (LiteralExpression
+        range: 5:31-5:56
+        kind: INT
+        text: "9_223_372_036_854_775_807"
+      )
+      operator: MULTIPLY
+      (LiteralExpression
+        range: 5:59-5:60
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:62
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:23
+      name: "multiplyNegative"
+    )
+    (NamedTypeNode
+      range: 6:25-6:28
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 6:31-6:61
+      (UnaryExpression
+        range: 6:31-6:57
+        operator: MINUS
+        (LiteralExpression
+          range: 6:32-6:57
+          kind: INT
+          text: "9_223_372_036_854_775_808"
+        )
+      )
+      operator: MULTIPLY
+      (LiteralExpression
+        range: 6:60-6:61
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:61
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:21
+      name: "divideOverflow"
+    )
+    (NamedTypeNode
+      range: 7:23-7:26
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 7:29-7:60
+      (UnaryExpression
+        range: 7:29-7:55
+        operator: MINUS
+        (LiteralExpression
+          range: 7:30-7:55
+          kind: INT
+          text: "9_223_372_036_854_775_808"
+        )
+      )
+      operator: DIVIDE
+      (UnaryExpression
+        range: 7:58-7:60
+        operator: MINUS
+        (LiteralExpression
+          range: 7:59-7:60
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:58
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:20
+      name: "negateMinimum"
+    )
+    (NamedTypeNode
+      range: 8:22-8:25
+      name: "i64"
+    )
+    (UnaryExpression
+      range: 8:28-8:57
+      operator: MINUS
+      (GroupingExpression
+        range: 8:29-8:57
+        (UnaryExpression
+          range: 8:30-8:56
+          operator: MINUS
+          (LiteralExpression
+            range: 8:31-8:56
+            kind: INT
+            text: "9_223_372_036_854_775_808"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:15
+      name: "inferred"
+    )
+    type: null
+    (UnaryExpression
+      range: 9:18-9:35
+      operator: MINUS
+      (GroupingExpression
+        range: 9:19-9:35
+        (UnaryExpression
+          range: 9:20-9:34
+          operator: MINUS
+          (LiteralExpression
+            range: 9:21-9:34
+            kind: INT
+            text: "2_147_483_648"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "boxed"
+    )
+    (NamedTypeNode
+      range: 10:14-10:17
+      name: "any"
+    )
+    (UnaryExpression
+      range: 10:20-10:37
+      operator: MINUS
+      (GroupingExpression
+        range: 10:21-10:37
+        (UnaryExpression
+          range: 10:22-10:36
+          operator: MINUS
+          (LiteralExpression
+            range: 10:23-10:36
+            kind: INT
+            text: "2_147_483_648"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "union"
+    )
+    (UnionTypeNode
+      range: 11:14-11:26
+      (NamedTypeNode
+        range: 11:14-11:17
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 11:20-11:26
+        name: "string"
+      )
+    )
+    (UnaryExpression
+      range: 11:29-11:46
+      operator: MINUS
+      (GroupingExpression
+        range: 11:30-11:46
+        (UnaryExpression
+          range: 11:31-11:45
+          operator: MINUS
+          (LiteralExpression
+            range: 11:32-11:45
+            kind: INT
+            text: "2_147_483_648"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:20
+    (CallExpression
+      range: 13:1-13:19
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:7-13:18
+        name: "addOverflow"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:21
+    (CallExpression
+      range: 14:1-14:20
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 14:7-14:19
+        name: "addUnderflow"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:25
+    (CallExpression
+      range: 15:1-15:24
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 15:7-15:23
+        name: "subtractOverflow"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:26
+    (CallExpression
+      range: 16:1-16:25
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 16:7-16:24
+        name: "subtractUnderflow"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:25
+    (CallExpression
+      range: 17:1-17:24
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 17:7-17:23
+        name: "multiplyPositive"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:25
+    (CallExpression
+      range: 18:1-18:24
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 18:7-18:23
+        name: "multiplyNegative"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:23
+    (CallExpression
+      range: 19:1-19:22
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 19:7-19:21
+        name: "divideOverflow"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:22
+    (CallExpression
+      range: 20:1-20:21
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 20:7-20:20
+        name: "negateMinimum"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:17
+    (CallExpression
+      range: 21:1-21:16
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 21:7-21:15
+        name: "inferred"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:14
+    (CallExpression
+      range: 22:1-22:13
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 22:7-22:12
+        name: "boxed"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:14
+    (CallExpression
+      range: 23:1-23:13
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 23:7-23:12
+        name: "union"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:26-1:51 -> i64
+  1:26-1:55 -> i64
+  1:54-1:55 -> i64
+  2:27-2:53 -> i64
+  2:27-2:58 -> i64
+  2:28-2:53 -> i64
+  2:56-2:58 -> i64
+  2:57-2:58 -> i64
+  3:31-3:56 -> i64
+  3:31-3:61 -> i64
+  3:59-3:61 -> i64
+  3:60-3:61 -> i64
+  4:32-4:58 -> i64
+  4:32-4:62 -> i64
+  4:33-4:58 -> i64
+  4:61-4:62 -> i64
+  5:31-5:56 -> i64
+  5:31-5:60 -> i64
+  5:59-5:60 -> i64
+  6:31-6:57 -> i64
+  6:31-6:61 -> i64
+  6:32-6:57 -> i64
+  6:60-6:61 -> i64
+  7:29-7:55 -> i64
+  7:29-7:60 -> i64
+  7:30-7:55 -> i64
+  7:58-7:60 -> i64
+  7:59-7:60 -> i64
+  8:28-8:57 -> i64
+  8:29-8:57 -> i64
+  8:30-8:56 -> i64
+  8:31-8:56 -> i64
+  9:18-9:35 -> i32
+  9:19-9:35 -> i32
+  9:20-9:34 -> i32
+  9:21-9:34 -> i32
+  10:20-10:37 -> i32
+  10:21-10:37 -> i32
+  10:22-10:36 -> i32
+  10:23-10:36 -> i32
+  11:29-11:46 -> i32
+  11:30-11:46 -> i32
+  11:31-11:45 -> i32
+  11:32-11:45 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:19 -> void
+  13:7-13:18 -> i64
+  14:1-14:6 -> (any) => void
+  14:1-14:20 -> void
+  14:7-14:19 -> i64
+  15:1-15:6 -> (any) => void
+  15:1-15:24 -> void
+  15:7-15:23 -> i64
+  16:1-16:6 -> (any) => void
+  16:1-16:25 -> void
+  16:7-16:24 -> i64
+  17:1-17:6 -> (any) => void
+  17:1-17:24 -> void
+  17:7-17:23 -> i64
+  18:1-18:6 -> (any) => void
+  18:1-18:24 -> void
+  18:7-18:23 -> i64
+  19:1-19:6 -> (any) => void
+  19:1-19:22 -> void
+  19:7-19:21 -> i64
+  20:1-20:6 -> (any) => void
+  20:1-20:21 -> void
+  20:7-20:20 -> i64
+  21:1-21:6 -> (any) => void
+  21:1-21:16 -> void
+  21:7-21:15 -> i32
+  22:1-22:6 -> (any) => void
+  22:1-22:13 -> void
+  22:7-22:12 -> any
+  23:1-23:6 -> (any) => void
+  23:1-23:13 -> void
+  23:7-23:12 -> i32 | string
+
+Resolved types:
+  1:20-1:23 -> i64
+  2:21-2:24 -> i64
+  3:25-3:28 -> i64
+  4:26-4:29 -> i64
+  5:25-5:28 -> i64
+  6:25-6:28 -> i64
+  7:23-7:26 -> i64
+  8:22-8:25 -> i64
+  10:14-10:17 -> any
+  11:14-11:17 -> i32
+  11:14-11:26 -> i32 | string
+  11:20-11:26 -> string
+
+Conversions:
+  10:20-10:37 -> i32 -> any
+  11:29-11:46 -> i32 -> i32 | string
+
+Declarations:
+  1:7-1:18 -> const addOverflow: i64
+  2:7-2:19 -> const addUnderflow: i64
+  3:7-3:23 -> const subtractOverflow: i64
+  4:7-4:24 -> const subtractUnderflow: i64
+  5:7-5:23 -> const multiplyPositive: i64
+  6:7-6:23 -> const multiplyNegative: i64
+  7:7-7:21 -> const divideOverflow: i64
+  8:7-8:20 -> const negateMinimum: i64
+  9:7-9:15 -> const inferred: i32
+  10:7-10:12 -> const boxed: any
+  11:7-11:12 -> const union: i32 | string
+
+References:
+  13:1-13:6 -> builtin print
+  13:7-13:18 -> 1:7-1:18
+  14:1-14:6 -> builtin print
+  14:7-14:19 -> 2:7-2:19
+  15:1-15:6 -> builtin print
+  15:7-15:23 -> 3:7-3:23
+  16:1-16:6 -> builtin print
+  16:7-16:24 -> 4:7-4:24
+  17:1-17:6 -> builtin print
+  17:7-17:23 -> 5:7-5:23
+  18:1-18:6 -> builtin print
+  18:7-18:23 -> 6:7-6:23
+  19:1-19:6 -> builtin print
+  19:7-19:21 -> 7:7-7:21
+  20:1-20:6 -> builtin print
+  20:7-20:20 -> 8:7-8:20
+  21:1-21:6 -> builtin print
+  21:7-21:15 -> 9:7-9:15
+  22:1-22:6 -> builtin print
+  22:7-22:12 -> 10:7-10:12
+  23:1-23:6 -> builtin print
+  23:7-23:12 -> 11:7-11:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field addOverflow J flags [PUBLIC, STATIC, FINAL]
+  field addUnderflow J flags [PUBLIC, STATIC, FINAL]
+  field subtractOverflow J flags [PUBLIC, STATIC, FINAL]
+  field subtractUnderflow J flags [PUBLIC, STATIC, FINAL]
+  field multiplyPositive J flags [PUBLIC, STATIC, FINAL]
+  field multiplyNegative J flags [PUBLIC, STATIC, FINAL]
+  field divideOverflow J flags [PUBLIC, STATIC, FINAL]
+  field negateMinimum J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
+  field inferred I flags [PUBLIC, STATIC, FINAL] = -2147483648
+  field boxed Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field union Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC2_W 9223372036854775807
+    LDC2_W 1
+    LADD
+    PUTSTATIC Test.addOverflow J
+    LDC2_W -9223372036854775808
+    LDC2_W -1
+    LADD
+    PUTSTATIC Test.addUnderflow J
+    LDC2_W 9223372036854775807
+    LDC2_W -1
+    LSUB
+    PUTSTATIC Test.subtractOverflow J
+    LDC2_W -9223372036854775808
+    LDC2_W 1
+    LSUB
+    PUTSTATIC Test.subtractUnderflow J
+    LDC2_W 9223372036854775807
+    LDC2_W 2
+    LMUL
+    PUTSTATIC Test.multiplyPositive J
+    LDC2_W -9223372036854775808
+    LDC2_W 2
+    LMUL
+    PUTSTATIC Test.multiplyNegative J
+    LDC2_W -9223372036854775808
+    LDC2_W -1
+    LDIV
+    PUTSTATIC Test.divideOverflow J
+    LDC -2147483648
+    INEG
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.boxed Ljava/lang/Object;
+    LDC -2147483648
+    INEG
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.union Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.addOverflow J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.addUnderflow J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.subtractOverflow J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.subtractUnderflow J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.multiplyPositive J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.multiplyNegative J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.divideOverflow J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.negateMinimum J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.inferred I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.boxed Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.union Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+-9223372036854775808
+9223372036854775807
+-9223372036854775808
+9223372036854775807
+-2
+0
+-9223372036854775808
+-9223372036854775808
+-2147483648
+-2147483648
+-2147483648
+

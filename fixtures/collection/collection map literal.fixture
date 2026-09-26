@@ -243,7 +243,7 @@ Expression types:
   4:12-4:13 -> i32
   6:33-6:47 -> Map<string, i64>
   6:34-6:42 -> string
-  6:44-6:46 -> i32
+  6:44-6:46 -> i64
   7:33-7:35 -> Map<string, i32>
   8:1-8:6 -> (any) => void
   8:1-8:14 -> void
@@ -262,9 +262,6 @@ Resolved types:
   7:14-7:30 -> Map<string, i32>
   7:18-7:24 -> string
   7:26-7:29 -> i32
-
-Conversions:
-  6:44-6:46 -> i32 -> i64
 
 Declarations:
   1:7-1:13 -> const values: Map<string, i32>
@@ -316,8 +313,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL java/util/LinkedHashMap.<init>()V
     DUP
     LDC "answer"
-    LDC 42
-    I2L
+    LDC2_W 42
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
     POP

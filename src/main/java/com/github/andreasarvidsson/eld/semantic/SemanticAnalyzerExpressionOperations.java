@@ -278,6 +278,19 @@ public final class SemanticAnalyzerExpressionOperations {
         final BinaryExpression binary,
         final SemanticContext context
     ) {
+        if (
+            isFloatingLiteral(binary.left())
+                && !isFloatingLiteral(binary.right())
+        ) {
+            final Type rightType =
+                expressions.analyzeExpression(binary.right(), context);
+            final Type leftType =
+                rightType instanceof BuiltinType builtin && builtin.isFloating()
+                    ? expressions
+                        .analyzeExpression(binary.left(), context, rightType)
+                    : expressions.analyzeExpression(binary.left(), context);
+            return finishBinaryExpression(binary, leftType, rightType);
+        }
         final Type leftType =
             expressions.analyzeExpression(binary.left(), context);
         SemanticContext rightContext = context;
@@ -301,7 +314,23 @@ public final class SemanticAnalyzerExpressionOperations {
                 );
         }
         final Type rightType =
-            expressions.analyzeExpression(binary.right(), rightContext);
+            leftType instanceof BuiltinType builtin && builtin.isFloating()
+                && isFloatingLiteral(binary.right())
+                    ? expressions.analyzeExpression(
+                        binary.right(),
+                        rightContext,
+                        leftType
+                    )
+                    : expressions
+                        .analyzeExpression(binary.right(), rightContext);
+        return finishBinaryExpression(binary, leftType, rightType);
+    }
+
+    private Type finishBinaryExpression(
+        final BinaryExpression binary,
+        final Type leftType,
+        final Type rightType
+    ) {
         boolean unionEquality = false;
         if (
             binary.operator() == BinaryOperator.EQUAL
@@ -386,7 +415,8 @@ public final class SemanticAnalyzerExpressionOperations {
         final UnaryExpression unary,
         final SemanticContext context
     ) {
-        final BigInteger signedLiteral = integerLiteral(unary);
+        final BigInteger signedLiteral =
+            simpleIntegerLiteral(unary) ? integerLiteral(unary) : null;
         if (signedLiteral != null) {
             final Type type = integerType(signedLiteral, unary);
             setLiteralType(unary.operand(), type);
@@ -514,7 +544,7 @@ public final class SemanticAnalyzerExpressionOperations {
         return type;
     }
 
-    // Java binary numeric promotion: double, float, long, otherwise int.
+    // Keep the common integer width; character arithmetic still uses i32.
     private static BuiltinType promotedNumericType(
         final Type left,
         final Type right
@@ -527,6 +557,19 @@ public final class SemanticAnalyzerExpressionOperations {
         }
         if (left == BuiltinType.I64 || right == BuiltinType.I64) {
             return BuiltinType.I64;
+        }
+        if (
+            left == BuiltinType.I32 || right == BuiltinType.I32
+                || left == BuiltinType.CHAR
+                || right == BuiltinType.CHAR
+        ) {
+            return BuiltinType.I32;
+        }
+        if (left == BuiltinType.I16 || right == BuiltinType.I16) {
+            return BuiltinType.I16;
+        }
+        if (left == BuiltinType.I8 && right == BuiltinType.I8) {
+            return BuiltinType.I8;
         }
         return BuiltinType.I32;
     }
@@ -543,6 +586,15 @@ public final class SemanticAnalyzerExpressionOperations {
         }
         if (expression instanceof GroupingExpression grouping) {
             return isFloatingLiteral(grouping.expression());
+        }
+        if (expression instanceof BinaryExpression binary) {
+            return (binary.operator() == BinaryOperator.ADD
+                || binary.operator() == BinaryOperator.SUBTRACT
+                || binary.operator() == BinaryOperator.MULTIPLY
+                || binary.operator() == BinaryOperator.DIVIDE
+                || binary.operator() == BinaryOperator.MODULO)
+                && isFloatingLiteral(binary.left())
+                && isFloatingLiteral(binary.right());
         }
         return expression instanceof UnaryExpression unary
             && (unary.operator() == UnaryOperator.PLUS
@@ -577,6 +629,33 @@ public final class SemanticAnalyzerExpressionOperations {
         return null;
     }
 
+    public static boolean simpleIntegerLiteral(final Expression expression) {
+        if (
+            expression instanceof LiteralExpression literal
+                && literal.kind() == LiteralKind.INT
+        ) {
+            return true;
+        }
+        if (expression instanceof GroupingExpression grouping) {
+            return simpleIntegerLiteral(grouping.expression());
+        }
+        return expression instanceof UnaryExpression unary
+            && (unary.operator() == UnaryOperator.PLUS
+                || unary.operator() == UnaryOperator.MINUS)
+            && unsignedIntegerLiteral(unary.operand());
+    }
+
+    private static boolean unsignedIntegerLiteral(final Expression expression) {
+        if (
+            expression instanceof LiteralExpression literal
+                && literal.kind() == LiteralKind.INT
+        ) {
+            return true;
+        }
+        return expression instanceof GroupingExpression grouping
+            && unsignedIntegerLiteral(grouping.expression());
+    }
+
     private static Type integerType(
         final BigInteger value,
         final Expression expression
@@ -584,12 +663,10 @@ public final class SemanticAnalyzerExpressionOperations {
         if (value.bitLength() < 32) {
             return BuiltinType.I32;
         }
-        if (value.bitLength() < 64) {
-            return BuiltinType.I64;
-        }
         throw new SemanticException(
             expression.range(),
-            "Integer literal is outside the i64 range"
+            "Integer literal %s does not fit in inferred type i32; specify an explicit integer type",
+            value
         );
     }
 

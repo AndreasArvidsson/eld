@@ -417,10 +417,17 @@ class BytecodeGeneratorTest {
                 module.getMethod("multi", int.class).invoke(null, 2)
             )
         );
+        final Class<?> numeric =
+            compileClass(
+                "const value: i32 | null = 1; const widened: i64 | null = value; const empty: i32 | null = null; const widenedEmpty: i64 | null = empty;",
+                "Test"
+            );
+        assertEquals(1L, numeric.getField("widened").get(null));
+        assertNull(numeric.getField("widenedEmpty").get(null));
         for (final String source : List.of(
             "class Base {} class Child extends Base {} const base: Base | null = new Base(); const child: Child | null = base;",
             "class Base {} class Other {} const other: Other | null = new Other(); const base: Base | null = other;",
-            "const value: i32 | null = 1; const widened: i64 | null = value;"
+            "const value: i64 | null = 1; const narrowed: i32 | null = value;"
         )) {
             assertThrows(
                 SemanticException.class,
@@ -2172,7 +2179,8 @@ class BytecodeGeneratorTest {
                     const text: any = "hello";
                     const empty: any = null;
                     func identity(value: any) any { return value; }
-                    func number() any { return identity(9000000000); }
+                    const wide: i64 = 9000000000;
+                    func number() any { return identity(wide); }
                     func primitives() (any, any, any, any, any, any, any, any) {
                         const b: i8 = 1; const s: i16 = 2; const i: i32 = 3;
                         const l: i64 = 4; const f: f32 = 1.5; const d: f64 = 2.5;
@@ -2810,7 +2818,7 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void floatLiteralNarrowingKeepsDoubleExpressionTypeAndConvertsAtRuntime()
+    void floatLiteralsUseContextualFloatTypesAndRoundDirectly()
         throws Exception {
         final Program program =
             new Parser(new Lexer("var value: f32 = 1.5;").getTokens()).parse();
@@ -2818,12 +2826,12 @@ class BytecodeGeneratorTest {
         final var initializer =
             ((VariableDeclaration) program.items().getFirst()).initializer();
         assertEquals(
-            com.github.andreasarvidsson.eld.semantic.BuiltinType.F64,
+            com.github.andreasarvidsson.eld.semantic.BuiltinType.F32,
             model.getExpressionType(initializer)
         );
         assertEquals(
             com.github.andreasarvidsson.eld.semantic.BuiltinType.F32,
-            model.getConversionType(initializer)
+            model.getEffectiveType(initializer)
         );
         final Class<?> type = compile("""
             const folded: f32 = 1.0000000596046448;
@@ -2833,13 +2841,11 @@ class BytecodeGeneratorTest {
             var argument = identity(1.0000000596046448);
             func result() f32 { return +(1.0000000596046448); }
             """);
-        // Parsing as f64 first rounds to the f32 midpoint, then D2F rounds to even.
-        // Parsing the original decimal directly as f32 would round upward.
-        assertEquals(1.0f, type.getField("folded").get(null));
-        assertEquals(1.0f, type.getField("runtime").get(null));
-        assertEquals(-1.0f, type.getField("grouped").get(null));
-        assertEquals(1.0f, type.getField("argument").get(null));
-        assertEquals(1.0f, type.getMethod("result").invoke(null));
+        assertEquals(1.0000001f, type.getField("folded").get(null));
+        assertEquals(1.0000001f, type.getField("runtime").get(null));
+        assertEquals(-1.0000001f, type.getField("grouped").get(null));
+        assertEquals(1.0000001f, type.getField("argument").get(null));
+        assertEquals(1.0000001f, type.getMethod("result").invoke(null));
     }
 
     @Test
@@ -2863,11 +2869,8 @@ class BytecodeGeneratorTest {
         assertEquals(-1.2345679f, type.getField("signed").get(null));
         assertEquals(-1.2345679f, type.getField("argument").get(null));
         assertEquals(1.2345679f, type.getField("returned").get(null));
-        assertEquals(double.class, type.getField("mixed").getType());
-        assertEquals(
-            (double) 1.2345679f + 0.1,
-            type.getField("mixed").get(null)
-        );
+        assertEquals(float.class, type.getField("mixed").getType());
+        assertEquals(1.2345679f + 0.1f, type.getField("mixed").get(null));
         assertThrows(
             SemanticException.class,
             () -> compile("var a = 1.25; var b: f32 = a;")
@@ -2879,7 +2882,7 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void numericOperatorsUseJavaPromotionForEveryTypePair() throws Exception {
+    void numericOperatorsUseCommonTypesForEveryTypePair() throws Exception {
         final String[] types =
             {"i8", "i16", "i32", "i64", "f32", "f64", "char"};
         for (final String left : types) {
@@ -2900,7 +2903,14 @@ class BytecodeGeneratorTest {
                             ? float.class
                             : left.equals("i64") || right.equals("i64")
                                 ? long.class
-                                : int.class;
+                                : left.equals("i32") || right.equals("i32")
+                                    || left.equals("char")
+                                    || right.equals("char")
+                                        ? int.class
+                                        : left.equals("i16")
+                                            || right.equals("i16")
+                                                ? short.class
+                                                : byte.class;
                 for (final String field : List.of(
                     "sum",
                     "difference",
@@ -2960,7 +2970,7 @@ class BytecodeGeneratorTest {
         assertEquals(-32768, type.getField("positive").get(null));
         assertEquals(65, type.getField("code").get(null));
         assertEquals(-65, type.getField("negatedCharacter").get(null));
-        assertEquals(-256, type.getField("sum").get(null));
+        assertEquals((byte) 0, type.getField("sum").get(null));
         assertEquals((byte) -128, type.getField("old").get(null));
         assertEquals((byte) -127, type.getField("small").get(null));
         assertEquals(0.1, type.getField("promoted").get(null));
@@ -2970,10 +2980,8 @@ class BytecodeGeneratorTest {
             type.getField("runtime").get(null)
         );
         assertEquals(16777216f, type.getField("rounded").get(null));
-        assertThrows(
-            SemanticException.class,
-            () -> compile("var a: i8 = 1; var b: i8 = a + a;")
-        );
+        final Class<?> narrow = compile("var a: i8 = 1; var b: i8 = a + a;");
+        assertEquals((byte) 2, narrow.getField("b").get(null));
     }
 
     @Test
@@ -2983,7 +2991,7 @@ class BytecodeGeneratorTest {
             const small: i16 = 32767;
             const wide: i64 = 9223372036854775807;
             const minimum: i64 = -(9223372036854775808);
-            var inferred = 2147483648;
+            var inferred: i64 = 2147483648;
             var single: f32 = 1.25;
             var precise: f64 = 1.23456789012345;
             func mix(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64) f64 {
@@ -3098,13 +3106,15 @@ class BytecodeGeneratorTest {
     @Test
     void wideNumbersWorkInLoopsSwitchesAndInstanceFields() throws Exception {
         final Class<?> type = compile("""
-            var longs = [2147483648, 9000000000];
+            var longs: [i64] = [2147483648, 9000000000];
+            const wide: i64 = 9000000000;
+            const expectedTotal: i64 = 11147483648;
             var total: i64 = 0;
             for (value : longs) { total = total + value; }
             func update() i64 { var x: i64 = 1; x = 4; x++; return -x; }
             var negative = update();
-            var comparison = total > 9000000000;
-            var selected = switch (total) { case 11147483648 => 7 else => 9 };
+            var comparison = total > wide;
+            var selected = switch (total) { case expectedTotal => 7 else => 9 };
             var real: f64 = 2.25;
             var matchValue: f64 = 2.25;
             var decimal = switch (real) { case matchValue => 3 else => 5 };
@@ -3391,7 +3401,6 @@ class BytecodeGeneratorTest {
     void switchRejectsInvalidValuePathsAndStillChecksDiscardedBranches() {
         for (final String source : List.of(
             "const x = switch (1) { case 1 => 2 };",
-            "const x: f32 = switch (1) { case 1 => 2 else => 2.5 };",
             "const x = switch (1) { case 1 { 2; } else => 3 };",
             "const x = switch (1) { case 1 { if (true) { yield 2; } } else => 3 };",
             "const x = switch (1) { case 1 => print() else => 3 };",
@@ -3468,8 +3477,7 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void conditionalBranchesInferUnionBeforeAssignmentConversion()
-        throws Exception {
+    void conditionalBranchesUseExpectedNumericTypes() throws Exception {
         for (final String expression : List.of(
             "true ? 1 : 2.5",
             "false ? 1.5 : 2",
@@ -3479,10 +3487,7 @@ class BytecodeGeneratorTest {
             "if (true) { if (false) { yield 1.5; } yield 1; } else { yield 2; }"
         )) {
             assertNotNull(compile("const value = " + expression + ";"));
-            assertThrows(
-                SemanticException.class,
-                () -> compile("const value: f32 = " + expression + ";")
-            );
+            assertNotNull(compile("const value: f32 = " + expression + ";"));
         }
         final Class<?> type = compile("""
             const ternary: f32 = true ? 1 : 2;

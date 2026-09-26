@@ -1,0 +1,1126 @@
+const a = 1;
+const b: i8 = 1;
+const c: i16 = 1;
+const d: i64 = 3_000_000_000 + 1;
+const e: i8 = 100 + 27;
+const x: i8 = 1;
+const y: i16 = 2;
+const z = x + y;
+const f = 1.5 + 2.5;
+const g: f32 = 1.5 + 2.5;
+const h: f32 = 3.141592653589793;
+const j = h + 2.0;
+const reverse = 2.0 + h;
+const widths: i64[] = [3_000_000_000, 1];
+const branch: i64 = true ? 3_000_000_000 : 1;
+const conditional: i64 = if (true) {
+    yield 3_000_000_000;
+}
+else {
+    yield 1;
+};
+const selection: i64 = switch (1) {
+    case 1 => 3_000_000_000
+    else => 1
+};
+const minimum: i64 = -9_223_372_036_854_775_808;
+print(d);
+print(z);
+print(g);
+print(j);
+print(reverse);
+print(widths[0]);
+print(branch);
+print(conditional);
+print(selection);
+print(minimum);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "a" (1:7-1:8)
+EQUAL (1:9-1:10)
+INTEGER_LITERAL "1" (1:11-1:12)
+SEMICOLON (1:12-1:13)
+CONST (2:1-2:6)
+IDENTIFIER "b" (2:7-2:8)
+COLON (2:8-2:9)
+IDENTIFIER "i8" (2:10-2:12)
+EQUAL (2:13-2:14)
+INTEGER_LITERAL "1" (2:15-2:16)
+SEMICOLON (2:16-2:17)
+CONST (3:1-3:6)
+IDENTIFIER "c" (3:7-3:8)
+COLON (3:8-3:9)
+IDENTIFIER "i16" (3:10-3:13)
+EQUAL (3:14-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+CONST (4:1-4:6)
+IDENTIFIER "d" (4:7-4:8)
+COLON (4:8-4:9)
+IDENTIFIER "i64" (4:10-4:13)
+EQUAL (4:14-4:15)
+INTEGER_LITERAL "3_000_000_000" (4:16-4:29)
+PLUS (4:30-4:31)
+INTEGER_LITERAL "1" (4:32-4:33)
+SEMICOLON (4:33-4:34)
+CONST (5:1-5:6)
+IDENTIFIER "e" (5:7-5:8)
+COLON (5:8-5:9)
+IDENTIFIER "i8" (5:10-5:12)
+EQUAL (5:13-5:14)
+INTEGER_LITERAL "100" (5:15-5:18)
+PLUS (5:19-5:20)
+INTEGER_LITERAL "27" (5:21-5:23)
+SEMICOLON (5:23-5:24)
+CONST (6:1-6:6)
+IDENTIFIER "x" (6:7-6:8)
+COLON (6:8-6:9)
+IDENTIFIER "i8" (6:10-6:12)
+EQUAL (6:13-6:14)
+INTEGER_LITERAL "1" (6:15-6:16)
+SEMICOLON (6:16-6:17)
+CONST (7:1-7:6)
+IDENTIFIER "y" (7:7-7:8)
+COLON (7:8-7:9)
+IDENTIFIER "i16" (7:10-7:13)
+EQUAL (7:14-7:15)
+INTEGER_LITERAL "2" (7:16-7:17)
+SEMICOLON (7:17-7:18)
+CONST (8:1-8:6)
+IDENTIFIER "z" (8:7-8:8)
+EQUAL (8:9-8:10)
+IDENTIFIER "x" (8:11-8:12)
+PLUS (8:13-8:14)
+IDENTIFIER "y" (8:15-8:16)
+SEMICOLON (8:16-8:17)
+CONST (9:1-9:6)
+IDENTIFIER "f" (9:7-9:8)
+EQUAL (9:9-9:10)
+FLOAT_LITERAL "1.5" (9:11-9:14)
+PLUS (9:15-9:16)
+FLOAT_LITERAL "2.5" (9:17-9:20)
+SEMICOLON (9:20-9:21)
+CONST (10:1-10:6)
+IDENTIFIER "g" (10:7-10:8)
+COLON (10:8-10:9)
+IDENTIFIER "f32" (10:10-10:13)
+EQUAL (10:14-10:15)
+FLOAT_LITERAL "1.5" (10:16-10:19)
+PLUS (10:20-10:21)
+FLOAT_LITERAL "2.5" (10:22-10:25)
+SEMICOLON (10:25-10:26)
+CONST (11:1-11:6)
+IDENTIFIER "h" (11:7-11:8)
+COLON (11:8-11:9)
+IDENTIFIER "f32" (11:10-11:13)
+EQUAL (11:14-11:15)
+FLOAT_LITERAL "3.141592653589793" (11:16-11:33)
+SEMICOLON (11:33-11:34)
+CONST (12:1-12:6)
+IDENTIFIER "j" (12:7-12:8)
+EQUAL (12:9-12:10)
+IDENTIFIER "h" (12:11-12:12)
+PLUS (12:13-12:14)
+FLOAT_LITERAL "2.0" (12:15-12:18)
+SEMICOLON (12:18-12:19)
+CONST (13:1-13:6)
+IDENTIFIER "reverse" (13:7-13:14)
+EQUAL (13:15-13:16)
+FLOAT_LITERAL "2.0" (13:17-13:20)
+PLUS (13:21-13:22)
+IDENTIFIER "h" (13:23-13:24)
+SEMICOLON (13:24-13:25)
+CONST (14:1-14:6)
+IDENTIFIER "widths" (14:7-14:13)
+COLON (14:13-14:14)
+IDENTIFIER "i64" (14:15-14:18)
+LEFT_BRACKET (14:18-14:19)
+RIGHT_BRACKET (14:19-14:20)
+EQUAL (14:21-14:22)
+LEFT_BRACKET (14:23-14:24)
+INTEGER_LITERAL "3_000_000_000" (14:24-14:37)
+COMMA (14:37-14:38)
+INTEGER_LITERAL "1" (14:39-14:40)
+RIGHT_BRACKET (14:40-14:41)
+SEMICOLON (14:41-14:42)
+CONST (15:1-15:6)
+IDENTIFIER "branch" (15:7-15:13)
+COLON (15:13-15:14)
+IDENTIFIER "i64" (15:15-15:18)
+EQUAL (15:19-15:20)
+BOOLEAN_LITERAL "true" (15:21-15:25)
+QUESTION (15:26-15:27)
+INTEGER_LITERAL "3_000_000_000" (15:28-15:41)
+COLON (15:42-15:43)
+INTEGER_LITERAL "1" (15:44-15:45)
+SEMICOLON (15:45-15:46)
+CONST (16:1-16:6)
+IDENTIFIER "conditional" (16:7-16:18)
+COLON (16:18-16:19)
+IDENTIFIER "i64" (16:20-16:23)
+EQUAL (16:24-16:25)
+IF (16:26-16:28)
+LEFT_PAREN (16:29-16:30)
+BOOLEAN_LITERAL "true" (16:30-16:34)
+RIGHT_PAREN (16:34-16:35)
+LEFT_BRACE (16:36-16:37)
+YIELD (17:5-17:10)
+INTEGER_LITERAL "3_000_000_000" (17:11-17:24)
+SEMICOLON (17:24-17:25)
+RIGHT_BRACE (18:1-18:2)
+ELSE (19:1-19:5)
+LEFT_BRACE (19:6-19:7)
+YIELD (20:5-20:10)
+INTEGER_LITERAL "1" (20:11-20:12)
+SEMICOLON (20:12-20:13)
+RIGHT_BRACE (21:1-21:2)
+SEMICOLON (21:2-21:3)
+CONST (22:1-22:6)
+IDENTIFIER "selection" (22:7-22:16)
+COLON (22:16-22:17)
+IDENTIFIER "i64" (22:18-22:21)
+EQUAL (22:22-22:23)
+SWITCH (22:24-22:30)
+LEFT_PAREN (22:31-22:32)
+INTEGER_LITERAL "1" (22:32-22:33)
+RIGHT_PAREN (22:33-22:34)
+LEFT_BRACE (22:35-22:36)
+CASE (23:5-23:9)
+INTEGER_LITERAL "1" (23:10-23:11)
+ARROW (23:12-23:14)
+INTEGER_LITERAL "3_000_000_000" (23:15-23:28)
+ELSE (24:5-24:9)
+ARROW (24:10-24:12)
+INTEGER_LITERAL "1" (24:13-24:14)
+RIGHT_BRACE (25:1-25:2)
+SEMICOLON (25:2-25:3)
+CONST (26:1-26:6)
+IDENTIFIER "minimum" (26:7-26:14)
+COLON (26:14-26:15)
+IDENTIFIER "i64" (26:16-26:19)
+EQUAL (26:20-26:21)
+MINUS (26:22-26:23)
+INTEGER_LITERAL "9_223_372_036_854_775_808" (26:23-26:48)
+SEMICOLON (26:48-26:49)
+IDENTIFIER "print" (27:1-27:6)
+LEFT_PAREN (27:6-27:7)
+IDENTIFIER "d" (27:7-27:8)
+RIGHT_PAREN (27:8-27:9)
+SEMICOLON (27:9-27:10)
+IDENTIFIER "print" (28:1-28:6)
+LEFT_PAREN (28:6-28:7)
+IDENTIFIER "z" (28:7-28:8)
+RIGHT_PAREN (28:8-28:9)
+SEMICOLON (28:9-28:10)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "g" (29:7-29:8)
+RIGHT_PAREN (29:8-29:9)
+SEMICOLON (29:9-29:10)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "j" (30:7-30:8)
+RIGHT_PAREN (30:8-30:9)
+SEMICOLON (30:9-30:10)
+IDENTIFIER "print" (31:1-31:6)
+LEFT_PAREN (31:6-31:7)
+IDENTIFIER "reverse" (31:7-31:14)
+RIGHT_PAREN (31:14-31:15)
+SEMICOLON (31:15-31:16)
+IDENTIFIER "print" (32:1-32:6)
+LEFT_PAREN (32:6-32:7)
+IDENTIFIER "widths" (32:7-32:13)
+LEFT_BRACKET (32:13-32:14)
+INTEGER_LITERAL "0" (32:14-32:15)
+RIGHT_BRACKET (32:15-32:16)
+RIGHT_PAREN (32:16-32:17)
+SEMICOLON (32:17-32:18)
+IDENTIFIER "print" (33:1-33:6)
+LEFT_PAREN (33:6-33:7)
+IDENTIFIER "branch" (33:7-33:13)
+RIGHT_PAREN (33:13-33:14)
+SEMICOLON (33:14-33:15)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+IDENTIFIER "conditional" (34:7-34:18)
+RIGHT_PAREN (34:18-34:19)
+SEMICOLON (34:19-34:20)
+IDENTIFIER "print" (35:1-35:6)
+LEFT_PAREN (35:6-35:7)
+IDENTIFIER "selection" (35:7-35:16)
+RIGHT_PAREN (35:16-35:17)
+SEMICOLON (35:17-35:18)
+IDENTIFIER "print" (36:1-36:6)
+LEFT_PAREN (36:6-36:7)
+IDENTIFIER "minimum" (36:7-36:14)
+RIGHT_PAREN (36:14-36:15)
+SEMICOLON (36:15-36:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-36:16
+  (VariableDeclaration
+    range: 1:1-1:13
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:8
+      name: "a"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:11-1:12
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:17
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:8
+      name: "b"
+    )
+    (NamedTypeNode
+      range: 2:10-2:12
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 2:15-2:16
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:18
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:8
+      name: "c"
+    )
+    (NamedTypeNode
+      range: 3:10-3:13
+      name: "i16"
+    )
+    (LiteralExpression
+      range: 3:16-3:17
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:8
+      name: "d"
+    )
+    (NamedTypeNode
+      range: 4:10-4:13
+      name: "i64"
+    )
+    (BinaryExpression
+      range: 4:16-4:33
+      (LiteralExpression
+        range: 4:16-4:29
+        kind: INT
+        text: "3_000_000_000"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 4:32-4:33
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "e"
+    )
+    (NamedTypeNode
+      range: 5:10-5:12
+      name: "i8"
+    )
+    (BinaryExpression
+      range: 5:15-5:23
+      (LiteralExpression
+        range: 5:15-5:18
+        kind: INT
+        text: "100"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 5:21-5:23
+        kind: INT
+        text: "27"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:17
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:8
+      name: "x"
+    )
+    (NamedTypeNode
+      range: 6:10-6:12
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 6:15-6:16
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:18
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:8
+      name: "y"
+    )
+    (NamedTypeNode
+      range: 7:10-7:13
+      name: "i16"
+    )
+    (LiteralExpression
+      range: 7:16-7:17
+      kind: INT
+      text: "2"
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:17
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:8
+      name: "z"
+    )
+    type: null
+    (BinaryExpression
+      range: 8:11-8:16
+      (IdentifierExpression
+        range: 8:11-8:12
+        name: "x"
+      )
+      operator: ADD
+      (IdentifierExpression
+        range: 8:15-8:16
+        name: "y"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:8
+      name: "f"
+    )
+    type: null
+    (BinaryExpression
+      range: 9:11-9:20
+      (LiteralExpression
+        range: 9:11-9:14
+        kind: FLOAT
+        text: "1.5"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 9:17-9:20
+        kind: FLOAT
+        text: "2.5"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:8
+      name: "g"
+    )
+    (NamedTypeNode
+      range: 10:10-10:13
+      name: "f32"
+    )
+    (BinaryExpression
+      range: 10:16-10:25
+      (LiteralExpression
+        range: 10:16-10:19
+        kind: FLOAT
+        text: "1.5"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 10:22-10:25
+        kind: FLOAT
+        text: "2.5"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:8
+      name: "h"
+    )
+    (NamedTypeNode
+      range: 11:10-11:13
+      name: "f32"
+    )
+    (LiteralExpression
+      range: 11:16-11:33
+      kind: FLOAT
+      text: "3.141592653589793"
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:8
+      name: "j"
+    )
+    type: null
+    (BinaryExpression
+      range: 12:11-12:18
+      (IdentifierExpression
+        range: 12:11-12:12
+        name: "h"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 12:15-12:18
+        kind: FLOAT
+        text: "2.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:14
+      name: "reverse"
+    )
+    type: null
+    (BinaryExpression
+      range: 13:17-13:24
+      (LiteralExpression
+        range: 13:17-13:20
+        kind: FLOAT
+        text: "2.0"
+      )
+      operator: ADD
+      (IdentifierExpression
+        range: 13:23-13:24
+        name: "h"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:13
+      name: "widths"
+    )
+    (ArrayTypeNode
+      range: 14:15-14:20
+      (NamedTypeNode
+        range: 14:15-14:18
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 14:23-14:41
+      (LiteralExpression
+        range: 14:24-14:37
+        kind: INT
+        text: "3_000_000_000"
+      )
+      (LiteralExpression
+        range: 14:39-14:40
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:13
+      name: "branch"
+    )
+    (NamedTypeNode
+      range: 15:15-15:18
+      name: "i64"
+    )
+    (TernaryExpression
+      range: 15:21-15:45
+      (LiteralExpression
+        range: 15:21-15:25
+        kind: BOOL
+        text: "true"
+      )
+      (LiteralExpression
+        range: 15:28-15:41
+        kind: INT
+        text: "3_000_000_000"
+      )
+      (LiteralExpression
+        range: 15:44-15:45
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-21:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:18
+      name: "conditional"
+    )
+    (NamedTypeNode
+      range: 16:20-16:23
+      name: "i64"
+    )
+    (IfExpression
+      range: 16:26-21:2
+      (LiteralExpression
+        range: 16:30-16:34
+        kind: BOOL
+        text: "true"
+      )
+      (BlockStatement
+        range: 16:36-18:2
+        (YieldStatement
+          range: 17:5-17:25
+          (LiteralExpression
+            range: 17:11-17:24
+            kind: INT
+            text: "3_000_000_000"
+          )
+        )
+      )
+      (BlockStatement
+        range: 19:6-21:2
+        (YieldStatement
+          range: 20:5-20:13
+          (LiteralExpression
+            range: 20:11-20:12
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-25:3
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:16
+      name: "selection"
+    )
+    (NamedTypeNode
+      range: 22:18-22:21
+      name: "i64"
+    )
+    (SwitchExpression
+      range: 22:24-25:2
+      (LiteralExpression
+        range: 22:32-22:33
+        kind: INT
+        text: "1"
+      )
+      (SwitchBranch
+        range: 23:5-23:28
+        (LiteralExpression
+          range: 23:10-23:11
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 23:15-23:28
+          (LiteralExpression
+            range: 23:15-23:28
+            kind: INT
+            text: "3_000_000_000"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 24:5-24:14
+        (SwitchBranchExpressionBody
+          range: 24:13-24:14
+          (LiteralExpression
+            range: 24:13-24:14
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 26:1-26:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 26:7-26:14
+      name: "minimum"
+    )
+    (NamedTypeNode
+      range: 26:16-26:19
+      name: "i64"
+    )
+    (UnaryExpression
+      range: 26:22-26:48
+      operator: MINUS
+      (LiteralExpression
+        range: 26:23-26:48
+        kind: INT
+        text: "9_223_372_036_854_775_808"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 27:1-27:10
+    (CallExpression
+      range: 27:1-27:9
+      (IdentifierExpression
+        range: 27:1-27:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 27:7-27:8
+        name: "d"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 28:1-28:10
+    (CallExpression
+      range: 28:1-28:9
+      (IdentifierExpression
+        range: 28:1-28:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 28:7-28:8
+        name: "z"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:10
+    (CallExpression
+      range: 29:1-29:9
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 29:7-29:8
+        name: "g"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:10
+    (CallExpression
+      range: 30:1-30:9
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 30:7-30:8
+        name: "j"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 31:1-31:16
+    (CallExpression
+      range: 31:1-31:15
+      (IdentifierExpression
+        range: 31:1-31:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 31:7-31:14
+        name: "reverse"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 32:1-32:18
+    (CallExpression
+      range: 32:1-32:17
+      (IdentifierExpression
+        range: 32:1-32:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 32:7-32:16
+        (IdentifierExpression
+          range: 32:7-32:13
+          name: "widths"
+        )
+        (LiteralExpression
+          range: 32:14-32:15
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 33:1-33:15
+    (CallExpression
+      range: 33:1-33:14
+      (IdentifierExpression
+        range: 33:1-33:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 33:7-33:13
+        name: "branch"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 34:1-34:20
+    (CallExpression
+      range: 34:1-34:19
+      (IdentifierExpression
+        range: 34:1-34:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 34:7-34:18
+        name: "conditional"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 35:1-35:18
+    (CallExpression
+      range: 35:1-35:17
+      (IdentifierExpression
+        range: 35:1-35:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 35:7-35:16
+        name: "selection"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 36:1-36:16
+    (CallExpression
+      range: 36:1-36:15
+      (IdentifierExpression
+        range: 36:1-36:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 36:7-36:14
+        name: "minimum"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:11-1:12 -> i32
+  2:15-2:16 -> i32
+  3:16-3:17 -> i32
+  4:16-4:29 -> i64
+  4:16-4:33 -> i64
+  4:32-4:33 -> i64
+  5:15-5:18 -> i32
+  5:15-5:23 -> i32
+  5:21-5:23 -> i32
+  6:15-6:16 -> i32
+  7:16-7:17 -> i32
+  8:11-8:12 -> i8
+  8:11-8:16 -> i16
+  8:15-8:16 -> i16
+  9:11-9:14 -> f64
+  9:11-9:20 -> f64
+  9:17-9:20 -> f64
+  10:16-10:19 -> f32
+  10:16-10:25 -> f32
+  10:22-10:25 -> f32
+  11:16-11:33 -> f32
+  12:11-12:12 -> f32
+  12:11-12:18 -> f32
+  12:15-12:18 -> f32
+  13:17-13:20 -> f32
+  13:17-13:24 -> f32
+  13:23-13:24 -> f32
+  14:23-14:41 -> [i64]
+  14:24-14:37 -> i64
+  14:39-14:40 -> i64
+  15:21-15:25 -> bool
+  15:21-15:45 -> i64
+  15:28-15:41 -> i64
+  15:44-15:45 -> i64
+  16:26-21:2 -> i64
+  16:30-16:34 -> bool
+  17:11-17:24 -> i64
+  20:11-20:12 -> i64
+  22:24-25:2 -> i64
+  22:32-22:33 -> i32
+  23:10-23:11 -> i32
+  23:15-23:28 -> i64
+  24:13-24:14 -> i64
+  26:22-26:48 -> i64
+  26:23-26:48 -> i64
+  27:1-27:6 -> (any) => void
+  27:1-27:9 -> void
+  27:7-27:8 -> i64
+  28:1-28:6 -> (any) => void
+  28:1-28:9 -> void
+  28:7-28:8 -> i16
+  29:1-29:6 -> (any) => void
+  29:1-29:9 -> void
+  29:7-29:8 -> f32
+  30:1-30:6 -> (any) => void
+  30:1-30:9 -> void
+  30:7-30:8 -> f32
+  31:1-31:6 -> (any) => void
+  31:1-31:15 -> void
+  31:7-31:14 -> f32
+  32:1-32:6 -> (any) => void
+  32:1-32:17 -> void
+  32:7-32:13 -> [i64]
+  32:7-32:16 -> i64
+  32:14-32:15 -> i32
+  33:1-33:6 -> (any) => void
+  33:1-33:14 -> void
+  33:7-33:13 -> i64
+  34:1-34:6 -> (any) => void
+  34:1-34:19 -> void
+  34:7-34:18 -> i64
+  35:1-35:6 -> (any) => void
+  35:1-35:17 -> void
+  35:7-35:16 -> i64
+  36:1-36:6 -> (any) => void
+  36:1-36:15 -> void
+  36:7-36:14 -> i64
+
+Resolved types:
+  2:10-2:12 -> i8
+  3:10-3:13 -> i16
+  4:10-4:13 -> i64
+  5:10-5:12 -> i8
+  6:10-6:12 -> i8
+  7:10-7:13 -> i16
+  10:10-10:13 -> f32
+  11:10-11:13 -> f32
+  14:15-14:18 -> i64
+  14:15-14:20 -> [i64]
+  15:15-15:18 -> i64
+  16:20-16:23 -> i64
+  22:18-22:21 -> i64
+  26:16-26:19 -> i64
+
+Conversions:
+  2:15-2:16 -> i32 -> i8
+  3:16-3:17 -> i32 -> i16
+  5:15-5:23 -> i32 -> i8
+  6:15-6:16 -> i32 -> i8
+  7:16-7:17 -> i32 -> i16
+  8:11-8:12 -> i8 -> i16
+
+Declarations:
+  1:7-1:8 -> const a: i32
+  2:7-2:8 -> const b: i8
+  3:7-3:8 -> const c: i16
+  4:7-4:8 -> const d: i64
+  5:7-5:8 -> const e: i8
+  6:7-6:8 -> const x: i8
+  7:7-7:8 -> const y: i16
+  8:7-8:8 -> const z: i16
+  9:7-9:8 -> const f: f64
+  10:7-10:8 -> const g: f32
+  11:7-11:8 -> const h: f32
+  12:7-12:8 -> const j: f32
+  13:7-13:14 -> const reverse: f32
+  14:7-14:13 -> const widths: [i64]
+  15:7-15:13 -> const branch: i64
+  16:7-16:18 -> const conditional: i64
+  22:7-22:16 -> const selection: i64
+  26:7-26:14 -> const minimum: i64
+
+References:
+  8:11-8:12 -> 6:7-6:8
+  8:15-8:16 -> 7:7-7:8
+  12:11-12:12 -> 11:7-11:8
+  13:23-13:24 -> 11:7-11:8
+  27:1-27:6 -> builtin print
+  27:7-27:8 -> 4:7-4:8
+  28:1-28:6 -> builtin print
+  28:7-28:8 -> 8:7-8:8
+  29:1-29:6 -> builtin print
+  29:7-29:8 -> 10:7-10:8
+  30:1-30:6 -> builtin print
+  30:7-30:8 -> 12:7-12:8
+  31:1-31:6 -> builtin print
+  31:7-31:14 -> 13:7-13:14
+  32:1-32:6 -> builtin print
+  32:7-32:13 -> 14:7-14:13
+  33:1-33:6 -> builtin print
+  33:7-33:13 -> 15:7-15:13
+  34:1-34:6 -> builtin print
+  34:7-34:18 -> 16:7-16:18
+  35:1-35:6 -> builtin print
+  35:7-35:16 -> 22:7-22:16
+  36:1-36:6 -> builtin print
+  36:7-36:14 -> 26:7-26:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field a I flags [PUBLIC, STATIC, FINAL] = 1
+  field b B flags [PUBLIC, STATIC, FINAL] = 1
+  field c S flags [PUBLIC, STATIC, FINAL] = 1
+  field d J flags [PUBLIC, STATIC, FINAL]
+  field e B flags [PUBLIC, STATIC, FINAL] = 127
+  field x B flags [PUBLIC, STATIC, FINAL] = 1
+  field y S flags [PUBLIC, STATIC, FINAL] = 2
+  field z S flags [PUBLIC, STATIC, FINAL]
+  field f D flags [PUBLIC, STATIC, FINAL] = 4.0
+  field g F flags [PUBLIC, STATIC, FINAL] = 4.0
+  field h F flags [PUBLIC, STATIC, FINAL] = 3.1415927
+  field j F flags [PUBLIC, STATIC, FINAL]
+  field reverse F flags [PUBLIC, STATIC, FINAL]
+  field widths Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; flags [PUBLIC, STATIC, FINAL]
+  field branch J flags [PUBLIC, STATIC, FINAL]
+  field conditional J flags [PUBLIC, STATIC, FINAL]
+  field selection J flags [PUBLIC, STATIC, FINAL]
+  field minimum J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
+  method <clinit>()V flags [STATIC]
+    LDC2_W 3000000000
+    LDC2_W 1
+    LADD
+    PUTSTATIC Test.d J
+    GETSTATIC Test.x B
+    I2S
+    GETSTATIC Test.y S
+    IADD
+    I2S
+    PUTSTATIC Test.z S
+    GETSTATIC Test.h F
+    LDC 2.0
+    FADD
+    PUTSTATIC Test.j F
+    LDC 2.0
+    GETSTATIC Test.h F
+    FADD
+    PUTSTATIC Test.reverse F
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    LDC 2
+    NEWARRAY LONG
+    DUP
+    LDC 0
+    LDC2_W 3000000000
+    LASTORE
+    DUP
+    LDC 1
+    LDC2_W 1
+    LASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
+    PUTSTATIC Test.widths Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    ICONST_1 1
+    IFEQ L0
+    LDC2_W 3000000000
+    GOTO L1
+   L0:
+    LDC2_W 1
+   L1:
+    PUTSTATIC Test.branch J
+    ICONST_1 1
+    IFEQ L2
+    LDC2_W 3000000000
+    GOTO L3
+   L2:
+    LDC2_W 1
+    GOTO L3
+   L3:
+    PUTSTATIC Test.conditional J
+    LDC 1
+    TABLESWITCH 1..1 default L5 1:L4
+   L4:
+    LDC2_W 3000000000
+    GOTO L6
+   L5:
+    LDC2_W 1
+   L6:
+    PUTSTATIC Test.selection J
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.d J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.z S
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.g F
+    INVOKEVIRTUAL java/io/PrintStream.println(F)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.j F
+    INVOKEVIRTUAL java/io/PrintStream.println(F)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reverse F
+    INVOKEVIRTUAL java/io/PrintStream.println(F)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.widths Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.get(I)J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.branch J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.conditional J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.selection J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.minimum J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    RETURN
+    max stack 7 max locals 0
+
+--- OUTPUT ---
+
+3000000001
+3
+4.0
+5.141593
+5.141593
+3000000000
+3000000000
+3000000000
+3000000000
+-9223372036854775808
+

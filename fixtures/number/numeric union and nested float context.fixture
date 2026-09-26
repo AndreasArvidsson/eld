@@ -1,0 +1,1377 @@
+const small: i8 = 1;
+const medium: i16 = 2;
+const wide: i64 = 3;
+const smallUnion: i8 | i16 = small;
+const mediumUnion: i8 | i16 = medium;
+const narrowResult = true ? smallUnion : medium;
+const smallResult = true ? smallUnion : wide;
+const mediumResult = true ? mediumUnion : wide;
+const single: f32 = 1.5;
+const double: f64 = 2.5;
+const floatingUnion: f32 | f64 = single;
+const widenedFloat = true ? floatingUnion : double;
+const mixedUnion: i8 | f32 = small;
+const mixedResult = true ? mixedUnion : wide;
+const mixedFloatUnion: i8 | f32 = single;
+const mixedFloatResult = true ? mixedFloatUnion : wide;
+const nullableSmall: i8 | null = small;
+const nullableEmpty: i8 | null = null;
+const nullableResult = true ? nullableSmall : wide;
+const nullableEmptyResult = true ? nullableEmpty : wide;
+const nested = single + (2.0 + 3.0);
+const reverseNested = (2.0 + 3.0) + single;
+print(smallResult);
+print(narrowResult);
+print(mediumResult);
+print(widenedFloat);
+print(mixedResult);
+print(mixedFloatResult);
+print(nullableResult);
+print(nullableEmptyResult);
+print(nested);
+print(reverseNested);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "small" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "1" (1:19-1:20)
+SEMICOLON (1:20-1:21)
+CONST (2:1-2:6)
+IDENTIFIER "medium" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "i16" (2:15-2:18)
+EQUAL (2:19-2:20)
+INTEGER_LITERAL "2" (2:21-2:22)
+SEMICOLON (2:22-2:23)
+CONST (3:1-3:6)
+IDENTIFIER "wide" (3:7-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "i64" (3:13-3:16)
+EQUAL (3:17-3:18)
+INTEGER_LITERAL "3" (3:19-3:20)
+SEMICOLON (3:20-3:21)
+CONST (4:1-4:6)
+IDENTIFIER "smallUnion" (4:7-4:17)
+COLON (4:17-4:18)
+IDENTIFIER "i8" (4:19-4:21)
+PIPE (4:22-4:23)
+IDENTIFIER "i16" (4:24-4:27)
+EQUAL (4:28-4:29)
+IDENTIFIER "small" (4:30-4:35)
+SEMICOLON (4:35-4:36)
+CONST (5:1-5:6)
+IDENTIFIER "mediumUnion" (5:7-5:18)
+COLON (5:18-5:19)
+IDENTIFIER "i8" (5:20-5:22)
+PIPE (5:23-5:24)
+IDENTIFIER "i16" (5:25-5:28)
+EQUAL (5:29-5:30)
+IDENTIFIER "medium" (5:31-5:37)
+SEMICOLON (5:37-5:38)
+CONST (6:1-6:6)
+IDENTIFIER "narrowResult" (6:7-6:19)
+EQUAL (6:20-6:21)
+BOOLEAN_LITERAL "true" (6:22-6:26)
+QUESTION (6:27-6:28)
+IDENTIFIER "smallUnion" (6:29-6:39)
+COLON (6:40-6:41)
+IDENTIFIER "medium" (6:42-6:48)
+SEMICOLON (6:48-6:49)
+CONST (7:1-7:6)
+IDENTIFIER "smallResult" (7:7-7:18)
+EQUAL (7:19-7:20)
+BOOLEAN_LITERAL "true" (7:21-7:25)
+QUESTION (7:26-7:27)
+IDENTIFIER "smallUnion" (7:28-7:38)
+COLON (7:39-7:40)
+IDENTIFIER "wide" (7:41-7:45)
+SEMICOLON (7:45-7:46)
+CONST (8:1-8:6)
+IDENTIFIER "mediumResult" (8:7-8:19)
+EQUAL (8:20-8:21)
+BOOLEAN_LITERAL "true" (8:22-8:26)
+QUESTION (8:27-8:28)
+IDENTIFIER "mediumUnion" (8:29-8:40)
+COLON (8:41-8:42)
+IDENTIFIER "wide" (8:43-8:47)
+SEMICOLON (8:47-8:48)
+CONST (9:1-9:6)
+IDENTIFIER "single" (9:7-9:13)
+COLON (9:13-9:14)
+IDENTIFIER "f32" (9:15-9:18)
+EQUAL (9:19-9:20)
+FLOAT_LITERAL "1.5" (9:21-9:24)
+SEMICOLON (9:24-9:25)
+CONST (10:1-10:6)
+IDENTIFIER "double" (10:7-10:13)
+COLON (10:13-10:14)
+IDENTIFIER "f64" (10:15-10:18)
+EQUAL (10:19-10:20)
+FLOAT_LITERAL "2.5" (10:21-10:24)
+SEMICOLON (10:24-10:25)
+CONST (11:1-11:6)
+IDENTIFIER "floatingUnion" (11:7-11:20)
+COLON (11:20-11:21)
+IDENTIFIER "f32" (11:22-11:25)
+PIPE (11:26-11:27)
+IDENTIFIER "f64" (11:28-11:31)
+EQUAL (11:32-11:33)
+IDENTIFIER "single" (11:34-11:40)
+SEMICOLON (11:40-11:41)
+CONST (12:1-12:6)
+IDENTIFIER "widenedFloat" (12:7-12:19)
+EQUAL (12:20-12:21)
+BOOLEAN_LITERAL "true" (12:22-12:26)
+QUESTION (12:27-12:28)
+IDENTIFIER "floatingUnion" (12:29-12:42)
+COLON (12:43-12:44)
+IDENTIFIER "double" (12:45-12:51)
+SEMICOLON (12:51-12:52)
+CONST (13:1-13:6)
+IDENTIFIER "mixedUnion" (13:7-13:17)
+COLON (13:17-13:18)
+IDENTIFIER "i8" (13:19-13:21)
+PIPE (13:22-13:23)
+IDENTIFIER "f32" (13:24-13:27)
+EQUAL (13:28-13:29)
+IDENTIFIER "small" (13:30-13:35)
+SEMICOLON (13:35-13:36)
+CONST (14:1-14:6)
+IDENTIFIER "mixedResult" (14:7-14:18)
+EQUAL (14:19-14:20)
+BOOLEAN_LITERAL "true" (14:21-14:25)
+QUESTION (14:26-14:27)
+IDENTIFIER "mixedUnion" (14:28-14:38)
+COLON (14:39-14:40)
+IDENTIFIER "wide" (14:41-14:45)
+SEMICOLON (14:45-14:46)
+CONST (15:1-15:6)
+IDENTIFIER "mixedFloatUnion" (15:7-15:22)
+COLON (15:22-15:23)
+IDENTIFIER "i8" (15:24-15:26)
+PIPE (15:27-15:28)
+IDENTIFIER "f32" (15:29-15:32)
+EQUAL (15:33-15:34)
+IDENTIFIER "single" (15:35-15:41)
+SEMICOLON (15:41-15:42)
+CONST (16:1-16:6)
+IDENTIFIER "mixedFloatResult" (16:7-16:23)
+EQUAL (16:24-16:25)
+BOOLEAN_LITERAL "true" (16:26-16:30)
+QUESTION (16:31-16:32)
+IDENTIFIER "mixedFloatUnion" (16:33-16:48)
+COLON (16:49-16:50)
+IDENTIFIER "wide" (16:51-16:55)
+SEMICOLON (16:55-16:56)
+CONST (17:1-17:6)
+IDENTIFIER "nullableSmall" (17:7-17:20)
+COLON (17:20-17:21)
+IDENTIFIER "i8" (17:22-17:24)
+PIPE (17:25-17:26)
+NULL (17:27-17:31)
+EQUAL (17:32-17:33)
+IDENTIFIER "small" (17:34-17:39)
+SEMICOLON (17:39-17:40)
+CONST (18:1-18:6)
+IDENTIFIER "nullableEmpty" (18:7-18:20)
+COLON (18:20-18:21)
+IDENTIFIER "i8" (18:22-18:24)
+PIPE (18:25-18:26)
+NULL (18:27-18:31)
+EQUAL (18:32-18:33)
+NULL (18:34-18:38)
+SEMICOLON (18:38-18:39)
+CONST (19:1-19:6)
+IDENTIFIER "nullableResult" (19:7-19:21)
+EQUAL (19:22-19:23)
+BOOLEAN_LITERAL "true" (19:24-19:28)
+QUESTION (19:29-19:30)
+IDENTIFIER "nullableSmall" (19:31-19:44)
+COLON (19:45-19:46)
+IDENTIFIER "wide" (19:47-19:51)
+SEMICOLON (19:51-19:52)
+CONST (20:1-20:6)
+IDENTIFIER "nullableEmptyResult" (20:7-20:26)
+EQUAL (20:27-20:28)
+BOOLEAN_LITERAL "true" (20:29-20:33)
+QUESTION (20:34-20:35)
+IDENTIFIER "nullableEmpty" (20:36-20:49)
+COLON (20:50-20:51)
+IDENTIFIER "wide" (20:52-20:56)
+SEMICOLON (20:56-20:57)
+CONST (21:1-21:6)
+IDENTIFIER "nested" (21:7-21:13)
+EQUAL (21:14-21:15)
+IDENTIFIER "single" (21:16-21:22)
+PLUS (21:23-21:24)
+LEFT_PAREN (21:25-21:26)
+FLOAT_LITERAL "2.0" (21:26-21:29)
+PLUS (21:30-21:31)
+FLOAT_LITERAL "3.0" (21:32-21:35)
+RIGHT_PAREN (21:35-21:36)
+SEMICOLON (21:36-21:37)
+CONST (22:1-22:6)
+IDENTIFIER "reverseNested" (22:7-22:20)
+EQUAL (22:21-22:22)
+LEFT_PAREN (22:23-22:24)
+FLOAT_LITERAL "2.0" (22:24-22:27)
+PLUS (22:28-22:29)
+FLOAT_LITERAL "3.0" (22:30-22:33)
+RIGHT_PAREN (22:33-22:34)
+PLUS (22:35-22:36)
+IDENTIFIER "single" (22:37-22:43)
+SEMICOLON (22:43-22:44)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "smallResult" (23:7-23:18)
+RIGHT_PAREN (23:18-23:19)
+SEMICOLON (23:19-23:20)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "narrowResult" (24:7-24:19)
+RIGHT_PAREN (24:19-24:20)
+SEMICOLON (24:20-24:21)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+IDENTIFIER "mediumResult" (25:7-25:19)
+RIGHT_PAREN (25:19-25:20)
+SEMICOLON (25:20-25:21)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+IDENTIFIER "widenedFloat" (26:7-26:19)
+RIGHT_PAREN (26:19-26:20)
+SEMICOLON (26:20-26:21)
+IDENTIFIER "print" (27:1-27:6)
+LEFT_PAREN (27:6-27:7)
+IDENTIFIER "mixedResult" (27:7-27:18)
+RIGHT_PAREN (27:18-27:19)
+SEMICOLON (27:19-27:20)
+IDENTIFIER "print" (28:1-28:6)
+LEFT_PAREN (28:6-28:7)
+IDENTIFIER "mixedFloatResult" (28:7-28:23)
+RIGHT_PAREN (28:23-28:24)
+SEMICOLON (28:24-28:25)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "nullableResult" (29:7-29:21)
+RIGHT_PAREN (29:21-29:22)
+SEMICOLON (29:22-29:23)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "nullableEmptyResult" (30:7-30:26)
+RIGHT_PAREN (30:26-30:27)
+SEMICOLON (30:27-30:28)
+IDENTIFIER "print" (31:1-31:6)
+LEFT_PAREN (31:6-31:7)
+IDENTIFIER "nested" (31:7-31:13)
+RIGHT_PAREN (31:13-31:14)
+SEMICOLON (31:14-31:15)
+IDENTIFIER "print" (32:1-32:6)
+LEFT_PAREN (32:6-32:7)
+IDENTIFIER "reverseNested" (32:7-32:20)
+RIGHT_PAREN (32:20-32:21)
+SEMICOLON (32:21-32:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-32:22
+  (VariableDeclaration
+    range: 1:1-1:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "small"
+    )
+    (NamedTypeNode
+      range: 1:14-1:16
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 1:19-1:20
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "medium"
+    )
+    (NamedTypeNode
+      range: 2:15-2:18
+      name: "i16"
+    )
+    (LiteralExpression
+      range: 2:21-2:22
+      kind: INT
+      text: "2"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:11
+      name: "wide"
+    )
+    (NamedTypeNode
+      range: 3:13-3:16
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 3:19-3:20
+      kind: INT
+      text: "3"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:17
+      name: "smallUnion"
+    )
+    (UnionTypeNode
+      range: 4:19-4:27
+      (NamedTypeNode
+        range: 4:19-4:21
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 4:24-4:27
+        name: "i16"
+      )
+    )
+    (IdentifierExpression
+      range: 4:30-4:35
+      name: "small"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:18
+      name: "mediumUnion"
+    )
+    (UnionTypeNode
+      range: 5:20-5:28
+      (NamedTypeNode
+        range: 5:20-5:22
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 5:25-5:28
+        name: "i16"
+      )
+    )
+    (IdentifierExpression
+      range: 5:31-5:37
+      name: "medium"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:19
+      name: "narrowResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 6:22-6:48
+      (LiteralExpression
+        range: 6:22-6:26
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 6:29-6:39
+        name: "smallUnion"
+      )
+      (IdentifierExpression
+        range: 6:42-6:48
+        name: "medium"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:18
+      name: "smallResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 7:21-7:45
+      (LiteralExpression
+        range: 7:21-7:25
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 7:28-7:38
+        name: "smallUnion"
+      )
+      (IdentifierExpression
+        range: 7:41-7:45
+        name: "wide"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:19
+      name: "mediumResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 8:22-8:47
+      (LiteralExpression
+        range: 8:22-8:26
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 8:29-8:40
+        name: "mediumUnion"
+      )
+      (IdentifierExpression
+        range: 8:43-8:47
+        name: "wide"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:13
+      name: "single"
+    )
+    (NamedTypeNode
+      range: 9:15-9:18
+      name: "f32"
+    )
+    (LiteralExpression
+      range: 9:21-9:24
+      kind: FLOAT
+      text: "1.5"
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "double"
+    )
+    (NamedTypeNode
+      range: 10:15-10:18
+      name: "f64"
+    )
+    (LiteralExpression
+      range: 10:21-10:24
+      kind: FLOAT
+      text: "2.5"
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:20
+      name: "floatingUnion"
+    )
+    (UnionTypeNode
+      range: 11:22-11:31
+      (NamedTypeNode
+        range: 11:22-11:25
+        name: "f32"
+      )
+      (NamedTypeNode
+        range: 11:28-11:31
+        name: "f64"
+      )
+    )
+    (IdentifierExpression
+      range: 11:34-11:40
+      name: "single"
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:52
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:19
+      name: "widenedFloat"
+    )
+    type: null
+    (TernaryExpression
+      range: 12:22-12:51
+      (LiteralExpression
+        range: 12:22-12:26
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 12:29-12:42
+        name: "floatingUnion"
+      )
+      (IdentifierExpression
+        range: 12:45-12:51
+        name: "double"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:17
+      name: "mixedUnion"
+    )
+    (UnionTypeNode
+      range: 13:19-13:27
+      (NamedTypeNode
+        range: 13:19-13:21
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 13:24-13:27
+        name: "f32"
+      )
+    )
+    (IdentifierExpression
+      range: 13:30-13:35
+      name: "small"
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:18
+      name: "mixedResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 14:21-14:45
+      (LiteralExpression
+        range: 14:21-14:25
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 14:28-14:38
+        name: "mixedUnion"
+      )
+      (IdentifierExpression
+        range: 14:41-14:45
+        name: "wide"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:22
+      name: "mixedFloatUnion"
+    )
+    (UnionTypeNode
+      range: 15:24-15:32
+      (NamedTypeNode
+        range: 15:24-15:26
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 15:29-15:32
+        name: "f32"
+      )
+    )
+    (IdentifierExpression
+      range: 15:35-15:41
+      name: "single"
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:23
+      name: "mixedFloatResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 16:26-16:55
+      (LiteralExpression
+        range: 16:26-16:30
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 16:33-16:48
+        name: "mixedFloatUnion"
+      )
+      (IdentifierExpression
+        range: 16:51-16:55
+        name: "wide"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 17:1-17:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 17:7-17:20
+      name: "nullableSmall"
+    )
+    (UnionTypeNode
+      range: 17:22-17:31
+      (NamedTypeNode
+        range: 17:22-17:24
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 17:27-17:31
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 17:34-17:39
+      name: "small"
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:20
+      name: "nullableEmpty"
+    )
+    (UnionTypeNode
+      range: 18:22-18:31
+      (NamedTypeNode
+        range: 18:22-18:24
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 18:27-18:31
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 18:34-18:38
+      kind: NULL
+      text: "null"
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:52
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:21
+      name: "nullableResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 19:24-19:51
+      (LiteralExpression
+        range: 19:24-19:28
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 19:31-19:44
+        name: "nullableSmall"
+      )
+      (IdentifierExpression
+        range: 19:47-19:51
+        name: "wide"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:57
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:26
+      name: "nullableEmptyResult"
+    )
+    type: null
+    (TernaryExpression
+      range: 20:29-20:56
+      (LiteralExpression
+        range: 20:29-20:33
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 20:36-20:49
+        name: "nullableEmpty"
+      )
+      (IdentifierExpression
+        range: 20:52-20:56
+        name: "wide"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:13
+      name: "nested"
+    )
+    type: null
+    (BinaryExpression
+      range: 21:16-21:36
+      (IdentifierExpression
+        range: 21:16-21:22
+        name: "single"
+      )
+      operator: ADD
+      (GroupingExpression
+        range: 21:25-21:36
+        (BinaryExpression
+          range: 21:26-21:35
+          (LiteralExpression
+            range: 21:26-21:29
+            kind: FLOAT
+            text: "2.0"
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 21:32-21:35
+            kind: FLOAT
+            text: "3.0"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:20
+      name: "reverseNested"
+    )
+    type: null
+    (BinaryExpression
+      range: 22:23-22:43
+      (GroupingExpression
+        range: 22:23-22:34
+        (BinaryExpression
+          range: 22:24-22:33
+          (LiteralExpression
+            range: 22:24-22:27
+            kind: FLOAT
+            text: "2.0"
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 22:30-22:33
+            kind: FLOAT
+            text: "3.0"
+          )
+        )
+      )
+      operator: ADD
+      (IdentifierExpression
+        range: 22:37-22:43
+        name: "single"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:20
+    (CallExpression
+      range: 23:1-23:19
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 23:7-23:18
+        name: "smallResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:21
+    (CallExpression
+      range: 24:1-24:20
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 24:7-24:19
+        name: "narrowResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:21
+    (CallExpression
+      range: 25:1-25:20
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 25:7-25:19
+        name: "mediumResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:21
+    (CallExpression
+      range: 26:1-26:20
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 26:7-26:19
+        name: "widenedFloat"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 27:1-27:20
+    (CallExpression
+      range: 27:1-27:19
+      (IdentifierExpression
+        range: 27:1-27:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 27:7-27:18
+        name: "mixedResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 28:1-28:25
+    (CallExpression
+      range: 28:1-28:24
+      (IdentifierExpression
+        range: 28:1-28:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 28:7-28:23
+        name: "mixedFloatResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:23
+    (CallExpression
+      range: 29:1-29:22
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 29:7-29:21
+        name: "nullableResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:28
+    (CallExpression
+      range: 30:1-30:27
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 30:7-30:26
+        name: "nullableEmptyResult"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 31:1-31:15
+    (CallExpression
+      range: 31:1-31:14
+      (IdentifierExpression
+        range: 31:1-31:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 31:7-31:13
+        name: "nested"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 32:1-32:22
+    (CallExpression
+      range: 32:1-32:21
+      (IdentifierExpression
+        range: 32:1-32:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 32:7-32:20
+        name: "reverseNested"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:20 -> i32
+  2:21-2:22 -> i32
+  3:19-3:20 -> i64
+  4:30-4:35 -> i8
+  5:31-5:37 -> i16
+  6:22-6:26 -> bool
+  6:22-6:48 -> i16
+  6:29-6:39 -> i8 | i16
+  6:42-6:48 -> i16
+  7:21-7:25 -> bool
+  7:21-7:45 -> i64
+  7:28-7:38 -> i8 | i16
+  7:41-7:45 -> i64
+  8:22-8:26 -> bool
+  8:22-8:47 -> i64
+  8:29-8:40 -> i8 | i16
+  8:43-8:47 -> i64
+  9:21-9:24 -> f32
+  10:21-10:24 -> f64
+  11:34-11:40 -> f32
+  12:22-12:26 -> bool
+  12:22-12:51 -> f64
+  12:29-12:42 -> f32 | f64
+  12:45-12:51 -> f64
+  13:30-13:35 -> i8
+  14:21-14:25 -> bool
+  14:21-14:45 -> i64 | f32
+  14:28-14:38 -> i8 | f32
+  14:41-14:45 -> i64
+  15:35-15:41 -> f32
+  16:26-16:30 -> bool
+  16:26-16:55 -> i64 | f32
+  16:33-16:48 -> i8 | f32
+  16:51-16:55 -> i64
+  17:34-17:39 -> i8
+  18:34-18:38 -> null
+  19:24-19:28 -> bool
+  19:24-19:51 -> i64 | null
+  19:31-19:44 -> i8 | null
+  19:47-19:51 -> i64
+  20:29-20:33 -> bool
+  20:29-20:56 -> i64 | null
+  20:36-20:49 -> i8 | null
+  20:52-20:56 -> i64
+  21:16-21:22 -> f32
+  21:16-21:36 -> f32
+  21:25-21:36 -> f32
+  21:26-21:29 -> f32
+  21:26-21:35 -> f32
+  21:32-21:35 -> f32
+  22:23-22:34 -> f32
+  22:23-22:43 -> f32
+  22:24-22:27 -> f32
+  22:24-22:33 -> f32
+  22:30-22:33 -> f32
+  22:37-22:43 -> f32
+  23:1-23:6 -> (any) => void
+  23:1-23:19 -> void
+  23:7-23:18 -> i64
+  24:1-24:6 -> (any) => void
+  24:1-24:20 -> void
+  24:7-24:19 -> i16
+  25:1-25:6 -> (any) => void
+  25:1-25:20 -> void
+  25:7-25:19 -> i64
+  26:1-26:6 -> (any) => void
+  26:1-26:20 -> void
+  26:7-26:19 -> f64
+  27:1-27:6 -> (any) => void
+  27:1-27:19 -> void
+  27:7-27:18 -> i64 | f32
+  28:1-28:6 -> (any) => void
+  28:1-28:24 -> void
+  28:7-28:23 -> i64 | f32
+  29:1-29:6 -> (any) => void
+  29:1-29:22 -> void
+  29:7-29:21 -> i64 | null
+  30:1-30:6 -> (any) => void
+  30:1-30:27 -> void
+  30:7-30:26 -> i64 | null
+  31:1-31:6 -> (any) => void
+  31:1-31:14 -> void
+  31:7-31:13 -> f32
+  32:1-32:6 -> (any) => void
+  32:1-32:21 -> void
+  32:7-32:20 -> f32
+
+Resolved types:
+  1:14-1:16 -> i8
+  2:15-2:18 -> i16
+  3:13-3:16 -> i64
+  4:19-4:21 -> i8
+  4:19-4:27 -> i8 | i16
+  4:24-4:27 -> i16
+  5:20-5:22 -> i8
+  5:20-5:28 -> i8 | i16
+  5:25-5:28 -> i16
+  9:15-9:18 -> f32
+  10:15-10:18 -> f64
+  11:22-11:25 -> f32
+  11:22-11:31 -> f32 | f64
+  11:28-11:31 -> f64
+  13:19-13:21 -> i8
+  13:19-13:27 -> i8 | f32
+  13:24-13:27 -> f32
+  15:24-15:26 -> i8
+  15:24-15:32 -> i8 | f32
+  15:29-15:32 -> f32
+  17:22-17:24 -> i8
+  17:22-17:31 -> i8 | null
+  17:27-17:31 -> null
+  18:22-18:24 -> i8
+  18:22-18:31 -> i8 | null
+  18:27-18:31 -> null
+
+Conversions:
+  1:19-1:20 -> i32 -> i8
+  2:21-2:22 -> i32 -> i16
+  4:30-4:35 -> i8 -> i8 | i16
+  5:31-5:37 -> i16 -> i8 | i16
+  6:29-6:39 -> i8 | i16 -> i16
+  7:28-7:38 -> i8 | i16 -> i64
+  8:29-8:40 -> i8 | i16 -> i64
+  11:34-11:40 -> f32 -> f32 | f64
+  12:29-12:42 -> f32 | f64 -> f64
+  13:30-13:35 -> i8 -> i8 | f32
+  14:28-14:38 -> i8 | f32 -> i64 | f32
+  14:41-14:45 -> i64 -> i64 | f32
+  15:35-15:41 -> f32 -> i8 | f32
+  16:33-16:48 -> i8 | f32 -> i64 | f32
+  16:51-16:55 -> i64 -> i64 | f32
+  17:34-17:39 -> i8 -> i8 | null
+  18:34-18:38 -> null -> i8 | null
+  19:31-19:44 -> i8 | null -> i64 | null
+  19:47-19:51 -> i64 -> i64 | null
+  20:36-20:49 -> i8 | null -> i64 | null
+  20:52-20:56 -> i64 -> i64 | null
+
+Declarations:
+  1:7-1:12 -> const small: i8
+  2:7-2:13 -> const medium: i16
+  3:7-3:11 -> const wide: i64
+  4:7-4:17 -> const smallUnion: i8 | i16
+  5:7-5:18 -> const mediumUnion: i8 | i16
+  6:7-6:19 -> const narrowResult: i16
+  7:7-7:18 -> const smallResult: i64
+  8:7-8:19 -> const mediumResult: i64
+  9:7-9:13 -> const single: f32
+  10:7-10:13 -> const double: f64
+  11:7-11:20 -> const floatingUnion: f32 | f64
+  12:7-12:19 -> const widenedFloat: f64
+  13:7-13:17 -> const mixedUnion: i8 | f32
+  14:7-14:18 -> const mixedResult: i64 | f32
+  15:7-15:22 -> const mixedFloatUnion: i8 | f32
+  16:7-16:23 -> const mixedFloatResult: i64 | f32
+  17:7-17:20 -> const nullableSmall: i8 | null
+  18:7-18:20 -> const nullableEmpty: i8 | null
+  19:7-19:21 -> const nullableResult: i64 | null
+  20:7-20:26 -> const nullableEmptyResult: i64 | null
+  21:7-21:13 -> const nested: f32
+  22:7-22:20 -> const reverseNested: f32
+
+References:
+  4:30-4:35 -> 1:7-1:12
+  5:31-5:37 -> 2:7-2:13
+  6:29-6:39 -> 4:7-4:17
+  6:42-6:48 -> 2:7-2:13
+  7:28-7:38 -> 4:7-4:17
+  7:41-7:45 -> 3:7-3:11
+  8:29-8:40 -> 5:7-5:18
+  8:43-8:47 -> 3:7-3:11
+  11:34-11:40 -> 9:7-9:13
+  12:29-12:42 -> 11:7-11:20
+  12:45-12:51 -> 10:7-10:13
+  13:30-13:35 -> 1:7-1:12
+  14:28-14:38 -> 13:7-13:17
+  14:41-14:45 -> 3:7-3:11
+  15:35-15:41 -> 9:7-9:13
+  16:33-16:48 -> 15:7-15:22
+  16:51-16:55 -> 3:7-3:11
+  17:34-17:39 -> 1:7-1:12
+  19:31-19:44 -> 17:7-17:20
+  19:47-19:51 -> 3:7-3:11
+  20:36-20:49 -> 18:7-18:20
+  20:52-20:56 -> 3:7-3:11
+  21:16-21:22 -> 9:7-9:13
+  22:37-22:43 -> 9:7-9:13
+  23:1-23:6 -> builtin print
+  23:7-23:18 -> 7:7-7:18
+  24:1-24:6 -> builtin print
+  24:7-24:19 -> 6:7-6:19
+  25:1-25:6 -> builtin print
+  25:7-25:19 -> 8:7-8:19
+  26:1-26:6 -> builtin print
+  26:7-26:19 -> 12:7-12:19
+  27:1-27:6 -> builtin print
+  27:7-27:18 -> 14:7-14:18
+  28:1-28:6 -> builtin print
+  28:7-28:23 -> 16:7-16:23
+  29:1-29:6 -> builtin print
+  29:7-29:21 -> 19:7-19:21
+  30:1-30:6 -> builtin print
+  30:7-30:26 -> 20:7-20:26
+  31:1-31:6 -> builtin print
+  31:7-31:13 -> 21:7-21:13
+  32:1-32:6 -> builtin print
+  32:7-32:20 -> 22:7-22:20
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field small B flags [PUBLIC, STATIC, FINAL] = 1
+  field medium S flags [PUBLIC, STATIC, FINAL] = 2
+  field wide J flags [PUBLIC, STATIC, FINAL] = 3
+  field smallUnion Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field mediumUnion Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field narrowResult S flags [PUBLIC, STATIC, FINAL]
+  field smallResult J flags [PUBLIC, STATIC, FINAL]
+  field mediumResult J flags [PUBLIC, STATIC, FINAL]
+  field single F flags [PUBLIC, STATIC, FINAL] = 1.5
+  field double D flags [PUBLIC, STATIC, FINAL] = 2.5
+  field floatingUnion Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field widenedFloat D flags [PUBLIC, STATIC, FINAL]
+  field mixedUnion Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field mixedResult Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field mixedFloatUnion Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field mixedFloatResult Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field nullableSmall Ljava/lang/Byte; flags [PUBLIC, STATIC, FINAL]
+  field nullableEmpty Ljava/lang/Byte; flags [PUBLIC, STATIC, FINAL]
+  field nullableResult Ljava/lang/Long; flags [PUBLIC, STATIC, FINAL]
+  field nullableEmptyResult Ljava/lang/Long; flags [PUBLIC, STATIC, FINAL]
+  field nested F flags [PUBLIC, STATIC, FINAL]
+  field reverseNested F flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC Test.small B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.smallUnion Ljava/lang/Object;
+    GETSTATIC Test.medium S
+    INVOKESTATIC java/lang/Short.valueOf(S)Ljava/lang/Short;
+    PUTSTATIC Test.mediumUnion Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L0
+    GETSTATIC Test.smallUnion Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.intValue()I
+    I2S
+    GOTO L1
+   L0:
+    GETSTATIC Test.medium S
+   L1:
+    PUTSTATIC Test.narrowResult S
+    ICONST_1 1
+    IFEQ L2
+    GETSTATIC Test.smallUnion Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    GOTO L3
+   L2:
+    GETSTATIC Test.wide J
+   L3:
+    PUTSTATIC Test.smallResult J
+    ICONST_1 1
+    IFEQ L4
+    GETSTATIC Test.mediumUnion Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    GOTO L5
+   L4:
+    GETSTATIC Test.wide J
+   L5:
+    PUTSTATIC Test.mediumResult J
+    GETSTATIC Test.single F
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    PUTSTATIC Test.floatingUnion Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L6
+    GETSTATIC Test.floatingUnion Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    GOTO L7
+   L6:
+    GETSTATIC Test.double D
+   L7:
+    PUTSTATIC Test.widenedFloat D
+    GETSTATIC Test.small B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.mixedUnion Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L9
+    GETSTATIC Test.mixedUnion Ljava/lang/Object;
+    DUP
+    LDC ClassOrInterfaceDesc[Byte]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L8
+    CHECKCAST java/lang/Byte
+    INVOKEVIRTUAL java/lang/Byte.byteValue()B
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L8
+   L8:
+    GOTO L10
+   L9:
+    GETSTATIC Test.wide J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+   L10:
+    PUTSTATIC Test.mixedResult Ljava/lang/Object;
+    GETSTATIC Test.single F
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    PUTSTATIC Test.mixedFloatUnion Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L12
+    GETSTATIC Test.mixedFloatUnion Ljava/lang/Object;
+    DUP
+    LDC ClassOrInterfaceDesc[Byte]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L11
+    CHECKCAST java/lang/Byte
+    INVOKEVIRTUAL java/lang/Byte.byteValue()B
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L11
+   L11:
+    GOTO L13
+   L12:
+    GETSTATIC Test.wide J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+   L13:
+    PUTSTATIC Test.mixedFloatResult Ljava/lang/Object;
+    GETSTATIC Test.small B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.nullableSmall Ljava/lang/Byte;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.nullableEmpty Ljava/lang/Byte;
+    ICONST_1 1
+    IFEQ L15
+    GETSTATIC Test.nullableSmall Ljava/lang/Byte;
+    DUP
+    LDC ClassOrInterfaceDesc[Byte]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L14
+    CHECKCAST java/lang/Byte
+    INVOKEVIRTUAL java/lang/Byte.byteValue()B
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L14
+   L14:
+    CHECKCAST java/lang/Long
+    GOTO L16
+   L15:
+    GETSTATIC Test.wide J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+   L16:
+    PUTSTATIC Test.nullableResult Ljava/lang/Long;
+    ICONST_1 1
+    IFEQ L18
+    GETSTATIC Test.nullableEmpty Ljava/lang/Byte;
+    DUP
+    LDC ClassOrInterfaceDesc[Byte]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L17
+    CHECKCAST java/lang/Byte
+    INVOKEVIRTUAL java/lang/Byte.byteValue()B
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L17
+   L17:
+    CHECKCAST java/lang/Long
+    GOTO L19
+   L18:
+    GETSTATIC Test.wide J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+   L19:
+    PUTSTATIC Test.nullableEmptyResult Ljava/lang/Long;
+    GETSTATIC Test.single F
+    LDC 2.0
+    LDC 3.0
+    FADD
+    FADD
+    PUTSTATIC Test.nested F
+    LDC 2.0
+    LDC 3.0
+    FADD
+    GETSTATIC Test.single F
+    FADD
+    PUTSTATIC Test.reverseNested F
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.smallResult J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.narrowResult S
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.mediumResult J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.widenedFloat D
+    INVOKEVIRTUAL java/io/PrintStream.println(D)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.mixedResult Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.mixedFloatResult Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableResult Ljava/lang/Long;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableEmptyResult Ljava/lang/Long;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nested F
+    INVOKEVIRTUAL java/io/PrintStream.println(F)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reverseNested F
+    INVOKEVIRTUAL java/io/PrintStream.println(F)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+1
+1
+2
+1.5
+1
+1.5
+1
+null
+6.5
+6.5
+

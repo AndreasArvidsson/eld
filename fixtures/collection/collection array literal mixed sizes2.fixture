@@ -1,0 +1,91 @@
+const foo: [i64] = [1, 9_000_000_000];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+COLON (1:10-1:11)
+LEFT_BRACKET (1:12-1:13)
+IDENTIFIER "i64" (1:13-1:16)
+RIGHT_BRACKET (1:16-1:17)
+EQUAL (1:18-1:19)
+LEFT_BRACKET (1:20-1:21)
+INTEGER_LITERAL "1" (1:21-1:22)
+COMMA (1:22-1:23)
+INTEGER_LITERAL "9_000_000_000" (1:24-1:37)
+RIGHT_BRACKET (1:37-1:38)
+SEMICOLON (1:38-1:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:39
+  (VariableDeclaration
+    range: 1:1-1:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    (ArrayTypeNode
+      range: 1:12-1:17
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 1:20-1:38
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:24-1:37
+        kind: INT
+        text: "9_000_000_000"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:20-1:38 -> [i64]
+  1:21-1:22 -> i64
+  1:24-1:37 -> i64
+
+Resolved types:
+  1:12-1:17 -> [i64]
+  1:13-1:16 -> i64
+
+Declarations:
+  1:7-1:10 -> const foo: [i64]
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    LDC 2
+    NEWARRAY LONG
+    DUP
+    LDC 0
+    LDC2_W 1
+    LASTORE
+    DUP
+    LDC 1
+    LDC2_W 9000000000
+    LASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
+    PUTSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    RETURN
+    max stack 7 max locals 0
+
+--- OUTPUT ---
+
+

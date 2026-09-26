@@ -557,7 +557,7 @@ Expression types:
   21:20-21:33 -> DetailedValue
   25:20-25:33 -> Derived
   25:24-25:31 -> Derived
-  26:19-26:20 -> i32
+  26:19-26:20 -> i64
   27:20-27:23 -> f64
   28:1-28:6 -> (any) => void
   28:1-28:56 -> void
@@ -590,9 +590,6 @@ Resolved types:
   25:13-25:17 -> Base
   26:13-26:16 -> i64
   27:14-27:17 -> f64
-
-Conversions:
-  26:19-26:20 -> i32 -> i64
 
 Declarations:
   1:7-1:12 -> class Value

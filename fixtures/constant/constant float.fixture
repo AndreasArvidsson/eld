@@ -82,15 +82,12 @@ SEMICOLON (3:22-3:23)
 
 Expression types:
   1:13-1:17 -> f64
-  2:18-2:22 -> f64
+  2:18-2:22 -> f32
   3:18-3:22 -> f64
 
 Resolved types:
   2:12-2:15 -> f32
   3:12-3:15 -> f64
-
-Conversions:
-  2:18-2:22 -> f64 -> f32
 
 Declarations:
   1:7-1:10 -> const aaa: f64

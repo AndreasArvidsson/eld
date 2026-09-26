@@ -1,0 +1,49 @@
+const value: i8 = 100 + 28;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "100" (1:19-1:22)
+PLUS (1:23-1:24)
+INTEGER_LITERAL "28" (1:25-1:27)
+SEMICOLON (1:27-1:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:28
+  (VariableDeclaration
+    range: 1:1-1:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:14-1:16
+      name: "i8"
+    )
+    (BinaryExpression
+      range: 1:19-1:27
+      (LiteralExpression
+        range: 1:19-1:22
+        kind: INT
+        text: "100"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 1:25-1:27
+        kind: INT
+        text: "28"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Integer constant 128 does not fit in i8 at 1:19-1:27

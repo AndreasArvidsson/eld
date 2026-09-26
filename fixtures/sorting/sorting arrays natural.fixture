@@ -829,13 +829,13 @@ Expression types:
   3:25-3:26 -> i32
   3:28-3:29 -> i32
   4:22-4:31 -> [i64]
-  4:23-4:24 -> i32
-  4:26-4:27 -> i32
-  4:29-4:30 -> i32
+  4:23-4:24 -> i64
+  4:26-4:27 -> i64
+  4:29-4:30 -> i64
   5:23-5:38 -> [f32]
-  5:24-5:27 -> f64
-  5:29-5:32 -> f64
-  5:34-5:37 -> f64
+  5:24-5:27 -> f32
+  5:29-5:32 -> f32
+  5:34-5:37 -> f32
   6:24-6:39 -> [f64]
   6:25-6:28 -> f64
   6:30-6:33 -> f64
@@ -940,12 +940,6 @@ Conversions:
   2:24-2:25 -> i32 -> i16
   2:27-2:28 -> i32 -> i16
   2:30-2:31 -> i32 -> i16
-  4:23-4:24 -> i32 -> i64
-  4:26-4:27 -> i32 -> i64
-  4:29-4:30 -> i32 -> i64
-  5:24-5:27 -> f64 -> f32
-  5:29-5:32 -> f64 -> f32
-  5:34-5:37 -> f64 -> f32
 
 Declarations:
   1:7-1:12 -> const bytes: [i8]
@@ -1075,18 +1069,15 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEWARRAY LONG
     DUP
     LDC 0
-    LDC 3
-    I2L
+    LDC2_W 3
     LASTORE
     DUP
     LDC 1
-    LDC 1
-    I2L
+    LDC2_W 1
     LASTORE
     DUP
     LDC 2
-    LDC 2
-    I2L
+    LDC2_W 2
     LASTORE
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
     PUTSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
@@ -1096,18 +1087,15 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEWARRAY FLOAT
     DUP
     LDC 0
-    LDC2_W 3.0
-    D2F
+    LDC 3.0
     FASTORE
     DUP
     LDC 1
-    LDC2_W 1.0
-    D2F
+    LDC 1.0
     FASTORE
     DUP
     LDC 2
-    LDC2_W 2.0
-    D2F
+    LDC 2.0
     FASTORE
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
     PUTSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;

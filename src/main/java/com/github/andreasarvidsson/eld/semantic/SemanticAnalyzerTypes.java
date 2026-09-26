@@ -121,10 +121,11 @@ public final class SemanticAnalyzerTypes {
             ) {
                 return true;
             }
-            final BigInteger literal =
-                SemanticAnalyzer.integerLiteral(expression);
-            if (literal != null && target.isInteger()) {
-                return literal.bitLength() < target.bits();
+            final Integer constant =
+                SemanticAnalyzerExpectedExpressions
+                    .integerConstantI32(expression);
+            if (constant != null && target.isInteger()) {
+                return BigInteger.valueOf(constant).bitLength() < target.bits();
             }
             return (source.isInteger()
                 && (target.isFloating() || target.bits() >= source.bits()))
@@ -193,6 +194,10 @@ public final class SemanticAnalyzerTypes {
         }
         if (
             allowUnion && types.stream().anyMatch(UnionType.class::isInstance)
+                && !members.stream()
+                    .allMatch(
+                        member -> member == BuiltinType.NULL || numeric(member)
+                    )
         ) {
             return UnionType.of(members);
         }
@@ -368,6 +373,20 @@ public final class SemanticAnalyzerTypes {
             return to;
         }
 
+        if (
+            from instanceof UnionType source && to instanceof BuiltinType target
+                && (target.isInteger() || target.isFloating())
+                && source.memberTypes()
+                    .stream()
+                    .allMatch(
+                        member -> member instanceof BuiltinType numeric
+                            && (numeric == target || numeric.canWidenTo(target))
+                    )
+        ) {
+            model.setConversionType(fromExpression, to);
+            return to;
+        }
+
         if (to instanceof UnionType union) {
             if (union.contains(from)) {
                 model.setUnionConversion(fromExpression, from, union);
@@ -380,9 +399,11 @@ public final class SemanticAnalyzerTypes {
                             .stream()
                             .anyMatch(
                                 member -> model.isSubtype(sourceMember, member)
+                                    || (sourceMember instanceof BuiltinType number
+                                        && member instanceof BuiltinType target
+                                        && number.canWidenTo(target))
                             );
                     if (!assignable) {
-                        // Numeric coercions between union members still require runtime dispatch.
                         return null;
                     }
                 }
@@ -474,10 +495,11 @@ public final class SemanticAnalyzerTypes {
                 model.setConversionType(fromExpression, target);
                 return target;
             }
-            final BigInteger literal =
-                SemanticAnalyzer.integerLiteral(fromExpression);
-            if (literal != null && target.isInteger()) {
-                if (literal.bitLength() >= target.bits()) {
+            final Integer constant =
+                SemanticAnalyzerExpectedExpressions
+                    .integerConstantI32(fromExpression);
+            if (constant != null && target.isInteger()) {
+                if (BigInteger.valueOf(constant).bitLength() >= target.bits()) {
                     return null;
                 }
                 model.setConversionType(fromExpression, to);

@@ -173,7 +173,7 @@ mvn -N -q spotless:apply
 // foo and bar are named imports
 import foo, bar from "lib"
 // Aliasing is supported
-import foo as bar from "lib"
+import foo as bar, baz from "lib"
 // Wildcard is supported
 import * as lib from "lib"
 
@@ -185,7 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- integer and float literals of different size.
 - hex and binary literals.
   123 decimal
   1_000_000 decimal with separators
@@ -193,7 +192,7 @@ protected const bar = 0;
   0xCAFE_BABE hexadecimal with separators
   0b1010 binary
   0b1111_0000 binary with separators
-- Multiline string as separate syntax?
+- Multiline string as separate syntax. Use """ """
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?
 - Value literals as type?
   const value: "foo" | false | 0;
@@ -204,10 +203,11 @@ protected const bar = 0;
 - String std lib
 - Collections std lib
 - Export & import
-- prohibit syntax like `if (value != null && (value = null) == null)`?
+- prohibit syntax like `if (value != null && (value = null) == null)`. Make assignment a statement instead of an expression.
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion
+- Tree sitter parser
 - Warnings in addition to errors
 - Operator overloading
 - Regex literals: `const re: regex = /^\d+$`;

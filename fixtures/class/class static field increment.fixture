@@ -280,7 +280,7 @@ SEMICOLON (11:20-11:21)
 
 Expression types:
   2:31-2:33 -> i32
-  3:35-3:37 -> i32
+  3:35-3:37 -> i64
   6:1-6:6 -> (any) => void
   6:1-6:23 -> void
   6:7-6:14 -> Example
@@ -318,9 +318,6 @@ Expression types:
 
 Resolved types:
   3:29-3:32 -> i64
-
-Conversions:
-  3:35-3:37 -> i32 -> i64
 
 Declarations:
   1:7-1:14 -> class Example
@@ -398,8 +395,7 @@ class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   method <clinit>()V flags [STATIC]
     LDC 40
     PUTSTATIC Test$Example.value I
-    LDC 10
-    I2L
+    LDC2_W 10
     PUTSTATIC Test$Example.wide J
     RETURN
     max stack 2 max locals 0

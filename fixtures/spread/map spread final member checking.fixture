@@ -149,11 +149,11 @@ SEMICOLON (3:12-3:13)
 Expression types:
   1:31-1:43 -> Map<string, i64>
   1:32-1:39 -> string
-  1:41-1:42 -> i32
+  1:41-1:42 -> i64
   2:32-2:52 -> Map<string, i64>
   2:36-2:39 -> Map<string, i64>
   2:41-2:48 -> string
-  2:50-2:51 -> i32
+  2:50-2:51 -> i64
   3:1-3:6 -> (any) => void
   3:1-3:12 -> void
   3:7-3:11 -> Map<string, i64>
@@ -165,10 +165,6 @@ Resolved types:
   2:13-2:29 -> Map<string, i64>
   2:17-2:23 -> string
   2:25-2:28 -> i64
-
-Conversions:
-  1:41-1:42 -> i32 -> i64
-  2:50-2:51 -> i32 -> i64
 
 Declarations:
   1:7-1:10 -> const old: Map<string, i64>
@@ -192,8 +188,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL java/util/LinkedHashMap.<init>()V
     DUP
     LDC "value"
-    LDC 7
-    I2L
+    LDC2_W 7
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
     POP
@@ -206,8 +201,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEINTERFACE java/util/Map.putAll(Ljava/util/Map;)V
     DUP
     LDC "other"
-    LDC 9
-    I2L
+    LDC2_W 9
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
     POP
