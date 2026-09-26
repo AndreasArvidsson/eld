@@ -233,6 +233,10 @@ public final class SemanticAnalyzerTypes {
                     continue;
                 }
             }
+            if (JavaTypes.isClassType(result) && JavaTypes.isClassType(type)) {
+                result = JavaTypes.classType();
+                continue;
+            }
             if (model.isSubtype(result, type)) {
                 result = type;
                 continue;
@@ -351,11 +355,28 @@ public final class SemanticAnalyzerTypes {
                     return to;
                 }
             }
-            // Exact members take priority above; numeric alternatives use a stable order.
+            // Exact members take priority above; widening alternatives use a stable order.
             for (final BuiltinType member : BuiltinType.values()) {
                 if (
-                    from instanceof BuiltinType
+                    from instanceof BuiltinType source
                         && union.memberTypes().contains(member)
+                        && source.canWidenTo(member)
+                        && resolveAssignType(
+                            from,
+                            member,
+                            fromExpression
+                        ) != null
+                ) {
+                    model.setUnionConversion(fromExpression, member, union);
+                    return to;
+                }
+            }
+            // Contextual literal narrowing is a fallback after widening.
+            for (final BuiltinType member : BuiltinType.values()) {
+                if (
+                    from instanceof BuiltinType source
+                        && (source.isInteger() || source.isFloating())
+                        && union.contains(member)
                         && resolveAssignType(
                             from,
                             member,

@@ -51,6 +51,7 @@ public final class SemanticAnalyzerExpectedExpressions {
         ) {
             final Type keyType = target.typeArguments().get(0);
             final Type valueType = target.typeArguments().get(1);
+            analyzer.requireConstantEquality(keyType, map.range(), "Map key");
             for (final MapElement element : map.elements()) {
                 if (element instanceof MapEntry entry) {
                     requireMapElement(entry.key(), context, keyType, "key");

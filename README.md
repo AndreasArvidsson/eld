@@ -139,6 +139,50 @@ print(pair[0]);
 print(pair == (1, "one"));
 ```
 
+## Maps and equality-based matching
+
+Maps use `hashCode` and `equals` for keys; switches compare cases with
+`equals`. Tuples can be used in both places:
+
+```text
+const labels = {(1, "one"): "first"};
+print(labels.get((1, "one")));
+
+switch ((1, "one")) {
+    case (1, "one") => print("matched")
+    else => print("missing")
+}
+```
+
+Class instances can also be map keys or switch values. Their `equals` and
+`hashCode` methods must be compile-time `const`; inherited default methods
+qualify, while custom overrides must be declared `const`:
+
+```text
+class Key {}
+const key = new Key();
+const values: Map<Key, string> = {key: "stored"};
+print(values.get(key));
+
+switch (key) {
+    case key => print("matched")
+    else => print("missing")
+}
+```
+
+`any` cannot be a map key type or switch subject because it cannot guarantee
+constant equality. A switch case must have a subtype of the switch subject's
+type, or a numeric type that widens to it; unrelated types such as `string`
+and `i32` cannot be compared.
+
+```text
+const wide: i64 | string = 1;
+switch (wide) {
+    case 1 => print("one") // i32 widens to i64
+    else => print("other")
+}
+```
+
 ## Records and array spread
 
 Records are immutable data classes with public fields, a canonical constructor,
@@ -234,8 +278,8 @@ external instance creation. `public` is only valid on class members; there is
 no `private` keyword.
 
 Use `protected` on fields, methods, or constructors to reserve access for the
-declaring class and future subclasses. Until inheritance is supported, protected
-members are accessible only within their declaring class.
+declaring class and its subclasses. Classes can extend a base class and
+implement interfaces; records can implement interfaces.
 
 ```text
 const counter = new Counter(0);
@@ -245,6 +289,34 @@ print(counter.next()); // 5; value becomes 6
 const next = counter.next;
 print(next()); // 6; bound to counter
 ```
+
+### Type values
+
+A class, record, or interface name used as a value represents its JVM type,
+not an instance. Its Eld type is `Type<T>`; for example, `new Dog()` has type
+`Dog`, while `Dog` has type `Type<Dog>`. A `Type<Dog>` can be assigned to
+`Type<Animal>` when `Dog` implements `Animal`. Type values can be map keys and
+switch subjects:
+
+```text
+interface Animal {}
+class Dog implements Animal {}
+record Cat() implements Animal;
+
+const selected: Type<Animal> = Dog;
+switch (selected) {
+    case Dog => print("dog")
+    case Cat => print("cat")
+    else => print("other")
+}
+
+const names: Map<Type<Animal>, string> = {Dog: "dog", Cat: "cat", Animal: "animal"};
+print(names.get(Dog));
+```
+
+Here the switch compares type values. To switch on an `Animal` instance,
+use instance-valued cases instead. Eld's `Type<T>` is backed by Java's
+`Class<T>` at runtime.
 
 ## Statements
 
@@ -364,6 +436,7 @@ Precedence, highest to lowest:
 | `(T, U)`                  | A tuple of two or more elements, which may have different types.  |
 | `T \| U`                  | A union accepting either type; `T \| null` makes a type nullable. |
 | `Foo`                     | An instance of a declared class `Foo`.                            |
+| `Type<T>`                 | The type value for a class, record, or interface `T`.               |
 
 Type aliases give a reusable name to any type and have no runtime
 representation.
@@ -406,6 +479,10 @@ const value: Foo = "hello";
    is an array of nullable integers; `[i32] | null` is a nullable array.
 4. Mixed array literals need an explicit union or `any` element type. Unrelated
    branch types do not automatically infer a union.
+5. Numeric literals select union members by their inferred type: exact members
+   first, then widening conversions. If neither applies, a fitting literal may
+   narrow to a union member. Thus `100` selects `i8` in `i8 | string`, but
+   selects `i64` in `i8 | i64`.
 
 ### Arrays and tuples
 

@@ -1,0 +1,187 @@
+class Key {
+    public override func equals(other: any) bool {
+        return true;
+    }
+
+    public override func hashCode() i32 {
+        return 0;
+    }
+}
+
+const values: Map<Key, string> = {new Key(): "value"};
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Key" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+OVERRIDE (2:12-2:20)
+FUNC (2:21-2:25)
+IDENTIFIER "equals" (2:26-2:32)
+LEFT_PAREN (2:32-2:33)
+IDENTIFIER "other" (2:33-2:38)
+COLON (2:38-2:39)
+IDENTIFIER "any" (2:40-2:43)
+RIGHT_PAREN (2:43-2:44)
+IDENTIFIER "bool" (2:45-2:49)
+LEFT_BRACE (2:50-2:51)
+RETURN (3:9-3:15)
+BOOLEAN_LITERAL "true" (3:16-3:20)
+SEMICOLON (3:20-3:21)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (6:5-6:11)
+OVERRIDE (6:12-6:20)
+FUNC (6:21-6:25)
+IDENTIFIER "hashCode" (6:26-6:34)
+LEFT_PAREN (6:34-6:35)
+RIGHT_PAREN (6:35-6:36)
+IDENTIFIER "i32" (6:37-6:40)
+LEFT_BRACE (6:41-6:42)
+RETURN (7:9-7:15)
+INTEGER_LITERAL "0" (7:16-7:17)
+SEMICOLON (7:17-7:18)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+CONST (11:1-11:6)
+IDENTIFIER "values" (11:7-11:13)
+COLON (11:13-11:14)
+IDENTIFIER "Map" (11:15-11:18)
+LESS (11:18-11:19)
+IDENTIFIER "Key" (11:19-11:22)
+COMMA (11:22-11:23)
+IDENTIFIER "string" (11:24-11:30)
+GREATER (11:30-11:31)
+EQUAL (11:32-11:33)
+LEFT_BRACE (11:34-11:35)
+NEW (11:35-11:38)
+IDENTIFIER "Key" (11:39-11:42)
+LEFT_PAREN (11:42-11:43)
+RIGHT_PAREN (11:43-11:44)
+COLON (11:44-11:45)
+STRING_LITERAL "\"value\"" (11:46-11:53)
+RIGHT_BRACE (11:53-11:54)
+SEMICOLON (11:54-11:55)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:55
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Key"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 2:26-2:32
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:33-2:43
+          (IdentifierDeclaration
+            range: 2:33-2:38
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:40-2:43
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:45-2:49
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:50-4:6
+          (ReturnStatement
+            range: 3:9-3:21
+            (LiteralExpression
+              range: 3:16-3:20
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 6:26-6:34
+          name: "hashCode"
+        )
+        (NamedTypeNode
+          range: 6:37-6:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:41-8:6
+          (ReturnStatement
+            range: 7:9-7:18
+            (LiteralExpression
+              range: 7:16-7:17
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 11:15-11:31
+      name: "Map"
+      (NamedTypeNode
+        range: 11:19-11:22
+        name: "Key"
+      )
+      (NamedTypeNode
+        range: 11:24-11:30
+        name: "string"
+      )
+    )
+    (MapExpression
+      range: 11:34-11:54
+      (MapEntry
+        range: 11:35-11:53
+        (NewExpression
+          range: 11:35-11:44
+          (IdentifierExpression
+            range: 11:39-11:42
+            name: "Key"
+          )
+        )
+        (LiteralExpression
+          range: 11:46-11:53
+          kind: STRING
+          text: "\"value\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Map key of type Key requires const equals and hashCode methods at 11:34-11:54

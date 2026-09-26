@@ -1,0 +1,106 @@
+const small: i8 | null = 100;
+print(small);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "small" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+PIPE (1:17-1:18)
+NULL (1:19-1:23)
+EQUAL (1:24-1:25)
+INTEGER_LITERAL "100" (1:26-1:29)
+SEMICOLON (1:29-1:30)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "small" (2:7-2:12)
+RIGHT_PAREN (2:12-2:13)
+SEMICOLON (2:13-2:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:14
+  (VariableDeclaration
+    range: 1:1-1:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "small"
+    )
+    (UnionTypeNode
+      range: 1:14-1:23
+      (NamedTypeNode
+        range: 1:14-1:16
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 1:19-1:23
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:26-1:29
+      kind: INT
+      text: "100"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:14
+    (CallExpression
+      range: 2:1-2:13
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 2:7-2:12
+        name: "small"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:26-1:29 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:13 -> void
+  2:7-2:12 -> i8 | null
+
+Resolved types:
+  1:14-1:16 -> i8
+  1:14-1:23 -> i8 | null
+  1:19-1:23 -> null
+
+Conversions:
+  1:26-1:29 -> i32 -> i8 -> i8 | null
+
+Declarations:
+  1:7-1:12 -> const small: i8 | null
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:12 -> 1:7-1:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field small Ljava/lang/Byte; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 100
+    I2B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.small Ljava/lang/Byte;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.small Ljava/lang/Byte;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+100
+

@@ -1,0 +1,320 @@
+class Base {}
+class Derived extends Base {}
+
+const value = new Derived();
+const subject: Base | null = value;
+switch (subject) {
+    case value => print("derived")
+    case null => print("null")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+CLASS (2:1-2:6)
+IDENTIFIER "Derived" (2:7-2:14)
+EXTENDS (2:15-2:22)
+IDENTIFIER "Base" (2:23-2:27)
+LEFT_BRACE (2:28-2:29)
+RIGHT_BRACE (2:29-2:30)
+CONST (4:1-4:6)
+IDENTIFIER "value" (4:7-4:12)
+EQUAL (4:13-4:14)
+NEW (4:15-4:18)
+IDENTIFIER "Derived" (4:19-4:26)
+LEFT_PAREN (4:26-4:27)
+RIGHT_PAREN (4:27-4:28)
+SEMICOLON (4:28-4:29)
+CONST (5:1-5:6)
+IDENTIFIER "subject" (5:7-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "Base" (5:16-5:20)
+PIPE (5:21-5:22)
+NULL (5:23-5:27)
+EQUAL (5:28-5:29)
+IDENTIFIER "value" (5:30-5:35)
+SEMICOLON (5:35-5:36)
+SWITCH (6:1-6:7)
+LEFT_PAREN (6:8-6:9)
+IDENTIFIER "subject" (6:9-6:16)
+RIGHT_PAREN (6:16-6:17)
+LEFT_BRACE (6:18-6:19)
+CASE (7:5-7:9)
+IDENTIFIER "value" (7:10-7:15)
+ARROW (7:16-7:18)
+IDENTIFIER "print" (7:19-7:24)
+LEFT_PAREN (7:24-7:25)
+STRING_LITERAL "\"derived\"" (7:25-7:34)
+RIGHT_PAREN (7:34-7:35)
+CASE (8:5-8:9)
+NULL (8:10-8:14)
+ARROW (8:15-8:17)
+IDENTIFIER "print" (8:18-8:23)
+LEFT_PAREN (8:23-8:24)
+STRING_LITERAL "\"null\"" (8:24-8:30)
+RIGHT_PAREN (8:30-8:31)
+ELSE (9:5-9:9)
+ARROW (9:10-9:12)
+IDENTIFIER "print" (9:13-9:18)
+LEFT_PAREN (9:18-9:19)
+STRING_LITERAL "\"missing\"" (9:19-9:28)
+RIGHT_PAREN (9:28-9:29)
+RIGHT_BRACE (10:1-10:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:2
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-2:30
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 2:23-2:27
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "value"
+    )
+    type: null
+    (NewExpression
+      range: 4:15-4:28
+      (IdentifierExpression
+        range: 4:19-4:26
+        name: "Derived"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "subject"
+    )
+    (UnionTypeNode
+      range: 5:16-5:27
+      (NamedTypeNode
+        range: 5:16-5:20
+        name: "Base"
+      )
+      (NamedTypeNode
+        range: 5:23-5:27
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 5:30-5:35
+      name: "value"
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-10:2
+    (SwitchExpression
+      range: 6:1-10:2
+      (IdentifierExpression
+        range: 6:9-6:16
+        name: "subject"
+      )
+      (SwitchBranch
+        range: 7:5-7:35
+        (IdentifierExpression
+          range: 7:10-7:15
+          name: "value"
+        )
+        (SwitchBranchExpressionBody
+          range: 7:19-7:35
+          (CallExpression
+            range: 7:19-7:35
+            (IdentifierExpression
+              range: 7:19-7:24
+              name: "print"
+            )
+            (LiteralExpression
+              range: 7:25-7:34
+              kind: STRING
+              text: "\"derived\""
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 8:5-8:31
+        (LiteralExpression
+          range: 8:10-8:14
+          kind: NULL
+          text: "null"
+        )
+        (SwitchBranchExpressionBody
+          range: 8:18-8:31
+          (CallExpression
+            range: 8:18-8:31
+            (IdentifierExpression
+              range: 8:18-8:23
+              name: "print"
+            )
+            (LiteralExpression
+              range: 8:24-8:30
+              kind: STRING
+              text: "\"null\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 9:5-9:29
+        (SwitchBranchExpressionBody
+          range: 9:13-9:29
+          (CallExpression
+            range: 9:13-9:29
+            (IdentifierExpression
+              range: 9:13-9:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 9:19-9:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:23-2:27 -> Base
+  4:15-4:28 -> Derived
+  4:19-4:26 -> Derived
+  5:30-5:35 -> Derived
+  6:1-10:2 -> void
+  6:9-6:16 -> Base | null
+  7:10-7:15 -> Derived
+  7:19-7:24 -> (any) => void
+  7:19-7:35 -> void
+  7:25-7:34 -> string
+  8:10-8:14 -> null
+  8:18-8:23 -> (any) => void
+  8:18-8:31 -> void
+  8:24-8:30 -> string
+  9:13-9:18 -> (any) => void
+  9:13-9:29 -> void
+  9:19-9:28 -> string
+
+Resolved types:
+  5:16-5:20 -> Base
+  5:16-5:27 -> Base | null
+  5:23-5:27 -> null
+
+Conversions:
+  5:30-5:35 -> Derived -> Base -> Base | null
+  7:10-7:15 -> Derived -> Base -> Base | null
+  8:10-8:14 -> null -> Base | null
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:7-2:14 -> class Derived
+  4:7-4:12 -> const value: Derived
+  5:7-5:14 -> const subject: Base | null
+
+References:
+  2:23-2:27 -> 1:7-1:11
+  4:19-4:26 -> 2:7-2:14
+  5:30-5:35 -> 4:7-4:12
+  6:9-6:16 -> 5:7-5:14
+  7:10-7:15 -> 4:7-4:12
+  7:19-7:24 -> builtin print
+  8:18-8:23 -> builtin print
+  9:13-9:18 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field value LTest$Derived; flags [PUBLIC, STATIC, FINAL]
+  field subject LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    PUTSTATIC Test.value LTest$Derived;
+    GETSTATIC Test.value LTest$Derived;
+    PUTSTATIC Test.subject LTest$Base;
+    GETSTATIC Test.subject LTest$Base;
+    ASTORE_0 0
+    ALOAD_0 0
+    GETSTATIC Test.value LTest$Derived;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "derived"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L1:
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L2
+    GOTO L3
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "null"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L4:
+    RETURN
+    max stack 2 max locals 1
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+derived
+

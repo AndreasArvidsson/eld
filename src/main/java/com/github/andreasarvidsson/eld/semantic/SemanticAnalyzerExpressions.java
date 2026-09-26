@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedMap;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.runtime.EldApi;
@@ -200,7 +201,23 @@ public final class SemanticAnalyzerExpressions {
                         target = symbol.type();
                     }
                     else {
-                        target = analyzeExpression(member.target(), context);
+                        final Type analyzed =
+                            analyzeExpression(member.target(), context);
+                        if (
+                            unwrap(
+                                member.target()
+                            ) instanceof IdentifierExpression identifier
+                                && model.getReference(
+                                    identifier
+                                ) instanceof ClassDeclarationSymbol created
+                        ) {
+                            target = created.type();
+                            model.setExpressionType(identifier, target);
+                            model.setExpressionType(member.target(), target);
+                        }
+                        else {
+                            target = analyzed;
+                        }
                     }
                 }
                 finally {
@@ -445,6 +462,7 @@ public final class SemanticAnalyzerExpressions {
                             );
                         }
                     }
+                    validateMapKeyEquality(member, javaTarget);
                     final JavaMethodSymbol symbol = candidates.getFirst();
                     if (
                         target instanceof ConstType
@@ -751,25 +769,24 @@ public final class SemanticAnalyzerExpressions {
                         creation.className().name()
                     );
                 }
-                final Type classType =
-                    operations.analyzeIdentifierExpression(
-                        creation.className(),
-                        context
-                    );
+                operations
+                    .analyzeIdentifierExpression(creation.className(), context);
                 if (
                     !(model.getReference(
                         creation.className()
-                    ) instanceof ClassDeclarationSymbol)
+                    ) instanceof ClassDeclarationSymbol created)
                 ) {
                     throw new SemanticException(
                         creation.className().range(),
                         "'new' requires a class name"
                     );
                 }
+                final ClassType classType = created.type();
+                model.setExpressionType(creation.className(), classType);
                 if (
                     !analyzer.canAccess(
-                        (ClassType) classType,
-                        model.getConstructorVisibility((ClassType) classType)
+                        classType,
+                        model.getConstructorVisibility(classType)
                     )
                 ) {
                     throw new SemanticException(
@@ -777,12 +794,12 @@ public final class SemanticAnalyzerExpressions {
                         "Constructor of class %s is %s",
                         creation.className().name(),
                         model.getConstructorVisibility(
-                            (ClassType) classType
+                            classType
                         ) == Visibility.PROTECTED ? "protected" : "private"
                     );
                 }
                 analyzeConstructorArguments(
-                    (ClassType) classType,
+                    classType,
                     creation,
                     creation.arguments(),
                     creation.range(),
@@ -921,6 +938,26 @@ public final class SemanticAnalyzerExpressions {
         return (Collection.class.isAssignableFrom(javaClass)
             || Map.class.isAssignableFrom(javaClass))
             && MUTATING_COLLECTION_METHODS.contains(method.getName());
+    }
+
+    private void validateMapKeyEquality(
+        final MemberExpression member,
+        final InterfaceType target
+    ) {
+        final Class<?> javaClass = Objects.requireNonNull(target.javaClass());
+        if (
+            Map.class.isAssignableFrom(javaClass)
+                && !SortedMap.class.isAssignableFrom(javaClass)
+                && Set.of("containsKey", "get", "put")
+                    .contains(member.member().name())
+                && !target.typeArguments().isEmpty()
+        ) {
+            analyzer.requireConstantEquality(
+                target.typeArguments().getFirst(),
+                member.range(),
+                "Map key"
+            );
+        }
     }
 
     private static FunctionType collectionMethodType(
@@ -1293,10 +1330,18 @@ public final class SemanticAnalyzerExpressions {
                 : BuiltinType.VOID;
         }
         if (!(type instanceof FunctionType function)) {
+            final Expression callee = unwrap(call.callee());
+            final Type reportedType =
+                callee instanceof IdentifierExpression identifier
+                    && model.getReference(
+                        identifier
+                    ) instanceof ClassDeclarationSymbol declaration
+                        ? declaration.type()
+                        : type;
             throw new SemanticException(
                 call.callee().range(),
                 "Expression is not callable: %s",
-                type
+                reportedType
             );
         }
         if (call.arguments().size() > function.parameterTypes().size()) {

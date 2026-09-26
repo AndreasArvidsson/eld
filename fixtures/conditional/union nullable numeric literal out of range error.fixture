@@ -1,0 +1,47 @@
+const value: i8 | null = 1000;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+PIPE (1:17-1:18)
+NULL (1:19-1:23)
+EQUAL (1:24-1:25)
+INTEGER_LITERAL "1000" (1:26-1:30)
+SEMICOLON (1:30-1:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:31
+  (VariableDeclaration
+    range: 1:1-1:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (UnionTypeNode
+      range: 1:14-1:23
+      (NamedTypeNode
+        range: 1:14-1:16
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 1:19-1:23
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:26-1:30
+      kind: INT
+      text: "1000"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign i32 to i8 | null at 1:26-1:30

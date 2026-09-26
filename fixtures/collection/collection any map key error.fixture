@@ -1,0 +1,90 @@
+const key: any = "key";
+const values: Map<any, string> = {key: "value"};
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "key" (1:7-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "any" (1:12-1:15)
+EQUAL (1:16-1:17)
+STRING_LITERAL "\"key\"" (1:18-1:23)
+SEMICOLON (1:23-1:24)
+CONST (2:1-2:6)
+IDENTIFIER "values" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "Map" (2:15-2:18)
+LESS (2:18-2:19)
+IDENTIFIER "any" (2:19-2:22)
+COMMA (2:22-2:23)
+IDENTIFIER "string" (2:24-2:30)
+GREATER (2:30-2:31)
+EQUAL (2:32-2:33)
+LEFT_BRACE (2:34-2:35)
+IDENTIFIER "key" (2:35-2:38)
+COLON (2:38-2:39)
+STRING_LITERAL "\"value\"" (2:40-2:47)
+RIGHT_BRACE (2:47-2:48)
+SEMICOLON (2:48-2:49)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:49
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "key"
+    )
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "any"
+    )
+    (LiteralExpression
+      range: 1:18-1:23
+      kind: STRING
+      text: "\"key\""
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 2:15-2:31
+      name: "Map"
+      (NamedTypeNode
+        range: 2:19-2:22
+        name: "any"
+      )
+      (NamedTypeNode
+        range: 2:24-2:30
+        name: "string"
+      )
+    )
+    (MapExpression
+      range: 2:34-2:48
+      (MapEntry
+        range: 2:35-2:47
+        (IdentifierExpression
+          range: 2:35-2:38
+          name: "key"
+        )
+        (LiteralExpression
+          range: 2:40-2:47
+          kind: STRING
+          text: "\"value\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Map key of type any requires const equals and hashCode methods at 2:34-2:48

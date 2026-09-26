@@ -575,7 +575,20 @@ public final class SemanticAnalyzer {
             return hasConstantObjectMethod(cls, "equals")
                 && hasConstantObjectMethod(cls, "hashCode");
         }
+        if (unqualified instanceof TupleType tuple) {
+            return tuple.elementTypes()
+                .stream()
+                .allMatch(this::hasConstantEquality);
+        }
+        if (unqualified instanceof UnionType union) {
+            return union.memberTypes()
+                .stream()
+                .allMatch(this::hasConstantEquality);
+        }
         if (unqualified instanceof InterfaceType contract) {
+            if (contract.javaClass() == Class.class) {
+                return true;
+            }
             final List<ClassType> implementations =
                 classMethods.keySet()
                     .stream()
@@ -585,6 +598,21 @@ public final class SemanticAnalyzer {
                 && implementations.stream().allMatch(this::hasConstantEquality);
         }
         return unqualified != BuiltinType.ANY;
+    }
+
+    public void requireConstantEquality(
+        final Type type,
+        final Range range,
+        final String usage
+    ) {
+        if (!hasConstantEquality(type)) {
+            throw new SemanticException(
+                range,
+                "%s of type %s requires const equals and hashCode methods",
+                usage,
+                type
+            );
+        }
     }
 
     private boolean hasConstantObjectMethod(

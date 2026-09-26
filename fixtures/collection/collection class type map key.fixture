@@ -1,0 +1,213 @@
+class First {}
+class Second {}
+
+const names = {First: "first", Second: "second"};
+print(names.get(Second));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "First" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+RIGHT_BRACE (1:14-1:15)
+CLASS (2:1-2:6)
+IDENTIFIER "Second" (2:7-2:13)
+LEFT_BRACE (2:14-2:15)
+RIGHT_BRACE (2:15-2:16)
+CONST (4:1-4:6)
+IDENTIFIER "names" (4:7-4:12)
+EQUAL (4:13-4:14)
+LEFT_BRACE (4:15-4:16)
+IDENTIFIER "First" (4:16-4:21)
+COLON (4:21-4:22)
+STRING_LITERAL "\"first\"" (4:23-4:30)
+COMMA (4:30-4:31)
+IDENTIFIER "Second" (4:32-4:38)
+COLON (4:38-4:39)
+STRING_LITERAL "\"second\"" (4:40-4:48)
+RIGHT_BRACE (4:48-4:49)
+SEMICOLON (4:49-4:50)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "names" (5:7-5:12)
+DOT (5:12-5:13)
+IDENTIFIER "get" (5:13-5:16)
+LEFT_PAREN (5:16-5:17)
+IDENTIFIER "Second" (5:17-5:23)
+RIGHT_PAREN (5:23-5:24)
+RIGHT_PAREN (5:24-5:25)
+SEMICOLON (5:25-5:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:26
+  (ClassDeclaration
+    range: 1:1-1:15
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "First"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-2:16
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "Second"
+    )
+    superClass: null
+  )
+  (VariableDeclaration
+    range: 4:1-4:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "names"
+    )
+    type: null
+    (MapExpression
+      range: 4:15-4:49
+      (MapEntry
+        range: 4:16-4:30
+        (IdentifierExpression
+          range: 4:16-4:21
+          name: "First"
+        )
+        (LiteralExpression
+          range: 4:23-4:30
+          kind: STRING
+          text: "\"first\""
+        )
+      )
+      (MapEntry
+        range: 4:32-4:48
+        (IdentifierExpression
+          range: 4:32-4:38
+          name: "Second"
+        )
+        (LiteralExpression
+          range: 4:40-4:48
+          kind: STRING
+          text: "\"second\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:26
+    (CallExpression
+      range: 5:1-5:25
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:24
+        (MemberExpression
+          range: 5:7-5:16
+          (IdentifierExpression
+            range: 5:7-5:12
+            name: "names"
+          )
+          (IdentifierExpression
+            range: 5:13-5:16
+            name: "get"
+          )
+        )
+        (IdentifierExpression
+          range: 5:17-5:23
+          name: "Second"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:15-4:49 -> Map<Type<any>, string>
+  4:16-4:21 -> Type<First>
+  4:23-4:30 -> string
+  4:32-4:38 -> Type<Second>
+  4:40-4:48 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:25 -> void
+  5:7-5:12 -> Map<Type<any>, string>
+  5:7-5:16 -> (any) => string | null
+  5:7-5:24 -> string | null
+  5:13-5:16 -> (any) => string | null
+  5:17-5:23 -> Type<Second>
+
+Conversions:
+  5:17-5:23 -> Type<Second> -> any
+
+Declarations:
+  1:7-1:12 -> class First
+  2:7-2:13 -> class Second
+  4:7-4:12 -> const names: Map<Type<any>, string>
+
+References:
+  4:16-4:21 -> 1:7-1:12
+  4:32-4:38 -> 2:7-2:13
+  5:1-5:6 -> builtin print
+  5:7-5:12 -> 4:7-4:12
+  5:13-5:16 -> 5:7-5:16
+  5:17-5:23 -> 2:7-2:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$First
+  nest member Test$Second
+  inner class Test$First flags [PUBLIC, STATIC]
+  inner class Test$Second flags [PUBLIC, STATIC]
+  field names Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/Class<Ljava/lang/Object;>;Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC ClassOrInterfaceDesc[Test$First]
+    LDC "first"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    DUP
+    LDC ClassOrInterfaceDesc[Test$Second]
+    LDC "second"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.names Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.names Ljava/util/Map;
+    LDC ClassOrInterfaceDesc[Test$Second]
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$First extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$First flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Second extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Second flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+second
+

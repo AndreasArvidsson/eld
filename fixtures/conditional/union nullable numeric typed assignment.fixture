@@ -1,0 +1,135 @@
+const small: i8 = 100;
+const optional: i8 | null = small;
+print(optional);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "small" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i8" (1:14-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "100" (1:19-1:22)
+SEMICOLON (1:22-1:23)
+CONST (2:1-2:6)
+IDENTIFIER "optional" (2:7-2:15)
+COLON (2:15-2:16)
+IDENTIFIER "i8" (2:17-2:19)
+PIPE (2:20-2:21)
+NULL (2:22-2:26)
+EQUAL (2:27-2:28)
+IDENTIFIER "small" (2:29-2:34)
+SEMICOLON (2:34-2:35)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "optional" (3:7-3:15)
+RIGHT_PAREN (3:15-3:16)
+SEMICOLON (3:16-3:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:17
+  (VariableDeclaration
+    range: 1:1-1:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "small"
+    )
+    (NamedTypeNode
+      range: 1:14-1:16
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 1:19-1:22
+      kind: INT
+      text: "100"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:15
+      name: "optional"
+    )
+    (UnionTypeNode
+      range: 2:17-2:26
+      (NamedTypeNode
+        range: 2:17-2:19
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 2:22-2:26
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 2:29-2:34
+      name: "small"
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:17
+    (CallExpression
+      range: 3:1-3:16
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 3:7-3:15
+        name: "optional"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:22 -> i32
+  2:29-2:34 -> i8
+  3:1-3:6 -> (any) => void
+  3:1-3:16 -> void
+  3:7-3:15 -> i8 | null
+
+Resolved types:
+  1:14-1:16 -> i8
+  2:17-2:19 -> i8
+  2:17-2:26 -> i8 | null
+  2:22-2:26 -> null
+
+Conversions:
+  1:19-1:22 -> i32 -> i8
+  2:29-2:34 -> i8 -> i8 | null
+
+Declarations:
+  1:7-1:12 -> const small: i8
+  2:7-2:15 -> const optional: i8 | null
+
+References:
+  2:29-2:34 -> 1:7-1:12
+  3:1-3:6 -> builtin print
+  3:7-3:15 -> 2:7-2:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field small B flags [PUBLIC, STATIC, FINAL] = 100
+  field optional Ljava/lang/Byte; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC Test.small B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.optional Ljava/lang/Byte;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.optional Ljava/lang/Byte;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+100
+

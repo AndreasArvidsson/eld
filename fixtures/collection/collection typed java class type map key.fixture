@@ -1,0 +1,209 @@
+const exception: Type<Exception> = Exception;
+const names: Map<Type<Exception>, string> = {Exception: "exception"};
+print(names.get(exception));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "exception" (1:7-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "Type" (1:18-1:22)
+LESS (1:22-1:23)
+IDENTIFIER "Exception" (1:23-1:32)
+GREATER (1:32-1:33)
+EQUAL (1:34-1:35)
+IDENTIFIER "Exception" (1:36-1:45)
+SEMICOLON (1:45-1:46)
+CONST (2:1-2:6)
+IDENTIFIER "names" (2:7-2:12)
+COLON (2:12-2:13)
+IDENTIFIER "Map" (2:14-2:17)
+LESS (2:17-2:18)
+IDENTIFIER "Type" (2:18-2:22)
+LESS (2:22-2:23)
+IDENTIFIER "Exception" (2:23-2:32)
+GREATER (2:32-2:33)
+COMMA (2:33-2:34)
+IDENTIFIER "string" (2:35-2:41)
+GREATER (2:41-2:42)
+EQUAL (2:43-2:44)
+LEFT_BRACE (2:45-2:46)
+IDENTIFIER "Exception" (2:46-2:55)
+COLON (2:55-2:56)
+STRING_LITERAL "\"exception\"" (2:57-2:68)
+RIGHT_BRACE (2:68-2:69)
+SEMICOLON (2:69-2:70)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "names" (3:7-3:12)
+DOT (3:12-3:13)
+IDENTIFIER "get" (3:13-3:16)
+LEFT_PAREN (3:16-3:17)
+IDENTIFIER "exception" (3:17-3:26)
+RIGHT_PAREN (3:26-3:27)
+RIGHT_PAREN (3:27-3:28)
+SEMICOLON (3:28-3:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:29
+  (VariableDeclaration
+    range: 1:1-1:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:16
+      name: "exception"
+    )
+    (NamedTypeNode
+      range: 1:18-1:33
+      name: "Type"
+      (NamedTypeNode
+        range: 1:23-1:32
+        name: "Exception"
+      )
+    )
+    (IdentifierExpression
+      range: 1:36-1:45
+      name: "Exception"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:70
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "names"
+    )
+    (NamedTypeNode
+      range: 2:14-2:42
+      name: "Map"
+      (NamedTypeNode
+        range: 2:18-2:33
+        name: "Type"
+        (NamedTypeNode
+          range: 2:23-2:32
+          name: "Exception"
+        )
+      )
+      (NamedTypeNode
+        range: 2:35-2:41
+        name: "string"
+      )
+    )
+    (MapExpression
+      range: 2:45-2:69
+      (MapEntry
+        range: 2:46-2:68
+        (IdentifierExpression
+          range: 2:46-2:55
+          name: "Exception"
+        )
+        (LiteralExpression
+          range: 2:57-2:68
+          kind: STRING
+          text: "\"exception\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:29
+    (CallExpression
+      range: 3:1-3:28
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:27
+        (MemberExpression
+          range: 3:7-3:16
+          (IdentifierExpression
+            range: 3:7-3:12
+            name: "names"
+          )
+          (IdentifierExpression
+            range: 3:13-3:16
+            name: "get"
+          )
+        )
+        (IdentifierExpression
+          range: 3:17-3:26
+          name: "exception"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:36-1:45 -> Type<Exception>
+  2:45-2:69 -> Map<Type<Exception>, string>
+  2:46-2:55 -> Type<Exception>
+  2:57-2:68 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:28 -> void
+  3:7-3:12 -> Map<Type<Exception>, string>
+  3:7-3:16 -> (any) => string | null
+  3:7-3:27 -> string | null
+  3:13-3:16 -> (any) => string | null
+  3:17-3:26 -> Type<Exception>
+
+Resolved types:
+  1:18-1:33 -> Type<Exception>
+  1:23-1:32 -> Exception
+  2:14-2:42 -> Map<Type<Exception>, string>
+  2:18-2:33 -> Type<Exception>
+  2:23-2:32 -> Exception
+  2:35-2:41 -> string
+
+Conversions:
+  3:17-3:26 -> Type<Exception> -> any
+
+Declarations:
+  1:7-1:16 -> const exception: Type<Exception>
+  2:7-2:12 -> const names: Map<Type<Exception>, string>
+
+References:
+  1:36-1:45 -> 1:36-1:45
+  2:46-2:55 -> 2:46-2:55
+  3:1-3:6 -> builtin print
+  3:7-3:12 -> 2:7-2:12
+  3:13-3:16 -> 3:7-3:16
+  3:17-3:26 -> 1:7-1:16
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field exception Ljava/lang/Class; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Class<Ljava/lang/Exception;>;
+  field names Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<Ljava/lang/Class<Ljava/lang/Exception;>;Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    LDC ClassOrInterfaceDesc[Exception]
+    PUTSTATIC Test.exception Ljava/lang/Class;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC ClassOrInterfaceDesc[Exception]
+    LDC "exception"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.names Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.names Ljava/util/Map;
+    GETSTATIC Test.exception Ljava/lang/Class;
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+exception
+

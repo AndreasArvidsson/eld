@@ -1,0 +1,190 @@
+class Key {
+    public override func equals(other: any) bool {
+        return true;
+    }
+
+    public override func hashCode() i32 {
+        return 0;
+    }
+}
+
+switch (new Key()) {
+    case new Key() => print("found")
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Key" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+OVERRIDE (2:12-2:20)
+FUNC (2:21-2:25)
+IDENTIFIER "equals" (2:26-2:32)
+LEFT_PAREN (2:32-2:33)
+IDENTIFIER "other" (2:33-2:38)
+COLON (2:38-2:39)
+IDENTIFIER "any" (2:40-2:43)
+RIGHT_PAREN (2:43-2:44)
+IDENTIFIER "bool" (2:45-2:49)
+LEFT_BRACE (2:50-2:51)
+RETURN (3:9-3:15)
+BOOLEAN_LITERAL "true" (3:16-3:20)
+SEMICOLON (3:20-3:21)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (6:5-6:11)
+OVERRIDE (6:12-6:20)
+FUNC (6:21-6:25)
+IDENTIFIER "hashCode" (6:26-6:34)
+LEFT_PAREN (6:34-6:35)
+RIGHT_PAREN (6:35-6:36)
+IDENTIFIER "i32" (6:37-6:40)
+LEFT_BRACE (6:41-6:42)
+RETURN (7:9-7:15)
+INTEGER_LITERAL "0" (7:16-7:17)
+SEMICOLON (7:17-7:18)
+RIGHT_BRACE (8:5-8:6)
+RIGHT_BRACE (9:1-9:2)
+SWITCH (11:1-11:7)
+LEFT_PAREN (11:8-11:9)
+NEW (11:9-11:12)
+IDENTIFIER "Key" (11:13-11:16)
+LEFT_PAREN (11:16-11:17)
+RIGHT_PAREN (11:17-11:18)
+RIGHT_PAREN (11:18-11:19)
+LEFT_BRACE (11:20-11:21)
+CASE (12:5-12:9)
+NEW (12:10-12:13)
+IDENTIFIER "Key" (12:14-12:17)
+LEFT_PAREN (12:17-12:18)
+RIGHT_PAREN (12:18-12:19)
+ARROW (12:20-12:22)
+IDENTIFIER "print" (12:23-12:28)
+LEFT_PAREN (12:28-12:29)
+STRING_LITERAL "\"found\"" (12:29-12:36)
+RIGHT_PAREN (12:36-12:37)
+RIGHT_BRACE (13:1-13:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:2
+  (ClassDeclaration
+    range: 1:1-9:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Key"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 2:26-2:32
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:33-2:43
+          (IdentifierDeclaration
+            range: 2:33-2:38
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:40-2:43
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:45-2:49
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:50-4:6
+          (ReturnStatement
+            range: 3:9-3:21
+            (LiteralExpression
+              range: 3:16-3:20
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-8:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-8:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 6:26-6:34
+          name: "hashCode"
+        )
+        (NamedTypeNode
+          range: 6:37-6:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:41-8:6
+          (ReturnStatement
+            range: 7:9-7:18
+            (LiteralExpression
+              range: 7:16-7:17
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-13:2
+    (SwitchExpression
+      range: 11:1-13:2
+      (NewExpression
+        range: 11:9-11:18
+        (IdentifierExpression
+          range: 11:13-11:16
+          name: "Key"
+        )
+      )
+      (SwitchBranch
+        range: 12:5-12:37
+        (NewExpression
+          range: 12:10-12:19
+          (IdentifierExpression
+            range: 12:14-12:17
+            name: "Key"
+          )
+        )
+        (SwitchBranchExpressionBody
+          range: 12:23-12:37
+          (CallExpression
+            range: 12:23-12:37
+            (IdentifierExpression
+              range: 12:23-12:28
+              name: "print"
+            )
+            (LiteralExpression
+              range: 12:29-12:36
+              kind: STRING
+              text: "\"found\""
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Switch subject of type Key requires const equals and hashCode methods at 11:9-11:18

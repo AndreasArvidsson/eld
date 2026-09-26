@@ -1,0 +1,88 @@
+const subject: any = "value";
+switch (subject) {
+    case "value" => print("found")
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "subject" (1:7-1:14)
+COLON (1:14-1:15)
+IDENTIFIER "any" (1:16-1:19)
+EQUAL (1:20-1:21)
+STRING_LITERAL "\"value\"" (1:22-1:29)
+SEMICOLON (1:29-1:30)
+SWITCH (2:1-2:7)
+LEFT_PAREN (2:8-2:9)
+IDENTIFIER "subject" (2:9-2:16)
+RIGHT_PAREN (2:16-2:17)
+LEFT_BRACE (2:18-2:19)
+CASE (3:5-3:9)
+STRING_LITERAL "\"value\"" (3:10-3:17)
+ARROW (3:18-3:20)
+IDENTIFIER "print" (3:21-3:26)
+LEFT_PAREN (3:26-3:27)
+STRING_LITERAL "\"found\"" (3:27-3:34)
+RIGHT_PAREN (3:34-3:35)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:2
+  (VariableDeclaration
+    range: 1:1-1:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "subject"
+    )
+    (NamedTypeNode
+      range: 1:16-1:19
+      name: "any"
+    )
+    (LiteralExpression
+      range: 1:22-1:29
+      kind: STRING
+      text: "\"value\""
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-4:2
+    (SwitchExpression
+      range: 2:1-4:2
+      (IdentifierExpression
+        range: 2:9-2:16
+        name: "subject"
+      )
+      (SwitchBranch
+        range: 3:5-3:35
+        (LiteralExpression
+          range: 3:10-3:17
+          kind: STRING
+          text: "\"value\""
+        )
+        (SwitchBranchExpressionBody
+          range: 3:21-3:35
+          (CallExpression
+            range: 3:21-3:35
+            (IdentifierExpression
+              range: 3:21-3:26
+              name: "print"
+            )
+            (LiteralExpression
+              range: 3:27-3:34
+              kind: STRING
+              text: "\"found\""
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Switch subject of type any requires const equals and hashCode methods at 2:9-2:16

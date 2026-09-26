@@ -1,0 +1,148 @@
+interface Animal {}
+class Dog implements Animal {}
+
+const value: Animal = new Dog();
+switch (value) {
+    case Dog => print("type")
+    else => print("instance")
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Animal" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+RIGHT_BRACE (1:19-1:20)
+CLASS (2:1-2:6)
+IDENTIFIER "Dog" (2:7-2:10)
+IMPLEMENTS (2:11-2:21)
+IDENTIFIER "Animal" (2:22-2:28)
+LEFT_BRACE (2:29-2:30)
+RIGHT_BRACE (2:30-2:31)
+CONST (4:1-4:6)
+IDENTIFIER "value" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "Animal" (4:14-4:20)
+EQUAL (4:21-4:22)
+NEW (4:23-4:26)
+IDENTIFIER "Dog" (4:27-4:30)
+LEFT_PAREN (4:30-4:31)
+RIGHT_PAREN (4:31-4:32)
+SEMICOLON (4:32-4:33)
+SWITCH (5:1-5:7)
+LEFT_PAREN (5:8-5:9)
+IDENTIFIER "value" (5:9-5:14)
+RIGHT_PAREN (5:14-5:15)
+LEFT_BRACE (5:16-5:17)
+CASE (6:5-6:9)
+IDENTIFIER "Dog" (6:10-6:13)
+ARROW (6:14-6:16)
+IDENTIFIER "print" (6:17-6:22)
+LEFT_PAREN (6:22-6:23)
+STRING_LITERAL "\"type\"" (6:23-6:29)
+RIGHT_PAREN (6:29-6:30)
+ELSE (7:5-7:9)
+ARROW (7:10-7:12)
+IDENTIFIER "print" (7:13-7:18)
+LEFT_PAREN (7:18-7:19)
+STRING_LITERAL "\"instance\"" (7:19-7:29)
+RIGHT_PAREN (7:29-7:30)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (InterfaceDeclaration
+    range: 1:1-1:20
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Animal"
+    )
+  )
+  (ClassDeclaration
+    range: 2:1-2:31
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "Dog"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 2:22-2:28
+      name: "Animal"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 4:14-4:20
+      name: "Animal"
+    )
+    (NewExpression
+      range: 4:23-4:32
+      (IdentifierExpression
+        range: 4:27-4:30
+        name: "Dog"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-8:2
+    (SwitchExpression
+      range: 5:1-8:2
+      (IdentifierExpression
+        range: 5:9-5:14
+        name: "value"
+      )
+      (SwitchBranch
+        range: 6:5-6:30
+        (IdentifierExpression
+          range: 6:10-6:13
+          name: "Dog"
+        )
+        (SwitchBranchExpressionBody
+          range: 6:17-6:30
+          (CallExpression
+            range: 6:17-6:30
+            (IdentifierExpression
+              range: 6:17-6:22
+              name: "print"
+            )
+            (LiteralExpression
+              range: 6:23-6:29
+              kind: STRING
+              text: "\"type\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 7:5-7:30
+        (SwitchBranchExpressionBody
+          range: 7:13-7:30
+          (CallExpression
+            range: 7:13-7:30
+            (IdentifierExpression
+              range: 7:13-7:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 7:19-7:29
+              kind: STRING
+              text: "\"instance\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Switch match type Type<Dog> does not match subject type Animal at 6:10-6:13

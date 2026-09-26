@@ -46,6 +46,7 @@ import com.github.andreasarvidsson.eld.semantic.TupleType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
+import com.github.andreasarvidsson.eld.semantic.ClassDeclarationSymbol;
 import com.github.andreasarvidsson.eld.semantic.ClassType;
 import com.github.andreasarvidsson.eld.semantic.ConstType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceType;
@@ -59,6 +60,8 @@ import com.github.andreasarvidsson.eld.semantic.Symbol;
 import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.semantic.UnionType;
 import com.github.andreasarvidsson.eld.semantic.JavaMethodSymbol;
+import com.github.andreasarvidsson.eld.semantic.JavaClassSymbol;
+import com.github.andreasarvidsson.eld.semantic.InterfaceSymbol;
 import com.github.andreasarvidsson.eld.semantic.JavaTypes;
 import com.github.andreasarvidsson.eld.semantic.PromiseType;
 import com.github.andreasarvidsson.eld.semantic.PromiseSourceType;
@@ -4469,11 +4472,7 @@ public final class BytecodeGenerator {
                             localInstruction(loadOpcode(subjectType), subject)
                         );
                         expression(match);
-                        if (
-                            subjectType == BuiltinType.STRING
-                                || subjectType instanceof UnionType
-                                || subjectType == BuiltinType.ANY
-                        ) {
+                        if (reference(subjectType)) {
                             method.invoke(
                                 INVOKESTATIC,
                                 classDesc("java/util/Objects"),
@@ -4766,7 +4765,16 @@ public final class BytecodeGenerator {
         }
 
         private void load(final Symbol symbol) {
-            if (BuiltinFunctionSymbol.PRINT.equals(symbol)) {
+            if (symbol instanceof ClassDeclarationSymbol declaration) {
+                method.ldc(classDesc(classOwner(declaration.type())));
+            }
+            else if (symbol instanceof InterfaceSymbol declaration) {
+                method.ldc(classDesc(interfaceOwner(declaration.type())));
+            }
+            else if (symbol instanceof JavaClassSymbol declaration) {
+                method.ldc(classDesc(interfaceOwner(declaration.type())));
+            }
+            else if (BuiltinFunctionSymbol.PRINT.equals(symbol)) {
                 method.fieldAccess(
                     GETSTATIC,
                     classDesc("java/lang/System"),

@@ -185,9 +185,7 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Tuples as map keys and switch conditions (using hashCode and equals)
-- Classes map keys and switch conditions (using hashCode and equals. Must be compile time constants)
-- Type narrowing on conditional branching. if/switch/ternary. Don't create a new variable: type narrow existing instead.
+- Type narrowing on conditional branching. if/switch/ternary. Don't create a new variable: type narrow existing instead the way typescript is doing. Add a new fixture header "Narrowed types" provided by the semantic analyzer.
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
 - abstract classes?

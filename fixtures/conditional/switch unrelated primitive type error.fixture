@@ -1,0 +1,88 @@
+switch ("one") {
+    case 1 => print("one")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+SWITCH (1:1-1:7)
+LEFT_PAREN (1:8-1:9)
+STRING_LITERAL "\"one\"" (1:9-1:14)
+RIGHT_PAREN (1:14-1:15)
+LEFT_BRACE (1:16-1:17)
+CASE (2:5-2:9)
+INTEGER_LITERAL "1" (2:10-2:11)
+ARROW (2:12-2:14)
+IDENTIFIER "print" (2:15-2:20)
+LEFT_PAREN (2:20-2:21)
+STRING_LITERAL "\"one\"" (2:21-2:26)
+RIGHT_PAREN (2:26-2:27)
+ELSE (3:5-3:9)
+ARROW (3:10-3:12)
+IDENTIFIER "print" (3:13-3:18)
+LEFT_PAREN (3:18-3:19)
+STRING_LITERAL "\"missing\"" (3:19-3:28)
+RIGHT_PAREN (3:28-3:29)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:2
+  (ExpressionStatement
+    range: 1:1-4:2
+    (SwitchExpression
+      range: 1:1-4:2
+      (LiteralExpression
+        range: 1:9-1:14
+        kind: STRING
+        text: "\"one\""
+      )
+      (SwitchBranch
+        range: 2:5-2:27
+        (LiteralExpression
+          range: 2:10-2:11
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 2:15-2:27
+          (CallExpression
+            range: 2:15-2:27
+            (IdentifierExpression
+              range: 2:15-2:20
+              name: "print"
+            )
+            (LiteralExpression
+              range: 2:21-2:26
+              kind: STRING
+              text: "\"one\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 3:5-3:29
+        (SwitchBranchExpressionBody
+          range: 3:13-3:29
+          (CallExpression
+            range: 3:13-3:29
+            (IdentifierExpression
+              range: 3:13-3:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 3:19-3:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Switch match type i32 does not match subject type string at 2:10-2:11

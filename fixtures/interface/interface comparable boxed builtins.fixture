@@ -423,7 +423,7 @@ Resolved types:
 
 Conversions:
   1:32-1:33 -> i32 -> Comparable<i32>
-  3:42-3:43 -> i32 -> Comparable<i32> | null
+  3:42-3:43 -> i32 -> Comparable<i32> -> Comparable<i32> | null
   4:19-4:23 -> null -> Comparable<i32> | null
   7:35-7:37 -> i32 -> Comparable<i32>
   9:34-9:37 -> string -> Comparable<string>

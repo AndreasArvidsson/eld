@@ -2,6 +2,7 @@ package com.github.andreasarvidsson.eld.semantic;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
@@ -399,6 +400,25 @@ public final class SemanticAnalyzerExpressionOperations {
     ) {
         final @Nullable Symbol symbol =
             context.scope().resolve(identifier.name());
+        final @Nullable Class<?> javaType =
+            symbol == null ? JavaTypes.findClass(identifier.name()) : null;
+
+        if (javaType != null) {
+            final List<Type> typeArguments =
+                Collections.nCopies(
+                    javaType.getTypeParameters().length,
+                    BuiltinType.ANY
+                );
+            final JavaClassSymbol javaClass =
+                new JavaClassSymbol(
+                    JavaTypes.type(identifier.name(), typeArguments),
+                    identifier.range()
+                );
+            final Type type = JavaTypes.classType(javaClass.type());
+            model.setExpressionType(identifier, type);
+            model.setReference(identifier, javaClass);
+            return type;
+        }
 
         if (symbol == null) {
             throw new SemanticException(
@@ -428,7 +448,11 @@ public final class SemanticAnalyzerExpressionOperations {
             );
         }
 
-        final Type type = symbol.type();
+        final Type type =
+            symbol instanceof ClassDeclarationSymbol
+                || symbol instanceof InterfaceSymbol
+                    ? JavaTypes.classType(symbol.type())
+                    : symbol.type();
         model.setExpressionType(identifier, type);
         model.setReference(identifier, symbol);
         return type;
@@ -622,6 +646,7 @@ public final class SemanticAnalyzerExpressionOperations {
         }
         final Type keyType = requireCommonMapType(keyTypes, map, "keys");
         final Type valueType = requireCommonMapType(valueTypes, map, "values");
+        analyzer.requireConstantEquality(keyType, map.range(), "Map key");
         applyMapElementTypes(map, keyType, valueType);
         final InterfaceType type =
             JavaTypes.type("Map", List.of(keyType, valueType));

@@ -367,6 +367,11 @@ public final class SemanticAnalyzerStatements {
                 "A switch subject must produce a value"
             );
         }
+        analyzer.requireConstantEquality(
+            subjectType,
+            expression.subject().range(),
+            "Switch subject"
+        );
         if (requireValue && expression.elseBranch() == null) {
             throw new SemanticException(
                 expression.range(),
@@ -379,14 +384,15 @@ public final class SemanticAnalyzerStatements {
                 final Type matchType =
                     analyzer.analyzeExpression(match, context);
                 if (
-                    !subjectType.equals(matchType)
-                        && !((subjectType instanceof UnionType
-                            || subjectType == BuiltinType.ANY)
+                    !switchMatchSubtype(matchType, subjectType)
+                        || ((subjectType instanceof UnionType
+                            || numericWidening(matchType, subjectType))
+                            && !subjectType.equals(matchType)
                             && analyzer.resolveAssignType(
                                 matchType,
                                 subjectType,
                                 match
-                            ) != null)
+                            ) == null)
                 ) {
                     throw new SemanticException(
                         match.range(),
@@ -485,6 +491,38 @@ public final class SemanticAnalyzerStatements {
             applyCommonType(resultValues, result);
         }
         return result;
+    }
+
+    private boolean switchMatchSubtype(
+        final Type matchType,
+        final Type subjectType
+    ) {
+        final Type match = ConstType.unwrap(matchType);
+        final Type subject = ConstType.unwrap(subjectType);
+        if (subject instanceof UnionType union) {
+            if (match instanceof UnionType matchUnion) {
+                return matchUnion.memberTypes()
+                    .stream()
+                    .allMatch(member -> switchMatchSubtype(member, union));
+            }
+            return union.memberTypes()
+                .stream()
+                .anyMatch(member -> switchMatchSubtype(match, member));
+        }
+        return model.isSubtype(match, subject)
+            || numericWidening(match, subject);
+    }
+
+    private boolean numericWidening(final Type from, final Type to) {
+        final Type source = ConstType.unwrap(from);
+        final Type target = ConstType.unwrap(to);
+        if (
+            !(source instanceof BuiltinType sourceNumber)
+                || !(target instanceof BuiltinType targetNumber)
+        ) {
+            return false;
+        }
+        return sourceNumber.canWidenTo(targetNumber);
     }
 
     public Type analyzeIfExpression(

@@ -127,17 +127,19 @@ public final class SemanticAnalyzerDeclarations {
         model.setImplementedInterfaces(classType, implemented);
         final IdentifierExpression superclassName = declaration.superClass();
         if (superclassName != null) {
-            final Type base =
-                analyzer.analyzeIdentifierExpression(superclassName, context);
+            analyzer.analyzeIdentifierExpression(superclassName, context);
             if (
-                !(model.getReference(superclassName) instanceof ClassSymbol)
-                    || !(base instanceof ClassType superclass)
+                !(model.getReference(
+                    superclassName
+                ) instanceof ClassSymbol superclassSymbol)
             ) {
                 throw new SemanticException(
                     superclassName.range(),
                     "'extends' requires a class name"
                 );
             }
+            final ClassType superclass = superclassSymbol.type();
+            model.setExpressionType(superclassName, superclass);
             if (
                 superclass.equals(classType)
                     || model.isSubclassOf(superclass, classType)

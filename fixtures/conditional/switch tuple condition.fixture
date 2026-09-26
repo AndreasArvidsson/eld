@@ -1,0 +1,288 @@
+switch ((1, "one")) {
+    case (2, "two") {
+        print("wrong");
+    }
+    case (1, "one") {
+        print("found");
+    }
+    else {
+        print("missing");
+    }
+}
+
+--- TOKENS ---
+
+SWITCH (1:1-1:7)
+LEFT_PAREN (1:8-1:9)
+LEFT_PAREN (1:9-1:10)
+INTEGER_LITERAL "1" (1:10-1:11)
+COMMA (1:11-1:12)
+STRING_LITERAL "\"one\"" (1:13-1:18)
+RIGHT_PAREN (1:18-1:19)
+RIGHT_PAREN (1:19-1:20)
+LEFT_BRACE (1:21-1:22)
+CASE (2:5-2:9)
+LEFT_PAREN (2:10-2:11)
+INTEGER_LITERAL "2" (2:11-2:12)
+COMMA (2:12-2:13)
+STRING_LITERAL "\"two\"" (2:14-2:19)
+RIGHT_PAREN (2:19-2:20)
+LEFT_BRACE (2:21-2:22)
+IDENTIFIER "print" (3:9-3:14)
+LEFT_PAREN (3:14-3:15)
+STRING_LITERAL "\"wrong\"" (3:15-3:22)
+RIGHT_PAREN (3:22-3:23)
+SEMICOLON (3:23-3:24)
+RIGHT_BRACE (4:5-4:6)
+CASE (5:5-5:9)
+LEFT_PAREN (5:10-5:11)
+INTEGER_LITERAL "1" (5:11-5:12)
+COMMA (5:12-5:13)
+STRING_LITERAL "\"one\"" (5:14-5:19)
+RIGHT_PAREN (5:19-5:20)
+LEFT_BRACE (5:21-5:22)
+IDENTIFIER "print" (6:9-6:14)
+LEFT_PAREN (6:14-6:15)
+STRING_LITERAL "\"found\"" (6:15-6:22)
+RIGHT_PAREN (6:22-6:23)
+SEMICOLON (6:23-6:24)
+RIGHT_BRACE (7:5-7:6)
+ELSE (8:5-8:9)
+LEFT_BRACE (8:10-8:11)
+IDENTIFIER "print" (9:9-9:14)
+LEFT_PAREN (9:14-9:15)
+STRING_LITERAL "\"missing\"" (9:15-9:24)
+RIGHT_PAREN (9:24-9:25)
+SEMICOLON (9:25-9:26)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (ExpressionStatement
+    range: 1:1-11:2
+    (SwitchExpression
+      range: 1:1-11:2
+      (TupleExpression
+        range: 1:9-1:19
+        (LiteralExpression
+          range: 1:10-1:11
+          kind: INT
+          text: "1"
+        )
+        (LiteralExpression
+          range: 1:13-1:18
+          kind: STRING
+          text: "\"one\""
+        )
+      )
+      (SwitchBranch
+        range: 2:5-4:6
+        (TupleExpression
+          range: 2:10-2:20
+          (LiteralExpression
+            range: 2:11-2:12
+            kind: INT
+            text: "2"
+          )
+          (LiteralExpression
+            range: 2:14-2:19
+            kind: STRING
+            text: "\"two\""
+          )
+        )
+        (SwitchBranchBlockBody
+          range: 2:21-4:6
+          (BlockStatement
+            range: 2:21-4:6
+            (ExpressionStatement
+              range: 3:9-3:24
+              (CallExpression
+                range: 3:9-3:23
+                (IdentifierExpression
+                  range: 3:9-3:14
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 3:15-3:22
+                  kind: STRING
+                  text: "\"wrong\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 5:5-7:6
+        (TupleExpression
+          range: 5:10-5:20
+          (LiteralExpression
+            range: 5:11-5:12
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 5:14-5:19
+            kind: STRING
+            text: "\"one\""
+          )
+        )
+        (SwitchBranchBlockBody
+          range: 5:21-7:6
+          (BlockStatement
+            range: 5:21-7:6
+            (ExpressionStatement
+              range: 6:9-6:24
+              (CallExpression
+                range: 6:9-6:23
+                (IdentifierExpression
+                  range: 6:9-6:14
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 6:15-6:22
+                  kind: STRING
+                  text: "\"found\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 8:5-10:6
+        (SwitchBranchBlockBody
+          range: 8:10-10:6
+          (BlockStatement
+            range: 8:10-10:6
+            (ExpressionStatement
+              range: 9:9-9:26
+              (CallExpression
+                range: 9:9-9:25
+                (IdentifierExpression
+                  range: 9:9-9:14
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 9:15-9:24
+                  kind: STRING
+                  text: "\"missing\""
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-11:2 -> void
+  1:9-1:19 -> (i32, string)
+  1:10-1:11 -> i32
+  1:13-1:18 -> string
+  2:10-2:20 -> (i32, string)
+  2:11-2:12 -> i32
+  2:14-2:19 -> string
+  3:9-3:14 -> (any) => void
+  3:9-3:23 -> void
+  3:15-3:22 -> string
+  5:10-5:20 -> (i32, string)
+  5:11-5:12 -> i32
+  5:14-5:19 -> string
+  6:9-6:14 -> (any) => void
+  6:9-6:23 -> void
+  6:15-6:22 -> string
+  9:9-9:14 -> (any) => void
+  9:9-9:25 -> void
+  9:15-9:24 -> string
+
+References:
+  3:9-3:14 -> builtin print
+  6:9-6:14 -> builtin print
+  9:9-9:14 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "one"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    ASTORE_0 0
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "two"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wrong"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L1:
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "one"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L2
+    GOTO L3
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "found"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L4:
+    RETURN
+    max stack 7 max locals 1
+
+--- OUTPUT ---
+
+found
+

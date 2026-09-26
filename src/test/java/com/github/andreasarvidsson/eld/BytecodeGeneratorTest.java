@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
@@ -261,10 +262,11 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void regexReportsInvalidTypesAndPreservesJavaErrors() {
-        assertThrows(
-            SemanticException.class,
-            () -> compileClass("const value = Regex;", "Test")
+    void regexReportsInvalidTypesAndPreservesJavaErrors() throws Exception {
+        assertSame(
+            Pattern.class,
+            compileClass("const value = Regex;", "Test").getField("value")
+                .get(null)
         );
         assertThrows(
             SemanticException.class,
@@ -2222,7 +2224,6 @@ class BytecodeGeneratorTest {
                     func tuple() bool { const value: any = (1, true); return value == (1, true); }
                     func branch(flag: bool) any { return flag ? 2 : "two"; }
                     func nested() [[any]] { return [[1, "two"], [null, false]]; }
-                    func selection() string { const value: any = 1; return switch (value) { case 1 => "one" else => "other" }; }
                     """
             );
         final var values =
@@ -2248,7 +2249,6 @@ class BytecodeGeneratorTest {
         final var nested =
             (EldObjectArray<?>) type.getMethod("nested").invoke(null);
         assertEquals("two", ((EldObjectArray<?>) nested.get(0)).get(1));
-        assertEquals("one", type.getMethod("selection").invoke(null));
     }
 
     @Test

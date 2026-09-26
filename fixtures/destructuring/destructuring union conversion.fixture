@@ -142,7 +142,7 @@ Resolved types:
   2:19-2:23 -> null
 
 Conversions:
-  2:8-2:23 -> i32 -> i64 | null
+  2:8-2:23 -> i32 -> i64 -> i64 | null
 
 Declarations:
   1:8-1:11 -> record Rec(foo: i32)

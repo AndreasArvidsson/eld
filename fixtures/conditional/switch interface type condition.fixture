@@ -1,0 +1,752 @@
+interface Animal {}
+interface Pet extends Animal {}
+class Dog implements Pet {}
+class Cat implements Animal {}
+record Bird() implements Animal;
+
+const selected: Type<Animal> = Dog;
+switch (selected) {
+    case Cat => print("cat")
+    case Bird => print("bird")
+    case Dog => print("dog")
+    else => print("missing")
+}
+
+const contract: Type<Animal> = Pet;
+switch (contract) {
+    case Pet => print("pet")
+    else => print("missing")
+}
+
+const javaType: Type<Collection<any>> = ArrayList;
+switch (javaType) {
+    case ArrayList => print("array list")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Animal" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+RIGHT_BRACE (1:19-1:20)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Pet" (2:11-2:14)
+EXTENDS (2:15-2:22)
+IDENTIFIER "Animal" (2:23-2:29)
+LEFT_BRACE (2:30-2:31)
+RIGHT_BRACE (2:31-2:32)
+CLASS (3:1-3:6)
+IDENTIFIER "Dog" (3:7-3:10)
+IMPLEMENTS (3:11-3:21)
+IDENTIFIER "Pet" (3:22-3:25)
+LEFT_BRACE (3:26-3:27)
+RIGHT_BRACE (3:27-3:28)
+CLASS (4:1-4:6)
+IDENTIFIER "Cat" (4:7-4:10)
+IMPLEMENTS (4:11-4:21)
+IDENTIFIER "Animal" (4:22-4:28)
+LEFT_BRACE (4:29-4:30)
+RIGHT_BRACE (4:30-4:31)
+RECORD (5:1-5:7)
+IDENTIFIER "Bird" (5:8-5:12)
+LEFT_PAREN (5:12-5:13)
+RIGHT_PAREN (5:13-5:14)
+IMPLEMENTS (5:15-5:25)
+IDENTIFIER "Animal" (5:26-5:32)
+SEMICOLON (5:32-5:33)
+CONST (7:1-7:6)
+IDENTIFIER "selected" (7:7-7:15)
+COLON (7:15-7:16)
+IDENTIFIER "Type" (7:17-7:21)
+LESS (7:21-7:22)
+IDENTIFIER "Animal" (7:22-7:28)
+GREATER (7:28-7:29)
+EQUAL (7:30-7:31)
+IDENTIFIER "Dog" (7:32-7:35)
+SEMICOLON (7:35-7:36)
+SWITCH (8:1-8:7)
+LEFT_PAREN (8:8-8:9)
+IDENTIFIER "selected" (8:9-8:17)
+RIGHT_PAREN (8:17-8:18)
+LEFT_BRACE (8:19-8:20)
+CASE (9:5-9:9)
+IDENTIFIER "Cat" (9:10-9:13)
+ARROW (9:14-9:16)
+IDENTIFIER "print" (9:17-9:22)
+LEFT_PAREN (9:22-9:23)
+STRING_LITERAL "\"cat\"" (9:23-9:28)
+RIGHT_PAREN (9:28-9:29)
+CASE (10:5-10:9)
+IDENTIFIER "Bird" (10:10-10:14)
+ARROW (10:15-10:17)
+IDENTIFIER "print" (10:18-10:23)
+LEFT_PAREN (10:23-10:24)
+STRING_LITERAL "\"bird\"" (10:24-10:30)
+RIGHT_PAREN (10:30-10:31)
+CASE (11:5-11:9)
+IDENTIFIER "Dog" (11:10-11:13)
+ARROW (11:14-11:16)
+IDENTIFIER "print" (11:17-11:22)
+LEFT_PAREN (11:22-11:23)
+STRING_LITERAL "\"dog\"" (11:23-11:28)
+RIGHT_PAREN (11:28-11:29)
+ELSE (12:5-12:9)
+ARROW (12:10-12:12)
+IDENTIFIER "print" (12:13-12:18)
+LEFT_PAREN (12:18-12:19)
+STRING_LITERAL "\"missing\"" (12:19-12:28)
+RIGHT_PAREN (12:28-12:29)
+RIGHT_BRACE (13:1-13:2)
+CONST (15:1-15:6)
+IDENTIFIER "contract" (15:7-15:15)
+COLON (15:15-15:16)
+IDENTIFIER "Type" (15:17-15:21)
+LESS (15:21-15:22)
+IDENTIFIER "Animal" (15:22-15:28)
+GREATER (15:28-15:29)
+EQUAL (15:30-15:31)
+IDENTIFIER "Pet" (15:32-15:35)
+SEMICOLON (15:35-15:36)
+SWITCH (16:1-16:7)
+LEFT_PAREN (16:8-16:9)
+IDENTIFIER "contract" (16:9-16:17)
+RIGHT_PAREN (16:17-16:18)
+LEFT_BRACE (16:19-16:20)
+CASE (17:5-17:9)
+IDENTIFIER "Pet" (17:10-17:13)
+ARROW (17:14-17:16)
+IDENTIFIER "print" (17:17-17:22)
+LEFT_PAREN (17:22-17:23)
+STRING_LITERAL "\"pet\"" (17:23-17:28)
+RIGHT_PAREN (17:28-17:29)
+ELSE (18:5-18:9)
+ARROW (18:10-18:12)
+IDENTIFIER "print" (18:13-18:18)
+LEFT_PAREN (18:18-18:19)
+STRING_LITERAL "\"missing\"" (18:19-18:28)
+RIGHT_PAREN (18:28-18:29)
+RIGHT_BRACE (19:1-19:2)
+CONST (21:1-21:6)
+IDENTIFIER "javaType" (21:7-21:15)
+COLON (21:15-21:16)
+IDENTIFIER "Type" (21:17-21:21)
+LESS (21:21-21:22)
+IDENTIFIER "Collection" (21:22-21:32)
+LESS (21:32-21:33)
+IDENTIFIER "any" (21:33-21:36)
+GREATER (21:36-21:37)
+GREATER (21:37-21:38)
+EQUAL (21:39-21:40)
+IDENTIFIER "ArrayList" (21:41-21:50)
+SEMICOLON (21:50-21:51)
+SWITCH (22:1-22:7)
+LEFT_PAREN (22:8-22:9)
+IDENTIFIER "javaType" (22:9-22:17)
+RIGHT_PAREN (22:17-22:18)
+LEFT_BRACE (22:19-22:20)
+CASE (23:5-23:9)
+IDENTIFIER "ArrayList" (23:10-23:19)
+ARROW (23:20-23:22)
+IDENTIFIER "print" (23:23-23:28)
+LEFT_PAREN (23:28-23:29)
+STRING_LITERAL "\"array list\"" (23:29-23:41)
+RIGHT_PAREN (23:41-23:42)
+ELSE (24:5-24:9)
+ARROW (24:10-24:12)
+IDENTIFIER "print" (24:13-24:18)
+LEFT_PAREN (24:18-24:19)
+STRING_LITERAL "\"missing\"" (24:19-24:28)
+RIGHT_PAREN (24:28-24:29)
+RIGHT_BRACE (25:1-25:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-25:2
+  (InterfaceDeclaration
+    range: 1:1-1:20
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Animal"
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:32
+    (IdentifierDeclaration
+      range: 2:11-2:14
+      name: "Pet"
+    )
+    (NamedTypeNode
+      range: 2:23-2:29
+      name: "Animal"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-3:28
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "Dog"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 3:22-3:25
+      name: "Pet"
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-4:31
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "Cat"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:22-4:28
+      name: "Animal"
+    )
+  )
+  (RecordDeclaration
+    range: 5:1-5:33
+    (IdentifierDeclaration
+      range: 5:8-5:12
+      name: "Bird"
+    )
+    (NamedTypeNode
+      range: 5:26-5:32
+      name: "Animal"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:15
+      name: "selected"
+    )
+    (NamedTypeNode
+      range: 7:17-7:29
+      name: "Type"
+      (NamedTypeNode
+        range: 7:22-7:28
+        name: "Animal"
+      )
+    )
+    (IdentifierExpression
+      range: 7:32-7:35
+      name: "Dog"
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-13:2
+    (SwitchExpression
+      range: 8:1-13:2
+      (IdentifierExpression
+        range: 8:9-8:17
+        name: "selected"
+      )
+      (SwitchBranch
+        range: 9:5-9:29
+        (IdentifierExpression
+          range: 9:10-9:13
+          name: "Cat"
+        )
+        (SwitchBranchExpressionBody
+          range: 9:17-9:29
+          (CallExpression
+            range: 9:17-9:29
+            (IdentifierExpression
+              range: 9:17-9:22
+              name: "print"
+            )
+            (LiteralExpression
+              range: 9:23-9:28
+              kind: STRING
+              text: "\"cat\""
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 10:5-10:31
+        (IdentifierExpression
+          range: 10:10-10:14
+          name: "Bird"
+        )
+        (SwitchBranchExpressionBody
+          range: 10:18-10:31
+          (CallExpression
+            range: 10:18-10:31
+            (IdentifierExpression
+              range: 10:18-10:23
+              name: "print"
+            )
+            (LiteralExpression
+              range: 10:24-10:30
+              kind: STRING
+              text: "\"bird\""
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 11:5-11:29
+        (IdentifierExpression
+          range: 11:10-11:13
+          name: "Dog"
+        )
+        (SwitchBranchExpressionBody
+          range: 11:17-11:29
+          (CallExpression
+            range: 11:17-11:29
+            (IdentifierExpression
+              range: 11:17-11:22
+              name: "print"
+            )
+            (LiteralExpression
+              range: 11:23-11:28
+              kind: STRING
+              text: "\"dog\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 12:5-12:29
+        (SwitchBranchExpressionBody
+          range: 12:13-12:29
+          (CallExpression
+            range: 12:13-12:29
+            (IdentifierExpression
+              range: 12:13-12:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 12:19-12:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:15
+      name: "contract"
+    )
+    (NamedTypeNode
+      range: 15:17-15:29
+      name: "Type"
+      (NamedTypeNode
+        range: 15:22-15:28
+        name: "Animal"
+      )
+    )
+    (IdentifierExpression
+      range: 15:32-15:35
+      name: "Pet"
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-19:2
+    (SwitchExpression
+      range: 16:1-19:2
+      (IdentifierExpression
+        range: 16:9-16:17
+        name: "contract"
+      )
+      (SwitchBranch
+        range: 17:5-17:29
+        (IdentifierExpression
+          range: 17:10-17:13
+          name: "Pet"
+        )
+        (SwitchBranchExpressionBody
+          range: 17:17-17:29
+          (CallExpression
+            range: 17:17-17:29
+            (IdentifierExpression
+              range: 17:17-17:22
+              name: "print"
+            )
+            (LiteralExpression
+              range: 17:23-17:28
+              kind: STRING
+              text: "\"pet\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 18:5-18:29
+        (SwitchBranchExpressionBody
+          range: 18:13-18:29
+          (CallExpression
+            range: 18:13-18:29
+            (IdentifierExpression
+              range: 18:13-18:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 18:19-18:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:15
+      name: "javaType"
+    )
+    (NamedTypeNode
+      range: 21:17-21:38
+      name: "Type"
+      (NamedTypeNode
+        range: 21:22-21:37
+        name: "Collection"
+        (NamedTypeNode
+          range: 21:33-21:36
+          name: "any"
+        )
+      )
+    )
+    (IdentifierExpression
+      range: 21:41-21:50
+      name: "ArrayList"
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-25:2
+    (SwitchExpression
+      range: 22:1-25:2
+      (IdentifierExpression
+        range: 22:9-22:17
+        name: "javaType"
+      )
+      (SwitchBranch
+        range: 23:5-23:42
+        (IdentifierExpression
+          range: 23:10-23:19
+          name: "ArrayList"
+        )
+        (SwitchBranchExpressionBody
+          range: 23:23-23:42
+          (CallExpression
+            range: 23:23-23:42
+            (IdentifierExpression
+              range: 23:23-23:28
+              name: "print"
+            )
+            (LiteralExpression
+              range: 23:29-23:41
+              kind: STRING
+              text: "\"array list\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 24:5-24:29
+        (SwitchBranchExpressionBody
+          range: 24:13-24:29
+          (CallExpression
+            range: 24:13-24:29
+            (IdentifierExpression
+              range: 24:13-24:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 24:19-24:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:1-5:33 -> Bird
+  5:1-5:33 -> string
+  5:8-5:12 -> Bird
+  7:32-7:35 -> Type<Dog>
+  8:1-13:2 -> void
+  8:9-8:17 -> Type<Animal>
+  9:10-9:13 -> Type<Cat>
+  9:17-9:22 -> (any) => void
+  9:17-9:29 -> void
+  9:23-9:28 -> string
+  10:10-10:14 -> Type<Bird>
+  10:18-10:23 -> (any) => void
+  10:18-10:31 -> void
+  10:24-10:30 -> string
+  11:10-11:13 -> Type<Dog>
+  11:17-11:22 -> (any) => void
+  11:17-11:29 -> void
+  11:23-11:28 -> string
+  12:13-12:18 -> (any) => void
+  12:13-12:29 -> void
+  12:19-12:28 -> string
+  15:32-15:35 -> Type<Pet>
+  16:1-19:2 -> void
+  16:9-16:17 -> Type<Animal>
+  17:10-17:13 -> Type<Pet>
+  17:17-17:22 -> (any) => void
+  17:17-17:29 -> void
+  17:23-17:28 -> string
+  18:13-18:18 -> (any) => void
+  18:13-18:29 -> void
+  18:19-18:28 -> string
+  21:41-21:50 -> Type<ArrayList<any>>
+  22:1-25:2 -> void
+  22:9-22:17 -> Type<Collection<any>>
+  23:10-23:19 -> Type<ArrayList<any>>
+  23:23-23:28 -> (any) => void
+  23:23-23:42 -> void
+  23:29-23:41 -> string
+  24:13-24:18 -> (any) => void
+  24:13-24:29 -> void
+  24:19-24:28 -> string
+
+Resolved types:
+  2:23-2:29 -> Animal
+  3:22-3:25 -> Pet
+  4:22-4:28 -> Animal
+  5:8-5:12 -> Bird
+  5:8-5:12 -> string
+  5:26-5:32 -> Animal
+  7:17-7:29 -> Type<Animal>
+  7:22-7:28 -> Animal
+  15:17-15:29 -> Type<Animal>
+  15:22-15:28 -> Animal
+  21:17-21:38 -> Type<Collection<any>>
+  21:22-21:37 -> Collection<any>
+  21:33-21:36 -> any
+
+Declarations:
+  1:11-1:17 -> interface Animal
+  2:11-2:14 -> interface Pet
+  3:7-3:10 -> class Dog
+  4:7-4:10 -> class Cat
+  5:8-5:12 -> record Bird()
+  7:7-7:15 -> const selected: Type<Animal>
+  15:7-15:15 -> const contract: Type<Animal>
+  21:7-21:15 -> const javaType: Type<Collection<any>>
+
+References:
+  5:8-5:12 -> 5:8-5:12
+  7:32-7:35 -> 3:7-3:10
+  8:9-8:17 -> 7:7-7:15
+  9:10-9:13 -> 4:7-4:10
+  9:17-9:22 -> builtin print
+  10:10-10:14 -> 5:8-5:12
+  10:18-10:23 -> builtin print
+  11:10-11:13 -> 3:7-3:10
+  11:17-11:22 -> builtin print
+  12:13-12:18 -> builtin print
+  15:32-15:35 -> 2:11-2:14
+  16:9-16:17 -> 15:7-15:15
+  17:10-17:13 -> 2:11-2:14
+  17:17-17:22 -> builtin print
+  18:13-18:18 -> builtin print
+  21:41-21:50 -> 21:41-21:50
+  22:9-22:17 -> 21:7-21:15
+  23:10-23:19 -> 23:10-23:19
+  23:23-23:28 -> builtin print
+  24:13-24:18 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  nest member Test$Pet
+  nest member Test$Dog
+  nest member Test$Cat
+  nest member Test$Bird
+  inner class Test$Animal flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Pet flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  inner class Test$Bird flags [PUBLIC, STATIC, FINAL]
+  field selected Ljava/lang/Class; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Class<LTest$Animal;>;
+  field contract Ljava/lang/Class; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Class<LTest$Animal;>;
+  field javaType Ljava/lang/Class; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Class<Ljava/util/Collection<Ljava/lang/Object;>;>;
+  method <clinit>()V flags [STATIC]
+    LDC ClassOrInterfaceDesc[Test$Dog]
+    PUTSTATIC Test.selected Ljava/lang/Class;
+    GETSTATIC Test.selected Ljava/lang/Class;
+    ASTORE_0 0
+    ALOAD_0 0
+    LDC ClassOrInterfaceDesc[Test$Cat]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "cat"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L1:
+    ALOAD_0 0
+    LDC ClassOrInterfaceDesc[Test$Bird]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L2
+    GOTO L3
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "bird"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L3:
+    ALOAD_0 0
+    LDC ClassOrInterfaceDesc[Test$Dog]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L4
+    GOTO L5
+   L4:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "dog"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L5:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L6:
+    LDC ClassOrInterfaceDesc[Test$Pet]
+    PUTSTATIC Test.contract Ljava/lang/Class;
+    GETSTATIC Test.contract Ljava/lang/Class;
+    ASTORE_1 1
+    ALOAD_1 1
+    LDC ClassOrInterfaceDesc[Test$Pet]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L7
+    GOTO L8
+   L7:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "pet"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L9
+   L8:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L9:
+    LDC ClassOrInterfaceDesc[ArrayList]
+    PUTSTATIC Test.javaType Ljava/lang/Class;
+    GETSTATIC Test.javaType Ljava/lang/Class;
+    ASTORE_2 2
+    ALOAD_2 2
+    LDC ClassOrInterfaceDesc[ArrayList]
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L10
+    GOTO L11
+   L10:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "array list"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L12
+   L11:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L12:
+    RETURN
+    max stack 2 max locals 3
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$Pet extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  implements Test$Animal
+  nest host Test
+  inner class Test$Pet flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$Dog extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Pet
+  nest host Test
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Cat extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Animal
+  nest host Test
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Bird extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements Test$Animal
+  nest host Test
+  inner class Test$Bird flags [PUBLIC, STATIC, FINAL]
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Bird("
+    ALOAD_1 1
+    LDC 5
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method copy()LTest$Bird; flags [PUBLIC]
+    NEW Test$Bird
+    DUP
+    INVOKESPECIAL Test$Bird.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+dog
+pet
+array list
+

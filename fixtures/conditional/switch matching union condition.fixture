@@ -1,0 +1,506 @@
+const selected: string | null = "same";
+const match: string | null = "same";
+
+switch (selected) {
+    case match => print("found")
+    else => print("missing")
+}
+
+class Base {}
+class Child extends Base {}
+const child = new Child();
+const broad: Base | null = child;
+const narrow: Child | null = child;
+switch (broad) {
+    case narrow => print("derived")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "selected" (1:7-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "string" (1:17-1:23)
+PIPE (1:24-1:25)
+NULL (1:26-1:30)
+EQUAL (1:31-1:32)
+STRING_LITERAL "\"same\"" (1:33-1:39)
+SEMICOLON (1:39-1:40)
+CONST (2:1-2:6)
+IDENTIFIER "match" (2:7-2:12)
+COLON (2:12-2:13)
+IDENTIFIER "string" (2:14-2:20)
+PIPE (2:21-2:22)
+NULL (2:23-2:27)
+EQUAL (2:28-2:29)
+STRING_LITERAL "\"same\"" (2:30-2:36)
+SEMICOLON (2:36-2:37)
+SWITCH (4:1-4:7)
+LEFT_PAREN (4:8-4:9)
+IDENTIFIER "selected" (4:9-4:17)
+RIGHT_PAREN (4:17-4:18)
+LEFT_BRACE (4:19-4:20)
+CASE (5:5-5:9)
+IDENTIFIER "match" (5:10-5:15)
+ARROW (5:16-5:18)
+IDENTIFIER "print" (5:19-5:24)
+LEFT_PAREN (5:24-5:25)
+STRING_LITERAL "\"found\"" (5:25-5:32)
+RIGHT_PAREN (5:32-5:33)
+ELSE (6:5-6:9)
+ARROW (6:10-6:12)
+IDENTIFIER "print" (6:13-6:18)
+LEFT_PAREN (6:18-6:19)
+STRING_LITERAL "\"missing\"" (6:19-6:28)
+RIGHT_PAREN (6:28-6:29)
+RIGHT_BRACE (7:1-7:2)
+CLASS (9:1-9:6)
+IDENTIFIER "Base" (9:7-9:11)
+LEFT_BRACE (9:12-9:13)
+RIGHT_BRACE (9:13-9:14)
+CLASS (10:1-10:6)
+IDENTIFIER "Child" (10:7-10:12)
+EXTENDS (10:13-10:20)
+IDENTIFIER "Base" (10:21-10:25)
+LEFT_BRACE (10:26-10:27)
+RIGHT_BRACE (10:27-10:28)
+CONST (11:1-11:6)
+IDENTIFIER "child" (11:7-11:12)
+EQUAL (11:13-11:14)
+NEW (11:15-11:18)
+IDENTIFIER "Child" (11:19-11:24)
+LEFT_PAREN (11:24-11:25)
+RIGHT_PAREN (11:25-11:26)
+SEMICOLON (11:26-11:27)
+CONST (12:1-12:6)
+IDENTIFIER "broad" (12:7-12:12)
+COLON (12:12-12:13)
+IDENTIFIER "Base" (12:14-12:18)
+PIPE (12:19-12:20)
+NULL (12:21-12:25)
+EQUAL (12:26-12:27)
+IDENTIFIER "child" (12:28-12:33)
+SEMICOLON (12:33-12:34)
+CONST (13:1-13:6)
+IDENTIFIER "narrow" (13:7-13:13)
+COLON (13:13-13:14)
+IDENTIFIER "Child" (13:15-13:20)
+PIPE (13:21-13:22)
+NULL (13:23-13:27)
+EQUAL (13:28-13:29)
+IDENTIFIER "child" (13:30-13:35)
+SEMICOLON (13:35-13:36)
+SWITCH (14:1-14:7)
+LEFT_PAREN (14:8-14:9)
+IDENTIFIER "broad" (14:9-14:14)
+RIGHT_PAREN (14:14-14:15)
+LEFT_BRACE (14:16-14:17)
+CASE (15:5-15:9)
+IDENTIFIER "narrow" (15:10-15:16)
+ARROW (15:17-15:19)
+IDENTIFIER "print" (15:20-15:25)
+LEFT_PAREN (15:25-15:26)
+STRING_LITERAL "\"derived\"" (15:26-15:35)
+RIGHT_PAREN (15:35-15:36)
+ELSE (16:5-16:9)
+ARROW (16:10-16:12)
+IDENTIFIER "print" (16:13-16:18)
+LEFT_PAREN (16:18-16:19)
+STRING_LITERAL "\"missing\"" (16:19-16:28)
+RIGHT_PAREN (16:28-16:29)
+RIGHT_BRACE (17:1-17:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:2
+  (VariableDeclaration
+    range: 1:1-1:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "selected"
+    )
+    (UnionTypeNode
+      range: 1:17-1:30
+      (NamedTypeNode
+        range: 1:17-1:23
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:26-1:30
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:33-1:39
+      kind: STRING
+      text: "\"same\""
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "match"
+    )
+    (UnionTypeNode
+      range: 2:14-2:27
+      (NamedTypeNode
+        range: 2:14-2:20
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 2:23-2:27
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 2:30-2:36
+      kind: STRING
+      text: "\"same\""
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-7:2
+    (SwitchExpression
+      range: 4:1-7:2
+      (IdentifierExpression
+        range: 4:9-4:17
+        name: "selected"
+      )
+      (SwitchBranch
+        range: 5:5-5:33
+        (IdentifierExpression
+          range: 5:10-5:15
+          name: "match"
+        )
+        (SwitchBranchExpressionBody
+          range: 5:19-5:33
+          (CallExpression
+            range: 5:19-5:33
+            (IdentifierExpression
+              range: 5:19-5:24
+              name: "print"
+            )
+            (LiteralExpression
+              range: 5:25-5:32
+              kind: STRING
+              text: "\"found\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 6:5-6:29
+        (SwitchBranchExpressionBody
+          range: 6:13-6:29
+          (CallExpression
+            range: 6:13-6:29
+            (IdentifierExpression
+              range: 6:13-6:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 6:19-6:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-9:14
+    (IdentifierDeclaration
+      range: 9:7-9:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 10:1-10:28
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 10:21-10:25
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "child"
+    )
+    type: null
+    (NewExpression
+      range: 11:15-11:26
+      (IdentifierExpression
+        range: 11:19-11:24
+        name: "Child"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "broad"
+    )
+    (UnionTypeNode
+      range: 12:14-12:25
+      (NamedTypeNode
+        range: 12:14-12:18
+        name: "Base"
+      )
+      (NamedTypeNode
+        range: 12:21-12:25
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 12:28-12:33
+      name: "child"
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:13
+      name: "narrow"
+    )
+    (UnionTypeNode
+      range: 13:15-13:27
+      (NamedTypeNode
+        range: 13:15-13:20
+        name: "Child"
+      )
+      (NamedTypeNode
+        range: 13:23-13:27
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 13:30-13:35
+      name: "child"
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-17:2
+    (SwitchExpression
+      range: 14:1-17:2
+      (IdentifierExpression
+        range: 14:9-14:14
+        name: "broad"
+      )
+      (SwitchBranch
+        range: 15:5-15:36
+        (IdentifierExpression
+          range: 15:10-15:16
+          name: "narrow"
+        )
+        (SwitchBranchExpressionBody
+          range: 15:20-15:36
+          (CallExpression
+            range: 15:20-15:36
+            (IdentifierExpression
+              range: 15:20-15:25
+              name: "print"
+            )
+            (LiteralExpression
+              range: 15:26-15:35
+              kind: STRING
+              text: "\"derived\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 16:5-16:29
+        (SwitchBranchExpressionBody
+          range: 16:13-16:29
+          (CallExpression
+            range: 16:13-16:29
+            (IdentifierExpression
+              range: 16:13-16:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 16:19-16:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:33-1:39 -> string
+  2:30-2:36 -> string
+  4:1-7:2 -> void
+  4:9-4:17 -> string | null
+  5:10-5:15 -> string | null
+  5:19-5:24 -> (any) => void
+  5:19-5:33 -> void
+  5:25-5:32 -> string
+  6:13-6:18 -> (any) => void
+  6:13-6:29 -> void
+  6:19-6:28 -> string
+  10:21-10:25 -> Base
+  11:15-11:26 -> Child
+  11:19-11:24 -> Child
+  12:28-12:33 -> Child
+  13:30-13:35 -> Child
+  14:1-17:2 -> void
+  14:9-14:14 -> Base | null
+  15:10-15:16 -> Child | null
+  15:20-15:25 -> (any) => void
+  15:20-15:36 -> void
+  15:26-15:35 -> string
+  16:13-16:18 -> (any) => void
+  16:13-16:29 -> void
+  16:19-16:28 -> string
+
+Resolved types:
+  1:17-1:23 -> string
+  1:17-1:30 -> string | null
+  1:26-1:30 -> null
+  2:14-2:20 -> string
+  2:14-2:27 -> string | null
+  2:23-2:27 -> null
+  12:14-12:18 -> Base
+  12:14-12:25 -> Base | null
+  12:21-12:25 -> null
+  13:15-13:20 -> Child
+  13:15-13:27 -> Child | null
+  13:23-13:27 -> null
+
+Conversions:
+  1:33-1:39 -> string -> string | null
+  2:30-2:36 -> string -> string | null
+  12:28-12:33 -> Child -> Base -> Base | null
+  13:30-13:35 -> Child -> Child | null
+  15:10-15:16 -> Child | null -> Base | null
+
+Declarations:
+  1:7-1:15 -> const selected: string | null
+  2:7-2:12 -> const match: string | null
+  9:7-9:11 -> class Base
+  10:7-10:12 -> class Child
+  11:7-11:12 -> const child: Child
+  12:7-12:12 -> const broad: Base | null
+  13:7-13:13 -> const narrow: Child | null
+
+References:
+  4:9-4:17 -> 1:7-1:15
+  5:10-5:15 -> 2:7-2:12
+  5:19-5:24 -> builtin print
+  6:13-6:18 -> builtin print
+  10:21-10:25 -> 9:7-9:11
+  11:19-11:24 -> 10:7-10:12
+  12:28-12:33 -> 11:7-11:12
+  13:30-13:35 -> 11:7-11:12
+  14:9-14:14 -> 12:7-12:12
+  15:10-15:16 -> 13:7-13:13
+  15:20-15:25 -> builtin print
+  16:13-16:18 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field selected Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
+  field match Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
+  field child LTest$Child; flags [PUBLIC, STATIC, FINAL]
+  field broad LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  field narrow LTest$Child; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC "same"
+    PUTSTATIC Test.selected Ljava/lang/String;
+    LDC "same"
+    PUTSTATIC Test.match Ljava/lang/String;
+    GETSTATIC Test.selected Ljava/lang/String;
+    ASTORE_0 0
+    ALOAD_0 0
+    GETSTATIC Test.match Ljava/lang/String;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "found"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L2
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L2:
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.child LTest$Child;
+    GETSTATIC Test.child LTest$Child;
+    PUTSTATIC Test.broad LTest$Base;
+    GETSTATIC Test.child LTest$Child;
+    PUTSTATIC Test.narrow LTest$Child;
+    GETSTATIC Test.broad LTest$Base;
+    ASTORE_1 1
+    ALOAD_1 1
+    GETSTATIC Test.narrow LTest$Child;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L3
+    GOTO L4
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "derived"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L5
+   L4:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L5:
+    RETURN
+    max stack 2 max locals 2
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+found
+derived
+

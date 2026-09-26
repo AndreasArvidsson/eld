@@ -28,6 +28,12 @@ public enum BuiltinType implements Type {
         return this == F32 || this == F64;
     }
 
+    public boolean canWidenTo(final BuiltinType target) {
+        return (isInteger() && ((target.isInteger() && target.bits() > bits())
+            || target.isFloating()))
+            || (isFloating() && target.isFloating() && target.bits() > bits());
+    }
+
     public int bits() {
         return switch (this) {
             case I8 -> 8;

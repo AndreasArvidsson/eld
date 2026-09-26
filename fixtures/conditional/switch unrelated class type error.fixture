@@ -1,0 +1,113 @@
+class First {}
+class Second {}
+
+switch (First) {
+    case Second => print("second")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "First" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+RIGHT_BRACE (1:14-1:15)
+CLASS (2:1-2:6)
+IDENTIFIER "Second" (2:7-2:13)
+LEFT_BRACE (2:14-2:15)
+RIGHT_BRACE (2:15-2:16)
+SWITCH (4:1-4:7)
+LEFT_PAREN (4:8-4:9)
+IDENTIFIER "First" (4:9-4:14)
+RIGHT_PAREN (4:14-4:15)
+LEFT_BRACE (4:16-4:17)
+CASE (5:5-5:9)
+IDENTIFIER "Second" (5:10-5:16)
+ARROW (5:17-5:19)
+IDENTIFIER "print" (5:20-5:25)
+LEFT_PAREN (5:25-5:26)
+STRING_LITERAL "\"second\"" (5:26-5:34)
+RIGHT_PAREN (5:34-5:35)
+ELSE (6:5-6:9)
+ARROW (6:10-6:12)
+IDENTIFIER "print" (6:13-6:18)
+LEFT_PAREN (6:18-6:19)
+STRING_LITERAL "\"missing\"" (6:19-6:28)
+RIGHT_PAREN (6:28-6:29)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (ClassDeclaration
+    range: 1:1-1:15
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "First"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-2:16
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "Second"
+    )
+    superClass: null
+  )
+  (ExpressionStatement
+    range: 4:1-7:2
+    (SwitchExpression
+      range: 4:1-7:2
+      (IdentifierExpression
+        range: 4:9-4:14
+        name: "First"
+      )
+      (SwitchBranch
+        range: 5:5-5:35
+        (IdentifierExpression
+          range: 5:10-5:16
+          name: "Second"
+        )
+        (SwitchBranchExpressionBody
+          range: 5:20-5:35
+          (CallExpression
+            range: 5:20-5:35
+            (IdentifierExpression
+              range: 5:20-5:25
+              name: "print"
+            )
+            (LiteralExpression
+              range: 5:26-5:34
+              kind: STRING
+              text: "\"second\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 6:5-6:29
+        (SwitchBranchExpressionBody
+          range: 6:13-6:29
+          (CallExpression
+            range: 6:13-6:29
+            (IdentifierExpression
+              range: 6:13-6:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 6:19-6:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Switch match type Type<Second> does not match subject type Type<First> at 5:10-5:16

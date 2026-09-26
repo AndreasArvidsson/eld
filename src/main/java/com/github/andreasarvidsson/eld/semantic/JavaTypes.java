@@ -30,6 +30,8 @@ import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 public final class JavaTypes {
     private static final InterfaceType OBJECT =
         new InterfaceType("any", List.of(), Object.class);
+    private static final InterfaceType CLASS =
+        new InterfaceType("Type", List.of(BuiltinType.ANY), Class.class);
     private static final List<String> EXCEPTION_PACKAGES =
         List.of(
             "java.lang.",
@@ -65,6 +67,8 @@ public final class JavaTypes {
             Map.entry("Matcher", Matcher.class),
             Map.entry("Comparable", Comparable.class),
             Map.entry("Comparator", Comparator.class),
+            Map.entry("Class", Class.class),
+            Map.entry("Type", Class.class),
             Map.entry("Collection", Collection.class),
             Map.entry("List", List.class),
             Map.entry("Set", Set.class),
@@ -78,6 +82,20 @@ public final class JavaTypes {
             Map.entry("HashMap", HashMap.class),
             Map.entry("TreeMap", TreeMap.class)
         );
+
+    public static InterfaceType classType() {
+        return CLASS;
+    }
+
+    public static InterfaceType classType(final Type represented) {
+        return new InterfaceType("Type", List.of(represented), Class.class);
+    }
+
+    public static boolean isClassType(final Type type) {
+        return ConstType.unwrap(type) instanceof InterfaceType contract
+            && contract.javaClass() == Class.class;
+    }
+
     private static final Set<String> METHODS =
         Set.of(
             "compareTo",

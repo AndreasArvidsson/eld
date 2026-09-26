@@ -515,6 +515,17 @@ public final class SemanticModel {
             }
             if (source instanceof InterfaceType type) {
                 if (type.javaClass() != null && contract.javaClass() != null) {
+                    if (
+                        JavaTypes.isClassType(type)
+                            && JavaTypes.isClassType(contract)
+                    ) {
+                        final Type represented =
+                            contract.typeArguments().getFirst();
+                        return represented == BuiltinType.ANY || isSubtype(
+                            type.typeArguments().getFirst(),
+                            represented
+                        );
+                    }
                     return contract.javaClass()
                         .isAssignableFrom(type.javaClass())
                         && type.typeArguments()
@@ -886,7 +897,13 @@ public final class SemanticModel {
             lines,
             "Conversions:",
             conversionTypes,
-            (expression, type) -> expressionTypes.get(expression) + ARROW + type
+            (expression, type) -> {
+                final @Nullable Type source = expressionTypes.get(expression);
+                final @Nullable Type member = unionMemberTypes.get(expression);
+                return member == null || Objects.equals(source, member)
+                    ? source + ARROW + type
+                    : source + ARROW + member + ARROW + type;
+            }
         );
         appendSection(
             lines,

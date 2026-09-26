@@ -232,7 +232,7 @@ Conversions:
   1:23-1:27 -> null -> i32 | null
   2:23-2:27 -> bool -> f32 | bool
   4:7-4:9 -> i32 -> i32 | null
-  7:7-7:10 -> f64 -> f32 | bool
+  7:7-7:10 -> f64 -> f32 -> f32 | bool
 
 Declarations:
   1:5-1:8 -> var foo: i32 | null

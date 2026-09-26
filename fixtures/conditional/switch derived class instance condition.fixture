@@ -1,0 +1,345 @@
+class Base {}
+class First extends Base {}
+class Second extends Base {}
+
+const second = new Second();
+const selected: Base = second;
+switch (selected) {
+    case new First() => print("first")
+    case second => print("second")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+RIGHT_BRACE (1:13-1:14)
+CLASS (2:1-2:6)
+IDENTIFIER "First" (2:7-2:12)
+EXTENDS (2:13-2:20)
+IDENTIFIER "Base" (2:21-2:25)
+LEFT_BRACE (2:26-2:27)
+RIGHT_BRACE (2:27-2:28)
+CLASS (3:1-3:6)
+IDENTIFIER "Second" (3:7-3:13)
+EXTENDS (3:14-3:21)
+IDENTIFIER "Base" (3:22-3:26)
+LEFT_BRACE (3:27-3:28)
+RIGHT_BRACE (3:28-3:29)
+CONST (5:1-5:6)
+IDENTIFIER "second" (5:7-5:13)
+EQUAL (5:14-5:15)
+NEW (5:16-5:19)
+IDENTIFIER "Second" (5:20-5:26)
+LEFT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+SEMICOLON (5:28-5:29)
+CONST (6:1-6:6)
+IDENTIFIER "selected" (6:7-6:15)
+COLON (6:15-6:16)
+IDENTIFIER "Base" (6:17-6:21)
+EQUAL (6:22-6:23)
+IDENTIFIER "second" (6:24-6:30)
+SEMICOLON (6:30-6:31)
+SWITCH (7:1-7:7)
+LEFT_PAREN (7:8-7:9)
+IDENTIFIER "selected" (7:9-7:17)
+RIGHT_PAREN (7:17-7:18)
+LEFT_BRACE (7:19-7:20)
+CASE (8:5-8:9)
+NEW (8:10-8:13)
+IDENTIFIER "First" (8:14-8:19)
+LEFT_PAREN (8:19-8:20)
+RIGHT_PAREN (8:20-8:21)
+ARROW (8:22-8:24)
+IDENTIFIER "print" (8:25-8:30)
+LEFT_PAREN (8:30-8:31)
+STRING_LITERAL "\"first\"" (8:31-8:38)
+RIGHT_PAREN (8:38-8:39)
+CASE (9:5-9:9)
+IDENTIFIER "second" (9:10-9:16)
+ARROW (9:17-9:19)
+IDENTIFIER "print" (9:20-9:25)
+LEFT_PAREN (9:25-9:26)
+STRING_LITERAL "\"second\"" (9:26-9:34)
+RIGHT_PAREN (9:34-9:35)
+ELSE (10:5-10:9)
+ARROW (10:10-10:12)
+IDENTIFIER "print" (10:13-10:18)
+LEFT_PAREN (10:18-10:19)
+STRING_LITERAL "\"missing\"" (10:19-10:28)
+RIGHT_PAREN (10:28-10:29)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (ClassDeclaration
+    range: 1:1-1:14
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-2:28
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "First"
+    )
+    (IdentifierExpression
+      range: 2:21-2:25
+      name: "Base"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-3:29
+    (IdentifierDeclaration
+      range: 3:7-3:13
+      name: "Second"
+    )
+    (IdentifierExpression
+      range: 3:22-3:26
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "second"
+    )
+    type: null
+    (NewExpression
+      range: 5:16-5:28
+      (IdentifierExpression
+        range: 5:20-5:26
+        name: "Second"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:15
+      name: "selected"
+    )
+    (NamedTypeNode
+      range: 6:17-6:21
+      name: "Base"
+    )
+    (IdentifierExpression
+      range: 6:24-6:30
+      name: "second"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-11:2
+    (SwitchExpression
+      range: 7:1-11:2
+      (IdentifierExpression
+        range: 7:9-7:17
+        name: "selected"
+      )
+      (SwitchBranch
+        range: 8:5-8:39
+        (NewExpression
+          range: 8:10-8:21
+          (IdentifierExpression
+            range: 8:14-8:19
+            name: "First"
+          )
+        )
+        (SwitchBranchExpressionBody
+          range: 8:25-8:39
+          (CallExpression
+            range: 8:25-8:39
+            (IdentifierExpression
+              range: 8:25-8:30
+              name: "print"
+            )
+            (LiteralExpression
+              range: 8:31-8:38
+              kind: STRING
+              text: "\"first\""
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 9:5-9:35
+        (IdentifierExpression
+          range: 9:10-9:16
+          name: "second"
+        )
+        (SwitchBranchExpressionBody
+          range: 9:20-9:35
+          (CallExpression
+            range: 9:20-9:35
+            (IdentifierExpression
+              range: 9:20-9:25
+              name: "print"
+            )
+            (LiteralExpression
+              range: 9:26-9:34
+              kind: STRING
+              text: "\"second\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 10:5-10:29
+        (SwitchBranchExpressionBody
+          range: 10:13-10:29
+          (CallExpression
+            range: 10:13-10:29
+            (IdentifierExpression
+              range: 10:13-10:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 10:19-10:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:21-2:25 -> Base
+  3:22-3:26 -> Base
+  5:16-5:28 -> Second
+  5:20-5:26 -> Second
+  6:24-6:30 -> Second
+  7:1-11:2 -> void
+  7:9-7:17 -> Base
+  8:10-8:21 -> First
+  8:14-8:19 -> First
+  8:25-8:30 -> (any) => void
+  8:25-8:39 -> void
+  8:31-8:38 -> string
+  9:10-9:16 -> Second
+  9:20-9:25 -> (any) => void
+  9:20-9:35 -> void
+  9:26-9:34 -> string
+  10:13-10:18 -> (any) => void
+  10:13-10:29 -> void
+  10:19-10:28 -> string
+
+Resolved types:
+  6:17-6:21 -> Base
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:7-2:12 -> class First
+  3:7-3:13 -> class Second
+  5:7-5:13 -> const second: Second
+  6:7-6:15 -> const selected: Base
+
+References:
+  2:21-2:25 -> 1:7-1:11
+  3:22-3:26 -> 1:7-1:11
+  5:20-5:26 -> 3:7-3:13
+  6:24-6:30 -> 5:7-5:13
+  7:9-7:17 -> 6:7-6:15
+  8:14-8:19 -> 2:7-2:12
+  8:25-8:30 -> builtin print
+  9:10-9:16 -> 5:7-5:13
+  9:20-9:25 -> builtin print
+  10:13-10:18 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$First
+  nest member Test$Second
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$First flags [PUBLIC, STATIC]
+  inner class Test$Second flags [PUBLIC, STATIC]
+  field second LTest$Second; flags [PUBLIC, STATIC, FINAL]
+  field selected LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Second
+    DUP
+    INVOKESPECIAL Test$Second.<init>()V
+    PUTSTATIC Test.second LTest$Second;
+    GETSTATIC Test.second LTest$Second;
+    PUTSTATIC Test.selected LTest$Base;
+    GETSTATIC Test.selected LTest$Base;
+    ASTORE_0 0
+    ALOAD_0 0
+    NEW Test$First
+    DUP
+    INVOKESPECIAL Test$First.<init>()V
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    GOTO L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "first"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L1:
+    ALOAD_0 0
+    GETSTATIC Test.second LTest$Second;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L2
+    GOTO L3
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "second"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L4:
+    RETURN
+    max stack 3 max locals 1
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$First extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$First flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Second extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Second flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+second
+

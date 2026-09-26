@@ -146,8 +146,8 @@ Resolved types:
   4:24-4:28 -> null
 
 Conversions:
-  4:31-4:34 -> Box -> Marker | null
-  5:17-5:20 -> Box -> Marker | null
+  4:31-4:34 -> Box -> Marker -> Marker | null
+  5:17-5:20 -> Box -> Marker -> Marker | null
 
 Declarations:
   1:11-1:17 -> interface Marker
