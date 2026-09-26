@@ -487,49 +487,39 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     LDC "(\\d+)"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     LDC "a12b34"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "<$1>"
     INVOKEVIRTUAL java/util/regex/Matcher.replaceAll(Ljava/lang/String;)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "#"
     INVOKEVIRTUAL java/util/regex/Matcher.replaceFirst(Ljava/lang/String;)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "$1"
     INVOKESTATIC java/util/regex/Matcher.quoteReplacement(Ljava/lang/String;)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/util/regex/Matcher.replaceAll(Ljava/lang/String;)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     LDC "a.b"
     INVOKESTATIC java/util/regex/Pattern.quote(Ljava/lang/String;)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     PUTSTATIC Test.literal Ljava/util/regex/Pattern;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.literal Ljava/util/regex/Pattern;
     LDC "a.b"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.literal Ljava/util/regex/Pattern;
     LDC "axb"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN

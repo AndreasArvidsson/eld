@@ -238,9 +238,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     INVOKESPECIAL Test$Foo.<init>()V
     INVOKEVIRTUAL Test$Foo.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 3 max locals 0

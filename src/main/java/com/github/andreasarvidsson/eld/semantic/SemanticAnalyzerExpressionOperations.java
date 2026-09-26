@@ -122,7 +122,8 @@ public final class SemanticAnalyzerExpressionOperations {
     }
 
     private boolean isValidSubscriptIndex(final Type index) {
-        return index instanceof BuiltinType builtin && builtin.isInteger()
+        return LiteralType.unwrap(index) instanceof BuiltinType builtin
+            && builtin.isInteger()
             && builtin != BuiltinType.I64;
     }
 
@@ -356,9 +357,11 @@ public final class SemanticAnalyzerExpressionOperations {
                     ) != null;
             }
         }
-        Type resolvedType = leftType;
-        final Type leftValueType = ConstType.unwrap(leftType);
-        final Type rightValueType = ConstType.unwrap(rightType);
+        final Type leftValueType =
+            LiteralType.unwrap(ConstType.unwrap(leftType));
+        final Type rightValueType =
+            LiteralType.unwrap(ConstType.unwrap(rightType));
+        Type resolvedType = leftValueType;
         final boolean compatibleNumbers =
             numeric(leftType) && numeric(rightType);
         final boolean relatedClasses =
@@ -366,8 +369,8 @@ public final class SemanticAnalyzerExpressionOperations {
                 && rightValueType instanceof ClassType rightClass
                 && model.commonClassType(leftClass, rightClass) != null;
         final boolean valid = switch (binary.operator()) {
-            case AND, OR ->
-                leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL;
+            case AND, OR -> leftValueType == BuiltinType.BOOL
+                && rightValueType == BuiltinType.BOOL;
             case INSTANCEOF -> JavaTypes.isClassType(rightValueType)
                 && (leftValueType instanceof UnionType
                     || !(leftValueType instanceof BuiltinType builtin)
@@ -380,9 +383,13 @@ public final class SemanticAnalyzerExpressionOperations {
                     && (model.isSubtype(leftType, rightType)
                         || model.isSubtype(rightType, leftType)))
                 || relatedClasses
-                || (leftType.equals(rightType) && leftType != BuiltinType.VOID);
-            case ADD -> compatibleNumbers || (leftType == BuiltinType.STRING
-                && rightType == BuiltinType.STRING);
+                || (leftType.equals(rightType) && leftType != BuiltinType.VOID)
+                || ((leftType instanceof LiteralType
+                    || rightType instanceof LiteralType)
+                    && leftValueType.equals(rightValueType));
+            case ADD ->
+                compatibleNumbers || (leftValueType == BuiltinType.STRING
+                    && rightValueType == BuiltinType.STRING);
             default -> compatibleNumbers;
         };
         if (!valid) {
@@ -435,7 +442,7 @@ public final class SemanticAnalyzerExpressionOperations {
                 }
             }
             case NOT -> {
-                if (operandType != BuiltinType.BOOL) {
+                if (LiteralType.unwrap(operandType) != BuiltinType.BOOL) {
                     throw new SemanticException(
                         unary.range(),
                         "Logical negation requires bool"
@@ -456,7 +463,7 @@ public final class SemanticAnalyzerExpressionOperations {
             unary.operator() == UnaryOperator.PLUS
                 || unary.operator() == UnaryOperator.MINUS
                     ? promotedNumericType(operandType, BuiltinType.I32)
-                    : operandType;
+                    : LiteralType.unwrap(operandType);
         if (!operandType.equals(resultType)) {
             model.setConversionType(unary.operand(), resultType);
         }
@@ -549,6 +556,16 @@ public final class SemanticAnalyzerExpressionOperations {
         final Type left,
         final Type right
     ) {
+        return promotedBuiltinNumericType(
+            LiteralType.unwrap(left),
+            LiteralType.unwrap(right)
+        );
+    }
+
+    private static BuiltinType promotedBuiltinNumericType(
+        final Type left,
+        final Type right
+    ) {
         if (left == BuiltinType.F64 || right == BuiltinType.F64) {
             return BuiltinType.F64;
         }
@@ -575,7 +592,7 @@ public final class SemanticAnalyzerExpressionOperations {
     }
 
     private static boolean numeric(final Type type) {
-        return type instanceof BuiltinType builtin
+        return LiteralType.unwrap(type) instanceof BuiltinType builtin
             && (builtin.isInteger() || builtin.isFloating()
                 || builtin == BuiltinType.CHAR);
     }

@@ -1,0 +1,3997 @@
+func check(source: 0 | 1 | 2) {
+    const target: 0 | 1 | i64 = source;
+    print(target == 0);
+    print(target == 1);
+    switch (target) {
+        case 0 { print("zero"); }
+        case 1 { print("one"); }
+        else { print("wide"); }
+    }
+}
+check(0);
+check(1);
+check(2);
+const ordinaryZero: i32 = 0;
+const ordinarySource: i32 | string = ordinaryZero;
+const ordinaryTarget: i64 | 0 | string = ordinarySource;
+print(ordinaryTarget == 0);
+const ordinaryOne: i32 = 1;
+const otherSource: i32 | string = ordinaryOne;
+const otherTarget: i64 | 0 | string = otherSource;
+print(otherTarget == 0);
+const wideZero: i64 = 0;
+const wideTarget: 0 | i64 = wideZero;
+print(wideTarget.getClass());
+print(wideTarget == 0);
+switch (wideTarget) {
+    case 0 { print("wide zero"); }
+    else { print("missing"); }
+}
+const wideSource: i64 | string = wideZero;
+const wideUnionTarget: 0 | i64 | string = wideSource;
+print(wideUnionTarget == 0);
+const values: [0 | i64] = [wideZero];
+print(values[0] == 0);
+const pair: (0 | i64, string) = (wideZero, "ok");
+print(pair[0] == 0);
+const smallZero: i8 = 0;
+const smallTarget: 0 | i8 = smallZero;
+print(smallTarget == 0);
+const none: 0 | null = null;
+print(none);
+const some: 0 | null = 0;
+print(some == 0);
+const floatingZero: f64 = 0.0;
+const floatingTarget: 0 | f64 = floatingZero;
+print(floatingTarget);
+print(floatingTarget == 0);
+const restoredFloating: f64 = floatingTarget;
+print(restoredFloating == 0.0);
+switch (floatingTarget) {
+    case 0 { print("floating zero"); }
+    else { print("missing floating zero"); }
+}
+const smallFloatingZero: f32 = 0.0;
+const smallFloatingTarget: 0 | f32 = smallFloatingZero;
+print(smallFloatingTarget == 0);
+const floatingOne: f64 = 1.0;
+const oneTarget: 1 | f64 = floatingOne;
+print(oneTarget);
+print(oneTarget == 1);
+const negativeZero: f64 = -0.0;
+const negativeTarget: 0 | f64 = negativeZero;
+print(negativeTarget);
+print(negativeTarget == 0);
+switch (negativeTarget) {
+    case 0 {
+        const matched: f64 = negativeTarget;
+        print(1.0 / matched);
+    }
+    else { print("missing negative zero"); }
+}
+const restoredNegative: f64 = negativeTarget;
+print(1.0 / restoredNegative);
+const smallNegativeZero: f32 = -0.0;
+const smallNegativeTarget: 0 | f32 = smallNegativeZero;
+const restoredSmallNegative: f32 = smallNegativeTarget;
+print(1.0 / restoredSmallNegative);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "check" (1:6-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "source" (1:12-1:18)
+COLON (1:18-1:19)
+INTEGER_LITERAL "0" (1:20-1:21)
+PIPE (1:22-1:23)
+INTEGER_LITERAL "1" (1:24-1:25)
+PIPE (1:26-1:27)
+INTEGER_LITERAL "2" (1:28-1:29)
+RIGHT_PAREN (1:29-1:30)
+LEFT_BRACE (1:31-1:32)
+CONST (2:5-2:10)
+IDENTIFIER "target" (2:11-2:17)
+COLON (2:17-2:18)
+INTEGER_LITERAL "0" (2:19-2:20)
+PIPE (2:21-2:22)
+INTEGER_LITERAL "1" (2:23-2:24)
+PIPE (2:25-2:26)
+IDENTIFIER "i64" (2:27-2:30)
+EQUAL (2:31-2:32)
+IDENTIFIER "source" (2:33-2:39)
+SEMICOLON (2:39-2:40)
+IDENTIFIER "print" (3:5-3:10)
+LEFT_PAREN (3:10-3:11)
+IDENTIFIER "target" (3:11-3:17)
+EQUAL_EQUAL (3:18-3:20)
+INTEGER_LITERAL "0" (3:21-3:22)
+RIGHT_PAREN (3:22-3:23)
+SEMICOLON (3:23-3:24)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "target" (4:11-4:17)
+EQUAL_EQUAL (4:18-4:20)
+INTEGER_LITERAL "1" (4:21-4:22)
+RIGHT_PAREN (4:22-4:23)
+SEMICOLON (4:23-4:24)
+SWITCH (5:5-5:11)
+LEFT_PAREN (5:12-5:13)
+IDENTIFIER "target" (5:13-5:19)
+RIGHT_PAREN (5:19-5:20)
+LEFT_BRACE (5:21-5:22)
+CASE (6:9-6:13)
+INTEGER_LITERAL "0" (6:14-6:15)
+LEFT_BRACE (6:16-6:17)
+IDENTIFIER "print" (6:18-6:23)
+LEFT_PAREN (6:23-6:24)
+STRING_LITERAL "\"zero\"" (6:24-6:30)
+RIGHT_PAREN (6:30-6:31)
+SEMICOLON (6:31-6:32)
+RIGHT_BRACE (6:33-6:34)
+CASE (7:9-7:13)
+INTEGER_LITERAL "1" (7:14-7:15)
+LEFT_BRACE (7:16-7:17)
+IDENTIFIER "print" (7:18-7:23)
+LEFT_PAREN (7:23-7:24)
+STRING_LITERAL "\"one\"" (7:24-7:29)
+RIGHT_PAREN (7:29-7:30)
+SEMICOLON (7:30-7:31)
+RIGHT_BRACE (7:32-7:33)
+ELSE (8:9-8:13)
+LEFT_BRACE (8:14-8:15)
+IDENTIFIER "print" (8:16-8:21)
+LEFT_PAREN (8:21-8:22)
+STRING_LITERAL "\"wide\"" (8:22-8:28)
+RIGHT_PAREN (8:28-8:29)
+SEMICOLON (8:29-8:30)
+RIGHT_BRACE (8:31-8:32)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+IDENTIFIER "check" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+INTEGER_LITERAL "0" (11:7-11:8)
+RIGHT_PAREN (11:8-11:9)
+SEMICOLON (11:9-11:10)
+IDENTIFIER "check" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+INTEGER_LITERAL "1" (12:7-12:8)
+RIGHT_PAREN (12:8-12:9)
+SEMICOLON (12:9-12:10)
+IDENTIFIER "check" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+INTEGER_LITERAL "2" (13:7-13:8)
+RIGHT_PAREN (13:8-13:9)
+SEMICOLON (13:9-13:10)
+CONST (14:1-14:6)
+IDENTIFIER "ordinaryZero" (14:7-14:19)
+COLON (14:19-14:20)
+IDENTIFIER "i32" (14:21-14:24)
+EQUAL (14:25-14:26)
+INTEGER_LITERAL "0" (14:27-14:28)
+SEMICOLON (14:28-14:29)
+CONST (15:1-15:6)
+IDENTIFIER "ordinarySource" (15:7-15:21)
+COLON (15:21-15:22)
+IDENTIFIER "i32" (15:23-15:26)
+PIPE (15:27-15:28)
+IDENTIFIER "string" (15:29-15:35)
+EQUAL (15:36-15:37)
+IDENTIFIER "ordinaryZero" (15:38-15:50)
+SEMICOLON (15:50-15:51)
+CONST (16:1-16:6)
+IDENTIFIER "ordinaryTarget" (16:7-16:21)
+COLON (16:21-16:22)
+IDENTIFIER "i64" (16:23-16:26)
+PIPE (16:27-16:28)
+INTEGER_LITERAL "0" (16:29-16:30)
+PIPE (16:31-16:32)
+IDENTIFIER "string" (16:33-16:39)
+EQUAL (16:40-16:41)
+IDENTIFIER "ordinarySource" (16:42-16:56)
+SEMICOLON (16:56-16:57)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "ordinaryTarget" (17:7-17:21)
+EQUAL_EQUAL (17:22-17:24)
+INTEGER_LITERAL "0" (17:25-17:26)
+RIGHT_PAREN (17:26-17:27)
+SEMICOLON (17:27-17:28)
+CONST (18:1-18:6)
+IDENTIFIER "ordinaryOne" (18:7-18:18)
+COLON (18:18-18:19)
+IDENTIFIER "i32" (18:20-18:23)
+EQUAL (18:24-18:25)
+INTEGER_LITERAL "1" (18:26-18:27)
+SEMICOLON (18:27-18:28)
+CONST (19:1-19:6)
+IDENTIFIER "otherSource" (19:7-19:18)
+COLON (19:18-19:19)
+IDENTIFIER "i32" (19:20-19:23)
+PIPE (19:24-19:25)
+IDENTIFIER "string" (19:26-19:32)
+EQUAL (19:33-19:34)
+IDENTIFIER "ordinaryOne" (19:35-19:46)
+SEMICOLON (19:46-19:47)
+CONST (20:1-20:6)
+IDENTIFIER "otherTarget" (20:7-20:18)
+COLON (20:18-20:19)
+IDENTIFIER "i64" (20:20-20:23)
+PIPE (20:24-20:25)
+INTEGER_LITERAL "0" (20:26-20:27)
+PIPE (20:28-20:29)
+IDENTIFIER "string" (20:30-20:36)
+EQUAL (20:37-20:38)
+IDENTIFIER "otherSource" (20:39-20:50)
+SEMICOLON (20:50-20:51)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "otherTarget" (21:7-21:18)
+EQUAL_EQUAL (21:19-21:21)
+INTEGER_LITERAL "0" (21:22-21:23)
+RIGHT_PAREN (21:23-21:24)
+SEMICOLON (21:24-21:25)
+CONST (22:1-22:6)
+IDENTIFIER "wideZero" (22:7-22:15)
+COLON (22:15-22:16)
+IDENTIFIER "i64" (22:17-22:20)
+EQUAL (22:21-22:22)
+INTEGER_LITERAL "0" (22:23-22:24)
+SEMICOLON (22:24-22:25)
+CONST (23:1-23:6)
+IDENTIFIER "wideTarget" (23:7-23:17)
+COLON (23:17-23:18)
+INTEGER_LITERAL "0" (23:19-23:20)
+PIPE (23:21-23:22)
+IDENTIFIER "i64" (23:23-23:26)
+EQUAL (23:27-23:28)
+IDENTIFIER "wideZero" (23:29-23:37)
+SEMICOLON (23:37-23:38)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "wideTarget" (24:7-24:17)
+DOT (24:17-24:18)
+IDENTIFIER "getClass" (24:18-24:26)
+LEFT_PAREN (24:26-24:27)
+RIGHT_PAREN (24:27-24:28)
+RIGHT_PAREN (24:28-24:29)
+SEMICOLON (24:29-24:30)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+IDENTIFIER "wideTarget" (25:7-25:17)
+EQUAL_EQUAL (25:18-25:20)
+INTEGER_LITERAL "0" (25:21-25:22)
+RIGHT_PAREN (25:22-25:23)
+SEMICOLON (25:23-25:24)
+SWITCH (26:1-26:7)
+LEFT_PAREN (26:8-26:9)
+IDENTIFIER "wideTarget" (26:9-26:19)
+RIGHT_PAREN (26:19-26:20)
+LEFT_BRACE (26:21-26:22)
+CASE (27:5-27:9)
+INTEGER_LITERAL "0" (27:10-27:11)
+LEFT_BRACE (27:12-27:13)
+IDENTIFIER "print" (27:14-27:19)
+LEFT_PAREN (27:19-27:20)
+STRING_LITERAL "\"wide zero\"" (27:20-27:31)
+RIGHT_PAREN (27:31-27:32)
+SEMICOLON (27:32-27:33)
+RIGHT_BRACE (27:34-27:35)
+ELSE (28:5-28:9)
+LEFT_BRACE (28:10-28:11)
+IDENTIFIER "print" (28:12-28:17)
+LEFT_PAREN (28:17-28:18)
+STRING_LITERAL "\"missing\"" (28:18-28:27)
+RIGHT_PAREN (28:27-28:28)
+SEMICOLON (28:28-28:29)
+RIGHT_BRACE (28:30-28:31)
+RIGHT_BRACE (29:1-29:2)
+CONST (30:1-30:6)
+IDENTIFIER "wideSource" (30:7-30:17)
+COLON (30:17-30:18)
+IDENTIFIER "i64" (30:19-30:22)
+PIPE (30:23-30:24)
+IDENTIFIER "string" (30:25-30:31)
+EQUAL (30:32-30:33)
+IDENTIFIER "wideZero" (30:34-30:42)
+SEMICOLON (30:42-30:43)
+CONST (31:1-31:6)
+IDENTIFIER "wideUnionTarget" (31:7-31:22)
+COLON (31:22-31:23)
+INTEGER_LITERAL "0" (31:24-31:25)
+PIPE (31:26-31:27)
+IDENTIFIER "i64" (31:28-31:31)
+PIPE (31:32-31:33)
+IDENTIFIER "string" (31:34-31:40)
+EQUAL (31:41-31:42)
+IDENTIFIER "wideSource" (31:43-31:53)
+SEMICOLON (31:53-31:54)
+IDENTIFIER "print" (32:1-32:6)
+LEFT_PAREN (32:6-32:7)
+IDENTIFIER "wideUnionTarget" (32:7-32:22)
+EQUAL_EQUAL (32:23-32:25)
+INTEGER_LITERAL "0" (32:26-32:27)
+RIGHT_PAREN (32:27-32:28)
+SEMICOLON (32:28-32:29)
+CONST (33:1-33:6)
+IDENTIFIER "values" (33:7-33:13)
+COLON (33:13-33:14)
+LEFT_BRACKET (33:15-33:16)
+INTEGER_LITERAL "0" (33:16-33:17)
+PIPE (33:18-33:19)
+IDENTIFIER "i64" (33:20-33:23)
+RIGHT_BRACKET (33:23-33:24)
+EQUAL (33:25-33:26)
+LEFT_BRACKET (33:27-33:28)
+IDENTIFIER "wideZero" (33:28-33:36)
+RIGHT_BRACKET (33:36-33:37)
+SEMICOLON (33:37-33:38)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+IDENTIFIER "values" (34:7-34:13)
+LEFT_BRACKET (34:13-34:14)
+INTEGER_LITERAL "0" (34:14-34:15)
+RIGHT_BRACKET (34:15-34:16)
+EQUAL_EQUAL (34:17-34:19)
+INTEGER_LITERAL "0" (34:20-34:21)
+RIGHT_PAREN (34:21-34:22)
+SEMICOLON (34:22-34:23)
+CONST (35:1-35:6)
+IDENTIFIER "pair" (35:7-35:11)
+COLON (35:11-35:12)
+LEFT_PAREN (35:13-35:14)
+INTEGER_LITERAL "0" (35:14-35:15)
+PIPE (35:16-35:17)
+IDENTIFIER "i64" (35:18-35:21)
+COMMA (35:21-35:22)
+IDENTIFIER "string" (35:23-35:29)
+RIGHT_PAREN (35:29-35:30)
+EQUAL (35:31-35:32)
+LEFT_PAREN (35:33-35:34)
+IDENTIFIER "wideZero" (35:34-35:42)
+COMMA (35:42-35:43)
+STRING_LITERAL "\"ok\"" (35:44-35:48)
+RIGHT_PAREN (35:48-35:49)
+SEMICOLON (35:49-35:50)
+IDENTIFIER "print" (36:1-36:6)
+LEFT_PAREN (36:6-36:7)
+IDENTIFIER "pair" (36:7-36:11)
+LEFT_BRACKET (36:11-36:12)
+INTEGER_LITERAL "0" (36:12-36:13)
+RIGHT_BRACKET (36:13-36:14)
+EQUAL_EQUAL (36:15-36:17)
+INTEGER_LITERAL "0" (36:18-36:19)
+RIGHT_PAREN (36:19-36:20)
+SEMICOLON (36:20-36:21)
+CONST (37:1-37:6)
+IDENTIFIER "smallZero" (37:7-37:16)
+COLON (37:16-37:17)
+IDENTIFIER "i8" (37:18-37:20)
+EQUAL (37:21-37:22)
+INTEGER_LITERAL "0" (37:23-37:24)
+SEMICOLON (37:24-37:25)
+CONST (38:1-38:6)
+IDENTIFIER "smallTarget" (38:7-38:18)
+COLON (38:18-38:19)
+INTEGER_LITERAL "0" (38:20-38:21)
+PIPE (38:22-38:23)
+IDENTIFIER "i8" (38:24-38:26)
+EQUAL (38:27-38:28)
+IDENTIFIER "smallZero" (38:29-38:38)
+SEMICOLON (38:38-38:39)
+IDENTIFIER "print" (39:1-39:6)
+LEFT_PAREN (39:6-39:7)
+IDENTIFIER "smallTarget" (39:7-39:18)
+EQUAL_EQUAL (39:19-39:21)
+INTEGER_LITERAL "0" (39:22-39:23)
+RIGHT_PAREN (39:23-39:24)
+SEMICOLON (39:24-39:25)
+CONST (40:1-40:6)
+IDENTIFIER "none" (40:7-40:11)
+COLON (40:11-40:12)
+INTEGER_LITERAL "0" (40:13-40:14)
+PIPE (40:15-40:16)
+NULL (40:17-40:21)
+EQUAL (40:22-40:23)
+NULL (40:24-40:28)
+SEMICOLON (40:28-40:29)
+IDENTIFIER "print" (41:1-41:6)
+LEFT_PAREN (41:6-41:7)
+IDENTIFIER "none" (41:7-41:11)
+RIGHT_PAREN (41:11-41:12)
+SEMICOLON (41:12-41:13)
+CONST (42:1-42:6)
+IDENTIFIER "some" (42:7-42:11)
+COLON (42:11-42:12)
+INTEGER_LITERAL "0" (42:13-42:14)
+PIPE (42:15-42:16)
+NULL (42:17-42:21)
+EQUAL (42:22-42:23)
+INTEGER_LITERAL "0" (42:24-42:25)
+SEMICOLON (42:25-42:26)
+IDENTIFIER "print" (43:1-43:6)
+LEFT_PAREN (43:6-43:7)
+IDENTIFIER "some" (43:7-43:11)
+EQUAL_EQUAL (43:12-43:14)
+INTEGER_LITERAL "0" (43:15-43:16)
+RIGHT_PAREN (43:16-43:17)
+SEMICOLON (43:17-43:18)
+CONST (44:1-44:6)
+IDENTIFIER "floatingZero" (44:7-44:19)
+COLON (44:19-44:20)
+IDENTIFIER "f64" (44:21-44:24)
+EQUAL (44:25-44:26)
+FLOAT_LITERAL "0.0" (44:27-44:30)
+SEMICOLON (44:30-44:31)
+CONST (45:1-45:6)
+IDENTIFIER "floatingTarget" (45:7-45:21)
+COLON (45:21-45:22)
+INTEGER_LITERAL "0" (45:23-45:24)
+PIPE (45:25-45:26)
+IDENTIFIER "f64" (45:27-45:30)
+EQUAL (45:31-45:32)
+IDENTIFIER "floatingZero" (45:33-45:45)
+SEMICOLON (45:45-45:46)
+IDENTIFIER "print" (46:1-46:6)
+LEFT_PAREN (46:6-46:7)
+IDENTIFIER "floatingTarget" (46:7-46:21)
+RIGHT_PAREN (46:21-46:22)
+SEMICOLON (46:22-46:23)
+IDENTIFIER "print" (47:1-47:6)
+LEFT_PAREN (47:6-47:7)
+IDENTIFIER "floatingTarget" (47:7-47:21)
+EQUAL_EQUAL (47:22-47:24)
+INTEGER_LITERAL "0" (47:25-47:26)
+RIGHT_PAREN (47:26-47:27)
+SEMICOLON (47:27-47:28)
+CONST (48:1-48:6)
+IDENTIFIER "restoredFloating" (48:7-48:23)
+COLON (48:23-48:24)
+IDENTIFIER "f64" (48:25-48:28)
+EQUAL (48:29-48:30)
+IDENTIFIER "floatingTarget" (48:31-48:45)
+SEMICOLON (48:45-48:46)
+IDENTIFIER "print" (49:1-49:6)
+LEFT_PAREN (49:6-49:7)
+IDENTIFIER "restoredFloating" (49:7-49:23)
+EQUAL_EQUAL (49:24-49:26)
+FLOAT_LITERAL "0.0" (49:27-49:30)
+RIGHT_PAREN (49:30-49:31)
+SEMICOLON (49:31-49:32)
+SWITCH (50:1-50:7)
+LEFT_PAREN (50:8-50:9)
+IDENTIFIER "floatingTarget" (50:9-50:23)
+RIGHT_PAREN (50:23-50:24)
+LEFT_BRACE (50:25-50:26)
+CASE (51:5-51:9)
+INTEGER_LITERAL "0" (51:10-51:11)
+LEFT_BRACE (51:12-51:13)
+IDENTIFIER "print" (51:14-51:19)
+LEFT_PAREN (51:19-51:20)
+STRING_LITERAL "\"floating zero\"" (51:20-51:35)
+RIGHT_PAREN (51:35-51:36)
+SEMICOLON (51:36-51:37)
+RIGHT_BRACE (51:38-51:39)
+ELSE (52:5-52:9)
+LEFT_BRACE (52:10-52:11)
+IDENTIFIER "print" (52:12-52:17)
+LEFT_PAREN (52:17-52:18)
+STRING_LITERAL "\"missing floating zero\"" (52:18-52:41)
+RIGHT_PAREN (52:41-52:42)
+SEMICOLON (52:42-52:43)
+RIGHT_BRACE (52:44-52:45)
+RIGHT_BRACE (53:1-53:2)
+CONST (54:1-54:6)
+IDENTIFIER "smallFloatingZero" (54:7-54:24)
+COLON (54:24-54:25)
+IDENTIFIER "f32" (54:26-54:29)
+EQUAL (54:30-54:31)
+FLOAT_LITERAL "0.0" (54:32-54:35)
+SEMICOLON (54:35-54:36)
+CONST (55:1-55:6)
+IDENTIFIER "smallFloatingTarget" (55:7-55:26)
+COLON (55:26-55:27)
+INTEGER_LITERAL "0" (55:28-55:29)
+PIPE (55:30-55:31)
+IDENTIFIER "f32" (55:32-55:35)
+EQUAL (55:36-55:37)
+IDENTIFIER "smallFloatingZero" (55:38-55:55)
+SEMICOLON (55:55-55:56)
+IDENTIFIER "print" (56:1-56:6)
+LEFT_PAREN (56:6-56:7)
+IDENTIFIER "smallFloatingTarget" (56:7-56:26)
+EQUAL_EQUAL (56:27-56:29)
+INTEGER_LITERAL "0" (56:30-56:31)
+RIGHT_PAREN (56:31-56:32)
+SEMICOLON (56:32-56:33)
+CONST (57:1-57:6)
+IDENTIFIER "floatingOne" (57:7-57:18)
+COLON (57:18-57:19)
+IDENTIFIER "f64" (57:20-57:23)
+EQUAL (57:24-57:25)
+FLOAT_LITERAL "1.0" (57:26-57:29)
+SEMICOLON (57:29-57:30)
+CONST (58:1-58:6)
+IDENTIFIER "oneTarget" (58:7-58:16)
+COLON (58:16-58:17)
+INTEGER_LITERAL "1" (58:18-58:19)
+PIPE (58:20-58:21)
+IDENTIFIER "f64" (58:22-58:25)
+EQUAL (58:26-58:27)
+IDENTIFIER "floatingOne" (58:28-58:39)
+SEMICOLON (58:39-58:40)
+IDENTIFIER "print" (59:1-59:6)
+LEFT_PAREN (59:6-59:7)
+IDENTIFIER "oneTarget" (59:7-59:16)
+RIGHT_PAREN (59:16-59:17)
+SEMICOLON (59:17-59:18)
+IDENTIFIER "print" (60:1-60:6)
+LEFT_PAREN (60:6-60:7)
+IDENTIFIER "oneTarget" (60:7-60:16)
+EQUAL_EQUAL (60:17-60:19)
+INTEGER_LITERAL "1" (60:20-60:21)
+RIGHT_PAREN (60:21-60:22)
+SEMICOLON (60:22-60:23)
+CONST (61:1-61:6)
+IDENTIFIER "negativeZero" (61:7-61:19)
+COLON (61:19-61:20)
+IDENTIFIER "f64" (61:21-61:24)
+EQUAL (61:25-61:26)
+MINUS (61:27-61:28)
+FLOAT_LITERAL "0.0" (61:28-61:31)
+SEMICOLON (61:31-61:32)
+CONST (62:1-62:6)
+IDENTIFIER "negativeTarget" (62:7-62:21)
+COLON (62:21-62:22)
+INTEGER_LITERAL "0" (62:23-62:24)
+PIPE (62:25-62:26)
+IDENTIFIER "f64" (62:27-62:30)
+EQUAL (62:31-62:32)
+IDENTIFIER "negativeZero" (62:33-62:45)
+SEMICOLON (62:45-62:46)
+IDENTIFIER "print" (63:1-63:6)
+LEFT_PAREN (63:6-63:7)
+IDENTIFIER "negativeTarget" (63:7-63:21)
+RIGHT_PAREN (63:21-63:22)
+SEMICOLON (63:22-63:23)
+IDENTIFIER "print" (64:1-64:6)
+LEFT_PAREN (64:6-64:7)
+IDENTIFIER "negativeTarget" (64:7-64:21)
+EQUAL_EQUAL (64:22-64:24)
+INTEGER_LITERAL "0" (64:25-64:26)
+RIGHT_PAREN (64:26-64:27)
+SEMICOLON (64:27-64:28)
+SWITCH (65:1-65:7)
+LEFT_PAREN (65:8-65:9)
+IDENTIFIER "negativeTarget" (65:9-65:23)
+RIGHT_PAREN (65:23-65:24)
+LEFT_BRACE (65:25-65:26)
+CASE (66:5-66:9)
+INTEGER_LITERAL "0" (66:10-66:11)
+LEFT_BRACE (66:12-66:13)
+CONST (67:9-67:14)
+IDENTIFIER "matched" (67:15-67:22)
+COLON (67:22-67:23)
+IDENTIFIER "f64" (67:24-67:27)
+EQUAL (67:28-67:29)
+IDENTIFIER "negativeTarget" (67:30-67:44)
+SEMICOLON (67:44-67:45)
+IDENTIFIER "print" (68:9-68:14)
+LEFT_PAREN (68:14-68:15)
+FLOAT_LITERAL "1.0" (68:15-68:18)
+SLASH (68:19-68:20)
+IDENTIFIER "matched" (68:21-68:28)
+RIGHT_PAREN (68:28-68:29)
+SEMICOLON (68:29-68:30)
+RIGHT_BRACE (69:5-69:6)
+ELSE (70:5-70:9)
+LEFT_BRACE (70:10-70:11)
+IDENTIFIER "print" (70:12-70:17)
+LEFT_PAREN (70:17-70:18)
+STRING_LITERAL "\"missing negative zero\"" (70:18-70:41)
+RIGHT_PAREN (70:41-70:42)
+SEMICOLON (70:42-70:43)
+RIGHT_BRACE (70:44-70:45)
+RIGHT_BRACE (71:1-71:2)
+CONST (72:1-72:6)
+IDENTIFIER "restoredNegative" (72:7-72:23)
+COLON (72:23-72:24)
+IDENTIFIER "f64" (72:25-72:28)
+EQUAL (72:29-72:30)
+IDENTIFIER "negativeTarget" (72:31-72:45)
+SEMICOLON (72:45-72:46)
+IDENTIFIER "print" (73:1-73:6)
+LEFT_PAREN (73:6-73:7)
+FLOAT_LITERAL "1.0" (73:7-73:10)
+SLASH (73:11-73:12)
+IDENTIFIER "restoredNegative" (73:13-73:29)
+RIGHT_PAREN (73:29-73:30)
+SEMICOLON (73:30-73:31)
+CONST (74:1-74:6)
+IDENTIFIER "smallNegativeZero" (74:7-74:24)
+COLON (74:24-74:25)
+IDENTIFIER "f32" (74:26-74:29)
+EQUAL (74:30-74:31)
+MINUS (74:32-74:33)
+FLOAT_LITERAL "0.0" (74:33-74:36)
+SEMICOLON (74:36-74:37)
+CONST (75:1-75:6)
+IDENTIFIER "smallNegativeTarget" (75:7-75:26)
+COLON (75:26-75:27)
+INTEGER_LITERAL "0" (75:28-75:29)
+PIPE (75:30-75:31)
+IDENTIFIER "f32" (75:32-75:35)
+EQUAL (75:36-75:37)
+IDENTIFIER "smallNegativeZero" (75:38-75:55)
+SEMICOLON (75:55-75:56)
+CONST (76:1-76:6)
+IDENTIFIER "restoredSmallNegative" (76:7-76:28)
+COLON (76:28-76:29)
+IDENTIFIER "f32" (76:30-76:33)
+EQUAL (76:34-76:35)
+IDENTIFIER "smallNegativeTarget" (76:36-76:55)
+SEMICOLON (76:55-76:56)
+IDENTIFIER "print" (77:1-77:6)
+LEFT_PAREN (77:6-77:7)
+FLOAT_LITERAL "1.0" (77:7-77:10)
+SLASH (77:11-77:12)
+IDENTIFIER "restoredSmallNegative" (77:13-77:34)
+RIGHT_PAREN (77:34-77:35)
+SEMICOLON (77:35-77:36)
+
+--- AST ---
+
+(Program
+  range: 1:1-77:36
+  (FunctionDeclaration
+    range: 1:1-10:2
+    (IdentifierDeclaration
+      range: 1:6-1:11
+      name: "check"
+    )
+    (FunctionParameter
+      range: 1:12-1:29
+      (IdentifierDeclaration
+        range: 1:12-1:18
+        name: "source"
+      )
+      (UnionTypeNode
+        range: 1:20-1:29
+        (LiteralTypeNode
+          range: 1:20-1:21
+          kind: INT
+          text: "0"
+        )
+        (LiteralTypeNode
+          range: 1:24-1:25
+          kind: INT
+          text: "1"
+        )
+        (LiteralTypeNode
+          range: 1:28-1:29
+          kind: INT
+          text: "2"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:31-10:2
+      (VariableDeclaration
+        range: 2:5-2:40
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:11-2:17
+          name: "target"
+        )
+        (UnionTypeNode
+          range: 2:19-2:30
+          (LiteralTypeNode
+            range: 2:19-2:20
+            kind: INT
+            text: "0"
+          )
+          (LiteralTypeNode
+            range: 2:23-2:24
+            kind: INT
+            text: "1"
+          )
+          (NamedTypeNode
+            range: 2:27-2:30
+            name: "i64"
+          )
+        )
+        (IdentifierExpression
+          range: 2:33-2:39
+          name: "source"
+        )
+      )
+      (ExpressionStatement
+        range: 3:5-3:24
+        (CallExpression
+          range: 3:5-3:23
+          (IdentifierExpression
+            range: 3:5-3:10
+            name: "print"
+          )
+          (BinaryExpression
+            range: 3:11-3:22
+            (IdentifierExpression
+              range: 3:11-3:17
+              name: "target"
+            )
+            operator: EQUAL
+            (LiteralExpression
+              range: 3:21-3:22
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 4:5-4:24
+        (CallExpression
+          range: 4:5-4:23
+          (IdentifierExpression
+            range: 4:5-4:10
+            name: "print"
+          )
+          (BinaryExpression
+            range: 4:11-4:22
+            (IdentifierExpression
+              range: 4:11-4:17
+              name: "target"
+            )
+            operator: EQUAL
+            (LiteralExpression
+              range: 4:21-4:22
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 5:5-9:6
+        (SwitchExpression
+          range: 5:5-9:6
+          (IdentifierExpression
+            range: 5:13-5:19
+            name: "target"
+          )
+          (SwitchBranch
+            range: 6:9-6:34
+            (LiteralExpression
+              range: 6:14-6:15
+              kind: INT
+              text: "0"
+            )
+            (SwitchBranchBlockBody
+              range: 6:16-6:34
+              (BlockStatement
+                range: 6:16-6:34
+                (ExpressionStatement
+                  range: 6:18-6:32
+                  (CallExpression
+                    range: 6:18-6:31
+                    (IdentifierExpression
+                      range: 6:18-6:23
+                      name: "print"
+                    )
+                    (LiteralExpression
+                      range: 6:24-6:30
+                      kind: STRING
+                      text: "\"zero\""
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (SwitchBranch
+            range: 7:9-7:33
+            (LiteralExpression
+              range: 7:14-7:15
+              kind: INT
+              text: "1"
+            )
+            (SwitchBranchBlockBody
+              range: 7:16-7:33
+              (BlockStatement
+                range: 7:16-7:33
+                (ExpressionStatement
+                  range: 7:18-7:31
+                  (CallExpression
+                    range: 7:18-7:30
+                    (IdentifierExpression
+                      range: 7:18-7:23
+                      name: "print"
+                    )
+                    (LiteralExpression
+                      range: 7:24-7:29
+                      kind: STRING
+                      text: "\"one\""
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (SwitchElseBranch
+            range: 8:9-8:32
+            (SwitchBranchBlockBody
+              range: 8:14-8:32
+              (BlockStatement
+                range: 8:14-8:32
+                (ExpressionStatement
+                  range: 8:16-8:30
+                  (CallExpression
+                    range: 8:16-8:29
+                    (IdentifierExpression
+                      range: 8:16-8:21
+                      name: "print"
+                    )
+                    (LiteralExpression
+                      range: 8:22-8:28
+                      kind: STRING
+                      text: "\"wide\""
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:10
+    (CallExpression
+      range: 11:1-11:9
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "check"
+      )
+      (LiteralExpression
+        range: 11:7-11:8
+        kind: INT
+        text: "0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:10
+    (CallExpression
+      range: 12:1-12:9
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "check"
+      )
+      (LiteralExpression
+        range: 12:7-12:8
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:10
+    (CallExpression
+      range: 13:1-13:9
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "check"
+      )
+      (LiteralExpression
+        range: 13:7-13:8
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:19
+      name: "ordinaryZero"
+    )
+    (NamedTypeNode
+      range: 14:21-14:24
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 14:27-14:28
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:21
+      name: "ordinarySource"
+    )
+    (UnionTypeNode
+      range: 15:23-15:35
+      (NamedTypeNode
+        range: 15:23-15:26
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 15:29-15:35
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 15:38-15:50
+      name: "ordinaryZero"
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:57
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:21
+      name: "ordinaryTarget"
+    )
+    (UnionTypeNode
+      range: 16:23-16:39
+      (NamedTypeNode
+        range: 16:23-16:26
+        name: "i64"
+      )
+      (LiteralTypeNode
+        range: 16:29-16:30
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 16:33-16:39
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 16:42-16:56
+      name: "ordinarySource"
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:28
+    (CallExpression
+      range: 17:1-17:27
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 17:7-17:26
+        (IdentifierExpression
+          range: 17:7-17:21
+          name: "ordinaryTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 17:25-17:26
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:18
+      name: "ordinaryOne"
+    )
+    (NamedTypeNode
+      range: 18:20-18:23
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 18:26-18:27
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:47
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:18
+      name: "otherSource"
+    )
+    (UnionTypeNode
+      range: 19:20-19:32
+      (NamedTypeNode
+        range: 19:20-19:23
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 19:26-19:32
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 19:35-19:46
+      name: "ordinaryOne"
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:18
+      name: "otherTarget"
+    )
+    (UnionTypeNode
+      range: 20:20-20:36
+      (NamedTypeNode
+        range: 20:20-20:23
+        name: "i64"
+      )
+      (LiteralTypeNode
+        range: 20:26-20:27
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 20:30-20:36
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 20:39-20:50
+      name: "otherSource"
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:25
+    (CallExpression
+      range: 21:1-21:24
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 21:7-21:23
+        (IdentifierExpression
+          range: 21:7-21:18
+          name: "otherTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 21:22-21:23
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:15
+      name: "wideZero"
+    )
+    (NamedTypeNode
+      range: 22:17-22:20
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 22:23-22:24
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 23:1-23:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 23:7-23:17
+      name: "wideTarget"
+    )
+    (UnionTypeNode
+      range: 23:19-23:26
+      (LiteralTypeNode
+        range: 23:19-23:20
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 23:23-23:26
+        name: "i64"
+      )
+    )
+    (IdentifierExpression
+      range: 23:29-23:37
+      name: "wideZero"
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:30
+    (CallExpression
+      range: 24:1-24:29
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (CallExpression
+        range: 24:7-24:28
+        (MemberExpression
+          range: 24:7-24:26
+          (IdentifierExpression
+            range: 24:7-24:17
+            name: "wideTarget"
+          )
+          (IdentifierExpression
+            range: 24:18-24:26
+            name: "getClass"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:24
+    (CallExpression
+      range: 25:1-25:23
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 25:7-25:22
+        (IdentifierExpression
+          range: 25:7-25:17
+          name: "wideTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 25:21-25:22
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-29:2
+    (SwitchExpression
+      range: 26:1-29:2
+      (IdentifierExpression
+        range: 26:9-26:19
+        name: "wideTarget"
+      )
+      (SwitchBranch
+        range: 27:5-27:35
+        (LiteralExpression
+          range: 27:10-27:11
+          kind: INT
+          text: "0"
+        )
+        (SwitchBranchBlockBody
+          range: 27:12-27:35
+          (BlockStatement
+            range: 27:12-27:35
+            (ExpressionStatement
+              range: 27:14-27:33
+              (CallExpression
+                range: 27:14-27:32
+                (IdentifierExpression
+                  range: 27:14-27:19
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 27:20-27:31
+                  kind: STRING
+                  text: "\"wide zero\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 28:5-28:31
+        (SwitchBranchBlockBody
+          range: 28:10-28:31
+          (BlockStatement
+            range: 28:10-28:31
+            (ExpressionStatement
+              range: 28:12-28:29
+              (CallExpression
+                range: 28:12-28:28
+                (IdentifierExpression
+                  range: 28:12-28:17
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 28:18-28:27
+                  kind: STRING
+                  text: "\"missing\""
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 30:1-30:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 30:7-30:17
+      name: "wideSource"
+    )
+    (UnionTypeNode
+      range: 30:19-30:31
+      (NamedTypeNode
+        range: 30:19-30:22
+        name: "i64"
+      )
+      (NamedTypeNode
+        range: 30:25-30:31
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 30:34-30:42
+      name: "wideZero"
+    )
+  )
+  (VariableDeclaration
+    range: 31:1-31:54
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 31:7-31:22
+      name: "wideUnionTarget"
+    )
+    (UnionTypeNode
+      range: 31:24-31:40
+      (LiteralTypeNode
+        range: 31:24-31:25
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 31:28-31:31
+        name: "i64"
+      )
+      (NamedTypeNode
+        range: 31:34-31:40
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 31:43-31:53
+      name: "wideSource"
+    )
+  )
+  (ExpressionStatement
+    range: 32:1-32:29
+    (CallExpression
+      range: 32:1-32:28
+      (IdentifierExpression
+        range: 32:1-32:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 32:7-32:27
+        (IdentifierExpression
+          range: 32:7-32:22
+          name: "wideUnionTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 32:26-32:27
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 33:1-33:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 33:7-33:13
+      name: "values"
+    )
+    (ArrayTypeNode
+      range: 33:15-33:24
+      (UnionTypeNode
+        range: 33:16-33:23
+        (LiteralTypeNode
+          range: 33:16-33:17
+          kind: INT
+          text: "0"
+        )
+        (NamedTypeNode
+          range: 33:20-33:23
+          name: "i64"
+        )
+      )
+    )
+    (ArrayExpression
+      range: 33:27-33:37
+      (IdentifierExpression
+        range: 33:28-33:36
+        name: "wideZero"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 34:1-34:23
+    (CallExpression
+      range: 34:1-34:22
+      (IdentifierExpression
+        range: 34:1-34:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 34:7-34:21
+        (SubscriptExpression
+          range: 34:7-34:16
+          (IdentifierExpression
+            range: 34:7-34:13
+            name: "values"
+          )
+          (LiteralExpression
+            range: 34:14-34:15
+            kind: INT
+            text: "0"
+          )
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 34:20-34:21
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 35:1-35:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 35:7-35:11
+      name: "pair"
+    )
+    (TupleTypeNode
+      range: 35:13-35:30
+      (UnionTypeNode
+        range: 35:14-35:21
+        (LiteralTypeNode
+          range: 35:14-35:15
+          kind: INT
+          text: "0"
+        )
+        (NamedTypeNode
+          range: 35:18-35:21
+          name: "i64"
+        )
+      )
+      (NamedTypeNode
+        range: 35:23-35:29
+        name: "string"
+      )
+    )
+    (TupleExpression
+      range: 35:33-35:49
+      (IdentifierExpression
+        range: 35:34-35:42
+        name: "wideZero"
+      )
+      (LiteralExpression
+        range: 35:44-35:48
+        kind: STRING
+        text: "\"ok\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 36:1-36:21
+    (CallExpression
+      range: 36:1-36:20
+      (IdentifierExpression
+        range: 36:1-36:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 36:7-36:19
+        (SubscriptExpression
+          range: 36:7-36:14
+          (IdentifierExpression
+            range: 36:7-36:11
+            name: "pair"
+          )
+          (LiteralExpression
+            range: 36:12-36:13
+            kind: INT
+            text: "0"
+          )
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 36:18-36:19
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 37:1-37:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 37:7-37:16
+      name: "smallZero"
+    )
+    (NamedTypeNode
+      range: 37:18-37:20
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 37:23-37:24
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 38:1-38:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 38:7-38:18
+      name: "smallTarget"
+    )
+    (UnionTypeNode
+      range: 38:20-38:26
+      (LiteralTypeNode
+        range: 38:20-38:21
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 38:24-38:26
+        name: "i8"
+      )
+    )
+    (IdentifierExpression
+      range: 38:29-38:38
+      name: "smallZero"
+    )
+  )
+  (ExpressionStatement
+    range: 39:1-39:25
+    (CallExpression
+      range: 39:1-39:24
+      (IdentifierExpression
+        range: 39:1-39:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 39:7-39:23
+        (IdentifierExpression
+          range: 39:7-39:18
+          name: "smallTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 39:22-39:23
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 40:1-40:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 40:7-40:11
+      name: "none"
+    )
+    (UnionTypeNode
+      range: 40:13-40:21
+      (LiteralTypeNode
+        range: 40:13-40:14
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 40:17-40:21
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 40:24-40:28
+      kind: NULL
+      text: "null"
+    )
+  )
+  (ExpressionStatement
+    range: 41:1-41:13
+    (CallExpression
+      range: 41:1-41:12
+      (IdentifierExpression
+        range: 41:1-41:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 41:7-41:11
+        name: "none"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 42:1-42:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 42:7-42:11
+      name: "some"
+    )
+    (UnionTypeNode
+      range: 42:13-42:21
+      (LiteralTypeNode
+        range: 42:13-42:14
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 42:17-42:21
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 42:24-42:25
+      kind: INT
+      text: "0"
+    )
+  )
+  (ExpressionStatement
+    range: 43:1-43:18
+    (CallExpression
+      range: 43:1-43:17
+      (IdentifierExpression
+        range: 43:1-43:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 43:7-43:16
+        (IdentifierExpression
+          range: 43:7-43:11
+          name: "some"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 43:15-43:16
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 44:1-44:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 44:7-44:19
+      name: "floatingZero"
+    )
+    (NamedTypeNode
+      range: 44:21-44:24
+      name: "f64"
+    )
+    (LiteralExpression
+      range: 44:27-44:30
+      kind: FLOAT
+      text: "0.0"
+    )
+  )
+  (VariableDeclaration
+    range: 45:1-45:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 45:7-45:21
+      name: "floatingTarget"
+    )
+    (UnionTypeNode
+      range: 45:23-45:30
+      (LiteralTypeNode
+        range: 45:23-45:24
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 45:27-45:30
+        name: "f64"
+      )
+    )
+    (IdentifierExpression
+      range: 45:33-45:45
+      name: "floatingZero"
+    )
+  )
+  (ExpressionStatement
+    range: 46:1-46:23
+    (CallExpression
+      range: 46:1-46:22
+      (IdentifierExpression
+        range: 46:1-46:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 46:7-46:21
+        name: "floatingTarget"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 47:1-47:28
+    (CallExpression
+      range: 47:1-47:27
+      (IdentifierExpression
+        range: 47:1-47:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 47:7-47:26
+        (IdentifierExpression
+          range: 47:7-47:21
+          name: "floatingTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 47:25-47:26
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 48:1-48:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 48:7-48:23
+      name: "restoredFloating"
+    )
+    (NamedTypeNode
+      range: 48:25-48:28
+      name: "f64"
+    )
+    (IdentifierExpression
+      range: 48:31-48:45
+      name: "floatingTarget"
+    )
+  )
+  (ExpressionStatement
+    range: 49:1-49:32
+    (CallExpression
+      range: 49:1-49:31
+      (IdentifierExpression
+        range: 49:1-49:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 49:7-49:30
+        (IdentifierExpression
+          range: 49:7-49:23
+          name: "restoredFloating"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 49:27-49:30
+          kind: FLOAT
+          text: "0.0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 50:1-53:2
+    (SwitchExpression
+      range: 50:1-53:2
+      (IdentifierExpression
+        range: 50:9-50:23
+        name: "floatingTarget"
+      )
+      (SwitchBranch
+        range: 51:5-51:39
+        (LiteralExpression
+          range: 51:10-51:11
+          kind: INT
+          text: "0"
+        )
+        (SwitchBranchBlockBody
+          range: 51:12-51:39
+          (BlockStatement
+            range: 51:12-51:39
+            (ExpressionStatement
+              range: 51:14-51:37
+              (CallExpression
+                range: 51:14-51:36
+                (IdentifierExpression
+                  range: 51:14-51:19
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 51:20-51:35
+                  kind: STRING
+                  text: "\"floating zero\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 52:5-52:45
+        (SwitchBranchBlockBody
+          range: 52:10-52:45
+          (BlockStatement
+            range: 52:10-52:45
+            (ExpressionStatement
+              range: 52:12-52:43
+              (CallExpression
+                range: 52:12-52:42
+                (IdentifierExpression
+                  range: 52:12-52:17
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 52:18-52:41
+                  kind: STRING
+                  text: "\"missing floating zero\""
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 54:1-54:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 54:7-54:24
+      name: "smallFloatingZero"
+    )
+    (NamedTypeNode
+      range: 54:26-54:29
+      name: "f32"
+    )
+    (LiteralExpression
+      range: 54:32-54:35
+      kind: FLOAT
+      text: "0.0"
+    )
+  )
+  (VariableDeclaration
+    range: 55:1-55:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 55:7-55:26
+      name: "smallFloatingTarget"
+    )
+    (UnionTypeNode
+      range: 55:28-55:35
+      (LiteralTypeNode
+        range: 55:28-55:29
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 55:32-55:35
+        name: "f32"
+      )
+    )
+    (IdentifierExpression
+      range: 55:38-55:55
+      name: "smallFloatingZero"
+    )
+  )
+  (ExpressionStatement
+    range: 56:1-56:33
+    (CallExpression
+      range: 56:1-56:32
+      (IdentifierExpression
+        range: 56:1-56:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 56:7-56:31
+        (IdentifierExpression
+          range: 56:7-56:26
+          name: "smallFloatingTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 56:30-56:31
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 57:1-57:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 57:7-57:18
+      name: "floatingOne"
+    )
+    (NamedTypeNode
+      range: 57:20-57:23
+      name: "f64"
+    )
+    (LiteralExpression
+      range: 57:26-57:29
+      kind: FLOAT
+      text: "1.0"
+    )
+  )
+  (VariableDeclaration
+    range: 58:1-58:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 58:7-58:16
+      name: "oneTarget"
+    )
+    (UnionTypeNode
+      range: 58:18-58:25
+      (LiteralTypeNode
+        range: 58:18-58:19
+        kind: INT
+        text: "1"
+      )
+      (NamedTypeNode
+        range: 58:22-58:25
+        name: "f64"
+      )
+    )
+    (IdentifierExpression
+      range: 58:28-58:39
+      name: "floatingOne"
+    )
+  )
+  (ExpressionStatement
+    range: 59:1-59:18
+    (CallExpression
+      range: 59:1-59:17
+      (IdentifierExpression
+        range: 59:1-59:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 59:7-59:16
+        name: "oneTarget"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 60:1-60:23
+    (CallExpression
+      range: 60:1-60:22
+      (IdentifierExpression
+        range: 60:1-60:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 60:7-60:21
+        (IdentifierExpression
+          range: 60:7-60:16
+          name: "oneTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 60:20-60:21
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 61:1-61:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 61:7-61:19
+      name: "negativeZero"
+    )
+    (NamedTypeNode
+      range: 61:21-61:24
+      name: "f64"
+    )
+    (UnaryExpression
+      range: 61:27-61:31
+      operator: MINUS
+      (LiteralExpression
+        range: 61:28-61:31
+        kind: FLOAT
+        text: "0.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 62:1-62:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 62:7-62:21
+      name: "negativeTarget"
+    )
+    (UnionTypeNode
+      range: 62:23-62:30
+      (LiteralTypeNode
+        range: 62:23-62:24
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 62:27-62:30
+        name: "f64"
+      )
+    )
+    (IdentifierExpression
+      range: 62:33-62:45
+      name: "negativeZero"
+    )
+  )
+  (ExpressionStatement
+    range: 63:1-63:23
+    (CallExpression
+      range: 63:1-63:22
+      (IdentifierExpression
+        range: 63:1-63:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 63:7-63:21
+        name: "negativeTarget"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 64:1-64:28
+    (CallExpression
+      range: 64:1-64:27
+      (IdentifierExpression
+        range: 64:1-64:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 64:7-64:26
+        (IdentifierExpression
+          range: 64:7-64:21
+          name: "negativeTarget"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 64:25-64:26
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 65:1-71:2
+    (SwitchExpression
+      range: 65:1-71:2
+      (IdentifierExpression
+        range: 65:9-65:23
+        name: "negativeTarget"
+      )
+      (SwitchBranch
+        range: 66:5-69:6
+        (LiteralExpression
+          range: 66:10-66:11
+          kind: INT
+          text: "0"
+        )
+        (SwitchBranchBlockBody
+          range: 66:12-69:6
+          (BlockStatement
+            range: 66:12-69:6
+            (VariableDeclaration
+              range: 67:9-67:45
+              mutability: CONST
+              (IdentifierDeclaration
+                range: 67:15-67:22
+                name: "matched"
+              )
+              (NamedTypeNode
+                range: 67:24-67:27
+                name: "f64"
+              )
+              (IdentifierExpression
+                range: 67:30-67:44
+                name: "negativeTarget"
+              )
+            )
+            (ExpressionStatement
+              range: 68:9-68:30
+              (CallExpression
+                range: 68:9-68:29
+                (IdentifierExpression
+                  range: 68:9-68:14
+                  name: "print"
+                )
+                (BinaryExpression
+                  range: 68:15-68:28
+                  (LiteralExpression
+                    range: 68:15-68:18
+                    kind: FLOAT
+                    text: "1.0"
+                  )
+                  operator: DIVIDE
+                  (IdentifierExpression
+                    range: 68:21-68:28
+                    name: "matched"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 70:5-70:45
+        (SwitchBranchBlockBody
+          range: 70:10-70:45
+          (BlockStatement
+            range: 70:10-70:45
+            (ExpressionStatement
+              range: 70:12-70:43
+              (CallExpression
+                range: 70:12-70:42
+                (IdentifierExpression
+                  range: 70:12-70:17
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 70:18-70:41
+                  kind: STRING
+                  text: "\"missing negative zero\""
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 72:1-72:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 72:7-72:23
+      name: "restoredNegative"
+    )
+    (NamedTypeNode
+      range: 72:25-72:28
+      name: "f64"
+    )
+    (IdentifierExpression
+      range: 72:31-72:45
+      name: "negativeTarget"
+    )
+  )
+  (ExpressionStatement
+    range: 73:1-73:31
+    (CallExpression
+      range: 73:1-73:30
+      (IdentifierExpression
+        range: 73:1-73:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 73:7-73:29
+        (LiteralExpression
+          range: 73:7-73:10
+          kind: FLOAT
+          text: "1.0"
+        )
+        operator: DIVIDE
+        (IdentifierExpression
+          range: 73:13-73:29
+          name: "restoredNegative"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 74:1-74:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 74:7-74:24
+      name: "smallNegativeZero"
+    )
+    (NamedTypeNode
+      range: 74:26-74:29
+      name: "f32"
+    )
+    (UnaryExpression
+      range: 74:32-74:36
+      operator: MINUS
+      (LiteralExpression
+        range: 74:33-74:36
+        kind: FLOAT
+        text: "0.0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 75:1-75:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 75:7-75:26
+      name: "smallNegativeTarget"
+    )
+    (UnionTypeNode
+      range: 75:28-75:35
+      (LiteralTypeNode
+        range: 75:28-75:29
+        kind: INT
+        text: "0"
+      )
+      (NamedTypeNode
+        range: 75:32-75:35
+        name: "f32"
+      )
+    )
+    (IdentifierExpression
+      range: 75:38-75:55
+      name: "smallNegativeZero"
+    )
+  )
+  (VariableDeclaration
+    range: 76:1-76:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 76:7-76:28
+      name: "restoredSmallNegative"
+    )
+    (NamedTypeNode
+      range: 76:30-76:33
+      name: "f32"
+    )
+    (IdentifierExpression
+      range: 76:36-76:55
+      name: "smallNegativeTarget"
+    )
+  )
+  (ExpressionStatement
+    range: 77:1-77:36
+    (CallExpression
+      range: 77:1-77:35
+      (IdentifierExpression
+        range: 77:1-77:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 77:7-77:34
+        (LiteralExpression
+          range: 77:7-77:10
+          kind: FLOAT
+          text: "1.0"
+        )
+        operator: DIVIDE
+        (IdentifierExpression
+          range: 77:13-77:34
+          name: "restoredSmallNegative"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:33-2:39 -> 0 | 1 | 2
+  3:5-3:10 -> (any) => void
+  3:5-3:23 -> void
+  3:11-3:17 -> 0 | 1 | i64
+  3:11-3:22 -> bool
+  3:21-3:22 -> i32
+  4:5-4:10 -> (any) => void
+  4:5-4:23 -> void
+  4:11-4:17 -> 0 | 1 | i64
+  4:11-4:22 -> bool
+  4:21-4:22 -> i32
+  5:5-9:6 -> void
+  5:13-5:19 -> 0 | 1 | i64
+  6:14-6:15 -> i32
+  6:18-6:23 -> (any) => void
+  6:18-6:31 -> void
+  6:24-6:30 -> string
+  7:14-7:15 -> i32
+  7:18-7:23 -> (any) => void
+  7:18-7:30 -> void
+  7:24-7:29 -> string
+  8:16-8:21 -> (any) => void
+  8:16-8:29 -> void
+  8:22-8:28 -> string
+  11:1-11:6 -> (0 | 1 | 2) => void
+  11:1-11:9 -> void
+  11:7-11:8 -> i32
+  12:1-12:6 -> (0 | 1 | 2) => void
+  12:1-12:9 -> void
+  12:7-12:8 -> i32
+  13:1-13:6 -> (0 | 1 | 2) => void
+  13:1-13:9 -> void
+  13:7-13:8 -> i32
+  14:27-14:28 -> i32
+  15:38-15:50 -> i32
+  16:42-16:56 -> i32 | string
+  17:1-17:6 -> (any) => void
+  17:1-17:27 -> void
+  17:7-17:21 -> i64 | 0 | string
+  17:7-17:26 -> bool
+  17:25-17:26 -> i32
+  18:26-18:27 -> i32
+  19:35-19:46 -> i32
+  20:39-20:50 -> i32 | string
+  21:1-21:6 -> (any) => void
+  21:1-21:24 -> void
+  21:7-21:18 -> i64 | 0 | string
+  21:7-21:23 -> bool
+  21:22-21:23 -> i32
+  22:23-22:24 -> i64
+  23:29-23:37 -> i64
+  24:1-24:6 -> (any) => void
+  24:1-24:29 -> void
+  24:7-24:17 -> 0 | i64
+  24:7-24:26 -> () => Type<0 | i64>
+  24:7-24:28 -> Type<0 | i64>
+  24:18-24:26 -> () => Type<0 | i64>
+  25:1-25:6 -> (any) => void
+  25:1-25:23 -> void
+  25:7-25:17 -> 0 | i64
+  25:7-25:22 -> bool
+  25:21-25:22 -> i32
+  26:1-29:2 -> void
+  26:9-26:19 -> 0 | i64
+  27:10-27:11 -> i32
+  27:14-27:19 -> (any) => void
+  27:14-27:32 -> void
+  27:20-27:31 -> string
+  28:12-28:17 -> (any) => void
+  28:12-28:28 -> void
+  28:18-28:27 -> string
+  30:34-30:42 -> i64
+  31:43-31:53 -> i64 | string
+  32:1-32:6 -> (any) => void
+  32:1-32:28 -> void
+  32:7-32:22 -> 0 | i64 | string
+  32:7-32:27 -> bool
+  32:26-32:27 -> i32
+  33:27-33:37 -> [0 | i64]
+  33:28-33:36 -> i64
+  34:1-34:6 -> (any) => void
+  34:1-34:22 -> void
+  34:7-34:13 -> [0 | i64]
+  34:7-34:16 -> 0 | i64
+  34:7-34:21 -> bool
+  34:14-34:15 -> i32
+  34:20-34:21 -> i32
+  35:33-35:49 -> (0 | i64, string)
+  35:34-35:42 -> i64
+  35:44-35:48 -> string
+  36:1-36:6 -> (any) => void
+  36:1-36:20 -> void
+  36:7-36:11 -> (0 | i64, string)
+  36:7-36:14 -> 0 | i64
+  36:7-36:19 -> bool
+  36:12-36:13 -> i32
+  36:18-36:19 -> i32
+  37:23-37:24 -> i32
+  38:29-38:38 -> i8
+  39:1-39:6 -> (any) => void
+  39:1-39:24 -> void
+  39:7-39:18 -> 0 | i8
+  39:7-39:23 -> bool
+  39:22-39:23 -> i32
+  40:24-40:28 -> null
+  41:1-41:6 -> (any) => void
+  41:1-41:12 -> void
+  41:7-41:11 -> 0 | null
+  42:24-42:25 -> i32
+  43:1-43:6 -> (any) => void
+  43:1-43:17 -> void
+  43:7-43:11 -> 0 | null
+  43:7-43:16 -> bool
+  43:15-43:16 -> i32
+  44:27-44:30 -> f64
+  45:33-45:45 -> f64
+  46:1-46:6 -> (any) => void
+  46:1-46:22 -> void
+  46:7-46:21 -> 0 | f64
+  47:1-47:6 -> (any) => void
+  47:1-47:27 -> void
+  47:7-47:21 -> 0 | f64
+  47:7-47:26 -> bool
+  47:25-47:26 -> i32
+  48:31-48:45 -> 0 | f64
+  49:1-49:6 -> (any) => void
+  49:1-49:31 -> void
+  49:7-49:23 -> f64
+  49:7-49:30 -> bool
+  49:27-49:30 -> f64
+  50:1-53:2 -> void
+  50:9-50:23 -> 0 | f64
+  51:10-51:11 -> i32
+  51:14-51:19 -> (any) => void
+  51:14-51:36 -> void
+  51:20-51:35 -> string
+  52:12-52:17 -> (any) => void
+  52:12-52:42 -> void
+  52:18-52:41 -> string
+  54:32-54:35 -> f32
+  55:38-55:55 -> f32
+  56:1-56:6 -> (any) => void
+  56:1-56:32 -> void
+  56:7-56:26 -> 0 | f32
+  56:7-56:31 -> bool
+  56:30-56:31 -> i32
+  57:26-57:29 -> f64
+  58:28-58:39 -> f64
+  59:1-59:6 -> (any) => void
+  59:1-59:17 -> void
+  59:7-59:16 -> 1 | f64
+  60:1-60:6 -> (any) => void
+  60:1-60:22 -> void
+  60:7-60:16 -> 1 | f64
+  60:7-60:21 -> bool
+  60:20-60:21 -> i32
+  61:27-61:31 -> f64
+  61:28-61:31 -> f64
+  62:33-62:45 -> f64
+  63:1-63:6 -> (any) => void
+  63:1-63:22 -> void
+  63:7-63:21 -> 0 | f64
+  64:1-64:6 -> (any) => void
+  64:1-64:27 -> void
+  64:7-64:21 -> 0 | f64
+  64:7-64:26 -> bool
+  64:25-64:26 -> i32
+  65:1-71:2 -> void
+  65:9-65:23 -> 0 | f64
+  66:10-66:11 -> i32
+  67:30-67:44 -> 0 | f64
+  68:9-68:14 -> (any) => void
+  68:9-68:29 -> void
+  68:15-68:18 -> f64
+  68:15-68:28 -> f64
+  68:21-68:28 -> f64
+  70:12-70:17 -> (any) => void
+  70:12-70:42 -> void
+  70:18-70:41 -> string
+  72:31-72:45 -> 0 | f64
+  73:1-73:6 -> (any) => void
+  73:1-73:30 -> void
+  73:7-73:10 -> f64
+  73:7-73:29 -> f64
+  73:13-73:29 -> f64
+  74:32-74:36 -> f32
+  74:33-74:36 -> f32
+  75:38-75:55 -> f32
+  76:36-76:55 -> 0 | f32
+  77:1-77:6 -> (any) => void
+  77:1-77:35 -> void
+  77:7-77:10 -> f32
+  77:7-77:34 -> f32
+  77:13-77:34 -> f32
+
+Resolved types:
+  1:20-1:21 -> 0
+  1:20-1:29 -> 0 | 1 | 2
+  1:24-1:25 -> 1
+  1:28-1:29 -> 2
+  2:19-2:20 -> 0
+  2:19-2:30 -> 0 | 1 | i64
+  2:23-2:24 -> 1
+  2:27-2:30 -> i64
+  14:21-14:24 -> i32
+  15:23-15:26 -> i32
+  15:23-15:35 -> i32 | string
+  15:29-15:35 -> string
+  16:23-16:26 -> i64
+  16:23-16:39 -> i64 | 0 | string
+  16:29-16:30 -> 0
+  16:33-16:39 -> string
+  18:20-18:23 -> i32
+  19:20-19:23 -> i32
+  19:20-19:32 -> i32 | string
+  19:26-19:32 -> string
+  20:20-20:23 -> i64
+  20:20-20:36 -> i64 | 0 | string
+  20:26-20:27 -> 0
+  20:30-20:36 -> string
+  22:17-22:20 -> i64
+  23:19-23:20 -> 0
+  23:19-23:26 -> 0 | i64
+  23:23-23:26 -> i64
+  30:19-30:22 -> i64
+  30:19-30:31 -> i64 | string
+  30:25-30:31 -> string
+  31:24-31:25 -> 0
+  31:24-31:40 -> 0 | i64 | string
+  31:28-31:31 -> i64
+  31:34-31:40 -> string
+  33:15-33:24 -> [0 | i64]
+  33:16-33:17 -> 0
+  33:16-33:23 -> 0 | i64
+  33:20-33:23 -> i64
+  35:13-35:30 -> (0 | i64, string)
+  35:14-35:15 -> 0
+  35:14-35:21 -> 0 | i64
+  35:18-35:21 -> i64
+  35:23-35:29 -> string
+  37:18-37:20 -> i8
+  38:20-38:21 -> 0
+  38:20-38:26 -> 0 | i8
+  38:24-38:26 -> i8
+  40:13-40:14 -> 0
+  40:13-40:21 -> 0 | null
+  40:17-40:21 -> null
+  42:13-42:14 -> 0
+  42:13-42:21 -> 0 | null
+  42:17-42:21 -> null
+  44:21-44:24 -> f64
+  45:23-45:24 -> 0
+  45:23-45:30 -> 0 | f64
+  45:27-45:30 -> f64
+  48:25-48:28 -> f64
+  54:26-54:29 -> f32
+  55:28-55:29 -> 0
+  55:28-55:35 -> 0 | f32
+  55:32-55:35 -> f32
+  57:20-57:23 -> f64
+  58:18-58:19 -> 1
+  58:18-58:25 -> 1 | f64
+  58:22-58:25 -> f64
+  61:21-61:24 -> f64
+  62:23-62:24 -> 0
+  62:23-62:30 -> 0 | f64
+  62:27-62:30 -> f64
+  67:24-67:27 -> f64
+  72:25-72:28 -> f64
+  74:26-74:29 -> f32
+  75:28-75:29 -> 0
+  75:28-75:35 -> 0 | f32
+  75:32-75:35 -> f32
+  76:30-76:33 -> f32
+
+Conversions:
+  2:33-2:39 -> 0 | 1 | 2 -> 0 | 1 | i64
+  3:21-3:22 -> i32 -> 0 -> 0 | 1 | i64
+  4:21-4:22 -> i32 -> 1 -> 0 | 1 | i64
+  6:14-6:15 -> i32 -> 0 -> 0 | 1 | i64
+  7:14-7:15 -> i32 -> 1 -> 0 | 1 | i64
+  11:7-11:8 -> i32 -> 0 -> 0 | 1 | 2
+  12:7-12:8 -> i32 -> 1 -> 0 | 1 | 2
+  13:7-13:8 -> i32 -> 2 -> 0 | 1 | 2
+  15:38-15:50 -> i32 -> i32 | string
+  16:42-16:56 -> i32 | string -> i64 | 0 | string
+  17:25-17:26 -> i32 -> 0 -> i64 | 0 | string
+  19:35-19:46 -> i32 -> i32 | string
+  20:39-20:50 -> i32 | string -> i64 | 0 | string
+  21:22-21:23 -> i32 -> 0 -> i64 | 0 | string
+  23:29-23:37 -> i64 -> 0 | i64
+  25:21-25:22 -> i32 -> 0 -> 0 | i64
+  27:10-27:11 -> i32 -> 0 -> 0 | i64
+  30:34-30:42 -> i64 -> i64 | string
+  31:43-31:53 -> i64 | string -> 0 | i64 | string
+  32:26-32:27 -> i32 -> 0 -> 0 | i64 | string
+  33:28-33:36 -> i64 -> 0 | i64
+  34:20-34:21 -> i32 -> 0 -> 0 | i64
+  35:34-35:42 -> i64 -> 0 | i64
+  36:18-36:19 -> i32 -> 0 -> 0 | i64
+  37:23-37:24 -> i32 -> i8
+  38:29-38:38 -> i8 -> 0 | i8
+  39:22-39:23 -> i32 -> 0 -> 0 | i8
+  40:24-40:28 -> null -> 0 | null
+  42:24-42:25 -> i32 -> 0 -> 0 | null
+  43:15-43:16 -> i32 -> 0 -> 0 | null
+  45:33-45:45 -> f64 -> 0 | f64
+  47:25-47:26 -> i32 -> 0 -> 0 | f64
+  48:31-48:45 -> 0 | f64 -> f64
+  51:10-51:11 -> i32 -> 0 -> 0 | f64
+  55:38-55:55 -> f32 -> 0 | f32
+  56:30-56:31 -> i32 -> 0 -> 0 | f32
+  58:28-58:39 -> f64 -> 1 | f64
+  60:20-60:21 -> i32 -> 1 -> 1 | f64
+  62:33-62:45 -> f64 -> 0 | f64
+  64:25-64:26 -> i32 -> 0 -> 0 | f64
+  66:10-66:11 -> i32 -> 0 -> 0 | f64
+  67:30-67:44 -> 0 | f64 -> f64
+  72:31-72:45 -> 0 | f64 -> f64
+  75:38-75:55 -> f32 -> 0 | f32
+  76:36-76:55 -> 0 | f32 -> f32
+
+Declarations:
+  1:6-1:11 -> func check(0 | 1 | 2) => void
+  1:12-1:18 -> const source: 0 | 1 | 2
+  2:11-2:17 -> const target: 0 | 1 | i64
+  14:7-14:19 -> const ordinaryZero: i32
+  15:7-15:21 -> const ordinarySource: i32 | string
+  16:7-16:21 -> const ordinaryTarget: i64 | 0 | string
+  18:7-18:18 -> const ordinaryOne: i32
+  19:7-19:18 -> const otherSource: i32 | string
+  20:7-20:18 -> const otherTarget: i64 | 0 | string
+  22:7-22:15 -> const wideZero: i64
+  23:7-23:17 -> const wideTarget: 0 | i64
+  30:7-30:17 -> const wideSource: i64 | string
+  31:7-31:22 -> const wideUnionTarget: 0 | i64 | string
+  33:7-33:13 -> const values: [0 | i64]
+  35:7-35:11 -> const pair: (0 | i64, string)
+  37:7-37:16 -> const smallZero: i8
+  38:7-38:18 -> const smallTarget: 0 | i8
+  40:7-40:11 -> const none: 0 | null
+  42:7-42:11 -> const some: 0 | null
+  44:7-44:19 -> const floatingZero: f64
+  45:7-45:21 -> const floatingTarget: 0 | f64
+  48:7-48:23 -> const restoredFloating: f64
+  54:7-54:24 -> const smallFloatingZero: f32
+  55:7-55:26 -> const smallFloatingTarget: 0 | f32
+  57:7-57:18 -> const floatingOne: f64
+  58:7-58:16 -> const oneTarget: 1 | f64
+  61:7-61:19 -> const negativeZero: f64
+  62:7-62:21 -> const negativeTarget: 0 | f64
+  67:15-67:22 -> const matched: f64
+  72:7-72:23 -> const restoredNegative: f64
+  74:7-74:24 -> const smallNegativeZero: f32
+  75:7-75:26 -> const smallNegativeTarget: 0 | f32
+  76:7-76:28 -> const restoredSmallNegative: f32
+
+References:
+  2:33-2:39 -> 1:12-1:18
+  3:5-3:10 -> builtin print
+  3:11-3:17 -> 2:11-2:17
+  4:5-4:10 -> builtin print
+  4:11-4:17 -> 2:11-2:17
+  5:13-5:19 -> 2:11-2:17
+  6:18-6:23 -> builtin print
+  7:18-7:23 -> builtin print
+  8:16-8:21 -> builtin print
+  11:1-11:6 -> 1:6-1:11
+  12:1-12:6 -> 1:6-1:11
+  13:1-13:6 -> 1:6-1:11
+  15:38-15:50 -> 14:7-14:19
+  16:42-16:56 -> 15:7-15:21
+  17:1-17:6 -> builtin print
+  17:7-17:21 -> 16:7-16:21
+  19:35-19:46 -> 18:7-18:18
+  20:39-20:50 -> 19:7-19:18
+  21:1-21:6 -> builtin print
+  21:7-21:18 -> 20:7-20:18
+  23:29-23:37 -> 22:7-22:15
+  24:1-24:6 -> builtin print
+  24:7-24:17 -> 23:7-23:17
+  24:18-24:26 -> 0 | i64.getClass(): Type<0 | i64>
+  25:1-25:6 -> builtin print
+  25:7-25:17 -> 23:7-23:17
+  26:9-26:19 -> 23:7-23:17
+  27:14-27:19 -> builtin print
+  28:12-28:17 -> builtin print
+  30:34-30:42 -> 22:7-22:15
+  31:43-31:53 -> 30:7-30:17
+  32:1-32:6 -> builtin print
+  32:7-32:22 -> 31:7-31:22
+  33:28-33:36 -> 22:7-22:15
+  34:1-34:6 -> builtin print
+  34:7-34:13 -> 33:7-33:13
+  35:34-35:42 -> 22:7-22:15
+  36:1-36:6 -> builtin print
+  36:7-36:11 -> 35:7-35:11
+  38:29-38:38 -> 37:7-37:16
+  39:1-39:6 -> builtin print
+  39:7-39:18 -> 38:7-38:18
+  41:1-41:6 -> builtin print
+  41:7-41:11 -> 40:7-40:11
+  43:1-43:6 -> builtin print
+  43:7-43:11 -> 42:7-42:11
+  45:33-45:45 -> 44:7-44:19
+  46:1-46:6 -> builtin print
+  46:7-46:21 -> 45:7-45:21
+  47:1-47:6 -> builtin print
+  47:7-47:21 -> 45:7-45:21
+  48:31-48:45 -> 45:7-45:21
+  49:1-49:6 -> builtin print
+  49:7-49:23 -> 48:7-48:23
+  50:9-50:23 -> 45:7-45:21
+  51:14-51:19 -> builtin print
+  52:12-52:17 -> builtin print
+  55:38-55:55 -> 54:7-54:24
+  56:1-56:6 -> builtin print
+  56:7-56:26 -> 55:7-55:26
+  58:28-58:39 -> 57:7-57:18
+  59:1-59:6 -> builtin print
+  59:7-59:16 -> 58:7-58:16
+  60:1-60:6 -> builtin print
+  60:7-60:16 -> 58:7-58:16
+  62:33-62:45 -> 61:7-61:19
+  63:1-63:6 -> builtin print
+  63:7-63:21 -> 62:7-62:21
+  64:1-64:6 -> builtin print
+  64:7-64:21 -> 62:7-62:21
+  65:9-65:23 -> 62:7-62:21
+  67:30-67:44 -> 62:7-62:21
+  68:9-68:14 -> builtin print
+  68:21-68:28 -> 67:15-67:22
+  70:12-70:17 -> builtin print
+  72:31-72:45 -> 62:7-62:21
+  73:1-73:6 -> builtin print
+  73:13-73:29 -> 72:7-72:23
+  75:38-75:55 -> 74:7-74:24
+  76:36-76:55 -> 75:7-75:26
+  77:1-77:6 -> builtin print
+  77:13-77:34 -> 76:7-76:28
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field ordinaryZero I flags [PUBLIC, STATIC, FINAL] = 0
+  field ordinarySource Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field ordinaryTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field ordinaryOne I flags [PUBLIC, STATIC, FINAL] = 1
+  field otherSource Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field otherTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field wideZero J flags [PUBLIC, STATIC, FINAL] = 0
+  field wideTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field wideSource Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field wideUnionTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field values Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC, FINAL]
+  field smallZero B flags [PUBLIC, STATIC, FINAL] = 0
+  field smallTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field none Ljava/lang/Integer; flags [PUBLIC, STATIC, FINAL]
+  field some Ljava/lang/Integer; flags [PUBLIC, STATIC, FINAL]
+  field floatingZero D flags [PUBLIC, STATIC, FINAL] = 0.0
+  field floatingTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field restoredFloating D flags [PUBLIC, STATIC, FINAL]
+  field smallFloatingZero F flags [PUBLIC, STATIC, FINAL] = 0.0
+  field smallFloatingTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field floatingOne D flags [PUBLIC, STATIC, FINAL] = 1.0
+  field oneTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field negativeZero D flags [PUBLIC, STATIC, FINAL] = -0.0
+  field negativeTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field restoredNegative D flags [PUBLIC, STATIC, FINAL]
+  field smallNegativeZero F flags [PUBLIC, STATIC, FINAL] = -0.0
+  field smallNegativeTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field restoredSmallNegative F flags [PUBLIC, STATIC, FINAL]
+  method check(Ljava/lang/Object;)V flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    DUP
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    DUP
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L0
+    DUP
+    LDC ClassOrInterfaceDesc[Integer]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L0
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L0
+   L0:
+    ASTORE_1 1
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE_2 2
+    ASTORE_3 3
+    ALOAD_3 3
+    INSTANCEOF java/lang/Number
+    IFEQ L2
+    ALOAD_2 2
+    INSTANCEOF java/lang/Number
+    IFEQ L2
+    ALOAD_3 3
+    INSTANCEOF java/lang/Float
+    IFNE L1
+    ALOAD_3 3
+    INSTANCEOF java/lang/Double
+    IFNE L1
+    ALOAD_2 2
+    INSTANCEOF java/lang/Float
+    IFNE L1
+    ALOAD_2 2
+    INSTANCEOF java/lang/Double
+    IFNE L1
+    ALOAD_3 3
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L3
+    GOTO L4
+   L1:
+    ALOAD_3 3
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L3
+    GOTO L4
+   L2:
+    ALOAD_3 3
+    ALOAD_2 2
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L5
+   L3:
+    ICONST_1 1
+    GOTO L5
+   L4:
+    ICONST_0 0
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_1 1
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 4
+    ASTORE 5
+    ALOAD 5
+    INSTANCEOF java/lang/Number
+    IFEQ L7
+    ALOAD 4
+    INSTANCEOF java/lang/Number
+    IFEQ L7
+    ALOAD 5
+    INSTANCEOF java/lang/Float
+    IFNE L6
+    ALOAD 5
+    INSTANCEOF java/lang/Double
+    IFNE L6
+    ALOAD 4
+    INSTANCEOF java/lang/Float
+    IFNE L6
+    ALOAD 4
+    INSTANCEOF java/lang/Double
+    IFNE L6
+    ALOAD 5
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 4
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L8
+    GOTO L9
+   L6:
+    ALOAD 5
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 4
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L8
+    GOTO L9
+   L7:
+    ALOAD 5
+    ALOAD 4
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L10
+   L8:
+    ICONST_1 1
+    GOTO L10
+   L9:
+    ICONST_0 0
+   L10:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    ALOAD_1 1
+    ASTORE 6
+    ALOAD 6
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 7
+    ASTORE 8
+    ALOAD 8
+    INSTANCEOF java/lang/Number
+    IFEQ L12
+    ALOAD 7
+    INSTANCEOF java/lang/Number
+    IFEQ L12
+    ALOAD 8
+    INSTANCEOF java/lang/Float
+    IFNE L11
+    ALOAD 8
+    INSTANCEOF java/lang/Double
+    IFNE L11
+    ALOAD 7
+    INSTANCEOF java/lang/Float
+    IFNE L11
+    ALOAD 7
+    INSTANCEOF java/lang/Double
+    IFNE L11
+    ALOAD 8
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 7
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L13
+    GOTO L14
+   L11:
+    ALOAD 8
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 7
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L13
+    GOTO L14
+   L12:
+    ALOAD 8
+    ALOAD 7
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L15
+   L13:
+    ICONST_1 1
+    GOTO L15
+   L14:
+    ICONST_0 0
+   L15:
+    IFNE L16
+    GOTO L17
+   L16:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L25
+   L17:
+    ALOAD 6
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 9
+    ASTORE 10
+    ALOAD 10
+    INSTANCEOF java/lang/Number
+    IFEQ L19
+    ALOAD 9
+    INSTANCEOF java/lang/Number
+    IFEQ L19
+    ALOAD 10
+    INSTANCEOF java/lang/Float
+    IFNE L18
+    ALOAD 10
+    INSTANCEOF java/lang/Double
+    IFNE L18
+    ALOAD 9
+    INSTANCEOF java/lang/Float
+    IFNE L18
+    ALOAD 9
+    INSTANCEOF java/lang/Double
+    IFNE L18
+    ALOAD 10
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 9
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L20
+    GOTO L21
+   L18:
+    ALOAD 10
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 9
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L20
+    GOTO L21
+   L19:
+    ALOAD 10
+    ALOAD 9
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L22
+   L20:
+    ICONST_1 1
+    GOTO L22
+   L21:
+    ICONST_0 0
+   L22:
+    IFNE L23
+    GOTO L24
+   L23:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "one"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L25
+   L24:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wide"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L25:
+    RETURN
+    max stack 5 max locals 11
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC Test.check(Ljava/lang/Object;)V
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC Test.check(Ljava/lang/Object;)V
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC Test.check(Ljava/lang/Object;)V
+    GETSTATIC Test.ordinaryZero I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.ordinarySource Ljava/lang/Object;
+    GETSTATIC Test.ordinarySource Ljava/lang/Object;
+    DUP
+    LDC ClassOrInterfaceDesc[Integer]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L0
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L0
+   L0:
+    PUTSTATIC Test.ordinaryTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ordinaryTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE_0 0
+    ASTORE_1 1
+    ALOAD_1 1
+    INSTANCEOF java/lang/Number
+    IFEQ L2
+    ALOAD_0 0
+    INSTANCEOF java/lang/Number
+    IFEQ L2
+    ALOAD_1 1
+    INSTANCEOF java/lang/Float
+    IFNE L1
+    ALOAD_1 1
+    INSTANCEOF java/lang/Double
+    IFNE L1
+    ALOAD_0 0
+    INSTANCEOF java/lang/Float
+    IFNE L1
+    ALOAD_0 0
+    INSTANCEOF java/lang/Double
+    IFNE L1
+    ALOAD_1 1
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD_0 0
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L3
+    GOTO L4
+   L1:
+    ALOAD_1 1
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD_0 0
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L3
+    GOTO L4
+   L2:
+    ALOAD_1 1
+    ALOAD_0 0
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L5
+   L3:
+    ICONST_1 1
+    GOTO L5
+   L4:
+    ICONST_0 0
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.ordinaryOne I
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.otherSource Ljava/lang/Object;
+    GETSTATIC Test.otherSource Ljava/lang/Object;
+    DUP
+    LDC ClassOrInterfaceDesc[Integer]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    IFEQ L6
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    GOTO L6
+   L6:
+    PUTSTATIC Test.otherTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.otherTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE_2 2
+    ASTORE_3 3
+    ALOAD_3 3
+    INSTANCEOF java/lang/Number
+    IFEQ L8
+    ALOAD_2 2
+    INSTANCEOF java/lang/Number
+    IFEQ L8
+    ALOAD_3 3
+    INSTANCEOF java/lang/Float
+    IFNE L7
+    ALOAD_3 3
+    INSTANCEOF java/lang/Double
+    IFNE L7
+    ALOAD_2 2
+    INSTANCEOF java/lang/Float
+    IFNE L7
+    ALOAD_2 2
+    INSTANCEOF java/lang/Double
+    IFNE L7
+    ALOAD_3 3
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L9
+    GOTO L10
+   L7:
+    ALOAD_3 3
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L9
+    GOTO L10
+   L8:
+    ALOAD_3 3
+    ALOAD_2 2
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L11
+   L9:
+    ICONST_1 1
+    GOTO L11
+   L10:
+    ICONST_0 0
+   L11:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.wideZero J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    PUTSTATIC Test.wideTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.wideTarget Ljava/lang/Object;
+    INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.wideTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 4
+    ASTORE 5
+    ALOAD 5
+    INSTANCEOF java/lang/Number
+    IFEQ L13
+    ALOAD 4
+    INSTANCEOF java/lang/Number
+    IFEQ L13
+    ALOAD 5
+    INSTANCEOF java/lang/Float
+    IFNE L12
+    ALOAD 5
+    INSTANCEOF java/lang/Double
+    IFNE L12
+    ALOAD 4
+    INSTANCEOF java/lang/Float
+    IFNE L12
+    ALOAD 4
+    INSTANCEOF java/lang/Double
+    IFNE L12
+    ALOAD 5
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 4
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L14
+    GOTO L15
+   L12:
+    ALOAD 5
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 4
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L14
+    GOTO L15
+   L13:
+    ALOAD 5
+    ALOAD 4
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L16
+   L14:
+    ICONST_1 1
+    GOTO L16
+   L15:
+    ICONST_0 0
+   L16:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.wideTarget Ljava/lang/Object;
+    ASTORE 6
+    ALOAD 6
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 7
+    ASTORE 8
+    ALOAD 8
+    INSTANCEOF java/lang/Number
+    IFEQ L18
+    ALOAD 7
+    INSTANCEOF java/lang/Number
+    IFEQ L18
+    ALOAD 8
+    INSTANCEOF java/lang/Float
+    IFNE L17
+    ALOAD 8
+    INSTANCEOF java/lang/Double
+    IFNE L17
+    ALOAD 7
+    INSTANCEOF java/lang/Float
+    IFNE L17
+    ALOAD 7
+    INSTANCEOF java/lang/Double
+    IFNE L17
+    ALOAD 8
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 7
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L19
+    GOTO L20
+   L17:
+    ALOAD 8
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 7
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L19
+    GOTO L20
+   L18:
+    ALOAD 8
+    ALOAD 7
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L21
+   L19:
+    ICONST_1 1
+    GOTO L21
+   L20:
+    ICONST_0 0
+   L21:
+    IFNE L22
+    GOTO L23
+   L22:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "wide zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L24
+   L23:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L24:
+    GETSTATIC Test.wideZero J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    PUTSTATIC Test.wideSource Ljava/lang/Object;
+    GETSTATIC Test.wideSource Ljava/lang/Object;
+    PUTSTATIC Test.wideUnionTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.wideUnionTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 9
+    ASTORE 10
+    ALOAD 10
+    INSTANCEOF java/lang/Number
+    IFEQ L26
+    ALOAD 9
+    INSTANCEOF java/lang/Number
+    IFEQ L26
+    ALOAD 10
+    INSTANCEOF java/lang/Float
+    IFNE L25
+    ALOAD 10
+    INSTANCEOF java/lang/Double
+    IFNE L25
+    ALOAD 9
+    INSTANCEOF java/lang/Float
+    IFNE L25
+    ALOAD 9
+    INSTANCEOF java/lang/Double
+    IFNE L25
+    ALOAD 10
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 9
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L27
+    GOTO L28
+   L25:
+    ALOAD 10
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 9
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L27
+    GOTO L28
+   L26:
+    ALOAD 10
+    ALOAD 9
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L29
+   L27:
+    ICONST_1 1
+    GOTO L29
+   L28:
+    ICONST_0 0
+   L29:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test.wideZero J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 11
+    ASTORE 12
+    ALOAD 12
+    INSTANCEOF java/lang/Number
+    IFEQ L31
+    ALOAD 11
+    INSTANCEOF java/lang/Number
+    IFEQ L31
+    ALOAD 12
+    INSTANCEOF java/lang/Float
+    IFNE L30
+    ALOAD 12
+    INSTANCEOF java/lang/Double
+    IFNE L30
+    ALOAD 11
+    INSTANCEOF java/lang/Float
+    IFNE L30
+    ALOAD 11
+    INSTANCEOF java/lang/Double
+    IFNE L30
+    ALOAD 12
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 11
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L32
+    GOTO L33
+   L30:
+    ALOAD 12
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 11
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L32
+    GOTO L33
+   L31:
+    ALOAD 12
+    ALOAD 11
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L34
+   L32:
+    ICONST_1 1
+    GOTO L34
+   L33:
+    ICONST_0 0
+   L34:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test.wideZero J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "ok"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 13
+    ASTORE 14
+    ALOAD 14
+    INSTANCEOF java/lang/Number
+    IFEQ L36
+    ALOAD 13
+    INSTANCEOF java/lang/Number
+    IFEQ L36
+    ALOAD 14
+    INSTANCEOF java/lang/Float
+    IFNE L35
+    ALOAD 14
+    INSTANCEOF java/lang/Double
+    IFNE L35
+    ALOAD 13
+    INSTANCEOF java/lang/Float
+    IFNE L35
+    ALOAD 13
+    INSTANCEOF java/lang/Double
+    IFNE L35
+    ALOAD 14
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 13
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L37
+    GOTO L38
+   L35:
+    ALOAD 14
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 13
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L37
+    GOTO L38
+   L36:
+    ALOAD 14
+    ALOAD 13
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L39
+   L37:
+    ICONST_1 1
+    GOTO L39
+   L38:
+    ICONST_0 0
+   L39:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.smallZero B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.smallTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.smallTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 15
+    ASTORE 16
+    ALOAD 16
+    INSTANCEOF java/lang/Number
+    IFEQ L41
+    ALOAD 15
+    INSTANCEOF java/lang/Number
+    IFEQ L41
+    ALOAD 16
+    INSTANCEOF java/lang/Float
+    IFNE L40
+    ALOAD 16
+    INSTANCEOF java/lang/Double
+    IFNE L40
+    ALOAD 15
+    INSTANCEOF java/lang/Float
+    IFNE L40
+    ALOAD 15
+    INSTANCEOF java/lang/Double
+    IFNE L40
+    ALOAD 16
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 15
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L42
+    GOTO L43
+   L40:
+    ALOAD 16
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 15
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L42
+    GOTO L43
+   L41:
+    ALOAD 16
+    ALOAD 15
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L44
+   L42:
+    ICONST_1 1
+    GOTO L44
+   L43:
+    ICONST_0 0
+   L44:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.none Ljava/lang/Integer;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.none Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.some Ljava/lang/Integer;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.some Ljava/lang/Integer;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 17
+    ASTORE 18
+    ALOAD 18
+    INSTANCEOF java/lang/Number
+    IFEQ L46
+    ALOAD 17
+    INSTANCEOF java/lang/Number
+    IFEQ L46
+    ALOAD 18
+    INSTANCEOF java/lang/Float
+    IFNE L45
+    ALOAD 18
+    INSTANCEOF java/lang/Double
+    IFNE L45
+    ALOAD 17
+    INSTANCEOF java/lang/Float
+    IFNE L45
+    ALOAD 17
+    INSTANCEOF java/lang/Double
+    IFNE L45
+    ALOAD 18
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 17
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L47
+    GOTO L48
+   L45:
+    ALOAD 18
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 17
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L47
+    GOTO L48
+   L46:
+    ALOAD 18
+    ALOAD 17
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L49
+   L47:
+    ICONST_1 1
+    GOTO L49
+   L48:
+    ICONST_0 0
+   L49:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.floatingZero D
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    PUTSTATIC Test.floatingTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floatingTarget Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floatingTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 19
+    ASTORE 20
+    ALOAD 20
+    INSTANCEOF java/lang/Number
+    IFEQ L51
+    ALOAD 19
+    INSTANCEOF java/lang/Number
+    IFEQ L51
+    ALOAD 20
+    INSTANCEOF java/lang/Float
+    IFNE L50
+    ALOAD 20
+    INSTANCEOF java/lang/Double
+    IFNE L50
+    ALOAD 19
+    INSTANCEOF java/lang/Float
+    IFNE L50
+    ALOAD 19
+    INSTANCEOF java/lang/Double
+    IFNE L50
+    ALOAD 20
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 19
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L52
+    GOTO L53
+   L50:
+    ALOAD 20
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 19
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L52
+    GOTO L53
+   L51:
+    ALOAD 20
+    ALOAD 19
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L54
+   L52:
+    ICONST_1 1
+    GOTO L54
+   L53:
+    ICONST_0 0
+   L54:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.floatingTarget Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    PUTSTATIC Test.restoredFloating D
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.restoredFloating D
+    LDC2_W 0.0
+    DCMPL
+    IFEQ L55
+    ICONST_0 0
+    GOTO L56
+   L55:
+    ICONST_1 1
+   L56:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.floatingTarget Ljava/lang/Object;
+    ASTORE 21
+    ALOAD 21
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 22
+    ASTORE 23
+    ALOAD 23
+    INSTANCEOF java/lang/Number
+    IFEQ L58
+    ALOAD 22
+    INSTANCEOF java/lang/Number
+    IFEQ L58
+    ALOAD 23
+    INSTANCEOF java/lang/Float
+    IFNE L57
+    ALOAD 23
+    INSTANCEOF java/lang/Double
+    IFNE L57
+    ALOAD 22
+    INSTANCEOF java/lang/Float
+    IFNE L57
+    ALOAD 22
+    INSTANCEOF java/lang/Double
+    IFNE L57
+    ALOAD 23
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 22
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L59
+    GOTO L60
+   L57:
+    ALOAD 23
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 22
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L59
+    GOTO L60
+   L58:
+    ALOAD 23
+    ALOAD 22
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L61
+   L59:
+    ICONST_1 1
+    GOTO L61
+   L60:
+    ICONST_0 0
+   L61:
+    IFNE L62
+    GOTO L63
+   L62:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "floating zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L64
+   L63:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing floating zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L64:
+    GETSTATIC Test.smallFloatingZero F
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    PUTSTATIC Test.smallFloatingTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.smallFloatingTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 24
+    ASTORE 25
+    ALOAD 25
+    INSTANCEOF java/lang/Number
+    IFEQ L66
+    ALOAD 24
+    INSTANCEOF java/lang/Number
+    IFEQ L66
+    ALOAD 25
+    INSTANCEOF java/lang/Float
+    IFNE L65
+    ALOAD 25
+    INSTANCEOF java/lang/Double
+    IFNE L65
+    ALOAD 24
+    INSTANCEOF java/lang/Float
+    IFNE L65
+    ALOAD 24
+    INSTANCEOF java/lang/Double
+    IFNE L65
+    ALOAD 25
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 24
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L67
+    GOTO L68
+   L65:
+    ALOAD 25
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 24
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L67
+    GOTO L68
+   L66:
+    ALOAD 25
+    ALOAD 24
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L69
+   L67:
+    ICONST_1 1
+    GOTO L69
+   L68:
+    ICONST_0 0
+   L69:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.floatingOne D
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    PUTSTATIC Test.oneTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.oneTarget Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.oneTarget Ljava/lang/Object;
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 26
+    ASTORE 27
+    ALOAD 27
+    INSTANCEOF java/lang/Number
+    IFEQ L71
+    ALOAD 26
+    INSTANCEOF java/lang/Number
+    IFEQ L71
+    ALOAD 27
+    INSTANCEOF java/lang/Float
+    IFNE L70
+    ALOAD 27
+    INSTANCEOF java/lang/Double
+    IFNE L70
+    ALOAD 26
+    INSTANCEOF java/lang/Float
+    IFNE L70
+    ALOAD 26
+    INSTANCEOF java/lang/Double
+    IFNE L70
+    ALOAD 27
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 26
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L72
+    GOTO L73
+   L70:
+    ALOAD 27
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 26
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L72
+    GOTO L73
+   L71:
+    ALOAD 27
+    ALOAD 26
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L74
+   L72:
+    ICONST_1 1
+    GOTO L74
+   L73:
+    ICONST_0 0
+   L74:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.negativeZero D
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    PUTSTATIC Test.negativeTarget Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.negativeTarget Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.negativeTarget Ljava/lang/Object;
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 28
+    ASTORE 29
+    ALOAD 29
+    INSTANCEOF java/lang/Number
+    IFEQ L76
+    ALOAD 28
+    INSTANCEOF java/lang/Number
+    IFEQ L76
+    ALOAD 29
+    INSTANCEOF java/lang/Float
+    IFNE L75
+    ALOAD 29
+    INSTANCEOF java/lang/Double
+    IFNE L75
+    ALOAD 28
+    INSTANCEOF java/lang/Float
+    IFNE L75
+    ALOAD 28
+    INSTANCEOF java/lang/Double
+    IFNE L75
+    ALOAD 29
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 28
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L77
+    GOTO L78
+   L75:
+    ALOAD 29
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 28
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L77
+    GOTO L78
+   L76:
+    ALOAD 29
+    ALOAD 28
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L79
+   L77:
+    ICONST_1 1
+    GOTO L79
+   L78:
+    ICONST_0 0
+   L79:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.negativeTarget Ljava/lang/Object;
+    ASTORE 30
+    ALOAD 30
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE 31
+    ASTORE 32
+    ALOAD 32
+    INSTANCEOF java/lang/Number
+    IFEQ L81
+    ALOAD 31
+    INSTANCEOF java/lang/Number
+    IFEQ L81
+    ALOAD 32
+    INSTANCEOF java/lang/Float
+    IFNE L80
+    ALOAD 32
+    INSTANCEOF java/lang/Double
+    IFNE L80
+    ALOAD 31
+    INSTANCEOF java/lang/Float
+    IFNE L80
+    ALOAD 31
+    INSTANCEOF java/lang/Double
+    IFNE L80
+    ALOAD 32
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD 31
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L82
+    GOTO L83
+   L80:
+    ALOAD 32
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD 31
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L82
+    GOTO L83
+   L81:
+    ALOAD 32
+    ALOAD 31
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L84
+   L82:
+    ICONST_1 1
+    GOTO L84
+   L83:
+    ICONST_0 0
+   L84:
+    IFNE L85
+    GOTO L86
+   L85:
+    GETSTATIC Test.negativeTarget Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DSTORE 33
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 1.0
+    DLOAD 33
+    DDIV
+    INVOKEVIRTUAL java/io/PrintStream.println(D)V
+    GOTO L87
+   L86:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing negative zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L87:
+    GETSTATIC Test.negativeTarget Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    PUTSTATIC Test.restoredNegative D
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 1.0
+    GETSTATIC Test.restoredNegative D
+    DDIV
+    INVOKEVIRTUAL java/io/PrintStream.println(D)V
+    GETSTATIC Test.smallNegativeZero F
+    INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
+    PUTSTATIC Test.smallNegativeTarget Ljava/lang/Object;
+    GETSTATIC Test.smallNegativeTarget Ljava/lang/Object;
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.floatValue()F
+    PUTSTATIC Test.restoredSmallNegative F
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1.0
+    GETSTATIC Test.restoredSmallNegative F
+    FDIV
+    INVOKEVIRTUAL java/io/PrintStream.println(F)V
+    RETURN
+    max stack 7 max locals 35
+
+--- OUTPUT ---
+
+true
+false
+zero
+false
+true
+one
+false
+false
+wide
+true
+false
+class java.lang.Long
+true
+wide zero
+true
+true
+true
+true
+null
+true
+0.0
+true
+true
+floating zero
+true
+1.0
+true
+-0.0
+true
+-Infinity
+-Infinity
+-Infinity
+

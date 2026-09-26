@@ -449,10 +449,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Box;
     INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
-    CHECKCAST java/lang/String
     GETSTATIC Test.first LTest$Box;
     INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN

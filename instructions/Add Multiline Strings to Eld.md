@@ -1,12 +1,12 @@
 # Add Multiline Strings to Eld
 
-Implement dedicated **multiline string literals** using triple double quotes:
+Implement dedicated **multiline string literals** using backticks:
 
 ```eld
-const message = """
+const message = `
 Hello
 World
-""";
+`;
 ```
 
 Normal double-quoted strings remain **single-line only**:
@@ -21,22 +21,22 @@ This keeps ordinary string errors easy to diagnose and gives multiline strings t
 
 ## Syntax
 
-Use three double quotes as the multiline string delimiter:
+Use a backtick as the multiline string delimiter:
 
 ```eld
-"""
+`
 content
-"""
+`
 ```
 
 Example:
 
 ```eld
-const text = """
+const text = `
 Hello world!
 
 This is a multiline string.
-""";
+`;
 ```
 
 The value should be:
@@ -77,55 +77,55 @@ const message = "Hello\nWorld";
 
 For the initial implementation, require multiline delimiters to delimit complete lines.
 
-The opening `"""` must be followed immediately by a newline:
+The opening `` ` `` must be followed immediately by a newline:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
 Do not initially support:
 
 ```eld
-const text = """Hello
+const text = `Hello
 World
-""";
+`;
 ```
 
 Likewise, the closing delimiter should appear on its own line, apart from indentation:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
 Do not initially support content followed by the closing delimiter on the same line:
 
 ```eld
-const text = """
+const text = `
 Hello
-World""";
+World`;
 ```
 
 These restrictions make newline and indentation semantics substantially simpler. They can be relaxed later without changing the basic multiline-string syntax.
 
 ## Leading and Trailing Newlines
 
-The newline immediately following the opening `"""` is structural and is **not part of the string value**.
+The newline immediately following the opening `` ` `` is structural and is **not part of the string value**.
 
-Similarly, the newline immediately before the closing `"""` is structural and is **not part of the string value**.
+Similarly, the newline immediately before the closing `` ` `` is structural and is **not part of the string value**.
 
 Therefore:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
 has the value:
@@ -147,11 +147,11 @@ World
 Explicit blank lines inside the content are preserved:
 
 ```eld
-const text = """
+const text = `
 Hello
 
 World
-""";
+`;
 ```
 
 has the value:
@@ -172,10 +172,10 @@ For example:
 
 ```eld
 func run() {
-    const text = """
+    const text = `
         Hello
         World
-        """;
+        `;
 }
 ```
 
@@ -186,7 +186,7 @@ Hello
 World
 ```
 
-The eight spaces before the closing `"""` define the indentation removed from each non-empty content line.
+The eight spaces before the closing `` ` `` define the indentation removed from each non-empty content line.
 
 This allows source indentation to remain readable without accidentally becoming part of the runtime string.
 
@@ -195,11 +195,11 @@ Another example:
 ```eld
 func run() {
     if (true) {
-        const text = """
+        const text = `
             first
             second
             third
-            """;
+            `;
     }
 }
 ```
@@ -219,11 +219,11 @@ Indentation beyond the closing delimiter's indentation is significant and must b
 For example:
 
 ```eld
-const text = """
+const text = `
     parent
         child
     sibling
-    """;
+    `;
 ```
 
 produces:
@@ -244,10 +244,10 @@ For example:
 
 ```eld
 func run() {
-    const text = """
+    const text = `
         Hello
       World
-        """;
+        `;
 }
 ```
 
@@ -264,11 +264,11 @@ Blank lines inside a multiline string are preserved as newline characters but sh
 For example:
 
 ```eld
-const text = """
+const text = `
     first
 
     second
-    """;
+    `;
 ```
 
 should conceptually produce:
@@ -290,11 +290,11 @@ They should support the same escape sequences as ordinary strings.
 For example:
 
 ```eld
-const text = """
+const text = `
 Hello\tWorld
 This contains a quote: \"
 This contains a backslash: \\
-""";
+`;
 ```
 
 Escape processing should reuse the existing normal-string escape semantics wherever possible.
@@ -304,10 +304,10 @@ A physical newline in a multiline string naturally represents a newline and does
 For example:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
 is equivalent in value to:
@@ -318,11 +318,11 @@ const text = "Hello\nWorld";
 
 assuming no additional trailing newline.
 
-## Triple Quotes Inside the String
+## Backtick Inside the String
 
-An unescaped `"""` terminates the multiline string.
+An unescaped `` ` `` terminates the multiline string.
 
-If existing Eld escape rules permit escaping quotes, provide a way to represent triple quotes through those existing escape semantics rather than introducing special delimiter-specific behavior unnecessarily.
+If existing Eld escape rules permit escaping quotes, provide a way to represent backticks through those existing escape semantics rather than introducing special delimiter-specific behavior unnecessarily.
 
 Add tests covering quotes and sequences of multiple quotes inside multiline strings.
 
@@ -346,10 +346,10 @@ string
 For example:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
 should conceptually still produce:
@@ -381,13 +381,13 @@ The token range must cover the complete multiline literal, including its delimit
 For example:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
-should have a string token spanning from the opening `"""` through the closing `"""`.
+should have a string token spanning from the opening `` ` `` through the closing `` ` ``.
 
 Ensure line/column tracking continues correctly after lexing a multiline literal.
 
@@ -405,10 +405,10 @@ Therefore:
 
 ```eld
 const single = "Hello";
-const multi = """
+const multi = `
 Hello
 World
-""";
+`;
 ```
 
 should infer:
@@ -421,10 +421,10 @@ multi: string
 Multiline strings should work anywhere an ordinary string expression works:
 
 ```eld
-print("""
+print(`
 Hello
 World
-""");
+`);
 ```
 
 and:
@@ -432,10 +432,10 @@ and:
 ```eld
 func consume(value: string) {}
 
-consume("""
+consume(`
 Hello
 World
-""");
+`);
 ```
 
 No special conversion should be required.
@@ -457,10 +457,10 @@ After escape processing, indentation removal, and newline normalization, emit th
 For example:
 
 ```eld
-const text = """
+const text = `
 Hello
 World
-""";
+`;
 ```
 
 should effectively emit the same runtime string as:
@@ -510,7 +510,7 @@ The error should occur at the end of that source line.
 ### Unterminated multiline string
 
 ```eld
-const value = """
+const value = `
 hello
 world
 ```
@@ -521,10 +521,10 @@ Report an unterminated multiline string.
 
 ```eld
 func run() {
-    const value = """
+    const value = `
         hello
       world
-        """;
+        `;
 }
 ```
 
@@ -532,12 +532,12 @@ Report that a content line has less indentation than required by the closing del
 
 ### Invalid opening delimiter placement
 
-If the initial implementation requires a newline immediately after `"""`, reject:
+If the initial implementation requires a newline immediately after `` ` ``, reject:
 
 ```eld
-const value = """hello
+const value = `hello
 world
-""";
+`;
 ```
 
 ### Invalid closing delimiter placement
@@ -545,9 +545,9 @@ world
 If the initial implementation requires the closing delimiter on its own line, reject:
 
 ```eld
-const value = """
+const value = `
 hello
-world""";
+world`;
 ```
 
 ## Tests
@@ -559,10 +559,10 @@ At minimum test:
 ### Basic multiline string
 
 ```eld
-const value = """
+const value = `
 Hello
 World
-""";
+`;
 print(value);
 ```
 
@@ -576,21 +576,21 @@ World
 ### Embedded blank line
 
 ```eld
-const value = """
+const value = `
 Hello
 
 World
-""";
+`;
 ```
 
 ### Indented source
 
 ```eld
 func run() {
-    const value = """
+    const value = `
         Hello
         World
-        """;
+        `;
 }
 ```
 
@@ -604,11 +604,11 @@ World
 ### Significant additional indentation
 
 ```eld
-const value = """
+const value = `
     parent
         child
     sibling
-    """;
+    `;
 ```
 
 Expected value:
@@ -622,10 +622,10 @@ sibling
 ### Escape processing
 
 ```eld
-const value = """
+const value = `
 Hello\tWorld
 Quote: \"
-""";
+`;
 ```
 
 Verify that normal string escapes are processed.
@@ -652,7 +652,7 @@ World";
 Verify that:
 
 ```eld
-const value = """
+const value = `
 Hello
 ```
 
@@ -681,20 +681,20 @@ const path = r"C:\foo\bar";
 and:
 
 ```eld
-const text = r"""
+const text = r`
 C:\foo\bar
 \d+\.\d+
-""";
+`;
 ```
 
 The intended future model is:
 
 ```text
 "..."       normal single-line string
-"""..."""   normal multiline string
+`...`   normal multiline string
 
 r"..."      raw single-line string       // future
-r"""..."""  raw multiline string         // future
+r`...`  raw multiline string         // future
 ```
 
 Rawness and multiline formatting should remain independent concepts.
@@ -705,7 +705,7 @@ Implement:
 
 ```text
 "..."       single-line normal string
-"""..."""   multiline normal string
+`...`   multiline normal string
 ```
 
 Normal strings:
@@ -715,7 +715,7 @@ Normal strings:
 
 Multiline strings:
 
-- Require dedicated `"""` delimiters.
+- Require dedicated `` ` `` delimiters.
 - Initially require opening and closing delimiters on their own structural lines.
 - Do not include structural opening/closing newlines in the value.
 - Strip indentation based on the closing delimiter.

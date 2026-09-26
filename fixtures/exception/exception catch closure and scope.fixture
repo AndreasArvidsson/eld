@@ -338,7 +338,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method $lambda1(Ljava/io/IOException;)Ljava/lang/String; flags [PRIVATE, STATIC, SYNTHETIC]
     ALOAD_0 0
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     ARETURN
     max stack 1 max locals 1
   method <clinit>()V flags [STATIC]
@@ -385,7 +384,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GOTO L5
    L5:

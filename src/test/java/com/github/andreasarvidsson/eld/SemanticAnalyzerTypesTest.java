@@ -2,19 +2,23 @@ package com.github.andreasarvidsson.eld;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.semantic.ArrayType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
 import com.github.andreasarvidsson.eld.semantic.ClassType;
+import com.github.andreasarvidsson.eld.semantic.LiteralType;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzerTypes;
 import com.github.andreasarvidsson.eld.semantic.SemanticModel;
 import com.github.andreasarvidsson.eld.semantic.TupleType;
 import com.github.andreasarvidsson.eld.semantic.Type;
 import com.github.andreasarvidsson.eld.semantic.UnionType;
+import com.github.andreasarvidsson.eld.parser.LiteralKind;
 
 class SemanticAnalyzerTypesTest {
     private record Fixture(List<Type> input, @Nullable String expected) {
@@ -47,6 +51,67 @@ class SemanticAnalyzerTypesTest {
                     "i64"
                 ),
                 new Fixture(List.of(BuiltinType.F32, BuiltinType.F64), "f64"),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.STRING, "\"foo\""),
+                        BuiltinType.STRING
+                    ),
+                    "string"
+                ),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.BOOL, "true"),
+                        BuiltinType.BOOL
+                    ),
+                    "bool"
+                ),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.INT, "0"),
+                        BuiltinType.I32
+                    ),
+                    "i32"
+                ),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.INT, "0"),
+                        BuiltinType.I64
+                    ),
+                    "i64"
+                ),
+                new Fixture(
+                    List.of(
+                        UnionType.of(
+                            List.of(
+                                new LiteralType(LiteralKind.INT, "0"),
+                                new LiteralType(LiteralKind.INT, "1")
+                            )
+                        ),
+                        BuiltinType.I64
+                    ),
+                    "i64"
+                ),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.STRING, "\"foo\""),
+                        new LiteralType(LiteralKind.STRING, "\"bar\"")
+                    ),
+                    "\"foo\" | \"bar\""
+                ),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.INT, "0"),
+                        new LiteralType(LiteralKind.INT, "1")
+                    ),
+                    "0 | 1"
+                ),
+                new Fixture(
+                    List.of(
+                        new LiteralType(LiteralKind.BOOL, "true"),
+                        new LiteralType(LiteralKind.BOOL, "false")
+                    ),
+                    "bool"
+                ),
                 new Fixture(
                     List.of(BuiltinType.I32, BuiltinType.F64),
                     "i32 | f64"
@@ -144,6 +209,23 @@ class SemanticAnalyzerTypesTest {
         assertEquals(
             BuiltinType.I16,
             analyzer.commonTypeStrict(List.of(BuiltinType.I8, BuiltinType.I16))
+        );
+    }
+
+    @Test
+    void literalIntegerCanWidenAsJavaArgument() {
+        final SemanticAnalyzerTypes analyzer =
+            new SemanticAnalyzerTypes(new SemanticModel());
+        assertTrue(
+            analyzer.canAssignJavaArgument(
+                new LiteralType(LiteralKind.INT, "0"),
+                BuiltinType.I64,
+                new LiteralExpression(
+                    LiteralKind.INT,
+                    "0",
+                    new Range(1, 1, 1, 2)
+                )
+            )
         );
     }
 }

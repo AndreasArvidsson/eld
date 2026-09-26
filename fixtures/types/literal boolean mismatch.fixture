@@ -1,0 +1,39 @@
+const value: false = true;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+BOOLEAN_LITERAL "false" (1:14-1:19)
+EQUAL (1:20-1:21)
+BOOLEAN_LITERAL "true" (1:22-1:26)
+SEMICOLON (1:26-1:27)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:27
+  (VariableDeclaration
+    range: 1:1-1:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (LiteralTypeNode
+      range: 1:14-1:19
+      kind: BOOL
+      text: "false"
+    )
+    (LiteralExpression
+      range: 1:22-1:26
+      kind: BOOL
+      text: "true"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign bool to false at 1:22-1:26

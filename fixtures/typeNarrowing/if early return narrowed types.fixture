@@ -188,10 +188,59 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method run(Ljava/lang/Integer;)V flags [PUBLIC, STATIC]
     ALOAD_0 0
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFEQ L0
-    RETURN
+    ASTORE_1 1
+    ASTORE_2 2
+    ALOAD_2 2
+    INSTANCEOF java/lang/Number
+    IFEQ L1
+    ALOAD_1 1
+    INSTANCEOF java/lang/Number
+    IFEQ L1
+    ALOAD_2 2
+    INSTANCEOF java/lang/Float
+    IFNE L0
+    ALOAD_2 2
+    INSTANCEOF java/lang/Double
+    IFNE L0
+    ALOAD_1 1
+    INSTANCEOF java/lang/Float
+    IFNE L0
+    ALOAD_1 1
+    INSTANCEOF java/lang/Double
+    IFNE L0
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD_1 1
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L2
+    GOTO L3
    L0:
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD_1 1
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L2
+    GOTO L3
+   L1:
+    ALOAD_2 2
+    ALOAD_1 1
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L4
+   L2:
+    ICONST_1 1
+    GOTO L4
+   L3:
+    ICONST_0 0
+   L4:
+    IFEQ L5
+    RETURN
+   L5:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     CHECKCAST java/lang/Integer
@@ -200,7 +249,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     IADD
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    max stack 3 max locals 1
+    max stack 4 max locals 3
   method <clinit>()V flags [STATIC]
     LDC 1
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;

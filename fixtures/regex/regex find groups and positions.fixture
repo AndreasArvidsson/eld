@@ -586,12 +586,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     LDC "(?<digits>\\d+)"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     PUTSTATIC Test.regex Ljava/util/regex/Pattern;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     LDC "abc123def456"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
    L0:
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
@@ -600,19 +598,16 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     INVOKEVIRTUAL java/util/regex/Matcher.group()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC 1
     INVOKEVIRTUAL java/util/regex/Matcher.group(I)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "digits"
     INVOKEVIRTUAL java/util/regex/Matcher.group(Ljava/lang/String;)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
@@ -642,7 +637,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     INVOKEVIRTUAL java/util/regex/Matcher.group()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 3 max locals 0

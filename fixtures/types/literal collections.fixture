@@ -1,0 +1,483 @@
+const numbers: [0] = [0];
+const flags: [true] = [true];
+const words: ["foo"] = ["foo"];
+const pair: (0, "foo") = (0, "foo");
+print(numbers[0]);
+print(flags[0]);
+print(words[0]);
+print(pair[0]);
+print(pair[1]);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "numbers" (1:7-1:14)
+COLON (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+INTEGER_LITERAL "0" (1:17-1:18)
+RIGHT_BRACKET (1:18-1:19)
+EQUAL (1:20-1:21)
+LEFT_BRACKET (1:22-1:23)
+INTEGER_LITERAL "0" (1:23-1:24)
+RIGHT_BRACKET (1:24-1:25)
+SEMICOLON (1:25-1:26)
+CONST (2:1-2:6)
+IDENTIFIER "flags" (2:7-2:12)
+COLON (2:12-2:13)
+LEFT_BRACKET (2:14-2:15)
+BOOLEAN_LITERAL "true" (2:15-2:19)
+RIGHT_BRACKET (2:19-2:20)
+EQUAL (2:21-2:22)
+LEFT_BRACKET (2:23-2:24)
+BOOLEAN_LITERAL "true" (2:24-2:28)
+RIGHT_BRACKET (2:28-2:29)
+SEMICOLON (2:29-2:30)
+CONST (3:1-3:6)
+IDENTIFIER "words" (3:7-3:12)
+COLON (3:12-3:13)
+LEFT_BRACKET (3:14-3:15)
+STRING_LITERAL "\"foo\"" (3:15-3:20)
+RIGHT_BRACKET (3:20-3:21)
+EQUAL (3:22-3:23)
+LEFT_BRACKET (3:24-3:25)
+STRING_LITERAL "\"foo\"" (3:25-3:30)
+RIGHT_BRACKET (3:30-3:31)
+SEMICOLON (3:31-3:32)
+CONST (4:1-4:6)
+IDENTIFIER "pair" (4:7-4:11)
+COLON (4:11-4:12)
+LEFT_PAREN (4:13-4:14)
+INTEGER_LITERAL "0" (4:14-4:15)
+COMMA (4:15-4:16)
+STRING_LITERAL "\"foo\"" (4:17-4:22)
+RIGHT_PAREN (4:22-4:23)
+EQUAL (4:24-4:25)
+LEFT_PAREN (4:26-4:27)
+INTEGER_LITERAL "0" (4:27-4:28)
+COMMA (4:28-4:29)
+STRING_LITERAL "\"foo\"" (4:30-4:35)
+RIGHT_PAREN (4:35-4:36)
+SEMICOLON (4:36-4:37)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "numbers" (5:7-5:14)
+LEFT_BRACKET (5:14-5:15)
+INTEGER_LITERAL "0" (5:15-5:16)
+RIGHT_BRACKET (5:16-5:17)
+RIGHT_PAREN (5:17-5:18)
+SEMICOLON (5:18-5:19)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "flags" (6:7-6:12)
+LEFT_BRACKET (6:12-6:13)
+INTEGER_LITERAL "0" (6:13-6:14)
+RIGHT_BRACKET (6:14-6:15)
+RIGHT_PAREN (6:15-6:16)
+SEMICOLON (6:16-6:17)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "words" (7:7-7:12)
+LEFT_BRACKET (7:12-7:13)
+INTEGER_LITERAL "0" (7:13-7:14)
+RIGHT_BRACKET (7:14-7:15)
+RIGHT_PAREN (7:15-7:16)
+SEMICOLON (7:16-7:17)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "pair" (8:7-8:11)
+LEFT_BRACKET (8:11-8:12)
+INTEGER_LITERAL "0" (8:12-8:13)
+RIGHT_BRACKET (8:13-8:14)
+RIGHT_PAREN (8:14-8:15)
+SEMICOLON (8:15-8:16)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "pair" (9:7-9:11)
+LEFT_BRACKET (9:11-9:12)
+INTEGER_LITERAL "1" (9:12-9:13)
+RIGHT_BRACKET (9:13-9:14)
+RIGHT_PAREN (9:14-9:15)
+SEMICOLON (9:15-9:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:16
+  (VariableDeclaration
+    range: 1:1-1:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "numbers"
+    )
+    (ArrayTypeNode
+      range: 1:16-1:19
+      (LiteralTypeNode
+        range: 1:17-1:18
+        kind: INT
+        text: "0"
+      )
+    )
+    (ArrayExpression
+      range: 1:22-1:25
+      (LiteralExpression
+        range: 1:23-1:24
+        kind: INT
+        text: "0"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "flags"
+    )
+    (ArrayTypeNode
+      range: 2:14-2:20
+      (LiteralTypeNode
+        range: 2:15-2:19
+        kind: BOOL
+        text: "true"
+      )
+    )
+    (ArrayExpression
+      range: 2:23-2:29
+      (LiteralExpression
+        range: 2:24-2:28
+        kind: BOOL
+        text: "true"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "words"
+    )
+    (ArrayTypeNode
+      range: 3:14-3:21
+      (LiteralTypeNode
+        range: 3:15-3:20
+        kind: STRING
+        text: "\"foo\""
+      )
+    )
+    (ArrayExpression
+      range: 3:24-3:31
+      (LiteralExpression
+        range: 3:25-3:30
+        kind: STRING
+        text: "\"foo\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:11
+      name: "pair"
+    )
+    (TupleTypeNode
+      range: 4:13-4:23
+      (LiteralTypeNode
+        range: 4:14-4:15
+        kind: INT
+        text: "0"
+      )
+      (LiteralTypeNode
+        range: 4:17-4:22
+        kind: STRING
+        text: "\"foo\""
+      )
+    )
+    (TupleExpression
+      range: 4:26-4:36
+      (LiteralExpression
+        range: 4:27-4:28
+        kind: INT
+        text: "0"
+      )
+      (LiteralExpression
+        range: 4:30-4:35
+        kind: STRING
+        text: "\"foo\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:19
+    (CallExpression
+      range: 5:1-5:18
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 5:7-5:17
+        (IdentifierExpression
+          range: 5:7-5:14
+          name: "numbers"
+        )
+        (LiteralExpression
+          range: 5:15-5:16
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:17
+    (CallExpression
+      range: 6:1-6:16
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 6:7-6:15
+        (IdentifierExpression
+          range: 6:7-6:12
+          name: "flags"
+        )
+        (LiteralExpression
+          range: 6:13-6:14
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:17
+    (CallExpression
+      range: 7:1-7:16
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 7:7-7:15
+        (IdentifierExpression
+          range: 7:7-7:12
+          name: "words"
+        )
+        (LiteralExpression
+          range: 7:13-7:14
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:16
+    (CallExpression
+      range: 8:1-8:15
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 8:7-8:14
+        (IdentifierExpression
+          range: 8:7-8:11
+          name: "pair"
+        )
+        (LiteralExpression
+          range: 8:12-8:13
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:16
+    (CallExpression
+      range: 9:1-9:15
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 9:7-9:14
+        (IdentifierExpression
+          range: 9:7-9:11
+          name: "pair"
+        )
+        (LiteralExpression
+          range: 9:12-9:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:22-1:25 -> [0]
+  1:23-1:24 -> i32
+  2:23-2:29 -> [true]
+  2:24-2:28 -> bool
+  3:24-3:31 -> ["foo"]
+  3:25-3:30 -> string
+  4:26-4:36 -> (0, "foo")
+  4:27-4:28 -> i32
+  4:30-4:35 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:18 -> void
+  5:7-5:14 -> [0]
+  5:7-5:17 -> 0
+  5:15-5:16 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:16 -> void
+  6:7-6:12 -> [true]
+  6:7-6:15 -> true
+  6:13-6:14 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:16 -> void
+  7:7-7:12 -> ["foo"]
+  7:7-7:15 -> "foo"
+  7:13-7:14 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:15 -> void
+  8:7-8:11 -> (0, "foo")
+  8:7-8:14 -> 0
+  8:12-8:13 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:15 -> void
+  9:7-9:11 -> (0, "foo")
+  9:7-9:14 -> "foo"
+  9:12-9:13 -> i32
+
+Resolved types:
+  1:16-1:19 -> [0]
+  1:17-1:18 -> 0
+  2:14-2:20 -> [true]
+  2:15-2:19 -> true
+  3:14-3:21 -> ["foo"]
+  3:15-3:20 -> "foo"
+  4:13-4:23 -> (0, "foo")
+  4:14-4:15 -> 0
+  4:17-4:22 -> "foo"
+
+Declarations:
+  1:7-1:14 -> const numbers: [0]
+  2:7-2:12 -> const flags: [true]
+  3:7-3:12 -> const words: ["foo"]
+  4:7-4:11 -> const pair: (0, "foo")
+
+References:
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 1:7-1:14
+  6:1-6:6 -> builtin print
+  6:7-6:12 -> 2:7-2:12
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 3:7-3:12
+  8:1-8:6 -> builtin print
+  8:7-8:11 -> 4:7-4:11
+  9:1-9:6 -> builtin print
+  9:7-9:11 -> 4:7-4:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field numbers Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; flags [PUBLIC, STATIC, FINAL]
+  field words Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 0
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.numbers Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
+    DUP
+    LDC 1
+    NEWARRAY BOOLEAN
+    DUP
+    LDC 0
+    ICONST_1 1
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>([Z)V
+    PUTSTATIC Test.flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "foo"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.words Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "foo"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.numbers Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.get(I)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.words Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    LDC 1
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 6 max locals 0
+
+--- OUTPUT ---
+
+0
+true
+foo
+0
+foo
+

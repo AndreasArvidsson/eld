@@ -466,7 +466,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GOTO L4
    L3:
@@ -489,7 +488,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_3 3
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GOTO L6
    L6:
@@ -505,7 +503,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD 4
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GOTO L8
    L8:

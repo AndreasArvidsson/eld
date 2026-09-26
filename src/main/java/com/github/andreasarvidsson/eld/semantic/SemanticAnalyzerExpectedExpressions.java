@@ -253,9 +253,8 @@ public final class SemanticAnalyzerExpectedExpressions {
                 && expression instanceof TernaryExpression ternary
         ) {
             if (
-                analyzeExpression(
-                    ternary.condition(),
-                    context
+                LiteralType.unwrap(
+                    analyzeExpression(ternary.condition(), context)
                 ) != BuiltinType.BOOL
             ) {
                 throw new SemanticException(

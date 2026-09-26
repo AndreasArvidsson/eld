@@ -196,7 +196,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.values Ljava/util/Map;
     GETSTATIC Test.values Ljava/util/Map;
     INVOKEINTERFACE java/util/Map.keySet()Ljava/util/Set;
-    CHECKCAST java/util/Set
     PUTSTATIC Test.keys Ljava/util/Set;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.keys Ljava/util/Set;

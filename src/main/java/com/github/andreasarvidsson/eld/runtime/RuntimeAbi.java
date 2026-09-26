@@ -5,6 +5,7 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 import java.lang.classfile.TypeKind;
 import com.github.andreasarvidsson.eld.semantic.BuiltinType;
+import com.github.andreasarvidsson.eld.semantic.LiteralType;
 import com.github.andreasarvidsson.eld.semantic.Type;
 
 final public class RuntimeAbi {
@@ -83,7 +84,7 @@ final public class RuntimeAbi {
     }
 
     public static ArrayKind array(final Type element) {
-        if (!(element instanceof BuiltinType builtin)) {
+        if (!(LiteralType.unwrap(element) instanceof BuiltinType builtin)) {
             return ArrayKind.OBJECT;
         }
         return switch (builtin) {

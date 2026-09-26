@@ -156,6 +156,9 @@ public final class JavaTypes {
     }
 
     public static @Nullable Class<?> boxedClass(Type type) {
+        if (type instanceof LiteralType literal) {
+            type = literal.valueType();
+        }
         if (!(type instanceof BuiltinType builtin)) {
             return null;
         }

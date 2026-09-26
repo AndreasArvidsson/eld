@@ -192,16 +192,18 @@ protected const bar = 0;
   0xCAFE_BABE hexadecimal with separators
   0b1010 binary
   0b1111_0000 binary with separators
-- Multiline string as separate syntax. Use """ """
+- Multiline string as separate syntax.
+- - == instead of .equals()
+- add enum
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?
-- Value literals as type?
-  const value: "foo" | false | 0;
 - Overloaded functions
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
 - abstract classes?
 - String std lib
+- assert identifier case
 - Collections std lib
+- create literal types from collection elements
 - Export & import
 - prohibit syntax like `if (value != null && (value = null) == null)`. Make assignment a statement instead of an expression.
 - Vscode extension with syntax highlighting

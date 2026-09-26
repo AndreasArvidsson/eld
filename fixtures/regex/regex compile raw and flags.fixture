@@ -540,31 +540,26 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     LDC "\\b[A-Z]\\w+\\d{2}\\b"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     PUTSTATIC Test.regex Ljava/util/regex/Pattern;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     INVOKEVIRTUAL java/util/regex/Pattern.pattern()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     LDC "Item42"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     LDC "item42"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     LDC "abc"
     LDC 2
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;I)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     PUTSTATIC Test.insensitive Ljava/util/regex/Pattern;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.insensitive Ljava/util/regex/Pattern;
@@ -574,7 +569,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.insensitive Ljava/util/regex/Pattern;
     LDC "ABC"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;

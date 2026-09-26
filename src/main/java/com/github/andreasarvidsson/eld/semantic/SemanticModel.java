@@ -504,6 +504,9 @@ public final class SemanticModel {
         if (source.equals(target)) {
             return true;
         }
+        if (source instanceof LiteralType literal) {
+            return isSubtype(literal.valueType(), target);
+        }
         if (target instanceof ConstType constant) {
             return isSubtype(ConstType.unwrap(source), constant.type());
         }

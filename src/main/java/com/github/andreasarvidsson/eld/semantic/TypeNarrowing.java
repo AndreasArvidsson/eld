@@ -253,6 +253,15 @@ final class TypeNarrowing {
                         members.add(narrowed);
                     }
                 }
+                else if (
+                    member instanceof BuiltinType source
+                        && LiteralType.unwrap(type) instanceof BuiltinType match
+                        && (source.isInteger() || source.isFloating())
+                        && (match.isInteger() || match.isFloating())
+                        && !members.contains(member)
+                ) {
+                    members.add(member);
+                }
             }
         }
         if (members.isEmpty()) {

@@ -1,0 +1,590 @@
+func sideEffect() bool {
+    print("evaluated");
+    return true;
+}
+
+const word: "foo" = "foo";
+const number: 1 = 1;
+const flag: true = true;
+if (flag) {
+    print(word.toString());
+}
+print(word + "bar");
+print(word == "foo");
+print(number + 2);
+print(number == 1);
+print(!flag);
+print(flag && false);
+print(sideEffect() && false);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "sideEffect" (1:6-1:16)
+LEFT_PAREN (1:16-1:17)
+RIGHT_PAREN (1:17-1:18)
+IDENTIFIER "bool" (1:19-1:23)
+LEFT_BRACE (1:24-1:25)
+IDENTIFIER "print" (2:5-2:10)
+LEFT_PAREN (2:10-2:11)
+STRING_LITERAL "\"evaluated\"" (2:11-2:22)
+RIGHT_PAREN (2:22-2:23)
+SEMICOLON (2:23-2:24)
+RETURN (3:5-3:11)
+BOOLEAN_LITERAL "true" (3:12-3:16)
+SEMICOLON (3:16-3:17)
+RIGHT_BRACE (4:1-4:2)
+CONST (6:1-6:6)
+IDENTIFIER "word" (6:7-6:11)
+COLON (6:11-6:12)
+STRING_LITERAL "\"foo\"" (6:13-6:18)
+EQUAL (6:19-6:20)
+STRING_LITERAL "\"foo\"" (6:21-6:26)
+SEMICOLON (6:26-6:27)
+CONST (7:1-7:6)
+IDENTIFIER "number" (7:7-7:13)
+COLON (7:13-7:14)
+INTEGER_LITERAL "1" (7:15-7:16)
+EQUAL (7:17-7:18)
+INTEGER_LITERAL "1" (7:19-7:20)
+SEMICOLON (7:20-7:21)
+CONST (8:1-8:6)
+IDENTIFIER "flag" (8:7-8:11)
+COLON (8:11-8:12)
+BOOLEAN_LITERAL "true" (8:13-8:17)
+EQUAL (8:18-8:19)
+BOOLEAN_LITERAL "true" (8:20-8:24)
+SEMICOLON (8:24-8:25)
+IF (9:1-9:3)
+LEFT_PAREN (9:4-9:5)
+IDENTIFIER "flag" (9:5-9:9)
+RIGHT_PAREN (9:9-9:10)
+LEFT_BRACE (9:11-9:12)
+IDENTIFIER "print" (10:5-10:10)
+LEFT_PAREN (10:10-10:11)
+IDENTIFIER "word" (10:11-10:15)
+DOT (10:15-10:16)
+IDENTIFIER "toString" (10:16-10:24)
+LEFT_PAREN (10:24-10:25)
+RIGHT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+SEMICOLON (10:27-10:28)
+RIGHT_BRACE (11:1-11:2)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "word" (12:7-12:11)
+PLUS (12:12-12:13)
+STRING_LITERAL "\"bar\"" (12:14-12:19)
+RIGHT_PAREN (12:19-12:20)
+SEMICOLON (12:20-12:21)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "word" (13:7-13:11)
+EQUAL_EQUAL (13:12-13:14)
+STRING_LITERAL "\"foo\"" (13:15-13:20)
+RIGHT_PAREN (13:20-13:21)
+SEMICOLON (13:21-13:22)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "number" (14:7-14:13)
+PLUS (14:14-14:15)
+INTEGER_LITERAL "2" (14:16-14:17)
+RIGHT_PAREN (14:17-14:18)
+SEMICOLON (14:18-14:19)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "number" (15:7-15:13)
+EQUAL_EQUAL (15:14-15:16)
+INTEGER_LITERAL "1" (15:17-15:18)
+RIGHT_PAREN (15:18-15:19)
+SEMICOLON (15:19-15:20)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+BANG (16:7-16:8)
+IDENTIFIER "flag" (16:8-16:12)
+RIGHT_PAREN (16:12-16:13)
+SEMICOLON (16:13-16:14)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "flag" (17:7-17:11)
+AND (17:12-17:14)
+BOOLEAN_LITERAL "false" (17:15-17:20)
+RIGHT_PAREN (17:20-17:21)
+SEMICOLON (17:21-17:22)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "sideEffect" (18:7-18:17)
+LEFT_PAREN (18:17-18:18)
+RIGHT_PAREN (18:18-18:19)
+AND (18:20-18:22)
+BOOLEAN_LITERAL "false" (18:23-18:28)
+RIGHT_PAREN (18:28-18:29)
+SEMICOLON (18:29-18:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-18:30
+  (FunctionDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:6-1:16
+      name: "sideEffect"
+    )
+    (NamedTypeNode
+      range: 1:19-1:23
+      name: "bool"
+    )
+    (BlockStatement
+      range: 1:24-4:2
+      (ExpressionStatement
+        range: 2:5-2:24
+        (CallExpression
+          range: 2:5-2:23
+          (IdentifierExpression
+            range: 2:5-2:10
+            name: "print"
+          )
+          (LiteralExpression
+            range: 2:11-2:22
+            kind: STRING
+            text: "\"evaluated\""
+          )
+        )
+      )
+      (ReturnStatement
+        range: 3:5-3:17
+        (LiteralExpression
+          range: 3:12-3:16
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:11
+      name: "word"
+    )
+    (LiteralTypeNode
+      range: 6:13-6:18
+      kind: STRING
+      text: "\"foo\""
+    )
+    (LiteralExpression
+      range: 6:21-6:26
+      kind: STRING
+      text: "\"foo\""
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:13
+      name: "number"
+    )
+    (LiteralTypeNode
+      range: 7:15-7:16
+      kind: INT
+      text: "1"
+    )
+    (LiteralExpression
+      range: 7:19-7:20
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:11
+      name: "flag"
+    )
+    (LiteralTypeNode
+      range: 8:13-8:17
+      kind: BOOL
+      text: "true"
+    )
+    (LiteralExpression
+      range: 8:20-8:24
+      kind: BOOL
+      text: "true"
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-11:2
+    (IfExpression
+      range: 9:1-11:2
+      (IdentifierExpression
+        range: 9:5-9:9
+        name: "flag"
+      )
+      (BlockStatement
+        range: 9:11-11:2
+        (ExpressionStatement
+          range: 10:5-10:28
+          (CallExpression
+            range: 10:5-10:27
+            (IdentifierExpression
+              range: 10:5-10:10
+              name: "print"
+            )
+            (CallExpression
+              range: 10:11-10:26
+              (MemberExpression
+                range: 10:11-10:24
+                (IdentifierExpression
+                  range: 10:11-10:15
+                  name: "word"
+                )
+                (IdentifierExpression
+                  range: 10:16-10:24
+                  name: "toString"
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:21
+    (CallExpression
+      range: 12:1-12:20
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 12:7-12:19
+        (IdentifierExpression
+          range: 12:7-12:11
+          name: "word"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 12:14-12:19
+          kind: STRING
+          text: "\"bar\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:22
+    (CallExpression
+      range: 13:1-13:21
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:20
+        (IdentifierExpression
+          range: 13:7-13:11
+          name: "word"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 13:15-13:20
+          kind: STRING
+          text: "\"foo\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:19
+    (CallExpression
+      range: 14:1-14:18
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:17
+        (IdentifierExpression
+          range: 14:7-14:13
+          name: "number"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 14:16-14:17
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:20
+    (CallExpression
+      range: 15:1-15:19
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 15:7-15:18
+        (IdentifierExpression
+          range: 15:7-15:13
+          name: "number"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 15:17-15:18
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:14
+    (CallExpression
+      range: 16:1-16:13
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (UnaryExpression
+        range: 16:7-16:12
+        operator: NOT
+        (IdentifierExpression
+          range: 16:8-16:12
+          name: "flag"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:22
+    (CallExpression
+      range: 17:1-17:21
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 17:7-17:20
+        (IdentifierExpression
+          range: 17:7-17:11
+          name: "flag"
+        )
+        operator: AND
+        (LiteralExpression
+          range: 17:15-17:20
+          kind: BOOL
+          text: "false"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:30
+    (CallExpression
+      range: 18:1-18:29
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 18:7-18:28
+        (CallExpression
+          range: 18:7-18:19
+          (IdentifierExpression
+            range: 18:7-18:17
+            name: "sideEffect"
+          )
+        )
+        operator: AND
+        (LiteralExpression
+          range: 18:23-18:28
+          kind: BOOL
+          text: "false"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:5-2:10 -> (any) => void
+  2:5-2:23 -> void
+  2:11-2:22 -> string
+  3:12-3:16 -> bool
+  6:21-6:26 -> string
+  7:19-7:20 -> i32
+  8:20-8:24 -> bool
+  9:1-11:2 -> void
+  9:5-9:9 -> true
+  10:5-10:10 -> (any) => void
+  10:5-10:27 -> void
+  10:11-10:15 -> "foo"
+  10:11-10:24 -> () => string
+  10:11-10:26 -> string
+  10:16-10:24 -> () => string
+  12:1-12:6 -> (any) => void
+  12:1-12:20 -> void
+  12:7-12:11 -> "foo"
+  12:7-12:19 -> string
+  12:14-12:19 -> string
+  13:1-13:6 -> (any) => void
+  13:1-13:21 -> void
+  13:7-13:11 -> "foo"
+  13:7-13:20 -> bool
+  13:15-13:20 -> string
+  14:1-14:6 -> (any) => void
+  14:1-14:18 -> void
+  14:7-14:13 -> 1
+  14:7-14:17 -> i32
+  14:16-14:17 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:19 -> void
+  15:7-15:13 -> 1
+  15:7-15:18 -> bool
+  15:17-15:18 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:13 -> void
+  16:7-16:12 -> bool
+  16:8-16:12 -> true
+  17:1-17:6 -> (any) => void
+  17:1-17:21 -> void
+  17:7-17:11 -> true
+  17:7-17:20 -> bool
+  17:15-17:20 -> bool
+  18:1-18:6 -> (any) => void
+  18:1-18:29 -> void
+  18:7-18:17 -> () => bool
+  18:7-18:19 -> bool
+  18:7-18:28 -> bool
+  18:23-18:28 -> bool
+
+Resolved types:
+  1:19-1:23 -> bool
+  6:13-6:18 -> "foo"
+  7:15-7:16 -> 1
+  8:13-8:17 -> true
+
+Conversions:
+  14:7-14:13 -> 1 -> i32
+  15:7-15:13 -> 1 -> i32
+  16:8-16:12 -> true -> bool
+
+Declarations:
+  1:6-1:16 -> func sideEffect() => bool
+  6:7-6:11 -> const word: "foo"
+  7:7-7:13 -> const number: 1
+  8:7-8:11 -> const flag: true
+
+References:
+  2:5-2:10 -> builtin print
+  9:5-9:9 -> 8:7-8:11
+  10:5-10:10 -> builtin print
+  10:11-10:15 -> 6:7-6:11
+  10:16-10:24 -> string.toString(): string
+  12:1-12:6 -> builtin print
+  12:7-12:11 -> 6:7-6:11
+  13:1-13:6 -> builtin print
+  13:7-13:11 -> 6:7-6:11
+  14:1-14:6 -> builtin print
+  14:7-14:13 -> 7:7-7:13
+  15:1-15:6 -> builtin print
+  15:7-15:13 -> 7:7-7:13
+  16:1-16:6 -> builtin print
+  16:8-16:12 -> 8:7-8:11
+  17:1-17:6 -> builtin print
+  17:7-17:11 -> 8:7-8:11
+  18:1-18:6 -> builtin print
+  18:7-18:17 -> 1:6-1:16
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field word Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "foo"
+  field number I flags [PUBLIC, STATIC, FINAL] = 1
+  field flag Z flags [PUBLIC, STATIC, FINAL] = 1
+  method sideEffect()Z flags [PUBLIC, STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "evaluated"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    ICONST_1 1
+    IRETURN
+    max stack 2 max locals 0
+  method <clinit>()V flags [STATIC]
+    GETSTATIC Test.flag Z
+    IFEQ L0
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.word Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L0
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.word Ljava/lang/String;
+    LDC "bar"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.word Ljava/lang/String;
+    LDC "foo"
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.number I
+    LDC 2
+    IADD
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.number I
+    LDC 1
+    IF_ICMPEQ L1
+    ICONST_0 0
+    GOTO L2
+   L1:
+    ICONST_1 1
+   L2:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.flag Z
+    IFEQ L3
+    ICONST_0 0
+    GOTO L4
+   L3:
+    ICONST_1 1
+   L4:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.flag Z
+    POP
+    ICONST_0 0
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test.sideEffect()Z
+    POP
+    ICONST_0 0
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+foo
+foobar
+true
+3
+true
+false
+false
+evaluated
+false
+

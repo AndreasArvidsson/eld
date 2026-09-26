@@ -1,0 +1,836 @@
+const choice: 0 | 1 = 1;
+switch (choice) {
+    case 0 { print("zero"); }
+    case 1 { print("one"); }
+}
+const only: 0 = 0;
+switch (only) {
+    case 0 { print("only zero"); }
+}
+const status: "success" | "error" = "error";
+switch (status) {
+    case "success" { print("ok"); }
+    case "error" { print("failed"); }
+}
+const flag: true = true;
+switch (flag) {
+    case true { print("true"); }
+}
+const either: true | false = false;
+switch (either) {
+    case false { print("false"); }
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "choice" (1:7-1:13)
+COLON (1:13-1:14)
+INTEGER_LITERAL "0" (1:15-1:16)
+PIPE (1:17-1:18)
+INTEGER_LITERAL "1" (1:19-1:20)
+EQUAL (1:21-1:22)
+INTEGER_LITERAL "1" (1:23-1:24)
+SEMICOLON (1:24-1:25)
+SWITCH (2:1-2:7)
+LEFT_PAREN (2:8-2:9)
+IDENTIFIER "choice" (2:9-2:15)
+RIGHT_PAREN (2:15-2:16)
+LEFT_BRACE (2:17-2:18)
+CASE (3:5-3:9)
+INTEGER_LITERAL "0" (3:10-3:11)
+LEFT_BRACE (3:12-3:13)
+IDENTIFIER "print" (3:14-3:19)
+LEFT_PAREN (3:19-3:20)
+STRING_LITERAL "\"zero\"" (3:20-3:26)
+RIGHT_PAREN (3:26-3:27)
+SEMICOLON (3:27-3:28)
+RIGHT_BRACE (3:29-3:30)
+CASE (4:5-4:9)
+INTEGER_LITERAL "1" (4:10-4:11)
+LEFT_BRACE (4:12-4:13)
+IDENTIFIER "print" (4:14-4:19)
+LEFT_PAREN (4:19-4:20)
+STRING_LITERAL "\"one\"" (4:20-4:25)
+RIGHT_PAREN (4:25-4:26)
+SEMICOLON (4:26-4:27)
+RIGHT_BRACE (4:28-4:29)
+RIGHT_BRACE (5:1-5:2)
+CONST (6:1-6:6)
+IDENTIFIER "only" (6:7-6:11)
+COLON (6:11-6:12)
+INTEGER_LITERAL "0" (6:13-6:14)
+EQUAL (6:15-6:16)
+INTEGER_LITERAL "0" (6:17-6:18)
+SEMICOLON (6:18-6:19)
+SWITCH (7:1-7:7)
+LEFT_PAREN (7:8-7:9)
+IDENTIFIER "only" (7:9-7:13)
+RIGHT_PAREN (7:13-7:14)
+LEFT_BRACE (7:15-7:16)
+CASE (8:5-8:9)
+INTEGER_LITERAL "0" (8:10-8:11)
+LEFT_BRACE (8:12-8:13)
+IDENTIFIER "print" (8:14-8:19)
+LEFT_PAREN (8:19-8:20)
+STRING_LITERAL "\"only zero\"" (8:20-8:31)
+RIGHT_PAREN (8:31-8:32)
+SEMICOLON (8:32-8:33)
+RIGHT_BRACE (8:34-8:35)
+RIGHT_BRACE (9:1-9:2)
+CONST (10:1-10:6)
+IDENTIFIER "status" (10:7-10:13)
+COLON (10:13-10:14)
+STRING_LITERAL "\"success\"" (10:15-10:24)
+PIPE (10:25-10:26)
+STRING_LITERAL "\"error\"" (10:27-10:34)
+EQUAL (10:35-10:36)
+STRING_LITERAL "\"error\"" (10:37-10:44)
+SEMICOLON (10:44-10:45)
+SWITCH (11:1-11:7)
+LEFT_PAREN (11:8-11:9)
+IDENTIFIER "status" (11:9-11:15)
+RIGHT_PAREN (11:15-11:16)
+LEFT_BRACE (11:17-11:18)
+CASE (12:5-12:9)
+STRING_LITERAL "\"success\"" (12:10-12:19)
+LEFT_BRACE (12:20-12:21)
+IDENTIFIER "print" (12:22-12:27)
+LEFT_PAREN (12:27-12:28)
+STRING_LITERAL "\"ok\"" (12:28-12:32)
+RIGHT_PAREN (12:32-12:33)
+SEMICOLON (12:33-12:34)
+RIGHT_BRACE (12:35-12:36)
+CASE (13:5-13:9)
+STRING_LITERAL "\"error\"" (13:10-13:17)
+LEFT_BRACE (13:18-13:19)
+IDENTIFIER "print" (13:20-13:25)
+LEFT_PAREN (13:25-13:26)
+STRING_LITERAL "\"failed\"" (13:26-13:34)
+RIGHT_PAREN (13:34-13:35)
+SEMICOLON (13:35-13:36)
+RIGHT_BRACE (13:37-13:38)
+RIGHT_BRACE (14:1-14:2)
+CONST (15:1-15:6)
+IDENTIFIER "flag" (15:7-15:11)
+COLON (15:11-15:12)
+BOOLEAN_LITERAL "true" (15:13-15:17)
+EQUAL (15:18-15:19)
+BOOLEAN_LITERAL "true" (15:20-15:24)
+SEMICOLON (15:24-15:25)
+SWITCH (16:1-16:7)
+LEFT_PAREN (16:8-16:9)
+IDENTIFIER "flag" (16:9-16:13)
+RIGHT_PAREN (16:13-16:14)
+LEFT_BRACE (16:15-16:16)
+CASE (17:5-17:9)
+BOOLEAN_LITERAL "true" (17:10-17:14)
+LEFT_BRACE (17:15-17:16)
+IDENTIFIER "print" (17:17-17:22)
+LEFT_PAREN (17:22-17:23)
+STRING_LITERAL "\"true\"" (17:23-17:29)
+RIGHT_PAREN (17:29-17:30)
+SEMICOLON (17:30-17:31)
+RIGHT_BRACE (17:32-17:33)
+RIGHT_BRACE (18:1-18:2)
+CONST (19:1-19:6)
+IDENTIFIER "either" (19:7-19:13)
+COLON (19:13-19:14)
+BOOLEAN_LITERAL "true" (19:15-19:19)
+PIPE (19:20-19:21)
+BOOLEAN_LITERAL "false" (19:22-19:27)
+EQUAL (19:28-19:29)
+BOOLEAN_LITERAL "false" (19:30-19:35)
+SEMICOLON (19:35-19:36)
+SWITCH (20:1-20:7)
+LEFT_PAREN (20:8-20:9)
+IDENTIFIER "either" (20:9-20:15)
+RIGHT_PAREN (20:15-20:16)
+LEFT_BRACE (20:17-20:18)
+CASE (21:5-21:9)
+BOOLEAN_LITERAL "false" (21:10-21:15)
+LEFT_BRACE (21:16-21:17)
+IDENTIFIER "print" (21:18-21:23)
+LEFT_PAREN (21:23-21:24)
+STRING_LITERAL "\"false\"" (21:24-21:31)
+RIGHT_PAREN (21:31-21:32)
+SEMICOLON (21:32-21:33)
+RIGHT_BRACE (21:34-21:35)
+RIGHT_BRACE (22:1-22:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-22:2
+  (VariableDeclaration
+    range: 1:1-1:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "choice"
+    )
+    (UnionTypeNode
+      range: 1:15-1:20
+      (LiteralTypeNode
+        range: 1:15-1:16
+        kind: INT
+        text: "0"
+      )
+      (LiteralTypeNode
+        range: 1:19-1:20
+        kind: INT
+        text: "1"
+      )
+    )
+    (LiteralExpression
+      range: 1:23-1:24
+      kind: INT
+      text: "1"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-5:2
+    (SwitchExpression
+      range: 2:1-5:2
+      (IdentifierExpression
+        range: 2:9-2:15
+        name: "choice"
+      )
+      (SwitchBranch
+        range: 3:5-3:30
+        (LiteralExpression
+          range: 3:10-3:11
+          kind: INT
+          text: "0"
+        )
+        (SwitchBranchBlockBody
+          range: 3:12-3:30
+          (BlockStatement
+            range: 3:12-3:30
+            (ExpressionStatement
+              range: 3:14-3:28
+              (CallExpression
+                range: 3:14-3:27
+                (IdentifierExpression
+                  range: 3:14-3:19
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 3:20-3:26
+                  kind: STRING
+                  text: "\"zero\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 4:5-4:29
+        (LiteralExpression
+          range: 4:10-4:11
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchBlockBody
+          range: 4:12-4:29
+          (BlockStatement
+            range: 4:12-4:29
+            (ExpressionStatement
+              range: 4:14-4:27
+              (CallExpression
+                range: 4:14-4:26
+                (IdentifierExpression
+                  range: 4:14-4:19
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 4:20-4:25
+                  kind: STRING
+                  text: "\"one\""
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:11
+      name: "only"
+    )
+    (LiteralTypeNode
+      range: 6:13-6:14
+      kind: INT
+      text: "0"
+    )
+    (LiteralExpression
+      range: 6:17-6:18
+      kind: INT
+      text: "0"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-9:2
+    (SwitchExpression
+      range: 7:1-9:2
+      (IdentifierExpression
+        range: 7:9-7:13
+        name: "only"
+      )
+      (SwitchBranch
+        range: 8:5-8:35
+        (LiteralExpression
+          range: 8:10-8:11
+          kind: INT
+          text: "0"
+        )
+        (SwitchBranchBlockBody
+          range: 8:12-8:35
+          (BlockStatement
+            range: 8:12-8:35
+            (ExpressionStatement
+              range: 8:14-8:33
+              (CallExpression
+                range: 8:14-8:32
+                (IdentifierExpression
+                  range: 8:14-8:19
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 8:20-8:31
+                  kind: STRING
+                  text: "\"only zero\""
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "status"
+    )
+    (UnionTypeNode
+      range: 10:15-10:34
+      (LiteralTypeNode
+        range: 10:15-10:24
+        kind: STRING
+        text: "\"success\""
+      )
+      (LiteralTypeNode
+        range: 10:27-10:34
+        kind: STRING
+        text: "\"error\""
+      )
+    )
+    (LiteralExpression
+      range: 10:37-10:44
+      kind: STRING
+      text: "\"error\""
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-14:2
+    (SwitchExpression
+      range: 11:1-14:2
+      (IdentifierExpression
+        range: 11:9-11:15
+        name: "status"
+      )
+      (SwitchBranch
+        range: 12:5-12:36
+        (LiteralExpression
+          range: 12:10-12:19
+          kind: STRING
+          text: "\"success\""
+        )
+        (SwitchBranchBlockBody
+          range: 12:20-12:36
+          (BlockStatement
+            range: 12:20-12:36
+            (ExpressionStatement
+              range: 12:22-12:34
+              (CallExpression
+                range: 12:22-12:33
+                (IdentifierExpression
+                  range: 12:22-12:27
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 12:28-12:32
+                  kind: STRING
+                  text: "\"ok\""
+                )
+              )
+            )
+          )
+        )
+      )
+      (SwitchBranch
+        range: 13:5-13:38
+        (LiteralExpression
+          range: 13:10-13:17
+          kind: STRING
+          text: "\"error\""
+        )
+        (SwitchBranchBlockBody
+          range: 13:18-13:38
+          (BlockStatement
+            range: 13:18-13:38
+            (ExpressionStatement
+              range: 13:20-13:36
+              (CallExpression
+                range: 13:20-13:35
+                (IdentifierExpression
+                  range: 13:20-13:25
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 13:26-13:34
+                  kind: STRING
+                  text: "\"failed\""
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:11
+      name: "flag"
+    )
+    (LiteralTypeNode
+      range: 15:13-15:17
+      kind: BOOL
+      text: "true"
+    )
+    (LiteralExpression
+      range: 15:20-15:24
+      kind: BOOL
+      text: "true"
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-18:2
+    (SwitchExpression
+      range: 16:1-18:2
+      (IdentifierExpression
+        range: 16:9-16:13
+        name: "flag"
+      )
+      (SwitchBranch
+        range: 17:5-17:33
+        (LiteralExpression
+          range: 17:10-17:14
+          kind: BOOL
+          text: "true"
+        )
+        (SwitchBranchBlockBody
+          range: 17:15-17:33
+          (BlockStatement
+            range: 17:15-17:33
+            (ExpressionStatement
+              range: 17:17-17:31
+              (CallExpression
+                range: 17:17-17:30
+                (IdentifierExpression
+                  range: 17:17-17:22
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 17:23-17:29
+                  kind: STRING
+                  text: "\"true\""
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:13
+      name: "either"
+    )
+    (UnionTypeNode
+      range: 19:15-19:27
+      (LiteralTypeNode
+        range: 19:15-19:19
+        kind: BOOL
+        text: "true"
+      )
+      (LiteralTypeNode
+        range: 19:22-19:27
+        kind: BOOL
+        text: "false"
+      )
+    )
+    (LiteralExpression
+      range: 19:30-19:35
+      kind: BOOL
+      text: "false"
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-22:2
+    (SwitchExpression
+      range: 20:1-22:2
+      (IdentifierExpression
+        range: 20:9-20:15
+        name: "either"
+      )
+      (SwitchBranch
+        range: 21:5-21:35
+        (LiteralExpression
+          range: 21:10-21:15
+          kind: BOOL
+          text: "false"
+        )
+        (SwitchBranchBlockBody
+          range: 21:16-21:35
+          (BlockStatement
+            range: 21:16-21:35
+            (ExpressionStatement
+              range: 21:18-21:33
+              (CallExpression
+                range: 21:18-21:32
+                (IdentifierExpression
+                  range: 21:18-21:23
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 21:24-21:31
+                  kind: STRING
+                  text: "\"false\""
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:23-1:24 -> i32
+  2:1-5:2 -> void
+  2:9-2:15 -> 0 | 1
+  3:10-3:11 -> i32
+  3:14-3:19 -> (any) => void
+  3:14-3:27 -> void
+  3:20-3:26 -> string
+  4:10-4:11 -> i32
+  4:14-4:19 -> (any) => void
+  4:14-4:26 -> void
+  4:20-4:25 -> string
+  6:17-6:18 -> i32
+  7:1-9:2 -> void
+  7:9-7:13 -> 0
+  8:10-8:11 -> i32
+  8:14-8:19 -> (any) => void
+  8:14-8:32 -> void
+  8:20-8:31 -> string
+  10:37-10:44 -> string
+  11:1-14:2 -> void
+  11:9-11:15 -> "success" | "error"
+  12:10-12:19 -> string
+  12:22-12:27 -> (any) => void
+  12:22-12:33 -> void
+  12:28-12:32 -> string
+  13:10-13:17 -> string
+  13:20-13:25 -> (any) => void
+  13:20-13:35 -> void
+  13:26-13:34 -> string
+  15:20-15:24 -> bool
+  16:1-18:2 -> void
+  16:9-16:13 -> true
+  17:10-17:14 -> bool
+  17:17-17:22 -> (any) => void
+  17:17-17:30 -> void
+  17:23-17:29 -> string
+  19:30-19:35 -> bool
+  20:1-22:2 -> void
+  20:9-20:15 -> bool
+  21:10-21:15 -> bool
+  21:18-21:23 -> (any) => void
+  21:18-21:32 -> void
+  21:24-21:31 -> string
+
+Resolved types:
+  1:15-1:16 -> 0
+  1:15-1:20 -> 0 | 1
+  1:19-1:20 -> 1
+  6:13-6:14 -> 0
+  10:15-10:24 -> "success"
+  10:15-10:34 -> "success" | "error"
+  10:27-10:34 -> "error"
+  15:13-15:17 -> true
+  19:15-19:19 -> true
+  19:15-19:27 -> bool
+  19:22-19:27 -> false
+
+Conversions:
+  1:23-1:24 -> i32 -> 1 -> 0 | 1
+  3:10-3:11 -> i32 -> 0 -> 0 | 1
+  4:10-4:11 -> i32 -> 1 -> 0 | 1
+  10:37-10:44 -> string -> "error" -> "success" | "error"
+  12:10-12:19 -> string -> "success" -> "success" | "error"
+  13:10-13:17 -> string -> "error" -> "success" | "error"
+
+Declarations:
+  1:7-1:13 -> const choice: 0 | 1
+  6:7-6:11 -> const only: 0
+  10:7-10:13 -> const status: "success" | "error"
+  15:7-15:11 -> const flag: true
+  19:7-19:13 -> const either: bool
+
+References:
+  2:9-2:15 -> 1:7-1:13
+  3:14-3:19 -> builtin print
+  4:14-4:19 -> builtin print
+  7:9-7:13 -> 6:7-6:11
+  8:14-8:19 -> builtin print
+  11:9-11:15 -> 10:7-10:13
+  12:22-12:27 -> builtin print
+  13:20-13:25 -> builtin print
+  16:9-16:13 -> 15:7-15:11
+  17:17-17:22 -> builtin print
+  20:9-20:15 -> 19:7-19:13
+  21:18-21:23 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field choice Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field only I flags [PUBLIC, STATIC, FINAL] = 0
+  field status Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field flag Z flags [PUBLIC, STATIC, FINAL] = 1
+  field either Z flags [PUBLIC, STATIC, FINAL] = 0
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.choice Ljava/lang/Object;
+    GETSTATIC Test.choice Ljava/lang/Object;
+    ASTORE_0 0
+    ALOAD_0 0
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE_1 1
+    ASTORE_2 2
+    ALOAD_2 2
+    INSTANCEOF java/lang/Number
+    IFEQ L1
+    ALOAD_1 1
+    INSTANCEOF java/lang/Number
+    IFEQ L1
+    ALOAD_2 2
+    INSTANCEOF java/lang/Float
+    IFNE L0
+    ALOAD_2 2
+    INSTANCEOF java/lang/Double
+    IFNE L0
+    ALOAD_1 1
+    INSTANCEOF java/lang/Float
+    IFNE L0
+    ALOAD_1 1
+    INSTANCEOF java/lang/Double
+    IFNE L0
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD_1 1
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L2
+    GOTO L3
+   L0:
+    ALOAD_2 2
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD_1 1
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L2
+    GOTO L3
+   L1:
+    ALOAD_2 2
+    ALOAD_1 1
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L4
+   L2:
+    ICONST_1 1
+    GOTO L4
+   L3:
+    ICONST_0 0
+   L4:
+    IFNE L5
+    GOTO L6
+   L5:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L13
+   L6:
+    ALOAD_0 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    ASTORE_3 3
+    ASTORE 4
+    ALOAD 4
+    INSTANCEOF java/lang/Number
+    IFEQ L8
+    ALOAD_3 3
+    INSTANCEOF java/lang/Number
+    IFEQ L8
+    ALOAD 4
+    INSTANCEOF java/lang/Float
+    IFNE L7
+    ALOAD 4
+    INSTANCEOF java/lang/Double
+    IFNE L7
+    ALOAD_3 3
+    INSTANCEOF java/lang/Float
+    IFNE L7
+    ALOAD_3 3
+    INSTANCEOF java/lang/Double
+    IFNE L7
+    ALOAD 4
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    ALOAD_3 3
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.longValue()J
+    LCMP
+    IFEQ L9
+    GOTO L10
+   L7:
+    ALOAD 4
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    ALOAD_3 3
+    CHECKCAST java/lang/Number
+    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    DCMPL
+    IFEQ L9
+    GOTO L10
+   L8:
+    ALOAD 4
+    ALOAD_3 3
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    GOTO L11
+   L9:
+    ICONST_1 1
+    GOTO L11
+   L10:
+    ICONST_0 0
+   L11:
+    IFNE L12
+    GOTO L13
+   L12:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "one"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L13
+   L13:
+    GETSTATIC Test.only I
+    ISTORE 5
+    ILOAD 5
+    LDC 0
+    IF_ICMPEQ L14
+    GOTO L15
+   L14:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "only zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L15
+   L15:
+    LDC "error"
+    PUTSTATIC Test.status Ljava/lang/Object;
+    GETSTATIC Test.status Ljava/lang/Object;
+    ASTORE 6
+    ALOAD 6
+    LDC "success"
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L16
+    GOTO L17
+   L16:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "ok"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L19
+   L17:
+    ALOAD 6
+    LDC "error"
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNE L18
+    GOTO L19
+   L18:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "failed"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L19
+   L19:
+    GETSTATIC Test.flag Z
+    ISTORE 7
+    ILOAD 7
+    ICONST_1 1
+    IF_ICMPEQ L20
+    GOTO L21
+   L20:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "true"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L21
+   L21:
+    GETSTATIC Test.either Z
+    ISTORE 8
+    ILOAD 8
+    ICONST_0 0
+    IF_ICMPEQ L22
+    GOTO L23
+   L22:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "false"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L23
+   L23:
+    RETURN
+    max stack 4 max locals 9
+
+--- OUTPUT ---
+
+one
+only zero
+failed
+true
+false
+

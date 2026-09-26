@@ -325,10 +325,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     LDC "(x)"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     LDC "x"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
@@ -338,7 +336,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     GETSTATIC Test.index B
     INVOKEVIRTUAL java/util/regex/Matcher.group(I)Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;

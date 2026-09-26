@@ -504,14 +504,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method compile(Ljava/lang/String;)Ljava/util/regex/Pattern; flags [PUBLIC, STATIC]
     ALOAD_0 0
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     ARETURN
     max stack 1 max locals 1
   method match(Ljava/util/regex/Pattern;Ljava/lang/String;)Ljava/util/regex/Matcher; flags [PUBLIC, STATIC]
     ALOAD_0 0
     ALOAD_1 1
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     ARETURN
     max stack 2 max locals 2
   method <clinit>()V flags [STATIC]
@@ -541,10 +539,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC "a.b"
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/String;)Ljava/lang/String;
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     LDC "a.b"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN

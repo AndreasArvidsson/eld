@@ -1,0 +1,39 @@
+const value: 0 = 1;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+INTEGER_LITERAL "0" (1:14-1:15)
+EQUAL (1:16-1:17)
+INTEGER_LITERAL "1" (1:18-1:19)
+SEMICOLON (1:19-1:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:20
+  (VariableDeclaration
+    range: 1:1-1:20
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (LiteralTypeNode
+      range: 1:14-1:15
+      kind: INT
+      text: "0"
+    )
+    (LiteralExpression
+      range: 1:18-1:19
+      kind: INT
+      text: "1"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign i32 to 0 at 1:18-1:19

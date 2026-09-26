@@ -217,7 +217,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NOP
     LDC "["
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     POP
    L1:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -231,12 +230,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     INVOKEVIRTUAL java/util/regex/PatternSyntaxException.getDescription()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     INVOKEVIRTUAL java/util/regex/PatternSyntaxException.getPattern()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
    L4:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;

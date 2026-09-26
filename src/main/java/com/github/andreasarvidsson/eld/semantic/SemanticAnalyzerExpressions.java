@@ -243,7 +243,8 @@ public final class SemanticAnalyzerExpressions {
                 finally {
                     analyzingCallee = memberCallee;
                 }
-                final Type memberTarget = ConstType.unwrap(target);
+                final Type memberTarget =
+                    LiteralType.unwrap(ConstType.unwrap(target));
                 final boolean classTarget =
                     unwrap(
                         member.target()

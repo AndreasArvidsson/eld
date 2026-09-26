@@ -1060,6 +1060,9 @@ public final class Parser extends ParserBase {
             if (arrow != null) {
                 final TypeNode returnType =
                     check(TokenType.IDENTIFIER) || check(TokenType.NULL)
+                        || check(TokenType.STRING_LITERAL)
+                        || check(TokenType.BOOLEAN_LITERAL)
+                        || check(TokenType.INTEGER_LITERAL)
                         || check(TokenType.LEFT_PAREN)
                         || check(TokenType.LEFT_BRACKET)
                         || check(TokenType.CONST) ? parseType() : null;
@@ -1093,6 +1096,19 @@ public final class Parser extends ParserBase {
                 elementType,
                 leftBracket.range().union(rightBracket.range())
             );
+        }
+        if (
+            check(TokenType.STRING_LITERAL) || check(TokenType.BOOLEAN_LITERAL)
+                || check(TokenType.INTEGER_LITERAL)
+        ) {
+            final Token literal = advance();
+            final LiteralKind kind = switch (literal.type()) {
+                case STRING_LITERAL -> LiteralKind.STRING;
+                case BOOLEAN_LITERAL -> LiteralKind.BOOL;
+                case INTEGER_LITERAL -> LiteralKind.INT;
+                default -> throw new IllegalStateException();
+            };
+            return new LiteralTypeNode(kind, literal.text(), literal.range());
         }
         final Token name =
             check(TokenType.NULL) ? advance() : expect(TokenType.IDENTIFIER);

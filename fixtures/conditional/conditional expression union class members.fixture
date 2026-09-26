@@ -1097,51 +1097,37 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.ternary Ljava/lang/Object;
     INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.conditional Ljava/lang/Object;
     INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.selection Ljava/lang/Object;
     INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.direct LTest$Animal;
     INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.typedTernary LTest$Animal;
     INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.typedConditional LTest$Animal;
     INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.typedSelection LTest$Animal;
     INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 2 max locals 0

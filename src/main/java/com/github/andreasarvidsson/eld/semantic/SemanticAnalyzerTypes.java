@@ -9,6 +9,10 @@ import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.ConstTypeNode;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.FunctionTypeNode;
+import com.github.andreasarvidsson.eld.parser.GroupingExpression;
+import com.github.andreasarvidsson.eld.parser.LiteralExpression;
+import com.github.andreasarvidsson.eld.parser.LiteralKind;
+import com.github.andreasarvidsson.eld.parser.LiteralTypeNode;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.TupleExpression;
 import com.github.andreasarvidsson.eld.parser.TupleTypeNode;
@@ -28,6 +32,23 @@ public final class SemanticAnalyzerTypes {
     ) {
         return switch (typeNode) {
             case NamedTypeNode named -> resolveNamedType(named, context);
+            case LiteralTypeNode literal -> {
+                final LiteralType type =
+                    new LiteralType(literal.kind(), literal.text());
+                if (
+                    literal.kind() == LiteralKind.INT
+                        && ((BigInteger) type.value())
+                            .bitLength() >= BuiltinType.I32.bits()
+                ) {
+                    throw new SemanticException(
+                        literal.range(),
+                        "Integer literal type %s does not fit in i32",
+                        literal.text()
+                    );
+                }
+                model.setResolvedType(literal, type);
+                yield type;
+            }
             case TupleTypeNode tuple -> {
                 final Type type =
                     new TupleType(
@@ -84,7 +105,11 @@ public final class SemanticAnalyzerTypes {
                 for (final TypeNode memberTypeNode : union.memberTypes()) {
                     memberTypes.add(resolveType(memberTypeNode, context));
                 }
-                final Type type = UnionType.of(memberTypes);
+                final Type common = commonTypeStrict(memberTypes);
+                final Type type =
+                    common == BuiltinType.BOOL
+                        ? common
+                        : UnionType.of(memberTypes);
                 model.setResolvedType(union, type);
                 yield type;
             }
@@ -110,7 +135,7 @@ public final class SemanticAnalyzerTypes {
                 );
         }
         if (
-            from instanceof BuiltinType source
+            LiteralType.unwrap(from) instanceof BuiltinType source
                 && to instanceof BuiltinType target
                 && (source.isInteger() || source.isFloating())
                 && (target.isInteger() || target.isFloating())
@@ -259,13 +284,28 @@ public final class SemanticAnalyzerTypes {
             if (type.equals(result)) {
                 continue;
             }
-            if (numeric(result) && numeric(type)) {
-                final BuiltinType left = (BuiltinType) result;
-                final BuiltinType right = (BuiltinType) type;
+            if (
+                result instanceof LiteralType left
+                    && type instanceof LiteralType right
+                    && left.valueType() == BuiltinType.BOOL
+                    && right.valueType() == BuiltinType.BOOL
+            ) {
+                result = BuiltinType.BOOL;
+                continue;
+            }
+            if (
+                !(result instanceof LiteralType && type instanceof LiteralType)
+                    && numeric(LiteralType.unwrap(result))
+                    && numeric(LiteralType.unwrap(type))
+            ) {
+                final BuiltinType left =
+                    (BuiltinType) LiteralType.unwrap(result);
+                final BuiltinType right =
+                    (BuiltinType) LiteralType.unwrap(type);
                 if (left.isInteger() != right.isInteger()) {
                     return null;
                 }
-                result = promotedNumericType(result, type);
+                result = promotedNumericType(left, right);
                 continue;
             }
             if (
@@ -295,7 +335,7 @@ public final class SemanticAnalyzerTypes {
     }
 
     private static boolean numeric(final Type type) {
-        return type instanceof BuiltinType builtin
+        return LiteralType.unwrap(type) instanceof BuiltinType builtin
             && (builtin.isInteger() || builtin.isFloating());
     }
 
@@ -316,6 +356,22 @@ public final class SemanticAnalyzerTypes {
         final Type to,
         final Expression fromExpression
     ) {
+        if (to instanceof LiteralType literal) {
+            if (
+                from instanceof LiteralType source
+                    && source.kind() == literal.kind()
+                    && source.value().equals(literal.value())
+            ) {
+                return to;
+            }
+            if (
+                from == literal.valueType()
+                    && matchesLiteral(fromExpression, literal)
+            ) {
+                return to;
+            }
+            return null;
+        }
         if (to instanceof ConstType target) {
             final Type source = ConstType.unwrap(from);
             if (
@@ -379,7 +435,8 @@ public final class SemanticAnalyzerTypes {
                 && source.memberTypes()
                     .stream()
                     .allMatch(
-                        member -> member instanceof BuiltinType numeric
+                        member -> LiteralType
+                            .unwrap(member) instanceof BuiltinType numeric
                             && (numeric == target || numeric.canWidenTo(target))
                     )
         ) {
@@ -392,6 +449,17 @@ public final class SemanticAnalyzerTypes {
                 model.setUnionConversion(fromExpression, from, union);
                 return to;
             }
+            if (
+                from instanceof LiteralType literal
+                    && union.contains(literal.valueType())
+            ) {
+                model.setUnionConversion(
+                    fromExpression,
+                    literal.valueType(),
+                    union
+                );
+                return to;
+            }
             if (from instanceof UnionType source) {
                 for (final Type sourceMember : source.memberTypes()) {
                     final boolean assignable =
@@ -399,7 +467,9 @@ public final class SemanticAnalyzerTypes {
                             .stream()
                             .anyMatch(
                                 member -> model.isSubtype(sourceMember, member)
-                                    || (sourceMember instanceof BuiltinType number
+                                    || (LiteralType.unwrap(
+                                        sourceMember
+                                    ) instanceof BuiltinType number
                                         && member instanceof BuiltinType target
                                         && number.canWidenTo(target))
                             );
@@ -409,6 +479,16 @@ public final class SemanticAnalyzerTypes {
                 }
                 model.setConversionType(fromExpression, to);
                 return to;
+            }
+            for (final Type member : union.memberTypes()) {
+                if (
+                    member instanceof LiteralType literal
+                        && from == literal.valueType()
+                        && matchesLiteral(fromExpression, literal)
+                ) {
+                    model.setUnionConversion(fromExpression, member, union);
+                    return to;
+                }
             }
             for (final Type member : union.memberTypes()) {
                 if (
@@ -428,7 +508,7 @@ public final class SemanticAnalyzerTypes {
             // Exact members take priority above; widening alternatives use a stable order.
             for (final BuiltinType member : BuiltinType.values()) {
                 if (
-                    from instanceof BuiltinType source
+                    LiteralType.unwrap(from) instanceof BuiltinType source
                         && union.memberTypes().contains(member)
                         && source.canWidenTo(member)
                         && resolveAssignType(
@@ -483,7 +563,7 @@ public final class SemanticAnalyzerTypes {
             return to;
         }
         if (
-            from instanceof BuiltinType source
+            LiteralType.unwrap(from) instanceof BuiltinType source
                 && to instanceof BuiltinType target
                 && (source.isInteger() || source.isFloating())
                 && (target.isInteger() || target.isFloating())
@@ -518,6 +598,35 @@ public final class SemanticAnalyzerTypes {
         }
 
         return null;
+    }
+
+    private static boolean matchesLiteral(
+        final Expression expression,
+        final LiteralType target
+    ) {
+        if (expression instanceof GroupingExpression grouping) {
+            return matchesLiteral(grouping.expression(), target);
+        }
+        if (target.kind() == LiteralKind.INT) {
+            final Integer value =
+                SemanticAnalyzerExpectedExpressions
+                    .integerConstantI32(expression);
+            return value != null
+                && BigInteger.valueOf(value).equals(target.value());
+        }
+        if (
+            target.kind() == LiteralKind.STRING
+                && expression instanceof LiteralExpression literal
+                && literal.kind() == LiteralKind.RAW_STRING
+        ) {
+            return literal.text()
+                .substring(1, literal.text().length() - 1)
+                .equals(target.value());
+        }
+        return expression instanceof LiteralExpression literal
+            && literal.kind() == target.kind()
+            && new LiteralType(literal.kind(), literal.text()).value()
+                .equals(target.value());
     }
 
     public Type resolveNamedType(

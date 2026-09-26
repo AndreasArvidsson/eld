@@ -713,12 +713,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     LDC "\\d+"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     PUTSTATIC Test.regex Ljava/util/regex/Pattern;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     LDC "123abc"
     INVOKEVIRTUAL java/util/regex/Pattern.matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     PUTSTATIC Test.matcher Ljava/util/regex/Matcher;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
@@ -732,31 +730,25 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "456"
     INVOKEVIRTUAL java/util/regex/Matcher.reset(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     INVOKEVIRTUAL java/util/regex/Matcher.pattern()Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     INVOKEVIRTUAL java/util/regex/Pattern.pattern()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     INVOKEVIRTUAL java/util/regex/Matcher.reset()Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.find()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "x789y"
     INVOKEVIRTUAL java/util/regex/Matcher.reset(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     LDC 1
     LDC 4
     INVOKEVIRTUAL java/util/regex/Matcher.region(II)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -771,12 +763,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.matcher Ljava/util/regex/Matcher;
     LDC "abc"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     INVOKEVIRTUAL java/util/regex/Matcher.usePattern(Ljava/util/regex/Pattern;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     LDC "abc"
     INVOKEVIRTUAL java/util/regex/Matcher.reset(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
-    CHECKCAST java/util/regex/Matcher
     INVOKEVIRTUAL java/util/regex/Matcher.matches()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN

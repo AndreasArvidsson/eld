@@ -344,7 +344,6 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD 4
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GOTO L8
    L8:

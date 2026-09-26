@@ -1,0 +1,107 @@
+const choice: 0 | 1 = 1;
+switch (choice) {
+    case 2 { print("wrong"); }
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "choice" (1:7-1:13)
+COLON (1:13-1:14)
+INTEGER_LITERAL "0" (1:15-1:16)
+PIPE (1:17-1:18)
+INTEGER_LITERAL "1" (1:19-1:20)
+EQUAL (1:21-1:22)
+INTEGER_LITERAL "1" (1:23-1:24)
+SEMICOLON (1:24-1:25)
+SWITCH (2:1-2:7)
+LEFT_PAREN (2:8-2:9)
+IDENTIFIER "choice" (2:9-2:15)
+RIGHT_PAREN (2:15-2:16)
+LEFT_BRACE (2:17-2:18)
+CASE (3:5-3:9)
+INTEGER_LITERAL "2" (3:10-3:11)
+LEFT_BRACE (3:12-3:13)
+IDENTIFIER "print" (3:14-3:19)
+LEFT_PAREN (3:19-3:20)
+STRING_LITERAL "\"wrong\"" (3:20-3:27)
+RIGHT_PAREN (3:27-3:28)
+SEMICOLON (3:28-3:29)
+RIGHT_BRACE (3:30-3:31)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:2
+  (VariableDeclaration
+    range: 1:1-1:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "choice"
+    )
+    (UnionTypeNode
+      range: 1:15-1:20
+      (LiteralTypeNode
+        range: 1:15-1:16
+        kind: INT
+        text: "0"
+      )
+      (LiteralTypeNode
+        range: 1:19-1:20
+        kind: INT
+        text: "1"
+      )
+    )
+    (LiteralExpression
+      range: 1:23-1:24
+      kind: INT
+      text: "1"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-4:2
+    (SwitchExpression
+      range: 2:1-4:2
+      (IdentifierExpression
+        range: 2:9-2:15
+        name: "choice"
+      )
+      (SwitchBranch
+        range: 3:5-3:31
+        (LiteralExpression
+          range: 3:10-3:11
+          kind: INT
+          text: "2"
+        )
+        (SwitchBranchBlockBody
+          range: 3:12-3:31
+          (BlockStatement
+            range: 3:12-3:31
+            (ExpressionStatement
+              range: 3:14-3:29
+              (CallExpression
+                range: 3:14-3:28
+                (IdentifierExpression
+                  range: 3:14-3:19
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 3:20-3:27
+                  kind: STRING
+                  text: "\"wrong\""
+                )
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Switch match type i32 does not match subject type 0 | 1 at 3:10-3:11

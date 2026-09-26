@@ -1,0 +1,15 @@
+const value: r"foo" = r"foo";
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+RAW_STRING_LITERAL "\"foo\"" (1:14-1:20)
+EQUAL (1:21-1:22)
+RAW_STRING_LITERAL "\"foo\"" (1:23-1:29)
+SEMICOLON (1:29-1:30)
+
+--- AST ---
+
+ParserException: Expected IDENTIFIER, but found RAW_STRING_LITERAL at 1:14-1:20

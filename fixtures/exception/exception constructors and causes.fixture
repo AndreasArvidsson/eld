@@ -282,11 +282,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     ALOAD_0 0
     INVOKEVIRTUAL java/lang/Throwable.getCause()Ljava/lang/Throwable;
-    CHECKCAST java/lang/Throwable
     ASTORE_1 1
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1

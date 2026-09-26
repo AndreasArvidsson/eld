@@ -882,7 +882,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
     LDC "x"
     INVOKESTATIC java/util/regex/Pattern.compile(Ljava/lang/String;)Ljava/util/regex/Pattern;
-    CHECKCAST java/util/regex/Pattern
     PUTSTATIC Test.regex Ljava/util/regex/Pattern;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.text Ljava/lang/String;
@@ -892,7 +891,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.array Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.toString()Ljava/lang/String;
-    CHECKCAST java/lang/String
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.tuple Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
@@ -953,7 +951,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     INVOKEVIRTUAL java/util/regex/Pattern.toString()Ljava/lang/String;
-    CHECKCAST java/lang/String
     LDC "x"
     INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V

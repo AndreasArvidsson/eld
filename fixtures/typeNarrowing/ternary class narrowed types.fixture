@@ -267,16 +267,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.value LTest$Base;
     CHECKCAST Test$DerivedA
     INVOKEVIRTUAL Test$DerivedA.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
     GOTO L1
    L0:
     GETSTATIC Test.value LTest$Base;
     INVOKEVIRTUAL Test$Base.getClass()Ljava/lang/Class;
-    CHECKCAST java/lang/Class
     INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
-    CHECKCAST java/lang/String
    L1:
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN

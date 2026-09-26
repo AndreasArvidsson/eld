@@ -95,7 +95,7 @@ public final class SemanticAnalyzerStatements {
         if (condition != null) {
             final Type conditionType =
                 analyzer.analyzeExpression(condition, loopContext);
-            if (conditionType != BuiltinType.BOOL) {
+            if (LiteralType.unwrap(conditionType) != BuiltinType.BOOL) {
                 throw new SemanticException(
                     condition.range(),
                     "For condition must be bool, found %s",
@@ -163,7 +163,7 @@ public final class SemanticAnalyzerStatements {
         final Type conditionType =
             analyzer.analyzeExpression(statement.condition(), context);
 
-        if (conditionType != BuiltinType.BOOL) {
+        if (LiteralType.unwrap(conditionType) != BuiltinType.BOOL) {
             throw new SemanticException(
                 statement.condition().range(),
                 "While condition must be bool, found %s",
@@ -190,7 +190,7 @@ public final class SemanticAnalyzerStatements {
         final Type conditionType =
             analyzer.analyzeExpression(statement.condition(), context);
 
-        if (conditionType != BuiltinType.BOOL) {
+        if (LiteralType.unwrap(conditionType) != BuiltinType.BOOL) {
             throw new SemanticException(
                 statement.condition().range(),
                 "Do-while condition must be bool, found %s",
@@ -217,7 +217,7 @@ public final class SemanticAnalyzerStatements {
         final Type conditionType =
             analyzer.analyzeExpression(statement.condition(), context);
 
-        if (conditionType != BuiltinType.BOOL) {
+        if (LiteralType.unwrap(conditionType) != BuiltinType.BOOL) {
             throw new SemanticException(
                 statement.condition().range(),
                 "If condition must be bool, found %s",
@@ -243,7 +243,7 @@ public final class SemanticAnalyzerStatements {
                     withScope(context, remaining)
                 );
 
-            if (branchConditionType != BuiltinType.BOOL) {
+            if (LiteralType.unwrap(branchConditionType) != BuiltinType.BOOL) {
                 throw new SemanticException(
                     branch.condition().range(),
                     "Else-if condition must be bool, found %s",
@@ -434,16 +434,27 @@ public final class SemanticAnalyzerStatements {
                     expression.subject().range(),
                     "Switch subject"
                 );
+                boolean compatible = switchMatchSubtype(matchType, subjectType);
                 if (
-                    !switchMatchSubtype(matchType, subjectType)
-                        || ((subjectType instanceof UnionType
-                            || numericWidening(matchType, subjectType))
-                            && !subjectType.equals(matchType)
-                            && analyzer.resolveAssignType(
-                                matchType,
-                                subjectType,
-                                match
-                            ) == null)
+                    !compatible && (subjectType instanceof LiteralType
+                        || subjectType instanceof UnionType)
+                ) {
+                    compatible =
+                        analyzer.resolveAssignType(
+                            matchType,
+                            subjectType,
+                            match
+                        ) != null;
+                }
+                if (
+                    !compatible || ((subjectType instanceof UnionType
+                        || numericWidening(matchType, subjectType))
+                        && !subjectType.equals(matchType)
+                        && analyzer.resolveAssignType(
+                            matchType,
+                            subjectType,
+                            match
+                        ) == null)
                 ) {
                     throw new SemanticException(
                         match.range(),
@@ -700,7 +711,7 @@ public final class SemanticAnalyzerStatements {
     ) {
         final Type condition =
             analyzer.analyzeExpression(expression.condition(), context);
-        if (condition != BuiltinType.BOOL) {
+        if (LiteralType.unwrap(condition) != BuiltinType.BOOL) {
             throw new SemanticException(
                 expression.condition().range(),
                 "Ternary condition must be bool, found %s",

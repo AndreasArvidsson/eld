@@ -50,6 +50,7 @@ import com.github.andreasarvidsson.eld.semantic.ClassDeclarationSymbol;
 import com.github.andreasarvidsson.eld.semantic.ClassType;
 import com.github.andreasarvidsson.eld.semantic.ConstType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceType;
+import com.github.andreasarvidsson.eld.semantic.LiteralType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceContract;
 import com.github.andreasarvidsson.eld.semantic.VariableSymbol;
 import com.github.andreasarvidsson.eld.semantic.FunctionSymbol;
@@ -2952,6 +2953,7 @@ public final class BytecodeGenerator {
 
     private String descriptor(final Type type) {
         return switch (type) {
+            case LiteralType literal -> descriptor(literal.valueType());
             case BuiltinType builtin -> switch (builtin) {
                 case I8 -> "B";
                 case I16 -> "S";
@@ -3285,6 +3287,9 @@ public final class BytecodeGenerator {
     }
 
     private static @Nullable String boxedOwner(final Type type) {
+        if (type instanceof LiteralType literal) {
+            return boxedOwner(literal.valueType());
+        }
         if (!(ConstType.unwrap(type) instanceof BuiltinType builtin)) {
             return null;
         }
@@ -3335,7 +3340,7 @@ public final class BytecodeGenerator {
     }
 
     private static boolean reference(final Type type) {
-        final Type unqualified = ConstType.unwrap(type);
+        final Type unqualified = LiteralType.unwrap(ConstType.unwrap(type));
         return unqualified instanceof UnionType
             || unqualified instanceof BuiltinFunctionType
             || unqualified instanceof ClassType
@@ -4449,6 +4454,95 @@ public final class BytecodeGenerator {
             return true;
         }
 
+        private static boolean numericUnion(final Type type) {
+            return type instanceof UnionType union && union.memberTypes()
+                .stream()
+                .anyMatch(
+                    member -> LiteralType
+                        .unwrap(member) instanceof BuiltinType numeric
+                        && (numeric.isInteger() || numeric.isFloating())
+                );
+        }
+
+        private void numberValue(final int local, final boolean floating) {
+            method.with(localInstruction(ALOAD, local));
+            method.checkcast(classDesc("java/lang/Number"));
+            method.invoke(
+                INVOKEVIRTUAL,
+                classDesc("java/lang/Number"),
+                floating ? "doubleValue" : "longValue",
+                MethodTypeDesc.ofDescriptor(floating ? "()D" : "()J"),
+                false
+            );
+        }
+
+        private void objectEquals(final boolean numeric) {
+            if (!numeric) {
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc("java/util/Objects"),
+                    "equals",
+                    MethodTypeDesc.ofDescriptor(
+                        "(Ljava/lang/Object;Ljava/lang/Object;)Z"
+                    ),
+                    false
+                );
+                return;
+            }
+            final int right = nextLocal++;
+            final int left = nextLocal++;
+            method.with(localInstruction(ASTORE, right));
+            method.with(localInstruction(ASTORE, left));
+            final Label objects = method.newLabel();
+            final Label floating = method.newLabel();
+            final Label equal = method.newLabel();
+            final Label unequal = method.newLabel();
+            final Label end = method.newLabel();
+            method.with(localInstruction(ALOAD, left));
+            method.instanceOf(classDesc("java/lang/Number"));
+            method.branch(IFEQ, objects);
+            method.with(localInstruction(ALOAD, right));
+            method.instanceOf(classDesc("java/lang/Number"));
+            method.branch(IFEQ, objects);
+            for (final int local : List.of(left, right)) {
+                for (final String owner : List
+                    .of("java/lang/Float", "java/lang/Double")) {
+                    method.with(localInstruction(ALOAD, local));
+                    method.instanceOf(classDesc(owner));
+                    method.branch(IFNE, floating);
+                }
+            }
+            numberValue(left, false);
+            numberValue(right, false);
+            method.lcmp();
+            method.branch(IFEQ, equal);
+            method.branch(GOTO, unequal);
+            method.labelBinding(floating);
+            numberValue(left, true);
+            numberValue(right, true);
+            method.dcmpl();
+            method.branch(IFEQ, equal);
+            method.branch(GOTO, unequal);
+            method.labelBinding(objects);
+            method.with(localInstruction(ALOAD, left));
+            method.with(localInstruction(ALOAD, right));
+            method.invoke(
+                INVOKESTATIC,
+                classDesc("java/util/Objects"),
+                "equals",
+                MethodTypeDesc
+                    .ofDescriptor("(Ljava/lang/Object;Ljava/lang/Object;)Z"),
+                false
+            );
+            method.branch(GOTO, end);
+            method.labelBinding(equal);
+            method.iconst_1();
+            method.branch(GOTO, end);
+            method.labelBinding(unequal);
+            method.iconst_0();
+            method.labelBinding(end);
+        }
+
         private void selection(final SwitchExpression selection) {
             final boolean discarded =
                 semanticModel.getExpressionType(selection) == BuiltinType.VOID;
@@ -4481,15 +4575,7 @@ public final class BytecodeGenerator {
                             final int matchLocal = nextLocal++;
                             method.with(localInstruction(ASTORE, matchLocal));
                             method.with(localInstruction(ALOAD, matchLocal));
-                            method.invoke(
-                                INVOKESTATIC,
-                                classDesc("java/util/Objects"),
-                                "equals",
-                                MethodTypeDesc.ofDescriptor(
-                                    "(Ljava/lang/Object;Ljava/lang/Object;)Z"
-                                ),
-                                false
-                            );
+                            objectEquals(numericUnion(subjectType));
                             method.branch(IFNE, body);
                             method.with(
                                 localInstruction(
@@ -4523,15 +4609,7 @@ public final class BytecodeGenerator {
                             method.branch(IFNE, body);
                         }
                         else if (reference(subjectType)) {
-                            method.invoke(
-                                INVOKESTATIC,
-                                classDesc("java/util/Objects"),
-                                "equals",
-                                MethodTypeDesc.ofDescriptor(
-                                    "(Ljava/lang/Object;Ljava/lang/Object;)Z"
-                                ),
-                                false
-                            );
+                            objectEquals(numericUnion(subjectType));
                             method.branch(IFNE, body);
                         }
                         else if (
@@ -5521,6 +5599,9 @@ public final class BytecodeGenerator {
         private void convertExpression(final Expression expression) {
             final Type from = semanticModel.getExpressionType(expression);
             final Type to = semanticModel.getEffectiveType(expression);
+            if (from.equals(to)) {
+                return;
+            }
             if (
                 to == BuiltinType.ANY || (to instanceof InterfaceType
                     && JavaTypes.boxedClass(from) != null)
@@ -5570,9 +5651,47 @@ public final class BytecodeGenerator {
         ) {
             final Label end = method.newLabel();
             boolean converted = false;
+            final Set<String> convertedOwners = new HashSet<>();
+            final Set<String> wideningOwners = new HashSet<>();
             for (final Type member : source.memberTypes()) {
                 if (
-                    !(member instanceof BuiltinType numeric)
+                    LiteralType.unwrap(member) instanceof BuiltinType
+                        && target.memberTypes()
+                            .stream()
+                            .noneMatch(
+                                destination -> semanticModel
+                                    .isSubtype(member, destination)
+                            )
+                ) {
+                    wideningOwners
+                        .add(Objects.requireNonNull(boxedOwner(member)));
+                }
+            }
+            for (final Type member : source.memberTypes()) {
+                if (
+                    member instanceof LiteralType literal
+                        && literal.kind() == LiteralKind.INT
+                        && target.contains(literal)
+                        && wideningOwners.contains(boxedOwner(literal))
+                ) {
+                    method.dup();
+                    method.ldc(((Number) literal.value()).intValue());
+                    box(literal);
+                    method.invoke(
+                        INVOKESTATIC,
+                        classDesc("java/util/Objects"),
+                        "equals",
+                        MethodTypeDesc.ofDescriptor(
+                            "(Ljava/lang/Object;Ljava/lang/Object;)Z"
+                        ),
+                        false
+                    );
+                    method.branch(IFNE, end);
+                }
+            }
+            for (final Type member : source.memberTypes()) {
+                if (
+                    !(LiteralType.unwrap(member) instanceof BuiltinType numeric)
                         || target.memberTypes()
                             .stream()
                             .anyMatch(
@@ -5598,10 +5717,13 @@ public final class BytecodeGenerator {
                             + target
                     );
                 }
+                final String owner = Objects.requireNonNull(boxedOwner(member));
+                if (!convertedOwners.add(owner)) {
+                    continue;
+                }
                 final Label next = method.newLabel();
                 method.dup();
-                method
-                    .ldc(classDesc(Objects.requireNonNull(boxedOwner(member))));
+                method.ldc(classDesc(owner));
                 method.with(simpleInstruction(SWAP));
                 method.invoke(
                     INVOKEVIRTUAL,
@@ -5631,7 +5753,7 @@ public final class BytecodeGenerator {
         }
 
         private void readObject(final Type type) {
-            final Type unqualified = ConstType.unwrap(type);
+            final Type unqualified = LiteralType.unwrap(ConstType.unwrap(type));
             if (unqualified instanceof ArrayType array) {
                 method.ldc(
                     RuntimeAbi.array(array.elementType()).elementDescriptor
@@ -6436,6 +6558,7 @@ public final class BytecodeGenerator {
             if (from.equals(to)) {
                 return;
             }
+            final Type source = LiteralType.unwrap(from);
             if (from instanceof UnionType) {
                 if (
                     to instanceof BuiltinType numeric
@@ -6469,7 +6592,7 @@ public final class BytecodeGenerator {
                 }
                 return;
             }
-            if (from == BuiltinType.I64) {
+            if (source == BuiltinType.I64) {
                 if (to == BuiltinType.F32) {
                     method.l2f();
                 }
@@ -6480,14 +6603,14 @@ public final class BytecodeGenerator {
                     method.l2i();
                 }
             }
-            else if (from == BuiltinType.F64 && to == BuiltinType.F32) {
+            else if (source == BuiltinType.F64 && to == BuiltinType.F32) {
                 method.d2f();
             }
-            else if (from == BuiltinType.F32 && to == BuiltinType.F64) {
+            else if (source == BuiltinType.F32 && to == BuiltinType.F64) {
                 method.f2d();
             }
             else if (
-                from instanceof BuiltinType builtin
+                source instanceof BuiltinType builtin
                     && (builtin.isInteger() || builtin == BuiltinType.CHAR)
             ) {
                 if (to == BuiltinType.I64) {
@@ -6789,7 +6912,12 @@ public final class BytecodeGenerator {
                     ),
                     isInterface
                 );
-                if (!javaMethod.getReturnType().isPrimitive()) {
+                if (
+                    !javaMethod.getReturnType().isPrimitive()
+                        && !descriptor(type.returnType()).equals(
+                            javaMethod.getReturnType().descriptorString()
+                        )
+                ) {
                     readObject(type.returnType());
                 }
                 return;
@@ -7226,19 +7354,20 @@ public final class BytecodeGenerator {
             final String owner = boxedOwner(element);
             if (owner != null) {
                 method.checkcast(classDesc(owner));
-                final String valueMethod = switch ((BuiltinType) element) {
-                    case I8 -> "byteValue";
-                    case I16 -> "shortValue";
-                    case I32 -> "intValue";
-                    case I64 -> "longValue";
-                    case F32 -> "floatValue";
-                    case F64 -> "doubleValue";
-                    case BOOL -> "booleanValue";
-                    case CHAR -> "charValue";
-                    default -> throw new IllegalArgumentException(
-                        "Not a primitive tuple element"
-                    );
-                };
+                final String valueMethod =
+                    switch ((BuiltinType) LiteralType.unwrap(element)) {
+                        case I8 -> "byteValue";
+                        case I16 -> "shortValue";
+                        case I32 -> "intValue";
+                        case I64 -> "longValue";
+                        case F32 -> "floatValue";
+                        case F64 -> "doubleValue";
+                        case BOOL -> "booleanValue";
+                        case CHAR -> "charValue";
+                        default -> throw new IllegalArgumentException(
+                            "Not a primitive tuple element"
+                        );
+                    };
                 method.invoke(
                     INVOKEVIRTUAL,
                     classDesc(owner),
@@ -8106,6 +8235,21 @@ public final class BytecodeGenerator {
         private void binary(final BinaryExpression binary) {
             final BinaryOperator operator = binary.operator();
             if (
+                (operator == BinaryOperator.AND
+                    && isBooleanLiteral(binary.right(), false))
+                    || (operator == BinaryOperator.OR
+                        && isBooleanLiteral(binary.right(), true))
+            ) {
+                expression(binary.left());
+                method.pop();
+                method.with(
+                    simpleInstruction(
+                        operator == BinaryOperator.AND ? ICONST_0 : ICONST_1
+                    )
+                );
+                return;
+            }
+            if (
                 operator == BinaryOperator.AND || operator == BinaryOperator.OR
             ) {
                 final Label shortcut = method.newLabel();
@@ -8126,7 +8270,9 @@ public final class BytecodeGenerator {
                 method.labelBinding(end);
                 return;
             }
-            final Type type = semanticModel.getEffectiveType(binary.left());
+            final Type type =
+                LiteralType
+                    .unwrap(semanticModel.getEffectiveType(binary.left()));
             final boolean spilled =
                 asyncStateMachine != null && containsAwait(binary.right());
             if (spilled) {
@@ -8187,15 +8333,7 @@ public final class BytecodeGenerator {
                             || type instanceof TupleType
                             || type == BuiltinType.ANY
                     ) {
-                        method.invoke(
-                            INVOKESTATIC,
-                            classDesc("java/util/Objects"),
-                            "equals",
-                            MethodTypeDesc.ofDescriptor(
-                                "(Ljava/lang/Object;Ljava/lang/Object;)Z"
-                            ),
-                            false
-                        );
+                        objectEquals(numericUnion(type));
                         if (operator == BinaryOperator.NOT_EQUAL) {
                             method.iconst_1();
                             method.ixor();
