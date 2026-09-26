@@ -443,11 +443,6 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL Test$DetailedValue.<init>()V
     ARETURN
     max stack 2 max locals 1
-  method create()LTest$Value; flags [PUBLIC, BRIDGE, SYNTHETIC]
-    ALOAD_0 0
-    INVOKEVIRTUAL Test$Base.create()LTest$DetailedValue;
-    ARETURN
-    max stack 1 max locals 1
 
 class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
   implements Test$Factory
@@ -457,6 +452,11 @@ class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     ALOAD_0 0
     INVOKESPECIAL Test$Base.<init>()V
     RETURN
+    max stack 1 max locals 1
+  method create()LTest$Value; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Child.create()LTest$DetailedValue;
+    ARETURN
     max stack 1 max locals 1
 
 --- OUTPUT ---

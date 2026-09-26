@@ -389,7 +389,7 @@ public final class SemanticAnalyzerObjects {
     ) {
         final ClassType base = model.getSuperclass(type);
         if (base == null) {
-            validateImplicitOverride(type, symbol);
+            validateImplicitOverride(symbol);
             return;
         }
         final ClassType methodOwner =
@@ -401,7 +401,7 @@ public final class SemanticAnalyzerObjects {
                 ? methodOwner
                 : memberOwner(base, symbol.name());
         if (owner == null) {
-            validateImplicitOverride(type, symbol);
+            validateImplicitOverride(symbol);
             return;
         }
         final Symbol inherited =
@@ -413,7 +413,7 @@ public final class SemanticAnalyzerObjects {
                 );
         final Visibility visibility = model.getMemberVisibility(inherited);
         if (visibility == Visibility.PRIVATE) {
-            validateImplicitOverride(type, symbol);
+            validateImplicitOverride(symbol);
             return;
         }
         if (
@@ -458,7 +458,6 @@ public final class SemanticAnalyzerObjects {
             }
             validateOverrideModifier(functionSymbol, true);
             model.addOverrideBridge(functionSymbol, inheritedFunction.type());
-            addInterfaceOverrideBridges(type, functionSymbol);
             final Visibility declared = model.getMemberVisibility(symbol);
             if (
                 declared == Visibility.PRIVATE
@@ -484,10 +483,7 @@ public final class SemanticAnalyzerObjects {
         }
     }
 
-    private void validateImplicitOverride(
-        final ClassType type,
-        final Symbol symbol
-    ) {
+    private void validateImplicitOverride(final Symbol symbol) {
         if (!(symbol instanceof FunctionSymbol function)) {
             return;
         }
@@ -500,7 +496,6 @@ public final class SemanticAnalyzerObjects {
         final boolean objectOverride =
             objectMethod != null && model
                 .isOverrideCompatible(function.type(), objectMethod.type());
-        addInterfaceOverrideBridges(type, function);
         validateOverrideModifier(function, objectOverride);
         if (
             objectOverride
@@ -512,35 +507,6 @@ public final class SemanticAnalyzerObjects {
                 function.name()
             );
         }
-    }
-
-    private boolean addInterfaceOverrideBridges(
-        final ClassType type,
-        final FunctionSymbol function
-    ) {
-        boolean compatible = false;
-        final List<InterfaceType> pending =
-            new java.util.ArrayList<>(model.getImplementedInterfaces(type));
-        final Set<InterfaceType> visited = new java.util.HashSet<>();
-        while (!pending.isEmpty()) {
-            final InterfaceType interfaceType = pending.removeLast();
-            if (!visited.add(interfaceType)) {
-                continue;
-            }
-            final InterfaceContract contract =
-                model.getInterface(interfaceType);
-            pending.addAll(contract.superInterfaces());
-            final FunctionSymbol inherited =
-                contract.methods().get(function.name());
-            if (
-                inherited != null && model
-                    .isOverrideCompatible(function.type(), inherited.type())
-            ) {
-                compatible = true;
-                model.addOverrideBridge(function, inherited.type());
-            }
-        }
-        return compatible;
     }
 
     private void validateOverrideModifier(

@@ -62,6 +62,36 @@ class CommandLineTest {
     }
 
     @Test
+    void replGeneratesInterfaceBridgeForInheritedCovariantMethod()
+        throws Exception {
+        final String output = capture(() -> {
+            final ReplSession session = new ReplSession();
+            session.evaluate("""
+                class Value {
+                    public func value() i32 { return 1; }
+                }
+                class DetailedValue extends Value {
+                    public override func value() i32 { return 2; }
+                }
+                interface Factory {
+                    func create() Value;
+                }
+                class Base {
+                    public func create() DetailedValue {
+                        return new DetailedValue();
+                    }
+                }
+                """);
+            session.evaluate("""
+                class Child extends Base implements Factory {}
+                const factory: Factory = new Child();
+                factory.create().value();
+                """);
+        });
+        assertEquals("2\n", output);
+    }
+
+    @Test
     void replSupportsExplicitSuperAcrossSubmissions() throws Exception {
         final String output = capture(() -> {
             final ReplSession session = new ReplSession();

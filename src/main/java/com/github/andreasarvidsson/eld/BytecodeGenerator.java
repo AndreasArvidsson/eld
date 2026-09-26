@@ -1240,6 +1240,7 @@ public final class BytecodeGenerator {
                     }
                 }
             }
+            generateInterfaceBridges(writer, name, classType);
             generateJavaBridges(
                 writer,
                 name,
@@ -3100,6 +3101,59 @@ public final class BytecodeGenerator {
                     );
                     method.with(
                         simpleInstruction(returnOpcode(inherited.returnType()))
+                    );
+                }
+            );
+        }
+    }
+
+    private void generateInterfaceBridges(
+        final ClassBuilder writer,
+        final String owner,
+        final ClassType classType
+    ) {
+        final Set<String> generated = new HashSet<>();
+        for (final SemanticModel.InterfaceBridge bridge : semanticModel
+            .getInterfaceBridges(classType)) {
+            final FunctionSymbol implementation = bridge.implementation();
+            final FunctionType contract = bridge.contract();
+            final String implementationDescriptor =
+                methodDescriptor(implementation.type());
+            final String bridgeDescriptor = methodDescriptor(contract);
+            final String key = methodName(implementation) + bridgeDescriptor;
+            if (
+                bridgeDescriptor.equals(implementationDescriptor)
+                    || !generated.add(key)
+            ) {
+                continue;
+            }
+            generateMethod(
+                writer,
+                visibilityAccess(
+                    semanticModel.getMemberVisibility(implementation)
+                ) | ACC_BRIDGE | ACC_SYNTHETIC,
+                methodName(implementation),
+                bridgeDescriptor,
+                null,
+                method -> {
+                    method.aload(0);
+                    int slot = 1;
+                    for (final Type parameter : implementation.type()
+                        .parameterTypes()) {
+                        method.with(
+                            localInstruction(loadOpcode(parameter), slot)
+                        );
+                        slot += slots(parameter);
+                    }
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc(owner),
+                        methodName(implementation),
+                        MethodTypeDesc.ofDescriptor(implementationDescriptor),
+                        false
+                    );
+                    method.with(
+                        simpleInstruction(returnOpcode(contract.returnType()))
                     );
                 }
             );

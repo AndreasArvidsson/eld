@@ -71,6 +71,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, List<FunctionType>> overrideBridges =
         new IdentityHashMap<>();
+    private final Map<ClassType, List<InterfaceBridge>> interfaceBridges =
+        new HashMap<>();
     private final IdentityHashMap<VariableSymbol, FunctionSymbol> variableOwners =
         new IdentityHashMap<>();
     private final IdentityHashMap<VariableSymbol, ClassType> constructorVariableOwners =
@@ -223,6 +225,35 @@ public final class SemanticModel {
         final FunctionSymbol function
     ) {
         return overrideBridges.getOrDefault(function, List.of());
+    }
+
+    public void addInterfaceBridge(
+        final ClassType owner,
+        final FunctionSymbol implementation,
+        final FunctionType contract
+    ) {
+        if (
+            implementation.type().equals(contract)
+                || getOverrideBridges(implementation).contains(contract)
+        ) {
+            return;
+        }
+        final InterfaceBridge bridge =
+            new InterfaceBridge(implementation, contract);
+        final List<InterfaceBridge> bridges =
+            interfaceBridges.computeIfAbsent(owner, _ -> new ArrayList<>());
+        if (!bridges.contains(bridge)) {
+            bridges.add(bridge);
+        }
+    }
+
+    public List<InterfaceBridge> getInterfaceBridges(final ClassType owner) {
+        return interfaceBridges.getOrDefault(owner, List.of());
+    }
+
+    public record InterfaceBridge(
+        FunctionSymbol implementation, FunctionType contract
+    ) {
     }
 
     public void setVariableOwner(

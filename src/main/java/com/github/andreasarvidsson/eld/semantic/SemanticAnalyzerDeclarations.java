@@ -2,6 +2,7 @@ package com.github.andreasarvidsson.eld.semantic;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,9 +129,7 @@ public final class SemanticAnalyzerDeclarations {
             final Type base =
                 analyzer.analyzeIdentifierExpression(superclassName, context);
             if (
-                !(model.getReference(
-                    superclassName
-                ) instanceof ClassDeclarationSymbol)
+                !(model.getReference(superclassName) instanceof ClassSymbol)
                     || !(base instanceof ClassType superclass)
             ) {
                 throw new SemanticException(
@@ -605,15 +604,6 @@ public final class SemanticAnalyzerDeclarations {
                     implementation.type()
                 );
             }
-            if (
-                contract instanceof FunctionSymbol contractFunction
-                    && implementation instanceof FunctionSymbol implementationFunction
-            ) {
-                model.addOverrideBridge(
-                    implementationFunction,
-                    contractFunction.type()
-                );
-            }
             if (implementation instanceof VariableSymbol field) {
                 if (
                     contract instanceof VariableSymbol requiredField
@@ -631,7 +621,39 @@ public final class SemanticAnalyzerDeclarations {
                 implementations.put(field.name(), field);
             }
         }
+        addInterfaceBridges(type);
         model.setInterfaceFields(type, implementations);
+    }
+
+    private void addInterfaceBridges(final ClassType type) {
+        final Set<InterfaceType> visited = new HashSet<>();
+        final List<InterfaceType> pending =
+            new ArrayList<>(model.getImplementedInterfaces(type));
+        while (!pending.isEmpty()) {
+            final InterfaceType interfaceType = pending.removeLast();
+            if (!visited.add(interfaceType)) {
+                continue;
+            }
+            final InterfaceContract contract =
+                model.getInterface(interfaceType);
+            pending.addAll(contract.superInterfaces());
+            for (final FunctionSymbol method : contract.methods().values()) {
+                final FunctionSymbol implementation =
+                    analyzer.classMethod(type, method.name());
+                if (
+                    implementation != null && model.isOverrideCompatible(
+                        implementation.type(),
+                        method.type()
+                    )
+                ) {
+                    model.addInterfaceBridge(
+                        type,
+                        implementation,
+                        method.type()
+                    );
+                }
+            }
+        }
     }
 
 }
