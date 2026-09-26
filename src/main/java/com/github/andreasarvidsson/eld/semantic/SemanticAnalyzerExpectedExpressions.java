@@ -124,11 +124,11 @@ public final class SemanticAnalyzerExpectedExpressions {
             return expected instanceof ConstType ? expected : list;
         }
         if (
-            expected instanceof FunctionType
-                && expression instanceof MemberExpression
+            expected instanceof FunctionType function
+                && expression instanceof MemberExpression member
         ) {
             return expressions
-                .analyzeExpressionAsCallee(expression, context, true);
+                .analyzeMemberReference(member, context, function);
         }
         if (expression instanceof ObjectExpression object) {
             Type target = expectedType;

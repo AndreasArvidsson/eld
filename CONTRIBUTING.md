@@ -185,6 +185,7 @@ protected const bar = 0;
 
 ### Miscellaneous
 
+- Allow tuple values from conditional expressions like ternary? true ? 0 : null;
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?
 - Overloaded functions
 - Sealed classes/interfaces

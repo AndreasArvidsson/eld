@@ -1,0 +1,430 @@
+class Foo {
+    public func equals(value: i32) bool {
+        return value == 1;
+    }
+}
+
+const foo = new Foo();
+const numeric: (i32) => bool = foo.equals;
+const inherited: (any) => bool = foo.equals;
+print(numeric(1));
+print(inherited("x"));
+print(inherited(foo));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "equals" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+IDENTIFIER "bool" (2:36-2:40)
+LEFT_BRACE (2:41-2:42)
+RETURN (3:9-3:15)
+IDENTIFIER "value" (3:16-3:21)
+EQUAL_EQUAL (3:22-3:24)
+INTEGER_LITERAL "1" (3:25-3:26)
+SEMICOLON (3:26-3:27)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CONST (7:1-7:6)
+IDENTIFIER "foo" (7:7-7:10)
+EQUAL (7:11-7:12)
+NEW (7:13-7:16)
+IDENTIFIER "Foo" (7:17-7:20)
+LEFT_PAREN (7:20-7:21)
+RIGHT_PAREN (7:21-7:22)
+SEMICOLON (7:22-7:23)
+CONST (8:1-8:6)
+IDENTIFIER "numeric" (8:7-8:14)
+COLON (8:14-8:15)
+LEFT_PAREN (8:16-8:17)
+IDENTIFIER "i32" (8:17-8:20)
+RIGHT_PAREN (8:20-8:21)
+ARROW (8:22-8:24)
+IDENTIFIER "bool" (8:25-8:29)
+EQUAL (8:30-8:31)
+IDENTIFIER "foo" (8:32-8:35)
+DOT (8:35-8:36)
+IDENTIFIER "equals" (8:36-8:42)
+SEMICOLON (8:42-8:43)
+CONST (9:1-9:6)
+IDENTIFIER "inherited" (9:7-9:16)
+COLON (9:16-9:17)
+LEFT_PAREN (9:18-9:19)
+IDENTIFIER "any" (9:19-9:22)
+RIGHT_PAREN (9:22-9:23)
+ARROW (9:24-9:26)
+IDENTIFIER "bool" (9:27-9:31)
+EQUAL (9:32-9:33)
+IDENTIFIER "foo" (9:34-9:37)
+DOT (9:37-9:38)
+IDENTIFIER "equals" (9:38-9:44)
+SEMICOLON (9:44-9:45)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "numeric" (10:7-10:14)
+LEFT_PAREN (10:14-10:15)
+INTEGER_LITERAL "1" (10:15-10:16)
+RIGHT_PAREN (10:16-10:17)
+RIGHT_PAREN (10:17-10:18)
+SEMICOLON (10:18-10:19)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "inherited" (11:7-11:16)
+LEFT_PAREN (11:16-11:17)
+STRING_LITERAL "\"x\"" (11:17-11:20)
+RIGHT_PAREN (11:20-11:21)
+RIGHT_PAREN (11:21-11:22)
+SEMICOLON (11:22-11:23)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "inherited" (12:7-12:16)
+LEFT_PAREN (12:16-12:17)
+IDENTIFIER "foo" (12:17-12:20)
+RIGHT_PAREN (12:20-12:21)
+RIGHT_PAREN (12:21-12:22)
+SEMICOLON (12:22-12:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:23
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:36-2:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:41-4:6
+          (ReturnStatement
+            range: 3:9-3:27
+            (BinaryExpression
+              range: 3:16-3:26
+              (IdentifierExpression
+                range: 3:16-3:21
+                name: "value"
+              )
+              operator: EQUAL
+              (LiteralExpression
+                range: 3:25-3:26
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "foo"
+    )
+    type: null
+    (NewExpression
+      range: 7:13-7:22
+      (IdentifierExpression
+        range: 7:17-7:20
+        name: "Foo"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "numeric"
+    )
+    (FunctionTypeNode
+      range: 8:16-8:29
+      (NamedTypeNode
+        range: 8:17-8:20
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 8:25-8:29
+        name: "bool"
+      )
+    )
+    (MemberExpression
+      range: 8:32-8:42
+      (IdentifierExpression
+        range: 8:32-8:35
+        name: "foo"
+      )
+      (IdentifierExpression
+        range: 8:36-8:42
+        name: "equals"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:16
+      name: "inherited"
+    )
+    (FunctionTypeNode
+      range: 9:18-9:31
+      (NamedTypeNode
+        range: 9:19-9:22
+        name: "any"
+      )
+      (NamedTypeNode
+        range: 9:27-9:31
+        name: "bool"
+      )
+    )
+    (MemberExpression
+      range: 9:34-9:44
+      (IdentifierExpression
+        range: 9:34-9:37
+        name: "foo"
+      )
+      (IdentifierExpression
+        range: 9:38-9:44
+        name: "equals"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:19
+    (CallExpression
+      range: 10:1-10:18
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:17
+        (IdentifierExpression
+          range: 10:7-10:14
+          name: "numeric"
+        )
+        (LiteralExpression
+          range: 10:15-10:16
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:23
+    (CallExpression
+      range: 11:1-11:22
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:21
+        (IdentifierExpression
+          range: 11:7-11:16
+          name: "inherited"
+        )
+        (LiteralExpression
+          range: 11:17-11:20
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:23
+    (CallExpression
+      range: 12:1-12:22
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:21
+        (IdentifierExpression
+          range: 12:7-12:16
+          name: "inherited"
+        )
+        (IdentifierExpression
+          range: 12:17-12:20
+          name: "foo"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:21 -> i32
+  3:16-3:26 -> bool
+  3:25-3:26 -> i32
+  7:13-7:22 -> Foo
+  7:17-7:20 -> Foo
+  8:32-8:35 -> Foo
+  8:32-8:42 -> (i32) => bool
+  8:36-8:42 -> (i32) => bool
+  9:34-9:37 -> Foo
+  9:34-9:44 -> (any) => bool
+  9:38-9:44 -> (any) => bool
+  10:1-10:6 -> (any) => void
+  10:1-10:18 -> void
+  10:7-10:14 -> (i32) => bool
+  10:7-10:17 -> bool
+  10:15-10:16 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:22 -> void
+  11:7-11:16 -> (any) => bool
+  11:7-11:21 -> bool
+  11:17-11:20 -> string
+  12:1-12:6 -> (any) => void
+  12:1-12:22 -> void
+  12:7-12:16 -> (any) => bool
+  12:7-12:21 -> bool
+  12:17-12:20 -> Foo
+
+Resolved types:
+  2:31-2:34 -> i32
+  2:36-2:40 -> bool
+  8:16-8:29 -> (i32) => bool
+  8:17-8:20 -> i32
+  8:25-8:29 -> bool
+  9:18-9:31 -> (any) => bool
+  9:19-9:22 -> any
+  9:27-9:31 -> bool
+
+Conversions:
+  11:17-11:20 -> string -> any
+  12:17-12:20 -> Foo -> any
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:17-2:23 -> func equals(i32) => bool
+  2:24-2:29 -> const value: i32
+  7:7-7:10 -> const foo: Foo
+  8:7-8:14 -> const numeric: (i32) => bool
+  9:7-9:16 -> const inherited: (any) => bool
+
+References:
+  3:16-3:21 -> 2:24-2:29
+  7:17-7:20 -> 1:7-1:10
+  8:32-8:35 -> 7:7-7:10
+  8:36-8:42 -> 2:17-2:23
+  9:34-9:37 -> 7:7-7:10
+  9:38-9:44 -> Foo.equals(any): bool
+  10:1-10:6 -> builtin print
+  10:7-10:14 -> 8:7-8:14
+  11:1-11:6 -> builtin print
+  11:7-11:16 -> 9:7-9:16
+  12:1-12:6 -> builtin print
+  12:7-12:16 -> 9:7-9:16
+  12:17-12:20 -> 7:7-7:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field foo LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  field numeric Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field inherited Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    PUTSTATIC Test.foo LTest$Foo;
+    LDC MethodHandleDesc[VIRTUAL/Test$Foo::equals(Test$Foo,int)boolean]
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.numeric Ljava/lang/invoke/MethodHandle;
+    LDC MethodHandleDesc[VIRTUAL/Test$Foo::equals(Test$Foo,Object)boolean]
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[(Object)boolean]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.inherited Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.numeric Ljava/lang/invoke/MethodHandle;
+    LDC 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.inherited Ljava/lang/invoke/MethodHandle;
+    LDC "x"
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.inherited Ljava/lang/invoke/MethodHandle;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equals(I)Z flags [PUBLIC]
+    ILOAD_1 1
+    LDC 1
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+false
+true
+

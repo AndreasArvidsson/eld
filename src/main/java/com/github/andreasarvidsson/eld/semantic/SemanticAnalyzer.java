@@ -1026,10 +1026,12 @@ public final class SemanticAnalyzer {
     private void validateConstMethodUses() {
         for (final ConstMethodUse use : constMethodUses) {
             if (
-                mutatesReceiver(
-                    use.function(),
-                    Collections.newSetFromMap(new IdentityHashMap<>())
-                )
+                use.function()
+                    .equals(model.getReference(use.expression().member()))
+                    && mutatesReceiver(
+                        use.function(),
+                        Collections.newSetFromMap(new IdentityHashMap<>())
+                    )
             ) {
                 throw new SemanticException(
                     use.expression().range(),

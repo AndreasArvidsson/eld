@@ -113,6 +113,8 @@ public final class SemanticAnalyzerExpressions {
     private boolean analyzingCallee;
     private int callArity = -1;
     private List<Expression> javaCallArguments = List.of();
+    private @Nullable MemberExpression contextualMember;
+    private @Nullable FunctionType contextualMemberType;
 
     public SemanticAnalyzerExpressions(
         final SemanticAnalyzer analyzer,
@@ -142,6 +144,24 @@ public final class SemanticAnalyzerExpressions {
         }
         finally {
             analyzingCallee = previous;
+        }
+    }
+
+    public Type analyzeMemberReference(
+        final MemberExpression member,
+        final SemanticContext context,
+        final FunctionType expected
+    ) {
+        final MemberExpression previousMember = contextualMember;
+        final FunctionType previousType = contextualMemberType;
+        contextualMember = member;
+        contextualMemberType = expected;
+        try {
+            return analyzeExpressionAsCallee(member, context, true);
+        }
+        finally {
+            contextualMember = previousMember;
+            contextualMemberType = previousType;
         }
     }
 
@@ -507,6 +527,16 @@ public final class SemanticAnalyzerExpressions {
                             contract
                         );
                     }
+                    final Type contextualObjectMethod =
+                        resolveContextualObjectMethod(
+                            member,
+                            memberTarget,
+                            symbol,
+                            classTarget
+                        );
+                    if (contextualObjectMethod != null) {
+                        yield contextualObjectMethod;
+                    }
                     model.setMemberOwner(member, contract);
                     model.setReference(member.member(), symbol);
                     model.setExpressionType(member.member(), symbol.type());
@@ -571,6 +601,16 @@ public final class SemanticAnalyzerExpressions {
                         classType.name()
                     );
                 }
+                final Type contextualObjectMethod =
+                    resolveContextualObjectMethod(
+                        member,
+                        memberTarget,
+                        symbol,
+                        classTarget
+                    );
+                if (contextualObjectMethod != null) {
+                    yield contextualObjectMethod;
+                }
                 if (classTarget && !model.isStaticMember(symbol)) {
                     throw new SemanticException(
                         member.member().range(),
@@ -579,7 +619,15 @@ public final class SemanticAnalyzerExpressions {
                         classType.name()
                     );
                 }
-                if (!classTarget && model.isStaticMember(symbol)) {
+                final boolean objectOverloadCandidate =
+                    analyzingCallee && callArity == 1
+                        && !classTarget
+                        && symbol instanceof FunctionSymbol
+                        && member.member().name().equals("equals");
+                if (
+                    !classTarget && model.isStaticMember(symbol)
+                        && !objectOverloadCandidate
+                ) {
                     throw new SemanticException(
                         member.member().range(),
                         "Static member '%s' must be accessed on class %s",
@@ -589,7 +637,7 @@ public final class SemanticAnalyzerExpressions {
                 }
                 model.setMemberOwner(member, Objects.requireNonNull(owner));
                 if (
-                    !analyzer.canAccess(
+                    !objectOverloadCandidate && !analyzer.canAccess(
                         Objects.requireNonNull(owner),
                         model.getMemberVisibility(symbol)
                     )
@@ -927,6 +975,28 @@ public final class SemanticAnalyzerExpressions {
         }
 
         return type;
+    }
+
+    private @Nullable Type resolveContextualObjectMethod(
+        final MemberExpression member,
+        final Type target,
+        final Symbol symbol,
+        final boolean classTarget
+    ) {
+        if (
+            classTarget || !member.equals(contextualMember)
+                || contextualMemberType == null
+                || !member.member().name().equals("equals")
+                || !(symbol instanceof FunctionSymbol function)
+                || function.type().equals(contextualMemberType)
+        ) {
+            return null;
+        }
+        final JavaMethodSymbol method =
+            JavaTypes.objectMethod("equals", 1, member.range(), target);
+        return method != null && method.type().equals(contextualMemberType)
+            ? resolveObjectMethod(member, target)
+            : null;
     }
 
     private @Nullable Type resolveObjectMethod(
@@ -1474,7 +1544,29 @@ public final class SemanticAnalyzerExpressions {
                 );
             }
             final Type expected = function.parameterTypes().get(parameter);
-            final Type actual = analyzeExpression(argument, context, expected);
+            final Type actual;
+            try {
+                actual = analyzeExpression(argument, context, expected);
+            }
+            catch (final SemanticException exception) {
+                try {
+                    final Type objectResult =
+                        resolveOverloadedObjectMethod(
+                            call,
+                            callee,
+                            supplied,
+                            null,
+                            context
+                        );
+                    if (objectResult != null) {
+                        return objectResult;
+                    }
+                }
+                catch (final SemanticException ignored) {
+                    // Report the error from the declared overload.
+                }
+                throw exception;
+            }
             if (
                 analyzer.resolveAssignType(actual, expected, argument) == null
             ) {
@@ -1483,7 +1575,8 @@ public final class SemanticAnalyzerExpressions {
                         call,
                         callee,
                         supplied,
-                        actual
+                        actual,
+                        context
                     );
                 if (objectResult != null) {
                     return objectResult;
@@ -1510,25 +1603,69 @@ public final class SemanticAnalyzerExpressions {
                 );
             }
         }
+        validateSelectedObjectOverload(callee);
         model.setArgumentParameters(call, parameters);
         return function.returnType();
     }
 
-    private @Nullable Type resolveOverloadedObjectMethod(
-        final CallExpression call,
-        final Expression callee,
-        final Expression supplied,
-        final Type actual
-    ) {
+    private void validateSelectedObjectOverload(final Expression callee) {
         if (
             !(callee instanceof MemberExpression member)
                 || !member.member().name().equals("equals")
                 || !(model.getReference(
                     member.member()
                 ) instanceof FunctionSymbol function)
-                || model.isStaticMember(function)
+                || !(model.getMemberOwner(member) instanceof ClassType owner)
+                || (unwrap(
+                    member.target()
+                ) instanceof IdentifierExpression identifier
+                    && model.getReference(
+                        identifier
+                    ) instanceof ClassDeclarationSymbol)
+        ) {
+            return;
+        }
+        if (model.isStaticMember(function)) {
+            throw new SemanticException(
+                member.member().range(),
+                "Static member '%s' must be accessed on class %s",
+                function.name(),
+                owner.name()
+            );
+        }
+        if (!analyzer.canAccess(owner, model.getMemberVisibility(function))) {
+            throw new SemanticException(
+                member.member().range(),
+                "Member '%s' of class %s is %s",
+                function.name(),
+                owner.name(),
+                model.getMemberVisibility(function) == Visibility.PROTECTED
+                    ? "protected"
+                    : "private"
+            );
+        }
+    }
+
+    private @Nullable Type resolveOverloadedObjectMethod(
+        final CallExpression call,
+        final Expression callee,
+        final Expression supplied,
+        final @Nullable Type actual,
+        final SemanticContext context
+    ) {
+        if (
+            !(callee instanceof MemberExpression member)
+                || !member.member().name().equals("equals")
+                || !(model
+                    .getReference(member.member()) instanceof FunctionSymbol)
                 || supplied instanceof NamedArgumentExpression
                 || call.arguments().size() != 1
+                || (unwrap(
+                    member.target()
+                ) instanceof IdentifierExpression identifier
+                    && model.getReference(
+                        identifier
+                    ) instanceof ClassDeclarationSymbol)
         ) {
             return null;
         }
@@ -1539,9 +1676,13 @@ public final class SemanticAnalyzerExpressions {
         }
         final JavaMethodSymbol method =
             JavaTypes.objectMethod("equals", 1, member.range(), owner);
+        final Type argumentType =
+            actual == null
+                ? analyzeExpression(supplied, context, BuiltinType.ANY)
+                : actual;
         if (
             method == null || analyzer.resolveAssignType(
-                actual,
+                argumentType,
                 method.type().parameterTypes().getFirst(),
                 supplied
             ) == null
