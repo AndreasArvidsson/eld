@@ -1,0 +1,1185 @@
+class Animal {}
+class Dog extends Animal {}
+class Cat extends Animal {}
+const source: Dog | Cat = new Dog();
+const ternary = true ? source : new Animal();
+const conditional = if (true) { yield source; } else { yield new Animal(); };
+const selection = switch (1) { case 1 => source else => new Animal() };
+const direct: Animal = source;
+const typedTernary: Animal = true ? source : new Animal();
+const typedConditional: Animal = if (true) { yield source; } else { yield new Animal(); };
+const typedSelection: Animal = switch (1) { case 1 => source else => new Animal() };
+print(ternary.getClass().getSimpleName());
+print(conditional.getClass().getSimpleName());
+print(selection.getClass().getSimpleName());
+print(direct.getClass().getSimpleName());
+print(typedTernary.getClass().getSimpleName());
+print(typedConditional.getClass().getSimpleName());
+print(typedSelection.getClass().getSimpleName());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+LEFT_BRACE (1:14-1:15)
+RIGHT_BRACE (1:15-1:16)
+CLASS (2:1-2:6)
+IDENTIFIER "Dog" (2:7-2:10)
+EXTENDS (2:11-2:18)
+IDENTIFIER "Animal" (2:19-2:25)
+LEFT_BRACE (2:26-2:27)
+RIGHT_BRACE (2:27-2:28)
+CLASS (3:1-3:6)
+IDENTIFIER "Cat" (3:7-3:10)
+EXTENDS (3:11-3:18)
+IDENTIFIER "Animal" (3:19-3:25)
+LEFT_BRACE (3:26-3:27)
+RIGHT_BRACE (3:27-3:28)
+CONST (4:1-4:6)
+IDENTIFIER "source" (4:7-4:13)
+COLON (4:13-4:14)
+IDENTIFIER "Dog" (4:15-4:18)
+PIPE (4:19-4:20)
+IDENTIFIER "Cat" (4:21-4:24)
+EQUAL (4:25-4:26)
+NEW (4:27-4:30)
+IDENTIFIER "Dog" (4:31-4:34)
+LEFT_PAREN (4:34-4:35)
+RIGHT_PAREN (4:35-4:36)
+SEMICOLON (4:36-4:37)
+CONST (5:1-5:6)
+IDENTIFIER "ternary" (5:7-5:14)
+EQUAL (5:15-5:16)
+BOOLEAN_LITERAL "true" (5:17-5:21)
+QUESTION (5:22-5:23)
+IDENTIFIER "source" (5:24-5:30)
+COLON (5:31-5:32)
+NEW (5:33-5:36)
+IDENTIFIER "Animal" (5:37-5:43)
+LEFT_PAREN (5:43-5:44)
+RIGHT_PAREN (5:44-5:45)
+SEMICOLON (5:45-5:46)
+CONST (6:1-6:6)
+IDENTIFIER "conditional" (6:7-6:18)
+EQUAL (6:19-6:20)
+IF (6:21-6:23)
+LEFT_PAREN (6:24-6:25)
+BOOLEAN_LITERAL "true" (6:25-6:29)
+RIGHT_PAREN (6:29-6:30)
+LEFT_BRACE (6:31-6:32)
+YIELD (6:33-6:38)
+IDENTIFIER "source" (6:39-6:45)
+SEMICOLON (6:45-6:46)
+RIGHT_BRACE (6:47-6:48)
+ELSE (6:49-6:53)
+LEFT_BRACE (6:54-6:55)
+YIELD (6:56-6:61)
+NEW (6:62-6:65)
+IDENTIFIER "Animal" (6:66-6:72)
+LEFT_PAREN (6:72-6:73)
+RIGHT_PAREN (6:73-6:74)
+SEMICOLON (6:74-6:75)
+RIGHT_BRACE (6:76-6:77)
+SEMICOLON (6:77-6:78)
+CONST (7:1-7:6)
+IDENTIFIER "selection" (7:7-7:16)
+EQUAL (7:17-7:18)
+SWITCH (7:19-7:25)
+LEFT_PAREN (7:26-7:27)
+INTEGER_LITERAL "1" (7:27-7:28)
+RIGHT_PAREN (7:28-7:29)
+LEFT_BRACE (7:30-7:31)
+CASE (7:32-7:36)
+INTEGER_LITERAL "1" (7:37-7:38)
+ARROW (7:39-7:41)
+IDENTIFIER "source" (7:42-7:48)
+ELSE (7:49-7:53)
+ARROW (7:54-7:56)
+NEW (7:57-7:60)
+IDENTIFIER "Animal" (7:61-7:67)
+LEFT_PAREN (7:67-7:68)
+RIGHT_PAREN (7:68-7:69)
+RIGHT_BRACE (7:70-7:71)
+SEMICOLON (7:71-7:72)
+CONST (8:1-8:6)
+IDENTIFIER "direct" (8:7-8:13)
+COLON (8:13-8:14)
+IDENTIFIER "Animal" (8:15-8:21)
+EQUAL (8:22-8:23)
+IDENTIFIER "source" (8:24-8:30)
+SEMICOLON (8:30-8:31)
+CONST (9:1-9:6)
+IDENTIFIER "typedTernary" (9:7-9:19)
+COLON (9:19-9:20)
+IDENTIFIER "Animal" (9:21-9:27)
+EQUAL (9:28-9:29)
+BOOLEAN_LITERAL "true" (9:30-9:34)
+QUESTION (9:35-9:36)
+IDENTIFIER "source" (9:37-9:43)
+COLON (9:44-9:45)
+NEW (9:46-9:49)
+IDENTIFIER "Animal" (9:50-9:56)
+LEFT_PAREN (9:56-9:57)
+RIGHT_PAREN (9:57-9:58)
+SEMICOLON (9:58-9:59)
+CONST (10:1-10:6)
+IDENTIFIER "typedConditional" (10:7-10:23)
+COLON (10:23-10:24)
+IDENTIFIER "Animal" (10:25-10:31)
+EQUAL (10:32-10:33)
+IF (10:34-10:36)
+LEFT_PAREN (10:37-10:38)
+BOOLEAN_LITERAL "true" (10:38-10:42)
+RIGHT_PAREN (10:42-10:43)
+LEFT_BRACE (10:44-10:45)
+YIELD (10:46-10:51)
+IDENTIFIER "source" (10:52-10:58)
+SEMICOLON (10:58-10:59)
+RIGHT_BRACE (10:60-10:61)
+ELSE (10:62-10:66)
+LEFT_BRACE (10:67-10:68)
+YIELD (10:69-10:74)
+NEW (10:75-10:78)
+IDENTIFIER "Animal" (10:79-10:85)
+LEFT_PAREN (10:85-10:86)
+RIGHT_PAREN (10:86-10:87)
+SEMICOLON (10:87-10:88)
+RIGHT_BRACE (10:89-10:90)
+SEMICOLON (10:90-10:91)
+CONST (11:1-11:6)
+IDENTIFIER "typedSelection" (11:7-11:21)
+COLON (11:21-11:22)
+IDENTIFIER "Animal" (11:23-11:29)
+EQUAL (11:30-11:31)
+SWITCH (11:32-11:38)
+LEFT_PAREN (11:39-11:40)
+INTEGER_LITERAL "1" (11:40-11:41)
+RIGHT_PAREN (11:41-11:42)
+LEFT_BRACE (11:43-11:44)
+CASE (11:45-11:49)
+INTEGER_LITERAL "1" (11:50-11:51)
+ARROW (11:52-11:54)
+IDENTIFIER "source" (11:55-11:61)
+ELSE (11:62-11:66)
+ARROW (11:67-11:69)
+NEW (11:70-11:73)
+IDENTIFIER "Animal" (11:74-11:80)
+LEFT_PAREN (11:80-11:81)
+RIGHT_PAREN (11:81-11:82)
+RIGHT_BRACE (11:83-11:84)
+SEMICOLON (11:84-11:85)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "ternary" (12:7-12:14)
+DOT (12:14-12:15)
+IDENTIFIER "getClass" (12:15-12:23)
+LEFT_PAREN (12:23-12:24)
+RIGHT_PAREN (12:24-12:25)
+DOT (12:25-12:26)
+IDENTIFIER "getSimpleName" (12:26-12:39)
+LEFT_PAREN (12:39-12:40)
+RIGHT_PAREN (12:40-12:41)
+RIGHT_PAREN (12:41-12:42)
+SEMICOLON (12:42-12:43)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "conditional" (13:7-13:18)
+DOT (13:18-13:19)
+IDENTIFIER "getClass" (13:19-13:27)
+LEFT_PAREN (13:27-13:28)
+RIGHT_PAREN (13:28-13:29)
+DOT (13:29-13:30)
+IDENTIFIER "getSimpleName" (13:30-13:43)
+LEFT_PAREN (13:43-13:44)
+RIGHT_PAREN (13:44-13:45)
+RIGHT_PAREN (13:45-13:46)
+SEMICOLON (13:46-13:47)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "selection" (14:7-14:16)
+DOT (14:16-14:17)
+IDENTIFIER "getClass" (14:17-14:25)
+LEFT_PAREN (14:25-14:26)
+RIGHT_PAREN (14:26-14:27)
+DOT (14:27-14:28)
+IDENTIFIER "getSimpleName" (14:28-14:41)
+LEFT_PAREN (14:41-14:42)
+RIGHT_PAREN (14:42-14:43)
+RIGHT_PAREN (14:43-14:44)
+SEMICOLON (14:44-14:45)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "direct" (15:7-15:13)
+DOT (15:13-15:14)
+IDENTIFIER "getClass" (15:14-15:22)
+LEFT_PAREN (15:22-15:23)
+RIGHT_PAREN (15:23-15:24)
+DOT (15:24-15:25)
+IDENTIFIER "getSimpleName" (15:25-15:38)
+LEFT_PAREN (15:38-15:39)
+RIGHT_PAREN (15:39-15:40)
+RIGHT_PAREN (15:40-15:41)
+SEMICOLON (15:41-15:42)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "typedTernary" (16:7-16:19)
+DOT (16:19-16:20)
+IDENTIFIER "getClass" (16:20-16:28)
+LEFT_PAREN (16:28-16:29)
+RIGHT_PAREN (16:29-16:30)
+DOT (16:30-16:31)
+IDENTIFIER "getSimpleName" (16:31-16:44)
+LEFT_PAREN (16:44-16:45)
+RIGHT_PAREN (16:45-16:46)
+RIGHT_PAREN (16:46-16:47)
+SEMICOLON (16:47-16:48)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "typedConditional" (17:7-17:23)
+DOT (17:23-17:24)
+IDENTIFIER "getClass" (17:24-17:32)
+LEFT_PAREN (17:32-17:33)
+RIGHT_PAREN (17:33-17:34)
+DOT (17:34-17:35)
+IDENTIFIER "getSimpleName" (17:35-17:48)
+LEFT_PAREN (17:48-17:49)
+RIGHT_PAREN (17:49-17:50)
+RIGHT_PAREN (17:50-17:51)
+SEMICOLON (17:51-17:52)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "typedSelection" (18:7-18:21)
+DOT (18:21-18:22)
+IDENTIFIER "getClass" (18:22-18:30)
+LEFT_PAREN (18:30-18:31)
+RIGHT_PAREN (18:31-18:32)
+DOT (18:32-18:33)
+IDENTIFIER "getSimpleName" (18:33-18:46)
+LEFT_PAREN (18:46-18:47)
+RIGHT_PAREN (18:47-18:48)
+RIGHT_PAREN (18:48-18:49)
+SEMICOLON (18:49-18:50)
+
+--- AST ---
+
+(Program
+  range: 1:1-18:50
+  (ClassDeclaration
+    range: 1:1-1:16
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-2:28
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "Dog"
+    )
+    (IdentifierExpression
+      range: 2:19-2:25
+      name: "Animal"
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-3:28
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "Cat"
+    )
+    (IdentifierExpression
+      range: 3:19-3:25
+      name: "Animal"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "source"
+    )
+    (UnionTypeNode
+      range: 4:15-4:24
+      (NamedTypeNode
+        range: 4:15-4:18
+        name: "Dog"
+      )
+      (NamedTypeNode
+        range: 4:21-4:24
+        name: "Cat"
+      )
+    )
+    (NewExpression
+      range: 4:27-4:36
+      (IdentifierExpression
+        range: 4:31-4:34
+        name: "Dog"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "ternary"
+    )
+    type: null
+    (TernaryExpression
+      range: 5:17-5:45
+      (LiteralExpression
+        range: 5:17-5:21
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 5:24-5:30
+        name: "source"
+      )
+      (NewExpression
+        range: 5:33-5:45
+        (IdentifierExpression
+          range: 5:37-5:43
+          name: "Animal"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:78
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:18
+      name: "conditional"
+    )
+    type: null
+    (IfExpression
+      range: 6:21-6:77
+      (LiteralExpression
+        range: 6:25-6:29
+        kind: BOOL
+        text: "true"
+      )
+      (BlockStatement
+        range: 6:31-6:48
+        (YieldStatement
+          range: 6:33-6:46
+          (IdentifierExpression
+            range: 6:39-6:45
+            name: "source"
+          )
+        )
+      )
+      (BlockStatement
+        range: 6:54-6:77
+        (YieldStatement
+          range: 6:56-6:75
+          (NewExpression
+            range: 6:62-6:74
+            (IdentifierExpression
+              range: 6:66-6:72
+              name: "Animal"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:72
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:16
+      name: "selection"
+    )
+    type: null
+    (SwitchExpression
+      range: 7:19-7:71
+      (LiteralExpression
+        range: 7:27-7:28
+        kind: INT
+        text: "1"
+      )
+      (SwitchBranch
+        range: 7:32-7:48
+        (LiteralExpression
+          range: 7:37-7:38
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 7:42-7:48
+          (IdentifierExpression
+            range: 7:42-7:48
+            name: "source"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 7:49-7:69
+        (SwitchBranchExpressionBody
+          range: 7:57-7:69
+          (NewExpression
+            range: 7:57-7:69
+            (IdentifierExpression
+              range: 7:61-7:67
+              name: "Animal"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:13
+      name: "direct"
+    )
+    (NamedTypeNode
+      range: 8:15-8:21
+      name: "Animal"
+    )
+    (IdentifierExpression
+      range: 8:24-8:30
+      name: "source"
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:59
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:19
+      name: "typedTernary"
+    )
+    (NamedTypeNode
+      range: 9:21-9:27
+      name: "Animal"
+    )
+    (TernaryExpression
+      range: 9:30-9:58
+      (LiteralExpression
+        range: 9:30-9:34
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 9:37-9:43
+        name: "source"
+      )
+      (NewExpression
+        range: 9:46-9:58
+        (IdentifierExpression
+          range: 9:50-9:56
+          name: "Animal"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:91
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:23
+      name: "typedConditional"
+    )
+    (NamedTypeNode
+      range: 10:25-10:31
+      name: "Animal"
+    )
+    (IfExpression
+      range: 10:34-10:90
+      (LiteralExpression
+        range: 10:38-10:42
+        kind: BOOL
+        text: "true"
+      )
+      (BlockStatement
+        range: 10:44-10:61
+        (YieldStatement
+          range: 10:46-10:59
+          (IdentifierExpression
+            range: 10:52-10:58
+            name: "source"
+          )
+        )
+      )
+      (BlockStatement
+        range: 10:67-10:90
+        (YieldStatement
+          range: 10:69-10:88
+          (NewExpression
+            range: 10:75-10:87
+            (IdentifierExpression
+              range: 10:79-10:85
+              name: "Animal"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:85
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:21
+      name: "typedSelection"
+    )
+    (NamedTypeNode
+      range: 11:23-11:29
+      name: "Animal"
+    )
+    (SwitchExpression
+      range: 11:32-11:84
+      (LiteralExpression
+        range: 11:40-11:41
+        kind: INT
+        text: "1"
+      )
+      (SwitchBranch
+        range: 11:45-11:61
+        (LiteralExpression
+          range: 11:50-11:51
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 11:55-11:61
+          (IdentifierExpression
+            range: 11:55-11:61
+            name: "source"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 11:62-11:82
+        (SwitchBranchExpressionBody
+          range: 11:70-11:82
+          (NewExpression
+            range: 11:70-11:82
+            (IdentifierExpression
+              range: 11:74-11:80
+              name: "Animal"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:43
+    (CallExpression
+      range: 12:1-12:42
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:41
+        (MemberExpression
+          range: 12:7-12:39
+          (CallExpression
+            range: 12:7-12:25
+            (MemberExpression
+              range: 12:7-12:23
+              (IdentifierExpression
+                range: 12:7-12:14
+                name: "ternary"
+              )
+              (IdentifierExpression
+                range: 12:15-12:23
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 12:26-12:39
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:47
+    (CallExpression
+      range: 13:1-13:46
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:45
+        (MemberExpression
+          range: 13:7-13:43
+          (CallExpression
+            range: 13:7-13:29
+            (MemberExpression
+              range: 13:7-13:27
+              (IdentifierExpression
+                range: 13:7-13:18
+                name: "conditional"
+              )
+              (IdentifierExpression
+                range: 13:19-13:27
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 13:30-13:43
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:45
+    (CallExpression
+      range: 14:1-14:44
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:43
+        (MemberExpression
+          range: 14:7-14:41
+          (CallExpression
+            range: 14:7-14:27
+            (MemberExpression
+              range: 14:7-14:25
+              (IdentifierExpression
+                range: 14:7-14:16
+                name: "selection"
+              )
+              (IdentifierExpression
+                range: 14:17-14:25
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 14:28-14:41
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:42
+    (CallExpression
+      range: 15:1-15:41
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:40
+        (MemberExpression
+          range: 15:7-15:38
+          (CallExpression
+            range: 15:7-15:24
+            (MemberExpression
+              range: 15:7-15:22
+              (IdentifierExpression
+                range: 15:7-15:13
+                name: "direct"
+              )
+              (IdentifierExpression
+                range: 15:14-15:22
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 15:25-15:38
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:48
+    (CallExpression
+      range: 16:1-16:47
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:46
+        (MemberExpression
+          range: 16:7-16:44
+          (CallExpression
+            range: 16:7-16:30
+            (MemberExpression
+              range: 16:7-16:28
+              (IdentifierExpression
+                range: 16:7-16:19
+                name: "typedTernary"
+              )
+              (IdentifierExpression
+                range: 16:20-16:28
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 16:31-16:44
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:52
+    (CallExpression
+      range: 17:1-17:51
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:50
+        (MemberExpression
+          range: 17:7-17:48
+          (CallExpression
+            range: 17:7-17:34
+            (MemberExpression
+              range: 17:7-17:32
+              (IdentifierExpression
+                range: 17:7-17:23
+                name: "typedConditional"
+              )
+              (IdentifierExpression
+                range: 17:24-17:32
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 17:35-17:48
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:50
+    (CallExpression
+      range: 18:1-18:49
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:48
+        (MemberExpression
+          range: 18:7-18:46
+          (CallExpression
+            range: 18:7-18:32
+            (MemberExpression
+              range: 18:7-18:30
+              (IdentifierExpression
+                range: 18:7-18:21
+                name: "typedSelection"
+              )
+              (IdentifierExpression
+                range: 18:22-18:30
+                name: "getClass"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 18:33-18:46
+            name: "getSimpleName"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:19-2:25 -> Animal
+  3:19-3:25 -> Animal
+  4:27-4:36 -> Dog
+  4:31-4:34 -> Dog
+  5:17-5:21 -> bool
+  5:17-5:45 -> Dog | Cat | Animal
+  5:24-5:30 -> Dog | Cat
+  5:33-5:45 -> Animal
+  5:37-5:43 -> Animal
+  6:21-6:77 -> Dog | Cat | Animal
+  6:25-6:29 -> bool
+  6:39-6:45 -> Dog | Cat
+  6:62-6:74 -> Animal
+  6:66-6:72 -> Animal
+  7:19-7:71 -> Dog | Cat | Animal
+  7:27-7:28 -> i32
+  7:37-7:38 -> i32
+  7:42-7:48 -> Dog | Cat
+  7:57-7:69 -> Animal
+  7:61-7:67 -> Animal
+  8:24-8:30 -> Dog | Cat
+  9:30-9:34 -> bool
+  9:30-9:58 -> Dog | Cat | Animal
+  9:37-9:43 -> Dog | Cat
+  9:46-9:58 -> Animal
+  9:50-9:56 -> Animal
+  10:34-10:90 -> Dog | Cat | Animal
+  10:38-10:42 -> bool
+  10:52-10:58 -> Dog | Cat
+  10:75-10:87 -> Animal
+  10:79-10:85 -> Animal
+  11:32-11:84 -> Dog | Cat | Animal
+  11:40-11:41 -> i32
+  11:50-11:51 -> i32
+  11:55-11:61 -> Dog | Cat
+  11:70-11:82 -> Animal
+  11:74-11:80 -> Animal
+  12:1-12:6 -> (any) => void
+  12:1-12:42 -> void
+  12:7-12:14 -> Dog | Cat | Animal
+  12:7-12:23 -> () => Type<Dog | Cat | Animal>
+  12:7-12:25 -> Type<Dog | Cat | Animal>
+  12:7-12:39 -> () => string
+  12:7-12:41 -> string
+  12:15-12:23 -> () => Type<Dog | Cat | Animal>
+  12:26-12:39 -> () => string
+  13:1-13:6 -> (any) => void
+  13:1-13:46 -> void
+  13:7-13:18 -> Dog | Cat | Animal
+  13:7-13:27 -> () => Type<Dog | Cat | Animal>
+  13:7-13:29 -> Type<Dog | Cat | Animal>
+  13:7-13:43 -> () => string
+  13:7-13:45 -> string
+  13:19-13:27 -> () => Type<Dog | Cat | Animal>
+  13:30-13:43 -> () => string
+  14:1-14:6 -> (any) => void
+  14:1-14:44 -> void
+  14:7-14:16 -> Dog | Cat | Animal
+  14:7-14:25 -> () => Type<Dog | Cat | Animal>
+  14:7-14:27 -> Type<Dog | Cat | Animal>
+  14:7-14:41 -> () => string
+  14:7-14:43 -> string
+  14:17-14:25 -> () => Type<Dog | Cat | Animal>
+  14:28-14:41 -> () => string
+  15:1-15:6 -> (any) => void
+  15:1-15:41 -> void
+  15:7-15:13 -> Animal
+  15:7-15:22 -> () => Type<Animal>
+  15:7-15:24 -> Type<Animal>
+  15:7-15:38 -> () => string
+  15:7-15:40 -> string
+  15:14-15:22 -> () => Type<Animal>
+  15:25-15:38 -> () => string
+  16:1-16:6 -> (any) => void
+  16:1-16:47 -> void
+  16:7-16:19 -> Animal
+  16:7-16:28 -> () => Type<Animal>
+  16:7-16:30 -> Type<Animal>
+  16:7-16:44 -> () => string
+  16:7-16:46 -> string
+  16:20-16:28 -> () => Type<Animal>
+  16:31-16:44 -> () => string
+  17:1-17:6 -> (any) => void
+  17:1-17:51 -> void
+  17:7-17:23 -> Animal
+  17:7-17:32 -> () => Type<Animal>
+  17:7-17:34 -> Type<Animal>
+  17:7-17:48 -> () => string
+  17:7-17:50 -> string
+  17:24-17:32 -> () => Type<Animal>
+  17:35-17:48 -> () => string
+  18:1-18:6 -> (any) => void
+  18:1-18:49 -> void
+  18:7-18:21 -> Animal
+  18:7-18:30 -> () => Type<Animal>
+  18:7-18:32 -> Type<Animal>
+  18:7-18:46 -> () => string
+  18:7-18:48 -> string
+  18:22-18:30 -> () => Type<Animal>
+  18:33-18:46 -> () => string
+
+Resolved types:
+  4:15-4:18 -> Dog
+  4:15-4:24 -> Dog | Cat
+  4:21-4:24 -> Cat
+  8:15-8:21 -> Animal
+  9:21-9:27 -> Animal
+  10:25-10:31 -> Animal
+  11:23-11:29 -> Animal
+
+Conversions:
+  4:27-4:36 -> Dog -> Dog | Cat
+  5:24-5:30 -> Dog | Cat -> Dog | Cat | Animal
+  5:33-5:45 -> Animal -> Dog | Cat | Animal
+  6:39-6:45 -> Dog | Cat -> Dog | Cat | Animal
+  6:62-6:74 -> Animal -> Dog | Cat | Animal
+  7:42-7:48 -> Dog | Cat -> Dog | Cat | Animal
+  7:57-7:69 -> Animal -> Dog | Cat | Animal
+  8:24-8:30 -> Dog | Cat -> Animal
+  9:30-9:58 -> Dog | Cat | Animal -> Animal
+  9:37-9:43 -> Dog | Cat -> Dog | Cat | Animal
+  9:46-9:58 -> Animal -> Dog | Cat | Animal
+  10:34-10:90 -> Dog | Cat | Animal -> Animal
+  10:52-10:58 -> Dog | Cat -> Dog | Cat | Animal
+  10:75-10:87 -> Animal -> Dog | Cat | Animal
+  11:32-11:84 -> Dog | Cat | Animal -> Animal
+  11:55-11:61 -> Dog | Cat -> Dog | Cat | Animal
+  11:70-11:82 -> Animal -> Dog | Cat | Animal
+
+Declarations:
+  1:7-1:13 -> class Animal
+  2:7-2:10 -> class Dog
+  3:7-3:10 -> class Cat
+  4:7-4:13 -> const source: Dog | Cat
+  5:7-5:14 -> const ternary: Dog | Cat | Animal
+  6:7-6:18 -> const conditional: Dog | Cat | Animal
+  7:7-7:16 -> const selection: Dog | Cat | Animal
+  8:7-8:13 -> const direct: Animal
+  9:7-9:19 -> const typedTernary: Animal
+  10:7-10:23 -> const typedConditional: Animal
+  11:7-11:21 -> const typedSelection: Animal
+
+References:
+  2:19-2:25 -> 1:7-1:13
+  3:19-3:25 -> 1:7-1:13
+  4:31-4:34 -> 2:7-2:10
+  5:24-5:30 -> 4:7-4:13
+  5:37-5:43 -> 1:7-1:13
+  6:39-6:45 -> 4:7-4:13
+  6:66-6:72 -> 1:7-1:13
+  7:42-7:48 -> 4:7-4:13
+  7:61-7:67 -> 1:7-1:13
+  8:24-8:30 -> 4:7-4:13
+  9:37-9:43 -> 4:7-4:13
+  9:50-9:56 -> 1:7-1:13
+  10:52-10:58 -> 4:7-4:13
+  10:79-10:85 -> 1:7-1:13
+  11:55-11:61 -> 4:7-4:13
+  11:74-11:80 -> 1:7-1:13
+  12:1-12:6 -> builtin print
+  12:7-12:14 -> 5:7-5:14
+  12:15-12:23 -> Dog | Cat | Animal.getClass(): Type<Dog | Cat | Animal>
+  12:26-12:39 -> Type<Dog | Cat | Animal>.getSimpleName(): string
+  13:1-13:6 -> builtin print
+  13:7-13:18 -> 6:7-6:18
+  13:19-13:27 -> Dog | Cat | Animal.getClass(): Type<Dog | Cat | Animal>
+  13:30-13:43 -> Type<Dog | Cat | Animal>.getSimpleName(): string
+  14:1-14:6 -> builtin print
+  14:7-14:16 -> 7:7-7:16
+  14:17-14:25 -> Dog | Cat | Animal.getClass(): Type<Dog | Cat | Animal>
+  14:28-14:41 -> Type<Dog | Cat | Animal>.getSimpleName(): string
+  15:1-15:6 -> builtin print
+  15:7-15:13 -> 8:7-8:13
+  15:14-15:22 -> Animal.getClass(): Type<Animal>
+  15:25-15:38 -> Type<Animal>.getSimpleName(): string
+  16:1-16:6 -> builtin print
+  16:7-16:19 -> 9:7-9:19
+  16:20-16:28 -> Animal.getClass(): Type<Animal>
+  16:31-16:44 -> Type<Animal>.getSimpleName(): string
+  17:1-17:6 -> builtin print
+  17:7-17:23 -> 10:7-10:23
+  17:24-17:32 -> Animal.getClass(): Type<Animal>
+  17:35-17:48 -> Type<Animal>.getSimpleName(): string
+  18:1-18:6 -> builtin print
+  18:7-18:21 -> 11:7-11:21
+  18:22-18:30 -> Animal.getClass(): Type<Animal>
+  18:33-18:46 -> Type<Animal>.getSimpleName(): string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  nest member Test$Dog
+  nest member Test$Cat
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  field source Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field ternary Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field conditional Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field selection Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field direct LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field typedTernary LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field typedConditional LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field typedSelection LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    PUTSTATIC Test.source Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L0
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L1
+   L0:
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+   L1:
+    PUTSTATIC Test.ternary Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L2
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L3
+   L2:
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+    GOTO L3
+   L3:
+    PUTSTATIC Test.conditional Ljava/lang/Object;
+    LDC 1
+    TABLESWITCH 1..1 default L5 1:L4
+   L4:
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L6
+   L5:
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+   L6:
+    PUTSTATIC Test.selection Ljava/lang/Object;
+    GETSTATIC Test.source Ljava/lang/Object;
+    CHECKCAST Test$Animal
+    PUTSTATIC Test.direct LTest$Animal;
+    ICONST_1 1
+    IFEQ L7
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L8
+   L7:
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+   L8:
+    CHECKCAST Test$Animal
+    PUTSTATIC Test.typedTernary LTest$Animal;
+    ICONST_1 1
+    IFEQ L9
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L10
+   L9:
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+    GOTO L10
+   L10:
+    CHECKCAST Test$Animal
+    PUTSTATIC Test.typedConditional LTest$Animal;
+    LDC 1
+    TABLESWITCH 1..1 default L12 1:L11
+   L11:
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L13
+   L12:
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+   L13:
+    CHECKCAST Test$Animal
+    PUTSTATIC Test.typedSelection LTest$Animal;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ternary Ljava/lang/Object;
+    INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.conditional Ljava/lang/Object;
+    INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.selection Ljava/lang/Object;
+    INVOKEVIRTUAL java/lang/Object.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.direct LTest$Animal;
+    INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.typedTernary LTest$Animal;
+    INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.typedConditional LTest$Animal;
+    INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.typedSelection LTest$Animal;
+    INVOKEVIRTUAL Test$Animal.getClass()Ljava/lang/Class;
+    CHECKCAST java/lang/Class
+    INVOKEVIRTUAL java/lang/Class.getSimpleName()Ljava/lang/String;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Cat extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  nest host Test
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+Dog
+Dog
+Dog
+Dog
+Dog
+Dog
+Dog
+

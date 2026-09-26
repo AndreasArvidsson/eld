@@ -2149,7 +2149,6 @@ class BytecodeGeneratorTest {
     @Test
     void anyBranchTargetsStillRequireValuesAndCompleteBranches() {
         for (final String source : List.of(
-            "const value = if (true) { yield 5; } else { yield 0.5; };",
             "const value: any = if (true) { yield 5; };",
             "const value: any = if (true) { yield 5; } else {};",
             "func empty() {} const value: any = if (true) { yield empty(); } else { yield 1; };",
@@ -3392,7 +3391,6 @@ class BytecodeGeneratorTest {
     void switchRejectsInvalidValuePathsAndStillChecksDiscardedBranches() {
         for (final String source : List.of(
             "const x = switch (1) { case 1 => 2 };",
-            "const x = switch (1) { case 1 => 2 else => 2.5 };",
             "const x: f32 = switch (1) { case 1 => 2 else => 2.5 };",
             "const x = switch (1) { case 1 { 2; } else => 3 };",
             "const x = switch (1) { case 1 { if (true) { yield 2; } } else => 3 };",
@@ -3470,7 +3468,7 @@ class BytecodeGeneratorTest {
     }
 
     @Test
-    void conditionalBranchesRequireMatchingTypesBeforeAssignmentConversion()
+    void conditionalBranchesInferUnionBeforeAssignmentConversion()
         throws Exception {
         for (final String expression : List.of(
             "true ? 1 : 2.5",
@@ -3480,10 +3478,7 @@ class BytecodeGeneratorTest {
             "if (true) { yield 1; } elif (false) { yield 2.5; } else { yield 3; }",
             "if (true) { if (false) { yield 1.5; } yield 1; } else { yield 2; }"
         )) {
-            assertThrows(
-                SemanticException.class,
-                () -> compile("const value = " + expression + ";")
-            );
+            assertNotNull(compile("const value = " + expression + ";"));
             assertThrows(
                 SemanticException.class,
                 () -> compile("const value: f32 = " + expression + ";")
@@ -3505,6 +3500,79 @@ class BytecodeGeneratorTest {
         assertEquals(5.0f, type.getField("assigned").get(null));
         assertEquals(7.0f, type.getMethod("result").invoke(null));
         assertEquals(1.5, type.getField("floating").get(null));
+    }
+
+    @Test
+    void conditionalBranchesPreserveNumericMembersOfExistingUnions()
+        throws Exception {
+        final Class<?> type = compile("""
+            const source: i8 | bool = 1;
+            const ternary = true ? source : 2;
+            const conditional = if (true) { yield source; } else { yield 2; };
+            const selection = switch (1) { case 1 => source else => 2 };
+            const other = false ? source : 2;
+            """);
+        assertEquals((byte) 1, type.getField("ternary").get(null));
+        assertEquals((byte) 1, type.getField("conditional").get(null));
+        assertEquals((byte) 1, type.getField("selection").get(null));
+        assertEquals(2, type.getField("other").get(null));
+    }
+
+    @Test
+    void conditionalBranchesPreserveClassMembersOfExistingUnions()
+        throws Exception {
+        final Class<?> type =
+            compileClass(
+                """
+                    class Animal {}
+                    class Dog extends Animal {}
+                    class Cat extends Animal {}
+                    const source: Dog | Cat = new Dog();
+                    const ternary = true ? source : new Animal();
+                    const conditional = if (true) { yield source; } else { yield new Animal(); };
+                    const selection = switch (1) { case 1 => source else => new Animal() };
+                    const direct: Animal = source;
+                    const typedTernary: Animal = true ? source : new Animal();
+                    const typedConditional: Animal = if (true) { yield source; } else { yield new Animal(); };
+                    const typedSelection: Animal = switch (1) { case 1 => source else => new Animal() };
+                    """,
+                "Test"
+            );
+        assertEquals(
+            "Dog",
+            type.getField("ternary").get(null).getClass().getSimpleName()
+        );
+        assertEquals(
+            "Dog",
+            type.getField("conditional").get(null).getClass().getSimpleName()
+        );
+        assertEquals(
+            "Dog",
+            type.getField("selection").get(null).getClass().getSimpleName()
+        );
+        for (final String field : List.of(
+            "direct",
+            "typedTernary",
+            "typedConditional",
+            "typedSelection"
+        )) {
+            assertEquals(
+                "Dog",
+                type.getField(field).get(null).getClass().getSimpleName()
+            );
+        }
+    }
+
+    @Test
+    void duplicatePrimitiveUnionMembersCollapse() throws Exception {
+        final Class<?> type = compile("""
+            const value: i32 | i32 = 1;
+            const target: i32 = value;
+            const flag: bool | bool = true;
+            const typedFlag: bool = flag;
+            """);
+        assertEquals(1, type.getField("target").get(null));
+        assertEquals(true, type.getField("typedFlag").get(null));
     }
 
     @Test

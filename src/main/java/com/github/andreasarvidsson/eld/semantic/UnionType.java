@@ -18,10 +18,10 @@ public record UnionType(List<Type> memberTypes) implements Type {
         ) {
             return BuiltinType.ANY;
         }
-        final UnionType union = new UnionType(members);
-        return union.memberTypes.size() == 1
-            ? union.memberTypes.getFirst()
-            : union;
+        final List<Type> distinct = members.stream().distinct().toList();
+        return distinct.size() == 1
+            ? distinct.getFirst()
+            : new UnionType(distinct);
     }
 
     public boolean contains(final Type type) {

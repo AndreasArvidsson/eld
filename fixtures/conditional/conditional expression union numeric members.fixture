@@ -1,0 +1,376 @@
+const source: i8 | bool = 1;
+const ternary = true ? source : 2;
+const conditional = if (true) { yield source; } else { yield 2; };
+const selection = switch (1) { case 1 => source else => 2 };
+print(ternary);
+print(conditional);
+print(selection);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "source" (1:7-1:13)
+COLON (1:13-1:14)
+IDENTIFIER "i8" (1:15-1:17)
+PIPE (1:18-1:19)
+IDENTIFIER "bool" (1:20-1:24)
+EQUAL (1:25-1:26)
+INTEGER_LITERAL "1" (1:27-1:28)
+SEMICOLON (1:28-1:29)
+CONST (2:1-2:6)
+IDENTIFIER "ternary" (2:7-2:14)
+EQUAL (2:15-2:16)
+BOOLEAN_LITERAL "true" (2:17-2:21)
+QUESTION (2:22-2:23)
+IDENTIFIER "source" (2:24-2:30)
+COLON (2:31-2:32)
+INTEGER_LITERAL "2" (2:33-2:34)
+SEMICOLON (2:34-2:35)
+CONST (3:1-3:6)
+IDENTIFIER "conditional" (3:7-3:18)
+EQUAL (3:19-3:20)
+IF (3:21-3:23)
+LEFT_PAREN (3:24-3:25)
+BOOLEAN_LITERAL "true" (3:25-3:29)
+RIGHT_PAREN (3:29-3:30)
+LEFT_BRACE (3:31-3:32)
+YIELD (3:33-3:38)
+IDENTIFIER "source" (3:39-3:45)
+SEMICOLON (3:45-3:46)
+RIGHT_BRACE (3:47-3:48)
+ELSE (3:49-3:53)
+LEFT_BRACE (3:54-3:55)
+YIELD (3:56-3:61)
+INTEGER_LITERAL "2" (3:62-3:63)
+SEMICOLON (3:63-3:64)
+RIGHT_BRACE (3:65-3:66)
+SEMICOLON (3:66-3:67)
+CONST (4:1-4:6)
+IDENTIFIER "selection" (4:7-4:16)
+EQUAL (4:17-4:18)
+SWITCH (4:19-4:25)
+LEFT_PAREN (4:26-4:27)
+INTEGER_LITERAL "1" (4:27-4:28)
+RIGHT_PAREN (4:28-4:29)
+LEFT_BRACE (4:30-4:31)
+CASE (4:32-4:36)
+INTEGER_LITERAL "1" (4:37-4:38)
+ARROW (4:39-4:41)
+IDENTIFIER "source" (4:42-4:48)
+ELSE (4:49-4:53)
+ARROW (4:54-4:56)
+INTEGER_LITERAL "2" (4:57-4:58)
+RIGHT_BRACE (4:59-4:60)
+SEMICOLON (4:60-4:61)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "ternary" (5:7-5:14)
+RIGHT_PAREN (5:14-5:15)
+SEMICOLON (5:15-5:16)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "conditional" (6:7-6:18)
+RIGHT_PAREN (6:18-6:19)
+SEMICOLON (6:19-6:20)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "selection" (7:7-7:16)
+RIGHT_PAREN (7:16-7:17)
+SEMICOLON (7:17-7:18)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:18
+  (VariableDeclaration
+    range: 1:1-1:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "source"
+    )
+    (UnionTypeNode
+      range: 1:15-1:24
+      (NamedTypeNode
+        range: 1:15-1:17
+        name: "i8"
+      )
+      (NamedTypeNode
+        range: 1:20-1:24
+        name: "bool"
+      )
+    )
+    (LiteralExpression
+      range: 1:27-1:28
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "ternary"
+    )
+    type: null
+    (TernaryExpression
+      range: 2:17-2:34
+      (LiteralExpression
+        range: 2:17-2:21
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 2:24-2:30
+        name: "source"
+      )
+      (LiteralExpression
+        range: 2:33-2:34
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:67
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:18
+      name: "conditional"
+    )
+    type: null
+    (IfExpression
+      range: 3:21-3:66
+      (LiteralExpression
+        range: 3:25-3:29
+        kind: BOOL
+        text: "true"
+      )
+      (BlockStatement
+        range: 3:31-3:48
+        (YieldStatement
+          range: 3:33-3:46
+          (IdentifierExpression
+            range: 3:39-3:45
+            name: "source"
+          )
+        )
+      )
+      (BlockStatement
+        range: 3:54-3:66
+        (YieldStatement
+          range: 3:56-3:64
+          (LiteralExpression
+            range: 3:62-3:63
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:61
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:16
+      name: "selection"
+    )
+    type: null
+    (SwitchExpression
+      range: 4:19-4:60
+      (LiteralExpression
+        range: 4:27-4:28
+        kind: INT
+        text: "1"
+      )
+      (SwitchBranch
+        range: 4:32-4:48
+        (LiteralExpression
+          range: 4:37-4:38
+          kind: INT
+          text: "1"
+        )
+        (SwitchBranchExpressionBody
+          range: 4:42-4:48
+          (IdentifierExpression
+            range: 4:42-4:48
+            name: "source"
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 4:49-4:58
+        (SwitchBranchExpressionBody
+          range: 4:57-4:58
+          (LiteralExpression
+            range: 4:57-4:58
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:16
+    (CallExpression
+      range: 5:1-5:15
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:14
+        name: "ternary"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:20
+    (CallExpression
+      range: 6:1-6:19
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 6:7-6:18
+        name: "conditional"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:18
+    (CallExpression
+      range: 7:1-7:17
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:16
+        name: "selection"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:27-1:28 -> i32
+  2:17-2:21 -> bool
+  2:17-2:34 -> i8 | bool | i32
+  2:24-2:30 -> i8 | bool
+  2:33-2:34 -> i32
+  3:21-3:66 -> i8 | bool | i32
+  3:25-3:29 -> bool
+  3:39-3:45 -> i8 | bool
+  3:62-3:63 -> i32
+  4:19-4:60 -> i8 | bool | i32
+  4:27-4:28 -> i32
+  4:37-4:38 -> i32
+  4:42-4:48 -> i8 | bool
+  4:57-4:58 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:15 -> void
+  5:7-5:14 -> i8 | bool | i32
+  6:1-6:6 -> (any) => void
+  6:1-6:19 -> void
+  6:7-6:18 -> i8 | bool | i32
+  7:1-7:6 -> (any) => void
+  7:1-7:17 -> void
+  7:7-7:16 -> i8 | bool | i32
+
+Resolved types:
+  1:15-1:17 -> i8
+  1:15-1:24 -> i8 | bool
+  1:20-1:24 -> bool
+
+Conversions:
+  1:27-1:28 -> i32 -> i8 -> i8 | bool
+  2:24-2:30 -> i8 | bool -> i8 | bool | i32
+  2:33-2:34 -> i32 -> i8 | bool | i32
+  3:39-3:45 -> i8 | bool -> i8 | bool | i32
+  3:62-3:63 -> i32 -> i8 | bool | i32
+  4:42-4:48 -> i8 | bool -> i8 | bool | i32
+  4:57-4:58 -> i32 -> i8 | bool | i32
+
+Declarations:
+  1:7-1:13 -> const source: i8 | bool
+  2:7-2:14 -> const ternary: i8 | bool | i32
+  3:7-3:18 -> const conditional: i8 | bool | i32
+  4:7-4:16 -> const selection: i8 | bool | i32
+
+References:
+  2:24-2:30 -> 1:7-1:13
+  3:39-3:45 -> 1:7-1:13
+  4:42-4:48 -> 1:7-1:13
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 2:7-2:14
+  6:1-6:6 -> builtin print
+  6:7-6:18 -> 3:7-3:18
+  7:1-7:6 -> builtin print
+  7:7-7:16 -> 4:7-4:16
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field source Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field ternary Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field conditional Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field selection Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    I2B
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    PUTSTATIC Test.source Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L0
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L1
+   L0:
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+   L1:
+    PUTSTATIC Test.ternary Ljava/lang/Object;
+    ICONST_1 1
+    IFEQ L2
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L3
+   L2:
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    GOTO L3
+   L3:
+    PUTSTATIC Test.conditional Ljava/lang/Object;
+    LDC 1
+    TABLESWITCH 1..1 default L5 1:L4
+   L4:
+    GETSTATIC Test.source Ljava/lang/Object;
+    GOTO L6
+   L5:
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+   L6:
+    PUTSTATIC Test.selection Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ternary Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.conditional Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.selection Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+1
+1
+1
+

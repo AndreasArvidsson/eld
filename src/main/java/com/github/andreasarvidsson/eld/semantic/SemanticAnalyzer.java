@@ -2061,6 +2061,10 @@ public final class SemanticAnalyzer {
         return types.commonType(candidates);
     }
 
+    public @Nullable Type commonTypeStrict(final List<Type> candidates) {
+        return types.commonTypeStrict(candidates);
+    }
+
     public Type resolveNamedType(
         final NamedTypeNode named,
         final SemanticContext context

@@ -1,0 +1,114 @@
+const foo = true ? 5 : 0.5;
+print(foo);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+EQUAL (1:11-1:12)
+BOOLEAN_LITERAL "true" (1:13-1:17)
+QUESTION (1:18-1:19)
+INTEGER_LITERAL "5" (1:20-1:21)
+COLON (1:22-1:23)
+FLOAT_LITERAL "0.5" (1:24-1:27)
+SEMICOLON (1:27-1:28)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "foo" (2:7-2:10)
+RIGHT_PAREN (2:10-2:11)
+SEMICOLON (2:11-2:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:12
+  (VariableDeclaration
+    range: 1:1-1:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "foo"
+    )
+    type: null
+    (TernaryExpression
+      range: 1:13-1:27
+      (LiteralExpression
+        range: 1:13-1:17
+        kind: BOOL
+        text: "true"
+      )
+      (LiteralExpression
+        range: 1:20-1:21
+        kind: INT
+        text: "5"
+      )
+      (LiteralExpression
+        range: 1:24-1:27
+        kind: FLOAT
+        text: "0.5"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:12
+    (CallExpression
+      range: 2:1-2:11
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 2:7-2:10
+        name: "foo"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:17 -> bool
+  1:13-1:27 -> i32 | f64
+  1:20-1:21 -> i32
+  1:24-1:27 -> f64
+  2:1-2:6 -> (any) => void
+  2:1-2:11 -> void
+  2:7-2:10 -> i32 | f64
+
+Conversions:
+  1:20-1:21 -> i32 -> i32 | f64
+  1:24-1:27 -> f64 -> i32 | f64
+
+Declarations:
+  1:7-1:10 -> const foo: i32 | f64
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:10 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    ICONST_1 1
+    IFEQ L0
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    GOTO L1
+   L0:
+    LDC2_W 0.5
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+   L1:
+    PUTSTATIC Test.foo Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+5
+

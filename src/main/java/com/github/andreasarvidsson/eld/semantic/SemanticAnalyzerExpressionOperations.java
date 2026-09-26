@@ -640,7 +640,7 @@ public final class SemanticAnalyzerExpressionOperations {
         final Type elementType =
             elementTypes.isEmpty()
                 ? BuiltinType.NULL
-                : analyzer.commonType(elementTypes);
+                : analyzer.commonTypeStrict(elementTypes);
         if (elementType == null) {
             throw new SemanticException(
                 array.range(),
@@ -715,7 +715,7 @@ public final class SemanticAnalyzerExpressionOperations {
         final MapExpression map,
         final String elements
     ) {
-        final Type result = analyzer.commonType(types);
+        final Type result = analyzer.commonTypeStrict(types);
         if (result == null || result == BuiltinType.VOID) {
             throw new SemanticException(
                 map.range(),

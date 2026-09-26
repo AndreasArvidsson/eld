@@ -164,6 +164,17 @@ public final class SemanticAnalyzerTypes {
     }
 
     public @Nullable Type commonType(final List<Type> types) {
+        return commonType(types, true);
+    }
+
+    public @Nullable Type commonTypeStrict(final List<Type> types) {
+        return commonType(types, false);
+    }
+
+    private @Nullable Type commonType(
+        final List<Type> types,
+        final boolean allowUnion
+    ) {
         if (
             !types.isEmpty()
                 && types.stream().allMatch(types.getFirst()::equals)
@@ -180,10 +191,39 @@ public final class SemanticAnalyzerTypes {
         if (members.contains(BuiltinType.ANY)) {
             return BuiltinType.ANY;
         }
+        if (
+            allowUnion && types.stream().anyMatch(UnionType.class::isInstance)
+        ) {
+            return UnionType.of(members);
+        }
         final boolean nullable = members.remove(BuiltinType.NULL);
         final Type common = commonNonNullType(members);
         if (common == null) {
-            return nullable && members.isEmpty() ? BuiltinType.NULL : null;
+            if (members.isEmpty()) {
+                return BuiltinType.NULL;
+            }
+            if (!allowUnion) {
+                return null;
+            }
+            final List<Type> remaining = new ArrayList<>(members);
+            for (int i = 0; i < remaining.size(); i++) {
+                for (int j = i + 1; j < remaining.size(); j++) {
+                    final Type merged =
+                        commonNonNullType(
+                            List.of(remaining.get(i), remaining.get(j))
+                        );
+                    if (merged != null) {
+                        remaining.set(i, merged);
+                        remaining.remove(j);
+                        i = -1;
+                        break;
+                    }
+                }
+            }
+            if (nullable) {
+                remaining.add(BuiltinType.NULL);
+            }
+            return UnionType.of(remaining);
         }
         return nullable
             ? UnionType.of(List.of(common, BuiltinType.NULL))
@@ -315,6 +355,15 @@ public final class SemanticAnalyzerTypes {
             return to;
         }
         if (to == BuiltinType.ANY && from != BuiltinType.VOID) {
+            model.setConversionType(fromExpression, to);
+            return to;
+        }
+
+        if (
+            from instanceof UnionType source && source.memberTypes()
+                .stream()
+                .allMatch(member -> model.isSubtype(member, to))
+        ) {
             model.setConversionType(fromExpression, to);
             return to;
         }

@@ -4,6 +4,7 @@ const foo = switch (1) {
     }
     else => 0.5
 };
+print(foo);
 
 --- TOKENS ---
 
@@ -27,11 +28,16 @@ ARROW (5:10-5:12)
 FLOAT_LITERAL "0.5" (5:13-5:16)
 RIGHT_BRACE (6:1-6:2)
 SEMICOLON (6:2-6:3)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "foo" (7:7-7:10)
+RIGHT_PAREN (7:10-7:11)
+SEMICOLON (7:11-7:12)
 
 --- AST ---
 
 (Program
-  range: 1:1-6:3
+  range: 1:1-7:12
   (VariableDeclaration
     range: 1:1-6:3
     mutability: CONST
@@ -82,8 +88,68 @@ SEMICOLON (6:2-6:3)
       )
     )
   )
+  (ExpressionStatement
+    range: 7:1-7:12
+    (CallExpression
+      range: 7:1-7:11
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:10
+        name: "foo"
+      )
+    )
+  )
 )
 
 --- SEMANTIC ---
 
-SemanticException: Incompatible branch types: i32 and f64 at 5:13-5:16
+Expression types:
+  1:13-6:2 -> i32 | f64
+  1:21-1:22 -> i32
+  2:10-2:11 -> i32
+  3:15-3:16 -> i32
+  5:13-5:16 -> f64
+  7:1-7:6 -> (any) => void
+  7:1-7:11 -> void
+  7:7-7:10 -> i32 | f64
+
+Conversions:
+  3:15-3:16 -> i32 -> i32 | f64
+  5:13-5:16 -> f64 -> i32 | f64
+
+Declarations:
+  1:7-1:10 -> const foo: i32 | f64
+
+References:
+  7:1-7:6 -> builtin print
+  7:7-7:10 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field foo Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    TABLESWITCH 1..1 default L1 1:L0
+   L0:
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    GOTO L2
+   L1:
+    LDC2_W 0.5
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+   L2:
+    PUTSTATIC Test.foo Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+5
+

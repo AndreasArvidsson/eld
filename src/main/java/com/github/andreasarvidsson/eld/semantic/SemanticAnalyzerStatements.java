@@ -459,7 +459,6 @@ public final class SemanticAnalyzerStatements {
         if (elseBranch != null) {
             bodies.add(elseBranch.body());
         }
-        Type result = BuiltinType.VOID;
         final List<Expression> resultValues = new ArrayList<>();
         final List<Scope> branchScopes = new ArrayList<>();
         final boolean stableSubject =
@@ -553,24 +552,30 @@ public final class SemanticAnalyzerStatements {
                             "Every branch of a switch expression must produce a value"
                         );
                     }
-                    result =
-                        result == BuiltinType.VOID
-                            ? type
-                            : commonBranchType(result, type, value);
                 }
             }
         }
-        if (requireValue && result == BuiltinType.VOID) {
+        if (requireValue && resultValues.isEmpty()) {
             throw new SemanticException(
                 expression.range(),
                 "A switch expression must produce a value"
             );
         }
         if (requireValue) {
+            final Type result =
+                Objects.requireNonNull(
+                    analyzer.commonType(
+                        resultValues.stream()
+                            .map(model::getEffectiveType)
+                            .toList()
+                    )
+                );
             applyCommonType(resultValues, result);
+            branchScopes.forEach(Scope::mergeAssignments);
+            return result;
         }
         branchScopes.forEach(Scope::mergeAssignments);
-        return result;
+        return BuiltinType.VOID;
     }
 
     private boolean switchMatchSubtype(
@@ -669,10 +674,18 @@ public final class SemanticAnalyzerStatements {
                 "Every branch of an if expression must yield a value"
             );
         }
-        Type result = model.getEffectiveType(yields.getFirst().value());
-        for (final YieldStatement statement : yields) {
-            final Type type = model.getEffectiveType(statement.value());
-            result = commonBranchType(result, type, statement.value());
+        final Type result =
+            analyzer.commonType(
+                yields.stream()
+                    .map(YieldStatement::value)
+                    .map(model::getEffectiveType)
+                    .toList()
+            );
+        if (result == null) {
+            throw new SemanticException(
+                expression.range(),
+                "Every branch of an if expression must yield a value"
+            );
         }
         applyCommonType(
             yields.stream().map(YieldStatement::value).toList(),
@@ -715,7 +728,9 @@ public final class SemanticAnalyzerStatements {
             );
         }
         final Type result =
-            commonBranchType(thenType, elseType, expression.elseBranch());
+            Objects.requireNonNull(
+                analyzer.commonType(List.of(thenType, elseType))
+            );
         applyCommonType(
             List.of(expression.thenBranch(), expression.elseBranch()),
             result

@@ -6369,6 +6369,10 @@ public final class BytecodeGenerator {
             if (from.equals(to)) {
                 return;
             }
+            if (from instanceof UnionType) {
+                readObject(to);
+                return;
+            }
             if (from == BuiltinType.I64) {
                 if (to == BuiltinType.F32) {
                     method.l2f();

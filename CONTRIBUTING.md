@@ -185,8 +185,18 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Allow tuple values from conditional expressions like ternary? true ? 0 : null;
+- integer and float literals of different size.
+- hex and binary literals.
+  123 decimal
+  1_000_000 decimal with separators
+  0xFF hexadecimal
+  0xCAFE_BABE hexadecimal with separators
+  0b1010 binary
+  0b1111_0000 binary with separators
+- Multiline string as separate syntax?
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?
+- Value literals as type?
+  const value: "foo" | false | 0;
 - Overloaded functions
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
