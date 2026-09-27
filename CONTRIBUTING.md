@@ -185,7 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Trim trailing empty line in fixtures output?
 - Bitwise operators. c-style but allow only for integers.
 - Overloaded functions
 - Sealed classes/interfaces

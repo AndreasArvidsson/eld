@@ -291,4 +291,3 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 2
 after loop
 cleanup
-

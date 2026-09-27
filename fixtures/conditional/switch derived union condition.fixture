@@ -329,4 +329,3 @@ class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 derived
-

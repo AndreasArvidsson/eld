@@ -327,4 +327,3 @@ class Test$Derived extends Test$Middle version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 3
-

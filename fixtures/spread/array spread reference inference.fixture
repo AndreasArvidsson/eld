@@ -922,4 +922,3 @@ class Test$Sibling extends Test$Base version 65.0 flags [PUBLIC, SUPER]
 7
 [[1], [2]]
 [1, 2, null]
-

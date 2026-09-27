@@ -579,4 +579,3 @@ class Test$Point extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUP
 true
 true
 Point(x=1, y=2)
-

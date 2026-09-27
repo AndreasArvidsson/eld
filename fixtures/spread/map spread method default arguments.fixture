@@ -236,4 +236,3 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 --- OUTPUT ---
 
 {first=1, second=3, third=4}
-

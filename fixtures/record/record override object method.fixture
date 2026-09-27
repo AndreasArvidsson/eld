@@ -235,4 +235,3 @@ class Test$Value extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUP
 --- OUTPUT ---
 
 value
-

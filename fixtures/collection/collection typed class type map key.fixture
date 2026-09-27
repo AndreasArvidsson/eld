@@ -233,4 +233,3 @@ class Test$First extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 first
-

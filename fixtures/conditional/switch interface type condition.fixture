@@ -752,4 +752,3 @@ class Test$Bird extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPE
 dog
 pet
 array list
-

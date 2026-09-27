@@ -808,4 +808,3 @@ class Test$Child extends Test$Person version 65.0 flags [PUBLIC, SUPER]
 10
 20
 30
-

@@ -250,4 +250,3 @@ class Test$Direction extends java/lang/Enum version 65.0 flags [PUBLIC, FINAL, S
 --- OUTPUT ---
 
 true
-

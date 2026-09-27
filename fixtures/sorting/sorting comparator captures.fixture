@@ -734,4 +734,3 @@ class Test$Direction extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 [3, 2, 1]
 [1, 2, 3]
-

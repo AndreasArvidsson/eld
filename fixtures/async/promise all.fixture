@@ -380,4 +380,3 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
 --- OUTPUT ---
 
 [2, 3]
-

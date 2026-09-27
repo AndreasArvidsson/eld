@@ -252,4 +252,3 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 
 {value=1, other=2}
 {value=3, other=2}
-

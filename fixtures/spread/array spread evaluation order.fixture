@@ -647,4 +647,3 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 12324
 [1, 1, 2, 3, 3, 2, 4]
 [4, 2]
-

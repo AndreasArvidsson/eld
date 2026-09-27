@@ -445,4 +445,3 @@ bar
 baz
 Foo(name=bar, value=0)
 Foo(name=baz, value=1)
-

@@ -361,4 +361,3 @@ class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, S
 
 foo
 Options(name=foo, value=10)
-

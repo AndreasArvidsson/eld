@@ -204,7 +204,7 @@ public class FixtureTest {
                 | BytecodeException e
         ) {
             final String message =
-                "%s: %s"
+                "%s: %s\n"
                     .formatted(e.getClass().getSimpleName(), e.getMessage());
             actualBuilder.append(message);
 
@@ -212,8 +212,6 @@ public class FixtureTest {
                 assertEquals(expected, message, name);
             }
         }
-
-        actualBuilder.append("\n");
 
         if (updateFixture) {
             Files.writeString(path, actualBuilder.toString());
@@ -230,15 +228,10 @@ public class FixtureTest {
             return "";
         }
         final int startIndex = headerIndex + header.length();
-        int endIndex =
-            nextHeaderIndex == -1 ? fixture.length() : nextHeaderIndex;
-        if (
-            nextHeaderIndex == -1 && endIndex > startIndex
-                && fixture.endsWith("\n")
-        ) {
-            endIndex--;
-        }
-        final String result = fixture.substring(startIndex, endIndex);
+        final String result =
+            nextHeaderIndex == -1
+                ? fixture.substring(startIndex)
+                : fixture.substring(startIndex, nextHeaderIndex);
         return Objects.requireNonNull(result);
     }
 

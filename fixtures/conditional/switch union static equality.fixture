@@ -428,4 +428,3 @@ class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 found
-

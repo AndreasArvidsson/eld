@@ -465,4 +465,3 @@ class Test$ConstDerived extends Test$MutableBase version 65.0 flags [PUBLIC, SUP
 
 2
 4
-

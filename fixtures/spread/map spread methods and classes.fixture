@@ -316,4 +316,3 @@ class Test$Value extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUP
 --- OUTPUT ---
 
 {first=Value(value=1), second=Value(value=2)}
-

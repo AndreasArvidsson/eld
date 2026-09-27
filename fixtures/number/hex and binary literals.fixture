@@ -721,4 +721,3 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 -9223372036854775808
 -2147483648
 true
-

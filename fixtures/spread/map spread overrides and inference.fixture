@@ -652,4 +652,3 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 {name=last, value=5}
 {name=foo, value=10}
 {name=inner, value=6}
-

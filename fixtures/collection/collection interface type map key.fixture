@@ -458,4 +458,3 @@ class Test$Square extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SU
 circle
 square
 shape
-

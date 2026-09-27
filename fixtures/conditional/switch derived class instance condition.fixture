@@ -343,4 +343,3 @@ class Test$Second extends Test$Base version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 second
-
