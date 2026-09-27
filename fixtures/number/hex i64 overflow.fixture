@@ -1,0 +1,38 @@
+const value: i64 = 0x8000_0000_0000_0000;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i64" (1:14-1:17)
+EQUAL (1:18-1:19)
+INTEGER_LITERAL "0x8000_0000_0000_0000" (1:20-1:41)
+SEMICOLON (1:41-1:42)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:42
+  (VariableDeclaration
+    range: 1:1-1:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:14-1:17
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 1:20-1:41
+      kind: INT
+      text: "0x8000_0000_0000_0000"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Integer literal 9223372036854775808 does not fit in i64 at 1:20-1:41

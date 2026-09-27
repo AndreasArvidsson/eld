@@ -1,0 +1,5 @@
+0b10._1;
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:1-1:8

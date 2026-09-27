@@ -1,0 +1,39 @@
+const value: 0b1111_1111 = 1;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+INTEGER_LITERAL "0b1111_1111" (1:14-1:25)
+EQUAL (1:26-1:27)
+INTEGER_LITERAL "1" (1:28-1:29)
+SEMICOLON (1:29-1:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:30
+  (VariableDeclaration
+    range: 1:1-1:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (LiteralTypeNode
+      range: 1:14-1:25
+      kind: INT
+      text: "0b1111_1111"
+    )
+    (LiteralExpression
+      range: 1:28-1:29
+      kind: INT
+      text: "1"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign i32 to 0b1111_1111 at 1:28-1:29

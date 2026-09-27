@@ -1,0 +1,39 @@
+const value: 0xFF = 1;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+COLON (1:12-1:13)
+INTEGER_LITERAL "0xFF" (1:14-1:18)
+EQUAL (1:19-1:20)
+INTEGER_LITERAL "1" (1:21-1:22)
+SEMICOLON (1:22-1:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:23
+  (VariableDeclaration
+    range: 1:1-1:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    (LiteralTypeNode
+      range: 1:14-1:18
+      kind: INT
+      text: "0xFF"
+    )
+    (LiteralExpression
+      range: 1:21-1:22
+      kind: INT
+      text: "1"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign i32 to 0xFF at 1:21-1:22

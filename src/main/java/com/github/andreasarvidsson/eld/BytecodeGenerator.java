@@ -2763,11 +2763,11 @@ public final class BytecodeGenerator {
     }
 
     private Object integerConstant(final LiteralExpression literal) {
-        final String text = literal.text().replace("_", "");
+        final var value = IntegerLiterals.parse(literal.text());
         if (semanticModel.getExpressionType(literal) == BuiltinType.I64) {
-            return Long.parseLong(text);
+            return value.longValueExact();
         }
-        return Integer.parseInt(text);
+        return value.intValueExact();
     }
 
     private Object floatingConstant(final LiteralExpression literal) {

@@ -19,3 +19,4 @@
 - When adding new logic/syntax test behavior in `.fixture` files.
 - When creating new `.fixture` files only have one empty line between the source code and the token header.
 - Import Java classes. Don't use the full package path in the code implementation.
+- If you create temporary files or folders please delete those afterwards. Don't leave empty folders in the project.

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.IntegerLiterals;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
@@ -626,7 +627,7 @@ public final class SemanticAnalyzerExpressionOperations {
             expression instanceof LiteralExpression literal
                 && literal.kind() == LiteralKind.INT
         ) {
-            return new BigInteger(literal.text().replace("_", ""));
+            return IntegerLiterals.parse(literal.text());
         }
         if (expression instanceof GroupingExpression grouping) {
             return integerLiteral(grouping.expression());
@@ -699,10 +700,8 @@ public final class SemanticAnalyzerExpressionOperations {
 
     public Type analyzeLiteralExpression(final LiteralExpression literal) {
         final Type type = switch (literal.kind()) {
-            case INT -> integerType(
-                new BigInteger(literal.text().replace("_", "")),
-                literal
-            );
+            case INT ->
+                integerType(IntegerLiterals.parse(literal.text()), literal);
             case FLOAT -> BuiltinType.F64;
             case CHAR -> BuiltinType.CHAR;
             case BOOL -> BuiltinType.BOOL;

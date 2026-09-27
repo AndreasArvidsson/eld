@@ -567,6 +567,43 @@ public class Lexer {
 
     private Token readNumberLiteral() {
         final StringBuilder builder = new StringBuilder();
+        final Character prefix = peek(1);
+        if (
+            Objects.equals(peek(), '0')
+                && (Objects.equals(prefix, 'x') || Objects.equals(prefix, 'X')
+                    || Objects.equals(prefix, 'b')
+                    || Objects.equals(prefix, 'B'))
+        ) {
+            final int radix =
+                Objects.equals(prefix, 'x') || Objects.equals(prefix, 'X')
+                    ? 16
+                    : 2;
+            builder.append('0');
+            advance();
+            builder.append(source.charAt(position));
+            advance();
+            if (!isRadixDigit(peek(), radix)) {
+                throw invalidNumericLiteral();
+            }
+            readDigits(builder, radix);
+            final Character suffix = peek();
+            final Character afterDot = peek(1);
+            if (
+                suffix != null && suffix == '.'
+                    && (Objects.equals(afterDot, '_')
+                        || (afterDot != null && Character.isDigit(afterDot)))
+            ) {
+                advance();
+                throw invalidNumericLiteral();
+            }
+            if (
+                suffix != null
+                    && (suffix == '_' || Character.isLetterOrDigit(suffix))
+            ) {
+                throw invalidNumericLiteral();
+            }
+            return createToken(TokenType.INTEGER_LITERAL, builder.toString());
+        }
         readDigits(builder);
 
         TokenType type = TokenType.INTEGER_LITERAL;
@@ -622,6 +659,10 @@ public class Lexer {
     }
 
     private void readDigits(final StringBuilder builder) {
+        readDigits(builder, 10);
+    }
+
+    private void readDigits(final StringBuilder builder, final int radix) {
         while (true) {
             final Character next = peek();
             if (next == null) {
@@ -638,18 +679,25 @@ public class Lexer {
                 }
                 if (
                     end >= source.length()
-                        || !Character.isDigit(source.charAt(end))
+                        || !isRadixDigit(source.charAt(end), radix)
                 ) {
                     throw invalidNumericLiteral();
                 }
                 continue;
             }
-            else if (!Character.isDigit(next)) {
+            else if (!isRadixDigit(next, radix)) {
                 return;
             }
             builder.append(next);
             advance();
         }
+    }
+
+    private static boolean isRadixDigit(
+        final @Nullable Character digit,
+        final int radix
+    ) {
+        return digit != null && Character.digit(digit, radix) >= 0;
     }
 
     private Token readStringLiteral(final boolean raw) {

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.IntegerLiterals;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.ArraySpread;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
@@ -499,7 +500,7 @@ public final class SemanticAnalyzerExpectedExpressions {
             expression instanceof LiteralExpression literal
                 && literal.kind() == LiteralKind.INT
         ) {
-            return new BigInteger(literal.text().replace("_", ""));
+            return IntegerLiterals.parse(literal.text());
         }
         if (expression instanceof GroupingExpression grouping) {
             return integerConstant(grouping.expression());

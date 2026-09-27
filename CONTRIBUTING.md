@@ -185,13 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- hex and binary literals.
-  123 decimal
-  1_000_000 decimal with separators
-  0xFF hexadecimal
-  0xCAFE_BABE hexadecimal with separators
-  0b1010 binary
-  0b1111_0000 binary with separators
 - - == instead of .equals()
 - add enum
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?

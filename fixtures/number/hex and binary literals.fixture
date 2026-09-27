@@ -1,0 +1,724 @@
+const decimal = 123;
+const separated = 1_000_000;
+const hex = 0xFF;
+const hexSeparated: i64 = 0xCAFE_BABE;
+const binary = 0b1010;
+const binarySeparated = 0b1111_0000;
+const upper = 0XAB + 0B11;
+const wide: i64 = 0x7FFF_FFFF_FFFF_FFFF;
+const minimum: i64 = -0x8000_0000_0000_0000;
+const minimum32: i32 = -0x8000_0000;
+func matches(value: 0xFF) bool { return value == 255; }
+print(decimal);
+print(separated);
+print(hex);
+print(hexSeparated);
+print(binary);
+print(binarySeparated);
+print(upper);
+print(wide);
+print(minimum);
+print(minimum32);
+print(matches(0b1111_1111));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "decimal" (1:7-1:14)
+EQUAL (1:15-1:16)
+INTEGER_LITERAL "123" (1:17-1:20)
+SEMICOLON (1:20-1:21)
+CONST (2:1-2:6)
+IDENTIFIER "separated" (2:7-2:16)
+EQUAL (2:17-2:18)
+INTEGER_LITERAL "1_000_000" (2:19-2:28)
+SEMICOLON (2:28-2:29)
+CONST (3:1-3:6)
+IDENTIFIER "hex" (3:7-3:10)
+EQUAL (3:11-3:12)
+INTEGER_LITERAL "0xFF" (3:13-3:17)
+SEMICOLON (3:17-3:18)
+CONST (4:1-4:6)
+IDENTIFIER "hexSeparated" (4:7-4:19)
+COLON (4:19-4:20)
+IDENTIFIER "i64" (4:21-4:24)
+EQUAL (4:25-4:26)
+INTEGER_LITERAL "0xCAFE_BABE" (4:27-4:38)
+SEMICOLON (4:38-4:39)
+CONST (5:1-5:6)
+IDENTIFIER "binary" (5:7-5:13)
+EQUAL (5:14-5:15)
+INTEGER_LITERAL "0b1010" (5:16-5:22)
+SEMICOLON (5:22-5:23)
+CONST (6:1-6:6)
+IDENTIFIER "binarySeparated" (6:7-6:22)
+EQUAL (6:23-6:24)
+INTEGER_LITERAL "0b1111_0000" (6:25-6:36)
+SEMICOLON (6:36-6:37)
+CONST (7:1-7:6)
+IDENTIFIER "upper" (7:7-7:12)
+EQUAL (7:13-7:14)
+INTEGER_LITERAL "0XAB" (7:15-7:19)
+PLUS (7:20-7:21)
+INTEGER_LITERAL "0B11" (7:22-7:26)
+SEMICOLON (7:26-7:27)
+CONST (8:1-8:6)
+IDENTIFIER "wide" (8:7-8:11)
+COLON (8:11-8:12)
+IDENTIFIER "i64" (8:13-8:16)
+EQUAL (8:17-8:18)
+INTEGER_LITERAL "0x7FFF_FFFF_FFFF_FFFF" (8:19-8:40)
+SEMICOLON (8:40-8:41)
+CONST (9:1-9:6)
+IDENTIFIER "minimum" (9:7-9:14)
+COLON (9:14-9:15)
+IDENTIFIER "i64" (9:16-9:19)
+EQUAL (9:20-9:21)
+MINUS (9:22-9:23)
+INTEGER_LITERAL "0x8000_0000_0000_0000" (9:23-9:44)
+SEMICOLON (9:44-9:45)
+CONST (10:1-10:6)
+IDENTIFIER "minimum32" (10:7-10:16)
+COLON (10:16-10:17)
+IDENTIFIER "i32" (10:18-10:21)
+EQUAL (10:22-10:23)
+MINUS (10:24-10:25)
+INTEGER_LITERAL "0x8000_0000" (10:25-10:36)
+SEMICOLON (10:36-10:37)
+FUNC (11:1-11:5)
+IDENTIFIER "matches" (11:6-11:13)
+LEFT_PAREN (11:13-11:14)
+IDENTIFIER "value" (11:14-11:19)
+COLON (11:19-11:20)
+INTEGER_LITERAL "0xFF" (11:21-11:25)
+RIGHT_PAREN (11:25-11:26)
+IDENTIFIER "bool" (11:27-11:31)
+LEFT_BRACE (11:32-11:33)
+RETURN (11:34-11:40)
+IDENTIFIER "value" (11:41-11:46)
+EQUAL_EQUAL (11:47-11:49)
+INTEGER_LITERAL "255" (11:50-11:53)
+SEMICOLON (11:53-11:54)
+RIGHT_BRACE (11:55-11:56)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "decimal" (12:7-12:14)
+RIGHT_PAREN (12:14-12:15)
+SEMICOLON (12:15-12:16)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "separated" (13:7-13:16)
+RIGHT_PAREN (13:16-13:17)
+SEMICOLON (13:17-13:18)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "hex" (14:7-14:10)
+RIGHT_PAREN (14:10-14:11)
+SEMICOLON (14:11-14:12)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "hexSeparated" (15:7-15:19)
+RIGHT_PAREN (15:19-15:20)
+SEMICOLON (15:20-15:21)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "binary" (16:7-16:13)
+RIGHT_PAREN (16:13-16:14)
+SEMICOLON (16:14-16:15)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "binarySeparated" (17:7-17:22)
+RIGHT_PAREN (17:22-17:23)
+SEMICOLON (17:23-17:24)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "upper" (18:7-18:12)
+RIGHT_PAREN (18:12-18:13)
+SEMICOLON (18:13-18:14)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "wide" (19:7-19:11)
+RIGHT_PAREN (19:11-19:12)
+SEMICOLON (19:12-19:13)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "minimum" (20:7-20:14)
+RIGHT_PAREN (20:14-20:15)
+SEMICOLON (20:15-20:16)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "minimum32" (21:7-21:16)
+RIGHT_PAREN (21:16-21:17)
+SEMICOLON (21:17-21:18)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "matches" (22:7-22:14)
+LEFT_PAREN (22:14-22:15)
+INTEGER_LITERAL "0b1111_1111" (22:15-22:26)
+RIGHT_PAREN (22:26-22:27)
+RIGHT_PAREN (22:27-22:28)
+SEMICOLON (22:28-22:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-22:29
+  (VariableDeclaration
+    range: 1:1-1:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "decimal"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:17-1:20
+      kind: INT
+      text: "123"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:16
+      name: "separated"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:19-2:28
+      kind: INT
+      text: "1_000_000"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:18
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "hex"
+    )
+    type: null
+    (LiteralExpression
+      range: 3:13-3:17
+      kind: INT
+      text: "0xFF"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:19
+      name: "hexSeparated"
+    )
+    (NamedTypeNode
+      range: 4:21-4:24
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 4:27-4:38
+      kind: INT
+      text: "0xCAFE_BABE"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "binary"
+    )
+    type: null
+    (LiteralExpression
+      range: 5:16-5:22
+      kind: INT
+      text: "0b1010"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:22
+      name: "binarySeparated"
+    )
+    type: null
+    (LiteralExpression
+      range: 6:25-6:36
+      kind: INT
+      text: "0b1111_0000"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "upper"
+    )
+    type: null
+    (BinaryExpression
+      range: 7:15-7:26
+      (LiteralExpression
+        range: 7:15-7:19
+        kind: INT
+        text: "0XAB"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 7:22-7:26
+        kind: INT
+        text: "0B11"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:11
+      name: "wide"
+    )
+    (NamedTypeNode
+      range: 8:13-8:16
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 8:19-8:40
+      kind: INT
+      text: "0x7FFF_FFFF_FFFF_FFFF"
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:14
+      name: "minimum"
+    )
+    (NamedTypeNode
+      range: 9:16-9:19
+      name: "i64"
+    )
+    (UnaryExpression
+      range: 9:22-9:44
+      operator: MINUS
+      (LiteralExpression
+        range: 9:23-9:44
+        kind: INT
+        text: "0x8000_0000_0000_0000"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:16
+      name: "minimum32"
+    )
+    (NamedTypeNode
+      range: 10:18-10:21
+      name: "i32"
+    )
+    (UnaryExpression
+      range: 10:24-10:36
+      operator: MINUS
+      (LiteralExpression
+        range: 10:25-10:36
+        kind: INT
+        text: "0x8000_0000"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 11:1-11:56
+    (IdentifierDeclaration
+      range: 11:6-11:13
+      name: "matches"
+    )
+    (FunctionParameter
+      range: 11:14-11:25
+      (IdentifierDeclaration
+        range: 11:14-11:19
+        name: "value"
+      )
+      (LiteralTypeNode
+        range: 11:21-11:25
+        kind: INT
+        text: "0xFF"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 11:27-11:31
+      name: "bool"
+    )
+    (BlockStatement
+      range: 11:32-11:56
+      (ReturnStatement
+        range: 11:34-11:54
+        (BinaryExpression
+          range: 11:41-11:53
+          (IdentifierExpression
+            range: 11:41-11:46
+            name: "value"
+          )
+          operator: EQUAL
+          (LiteralExpression
+            range: 11:50-11:53
+            kind: INT
+            text: "255"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:16
+    (CallExpression
+      range: 12:1-12:15
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:7-12:14
+        name: "decimal"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:18
+    (CallExpression
+      range: 13:1-13:17
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:7-13:16
+        name: "separated"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:12
+    (CallExpression
+      range: 14:1-14:11
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 14:7-14:10
+        name: "hex"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:21
+    (CallExpression
+      range: 15:1-15:20
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 15:7-15:19
+        name: "hexSeparated"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:15
+    (CallExpression
+      range: 16:1-16:14
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 16:7-16:13
+        name: "binary"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:24
+    (CallExpression
+      range: 17:1-17:23
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 17:7-17:22
+        name: "binarySeparated"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:14
+    (CallExpression
+      range: 18:1-18:13
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 18:7-18:12
+        name: "upper"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:13
+    (CallExpression
+      range: 19:1-19:12
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 19:7-19:11
+        name: "wide"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:16
+    (CallExpression
+      range: 20:1-20:15
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 20:7-20:14
+        name: "minimum"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:18
+    (CallExpression
+      range: 21:1-21:17
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 21:7-21:16
+        name: "minimum32"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:29
+    (CallExpression
+      range: 22:1-22:28
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (CallExpression
+        range: 22:7-22:27
+        (IdentifierExpression
+          range: 22:7-22:14
+          name: "matches"
+        )
+        (LiteralExpression
+          range: 22:15-22:26
+          kind: INT
+          text: "0b1111_1111"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:17-1:20 -> i32
+  2:19-2:28 -> i32
+  3:13-3:17 -> i32
+  4:27-4:38 -> i64
+  5:16-5:22 -> i32
+  6:25-6:36 -> i32
+  7:15-7:19 -> i32
+  7:15-7:26 -> i32
+  7:22-7:26 -> i32
+  8:19-8:40 -> i64
+  9:22-9:44 -> i64
+  9:23-9:44 -> i64
+  10:24-10:36 -> i32
+  10:25-10:36 -> i32
+  11:41-11:46 -> 0xFF
+  11:41-11:53 -> bool
+  11:50-11:53 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:15 -> void
+  12:7-12:14 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:17 -> void
+  13:7-13:16 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:11 -> void
+  14:7-14:10 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:20 -> void
+  15:7-15:19 -> i64
+  16:1-16:6 -> (any) => void
+  16:1-16:14 -> void
+  16:7-16:13 -> i32
+  17:1-17:6 -> (any) => void
+  17:1-17:23 -> void
+  17:7-17:22 -> i32
+  18:1-18:6 -> (any) => void
+  18:1-18:13 -> void
+  18:7-18:12 -> i32
+  19:1-19:6 -> (any) => void
+  19:1-19:12 -> void
+  19:7-19:11 -> i64
+  20:1-20:6 -> (any) => void
+  20:1-20:15 -> void
+  20:7-20:14 -> i64
+  21:1-21:6 -> (any) => void
+  21:1-21:17 -> void
+  21:7-21:16 -> i32
+  22:1-22:6 -> (any) => void
+  22:1-22:28 -> void
+  22:7-22:14 -> (0xFF) => bool
+  22:7-22:27 -> bool
+  22:15-22:26 -> i32
+
+Resolved types:
+  4:21-4:24 -> i64
+  8:13-8:16 -> i64
+  9:16-9:19 -> i64
+  10:18-10:21 -> i32
+  11:21-11:25 -> 0xFF
+  11:27-11:31 -> bool
+
+Conversions:
+  11:41-11:46 -> 0xFF -> i32
+
+Declarations:
+  1:7-1:14 -> const decimal: i32
+  2:7-2:16 -> const separated: i32
+  3:7-3:10 -> const hex: i32
+  4:7-4:19 -> const hexSeparated: i64
+  5:7-5:13 -> const binary: i32
+  6:7-6:22 -> const binarySeparated: i32
+  7:7-7:12 -> const upper: i32
+  8:7-8:11 -> const wide: i64
+  9:7-9:14 -> const minimum: i64
+  10:7-10:16 -> const minimum32: i32
+  11:6-11:13 -> func matches(0xFF) => bool
+  11:14-11:19 -> const value: 0xFF
+
+References:
+  11:41-11:46 -> 11:14-11:19
+  12:1-12:6 -> builtin print
+  12:7-12:14 -> 1:7-1:14
+  13:1-13:6 -> builtin print
+  13:7-13:16 -> 2:7-2:16
+  14:1-14:6 -> builtin print
+  14:7-14:10 -> 3:7-3:10
+  15:1-15:6 -> builtin print
+  15:7-15:19 -> 4:7-4:19
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 5:7-5:13
+  17:1-17:6 -> builtin print
+  17:7-17:22 -> 6:7-6:22
+  18:1-18:6 -> builtin print
+  18:7-18:12 -> 7:7-7:12
+  19:1-19:6 -> builtin print
+  19:7-19:11 -> 8:7-8:11
+  20:1-20:6 -> builtin print
+  20:7-20:14 -> 9:7-9:14
+  21:1-21:6 -> builtin print
+  21:7-21:16 -> 10:7-10:16
+  22:1-22:6 -> builtin print
+  22:7-22:14 -> 11:6-11:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field decimal I flags [PUBLIC, STATIC, FINAL] = 123
+  field separated I flags [PUBLIC, STATIC, FINAL] = 1000000
+  field hex I flags [PUBLIC, STATIC, FINAL] = 255
+  field hexSeparated J flags [PUBLIC, STATIC, FINAL] = 3405691582
+  field binary I flags [PUBLIC, STATIC, FINAL] = 10
+  field binarySeparated I flags [PUBLIC, STATIC, FINAL] = 240
+  field upper I flags [PUBLIC, STATIC, FINAL] = 174
+  field wide J flags [PUBLIC, STATIC, FINAL] = 9223372036854775807
+  field minimum J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
+  field minimum32 I flags [PUBLIC, STATIC, FINAL] = -2147483648
+  method matches(I)Z flags [PUBLIC, STATIC]
+    ILOAD_0 0
+    LDC 255
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IRETURN
+    max stack 2 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.decimal I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.separated I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.hex I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.hexSeparated J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.binary I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.binarySeparated I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.upper I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.wide J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.minimum J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.minimum32 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 255
+    INVOKESTATIC Test.matches(I)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+123
+1000000
+255
+3405691582
+10
+240
+174
+9223372036854775807
+-9223372036854775808
+-2147483648
+true
+

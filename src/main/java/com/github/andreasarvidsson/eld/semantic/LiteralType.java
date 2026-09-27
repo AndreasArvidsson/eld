@@ -1,8 +1,8 @@
 package com.github.andreasarvidsson.eld.semantic;
 
-import java.math.BigInteger;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.IntegerLiterals;
 import com.github.andreasarvidsson.eld.StringLiterals;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 
@@ -36,7 +36,7 @@ public record LiteralType(LiteralKind kind, String text) implements Type {
         return switch (kind) {
             case STRING -> StringLiterals.decode(text);
             case BOOL -> Boolean.valueOf(text);
-            case INT -> new BigInteger(text.replace("_", ""));
+            case INT -> IntegerLiterals.parse(text);
             default -> throw new IllegalStateException();
         };
     }

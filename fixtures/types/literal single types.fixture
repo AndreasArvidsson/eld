@@ -7,11 +7,15 @@ const zeroValue: i32 = zero;
 const rawWord: "foo" = r"foo";
 const decodedWord: "foo" = rawWord;
 const rawEscape: string = r"\n";
+const hexNumber: 0xFF = 255;
+const binaryNumber: 0b1111_1111 = 255;
 print(wordValue);
 print(flagValue);
 print(zeroValue);
 print(decodedWord);
 print(rawEscape);
+print(hexNumber);
+print(binaryNumber);
 
 --- TOKENS ---
 
@@ -78,36 +82,60 @@ IDENTIFIER "string" (9:18-9:24)
 EQUAL (9:25-9:26)
 RAW_STRING_LITERAL "\"\\n\"" (9:27-9:32)
 SEMICOLON (9:32-9:33)
-IDENTIFIER "print" (10:1-10:6)
-LEFT_PAREN (10:6-10:7)
-IDENTIFIER "wordValue" (10:7-10:16)
-RIGHT_PAREN (10:16-10:17)
-SEMICOLON (10:17-10:18)
-IDENTIFIER "print" (11:1-11:6)
-LEFT_PAREN (11:6-11:7)
-IDENTIFIER "flagValue" (11:7-11:16)
-RIGHT_PAREN (11:16-11:17)
-SEMICOLON (11:17-11:18)
+CONST (10:1-10:6)
+IDENTIFIER "hexNumber" (10:7-10:16)
+COLON (10:16-10:17)
+INTEGER_LITERAL "0xFF" (10:18-10:22)
+EQUAL (10:23-10:24)
+INTEGER_LITERAL "255" (10:25-10:28)
+SEMICOLON (10:28-10:29)
+CONST (11:1-11:6)
+IDENTIFIER "binaryNumber" (11:7-11:19)
+COLON (11:19-11:20)
+INTEGER_LITERAL "0b1111_1111" (11:21-11:32)
+EQUAL (11:33-11:34)
+INTEGER_LITERAL "255" (11:35-11:38)
+SEMICOLON (11:38-11:39)
 IDENTIFIER "print" (12:1-12:6)
 LEFT_PAREN (12:6-12:7)
-IDENTIFIER "zeroValue" (12:7-12:16)
+IDENTIFIER "wordValue" (12:7-12:16)
 RIGHT_PAREN (12:16-12:17)
 SEMICOLON (12:17-12:18)
 IDENTIFIER "print" (13:1-13:6)
 LEFT_PAREN (13:6-13:7)
-IDENTIFIER "decodedWord" (13:7-13:18)
-RIGHT_PAREN (13:18-13:19)
-SEMICOLON (13:19-13:20)
+IDENTIFIER "flagValue" (13:7-13:16)
+RIGHT_PAREN (13:16-13:17)
+SEMICOLON (13:17-13:18)
 IDENTIFIER "print" (14:1-14:6)
 LEFT_PAREN (14:6-14:7)
-IDENTIFIER "rawEscape" (14:7-14:16)
+IDENTIFIER "zeroValue" (14:7-14:16)
 RIGHT_PAREN (14:16-14:17)
 SEMICOLON (14:17-14:18)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "decodedWord" (15:7-15:18)
+RIGHT_PAREN (15:18-15:19)
+SEMICOLON (15:19-15:20)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "rawEscape" (16:7-16:16)
+RIGHT_PAREN (16:16-16:17)
+SEMICOLON (16:17-16:18)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "hexNumber" (17:7-17:16)
+RIGHT_PAREN (17:16-17:17)
+SEMICOLON (17:17-17:18)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "binaryNumber" (18:7-18:19)
+RIGHT_PAREN (18:19-18:20)
+SEMICOLON (18:20-18:21)
 
 --- AST ---
 
 (Program
-  range: 1:1-14:18
+  range: 1:1-18:21
   (VariableDeclaration
     range: 1:1-1:27
     mutability: CONST
@@ -262,32 +290,40 @@ SEMICOLON (14:17-14:18)
       text: "\"\\n\""
     )
   )
-  (ExpressionStatement
-    range: 10:1-10:18
-    (CallExpression
-      range: 10:1-10:17
-      (IdentifierExpression
-        range: 10:1-10:6
-        name: "print"
-      )
-      (IdentifierExpression
-        range: 10:7-10:16
-        name: "wordValue"
-      )
+  (VariableDeclaration
+    range: 10:1-10:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:16
+      name: "hexNumber"
+    )
+    (LiteralTypeNode
+      range: 10:18-10:22
+      kind: INT
+      text: "0xFF"
+    )
+    (LiteralExpression
+      range: 10:25-10:28
+      kind: INT
+      text: "255"
     )
   )
-  (ExpressionStatement
-    range: 11:1-11:18
-    (CallExpression
-      range: 11:1-11:17
-      (IdentifierExpression
-        range: 11:1-11:6
-        name: "print"
-      )
-      (IdentifierExpression
-        range: 11:7-11:16
-        name: "flagValue"
-      )
+  (VariableDeclaration
+    range: 11:1-11:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:19
+      name: "binaryNumber"
+    )
+    (LiteralTypeNode
+      range: 11:21-11:32
+      kind: INT
+      text: "0b1111_1111"
+    )
+    (LiteralExpression
+      range: 11:35-11:38
+      kind: INT
+      text: "255"
     )
   )
   (ExpressionStatement
@@ -300,21 +336,21 @@ SEMICOLON (14:17-14:18)
       )
       (IdentifierExpression
         range: 12:7-12:16
-        name: "zeroValue"
+        name: "wordValue"
       )
     )
   )
   (ExpressionStatement
-    range: 13:1-13:20
+    range: 13:1-13:18
     (CallExpression
-      range: 13:1-13:19
+      range: 13:1-13:17
       (IdentifierExpression
         range: 13:1-13:6
         name: "print"
       )
       (IdentifierExpression
-        range: 13:7-13:18
-        name: "decodedWord"
+        range: 13:7-13:16
+        name: "flagValue"
       )
     )
   )
@@ -328,7 +364,63 @@ SEMICOLON (14:17-14:18)
       )
       (IdentifierExpression
         range: 14:7-14:16
+        name: "zeroValue"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:20
+    (CallExpression
+      range: 15:1-15:19
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 15:7-15:18
+        name: "decodedWord"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:18
+    (CallExpression
+      range: 16:1-16:17
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 16:7-16:16
         name: "rawEscape"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:18
+    (CallExpression
+      range: 17:1-17:17
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 17:7-17:16
+        name: "hexNumber"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:21
+    (CallExpression
+      range: 18:1-18:20
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 18:7-18:19
+        name: "binaryNumber"
       )
     )
   )
@@ -346,21 +438,29 @@ Expression types:
   7:24-7:30 -> string
   8:28-8:35 -> "foo"
   9:27-9:32 -> string
-  10:1-10:6 -> (any) => void
-  10:1-10:17 -> void
-  10:7-10:16 -> string
-  11:1-11:6 -> (any) => void
-  11:1-11:17 -> void
-  11:7-11:16 -> bool
+  10:25-10:28 -> i32
+  11:35-11:38 -> i32
   12:1-12:6 -> (any) => void
   12:1-12:17 -> void
-  12:7-12:16 -> i32
+  12:7-12:16 -> string
   13:1-13:6 -> (any) => void
-  13:1-13:19 -> void
-  13:7-13:18 -> "foo"
+  13:1-13:17 -> void
+  13:7-13:16 -> bool
   14:1-14:6 -> (any) => void
   14:1-14:17 -> void
-  14:7-14:16 -> string
+  14:7-14:16 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:19 -> void
+  15:7-15:18 -> "foo"
+  16:1-16:6 -> (any) => void
+  16:1-16:17 -> void
+  16:7-16:16 -> string
+  17:1-17:6 -> (any) => void
+  17:1-17:17 -> void
+  17:7-17:16 -> 0xFF
+  18:1-18:6 -> (any) => void
+  18:1-18:20 -> void
+  18:7-18:19 -> 0b1111_1111
 
 Resolved types:
   1:13-1:18 -> "foo"
@@ -372,6 +472,8 @@ Resolved types:
   7:16-7:21 -> "foo"
   8:20-8:25 -> "foo"
   9:18-9:24 -> string
+  10:18-10:22 -> 0xFF
+  11:21-11:32 -> 0b1111_1111
 
 Declarations:
   1:7-1:11 -> const word: "foo"
@@ -383,22 +485,28 @@ Declarations:
   7:7-7:14 -> const rawWord: "foo"
   8:7-8:18 -> const decodedWord: "foo"
   9:7-9:16 -> const rawEscape: string
+  10:7-10:16 -> const hexNumber: 0xFF
+  11:7-11:19 -> const binaryNumber: 0b1111_1111
 
 References:
   2:27-2:31 -> 1:7-1:11
   4:25-4:29 -> 3:7-3:11
   6:24-6:28 -> 5:7-5:11
   8:28-8:35 -> 7:7-7:14
-  10:1-10:6 -> builtin print
-  10:7-10:16 -> 2:7-2:16
-  11:1-11:6 -> builtin print
-  11:7-11:16 -> 4:7-4:16
   12:1-12:6 -> builtin print
-  12:7-12:16 -> 6:7-6:16
+  12:7-12:16 -> 2:7-2:16
   13:1-13:6 -> builtin print
-  13:7-13:18 -> 8:7-8:18
+  13:7-13:16 -> 4:7-4:16
   14:1-14:6 -> builtin print
-  14:7-14:16 -> 9:7-9:16
+  14:7-14:16 -> 6:7-6:16
+  15:1-15:6 -> builtin print
+  15:7-15:18 -> 8:7-8:18
+  16:1-16:6 -> builtin print
+  16:7-16:16 -> 9:7-9:16
+  17:1-17:6 -> builtin print
+  17:7-17:16 -> 10:7-10:16
+  18:1-18:6 -> builtin print
+  18:7-18:19 -> 11:7-11:19
 
 --- BYTECODE ---
 
@@ -412,6 +520,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field rawWord Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "foo"
   field decodedWord Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
   field rawEscape Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "\\n"
+  field hexNumber I flags [PUBLIC, STATIC, FINAL] = 255
+  field binaryNumber I flags [PUBLIC, STATIC, FINAL] = 255
   method <clinit>()V flags [STATIC]
     GETSTATIC Test.word Ljava/lang/String;
     PUTSTATIC Test.wordValue Ljava/lang/String;
@@ -436,6 +546,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.rawEscape Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.hexNumber I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.binaryNumber I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
     max stack 2 max locals 0
 
@@ -446,4 +562,6 @@ false
 0
 foo
 \n
+255
+255
 
