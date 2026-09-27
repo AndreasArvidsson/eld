@@ -1,0 +1,92 @@
+print(r"""
+Hello\tworld
+Foo\tbar
+""");
+print(r"""
+foo\bar\baz
+aaa\bbb\ccc
+""");
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+RAW_STRING_LITERAL "\"\"\"\nHello\\tworld\nFoo\\tbar\n\"\"\"" (1:7-4:4)
+RIGHT_PAREN (4:4-4:5)
+SEMICOLON (4:5-4:6)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+RAW_STRING_LITERAL "\"\"\"\nfoo\\bar\\baz\naaa\\bbb\\ccc\n\"\"\"" (5:7-8:4)
+RIGHT_PAREN (8:4-8:5)
+SEMICOLON (8:5-8:6)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:6
+  (ExpressionStatement
+    range: 1:1-4:6
+    (CallExpression
+      range: 1:1-4:5
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 1:7-4:4
+        kind: RAW_STRING
+        text: "\"\"\"\nHello\\tworld\nFoo\\tbar\n\"\"\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-8:6
+    (CallExpression
+      range: 5:1-8:5
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 5:7-8:4
+        kind: RAW_STRING
+        text: "\"\"\"\nfoo\\bar\\baz\naaa\\bbb\\ccc\n\"\"\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-4:5 -> void
+  1:7-4:4 -> string
+  5:1-5:6 -> (any) => void
+  5:1-8:5 -> void
+  5:7-8:4 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  5:1-5:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Hello\\tworld\nFoo\\tbar"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "foo\\bar\\baz\naaa\\bbb\\ccc"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+Hello\tworld
+Foo\tbar
+foo\bar\baz
+aaa\bbb\ccc
+

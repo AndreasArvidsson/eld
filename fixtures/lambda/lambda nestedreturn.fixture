@@ -21,7 +21,7 @@ IDENTIFIER "callback" (1:41-1:49)
 RIGHT_PAREN (1:49-1:50)
 ARROW (1:51-1:53)
 FORMAT_STRING_START (1:54-1:56)
-STRING_LITERAL "\"hello \"" (1:56-1:62)
+FORMAT_STRING_TEXT "hello " (1:56-1:62)
 LEFT_BRACE (1:62-1:63)
 IDENTIFIER "callback" (1:63-1:71)
 LEFT_PAREN (1:71-1:72)
@@ -89,8 +89,8 @@ SEMICOLON (2:30-2:31)
         range: 1:54-1:76
         (LiteralExpression
           range: 1:56-1:62
-          kind: STRING
-          text: "\"hello \""
+          kind: FORMAT_STRING_TEXT
+          text: "hello "
         )
         (CallExpression
           range: 1:63-1:74

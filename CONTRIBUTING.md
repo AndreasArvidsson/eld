@@ -192,7 +192,6 @@ protected const bar = 0;
   0xCAFE_BABE hexadecimal with separators
   0b1010 binary
   0b1111_0000 binary with separators
-- Multiline string as separate syntax.
 - - == instead of .equals()
 - add enum
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?

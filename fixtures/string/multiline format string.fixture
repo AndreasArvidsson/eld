@@ -1,8 +1,20 @@
 const value = 5;
-print("hello \t{value} {{value}}");
-print(r"hello \t{value} {{value}}");
-print(f"hello \t{value} {{value}}");
-print(rf"hello \t{value} {{value}}");
+print("""
+hello \t{value}
+{{value}}
+""");
+print(r"""
+hello \t{value}
+{{value}}
+""");
+print(f"""
+hello \t{value}
+{{value}}
+""");
+print(rf"""
+hello \t{value}
+{{value}}
+""");
 
 --- TOKENS ---
 
@@ -13,41 +25,41 @@ INTEGER_LITERAL "5" (1:15-1:16)
 SEMICOLON (1:16-1:17)
 IDENTIFIER "print" (2:1-2:6)
 LEFT_PAREN (2:6-2:7)
-STRING_LITERAL "\"hello \\t{value} {{value}}\"" (2:7-2:34)
-RIGHT_PAREN (2:34-2:35)
-SEMICOLON (2:35-2:36)
-IDENTIFIER "print" (3:1-3:6)
-LEFT_PAREN (3:6-3:7)
-RAW_STRING_LITERAL "\"hello \\t{value} {{value}}\"" (3:7-3:35)
-RIGHT_PAREN (3:35-3:36)
-SEMICOLON (3:36-3:37)
-IDENTIFIER "print" (4:1-4:6)
-LEFT_PAREN (4:6-4:7)
-FORMAT_STRING_START (4:7-4:9)
-FORMAT_STRING_TEXT "hello \\t" (4:9-4:17)
-LEFT_BRACE (4:17-4:18)
-IDENTIFIER "value" (4:18-4:23)
-RIGHT_BRACE (4:23-4:24)
-FORMAT_STRING_TEXT " {value}" (4:24-4:34)
-FORMAT_STRING_END (4:34-4:35)
-RIGHT_PAREN (4:35-4:36)
-SEMICOLON (4:36-4:37)
-IDENTIFIER "print" (5:1-5:6)
-LEFT_PAREN (5:6-5:7)
-FORMAT_STRING_START (5:7-5:10)
-FORMAT_STRING_TEXT "hello \\t" (5:10-5:18)
-LEFT_BRACE (5:18-5:19)
-IDENTIFIER "value" (5:19-5:24)
-RIGHT_BRACE (5:24-5:25)
-FORMAT_STRING_TEXT " {value}" (5:25-5:35)
-FORMAT_STRING_END (5:35-5:36)
-RIGHT_PAREN (5:36-5:37)
-SEMICOLON (5:37-5:38)
+STRING_LITERAL "\"\"\"\nhello \\t{value}\n{{value}}\n\"\"\"" (2:7-5:4)
+RIGHT_PAREN (5:4-5:5)
+SEMICOLON (5:5-5:6)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+RAW_STRING_LITERAL "\"\"\"\nhello \\t{value}\n{{value}}\n\"\"\"" (6:7-9:4)
+RIGHT_PAREN (9:4-9:5)
+SEMICOLON (9:5-9:6)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+FORMAT_STRING_START (10:7-10:11)
+FORMAT_STRING_TEXT "hello \\t" (11:1-11:9)
+LEFT_BRACE (11:9-11:10)
+IDENTIFIER "value" (11:10-11:15)
+RIGHT_BRACE (11:15-11:16)
+FORMAT_STRING_TEXT "\n{value}" (11:16-12:10)
+FORMAT_STRING_END (13:1-13:4)
+RIGHT_PAREN (13:4-13:5)
+SEMICOLON (13:5-13:6)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+FORMAT_STRING_START (14:7-14:12)
+FORMAT_STRING_TEXT "hello \\t" (15:1-15:9)
+LEFT_BRACE (15:9-15:10)
+IDENTIFIER "value" (15:10-15:15)
+RIGHT_BRACE (15:15-15:16)
+FORMAT_STRING_TEXT "\n{value}" (15:16-16:10)
+FORMAT_STRING_END (17:1-17:4)
+RIGHT_PAREN (17:4-17:5)
+SEMICOLON (17:5-17:6)
 
 --- AST ---
 
 (Program
-  range: 1:1-5:38
+  range: 1:1-17:6
   (VariableDeclaration
     range: 1:1-1:17
     mutability: CONST
@@ -63,85 +75,85 @@ SEMICOLON (5:37-5:38)
     )
   )
   (ExpressionStatement
-    range: 2:1-2:36
+    range: 2:1-5:6
     (CallExpression
-      range: 2:1-2:35
+      range: 2:1-5:5
       (IdentifierExpression
         range: 2:1-2:6
         name: "print"
       )
       (LiteralExpression
-        range: 2:7-2:34
+        range: 2:7-5:4
         kind: STRING
-        text: "\"hello \\t{value} {{value}}\""
+        text: "\"\"\"\nhello \\t{value}\n{{value}}\n\"\"\""
       )
     )
   )
   (ExpressionStatement
-    range: 3:1-3:37
+    range: 6:1-9:6
     (CallExpression
-      range: 3:1-3:36
+      range: 6:1-9:5
       (IdentifierExpression
-        range: 3:1-3:6
+        range: 6:1-6:6
         name: "print"
       )
       (LiteralExpression
-        range: 3:7-3:35
+        range: 6:7-9:4
         kind: RAW_STRING
-        text: "\"hello \\t{value} {{value}}\""
+        text: "\"\"\"\nhello \\t{value}\n{{value}}\n\"\"\""
       )
     )
   )
   (ExpressionStatement
-    range: 4:1-4:37
+    range: 10:1-13:6
     (CallExpression
-      range: 4:1-4:36
+      range: 10:1-13:5
       (IdentifierExpression
-        range: 4:1-4:6
+        range: 10:1-10:6
         name: "print"
       )
       (FormatStringExpression
-        range: 4:7-4:35
+        range: 10:7-13:4
         (LiteralExpression
-          range: 4:9-4:17
+          range: 11:1-11:9
           kind: FORMAT_STRING_TEXT
           text: "hello \\t"
         )
         (IdentifierExpression
-          range: 4:18-4:23
+          range: 11:10-11:15
           name: "value"
         )
         (LiteralExpression
-          range: 4:24-4:34
+          range: 11:16-12:10
           kind: FORMAT_STRING_TEXT
-          text: " {value}"
+          text: "\n{value}"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 5:1-5:38
+    range: 14:1-17:6
     (CallExpression
-      range: 5:1-5:37
+      range: 14:1-17:5
       (IdentifierExpression
-        range: 5:1-5:6
+        range: 14:1-14:6
         name: "print"
       )
       (FormatStringExpression
-        range: 5:7-5:36
+        range: 14:7-17:4
         (LiteralExpression
-          range: 5:10-5:18
+          range: 15:1-15:9
           kind: RAW_FORMAT_STRING_TEXT
           text: "hello \\t"
         )
         (IdentifierExpression
-          range: 5:19-5:24
+          range: 15:10-15:15
           name: "value"
         )
         (LiteralExpression
-          range: 5:25-5:35
+          range: 15:16-16:10
           kind: RAW_FORMAT_STRING_TEXT
-          text: " {value}"
+          text: "\n{value}"
         )
       )
     )
@@ -153,34 +165,34 @@ SEMICOLON (5:37-5:38)
 Expression types:
   1:15-1:16 -> i32
   2:1-2:6 -> (any) => void
-  2:1-2:35 -> void
-  2:7-2:34 -> string
-  3:1-3:6 -> (any) => void
-  3:1-3:36 -> void
-  3:7-3:35 -> string
-  4:1-4:6 -> (any) => void
-  4:1-4:36 -> void
-  4:7-4:35 -> string
-  4:9-4:17 -> string
-  4:18-4:23 -> i32
-  4:24-4:34 -> string
-  5:1-5:6 -> (any) => void
-  5:1-5:37 -> void
-  5:7-5:36 -> string
-  5:10-5:18 -> string
-  5:19-5:24 -> i32
-  5:25-5:35 -> string
+  2:1-5:5 -> void
+  2:7-5:4 -> string
+  6:1-6:6 -> (any) => void
+  6:1-9:5 -> void
+  6:7-9:4 -> string
+  10:1-10:6 -> (any) => void
+  10:1-13:5 -> void
+  10:7-13:4 -> string
+  11:1-11:9 -> string
+  11:10-11:15 -> i32
+  11:16-12:10 -> string
+  14:1-14:6 -> (any) => void
+  14:1-17:5 -> void
+  14:7-17:4 -> string
+  15:1-15:9 -> string
+  15:10-15:15 -> i32
+  15:16-16:10 -> string
 
 Declarations:
   1:7-1:12 -> const value: i32
 
 References:
   2:1-2:6 -> builtin print
-  3:1-3:6 -> builtin print
-  4:1-4:6 -> builtin print
-  4:18-4:23 -> 1:7-1:12
-  5:1-5:6 -> builtin print
-  5:19-5:24 -> 1:7-1:12
+  6:1-6:6 -> builtin print
+  10:1-10:6 -> builtin print
+  11:10-11:15 -> 1:7-1:12
+  14:1-14:6 -> builtin print
+  15:10-15:15 -> 1:7-1:12
 
 --- BYTECODE ---
 
@@ -188,10 +200,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field value I flags [PUBLIC, STATIC, FINAL] = 5
   method <clinit>()V flags [STATIC]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "hello \t{value} {{value}}"
+    LDC "hello \t{value}\n{{value}}"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "hello \\t{value} {{value}}"
+    LDC "hello \\t{value}\n{{value}}"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     NEW java/lang/StringBuilder
@@ -201,7 +213,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
     GETSTATIC Test.value I
     INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
-    LDC " {value}"
+    LDC "\n{value}"
     INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
     INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
@@ -213,7 +225,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
     GETSTATIC Test.value I
     INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
-    LDC " {value}"
+    LDC "\n{value}"
     INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
     INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
@@ -222,8 +234,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 
 --- OUTPUT ---
 
-hello 	{value} {{value}}
-hello \t{value} {{value}}
-hello 	5 {value}
-hello \t5 {value}
+hello 	{value}
+{{value}}
+hello \t{value}
+{{value}}
+hello 	5
+{value}
+hello \t5
+{value}
 

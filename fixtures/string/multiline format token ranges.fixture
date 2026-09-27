@@ -1,0 +1,70 @@
+print(f"""
+    {1}
+    """);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+FORMAT_STRING_START (1:7-1:11)
+LEFT_BRACE (2:5-2:6)
+INTEGER_LITERAL "1" (2:6-2:7)
+RIGHT_BRACE (2:7-2:8)
+FORMAT_STRING_END (3:5-3:8)
+RIGHT_PAREN (3:8-3:9)
+SEMICOLON (3:9-3:10)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:10
+  (ExpressionStatement
+    range: 1:1-3:10
+    (CallExpression
+      range: 1:1-3:9
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (FormatStringExpression
+        range: 1:7-3:8
+        (LiteralExpression
+          range: 2:6-2:7
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-3:9 -> void
+  1:7-3:8 -> string
+  2:6-2:7 -> i32
+
+References:
+  1:1-1:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+1
+

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.StringLiterals;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.ConstTypeNode;
@@ -619,8 +620,7 @@ public final class SemanticAnalyzerTypes {
                 && expression instanceof LiteralExpression literal
                 && literal.kind() == LiteralKind.RAW_STRING
         ) {
-            return literal.text()
-                .substring(1, literal.text().length() - 1)
+            return StringLiterals.decodeRaw(literal.text())
                 .equals(target.value());
         }
         return expression instanceof LiteralExpression literal

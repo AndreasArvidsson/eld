@@ -7,5 +7,7 @@ public enum LiteralKind {
     CHAR,
     STRING,
     RAW_STRING,
+    FORMAT_STRING_TEXT,
+    RAW_FORMAT_STRING_TEXT,
     NULL;
 }

@@ -1471,8 +1471,7 @@ class BytecodeGeneratorTest {
             const reversed = fr"hello\\\\{name}";
             const nested = rf"{f"hello {name}"}\\\\{r"raw\\\\text"}";
             const normal = f"hello\\\\{name}";
-            const multiline = r"first
-            second";
+            const rawLine = r"first\\nsecond";
             const concatenated = r"a\\\\" + r"b\\\\";
             """, "Test");
         assertEquals(
@@ -1498,7 +1497,7 @@ class BytecodeGeneratorTest {
             module.getField("nested").get(null)
         );
         assertEquals("hello\\Ada", module.getField("normal").get(null));
-        assertEquals("first\nsecond", module.getField("multiline").get(null));
+        assertEquals("first\\nsecond", module.getField("rawLine").get(null));
         assertEquals("a\\\\b\\\\", module.getField("concatenated").get(null));
     }
 
@@ -1513,8 +1512,7 @@ class BytecodeGeneratorTest {
             const expression = f"{value + 1}: {true}, {'x'}, {null}, {[1, 2]}";
             const nested = f"outer {f"inner {value}"}";
             const quoted = f"{ "quoted } text" }";
-            const multiline = f"hello
-            {value}";
+            const multiline = f"hello\\n{value}";
             var count = 0;
             func next() i32 { count = count + 1; return count; }
             const ordered = f"{next()}{next()}";

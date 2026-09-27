@@ -49,7 +49,7 @@ FORMAT_STRING_START (9:11-9:13)
 LEFT_BRACE (9:13-9:14)
 IDENTIFIER "values" (9:14-9:20)
 RIGHT_BRACE (9:20-9:21)
-STRING_LITERAL "\" \"" (9:21-9:22)
+FORMAT_STRING_TEXT " " (9:21-9:22)
 LEFT_BRACE (9:22-9:23)
 AWAIT (9:23-9:28)
 IDENTIFIER "Promise" (9:29-9:36)
@@ -163,8 +163,8 @@ SEMICOLON (12:13-12:14)
             )
             (LiteralExpression
               range: 9:21-9:22
-              kind: STRING
-              text: "\" \""
+              kind: FORMAT_STRING_TEXT
+              text: " "
             )
             (AwaitExpression
               range: 9:23-9:54

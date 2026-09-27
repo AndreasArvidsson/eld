@@ -55,11 +55,11 @@ FORMAT_STRING_START (7:11-7:13)
 LEFT_BRACE (7:13-7:14)
 IDENTIFIER "a" (7:14-7:15)
 RIGHT_BRACE (7:15-7:16)
-STRING_LITERAL "\" \"" (7:16-7:17)
+FORMAT_STRING_TEXT " " (7:16-7:17)
 LEFT_BRACE (7:17-7:18)
 IDENTIFIER "b" (7:18-7:19)
 RIGHT_BRACE (7:19-7:20)
-STRING_LITERAL "\" \"" (7:20-7:21)
+FORMAT_STRING_TEXT " " (7:20-7:21)
 LEFT_BRACE (7:21-7:22)
 IDENTIFIER "c" (7:22-7:23)
 RIGHT_BRACE (7:23-7:24)
@@ -202,8 +202,8 @@ SEMICOLON (12:13-12:14)
             )
             (LiteralExpression
               range: 7:16-7:17
-              kind: STRING
-              text: "\" \""
+              kind: FORMAT_STRING_TEXT
+              text: " "
             )
             (IdentifierExpression
               range: 7:18-7:19
@@ -211,8 +211,8 @@ SEMICOLON (12:13-12:14)
             )
             (LiteralExpression
               range: 7:20-7:21
-              kind: STRING
-              text: "\" \""
+              kind: FORMAT_STRING_TEXT
+              text: " "
             )
             (IdentifierExpression
               range: 7:22-7:23

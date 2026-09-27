@@ -1,0 +1,129 @@
+print(f"""
+    {"""
+    nested
+    """}
+    """);
+print(f"""
+    {f"""
+    inner
+    """}
+    """);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+FORMAT_STRING_START (1:7-1:11)
+LEFT_BRACE (2:5-2:6)
+STRING_LITERAL "\"\"\"\n    nested\n    \"\"\"" (2:6-4:8)
+RIGHT_BRACE (4:8-4:9)
+FORMAT_STRING_END (5:5-5:8)
+RIGHT_PAREN (5:8-5:9)
+SEMICOLON (5:9-5:10)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+FORMAT_STRING_START (6:7-6:11)
+LEFT_BRACE (7:5-7:6)
+FORMAT_STRING_START (7:6-7:10)
+FORMAT_STRING_TEXT "inner" (8:5-8:10)
+FORMAT_STRING_END (9:5-9:8)
+RIGHT_BRACE (9:8-9:9)
+FORMAT_STRING_END (10:5-10:8)
+RIGHT_PAREN (10:8-10:9)
+SEMICOLON (10:9-10:10)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:10
+  (ExpressionStatement
+    range: 1:1-5:10
+    (CallExpression
+      range: 1:1-5:9
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (FormatStringExpression
+        range: 1:7-5:8
+        (LiteralExpression
+          range: 2:6-4:8
+          kind: STRING
+          text: "\"\"\"\n    nested\n    \"\"\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-10:10
+    (CallExpression
+      range: 6:1-10:9
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (FormatStringExpression
+        range: 6:7-10:8
+        (FormatStringExpression
+          range: 7:6-9:8
+          (LiteralExpression
+            range: 8:5-8:10
+            kind: FORMAT_STRING_TEXT
+            text: "inner"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-5:9 -> void
+  1:7-5:8 -> string
+  2:6-4:8 -> string
+  6:1-6:6 -> (any) => void
+  6:1-10:9 -> void
+  6:7-10:8 -> string
+  7:6-9:8 -> string
+  8:5-8:10 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  6:1-6:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC "nested"
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC "inner"
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+nested
+inner
+

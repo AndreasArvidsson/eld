@@ -1,0 +1,71 @@
+print("""
+""" == "");
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"\"\"\n\"\"\"" (1:7-2:4)
+EQUAL_EQUAL (2:5-2:7)
+STRING_LITERAL "\"\"" (2:8-2:10)
+RIGHT_PAREN (2:10-2:11)
+SEMICOLON (2:11-2:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:12
+  (ExpressionStatement
+    range: 1:1-2:12
+    (CallExpression
+      range: 1:1-2:11
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 1:7-2:10
+        (LiteralExpression
+          range: 1:7-2:4
+          kind: STRING
+          text: "\"\"\"\n\"\"\""
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 2:8-2:10
+          kind: STRING
+          text: "\"\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-2:11 -> void
+  1:7-2:4 -> string
+  1:7-2:10 -> bool
+  2:8-2:10 -> string
+
+References:
+  1:1-1:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    LDC ""
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+

@@ -2729,8 +2729,10 @@ public final class BytecodeGenerator {
                 case BOOL -> Boolean.parseBoolean(literal.text()) ? 1 : 0;
                 case CHAR -> (int) decodeChar(literal.text());
                 case STRING -> decodeString(literal.text());
-                case RAW_STRING ->
-                    literal.text().substring(1, literal.text().length() - 1);
+                case RAW_STRING -> StringLiterals.decodeRaw(literal.text());
+                case FORMAT_STRING_TEXT ->
+                    StringLiterals.decodeContent(literal.text());
+                case RAW_FORMAT_STRING_TEXT -> literal.text();
                 case NULL -> null;
             };
             case GroupingExpression grouping ->
@@ -2887,27 +2889,7 @@ public final class BytecodeGenerator {
     }
 
     private static String decodeString(final String text) {
-        // Decode supported escapes while preserving other backslash sequences.
-        final StringBuilder decoded = new StringBuilder();
-        for (int i = 1; i < text.length() - 1; i++) {
-            char c = text.charAt(i);
-            if (
-                c == '\\' && i + 1 < text.length() - 1
-                    && "btnfr0'\"\\".indexOf(text.charAt(i + 1)) >= 0
-            ) {
-                c = switch (text.charAt(++i)) {
-                    case 'b' -> '\b';
-                    case 't' -> '\t';
-                    case 'n' -> '\n';
-                    case 'f' -> '\f';
-                    case 'r' -> '\r';
-                    case '0' -> '\0';
-                    default -> text.charAt(i);
-                };
-            }
-            decoded.append(c);
-        }
-        return decoded.toString();
+        return StringLiterals.decode(text);
     }
 
     private String classOwner(final ClassType type) {
@@ -6640,8 +6622,10 @@ public final class BytecodeGenerator {
                 case NULL -> method.aconst_null();
                 case CHAR -> method.ldc((int) decodeChar(text));
                 case STRING -> method.ldc(decodeString(text));
-                case RAW_STRING ->
-                    method.ldc(text.substring(1, text.length() - 1));
+                case RAW_STRING -> method.ldc(StringLiterals.decodeRaw(text));
+                case FORMAT_STRING_TEXT ->
+                    method.ldc(StringLiterals.decodeContent(text));
+                case RAW_FORMAT_STRING_TEXT -> method.ldc(text);
             }
         }
 

@@ -352,17 +352,24 @@ public class ParserExpressions extends ParserBase {
 
     private Expression parseFormatString(final Token start) {
         final List<Expression> parts = new ArrayList<>();
+        final boolean raw =
+            start.text().startsWith("r") || start.text().startsWith("fr");
         while (!check(TokenType.FORMAT_STRING_END)) {
             if (match(TokenType.LEFT_BRACE)) {
                 parts.add(parseExpression());
                 expect(TokenType.RIGHT_BRACE);
             }
             else {
-                final Token part =
-                    check(TokenType.RAW_STRING_LITERAL)
-                        ? expect(TokenType.RAW_STRING_LITERAL)
-                        : expect(TokenType.STRING_LITERAL);
-                parts.add(parsePrimitiveExpression(part));
+                final Token part = expect(TokenType.FORMAT_STRING_TEXT);
+                parts.add(
+                    new LiteralExpression(
+                        raw
+                            ? LiteralKind.RAW_FORMAT_STRING_TEXT
+                            : LiteralKind.FORMAT_STRING_TEXT,
+                        part.text(),
+                        part.range()
+                    )
+                );
             }
         }
         final Token end = expect(TokenType.FORMAT_STRING_END);

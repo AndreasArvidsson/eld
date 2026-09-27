@@ -1,0 +1,7 @@
+const value = """Hello
+World
+""";
+
+--- TOKENS ---
+
+LexerException: Multiline string opening delimiter must be followed by a newline at 1:18-1:19

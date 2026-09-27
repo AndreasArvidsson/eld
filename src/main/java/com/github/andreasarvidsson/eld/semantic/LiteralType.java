@@ -3,6 +3,7 @@ package com.github.andreasarvidsson.eld.semantic;
 import java.math.BigInteger;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.StringLiterals;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
 
 public record LiteralType(LiteralKind kind, String text) implements Type {
@@ -33,34 +34,11 @@ public record LiteralType(LiteralKind kind, String text) implements Type {
 
     public Object value() {
         return switch (kind) {
-            case STRING -> decodeString(text);
+            case STRING -> StringLiterals.decode(text);
             case BOOL -> Boolean.valueOf(text);
             case INT -> new BigInteger(text.replace("_", ""));
             default -> throw new IllegalStateException();
         };
-    }
-
-    private static String decodeString(final String text) {
-        final StringBuilder decoded = new StringBuilder();
-        for (int i = 1; i < text.length() - 1; i++) {
-            char c = text.charAt(i);
-            if (
-                c == '\\' && i + 1 < text.length() - 1
-                    && "btnfr0'\"\\".indexOf(text.charAt(i + 1)) >= 0
-            ) {
-                c = switch (text.charAt(++i)) {
-                    case 'b' -> '\b';
-                    case 't' -> '\t';
-                    case 'n' -> '\n';
-                    case 'f' -> '\f';
-                    case 'r' -> '\r';
-                    case '0' -> '\0';
-                    default -> text.charAt(i);
-                };
-            }
-            decoded.append(c);
-        }
-        return decoded.toString();
     }
 
     @Override

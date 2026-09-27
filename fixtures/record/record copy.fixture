@@ -48,7 +48,7 @@ THIS (3:19-3:23)
 DOT (3:23-3:24)
 IDENTIFIER "name" (3:24-3:28)
 RIGHT_BRACE (3:28-3:29)
-STRING_LITERAL "\": \"" (3:29-3:31)
+FORMAT_STRING_TEXT ": " (3:29-3:31)
 LEFT_BRACE (3:31-3:32)
 THIS (3:32-3:36)
 DOT (3:36-3:37)
@@ -267,8 +267,8 @@ SEMICOLON (21:21-21:22)
               )
               (LiteralExpression
                 range: 3:29-3:31
-                kind: STRING
-                text: "\": \""
+                kind: FORMAT_STRING_TEXT
+                text: ": "
               )
               (MemberExpression
                 range: 3:32-3:42

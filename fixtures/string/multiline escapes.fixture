@@ -1,0 +1,99 @@
+const value = """
+Hello\tWorld
+Quote: \" and \"\"\"
+Backslash: \\
+""";
+print(value == "Hello\tWorld\nQuote: \" and \"\"\"\nBackslash: \\");
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+STRING_LITERAL "\"\"\"\nHello\\tWorld\nQuote: \\\" and \\\"\\\"\\\"\nBackslash: \\\\\n\"\"\"" (1:15-5:4)
+SEMICOLON (5:4-5:5)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "value" (6:7-6:12)
+EQUAL_EQUAL (6:13-6:15)
+STRING_LITERAL "\"Hello\\tWorld\\nQuote: \\\" and \\\"\\\"\\\"\\nBackslash: \\\\\"" (6:16-6:67)
+RIGHT_PAREN (6:67-6:68)
+SEMICOLON (6:68-6:69)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:69
+  (VariableDeclaration
+    range: 1:1-5:5
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:15-5:4
+      kind: STRING
+      text: "\"\"\"\nHello\\tWorld\nQuote: \\\" and \\\"\\\"\\\"\nBackslash: \\\\\n\"\"\""
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:69
+    (CallExpression
+      range: 6:1-6:68
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:67
+        (IdentifierExpression
+          range: 6:7-6:12
+          name: "value"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 6:16-6:67
+          kind: STRING
+          text: "\"Hello\\tWorld\\nQuote: \\\" and \\\"\\\"\\\"\\nBackslash: \\\\\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:15-5:4 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:68 -> void
+  6:7-6:12 -> string
+  6:7-6:67 -> bool
+  6:16-6:67 -> string
+
+Declarations:
+  1:7-1:12 -> const value: string
+
+References:
+  6:1-6:6 -> builtin print
+  6:7-6:12 -> 1:7-1:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "Hello\tWorld\nQuote: \" and \"\"\"\nBackslash: \\"
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    LDC "Hello\tWorld\nQuote: \" and \"\"\"\nBackslash: \\"
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+

@@ -1,0 +1,84 @@
+print(r"Hello\tworld");
+print(r"foo\bar\baz");
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+RAW_STRING_LITERAL "\"Hello\\tworld\"" (1:7-1:22)
+RIGHT_PAREN (1:22-1:23)
+SEMICOLON (1:23-1:24)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+RAW_STRING_LITERAL "\"foo\\bar\\baz\"" (2:7-2:21)
+RIGHT_PAREN (2:21-2:22)
+SEMICOLON (2:22-2:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:23
+  (ExpressionStatement
+    range: 1:1-1:24
+    (CallExpression
+      range: 1:1-1:23
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 1:7-1:22
+        kind: RAW_STRING
+        text: "\"Hello\\tworld\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:23
+    (CallExpression
+      range: 2:1-2:22
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 2:7-2:21
+        kind: RAW_STRING
+        text: "\"foo\\bar\\baz\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:23 -> void
+  1:7-1:22 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:22 -> void
+  2:7-2:21 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Hello\\tworld"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "foo\\bar\\baz"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+Hello\tworld
+foo\bar\baz
+

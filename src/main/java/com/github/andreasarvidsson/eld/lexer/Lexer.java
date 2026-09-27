@@ -108,10 +108,27 @@ public class Lexer {
     private static final class FormatContext {
         private boolean text = true;
         private int braces;
-        private final boolean raw;
+        private final int openingLine;
+        private final int openingColumn;
+        private final int openingPosition;
+        private final boolean multiline;
+        private final int closingPosition;
+        private final String indentation;
 
-        private FormatContext(final boolean raw) {
-            this.raw = raw;
+        private FormatContext(
+            final int openingLine,
+            final int openingColumn,
+            final int openingPosition,
+            final boolean multiline,
+            final int closingPosition,
+            final String indentation
+        ) {
+            this.openingLine = openingLine;
+            this.openingColumn = openingColumn;
+            this.openingPosition = openingPosition;
+            this.multiline = multiline;
+            this.closingPosition = closingPosition;
+            this.indentation = indentation;
         }
     }
 
@@ -149,10 +166,30 @@ public class Lexer {
         }
         final Token token = readToken();
         if (context != null) {
+            if (!context.multiline && line > context.openingLine) {
+                int newline = source.indexOf('\n', context.openingPosition);
+                if (
+                    newline > context.openingPosition
+                        && source.charAt(newline - 1) == '\r'
+                ) {
+                    newline--;
+                }
+                final int newlineColumn =
+                    context.openingColumn + newline - context.openingPosition;
+                throw new LexerException(
+                    new Range(
+                        context.openingLine,
+                        newlineColumn,
+                        context.openingLine,
+                        newlineColumn + 1
+                    ),
+                    "Unterminated string literal"
+                );
+            }
             if (token == null) {
                 throw new LexerException(
-                    new Range(tokenStart, new Position(line, column)),
-                    "Unterminated format string interpolation"
+                    new Range(line, column, line, column + 1),
+                    "Unterminated string literal"
                 );
             }
             if (token.type() == TokenType.LEFT_BRACE) {
@@ -171,22 +208,29 @@ public class Lexer {
     }
 
     private Token readFormatText(final FormatContext context) {
+        if (context.multiline) {
+            return readMultilineFormatText(context);
+        }
         final StringBuilder builder = new StringBuilder();
         while (true) {
             final Character next = peek();
             if (next == null) {
                 throw new LexerException(
-                    new Range(tokenStart, new Position(line, column)),
-                    "Unterminated format string literal"
+                    new Range(line, column, line, column + 1),
+                    "Unterminated string literal"
+                );
+            }
+            if (next == '\n' || next == '\r') {
+                throw new LexerException(
+                    new Range(line, column, line, column + 1),
+                    "Unterminated string literal"
                 );
             }
             if (next == '"' || (next == '{' && !Objects.equals(peek(1), '{'))) {
                 if (!builder.isEmpty()) {
                     return createToken(
-                        context.raw
-                            ? TokenType.RAW_STRING_LITERAL
-                            : TokenType.STRING_LITERAL,
-                        Objects.requireNonNull("\"" + builder + "\"")
+                        TokenType.FORMAT_STRING_TEXT,
+                        builder.toString()
                     );
                 }
                 advance();
@@ -216,6 +260,111 @@ public class Lexer {
                 advance();
             }
         }
+    }
+
+    private Token readMultilineFormatText(final FormatContext context) {
+        final StringBuilder builder = new StringBuilder();
+        if (position == context.openingPosition) {
+            if (peek() != null && peek() == '\r') {
+                advance();
+            }
+            advance();
+            tokenStart = new Position(line, column);
+        }
+        Position contentEnd = new Position(line, column);
+        final int closingLineStart =
+            source.lastIndexOf('\n', context.closingPosition - 1) + 1;
+        while (true) {
+            if (position == context.closingPosition) {
+                if (!builder.isEmpty()) {
+                    return createMultilineFormatTextToken(builder, contentEnd);
+                }
+                tokenStart = new Position(line, column);
+                advance();
+                advance();
+                advance();
+                formats.pop();
+                return createToken(TokenType.FORMAT_STRING_END, "\"\"\"");
+            }
+            if (position == closingLineStart) {
+                for (int i = 0; i < context.indentation.length(); i++) {
+                    advance();
+                }
+                if (builder.isEmpty()) {
+                    tokenStart = new Position(line, column);
+                }
+                continue;
+            }
+            if (position > 0 && source.charAt(position - 1) == '\n') {
+                int lineEnd = source.indexOf('\n', position);
+                if (lineEnd < 0) {
+                    lineEnd = source.length();
+                }
+                if (lineEnd > position && source.charAt(lineEnd - 1) == '\r') {
+                    lineEnd--;
+                }
+                final String row = source.substring(position, lineEnd);
+                final int skip =
+                    row.isBlank() ? row.length() : context.indentation.length();
+                for (int i = 0; i < skip; i++) {
+                    advance();
+                }
+                if (builder.isEmpty()) {
+                    tokenStart = new Position(line, column);
+                }
+            }
+            final char next = source.charAt(position);
+            if (next == '\r' || next == '\n') {
+                if (next == '\r') {
+                    advance();
+                }
+                advance();
+                if (position != closingLineStart) {
+                    builder.append('\n');
+                    contentEnd = new Position(line, column);
+                }
+                continue;
+            }
+            if (next == '{' && !Objects.equals(peek(1), '{')) {
+                if (!builder.isEmpty()) {
+                    return createMultilineFormatTextToken(builder, contentEnd);
+                }
+                tokenStart = new Position(line, column);
+                advance();
+                context.text = false;
+                return createToken(TokenType.LEFT_BRACE, '{');
+            }
+            if (next == '{' || next == '}') {
+                if (!Objects.equals(peek(1), next)) {
+                    throw new LexerException(
+                        new Range(line, column, line, column + 1),
+                        "Unescaped closing brace in format string"
+                    );
+                }
+                advance();
+            }
+            builder.append(next);
+            advance();
+            if (
+                next == '\\' && (Objects.equals(peek(), '"')
+                    || Objects.equals(peek(), '\\'))
+            ) {
+                builder.append(peek());
+                advance();
+            }
+            contentEnd = new Position(line, column);
+        }
+    }
+
+    private Token createMultilineFormatTextToken(
+        final StringBuilder builder,
+        final Position end
+    ) {
+        return new Token(
+            TokenType.FORMAT_STRING_TEXT,
+            builder.toString(),
+            new Range(tokenStart, end)
+        );
     }
 
     private @Nullable Token readToken() {
@@ -248,13 +397,47 @@ public class Lexer {
                 for (int i = 0; i < prefixLength; i++) {
                     advance();
                 }
+                final boolean multiline = source.startsWith("\"\"\"", position);
                 if (formatted) {
-                    advance();
-                    formats.push(new FormatContext(raw));
+                    int closingPosition = -1;
+                    String indentation = "";
+                    if (multiline) {
+                        final int openingPosition = position;
+                        final int openingLine = line;
+                        final int openingColumn = column;
+                        readMultilineStringLiteral(false, true);
+                        closingPosition = position - 3;
+                        final int closingLineStart =
+                            source.lastIndexOf('\n', closingPosition - 1) + 1;
+                        indentation =
+                            source.substring(closingLineStart, closingPosition);
+                        position = openingPosition;
+                        line = openingLine;
+                        column = openingColumn;
+                        advance();
+                        advance();
+                        advance();
+                    }
+                    else {
+                        advance();
+                    }
+                    formats.push(
+                        new FormatContext(
+                            line,
+                            column,
+                            position,
+                            multiline,
+                            closingPosition,
+                            indentation
+                        )
+                    );
                     return createToken(
                         TokenType.FORMAT_STRING_START,
-                        prefix + "\""
+                        prefix + (multiline ? "\"\"\"" : "\"")
                     );
+                }
+                if (multiline) {
+                    return readMultilineStringLiteral(raw, false);
                 }
                 return readStringLiteral(raw);
             }
@@ -269,6 +452,9 @@ public class Lexer {
         }
 
         if (next == '"') {
+            if (source.startsWith("\"\"\"", position)) {
+                return readMultilineStringLiteral(false, false);
+            }
             return readStringLiteral(false);
         }
 
@@ -473,7 +659,7 @@ public class Lexer {
         final StringBuilder builder = new StringBuilder();
         while (true) {
             final Character next = peek();
-            if (next == null || next == '"') {
+            if (next == null || next == '"' || next == '\n' || next == '\r') {
                 break;
             }
             builder.append(next);
@@ -504,6 +690,158 @@ public class Lexer {
             raw ? TokenType.RAW_STRING_LITERAL : TokenType.STRING_LITERAL,
             text
         );
+    }
+
+    private Token readMultilineStringLiteral(
+        final boolean raw,
+        final boolean formatted
+    ) {
+        final int start = position;
+        advance();
+        advance();
+        advance();
+        if (peek() != null && peek() == '\r') {
+            advance();
+        }
+        if (peek() == null || peek() != '\n') {
+            throw new LexerException(
+                new Range(line, column, line, column + 1),
+                "Multiline string opening delimiter must be followed by a newline"
+            );
+        }
+        advance();
+        final int contentStart = position;
+        int lineStart = position;
+        while (peek() != null) {
+            if (source.startsWith("\"\"\"", position)) {
+                final String indentation =
+                    source.substring(lineStart, position);
+                if (!indentation.isBlank()) {
+                    throw new LexerException(
+                        new Range(line, column, line, column + 3),
+                        "Multiline string closing delimiter must be on its own line"
+                    );
+                }
+                validateMultilineIndentation(
+                    contentStart,
+                    lineStart,
+                    indentation
+                );
+                advance();
+                advance();
+                advance();
+                return createToken(
+                    raw
+                        ? TokenType.RAW_STRING_LITERAL
+                        : TokenType.STRING_LITERAL,
+                    Objects.requireNonNull(source.substring(start, position))
+                );
+            }
+            final char current = source.charAt(position);
+            if (formatted && current == '{') {
+                if (Objects.equals(peek(1), '{')) {
+                    advance();
+                    advance();
+                }
+                else {
+                    skipMultilineInterpolation();
+                    lineStart = source.lastIndexOf('\n', position - 1) + 1;
+                }
+                continue;
+            }
+            if (
+                current == '\\' && position + 1 < source.length()
+                    && (source.charAt(position + 1) == '"'
+                        || source.charAt(position + 1) == '\\')
+            ) {
+                advance();
+                advance();
+                continue;
+            }
+            advance();
+            if (current == '\n') {
+                lineStart = position;
+            }
+        }
+        throw new LexerException(
+            new Range(line, column, line, column + 1),
+            "Unterminated multiline string literal"
+        );
+    }
+
+    private void skipMultilineInterpolation() {
+        int braces = 0;
+        while (peek() != null) {
+            final char current = source.charAt(position);
+            if (current == '"' || current == '\'') {
+                skipInterpolationQuotedLiteral(current);
+                continue;
+            }
+            if (current == '/' && Objects.equals(peek(1), '/')) {
+                skipLineComment();
+                continue;
+            }
+            if (current == '/' && Objects.equals(peek(1), '*')) {
+                skipBlockComment();
+                continue;
+            }
+            advance();
+            if (current == '{') {
+                braces++;
+            }
+            else if (current == '}' && --braces == 0) {
+                return;
+            }
+        }
+        throw new LexerException(
+            new Range(line, column, line, column + 1),
+            "Unterminated multiline string literal"
+        );
+    }
+
+    private void skipInterpolationQuotedLiteral(final char quote) {
+        final boolean triple =
+            quote == '"' && source.startsWith("\"\"\"", position);
+        final int delimiterLength = triple ? 3 : 1;
+        for (int i = 0; i < delimiterLength; i++) {
+            advance();
+        }
+        while (peek() != null) {
+            if (source.charAt(position) == '\\' && peek(1) != null) {
+                advance();
+                advance();
+                continue;
+            }
+            if (triple && source.startsWith("\"\"\"", position)) {
+                advance();
+                advance();
+                advance();
+                return;
+            }
+            if (!triple && source.charAt(position) == quote) {
+                advance();
+                return;
+            }
+            advance();
+        }
+    }
+
+    private void validateMultilineIndentation(
+        final int contentStart,
+        final int closingLineStart,
+        final String indentation
+    ) {
+        final String content = source.substring(contentStart, closingLineStart);
+        int contentLine = tokenStart.line() + 1;
+        for (final String row : content.split("\\r?\\n", -1)) {
+            if (!row.isBlank() && !row.startsWith(indentation)) {
+                throw new LexerException(
+                    new Range(contentLine, 1, contentLine, row.length() + 1),
+                    "Multiline string content has insufficient indentation"
+                );
+            }
+            contentLine++;
+        }
     }
 
     private Token readCharLiteral() {

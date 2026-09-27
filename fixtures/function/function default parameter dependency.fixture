@@ -32,7 +32,7 @@ FORMAT_STRING_START (2:11-2:13)
 LEFT_BRACE (2:13-2:14)
 IDENTIFIER "a" (2:14-2:15)
 RIGHT_BRACE (2:15-2:16)
-STRING_LITERAL "\" \"" (2:16-2:17)
+FORMAT_STRING_TEXT " " (2:16-2:17)
 LEFT_BRACE (2:17-2:18)
 IDENTIFIER "b" (2:18-2:19)
 RIGHT_BRACE (2:19-2:20)
@@ -128,8 +128,8 @@ SEMICOLON (7:11-7:12)
             )
             (LiteralExpression
               range: 2:16-2:17
-              kind: STRING
-              text: "\" \""
+              kind: FORMAT_STRING_TEXT
+              text: " "
             )
             (IdentifierExpression
               range: 2:18-2:19

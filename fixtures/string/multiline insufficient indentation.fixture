@@ -1,0 +1,10 @@
+func run() {
+    const value = """
+        Hello
+      World
+        """;
+}
+
+--- TOKENS ---
+
+LexerException: Multiline string content has insufficient indentation at 4:1-4:12

@@ -706,7 +706,8 @@ public final class SemanticAnalyzerExpressionOperations {
             case FLOAT -> BuiltinType.F64;
             case CHAR -> BuiltinType.CHAR;
             case BOOL -> BuiltinType.BOOL;
-            case STRING, RAW_STRING -> BuiltinType.STRING;
+            case STRING, RAW_STRING, FORMAT_STRING_TEXT,
+                RAW_FORMAT_STRING_TEXT -> BuiltinType.STRING;
             case NULL -> BuiltinType.NULL;
         };
 

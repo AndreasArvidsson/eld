@@ -1,0 +1,5 @@
+"Hello
+
+--- TOKENS ---
+
+LexerException: Unterminated string literal at 1:7-1:8
