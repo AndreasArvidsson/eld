@@ -121,7 +121,7 @@ SEMICOLON (6:11-6:12)
       range: 4:1-4:11
       (RecordPatternField
         range: 4:2-4:5
-        (IdentifierDeclaration
+        (IdentifierExpression
           range: 4:2-4:5
           name: "foo"
         )
@@ -136,7 +136,7 @@ SEMICOLON (6:11-6:12)
       )
       (RecordPatternField
         range: 4:7-4:10
-        (IdentifierDeclaration
+        (IdentifierExpression
           range: 4:7-4:10
           name: "bar"
         )

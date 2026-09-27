@@ -186,7 +186,6 @@ protected const bar = 0;
 ### Miscellaneous
 
 - add enum
-- Stop using IdentifierDeclaration in destruction pattern assignment expressions?
 - Overloaded functions
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes

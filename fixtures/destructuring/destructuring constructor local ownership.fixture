@@ -229,14 +229,12 @@ class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
     ISTORE_2 2
-    ILOAD_2 2
-    ISTORE_3 3
     LDC 3
     DUP
-    ISTORE_3 3
+    ISTORE_2 2
     POP
     RETURN
-    max stack 6 max locals 4
+    max stack 6 max locals 3
 
 --- OUTPUT ---
 

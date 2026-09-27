@@ -92,7 +92,7 @@ SEMICOLON (3:11-3:12)
       range: 2:7-2:12
       (RecordPatternField
         range: 2:8-2:11
-        (IdentifierDeclaration
+        (IdentifierExpression
           range: 2:8-2:11
           name: "bar"
         )

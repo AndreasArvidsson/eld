@@ -112,7 +112,7 @@ RIGHT_BRACE (8:1-8:2)
               range: 5:15-5:30
               (RecordPatternField
                 range: 5:16-5:29
-                (IdentifierDeclaration
+                (IdentifierExpression
                   range: 5:16-5:21
                   name: "value"
                 )

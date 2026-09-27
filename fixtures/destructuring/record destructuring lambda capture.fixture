@@ -1,6 +1,9 @@
 record Rec(foo: i32);
-const {foo: i64 | null} = new Rec(1);
-print(foo);
+const run = () => {
+    const {foo} = new Rec(7);
+    print(foo);
+};
+run();
 
 --- TOKENS ---
 
@@ -13,30 +16,39 @@ IDENTIFIER "i32" (1:17-1:20)
 RIGHT_PAREN (1:20-1:21)
 SEMICOLON (1:21-1:22)
 CONST (2:1-2:6)
-LEFT_BRACE (2:7-2:8)
-IDENTIFIER "foo" (2:8-2:11)
-COLON (2:11-2:12)
-IDENTIFIER "i64" (2:13-2:16)
-PIPE (2:17-2:18)
-NULL (2:19-2:23)
-RIGHT_BRACE (2:23-2:24)
-EQUAL (2:25-2:26)
-NEW (2:27-2:30)
-IDENTIFIER "Rec" (2:31-2:34)
-LEFT_PAREN (2:34-2:35)
-INTEGER_LITERAL "1" (2:35-2:36)
-RIGHT_PAREN (2:36-2:37)
-SEMICOLON (2:37-2:38)
-IDENTIFIER "print" (3:1-3:6)
-LEFT_PAREN (3:6-3:7)
-IDENTIFIER "foo" (3:7-3:10)
-RIGHT_PAREN (3:10-3:11)
-SEMICOLON (3:11-3:12)
+IDENTIFIER "run" (2:7-2:10)
+EQUAL (2:11-2:12)
+LEFT_PAREN (2:13-2:14)
+RIGHT_PAREN (2:14-2:15)
+ARROW (2:16-2:18)
+LEFT_BRACE (2:19-2:20)
+CONST (3:5-3:10)
+LEFT_BRACE (3:11-3:12)
+IDENTIFIER "foo" (3:12-3:15)
+RIGHT_BRACE (3:15-3:16)
+EQUAL (3:17-3:18)
+NEW (3:19-3:22)
+IDENTIFIER "Rec" (3:23-3:26)
+LEFT_PAREN (3:26-3:27)
+INTEGER_LITERAL "7" (3:27-3:28)
+RIGHT_PAREN (3:28-3:29)
+SEMICOLON (3:29-3:30)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "foo" (4:11-4:14)
+RIGHT_PAREN (4:14-4:15)
+SEMICOLON (4:15-4:16)
+RIGHT_BRACE (5:1-5:2)
+SEMICOLON (5:2-5:3)
+IDENTIFIER "run" (6:1-6:4)
+LEFT_PAREN (6:4-6:5)
+RIGHT_PAREN (6:5-6:6)
+SEMICOLON (6:6-6:7)
 
 --- AST ---
 
 (Program
-  range: 1:1-3:12
+  range: 1:1-6:7
   (RecordDeclaration
     range: 1:1-1:22
     (IdentifierDeclaration
@@ -55,61 +67,76 @@ SEMICOLON (3:11-3:12)
       )
     )
   )
-  (DestructuringDeclaration
-    range: 2:1-2:38
+  (VariableDeclaration
+    range: 2:1-5:3
     mutability: CONST
-    (RecordPattern
-      range: 2:7-2:24
-      (RecordPatternField
-        range: 2:8-2:23
-        (IdentifierDeclaration
-          range: 2:8-2:11
-          name: "foo"
-        )
-        (IdentifierPattern
-          range: 2:8-2:23
-          (IdentifierDeclaration
-            range: 2:8-2:11
-            name: "foo"
-          )
-          (UnionTypeNode
-            range: 2:13-2:23
-            (NamedTypeNode
-              range: 2:13-2:16
-              name: "i64"
-            )
-            (NamedTypeNode
-              range: 2:19-2:23
-              name: "null"
-            )
-          )
-        )
-      )
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "run"
     )
-    (NewExpression
-      range: 2:27-2:37
-      (IdentifierExpression
-        range: 2:31-2:34
-        name: "Rec"
-      )
-      (LiteralExpression
-        range: 2:35-2:36
-        kind: INT
-        text: "1"
+    type: null
+    (LambdaExpression
+      range: 2:13-5:2
+      (BlockStatement
+        range: 2:19-5:2
+        (DestructuringDeclaration
+          range: 3:5-3:30
+          mutability: CONST
+          (RecordPattern
+            range: 3:11-3:16
+            (RecordPatternField
+              range: 3:12-3:15
+              (IdentifierExpression
+                range: 3:12-3:15
+                name: "foo"
+              )
+              (IdentifierPattern
+                range: 3:12-3:15
+                (IdentifierDeclaration
+                  range: 3:12-3:15
+                  name: "foo"
+                )
+                type: null
+              )
+            )
+          )
+          (NewExpression
+            range: 3:19-3:29
+            (IdentifierExpression
+              range: 3:23-3:26
+              name: "Rec"
+            )
+            (LiteralExpression
+              range: 3:27-3:28
+              kind: INT
+              text: "7"
+            )
+          )
+        )
+        (ExpressionStatement
+          range: 4:5-4:16
+          (CallExpression
+            range: 4:5-4:15
+            (IdentifierExpression
+              range: 4:5-4:10
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 4:11-4:14
+              name: "foo"
+            )
+          )
+        )
       )
     )
   )
   (ExpressionStatement
-    range: 3:1-3:12
+    range: 6:1-6:7
     (CallExpression
-      range: 3:1-3:11
+      range: 6:1-6:6
       (IdentifierExpression
-        range: 3:1-3:6
-        name: "print"
-      )
-      (IdentifierExpression
-        range: 3:7-3:10
-        name: "foo"
+        range: 6:1-6:4
+        name: "run"
       )
     )
   )
@@ -125,60 +152,62 @@ Expression types:
   1:12-1:20 -> Rec
   1:12-1:20 -> i32
   1:12-1:20 -> string
-  2:8-2:23 -> i32
-  2:27-2:37 -> Rec
-  2:31-2:34 -> Rec
-  2:35-2:36 -> i32
-  3:1-3:6 -> (any) => void
-  3:1-3:11 -> void
-  3:7-3:10 -> i64 | null
+  2:13-5:2 -> () => void
+  3:12-3:15 -> i32
+  3:19-3:29 -> Rec
+  3:23-3:26 -> Rec
+  3:27-3:28 -> i32
+  4:5-4:10 -> (any) => void
+  4:5-4:15 -> void
+  4:11-4:14 -> i32
+  6:1-6:4 -> () => void
+  6:1-6:6 -> void
 
 Resolved types:
   1:8-1:11 -> Rec
   1:8-1:11 -> string
   1:17-1:20 -> i32
-  2:13-2:16 -> i64
-  2:13-2:23 -> i64 | null
-  2:19-2:23 -> null
-
-Conversions:
-  2:8-2:23 -> i32 -> i64 -> i64 | null
 
 Declarations:
   1:8-1:11 -> record Rec(foo: i32)
-  2:8-2:11 -> const foo: i64 | null
+  2:7-2:10 -> const run: () => void
+  3:12-3:15 -> const foo: i32
 
 References:
   1:8-1:11 -> 1:8-1:11
   1:12-1:15 -> 1:12-1:15
-  2:31-2:34 -> 1:8-1:11
-  3:1-3:6 -> builtin print
-  3:7-3:10 -> 2:8-2:11
+  3:23-3:26 -> 1:8-1:11
+  4:5-4:10 -> builtin print
+  4:11-4:14 -> 3:12-3:15
+  6:1-6:4 -> 2:7-2:10
 
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   nest member Test$Rec
   inner class Test$Rec flags [PUBLIC, STATIC, FINAL]
-  field foo Ljava/lang/Long; flags [PUBLIC, STATIC, FINAL]
-  method <clinit>()V flags [STATIC]
+  field run Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method $lambda0()V flags [PRIVATE, STATIC, SYNTHETIC]
     NEW Test$Rec
     DUP
-    LDC 1
+    LDC 7
     INVOKESPECIAL Test$Rec.<init>(I)V
     ASTORE_0 0
     ALOAD_0 0
     INVOKEVIRTUAL Test$Rec.foo()I
-    I2L
-    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    ASTORE_1 1
-    ALOAD_1 1
-    PUTSTATIC Test.foo Ljava/lang/Long;
+    ISTORE_1 1
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.foo Ljava/lang/Long;
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    ILOAD_1 1
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
     max stack 3 max locals 2
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::$lambda0()void]
+    PUTSTATIC Test.run Ljava/lang/invoke/MethodHandle;
+    GETSTATIC Test.run Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()V
+    RETURN
+    max stack 1 max locals 0
 
 class Test$Rec extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
   implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
@@ -251,5 +280,5 @@ class Test$Rec extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER
 
 --- OUTPUT ---
 
-1
+7
 

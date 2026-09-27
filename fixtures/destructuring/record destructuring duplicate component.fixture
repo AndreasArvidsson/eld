@@ -73,7 +73,7 @@ SEMICOLON (2:40-2:41)
       range: 2:7-2:24
       (RecordPatternField
         range: 2:8-2:11
-        (IdentifierDeclaration
+        (IdentifierExpression
           range: 2:8-2:11
           name: "foo"
         )
@@ -88,7 +88,7 @@ SEMICOLON (2:40-2:41)
       )
       (RecordPatternField
         range: 2:13-2:23
-        (IdentifierDeclaration
+        (IdentifierExpression
           range: 2:13-2:16
           name: "foo"
         )

@@ -923,8 +923,8 @@ public final class Parser extends ParserBase {
         if (!check(TokenType.RIGHT_BRACE)) {
             do {
                 final Token component = expect(TokenType.IDENTIFIER);
-                final IdentifierDeclaration componentName =
-                    new IdentifierDeclaration(
+                final IdentifierExpression componentName =
+                    new IdentifierExpression(
                         component.text(),
                         component.range()
                     );

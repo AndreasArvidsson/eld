@@ -1377,7 +1377,8 @@ public final class SemanticAnalyzerExpressions {
         final List<Symbol> captures = new ArrayList<>();
         AstTraversal.walk(lambda.body(), node -> {
             if (node instanceof IdentifierExpression identifier) {
-                final Symbol reference = model.getReference(identifier);
+                final @Nullable Symbol reference =
+                    model.findReference(identifier);
                 if (
                     reference instanceof VariableSymbol
                         && !declared.contains(reference)

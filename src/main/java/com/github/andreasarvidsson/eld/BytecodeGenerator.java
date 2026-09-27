@@ -9686,6 +9686,18 @@ public final class BytecodeGenerator {
             for (final PatternValue value : values) {
                 final Symbol symbol =
                     semanticModel.getPatternSymbol(value.binding());
+                if (
+                    declaration && !cell(symbol)
+                        && !semanticModel.isStaticMember(symbol)
+                        && !globals.containsKey(symbol)
+                        && (instance == null
+                            || !instance.members().containsKey(symbol))
+                        && (lexicalInstance == null
+                            || !lexicalInstance.members().containsKey(symbol))
+                        && locals.putIfAbsent(symbol, value.local()) == null
+                ) {
+                    continue;
+                }
                 prepareStore(symbol);
                 method.with(
                     localInstruction(loadOpcode(symbol.type()), value.local())
