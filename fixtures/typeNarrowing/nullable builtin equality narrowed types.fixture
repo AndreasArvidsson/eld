@@ -1,0 +1,317 @@
+var value: string | null = "hello";
+
+if (value == "hello") {
+    print(value + "!");
+}
+
+switch (value) {
+    case "hello", "world" => print(value + "?")
+    else => print("other")
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "string" (1:12-1:18)
+PIPE (1:19-1:20)
+NULL (1:21-1:25)
+EQUAL (1:26-1:27)
+STRING_LITERAL "\"hello\"" (1:28-1:35)
+SEMICOLON (1:35-1:36)
+IF (3:1-3:3)
+LEFT_PAREN (3:4-3:5)
+IDENTIFIER "value" (3:5-3:10)
+EQUAL_EQUAL (3:11-3:13)
+STRING_LITERAL "\"hello\"" (3:14-3:21)
+RIGHT_PAREN (3:21-3:22)
+LEFT_BRACE (3:23-3:24)
+IDENTIFIER "print" (4:5-4:10)
+LEFT_PAREN (4:10-4:11)
+IDENTIFIER "value" (4:11-4:16)
+PLUS (4:17-4:18)
+STRING_LITERAL "\"!\"" (4:19-4:22)
+RIGHT_PAREN (4:22-4:23)
+SEMICOLON (4:23-4:24)
+RIGHT_BRACE (5:1-5:2)
+SWITCH (7:1-7:7)
+LEFT_PAREN (7:8-7:9)
+IDENTIFIER "value" (7:9-7:14)
+RIGHT_PAREN (7:14-7:15)
+LEFT_BRACE (7:16-7:17)
+CASE (8:5-8:9)
+STRING_LITERAL "\"hello\"" (8:10-8:17)
+COMMA (8:17-8:18)
+STRING_LITERAL "\"world\"" (8:19-8:26)
+ARROW (8:27-8:29)
+IDENTIFIER "print" (8:30-8:35)
+LEFT_PAREN (8:35-8:36)
+IDENTIFIER "value" (8:36-8:41)
+PLUS (8:42-8:43)
+STRING_LITERAL "\"?\"" (8:44-8:47)
+RIGHT_PAREN (8:47-8:48)
+ELSE (9:5-9:9)
+ARROW (9:10-9:12)
+IDENTIFIER "print" (9:13-9:18)
+LEFT_PAREN (9:18-9:19)
+STRING_LITERAL "\"other\"" (9:19-9:26)
+RIGHT_PAREN (9:26-9:27)
+RIGHT_BRACE (10:1-10:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:2
+  (VariableDeclaration
+    range: 1:1-1:36
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (UnionTypeNode
+      range: 1:12-1:25
+      (NamedTypeNode
+        range: 1:12-1:18
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 1:21-1:25
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:28-1:35
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-5:2
+    (IfExpression
+      range: 3:1-5:2
+      (BinaryExpression
+        range: 3:5-3:21
+        (IdentifierExpression
+          range: 3:5-3:10
+          name: "value"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 3:14-3:21
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+      (BlockStatement
+        range: 3:23-5:2
+        (ExpressionStatement
+          range: 4:5-4:24
+          (CallExpression
+            range: 4:5-4:23
+            (IdentifierExpression
+              range: 4:5-4:10
+              name: "print"
+            )
+            (BinaryExpression
+              range: 4:11-4:22
+              (IdentifierExpression
+                range: 4:11-4:16
+                name: "value"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 4:19-4:22
+                kind: STRING
+                text: "\"!\""
+              )
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-10:2
+    (SwitchExpression
+      range: 7:1-10:2
+      (IdentifierExpression
+        range: 7:9-7:14
+        name: "value"
+      )
+      (SwitchBranch
+        range: 8:5-8:48
+        (LiteralExpression
+          range: 8:10-8:17
+          kind: STRING
+          text: "\"hello\""
+        )
+        (LiteralExpression
+          range: 8:19-8:26
+          kind: STRING
+          text: "\"world\""
+        )
+        (SwitchBranchExpressionBody
+          range: 8:30-8:48
+          (CallExpression
+            range: 8:30-8:48
+            (IdentifierExpression
+              range: 8:30-8:35
+              name: "print"
+            )
+            (BinaryExpression
+              range: 8:36-8:47
+              (IdentifierExpression
+                range: 8:36-8:41
+                name: "value"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 8:44-8:47
+                kind: STRING
+                text: "\"?\""
+              )
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 9:5-9:27
+        (SwitchBranchExpressionBody
+          range: 9:13-9:27
+          (CallExpression
+            range: 9:13-9:27
+            (IdentifierExpression
+              range: 9:13-9:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 9:19-9:26
+              kind: STRING
+              text: "\"other\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:28-1:35 -> string
+  3:1-5:2 -> void
+  3:5-3:10 -> string | null
+  3:5-3:21 -> bool
+  3:14-3:21 -> string
+  4:5-4:10 -> (any) => void
+  4:5-4:23 -> void
+  4:11-4:16 -> string
+  4:11-4:22 -> string
+  4:19-4:22 -> string
+  7:1-10:2 -> void
+  7:9-7:14 -> string | null
+  8:10-8:17 -> string
+  8:19-8:26 -> string
+  8:30-8:35 -> (any) => void
+  8:30-8:48 -> void
+  8:36-8:41 -> string
+  8:36-8:47 -> string
+  8:44-8:47 -> string
+  9:13-9:18 -> (any) => void
+  9:13-9:27 -> void
+  9:19-9:26 -> string
+
+Narrowed types:
+  4:11-4:16 -> string | null -> string
+  8:36-8:41 -> string | null -> string
+
+Resolved types:
+  1:12-1:18 -> string
+  1:12-1:25 -> string | null
+  1:21-1:25 -> null
+
+Conversions:
+  1:28-1:35 -> string -> string | null
+  3:14-3:21 -> string -> string | null
+  8:10-8:17 -> string -> string | null
+  8:19-8:26 -> string -> string | null
+
+Declarations:
+  1:5-1:10 -> var value: string | null
+
+References:
+  3:5-3:10 -> 1:5-1:10
+  4:5-4:10 -> builtin print
+  4:11-4:16 -> 1:5-1:10
+  7:9-7:14 -> 1:5-1:10
+  8:30-8:35 -> builtin print
+  8:36-8:41 -> 1:5-1:10
+  9:13-9:18 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Ljava/lang/String; flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC "hello"
+    PUTSTATIC Test.value Ljava/lang/String;
+    GETSTATIC Test.value Ljava/lang/String;
+    DUP
+    IFNONNULL L0
+    POP
+    GOTO L2
+   L0:
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L1
+    GOTO L2
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    LDC "!"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L2:
+    GETSTATIC Test.value Ljava/lang/String;
+    ASTORE_0 0
+    ALOAD_0 0
+    DUP
+    IFNULL L3
+    DUP
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L4
+    DUP
+    LDC "world"
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L4
+    POP
+    GOTO L5
+   L3:
+    POP
+    GOTO L5
+   L4:
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    LDC "?"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L6
+   L5:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "other"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L6:
+    RETURN
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+hello!
+hello?
+

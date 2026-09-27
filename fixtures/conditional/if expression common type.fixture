@@ -127,7 +127,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L0:
     LDC2_W 0.5
     INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
-    GOTO L1
    L1:
     PUTSTATIC Test.foo Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;

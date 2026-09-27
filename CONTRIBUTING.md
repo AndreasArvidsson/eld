@@ -185,7 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- - == instead of .equals()
 - add enum
 - Stop using IdentifierDeclaration in destruction pattern assignment expressions?
 - Overloaded functions
@@ -198,6 +197,7 @@ protected const bar = 0;
 - create literal types from collection elements
 - Export & import
 - prohibit syntax like `if (value != null && (value = null) == null)`. Make assignment a statement instead of an expression.
+- Stream trailing empty line in fixtures output?
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion

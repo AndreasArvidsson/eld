@@ -251,7 +251,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_0 0
     ALOAD_0 0
     LDC ClassOrInterfaceDesc[Test$First]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L0
     GOTO L1
    L0:
@@ -262,7 +262,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L1:
     ALOAD_0 0
     LDC ClassOrInterfaceDesc[Test$Second]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L2
     GOTO L3
    L2:
@@ -279,6 +279,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 2 max locals 1
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -288,6 +289,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$First extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$First flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -297,6 +299,7 @@ class Test$First extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Second extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Second flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

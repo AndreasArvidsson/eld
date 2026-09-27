@@ -240,17 +240,29 @@ final class TypeNarrowing {
                 continue;
             }
             for (final Type type : targets) {
+                if (
+                    (member instanceof ClassType
+                        || member instanceof InterfaceType)
+                        && (type instanceof ClassType
+                            || type instanceof InterfaceType)
+                ) {
+                    if (
+                        SemanticAnalyzerExpressionOperations
+                            .equalityCompatible(model, member, type)
+                            && !members.contains(member)
+                    ) {
+                        members.add(member);
+                    }
+                    continue;
+                }
                 if (model.isSubtype(member, type)) {
                     if (!members.contains(member)) {
                         members.add(member);
                     }
                 }
                 else if (model.isSubtype(type, member)) {
-                    final Type narrowed =
-                        JavaTypes.isClassType(member)
-                            && JavaTypes.isClassType(type) ? type : member;
-                    if (!members.contains(narrowed)) {
-                        members.add(narrowed);
+                    if (!members.contains(member)) {
+                        members.add(member);
                     }
                 }
                 else if (

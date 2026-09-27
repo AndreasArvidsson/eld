@@ -1,0 +1,800 @@
+class Box {
+    public static func equal(a: Box, b: Box) bool { return true; }
+}
+
+const missing: i32 | Box | null = null;
+const number: i32 | Box | null = 7;
+const object: i32 | Box | null = new Box();
+print(missing == null);
+print(null == missing);
+print(number != null);
+print(null == null);
+print(null != null);
+print(missing != 7);
+print(number == 7);
+print(number != new Box());
+print(object == new Box());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Box" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "equal" (2:24-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "a" (2:30-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "Box" (2:33-2:36)
+COMMA (2:36-2:37)
+IDENTIFIER "b" (2:38-2:39)
+COLON (2:39-2:40)
+IDENTIFIER "Box" (2:41-2:44)
+RIGHT_PAREN (2:44-2:45)
+IDENTIFIER "bool" (2:46-2:50)
+LEFT_BRACE (2:51-2:52)
+RETURN (2:53-2:59)
+BOOLEAN_LITERAL "true" (2:60-2:64)
+SEMICOLON (2:64-2:65)
+RIGHT_BRACE (2:66-2:67)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "missing" (5:7-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "i32" (5:16-5:19)
+PIPE (5:20-5:21)
+IDENTIFIER "Box" (5:22-5:25)
+PIPE (5:26-5:27)
+NULL (5:28-5:32)
+EQUAL (5:33-5:34)
+NULL (5:35-5:39)
+SEMICOLON (5:39-5:40)
+CONST (6:1-6:6)
+IDENTIFIER "number" (6:7-6:13)
+COLON (6:13-6:14)
+IDENTIFIER "i32" (6:15-6:18)
+PIPE (6:19-6:20)
+IDENTIFIER "Box" (6:21-6:24)
+PIPE (6:25-6:26)
+NULL (6:27-6:31)
+EQUAL (6:32-6:33)
+INTEGER_LITERAL "7" (6:34-6:35)
+SEMICOLON (6:35-6:36)
+CONST (7:1-7:6)
+IDENTIFIER "object" (7:7-7:13)
+COLON (7:13-7:14)
+IDENTIFIER "i32" (7:15-7:18)
+PIPE (7:19-7:20)
+IDENTIFIER "Box" (7:21-7:24)
+PIPE (7:25-7:26)
+NULL (7:27-7:31)
+EQUAL (7:32-7:33)
+NEW (7:34-7:37)
+IDENTIFIER "Box" (7:38-7:41)
+LEFT_PAREN (7:41-7:42)
+RIGHT_PAREN (7:42-7:43)
+SEMICOLON (7:43-7:44)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "missing" (8:7-8:14)
+EQUAL_EQUAL (8:15-8:17)
+NULL (8:18-8:22)
+RIGHT_PAREN (8:22-8:23)
+SEMICOLON (8:23-8:24)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+NULL (9:7-9:11)
+EQUAL_EQUAL (9:12-9:14)
+IDENTIFIER "missing" (9:15-9:22)
+RIGHT_PAREN (9:22-9:23)
+SEMICOLON (9:23-9:24)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "number" (10:7-10:13)
+BANG_EQUAL (10:14-10:16)
+NULL (10:17-10:21)
+RIGHT_PAREN (10:21-10:22)
+SEMICOLON (10:22-10:23)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+NULL (11:7-11:11)
+EQUAL_EQUAL (11:12-11:14)
+NULL (11:15-11:19)
+RIGHT_PAREN (11:19-11:20)
+SEMICOLON (11:20-11:21)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+NULL (12:7-12:11)
+BANG_EQUAL (12:12-12:14)
+NULL (12:15-12:19)
+RIGHT_PAREN (12:19-12:20)
+SEMICOLON (12:20-12:21)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "missing" (13:7-13:14)
+BANG_EQUAL (13:15-13:17)
+INTEGER_LITERAL "7" (13:18-13:19)
+RIGHT_PAREN (13:19-13:20)
+SEMICOLON (13:20-13:21)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "number" (14:7-14:13)
+EQUAL_EQUAL (14:14-14:16)
+INTEGER_LITERAL "7" (14:17-14:18)
+RIGHT_PAREN (14:18-14:19)
+SEMICOLON (14:19-14:20)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "number" (15:7-15:13)
+BANG_EQUAL (15:14-15:16)
+NEW (15:17-15:20)
+IDENTIFIER "Box" (15:21-15:24)
+LEFT_PAREN (15:24-15:25)
+RIGHT_PAREN (15:25-15:26)
+RIGHT_PAREN (15:26-15:27)
+SEMICOLON (15:27-15:28)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "object" (16:7-16:13)
+EQUAL_EQUAL (16:14-16:16)
+NEW (16:17-16:20)
+IDENTIFIER "Box" (16:21-16:24)
+LEFT_PAREN (16:24-16:25)
+RIGHT_PAREN (16:25-16:26)
+RIGHT_PAREN (16:26-16:27)
+SEMICOLON (16:27-16:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:28
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Box"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:67
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:67
+        (IdentifierDeclaration
+          range: 2:24-2:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:30-2:36
+          (IdentifierDeclaration
+            range: 2:30-2:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:33-2:36
+            name: "Box"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:38-2:44
+          (IdentifierDeclaration
+            range: 2:38-2:39
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:41-2:44
+            name: "Box"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:46-2:50
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:51-2:67
+          (ReturnStatement
+            range: 2:53-2:65
+            (LiteralExpression
+              range: 2:60-2:64
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "missing"
+    )
+    (UnionTypeNode
+      range: 5:16-5:32
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 5:22-5:25
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 5:28-5:32
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 5:35-5:39
+      kind: NULL
+      text: "null"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "number"
+    )
+    (UnionTypeNode
+      range: 6:15-6:31
+      (NamedTypeNode
+        range: 6:15-6:18
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 6:21-6:24
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 6:27-6:31
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 6:34-6:35
+      kind: INT
+      text: "7"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:13
+      name: "object"
+    )
+    (UnionTypeNode
+      range: 7:15-7:31
+      (NamedTypeNode
+        range: 7:15-7:18
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 7:21-7:24
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 7:27-7:31
+        name: "null"
+      )
+    )
+    (NewExpression
+      range: 7:34-7:43
+      (IdentifierExpression
+        range: 7:38-7:41
+        name: "Box"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:24
+    (CallExpression
+      range: 8:1-8:23
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:22
+        (IdentifierExpression
+          range: 8:7-8:14
+          name: "missing"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 8:18-8:22
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:24
+    (CallExpression
+      range: 9:1-9:23
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:22
+        (LiteralExpression
+          range: 9:7-9:11
+          kind: NULL
+          text: "null"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 9:15-9:22
+          name: "missing"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:23
+    (CallExpression
+      range: 10:1-10:22
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:7-10:21
+        (IdentifierExpression
+          range: 10:7-10:13
+          name: "number"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 10:17-10:21
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:21
+    (CallExpression
+      range: 11:1-11:20
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 11:7-11:19
+        (LiteralExpression
+          range: 11:7-11:11
+          kind: NULL
+          text: "null"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 11:15-11:19
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:21
+    (CallExpression
+      range: 12:1-12:20
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 12:7-12:19
+        (LiteralExpression
+          range: 12:7-12:11
+          kind: NULL
+          text: "null"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 12:15-12:19
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:21
+    (CallExpression
+      range: 13:1-13:20
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:19
+        (IdentifierExpression
+          range: 13:7-13:14
+          name: "missing"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 13:18-13:19
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:20
+    (CallExpression
+      range: 14:1-14:19
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:18
+        (IdentifierExpression
+          range: 14:7-14:13
+          name: "number"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 14:17-14:18
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:28
+    (CallExpression
+      range: 15:1-15:27
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 15:7-15:26
+        (IdentifierExpression
+          range: 15:7-15:13
+          name: "number"
+        )
+        operator: NOT_EQUAL
+        (NewExpression
+          range: 15:17-15:26
+          (IdentifierExpression
+            range: 15:21-15:24
+            name: "Box"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:28
+    (CallExpression
+      range: 16:1-16:27
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 16:7-16:26
+        (IdentifierExpression
+          range: 16:7-16:13
+          name: "object"
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 16:17-16:26
+          (IdentifierExpression
+            range: 16:21-16:24
+            name: "Box"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:60-2:64 -> bool
+  5:35-5:39 -> null
+  6:34-6:35 -> i32
+  7:34-7:43 -> Box
+  7:38-7:41 -> Box
+  8:1-8:6 -> (any) => void
+  8:1-8:23 -> void
+  8:7-8:14 -> i32 | Box | null
+  8:7-8:22 -> bool
+  8:18-8:22 -> null
+  9:1-9:6 -> (any) => void
+  9:1-9:23 -> void
+  9:7-9:11 -> null
+  9:7-9:22 -> bool
+  9:15-9:22 -> i32 | Box | null
+  10:1-10:6 -> (any) => void
+  10:1-10:22 -> void
+  10:7-10:13 -> i32 | Box | null
+  10:7-10:21 -> bool
+  10:17-10:21 -> null
+  11:1-11:6 -> (any) => void
+  11:1-11:20 -> void
+  11:7-11:11 -> null
+  11:7-11:19 -> bool
+  11:15-11:19 -> null
+  12:1-12:6 -> (any) => void
+  12:1-12:20 -> void
+  12:7-12:11 -> null
+  12:7-12:19 -> bool
+  12:15-12:19 -> null
+  13:1-13:6 -> (any) => void
+  13:1-13:20 -> void
+  13:7-13:14 -> i32 | Box | null
+  13:7-13:19 -> bool
+  13:18-13:19 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:19 -> void
+  14:7-14:13 -> i32 | Box | null
+  14:7-14:18 -> bool
+  14:17-14:18 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:27 -> void
+  15:7-15:13 -> i32 | Box | null
+  15:7-15:26 -> bool
+  15:17-15:26 -> Box
+  15:21-15:24 -> Box
+  16:1-16:6 -> (any) => void
+  16:1-16:27 -> void
+  16:7-16:13 -> i32 | Box | null
+  16:7-16:26 -> bool
+  16:17-16:26 -> Box
+  16:21-16:24 -> Box
+
+Resolved types:
+  2:33-2:36 -> Box
+  2:41-2:44 -> Box
+  2:46-2:50 -> bool
+  5:16-5:19 -> i32
+  5:16-5:32 -> i32 | Box | null
+  5:22-5:25 -> Box
+  5:28-5:32 -> null
+  6:15-6:18 -> i32
+  6:15-6:31 -> i32 | Box | null
+  6:21-6:24 -> Box
+  6:27-6:31 -> null
+  7:15-7:18 -> i32
+  7:15-7:31 -> i32 | Box | null
+  7:21-7:24 -> Box
+  7:27-7:31 -> null
+
+Conversions:
+  5:35-5:39 -> null -> i32 | Box | null
+  6:34-6:35 -> i32 -> i32 | Box | null
+  7:34-7:43 -> Box -> i32 | Box | null
+  8:18-8:22 -> null -> i32 | Box | null
+  9:7-9:11 -> null -> i32 | Box | null
+  10:17-10:21 -> null -> i32 | Box | null
+  13:18-13:19 -> i32 -> i32 | Box | null
+  14:17-14:18 -> i32 -> i32 | Box | null
+  15:17-15:26 -> Box -> i32 | Box | null
+  16:17-16:26 -> Box -> i32 | Box | null
+
+Declarations:
+  1:7-1:10 -> class Box
+  2:24-2:29 -> func equal(Box, Box) => bool
+  2:30-2:31 -> const a: Box
+  2:38-2:39 -> const b: Box
+  5:7-5:14 -> const missing: i32 | Box | null
+  6:7-6:13 -> const number: i32 | Box | null
+  7:7-7:13 -> const object: i32 | Box | null
+
+References:
+  7:38-7:41 -> 1:7-1:10
+  8:1-8:6 -> builtin print
+  8:7-8:14 -> 5:7-5:14
+  9:1-9:6 -> builtin print
+  9:15-9:22 -> 5:7-5:14
+  10:1-10:6 -> builtin print
+  10:7-10:13 -> 6:7-6:13
+  11:1-11:6 -> builtin print
+  12:1-12:6 -> builtin print
+  13:1-13:6 -> builtin print
+  13:7-13:14 -> 5:7-5:14
+  14:1-14:6 -> builtin print
+  14:7-14:13 -> 6:7-6:13
+  15:1-15:6 -> builtin print
+  15:7-15:13 -> 6:7-6:13
+  15:21-15:24 -> 1:7-1:10
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 7:7-7:13
+  16:21-16:24 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Box
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field missing Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field number Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field object Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.missing Ljava/lang/Object;
+    LDC 7
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.number Ljava/lang/Object;
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.object Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.missing Ljava/lang/Object;
+    IFNULL L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.missing Ljava/lang/Object;
+    IFNULL L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.number Ljava/lang/Object;
+    IFNONNULL L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_1 1
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_0 0
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.missing Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L6
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 7
+    IF_ICMPEQ L7
+   L6:
+    POP
+    ICONST_0 0
+    GOTO L8
+   L7:
+    POP
+    ICONST_1 1
+   L8:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.number Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L9
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 7
+    IF_ICMPEQ L10
+   L9:
+    POP
+    ICONST_0 0
+    GOTO L11
+   L10:
+    POP
+    ICONST_1 1
+   L11:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.number Ljava/lang/Object;
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    SWAP
+    DUP
+    INSTANCEOF Test$Box
+    IFEQ L12
+    CHECKCAST Test$Box
+    SWAP
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    GOTO L13
+   L12:
+    POP2
+    ICONST_0 0
+   L13:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.object Ljava/lang/Object;
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    SWAP
+    DUP
+    INSTANCEOF Test$Box
+    IFEQ L14
+    CHECKCAST Test$Box
+    SWAP
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    GOTO L15
+   L14:
+    POP2
+    ICONST_0 0
+   L15:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Box;LTest$Box;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Box
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Box
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+false
+true
+true
+true
+true
+

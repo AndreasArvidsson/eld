@@ -355,6 +355,7 @@ class Test$Renamable extends java/lang/Object version 65.0 flags [PUBLIC, INTERF
 
 class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Renamable
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Person flags [PUBLIC, STATIC]
   field name Ljava/lang/String; flags [PUBLIC]

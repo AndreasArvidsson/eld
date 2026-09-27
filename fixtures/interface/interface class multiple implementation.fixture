@@ -373,6 +373,7 @@ class Test$Flag extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, 
 class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Value
   implements Test$Flag
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Box flags [PUBLIC, STATIC]
   field value I flags [PUBLIC, FINAL]

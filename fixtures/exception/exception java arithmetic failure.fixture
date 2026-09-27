@@ -187,7 +187,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "arithmetic"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L3
    L3:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "continued"

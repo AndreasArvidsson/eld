@@ -181,10 +181,28 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.marker LTest$Marker;
     GETSTATIC Test.box LTest$Box;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    DUP2
+    POP
+    IFNULL L2
+    DUP2
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IFNE L3
+   L2:
+    POP2
+    ICONST_0 0
+    GOTO L4
+   L3:
+    POP2
+    ICONST_1 1
+   L4:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    max stack 3 max locals 0
+    max stack 5 max locals 0
 
 class Test$Marker extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
   nest host Test
@@ -192,6 +210,7 @@ class Test$Marker extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE
 
 class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Marker
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Box flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

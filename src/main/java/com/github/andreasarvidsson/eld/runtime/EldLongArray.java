@@ -83,4 +83,19 @@ public final class EldLongArray extends EldArray<EldLongArray> {
         elements = Arrays.copyOf(elements, newCapacity);
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof EldLongArray other
+            && Arrays.equals(elements, 0, size, other.elements, 0, other.size);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        for (int i = 0; i < size; i++) {
+            result = 31 * result + Long.hashCode(elements[i]);
+        }
+        return result;
+    }
+
 }

@@ -270,34 +270,45 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_0 0
     ALOAD_0 0
     GETSTATIC Test.value LTest$Derived;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L0
-    GOTO L1
+    DUP2
+    POP
+    IFNULL L1
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L2
    L0:
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "derived"
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L4
+    ICONST_1 1
+    GOTO L2
    L1:
-    ALOAD_0 0
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L2
-    GOTO L3
+    POP2
+    ICONST_0 0
    L2:
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "null"
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    IFNE L3
     GOTO L4
    L3:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "derived"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L7
+   L4:
+    ALOAD_0 0
+    IFNULL L5
+    GOTO L6
+   L5:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "null"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L7
+   L6:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "missing"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L4:
+   L7:
     RETURN
-    max stack 2 max locals 1
+    max stack 4 max locals 1
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -307,6 +318,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Derived flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

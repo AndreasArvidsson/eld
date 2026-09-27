@@ -1042,7 +1042,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEW Test$Animal
     DUP
     INVOKESPECIAL Test$Animal.<init>()V
-    GOTO L3
    L3:
     PUTSTATIC Test.conditional Ljava/lang/Object;
     LDC 1
@@ -1078,7 +1077,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEW Test$Animal
     DUP
     INVOKESPECIAL Test$Animal.<init>()V
-    GOTO L10
    L10:
     CHECKCAST Test$Animal
     PUTSTATIC Test.typedConditional LTest$Animal;
@@ -1133,6 +1131,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 2 max locals 0
 
 class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Animal flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -1142,6 +1141,7 @@ class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Dog flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -1151,6 +1151,7 @@ class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Cat extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Cat flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

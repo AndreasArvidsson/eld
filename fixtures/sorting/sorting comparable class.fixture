@@ -721,7 +721,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
 
 class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements java/lang/Comparable
-  signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Person;>;
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Person;>;Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;
   nest host Test
   inner class Test$Person flags [PUBLIC, STATIC]
   field age I flags [PUBLIC, FINAL]

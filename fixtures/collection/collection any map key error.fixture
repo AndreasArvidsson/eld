@@ -87,4 +87,4 @@ SEMICOLON (2:48-2:49)
 
 --- SEMANTIC ---
 
-SemanticException: Map key of type any requires const equals and hashCode methods at 2:34-2:48
+SemanticException: Map key of type any requires const equal and hashCode methods at 2:34-2:48

@@ -45,8 +45,6 @@ Expression types:
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
    L0:
-    GOTO L1
-   L1:
     ICONST_0 0
     IFNE L0
     RETURN

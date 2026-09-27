@@ -110,6 +110,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   inner class Test$Child flags [PUBLIC, STATIC]
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -119,6 +120,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Child flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

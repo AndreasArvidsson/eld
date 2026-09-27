@@ -20,6 +20,7 @@ import java.lang.constant.DynamicCallSiteDesc;
 import java.lang.constant.MethodHandleDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -208,7 +209,7 @@ public final class BytecodeGenerator {
                 "This program declares classes; use generateClasses()"
             );
         }
-        return generateModule();
+        return JumpThreading.optimize(classFile(), generateModule());
     }
 
     /**
@@ -370,6 +371,9 @@ public final class BytecodeGenerator {
             }
         }
         classes.putAll(objectClasses);
+        classes.replaceAll(
+            (name, bytes) -> JumpThreading.optimize(classFile(), bytes)
+        );
         return Collections.unmodifiableMap(classes);
     }
 
@@ -927,6 +931,13 @@ public final class BytecodeGenerator {
         if (owner == null) {
             return function.name();
         }
+        if (
+            function.name().equals("equals")
+                && methodDescriptor(function.type())
+                    .equals("(Ljava/lang/Object;)Z")
+        ) {
+            return "$eld$equals";
+        }
         final RecordDeclaration record =
             semanticModel.findRecordDeclaration(owner);
         if (
@@ -1036,20 +1047,32 @@ public final class BytecodeGenerator {
             if (record != null) {
                 generateRecordAttribute(writer, record);
             }
-            generateClassSignature(
-                writer,
+            final String signature =
                 classSignature(
                     superclassOwner,
                     semanticModel.getImplementedInterfaces(classType)
+                );
+            generateClassSignature(
+                writer,
+                signature == null
+                    ? signature
+                    : signature
+                        + "Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;"
+            );
+            final List<ClassDesc> interfaces =
+                new ArrayList<>(
+                    semanticModel.getImplementedInterfaces(classType)
+                        .stream()
+                        .map(BytecodeGenerator.this::interfaceOwner)
+                        .map(BytecodeGenerator::classDesc)
+                        .toList()
+                );
+            interfaces.add(
+                classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject"
                 )
             );
-            writer.withInterfaceSymbols(
-                semanticModel.getImplementedInterfaces(classType)
-                    .stream()
-                    .map(BytecodeGenerator.this::interfaceOwner)
-                    .map(BytecodeGenerator::classDesc)
-                    .toList()
-            );
+            writer.withInterfaceSymbols(interfaces);
 
             currentWriter = writer;
             currentOwner = name;
@@ -1258,9 +1281,31 @@ public final class BytecodeGenerator {
                     if (!explicitSuper) {
                         initializer.initializeBase(List.of());
                     }
-                    final boolean reachable =
-                        declarationConstructor == null
-                            || initializer.block(declarationConstructor.body());
+                    final boolean reachable;
+                    if (record != null) {
+                        int slot = 1;
+                        for (final RecordParameter parameter : record
+                            .parameters()) {
+                            final Type type =
+                                semanticModel.getResolvedType(parameter.type());
+                            constructor.aload(0);
+                            constructor
+                                .with(localInstruction(loadOpcode(type), slot));
+                            constructor.fieldAccess(
+                                PUTFIELD,
+                                classDesc(name),
+                                parameter.name().name(),
+                                ClassDesc.ofDescriptor(descriptor(type))
+                            );
+                            slot += slots(type);
+                        }
+                        reachable = true;
+                    }
+                    else {
+                        reachable =
+                            declarationConstructor == null || initializer
+                                .block(declarationConstructor.body());
+                    }
                     initializer.finish(reachable);
                 }
             );
@@ -1300,6 +1345,7 @@ public final class BytecodeGenerator {
                             memberDeclaration.staticMember() ? null : instance
                         );
                         generateOverrideBridges(writer, name, function);
+                        generateStaticEqualityBridge(writer, name, function);
                     }
                 }
             }
@@ -2714,11 +2760,12 @@ public final class BytecodeGenerator {
     // null means this expression must be evaluated at runtime. In particular,
     // JVM ConstantValue cannot represent null, arrays, or function references.
     private @Nullable Object constantValue(final Expression expression) {
+        final Type effective = semanticModel.getEffectiveType(expression);
         if (
-            semanticModel.getEffectiveType(expression) instanceof UnionType
-                || semanticModel
-                    .getEffectiveType(expression) instanceof InterfaceType
-                || semanticModel.getEffectiveType(expression) == BuiltinType.ANY
+            (effective instanceof UnionType
+                && uniformUnionType(effective) == null)
+                || effective instanceof InterfaceType
+                || effective == BuiltinType.ANY
         ) {
             return null;
         }
@@ -2970,6 +3017,10 @@ public final class BytecodeGenerator {
     }
 
     private String unionDescriptor(final UnionType union) {
+        final BuiltinType uniform = uniformUnionType(union);
+        if (uniform != null) {
+            return descriptor(uniform);
+        }
         final List<Type> members =
             union.memberTypes()
                 .stream()
@@ -3180,6 +3231,56 @@ public final class BytecodeGenerator {
         }
     }
 
+    private void generateStaticEqualityBridge(
+        final ClassBuilder writer,
+        final String owner,
+        final FunctionDeclaration declaration
+    ) {
+        if (!declaration.name().name().equals("equal")) {
+            return;
+        }
+        final FunctionSymbol function =
+            (FunctionSymbol) semanticModel.getSymbol(declaration.name());
+        final ClassType type = semanticModel.findClassMemberOwner(function);
+        if (
+            type == null || !semanticModel.isStaticMember(function)
+                || function.type().parameterTypes().size() != 2
+                || !function.type().parameterTypes().get(0).equals(type)
+                || !function.type().parameterTypes().get(1).equals(type)
+                || function.type().returnType() != BuiltinType.BOOL
+        ) {
+            return;
+        }
+        generateMethod(
+            writer,
+            ACC_PUBLIC | ACC_BRIDGE | ACC_SYNTHETIC,
+            "equals",
+            "(Ljava/lang/Object;)Z",
+            null,
+            method -> {
+                final Label unequal = method.newLabel();
+                method.aload(1);
+                method.instanceOf(classDesc(owner));
+                method.branch(IFEQ, unequal);
+                method.aload(0);
+                method.aload(1);
+                method.checkcast(classDesc(owner));
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc(owner),
+                    "equal",
+                    MethodTypeDesc
+                        .ofDescriptor(methodDescriptor(function.type())),
+                    false
+                );
+                method.ireturn();
+                method.labelBinding(unequal);
+                method.iconst_0();
+                method.ireturn();
+            }
+        );
+    }
+
     private void generateInterfaceBridges(
         final ClassBuilder writer,
         final String owner,
@@ -3269,6 +3370,10 @@ public final class BytecodeGenerator {
     }
 
     private static @Nullable String boxedOwner(final Type type) {
+        final BuiltinType primitive = primitiveUnionType(type);
+        if (primitive != null) {
+            return boxedOwner(primitive);
+        }
         if (type instanceof LiteralType literal) {
             return boxedOwner(literal.valueType());
         }
@@ -3303,9 +3408,10 @@ public final class BytecodeGenerator {
         }
         if (type instanceof UnionType) {
             final String representation = descriptor(type);
-            return representation.equals("Ljava/lang/String;")
-                ? representation
-                : "Ljava/lang/Object;";
+            return (primitiveUnionType(type) != null
+                || representation.equals("Ljava/lang/String;"))
+                    ? representation
+                    : "Ljava/lang/Object;";
         }
         return type == BuiltinType.I8 || type == BuiltinType.I16
             ? "I"
@@ -3323,7 +3429,8 @@ public final class BytecodeGenerator {
 
     private static boolean reference(final Type type) {
         final Type unqualified = LiteralType.unwrap(ConstType.unwrap(type));
-        return unqualified instanceof UnionType
+        return (unqualified instanceof UnionType
+            && primitiveUnionType(unqualified) == null)
             || unqualified instanceof BuiltinFunctionType
             || unqualified instanceof ClassType
             || unqualified instanceof InterfaceType
@@ -3335,6 +3442,43 @@ public final class BytecodeGenerator {
             || unqualified == BuiltinType.STRING
             || unqualified == BuiltinType.NULL
             || unqualified == BuiltinType.ANY;
+    }
+
+    private static @Nullable BuiltinType primitiveUnionType(final Type type) {
+        final BuiltinType uniform = uniformUnionType(type);
+        return uniform != BuiltinType.STRING ? uniform : null;
+    }
+
+    private static @Nullable BuiltinType uniformUnionType(final Type type) {
+        if (!(ConstType.unwrap(type) instanceof UnionType union)) {
+            return null;
+        }
+        BuiltinType uniform = null;
+        for (final Type member : union.memberTypes()) {
+            final Type value = LiteralType.unwrap(ConstType.unwrap(member));
+            if (
+                !(value instanceof BuiltinType builtin)
+                    || !(builtin.isInteger() || builtin.isFloating()
+                        || builtin == BuiltinType.BOOL
+                        || builtin == BuiltinType.CHAR
+                        || builtin == BuiltinType.STRING)
+            ) {
+                return null;
+            }
+            if (uniform != null && uniform != builtin) {
+                return null;
+            }
+            uniform = builtin;
+        }
+        return uniform;
+    }
+
+    private static boolean nullableReference(final Type type) {
+        final Type unqualified = ConstType.unwrap(type);
+        return unqualified == BuiltinType.ANY || unqualified == BuiltinType.NULL
+            || (unqualified instanceof UnionType union && union.memberTypes()
+                .stream()
+                .anyMatch(BytecodeGenerator::nullableReference));
     }
 
     private static ArrayType arrayType(final Type type) {
@@ -3495,6 +3639,7 @@ public final class BytecodeGenerator {
 
         private final Type returnType;
         private int nextLocal;
+        private int numericEqualityScratch = -1;
         private @Nullable String asyncSourceOwner;
         private @Nullable Type asyncResultType;
         private @Nullable AsyncStateMachine asyncStateMachine;
@@ -4436,34 +4581,33 @@ public final class BytecodeGenerator {
             return true;
         }
 
-        private static boolean numericUnion(final Type type) {
-            return type instanceof UnionType union && union.memberTypes()
-                .stream()
-                .anyMatch(
-                    member -> LiteralType
-                        .unwrap(member) instanceof BuiltinType numeric
-                        && (numeric.isInteger() || numeric.isFloating())
-                );
-        }
-
-        private void numberValue(final int local, final boolean floating) {
-            method.with(localInstruction(ALOAD, local));
-            method.checkcast(classDesc("java/lang/Number"));
-            method.invoke(
-                INVOKEVIRTUAL,
-                classDesc("java/lang/Number"),
-                floating ? "doubleValue" : "longValue",
-                MethodTypeDesc.ofDescriptor(floating ? "()D" : "()J"),
-                false
-            );
+        private static @Nullable Type singleUnionMember(final Type type) {
+            if (!(ConstType.unwrap(type) instanceof UnionType union)) {
+                return null;
+            }
+            Type single = null;
+            for (final Type member : union.memberTypes()) {
+                final Type underlying =
+                    LiteralType.unwrap(ConstType.unwrap(member));
+                if (underlying == BuiltinType.NULL) {
+                    continue;
+                }
+                if (single != null && !single.equals(underlying)) {
+                    return null;
+                }
+                single = underlying;
+            }
+            return single;
         }
 
         private void objectEquals(final boolean numeric) {
             if (!numeric) {
                 method.invoke(
                     INVOKESTATIC,
-                    classDesc("java/util/Objects"),
-                    "equals",
+                    classDesc(
+                        "com/github/andreasarvidsson/eld/runtime/EldEquality"
+                    ),
+                    "referenceEquals",
                     MethodTypeDesc.ofDescriptor(
                         "(Ljava/lang/Object;Ljava/lang/Object;)Z"
                     ),
@@ -4471,43 +4615,636 @@ public final class BytecodeGenerator {
                 );
                 return;
             }
-            final int right = nextLocal++;
-            final int left = nextLocal++;
-            method.with(localInstruction(ASTORE, right));
-            method.with(localInstruction(ASTORE, left));
-            final Label objects = method.newLabel();
-            final Label floating = method.newLabel();
-            final Label equal = method.newLabel();
-            final Label unequal = method.newLabel();
-            final Label end = method.newLabel();
-            method.with(localInstruction(ALOAD, left));
-            method.instanceOf(classDesc("java/lang/Number"));
-            method.branch(IFEQ, objects);
-            method.with(localInstruction(ALOAD, right));
-            method.instanceOf(classDesc("java/lang/Number"));
-            method.branch(IFEQ, objects);
-            for (final int local : List.of(left, right)) {
-                for (final String owner : List
-                    .of("java/lang/Float", "java/lang/Double")) {
-                    method.with(localInstruction(ALOAD, local));
-                    method.instanceOf(classDesc(owner));
-                    method.branch(IFNE, floating);
+            method.invoke(
+                INVOKESTATIC,
+                classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/EldEquality"
+                ),
+                "dynamicEquals",
+                MethodTypeDesc
+                    .ofDescriptor("(Ljava/lang/Object;Ljava/lang/Object;)Z"),
+                false
+            );
+        }
+
+        private void typedObjectEquals(final Type leftType) {
+            if (
+                leftType == BuiltinType.STRING
+                    || singleUnionMember(leftType) == BuiltinType.STRING
+            ) {
+                if (leftType != BuiltinType.STRING) {
+                    method.with(simpleInstruction(SWAP));
+                    method.checkcast(classDesc("java/lang/String"));
+                    method.with(simpleInstruction(SWAP));
+                }
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc("java/lang/String"),
+                    "equals",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                    false
+                );
+                return;
+            }
+            final Type underlying =
+                LiteralType.unwrap(ConstType.unwrap(leftType));
+            if (underlying instanceof ArrayType) {
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    ClassDesc.ofDescriptor(descriptor(underlying)),
+                    "equals",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                    false
+                );
+                return;
+            }
+            if (
+                underlying instanceof ClassType classType
+                    && semanticModel.isRecordClass(classType)
+            ) {
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    ClassDesc.ofDescriptor(descriptor(classType)),
+                    "equals",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                    false
+                );
+                return;
+            }
+            if (
+                underlying instanceof ClassType
+                    || (underlying instanceof InterfaceType contract
+                        && contract.javaClass() == null)
+            ) {
+                booleanResult(IF_ACMPEQ);
+                return;
+            }
+            final boolean javaInterface =
+                underlying instanceof InterfaceType contract
+                    && contract.javaClass() != null
+                    && contract.javaClass().isInterface();
+            if (
+                underlying instanceof TupleType
+                    || (underlying instanceof InterfaceType contract
+                        && contract.javaClass() != null)
+            ) {
+                method.invoke(
+                    javaInterface ? INVOKEINTERFACE : INVOKEVIRTUAL,
+                    ClassDesc.ofDescriptor(descriptor(underlying)),
+                    "equals",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                    javaInterface
+                );
+                return;
+            }
+            method.invoke(
+                INVOKESTATIC,
+                classDesc(
+                    "com/github/andreasarvidsson/eld/runtime/EldEquality"
+                ),
+                "referenceEquals",
+                MethodTypeDesc
+                    .ofDescriptor("(Ljava/lang/Object;Ljava/lang/Object;)Z"),
+                false
+            );
+        }
+
+        private boolean eldIdentityObjectEquals(
+            final MemberExpression member,
+            final JavaMethodSymbol function
+        ) {
+            final var javaMethod = function.method();
+            if (
+                javaMethod.getDeclaringClass() != Object.class
+                    || !function.name().equals("equals")
+                    || javaMethod.getParameterCount() != 1
+                    || javaMethod.getParameterTypes()[0] != Object.class
+                    || javaMethod.getReturnType() != boolean.class
+            ) {
+                return false;
+            }
+            final Type receiverType =
+                LiteralType.unwrap(
+                    ConstType.unwrap(
+                        semanticModel.getExpressionType(member.target())
+                    )
+                );
+            if (receiverType instanceof ClassType classType) {
+                return !semanticModel.isRecordClass(classType)
+                    && semanticModel.findStaticEquality(classType) == null;
+            }
+            return receiverType instanceof InterfaceType contract
+                && contract.javaClass() == null;
+        }
+
+        private static @Nullable ClassType nullableClassMember(
+            final Type type
+        ) {
+            if (!(ConstType.unwrap(type) instanceof UnionType union)) {
+                return null;
+            }
+            final List<Type> members = union.memberTypes();
+            if (members.size() != 2 || !members.contains(BuiltinType.NULL)) {
+                return null;
+            }
+            for (final Type member : members) {
+                if (member instanceof ClassType classType) {
+                    return classType;
                 }
             }
-            numberValue(left, false);
-            numberValue(right, false);
-            method.lcmp();
-            method.branch(IFEQ, equal);
+            return null;
+        }
+
+        private @Nullable ClassType equalityComparisonType(
+            final Type leftType,
+            final Type rightType
+        ) {
+            final ClassType leftClass =
+                leftType instanceof ClassType type
+                    ? type
+                    : nullableClassMember(leftType);
+            final ClassType rightClass =
+                rightType instanceof ClassType type
+                    ? type
+                    : nullableClassMember(rightType);
+            if (leftClass == null || rightClass == null) {
+                return null;
+            }
+            if (semanticModel.isSubtype(leftClass, rightClass)) {
+                return rightClass;
+            }
+            return semanticModel.isSubtype(rightClass, leftClass)
+                ? leftClass
+                : null;
+        }
+
+        private void invokeStaticClassEqual(final ClassType owner) {
+            method.invoke(
+                INVOKESTATIC,
+                ClassDesc.ofDescriptor(descriptor(owner)),
+                "equal",
+                MethodTypeDesc.ofDescriptor(
+                    "(" + descriptor(owner) + descriptor(owner) + ")Z"
+                ),
+                false
+            );
+        }
+
+        private boolean staticClassEquals(
+            final Type leftType,
+            final Type rightType,
+            final Type declaredLeftType,
+            final Type declaredRightType
+        ) {
+            final ClassType comparisonType =
+                equalityComparisonType(leftType, rightType);
+            if (
+                comparisonType == null
+                    || semanticModel.isRecordClass(comparisonType)
+            ) {
+                return false;
+            }
+            final FunctionSymbol contract =
+                semanticModel.findStaticEquality(comparisonType);
+            if (contract == null) {
+                return false;
+            }
+            final ClassType owner = semanticModel.getClassMemberOwner(contract);
+            final boolean leftNullable = nullableReference(declaredLeftType);
+            final boolean rightNullable = nullableReference(declaredRightType);
+            if (!leftNullable && !rightNullable) {
+                invokeStaticClassEqual(owner);
+                return true;
+            }
+            if (leftNullable && rightNullable) {
+                stackNullableEquals(() -> invokeStaticClassEqual(owner));
+                return true;
+            }
+            if (leftNullable) {
+                method.with(simpleInstruction(DUP2));
+                method.with(simpleInstruction(POP));
+            }
+            else {
+                method.with(simpleInstruction(DUP));
+            }
+            final Label unequal = method.newLabel();
+            final Label end = method.newLabel();
+            method.branch(IFNULL, unequal);
+            invokeStaticClassEqual(owner);
+            method.branch(GOTO, end);
+            method.labelBinding(unequal);
+            method.with(simpleInstruction(POP2));
+            method.iconst_0();
+            method.labelBinding(end);
+            return true;
+        }
+
+        private void stackNullableEquals(final Runnable nonNullEquals) {
+            final Label leftNull = method.newLabel();
+            final Label unequal = method.newLabel();
+            final Label end = method.newLabel();
+            method.with(simpleInstruction(DUP2));
+            method.with(simpleInstruction(POP));
+            method.branch(IFNULL, leftNull);
+            method.with(simpleInstruction(DUP));
+            method.branch(IFNULL, unequal);
+            nonNullEquals.run();
+            method.branch(GOTO, end);
+            method.labelBinding(leftNull);
+            booleanResult(IF_ACMPEQ);
+            method.branch(GOTO, end);
+            method.labelBinding(unequal);
+            method.with(simpleInstruction(POP2));
+            method.iconst_0();
+            method.labelBinding(end);
+        }
+
+        private void stackNullableEqualsBranch(
+            final Runnable nonNullEquals,
+            final Label equal,
+            final Label unequal
+        ) {
+            final Label leftNull = method.newLabel();
+            final Label rightNull = method.newLabel();
+            method.with(simpleInstruction(DUP2));
+            method.with(simpleInstruction(POP));
+            method.branch(IFNULL, leftNull);
+            method.with(simpleInstruction(DUP));
+            method.branch(IFNULL, rightNull);
+            nonNullEquals.run();
+            method.branch(IFNE, equal);
             method.branch(GOTO, unequal);
-            method.labelBinding(floating);
-            numberValue(left, true);
-            numberValue(right, true);
-            method.dcmpl();
-            method.branch(IFEQ, equal);
+            method.labelBinding(leftNull);
+            method.branch(IF_ACMPEQ, equal);
             method.branch(GOTO, unequal);
-            method.labelBinding(objects);
-            method.with(localInstruction(ALOAD, left));
-            method.with(localInstruction(ALOAD, right));
+            method.labelBinding(rightNull);
+            method.with(simpleInstruction(POP2));
+            method.branch(GOTO, unequal);
+        }
+
+        private boolean nullableSingleMemberEqualsBranch(
+            final Type leftType,
+            final Type rightType,
+            final Label equal,
+            final Label unequal
+        ) {
+            if (!nullableReference(leftType) || !nullableReference(rightType)) {
+                return false;
+            }
+            final Type leftMember = singleUnionMember(leftType);
+            final Type rightMember = singleUnionMember(rightType);
+            if (leftMember == null || rightMember == null) {
+                return false;
+            }
+            if (
+                leftMember instanceof ClassType leftClass
+                    && rightMember instanceof ClassType rightClass
+                    && (semanticModel.isSubtype(leftClass, rightClass)
+                        || semanticModel.isSubtype(rightClass, leftClass))
+            ) {
+                final ClassType comparison =
+                    equalityComparisonType(leftClass, rightClass);
+                final FunctionSymbol contract =
+                    comparison == null
+                        || semanticModel.isRecordClass(comparison)
+                            ? null
+                            : semanticModel.findStaticEquality(comparison);
+                if (
+                    comparison != null
+                        && semanticModel.isRecordClass(comparison)
+                ) {
+                    final ClassType recordType = comparison;
+                    stackNullableEqualsBranch(
+                        () -> typedObjectEquals(recordType),
+                        equal,
+                        unequal
+                    );
+                }
+                else if (contract == null) {
+                    method.branch(IF_ACMPEQ, equal);
+                    method.branch(GOTO, unequal);
+                }
+                else {
+                    stackNullableEqualsBranch(
+                        () -> invokeStaticClassEqual(
+                            semanticModel.getClassMemberOwner(contract)
+                        ),
+                        equal,
+                        unequal
+                    );
+                }
+                return true;
+            }
+            if (
+                leftMember == BuiltinType.STRING
+                    && rightMember == BuiltinType.STRING
+            ) {
+                stackNullableEqualsBranch(
+                    () -> typedObjectEquals(BuiltinType.STRING),
+                    equal,
+                    unequal
+                );
+                return true;
+            }
+            if (
+                leftMember instanceof BuiltinType leftNumeric
+                    && (leftNumeric.isInteger() || leftNumeric.isFloating()
+                        || leftNumeric == BuiltinType.CHAR)
+                    && rightMember instanceof BuiltinType rightNumeric
+                    && (rightNumeric.isInteger() || rightNumeric.isFloating()
+                        || rightNumeric == BuiltinType.CHAR)
+            ) {
+                stackNullableEqualsBranch(
+                    () -> stackNumericEquals(leftNumeric, rightNumeric),
+                    equal,
+                    unequal
+                );
+                return true;
+            }
+            if (
+                leftMember instanceof BuiltinType builtin
+                    && leftMember.equals(rightMember)
+            ) {
+                final String owner = boxedOwner(builtin);
+                if (owner != null) {
+                    stackNullableEqualsBranch(
+                        () -> method.invoke(
+                            INVOKEVIRTUAL,
+                            classDesc(owner),
+                            "equals",
+                            MethodTypeDesc
+                                .ofDescriptor("(Ljava/lang/Object;)Z"),
+                            false
+                        ),
+                        equal,
+                        unequal
+                    );
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void stackNumericEquals(
+            final BuiltinType leftType,
+            final BuiltinType rightType
+        ) {
+            final BuiltinType promoted =
+                numericStackOperands(leftType, rightType);
+            if (promoted == BuiltinType.I64) {
+                method.lcmp();
+                booleanResult(IFEQ);
+            }
+            else if (promoted == BuiltinType.F64) {
+                method.dcmpl();
+                booleanResult(IFEQ);
+            }
+            else if (promoted == BuiltinType.F32) {
+                method.fcmpl();
+                booleanResult(IFEQ);
+            }
+            else {
+                booleanResult(IF_ICMPEQ);
+            }
+        }
+
+        private BuiltinType numericStackOperands(
+            final Type leftType,
+            final Type rightType
+        ) {
+            final BuiltinType promoted =
+                SemanticAnalyzerExpressionOperations
+                    .promotedNumericType(leftType, rightType);
+            method.with(simpleInstruction(SWAP));
+            readObject(leftType);
+            convert(leftType, promoted);
+            if (promoted == BuiltinType.I64 || promoted == BuiltinType.F64) {
+                method.with(simpleInstruction(DUP2_X1));
+                method.with(simpleInstruction(POP2));
+            }
+            else {
+                method.with(simpleInstruction(SWAP));
+            }
+            readObject(rightType);
+            convert(rightType, promoted);
+            return promoted;
+        }
+
+        private boolean nullableSingleMemberEquals(
+            final Type leftType,
+            final Type rightType
+        ) {
+            if (!nullableReference(leftType) || !nullableReference(rightType)) {
+                return false;
+            }
+            final Type leftMember = singleUnionMember(leftType);
+            final Type rightMember = singleUnionMember(rightType);
+            if (leftMember == null || rightMember == null) {
+                return false;
+            }
+            if (
+                leftMember instanceof ClassType leftClass
+                    && rightMember instanceof ClassType rightClass
+                    && (semanticModel.isSubtype(leftClass, rightClass)
+                        || semanticModel.isSubtype(rightClass, leftClass))
+            ) {
+                stackNullableEquals(() -> typedObjectEquals(leftClass));
+                return true;
+            }
+            if (
+                leftMember == BuiltinType.STRING
+                    && rightMember == BuiltinType.STRING
+            ) {
+                stackNullableEquals(
+                    () -> typedObjectEquals(BuiltinType.STRING)
+                );
+                return true;
+            }
+            if (
+                leftMember instanceof BuiltinType leftNumeric
+                    && (leftNumeric.isInteger() || leftNumeric.isFloating()
+                        || leftNumeric == BuiltinType.CHAR)
+                    && rightMember instanceof BuiltinType rightNumeric
+                    && (rightNumeric.isInteger() || rightNumeric.isFloating()
+                        || rightNumeric == BuiltinType.CHAR)
+            ) {
+                stackNullableEquals(
+                    () -> stackNumericEquals(leftNumeric, rightNumeric)
+                );
+                return true;
+            }
+            if (
+                leftMember instanceof BuiltinType builtin
+                    && leftMember.equals(rightMember)
+            ) {
+                final String owner = boxedOwner(builtin);
+                if (owner != null) {
+                    stackNullableEquals(
+                        () -> method.invoke(
+                            INVOKEVIRTUAL,
+                            classDesc(owner),
+                            "equals",
+                            MethodTypeDesc
+                                .ofDescriptor("(Ljava/lang/Object;)Z"),
+                            false
+                        )
+                    );
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private boolean nullableStringLiteralEquals(
+            final Type leftType,
+            final Expression right,
+            final @Nullable Label equal
+        ) {
+            if (
+                singleUnionMember(leftType) != BuiltinType.STRING
+                    || !(right instanceof LiteralExpression literal)
+                    || literal.kind() != LiteralKind.STRING
+            ) {
+                return false;
+            }
+            final Label unequal = method.newLabel();
+            final Label end = method.newLabel();
+            method.with(simpleInstruction(DUP));
+            method.branch(IFNULL, unequal);
+            expression(right);
+            typedObjectEquals(BuiltinType.STRING);
+            if (equal != null) {
+                method.branch(IFNE, equal);
+            }
+            method.branch(GOTO, end);
+            method.labelBinding(unequal);
+            method.with(simpleInstruction(POP));
+            if (equal == null) {
+                method.iconst_0();
+            }
+            method.labelBinding(end);
+            return true;
+        }
+
+        private void nullableStringLiteralBranch(
+            final Expression right,
+            final Label equal,
+            final Label unequal
+        ) {
+            final Label nonNull = method.newLabel();
+            method.with(simpleInstruction(DUP));
+            method.branch(IFNONNULL, nonNull);
+            method.with(simpleInstruction(POP));
+            method.branch(GOTO, unequal);
+            method.labelBinding(nonNull);
+            expression(right);
+            typedObjectEquals(BuiltinType.STRING);
+            method.branch(IFNE, equal);
+            method.branch(GOTO, unequal);
+        }
+
+        private boolean nullableStringSelectionMatches(
+            final Type subjectType,
+            final int subject,
+            final List<Expression> matches,
+            final Label next
+        ) {
+            if (
+                singleUnionMember(subjectType) != BuiltinType.STRING
+                    || matches.size() < 2
+                    || matches.stream()
+                        .anyMatch(
+                            match -> !(match instanceof LiteralExpression literal)
+                                || literal.kind() != LiteralKind.STRING
+                        )
+            ) {
+                return false;
+            }
+            final Label nullSubject = method.newLabel();
+            final Label matched = method.newLabel();
+            method.with(localInstruction(ALOAD, subject));
+            method.with(simpleInstruction(DUP));
+            method.branch(IFNULL, nullSubject);
+            for (final Expression match : matches) {
+                method.with(simpleInstruction(DUP));
+                expression(match);
+                typedObjectEquals(BuiltinType.STRING);
+                method.branch(IFNE, matched);
+            }
+            method.with(simpleInstruction(POP));
+            method.branch(GOTO, next);
+            method.labelBinding(nullSubject);
+            method.with(simpleInstruction(POP));
+            method.branch(GOTO, next);
+            method.labelBinding(matched);
+            method.with(simpleInstruction(POP));
+            return true;
+        }
+
+        private boolean nullableClassEquals(
+            final Type leftType,
+            final Type rightType
+        ) {
+            final ClassType leftClass = nullableClassMember(leftType);
+            if (
+                leftClass == null
+                    || !(rightType instanceof ClassType rightClass)
+                    || !semanticModel.isSubtype(rightClass, leftClass)
+            ) {
+                return false;
+            }
+            final Label unequal = method.newLabel();
+            final Label end = method.newLabel();
+            method.with(simpleInstruction(DUP2));
+            method.with(simpleInstruction(POP));
+            method.branch(IFNULL, unequal);
+            typedObjectEquals(leftClass);
+            method.branch(GOTO, end);
+            method.labelBinding(unequal);
+            method.with(simpleInstruction(POP2));
+            method.iconst_0();
+            method.labelBinding(end);
+            return true;
+        }
+
+        private boolean javaUnionEquals(
+            final Type leftType,
+            final Type rightType
+        ) {
+            if (
+                !(ConstType.unwrap(leftType) instanceof UnionType)
+                    && !(ConstType.unwrap(rightType) instanceof UnionType)
+            ) {
+                return false;
+            }
+            boolean hasJavaType = false;
+            for (final Type member : equalityMembers(leftType)) {
+                if (member == BuiltinType.NULL) {
+                    continue;
+                }
+                if (
+                    !(member instanceof InterfaceType contract)
+                        || contract.javaClass() == null
+                ) {
+                    return false;
+                }
+                hasJavaType = true;
+            }
+            for (final Type member : equalityMembers(rightType)) {
+                if (member == BuiltinType.NULL) {
+                    continue;
+                }
+                if (
+                    !(member instanceof InterfaceType contract)
+                        || contract.javaClass() == null
+                ) {
+                    return false;
+                }
+                hasJavaType = true;
+            }
+            if (!hasJavaType) {
+                return false;
+            }
             method.invoke(
                 INVOKESTATIC,
                 classDesc("java/util/Objects"),
@@ -4516,13 +5253,1152 @@ public final class BytecodeGenerator {
                     .ofDescriptor("(Ljava/lang/Object;Ljava/lang/Object;)Z"),
                 false
             );
+            return true;
+        }
+
+        private List<Type> equalityMembers(final Type type) {
+            final Type unqualified = ConstType.unwrap(type);
+            if (unqualified instanceof UnionType union) {
+                final List<Type> members =
+                    union.memberTypes()
+                        .stream()
+                        .flatMap(member -> equalityMembers(member).stream())
+                        .distinct()
+                        .toList();
+                // A subtype and its base have the same runtime representation.
+                // The base member determines the union's equality contract.
+                return members.stream()
+                    .filter(
+                        member -> members.stream()
+                            .noneMatch(
+                                other -> !other.equals(member)
+                                    && semanticModel.isSubtype(member, other)
+                            )
+                    )
+                    .toList();
+            }
+            return List.of(LiteralType.unwrap(unqualified));
+        }
+
+        private boolean identityUnionEquals(
+            final Type leftDeclaredType,
+            final Type rightDeclaredType
+        ) {
+            if (
+                !(ConstType.unwrap(leftDeclaredType) instanceof UnionType)
+                    && !(ConstType
+                        .unwrap(rightDeclaredType) instanceof UnionType)
+            ) {
+                return false;
+            }
+            final List<Type> leftMembers = equalityMembers(leftDeclaredType);
+            final List<Type> rightMembers = equalityMembers(rightDeclaredType);
+            if (
+                leftMembers.size() != 1 || rightMembers.size() != 1
+                    || !leftMembers.getFirst().equals(rightMembers.getFirst())
+            ) {
+                return false;
+            }
+            final Type member = leftMembers.getFirst();
+            return (member instanceof InterfaceType contract
+                && contract.javaClass() == null)
+                || (member instanceof ClassType classType
+                    && !semanticModel.isRecordClass(classType)
+                    && semanticModel.findStaticEquality(classType) == null);
+        }
+
+        private boolean directIdentitySwitchEquals(
+            final Type subjectType,
+            final Type matchType,
+            final Type declaredSubject,
+            final Type declaredMatch
+        ) {
+            if (identityUnionEquals(declaredSubject, declaredMatch)) {
+                return true;
+            }
+            if (
+                nullableReference(subjectType) || nullableReference(matchType)
+                    || declaredMatch instanceof UnionType
+                    || !(declaredSubject instanceof ClassType
+                        || (declaredSubject instanceof InterfaceType contract
+                            && contract.javaClass() == null))
+            ) {
+                return false;
+            }
+            final ClassType comparison =
+                equalityComparisonType(declaredSubject, declaredMatch);
+            return comparison == null
+                || (!semanticModel.isRecordClass(comparison)
+                    && semanticModel.findStaticEquality(comparison) == null);
+        }
+
+        private void equalityMemberGuard(
+            final boolean left,
+            final Type member,
+            final boolean nullableSingleMember,
+            final Label next
+        ) {
+            if (left) {
+                method.with(simpleInstruction(DUP2));
+                method.with(simpleInstruction(POP));
+            }
+            else {
+                method.with(simpleInstruction(DUP));
+            }
+            if (member == BuiltinType.NULL) {
+                method.branch(IFNONNULL, next);
+                return;
+            }
+            if (nullableSingleMember) {
+                method.branch(IFNULL, next);
+                return;
+            }
+            method.instanceOf(ClassDesc.ofDescriptor(boxedDescriptor(member)));
+            method.branch(IFEQ, next);
+        }
+
+        private void numericMemberBranch(
+            final Type leftType,
+            final Type rightType,
+            final Label matched
+        ) {
+            final BuiltinType promoted =
+                numericStackOperands(leftType, rightType);
+            if (promoted == BuiltinType.I64) {
+                method.lcmp();
+                method.branch(IFEQ, matched);
+            }
+            else if (promoted == BuiltinType.F64) {
+                method.dcmpl();
+                method.branch(IFEQ, matched);
+            }
+            else if (promoted == BuiltinType.F32) {
+                method.fcmpl();
+                method.branch(IFEQ, matched);
+            }
+            else {
+                method.branch(IF_ICMPEQ, matched);
+            }
+        }
+
+        private void equalityMemberPairBranch(
+            final Type leftType,
+            final Type leftRepresentation,
+            final Type rightType,
+            final Type rightRepresentation,
+            final Label matched
+        ) {
+            if (leftType == BuiltinType.NULL) {
+                method.branch(GOTO, matched);
+                return;
+            }
+            if (
+                leftType instanceof BuiltinType leftNumeric
+                    && (leftNumeric.isInteger() || leftNumeric.isFloating()
+                        || leftNumeric == BuiltinType.CHAR)
+                    && rightType instanceof BuiltinType rightNumeric
+                    && (rightNumeric.isInteger() || rightNumeric.isFloating()
+                        || rightNumeric == BuiltinType.CHAR)
+            ) {
+                method.with(simpleInstruction(DUP2));
+                numericMemberBranch(leftType, rightType, matched);
+                return;
+            }
+            if (leftType == BuiltinType.BOOL && rightType == BuiltinType.BOOL) {
+                method.with(simpleInstruction(DUP2));
+                objectEquals(false);
+                method.branch(IFNE, matched);
+                return;
+            }
+            final ClassType comparisonType =
+                equalityComparisonType(leftType, rightType);
+            final FunctionSymbol contract =
+                comparisonType == null
+                    || semanticModel.isRecordClass(comparisonType)
+                        ? null
+                        : semanticModel.findStaticEquality(comparisonType);
+            if (contract != null) {
+                final ClassType owner =
+                    semanticModel.getClassMemberOwner(contract);
+                method.with(simpleInstruction(DUP2));
+                if (
+                    !referenceAssignable(
+                        descriptor(rightRepresentation),
+                        descriptor(owner)
+                    )
+                ) {
+                    readObject(owner);
+                }
+                method.with(simpleInstruction(SWAP));
+                if (
+                    !referenceAssignable(
+                        descriptor(leftRepresentation),
+                        descriptor(owner)
+                    )
+                ) {
+                    readObject(owner);
+                }
+                method.with(simpleInstruction(SWAP));
+                invokeStaticClassEqual(owner);
+                method.branch(IFNE, matched);
+                return;
+            }
+            method.with(simpleInstruction(DUP2));
+            if (
+                !referenceAssignable(
+                    descriptor(leftRepresentation),
+                    descriptor(leftType)
+                )
+            ) {
+                method.with(simpleInstruction(SWAP));
+                readObject(leftType);
+                method.with(simpleInstruction(SWAP));
+            }
+            if (reference(leftType) && !nullableReference(leftType)) {
+                typedObjectEquals(leftType);
+            }
+            else {
+                objectEquals(false);
+            }
+            method.branch(IFNE, matched);
+        }
+
+        private List<Type> numericEqualityMembers(
+            final Type leftType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType
+        ) {
+            final Type rightMember = LiteralType.unwrap(rightDeclaredType);
+            if (
+                !(leftDeclaredType instanceof UnionType)
+                    || !(rightMember instanceof BuiltinType rightNumeric)
+                    || !(rightNumeric.isInteger() || rightNumeric.isFloating()
+                        || rightNumeric == BuiltinType.CHAR)
+                    || !reference(leftType)
+            ) {
+                return List.of();
+            }
+            final List<Type> compatibleMembers =
+                equalityMembers(leftDeclaredType).stream()
+                    .filter(
+                        member -> SemanticAnalyzerExpressionOperations
+                            .equalityCompatible(
+                                semanticModel,
+                                member,
+                                rightMember
+                            )
+                    )
+                    .toList();
+            if (
+                compatibleMembers.isEmpty() || compatibleMembers.stream()
+                    .anyMatch(
+                        member -> !(member instanceof BuiltinType builtin)
+                            || !(builtin.isInteger() || builtin.isFloating()
+                                || builtin == BuiltinType.CHAR)
+                    )
+            ) {
+                return List.of();
+            }
+            return compatibleMembers;
+        }
+
+        private boolean numericUnionEquals(
+            final Type leftType,
+            final Type rightType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType
+        ) {
+            return numericUnionEquals(
+                leftType,
+                rightType,
+                leftDeclaredType,
+                rightDeclaredType,
+                null
+            );
+        }
+
+        private boolean numericUnionEquals(
+            final Type leftType,
+            final Type rightType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType,
+            final @Nullable Label equal
+        ) {
+            final List<Type> compatibleMembers =
+                numericEqualityMembers(
+                    leftType,
+                    leftDeclaredType,
+                    rightDeclaredType
+                );
+            if (compatibleMembers.isEmpty()) {
+                return false;
+            }
+            final Type rightMember = LiteralType.unwrap(rightDeclaredType);
+            if (reference(rightType)) {
+                readObject(rightMember);
+            }
+            else {
+                convert(rightType, rightMember);
+            }
+            if (numericEqualityScratch == -1) {
+                numericEqualityScratch = nextLocal;
+                nextLocal += 2;
+            }
+            final int right = numericEqualityScratch;
+            method.with(localInstruction(storeOpcode(rightMember), right));
+            numericUnionBranches(
+                compatibleMembers,
+                rightMember,
+                () -> method
+                    .with(localInstruction(loadOpcode(rightMember), right)),
+                equal
+            );
+            return true;
+        }
+
+        private void numericUnionBranches(
+            final List<Type> compatibleMembers,
+            final Type rightMember,
+            final Runnable loadRight,
+            final @Nullable Label equal
+        ) {
+            final Label matched = method.newLabel();
+            final Label end = method.newLabel();
+            for (final Type leftMember : compatibleMembers) {
+                final Label next = method.newLabel();
+                method.with(simpleInstruction(DUP));
+                method.instanceOf(
+                    ClassDesc.ofDescriptor(boxedDescriptor(leftMember))
+                );
+                method.branch(IFEQ, next);
+                final BuiltinType promoted =
+                    SemanticAnalyzerExpressionOperations
+                        .promotedNumericType(leftMember, rightMember);
+                method.with(simpleInstruction(DUP));
+                readObject(leftMember);
+                convert(leftMember, promoted);
+                loadRight.run();
+                convert(rightMember, promoted);
+                if (promoted == BuiltinType.I64) {
+                    method.lcmp();
+                    method.branch(IFEQ, matched);
+                }
+                else if (promoted == BuiltinType.F64) {
+                    method.dcmpl();
+                    method.branch(IFEQ, matched);
+                }
+                else if (promoted == BuiltinType.F32) {
+                    method.fcmpl();
+                    method.branch(IFEQ, matched);
+                }
+                else {
+                    method.branch(IF_ICMPEQ, matched);
+                }
+                method.labelBinding(next);
+            }
+            method.with(simpleInstruction(POP));
+            if (equal == null) {
+                method.iconst_0();
+            }
             method.branch(GOTO, end);
-            method.labelBinding(equal);
-            method.iconst_1();
-            method.branch(GOTO, end);
-            method.labelBinding(unequal);
-            method.iconst_0();
+            method.labelBinding(matched);
+            method.with(simpleInstruction(POP));
+            if (equal == null) {
+                method.iconst_1();
+            }
+            else {
+                method.branch(GOTO, equal);
+            }
             method.labelBinding(end);
+        }
+
+        private boolean booleanUnionMember(
+            final Type leftType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType
+        ) {
+            return leftDeclaredType instanceof UnionType
+                && LiteralType.unwrap(rightDeclaredType) == BuiltinType.BOOL
+                && reference(leftType)
+                && equalityMembers(leftDeclaredType).contains(BuiltinType.BOOL)
+                && !equalityMembers(leftDeclaredType).contains(BuiltinType.ANY);
+        }
+
+        private void booleanUnionBranches(
+            final Runnable loadRight,
+            final @Nullable Label equal
+        ) {
+            final Label unequal = method.newLabel();
+            final Label matched = method.newLabel();
+            final Label end = method.newLabel();
+            method.with(simpleInstruction(DUP));
+            method.instanceOf(classDesc("java/lang/Boolean"));
+            method.branch(IFEQ, unequal);
+            method.with(simpleInstruction(DUP));
+            readObject(BuiltinType.BOOL);
+            loadRight.run();
+            method.branch(IF_ICMPEQ, matched);
+            method.labelBinding(unequal);
+            method.with(simpleInstruction(POP));
+            if (equal == null) {
+                method.iconst_0();
+            }
+            method.branch(GOTO, end);
+            method.labelBinding(matched);
+            method.with(simpleInstruction(POP));
+            if (equal == null) {
+                method.iconst_1();
+            }
+            else {
+                method.branch(GOTO, equal);
+            }
+            method.labelBinding(end);
+        }
+
+        private boolean booleanUnionEquals(
+            final Type leftType,
+            final Type rightType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType,
+            final @Nullable Label equal
+        ) {
+            if (
+                !booleanUnionMember(
+                    leftType,
+                    leftDeclaredType,
+                    rightDeclaredType
+                )
+            ) {
+                return false;
+            }
+            if (reference(rightType)) {
+                readObject(BuiltinType.BOOL);
+            }
+            if (numericEqualityScratch == -1) {
+                numericEqualityScratch = nextLocal;
+                nextLocal += 2;
+            }
+            final int right = numericEqualityScratch;
+            method.with(localInstruction(ISTORE, right));
+            booleanUnionBranches(
+                () -> method.with(localInstruction(ILOAD, right)),
+                equal
+            );
+            return true;
+        }
+
+        private @Nullable ClassType classUnionMember(
+            final Type leftType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType
+        ) {
+            if (
+                !(leftDeclaredType instanceof UnionType)
+                    || !(rightDeclaredType instanceof ClassType rightClass)
+                    || !reference(leftType)
+            ) {
+                return null;
+            }
+            final List<Type> compatible =
+                equalityMembers(leftDeclaredType).stream()
+                    .filter(
+                        member -> SemanticAnalyzerExpressionOperations
+                            .equalityCompatible(
+                                semanticModel,
+                                member,
+                                rightClass
+                            )
+                    )
+                    .toList();
+            if (
+                compatible.size() != 1
+                    || !(compatible.getFirst() instanceof ClassType member)
+            ) {
+                return null;
+            }
+            final ClassType comparison =
+                equalityComparisonType(member, rightClass);
+            return comparison != null
+                && !semanticModel.isRecordClass(comparison)
+                && semanticModel.findStaticEquality(comparison) != null
+                    ? member
+                    : null;
+        }
+
+        private boolean classUnionEquals(
+            final Type leftType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType,
+            final @Nullable Label equal
+        ) {
+            return classUnionEquals(
+                leftType,
+                leftDeclaredType,
+                rightDeclaredType,
+                equal,
+                null,
+                false
+            );
+        }
+
+        private boolean classUnionEquals(
+            final Type leftType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType,
+            final @Nullable Label equal,
+            final @Nullable Label unequal,
+            final boolean reversed
+        ) {
+            final ClassType member =
+                classUnionMember(leftType, leftDeclaredType, rightDeclaredType);
+            if (member == null) {
+                return false;
+            }
+            final ClassType comparison =
+                equalityComparisonType(member, (ClassType) rightDeclaredType);
+            final FunctionSymbol contract =
+                semanticModel
+                    .findStaticEquality(Objects.requireNonNull(comparison));
+            final ClassType owner =
+                semanticModel
+                    .getClassMemberOwner(Objects.requireNonNull(contract));
+            final Label incompatible = method.newLabel();
+            final Label end = method.newLabel();
+            if (!reversed) {
+                method.with(simpleInstruction(SWAP));
+            }
+            method.with(simpleInstruction(DUP));
+            method.instanceOf(ClassDesc.ofDescriptor(descriptor(member)));
+            method.branch(IFEQ, incompatible);
+            method.checkcast(ClassDesc.ofDescriptor(descriptor(owner)));
+            if (!reversed) {
+                method.with(simpleInstruction(SWAP));
+            }
+            invokeStaticClassEqual(owner);
+            if (equal != null) {
+                method.branch(IFNE, equal);
+            }
+            method.branch(GOTO, unequal == null ? end : unequal);
+            method.labelBinding(incompatible);
+            method.with(simpleInstruction(POP2));
+            if (equal == null) {
+                method.iconst_0();
+            }
+            else if (unequal != null) {
+                method.branch(GOTO, unequal);
+            }
+            if (unequal == null) {
+                method.labelBinding(end);
+            }
+            return true;
+        }
+
+        private boolean unionEquals(
+            final Type leftType,
+            final Type rightType,
+            final Type leftDeclaredType,
+            final Type rightDeclaredType
+        ) {
+            if (
+                !(leftType instanceof UnionType
+                    || rightType instanceof UnionType)
+            ) {
+                return false;
+            }
+            final List<Type> leftMembers = equalityMembers(leftDeclaredType);
+            final List<Type> rightMembers = equalityMembers(rightDeclaredType);
+            final boolean leftNullableSingleMember =
+                leftMembers.size() == 2
+                    && leftMembers.contains(BuiltinType.NULL);
+            final boolean rightNullableSingleMember =
+                rightMembers.size() == 2
+                    && rightMembers.contains(BuiltinType.NULL);
+            if (
+                leftMembers.contains(BuiltinType.ANY)
+                    || rightMembers.contains(BuiltinType.ANY)
+            ) {
+                return false;
+            }
+            if (
+                numericUnionEquals(
+                    leftType,
+                    rightType,
+                    leftDeclaredType,
+                    rightDeclaredType
+                )
+            ) {
+                return true;
+            }
+            if (
+                booleanUnionEquals(
+                    leftType,
+                    rightType,
+                    leftDeclaredType,
+                    rightDeclaredType,
+                    null
+                )
+            ) {
+                return true;
+            }
+            if (
+                reference(leftType) && reference(rightType)
+                    && !numericEqualityMembers(
+                        rightType,
+                        rightDeclaredType,
+                        leftDeclaredType
+                    ).isEmpty()
+            ) {
+                method.with(simpleInstruction(SWAP));
+                numericUnionEquals(
+                    rightType,
+                    leftType,
+                    rightDeclaredType,
+                    leftDeclaredType
+                );
+                return true;
+            }
+            if (
+                reference(leftType) && reference(rightType)
+                    && booleanUnionMember(
+                        rightType,
+                        rightDeclaredType,
+                        leftDeclaredType
+                    )
+            ) {
+                method.with(simpleInstruction(SWAP));
+                booleanUnionEquals(
+                    rightType,
+                    leftType,
+                    rightDeclaredType,
+                    leftDeclaredType,
+                    null
+                );
+                return true;
+            }
+            if (!reference(rightType)) {
+                box(rightType);
+            }
+            final Label matched = method.newLabel();
+            final Label end = method.newLabel();
+            for (final Type leftMember : leftMembers) {
+                final List<Type> compatibleRightMembers =
+                    rightMembers.stream()
+                        .filter(
+                            rightMember -> SemanticAnalyzerExpressionOperations
+                                .equalityCompatible(
+                                    semanticModel,
+                                    leftMember,
+                                    rightMember
+                                )
+                        )
+                        .toList();
+                if (compatibleRightMembers.isEmpty()) {
+                    continue;
+                }
+                final Label nextLeft = method.newLabel();
+                if (leftDeclaredType instanceof UnionType) {
+                    equalityMemberGuard(
+                        true,
+                        leftMember,
+                        leftNullableSingleMember,
+                        nextLeft
+                    );
+                }
+                for (final Type rightMember : compatibleRightMembers) {
+                    final Label nextRight = method.newLabel();
+                    if (rightDeclaredType instanceof UnionType) {
+                        equalityMemberGuard(
+                            false,
+                            rightMember,
+                            rightNullableSingleMember,
+                            nextRight
+                        );
+                    }
+                    equalityMemberPairBranch(
+                        leftMember,
+                        leftType,
+                        rightMember,
+                        rightType,
+                        matched
+                    );
+                    if (rightDeclaredType instanceof UnionType) {
+                        method.labelBinding(nextRight);
+                    }
+                }
+                if (leftDeclaredType instanceof UnionType) {
+                    method.labelBinding(nextLeft);
+                }
+            }
+            method.with(simpleInstruction(POP2));
+            method.iconst_0();
+            method.branch(GOTO, end);
+            method.labelBinding(matched);
+            method.with(simpleInstruction(POP2));
+            method.iconst_1();
+            method.labelBinding(end);
+            return true;
+        }
+
+        private void referenceEquals(
+            final Type effectiveLeftType,
+            final Type effectiveRightType,
+            final Type declaredLeftType,
+            final Type declaredRightType
+        ) {
+            final Type leftType =
+                LiteralType.unwrap(ConstType.unwrap(effectiveLeftType));
+            final Type rightType =
+                LiteralType.unwrap(ConstType.unwrap(effectiveRightType));
+            if (identityUnionEquals(declaredLeftType, declaredRightType)) {
+                booleanResult(IF_ACMPEQ);
+                return;
+            }
+            if (
+                staticClassEquals(
+                    leftType,
+                    rightType,
+                    ConstType.unwrap(declaredLeftType),
+                    ConstType.unwrap(declaredRightType)
+                )
+            ) {
+                return;
+            }
+            else if (
+                nullableClassEquals(
+                    leftType,
+                    ConstType.unwrap(declaredRightType)
+                )
+            ) {
+                return;
+            }
+            else if (
+                javaUnionEquals(
+                    ConstType.unwrap(declaredLeftType),
+                    ConstType.unwrap(declaredRightType)
+                )
+            ) {
+                return;
+            }
+            else if (
+                nullableSingleMemberEquals(
+                    ConstType.unwrap(declaredLeftType),
+                    ConstType.unwrap(declaredRightType)
+                )
+            ) {
+                return;
+            }
+            else if (
+                classUnionEquals(
+                    leftType,
+                    ConstType.unwrap(declaredLeftType),
+                    ConstType.unwrap(declaredRightType),
+                    null
+                )
+            ) {
+                return;
+            }
+            else if (
+                classUnionMember(
+                    rightType,
+                    ConstType.unwrap(declaredRightType),
+                    ConstType.unwrap(declaredLeftType)
+                ) != null
+            ) {
+                classUnionEquals(
+                    rightType,
+                    ConstType.unwrap(declaredRightType),
+                    ConstType.unwrap(declaredLeftType),
+                    null,
+                    null,
+                    true
+                );
+                return;
+            }
+            else if (
+                unionEquals(
+                    leftType,
+                    rightType,
+                    ConstType.unwrap(declaredLeftType),
+                    ConstType.unwrap(declaredRightType)
+                )
+            ) {
+                return;
+            }
+            else if (
+                equalityMembers(leftType).contains(BuiltinType.ANY)
+                    || equalityMembers(rightType).contains(BuiltinType.ANY)
+            ) {
+                objectEquals(true);
+            }
+            else if (!reference(leftType) || nullableReference(leftType)) {
+                objectEquals(false);
+            }
+            else {
+                typedObjectEquals(leftType);
+            }
+        }
+
+        private Type equalityDispatchType(final Expression expression) {
+            final Type source = semanticModel.getExpressionType(expression);
+            final Type effective = semanticModel.getEffectiveType(expression);
+            if (
+                source instanceof UnionType && effective instanceof UnionType
+                    && !source.equals(effective)
+            ) {
+                return effective;
+            }
+            return semanticModel.getUnionMemberType(expression);
+        }
+
+        private @Nullable BigInteger numericEqualityLiteral(
+            final Expression left,
+            final Expression right
+        ) {
+            final Type effective = semanticModel.getEffectiveType(right);
+            final Type source = semanticModel.getExpressionType(right);
+            final Type member = LiteralType.unwrap(equalityDispatchType(right));
+            final BigInteger literal = SemanticAnalyzer.integerLiteral(right);
+            if (
+                !numericEqualityMembers(
+                    semanticModel.getEffectiveType(left),
+                    equalityDispatchType(left),
+                    equalityDispatchType(right)
+                ).isEmpty() && literal != null
+                    && (source == BuiltinType.I32 || source == BuiltinType.I64)
+                    && member instanceof BuiltinType numeric
+                    && numeric.isInteger()
+                    && (source == numeric
+                        || ((BuiltinType) source).canWidenTo(numeric))
+                    && reference(effective)
+            ) {
+                return literal;
+            }
+            return null;
+        }
+
+        private @Nullable Boolean booleanEqualityLiteral(
+            final Expression left,
+            final Expression right
+        ) {
+            if (
+                !(right instanceof LiteralExpression literal)
+                    || literal.kind() != LiteralKind.BOOL
+                    || !booleanUnionMember(
+                        semanticModel.getEffectiveType(left),
+                        equalityDispatchType(left),
+                        equalityDispatchType(right)
+                    )
+            ) {
+                return null;
+            }
+            return literal.text().equals("true");
+        }
+
+        private boolean nativeNumericIdentifier(
+            final Expression expression,
+            final Type comparisonType
+        ) {
+            if (
+                !(semanticModel.getExpressionType(
+                    expression
+                ) instanceof BuiltinType source)
+                    || !(comparisonType instanceof BuiltinType target)
+                    || !(source.isInteger() || source.isFloating()
+                        || source == BuiltinType.CHAR)
+                    || !(target.isInteger() || target.isFloating()
+                        || target == BuiltinType.CHAR)
+            ) {
+                return false;
+            }
+            if (expression instanceof IdentifierExpression identifier) {
+                if (
+                    !source
+                        .equals(semanticModel.getReference(identifier).type())
+                ) {
+                    return false;
+                }
+                load(semanticModel.getReference(identifier));
+            }
+            else if (
+                expression instanceof CallExpression call
+                    && !containsAwait(call)
+                    && !expressionTemporaries.containsKey(call)
+                    && !frameTemporaries.containsKey(call)
+            ) {
+                call(call);
+            }
+            else {
+                return false;
+            }
+            convert(source, target);
+            return true;
+        }
+
+        private boolean nativeBooleanIdentifier(final Expression expression) {
+            if (
+                semanticModel.getExpressionType(expression) != BuiltinType.BOOL
+            ) {
+                return false;
+            }
+            if (expression instanceof IdentifierExpression identifier) {
+                if (
+                    semanticModel.getReference(identifier)
+                        .type() != BuiltinType.BOOL
+                ) {
+                    return false;
+                }
+                load(semanticModel.getReference(identifier));
+            }
+            else if (
+                expression instanceof CallExpression call
+                    && !containsAwait(call)
+                    && !expressionTemporaries.containsKey(call)
+                    && !frameTemporaries.containsKey(call)
+            ) {
+                call(call);
+            }
+            else {
+                return false;
+            }
+            return true;
+        }
+
+        private boolean reversePrimitiveUnionEquals(
+            final BinaryExpression binary,
+            final @Nullable Label equal
+        ) {
+            final Expression concrete = binary.left();
+            final Expression union = binary.right();
+            final Type unionType = semanticModel.getEffectiveType(union);
+            final Type unionDeclaredType = equalityDispatchType(union);
+            final Type concreteDeclaredType = equalityDispatchType(concrete);
+            final List<Type> numericMembers =
+                numericEqualityMembers(
+                    unionType,
+                    unionDeclaredType,
+                    concreteDeclaredType
+                );
+            final BigInteger numericLiteral =
+                numericEqualityLiteral(union, concrete);
+            if (numericLiteral != null) {
+                expression(union);
+                numericUnionLiteralEquals(
+                    union,
+                    concrete,
+                    numericLiteral,
+                    equal
+                );
+            }
+            else if (
+                !numericMembers.isEmpty() && nativeNumericIdentifier(
+                    concrete,
+                    LiteralType.unwrap(concreteDeclaredType)
+                )
+            ) {
+                final Type member = LiteralType.unwrap(concreteDeclaredType);
+                final int concreteLocal = reserve(member);
+                method
+                    .with(localInstruction(storeOpcode(member), concreteLocal));
+                expression(union);
+                numericUnionBranches(
+                    numericMembers,
+                    member,
+                    () -> method.with(
+                        localInstruction(loadOpcode(member), concreteLocal)
+                    ),
+                    equal
+                );
+            }
+            else if (
+                booleanUnionMember(
+                    unionType,
+                    unionDeclaredType,
+                    concreteDeclaredType
+                )
+            ) {
+                final Boolean booleanLiteral =
+                    booleanEqualityLiteral(union, concrete);
+                if (booleanLiteral != null) {
+                    expression(union);
+                    booleanUnionLiteralEquals(booleanLiteral, equal);
+                }
+                else if (nativeBooleanIdentifier(concrete)) {
+                    final int concreteLocal = reserve(BuiltinType.BOOL);
+                    method.with(localInstruction(ISTORE, concreteLocal));
+                    expression(union);
+                    booleanUnionBranches(
+                        () -> method
+                            .with(localInstruction(ILOAD, concreteLocal)),
+                        equal
+                    );
+                }
+                else {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+            if (
+                equal == null && binary.operator() == BinaryOperator.NOT_EQUAL
+            ) {
+                method.iconst_1();
+                method.ixor();
+            }
+            return true;
+        }
+
+        private boolean numericWideningOnly(
+            final UnionType source,
+            final UnionType effective
+        ) {
+            if (source.equals(effective)) {
+                return true;
+            }
+            final List<Type> from = equalityMembers(source);
+            final List<Type> to = equalityMembers(effective);
+            if (from.size() != to.size()) {
+                return false;
+            }
+            final List<BuiltinType> sourceNumeric =
+                from.stream()
+                    .filter(
+                        member -> member instanceof BuiltinType builtin
+                            && (builtin.isInteger() || builtin.isFloating()
+                                || builtin == BuiltinType.CHAR)
+                    )
+                    .map(member -> (BuiltinType) member)
+                    .toList();
+            final List<BuiltinType> targetNumeric =
+                to.stream()
+                    .filter(
+                        member -> member instanceof BuiltinType builtin
+                            && (builtin.isInteger() || builtin.isFloating()
+                                || builtin == BuiltinType.CHAR)
+                    )
+                    .map(member -> (BuiltinType) member)
+                    .toList();
+            return sourceNumeric.size() == 1 && targetNumeric.size() == 1
+                && sourceNumeric.getFirst().canWidenTo(targetNumeric.getFirst())
+                && Set
+                    .copyOf(
+                        from.stream()
+                            .filter(member -> !sourceNumeric.contains(member))
+                            .toList()
+                    )
+                    .equals(
+                        Set.copyOf(
+                            to.stream()
+                                .filter(
+                                    member -> !targetNumeric.contains(member)
+                                )
+                                .toList()
+                        )
+                    );
+        }
+
+        private boolean nativeUnionOperand(final Expression expression) {
+            if (
+                expressionTemporaries.containsKey(expression)
+                    || frameTemporaries.containsKey(expression)
+            ) {
+                return false;
+            }
+            if (expression instanceof IdentifierExpression identifier) {
+                return semanticModel.getExpressionType(expression)
+                    .equals(semanticModel.getReference(identifier).type())
+                    && semanticModel.findNarrowedType(identifier) == null;
+            }
+            return expression instanceof CallExpression call
+                && !containsAwait(call);
+        }
+
+        private void emitNativeUnionOperand(final Expression expression) {
+            if (expression instanceof IdentifierExpression identifier) {
+                load(semanticModel.getReference(identifier));
+            }
+            else {
+                call((CallExpression) expression);
+            }
+        }
+
+        private boolean rawNumericUnionEquals(final BinaryExpression binary) {
+            final Type leftSource =
+                ConstType
+                    .unwrap(semanticModel.getExpressionType(binary.left()));
+            final Type rightSource =
+                ConstType
+                    .unwrap(semanticModel.getExpressionType(binary.right()));
+            final Type leftEffective =
+                ConstType.unwrap(semanticModel.getEffectiveType(binary.left()));
+            final Type rightEffective =
+                ConstType
+                    .unwrap(semanticModel.getEffectiveType(binary.right()));
+            if (
+                !(leftSource instanceof UnionType leftUnion)
+                    || !(rightSource instanceof UnionType rightUnion)
+                    || !(leftEffective instanceof UnionType leftTarget)
+                    || !(rightEffective instanceof UnionType rightTarget)
+                    || (leftUnion.equals(leftTarget)
+                        && rightUnion.equals(rightTarget))
+                    || !numericWideningOnly(leftUnion, leftTarget)
+                    || !numericWideningOnly(rightUnion, rightTarget)
+                    || !descriptor(leftUnion).equals(descriptor(leftTarget))
+                    || !descriptor(rightUnion).equals(descriptor(rightTarget))
+                    || !reference(leftUnion)
+                    || !reference(rightUnion)
+                    || !nativeUnionOperand(binary.left())
+                    || !nativeUnionOperand(binary.right())
+            ) {
+                return false;
+            }
+            emitNativeUnionOperand(binary.left());
+            emitNativeUnionOperand(binary.right());
+            referenceEquals(leftUnion, rightUnion, leftUnion, rightUnion);
+            if (binary.operator() == BinaryOperator.NOT_EQUAL) {
+                method.iconst_1();
+                method.ixor();
+            }
+            return true;
+        }
+
+        private void numericUnionLiteralEquals(
+            final Expression left,
+            final Expression right,
+            final BigInteger literal,
+            final @Nullable Label equal
+        ) {
+            final Type source = semanticModel.getExpressionType(right);
+            final Type member = LiteralType.unwrap(equalityDispatchType(right));
+            numericUnionBranches(
+                numericEqualityMembers(
+                    semanticModel.getEffectiveType(left),
+                    equalityDispatchType(left),
+                    equalityDispatchType(right)
+                ),
+                member,
+                () -> {
+                    if (source == BuiltinType.I64) {
+                        method.ldc(literal.longValueExact());
+                    }
+                    else {
+                        method.ldc(literal.intValueExact());
+                    }
+                    convert(source, member);
+                },
+                equal
+            );
+        }
+
+        private void booleanUnionLiteralEquals(
+            final boolean value,
+            final @Nullable Label equal
+        ) {
+            booleanUnionBranches(
+                () -> method
+                    .with(simpleInstruction(value ? ICONST_1 : ICONST_0)),
+                equal
+            );
         }
 
         private void selection(final SwitchExpression selection) {
@@ -4531,8 +6407,15 @@ public final class BytecodeGenerator {
             final Type subjectType =
                 semanticModel.getEffectiveType(selection.subject());
             if (
-                subjectType == BuiltinType.I32
+                descriptor(subjectType).equals("I")
                     && integerSelection(selection, discarded)
+            ) {
+                return;
+            }
+            if (
+                descriptor(subjectType).equals("Ljava/lang/String;")
+                    && !nullableReference(subjectType)
+                    && stringSelection(selection, discarded)
             ) {
                 return;
             }
@@ -4547,17 +6430,154 @@ public final class BytecodeGenerator {
                 final Label body = method.newLabel();
                 final Label next = method.newLabel();
                 final List<Expression> matches = branch.matches();
-                if (matches != null) {
-                    for (final Expression match : matches) {
+                boolean fallsThrough = true;
+                if (
+                    matches != null && nullableStringSelectionMatches(
+                        subjectType,
+                        subject,
+                        matches,
+                        next
+                    )
+                ) {
+                    fallsThrough = false;
+                }
+                else if (matches != null) {
+                    for (int matchIndex = 0; matchIndex < matches
+                        .size(); matchIndex++) {
+                        final Expression match = matches.get(matchIndex);
                         method.with(
                             localInstruction(loadOpcode(subjectType), subject)
                         );
+                        if (reference(subjectType) && isNullLiteral(match)) {
+                            method.branch(IFNULL, body);
+                            continue;
+                        }
+                        if (
+                            reference(subjectType)
+                                && singleUnionMember(
+                                    subjectType
+                                ) == BuiltinType.STRING
+                                && match instanceof LiteralExpression literal
+                                && literal.kind() == LiteralKind.STRING
+                        ) {
+                            final boolean lastMatch =
+                                matchIndex + 1 == matches.size();
+                            final Label unequal =
+                                lastMatch ? next : method.newLabel();
+                            nullableStringLiteralBranch(match, body, unequal);
+                            if (!lastMatch) {
+                                method.labelBinding(unequal);
+                            }
+                            else {
+                                fallsThrough = false;
+                            }
+                            continue;
+                        }
+                        final Boolean booleanLiteral =
+                            (reference(subjectType)
+                                && !semanticModel.isSwitchDualMatch(match)
+                                && !semanticModel.isSwitchTypeMatch(match))
+                                    ? booleanEqualityLiteral(
+                                        selection.subject(),
+                                        match
+                                    )
+                                    : null;
+                        if (booleanLiteral != null) {
+                            booleanUnionLiteralEquals(booleanLiteral, body);
+                            continue;
+                        }
+                        if (
+                            booleanUnionMember(
+                                subjectType,
+                                equalityDispatchType(selection.subject()),
+                                equalityDispatchType(match)
+                            )
+                        ) {
+                            expression(match);
+                            booleanUnionEquals(
+                                subjectType,
+                                semanticModel.getEffectiveType(match),
+                                equalityDispatchType(selection.subject()),
+                                equalityDispatchType(match),
+                                body
+                            );
+                            continue;
+                        }
+                        final BigInteger numericLiteral =
+                            (reference(subjectType)
+                                && !semanticModel.isSwitchDualMatch(match)
+                                && !semanticModel.isSwitchTypeMatch(match))
+                                    ? numericEqualityLiteral(
+                                        selection.subject(),
+                                        match
+                                    )
+                                    : null;
+                        if (numericLiteral != null) {
+                            numericUnionLiteralEquals(
+                                selection.subject(),
+                                match,
+                                numericLiteral,
+                                body
+                            );
+                            continue;
+                        }
+                        if (
+                            !numericEqualityMembers(
+                                subjectType,
+                                equalityDispatchType(selection.subject()),
+                                equalityDispatchType(match)
+                            ).isEmpty()
+                        ) {
+                            final Type comparisonType =
+                                LiteralType.unwrap(equalityDispatchType(match));
+                            final boolean nativeMatch =
+                                nativeNumericIdentifier(match, comparisonType);
+                            if (!nativeMatch) {
+                                expression(match);
+                            }
+                            numericUnionEquals(
+                                subjectType,
+                                nativeMatch
+                                    ? comparisonType
+                                    : semanticModel.getEffectiveType(match),
+                                equalityDispatchType(selection.subject()),
+                                equalityDispatchType(match),
+                                body
+                            );
+                            continue;
+                        }
                         expression(match);
+                        if (
+                            !semanticModel.isSwitchDualMatch(match)
+                                && !semanticModel.isSwitchTypeMatch(match)
+                                && reference(subjectType)
+                        ) {
+                            final boolean lastMatch =
+                                matchIndex + 1 == matches.size();
+                            final Label unequal =
+                                lastMatch ? next : method.newLabel();
+                            if (
+                                nullableSingleMemberEqualsBranch(
+                                    equalityDispatchType(selection.subject()),
+                                    equalityDispatchType(match),
+                                    body,
+                                    unequal
+                                )
+                            ) {
+                                if (lastMatch) {
+                                    fallsThrough = false;
+                                }
+                                else {
+                                    method.labelBinding(unequal);
+                                }
+                                continue;
+                            }
+                        }
                         if (semanticModel.isSwitchDualMatch(match)) {
                             final int matchLocal = nextLocal++;
                             method.with(localInstruction(ASTORE, matchLocal));
                             method.with(localInstruction(ALOAD, matchLocal));
-                            objectEquals(numericUnion(subjectType));
+                            objectEquals(false);
                             method.branch(IFNE, body);
                             method.with(
                                 localInstruction(
@@ -4591,8 +6611,63 @@ public final class BytecodeGenerator {
                             method.branch(IFNE, body);
                         }
                         else if (reference(subjectType)) {
-                            objectEquals(numericUnion(subjectType));
-                            method.branch(IFNE, body);
+                            final boolean lastMatch =
+                                matchIndex + 1 == matches.size();
+                            final Label unequal =
+                                lastMatch ? next : method.newLabel();
+                            if (
+                                !classUnionEquals(
+                                    subjectType,
+                                    equalityDispatchType(selection.subject()),
+                                    equalityDispatchType(match),
+                                    body,
+                                    unequal,
+                                    false
+                                )
+                            ) {
+                                final Type matchType =
+                                    semanticModel.getEffectiveType(match);
+                                final Type declaredSubject =
+                                    LiteralType.unwrap(
+                                        ConstType.unwrap(
+                                            equalityDispatchType(
+                                                selection.subject()
+                                            )
+                                        )
+                                    );
+                                final Type declaredMatch =
+                                    LiteralType.unwrap(
+                                        ConstType
+                                            .unwrap(equalityDispatchType(match))
+                                    );
+                                if (
+                                    directIdentitySwitchEquals(
+                                        subjectType,
+                                        matchType,
+                                        declaredSubject,
+                                        declaredMatch
+                                    )
+                                ) {
+                                    method.branch(IF_ACMPEQ, body);
+                                }
+                                else {
+                                    referenceEquals(
+                                        subjectType,
+                                        matchType,
+                                        equalityDispatchType(
+                                            selection.subject()
+                                        ),
+                                        equalityDispatchType(match)
+                                    );
+                                    method.branch(IFNE, body);
+                                }
+                            }
+                            else if (!lastMatch) {
+                                method.labelBinding(unequal);
+                            }
+                            else {
+                                fallsThrough = false;
+                            }
                         }
                         else if (
                             subjectType == BuiltinType.F32
@@ -4618,6 +6693,58 @@ public final class BytecodeGenerator {
                         }
                     }
                 }
+                if (fallsThrough) {
+                    method.branch(GOTO, next);
+                }
+                method.labelBinding(body);
+                if (selectionBody(branch.body(), discarded)) {
+                    method.branch(GOTO, end);
+                }
+                method.labelBinding(next);
+            }
+            final SwitchElseBranch otherwise = selection.elseBranch();
+            if (otherwise != null) {
+                selectionBody(otherwise.body(), discarded);
+            }
+            method.labelBinding(end);
+            yieldTargets.pop();
+        }
+
+        private boolean stringSelection(
+            final SwitchExpression selection,
+            final boolean discarded
+        ) {
+            for (final SwitchBranch branch : selection.branches()) {
+                for (final Expression match : branch.matches()) {
+                    if (!(constantValue(match) instanceof String)) {
+                        return false;
+                    }
+                }
+            }
+            final Type subjectType =
+                semanticModel.getEffectiveType(selection.subject());
+            final int subject = nextLocal;
+            nextLocal += slots(subjectType);
+            expression(selection.subject());
+            method.with(localInstruction(storeOpcode(subjectType), subject));
+            final Label end = method.newLabel();
+            yieldTargets
+                .push(new YieldTarget(end, discarded, tryFrames.size()));
+            for (final SwitchBranch branch : selection.branches()) {
+                final Label body = method.newLabel();
+                final Label next = method.newLabel();
+                for (final Expression match : branch.matches()) {
+                    method.with(localInstruction(ALOAD, subject));
+                    method.ldc((String) constantValue(match));
+                    method.invoke(
+                        INVOKEVIRTUAL,
+                        classDesc("java/lang/String"),
+                        "equals",
+                        MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"),
+                        false
+                    );
+                    method.branch(IFNE, body);
+                }
                 method.branch(GOTO, next);
                 method.labelBinding(body);
                 if (selectionBody(branch.body(), discarded)) {
@@ -4631,6 +6758,7 @@ public final class BytecodeGenerator {
             }
             method.labelBinding(end);
             yieldTargets.pop();
+            return true;
         }
 
         private boolean integerSelection(
@@ -4754,14 +6882,180 @@ public final class BytecodeGenerator {
             final Label end
         ) {
             final Label next = method.newLabel();
-            expression(condition);
-            method.branch(IFEQ, next);
+            final Label matched = method.newLabel();
+            if (unionEqualityBranch(condition, matched, next)) {
+                method.labelBinding(matched);
+            }
+            else {
+                expression(condition);
+                method.branch(IFEQ, next);
+            }
             final boolean reachable = block(body);
             if (reachable) {
                 method.branch(GOTO, end);
             }
             method.labelBinding(next);
             return reachable;
+        }
+
+        private boolean unionEqualityBranch(
+            final Expression condition,
+            final Label whenTrue,
+            final Label whenFalse
+        ) {
+            final Expression unwrapped =
+                SemanticAnalyzerExpressionOperations.unwrap(condition);
+            if (
+                !(unwrapped instanceof BinaryExpression binary)
+                    || (binary.operator() != BinaryOperator.EQUAL
+                        && binary.operator() != BinaryOperator.NOT_EQUAL)
+                    || (asyncStateMachine != null
+                        && containsAwait(binary.right()))
+            ) {
+                return false;
+            }
+            final Type leftType = semanticModel.getEffectiveType(binary.left());
+            final Type leftDeclaredType = equalityDispatchType(binary.left());
+            final Type rightDeclaredType = equalityDispatchType(binary.right());
+            if (identityUnionEquals(leftDeclaredType, rightDeclaredType)) {
+                final Label equal =
+                    binary.operator() == BinaryOperator.EQUAL
+                        ? whenTrue
+                        : whenFalse;
+                final Label unequal =
+                    binary.operator() == BinaryOperator.EQUAL
+                        ? whenFalse
+                        : whenTrue;
+                expression(binary.left());
+                expression(binary.right());
+                method.branch(IF_ACMPEQ, equal);
+                method.branch(GOTO, unequal);
+                return true;
+            }
+            final boolean numeric =
+                !numericEqualityMembers(
+                    leftType,
+                    leftDeclaredType,
+                    rightDeclaredType
+                ).isEmpty();
+            final boolean classEquality =
+                classUnionMember(
+                    leftType,
+                    leftDeclaredType,
+                    rightDeclaredType
+                ) != null;
+            final boolean booleanEquality =
+                booleanUnionMember(
+                    leftType,
+                    leftDeclaredType,
+                    rightDeclaredType
+                );
+            final boolean nullableString =
+                singleUnionMember(leftType) == BuiltinType.STRING
+                    && binary.right() instanceof LiteralExpression literal
+                    && literal.kind() == LiteralKind.STRING;
+            if (
+                !numeric && !classEquality
+                    && !booleanEquality
+                    && !nullableString
+            ) {
+                final Label reverseEqual =
+                    binary.operator() == BinaryOperator.EQUAL
+                        ? whenTrue
+                        : whenFalse;
+                if (reversePrimitiveUnionEquals(binary, reverseEqual)) {
+                    method.branch(
+                        GOTO,
+                        binary.operator() == BinaryOperator.EQUAL
+                            ? whenFalse
+                            : whenTrue
+                    );
+                    return true;
+                }
+                return false;
+            }
+            final Label equal =
+                binary.operator() == BinaryOperator.EQUAL
+                    ? whenTrue
+                    : whenFalse;
+            final Label unequal =
+                binary.operator() == BinaryOperator.EQUAL
+                    ? whenFalse
+                    : whenTrue;
+            expression(binary.left());
+            if (nullableString) {
+                nullableStringLiteralBranch(binary.right(), equal, unequal);
+                return true;
+            }
+            else if (numeric) {
+                final BigInteger literal =
+                    numericEqualityLiteral(binary.left(), binary.right());
+                if (literal != null) {
+                    numericUnionLiteralEquals(
+                        binary.left(),
+                        binary.right(),
+                        literal,
+                        equal
+                    );
+                }
+                else {
+                    final Type rightMember =
+                        LiteralType.unwrap(rightDeclaredType);
+                    final boolean nativeRight =
+                        nativeNumericIdentifier(binary.right(), rightMember);
+                    final Type rightType =
+                        nativeRight
+                            ? rightMember
+                            : semanticModel.getEffectiveType(binary.right());
+                    if (!nativeRight) {
+                        expression(binary.right());
+                    }
+                    numericUnionEquals(
+                        leftType,
+                        rightType,
+                        leftDeclaredType,
+                        rightDeclaredType,
+                        equal
+                    );
+                }
+            }
+            else if (booleanEquality) {
+                final Boolean literal =
+                    booleanEqualityLiteral(binary.left(), binary.right());
+                if (literal != null) {
+                    booleanUnionLiteralEquals(literal, equal);
+                }
+                else {
+                    final boolean nativeRight =
+                        nativeBooleanIdentifier(binary.right());
+                    if (!nativeRight) {
+                        expression(binary.right());
+                    }
+                    booleanUnionEquals(
+                        leftType,
+                        nativeRight
+                            ? BuiltinType.BOOL
+                            : semanticModel.getEffectiveType(binary.right()),
+                        leftDeclaredType,
+                        rightDeclaredType,
+                        equal
+                    );
+                }
+            }
+            else {
+                expression(binary.right());
+                classUnionEquals(
+                    leftType,
+                    leftDeclaredType,
+                    rightDeclaredType,
+                    equal,
+                    unequal,
+                    false
+                );
+                return true;
+            }
+            method.branch(GOTO, unequal);
+            return true;
         }
 
         private boolean loopBody(final BlockStatement body, final Loop loop) {
@@ -5273,7 +7567,14 @@ public final class BytecodeGenerator {
                         load(symbol);
                         final Type narrowed =
                             semanticModel.findNarrowedType(identifier);
-                        if (narrowed != null && reference(symbol.type())) {
+                        if (
+                            narrowed != null && reference(symbol.type())
+                                && (!reference(narrowed)
+                                    || !referenceAssignable(
+                                        descriptor(symbol.type()),
+                                        descriptor(narrowed)
+                                    ))
+                        ) {
                             readObject(narrowed);
                         }
                     }
@@ -5591,9 +7892,38 @@ public final class BytecodeGenerator {
                 box(from);
             }
             else if (to instanceof UnionType unionType) {
+                final BuiltinType primitiveTarget =
+                    primitiveUnionType(unionType);
+                if (primitiveTarget != null) {
+                    convert(from, primitiveTarget);
+                    return;
+                }
                 final Type member =
                     semanticModel.getUnionMemberType(expression);
                 if (from instanceof UnionType sourceUnion) {
+                    final BuiltinType primitiveSource =
+                        primitiveUnionType(sourceUnion);
+                    if (primitiveSource != null) {
+                        final BuiltinType commonTarget =
+                            commonUnionWideningTarget(sourceUnion, unionType);
+                        if (commonTarget != null) {
+                            convert(primitiveSource, commonTarget);
+                            box(commonTarget);
+                            return;
+                        }
+                        final BuiltinType literalTarget =
+                            literalUnionWideningTarget(sourceUnion, unionType);
+                        if (literalTarget != null) {
+                            convertLiteralUnionMembers(
+                                sourceUnion,
+                                unionType,
+                                primitiveSource,
+                                literalTarget
+                            );
+                            return;
+                        }
+                        box(primitiveSource);
+                    }
                     convertUnionMembers(sourceUnion, unionType);
                 }
                 else {
@@ -5625,6 +7955,121 @@ public final class BytecodeGenerator {
             else {
                 convert(from, to);
             }
+        }
+
+        private @Nullable BuiltinType commonUnionWideningTarget(
+            final UnionType source,
+            final UnionType target
+        ) {
+            BuiltinType common = null;
+            for (final Type member : source.memberTypes()) {
+                if (
+                    !(LiteralType.unwrap(member) instanceof BuiltinType numeric)
+                        || target.memberTypes()
+                            .stream()
+                            .anyMatch(
+                                destination -> semanticModel
+                                    .isSubtype(member, destination)
+                            )
+                ) {
+                    return null;
+                }
+                BuiltinType destination = null;
+                for (final BuiltinType candidate : BuiltinType.values()) {
+                    if (
+                        target.memberTypes().contains(candidate)
+                            && numeric.canWidenTo(candidate)
+                    ) {
+                        destination = candidate;
+                        break;
+                    }
+                }
+                if (
+                    destination == null
+                        || (common != null && common != destination)
+                ) {
+                    return null;
+                }
+                common = destination;
+            }
+            return common;
+        }
+
+        private @Nullable BuiltinType literalUnionWideningTarget(
+            final UnionType source,
+            final UnionType target
+        ) {
+            if (primitiveUnionType(source) != BuiltinType.I32) {
+                return null;
+            }
+            boolean preserved = false;
+            BuiltinType common = null;
+            for (final Type member : source.memberTypes()) {
+                if (
+                    member instanceof LiteralType literal
+                        && literal.kind() == LiteralKind.INT
+                        && target.contains(literal)
+                ) {
+                    preserved = true;
+                    continue;
+                }
+                if (
+                    !(LiteralType.unwrap(member) instanceof BuiltinType numeric)
+                        || target.memberTypes()
+                            .stream()
+                            .anyMatch(
+                                destination -> semanticModel
+                                    .isSubtype(member, destination)
+                            )
+                ) {
+                    return null;
+                }
+                BuiltinType destination = null;
+                for (final BuiltinType candidate : BuiltinType.values()) {
+                    if (
+                        target.memberTypes().contains(candidate)
+                            && numeric.canWidenTo(candidate)
+                    ) {
+                        destination = candidate;
+                        break;
+                    }
+                }
+                if (
+                    destination == null
+                        || (common != null && common != destination)
+                ) {
+                    return null;
+                }
+                common = destination;
+            }
+            return preserved ? common : null;
+        }
+
+        private void convertLiteralUnionMembers(
+            final UnionType source,
+            final UnionType target,
+            final BuiltinType sourceType,
+            final BuiltinType destination
+        ) {
+            final Label preserved = method.newLabel();
+            final Label end = method.newLabel();
+            for (final Type member : source.memberTypes()) {
+                if (
+                    member instanceof LiteralType literal
+                        && literal.kind() == LiteralKind.INT
+                        && target.contains(literal)
+                ) {
+                    method.dup();
+                    method.ldc(((Number) literal.value()).intValue());
+                    method.branch(IF_ICMPEQ, preserved);
+                }
+            }
+            convert(sourceType, destination);
+            box(destination);
+            method.branch(GOTO, end);
+            method.labelBinding(preserved);
+            box(sourceType);
+            method.labelBinding(end);
         }
 
         private void convertUnionMembers(
@@ -5759,18 +8204,25 @@ public final class BytecodeGenerator {
             final String owner = boxedOwner(type);
             if (owner != null) {
                 method.checkcast(classDesc(owner));
-                final String valueMethod = switch ((BuiltinType) unqualified) {
-                    case I8 -> "byteValue";
-                    case I16 -> "shortValue";
-                    case I32 -> "intValue";
-                    case I64 -> "longValue";
-                    case F32 -> "floatValue";
-                    case F64 -> "doubleValue";
-                    case BOOL -> "booleanValue";
-                    case CHAR -> "charValue";
-                    default ->
-                        throw new IllegalArgumentException("Not a primitive");
-                };
+                final BuiltinType primitive = primitiveUnionType(type);
+                final String valueMethod =
+                    switch (
+                        primitive != null
+                            ? primitive
+                            : (BuiltinType) unqualified
+                    ) {
+                        case I8 -> "byteValue";
+                        case I16 -> "shortValue";
+                        case I32 -> "intValue";
+                        case I64 -> "longValue";
+                        case F32 -> "floatValue";
+                        case F64 -> "doubleValue";
+                        case BOOL -> "booleanValue";
+                        case CHAR -> "charValue";
+                        default -> throw new IllegalArgumentException(
+                            "Not a primitive"
+                        );
+                    };
                 method.invoke(
                     INVOKEVIRTUAL,
                     classDesc(owner),
@@ -6540,6 +8992,15 @@ public final class BytecodeGenerator {
             if (from.equals(to)) {
                 return;
             }
+            final BuiltinType primitiveSource = primitiveUnionType(from);
+            if (primitiveSource != null) {
+                convert(primitiveSource, to);
+                return;
+            }
+            if (uniformUnionType(from) == BuiltinType.STRING) {
+                convert(BuiltinType.STRING, to);
+                return;
+            }
             final Type source = LiteralType.unwrap(from);
             if (from instanceof UnionType) {
                 if (
@@ -6877,6 +9338,10 @@ public final class BytecodeGenerator {
                         box(semanticModel.getEffectiveType(argument));
                     }
                 }
+                if (eldIdentityObjectEquals(member, function)) {
+                    booleanResult(IF_ACMPEQ);
+                    return;
+                }
                 if (
                     function.name().equals("sort") && call.arguments().isEmpty()
                         && javaMethod.getParameterCount() == 1
@@ -6884,7 +9349,7 @@ public final class BytecodeGenerator {
                     method.aconst_null();
                 }
                 final boolean isInterface =
-                    javaMethod.getDeclaringClass().isInterface();
+                    javaMethodInterface(member, javaMethod);
                 method.invoke(
                     isStatic
                         ? INVOKESTATIC
@@ -7047,6 +9512,9 @@ public final class BytecodeGenerator {
             }
             final List<Integer> parameters =
                 semanticModel.getArgumentParameters(call);
+            if (orderedArguments(call.arguments(), parameters, type)) {
+                return;
+            }
             final int[] locals = new int[type.parameterTypes().size()];
             final boolean[] assigned = new boolean[locals.length];
             for (int i = 0; i < parameters.size(); i++) {
@@ -7101,6 +9569,9 @@ public final class BytecodeGenerator {
             }
             final List<Integer> parameters =
                 semanticModel.getConstructorArgumentParameters(creation);
+            if (orderedArguments(creation.arguments(), parameters, type)) {
+                return;
+            }
             final int[] locals = new int[type.parameterTypes().size()];
             final boolean[] assigned = new boolean[locals.length];
             for (int i = 0; i < parameters.size(); i++) {
@@ -7134,6 +9605,29 @@ public final class BytecodeGenerator {
             if (parameters.size() < locals.length) {
                 omissionMask(assigned, type);
             }
+        }
+
+        private boolean orderedArguments(
+            final List<Expression> arguments,
+            final List<Integer> parameters,
+            final FunctionType type
+        ) {
+            if (
+                arguments.size() != type.parameterTypes().size()
+                    || parameters.size() != arguments.size()
+                    || IntStream.range(0, parameters.size())
+                        .anyMatch(index -> parameters.get(index) != index)
+            ) {
+                return false;
+            }
+            for (final Expression supplied : arguments) {
+                expression(
+                    supplied instanceof NamedArgumentExpression named
+                        ? named.value()
+                        : supplied
+                );
+            }
+            return true;
         }
 
         private void tuple(final TupleExpression tuple) {
@@ -7287,6 +9781,12 @@ public final class BytecodeGenerator {
                 box(source);
             }
             else if (targetValue instanceof UnionType) {
+                final BuiltinType primitiveTarget =
+                    primitiveUnionType(targetValue);
+                if (primitiveTarget != null) {
+                    convert(source, primitiveTarget);
+                    return;
+                }
                 if (!(source instanceof UnionType)) {
                     if (
                         conversion instanceof InterfaceType
@@ -7338,8 +9838,13 @@ public final class BytecodeGenerator {
             final String owner = boxedOwner(element);
             if (owner != null) {
                 method.checkcast(classDesc(owner));
+                final BuiltinType primitive = primitiveUnionType(element);
                 final String valueMethod =
-                    switch ((BuiltinType) LiteralType.unwrap(element)) {
+                    switch (
+                        primitive != null
+                            ? primitive
+                            : (BuiltinType) LiteralType.unwrap(element)
+                    ) {
                         case I8 -> "byteValue";
                         case I16 -> "shortValue";
                         case I32 -> "intValue";
@@ -7781,6 +10286,11 @@ public final class BytecodeGenerator {
                 && Boolean.parseBoolean(literal.text()) == value;
         }
 
+        private boolean isNullLiteral(final Expression expression) {
+            return unwrap(expression) instanceof LiteralExpression literal
+                && literal.kind() == LiteralKind.NULL;
+        }
+
         private String memberOwner(final MemberExpression member) {
             return typeOwner(semanticModel.getMemberOwner(member));
         }
@@ -7814,6 +10324,10 @@ public final class BytecodeGenerator {
                 case InterfaceType contract when contract.javaClass() != null
                     && !contract.javaClass().isInterface() ->
                     classDesc(contract.javaClass().getName().replace('.', '/'));
+                case InterfaceType contract when contract.javaClass() != null
+                    && contract.javaClass().isInterface()
+                    && method.getName().equals("equals") ->
+                    classDesc(contract.javaClass().getName().replace('.', '/'));
                 case PromiseType _ -> classDesc(
                     "com/github/andreasarvidsson/eld/runtime/EldPromise"
                 );
@@ -7822,6 +10336,21 @@ public final class BytecodeGenerator {
                 );
                 default -> classDesc("java/lang/Object");
             };
+        }
+
+        private boolean javaMethodInterface(
+            final MemberExpression member,
+            final Method method
+        ) {
+            if (method.getDeclaringClass().isInterface()) {
+                return true;
+            }
+            final Type owner = semanticModel.getMemberOwner(member);
+            return method.getDeclaringClass() == Object.class
+                && method.getName().equals("equals")
+                && owner instanceof InterfaceType contract
+                && contract.javaClass() != null
+                && contract.javaClass().isInterface();
         }
 
         private void memberReceiver(final MemberExpression member) {
@@ -7857,22 +10386,34 @@ public final class BytecodeGenerator {
             if (symbol instanceof JavaMethodSymbol function) {
                 final var javaMethod = function.method();
                 final boolean isInterface =
-                    javaMethod.getDeclaringClass().isInterface();
+                    javaMethodInterface(member, javaMethod);
                 method.ldc(
-                    MethodHandleDesc.ofMethod(
-                        java.lang.reflect.Modifier.isStatic(
-                            javaMethod.getModifiers()
+                    eldIdentityObjectEquals(member, function)
+                        ? MethodHandleDesc.ofMethod(
+                            DirectMethodHandleDesc.Kind.STATIC,
+                            classDesc(
+                                "com/github/andreasarvidsson/eld/runtime/EldEquality"
+                            ),
+                            "identityEquals",
+                            MethodTypeDesc.ofDescriptor(
+                                "(Ljava/lang/Object;Ljava/lang/Object;)Z"
+                            )
                         )
-                            ? DirectMethodHandleDesc.Kind.STATIC
-                            : isInterface
-                                ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
-                                : DirectMethodHandleDesc.Kind.VIRTUAL,
-                        javaMethodOwner(member, javaMethod),
-                        function.name(),
-                        MethodTypeDesc.ofDescriptor(
-                            javaMethodDescriptor(javaMethod).descriptorString()
+                        : MethodHandleDesc.ofMethod(
+                            java.lang.reflect.Modifier.isStatic(
+                                javaMethod.getModifiers()
+                            )
+                                ? DirectMethodHandleDesc.Kind.STATIC
+                                : isInterface
+                                    ? DirectMethodHandleDesc.Kind.INTERFACE_VIRTUAL
+                                    : DirectMethodHandleDesc.Kind.VIRTUAL,
+                            javaMethodOwner(member, javaMethod),
+                            function.name(),
+                            MethodTypeDesc.ofDescriptor(
+                                javaMethodDescriptor(javaMethod)
+                                    .descriptorString()
+                            )
                         )
-                    )
                 );
                 if (
                     !java.lang.reflect.Modifier
@@ -8254,6 +10795,33 @@ public final class BytecodeGenerator {
                 method.labelBinding(end);
                 return;
             }
+            if (
+                (operator == BinaryOperator.EQUAL
+                    || operator == BinaryOperator.NOT_EQUAL)
+                    && (isNullLiteral(binary.left())
+                        || isNullLiteral(binary.right()))
+            ) {
+                final Expression value =
+                    isNullLiteral(binary.left())
+                        ? binary.right()
+                        : binary.left();
+                if (isNullLiteral(value)) {
+                    method.with(
+                        simpleInstruction(
+                            operator == BinaryOperator.EQUAL
+                                ? ICONST_1
+                                : ICONST_0
+                        )
+                    );
+                }
+                else {
+                    expression(value);
+                    booleanResult(
+                        operator == BinaryOperator.EQUAL ? IFNULL : IFNONNULL
+                    );
+                }
+                return;
+            }
             final Type type =
                 LiteralType
                     .unwrap(semanticModel.getEffectiveType(binary.left()));
@@ -8270,7 +10838,107 @@ public final class BytecodeGenerator {
                 method.with(localInstruction(loadOpcode(rightType), right));
             }
             else {
+                if (
+                    (operator == BinaryOperator.EQUAL
+                        || operator == BinaryOperator.NOT_EQUAL)
+                        && rawNumericUnionEquals(binary)
+                ) {
+                    return;
+                }
+                if (
+                    (operator == BinaryOperator.EQUAL
+                        || operator == BinaryOperator.NOT_EQUAL)
+                        && reversePrimitiveUnionEquals(binary, null)
+                ) {
+                    return;
+                }
                 expression(binary.left());
+                if (
+                    operator == BinaryOperator.EQUAL
+                        || operator == BinaryOperator.NOT_EQUAL
+                ) {
+                    if (
+                        nullableStringLiteralEquals(type, binary.right(), null)
+                    ) {
+                        if (operator == BinaryOperator.NOT_EQUAL) {
+                            method.iconst_1();
+                            method.ixor();
+                        }
+                        return;
+                    }
+                    final Boolean booleanLiteral =
+                        booleanEqualityLiteral(binary.left(), binary.right());
+                    if (booleanLiteral != null) {
+                        booleanUnionLiteralEquals(booleanLiteral, null);
+                        if (operator == BinaryOperator.NOT_EQUAL) {
+                            method.iconst_1();
+                            method.ixor();
+                        }
+                        return;
+                    }
+                    final BigInteger numericLiteral =
+                        numericEqualityLiteral(binary.left(), binary.right());
+                    if (numericLiteral != null) {
+                        numericUnionLiteralEquals(
+                            binary.left(),
+                            binary.right(),
+                            numericLiteral,
+                            null
+                        );
+                        if (operator == BinaryOperator.NOT_EQUAL) {
+                            method.iconst_1();
+                            method.ixor();
+                        }
+                        return;
+                    }
+                    final Type leftDeclaredType =
+                        equalityDispatchType(binary.left());
+                    final Type rightDeclaredType =
+                        equalityDispatchType(binary.right());
+                    if (
+                        !numericEqualityMembers(
+                            type,
+                            leftDeclaredType,
+                            rightDeclaredType
+                        ).isEmpty()
+                    ) {
+                        final Type member =
+                            LiteralType.unwrap(rightDeclaredType);
+                        if (nativeNumericIdentifier(binary.right(), member)) {
+                            numericUnionEquals(
+                                type,
+                                member,
+                                leftDeclaredType,
+                                rightDeclaredType
+                            );
+                            if (operator == BinaryOperator.NOT_EQUAL) {
+                                method.iconst_1();
+                                method.ixor();
+                            }
+                            return;
+                        }
+                    }
+                    if (
+                        booleanUnionMember(
+                            type,
+                            leftDeclaredType,
+                            rightDeclaredType
+                        ) && nativeBooleanIdentifier(binary.right())
+                    ) {
+                        booleanUnionEquals(
+                            type,
+                            BuiltinType.BOOL,
+                            leftDeclaredType,
+                            rightDeclaredType,
+                            null
+                        );
+                        if (operator == BinaryOperator.NOT_EQUAL) {
+                            method.iconst_1();
+                            method.ixor();
+                        }
+                        return;
+                    }
+                }
                 expression(binary.right());
             }
             if (operator == BinaryOperator.INSTANCEOF) {
@@ -8312,23 +10980,15 @@ public final class BytecodeGenerator {
                             "Unsupported reference comparison"
                         );
                     }
-                    if (
-                        type == BuiltinType.STRING || type instanceof UnionType
-                            || type instanceof TupleType
-                            || type == BuiltinType.ANY
-                    ) {
-                        objectEquals(numericUnion(type));
-                        if (operator == BinaryOperator.NOT_EQUAL) {
-                            method.iconst_1();
-                            method.ixor();
-                        }
-                    }
-                    else {
-                        booleanResult(
-                            operator == BinaryOperator.EQUAL
-                                ? IF_ACMPEQ
-                                : IF_ACMPNE
-                        );
+                    referenceEquals(
+                        type,
+                        semanticModel.getEffectiveType(binary.right()),
+                        equalityDispatchType(binary.left()),
+                        equalityDispatchType(binary.right())
+                    );
+                    if (operator == BinaryOperator.NOT_EQUAL) {
+                        method.iconst_1();
+                        method.ixor();
                     }
                 }
                 else {

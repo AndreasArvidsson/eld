@@ -1,7 +1,7 @@
 record Point(x: i32, y: i32);
 
 const point = new Point(1, 2);
-const equals: (any) => bool = point.equals;
+const equals: (Point) => bool = point.equals;
 const hashCode: () => i32 = point.hashCode;
 const toString: () => string = point.toString;
 
@@ -38,15 +38,15 @@ CONST (4:1-4:6)
 IDENTIFIER "equals" (4:7-4:13)
 COLON (4:13-4:14)
 LEFT_PAREN (4:15-4:16)
-IDENTIFIER "any" (4:16-4:19)
-RIGHT_PAREN (4:19-4:20)
-ARROW (4:21-4:23)
-IDENTIFIER "bool" (4:24-4:28)
-EQUAL (4:29-4:30)
-IDENTIFIER "point" (4:31-4:36)
-DOT (4:36-4:37)
-IDENTIFIER "equals" (4:37-4:43)
-SEMICOLON (4:43-4:44)
+IDENTIFIER "Point" (4:16-4:21)
+RIGHT_PAREN (4:21-4:22)
+ARROW (4:23-4:25)
+IDENTIFIER "bool" (4:26-4:30)
+EQUAL (4:31-4:32)
+IDENTIFIER "point" (4:33-4:38)
+DOT (4:38-4:39)
+IDENTIFIER "equals" (4:39-4:45)
+SEMICOLON (4:45-4:46)
 CONST (5:1-5:6)
 IDENTIFIER "hashCode" (5:7-5:15)
 COLON (5:15-5:16)
@@ -166,31 +166,31 @@ SEMICOLON (10:18-10:19)
     )
   )
   (VariableDeclaration
-    range: 4:1-4:44
+    range: 4:1-4:46
     mutability: CONST
     (IdentifierDeclaration
       range: 4:7-4:13
       name: "equals"
     )
     (FunctionTypeNode
-      range: 4:15-4:28
+      range: 4:15-4:30
       (NamedTypeNode
-        range: 4:16-4:19
-        name: "any"
+        range: 4:16-4:21
+        name: "Point"
       )
       (NamedTypeNode
-        range: 4:24-4:28
+        range: 4:26-4:30
         name: "bool"
       )
     )
     (MemberExpression
-      range: 4:31-4:43
+      range: 4:33-4:45
       (IdentifierExpression
-        range: 4:31-4:36
+        range: 4:33-4:38
         name: "point"
       )
       (IdentifierExpression
-        range: 4:37-4:43
+        range: 4:39-4:45
         name: "equals"
       )
     )
@@ -353,9 +353,9 @@ Expression types:
   3:19-3:24 -> Point
   3:25-3:26 -> i32
   3:28-3:29 -> i32
-  4:31-4:36 -> Point
-  4:31-4:43 -> (any) => bool
-  4:37-4:43 -> (any) => bool
+  4:33-4:38 -> Point
+  4:33-4:45 -> (Point) => bool
+  4:39-4:45 -> (Point) => bool
   5:29-5:34 -> Point
   5:29-5:43 -> () => i32
   5:35-5:43 -> () => i32
@@ -364,7 +364,7 @@ Expression types:
   6:38-6:46 -> () => string
   8:1-8:6 -> (any) => void
   8:1-8:31 -> void
-  8:7-8:13 -> (any) => bool
+  8:7-8:13 -> (Point) => bool
   8:7-8:30 -> bool
   8:14-8:29 -> Point
   8:18-8:23 -> Point
@@ -389,21 +389,18 @@ Resolved types:
   1:8-1:13 -> string
   1:17-1:20 -> i32
   1:25-1:28 -> i32
-  4:15-4:28 -> (any) => bool
-  4:16-4:19 -> any
-  4:24-4:28 -> bool
+  4:15-4:30 -> (Point) => bool
+  4:16-4:21 -> Point
+  4:26-4:30 -> bool
   5:17-5:26 -> () => i32
   5:23-5:26 -> i32
   6:17-6:29 -> () => string
   6:23-6:29 -> string
 
-Conversions:
-  8:14-8:29 -> Point -> any
-
 Declarations:
   1:8-1:13 -> record Point(x: i32, y: i32)
   3:7-3:12 -> const point: Point
-  4:7-4:13 -> const equals: (any) => bool
+  4:7-4:13 -> const equals: (Point) => bool
   5:7-5:15 -> const hashCode: () => i32
   6:7-6:15 -> const toString: () => string
 
@@ -412,8 +409,8 @@ References:
   1:14-1:15 -> 1:14-1:15
   1:22-1:23 -> 1:22-1:23
   3:19-3:24 -> 1:8-1:13
-  4:31-4:36 -> 3:7-3:12
-  4:37-4:43 -> Point.equals(any): bool
+  4:33-4:38 -> 3:7-3:12
+  4:39-4:45 -> Point.equals(Point): bool
   5:29-5:34 -> 3:7-3:12
   5:35-5:43 -> Point.hashCode(): i32
   6:32-6:37 -> 3:7-3:12
@@ -447,7 +444,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC MethodHandleDesc[VIRTUAL/Test$Point::equals(Test$Point,Object)boolean]
     GETSTATIC Test.point LTest$Point;
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    LDC MethodTypeDesc[(Object)boolean]
+    LDC MethodTypeDesc[(Test$Point)boolean]
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
     PUTSTATIC Test.equals Ljava/lang/invoke/MethodHandle;
     LDC MethodHandleDesc[VIRTUAL/Test$Point::hashCode(Test$Point)int]
@@ -467,7 +464,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 1
     LDC 2
     INVOKESPECIAL Test$Point.<init>(II)V
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(LTest$Point;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.hashCode Ljava/lang/invoke/MethodHandle;
@@ -489,6 +486,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 6 max locals 0
 
 class Test$Point extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Point flags [PUBLIC, STATIC, FINAL]
   record component x I
@@ -538,16 +536,12 @@ class Test$Point extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUP
     INVOKESPECIAL java/lang/Record.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Point.x I
-    POP
     ALOAD_0 0
     ILOAD_2 2
-    DUP_X1
     PUTFIELD Test$Point.y I
-    POP
     RETURN
-    max stack 3 max locals 3
+    max stack 2 max locals 3
   method copy(II)LTest$Point; flags [PUBLIC]
     NEW Test$Point
     DUP

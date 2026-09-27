@@ -365,31 +365,27 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     PUTSTATIC Test.message Ljava/lang/invoke/MethodHandle;
     POP
-    GOTO L2
-   L2:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.message Ljava/lang/invoke/MethodHandle;
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L3:
+   L2:
     NOP
     NEW java/lang/IllegalArgumentException
     DUP
     LDC "second"
     INVOKESPECIAL java/lang/IllegalArgumentException.<init>(Ljava/lang/String;)V
     ATHROW
-   L4:
+   L3:
     ASTORE_1 1
     NOP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L5
-   L5:
     RETURN
     catch java/io/IOException from L0 to L1 handler L1
-    catch java/lang/IllegalArgumentException from L3 to L4 handler L4
+    catch java/lang/IllegalArgumentException from L2 to L3 handler L3
     max stack 6 max locals 2
 
 --- OUTPUT ---

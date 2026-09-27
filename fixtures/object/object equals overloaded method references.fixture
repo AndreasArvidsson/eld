@@ -6,10 +6,10 @@ class Foo {
 
 const foo = new Foo();
 const numeric: (i32) => bool = foo.equals;
-const inherited: (any) => bool = foo.equals;
+const inherited: (Foo) => bool = foo.equals;
 print(numeric(1));
-print(inherited("x"));
 print(inherited(foo));
+print(inherited(new Foo()));
 
 --- TOKENS ---
 
@@ -58,7 +58,7 @@ CONST (9:1-9:6)
 IDENTIFIER "inherited" (9:7-9:16)
 COLON (9:16-9:17)
 LEFT_PAREN (9:18-9:19)
-IDENTIFIER "any" (9:19-9:22)
+IDENTIFIER "Foo" (9:19-9:22)
 RIGHT_PAREN (9:22-9:23)
 ARROW (9:24-9:26)
 IDENTIFIER "bool" (9:27-9:31)
@@ -79,7 +79,7 @@ IDENTIFIER "print" (11:1-11:6)
 LEFT_PAREN (11:6-11:7)
 IDENTIFIER "inherited" (11:7-11:16)
 LEFT_PAREN (11:16-11:17)
-STRING_LITERAL "\"x\"" (11:17-11:20)
+IDENTIFIER "foo" (11:17-11:20)
 RIGHT_PAREN (11:20-11:21)
 RIGHT_PAREN (11:21-11:22)
 SEMICOLON (11:22-11:23)
@@ -87,15 +87,18 @@ IDENTIFIER "print" (12:1-12:6)
 LEFT_PAREN (12:6-12:7)
 IDENTIFIER "inherited" (12:7-12:16)
 LEFT_PAREN (12:16-12:17)
-IDENTIFIER "foo" (12:17-12:20)
-RIGHT_PAREN (12:20-12:21)
-RIGHT_PAREN (12:21-12:22)
-SEMICOLON (12:22-12:23)
+NEW (12:17-12:20)
+IDENTIFIER "Foo" (12:21-12:24)
+LEFT_PAREN (12:24-12:25)
+RIGHT_PAREN (12:25-12:26)
+RIGHT_PAREN (12:26-12:27)
+RIGHT_PAREN (12:27-12:28)
+SEMICOLON (12:28-12:29)
 
 --- AST ---
 
 (Program
-  range: 1:1-12:23
+  range: 1:1-12:29
   (ClassDeclaration
     range: 1:1-5:2
     (IdentifierDeclaration
@@ -208,7 +211,7 @@ SEMICOLON (12:22-12:23)
       range: 9:18-9:31
       (NamedTypeNode
         range: 9:19-9:22
-        name: "any"
+        name: "Foo"
       )
       (NamedTypeNode
         range: 9:27-9:31
@@ -263,31 +266,33 @@ SEMICOLON (12:22-12:23)
           range: 11:7-11:16
           name: "inherited"
         )
-        (LiteralExpression
+        (IdentifierExpression
           range: 11:17-11:20
-          kind: STRING
-          text: "\"x\""
+          name: "foo"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 12:1-12:23
+    range: 12:1-12:29
     (CallExpression
-      range: 12:1-12:22
+      range: 12:1-12:28
       (IdentifierExpression
         range: 12:1-12:6
         name: "print"
       )
       (CallExpression
-        range: 12:7-12:21
+        range: 12:7-12:27
         (IdentifierExpression
           range: 12:7-12:16
           name: "inherited"
         )
-        (IdentifierExpression
-          range: 12:17-12:20
-          name: "foo"
+        (NewExpression
+          range: 12:17-12:26
+          (IdentifierExpression
+            range: 12:21-12:24
+            name: "Foo"
+          )
         )
       )
     )
@@ -306,8 +311,8 @@ Expression types:
   8:32-8:42 -> (i32) => bool
   8:36-8:42 -> (i32) => bool
   9:34-9:37 -> Foo
-  9:34-9:44 -> (any) => bool
-  9:38-9:44 -> (any) => bool
+  9:34-9:44 -> (Foo) => bool
+  9:38-9:44 -> (Foo) => bool
   10:1-10:6 -> (any) => void
   10:1-10:18 -> void
   10:7-10:14 -> (i32) => bool
@@ -315,14 +320,15 @@ Expression types:
   10:15-10:16 -> i32
   11:1-11:6 -> (any) => void
   11:1-11:22 -> void
-  11:7-11:16 -> (any) => bool
+  11:7-11:16 -> (Foo) => bool
   11:7-11:21 -> bool
-  11:17-11:20 -> string
+  11:17-11:20 -> Foo
   12:1-12:6 -> (any) => void
-  12:1-12:22 -> void
-  12:7-12:16 -> (any) => bool
-  12:7-12:21 -> bool
-  12:17-12:20 -> Foo
+  12:1-12:28 -> void
+  12:7-12:16 -> (Foo) => bool
+  12:7-12:27 -> bool
+  12:17-12:26 -> Foo
+  12:21-12:24 -> Foo
 
 Resolved types:
   2:31-2:34 -> i32
@@ -330,13 +336,9 @@ Resolved types:
   8:16-8:29 -> (i32) => bool
   8:17-8:20 -> i32
   8:25-8:29 -> bool
-  9:18-9:31 -> (any) => bool
-  9:19-9:22 -> any
+  9:18-9:31 -> (Foo) => bool
+  9:19-9:22 -> Foo
   9:27-9:31 -> bool
-
-Conversions:
-  11:17-11:20 -> string -> any
-  12:17-12:20 -> Foo -> any
 
 Declarations:
   1:7-1:10 -> class Foo
@@ -344,7 +346,7 @@ Declarations:
   2:24-2:29 -> const value: i32
   7:7-7:10 -> const foo: Foo
   8:7-8:14 -> const numeric: (i32) => bool
-  9:7-9:16 -> const inherited: (any) => bool
+  9:7-9:16 -> const inherited: (Foo) => bool
 
 References:
   3:16-3:21 -> 2:24-2:29
@@ -352,14 +354,15 @@ References:
   8:32-8:35 -> 7:7-7:10
   8:36-8:42 -> 2:17-2:23
   9:34-9:37 -> 7:7-7:10
-  9:38-9:44 -> Foo.equals(any): bool
+  9:38-9:44 -> Foo.equals(Foo): bool
   10:1-10:6 -> builtin print
   10:7-10:14 -> 8:7-8:14
   11:1-11:6 -> builtin print
   11:7-11:16 -> 9:7-9:16
+  11:17-11:20 -> 7:7-7:10
   12:1-12:6 -> builtin print
   12:7-12:16 -> 9:7-9:16
-  12:17-12:20 -> 7:7-7:10
+  12:21-12:24 -> 1:7-1:10
 
 --- BYTECODE ---
 
@@ -378,10 +381,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.foo LTest$Foo;
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
     PUTSTATIC Test.numeric Ljava/lang/invoke/MethodHandle;
-    LDC MethodHandleDesc[VIRTUAL/Test$Foo::equals(Test$Foo,Object)boolean]
+    LDC MethodHandleDesc[STATIC/EldEquality::identityEquals(Object,Object)boolean]
     GETSTATIC Test.foo LTest$Foo;
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    LDC MethodTypeDesc[(Object)boolean]
+    LDC MethodTypeDesc[(Test$Foo)boolean]
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
     PUTSTATIC Test.inherited Ljava/lang/invoke/MethodHandle;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -391,18 +394,21 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.inherited Ljava/lang/invoke/MethodHandle;
-    LDC "x"
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/Object;)Z
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(LTest$Foo;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.inherited Ljava/lang/invoke/MethodHandle;
-    GETSTATIC Test.foo LTest$Foo;
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/Object;)Z
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(LTest$Foo;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    max stack 3 max locals 0
+    max stack 4 max locals 0
 
 class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Foo flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -425,6 +431,6 @@ class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 true
-false
 true
+false
 

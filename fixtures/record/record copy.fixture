@@ -969,6 +969,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 7 max locals 4
 
 class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Options flags [PUBLIC, STATIC, FINAL]
   record component name Ljava/lang/String;
@@ -1018,16 +1019,12 @@ class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, S
     INVOKESPECIAL java/lang/Record.<init>()V
     ALOAD_0 0
     ALOAD_1 1
-    DUP_X1
     PUTFIELD Test$Options.name Ljava/lang/String;
-    POP
     ALOAD_0 0
     ILOAD_2 2
-    DUP_X1
     PUTFIELD Test$Options.value I
-    POP
     RETURN
-    max stack 3 max locals 3
+    max stack 2 max locals 3
   method copy(Ljava/lang/String;I)LTest$Options; flags [PUBLIC]
     NEW Test$Options
     DUP
@@ -1076,6 +1073,7 @@ class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, S
     max stack 2 max locals 1
 
 class Test$Measurement extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Measurement flags [PUBLIC, STATIC, FINAL]
   record component total J
@@ -1132,21 +1130,15 @@ class Test$Measurement extends java/lang/Record version 65.0 flags [PUBLIC, FINA
     INVOKESPECIAL java/lang/Record.<init>()V
     ALOAD_0 0
     LLOAD_1 1
-    DUP2_X1
     PUTFIELD Test$Measurement.total J
-    POP2
     ALOAD_0 0
     DLOAD_3 3
-    DUP2_X1
     PUTFIELD Test$Measurement.ratio D
-    POP2
     ALOAD_0 0
     ALOAD 5
-    DUP_X1
     PUTFIELD Test$Measurement.note Ljava/lang/String;
-    POP
     RETURN
-    max stack 5 max locals 6
+    max stack 3 max locals 6
   method copy(JDLjava/lang/String;)LTest$Measurement; flags [PUBLIC]
     NEW Test$Measurement
     DUP

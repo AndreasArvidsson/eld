@@ -245,6 +245,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 6 max locals 0
 
 class Test$Value extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Value flags [PUBLIC, STATIC, FINAL]
   record component value I
@@ -287,11 +288,9 @@ class Test$Value extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUP
     INVOKESPECIAL java/lang/Record.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Value.value I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
   method copy(I)LTest$Value; flags [PUBLIC]
     NEW Test$Value
     DUP

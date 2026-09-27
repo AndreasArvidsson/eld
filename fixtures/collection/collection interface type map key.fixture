@@ -399,6 +399,7 @@ class Test$Shape extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE,
 
 class Test$Circle extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Shape
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Circle flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -409,6 +410,7 @@ class Test$Circle extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 class Test$Square extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
   implements Test$Shape
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Square flags [PUBLIC, STATIC, FINAL]
   method toString()Ljava/lang/String; flags [PUBLIC, FINAL]

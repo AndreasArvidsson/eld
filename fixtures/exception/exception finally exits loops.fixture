@@ -336,7 +336,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.index I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
-    GOTO L16
+    GOTO L0
    L15:
     ASTORE_0 0
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -345,7 +345,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_0 0
     ATHROW
    L16:
-    GOTO L0
+    NOP
+    NOP
+    ATHROW
    L17:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "done"

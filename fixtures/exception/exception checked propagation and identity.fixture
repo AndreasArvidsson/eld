@@ -290,26 +290,20 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NOP
     INVOKESTATIC Test.forward()V
    L1:
-    GOTO L5
+    GOTO L3
    L2:
     ASTORE_0 0
     NOP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     GETSTATIC Test.original Ljava/io/IOException;
-    IF_ACMPEQ L3
-    ICONST_0 0
-    GOTO L4
-   L3:
-    ICONST_1 1
-   L4:
+    INVOKEVIRTUAL java/io/IOException.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L5
-   L5:
+   L3:
     RETURN
     catch java/io/IOException from L0 to L1 handler L2
     max stack 3 max locals 1

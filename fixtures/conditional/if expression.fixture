@@ -122,7 +122,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GOTO L1
    L0:
     LDC 0
-    GOTO L1
    L1:
     PUTSTATIC Test.value I
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;

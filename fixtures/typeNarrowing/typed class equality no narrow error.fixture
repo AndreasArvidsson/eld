@@ -1,0 +1,332 @@
+class Animal {}
+class Cat extends Animal {
+    public static func equal(a: Cat, b: Cat) bool { return true; }
+    public func meow() string { return "meow"; }
+}
+class Dog extends Animal {}
+
+func inspect(value: Animal, cat: Cat) {
+    if (value == cat) {
+        print(value.meow());
+    }
+}
+
+inspect(new Cat(), new Cat());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+LEFT_BRACE (1:14-1:15)
+RIGHT_BRACE (1:15-1:16)
+CLASS (2:1-2:6)
+IDENTIFIER "Cat" (2:7-2:10)
+EXTENDS (2:11-2:18)
+IDENTIFIER "Animal" (2:19-2:25)
+LEFT_BRACE (2:26-2:27)
+PUBLIC (3:5-3:11)
+STATIC (3:12-3:18)
+FUNC (3:19-3:23)
+IDENTIFIER "equal" (3:24-3:29)
+LEFT_PAREN (3:29-3:30)
+IDENTIFIER "a" (3:30-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "Cat" (3:33-3:36)
+COMMA (3:36-3:37)
+IDENTIFIER "b" (3:38-3:39)
+COLON (3:39-3:40)
+IDENTIFIER "Cat" (3:41-3:44)
+RIGHT_PAREN (3:44-3:45)
+IDENTIFIER "bool" (3:46-3:50)
+LEFT_BRACE (3:51-3:52)
+RETURN (3:53-3:59)
+BOOLEAN_LITERAL "true" (3:60-3:64)
+SEMICOLON (3:64-3:65)
+RIGHT_BRACE (3:66-3:67)
+PUBLIC (4:5-4:11)
+FUNC (4:12-4:16)
+IDENTIFIER "meow" (4:17-4:21)
+LEFT_PAREN (4:21-4:22)
+RIGHT_PAREN (4:22-4:23)
+IDENTIFIER "string" (4:24-4:30)
+LEFT_BRACE (4:31-4:32)
+RETURN (4:33-4:39)
+STRING_LITERAL "\"meow\"" (4:40-4:46)
+SEMICOLON (4:46-4:47)
+RIGHT_BRACE (4:48-4:49)
+RIGHT_BRACE (5:1-5:2)
+CLASS (6:1-6:6)
+IDENTIFIER "Dog" (6:7-6:10)
+EXTENDS (6:11-6:18)
+IDENTIFIER "Animal" (6:19-6:25)
+LEFT_BRACE (6:26-6:27)
+RIGHT_BRACE (6:27-6:28)
+FUNC (8:1-8:5)
+IDENTIFIER "inspect" (8:6-8:13)
+LEFT_PAREN (8:13-8:14)
+IDENTIFIER "value" (8:14-8:19)
+COLON (8:19-8:20)
+IDENTIFIER "Animal" (8:21-8:27)
+COMMA (8:27-8:28)
+IDENTIFIER "cat" (8:29-8:32)
+COLON (8:32-8:33)
+IDENTIFIER "Cat" (8:34-8:37)
+RIGHT_PAREN (8:37-8:38)
+LEFT_BRACE (8:39-8:40)
+IF (9:5-9:7)
+LEFT_PAREN (9:8-9:9)
+IDENTIFIER "value" (9:9-9:14)
+EQUAL_EQUAL (9:15-9:17)
+IDENTIFIER "cat" (9:18-9:21)
+RIGHT_PAREN (9:21-9:22)
+LEFT_BRACE (9:23-9:24)
+IDENTIFIER "print" (10:9-10:14)
+LEFT_PAREN (10:14-10:15)
+IDENTIFIER "value" (10:15-10:20)
+DOT (10:20-10:21)
+IDENTIFIER "meow" (10:21-10:25)
+LEFT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+SEMICOLON (10:28-10:29)
+RIGHT_BRACE (11:5-11:6)
+RIGHT_BRACE (12:1-12:2)
+IDENTIFIER "inspect" (14:1-14:8)
+LEFT_PAREN (14:8-14:9)
+NEW (14:9-14:12)
+IDENTIFIER "Cat" (14:13-14:16)
+LEFT_PAREN (14:16-14:17)
+RIGHT_PAREN (14:17-14:18)
+COMMA (14:18-14:19)
+NEW (14:20-14:23)
+IDENTIFIER "Cat" (14:24-14:27)
+LEFT_PAREN (14:27-14:28)
+RIGHT_PAREN (14:28-14:29)
+RIGHT_PAREN (14:29-14:30)
+SEMICOLON (14:30-14:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:31
+  (ClassDeclaration
+    range: 1:1-1:16
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-5:2
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "Cat"
+    )
+    (IdentifierExpression
+      range: 2:19-2:25
+      name: "Animal"
+    )
+    (MemberDeclaration
+      range: 3:5-3:67
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 3:19-3:67
+        (IdentifierDeclaration
+          range: 3:24-3:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 3:30-3:36
+          (IdentifierDeclaration
+            range: 3:30-3:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 3:33-3:36
+            name: "Cat"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 3:38-3:44
+          (IdentifierDeclaration
+            range: 3:38-3:39
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 3:41-3:44
+            name: "Cat"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:46-3:50
+          name: "bool"
+        )
+        (BlockStatement
+          range: 3:51-3:67
+          (ReturnStatement
+            range: 3:53-3:65
+            (LiteralExpression
+              range: 3:60-3:64
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:49
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-4:49
+        (IdentifierDeclaration
+          range: 4:17-4:21
+          name: "meow"
+        )
+        (NamedTypeNode
+          range: 4:24-4:30
+          name: "string"
+        )
+        (BlockStatement
+          range: 4:31-4:49
+          (ReturnStatement
+            range: 4:33-4:47
+            (LiteralExpression
+              range: 4:40-4:46
+              kind: STRING
+              text: "\"meow\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-6:28
+    (IdentifierDeclaration
+      range: 6:7-6:10
+      name: "Dog"
+    )
+    (IdentifierExpression
+      range: 6:19-6:25
+      name: "Animal"
+    )
+  )
+  (FunctionDeclaration
+    range: 8:1-12:2
+    (IdentifierDeclaration
+      range: 8:6-8:13
+      name: "inspect"
+    )
+    (FunctionParameter
+      range: 8:14-8:27
+      (IdentifierDeclaration
+        range: 8:14-8:19
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 8:21-8:27
+        name: "Animal"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 8:29-8:37
+      (IdentifierDeclaration
+        range: 8:29-8:32
+        name: "cat"
+      )
+      (NamedTypeNode
+        range: 8:34-8:37
+        name: "Cat"
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 8:39-12:2
+      (ExpressionStatement
+        range: 9:5-11:6
+        (IfExpression
+          range: 9:5-11:6
+          (BinaryExpression
+            range: 9:9-9:21
+            (IdentifierExpression
+              range: 9:9-9:14
+              name: "value"
+            )
+            operator: EQUAL
+            (IdentifierExpression
+              range: 9:18-9:21
+              name: "cat"
+            )
+          )
+          (BlockStatement
+            range: 9:23-11:6
+            (ExpressionStatement
+              range: 10:9-10:29
+              (CallExpression
+                range: 10:9-10:28
+                (IdentifierExpression
+                  range: 10:9-10:14
+                  name: "print"
+                )
+                (CallExpression
+                  range: 10:15-10:27
+                  (MemberExpression
+                    range: 10:15-10:25
+                    (IdentifierExpression
+                      range: 10:15-10:20
+                      name: "value"
+                    )
+                    (IdentifierExpression
+                      range: 10:21-10:25
+                      name: "meow"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          elseBranch: null
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:31
+    (CallExpression
+      range: 14:1-14:30
+      (IdentifierExpression
+        range: 14:1-14:8
+        name: "inspect"
+      )
+      (NewExpression
+        range: 14:9-14:18
+        (IdentifierExpression
+          range: 14:13-14:16
+          name: "Cat"
+        )
+      )
+      (NewExpression
+        range: 14:20-14:29
+        (IdentifierExpression
+          range: 14:24-14:27
+          name: "Cat"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Unknown member 'meow' of class Animal at 10:21-10:25

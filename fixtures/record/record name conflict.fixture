@@ -178,6 +178,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   inner class Test$Foo flags [PUBLIC, STATIC, FINAL]
 
 class Test$Foo extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Foo flags [PUBLIC, STATIC, FINAL]
   record component name Ljava/lang/String;
@@ -227,16 +228,12 @@ class Test$Foo extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER
     INVOKESPECIAL java/lang/Record.<init>()V
     ALOAD_0 0
     ALOAD_1 1
-    DUP_X1
     PUTFIELD Test$Foo.name Ljava/lang/String;
-    POP
     ALOAD_0 0
     ILOAD_2 2
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
     RETURN
-    max stack 3 max locals 3
+    max stack 2 max locals 3
   method copy(Ljava/lang/String;I)LTest$Foo; flags [PUBLIC]
     NEW Test$Foo
     DUP

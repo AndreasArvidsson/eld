@@ -343,7 +343,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L2:
     LDC 2
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    GOTO L3
    L3:
     PUTSTATIC Test.conditional Ljava/lang/Object;
     LDC 1

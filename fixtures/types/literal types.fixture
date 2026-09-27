@@ -359,30 +359,22 @@ References:
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
-  field status Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field status Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "success"
   field enabled Z flags [PUBLIC, STATIC, FINAL] = 1
-  field result Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field result I flags [PUBLIC, STATIC, FINAL] = 1
   field mixed Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
   field text Ljava/lang/String; flags [PUBLIC, STATIC, FINAL]
   field flag Z flags [PUBLIC, STATIC, FINAL]
   field number I flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
-    LDC "success"
-    PUTSTATIC Test.status Ljava/lang/Object;
-    LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    PUTSTATIC Test.result Ljava/lang/Object;
     ICONST_0 0
     INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     PUTSTATIC Test.mixed Ljava/lang/Object;
-    GETSTATIC Test.status Ljava/lang/Object;
-    CHECKCAST java/lang/String
+    GETSTATIC Test.status Ljava/lang/String;
     PUTSTATIC Test.text Ljava/lang/String;
     GETSTATIC Test.enabled Z
     PUTSTATIC Test.flag Z
-    GETSTATIC Test.result Ljava/lang/Object;
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.intValue()I
+    GETSTATIC Test.result I
     PUTSTATIC Test.number I
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.text Ljava/lang/String;

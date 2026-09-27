@@ -1228,30 +1228,28 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
     PUTSTATIC Test.mixedUnion Ljava/lang/Object;
     ICONST_1 1
-    IFEQ L9
+    IFEQ L8
     GETSTATIC Test.mixedUnion Ljava/lang/Object;
     DUP
     LDC ClassOrInterfaceDesc[Byte]
     SWAP
     INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
-    IFEQ L8
+    IFEQ L9
     CHECKCAST java/lang/Byte
     INVOKEVIRTUAL java/lang/Byte.byteValue()B
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L8
+    GOTO L9
    L8:
-    GOTO L10
-   L9:
     GETSTATIC Test.wide J
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-   L10:
+   L9:
     PUTSTATIC Test.mixedResult Ljava/lang/Object;
     GETSTATIC Test.single F
     INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
     PUTSTATIC Test.mixedFloatUnion Ljava/lang/Object;
     ICONST_1 1
-    IFEQ L12
+    IFEQ L10
     GETSTATIC Test.mixedFloatUnion Ljava/lang/Object;
     DUP
     LDC ClassOrInterfaceDesc[Byte]
@@ -1263,12 +1261,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     GOTO L11
-   L11:
-    GOTO L13
-   L12:
+   L10:
     GETSTATIC Test.wide J
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-   L13:
+   L11:
     PUTSTATIC Test.mixedFloatResult Ljava/lang/Object;
     GETSTATIC Test.small B
     INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
@@ -1276,46 +1272,44 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     PUTSTATIC Test.nullableEmpty Ljava/lang/Byte;
     ICONST_1 1
-    IFEQ L15
+    IFEQ L13
     GETSTATIC Test.nullableSmall Ljava/lang/Byte;
     DUP
     LDC ClassOrInterfaceDesc[Byte]
     SWAP
     INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
-    IFEQ L14
+    IFEQ L12
     CHECKCAST java/lang/Byte
     INVOKEVIRTUAL java/lang/Byte.byteValue()B
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L14
-   L14:
+   L12:
     CHECKCAST java/lang/Long
-    GOTO L16
-   L15:
+    GOTO L14
+   L13:
     GETSTATIC Test.wide J
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-   L16:
+   L14:
     PUTSTATIC Test.nullableResult Ljava/lang/Long;
     ICONST_1 1
-    IFEQ L18
+    IFEQ L16
     GETSTATIC Test.nullableEmpty Ljava/lang/Byte;
     DUP
     LDC ClassOrInterfaceDesc[Byte]
     SWAP
     INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
-    IFEQ L17
+    IFEQ L15
     CHECKCAST java/lang/Byte
     INVOKEVIRTUAL java/lang/Byte.byteValue()B
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L17
-   L17:
+   L15:
     CHECKCAST java/lang/Long
-    GOTO L19
-   L18:
+    GOTO L17
+   L16:
     GETSTATIC Test.wide J
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-   L19:
+   L17:
     PUTSTATIC Test.nullableEmptyResult Ljava/lang/Long;
     GETSTATIC Test.single F
     LDC 2.0

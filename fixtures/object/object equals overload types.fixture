@@ -6,10 +6,10 @@ class Foo {
 
 const foo = new Foo();
 print(foo.equals(1));
-print(foo.equals("x"));
 print(foo.equals(foo));
 print(foo.equals(new Foo()));
 print(foo.equals(value: 1));
+print(foo == foo);
 
 --- TOKENS ---
 
@@ -57,7 +57,7 @@ IDENTIFIER "foo" (9:7-9:10)
 DOT (9:10-9:11)
 IDENTIFIER "equals" (9:11-9:17)
 LEFT_PAREN (9:17-9:18)
-STRING_LITERAL "\"x\"" (9:18-9:21)
+IDENTIFIER "foo" (9:18-9:21)
 RIGHT_PAREN (9:21-9:22)
 RIGHT_PAREN (9:22-9:23)
 SEMICOLON (9:23-9:24)
@@ -67,40 +67,37 @@ IDENTIFIER "foo" (10:7-10:10)
 DOT (10:10-10:11)
 IDENTIFIER "equals" (10:11-10:17)
 LEFT_PAREN (10:17-10:18)
-IDENTIFIER "foo" (10:18-10:21)
-RIGHT_PAREN (10:21-10:22)
-RIGHT_PAREN (10:22-10:23)
-SEMICOLON (10:23-10:24)
+NEW (10:18-10:21)
+IDENTIFIER "Foo" (10:22-10:25)
+LEFT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+RIGHT_PAREN (10:28-10:29)
+SEMICOLON (10:29-10:30)
 IDENTIFIER "print" (11:1-11:6)
 LEFT_PAREN (11:6-11:7)
 IDENTIFIER "foo" (11:7-11:10)
 DOT (11:10-11:11)
 IDENTIFIER "equals" (11:11-11:17)
 LEFT_PAREN (11:17-11:18)
-NEW (11:18-11:21)
-IDENTIFIER "Foo" (11:22-11:25)
-LEFT_PAREN (11:25-11:26)
+IDENTIFIER "value" (11:18-11:23)
+COLON (11:23-11:24)
+INTEGER_LITERAL "1" (11:25-11:26)
 RIGHT_PAREN (11:26-11:27)
 RIGHT_PAREN (11:27-11:28)
-RIGHT_PAREN (11:28-11:29)
-SEMICOLON (11:29-11:30)
+SEMICOLON (11:28-11:29)
 IDENTIFIER "print" (12:1-12:6)
 LEFT_PAREN (12:6-12:7)
 IDENTIFIER "foo" (12:7-12:10)
-DOT (12:10-12:11)
-IDENTIFIER "equals" (12:11-12:17)
-LEFT_PAREN (12:17-12:18)
-IDENTIFIER "value" (12:18-12:23)
-COLON (12:23-12:24)
-INTEGER_LITERAL "1" (12:25-12:26)
-RIGHT_PAREN (12:26-12:27)
-RIGHT_PAREN (12:27-12:28)
-SEMICOLON (12:28-12:29)
+EQUAL_EQUAL (12:11-12:13)
+IDENTIFIER "foo" (12:14-12:17)
+RIGHT_PAREN (12:17-12:18)
+SEMICOLON (12:18-12:19)
 
 --- AST ---
 
 (Program
-  range: 1:1-12:29
+  range: 1:1-12:19
   (ClassDeclaration
     range: 1:1-5:2
     (IdentifierDeclaration
@@ -222,24 +219,23 @@ SEMICOLON (12:28-12:29)
             name: "equals"
           )
         )
-        (LiteralExpression
+        (IdentifierExpression
           range: 9:18-9:21
-          kind: STRING
-          text: "\"x\""
+          name: "foo"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 10:1-10:24
+    range: 10:1-10:30
     (CallExpression
-      range: 10:1-10:23
+      range: 10:1-10:29
       (IdentifierExpression
         range: 10:1-10:6
         name: "print"
       )
       (CallExpression
-        range: 10:7-10:22
+        range: 10:7-10:28
         (MemberExpression
           range: 10:7-10:17
           (IdentifierExpression
@@ -251,23 +247,26 @@ SEMICOLON (12:28-12:29)
             name: "equals"
           )
         )
-        (IdentifierExpression
-          range: 10:18-10:21
-          name: "foo"
+        (NewExpression
+          range: 10:18-10:27
+          (IdentifierExpression
+            range: 10:22-10:25
+            name: "Foo"
+          )
         )
       )
     )
   )
   (ExpressionStatement
-    range: 11:1-11:30
+    range: 11:1-11:29
     (CallExpression
-      range: 11:1-11:29
+      range: 11:1-11:28
       (IdentifierExpression
         range: 11:1-11:6
         name: "print"
       )
       (CallExpression
-        range: 11:7-11:28
+        range: 11:7-11:27
         (MemberExpression
           range: 11:7-11:17
           (IdentifierExpression
@@ -279,48 +278,39 @@ SEMICOLON (12:28-12:29)
             name: "equals"
           )
         )
-        (NewExpression
-          range: 11:18-11:27
-          (IdentifierExpression
-            range: 11:22-11:25
-            name: "Foo"
+        (NamedArgumentExpression
+          range: 11:18-11:26
+          (IdentifierDeclaration
+            range: 11:18-11:23
+            name: "value"
+          )
+          (LiteralExpression
+            range: 11:25-11:26
+            kind: INT
+            text: "1"
           )
         )
       )
     )
   )
   (ExpressionStatement
-    range: 12:1-12:29
+    range: 12:1-12:19
     (CallExpression
-      range: 12:1-12:28
+      range: 12:1-12:18
       (IdentifierExpression
         range: 12:1-12:6
         name: "print"
       )
-      (CallExpression
-        range: 12:7-12:27
-        (MemberExpression
-          range: 12:7-12:17
-          (IdentifierExpression
-            range: 12:7-12:10
-            name: "foo"
-          )
-          (IdentifierExpression
-            range: 12:11-12:17
-            name: "equals"
-          )
+      (BinaryExpression
+        range: 12:7-12:17
+        (IdentifierExpression
+          range: 12:7-12:10
+          name: "foo"
         )
-        (NamedArgumentExpression
-          range: 12:18-12:26
-          (IdentifierDeclaration
-            range: 12:18-12:23
-            name: "value"
-          )
-          (LiteralExpression
-            range: 12:25-12:26
-            kind: INT
-            text: "1"
-          )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 12:14-12:17
+          name: "foo"
         )
       )
     )
@@ -345,41 +335,34 @@ Expression types:
   9:1-9:6 -> (any) => void
   9:1-9:23 -> void
   9:7-9:10 -> Foo
-  9:7-9:17 -> (any) => bool
+  9:7-9:17 -> (Foo) => bool
   9:7-9:22 -> bool
-  9:11-9:17 -> (any) => bool
-  9:18-9:21 -> string
+  9:11-9:17 -> (Foo) => bool
+  9:18-9:21 -> Foo
   10:1-10:6 -> (any) => void
-  10:1-10:23 -> void
+  10:1-10:29 -> void
   10:7-10:10 -> Foo
-  10:7-10:17 -> (any) => bool
-  10:7-10:22 -> bool
-  10:11-10:17 -> (any) => bool
-  10:18-10:21 -> Foo
+  10:7-10:17 -> (Foo) => bool
+  10:7-10:28 -> bool
+  10:11-10:17 -> (Foo) => bool
+  10:18-10:27 -> Foo
+  10:22-10:25 -> Foo
   11:1-11:6 -> (any) => void
-  11:1-11:29 -> void
+  11:1-11:28 -> void
   11:7-11:10 -> Foo
-  11:7-11:17 -> (any) => bool
-  11:7-11:28 -> bool
-  11:11-11:17 -> (any) => bool
-  11:18-11:27 -> Foo
-  11:22-11:25 -> Foo
+  11:7-11:17 -> (i32) => bool
+  11:7-11:27 -> bool
+  11:11-11:17 -> (i32) => bool
+  11:25-11:26 -> i32
   12:1-12:6 -> (any) => void
-  12:1-12:28 -> void
+  12:1-12:18 -> void
   12:7-12:10 -> Foo
-  12:7-12:17 -> (i32) => bool
-  12:7-12:27 -> bool
-  12:11-12:17 -> (i32) => bool
-  12:25-12:26 -> i32
+  12:7-12:17 -> bool
+  12:14-12:17 -> Foo
 
 Resolved types:
   2:31-2:34 -> i32
   2:36-2:40 -> bool
-
-Conversions:
-  9:18-9:21 -> string -> any
-  10:18-10:21 -> Foo -> any
-  11:18-11:27 -> Foo -> any
 
 Declarations:
   1:7-1:10 -> class Foo
@@ -395,21 +378,21 @@ References:
   8:11-8:17 -> 2:17-2:23
   9:1-9:6 -> builtin print
   9:7-9:10 -> 7:7-7:10
-  9:11-9:17 -> Foo.equals(any): bool
+  9:11-9:17 -> Foo.equals(Foo): bool
+  9:18-9:21 -> 7:7-7:10
   10:1-10:6 -> builtin print
   10:7-10:10 -> 7:7-7:10
-  10:11-10:17 -> Foo.equals(any): bool
-  10:18-10:21 -> 7:7-7:10
+  10:11-10:17 -> Foo.equals(Foo): bool
+  10:22-10:25 -> 1:7-1:10
   11:1-11:6 -> builtin print
   11:7-11:10 -> 7:7-7:10
-  11:11-11:17 -> Foo.equals(any): bool
-  11:22-11:25 -> 1:7-1:10
+  11:11-11:17 -> 2:17-2:23
   12:1-12:6 -> builtin print
   12:7-12:10 -> 7:7-7:10
-  12:11-12:17 -> 2:17-2:23
+  12:14-12:17 -> 7:7-7:10
 
 Named arguments:
-  12:18-12:23 -> parameter 2:24-2:29
+  11:18-11:23 -> parameter 2:24-2:29
 
 --- BYTECODE ---
 
@@ -429,32 +412,46 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo LTest$Foo;
-    LDC "x"
-    INVOKEVIRTUAL Test$Foo.equals(Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo LTest$Foo;
-    GETSTATIC Test.foo LTest$Foo;
-    INVOKEVIRTUAL Test$Foo.equals(Ljava/lang/Object;)Z
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo LTest$Foo;
     NEW Test$Foo
     DUP
     INVOKESPECIAL Test$Foo.<init>()V
-    INVOKEVIRTUAL Test$Foo.equals(Ljava/lang/Object;)Z
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo LTest$Foo;
     LDC 1
-    ISTORE_0 0
-    ILOAD_0 0
     INVOKEVIRTUAL Test$Foo.equals(I)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    GETSTATIC Test.foo LTest$Foo;
+    IF_ACMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    max stack 4 max locals 1
+    max stack 4 max locals 0
 
 class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Foo flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -477,8 +474,8 @@ class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 --- OUTPUT ---
 
 true
-false
 true
 false
+true
 true
 

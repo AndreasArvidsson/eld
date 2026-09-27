@@ -1,0 +1,1160 @@
+const left: List<i32> = new ArrayList<i32>();
+const right: List<i32> = new LinkedList<i32>();
+const same: List<i32> = new ArrayList<i32>();
+const different: List<i32> = new ArrayList<i32>();
+left.add(1);
+right.add(1);
+same.add(1);
+different.add(2);
+print(left == right);
+print(left.equals(right));
+print(left == same);
+print(left.equals(same));
+print(left == different);
+const dynamicLeft: any = left;
+const dynamicSame: any = same;
+print(dynamicLeft == dynamicSame);
+print(dynamicLeft == dynamicLeft);
+const nullableLeft: List<i32> | null = left;
+const nullableSame: List<i32> | null = same;
+print(nullableLeft == nullableSame);
+const nullableEmpty: List<i32> | null = null;
+print(nullableEmpty == nullableEmpty);
+print(nullableLeft == nullableEmpty);
+print(nullableEmpty == nullableLeft);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "left" (1:7-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "List" (1:13-1:17)
+LESS (1:17-1:18)
+IDENTIFIER "i32" (1:18-1:21)
+GREATER (1:21-1:22)
+EQUAL (1:23-1:24)
+NEW (1:25-1:28)
+IDENTIFIER "ArrayList" (1:29-1:38)
+LESS (1:38-1:39)
+IDENTIFIER "i32" (1:39-1:42)
+GREATER (1:42-1:43)
+LEFT_PAREN (1:43-1:44)
+RIGHT_PAREN (1:44-1:45)
+SEMICOLON (1:45-1:46)
+CONST (2:1-2:6)
+IDENTIFIER "right" (2:7-2:12)
+COLON (2:12-2:13)
+IDENTIFIER "List" (2:14-2:18)
+LESS (2:18-2:19)
+IDENTIFIER "i32" (2:19-2:22)
+GREATER (2:22-2:23)
+EQUAL (2:24-2:25)
+NEW (2:26-2:29)
+IDENTIFIER "LinkedList" (2:30-2:40)
+LESS (2:40-2:41)
+IDENTIFIER "i32" (2:41-2:44)
+GREATER (2:44-2:45)
+LEFT_PAREN (2:45-2:46)
+RIGHT_PAREN (2:46-2:47)
+SEMICOLON (2:47-2:48)
+CONST (3:1-3:6)
+IDENTIFIER "same" (3:7-3:11)
+COLON (3:11-3:12)
+IDENTIFIER "List" (3:13-3:17)
+LESS (3:17-3:18)
+IDENTIFIER "i32" (3:18-3:21)
+GREATER (3:21-3:22)
+EQUAL (3:23-3:24)
+NEW (3:25-3:28)
+IDENTIFIER "ArrayList" (3:29-3:38)
+LESS (3:38-3:39)
+IDENTIFIER "i32" (3:39-3:42)
+GREATER (3:42-3:43)
+LEFT_PAREN (3:43-3:44)
+RIGHT_PAREN (3:44-3:45)
+SEMICOLON (3:45-3:46)
+CONST (4:1-4:6)
+IDENTIFIER "different" (4:7-4:16)
+COLON (4:16-4:17)
+IDENTIFIER "List" (4:18-4:22)
+LESS (4:22-4:23)
+IDENTIFIER "i32" (4:23-4:26)
+GREATER (4:26-4:27)
+EQUAL (4:28-4:29)
+NEW (4:30-4:33)
+IDENTIFIER "ArrayList" (4:34-4:43)
+LESS (4:43-4:44)
+IDENTIFIER "i32" (4:44-4:47)
+GREATER (4:47-4:48)
+LEFT_PAREN (4:48-4:49)
+RIGHT_PAREN (4:49-4:50)
+SEMICOLON (4:50-4:51)
+IDENTIFIER "left" (5:1-5:5)
+DOT (5:5-5:6)
+IDENTIFIER "add" (5:6-5:9)
+LEFT_PAREN (5:9-5:10)
+INTEGER_LITERAL "1" (5:10-5:11)
+RIGHT_PAREN (5:11-5:12)
+SEMICOLON (5:12-5:13)
+IDENTIFIER "right" (6:1-6:6)
+DOT (6:6-6:7)
+IDENTIFIER "add" (6:7-6:10)
+LEFT_PAREN (6:10-6:11)
+INTEGER_LITERAL "1" (6:11-6:12)
+RIGHT_PAREN (6:12-6:13)
+SEMICOLON (6:13-6:14)
+IDENTIFIER "same" (7:1-7:5)
+DOT (7:5-7:6)
+IDENTIFIER "add" (7:6-7:9)
+LEFT_PAREN (7:9-7:10)
+INTEGER_LITERAL "1" (7:10-7:11)
+RIGHT_PAREN (7:11-7:12)
+SEMICOLON (7:12-7:13)
+IDENTIFIER "different" (8:1-8:10)
+DOT (8:10-8:11)
+IDENTIFIER "add" (8:11-8:14)
+LEFT_PAREN (8:14-8:15)
+INTEGER_LITERAL "2" (8:15-8:16)
+RIGHT_PAREN (8:16-8:17)
+SEMICOLON (8:17-8:18)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "left" (9:7-9:11)
+EQUAL_EQUAL (9:12-9:14)
+IDENTIFIER "right" (9:15-9:20)
+RIGHT_PAREN (9:20-9:21)
+SEMICOLON (9:21-9:22)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "left" (10:7-10:11)
+DOT (10:11-10:12)
+IDENTIFIER "equals" (10:12-10:18)
+LEFT_PAREN (10:18-10:19)
+IDENTIFIER "right" (10:19-10:24)
+RIGHT_PAREN (10:24-10:25)
+RIGHT_PAREN (10:25-10:26)
+SEMICOLON (10:26-10:27)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "left" (11:7-11:11)
+EQUAL_EQUAL (11:12-11:14)
+IDENTIFIER "same" (11:15-11:19)
+RIGHT_PAREN (11:19-11:20)
+SEMICOLON (11:20-11:21)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "left" (12:7-12:11)
+DOT (12:11-12:12)
+IDENTIFIER "equals" (12:12-12:18)
+LEFT_PAREN (12:18-12:19)
+IDENTIFIER "same" (12:19-12:23)
+RIGHT_PAREN (12:23-12:24)
+RIGHT_PAREN (12:24-12:25)
+SEMICOLON (12:25-12:26)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "left" (13:7-13:11)
+EQUAL_EQUAL (13:12-13:14)
+IDENTIFIER "different" (13:15-13:24)
+RIGHT_PAREN (13:24-13:25)
+SEMICOLON (13:25-13:26)
+CONST (14:1-14:6)
+IDENTIFIER "dynamicLeft" (14:7-14:18)
+COLON (14:18-14:19)
+IDENTIFIER "any" (14:20-14:23)
+EQUAL (14:24-14:25)
+IDENTIFIER "left" (14:26-14:30)
+SEMICOLON (14:30-14:31)
+CONST (15:1-15:6)
+IDENTIFIER "dynamicSame" (15:7-15:18)
+COLON (15:18-15:19)
+IDENTIFIER "any" (15:20-15:23)
+EQUAL (15:24-15:25)
+IDENTIFIER "same" (15:26-15:30)
+SEMICOLON (15:30-15:31)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "dynamicLeft" (16:7-16:18)
+EQUAL_EQUAL (16:19-16:21)
+IDENTIFIER "dynamicSame" (16:22-16:33)
+RIGHT_PAREN (16:33-16:34)
+SEMICOLON (16:34-16:35)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "dynamicLeft" (17:7-17:18)
+EQUAL_EQUAL (17:19-17:21)
+IDENTIFIER "dynamicLeft" (17:22-17:33)
+RIGHT_PAREN (17:33-17:34)
+SEMICOLON (17:34-17:35)
+CONST (18:1-18:6)
+IDENTIFIER "nullableLeft" (18:7-18:19)
+COLON (18:19-18:20)
+IDENTIFIER "List" (18:21-18:25)
+LESS (18:25-18:26)
+IDENTIFIER "i32" (18:26-18:29)
+GREATER (18:29-18:30)
+PIPE (18:31-18:32)
+NULL (18:33-18:37)
+EQUAL (18:38-18:39)
+IDENTIFIER "left" (18:40-18:44)
+SEMICOLON (18:44-18:45)
+CONST (19:1-19:6)
+IDENTIFIER "nullableSame" (19:7-19:19)
+COLON (19:19-19:20)
+IDENTIFIER "List" (19:21-19:25)
+LESS (19:25-19:26)
+IDENTIFIER "i32" (19:26-19:29)
+GREATER (19:29-19:30)
+PIPE (19:31-19:32)
+NULL (19:33-19:37)
+EQUAL (19:38-19:39)
+IDENTIFIER "same" (19:40-19:44)
+SEMICOLON (19:44-19:45)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "nullableLeft" (20:7-20:19)
+EQUAL_EQUAL (20:20-20:22)
+IDENTIFIER "nullableSame" (20:23-20:35)
+RIGHT_PAREN (20:35-20:36)
+SEMICOLON (20:36-20:37)
+CONST (21:1-21:6)
+IDENTIFIER "nullableEmpty" (21:7-21:20)
+COLON (21:20-21:21)
+IDENTIFIER "List" (21:22-21:26)
+LESS (21:26-21:27)
+IDENTIFIER "i32" (21:27-21:30)
+GREATER (21:30-21:31)
+PIPE (21:32-21:33)
+NULL (21:34-21:38)
+EQUAL (21:39-21:40)
+NULL (21:41-21:45)
+SEMICOLON (21:45-21:46)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "nullableEmpty" (22:7-22:20)
+EQUAL_EQUAL (22:21-22:23)
+IDENTIFIER "nullableEmpty" (22:24-22:37)
+RIGHT_PAREN (22:37-22:38)
+SEMICOLON (22:38-22:39)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "nullableLeft" (23:7-23:19)
+EQUAL_EQUAL (23:20-23:22)
+IDENTIFIER "nullableEmpty" (23:23-23:36)
+RIGHT_PAREN (23:36-23:37)
+SEMICOLON (23:37-23:38)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "nullableEmpty" (24:7-24:20)
+EQUAL_EQUAL (24:21-24:23)
+IDENTIFIER "nullableLeft" (24:24-24:36)
+RIGHT_PAREN (24:36-24:37)
+SEMICOLON (24:37-24:38)
+
+--- AST ---
+
+(Program
+  range: 1:1-24:38
+  (VariableDeclaration
+    range: 1:1-1:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "left"
+    )
+    (NamedTypeNode
+      range: 1:13-1:22
+      name: "List"
+      (NamedTypeNode
+        range: 1:18-1:21
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 1:25-1:45
+      (IdentifierExpression
+        range: 1:29-1:38
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 1:39-1:42
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:12
+      name: "right"
+    )
+    (NamedTypeNode
+      range: 2:14-2:23
+      name: "List"
+      (NamedTypeNode
+        range: 2:19-2:22
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 2:26-2:47
+      (IdentifierExpression
+        range: 2:30-2:40
+        name: "LinkedList"
+      )
+      (NamedTypeNode
+        range: 2:41-2:44
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:11
+      name: "same"
+    )
+    (NamedTypeNode
+      range: 3:13-3:22
+      name: "List"
+      (NamedTypeNode
+        range: 3:18-3:21
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 3:25-3:45
+      (IdentifierExpression
+        range: 3:29-3:38
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 3:39-3:42
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:16
+      name: "different"
+    )
+    (NamedTypeNode
+      range: 4:18-4:27
+      name: "List"
+      (NamedTypeNode
+        range: 4:23-4:26
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 4:30-4:50
+      (IdentifierExpression
+        range: 4:34-4:43
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 4:44-4:47
+        name: "i32"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:13
+    (CallExpression
+      range: 5:1-5:12
+      (MemberExpression
+        range: 5:1-5:9
+        (IdentifierExpression
+          range: 5:1-5:5
+          name: "left"
+        )
+        (IdentifierExpression
+          range: 5:6-5:9
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 5:10-5:11
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:14
+    (CallExpression
+      range: 6:1-6:13
+      (MemberExpression
+        range: 6:1-6:10
+        (IdentifierExpression
+          range: 6:1-6:6
+          name: "right"
+        )
+        (IdentifierExpression
+          range: 6:7-6:10
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 6:11-6:12
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:13
+    (CallExpression
+      range: 7:1-7:12
+      (MemberExpression
+        range: 7:1-7:9
+        (IdentifierExpression
+          range: 7:1-7:5
+          name: "same"
+        )
+        (IdentifierExpression
+          range: 7:6-7:9
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 7:10-7:11
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:18
+    (CallExpression
+      range: 8:1-8:17
+      (MemberExpression
+        range: 8:1-8:14
+        (IdentifierExpression
+          range: 8:1-8:10
+          name: "different"
+        )
+        (IdentifierExpression
+          range: 8:11-8:14
+          name: "add"
+        )
+      )
+      (LiteralExpression
+        range: 8:15-8:16
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:22
+    (CallExpression
+      range: 9:1-9:21
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:20
+        (IdentifierExpression
+          range: 9:7-9:11
+          name: "left"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 9:15-9:20
+          name: "right"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:27
+    (CallExpression
+      range: 10:1-10:26
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:25
+        (MemberExpression
+          range: 10:7-10:18
+          (IdentifierExpression
+            range: 10:7-10:11
+            name: "left"
+          )
+          (IdentifierExpression
+            range: 10:12-10:18
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 10:19-10:24
+          name: "right"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:21
+    (CallExpression
+      range: 11:1-11:20
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 11:7-11:19
+        (IdentifierExpression
+          range: 11:7-11:11
+          name: "left"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 11:15-11:19
+          name: "same"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:26
+    (CallExpression
+      range: 12:1-12:25
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:24
+        (MemberExpression
+          range: 12:7-12:18
+          (IdentifierExpression
+            range: 12:7-12:11
+            name: "left"
+          )
+          (IdentifierExpression
+            range: 12:12-12:18
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 12:19-12:23
+          name: "same"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:26
+    (CallExpression
+      range: 13:1-13:25
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:24
+        (IdentifierExpression
+          range: 13:7-13:11
+          name: "left"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 13:15-13:24
+          name: "different"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:18
+      name: "dynamicLeft"
+    )
+    (NamedTypeNode
+      range: 14:20-14:23
+      name: "any"
+    )
+    (IdentifierExpression
+      range: 14:26-14:30
+      name: "left"
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:18
+      name: "dynamicSame"
+    )
+    (NamedTypeNode
+      range: 15:20-15:23
+      name: "any"
+    )
+    (IdentifierExpression
+      range: 15:26-15:30
+      name: "same"
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:35
+    (CallExpression
+      range: 16:1-16:34
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 16:7-16:33
+        (IdentifierExpression
+          range: 16:7-16:18
+          name: "dynamicLeft"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 16:22-16:33
+          name: "dynamicSame"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:35
+    (CallExpression
+      range: 17:1-17:34
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 17:7-17:33
+        (IdentifierExpression
+          range: 17:7-17:18
+          name: "dynamicLeft"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 17:22-17:33
+          name: "dynamicLeft"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:19
+      name: "nullableLeft"
+    )
+    (UnionTypeNode
+      range: 18:21-18:37
+      (NamedTypeNode
+        range: 18:21-18:30
+        name: "List"
+        (NamedTypeNode
+          range: 18:26-18:29
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 18:33-18:37
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 18:40-18:44
+      name: "left"
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:19
+      name: "nullableSame"
+    )
+    (UnionTypeNode
+      range: 19:21-19:37
+      (NamedTypeNode
+        range: 19:21-19:30
+        name: "List"
+        (NamedTypeNode
+          range: 19:26-19:29
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 19:33-19:37
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 19:40-19:44
+      name: "same"
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:37
+    (CallExpression
+      range: 20:1-20:36
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 20:7-20:35
+        (IdentifierExpression
+          range: 20:7-20:19
+          name: "nullableLeft"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 20:23-20:35
+          name: "nullableSame"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:20
+      name: "nullableEmpty"
+    )
+    (UnionTypeNode
+      range: 21:22-21:38
+      (NamedTypeNode
+        range: 21:22-21:31
+        name: "List"
+        (NamedTypeNode
+          range: 21:27-21:30
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 21:34-21:38
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 21:41-21:45
+      kind: NULL
+      text: "null"
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:39
+    (CallExpression
+      range: 22:1-22:38
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 22:7-22:37
+        (IdentifierExpression
+          range: 22:7-22:20
+          name: "nullableEmpty"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 22:24-22:37
+          name: "nullableEmpty"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:38
+    (CallExpression
+      range: 23:1-23:37
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 23:7-23:36
+        (IdentifierExpression
+          range: 23:7-23:19
+          name: "nullableLeft"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 23:23-23:36
+          name: "nullableEmpty"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:38
+    (CallExpression
+      range: 24:1-24:37
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 24:7-24:36
+        (IdentifierExpression
+          range: 24:7-24:20
+          name: "nullableEmpty"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 24:24-24:36
+          name: "nullableLeft"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:25-1:45 -> ArrayList<i32>
+  1:29-1:38 -> ArrayList<i32>
+  2:26-2:47 -> LinkedList<i32>
+  2:30-2:40 -> LinkedList<i32>
+  3:25-3:45 -> ArrayList<i32>
+  3:29-3:38 -> ArrayList<i32>
+  4:30-4:50 -> ArrayList<i32>
+  4:34-4:43 -> ArrayList<i32>
+  5:1-5:5 -> List<i32>
+  5:1-5:9 -> (i32) => bool
+  5:1-5:12 -> bool
+  5:6-5:9 -> (i32) => bool
+  5:10-5:11 -> i32
+  6:1-6:6 -> List<i32>
+  6:1-6:10 -> (i32) => bool
+  6:1-6:13 -> bool
+  6:7-6:10 -> (i32) => bool
+  6:11-6:12 -> i32
+  7:1-7:5 -> List<i32>
+  7:1-7:9 -> (i32) => bool
+  7:1-7:12 -> bool
+  7:6-7:9 -> (i32) => bool
+  7:10-7:11 -> i32
+  8:1-8:10 -> List<i32>
+  8:1-8:14 -> (i32) => bool
+  8:1-8:17 -> bool
+  8:11-8:14 -> (i32) => bool
+  8:15-8:16 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:21 -> void
+  9:7-9:11 -> List<i32>
+  9:7-9:20 -> bool
+  9:15-9:20 -> List<i32>
+  10:1-10:6 -> (any) => void
+  10:1-10:26 -> void
+  10:7-10:11 -> List<i32>
+  10:7-10:18 -> (List<i32>) => bool
+  10:7-10:25 -> bool
+  10:12-10:18 -> (List<i32>) => bool
+  10:19-10:24 -> List<i32>
+  11:1-11:6 -> (any) => void
+  11:1-11:20 -> void
+  11:7-11:11 -> List<i32>
+  11:7-11:19 -> bool
+  11:15-11:19 -> List<i32>
+  12:1-12:6 -> (any) => void
+  12:1-12:25 -> void
+  12:7-12:11 -> List<i32>
+  12:7-12:18 -> (List<i32>) => bool
+  12:7-12:24 -> bool
+  12:12-12:18 -> (List<i32>) => bool
+  12:19-12:23 -> List<i32>
+  13:1-13:6 -> (any) => void
+  13:1-13:25 -> void
+  13:7-13:11 -> List<i32>
+  13:7-13:24 -> bool
+  13:15-13:24 -> List<i32>
+  14:26-14:30 -> List<i32>
+  15:26-15:30 -> List<i32>
+  16:1-16:6 -> (any) => void
+  16:1-16:34 -> void
+  16:7-16:18 -> any
+  16:7-16:33 -> bool
+  16:22-16:33 -> any
+  17:1-17:6 -> (any) => void
+  17:1-17:34 -> void
+  17:7-17:18 -> any
+  17:7-17:33 -> bool
+  17:22-17:33 -> any
+  18:40-18:44 -> List<i32>
+  19:40-19:44 -> List<i32>
+  20:1-20:6 -> (any) => void
+  20:1-20:36 -> void
+  20:7-20:19 -> List<i32> | null
+  20:7-20:35 -> bool
+  20:23-20:35 -> List<i32> | null
+  21:41-21:45 -> null
+  22:1-22:6 -> (any) => void
+  22:1-22:38 -> void
+  22:7-22:20 -> List<i32> | null
+  22:7-22:37 -> bool
+  22:24-22:37 -> List<i32> | null
+  23:1-23:6 -> (any) => void
+  23:1-23:37 -> void
+  23:7-23:19 -> List<i32> | null
+  23:7-23:36 -> bool
+  23:23-23:36 -> List<i32> | null
+  24:1-24:6 -> (any) => void
+  24:1-24:37 -> void
+  24:7-24:20 -> List<i32> | null
+  24:7-24:36 -> bool
+  24:24-24:36 -> List<i32> | null
+
+Resolved types:
+  1:13-1:22 -> List<i32>
+  1:18-1:21 -> i32
+  1:25-1:45 -> ArrayList<i32>
+  1:39-1:42 -> i32
+  2:14-2:23 -> List<i32>
+  2:19-2:22 -> i32
+  2:26-2:47 -> LinkedList<i32>
+  2:41-2:44 -> i32
+  3:13-3:22 -> List<i32>
+  3:18-3:21 -> i32
+  3:25-3:45 -> ArrayList<i32>
+  3:39-3:42 -> i32
+  4:18-4:27 -> List<i32>
+  4:23-4:26 -> i32
+  4:30-4:50 -> ArrayList<i32>
+  4:44-4:47 -> i32
+  14:20-14:23 -> any
+  15:20-15:23 -> any
+  18:21-18:30 -> List<i32>
+  18:21-18:37 -> List<i32> | null
+  18:26-18:29 -> i32
+  18:33-18:37 -> null
+  19:21-19:30 -> List<i32>
+  19:21-19:37 -> List<i32> | null
+  19:26-19:29 -> i32
+  19:33-19:37 -> null
+  21:22-21:31 -> List<i32>
+  21:22-21:38 -> List<i32> | null
+  21:27-21:30 -> i32
+  21:34-21:38 -> null
+
+Conversions:
+  14:26-14:30 -> List<i32> -> any
+  15:26-15:30 -> List<i32> -> any
+  18:40-18:44 -> List<i32> -> List<i32> | null
+  19:40-19:44 -> List<i32> -> List<i32> | null
+  21:41-21:45 -> null -> List<i32> | null
+
+Declarations:
+  1:7-1:11 -> const left: List<i32>
+  2:7-2:12 -> const right: List<i32>
+  3:7-3:11 -> const same: List<i32>
+  4:7-4:16 -> const different: List<i32>
+  14:7-14:18 -> const dynamicLeft: any
+  15:7-15:18 -> const dynamicSame: any
+  18:7-18:19 -> const nullableLeft: List<i32> | null
+  19:7-19:19 -> const nullableSame: List<i32> | null
+  21:7-21:20 -> const nullableEmpty: List<i32> | null
+
+References:
+  1:29-1:38 -> 1:25-1:45
+  2:30-2:40 -> 2:26-2:47
+  3:29-3:38 -> 3:25-3:45
+  4:34-4:43 -> 4:30-4:50
+  5:1-5:5 -> 1:7-1:11
+  5:6-5:9 -> List<i32>.add(i32): bool
+  6:1-6:6 -> 2:7-2:12
+  6:7-6:10 -> List<i32>.add(i32): bool
+  7:1-7:5 -> 3:7-3:11
+  7:6-7:9 -> List<i32>.add(i32): bool
+  8:1-8:10 -> 4:7-4:16
+  8:11-8:14 -> List<i32>.add(i32): bool
+  9:1-9:6 -> builtin print
+  9:7-9:11 -> 1:7-1:11
+  9:15-9:20 -> 2:7-2:12
+  10:1-10:6 -> builtin print
+  10:7-10:11 -> 1:7-1:11
+  10:12-10:18 -> List<i32>.equals(List<i32>): bool
+  10:19-10:24 -> 2:7-2:12
+  11:1-11:6 -> builtin print
+  11:7-11:11 -> 1:7-1:11
+  11:15-11:19 -> 3:7-3:11
+  12:1-12:6 -> builtin print
+  12:7-12:11 -> 1:7-1:11
+  12:12-12:18 -> List<i32>.equals(List<i32>): bool
+  12:19-12:23 -> 3:7-3:11
+  13:1-13:6 -> builtin print
+  13:7-13:11 -> 1:7-1:11
+  13:15-13:24 -> 4:7-4:16
+  14:26-14:30 -> 1:7-1:11
+  15:26-15:30 -> 3:7-3:11
+  16:1-16:6 -> builtin print
+  16:7-16:18 -> 14:7-14:18
+  16:22-16:33 -> 15:7-15:18
+  17:1-17:6 -> builtin print
+  17:7-17:18 -> 14:7-14:18
+  17:22-17:33 -> 14:7-14:18
+  18:40-18:44 -> 1:7-1:11
+  19:40-19:44 -> 3:7-3:11
+  20:1-20:6 -> builtin print
+  20:7-20:19 -> 18:7-18:19
+  20:23-20:35 -> 19:7-19:19
+  22:1-22:6 -> builtin print
+  22:7-22:20 -> 21:7-21:20
+  22:24-22:37 -> 21:7-21:20
+  23:1-23:6 -> builtin print
+  23:7-23:19 -> 18:7-18:19
+  23:23-23:36 -> 21:7-21:20
+  24:1-24:6 -> builtin print
+  24:7-24:20 -> 21:7-21:20
+  24:24-24:36 -> 18:7-18:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field left Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field right Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field same Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field different Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field dynamicLeft Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicSame Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field nullableLeft Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field nullableSame Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field nullableEmpty Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.left Ljava/util/List;
+    NEW java/util/LinkedList
+    DUP
+    INVOKESPECIAL java/util/LinkedList.<init>()V
+    PUTSTATIC Test.right Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.same Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.different Ljava/util/List;
+    GETSTATIC Test.left Ljava/util/List;
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/List.add(Ljava/lang/Object;)Z
+    POP
+    GETSTATIC Test.right Ljava/util/List;
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/List.add(Ljava/lang/Object;)Z
+    POP
+    GETSTATIC Test.same Ljava/util/List;
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/List.add(Ljava/lang/Object;)Z
+    POP
+    GETSTATIC Test.different Ljava/util/List;
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEINTERFACE java/util/List.add(Ljava/lang/Object;)Z
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/util/List;
+    GETSTATIC Test.right Ljava/util/List;
+    INVOKEINTERFACE java/util/List.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/util/List;
+    GETSTATIC Test.right Ljava/util/List;
+    INVOKEINTERFACE java/util/List.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/util/List;
+    GETSTATIC Test.same Ljava/util/List;
+    INVOKEINTERFACE java/util/List.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/util/List;
+    GETSTATIC Test.same Ljava/util/List;
+    INVOKEINTERFACE java/util/List.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/util/List;
+    GETSTATIC Test.different Ljava/util/List;
+    INVOKEINTERFACE java/util/List.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.left Ljava/util/List;
+    PUTSTATIC Test.dynamicLeft Ljava/lang/Object;
+    GETSTATIC Test.same Ljava/util/List;
+    PUTSTATIC Test.dynamicSame Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicLeft Ljava/lang/Object;
+    GETSTATIC Test.dynamicSame Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicLeft Ljava/lang/Object;
+    GETSTATIC Test.dynamicLeft Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.left Ljava/util/List;
+    PUTSTATIC Test.nullableLeft Ljava/util/List;
+    GETSTATIC Test.same Ljava/util/List;
+    PUTSTATIC Test.nullableSame Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableLeft Ljava/util/List;
+    GETSTATIC Test.nullableSame Ljava/util/List;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.nullableEmpty Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableEmpty Ljava/util/List;
+    GETSTATIC Test.nullableEmpty Ljava/util/List;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableLeft Ljava/util/List;
+    GETSTATIC Test.nullableEmpty Ljava/util/List;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableEmpty Ljava/util/List;
+    GETSTATIC Test.nullableLeft Ljava/util/List;
+    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+false
+true
+true
+true
+true
+false
+false
+

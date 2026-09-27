@@ -44,8 +44,6 @@ Expression types:
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
-    GOTO L0
-   L0:
     RETURN
     max stack 0 max locals 0
 

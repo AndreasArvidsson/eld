@@ -1,0 +1,372 @@
+class Compare {
+    public static const func equal(a: Compare, b: Compare) bool { return true; }
+    public const override func hashCode() i32 { return 0; }
+}
+
+func unsafe(value: Compare | null) {
+    switch (value) {
+        case null { const narrowed: null = value; }
+        else => print("other")
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Compare" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+FUNC (2:25-2:29)
+IDENTIFIER "equal" (2:30-2:35)
+LEFT_PAREN (2:35-2:36)
+IDENTIFIER "a" (2:36-2:37)
+COLON (2:37-2:38)
+IDENTIFIER "Compare" (2:39-2:46)
+COMMA (2:46-2:47)
+IDENTIFIER "b" (2:48-2:49)
+COLON (2:49-2:50)
+IDENTIFIER "Compare" (2:51-2:58)
+RIGHT_PAREN (2:58-2:59)
+IDENTIFIER "bool" (2:60-2:64)
+LEFT_BRACE (2:65-2:66)
+RETURN (2:67-2:73)
+BOOLEAN_LITERAL "true" (2:74-2:78)
+SEMICOLON (2:78-2:79)
+RIGHT_BRACE (2:80-2:81)
+PUBLIC (3:5-3:11)
+CONST (3:12-3:17)
+OVERRIDE (3:18-3:26)
+FUNC (3:27-3:31)
+IDENTIFIER "hashCode" (3:32-3:40)
+LEFT_PAREN (3:40-3:41)
+RIGHT_PAREN (3:41-3:42)
+IDENTIFIER "i32" (3:43-3:46)
+LEFT_BRACE (3:47-3:48)
+RETURN (3:49-3:55)
+INTEGER_LITERAL "0" (3:56-3:57)
+SEMICOLON (3:57-3:58)
+RIGHT_BRACE (3:59-3:60)
+RIGHT_BRACE (4:1-4:2)
+FUNC (6:1-6:5)
+IDENTIFIER "unsafe" (6:6-6:12)
+LEFT_PAREN (6:12-6:13)
+IDENTIFIER "value" (6:13-6:18)
+COLON (6:18-6:19)
+IDENTIFIER "Compare" (6:20-6:27)
+PIPE (6:28-6:29)
+NULL (6:30-6:34)
+RIGHT_PAREN (6:34-6:35)
+LEFT_BRACE (6:36-6:37)
+SWITCH (7:5-7:11)
+LEFT_PAREN (7:12-7:13)
+IDENTIFIER "value" (7:13-7:18)
+RIGHT_PAREN (7:18-7:19)
+LEFT_BRACE (7:20-7:21)
+CASE (8:9-8:13)
+NULL (8:14-8:18)
+LEFT_BRACE (8:19-8:20)
+CONST (8:21-8:26)
+IDENTIFIER "narrowed" (8:27-8:35)
+COLON (8:35-8:36)
+NULL (8:37-8:41)
+EQUAL (8:42-8:43)
+IDENTIFIER "value" (8:44-8:49)
+SEMICOLON (8:49-8:50)
+RIGHT_BRACE (8:51-8:52)
+ELSE (9:9-9:13)
+ARROW (9:14-9:16)
+IDENTIFIER "print" (9:17-9:22)
+LEFT_PAREN (9:22-9:23)
+STRING_LITERAL "\"other\"" (9:23-9:30)
+RIGHT_PAREN (9:30-9:31)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Compare"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:81
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:81
+        CONST
+        (IdentifierDeclaration
+          range: 2:30-2:35
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:36-2:46
+          (IdentifierDeclaration
+            range: 2:36-2:37
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:39-2:46
+            name: "Compare"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:48-2:58
+          (IdentifierDeclaration
+            range: 2:48-2:49
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:51-2:58
+            name: "Compare"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:60-2:64
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:65-2:81
+          (ReturnStatement
+            range: 2:67-2:79
+            (LiteralExpression
+              range: 2:74-2:78
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:60
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:60
+        CONST
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 3:32-3:40
+          name: "hashCode"
+        )
+        (NamedTypeNode
+          range: 3:43-3:46
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:47-3:60
+          (ReturnStatement
+            range: 3:49-3:58
+            (LiteralExpression
+              range: 3:56-3:57
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 6:1-11:2
+    (IdentifierDeclaration
+      range: 6:6-6:12
+      name: "unsafe"
+    )
+    (FunctionParameter
+      range: 6:13-6:34
+      (IdentifierDeclaration
+        range: 6:13-6:18
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 6:20-6:34
+        (NamedTypeNode
+          range: 6:20-6:27
+          name: "Compare"
+        )
+        (NamedTypeNode
+          range: 6:30-6:34
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 6:36-11:2
+      (ExpressionStatement
+        range: 7:5-10:6
+        (SwitchExpression
+          range: 7:5-10:6
+          (IdentifierExpression
+            range: 7:13-7:18
+            name: "value"
+          )
+          (SwitchBranch
+            range: 8:9-8:52
+            (LiteralExpression
+              range: 8:14-8:18
+              kind: NULL
+              text: "null"
+            )
+            (SwitchBranchBlockBody
+              range: 8:19-8:52
+              (BlockStatement
+                range: 8:19-8:52
+                (VariableDeclaration
+                  range: 8:21-8:50
+                  mutability: CONST
+                  (IdentifierDeclaration
+                    range: 8:27-8:35
+                    name: "narrowed"
+                  )
+                  (NamedTypeNode
+                    range: 8:37-8:41
+                    name: "null"
+                  )
+                  (IdentifierExpression
+                    range: 8:44-8:49
+                    name: "value"
+                  )
+                )
+              )
+            )
+          )
+          (SwitchElseBranch
+            range: 9:9-9:31
+            (SwitchBranchExpressionBody
+              range: 9:17-9:31
+              (CallExpression
+                range: 9:17-9:31
+                (IdentifierExpression
+                  range: 9:17-9:22
+                  name: "print"
+                )
+                (LiteralExpression
+                  range: 9:23-9:30
+                  kind: STRING
+                  text: "\"other\""
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:74-2:78 -> bool
+  3:56-3:57 -> i32
+  7:5-10:6 -> void
+  7:13-7:18 -> Compare | null
+  8:14-8:18 -> null
+  8:44-8:49 -> null
+  9:17-9:22 -> (any) => void
+  9:17-9:31 -> void
+  9:23-9:30 -> string
+
+Narrowed types:
+  8:44-8:49 -> Compare | null -> null
+
+Resolved types:
+  2:39-2:46 -> Compare
+  2:51-2:58 -> Compare
+  2:60-2:64 -> bool
+  3:43-3:46 -> i32
+  6:20-6:27 -> Compare
+  6:20-6:34 -> Compare | null
+  6:30-6:34 -> null
+  8:37-8:41 -> null
+
+Conversions:
+  8:14-8:18 -> null -> Compare | null
+
+Declarations:
+  1:7-1:14 -> class Compare
+  2:30-2:35 -> const func equal(Compare, Compare) => bool
+  2:36-2:37 -> const a: Compare
+  2:48-2:49 -> const b: Compare
+  3:32-3:40 -> const override func hashCode() => i32
+  6:6-6:12 -> func unsafe(Compare | null) => void
+  6:13-6:18 -> const value: Compare | null
+  8:27-8:35 -> const narrowed: null
+
+References:
+  7:13-7:18 -> 6:13-6:18
+  8:44-8:49 -> 6:13-6:18
+  9:17-9:22 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Compare
+  inner class Test$Compare flags [PUBLIC, STATIC]
+  method unsafe(LTest$Compare;)V flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    ASTORE_1 1
+    ALOAD_1 1
+    IFNULL L0
+    GOTO L1
+   L0:
+    ALOAD_0 0
+    ASTORE_2 2
+    GOTO L2
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "other"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L2:
+    RETURN
+    max stack 2 max locals 3
+
+class Test$Compare extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Compare flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Compare;LTest$Compare;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Compare
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Compare
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+  method hashCode()I flags [PUBLIC]
+    LDC 0
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+

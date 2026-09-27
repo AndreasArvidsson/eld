@@ -192,8 +192,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_0 0
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L2
-   L2:
     RETURN
     catch java/lang/IllegalArgumentException from L0 to L1 handler L1
     max stack 3 max locals 1

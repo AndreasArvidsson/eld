@@ -292,6 +292,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 2 max locals 0
 
 class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Example flags [PUBLIC, STATIC]
   field value I flags [PUBLIC, STATIC]

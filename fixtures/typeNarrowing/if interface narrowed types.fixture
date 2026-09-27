@@ -354,6 +354,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, 
 
 class Test$DerivedA extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Base
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$DerivedA flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -364,6 +365,7 @@ class Test$DerivedA extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 class Test$DerivedB extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Base
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$DerivedB flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

@@ -1212,6 +1212,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 2 max locals 0
 
 class Test$Runner extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Runner flags [PUBLIC, STATIC]
   field value I flags [PRIVATE]
@@ -1313,7 +1314,6 @@ class Test$$async1 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     GETFIELD Test$$async1.$local1 I
     IADD
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
-    GOTO L6
    L6:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "done"
@@ -1361,7 +1361,7 @@ class Test$$async2 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ATHROW
    L1:
     ICONST_0 0
-    IFEQ L4
+    IFEQ L3
     NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
     DUP
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
@@ -1379,8 +1379,6 @@ class Test$$async2 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_2 2
     ATHROW
    L3:
-    GOTO L4
-   L4:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "skipped"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
@@ -1388,14 +1386,14 @@ class Test$$async2 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     GETFIELD Test$$async2.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
     RETURN
-   L5:
+   L4:
     ASTORE_3 3
     ALOAD_0 0
     GETFIELD Test$$async2.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
     ALOAD_3 3
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
     RETURN
-    catch all from L1 to L5 handler L5
+    catch all from L1 to L4 handler L4
     max stack 3 max locals 4
 
 class Test$$async3 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]

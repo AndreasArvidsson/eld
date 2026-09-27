@@ -519,7 +519,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field zero I flags [PUBLIC, STATIC, FINAL] = 0
   field integerComparable Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
     signature Ljava/lang/Comparable<Ljava/lang/Integer;>;
-  field words Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field words Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "foo"
   field unionComparable Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
     signature Ljava/lang/Comparable<Ljava/lang/String;>;
   method compare(Ljava/lang/Comparable;)I flags [PUBLIC, STATIC]
@@ -550,10 +550,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
-    LDC "foo"
-    PUTSTATIC Test.words Ljava/lang/Object;
-    GETSTATIC Test.words Ljava/lang/Object;
-    CHECKCAST java/lang/Comparable
+    GETSTATIC Test.words Ljava/lang/String;
     PUTSTATIC Test.unionComparable Ljava/lang/Comparable;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.unionComparable Ljava/lang/Comparable;

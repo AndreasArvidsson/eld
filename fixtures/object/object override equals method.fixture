@@ -1,0 +1,437 @@
+class WithoutEquals {}
+class WithEquals {
+    public static func equal(a: WithEquals, b: WithEquals) bool { return true; }
+}
+print(new WithoutEquals() == new WithoutEquals());
+print(new WithEquals() == new WithEquals());
+const dynamicWithoutA: any = new WithoutEquals();
+const dynamicWithoutB: any = new WithoutEquals();
+print(dynamicWithoutA == dynamicWithoutB);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "WithoutEquals" (1:7-1:20)
+LEFT_BRACE (1:21-1:22)
+RIGHT_BRACE (1:22-1:23)
+CLASS (2:1-2:6)
+IDENTIFIER "WithEquals" (2:7-2:17)
+LEFT_BRACE (2:18-2:19)
+PUBLIC (3:5-3:11)
+STATIC (3:12-3:18)
+FUNC (3:19-3:23)
+IDENTIFIER "equal" (3:24-3:29)
+LEFT_PAREN (3:29-3:30)
+IDENTIFIER "a" (3:30-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "WithEquals" (3:33-3:43)
+COMMA (3:43-3:44)
+IDENTIFIER "b" (3:45-3:46)
+COLON (3:46-3:47)
+IDENTIFIER "WithEquals" (3:48-3:58)
+RIGHT_PAREN (3:58-3:59)
+IDENTIFIER "bool" (3:60-3:64)
+LEFT_BRACE (3:65-3:66)
+RETURN (3:67-3:73)
+BOOLEAN_LITERAL "true" (3:74-3:78)
+SEMICOLON (3:78-3:79)
+RIGHT_BRACE (3:80-3:81)
+RIGHT_BRACE (4:1-4:2)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+NEW (5:7-5:10)
+IDENTIFIER "WithoutEquals" (5:11-5:24)
+LEFT_PAREN (5:24-5:25)
+RIGHT_PAREN (5:25-5:26)
+EQUAL_EQUAL (5:27-5:29)
+NEW (5:30-5:33)
+IDENTIFIER "WithoutEquals" (5:34-5:47)
+LEFT_PAREN (5:47-5:48)
+RIGHT_PAREN (5:48-5:49)
+RIGHT_PAREN (5:49-5:50)
+SEMICOLON (5:50-5:51)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+NEW (6:7-6:10)
+IDENTIFIER "WithEquals" (6:11-6:21)
+LEFT_PAREN (6:21-6:22)
+RIGHT_PAREN (6:22-6:23)
+EQUAL_EQUAL (6:24-6:26)
+NEW (6:27-6:30)
+IDENTIFIER "WithEquals" (6:31-6:41)
+LEFT_PAREN (6:41-6:42)
+RIGHT_PAREN (6:42-6:43)
+RIGHT_PAREN (6:43-6:44)
+SEMICOLON (6:44-6:45)
+CONST (7:1-7:6)
+IDENTIFIER "dynamicWithoutA" (7:7-7:22)
+COLON (7:22-7:23)
+IDENTIFIER "any" (7:24-7:27)
+EQUAL (7:28-7:29)
+NEW (7:30-7:33)
+IDENTIFIER "WithoutEquals" (7:34-7:47)
+LEFT_PAREN (7:47-7:48)
+RIGHT_PAREN (7:48-7:49)
+SEMICOLON (7:49-7:50)
+CONST (8:1-8:6)
+IDENTIFIER "dynamicWithoutB" (8:7-8:22)
+COLON (8:22-8:23)
+IDENTIFIER "any" (8:24-8:27)
+EQUAL (8:28-8:29)
+NEW (8:30-8:33)
+IDENTIFIER "WithoutEquals" (8:34-8:47)
+LEFT_PAREN (8:47-8:48)
+RIGHT_PAREN (8:48-8:49)
+SEMICOLON (8:49-8:50)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "dynamicWithoutA" (9:7-9:22)
+EQUAL_EQUAL (9:23-9:25)
+IDENTIFIER "dynamicWithoutB" (9:26-9:41)
+RIGHT_PAREN (9:41-9:42)
+SEMICOLON (9:42-9:43)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:43
+  (ClassDeclaration
+    range: 1:1-1:23
+    (IdentifierDeclaration
+      range: 1:7-1:20
+      name: "WithoutEquals"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 2:1-4:2
+    (IdentifierDeclaration
+      range: 2:7-2:17
+      name: "WithEquals"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 3:5-3:81
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 3:19-3:81
+        (IdentifierDeclaration
+          range: 3:24-3:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 3:30-3:43
+          (IdentifierDeclaration
+            range: 3:30-3:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 3:33-3:43
+            name: "WithEquals"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 3:45-3:58
+          (IdentifierDeclaration
+            range: 3:45-3:46
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 3:48-3:58
+            name: "WithEquals"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:60-3:64
+          name: "bool"
+        )
+        (BlockStatement
+          range: 3:65-3:81
+          (ReturnStatement
+            range: 3:67-3:79
+            (LiteralExpression
+              range: 3:74-3:78
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:51
+    (CallExpression
+      range: 5:1-5:50
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 5:7-5:49
+        (NewExpression
+          range: 5:7-5:26
+          (IdentifierExpression
+            range: 5:11-5:24
+            name: "WithoutEquals"
+          )
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 5:30-5:49
+          (IdentifierExpression
+            range: 5:34-5:47
+            name: "WithoutEquals"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:45
+    (CallExpression
+      range: 6:1-6:44
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:43
+        (NewExpression
+          range: 6:7-6:23
+          (IdentifierExpression
+            range: 6:11-6:21
+            name: "WithEquals"
+          )
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 6:27-6:43
+          (IdentifierExpression
+            range: 6:31-6:41
+            name: "WithEquals"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:22
+      name: "dynamicWithoutA"
+    )
+    (NamedTypeNode
+      range: 7:24-7:27
+      name: "any"
+    )
+    (NewExpression
+      range: 7:30-7:49
+      (IdentifierExpression
+        range: 7:34-7:47
+        name: "WithoutEquals"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:22
+      name: "dynamicWithoutB"
+    )
+    (NamedTypeNode
+      range: 8:24-8:27
+      name: "any"
+    )
+    (NewExpression
+      range: 8:30-8:49
+      (IdentifierExpression
+        range: 8:34-8:47
+        name: "WithoutEquals"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:43
+    (CallExpression
+      range: 9:1-9:42
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:41
+        (IdentifierExpression
+          range: 9:7-9:22
+          name: "dynamicWithoutA"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 9:26-9:41
+          name: "dynamicWithoutB"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:74-3:78 -> bool
+  5:1-5:6 -> (any) => void
+  5:1-5:50 -> void
+  5:7-5:26 -> WithoutEquals
+  5:7-5:49 -> bool
+  5:11-5:24 -> WithoutEquals
+  5:30-5:49 -> WithoutEquals
+  5:34-5:47 -> WithoutEquals
+  6:1-6:6 -> (any) => void
+  6:1-6:44 -> void
+  6:7-6:23 -> WithEquals
+  6:7-6:43 -> bool
+  6:11-6:21 -> WithEquals
+  6:27-6:43 -> WithEquals
+  6:31-6:41 -> WithEquals
+  7:30-7:49 -> WithoutEquals
+  7:34-7:47 -> WithoutEquals
+  8:30-8:49 -> WithoutEquals
+  8:34-8:47 -> WithoutEquals
+  9:1-9:6 -> (any) => void
+  9:1-9:42 -> void
+  9:7-9:22 -> any
+  9:7-9:41 -> bool
+  9:26-9:41 -> any
+
+Resolved types:
+  3:33-3:43 -> WithEquals
+  3:48-3:58 -> WithEquals
+  3:60-3:64 -> bool
+  7:24-7:27 -> any
+  8:24-8:27 -> any
+
+Conversions:
+  7:30-7:49 -> WithoutEquals -> any
+  8:30-8:49 -> WithoutEquals -> any
+
+Declarations:
+  1:7-1:20 -> class WithoutEquals
+  2:7-2:17 -> class WithEquals
+  3:24-3:29 -> func equal(WithEquals, WithEquals) => bool
+  3:30-3:31 -> const a: WithEquals
+  3:45-3:46 -> const b: WithEquals
+  7:7-7:22 -> const dynamicWithoutA: any
+  8:7-8:22 -> const dynamicWithoutB: any
+
+References:
+  5:1-5:6 -> builtin print
+  5:11-5:24 -> 1:7-1:20
+  5:34-5:47 -> 1:7-1:20
+  6:1-6:6 -> builtin print
+  6:11-6:21 -> 2:7-2:17
+  6:31-6:41 -> 2:7-2:17
+  7:34-7:47 -> 1:7-1:20
+  8:34-8:47 -> 1:7-1:20
+  9:1-9:6 -> builtin print
+  9:7-9:22 -> 7:7-7:22
+  9:26-9:41 -> 8:7-8:22
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$WithoutEquals
+  nest member Test$WithEquals
+  inner class Test$WithoutEquals flags [PUBLIC, STATIC]
+  inner class Test$WithEquals flags [PUBLIC, STATIC]
+  field dynamicWithoutA Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicWithoutB Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$WithoutEquals
+    DUP
+    INVOKESPECIAL Test$WithoutEquals.<init>()V
+    NEW Test$WithoutEquals
+    DUP
+    INVOKESPECIAL Test$WithoutEquals.<init>()V
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$WithEquals
+    DUP
+    INVOKESPECIAL Test$WithEquals.<init>()V
+    NEW Test$WithEquals
+    DUP
+    INVOKESPECIAL Test$WithEquals.<init>()V
+    INVOKESTATIC Test$WithEquals.equal(LTest$WithEquals;LTest$WithEquals;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW Test$WithoutEquals
+    DUP
+    INVOKESPECIAL Test$WithoutEquals.<init>()V
+    PUTSTATIC Test.dynamicWithoutA Ljava/lang/Object;
+    NEW Test$WithoutEquals
+    DUP
+    INVOKESPECIAL Test$WithoutEquals.<init>()V
+    PUTSTATIC Test.dynamicWithoutB Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicWithoutA Ljava/lang/Object;
+    GETSTATIC Test.dynamicWithoutB Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$WithoutEquals extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$WithoutEquals flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$WithEquals extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$WithEquals flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$WithEquals;LTest$WithEquals;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$WithEquals
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$WithEquals
+    INVOKESTATIC Test$WithEquals.equal(LTest$WithEquals;LTest$WithEquals;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+false
+true
+false
+

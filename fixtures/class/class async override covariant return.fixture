@@ -472,6 +472,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 1 max locals 0
 
 class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Value flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -485,6 +486,7 @@ class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$DetailedValue flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -498,6 +500,7 @@ class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -536,6 +539,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 2 max locals 3
 
 class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Derived flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

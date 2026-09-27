@@ -1,0 +1,2145 @@
+const integer = 5;
+print(5 == integer);
+print(1 != integer);
+
+const floatNumber = 5.5;
+const floatZero = 0.0;
+print(5.5 == floatNumber);
+print(1.0 != floatNumber);
+print(floatZero == 0);
+print(floatZero == 0.0);
+
+const boolean = true;
+print(true == boolean);
+print(false != boolean);
+
+const character = 'A';
+print('A' == character);
+print('a' != character);
+
+const str = "hello";
+print("hello" == str);
+print("Hello" != str);
+print("""
+hello
+""" == str);
+
+class Base {}
+class Derived extends Base {}
+const base = new Base();
+const derived = new Derived();
+const renamed: Base = derived;
+print(derived == renamed);
+print(base != derived);
+print(base != new Base());
+
+class Compare {
+    public static func equal(a: Compare, b: Compare) bool {
+        return true;
+    }
+}
+const compare = new Compare();
+const compareNullable: Compare | null = new Compare();
+print(compare == new Compare());
+print(compare == compareNullable);
+print(compareNullable == compare);
+print(compareNullable != null);
+
+const unionPrimitive: i32 | bool = 5;
+const unionComplex: i32 | Compare = 2;
+const unionComplex2: i32 | Compare = new Compare();
+print(unionPrimitive == 5);
+print(unionPrimitive != true);
+print(true != unionPrimitive);
+if (true != unionPrimitive) { print("bool reverse"); }
+print(unionComplex == 2);
+print(unionComplex != new Compare());
+print(unionComplex2 == new Compare());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "integer" (1:7-1:14)
+EQUAL (1:15-1:16)
+INTEGER_LITERAL "5" (1:17-1:18)
+SEMICOLON (1:18-1:19)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+INTEGER_LITERAL "5" (2:7-2:8)
+EQUAL_EQUAL (2:9-2:11)
+IDENTIFIER "integer" (2:12-2:19)
+RIGHT_PAREN (2:19-2:20)
+SEMICOLON (2:20-2:21)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+INTEGER_LITERAL "1" (3:7-3:8)
+BANG_EQUAL (3:9-3:11)
+IDENTIFIER "integer" (3:12-3:19)
+RIGHT_PAREN (3:19-3:20)
+SEMICOLON (3:20-3:21)
+CONST (5:1-5:6)
+IDENTIFIER "floatNumber" (5:7-5:18)
+EQUAL (5:19-5:20)
+FLOAT_LITERAL "5.5" (5:21-5:24)
+SEMICOLON (5:24-5:25)
+CONST (6:1-6:6)
+IDENTIFIER "floatZero" (6:7-6:16)
+EQUAL (6:17-6:18)
+FLOAT_LITERAL "0.0" (6:19-6:22)
+SEMICOLON (6:22-6:23)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+FLOAT_LITERAL "5.5" (7:7-7:10)
+EQUAL_EQUAL (7:11-7:13)
+IDENTIFIER "floatNumber" (7:14-7:25)
+RIGHT_PAREN (7:25-7:26)
+SEMICOLON (7:26-7:27)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+FLOAT_LITERAL "1.0" (8:7-8:10)
+BANG_EQUAL (8:11-8:13)
+IDENTIFIER "floatNumber" (8:14-8:25)
+RIGHT_PAREN (8:25-8:26)
+SEMICOLON (8:26-8:27)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "floatZero" (9:7-9:16)
+EQUAL_EQUAL (9:17-9:19)
+INTEGER_LITERAL "0" (9:20-9:21)
+RIGHT_PAREN (9:21-9:22)
+SEMICOLON (9:22-9:23)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "floatZero" (10:7-10:16)
+EQUAL_EQUAL (10:17-10:19)
+FLOAT_LITERAL "0.0" (10:20-10:23)
+RIGHT_PAREN (10:23-10:24)
+SEMICOLON (10:24-10:25)
+CONST (12:1-12:6)
+IDENTIFIER "boolean" (12:7-12:14)
+EQUAL (12:15-12:16)
+BOOLEAN_LITERAL "true" (12:17-12:21)
+SEMICOLON (12:21-12:22)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+BOOLEAN_LITERAL "true" (13:7-13:11)
+EQUAL_EQUAL (13:12-13:14)
+IDENTIFIER "boolean" (13:15-13:22)
+RIGHT_PAREN (13:22-13:23)
+SEMICOLON (13:23-13:24)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+BOOLEAN_LITERAL "false" (14:7-14:12)
+BANG_EQUAL (14:13-14:15)
+IDENTIFIER "boolean" (14:16-14:23)
+RIGHT_PAREN (14:23-14:24)
+SEMICOLON (14:24-14:25)
+CONST (16:1-16:6)
+IDENTIFIER "character" (16:7-16:16)
+EQUAL (16:17-16:18)
+CHAR_LITERAL "'A'" (16:19-16:22)
+SEMICOLON (16:22-16:23)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+CHAR_LITERAL "'A'" (17:7-17:10)
+EQUAL_EQUAL (17:11-17:13)
+IDENTIFIER "character" (17:14-17:23)
+RIGHT_PAREN (17:23-17:24)
+SEMICOLON (17:24-17:25)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+CHAR_LITERAL "'a'" (18:7-18:10)
+BANG_EQUAL (18:11-18:13)
+IDENTIFIER "character" (18:14-18:23)
+RIGHT_PAREN (18:23-18:24)
+SEMICOLON (18:24-18:25)
+CONST (20:1-20:6)
+IDENTIFIER "str" (20:7-20:10)
+EQUAL (20:11-20:12)
+STRING_LITERAL "\"hello\"" (20:13-20:20)
+SEMICOLON (20:20-20:21)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+STRING_LITERAL "\"hello\"" (21:7-21:14)
+EQUAL_EQUAL (21:15-21:17)
+IDENTIFIER "str" (21:18-21:21)
+RIGHT_PAREN (21:21-21:22)
+SEMICOLON (21:22-21:23)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+STRING_LITERAL "\"Hello\"" (22:7-22:14)
+BANG_EQUAL (22:15-22:17)
+IDENTIFIER "str" (22:18-22:21)
+RIGHT_PAREN (22:21-22:22)
+SEMICOLON (22:22-22:23)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+STRING_LITERAL "\"\"\"\nhello\n\"\"\"" (23:7-25:4)
+EQUAL_EQUAL (25:5-25:7)
+IDENTIFIER "str" (25:8-25:11)
+RIGHT_PAREN (25:11-25:12)
+SEMICOLON (25:12-25:13)
+CLASS (27:1-27:6)
+IDENTIFIER "Base" (27:7-27:11)
+LEFT_BRACE (27:12-27:13)
+RIGHT_BRACE (27:13-27:14)
+CLASS (28:1-28:6)
+IDENTIFIER "Derived" (28:7-28:14)
+EXTENDS (28:15-28:22)
+IDENTIFIER "Base" (28:23-28:27)
+LEFT_BRACE (28:28-28:29)
+RIGHT_BRACE (28:29-28:30)
+CONST (29:1-29:6)
+IDENTIFIER "base" (29:7-29:11)
+EQUAL (29:12-29:13)
+NEW (29:14-29:17)
+IDENTIFIER "Base" (29:18-29:22)
+LEFT_PAREN (29:22-29:23)
+RIGHT_PAREN (29:23-29:24)
+SEMICOLON (29:24-29:25)
+CONST (30:1-30:6)
+IDENTIFIER "derived" (30:7-30:14)
+EQUAL (30:15-30:16)
+NEW (30:17-30:20)
+IDENTIFIER "Derived" (30:21-30:28)
+LEFT_PAREN (30:28-30:29)
+RIGHT_PAREN (30:29-30:30)
+SEMICOLON (30:30-30:31)
+CONST (31:1-31:6)
+IDENTIFIER "renamed" (31:7-31:14)
+COLON (31:14-31:15)
+IDENTIFIER "Base" (31:16-31:20)
+EQUAL (31:21-31:22)
+IDENTIFIER "derived" (31:23-31:30)
+SEMICOLON (31:30-31:31)
+IDENTIFIER "print" (32:1-32:6)
+LEFT_PAREN (32:6-32:7)
+IDENTIFIER "derived" (32:7-32:14)
+EQUAL_EQUAL (32:15-32:17)
+IDENTIFIER "renamed" (32:18-32:25)
+RIGHT_PAREN (32:25-32:26)
+SEMICOLON (32:26-32:27)
+IDENTIFIER "print" (33:1-33:6)
+LEFT_PAREN (33:6-33:7)
+IDENTIFIER "base" (33:7-33:11)
+BANG_EQUAL (33:12-33:14)
+IDENTIFIER "derived" (33:15-33:22)
+RIGHT_PAREN (33:22-33:23)
+SEMICOLON (33:23-33:24)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+IDENTIFIER "base" (34:7-34:11)
+BANG_EQUAL (34:12-34:14)
+NEW (34:15-34:18)
+IDENTIFIER "Base" (34:19-34:23)
+LEFT_PAREN (34:23-34:24)
+RIGHT_PAREN (34:24-34:25)
+RIGHT_PAREN (34:25-34:26)
+SEMICOLON (34:26-34:27)
+CLASS (36:1-36:6)
+IDENTIFIER "Compare" (36:7-36:14)
+LEFT_BRACE (36:15-36:16)
+PUBLIC (37:5-37:11)
+STATIC (37:12-37:18)
+FUNC (37:19-37:23)
+IDENTIFIER "equal" (37:24-37:29)
+LEFT_PAREN (37:29-37:30)
+IDENTIFIER "a" (37:30-37:31)
+COLON (37:31-37:32)
+IDENTIFIER "Compare" (37:33-37:40)
+COMMA (37:40-37:41)
+IDENTIFIER "b" (37:42-37:43)
+COLON (37:43-37:44)
+IDENTIFIER "Compare" (37:45-37:52)
+RIGHT_PAREN (37:52-37:53)
+IDENTIFIER "bool" (37:54-37:58)
+LEFT_BRACE (37:59-37:60)
+RETURN (38:9-38:15)
+BOOLEAN_LITERAL "true" (38:16-38:20)
+SEMICOLON (38:20-38:21)
+RIGHT_BRACE (39:5-39:6)
+RIGHT_BRACE (40:1-40:2)
+CONST (41:1-41:6)
+IDENTIFIER "compare" (41:7-41:14)
+EQUAL (41:15-41:16)
+NEW (41:17-41:20)
+IDENTIFIER "Compare" (41:21-41:28)
+LEFT_PAREN (41:28-41:29)
+RIGHT_PAREN (41:29-41:30)
+SEMICOLON (41:30-41:31)
+CONST (42:1-42:6)
+IDENTIFIER "compareNullable" (42:7-42:22)
+COLON (42:22-42:23)
+IDENTIFIER "Compare" (42:24-42:31)
+PIPE (42:32-42:33)
+NULL (42:34-42:38)
+EQUAL (42:39-42:40)
+NEW (42:41-42:44)
+IDENTIFIER "Compare" (42:45-42:52)
+LEFT_PAREN (42:52-42:53)
+RIGHT_PAREN (42:53-42:54)
+SEMICOLON (42:54-42:55)
+IDENTIFIER "print" (43:1-43:6)
+LEFT_PAREN (43:6-43:7)
+IDENTIFIER "compare" (43:7-43:14)
+EQUAL_EQUAL (43:15-43:17)
+NEW (43:18-43:21)
+IDENTIFIER "Compare" (43:22-43:29)
+LEFT_PAREN (43:29-43:30)
+RIGHT_PAREN (43:30-43:31)
+RIGHT_PAREN (43:31-43:32)
+SEMICOLON (43:32-43:33)
+IDENTIFIER "print" (44:1-44:6)
+LEFT_PAREN (44:6-44:7)
+IDENTIFIER "compare" (44:7-44:14)
+EQUAL_EQUAL (44:15-44:17)
+IDENTIFIER "compareNullable" (44:18-44:33)
+RIGHT_PAREN (44:33-44:34)
+SEMICOLON (44:34-44:35)
+IDENTIFIER "print" (45:1-45:6)
+LEFT_PAREN (45:6-45:7)
+IDENTIFIER "compareNullable" (45:7-45:22)
+EQUAL_EQUAL (45:23-45:25)
+IDENTIFIER "compare" (45:26-45:33)
+RIGHT_PAREN (45:33-45:34)
+SEMICOLON (45:34-45:35)
+IDENTIFIER "print" (46:1-46:6)
+LEFT_PAREN (46:6-46:7)
+IDENTIFIER "compareNullable" (46:7-46:22)
+BANG_EQUAL (46:23-46:25)
+NULL (46:26-46:30)
+RIGHT_PAREN (46:30-46:31)
+SEMICOLON (46:31-46:32)
+CONST (48:1-48:6)
+IDENTIFIER "unionPrimitive" (48:7-48:21)
+COLON (48:21-48:22)
+IDENTIFIER "i32" (48:23-48:26)
+PIPE (48:27-48:28)
+IDENTIFIER "bool" (48:29-48:33)
+EQUAL (48:34-48:35)
+INTEGER_LITERAL "5" (48:36-48:37)
+SEMICOLON (48:37-48:38)
+CONST (49:1-49:6)
+IDENTIFIER "unionComplex" (49:7-49:19)
+COLON (49:19-49:20)
+IDENTIFIER "i32" (49:21-49:24)
+PIPE (49:25-49:26)
+IDENTIFIER "Compare" (49:27-49:34)
+EQUAL (49:35-49:36)
+INTEGER_LITERAL "2" (49:37-49:38)
+SEMICOLON (49:38-49:39)
+CONST (50:1-50:6)
+IDENTIFIER "unionComplex2" (50:7-50:20)
+COLON (50:20-50:21)
+IDENTIFIER "i32" (50:22-50:25)
+PIPE (50:26-50:27)
+IDENTIFIER "Compare" (50:28-50:35)
+EQUAL (50:36-50:37)
+NEW (50:38-50:41)
+IDENTIFIER "Compare" (50:42-50:49)
+LEFT_PAREN (50:49-50:50)
+RIGHT_PAREN (50:50-50:51)
+SEMICOLON (50:51-50:52)
+IDENTIFIER "print" (51:1-51:6)
+LEFT_PAREN (51:6-51:7)
+IDENTIFIER "unionPrimitive" (51:7-51:21)
+EQUAL_EQUAL (51:22-51:24)
+INTEGER_LITERAL "5" (51:25-51:26)
+RIGHT_PAREN (51:26-51:27)
+SEMICOLON (51:27-51:28)
+IDENTIFIER "print" (52:1-52:6)
+LEFT_PAREN (52:6-52:7)
+IDENTIFIER "unionPrimitive" (52:7-52:21)
+BANG_EQUAL (52:22-52:24)
+BOOLEAN_LITERAL "true" (52:25-52:29)
+RIGHT_PAREN (52:29-52:30)
+SEMICOLON (52:30-52:31)
+IDENTIFIER "print" (53:1-53:6)
+LEFT_PAREN (53:6-53:7)
+BOOLEAN_LITERAL "true" (53:7-53:11)
+BANG_EQUAL (53:12-53:14)
+IDENTIFIER "unionPrimitive" (53:15-53:29)
+RIGHT_PAREN (53:29-53:30)
+SEMICOLON (53:30-53:31)
+IF (54:1-54:3)
+LEFT_PAREN (54:4-54:5)
+BOOLEAN_LITERAL "true" (54:5-54:9)
+BANG_EQUAL (54:10-54:12)
+IDENTIFIER "unionPrimitive" (54:13-54:27)
+RIGHT_PAREN (54:27-54:28)
+LEFT_BRACE (54:29-54:30)
+IDENTIFIER "print" (54:31-54:36)
+LEFT_PAREN (54:36-54:37)
+STRING_LITERAL "\"bool reverse\"" (54:37-54:51)
+RIGHT_PAREN (54:51-54:52)
+SEMICOLON (54:52-54:53)
+RIGHT_BRACE (54:54-54:55)
+IDENTIFIER "print" (55:1-55:6)
+LEFT_PAREN (55:6-55:7)
+IDENTIFIER "unionComplex" (55:7-55:19)
+EQUAL_EQUAL (55:20-55:22)
+INTEGER_LITERAL "2" (55:23-55:24)
+RIGHT_PAREN (55:24-55:25)
+SEMICOLON (55:25-55:26)
+IDENTIFIER "print" (56:1-56:6)
+LEFT_PAREN (56:6-56:7)
+IDENTIFIER "unionComplex" (56:7-56:19)
+BANG_EQUAL (56:20-56:22)
+NEW (56:23-56:26)
+IDENTIFIER "Compare" (56:27-56:34)
+LEFT_PAREN (56:34-56:35)
+RIGHT_PAREN (56:35-56:36)
+RIGHT_PAREN (56:36-56:37)
+SEMICOLON (56:37-56:38)
+IDENTIFIER "print" (57:1-57:6)
+LEFT_PAREN (57:6-57:7)
+IDENTIFIER "unionComplex2" (57:7-57:20)
+EQUAL_EQUAL (57:21-57:23)
+NEW (57:24-57:27)
+IDENTIFIER "Compare" (57:28-57:35)
+LEFT_PAREN (57:35-57:36)
+RIGHT_PAREN (57:36-57:37)
+RIGHT_PAREN (57:37-57:38)
+SEMICOLON (57:38-57:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-57:39
+  (VariableDeclaration
+    range: 1:1-1:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "integer"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:17-1:18
+      kind: INT
+      text: "5"
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:21
+    (CallExpression
+      range: 2:1-2:20
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 2:7-2:19
+        (LiteralExpression
+          range: 2:7-2:8
+          kind: INT
+          text: "5"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 2:12-2:19
+          name: "integer"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:21
+    (CallExpression
+      range: 3:1-3:20
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 3:7-3:19
+        (LiteralExpression
+          range: 3:7-3:8
+          kind: INT
+          text: "1"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 3:12-3:19
+          name: "integer"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:18
+      name: "floatNumber"
+    )
+    type: null
+    (LiteralExpression
+      range: 5:21-5:24
+      kind: FLOAT
+      text: "5.5"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:16
+      name: "floatZero"
+    )
+    type: null
+    (LiteralExpression
+      range: 6:19-6:22
+      kind: FLOAT
+      text: "0.0"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:27
+    (CallExpression
+      range: 7:1-7:26
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 7:7-7:25
+        (LiteralExpression
+          range: 7:7-7:10
+          kind: FLOAT
+          text: "5.5"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 7:14-7:25
+          name: "floatNumber"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:27
+    (CallExpression
+      range: 8:1-8:26
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:25
+        (LiteralExpression
+          range: 8:7-8:10
+          kind: FLOAT
+          text: "1.0"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 8:14-8:25
+          name: "floatNumber"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:23
+    (CallExpression
+      range: 9:1-9:22
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:21
+        (IdentifierExpression
+          range: 9:7-9:16
+          name: "floatZero"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 9:20-9:21
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:25
+    (CallExpression
+      range: 10:1-10:24
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:7-10:23
+        (IdentifierExpression
+          range: 10:7-10:16
+          name: "floatZero"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 10:20-10:23
+          kind: FLOAT
+          text: "0.0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:22
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:14
+      name: "boolean"
+    )
+    type: null
+    (LiteralExpression
+      range: 12:17-12:21
+      kind: BOOL
+      text: "true"
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:24
+    (CallExpression
+      range: 13:1-13:23
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:22
+        (LiteralExpression
+          range: 13:7-13:11
+          kind: BOOL
+          text: "true"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 13:15-13:22
+          name: "boolean"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:25
+    (CallExpression
+      range: 14:1-14:24
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:23
+        (LiteralExpression
+          range: 14:7-14:12
+          kind: BOOL
+          text: "false"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 14:16-14:23
+          name: "boolean"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:16
+      name: "character"
+    )
+    type: null
+    (LiteralExpression
+      range: 16:19-16:22
+      kind: CHAR
+      text: "'A'"
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:25
+    (CallExpression
+      range: 17:1-17:24
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 17:7-17:23
+        (LiteralExpression
+          range: 17:7-17:10
+          kind: CHAR
+          text: "'A'"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 17:14-17:23
+          name: "character"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:25
+    (CallExpression
+      range: 18:1-18:24
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 18:7-18:23
+        (LiteralExpression
+          range: 18:7-18:10
+          kind: CHAR
+          text: "'a'"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 18:14-18:23
+          name: "character"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:10
+      name: "str"
+    )
+    type: null
+    (LiteralExpression
+      range: 20:13-20:20
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:23
+    (CallExpression
+      range: 21:1-21:22
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 21:7-21:21
+        (LiteralExpression
+          range: 21:7-21:14
+          kind: STRING
+          text: "\"hello\""
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 21:18-21:21
+          name: "str"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:23
+    (CallExpression
+      range: 22:1-22:22
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 22:7-22:21
+        (LiteralExpression
+          range: 22:7-22:14
+          kind: STRING
+          text: "\"Hello\""
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 22:18-22:21
+          name: "str"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-25:13
+    (CallExpression
+      range: 23:1-25:12
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 23:7-25:11
+        (LiteralExpression
+          range: 23:7-25:4
+          kind: STRING
+          text: "\"\"\"\nhello\n\"\"\""
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 25:8-25:11
+          name: "str"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 27:1-27:14
+    (IdentifierDeclaration
+      range: 27:7-27:11
+      name: "Base"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 28:1-28:30
+    (IdentifierDeclaration
+      range: 28:7-28:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 28:23-28:27
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 29:1-29:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 29:7-29:11
+      name: "base"
+    )
+    type: null
+    (NewExpression
+      range: 29:14-29:24
+      (IdentifierExpression
+        range: 29:18-29:22
+        name: "Base"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 30:1-30:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 30:7-30:14
+      name: "derived"
+    )
+    type: null
+    (NewExpression
+      range: 30:17-30:30
+      (IdentifierExpression
+        range: 30:21-30:28
+        name: "Derived"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 31:1-31:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 31:7-31:14
+      name: "renamed"
+    )
+    (NamedTypeNode
+      range: 31:16-31:20
+      name: "Base"
+    )
+    (IdentifierExpression
+      range: 31:23-31:30
+      name: "derived"
+    )
+  )
+  (ExpressionStatement
+    range: 32:1-32:27
+    (CallExpression
+      range: 32:1-32:26
+      (IdentifierExpression
+        range: 32:1-32:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 32:7-32:25
+        (IdentifierExpression
+          range: 32:7-32:14
+          name: "derived"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 32:18-32:25
+          name: "renamed"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 33:1-33:24
+    (CallExpression
+      range: 33:1-33:23
+      (IdentifierExpression
+        range: 33:1-33:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 33:7-33:22
+        (IdentifierExpression
+          range: 33:7-33:11
+          name: "base"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 33:15-33:22
+          name: "derived"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 34:1-34:27
+    (CallExpression
+      range: 34:1-34:26
+      (IdentifierExpression
+        range: 34:1-34:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 34:7-34:25
+        (IdentifierExpression
+          range: 34:7-34:11
+          name: "base"
+        )
+        operator: NOT_EQUAL
+        (NewExpression
+          range: 34:15-34:25
+          (IdentifierExpression
+            range: 34:19-34:23
+            name: "Base"
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 36:1-40:2
+    (IdentifierDeclaration
+      range: 36:7-36:14
+      name: "Compare"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 37:5-39:6
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 37:19-39:6
+        (IdentifierDeclaration
+          range: 37:24-37:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 37:30-37:40
+          (IdentifierDeclaration
+            range: 37:30-37:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 37:33-37:40
+            name: "Compare"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 37:42-37:52
+          (IdentifierDeclaration
+            range: 37:42-37:43
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 37:45-37:52
+            name: "Compare"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 37:54-37:58
+          name: "bool"
+        )
+        (BlockStatement
+          range: 37:59-39:6
+          (ReturnStatement
+            range: 38:9-38:21
+            (LiteralExpression
+              range: 38:16-38:20
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 41:1-41:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 41:7-41:14
+      name: "compare"
+    )
+    type: null
+    (NewExpression
+      range: 41:17-41:30
+      (IdentifierExpression
+        range: 41:21-41:28
+        name: "Compare"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 42:1-42:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 42:7-42:22
+      name: "compareNullable"
+    )
+    (UnionTypeNode
+      range: 42:24-42:38
+      (NamedTypeNode
+        range: 42:24-42:31
+        name: "Compare"
+      )
+      (NamedTypeNode
+        range: 42:34-42:38
+        name: "null"
+      )
+    )
+    (NewExpression
+      range: 42:41-42:54
+      (IdentifierExpression
+        range: 42:45-42:52
+        name: "Compare"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 43:1-43:33
+    (CallExpression
+      range: 43:1-43:32
+      (IdentifierExpression
+        range: 43:1-43:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 43:7-43:31
+        (IdentifierExpression
+          range: 43:7-43:14
+          name: "compare"
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 43:18-43:31
+          (IdentifierExpression
+            range: 43:22-43:29
+            name: "Compare"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 44:1-44:35
+    (CallExpression
+      range: 44:1-44:34
+      (IdentifierExpression
+        range: 44:1-44:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 44:7-44:33
+        (IdentifierExpression
+          range: 44:7-44:14
+          name: "compare"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 44:18-44:33
+          name: "compareNullable"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 45:1-45:35
+    (CallExpression
+      range: 45:1-45:34
+      (IdentifierExpression
+        range: 45:1-45:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 45:7-45:33
+        (IdentifierExpression
+          range: 45:7-45:22
+          name: "compareNullable"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 45:26-45:33
+          name: "compare"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 46:1-46:32
+    (CallExpression
+      range: 46:1-46:31
+      (IdentifierExpression
+        range: 46:1-46:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 46:7-46:30
+        (IdentifierExpression
+          range: 46:7-46:22
+          name: "compareNullable"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 46:26-46:30
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 48:1-48:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 48:7-48:21
+      name: "unionPrimitive"
+    )
+    (UnionTypeNode
+      range: 48:23-48:33
+      (NamedTypeNode
+        range: 48:23-48:26
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 48:29-48:33
+        name: "bool"
+      )
+    )
+    (LiteralExpression
+      range: 48:36-48:37
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 49:1-49:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 49:7-49:19
+      name: "unionComplex"
+    )
+    (UnionTypeNode
+      range: 49:21-49:34
+      (NamedTypeNode
+        range: 49:21-49:24
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 49:27-49:34
+        name: "Compare"
+      )
+    )
+    (LiteralExpression
+      range: 49:37-49:38
+      kind: INT
+      text: "2"
+    )
+  )
+  (VariableDeclaration
+    range: 50:1-50:52
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 50:7-50:20
+      name: "unionComplex2"
+    )
+    (UnionTypeNode
+      range: 50:22-50:35
+      (NamedTypeNode
+        range: 50:22-50:25
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 50:28-50:35
+        name: "Compare"
+      )
+    )
+    (NewExpression
+      range: 50:38-50:51
+      (IdentifierExpression
+        range: 50:42-50:49
+        name: "Compare"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 51:1-51:28
+    (CallExpression
+      range: 51:1-51:27
+      (IdentifierExpression
+        range: 51:1-51:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 51:7-51:26
+        (IdentifierExpression
+          range: 51:7-51:21
+          name: "unionPrimitive"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 51:25-51:26
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 52:1-52:31
+    (CallExpression
+      range: 52:1-52:30
+      (IdentifierExpression
+        range: 52:1-52:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 52:7-52:29
+        (IdentifierExpression
+          range: 52:7-52:21
+          name: "unionPrimitive"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 52:25-52:29
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 53:1-53:31
+    (CallExpression
+      range: 53:1-53:30
+      (IdentifierExpression
+        range: 53:1-53:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 53:7-53:29
+        (LiteralExpression
+          range: 53:7-53:11
+          kind: BOOL
+          text: "true"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 53:15-53:29
+          name: "unionPrimitive"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 54:1-54:55
+    (IfExpression
+      range: 54:1-54:55
+      (BinaryExpression
+        range: 54:5-54:27
+        (LiteralExpression
+          range: 54:5-54:9
+          kind: BOOL
+          text: "true"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 54:13-54:27
+          name: "unionPrimitive"
+        )
+      )
+      (BlockStatement
+        range: 54:29-54:55
+        (ExpressionStatement
+          range: 54:31-54:53
+          (CallExpression
+            range: 54:31-54:52
+            (IdentifierExpression
+              range: 54:31-54:36
+              name: "print"
+            )
+            (LiteralExpression
+              range: 54:37-54:51
+              kind: STRING
+              text: "\"bool reverse\""
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (ExpressionStatement
+    range: 55:1-55:26
+    (CallExpression
+      range: 55:1-55:25
+      (IdentifierExpression
+        range: 55:1-55:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 55:7-55:24
+        (IdentifierExpression
+          range: 55:7-55:19
+          name: "unionComplex"
+        )
+        operator: EQUAL
+        (LiteralExpression
+          range: 55:23-55:24
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 56:1-56:38
+    (CallExpression
+      range: 56:1-56:37
+      (IdentifierExpression
+        range: 56:1-56:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 56:7-56:36
+        (IdentifierExpression
+          range: 56:7-56:19
+          name: "unionComplex"
+        )
+        operator: NOT_EQUAL
+        (NewExpression
+          range: 56:23-56:36
+          (IdentifierExpression
+            range: 56:27-56:34
+            name: "Compare"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 57:1-57:39
+    (CallExpression
+      range: 57:1-57:38
+      (IdentifierExpression
+        range: 57:1-57:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 57:7-57:37
+        (IdentifierExpression
+          range: 57:7-57:20
+          name: "unionComplex2"
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 57:24-57:37
+          (IdentifierExpression
+            range: 57:28-57:35
+            name: "Compare"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:17-1:18 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:20 -> void
+  2:7-2:8 -> i32
+  2:7-2:19 -> bool
+  2:12-2:19 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:20 -> void
+  3:7-3:8 -> i32
+  3:7-3:19 -> bool
+  3:12-3:19 -> i32
+  5:21-5:24 -> f64
+  6:19-6:22 -> f64
+  7:1-7:6 -> (any) => void
+  7:1-7:26 -> void
+  7:7-7:10 -> f64
+  7:7-7:25 -> bool
+  7:14-7:25 -> f64
+  8:1-8:6 -> (any) => void
+  8:1-8:26 -> void
+  8:7-8:10 -> f64
+  8:7-8:25 -> bool
+  8:14-8:25 -> f64
+  9:1-9:6 -> (any) => void
+  9:1-9:22 -> void
+  9:7-9:16 -> f64
+  9:7-9:21 -> bool
+  9:20-9:21 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:24 -> void
+  10:7-10:16 -> f64
+  10:7-10:23 -> bool
+  10:20-10:23 -> f64
+  12:17-12:21 -> bool
+  13:1-13:6 -> (any) => void
+  13:1-13:23 -> void
+  13:7-13:11 -> bool
+  13:7-13:22 -> bool
+  13:15-13:22 -> bool
+  14:1-14:6 -> (any) => void
+  14:1-14:24 -> void
+  14:7-14:12 -> bool
+  14:7-14:23 -> bool
+  14:16-14:23 -> bool
+  16:19-16:22 -> char
+  17:1-17:6 -> (any) => void
+  17:1-17:24 -> void
+  17:7-17:10 -> char
+  17:7-17:23 -> bool
+  17:14-17:23 -> char
+  18:1-18:6 -> (any) => void
+  18:1-18:24 -> void
+  18:7-18:10 -> char
+  18:7-18:23 -> bool
+  18:14-18:23 -> char
+  20:13-20:20 -> string
+  21:1-21:6 -> (any) => void
+  21:1-21:22 -> void
+  21:7-21:14 -> string
+  21:7-21:21 -> bool
+  21:18-21:21 -> string
+  22:1-22:6 -> (any) => void
+  22:1-22:22 -> void
+  22:7-22:14 -> string
+  22:7-22:21 -> bool
+  22:18-22:21 -> string
+  23:1-23:6 -> (any) => void
+  23:1-25:12 -> void
+  23:7-25:4 -> string
+  23:7-25:11 -> bool
+  25:8-25:11 -> string
+  28:23-28:27 -> Base
+  29:14-29:24 -> Base
+  29:18-29:22 -> Base
+  30:17-30:30 -> Derived
+  30:21-30:28 -> Derived
+  31:23-31:30 -> Derived
+  32:1-32:6 -> (any) => void
+  32:1-32:26 -> void
+  32:7-32:14 -> Derived
+  32:7-32:25 -> bool
+  32:18-32:25 -> Base
+  33:1-33:6 -> (any) => void
+  33:1-33:23 -> void
+  33:7-33:11 -> Base
+  33:7-33:22 -> bool
+  33:15-33:22 -> Derived
+  34:1-34:6 -> (any) => void
+  34:1-34:26 -> void
+  34:7-34:11 -> Base
+  34:7-34:25 -> bool
+  34:15-34:25 -> Base
+  34:19-34:23 -> Base
+  38:16-38:20 -> bool
+  41:17-41:30 -> Compare
+  41:21-41:28 -> Compare
+  42:41-42:54 -> Compare
+  42:45-42:52 -> Compare
+  43:1-43:6 -> (any) => void
+  43:1-43:32 -> void
+  43:7-43:14 -> Compare
+  43:7-43:31 -> bool
+  43:18-43:31 -> Compare
+  43:22-43:29 -> Compare
+  44:1-44:6 -> (any) => void
+  44:1-44:34 -> void
+  44:7-44:14 -> Compare
+  44:7-44:33 -> bool
+  44:18-44:33 -> Compare | null
+  45:1-45:6 -> (any) => void
+  45:1-45:34 -> void
+  45:7-45:22 -> Compare | null
+  45:7-45:33 -> bool
+  45:26-45:33 -> Compare
+  46:1-46:6 -> (any) => void
+  46:1-46:31 -> void
+  46:7-46:22 -> Compare | null
+  46:7-46:30 -> bool
+  46:26-46:30 -> null
+  48:36-48:37 -> i32
+  49:37-49:38 -> i32
+  50:38-50:51 -> Compare
+  50:42-50:49 -> Compare
+  51:1-51:6 -> (any) => void
+  51:1-51:27 -> void
+  51:7-51:21 -> i32 | bool
+  51:7-51:26 -> bool
+  51:25-51:26 -> i32
+  52:1-52:6 -> (any) => void
+  52:1-52:30 -> void
+  52:7-52:21 -> i32 | bool
+  52:7-52:29 -> bool
+  52:25-52:29 -> bool
+  53:1-53:6 -> (any) => void
+  53:1-53:30 -> void
+  53:7-53:11 -> bool
+  53:7-53:29 -> bool
+  53:15-53:29 -> i32 | bool
+  54:1-54:55 -> void
+  54:5-54:9 -> bool
+  54:5-54:27 -> bool
+  54:13-54:27 -> i32 | bool
+  54:31-54:36 -> (any) => void
+  54:31-54:52 -> void
+  54:37-54:51 -> string
+  55:1-55:6 -> (any) => void
+  55:1-55:25 -> void
+  55:7-55:19 -> i32 | Compare
+  55:7-55:24 -> bool
+  55:23-55:24 -> i32
+  56:1-56:6 -> (any) => void
+  56:1-56:37 -> void
+  56:7-56:19 -> i32 | Compare
+  56:7-56:36 -> bool
+  56:23-56:36 -> Compare
+  56:27-56:34 -> Compare
+  57:1-57:6 -> (any) => void
+  57:1-57:38 -> void
+  57:7-57:20 -> i32 | Compare
+  57:7-57:37 -> bool
+  57:24-57:37 -> Compare
+  57:28-57:35 -> Compare
+
+Resolved types:
+  31:16-31:20 -> Base
+  37:33-37:40 -> Compare
+  37:45-37:52 -> Compare
+  37:54-37:58 -> bool
+  42:24-42:31 -> Compare
+  42:24-42:38 -> Compare | null
+  42:34-42:38 -> null
+  48:23-48:26 -> i32
+  48:23-48:33 -> i32 | bool
+  48:29-48:33 -> bool
+  49:21-49:24 -> i32
+  49:21-49:34 -> i32 | Compare
+  49:27-49:34 -> Compare
+  50:22-50:25 -> i32
+  50:22-50:35 -> i32 | Compare
+  50:28-50:35 -> Compare
+
+Conversions:
+  9:20-9:21 -> i32 -> f64
+  17:7-17:10 -> char -> i32
+  17:14-17:23 -> char -> i32
+  18:7-18:10 -> char -> i32
+  18:14-18:23 -> char -> i32
+  42:41-42:54 -> Compare -> Compare | null
+  44:7-44:14 -> Compare -> Compare | null
+  45:26-45:33 -> Compare -> Compare | null
+  46:26-46:30 -> null -> Compare | null
+  48:36-48:37 -> i32 -> i32 | bool
+  49:37-49:38 -> i32 -> i32 | Compare
+  50:38-50:51 -> Compare -> i32 | Compare
+  51:25-51:26 -> i32 -> i32 | bool
+  52:25-52:29 -> bool -> i32 | bool
+  53:7-53:11 -> bool -> i32 | bool
+  54:5-54:9 -> bool -> i32 | bool
+  55:23-55:24 -> i32 -> i32 | Compare
+  56:23-56:36 -> Compare -> i32 | Compare
+  57:24-57:37 -> Compare -> i32 | Compare
+
+Declarations:
+  1:7-1:14 -> const integer: i32
+  5:7-5:18 -> const floatNumber: f64
+  6:7-6:16 -> const floatZero: f64
+  12:7-12:14 -> const boolean: bool
+  16:7-16:16 -> const character: char
+  20:7-20:10 -> const str: string
+  27:7-27:11 -> class Base
+  28:7-28:14 -> class Derived
+  29:7-29:11 -> const base: Base
+  30:7-30:14 -> const derived: Derived
+  31:7-31:14 -> const renamed: Base
+  36:7-36:14 -> class Compare
+  37:24-37:29 -> func equal(Compare, Compare) => bool
+  37:30-37:31 -> const a: Compare
+  37:42-37:43 -> const b: Compare
+  41:7-41:14 -> const compare: Compare
+  42:7-42:22 -> const compareNullable: Compare | null
+  48:7-48:21 -> const unionPrimitive: i32 | bool
+  49:7-49:19 -> const unionComplex: i32 | Compare
+  50:7-50:20 -> const unionComplex2: i32 | Compare
+
+References:
+  2:1-2:6 -> builtin print
+  2:12-2:19 -> 1:7-1:14
+  3:1-3:6 -> builtin print
+  3:12-3:19 -> 1:7-1:14
+  7:1-7:6 -> builtin print
+  7:14-7:25 -> 5:7-5:18
+  8:1-8:6 -> builtin print
+  8:14-8:25 -> 5:7-5:18
+  9:1-9:6 -> builtin print
+  9:7-9:16 -> 6:7-6:16
+  10:1-10:6 -> builtin print
+  10:7-10:16 -> 6:7-6:16
+  13:1-13:6 -> builtin print
+  13:15-13:22 -> 12:7-12:14
+  14:1-14:6 -> builtin print
+  14:16-14:23 -> 12:7-12:14
+  17:1-17:6 -> builtin print
+  17:14-17:23 -> 16:7-16:16
+  18:1-18:6 -> builtin print
+  18:14-18:23 -> 16:7-16:16
+  21:1-21:6 -> builtin print
+  21:18-21:21 -> 20:7-20:10
+  22:1-22:6 -> builtin print
+  22:18-22:21 -> 20:7-20:10
+  23:1-23:6 -> builtin print
+  25:8-25:11 -> 20:7-20:10
+  28:23-28:27 -> 27:7-27:11
+  29:18-29:22 -> 27:7-27:11
+  30:21-30:28 -> 28:7-28:14
+  31:23-31:30 -> 30:7-30:14
+  32:1-32:6 -> builtin print
+  32:7-32:14 -> 30:7-30:14
+  32:18-32:25 -> 31:7-31:14
+  33:1-33:6 -> builtin print
+  33:7-33:11 -> 29:7-29:11
+  33:15-33:22 -> 30:7-30:14
+  34:1-34:6 -> builtin print
+  34:7-34:11 -> 29:7-29:11
+  34:19-34:23 -> 27:7-27:11
+  41:21-41:28 -> 36:7-36:14
+  42:45-42:52 -> 36:7-36:14
+  43:1-43:6 -> builtin print
+  43:7-43:14 -> 41:7-41:14
+  43:22-43:29 -> 36:7-36:14
+  44:1-44:6 -> builtin print
+  44:7-44:14 -> 41:7-41:14
+  44:18-44:33 -> 42:7-42:22
+  45:1-45:6 -> builtin print
+  45:7-45:22 -> 42:7-42:22
+  45:26-45:33 -> 41:7-41:14
+  46:1-46:6 -> builtin print
+  46:7-46:22 -> 42:7-42:22
+  50:42-50:49 -> 36:7-36:14
+  51:1-51:6 -> builtin print
+  51:7-51:21 -> 48:7-48:21
+  52:1-52:6 -> builtin print
+  52:7-52:21 -> 48:7-48:21
+  53:1-53:6 -> builtin print
+  53:15-53:29 -> 48:7-48:21
+  54:13-54:27 -> 48:7-48:21
+  54:31-54:36 -> builtin print
+  55:1-55:6 -> builtin print
+  55:7-55:19 -> 49:7-49:19
+  56:1-56:6 -> builtin print
+  56:7-56:19 -> 49:7-49:19
+  56:27-56:34 -> 36:7-36:14
+  57:1-57:6 -> builtin print
+  57:7-57:20 -> 50:7-50:20
+  57:28-57:35 -> 36:7-36:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  nest member Test$Compare
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  inner class Test$Compare flags [PUBLIC, STATIC]
+  field integer I flags [PUBLIC, STATIC, FINAL] = 5
+  field floatNumber D flags [PUBLIC, STATIC, FINAL] = 5.5
+  field floatZero D flags [PUBLIC, STATIC, FINAL] = 0.0
+  field boolean Z flags [PUBLIC, STATIC, FINAL] = 1
+  field character C flags [PUBLIC, STATIC, FINAL] = 65
+  field str Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "hello"
+  field base LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  field derived LTest$Derived; flags [PUBLIC, STATIC, FINAL]
+  field renamed LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  field compare LTest$Compare; flags [PUBLIC, STATIC, FINAL]
+  field compareNullable LTest$Compare; flags [PUBLIC, STATIC, FINAL]
+  field unionPrimitive Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field unionComplex Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field unionComplex2 Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 5
+    GETSTATIC Test.integer I
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    GETSTATIC Test.integer I
+    IF_ICMPNE L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 5.5
+    GETSTATIC Test.floatNumber D
+    DCMPL
+    IFEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 1.0
+    GETSTATIC Test.floatNumber D
+    DCMPL
+    IFNE L6
+    ICONST_0 0
+    GOTO L7
+   L6:
+    ICONST_1 1
+   L7:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floatZero D
+    LDC 0
+    I2D
+    DCMPL
+    IFEQ L8
+    ICONST_0 0
+    GOTO L9
+   L8:
+    ICONST_1 1
+   L9:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floatZero D
+    LDC2_W 0.0
+    DCMPL
+    IFEQ L10
+    ICONST_0 0
+    GOTO L11
+   L10:
+    ICONST_1 1
+   L11:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_1 1
+    GETSTATIC Test.boolean Z
+    IF_ICMPEQ L12
+    ICONST_0 0
+    GOTO L13
+   L12:
+    ICONST_1 1
+   L13:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ICONST_0 0
+    GETSTATIC Test.boolean Z
+    IF_ICMPNE L14
+    ICONST_0 0
+    GOTO L15
+   L14:
+    ICONST_1 1
+   L15:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 65
+    GETSTATIC Test.character C
+    IF_ICMPEQ L16
+    ICONST_0 0
+    GOTO L17
+   L16:
+    ICONST_1 1
+   L17:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 97
+    GETSTATIC Test.character C
+    IF_ICMPNE L18
+    ICONST_0 0
+    GOTO L19
+   L18:
+    ICONST_1 1
+   L19:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    GETSTATIC Test.str Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Hello"
+    GETSTATIC Test.str Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    GETSTATIC Test.str Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW Test$Base
+    DUP
+    INVOKESPECIAL Test$Base.<init>()V
+    PUTSTATIC Test.base LTest$Base;
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    PUTSTATIC Test.derived LTest$Derived;
+    GETSTATIC Test.derived LTest$Derived;
+    PUTSTATIC Test.renamed LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derived LTest$Derived;
+    GETSTATIC Test.renamed LTest$Base;
+    IF_ACMPEQ L20
+    ICONST_0 0
+    GOTO L21
+   L20:
+    ICONST_1 1
+   L21:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.base LTest$Base;
+    GETSTATIC Test.derived LTest$Derived;
+    IF_ACMPEQ L22
+    ICONST_0 0
+    GOTO L23
+   L22:
+    ICONST_1 1
+   L23:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.base LTest$Base;
+    NEW Test$Base
+    DUP
+    INVOKESPECIAL Test$Base.<init>()V
+    IF_ACMPEQ L24
+    ICONST_0 0
+    GOTO L25
+   L24:
+    ICONST_1 1
+   L25:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    PUTSTATIC Test.compare LTest$Compare;
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    PUTSTATIC Test.compareNullable LTest$Compare;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.compare LTest$Compare;
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.compare LTest$Compare;
+    GETSTATIC Test.compareNullable LTest$Compare;
+    DUP
+    IFNULL L26
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    GOTO L27
+   L26:
+    POP2
+    ICONST_0 0
+   L27:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.compareNullable LTest$Compare;
+    GETSTATIC Test.compare LTest$Compare;
+    DUP2
+    POP
+    IFNULL L28
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    GOTO L29
+   L28:
+    POP2
+    ICONST_0 0
+   L29:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.compareNullable LTest$Compare;
+    IFNONNULL L30
+    ICONST_0 0
+    GOTO L31
+   L30:
+    ICONST_1 1
+   L31:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.unionPrimitive Ljava/lang/Object;
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.unionComplex Ljava/lang/Object;
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    PUTSTATIC Test.unionComplex2 Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.unionPrimitive Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L32
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 5
+    IF_ICMPEQ L33
+   L32:
+    POP
+    ICONST_0 0
+    GOTO L34
+   L33:
+    POP
+    ICONST_1 1
+   L34:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.unionPrimitive Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Boolean
+    IFEQ L35
+    DUP
+    CHECKCAST java/lang/Boolean
+    INVOKEVIRTUAL java/lang/Boolean.booleanValue()Z
+    ICONST_1 1
+    IF_ICMPEQ L36
+   L35:
+    POP
+    ICONST_0 0
+    GOTO L37
+   L36:
+    POP
+    ICONST_1 1
+   L37:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.unionPrimitive Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Boolean
+    IFEQ L38
+    DUP
+    CHECKCAST java/lang/Boolean
+    INVOKEVIRTUAL java/lang/Boolean.booleanValue()Z
+    ICONST_1 1
+    IF_ICMPEQ L39
+   L38:
+    POP
+    ICONST_0 0
+    GOTO L40
+   L39:
+    POP
+    ICONST_1 1
+   L40:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.unionPrimitive Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Boolean
+    IFEQ L41
+    DUP
+    CHECKCAST java/lang/Boolean
+    INVOKEVIRTUAL java/lang/Boolean.booleanValue()Z
+    ICONST_1 1
+    IF_ICMPEQ L42
+   L41:
+    POP
+    GOTO L43
+   L42:
+    POP
+    GOTO L44
+   L43:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "bool reverse"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L44:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.unionComplex Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L45
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 2
+    IF_ICMPEQ L46
+   L45:
+    POP
+    ICONST_0 0
+    GOTO L47
+   L46:
+    POP
+    ICONST_1 1
+   L47:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.unionComplex Ljava/lang/Object;
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    SWAP
+    DUP
+    INSTANCEOF Test$Compare
+    IFEQ L48
+    CHECKCAST Test$Compare
+    SWAP
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    GOTO L49
+   L48:
+    POP2
+    ICONST_0 0
+   L49:
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.unionComplex2 Ljava/lang/Object;
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    SWAP
+    DUP
+    INSTANCEOF Test$Compare
+    IFEQ L50
+    CHECKCAST Test$Compare
+    SWAP
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    GOTO L51
+   L50:
+    POP2
+    ICONST_0 0
+   L51:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Compare extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Compare flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Compare;LTest$Compare;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Compare
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Compare
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+bool reverse
+true
+true
+true
+

@@ -701,6 +701,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 3 max locals 0
 
 class Test$Direction extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Direction flags [PUBLIC, STATIC]
   field multiplier I flags [PRIVATE, FINAL]

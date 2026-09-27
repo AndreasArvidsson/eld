@@ -229,30 +229,31 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC "hello"
     PUTSTATIC Test.value Ljava/lang/String;
     GETSTATIC Test.value Ljava/lang/String;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFEQ L0
+    IFNULL L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IFEQ L2
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.value Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
-    GOTO L2
-   L0:
-    GETSTATIC Test.value Ljava/lang/String;
-    CHECKCAST java/lang/String
-    LDC "hello"
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFEQ L1
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.value Ljava/lang/String;
-    CHECKCAST java/lang/String
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L2
-   L1:
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.value Ljava/lang/String;
-    CHECKCAST java/lang/String
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
    L2:
+    GETSTATIC Test.value Ljava/lang/String;
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFEQ L3
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L4
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L4:
     RETURN
     max stack 2 max locals 0
 

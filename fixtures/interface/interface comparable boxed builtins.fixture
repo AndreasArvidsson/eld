@@ -479,8 +479,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.optional Ljava/lang/Comparable;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.optional Ljava/lang/Comparable;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNULL L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     LDC MethodHandleDesc[INTERFACE_VIRTUAL/Comparable::compareTo(Comparable,Object)int]
     GETSTATIC Test.value Ljava/lang/Comparable;

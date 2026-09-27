@@ -44,7 +44,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     ICONST_1 1
     IFEQ L0
-    GOTO L0
    L0:
     RETURN
     max stack 1 max locals 0

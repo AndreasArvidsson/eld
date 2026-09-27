@@ -1,8 +1,7 @@
 class Key {
-    public const override func equals(other: any) bool {
+    public static const func equal(a: Key, b: Key) bool {
         return true;
     }
-
     public const override func hashCode() i32 {
         return 0;
     }
@@ -19,37 +18,49 @@ CLASS (1:1-1:6)
 IDENTIFIER "Key" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
 PUBLIC (2:5-2:11)
-CONST (2:12-2:17)
-OVERRIDE (2:18-2:26)
-FUNC (2:27-2:31)
-IDENTIFIER "equals" (2:32-2:38)
-LEFT_PAREN (2:38-2:39)
-IDENTIFIER "other" (2:39-2:44)
-COLON (2:44-2:45)
-IDENTIFIER "any" (2:46-2:49)
-RIGHT_PAREN (2:49-2:50)
-IDENTIFIER "bool" (2:51-2:55)
-LEFT_BRACE (2:56-2:57)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+FUNC (2:25-2:29)
+IDENTIFIER "equal" (2:30-2:35)
+LEFT_PAREN (2:35-2:36)
+IDENTIFIER "a" (2:36-2:37)
+COLON (2:37-2:38)
+IDENTIFIER "Key" (2:39-2:42)
+COMMA (2:42-2:43)
+IDENTIFIER "b" (2:44-2:45)
+COLON (2:45-2:46)
+IDENTIFIER "Key" (2:47-2:50)
+RIGHT_PAREN (2:50-2:51)
+IDENTIFIER "bool" (2:52-2:56)
+LEFT_BRACE (2:57-2:58)
 RETURN (3:9-3:15)
 BOOLEAN_LITERAL "true" (3:16-3:20)
 SEMICOLON (3:20-3:21)
 RIGHT_BRACE (4:5-4:6)
-PUBLIC (6:5-6:11)
-CONST (6:12-6:17)
-OVERRIDE (6:18-6:26)
-FUNC (6:27-6:31)
-IDENTIFIER "hashCode" (6:32-6:40)
-LEFT_PAREN (6:40-6:41)
-RIGHT_PAREN (6:41-6:42)
-IDENTIFIER "i32" (6:43-6:46)
-LEFT_BRACE (6:47-6:48)
-RETURN (7:9-7:15)
-INTEGER_LITERAL "0" (7:16-7:17)
-SEMICOLON (7:17-7:18)
-RIGHT_BRACE (8:5-8:6)
-RIGHT_BRACE (9:1-9:2)
+PUBLIC (5:5-5:11)
+CONST (5:12-5:17)
+OVERRIDE (5:18-5:26)
+FUNC (5:27-5:31)
+IDENTIFIER "hashCode" (5:32-5:40)
+LEFT_PAREN (5:40-5:41)
+RIGHT_PAREN (5:41-5:42)
+IDENTIFIER "i32" (5:43-5:46)
+LEFT_BRACE (5:47-5:48)
+RETURN (6:9-6:15)
+INTEGER_LITERAL "0" (6:16-6:17)
+SEMICOLON (6:17-6:18)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+CONST (10:1-10:6)
+IDENTIFIER "stored" (10:7-10:13)
+EQUAL (10:14-10:15)
+NEW (10:16-10:19)
+IDENTIFIER "Key" (10:20-10:23)
+LEFT_PAREN (10:23-10:24)
+RIGHT_PAREN (10:24-10:25)
+SEMICOLON (10:25-10:26)
 CONST (11:1-11:6)
-IDENTIFIER "stored" (11:7-11:13)
+IDENTIFIER "lookup" (11:7-11:13)
 EQUAL (11:14-11:15)
 NEW (11:16-11:19)
 IDENTIFIER "Key" (11:20-11:23)
@@ -57,39 +68,31 @@ LEFT_PAREN (11:23-11:24)
 RIGHT_PAREN (11:24-11:25)
 SEMICOLON (11:25-11:26)
 CONST (12:1-12:6)
-IDENTIFIER "lookup" (12:7-12:13)
+IDENTIFIER "values" (12:7-12:13)
 EQUAL (12:14-12:15)
-NEW (12:16-12:19)
-IDENTIFIER "Key" (12:20-12:23)
-LEFT_PAREN (12:23-12:24)
-RIGHT_PAREN (12:24-12:25)
-SEMICOLON (12:25-12:26)
-CONST (13:1-13:6)
+LEFT_BRACE (12:16-12:17)
+IDENTIFIER "stored" (12:17-12:23)
+COLON (12:23-12:24)
+STRING_LITERAL "\"found\"" (12:25-12:32)
+RIGHT_BRACE (12:32-12:33)
+SEMICOLON (12:33-12:34)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
 IDENTIFIER "values" (13:7-13:13)
-EQUAL (13:14-13:15)
-LEFT_BRACE (13:16-13:17)
-IDENTIFIER "stored" (13:17-13:23)
-COLON (13:23-13:24)
-STRING_LITERAL "\"found\"" (13:25-13:32)
-RIGHT_BRACE (13:32-13:33)
-SEMICOLON (13:33-13:34)
-IDENTIFIER "print" (14:1-14:6)
-LEFT_PAREN (14:6-14:7)
-IDENTIFIER "values" (14:7-14:13)
-DOT (14:13-14:14)
-IDENTIFIER "get" (14:14-14:17)
-LEFT_PAREN (14:17-14:18)
-IDENTIFIER "lookup" (14:18-14:24)
-RIGHT_PAREN (14:24-14:25)
-RIGHT_PAREN (14:25-14:26)
-SEMICOLON (14:26-14:27)
+DOT (13:13-13:14)
+IDENTIFIER "get" (13:14-13:17)
+LEFT_PAREN (13:17-13:18)
+IDENTIFIER "lookup" (13:18-13:24)
+RIGHT_PAREN (13:24-13:25)
+RIGHT_PAREN (13:25-13:26)
+SEMICOLON (13:26-13:27)
 
 --- AST ---
 
 (Program
-  range: 1:1-14:27
+  range: 1:1-13:27
   (ClassDeclaration
-    range: 1:1-9:2
+    range: 1:1-8:2
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Key"
@@ -98,33 +101,46 @@ SEMICOLON (14:26-14:27)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: true
       (FunctionDeclaration
-        range: 2:12-4:6
+        range: 2:19-4:6
         CONST
-        OVERRIDE
         (IdentifierDeclaration
-          range: 2:32-2:38
-          name: "equals"
+          range: 2:30-2:35
+          name: "equal"
         )
         (FunctionParameter
-          range: 2:39-2:49
+          range: 2:36-2:42
           (IdentifierDeclaration
-            range: 2:39-2:44
-            name: "other"
+            range: 2:36-2:37
+            name: "a"
           )
           (NamedTypeNode
-            range: 2:46-2:49
-            name: "any"
+            range: 2:39-2:42
+            name: "Key"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:44-2:50
+          (IdentifierDeclaration
+            range: 2:44-2:45
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:47-2:50
+            name: "Key"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 2:51-2:55
+          range: 2:52-2:56
           name: "bool"
         )
         (BlockStatement
-          range: 2:56-4:6
+          range: 2:57-4:6
           (ReturnStatement
             range: 3:9-3:21
             (LiteralExpression
@@ -137,26 +153,26 @@ SEMICOLON (14:26-14:27)
       )
     )
     (MemberDeclaration
-      range: 6:5-8:6
+      range: 5:5-7:6
       visibility: PUBLIC
       (FunctionDeclaration
-        range: 6:12-8:6
+        range: 5:12-7:6
         CONST
         OVERRIDE
         (IdentifierDeclaration
-          range: 6:32-6:40
+          range: 5:32-5:40
           name: "hashCode"
         )
         (NamedTypeNode
-          range: 6:43-6:46
+          range: 5:43-5:46
           name: "i32"
         )
         (BlockStatement
-          range: 6:47-8:6
+          range: 5:47-7:6
           (ReturnStatement
-            range: 7:9-7:18
+            range: 6:9-6:18
             (LiteralExpression
-              range: 7:16-7:17
+              range: 6:16-6:17
               kind: INT
               text: "0"
             )
@@ -166,11 +182,27 @@ SEMICOLON (14:26-14:27)
     )
   )
   (VariableDeclaration
+    range: 10:1-10:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "stored"
+    )
+    type: null
+    (NewExpression
+      range: 10:16-10:25
+      (IdentifierExpression
+        range: 10:20-10:23
+        name: "Key"
+      )
+    )
+  )
+  (VariableDeclaration
     range: 11:1-11:26
     mutability: CONST
     (IdentifierDeclaration
       range: 11:7-11:13
-      name: "stored"
+      name: "lookup"
     )
     type: null
     (NewExpression
@@ -182,39 +214,23 @@ SEMICOLON (14:26-14:27)
     )
   )
   (VariableDeclaration
-    range: 12:1-12:26
+    range: 12:1-12:34
     mutability: CONST
     (IdentifierDeclaration
       range: 12:7-12:13
-      name: "lookup"
-    )
-    type: null
-    (NewExpression
-      range: 12:16-12:25
-      (IdentifierExpression
-        range: 12:20-12:23
-        name: "Key"
-      )
-    )
-  )
-  (VariableDeclaration
-    range: 13:1-13:34
-    mutability: CONST
-    (IdentifierDeclaration
-      range: 13:7-13:13
       name: "values"
     )
     type: null
     (MapExpression
-      range: 13:16-13:33
+      range: 12:16-12:33
       (MapEntry
-        range: 13:17-13:32
+        range: 12:17-12:32
         (IdentifierExpression
-          range: 13:17-13:23
+          range: 12:17-12:23
           name: "stored"
         )
         (LiteralExpression
-          range: 13:25-13:32
+          range: 12:25-12:32
           kind: STRING
           text: "\"found\""
         )
@@ -222,28 +238,28 @@ SEMICOLON (14:26-14:27)
     )
   )
   (ExpressionStatement
-    range: 14:1-14:27
+    range: 13:1-13:27
     (CallExpression
-      range: 14:1-14:26
+      range: 13:1-13:26
       (IdentifierExpression
-        range: 14:1-14:6
+        range: 13:1-13:6
         name: "print"
       )
       (CallExpression
-        range: 14:7-14:25
+        range: 13:7-13:25
         (MemberExpression
-          range: 14:7-14:17
+          range: 13:7-13:17
           (IdentifierExpression
-            range: 14:7-14:13
+            range: 13:7-13:13
             name: "values"
           )
           (IdentifierExpression
-            range: 14:14-14:17
+            range: 13:14-13:17
             name: "get"
           )
         )
         (IdentifierExpression
-          range: 14:18-14:24
+          range: 13:18-13:24
           name: "lookup"
         )
       )
@@ -255,47 +271,49 @@ SEMICOLON (14:26-14:27)
 
 Expression types:
   3:16-3:20 -> bool
-  7:16-7:17 -> i32
+  6:16-6:17 -> i32
+  10:16-10:25 -> Key
+  10:20-10:23 -> Key
   11:16-11:25 -> Key
   11:20-11:23 -> Key
-  12:16-12:25 -> Key
-  12:20-12:23 -> Key
-  13:16-13:33 -> Map<Key, string>
-  13:17-13:23 -> Key
-  13:25-13:32 -> string
-  14:1-14:6 -> (any) => void
-  14:1-14:26 -> void
-  14:7-14:13 -> Map<Key, string>
-  14:7-14:17 -> (any) => string | null
-  14:7-14:25 -> string | null
-  14:14-14:17 -> (any) => string | null
-  14:18-14:24 -> Key
+  12:16-12:33 -> Map<Key, string>
+  12:17-12:23 -> Key
+  12:25-12:32 -> string
+  13:1-13:6 -> (any) => void
+  13:1-13:26 -> void
+  13:7-13:13 -> Map<Key, string>
+  13:7-13:17 -> (any) => string | null
+  13:7-13:25 -> string | null
+  13:14-13:17 -> (any) => string | null
+  13:18-13:24 -> Key
 
 Resolved types:
-  2:46-2:49 -> any
-  2:51-2:55 -> bool
-  6:43-6:46 -> i32
+  2:39-2:42 -> Key
+  2:47-2:50 -> Key
+  2:52-2:56 -> bool
+  5:43-5:46 -> i32
 
 Conversions:
-  14:18-14:24 -> Key -> any
+  13:18-13:24 -> Key -> any
 
 Declarations:
   1:7-1:10 -> class Key
-  2:32-2:38 -> const override func equals(any) => bool
-  2:39-2:44 -> const other: any
-  6:32-6:40 -> const override func hashCode() => i32
-  11:7-11:13 -> const stored: Key
-  12:7-12:13 -> const lookup: Key
-  13:7-13:13 -> const values: Map<Key, string>
+  2:30-2:35 -> const func equal(Key, Key) => bool
+  2:36-2:37 -> const a: Key
+  2:44-2:45 -> const b: Key
+  5:32-5:40 -> const override func hashCode() => i32
+  10:7-10:13 -> const stored: Key
+  11:7-11:13 -> const lookup: Key
+  12:7-12:13 -> const values: Map<Key, string>
 
 References:
+  10:20-10:23 -> 1:7-1:10
   11:20-11:23 -> 1:7-1:10
-  12:20-12:23 -> 1:7-1:10
-  13:17-13:23 -> 11:7-11:13
-  14:1-14:6 -> builtin print
-  14:7-14:13 -> 13:7-13:13
-  14:14-14:17 -> Map<Key, string>.get(any): string | null
-  14:18-14:24 -> 12:7-12:13
+  12:17-12:23 -> 10:7-10:13
+  13:1-13:6 -> builtin print
+  13:7-13:13 -> 12:7-12:13
+  13:14-13:17 -> Map<Key, string>.get(any): string | null
+  13:18-13:24 -> 11:7-11:13
 
 --- BYTECODE ---
 
@@ -334,6 +352,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 4 max locals 0
 
 class Test$Key extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Key flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -341,10 +360,23 @@ class Test$Key extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
     max stack 1 max locals 1
-  method equals(Ljava/lang/Object;)Z flags [PUBLIC]
+  method equal(LTest$Key;LTest$Key;)Z flags [PUBLIC, STATIC]
     ICONST_1 1
     IRETURN
     max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Key
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Key
+    INVOKESTATIC Test$Key.equal(LTest$Key;LTest$Key;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
   method hashCode()I flags [PUBLIC]
     LDC 0
     IRETURN

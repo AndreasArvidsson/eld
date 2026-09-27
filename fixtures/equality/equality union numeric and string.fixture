@@ -1,0 +1,994 @@
+const small: i32 | string = 5;
+const wide: i64 | string = 5;
+const text1: i32 | string = "same";
+const text2: i64 | string = "same";
+const nullable: i32 | string | null = "same";
+const missing: i32 | string | null = null;
+print(small == wide);
+print(wide == small);
+print(text1 == text2);
+print(text2 == text1);
+print(nullable == text1);
+print(text1 == nullable);
+print(missing == missing);
+print(missing == text1);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "small" (1:7-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i32" (1:14-1:17)
+PIPE (1:18-1:19)
+IDENTIFIER "string" (1:20-1:26)
+EQUAL (1:27-1:28)
+INTEGER_LITERAL "5" (1:29-1:30)
+SEMICOLON (1:30-1:31)
+CONST (2:1-2:6)
+IDENTIFIER "wide" (2:7-2:11)
+COLON (2:11-2:12)
+IDENTIFIER "i64" (2:13-2:16)
+PIPE (2:17-2:18)
+IDENTIFIER "string" (2:19-2:25)
+EQUAL (2:26-2:27)
+INTEGER_LITERAL "5" (2:28-2:29)
+SEMICOLON (2:29-2:30)
+CONST (3:1-3:6)
+IDENTIFIER "text1" (3:7-3:12)
+COLON (3:12-3:13)
+IDENTIFIER "i32" (3:14-3:17)
+PIPE (3:18-3:19)
+IDENTIFIER "string" (3:20-3:26)
+EQUAL (3:27-3:28)
+STRING_LITERAL "\"same\"" (3:29-3:35)
+SEMICOLON (3:35-3:36)
+CONST (4:1-4:6)
+IDENTIFIER "text2" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "i64" (4:14-4:17)
+PIPE (4:18-4:19)
+IDENTIFIER "string" (4:20-4:26)
+EQUAL (4:27-4:28)
+STRING_LITERAL "\"same\"" (4:29-4:35)
+SEMICOLON (4:35-4:36)
+CONST (5:1-5:6)
+IDENTIFIER "nullable" (5:7-5:15)
+COLON (5:15-5:16)
+IDENTIFIER "i32" (5:17-5:20)
+PIPE (5:21-5:22)
+IDENTIFIER "string" (5:23-5:29)
+PIPE (5:30-5:31)
+NULL (5:32-5:36)
+EQUAL (5:37-5:38)
+STRING_LITERAL "\"same\"" (5:39-5:45)
+SEMICOLON (5:45-5:46)
+CONST (6:1-6:6)
+IDENTIFIER "missing" (6:7-6:14)
+COLON (6:14-6:15)
+IDENTIFIER "i32" (6:16-6:19)
+PIPE (6:20-6:21)
+IDENTIFIER "string" (6:22-6:28)
+PIPE (6:29-6:30)
+NULL (6:31-6:35)
+EQUAL (6:36-6:37)
+NULL (6:38-6:42)
+SEMICOLON (6:42-6:43)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "small" (7:7-7:12)
+EQUAL_EQUAL (7:13-7:15)
+IDENTIFIER "wide" (7:16-7:20)
+RIGHT_PAREN (7:20-7:21)
+SEMICOLON (7:21-7:22)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "wide" (8:7-8:11)
+EQUAL_EQUAL (8:12-8:14)
+IDENTIFIER "small" (8:15-8:20)
+RIGHT_PAREN (8:20-8:21)
+SEMICOLON (8:21-8:22)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "text1" (9:7-9:12)
+EQUAL_EQUAL (9:13-9:15)
+IDENTIFIER "text2" (9:16-9:21)
+RIGHT_PAREN (9:21-9:22)
+SEMICOLON (9:22-9:23)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "text2" (10:7-10:12)
+EQUAL_EQUAL (10:13-10:15)
+IDENTIFIER "text1" (10:16-10:21)
+RIGHT_PAREN (10:21-10:22)
+SEMICOLON (10:22-10:23)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "nullable" (11:7-11:15)
+EQUAL_EQUAL (11:16-11:18)
+IDENTIFIER "text1" (11:19-11:24)
+RIGHT_PAREN (11:24-11:25)
+SEMICOLON (11:25-11:26)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "text1" (12:7-12:12)
+EQUAL_EQUAL (12:13-12:15)
+IDENTIFIER "nullable" (12:16-12:24)
+RIGHT_PAREN (12:24-12:25)
+SEMICOLON (12:25-12:26)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "missing" (13:7-13:14)
+EQUAL_EQUAL (13:15-13:17)
+IDENTIFIER "missing" (13:18-13:25)
+RIGHT_PAREN (13:25-13:26)
+SEMICOLON (13:26-13:27)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "missing" (14:7-14:14)
+EQUAL_EQUAL (14:15-14:17)
+IDENTIFIER "text1" (14:18-14:23)
+RIGHT_PAREN (14:23-14:24)
+SEMICOLON (14:24-14:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:25
+  (VariableDeclaration
+    range: 1:1-1:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "small"
+    )
+    (UnionTypeNode
+      range: 1:14-1:26
+      (NamedTypeNode
+        range: 1:14-1:17
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 1:20-1:26
+        name: "string"
+      )
+    )
+    (LiteralExpression
+      range: 1:29-1:30
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:11
+      name: "wide"
+    )
+    (UnionTypeNode
+      range: 2:13-2:25
+      (NamedTypeNode
+        range: 2:13-2:16
+        name: "i64"
+      )
+      (NamedTypeNode
+        range: 2:19-2:25
+        name: "string"
+      )
+    )
+    (LiteralExpression
+      range: 2:28-2:29
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "text1"
+    )
+    (UnionTypeNode
+      range: 3:14-3:26
+      (NamedTypeNode
+        range: 3:14-3:17
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 3:20-3:26
+        name: "string"
+      )
+    )
+    (LiteralExpression
+      range: 3:29-3:35
+      kind: STRING
+      text: "\"same\""
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "text2"
+    )
+    (UnionTypeNode
+      range: 4:14-4:26
+      (NamedTypeNode
+        range: 4:14-4:17
+        name: "i64"
+      )
+      (NamedTypeNode
+        range: 4:20-4:26
+        name: "string"
+      )
+    )
+    (LiteralExpression
+      range: 4:29-4:35
+      kind: STRING
+      text: "\"same\""
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:15
+      name: "nullable"
+    )
+    (UnionTypeNode
+      range: 5:17-5:36
+      (NamedTypeNode
+        range: 5:17-5:20
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 5:23-5:29
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 5:32-5:36
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 5:39-5:45
+      kind: STRING
+      text: "\"same\""
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:14
+      name: "missing"
+    )
+    (UnionTypeNode
+      range: 6:16-6:35
+      (NamedTypeNode
+        range: 6:16-6:19
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 6:22-6:28
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 6:31-6:35
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 6:38-6:42
+      kind: NULL
+      text: "null"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:22
+    (CallExpression
+      range: 7:1-7:21
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 7:7-7:20
+        (IdentifierExpression
+          range: 7:7-7:12
+          name: "small"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 7:16-7:20
+          name: "wide"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:22
+    (CallExpression
+      range: 8:1-8:21
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:20
+        (IdentifierExpression
+          range: 8:7-8:11
+          name: "wide"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 8:15-8:20
+          name: "small"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:23
+    (CallExpression
+      range: 9:1-9:22
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:21
+        (IdentifierExpression
+          range: 9:7-9:12
+          name: "text1"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 9:16-9:21
+          name: "text2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:23
+    (CallExpression
+      range: 10:1-10:22
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:7-10:21
+        (IdentifierExpression
+          range: 10:7-10:12
+          name: "text2"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 10:16-10:21
+          name: "text1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:26
+    (CallExpression
+      range: 11:1-11:25
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 11:7-11:24
+        (IdentifierExpression
+          range: 11:7-11:15
+          name: "nullable"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 11:19-11:24
+          name: "text1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:26
+    (CallExpression
+      range: 12:1-12:25
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 12:7-12:24
+        (IdentifierExpression
+          range: 12:7-12:12
+          name: "text1"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 12:16-12:24
+          name: "nullable"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:27
+    (CallExpression
+      range: 13:1-13:26
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:25
+        (IdentifierExpression
+          range: 13:7-13:14
+          name: "missing"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 13:18-13:25
+          name: "missing"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:25
+    (CallExpression
+      range: 14:1-14:24
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:23
+        (IdentifierExpression
+          range: 14:7-14:14
+          name: "missing"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 14:18-14:23
+          name: "text1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:29-1:30 -> i32
+  2:28-2:29 -> i32
+  3:29-3:35 -> string
+  4:29-4:35 -> string
+  5:39-5:45 -> string
+  6:38-6:42 -> null
+  7:1-7:6 -> (any) => void
+  7:1-7:21 -> void
+  7:7-7:12 -> i32 | string
+  7:7-7:20 -> bool
+  7:16-7:20 -> i64 | string
+  8:1-8:6 -> (any) => void
+  8:1-8:21 -> void
+  8:7-8:11 -> i64 | string
+  8:7-8:20 -> bool
+  8:15-8:20 -> i32 | string
+  9:1-9:6 -> (any) => void
+  9:1-9:22 -> void
+  9:7-9:12 -> i32 | string
+  9:7-9:21 -> bool
+  9:16-9:21 -> i64 | string
+  10:1-10:6 -> (any) => void
+  10:1-10:22 -> void
+  10:7-10:12 -> i64 | string
+  10:7-10:21 -> bool
+  10:16-10:21 -> i32 | string
+  11:1-11:6 -> (any) => void
+  11:1-11:25 -> void
+  11:7-11:15 -> i32 | string | null
+  11:7-11:24 -> bool
+  11:19-11:24 -> i32 | string
+  12:1-12:6 -> (any) => void
+  12:1-12:25 -> void
+  12:7-12:12 -> i32 | string
+  12:7-12:24 -> bool
+  12:16-12:24 -> i32 | string | null
+  13:1-13:6 -> (any) => void
+  13:1-13:26 -> void
+  13:7-13:14 -> i32 | string | null
+  13:7-13:25 -> bool
+  13:18-13:25 -> i32 | string | null
+  14:1-14:6 -> (any) => void
+  14:1-14:24 -> void
+  14:7-14:14 -> i32 | string | null
+  14:7-14:23 -> bool
+  14:18-14:23 -> i32 | string
+
+Resolved types:
+  1:14-1:17 -> i32
+  1:14-1:26 -> i32 | string
+  1:20-1:26 -> string
+  2:13-2:16 -> i64
+  2:13-2:25 -> i64 | string
+  2:19-2:25 -> string
+  3:14-3:17 -> i32
+  3:14-3:26 -> i32 | string
+  3:20-3:26 -> string
+  4:14-4:17 -> i64
+  4:14-4:26 -> i64 | string
+  4:20-4:26 -> string
+  5:17-5:20 -> i32
+  5:17-5:36 -> i32 | string | null
+  5:23-5:29 -> string
+  5:32-5:36 -> null
+  6:16-6:19 -> i32
+  6:16-6:35 -> i32 | string | null
+  6:22-6:28 -> string
+  6:31-6:35 -> null
+
+Conversions:
+  1:29-1:30 -> i32 -> i32 | string
+  2:28-2:29 -> i32 -> i64 -> i64 | string
+  3:29-3:35 -> string -> i32 | string
+  4:29-4:35 -> string -> i64 | string
+  5:39-5:45 -> string -> i32 | string | null
+  6:38-6:42 -> null -> i32 | string | null
+  7:7-7:12 -> i32 | string -> i64 | string
+  8:15-8:20 -> i32 | string -> i64 | string
+  9:7-9:12 -> i32 | string -> i64 | string
+  10:16-10:21 -> i32 | string -> i64 | string
+  11:19-11:24 -> i32 | string -> i32 | string | null
+  12:7-12:12 -> i32 | string -> i32 | string | null
+  14:18-14:23 -> i32 | string -> i32 | string | null
+
+Declarations:
+  1:7-1:12 -> const small: i32 | string
+  2:7-2:11 -> const wide: i64 | string
+  3:7-3:12 -> const text1: i32 | string
+  4:7-4:12 -> const text2: i64 | string
+  5:7-5:15 -> const nullable: i32 | string | null
+  6:7-6:14 -> const missing: i32 | string | null
+
+References:
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 1:7-1:12
+  7:16-7:20 -> 2:7-2:11
+  8:1-8:6 -> builtin print
+  8:7-8:11 -> 2:7-2:11
+  8:15-8:20 -> 1:7-1:12
+  9:1-9:6 -> builtin print
+  9:7-9:12 -> 3:7-3:12
+  9:16-9:21 -> 4:7-4:12
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 4:7-4:12
+  10:16-10:21 -> 3:7-3:12
+  11:1-11:6 -> builtin print
+  11:7-11:15 -> 5:7-5:15
+  11:19-11:24 -> 3:7-3:12
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 3:7-3:12
+  12:16-12:24 -> 5:7-5:15
+  13:1-13:6 -> builtin print
+  13:7-13:14 -> 6:7-6:14
+  13:18-13:25 -> 6:7-6:14
+  14:1-14:6 -> builtin print
+  14:7-14:14 -> 6:7-6:14
+  14:18-14:23 -> 3:7-3:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field small Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field wide Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field text1 Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field text2 Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field nullable Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field missing Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.small Ljava/lang/Object;
+    LDC 5
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    PUTSTATIC Test.wide Ljava/lang/Object;
+    LDC "same"
+    PUTSTATIC Test.text1 Ljava/lang/Object;
+    LDC "same"
+    PUTSTATIC Test.text2 Ljava/lang/Object;
+    LDC "same"
+    PUTSTATIC Test.nullable Ljava/lang/Object;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.missing Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.small Ljava/lang/Object;
+    GETSTATIC Test.wide Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Integer
+    IFEQ L0
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L0
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    DUP2_X1
+    POP2
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LCMP
+    IFEQ L2
+   L0:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L1
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L1
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L2
+   L1:
+    POP2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    POP2
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.wide Ljava/lang/Object;
+    GETSTATIC Test.small Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Long
+    IFEQ L4
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L4
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    DUP2_X1
+    POP2
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    LCMP
+    IFEQ L6
+   L4:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L5
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L5
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L6
+   L5:
+    POP2
+    ICONST_0 0
+    GOTO L7
+   L6:
+    POP2
+    ICONST_1 1
+   L7:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.text1 Ljava/lang/Object;
+    GETSTATIC Test.text2 Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Integer
+    IFEQ L8
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L8
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    DUP2_X1
+    POP2
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LCMP
+    IFEQ L10
+   L8:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L9
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L9
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L10
+   L9:
+    POP2
+    ICONST_0 0
+    GOTO L11
+   L10:
+    POP2
+    ICONST_1 1
+   L11:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.text2 Ljava/lang/Object;
+    GETSTATIC Test.text1 Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Long
+    IFEQ L12
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L12
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    DUP2_X1
+    POP2
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    I2L
+    LCMP
+    IFEQ L14
+   L12:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L13
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L13
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L14
+   L13:
+    POP2
+    ICONST_0 0
+    GOTO L15
+   L14:
+    POP2
+    ICONST_1 1
+   L15:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullable Ljava/lang/Object;
+    GETSTATIC Test.text1 Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Integer
+    IFEQ L16
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L16
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    IF_ICMPEQ L19
+   L16:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L17
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L17
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L19
+   L17:
+    DUP2
+    POP
+    IFNONNULL L18
+    DUP
+    IFNONNULL L18
+    GOTO L19
+   L18:
+    POP2
+    ICONST_0 0
+    GOTO L20
+   L19:
+    POP2
+    ICONST_1 1
+   L20:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.text1 Ljava/lang/Object;
+    GETSTATIC Test.nullable Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Integer
+    IFEQ L21
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L21
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    IF_ICMPEQ L24
+   L21:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L22
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L22
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L24
+   L22:
+    DUP2
+    POP
+    IFNONNULL L23
+    DUP
+    IFNONNULL L23
+    GOTO L24
+   L23:
+    POP2
+    ICONST_0 0
+    GOTO L25
+   L24:
+    POP2
+    ICONST_1 1
+   L25:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.missing Ljava/lang/Object;
+    GETSTATIC Test.missing Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Integer
+    IFEQ L26
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L26
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    IF_ICMPEQ L29
+   L26:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L27
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L27
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L29
+   L27:
+    DUP2
+    POP
+    IFNONNULL L28
+    DUP
+    IFNONNULL L28
+    GOTO L29
+   L28:
+    POP2
+    ICONST_0 0
+    GOTO L30
+   L29:
+    POP2
+    ICONST_1 1
+   L30:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.missing Ljava/lang/Object;
+    GETSTATIC Test.text1 Ljava/lang/Object;
+    DUP2
+    POP
+    INSTANCEOF java/lang/Integer
+    IFEQ L31
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L31
+    DUP2
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    SWAP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    IF_ICMPEQ L34
+   L31:
+    DUP2
+    POP
+    INSTANCEOF java/lang/String
+    IFEQ L32
+    DUP
+    INSTANCEOF java/lang/String
+    IFEQ L32
+    DUP2
+    SWAP
+    CHECKCAST java/lang/String
+    SWAP
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L34
+   L32:
+    DUP2
+    POP
+    IFNONNULL L33
+    DUP
+    IFNONNULL L33
+    GOTO L34
+   L33:
+    POP2
+    ICONST_0 0
+    GOTO L35
+   L34:
+    POP2
+    ICONST_1 1
+   L35:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 8 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+true
+true
+true
+false
+

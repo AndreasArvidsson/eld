@@ -793,11 +793,13 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     RETURN
    L5:
     ALOAD_2 2
-    IFNULL L6
+    IFNULL L2
     ALOAD_2 2
     ATHROW
    L6:
-    GOTO L2
+    NOP
+    NOP
+    ATHROW
    L7:
     ALOAD_0 0
     LDC 20
@@ -988,7 +990,8 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD 5
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
     RETURN
-    catch all from L1 to L23 handler L23
+    catch all from L1 to L6 handler L23
+    catch all from L7 to L23 handler L23
     max stack 6 max locals 6
 
 --- OUTPUT ---

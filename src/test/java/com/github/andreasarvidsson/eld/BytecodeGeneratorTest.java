@@ -703,7 +703,8 @@ class BytecodeGeneratorTest {
                     func identity() bool {
                         const child = new Left();
                         const base: Base = child;
-                        return base == child && child != new Right();
+                        const sibling: Base = new Right();
+                        return base == child && base != sibling;
                     }
                     func result() i32 {
                         const inferred = true ? new Left() : new Right();

@@ -755,6 +755,7 @@ class Test$Order extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE,
 
 class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Order
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Person flags [PUBLIC, STATIC]
   field age I flags [PUBLIC, FINAL]
@@ -792,6 +793,7 @@ class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 2 max locals 2
 
 class Test$Child extends Test$Person version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Child flags [PUBLIC, STATIC]
   method $get$age()I flags [PUBLIC, SYNTHETIC]

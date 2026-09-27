@@ -60,7 +60,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC ""
     LDC ""
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 3 max locals 0

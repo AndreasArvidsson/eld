@@ -457,16 +457,16 @@ Expression types:
   28:1-28:6 -> (any) => void
   28:1-28:37 -> void
   28:7-28:17 -> First
-  28:7-28:24 -> (any) => bool
+  28:7-28:24 -> (First) => bool
   28:7-28:36 -> bool
-  28:18-28:24 -> (any) => bool
+  28:18-28:24 -> (First) => bool
   28:25-28:35 -> First
   29:1-29:6 -> (any) => void
   29:1-29:39 -> void
   29:7-29:18 -> Second
-  29:7-29:25 -> (any) => bool
+  29:7-29:25 -> (Second) => bool
   29:7-29:38 -> bool
-  29:19-29:25 -> (any) => bool
+  29:19-29:25 -> (Second) => bool
   29:26-29:37 -> Second
 
 Resolved types:
@@ -481,10 +481,6 @@ Resolved types:
   19:26-19:34 -> Combined
   24:14-24:26 -> FirstFactory
   25:15-25:28 -> SecondFactory
-
-Conversions:
-  28:25-28:35 -> First -> any
-  29:26-29:37 -> Second -> any
 
 Declarations:
   1:11-1:16 -> interface First
@@ -513,11 +509,11 @@ References:
   27:28-27:34 -> 11:10-11:16
   28:1-28:6 -> builtin print
   28:7-28:17 -> 26:7-26:17
-  28:18-28:24 -> First.equals(any): bool
+  28:18-28:24 -> First.equals(First): bool
   28:25-28:35 -> 26:7-26:17
   29:1-29:6 -> builtin print
   29:7-29:18 -> 27:7-27:18
-  29:19-29:25 -> Second.equals(any): bool
+  29:19-29:25 -> Second.equals(Second): bool
   29:26-29:37 -> 27:7-27:18
 
 --- BYTECODE ---
@@ -559,12 +555,22 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.firstValue LTest$First;
     GETSTATIC Test.firstValue LTest$First;
-    INVOKEVIRTUAL java/lang/Object.equals(Ljava/lang/Object;)Z
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.secondValue LTest$Second;
     GETSTATIC Test.secondValue LTest$Second;
-    INVOKEVIRTUAL java/lang/Object.equals(Ljava/lang/Object;)Z
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 3 max locals 0
@@ -580,6 +586,7 @@ class Test$Second extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE
 class Test$Combined extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$First
   implements Test$Second
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Combined flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -607,6 +614,7 @@ class Test$CombinedFactory extends java/lang/Object version 65.0 flags [PUBLIC, 
 
 class Test$Factory extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$CombinedFactory
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Factory flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

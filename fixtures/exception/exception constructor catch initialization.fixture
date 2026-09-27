@@ -236,6 +236,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 3 max locals 0
 
 class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Resource flags [PUBLIC, STATIC]
   field value I flags [PUBLIC, FINAL]
@@ -257,8 +258,6 @@ class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     DUP_X1
     PUTFIELD Test$Resource.value I
     POP
-    GOTO L2
-   L2:
     RETURN
     catch java/io/IOException from L0 to L1 handler L1
     max stack 3 max locals 2

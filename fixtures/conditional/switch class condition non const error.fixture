@@ -1,5 +1,5 @@
 class Key {
-    public override func equals(other: any) bool {
+    public static func equal(a: Key, b: Key) bool {
         return true;
     }
 
@@ -18,16 +18,20 @@ CLASS (1:1-1:6)
 IDENTIFIER "Key" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
 PUBLIC (2:5-2:11)
-OVERRIDE (2:12-2:20)
-FUNC (2:21-2:25)
-IDENTIFIER "equals" (2:26-2:32)
-LEFT_PAREN (2:32-2:33)
-IDENTIFIER "other" (2:33-2:38)
-COLON (2:38-2:39)
-IDENTIFIER "any" (2:40-2:43)
-RIGHT_PAREN (2:43-2:44)
-IDENTIFIER "bool" (2:45-2:49)
-LEFT_BRACE (2:50-2:51)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "equal" (2:24-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "a" (2:30-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "Key" (2:33-2:36)
+COMMA (2:36-2:37)
+IDENTIFIER "b" (2:38-2:39)
+COLON (2:39-2:40)
+IDENTIFIER "Key" (2:41-2:44)
+RIGHT_PAREN (2:44-2:45)
+IDENTIFIER "bool" (2:46-2:50)
+LEFT_BRACE (2:51-2:52)
 RETURN (3:9-3:15)
 BOOLEAN_LITERAL "true" (3:16-3:20)
 SEMICOLON (3:20-3:21)
@@ -79,32 +83,45 @@ RIGHT_BRACE (13:1-13:2)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: true
       (FunctionDeclaration
-        range: 2:12-4:6
-        OVERRIDE
+        range: 2:19-4:6
         (IdentifierDeclaration
-          range: 2:26-2:32
-          name: "equals"
+          range: 2:24-2:29
+          name: "equal"
         )
         (FunctionParameter
-          range: 2:33-2:43
+          range: 2:30-2:36
           (IdentifierDeclaration
-            range: 2:33-2:38
-            name: "other"
+            range: 2:30-2:31
+            name: "a"
           )
           (NamedTypeNode
-            range: 2:40-2:43
-            name: "any"
+            range: 2:33-2:36
+            name: "Key"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:38-2:44
+          (IdentifierDeclaration
+            range: 2:38-2:39
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:41-2:44
+            name: "Key"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 2:45-2:49
+          range: 2:46-2:50
           name: "bool"
         )
         (BlockStatement
-          range: 2:50-4:6
+          range: 2:51-4:6
           (ReturnStatement
             range: 3:9-3:21
             (LiteralExpression
@@ -187,4 +204,4 @@ RIGHT_BRACE (13:1-13:2)
 
 --- SEMANTIC ---
 
-SemanticException: Switch subject of type Key requires const equals and hashCode methods at 11:9-11:18
+SemanticException: Switch subject of type Key requires const equal and hashCode methods at 11:9-11:18

@@ -1,0 +1,763 @@
+class Animal {
+    public static func equal(a: Animal, b: Animal) bool { return true; }
+}
+class Cat extends Animal {}
+class Dog extends Animal {}
+const cat: Animal = new Cat();
+const dog: Animal = new Dog();
+const nullableCat: Animal | null = cat;
+const nullableDog: Animal | null = dog;
+const absent: Animal | null = null;
+print(cat == dog);
+print(nullableCat == nullableDog);
+print(cat == nullableDog);
+print(nullableCat == dog);
+print(nullableCat == absent);
+print(absent == absent);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+LEFT_BRACE (1:14-1:15)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "equal" (2:24-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "a" (2:30-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "Animal" (2:33-2:39)
+COMMA (2:39-2:40)
+IDENTIFIER "b" (2:41-2:42)
+COLON (2:42-2:43)
+IDENTIFIER "Animal" (2:44-2:50)
+RIGHT_PAREN (2:50-2:51)
+IDENTIFIER "bool" (2:52-2:56)
+LEFT_BRACE (2:57-2:58)
+RETURN (2:59-2:65)
+BOOLEAN_LITERAL "true" (2:66-2:70)
+SEMICOLON (2:70-2:71)
+RIGHT_BRACE (2:72-2:73)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Cat" (4:7-4:10)
+EXTENDS (4:11-4:18)
+IDENTIFIER "Animal" (4:19-4:25)
+LEFT_BRACE (4:26-4:27)
+RIGHT_BRACE (4:27-4:28)
+CLASS (5:1-5:6)
+IDENTIFIER "Dog" (5:7-5:10)
+EXTENDS (5:11-5:18)
+IDENTIFIER "Animal" (5:19-5:25)
+LEFT_BRACE (5:26-5:27)
+RIGHT_BRACE (5:27-5:28)
+CONST (6:1-6:6)
+IDENTIFIER "cat" (6:7-6:10)
+COLON (6:10-6:11)
+IDENTIFIER "Animal" (6:12-6:18)
+EQUAL (6:19-6:20)
+NEW (6:21-6:24)
+IDENTIFIER "Cat" (6:25-6:28)
+LEFT_PAREN (6:28-6:29)
+RIGHT_PAREN (6:29-6:30)
+SEMICOLON (6:30-6:31)
+CONST (7:1-7:6)
+IDENTIFIER "dog" (7:7-7:10)
+COLON (7:10-7:11)
+IDENTIFIER "Animal" (7:12-7:18)
+EQUAL (7:19-7:20)
+NEW (7:21-7:24)
+IDENTIFIER "Dog" (7:25-7:28)
+LEFT_PAREN (7:28-7:29)
+RIGHT_PAREN (7:29-7:30)
+SEMICOLON (7:30-7:31)
+CONST (8:1-8:6)
+IDENTIFIER "nullableCat" (8:7-8:18)
+COLON (8:18-8:19)
+IDENTIFIER "Animal" (8:20-8:26)
+PIPE (8:27-8:28)
+NULL (8:29-8:33)
+EQUAL (8:34-8:35)
+IDENTIFIER "cat" (8:36-8:39)
+SEMICOLON (8:39-8:40)
+CONST (9:1-9:6)
+IDENTIFIER "nullableDog" (9:7-9:18)
+COLON (9:18-9:19)
+IDENTIFIER "Animal" (9:20-9:26)
+PIPE (9:27-9:28)
+NULL (9:29-9:33)
+EQUAL (9:34-9:35)
+IDENTIFIER "dog" (9:36-9:39)
+SEMICOLON (9:39-9:40)
+CONST (10:1-10:6)
+IDENTIFIER "absent" (10:7-10:13)
+COLON (10:13-10:14)
+IDENTIFIER "Animal" (10:15-10:21)
+PIPE (10:22-10:23)
+NULL (10:24-10:28)
+EQUAL (10:29-10:30)
+NULL (10:31-10:35)
+SEMICOLON (10:35-10:36)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "cat" (11:7-11:10)
+EQUAL_EQUAL (11:11-11:13)
+IDENTIFIER "dog" (11:14-11:17)
+RIGHT_PAREN (11:17-11:18)
+SEMICOLON (11:18-11:19)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "nullableCat" (12:7-12:18)
+EQUAL_EQUAL (12:19-12:21)
+IDENTIFIER "nullableDog" (12:22-12:33)
+RIGHT_PAREN (12:33-12:34)
+SEMICOLON (12:34-12:35)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "cat" (13:7-13:10)
+EQUAL_EQUAL (13:11-13:13)
+IDENTIFIER "nullableDog" (13:14-13:25)
+RIGHT_PAREN (13:25-13:26)
+SEMICOLON (13:26-13:27)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "nullableCat" (14:7-14:18)
+EQUAL_EQUAL (14:19-14:21)
+IDENTIFIER "dog" (14:22-14:25)
+RIGHT_PAREN (14:25-14:26)
+SEMICOLON (14:26-14:27)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "nullableCat" (15:7-15:18)
+EQUAL_EQUAL (15:19-15:21)
+IDENTIFIER "absent" (15:22-15:28)
+RIGHT_PAREN (15:28-15:29)
+SEMICOLON (15:29-15:30)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "absent" (16:7-16:13)
+EQUAL_EQUAL (16:14-16:16)
+IDENTIFIER "absent" (16:17-16:23)
+RIGHT_PAREN (16:23-16:24)
+SEMICOLON (16:24-16:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:25
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:73
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:73
+        (IdentifierDeclaration
+          range: 2:24-2:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:30-2:39
+          (IdentifierDeclaration
+            range: 2:30-2:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:33-2:39
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:41-2:50
+          (IdentifierDeclaration
+            range: 2:41-2:42
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:44-2:50
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:52-2:56
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:57-2:73
+          (ReturnStatement
+            range: 2:59-2:71
+            (LiteralExpression
+              range: 2:66-2:70
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-4:28
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "Cat"
+    )
+    (IdentifierExpression
+      range: 4:19-4:25
+      name: "Animal"
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-5:28
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "Dog"
+    )
+    (IdentifierExpression
+      range: 5:19-5:25
+      name: "Animal"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:10
+      name: "cat"
+    )
+    (NamedTypeNode
+      range: 6:12-6:18
+      name: "Animal"
+    )
+    (NewExpression
+      range: 6:21-6:30
+      (IdentifierExpression
+        range: 6:25-6:28
+        name: "Cat"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "dog"
+    )
+    (NamedTypeNode
+      range: 7:12-7:18
+      name: "Animal"
+    )
+    (NewExpression
+      range: 7:21-7:30
+      (IdentifierExpression
+        range: 7:25-7:28
+        name: "Dog"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:18
+      name: "nullableCat"
+    )
+    (UnionTypeNode
+      range: 8:20-8:33
+      (NamedTypeNode
+        range: 8:20-8:26
+        name: "Animal"
+      )
+      (NamedTypeNode
+        range: 8:29-8:33
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 8:36-8:39
+      name: "cat"
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:18
+      name: "nullableDog"
+    )
+    (UnionTypeNode
+      range: 9:20-9:33
+      (NamedTypeNode
+        range: 9:20-9:26
+        name: "Animal"
+      )
+      (NamedTypeNode
+        range: 9:29-9:33
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 9:36-9:39
+      name: "dog"
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "absent"
+    )
+    (UnionTypeNode
+      range: 10:15-10:28
+      (NamedTypeNode
+        range: 10:15-10:21
+        name: "Animal"
+      )
+      (NamedTypeNode
+        range: 10:24-10:28
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 10:31-10:35
+      kind: NULL
+      text: "null"
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:19
+    (CallExpression
+      range: 11:1-11:18
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 11:7-11:17
+        (IdentifierExpression
+          range: 11:7-11:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 11:14-11:17
+          name: "dog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:35
+    (CallExpression
+      range: 12:1-12:34
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 12:7-12:33
+        (IdentifierExpression
+          range: 12:7-12:18
+          name: "nullableCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 12:22-12:33
+          name: "nullableDog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:27
+    (CallExpression
+      range: 13:1-13:26
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:25
+        (IdentifierExpression
+          range: 13:7-13:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 13:14-13:25
+          name: "nullableDog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:27
+    (CallExpression
+      range: 14:1-14:26
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:25
+        (IdentifierExpression
+          range: 14:7-14:18
+          name: "nullableCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 14:22-14:25
+          name: "dog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:30
+    (CallExpression
+      range: 15:1-15:29
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 15:7-15:28
+        (IdentifierExpression
+          range: 15:7-15:18
+          name: "nullableCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 15:22-15:28
+          name: "absent"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:25
+    (CallExpression
+      range: 16:1-16:24
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 16:7-16:23
+        (IdentifierExpression
+          range: 16:7-16:13
+          name: "absent"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 16:17-16:23
+          name: "absent"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:66-2:70 -> bool
+  4:19-4:25 -> Animal
+  5:19-5:25 -> Animal
+  6:21-6:30 -> Cat
+  6:25-6:28 -> Cat
+  7:21-7:30 -> Dog
+  7:25-7:28 -> Dog
+  8:36-8:39 -> Animal
+  9:36-9:39 -> Animal
+  10:31-10:35 -> null
+  11:1-11:6 -> (any) => void
+  11:1-11:18 -> void
+  11:7-11:10 -> Animal
+  11:7-11:17 -> bool
+  11:14-11:17 -> Animal
+  12:1-12:6 -> (any) => void
+  12:1-12:34 -> void
+  12:7-12:18 -> Animal | null
+  12:7-12:33 -> bool
+  12:22-12:33 -> Animal | null
+  13:1-13:6 -> (any) => void
+  13:1-13:26 -> void
+  13:7-13:10 -> Animal
+  13:7-13:25 -> bool
+  13:14-13:25 -> Animal | null
+  14:1-14:6 -> (any) => void
+  14:1-14:26 -> void
+  14:7-14:18 -> Animal | null
+  14:7-14:25 -> bool
+  14:22-14:25 -> Animal
+  15:1-15:6 -> (any) => void
+  15:1-15:29 -> void
+  15:7-15:18 -> Animal | null
+  15:7-15:28 -> bool
+  15:22-15:28 -> Animal | null
+  16:1-16:6 -> (any) => void
+  16:1-16:24 -> void
+  16:7-16:13 -> Animal | null
+  16:7-16:23 -> bool
+  16:17-16:23 -> Animal | null
+
+Resolved types:
+  2:33-2:39 -> Animal
+  2:44-2:50 -> Animal
+  2:52-2:56 -> bool
+  6:12-6:18 -> Animal
+  7:12-7:18 -> Animal
+  8:20-8:26 -> Animal
+  8:20-8:33 -> Animal | null
+  8:29-8:33 -> null
+  9:20-9:26 -> Animal
+  9:20-9:33 -> Animal | null
+  9:29-9:33 -> null
+  10:15-10:21 -> Animal
+  10:15-10:28 -> Animal | null
+  10:24-10:28 -> null
+
+Conversions:
+  8:36-8:39 -> Animal -> Animal | null
+  9:36-9:39 -> Animal -> Animal | null
+  10:31-10:35 -> null -> Animal | null
+  13:7-13:10 -> Animal -> Animal | null
+  14:22-14:25 -> Animal -> Animal | null
+
+Declarations:
+  1:7-1:13 -> class Animal
+  2:24-2:29 -> func equal(Animal, Animal) => bool
+  2:30-2:31 -> const a: Animal
+  2:41-2:42 -> const b: Animal
+  4:7-4:10 -> class Cat
+  5:7-5:10 -> class Dog
+  6:7-6:10 -> const cat: Animal
+  7:7-7:10 -> const dog: Animal
+  8:7-8:18 -> const nullableCat: Animal | null
+  9:7-9:18 -> const nullableDog: Animal | null
+  10:7-10:13 -> const absent: Animal | null
+
+References:
+  4:19-4:25 -> 1:7-1:13
+  5:19-5:25 -> 1:7-1:13
+  6:25-6:28 -> 4:7-4:10
+  7:25-7:28 -> 5:7-5:10
+  8:36-8:39 -> 6:7-6:10
+  9:36-9:39 -> 7:7-7:10
+  11:1-11:6 -> builtin print
+  11:7-11:10 -> 6:7-6:10
+  11:14-11:17 -> 7:7-7:10
+  12:1-12:6 -> builtin print
+  12:7-12:18 -> 8:7-8:18
+  12:22-12:33 -> 9:7-9:18
+  13:1-13:6 -> builtin print
+  13:7-13:10 -> 6:7-6:10
+  13:14-13:25 -> 9:7-9:18
+  14:1-14:6 -> builtin print
+  14:7-14:18 -> 8:7-8:18
+  14:22-14:25 -> 7:7-7:10
+  15:1-15:6 -> builtin print
+  15:7-15:18 -> 8:7-8:18
+  15:22-15:28 -> 10:7-10:13
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 10:7-10:13
+  16:17-16:23 -> 10:7-10:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  nest member Test$Cat
+  nest member Test$Dog
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  field cat LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field dog LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field nullableCat LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field nullableDog LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field absent LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    PUTSTATIC Test.cat LTest$Animal;
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    PUTSTATIC Test.dog LTest$Animal;
+    GETSTATIC Test.cat LTest$Animal;
+    PUTSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.dog LTest$Animal;
+    PUTSTATIC Test.nullableDog LTest$Animal;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.absent LTest$Animal;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Animal;
+    GETSTATIC Test.dog LTest$Animal;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    DUP2
+    POP
+    IFNULL L0
+    DUP
+    IFNULL L2
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L3
+   L0:
+    IF_ACMPEQ L1
+    ICONST_0 0
+    GOTO L3
+   L1:
+    ICONST_1 1
+    GOTO L3
+   L2:
+    POP2
+    ICONST_0 0
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Animal;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    DUP
+    IFNULL L4
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L5
+   L4:
+    POP2
+    ICONST_0 0
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.dog LTest$Animal;
+    DUP2
+    POP
+    IFNULL L6
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L7
+   L6:
+    POP2
+    ICONST_0 0
+   L7:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.absent LTest$Animal;
+    DUP2
+    POP
+    IFNULL L8
+    DUP
+    IFNULL L10
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L11
+   L8:
+    IF_ACMPEQ L9
+    ICONST_0 0
+    GOTO L11
+   L9:
+    ICONST_1 1
+    GOTO L11
+   L10:
+    POP2
+    ICONST_0 0
+   L11:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.absent LTest$Animal;
+    GETSTATIC Test.absent LTest$Animal;
+    DUP2
+    POP
+    IFNULL L12
+    DUP
+    IFNULL L14
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L15
+   L12:
+    IF_ACMPEQ L13
+    ICONST_0 0
+    GOTO L15
+   L13:
+    ICONST_1 1
+    GOTO L15
+   L14:
+    POP2
+    ICONST_0 0
+   L15:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Animal;LTest$Animal;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Animal
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Animal
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Cat extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+false
+true
+

@@ -1,5 +1,5 @@
 class Box {
-    public override func equals(other: any) bool {
+    public static func equal(a: Box, b: Box) bool {
         return true;
     }
 }
@@ -7,8 +7,10 @@ class Box {
 const first = new Box();
 const second = new Box();
 
-print(first.equals(first));
-print(first.equals(second));
+print(first == first);
+print(first == second);
+const equal: (Box, Box) => bool = Box.equal;
+print(equal(first, second));
 print(first.hashCode() == first.hashCode());
 print(first.toString() == first.toString());
 
@@ -18,16 +20,20 @@ CLASS (1:1-1:6)
 IDENTIFIER "Box" (1:7-1:10)
 LEFT_BRACE (1:11-1:12)
 PUBLIC (2:5-2:11)
-OVERRIDE (2:12-2:20)
-FUNC (2:21-2:25)
-IDENTIFIER "equals" (2:26-2:32)
-LEFT_PAREN (2:32-2:33)
-IDENTIFIER "other" (2:33-2:38)
-COLON (2:38-2:39)
-IDENTIFIER "any" (2:40-2:43)
-RIGHT_PAREN (2:43-2:44)
-IDENTIFIER "bool" (2:45-2:49)
-LEFT_BRACE (2:50-2:51)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "equal" (2:24-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "a" (2:30-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "Box" (2:33-2:36)
+COMMA (2:36-2:37)
+IDENTIFIER "b" (2:38-2:39)
+COLON (2:39-2:40)
+IDENTIFIER "Box" (2:41-2:44)
+RIGHT_PAREN (2:44-2:45)
+IDENTIFIER "bool" (2:46-2:50)
+LEFT_BRACE (2:51-2:52)
 RETURN (3:9-3:15)
 BOOLEAN_LITERAL "true" (3:16-3:20)
 SEMICOLON (3:20-3:21)
@@ -52,58 +58,77 @@ SEMICOLON (8:25-8:26)
 IDENTIFIER "print" (10:1-10:6)
 LEFT_PAREN (10:6-10:7)
 IDENTIFIER "first" (10:7-10:12)
-DOT (10:12-10:13)
-IDENTIFIER "equals" (10:13-10:19)
-LEFT_PAREN (10:19-10:20)
-IDENTIFIER "first" (10:20-10:25)
-RIGHT_PAREN (10:25-10:26)
-RIGHT_PAREN (10:26-10:27)
-SEMICOLON (10:27-10:28)
+EQUAL_EQUAL (10:13-10:15)
+IDENTIFIER "first" (10:16-10:21)
+RIGHT_PAREN (10:21-10:22)
+SEMICOLON (10:22-10:23)
 IDENTIFIER "print" (11:1-11:6)
 LEFT_PAREN (11:6-11:7)
 IDENTIFIER "first" (11:7-11:12)
-DOT (11:12-11:13)
-IDENTIFIER "equals" (11:13-11:19)
-LEFT_PAREN (11:19-11:20)
-IDENTIFIER "second" (11:20-11:26)
-RIGHT_PAREN (11:26-11:27)
-RIGHT_PAREN (11:27-11:28)
-SEMICOLON (11:28-11:29)
-IDENTIFIER "print" (12:1-12:6)
-LEFT_PAREN (12:6-12:7)
-IDENTIFIER "first" (12:7-12:12)
-DOT (12:12-12:13)
-IDENTIFIER "hashCode" (12:13-12:21)
-LEFT_PAREN (12:21-12:22)
-RIGHT_PAREN (12:22-12:23)
-EQUAL_EQUAL (12:24-12:26)
-IDENTIFIER "first" (12:27-12:32)
-DOT (12:32-12:33)
-IDENTIFIER "hashCode" (12:33-12:41)
-LEFT_PAREN (12:41-12:42)
-RIGHT_PAREN (12:42-12:43)
-RIGHT_PAREN (12:43-12:44)
+EQUAL_EQUAL (11:13-11:15)
+IDENTIFIER "second" (11:16-11:22)
+RIGHT_PAREN (11:22-11:23)
+SEMICOLON (11:23-11:24)
+CONST (12:1-12:6)
+IDENTIFIER "equal" (12:7-12:12)
+COLON (12:12-12:13)
+LEFT_PAREN (12:14-12:15)
+IDENTIFIER "Box" (12:15-12:18)
+COMMA (12:18-12:19)
+IDENTIFIER "Box" (12:20-12:23)
+RIGHT_PAREN (12:23-12:24)
+ARROW (12:25-12:27)
+IDENTIFIER "bool" (12:28-12:32)
+EQUAL (12:33-12:34)
+IDENTIFIER "Box" (12:35-12:38)
+DOT (12:38-12:39)
+IDENTIFIER "equal" (12:39-12:44)
 SEMICOLON (12:44-12:45)
 IDENTIFIER "print" (13:1-13:6)
 LEFT_PAREN (13:6-13:7)
-IDENTIFIER "first" (13:7-13:12)
-DOT (13:12-13:13)
-IDENTIFIER "toString" (13:13-13:21)
-LEFT_PAREN (13:21-13:22)
-RIGHT_PAREN (13:22-13:23)
-EQUAL_EQUAL (13:24-13:26)
-IDENTIFIER "first" (13:27-13:32)
-DOT (13:32-13:33)
-IDENTIFIER "toString" (13:33-13:41)
-LEFT_PAREN (13:41-13:42)
-RIGHT_PAREN (13:42-13:43)
-RIGHT_PAREN (13:43-13:44)
-SEMICOLON (13:44-13:45)
+IDENTIFIER "equal" (13:7-13:12)
+LEFT_PAREN (13:12-13:13)
+IDENTIFIER "first" (13:13-13:18)
+COMMA (13:18-13:19)
+IDENTIFIER "second" (13:20-13:26)
+RIGHT_PAREN (13:26-13:27)
+RIGHT_PAREN (13:27-13:28)
+SEMICOLON (13:28-13:29)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "first" (14:7-14:12)
+DOT (14:12-14:13)
+IDENTIFIER "hashCode" (14:13-14:21)
+LEFT_PAREN (14:21-14:22)
+RIGHT_PAREN (14:22-14:23)
+EQUAL_EQUAL (14:24-14:26)
+IDENTIFIER "first" (14:27-14:32)
+DOT (14:32-14:33)
+IDENTIFIER "hashCode" (14:33-14:41)
+LEFT_PAREN (14:41-14:42)
+RIGHT_PAREN (14:42-14:43)
+RIGHT_PAREN (14:43-14:44)
+SEMICOLON (14:44-14:45)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "first" (15:7-15:12)
+DOT (15:12-15:13)
+IDENTIFIER "toString" (15:13-15:21)
+LEFT_PAREN (15:21-15:22)
+RIGHT_PAREN (15:22-15:23)
+EQUAL_EQUAL (15:24-15:26)
+IDENTIFIER "first" (15:27-15:32)
+DOT (15:32-15:33)
+IDENTIFIER "toString" (15:33-15:41)
+LEFT_PAREN (15:41-15:42)
+RIGHT_PAREN (15:42-15:43)
+RIGHT_PAREN (15:43-15:44)
+SEMICOLON (15:44-15:45)
 
 --- AST ---
 
 (Program
-  range: 1:1-13:45
+  range: 1:1-15:45
   (ClassDeclaration
     range: 1:1-5:2
     (IdentifierDeclaration
@@ -114,32 +139,45 @@ SEMICOLON (13:44-13:45)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: true
       (FunctionDeclaration
-        range: 2:12-4:6
-        OVERRIDE
+        range: 2:19-4:6
         (IdentifierDeclaration
-          range: 2:26-2:32
-          name: "equals"
+          range: 2:24-2:29
+          name: "equal"
         )
         (FunctionParameter
-          range: 2:33-2:43
+          range: 2:30-2:36
           (IdentifierDeclaration
-            range: 2:33-2:38
-            name: "other"
+            range: 2:30-2:31
+            name: "a"
           )
           (NamedTypeNode
-            range: 2:40-2:43
-            name: "any"
+            range: 2:33-2:36
+            name: "Box"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:38-2:44
+          (IdentifierDeclaration
+            range: 2:38-2:39
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:41-2:44
+            name: "Box"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 2:45-2:49
+          range: 2:46-2:50
           name: "bool"
         )
         (BlockStatement
-          range: 2:50-4:6
+          range: 2:51-4:6
           (ReturnStatement
             range: 3:9-3:21
             (LiteralExpression
@@ -185,96 +223,143 @@ SEMICOLON (13:44-13:45)
     )
   )
   (ExpressionStatement
-    range: 10:1-10:28
+    range: 10:1-10:23
     (CallExpression
-      range: 10:1-10:27
+      range: 10:1-10:22
       (IdentifierExpression
         range: 10:1-10:6
         name: "print"
       )
-      (CallExpression
-        range: 10:7-10:26
-        (MemberExpression
-          range: 10:7-10:19
-          (IdentifierExpression
-            range: 10:7-10:12
-            name: "first"
-          )
-          (IdentifierExpression
-            range: 10:13-10:19
-            name: "equals"
-          )
-        )
+      (BinaryExpression
+        range: 10:7-10:21
         (IdentifierExpression
-          range: 10:20-10:25
+          range: 10:7-10:12
+          name: "first"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 10:16-10:21
           name: "first"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 11:1-11:29
+    range: 11:1-11:24
     (CallExpression
-      range: 11:1-11:28
+      range: 11:1-11:23
       (IdentifierExpression
         range: 11:1-11:6
         name: "print"
       )
+      (BinaryExpression
+        range: 11:7-11:22
+        (IdentifierExpression
+          range: 11:7-11:12
+          name: "first"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 11:16-11:22
+          name: "second"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:12
+      name: "equal"
+    )
+    (FunctionTypeNode
+      range: 12:14-12:32
+      (NamedTypeNode
+        range: 12:15-12:18
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 12:20-12:23
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 12:28-12:32
+        name: "bool"
+      )
+    )
+    (MemberExpression
+      range: 12:35-12:44
+      (IdentifierExpression
+        range: 12:35-12:38
+        name: "Box"
+      )
+      (IdentifierExpression
+        range: 12:39-12:44
+        name: "equal"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:29
+    (CallExpression
+      range: 13:1-13:28
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
       (CallExpression
-        range: 11:7-11:27
-        (MemberExpression
-          range: 11:7-11:19
-          (IdentifierExpression
-            range: 11:7-11:12
-            name: "first"
-          )
-          (IdentifierExpression
-            range: 11:13-11:19
-            name: "equals"
-          )
+        range: 13:7-13:27
+        (IdentifierExpression
+          range: 13:7-13:12
+          name: "equal"
         )
         (IdentifierExpression
-          range: 11:20-11:26
+          range: 13:13-13:18
+          name: "first"
+        )
+        (IdentifierExpression
+          range: 13:20-13:26
           name: "second"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 12:1-12:45
+    range: 14:1-14:45
     (CallExpression
-      range: 12:1-12:44
+      range: 14:1-14:44
       (IdentifierExpression
-        range: 12:1-12:6
+        range: 14:1-14:6
         name: "print"
       )
       (BinaryExpression
-        range: 12:7-12:43
+        range: 14:7-14:43
         (CallExpression
-          range: 12:7-12:23
+          range: 14:7-14:23
           (MemberExpression
-            range: 12:7-12:21
+            range: 14:7-14:21
             (IdentifierExpression
-              range: 12:7-12:12
+              range: 14:7-14:12
               name: "first"
             )
             (IdentifierExpression
-              range: 12:13-12:21
+              range: 14:13-14:21
               name: "hashCode"
             )
           )
         )
         operator: EQUAL
         (CallExpression
-          range: 12:27-12:43
+          range: 14:27-14:43
           (MemberExpression
-            range: 12:27-12:41
+            range: 14:27-14:41
             (IdentifierExpression
-              range: 12:27-12:32
+              range: 14:27-14:32
               name: "first"
             )
             (IdentifierExpression
-              range: 12:33-12:41
+              range: 14:33-14:41
               name: "hashCode"
             )
           )
@@ -283,40 +368,40 @@ SEMICOLON (13:44-13:45)
     )
   )
   (ExpressionStatement
-    range: 13:1-13:45
+    range: 15:1-15:45
     (CallExpression
-      range: 13:1-13:44
+      range: 15:1-15:44
       (IdentifierExpression
-        range: 13:1-13:6
+        range: 15:1-15:6
         name: "print"
       )
       (BinaryExpression
-        range: 13:7-13:43
+        range: 15:7-15:43
         (CallExpression
-          range: 13:7-13:23
+          range: 15:7-15:23
           (MemberExpression
-            range: 13:7-13:21
+            range: 15:7-15:21
             (IdentifierExpression
-              range: 13:7-13:12
+              range: 15:7-15:12
               name: "first"
             )
             (IdentifierExpression
-              range: 13:13-13:21
+              range: 15:13-15:21
               name: "toString"
             )
           )
         )
         operator: EQUAL
         (CallExpression
-          range: 13:27-13:43
+          range: 15:27-15:43
           (MemberExpression
-            range: 13:27-13:41
+            range: 15:27-15:41
             (IdentifierExpression
-              range: 13:27-13:32
+              range: 15:27-15:32
               name: "first"
             )
             (IdentifierExpression
-              range: 13:33-13:41
+              range: 15:33-15:41
               name: "toString"
             )
           )
@@ -335,78 +420,90 @@ Expression types:
   8:16-8:25 -> Box
   8:20-8:23 -> Box
   10:1-10:6 -> (any) => void
-  10:1-10:27 -> void
+  10:1-10:22 -> void
   10:7-10:12 -> Box
-  10:7-10:19 -> (any) => bool
-  10:7-10:26 -> bool
-  10:13-10:19 -> (any) => bool
-  10:20-10:25 -> Box
+  10:7-10:21 -> bool
+  10:16-10:21 -> Box
   11:1-11:6 -> (any) => void
-  11:1-11:28 -> void
+  11:1-11:23 -> void
   11:7-11:12 -> Box
-  11:7-11:19 -> (any) => bool
-  11:7-11:27 -> bool
-  11:13-11:19 -> (any) => bool
-  11:20-11:26 -> Box
-  12:1-12:6 -> (any) => void
-  12:1-12:44 -> void
-  12:7-12:12 -> Box
-  12:7-12:21 -> () => i32
-  12:7-12:23 -> i32
-  12:7-12:43 -> bool
-  12:13-12:21 -> () => i32
-  12:27-12:32 -> Box
-  12:27-12:41 -> () => i32
-  12:27-12:43 -> i32
-  12:33-12:41 -> () => i32
+  11:7-11:22 -> bool
+  11:16-11:22 -> Box
+  12:35-12:38 -> Box
+  12:35-12:44 -> (Box, Box) => bool
+  12:39-12:44 -> (Box, Box) => bool
   13:1-13:6 -> (any) => void
-  13:1-13:44 -> void
-  13:7-13:12 -> Box
-  13:7-13:21 -> () => string
-  13:7-13:23 -> string
-  13:7-13:43 -> bool
-  13:13-13:21 -> () => string
-  13:27-13:32 -> Box
-  13:27-13:41 -> () => string
-  13:27-13:43 -> string
-  13:33-13:41 -> () => string
+  13:1-13:28 -> void
+  13:7-13:12 -> (Box, Box) => bool
+  13:7-13:27 -> bool
+  13:13-13:18 -> Box
+  13:20-13:26 -> Box
+  14:1-14:6 -> (any) => void
+  14:1-14:44 -> void
+  14:7-14:12 -> Box
+  14:7-14:21 -> () => i32
+  14:7-14:23 -> i32
+  14:7-14:43 -> bool
+  14:13-14:21 -> () => i32
+  14:27-14:32 -> Box
+  14:27-14:41 -> () => i32
+  14:27-14:43 -> i32
+  14:33-14:41 -> () => i32
+  15:1-15:6 -> (any) => void
+  15:1-15:44 -> void
+  15:7-15:12 -> Box
+  15:7-15:21 -> () => string
+  15:7-15:23 -> string
+  15:7-15:43 -> bool
+  15:13-15:21 -> () => string
+  15:27-15:32 -> Box
+  15:27-15:41 -> () => string
+  15:27-15:43 -> string
+  15:33-15:41 -> () => string
 
 Resolved types:
-  2:40-2:43 -> any
-  2:45-2:49 -> bool
-
-Conversions:
-  10:20-10:25 -> Box -> any
-  11:20-11:26 -> Box -> any
+  2:33-2:36 -> Box
+  2:41-2:44 -> Box
+  2:46-2:50 -> bool
+  12:14-12:32 -> (Box, Box) => bool
+  12:15-12:18 -> Box
+  12:20-12:23 -> Box
+  12:28-12:32 -> bool
 
 Declarations:
   1:7-1:10 -> class Box
-  2:26-2:32 -> override func equals(any) => bool
-  2:33-2:38 -> const other: any
+  2:24-2:29 -> func equal(Box, Box) => bool
+  2:30-2:31 -> const a: Box
+  2:38-2:39 -> const b: Box
   7:7-7:12 -> const first: Box
   8:7-8:13 -> const second: Box
+  12:7-12:12 -> const equal: (Box, Box) => bool
 
 References:
   7:19-7:22 -> 1:7-1:10
   8:20-8:23 -> 1:7-1:10
   10:1-10:6 -> builtin print
   10:7-10:12 -> 7:7-7:12
-  10:13-10:19 -> 2:26-2:32
-  10:20-10:25 -> 7:7-7:12
+  10:16-10:21 -> 7:7-7:12
   11:1-11:6 -> builtin print
   11:7-11:12 -> 7:7-7:12
-  11:13-11:19 -> 2:26-2:32
-  11:20-11:26 -> 8:7-8:13
-  12:1-12:6 -> builtin print
-  12:7-12:12 -> 7:7-7:12
-  12:13-12:21 -> Box.hashCode(): i32
-  12:27-12:32 -> 7:7-7:12
-  12:33-12:41 -> Box.hashCode(): i32
+  11:16-11:22 -> 8:7-8:13
+  12:35-12:38 -> 1:7-1:10
+  12:39-12:44 -> 2:24-2:29
   13:1-13:6 -> builtin print
-  13:7-13:12 -> 7:7-7:12
-  13:13-13:21 -> Box.toString(): string
-  13:27-13:32 -> 7:7-7:12
-  13:33-13:41 -> Box.toString(): string
+  13:7-13:12 -> 12:7-12:12
+  13:13-13:18 -> 7:7-7:12
+  13:20-13:26 -> 8:7-8:13
+  14:1-14:6 -> builtin print
+  14:7-14:12 -> 7:7-7:12
+  14:13-14:21 -> Box.hashCode(): i32
+  14:27-14:32 -> 7:7-7:12
+  14:33-14:41 -> Box.hashCode(): i32
+  15:1-15:6 -> builtin print
+  15:7-15:12 -> 7:7-7:12
+  15:13-15:21 -> Box.toString(): string
+  15:27-15:32 -> 7:7-7:12
+  15:33-15:41 -> Box.toString(): string
 
 --- BYTECODE ---
 
@@ -415,6 +512,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   inner class Test$Box flags [PUBLIC, STATIC]
   field first LTest$Box; flags [PUBLIC, STATIC, FINAL]
   field second LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field equal Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
     NEW Test$Box
     DUP
@@ -427,12 +525,20 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Box;
     GETSTATIC Test.first LTest$Box;
-    INVOKEVIRTUAL Test$Box.equals(Ljava/lang/Object;)Z
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Box;
     GETSTATIC Test.second LTest$Box;
-    INVOKEVIRTUAL Test$Box.equals(Ljava/lang/Object;)Z
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC MethodHandleDesc[STATIC/Test$Box::equal(Test$Box,Test$Box)boolean]
+    PUTSTATIC Test.equal Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.equal Ljava/lang/invoke/MethodHandle;
+    GETSTATIC Test.first LTest$Box;
+    GETSTATIC Test.second LTest$Box;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(LTest$Box;LTest$Box;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Box;
@@ -451,12 +557,13 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
     GETSTATIC Test.first LTest$Box;
     INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    max stack 3 max locals 0
+    max stack 4 max locals 0
 
 class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Box flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -464,13 +571,27 @@ class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
     max stack 1 max locals 1
-  method equals(Ljava/lang/Object;)Z flags [PUBLIC]
+  method equal(LTest$Box;LTest$Box;)Z flags [PUBLIC, STATIC]
     ICONST_1 1
     IRETURN
     max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Box
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Box
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 
+true
 true
 true
 true

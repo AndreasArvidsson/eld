@@ -628,203 +628,78 @@ References:
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
-  field choice Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field choice I flags [PUBLIC, STATIC, FINAL] = 1
   field only I flags [PUBLIC, STATIC, FINAL] = 0
-  field status Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field status Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "error"
   field flag Z flags [PUBLIC, STATIC, FINAL] = 1
   field either Z flags [PUBLIC, STATIC, FINAL] = 0
   method <clinit>()V flags [STATIC]
-    LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    PUTSTATIC Test.choice Ljava/lang/Object;
-    GETSTATIC Test.choice Ljava/lang/Object;
+    GETSTATIC Test.choice I
+    TABLESWITCH 0..1 default L2 0:L0 1:L1
+   L0:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L2
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "one"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L2:
+    GETSTATIC Test.only I
+    TABLESWITCH 0..0 default L4 0:L3
+   L3:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "only zero"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L4:
+    GETSTATIC Test.status Ljava/lang/String;
     ASTORE_0 0
     ALOAD_0 0
-    LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE_1 1
-    ASTORE_2 2
-    ALOAD_2 2
-    INSTANCEOF java/lang/Number
-    IFEQ L1
-    ALOAD_1 1
-    INSTANCEOF java/lang/Number
-    IFEQ L1
-    ALOAD_2 2
-    INSTANCEOF java/lang/Float
-    IFNE L0
-    ALOAD_2 2
-    INSTANCEOF java/lang/Double
-    IFNE L0
-    ALOAD_1 1
-    INSTANCEOF java/lang/Float
-    IFNE L0
-    ALOAD_1 1
-    INSTANCEOF java/lang/Double
-    IFNE L0
-    ALOAD_2 2
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD_1 1
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L2
-    GOTO L3
-   L0:
-    ALOAD_2 2
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD_1 1
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L2
-    GOTO L3
-   L1:
-    ALOAD_2 2
-    ALOAD_1 1
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L4
-   L2:
-    ICONST_1 1
-    GOTO L4
-   L3:
-    ICONST_0 0
-   L4:
+    LDC "success"
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
     IFNE L5
     GOTO L6
    L5:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "zero"
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L13
-   L6:
-    ALOAD_0 0
-    LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE_3 3
-    ASTORE 4
-    ALOAD 4
-    INSTANCEOF java/lang/Number
-    IFEQ L8
-    ALOAD_3 3
-    INSTANCEOF java/lang/Number
-    IFEQ L8
-    ALOAD 4
-    INSTANCEOF java/lang/Float
-    IFNE L7
-    ALOAD 4
-    INSTANCEOF java/lang/Double
-    IFNE L7
-    ALOAD_3 3
-    INSTANCEOF java/lang/Float
-    IFNE L7
-    ALOAD_3 3
-    INSTANCEOF java/lang/Double
-    IFNE L7
-    ALOAD 4
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD_3 3
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L9
-    GOTO L10
-   L7:
-    ALOAD 4
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD_3 3
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L9
-    GOTO L10
-   L8:
-    ALOAD 4
-    ALOAD_3 3
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L11
-   L9:
-    ICONST_1 1
-    GOTO L11
-   L10:
-    ICONST_0 0
-   L11:
-    IFNE L12
-    GOTO L13
-   L12:
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "one"
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L13
-   L13:
-    GETSTATIC Test.only I
-    ISTORE 5
-    ILOAD 5
-    LDC 0
-    IF_ICMPEQ L14
-    GOTO L15
-   L14:
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC "only zero"
-    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L15
-   L15:
-    LDC "error"
-    PUTSTATIC Test.status Ljava/lang/Object;
-    GETSTATIC Test.status Ljava/lang/Object;
-    ASTORE 6
-    ALOAD 6
-    LDC "success"
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L16
-    GOTO L17
-   L16:
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "ok"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L19
-   L17:
-    ALOAD 6
+    GOTO L8
+   L6:
+    ALOAD_0 0
     LDC "error"
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L18
-    GOTO L19
-   L18:
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L7
+    GOTO L8
+   L7:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "failed"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L19
-   L19:
+   L8:
     GETSTATIC Test.flag Z
-    ISTORE 7
-    ILOAD 7
+    ISTORE_1 1
+    ILOAD_1 1
     ICONST_1 1
-    IF_ICMPEQ L20
-    GOTO L21
-   L20:
+    IF_ICMPEQ L9
+    GOTO L10
+   L9:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "true"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L21
-   L21:
+   L10:
     GETSTATIC Test.either Z
-    ISTORE 8
-    ILOAD 8
+    ISTORE_2 2
+    ILOAD_2 2
     ICONST_0 0
-    IF_ICMPEQ L22
-    GOTO L23
-   L22:
+    IF_ICMPEQ L11
+    GOTO L12
+   L11:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "false"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L23
-   L23:
+   L12:
     RETURN
-    max stack 4 max locals 9
+    max stack 2 max locals 3
 
 --- OUTPUT ---
 

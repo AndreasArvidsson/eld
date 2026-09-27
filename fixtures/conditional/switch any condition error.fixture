@@ -85,4 +85,4 @@ RIGHT_BRACE (4:1-4:2)
 
 --- SEMANTIC ---
 
-SemanticException: Switch subject of type any requires const equals and hashCode methods at 2:9-2:16
+SemanticException: Switch subject of type any requires const equal and hashCode methods at 2:9-2:16

@@ -440,19 +440,30 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_0 0
     ALOAD_0 0
     GETSTATIC Test.match Ljava/lang/String;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L0
-    GOTO L1
+    DUP2
+    POP
+    IFNULL L0
+    DUP
+    IFNULL L1
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    IFNE L2
+    GOTO L3
    L0:
+    IF_ACMPEQ L2
+    GOTO L3
+   L1:
+    POP2
+    GOTO L3
+   L2:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "found"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L2
-   L1:
+    GOTO L4
+   L3:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "missing"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L2:
+   L4:
     NEW Test$Child
     DUP
     INVOKESPECIAL Test$Child.<init>()V
@@ -465,23 +476,23 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_1 1
     ALOAD_1 1
     GETSTATIC Test.narrow LTest$Child;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L3
-    GOTO L4
-   L3:
+    IF_ACMPEQ L5
+    GOTO L6
+   L5:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "derived"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L5
-   L4:
+    GOTO L7
+   L6:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "missing"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L5:
+   L7:
     RETURN
-    max stack 2 max locals 2
+    max stack 4 max locals 2
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -491,6 +502,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Child flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

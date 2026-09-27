@@ -251,6 +251,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   inner class Test$Counter flags [PUBLIC, STATIC]
 
 class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Counter flags [PUBLIC, STATIC]
   field initial I flags [PRIVATE, FINAL]

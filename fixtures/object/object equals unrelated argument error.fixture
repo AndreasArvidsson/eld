@@ -1,0 +1,146 @@
+class Foo {
+    public func equals(value: i32) bool { return true; }
+}
+const foo = new Foo();
+print(foo.equals("x"));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "equals" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+IDENTIFIER "bool" (2:36-2:40)
+LEFT_BRACE (2:41-2:42)
+RETURN (2:43-2:49)
+BOOLEAN_LITERAL "true" (2:50-2:54)
+SEMICOLON (2:54-2:55)
+RIGHT_BRACE (2:56-2:57)
+RIGHT_BRACE (3:1-3:2)
+CONST (4:1-4:6)
+IDENTIFIER "foo" (4:7-4:10)
+EQUAL (4:11-4:12)
+NEW (4:13-4:16)
+IDENTIFIER "Foo" (4:17-4:20)
+LEFT_PAREN (4:20-4:21)
+RIGHT_PAREN (4:21-4:22)
+SEMICOLON (4:22-4:23)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "foo" (5:7-5:10)
+DOT (5:10-5:11)
+IDENTIFIER "equals" (5:11-5:17)
+LEFT_PAREN (5:17-5:18)
+STRING_LITERAL "\"x\"" (5:18-5:21)
+RIGHT_PAREN (5:21-5:22)
+RIGHT_PAREN (5:22-5:23)
+SEMICOLON (5:23-5:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:24
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:57
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:57
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:36-2:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:41-2:57
+          (ReturnStatement
+            range: 2:43-2:55
+            (LiteralExpression
+              range: 2:50-2:54
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "foo"
+    )
+    type: null
+    (NewExpression
+      range: 4:13-4:22
+      (IdentifierExpression
+        range: 4:17-4:20
+        name: "Foo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:24
+    (CallExpression
+      range: 5:1-5:23
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:22
+        (MemberExpression
+          range: 5:7-5:17
+          (IdentifierExpression
+            range: 5:7-5:10
+            name: "foo"
+          )
+          (IdentifierExpression
+            range: 5:11-5:17
+            name: "equals"
+          )
+        )
+        (LiteralExpression
+          range: 5:18-5:21
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot pass string as i32 at 5:18-5:21

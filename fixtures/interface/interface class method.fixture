@@ -274,6 +274,7 @@ class Test$Greeting extends java/lang/Object version 65.0 flags [PUBLIC, INTERFA
 
 class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Greeting
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Person flags [PUBLIC, STATIC]
   field name Ljava/lang/String; flags [PUBLIC, FINAL]

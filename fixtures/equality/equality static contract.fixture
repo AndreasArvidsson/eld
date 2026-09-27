@@ -1,0 +1,1645 @@
+class Animal {
+    public static const func equal(a: Animal, b: Animal) bool { return true; }
+    public const override func hashCode() i32 { return 0; }
+}
+class Cat extends Animal {
+    public static const func equal(a: Cat, b: Cat) bool { return false; }
+}
+class Dog extends Animal {}
+
+const cat: Animal = new Cat();
+const dog: Animal = new Dog();
+const nullableCat: Animal | null = cat;
+const nullableDog: Animal | null = dog;
+const absent: Animal | null = null;
+print(cat == dog);
+print(dog == cat);
+print(nullableCat == nullableDog);
+print(nullableDog == nullableCat);
+print(cat == nullableDog);
+print(nullableDog == cat);
+print(nullableCat == absent);
+print(absent == nullableDog);
+print(absent == absent);
+print(new Cat() == new Cat());
+print(new Dog() == new Dog());
+print(cat == cat);
+const directCat = new Cat();
+const nullableDirectCat: Cat | null = directCat;
+print(directCat == cat);
+print(cat == directCat);
+print(nullableDirectCat == directCat);
+print(directCat == nullableDirectCat);
+const keys = {new Dog(): "found"};
+print(keys.get(new Dog()));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+LEFT_BRACE (1:14-1:15)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+FUNC (2:25-2:29)
+IDENTIFIER "equal" (2:30-2:35)
+LEFT_PAREN (2:35-2:36)
+IDENTIFIER "a" (2:36-2:37)
+COLON (2:37-2:38)
+IDENTIFIER "Animal" (2:39-2:45)
+COMMA (2:45-2:46)
+IDENTIFIER "b" (2:47-2:48)
+COLON (2:48-2:49)
+IDENTIFIER "Animal" (2:50-2:56)
+RIGHT_PAREN (2:56-2:57)
+IDENTIFIER "bool" (2:58-2:62)
+LEFT_BRACE (2:63-2:64)
+RETURN (2:65-2:71)
+BOOLEAN_LITERAL "true" (2:72-2:76)
+SEMICOLON (2:76-2:77)
+RIGHT_BRACE (2:78-2:79)
+PUBLIC (3:5-3:11)
+CONST (3:12-3:17)
+OVERRIDE (3:18-3:26)
+FUNC (3:27-3:31)
+IDENTIFIER "hashCode" (3:32-3:40)
+LEFT_PAREN (3:40-3:41)
+RIGHT_PAREN (3:41-3:42)
+IDENTIFIER "i32" (3:43-3:46)
+LEFT_BRACE (3:47-3:48)
+RETURN (3:49-3:55)
+INTEGER_LITERAL "0" (3:56-3:57)
+SEMICOLON (3:57-3:58)
+RIGHT_BRACE (3:59-3:60)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Cat" (5:7-5:10)
+EXTENDS (5:11-5:18)
+IDENTIFIER "Animal" (5:19-5:25)
+LEFT_BRACE (5:26-5:27)
+PUBLIC (6:5-6:11)
+STATIC (6:12-6:18)
+CONST (6:19-6:24)
+FUNC (6:25-6:29)
+IDENTIFIER "equal" (6:30-6:35)
+LEFT_PAREN (6:35-6:36)
+IDENTIFIER "a" (6:36-6:37)
+COLON (6:37-6:38)
+IDENTIFIER "Cat" (6:39-6:42)
+COMMA (6:42-6:43)
+IDENTIFIER "b" (6:44-6:45)
+COLON (6:45-6:46)
+IDENTIFIER "Cat" (6:47-6:50)
+RIGHT_PAREN (6:50-6:51)
+IDENTIFIER "bool" (6:52-6:56)
+LEFT_BRACE (6:57-6:58)
+RETURN (6:59-6:65)
+BOOLEAN_LITERAL "false" (6:66-6:71)
+SEMICOLON (6:71-6:72)
+RIGHT_BRACE (6:73-6:74)
+RIGHT_BRACE (7:1-7:2)
+CLASS (8:1-8:6)
+IDENTIFIER "Dog" (8:7-8:10)
+EXTENDS (8:11-8:18)
+IDENTIFIER "Animal" (8:19-8:25)
+LEFT_BRACE (8:26-8:27)
+RIGHT_BRACE (8:27-8:28)
+CONST (10:1-10:6)
+IDENTIFIER "cat" (10:7-10:10)
+COLON (10:10-10:11)
+IDENTIFIER "Animal" (10:12-10:18)
+EQUAL (10:19-10:20)
+NEW (10:21-10:24)
+IDENTIFIER "Cat" (10:25-10:28)
+LEFT_PAREN (10:28-10:29)
+RIGHT_PAREN (10:29-10:30)
+SEMICOLON (10:30-10:31)
+CONST (11:1-11:6)
+IDENTIFIER "dog" (11:7-11:10)
+COLON (11:10-11:11)
+IDENTIFIER "Animal" (11:12-11:18)
+EQUAL (11:19-11:20)
+NEW (11:21-11:24)
+IDENTIFIER "Dog" (11:25-11:28)
+LEFT_PAREN (11:28-11:29)
+RIGHT_PAREN (11:29-11:30)
+SEMICOLON (11:30-11:31)
+CONST (12:1-12:6)
+IDENTIFIER "nullableCat" (12:7-12:18)
+COLON (12:18-12:19)
+IDENTIFIER "Animal" (12:20-12:26)
+PIPE (12:27-12:28)
+NULL (12:29-12:33)
+EQUAL (12:34-12:35)
+IDENTIFIER "cat" (12:36-12:39)
+SEMICOLON (12:39-12:40)
+CONST (13:1-13:6)
+IDENTIFIER "nullableDog" (13:7-13:18)
+COLON (13:18-13:19)
+IDENTIFIER "Animal" (13:20-13:26)
+PIPE (13:27-13:28)
+NULL (13:29-13:33)
+EQUAL (13:34-13:35)
+IDENTIFIER "dog" (13:36-13:39)
+SEMICOLON (13:39-13:40)
+CONST (14:1-14:6)
+IDENTIFIER "absent" (14:7-14:13)
+COLON (14:13-14:14)
+IDENTIFIER "Animal" (14:15-14:21)
+PIPE (14:22-14:23)
+NULL (14:24-14:28)
+EQUAL (14:29-14:30)
+NULL (14:31-14:35)
+SEMICOLON (14:35-14:36)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "cat" (15:7-15:10)
+EQUAL_EQUAL (15:11-15:13)
+IDENTIFIER "dog" (15:14-15:17)
+RIGHT_PAREN (15:17-15:18)
+SEMICOLON (15:18-15:19)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "dog" (16:7-16:10)
+EQUAL_EQUAL (16:11-16:13)
+IDENTIFIER "cat" (16:14-16:17)
+RIGHT_PAREN (16:17-16:18)
+SEMICOLON (16:18-16:19)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "nullableCat" (17:7-17:18)
+EQUAL_EQUAL (17:19-17:21)
+IDENTIFIER "nullableDog" (17:22-17:33)
+RIGHT_PAREN (17:33-17:34)
+SEMICOLON (17:34-17:35)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "nullableDog" (18:7-18:18)
+EQUAL_EQUAL (18:19-18:21)
+IDENTIFIER "nullableCat" (18:22-18:33)
+RIGHT_PAREN (18:33-18:34)
+SEMICOLON (18:34-18:35)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "cat" (19:7-19:10)
+EQUAL_EQUAL (19:11-19:13)
+IDENTIFIER "nullableDog" (19:14-19:25)
+RIGHT_PAREN (19:25-19:26)
+SEMICOLON (19:26-19:27)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "nullableDog" (20:7-20:18)
+EQUAL_EQUAL (20:19-20:21)
+IDENTIFIER "cat" (20:22-20:25)
+RIGHT_PAREN (20:25-20:26)
+SEMICOLON (20:26-20:27)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "nullableCat" (21:7-21:18)
+EQUAL_EQUAL (21:19-21:21)
+IDENTIFIER "absent" (21:22-21:28)
+RIGHT_PAREN (21:28-21:29)
+SEMICOLON (21:29-21:30)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "absent" (22:7-22:13)
+EQUAL_EQUAL (22:14-22:16)
+IDENTIFIER "nullableDog" (22:17-22:28)
+RIGHT_PAREN (22:28-22:29)
+SEMICOLON (22:29-22:30)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "absent" (23:7-23:13)
+EQUAL_EQUAL (23:14-23:16)
+IDENTIFIER "absent" (23:17-23:23)
+RIGHT_PAREN (23:23-23:24)
+SEMICOLON (23:24-23:25)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+NEW (24:7-24:10)
+IDENTIFIER "Cat" (24:11-24:14)
+LEFT_PAREN (24:14-24:15)
+RIGHT_PAREN (24:15-24:16)
+EQUAL_EQUAL (24:17-24:19)
+NEW (24:20-24:23)
+IDENTIFIER "Cat" (24:24-24:27)
+LEFT_PAREN (24:27-24:28)
+RIGHT_PAREN (24:28-24:29)
+RIGHT_PAREN (24:29-24:30)
+SEMICOLON (24:30-24:31)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+NEW (25:7-25:10)
+IDENTIFIER "Dog" (25:11-25:14)
+LEFT_PAREN (25:14-25:15)
+RIGHT_PAREN (25:15-25:16)
+EQUAL_EQUAL (25:17-25:19)
+NEW (25:20-25:23)
+IDENTIFIER "Dog" (25:24-25:27)
+LEFT_PAREN (25:27-25:28)
+RIGHT_PAREN (25:28-25:29)
+RIGHT_PAREN (25:29-25:30)
+SEMICOLON (25:30-25:31)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+IDENTIFIER "cat" (26:7-26:10)
+EQUAL_EQUAL (26:11-26:13)
+IDENTIFIER "cat" (26:14-26:17)
+RIGHT_PAREN (26:17-26:18)
+SEMICOLON (26:18-26:19)
+CONST (27:1-27:6)
+IDENTIFIER "directCat" (27:7-27:16)
+EQUAL (27:17-27:18)
+NEW (27:19-27:22)
+IDENTIFIER "Cat" (27:23-27:26)
+LEFT_PAREN (27:26-27:27)
+RIGHT_PAREN (27:27-27:28)
+SEMICOLON (27:28-27:29)
+CONST (28:1-28:6)
+IDENTIFIER "nullableDirectCat" (28:7-28:24)
+COLON (28:24-28:25)
+IDENTIFIER "Cat" (28:26-28:29)
+PIPE (28:30-28:31)
+NULL (28:32-28:36)
+EQUAL (28:37-28:38)
+IDENTIFIER "directCat" (28:39-28:48)
+SEMICOLON (28:48-28:49)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "directCat" (29:7-29:16)
+EQUAL_EQUAL (29:17-29:19)
+IDENTIFIER "cat" (29:20-29:23)
+RIGHT_PAREN (29:23-29:24)
+SEMICOLON (29:24-29:25)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "cat" (30:7-30:10)
+EQUAL_EQUAL (30:11-30:13)
+IDENTIFIER "directCat" (30:14-30:23)
+RIGHT_PAREN (30:23-30:24)
+SEMICOLON (30:24-30:25)
+IDENTIFIER "print" (31:1-31:6)
+LEFT_PAREN (31:6-31:7)
+IDENTIFIER "nullableDirectCat" (31:7-31:24)
+EQUAL_EQUAL (31:25-31:27)
+IDENTIFIER "directCat" (31:28-31:37)
+RIGHT_PAREN (31:37-31:38)
+SEMICOLON (31:38-31:39)
+IDENTIFIER "print" (32:1-32:6)
+LEFT_PAREN (32:6-32:7)
+IDENTIFIER "directCat" (32:7-32:16)
+EQUAL_EQUAL (32:17-32:19)
+IDENTIFIER "nullableDirectCat" (32:20-32:37)
+RIGHT_PAREN (32:37-32:38)
+SEMICOLON (32:38-32:39)
+CONST (33:1-33:6)
+IDENTIFIER "keys" (33:7-33:11)
+EQUAL (33:12-33:13)
+LEFT_BRACE (33:14-33:15)
+NEW (33:15-33:18)
+IDENTIFIER "Dog" (33:19-33:22)
+LEFT_PAREN (33:22-33:23)
+RIGHT_PAREN (33:23-33:24)
+COLON (33:24-33:25)
+STRING_LITERAL "\"found\"" (33:26-33:33)
+RIGHT_BRACE (33:33-33:34)
+SEMICOLON (33:34-33:35)
+IDENTIFIER "print" (34:1-34:6)
+LEFT_PAREN (34:6-34:7)
+IDENTIFIER "keys" (34:7-34:11)
+DOT (34:11-34:12)
+IDENTIFIER "get" (34:12-34:15)
+LEFT_PAREN (34:15-34:16)
+NEW (34:16-34:19)
+IDENTIFIER "Dog" (34:20-34:23)
+LEFT_PAREN (34:23-34:24)
+RIGHT_PAREN (34:24-34:25)
+RIGHT_PAREN (34:25-34:26)
+RIGHT_PAREN (34:26-34:27)
+SEMICOLON (34:27-34:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-34:28
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:79
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:79
+        CONST
+        (IdentifierDeclaration
+          range: 2:30-2:35
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:36-2:45
+          (IdentifierDeclaration
+            range: 2:36-2:37
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:39-2:45
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:47-2:56
+          (IdentifierDeclaration
+            range: 2:47-2:48
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:50-2:56
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:58-2:62
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:63-2:79
+          (ReturnStatement
+            range: 2:65-2:77
+            (LiteralExpression
+              range: 2:72-2:76
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:60
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:60
+        CONST
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 3:32-3:40
+          name: "hashCode"
+        )
+        (NamedTypeNode
+          range: 3:43-3:46
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:47-3:60
+          (ReturnStatement
+            range: 3:49-3:58
+            (LiteralExpression
+              range: 3:56-3:57
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "Cat"
+    )
+    (IdentifierExpression
+      range: 5:19-5:25
+      name: "Animal"
+    )
+    (MemberDeclaration
+      range: 6:5-6:74
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 6:19-6:74
+        CONST
+        (IdentifierDeclaration
+          range: 6:30-6:35
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 6:36-6:42
+          (IdentifierDeclaration
+            range: 6:36-6:37
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 6:39-6:42
+            name: "Cat"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 6:44-6:50
+          (IdentifierDeclaration
+            range: 6:44-6:45
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 6:47-6:50
+            name: "Cat"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:52-6:56
+          name: "bool"
+        )
+        (BlockStatement
+          range: 6:57-6:74
+          (ReturnStatement
+            range: 6:59-6:72
+            (LiteralExpression
+              range: 6:66-6:71
+              kind: BOOL
+              text: "false"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 8:1-8:28
+    (IdentifierDeclaration
+      range: 8:7-8:10
+      name: "Dog"
+    )
+    (IdentifierExpression
+      range: 8:19-8:25
+      name: "Animal"
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:10
+      name: "cat"
+    )
+    (NamedTypeNode
+      range: 10:12-10:18
+      name: "Animal"
+    )
+    (NewExpression
+      range: 10:21-10:30
+      (IdentifierExpression
+        range: 10:25-10:28
+        name: "Cat"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:10
+      name: "dog"
+    )
+    (NamedTypeNode
+      range: 11:12-11:18
+      name: "Animal"
+    )
+    (NewExpression
+      range: 11:21-11:30
+      (IdentifierExpression
+        range: 11:25-11:28
+        name: "Dog"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:18
+      name: "nullableCat"
+    )
+    (UnionTypeNode
+      range: 12:20-12:33
+      (NamedTypeNode
+        range: 12:20-12:26
+        name: "Animal"
+      )
+      (NamedTypeNode
+        range: 12:29-12:33
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 12:36-12:39
+      name: "cat"
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:18
+      name: "nullableDog"
+    )
+    (UnionTypeNode
+      range: 13:20-13:33
+      (NamedTypeNode
+        range: 13:20-13:26
+        name: "Animal"
+      )
+      (NamedTypeNode
+        range: 13:29-13:33
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 13:36-13:39
+      name: "dog"
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:13
+      name: "absent"
+    )
+    (UnionTypeNode
+      range: 14:15-14:28
+      (NamedTypeNode
+        range: 14:15-14:21
+        name: "Animal"
+      )
+      (NamedTypeNode
+        range: 14:24-14:28
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 14:31-14:35
+      kind: NULL
+      text: "null"
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:19
+    (CallExpression
+      range: 15:1-15:18
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 15:7-15:17
+        (IdentifierExpression
+          range: 15:7-15:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 15:14-15:17
+          name: "dog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:19
+    (CallExpression
+      range: 16:1-16:18
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 16:7-16:17
+        (IdentifierExpression
+          range: 16:7-16:10
+          name: "dog"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 16:14-16:17
+          name: "cat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:35
+    (CallExpression
+      range: 17:1-17:34
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 17:7-17:33
+        (IdentifierExpression
+          range: 17:7-17:18
+          name: "nullableCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 17:22-17:33
+          name: "nullableDog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:35
+    (CallExpression
+      range: 18:1-18:34
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 18:7-18:33
+        (IdentifierExpression
+          range: 18:7-18:18
+          name: "nullableDog"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 18:22-18:33
+          name: "nullableCat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:27
+    (CallExpression
+      range: 19:1-19:26
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 19:7-19:25
+        (IdentifierExpression
+          range: 19:7-19:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 19:14-19:25
+          name: "nullableDog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:27
+    (CallExpression
+      range: 20:1-20:26
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 20:7-20:25
+        (IdentifierExpression
+          range: 20:7-20:18
+          name: "nullableDog"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 20:22-20:25
+          name: "cat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:30
+    (CallExpression
+      range: 21:1-21:29
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 21:7-21:28
+        (IdentifierExpression
+          range: 21:7-21:18
+          name: "nullableCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 21:22-21:28
+          name: "absent"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:30
+    (CallExpression
+      range: 22:1-22:29
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 22:7-22:28
+        (IdentifierExpression
+          range: 22:7-22:13
+          name: "absent"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 22:17-22:28
+          name: "nullableDog"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:25
+    (CallExpression
+      range: 23:1-23:24
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 23:7-23:23
+        (IdentifierExpression
+          range: 23:7-23:13
+          name: "absent"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 23:17-23:23
+          name: "absent"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:31
+    (CallExpression
+      range: 24:1-24:30
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 24:7-24:29
+        (NewExpression
+          range: 24:7-24:16
+          (IdentifierExpression
+            range: 24:11-24:14
+            name: "Cat"
+          )
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 24:20-24:29
+          (IdentifierExpression
+            range: 24:24-24:27
+            name: "Cat"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:31
+    (CallExpression
+      range: 25:1-25:30
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 25:7-25:29
+        (NewExpression
+          range: 25:7-25:16
+          (IdentifierExpression
+            range: 25:11-25:14
+            name: "Dog"
+          )
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 25:20-25:29
+          (IdentifierExpression
+            range: 25:24-25:27
+            name: "Dog"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:19
+    (CallExpression
+      range: 26:1-26:18
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 26:7-26:17
+        (IdentifierExpression
+          range: 26:7-26:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 26:14-26:17
+          name: "cat"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 27:1-27:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 27:7-27:16
+      name: "directCat"
+    )
+    type: null
+    (NewExpression
+      range: 27:19-27:28
+      (IdentifierExpression
+        range: 27:23-27:26
+        name: "Cat"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 28:1-28:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 28:7-28:24
+      name: "nullableDirectCat"
+    )
+    (UnionTypeNode
+      range: 28:26-28:36
+      (NamedTypeNode
+        range: 28:26-28:29
+        name: "Cat"
+      )
+      (NamedTypeNode
+        range: 28:32-28:36
+        name: "null"
+      )
+    )
+    (IdentifierExpression
+      range: 28:39-28:48
+      name: "directCat"
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:25
+    (CallExpression
+      range: 29:1-29:24
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 29:7-29:23
+        (IdentifierExpression
+          range: 29:7-29:16
+          name: "directCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 29:20-29:23
+          name: "cat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:25
+    (CallExpression
+      range: 30:1-30:24
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 30:7-30:23
+        (IdentifierExpression
+          range: 30:7-30:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 30:14-30:23
+          name: "directCat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 31:1-31:39
+    (CallExpression
+      range: 31:1-31:38
+      (IdentifierExpression
+        range: 31:1-31:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 31:7-31:37
+        (IdentifierExpression
+          range: 31:7-31:24
+          name: "nullableDirectCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 31:28-31:37
+          name: "directCat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 32:1-32:39
+    (CallExpression
+      range: 32:1-32:38
+      (IdentifierExpression
+        range: 32:1-32:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 32:7-32:37
+        (IdentifierExpression
+          range: 32:7-32:16
+          name: "directCat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 32:20-32:37
+          name: "nullableDirectCat"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 33:1-33:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 33:7-33:11
+      name: "keys"
+    )
+    type: null
+    (MapExpression
+      range: 33:14-33:34
+      (MapEntry
+        range: 33:15-33:33
+        (NewExpression
+          range: 33:15-33:24
+          (IdentifierExpression
+            range: 33:19-33:22
+            name: "Dog"
+          )
+        )
+        (LiteralExpression
+          range: 33:26-33:33
+          kind: STRING
+          text: "\"found\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 34:1-34:28
+    (CallExpression
+      range: 34:1-34:27
+      (IdentifierExpression
+        range: 34:1-34:6
+        name: "print"
+      )
+      (CallExpression
+        range: 34:7-34:26
+        (MemberExpression
+          range: 34:7-34:15
+          (IdentifierExpression
+            range: 34:7-34:11
+            name: "keys"
+          )
+          (IdentifierExpression
+            range: 34:12-34:15
+            name: "get"
+          )
+        )
+        (NewExpression
+          range: 34:16-34:25
+          (IdentifierExpression
+            range: 34:20-34:23
+            name: "Dog"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:72-2:76 -> bool
+  3:56-3:57 -> i32
+  5:19-5:25 -> Animal
+  6:66-6:71 -> bool
+  8:19-8:25 -> Animal
+  10:21-10:30 -> Cat
+  10:25-10:28 -> Cat
+  11:21-11:30 -> Dog
+  11:25-11:28 -> Dog
+  12:36-12:39 -> Animal
+  13:36-13:39 -> Animal
+  14:31-14:35 -> null
+  15:1-15:6 -> (any) => void
+  15:1-15:18 -> void
+  15:7-15:10 -> Animal
+  15:7-15:17 -> bool
+  15:14-15:17 -> Animal
+  16:1-16:6 -> (any) => void
+  16:1-16:18 -> void
+  16:7-16:10 -> Animal
+  16:7-16:17 -> bool
+  16:14-16:17 -> Animal
+  17:1-17:6 -> (any) => void
+  17:1-17:34 -> void
+  17:7-17:18 -> Animal | null
+  17:7-17:33 -> bool
+  17:22-17:33 -> Animal | null
+  18:1-18:6 -> (any) => void
+  18:1-18:34 -> void
+  18:7-18:18 -> Animal | null
+  18:7-18:33 -> bool
+  18:22-18:33 -> Animal | null
+  19:1-19:6 -> (any) => void
+  19:1-19:26 -> void
+  19:7-19:10 -> Animal
+  19:7-19:25 -> bool
+  19:14-19:25 -> Animal | null
+  20:1-20:6 -> (any) => void
+  20:1-20:26 -> void
+  20:7-20:18 -> Animal | null
+  20:7-20:25 -> bool
+  20:22-20:25 -> Animal
+  21:1-21:6 -> (any) => void
+  21:1-21:29 -> void
+  21:7-21:18 -> Animal | null
+  21:7-21:28 -> bool
+  21:22-21:28 -> Animal | null
+  22:1-22:6 -> (any) => void
+  22:1-22:29 -> void
+  22:7-22:13 -> Animal | null
+  22:7-22:28 -> bool
+  22:17-22:28 -> Animal | null
+  23:1-23:6 -> (any) => void
+  23:1-23:24 -> void
+  23:7-23:13 -> Animal | null
+  23:7-23:23 -> bool
+  23:17-23:23 -> Animal | null
+  24:1-24:6 -> (any) => void
+  24:1-24:30 -> void
+  24:7-24:16 -> Cat
+  24:7-24:29 -> bool
+  24:11-24:14 -> Cat
+  24:20-24:29 -> Cat
+  24:24-24:27 -> Cat
+  25:1-25:6 -> (any) => void
+  25:1-25:30 -> void
+  25:7-25:16 -> Dog
+  25:7-25:29 -> bool
+  25:11-25:14 -> Dog
+  25:20-25:29 -> Dog
+  25:24-25:27 -> Dog
+  26:1-26:6 -> (any) => void
+  26:1-26:18 -> void
+  26:7-26:10 -> Animal
+  26:7-26:17 -> bool
+  26:14-26:17 -> Animal
+  27:19-27:28 -> Cat
+  27:23-27:26 -> Cat
+  28:39-28:48 -> Cat
+  29:1-29:6 -> (any) => void
+  29:1-29:24 -> void
+  29:7-29:16 -> Cat
+  29:7-29:23 -> bool
+  29:20-29:23 -> Animal
+  30:1-30:6 -> (any) => void
+  30:1-30:24 -> void
+  30:7-30:10 -> Animal
+  30:7-30:23 -> bool
+  30:14-30:23 -> Cat
+  31:1-31:6 -> (any) => void
+  31:1-31:38 -> void
+  31:7-31:24 -> Cat | null
+  31:7-31:37 -> bool
+  31:28-31:37 -> Cat
+  32:1-32:6 -> (any) => void
+  32:1-32:38 -> void
+  32:7-32:16 -> Cat
+  32:7-32:37 -> bool
+  32:20-32:37 -> Cat | null
+  33:14-33:34 -> Map<Dog, string>
+  33:15-33:24 -> Dog
+  33:19-33:22 -> Dog
+  33:26-33:33 -> string
+  34:1-34:6 -> (any) => void
+  34:1-34:27 -> void
+  34:7-34:11 -> Map<Dog, string>
+  34:7-34:15 -> (any) => string | null
+  34:7-34:26 -> string | null
+  34:12-34:15 -> (any) => string | null
+  34:16-34:25 -> Dog
+  34:20-34:23 -> Dog
+
+Resolved types:
+  2:39-2:45 -> Animal
+  2:50-2:56 -> Animal
+  2:58-2:62 -> bool
+  3:43-3:46 -> i32
+  6:39-6:42 -> Cat
+  6:47-6:50 -> Cat
+  6:52-6:56 -> bool
+  10:12-10:18 -> Animal
+  11:12-11:18 -> Animal
+  12:20-12:26 -> Animal
+  12:20-12:33 -> Animal | null
+  12:29-12:33 -> null
+  13:20-13:26 -> Animal
+  13:20-13:33 -> Animal | null
+  13:29-13:33 -> null
+  14:15-14:21 -> Animal
+  14:15-14:28 -> Animal | null
+  14:24-14:28 -> null
+  28:26-28:29 -> Cat
+  28:26-28:36 -> Cat | null
+  28:32-28:36 -> null
+
+Conversions:
+  12:36-12:39 -> Animal -> Animal | null
+  13:36-13:39 -> Animal -> Animal | null
+  14:31-14:35 -> null -> Animal | null
+  19:7-19:10 -> Animal -> Animal | null
+  20:22-20:25 -> Animal -> Animal | null
+  28:39-28:48 -> Cat -> Cat | null
+  31:28-31:37 -> Cat -> Cat | null
+  32:7-32:16 -> Cat -> Cat | null
+  34:16-34:25 -> Dog -> any
+
+Declarations:
+  1:7-1:13 -> class Animal
+  2:30-2:35 -> const func equal(Animal, Animal) => bool
+  2:36-2:37 -> const a: Animal
+  2:47-2:48 -> const b: Animal
+  3:32-3:40 -> const override func hashCode() => i32
+  5:7-5:10 -> class Cat
+  6:30-6:35 -> const func equal(Cat, Cat) => bool
+  6:36-6:37 -> const a: Cat
+  6:44-6:45 -> const b: Cat
+  8:7-8:10 -> class Dog
+  10:7-10:10 -> const cat: Animal
+  11:7-11:10 -> const dog: Animal
+  12:7-12:18 -> const nullableCat: Animal | null
+  13:7-13:18 -> const nullableDog: Animal | null
+  14:7-14:13 -> const absent: Animal | null
+  27:7-27:16 -> const directCat: Cat
+  28:7-28:24 -> const nullableDirectCat: Cat | null
+  33:7-33:11 -> const keys: Map<Dog, string>
+
+References:
+  5:19-5:25 -> 1:7-1:13
+  8:19-8:25 -> 1:7-1:13
+  10:25-10:28 -> 5:7-5:10
+  11:25-11:28 -> 8:7-8:10
+  12:36-12:39 -> 10:7-10:10
+  13:36-13:39 -> 11:7-11:10
+  15:1-15:6 -> builtin print
+  15:7-15:10 -> 10:7-10:10
+  15:14-15:17 -> 11:7-11:10
+  16:1-16:6 -> builtin print
+  16:7-16:10 -> 11:7-11:10
+  16:14-16:17 -> 10:7-10:10
+  17:1-17:6 -> builtin print
+  17:7-17:18 -> 12:7-12:18
+  17:22-17:33 -> 13:7-13:18
+  18:1-18:6 -> builtin print
+  18:7-18:18 -> 13:7-13:18
+  18:22-18:33 -> 12:7-12:18
+  19:1-19:6 -> builtin print
+  19:7-19:10 -> 10:7-10:10
+  19:14-19:25 -> 13:7-13:18
+  20:1-20:6 -> builtin print
+  20:7-20:18 -> 13:7-13:18
+  20:22-20:25 -> 10:7-10:10
+  21:1-21:6 -> builtin print
+  21:7-21:18 -> 12:7-12:18
+  21:22-21:28 -> 14:7-14:13
+  22:1-22:6 -> builtin print
+  22:7-22:13 -> 14:7-14:13
+  22:17-22:28 -> 13:7-13:18
+  23:1-23:6 -> builtin print
+  23:7-23:13 -> 14:7-14:13
+  23:17-23:23 -> 14:7-14:13
+  24:1-24:6 -> builtin print
+  24:11-24:14 -> 5:7-5:10
+  24:24-24:27 -> 5:7-5:10
+  25:1-25:6 -> builtin print
+  25:11-25:14 -> 8:7-8:10
+  25:24-25:27 -> 8:7-8:10
+  26:1-26:6 -> builtin print
+  26:7-26:10 -> 10:7-10:10
+  26:14-26:17 -> 10:7-10:10
+  27:23-27:26 -> 5:7-5:10
+  28:39-28:48 -> 27:7-27:16
+  29:1-29:6 -> builtin print
+  29:7-29:16 -> 27:7-27:16
+  29:20-29:23 -> 10:7-10:10
+  30:1-30:6 -> builtin print
+  30:7-30:10 -> 10:7-10:10
+  30:14-30:23 -> 27:7-27:16
+  31:1-31:6 -> builtin print
+  31:7-31:24 -> 28:7-28:24
+  31:28-31:37 -> 27:7-27:16
+  32:1-32:6 -> builtin print
+  32:7-32:16 -> 27:7-27:16
+  32:20-32:37 -> 28:7-28:24
+  33:19-33:22 -> 8:7-8:10
+  34:1-34:6 -> builtin print
+  34:7-34:11 -> 33:7-33:11
+  34:12-34:15 -> Map<Dog, string>.get(any): string | null
+  34:20-34:23 -> 8:7-8:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  nest member Test$Cat
+  nest member Test$Dog
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  field cat LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field dog LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field nullableCat LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field nullableDog LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field absent LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  field directCat LTest$Cat; flags [PUBLIC, STATIC, FINAL]
+  field nullableDirectCat LTest$Cat; flags [PUBLIC, STATIC, FINAL]
+  field keys Ljava/util/Map; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Map<LTest$Dog;Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    PUTSTATIC Test.cat LTest$Animal;
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    PUTSTATIC Test.dog LTest$Animal;
+    GETSTATIC Test.cat LTest$Animal;
+    PUTSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.dog LTest$Animal;
+    PUTSTATIC Test.nullableDog LTest$Animal;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    PUTSTATIC Test.absent LTest$Animal;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Animal;
+    GETSTATIC Test.dog LTest$Animal;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dog LTest$Animal;
+    GETSTATIC Test.cat LTest$Animal;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    DUP2
+    POP
+    IFNULL L0
+    DUP
+    IFNULL L2
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L3
+   L0:
+    IF_ACMPEQ L1
+    ICONST_0 0
+    GOTO L3
+   L1:
+    ICONST_1 1
+    GOTO L3
+   L2:
+    POP2
+    ICONST_0 0
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    GETSTATIC Test.nullableCat LTest$Animal;
+    DUP2
+    POP
+    IFNULL L4
+    DUP
+    IFNULL L6
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L7
+   L4:
+    IF_ACMPEQ L5
+    ICONST_0 0
+    GOTO L7
+   L5:
+    ICONST_1 1
+    GOTO L7
+   L6:
+    POP2
+    ICONST_0 0
+   L7:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Animal;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    DUP
+    IFNULL L8
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L9
+   L8:
+    POP2
+    ICONST_0 0
+   L9:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    GETSTATIC Test.cat LTest$Animal;
+    DUP2
+    POP
+    IFNULL L10
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L11
+   L10:
+    POP2
+    ICONST_0 0
+   L11:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableCat LTest$Animal;
+    GETSTATIC Test.absent LTest$Animal;
+    DUP2
+    POP
+    IFNULL L12
+    DUP
+    IFNULL L14
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L15
+   L12:
+    IF_ACMPEQ L13
+    ICONST_0 0
+    GOTO L15
+   L13:
+    ICONST_1 1
+    GOTO L15
+   L14:
+    POP2
+    ICONST_0 0
+   L15:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.absent LTest$Animal;
+    GETSTATIC Test.nullableDog LTest$Animal;
+    DUP2
+    POP
+    IFNULL L16
+    DUP
+    IFNULL L18
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L19
+   L16:
+    IF_ACMPEQ L17
+    ICONST_0 0
+    GOTO L19
+   L17:
+    ICONST_1 1
+    GOTO L19
+   L18:
+    POP2
+    ICONST_0 0
+   L19:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.absent LTest$Animal;
+    GETSTATIC Test.absent LTest$Animal;
+    DUP2
+    POP
+    IFNULL L20
+    DUP
+    IFNULL L22
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    GOTO L23
+   L20:
+    IF_ACMPEQ L21
+    ICONST_0 0
+    GOTO L23
+   L21:
+    ICONST_1 1
+    GOTO L23
+   L22:
+    POP2
+    ICONST_0 0
+   L23:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    INVOKESTATIC Test$Cat.equal(LTest$Cat;LTest$Cat;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Animal;
+    GETSTATIC Test.cat LTest$Animal;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    PUTSTATIC Test.directCat LTest$Cat;
+    GETSTATIC Test.directCat LTest$Cat;
+    PUTSTATIC Test.nullableDirectCat LTest$Cat;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.directCat LTest$Cat;
+    GETSTATIC Test.cat LTest$Animal;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Animal;
+    GETSTATIC Test.directCat LTest$Cat;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.nullableDirectCat LTest$Cat;
+    GETSTATIC Test.directCat LTest$Cat;
+    DUP2
+    POP
+    IFNULL L24
+    INVOKESTATIC Test$Cat.equal(LTest$Cat;LTest$Cat;)Z
+    GOTO L25
+   L24:
+    POP2
+    ICONST_0 0
+   L25:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.directCat LTest$Cat;
+    GETSTATIC Test.nullableDirectCat LTest$Cat;
+    DUP
+    IFNULL L26
+    INVOKESTATIC Test$Cat.equal(LTest$Cat;LTest$Cat;)Z
+    GOTO L27
+   L26:
+    POP2
+    ICONST_0 0
+   L27:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    LDC "found"
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    PUTSTATIC Test.keys Ljava/util/Map;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.keys Ljava/util/Map;
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    INVOKEINTERFACE java/util/Map.get(Ljava/lang/Object;)Ljava/lang/Object;
+    CHECKCAST java/lang/String
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Animal;LTest$Animal;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Animal
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Animal
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+  method hashCode()I flags [PUBLIC]
+    LDC 0
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Cat extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Cat;LTest$Cat;)Z flags [PUBLIC, STATIC]
+    ICONST_0 0
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Cat
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Cat
+    INVOKESTATIC Test$Cat.equal(LTest$Cat;LTest$Cat;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+true
+true
+false
+false
+true
+false
+true
+true
+true
+true
+false
+false
+found
+

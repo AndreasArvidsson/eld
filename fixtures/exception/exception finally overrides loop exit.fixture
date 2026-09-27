@@ -198,7 +198,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L1:
     ICONST_1 1
    L2:
-    IFEQ L13
+    IFEQ L12
     GETSTATIC Test.index I
     DUP
     ICONST_1 1
@@ -216,33 +216,31 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L5:
     ICONST_1 1
    L6:
-    IFEQ L7
+    IFEQ L12
     GOTO L0
    L7:
-    GOTO L13
-   L8:
     ATHROW
-   L9:
+   L8:
     ASTORE_0 0
     GETSTATIC Test.index I
     LDC 3
-    IF_ICMPLT L10
+    IF_ICMPLT L9
     ICONST_0 0
-    GOTO L11
-   L10:
+    GOTO L10
+   L9:
     ICONST_1 1
-   L11:
-    IFEQ L12
+   L10:
+    IFEQ L11
     GOTO L0
-   L12:
+   L11:
     ALOAD_0 0
     ATHROW
-   L13:
+   L12:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.index I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    catch all from L3 to L4 handler L9
+    catch all from L3 to L4 handler L8
     max stack 3 max locals 1
 
 --- OUTPUT ---

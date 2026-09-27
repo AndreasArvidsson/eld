@@ -1,0 +1,431 @@
+class Animal {
+    public static const func equal(a: Animal, b: Animal) bool { return true; }
+}
+class Cat extends Animal {}
+class Dog extends Animal {}
+
+const subject: i32 | Animal = new Cat();
+const match: Animal = new Dog();
+switch (subject) {
+    case match => print("found")
+    else => print("missing")
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+LEFT_BRACE (1:14-1:15)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+CONST (2:19-2:24)
+FUNC (2:25-2:29)
+IDENTIFIER "equal" (2:30-2:35)
+LEFT_PAREN (2:35-2:36)
+IDENTIFIER "a" (2:36-2:37)
+COLON (2:37-2:38)
+IDENTIFIER "Animal" (2:39-2:45)
+COMMA (2:45-2:46)
+IDENTIFIER "b" (2:47-2:48)
+COLON (2:48-2:49)
+IDENTIFIER "Animal" (2:50-2:56)
+RIGHT_PAREN (2:56-2:57)
+IDENTIFIER "bool" (2:58-2:62)
+LEFT_BRACE (2:63-2:64)
+RETURN (2:65-2:71)
+BOOLEAN_LITERAL "true" (2:72-2:76)
+SEMICOLON (2:76-2:77)
+RIGHT_BRACE (2:78-2:79)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Cat" (4:7-4:10)
+EXTENDS (4:11-4:18)
+IDENTIFIER "Animal" (4:19-4:25)
+LEFT_BRACE (4:26-4:27)
+RIGHT_BRACE (4:27-4:28)
+CLASS (5:1-5:6)
+IDENTIFIER "Dog" (5:7-5:10)
+EXTENDS (5:11-5:18)
+IDENTIFIER "Animal" (5:19-5:25)
+LEFT_BRACE (5:26-5:27)
+RIGHT_BRACE (5:27-5:28)
+CONST (7:1-7:6)
+IDENTIFIER "subject" (7:7-7:14)
+COLON (7:14-7:15)
+IDENTIFIER "i32" (7:16-7:19)
+PIPE (7:20-7:21)
+IDENTIFIER "Animal" (7:22-7:28)
+EQUAL (7:29-7:30)
+NEW (7:31-7:34)
+IDENTIFIER "Cat" (7:35-7:38)
+LEFT_PAREN (7:38-7:39)
+RIGHT_PAREN (7:39-7:40)
+SEMICOLON (7:40-7:41)
+CONST (8:1-8:6)
+IDENTIFIER "match" (8:7-8:12)
+COLON (8:12-8:13)
+IDENTIFIER "Animal" (8:14-8:20)
+EQUAL (8:21-8:22)
+NEW (8:23-8:26)
+IDENTIFIER "Dog" (8:27-8:30)
+LEFT_PAREN (8:30-8:31)
+RIGHT_PAREN (8:31-8:32)
+SEMICOLON (8:32-8:33)
+SWITCH (9:1-9:7)
+LEFT_PAREN (9:8-9:9)
+IDENTIFIER "subject" (9:9-9:16)
+RIGHT_PAREN (9:16-9:17)
+LEFT_BRACE (9:18-9:19)
+CASE (10:5-10:9)
+IDENTIFIER "match" (10:10-10:15)
+ARROW (10:16-10:18)
+IDENTIFIER "print" (10:19-10:24)
+LEFT_PAREN (10:24-10:25)
+STRING_LITERAL "\"found\"" (10:25-10:32)
+RIGHT_PAREN (10:32-10:33)
+ELSE (11:5-11:9)
+ARROW (11:10-11:12)
+IDENTIFIER "print" (11:13-11:18)
+LEFT_PAREN (11:18-11:19)
+STRING_LITERAL "\"missing\"" (11:19-11:28)
+RIGHT_PAREN (11:28-11:29)
+RIGHT_BRACE (12:1-12:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:2
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:79
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:79
+        CONST
+        (IdentifierDeclaration
+          range: 2:30-2:35
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:36-2:45
+          (IdentifierDeclaration
+            range: 2:36-2:37
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:39-2:45
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:47-2:56
+          (IdentifierDeclaration
+            range: 2:47-2:48
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:50-2:56
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:58-2:62
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:63-2:79
+          (ReturnStatement
+            range: 2:65-2:77
+            (LiteralExpression
+              range: 2:72-2:76
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-4:28
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "Cat"
+    )
+    (IdentifierExpression
+      range: 4:19-4:25
+      name: "Animal"
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-5:28
+    (IdentifierDeclaration
+      range: 5:7-5:10
+      name: "Dog"
+    )
+    (IdentifierExpression
+      range: 5:19-5:25
+      name: "Animal"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:14
+      name: "subject"
+    )
+    (UnionTypeNode
+      range: 7:16-7:28
+      (NamedTypeNode
+        range: 7:16-7:19
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 7:22-7:28
+        name: "Animal"
+      )
+    )
+    (NewExpression
+      range: 7:31-7:40
+      (IdentifierExpression
+        range: 7:35-7:38
+        name: "Cat"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:12
+      name: "match"
+    )
+    (NamedTypeNode
+      range: 8:14-8:20
+      name: "Animal"
+    )
+    (NewExpression
+      range: 8:23-8:32
+      (IdentifierExpression
+        range: 8:27-8:30
+        name: "Dog"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-12:2
+    (SwitchExpression
+      range: 9:1-12:2
+      (IdentifierExpression
+        range: 9:9-9:16
+        name: "subject"
+      )
+      (SwitchBranch
+        range: 10:5-10:33
+        (IdentifierExpression
+          range: 10:10-10:15
+          name: "match"
+        )
+        (SwitchBranchExpressionBody
+          range: 10:19-10:33
+          (CallExpression
+            range: 10:19-10:33
+            (IdentifierExpression
+              range: 10:19-10:24
+              name: "print"
+            )
+            (LiteralExpression
+              range: 10:25-10:32
+              kind: STRING
+              text: "\"found\""
+            )
+          )
+        )
+      )
+      (SwitchElseBranch
+        range: 11:5-11:29
+        (SwitchBranchExpressionBody
+          range: 11:13-11:29
+          (CallExpression
+            range: 11:13-11:29
+            (IdentifierExpression
+              range: 11:13-11:18
+              name: "print"
+            )
+            (LiteralExpression
+              range: 11:19-11:28
+              kind: STRING
+              text: "\"missing\""
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:72-2:76 -> bool
+  4:19-4:25 -> Animal
+  5:19-5:25 -> Animal
+  7:31-7:40 -> Cat
+  7:35-7:38 -> Cat
+  8:23-8:32 -> Dog
+  8:27-8:30 -> Dog
+  9:1-12:2 -> void
+  9:9-9:16 -> i32 | Animal
+  10:10-10:15 -> Animal
+  10:19-10:24 -> (any) => void
+  10:19-10:33 -> void
+  10:25-10:32 -> string
+  11:13-11:18 -> (any) => void
+  11:13-11:29 -> void
+  11:19-11:28 -> string
+
+Resolved types:
+  2:39-2:45 -> Animal
+  2:50-2:56 -> Animal
+  2:58-2:62 -> bool
+  7:16-7:19 -> i32
+  7:16-7:28 -> i32 | Animal
+  7:22-7:28 -> Animal
+  8:14-8:20 -> Animal
+
+Conversions:
+  7:31-7:40 -> Cat -> Animal -> i32 | Animal
+  10:10-10:15 -> Animal -> i32 | Animal
+
+Declarations:
+  1:7-1:13 -> class Animal
+  2:30-2:35 -> const func equal(Animal, Animal) => bool
+  2:36-2:37 -> const a: Animal
+  2:47-2:48 -> const b: Animal
+  4:7-4:10 -> class Cat
+  5:7-5:10 -> class Dog
+  7:7-7:14 -> const subject: i32 | Animal
+  8:7-8:12 -> const match: Animal
+
+References:
+  4:19-4:25 -> 1:7-1:13
+  5:19-5:25 -> 1:7-1:13
+  7:35-7:38 -> 4:7-4:10
+  8:27-8:30 -> 5:7-5:10
+  9:9-9:16 -> 7:7-7:14
+  10:10-10:15 -> 8:7-8:12
+  10:19-10:24 -> builtin print
+  11:13-11:18 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  nest member Test$Cat
+  nest member Test$Dog
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  field subject Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field match LTest$Animal; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    PUTSTATIC Test.subject Ljava/lang/Object;
+    NEW Test$Dog
+    DUP
+    INVOKESPECIAL Test$Dog.<init>()V
+    PUTSTATIC Test.match LTest$Animal;
+    GETSTATIC Test.subject Ljava/lang/Object;
+    ASTORE_0 0
+    ALOAD_0 0
+    GETSTATIC Test.match LTest$Animal;
+    SWAP
+    DUP
+    INSTANCEOF Test$Animal
+    IFEQ L0
+    CHECKCAST Test$Animal
+    SWAP
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    IFNE L1
+    GOTO L2
+   L0:
+    POP2
+    GOTO L2
+   L1:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "found"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GOTO L3
+   L2:
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "missing"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L3:
+    RETURN
+    max stack 3 max locals 1
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Animal;LTest$Animal;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Animal
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Animal
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Cat extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Dog extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Dog flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+found
+

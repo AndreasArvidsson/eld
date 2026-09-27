@@ -285,8 +285,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEW Test$First
     DUP
     INVOKESPECIAL Test$First.<init>()V
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L0
+    IF_ACMPEQ L0
     GOTO L1
    L0:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -296,8 +295,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L1:
     ALOAD_0 0
     GETSTATIC Test.second LTest$Second;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L2
+    IF_ACMPEQ L2
     GOTO L3
    L2:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -313,6 +311,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 3 max locals 1
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -322,6 +321,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$First extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$First flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -331,6 +331,7 @@ class Test$First extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Second extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Second flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

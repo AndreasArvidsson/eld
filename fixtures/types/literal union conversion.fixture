@@ -2674,280 +2674,156 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field smallNegativeZero F flags [PUBLIC, STATIC, FINAL] = -0.0
   field smallNegativeTarget Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
   field restoredSmallNegative F flags [PUBLIC, STATIC, FINAL]
-  method check(Ljava/lang/Object;)V flags [PUBLIC, STATIC]
-    ALOAD_0 0
+  method check(I)V flags [PUBLIC, STATIC]
+    ILOAD_0 0
     DUP
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L0
+    IF_ICMPEQ L0
     DUP
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    IFNE L0
-    DUP
-    LDC ClassOrInterfaceDesc[Integer]
-    SWAP
-    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
-    IFEQ L0
-    CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    IF_ICMPEQ L0
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L0
+    GOTO L1
    L0:
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+   L1:
     ASTORE_1 1
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L2
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE_2 2
-    ASTORE_3 3
-    ALOAD_3 3
-    INSTANCEOF java/lang/Number
-    IFEQ L2
-    ALOAD_2 2
-    INSTANCEOF java/lang/Number
-    IFEQ L2
-    ALOAD_3 3
-    INSTANCEOF java/lang/Float
-    IFNE L1
-    ALOAD_3 3
-    INSTANCEOF java/lang/Double
-    IFNE L1
-    ALOAD_2 2
-    INSTANCEOF java/lang/Float
-    IFNE L1
-    ALOAD_2 2
-    INSTANCEOF java/lang/Double
-    IFNE L1
-    ALOAD_3 3
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD_2 2
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L3
-    GOTO L4
-   L1:
-    ALOAD_3 3
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD_2 2
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L3
-    GOTO L4
+    IF_ICMPEQ L4
    L2:
-    ALOAD_3 3
-    ALOAD_2 2
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L5
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L3
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
+    LCMP
+    IFEQ L4
    L3:
-    ICONST_1 1
+    POP
+    ICONST_0 0
     GOTO L5
    L4:
-    ICONST_0 0
+    POP
+    ICONST_1 1
    L5:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L6
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 4
-    ASTORE 5
-    ALOAD 5
-    INSTANCEOF java/lang/Number
+    IF_ICMPEQ L8
+   L6:
+    DUP
+    INSTANCEOF java/lang/Long
     IFEQ L7
-    ALOAD 4
-    INSTANCEOF java/lang/Number
-    IFEQ L7
-    ALOAD 5
-    INSTANCEOF java/lang/Float
-    IFNE L6
-    ALOAD 5
-    INSTANCEOF java/lang/Double
-    IFNE L6
-    ALOAD 4
-    INSTANCEOF java/lang/Float
-    IFNE L6
-    ALOAD 4
-    INSTANCEOF java/lang/Double
-    IFNE L6
-    ALOAD 5
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 4
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 1
+    I2L
     LCMP
     IFEQ L8
-    GOTO L9
-   L6:
-    ALOAD 5
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 4
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L8
-    GOTO L9
    L7:
-    ALOAD 5
-    ALOAD 4
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L10
-   L8:
-    ICONST_1 1
-    GOTO L10
-   L9:
+    POP
     ICONST_0 0
-   L10:
+    GOTO L9
+   L8:
+    POP
+    ICONST_1 1
+   L9:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     ALOAD_1 1
-    ASTORE 6
-    ALOAD 6
+    ASTORE_2 2
+    ALOAD_2 2
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L10
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 7
-    ASTORE 8
-    ALOAD 8
-    INSTANCEOF java/lang/Number
-    IFEQ L12
-    ALOAD 7
-    INSTANCEOF java/lang/Number
-    IFEQ L12
-    ALOAD 8
-    INSTANCEOF java/lang/Float
-    IFNE L11
-    ALOAD 8
-    INSTANCEOF java/lang/Double
-    IFNE L11
-    ALOAD 7
-    INSTANCEOF java/lang/Float
-    IFNE L11
-    ALOAD 7
-    INSTANCEOF java/lang/Double
-    IFNE L11
-    ALOAD 8
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 7
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L12
+   L10:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L11
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
     LCMP
-    IFEQ L13
-    GOTO L14
+    IFEQ L12
    L11:
-    ALOAD 8
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 7
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L13
-    GOTO L14
+    POP
+    GOTO L13
    L12:
-    ALOAD 8
-    ALOAD 7
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L15
-   L13:
-    ICONST_1 1
-    GOTO L15
-   L14:
-    ICONST_0 0
-   L15:
-    IFNE L16
-    GOTO L17
-   L16:
+    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "zero"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L25
-   L17:
-    ALOAD 6
+    GOTO L18
+   L13:
+    ALOAD_2 2
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L14
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 9
-    ASTORE 10
-    ALOAD 10
-    INSTANCEOF java/lang/Number
-    IFEQ L19
-    ALOAD 9
-    INSTANCEOF java/lang/Number
-    IFEQ L19
-    ALOAD 10
-    INSTANCEOF java/lang/Float
-    IFNE L18
-    ALOAD 10
-    INSTANCEOF java/lang/Double
-    IFNE L18
-    ALOAD 9
-    INSTANCEOF java/lang/Float
-    IFNE L18
-    ALOAD 9
-    INSTANCEOF java/lang/Double
-    IFNE L18
-    ALOAD 10
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 9
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L16
+   L14:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L15
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 1
+    I2L
     LCMP
-    IFEQ L20
-    GOTO L21
-   L18:
-    ALOAD 10
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 9
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L20
-    GOTO L21
-   L19:
-    ALOAD 10
-    ALOAD 9
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L22
-   L20:
-    ICONST_1 1
-    GOTO L22
-   L21:
-    ICONST_0 0
-   L22:
-    IFNE L23
-    GOTO L24
-   L23:
+    IFEQ L16
+   L15:
+    POP
+    GOTO L17
+   L16:
+    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "one"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L25
-   L24:
+    GOTO L18
+   L17:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "wide"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L25:
+   L18:
     RETURN
-    max stack 5 max locals 11
+    max stack 6 max locals 3
   method <clinit>()V flags [STATIC]
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKESTATIC Test.check(Ljava/lang/Object;)V
+    INVOKESTATIC Test.check(I)V
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKESTATIC Test.check(Ljava/lang/Object;)V
+    INVOKESTATIC Test.check(I)V
     LDC 2
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKESTATIC Test.check(Ljava/lang/Object;)V
+    INVOKESTATIC Test.check(I)V
     GETSTATIC Test.ordinaryZero I
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     PUTSTATIC Test.ordinarySource Ljava/lang/Object;
@@ -2961,63 +2837,37 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/lang/Integer.intValue()I
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L0
    L0:
     PUTSTATIC Test.ordinaryTarget Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.ordinaryTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L1
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE_0 0
-    ASTORE_1 1
-    ALOAD_1 1
-    INSTANCEOF java/lang/Number
-    IFEQ L2
-    ALOAD_0 0
-    INSTANCEOF java/lang/Number
-    IFEQ L2
-    ALOAD_1 1
-    INSTANCEOF java/lang/Float
-    IFNE L1
-    ALOAD_1 1
-    INSTANCEOF java/lang/Double
-    IFNE L1
-    ALOAD_0 0
-    INSTANCEOF java/lang/Float
-    IFNE L1
-    ALOAD_0 0
-    INSTANCEOF java/lang/Double
-    IFNE L1
-    ALOAD_1 1
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD_0 0
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    I2L
     LCMP
     IFEQ L3
-    GOTO L4
    L1:
-    ALOAD_1 1
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD_0 0
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L3
-    GOTO L4
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L2
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 0
+    IF_ICMPEQ L3
    L2:
-    ALOAD_1 1
-    ALOAD_0 0
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L5
-   L3:
-    ICONST_1 1
-    GOTO L5
-   L4:
+    POP
     ICONST_0 0
-   L5:
+    GOTO L4
+   L3:
+    POP
+    ICONST_1 1
+   L4:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.ordinaryOne I
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
@@ -3027,68 +2877,42 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC ClassOrInterfaceDesc[Integer]
     SWAP
     INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
-    IFEQ L6
+    IFEQ L5
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L6
-   L6:
+   L5:
     PUTSTATIC Test.otherTarget Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.otherTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L6
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE_2 2
-    ASTORE_3 3
-    ALOAD_3 3
-    INSTANCEOF java/lang/Number
-    IFEQ L8
-    ALOAD_2 2
-    INSTANCEOF java/lang/Number
-    IFEQ L8
-    ALOAD_3 3
-    INSTANCEOF java/lang/Float
-    IFNE L7
-    ALOAD_3 3
-    INSTANCEOF java/lang/Double
-    IFNE L7
-    ALOAD_2 2
-    INSTANCEOF java/lang/Float
-    IFNE L7
-    ALOAD_2 2
-    INSTANCEOF java/lang/Double
-    IFNE L7
-    ALOAD_3 3
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD_2 2
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    I2L
     LCMP
-    IFEQ L9
-    GOTO L10
+    IFEQ L8
+   L6:
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L7
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 0
+    IF_ICMPEQ L8
    L7:
-    ALOAD_3 3
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD_2 2
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L9
-    GOTO L10
-   L8:
-    ALOAD_3 3
-    ALOAD_2 2
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L11
-   L9:
-    ICONST_1 1
-    GOTO L11
-   L10:
+    POP
     ICONST_0 0
-   L11:
+    GOTO L9
+   L8:
+    POP
+    ICONST_1 1
+   L9:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.wideZero J
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
@@ -3099,126 +2923,70 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.wideTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L10
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 4
-    ASTORE 5
-    ALOAD 5
-    INSTANCEOF java/lang/Number
-    IFEQ L13
-    ALOAD 4
-    INSTANCEOF java/lang/Number
-    IFEQ L13
-    ALOAD 5
-    INSTANCEOF java/lang/Float
-    IFNE L12
-    ALOAD 5
-    INSTANCEOF java/lang/Double
-    IFNE L12
-    ALOAD 4
-    INSTANCEOF java/lang/Float
-    IFNE L12
-    ALOAD 4
-    INSTANCEOF java/lang/Double
-    IFNE L12
-    ALOAD 5
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 4
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L12
+   L10:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L11
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
     LCMP
-    IFEQ L14
-    GOTO L15
-   L12:
-    ALOAD 5
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 4
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L14
-    GOTO L15
-   L13:
-    ALOAD 5
-    ALOAD 4
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L16
-   L14:
-    ICONST_1 1
-    GOTO L16
-   L15:
+    IFEQ L12
+   L11:
+    POP
     ICONST_0 0
-   L16:
+    GOTO L13
+   L12:
+    POP
+    ICONST_1 1
+   L13:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.wideTarget Ljava/lang/Object;
-    ASTORE 6
-    ALOAD 6
+    ASTORE_0 0
+    ALOAD_0 0
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L14
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 7
-    ASTORE 8
-    ALOAD 8
-    INSTANCEOF java/lang/Number
-    IFEQ L18
-    ALOAD 7
-    INSTANCEOF java/lang/Number
-    IFEQ L18
-    ALOAD 8
-    INSTANCEOF java/lang/Float
-    IFNE L17
-    ALOAD 8
-    INSTANCEOF java/lang/Double
-    IFNE L17
-    ALOAD 7
-    INSTANCEOF java/lang/Float
-    IFNE L17
-    ALOAD 7
-    INSTANCEOF java/lang/Double
-    IFNE L17
-    ALOAD 8
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 7
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L16
+   L14:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L15
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
     LCMP
-    IFEQ L19
-    GOTO L20
-   L17:
-    ALOAD 8
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 7
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L19
-    GOTO L20
-   L18:
-    ALOAD 8
-    ALOAD 7
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L21
-   L19:
-    ICONST_1 1
-    GOTO L21
-   L20:
-    ICONST_0 0
-   L21:
-    IFNE L22
-    GOTO L23
-   L22:
+    IFEQ L16
+   L15:
+    POP
+    GOTO L17
+   L16:
+    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "wide zero"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L24
-   L23:
+    GOTO L18
+   L17:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "missing"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L24:
+   L18:
     GETSTATIC Test.wideZero J
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     PUTSTATIC Test.wideSource Ljava/lang/Object;
@@ -3226,58 +2994,33 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.wideUnionTarget Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.wideUnionTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L19
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 9
-    ASTORE 10
-    ALOAD 10
-    INSTANCEOF java/lang/Number
-    IFEQ L26
-    ALOAD 9
-    INSTANCEOF java/lang/Number
-    IFEQ L26
-    ALOAD 10
-    INSTANCEOF java/lang/Float
-    IFNE L25
-    ALOAD 10
-    INSTANCEOF java/lang/Double
-    IFNE L25
-    ALOAD 9
-    INSTANCEOF java/lang/Float
-    IFNE L25
-    ALOAD 9
-    INSTANCEOF java/lang/Double
-    IFNE L25
-    ALOAD 10
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 9
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L21
+   L19:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L20
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
     LCMP
-    IFEQ L27
-    GOTO L28
-   L25:
-    ALOAD 10
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 9
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L27
-    GOTO L28
-   L26:
-    ALOAD 10
-    ALOAD 9
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L29
-   L27:
-    ICONST_1 1
-    GOTO L29
-   L28:
+    IFEQ L21
+   L20:
+    POP
     ICONST_0 0
-   L29:
+    GOTO L22
+   L21:
+    POP
+    ICONST_1 1
+   L22:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
@@ -3294,58 +3037,33 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     LDC 0
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L23
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 11
-    ASTORE 12
-    ALOAD 12
-    INSTANCEOF java/lang/Number
-    IFEQ L31
-    ALOAD 11
-    INSTANCEOF java/lang/Number
-    IFEQ L31
-    ALOAD 12
-    INSTANCEOF java/lang/Float
-    IFNE L30
-    ALOAD 12
-    INSTANCEOF java/lang/Double
-    IFNE L30
-    ALOAD 11
-    INSTANCEOF java/lang/Float
-    IFNE L30
-    ALOAD 11
-    INSTANCEOF java/lang/Double
-    IFNE L30
-    ALOAD 12
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 11
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L25
+   L23:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L24
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
     LCMP
-    IFEQ L32
-    GOTO L33
-   L30:
-    ALOAD 12
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 11
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L32
-    GOTO L33
-   L31:
-    ALOAD 12
-    ALOAD 11
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L34
-   L32:
-    ICONST_1 1
-    GOTO L34
-   L33:
+    IFEQ L25
+   L24:
+    POP
     ICONST_0 0
-   L34:
+    GOTO L26
+   L25:
+    POP
+    ICONST_1 1
+   L26:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
@@ -3366,116 +3084,64 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.pair Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
     LDC 0
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.get(I)Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L27
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 13
-    ASTORE 14
-    ALOAD 14
-    INSTANCEOF java/lang/Number
-    IFEQ L36
-    ALOAD 13
-    INSTANCEOF java/lang/Number
-    IFEQ L36
-    ALOAD 14
-    INSTANCEOF java/lang/Float
-    IFNE L35
-    ALOAD 14
-    INSTANCEOF java/lang/Double
-    IFNE L35
-    ALOAD 13
-    INSTANCEOF java/lang/Float
-    IFNE L35
-    ALOAD 13
-    INSTANCEOF java/lang/Double
-    IFNE L35
-    ALOAD 14
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 13
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    IF_ICMPEQ L29
+   L27:
+    DUP
+    INSTANCEOF java/lang/Long
+    IFEQ L28
+    DUP
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC 0
+    I2L
     LCMP
-    IFEQ L37
-    GOTO L38
-   L35:
-    ALOAD 14
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 13
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L37
-    GOTO L38
-   L36:
-    ALOAD 14
-    ALOAD 13
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L39
-   L37:
-    ICONST_1 1
-    GOTO L39
-   L38:
+    IFEQ L29
+   L28:
+    POP
     ICONST_0 0
-   L39:
+    GOTO L30
+   L29:
+    POP
+    ICONST_1 1
+   L30:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.smallZero B
     INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
     PUTSTATIC Test.smallTarget Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.smallTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L31
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 15
-    ASTORE 16
-    ALOAD 16
-    INSTANCEOF java/lang/Number
-    IFEQ L41
-    ALOAD 15
-    INSTANCEOF java/lang/Number
-    IFEQ L41
-    ALOAD 16
-    INSTANCEOF java/lang/Float
-    IFNE L40
-    ALOAD 16
-    INSTANCEOF java/lang/Double
-    IFNE L40
-    ALOAD 15
-    INSTANCEOF java/lang/Float
-    IFNE L40
-    ALOAD 15
-    INSTANCEOF java/lang/Double
-    IFNE L40
-    ALOAD 16
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 15
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L42
-    GOTO L43
-   L40:
-    ALOAD 16
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 15
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L42
-    GOTO L43
-   L41:
-    ALOAD 16
-    ALOAD 15
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L44
-   L42:
-    ICONST_1 1
-    GOTO L44
-   L43:
+    IF_ICMPEQ L33
+   L31:
+    DUP
+    INSTANCEOF java/lang/Byte
+    IFEQ L32
+    DUP
+    CHECKCAST java/lang/Byte
+    INVOKEVIRTUAL java/lang/Byte.byteValue()B
+    LDC 0
+    IF_ICMPEQ L33
+   L32:
+    POP
     ICONST_0 0
-   L44:
+    GOTO L34
+   L33:
+    POP
+    ICONST_1 1
+   L34:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     PUTSTATIC Test.none Ljava/lang/Integer;
@@ -3487,58 +3153,22 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.some Ljava/lang/Integer;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.some Ljava/lang/Integer;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L35
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 17
-    ASTORE 18
-    ALOAD 18
-    INSTANCEOF java/lang/Number
-    IFEQ L46
-    ALOAD 17
-    INSTANCEOF java/lang/Number
-    IFEQ L46
-    ALOAD 18
-    INSTANCEOF java/lang/Float
-    IFNE L45
-    ALOAD 18
-    INSTANCEOF java/lang/Double
-    IFNE L45
-    ALOAD 17
-    INSTANCEOF java/lang/Float
-    IFNE L45
-    ALOAD 17
-    INSTANCEOF java/lang/Double
-    IFNE L45
-    ALOAD 18
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 17
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L47
-    GOTO L48
-   L45:
-    ALOAD 18
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 17
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L47
-    GOTO L48
-   L46:
-    ALOAD 18
-    ALOAD 17
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L49
-   L47:
-    ICONST_1 1
-    GOTO L49
-   L48:
+    IF_ICMPEQ L36
+   L35:
+    POP
     ICONST_0 0
-   L49:
+    GOTO L37
+   L36:
+    POP
+    ICONST_1 1
+   L37:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.floatingZero D
     INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
@@ -3548,58 +3178,33 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.floatingTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L38
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 19
-    ASTORE 20
-    ALOAD 20
-    INSTANCEOF java/lang/Number
-    IFEQ L51
-    ALOAD 19
-    INSTANCEOF java/lang/Number
-    IFEQ L51
-    ALOAD 20
-    INSTANCEOF java/lang/Float
-    IFNE L50
-    ALOAD 20
+    IF_ICMPEQ L40
+   L38:
+    DUP
     INSTANCEOF java/lang/Double
-    IFNE L50
-    ALOAD 19
-    INSTANCEOF java/lang/Float
-    IFNE L50
-    ALOAD 19
-    INSTANCEOF java/lang/Double
-    IFNE L50
-    ALOAD 20
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 19
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L52
-    GOTO L53
-   L50:
-    ALOAD 20
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 19
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    IFEQ L39
+    DUP
+    CHECKCAST java/lang/Double
+    INVOKEVIRTUAL java/lang/Double.doubleValue()D
+    LDC 0
+    I2D
     DCMPL
-    IFEQ L52
-    GOTO L53
-   L51:
-    ALOAD 20
-    ALOAD 19
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L54
-   L52:
-    ICONST_1 1
-    GOTO L54
-   L53:
+    IFEQ L40
+   L39:
+    POP
     ICONST_0 0
-   L54:
+    GOTO L41
+   L40:
+    POP
+    ICONST_1 1
+   L41:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.floatingTarget Ljava/lang/Object;
     CHECKCAST java/lang/Number
@@ -3609,137 +3214,81 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.restoredFloating D
     LDC2_W 0.0
     DCMPL
-    IFEQ L55
+    IFEQ L42
     ICONST_0 0
-    GOTO L56
-   L55:
+    GOTO L43
+   L42:
     ICONST_1 1
-   L56:
+   L43:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.floatingTarget Ljava/lang/Object;
-    ASTORE 21
-    ALOAD 21
+    ASTORE_1 1
+    ALOAD_1 1
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L44
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 22
-    ASTORE 23
-    ALOAD 23
-    INSTANCEOF java/lang/Number
-    IFEQ L58
-    ALOAD 22
-    INSTANCEOF java/lang/Number
-    IFEQ L58
-    ALOAD 23
-    INSTANCEOF java/lang/Float
-    IFNE L57
-    ALOAD 23
+    IF_ICMPEQ L46
+   L44:
+    DUP
     INSTANCEOF java/lang/Double
-    IFNE L57
-    ALOAD 22
-    INSTANCEOF java/lang/Float
-    IFNE L57
-    ALOAD 22
-    INSTANCEOF java/lang/Double
-    IFNE L57
-    ALOAD 23
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 22
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L59
-    GOTO L60
-   L57:
-    ALOAD 23
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 22
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    IFEQ L45
+    DUP
+    CHECKCAST java/lang/Double
+    INVOKEVIRTUAL java/lang/Double.doubleValue()D
+    LDC 0
+    I2D
     DCMPL
-    IFEQ L59
-    GOTO L60
-   L58:
-    ALOAD 23
-    ALOAD 22
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L61
-   L59:
-    ICONST_1 1
-    GOTO L61
-   L60:
-    ICONST_0 0
-   L61:
-    IFNE L62
-    GOTO L63
-   L62:
+    IFEQ L46
+   L45:
+    POP
+    GOTO L47
+   L46:
+    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "floating zero"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L64
-   L63:
+    GOTO L48
+   L47:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "missing floating zero"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L64:
+   L48:
     GETSTATIC Test.smallFloatingZero F
     INVOKESTATIC java/lang/Float.valueOf(F)Ljava/lang/Float;
     PUTSTATIC Test.smallFloatingTarget Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.smallFloatingTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L49
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 24
-    ASTORE 25
-    ALOAD 25
-    INSTANCEOF java/lang/Number
-    IFEQ L66
-    ALOAD 24
-    INSTANCEOF java/lang/Number
-    IFEQ L66
-    ALOAD 25
+    IF_ICMPEQ L51
+   L49:
+    DUP
     INSTANCEOF java/lang/Float
-    IFNE L65
-    ALOAD 25
-    INSTANCEOF java/lang/Double
-    IFNE L65
-    ALOAD 24
-    INSTANCEOF java/lang/Float
-    IFNE L65
-    ALOAD 24
-    INSTANCEOF java/lang/Double
-    IFNE L65
-    ALOAD 25
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 24
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L67
-    GOTO L68
-   L65:
-    ALOAD 25
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 24
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DCMPL
-    IFEQ L67
-    GOTO L68
-   L66:
-    ALOAD 25
-    ALOAD 24
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L69
-   L67:
-    ICONST_1 1
-    GOTO L69
-   L68:
+    IFEQ L50
+    DUP
+    CHECKCAST java/lang/Float
+    INVOKEVIRTUAL java/lang/Float.floatValue()F
+    LDC 0
+    I2F
+    FCMPL
+    IFEQ L51
+   L50:
+    POP
     ICONST_0 0
-   L69:
+    GOTO L52
+   L51:
+    POP
+    ICONST_1 1
+   L52:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.floatingOne D
     INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
@@ -3749,58 +3298,33 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.oneTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L53
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 26
-    ASTORE 27
-    ALOAD 27
-    INSTANCEOF java/lang/Number
-    IFEQ L71
-    ALOAD 26
-    INSTANCEOF java/lang/Number
-    IFEQ L71
-    ALOAD 27
-    INSTANCEOF java/lang/Float
-    IFNE L70
-    ALOAD 27
+    IF_ICMPEQ L55
+   L53:
+    DUP
     INSTANCEOF java/lang/Double
-    IFNE L70
-    ALOAD 26
-    INSTANCEOF java/lang/Float
-    IFNE L70
-    ALOAD 26
-    INSTANCEOF java/lang/Double
-    IFNE L70
-    ALOAD 27
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 26
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L72
-    GOTO L73
-   L70:
-    ALOAD 27
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 26
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    IFEQ L54
+    DUP
+    CHECKCAST java/lang/Double
+    INVOKEVIRTUAL java/lang/Double.doubleValue()D
+    LDC 1
+    I2D
     DCMPL
-    IFEQ L72
-    GOTO L73
-   L71:
-    ALOAD 27
-    ALOAD 26
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L74
-   L72:
-    ICONST_1 1
-    GOTO L74
-   L73:
+    IFEQ L55
+   L54:
+    POP
     ICONST_0 0
-   L74:
+    GOTO L56
+   L55:
+    POP
+    ICONST_1 1
+   L56:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.negativeZero D
     INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
@@ -3810,132 +3334,76 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.negativeTarget Ljava/lang/Object;
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L57
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 28
-    ASTORE 29
-    ALOAD 29
-    INSTANCEOF java/lang/Number
-    IFEQ L76
-    ALOAD 28
-    INSTANCEOF java/lang/Number
-    IFEQ L76
-    ALOAD 29
-    INSTANCEOF java/lang/Float
-    IFNE L75
-    ALOAD 29
+    IF_ICMPEQ L59
+   L57:
+    DUP
     INSTANCEOF java/lang/Double
-    IFNE L75
-    ALOAD 28
-    INSTANCEOF java/lang/Float
-    IFNE L75
-    ALOAD 28
-    INSTANCEOF java/lang/Double
-    IFNE L75
-    ALOAD 29
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 28
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L77
-    GOTO L78
-   L75:
-    ALOAD 29
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 28
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    IFEQ L58
+    DUP
+    CHECKCAST java/lang/Double
+    INVOKEVIRTUAL java/lang/Double.doubleValue()D
+    LDC 0
+    I2D
     DCMPL
-    IFEQ L77
-    GOTO L78
-   L76:
-    ALOAD 29
-    ALOAD 28
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L79
-   L77:
-    ICONST_1 1
-    GOTO L79
-   L78:
+    IFEQ L59
+   L58:
+    POP
     ICONST_0 0
-   L79:
+    GOTO L60
+   L59:
+    POP
+    ICONST_1 1
+   L60:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.negativeTarget Ljava/lang/Object;
-    ASTORE 30
-    ALOAD 30
+    ASTORE_2 2
+    ALOAD_2 2
+    DUP
+    INSTANCEOF java/lang/Integer
+    IFEQ L61
+    DUP
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
     LDC 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE 31
-    ASTORE 32
-    ALOAD 32
-    INSTANCEOF java/lang/Number
-    IFEQ L81
-    ALOAD 31
-    INSTANCEOF java/lang/Number
-    IFEQ L81
-    ALOAD 32
-    INSTANCEOF java/lang/Float
-    IFNE L80
-    ALOAD 32
+    IF_ICMPEQ L63
+   L61:
+    DUP
     INSTANCEOF java/lang/Double
-    IFNE L80
-    ALOAD 31
-    INSTANCEOF java/lang/Float
-    IFNE L80
-    ALOAD 31
-    INSTANCEOF java/lang/Double
-    IFNE L80
-    ALOAD 32
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    ALOAD 31
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
-    LCMP
-    IFEQ L82
-    GOTO L83
-   L80:
-    ALOAD 32
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    ALOAD 31
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.doubleValue()D
+    IFEQ L62
+    DUP
+    CHECKCAST java/lang/Double
+    INVOKEVIRTUAL java/lang/Double.doubleValue()D
+    LDC 0
+    I2D
     DCMPL
-    IFEQ L82
-    GOTO L83
-   L81:
-    ALOAD 32
-    ALOAD 31
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L84
-   L82:
-    ICONST_1 1
-    GOTO L84
-   L83:
-    ICONST_0 0
-   L84:
-    IFNE L85
-    GOTO L86
-   L85:
+    IFEQ L63
+   L62:
+    POP
+    GOTO L64
+   L63:
+    POP
     GETSTATIC Test.negativeTarget Ljava/lang/Object;
     CHECKCAST java/lang/Number
     INVOKEVIRTUAL java/lang/Number.doubleValue()D
-    DSTORE 33
+    DSTORE_3 3
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC2_W 1.0
-    DLOAD 33
+    DLOAD_3 3
     DDIV
     INVOKEVIRTUAL java/io/PrintStream.println(D)V
-    GOTO L87
-   L86:
+    GOTO L65
+   L64:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "missing negative zero"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-   L87:
+   L65:
     GETSTATIC Test.negativeTarget Ljava/lang/Object;
     CHECKCAST java/lang/Number
     INVOKEVIRTUAL java/lang/Number.doubleValue()D
@@ -3958,7 +3426,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     FDIV
     INVOKEVIRTUAL java/io/PrintStream.println(F)V
     RETURN
-    max stack 7 max locals 35
+    max stack 7 max locals 5
 
 --- OUTPUT ---
 

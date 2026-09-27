@@ -335,7 +335,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field zero I flags [PUBLIC, STATIC, FINAL] = 0
   field wide J flags [PUBLIC, STATIC, FINAL]
   field mixed Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
-  field choices Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field choices I flags [PUBLIC, STATIC, FINAL] = 1
   field fromChoices J flags [PUBLIC, STATIC, FINAL]
   field mixedChoices Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
@@ -352,28 +352,15 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.mixed Ljava/lang/Object;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
-    LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    PUTSTATIC Test.choices Ljava/lang/Object;
-    GETSTATIC Test.choices Ljava/lang/Object;
-    CHECKCAST java/lang/Number
-    INVOKEVIRTUAL java/lang/Number.longValue()J
+    GETSTATIC Test.choices I
+    I2L
     PUTSTATIC Test.fromChoices J
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.fromChoices J
     INVOKEVIRTUAL java/io/PrintStream.println(J)V
-    GETSTATIC Test.choices Ljava/lang/Object;
-    DUP
-    LDC ClassOrInterfaceDesc[Integer]
-    SWAP
-    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
-    IFEQ L0
-    CHECKCAST java/lang/Integer
-    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    GETSTATIC Test.choices I
     I2L
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
-    GOTO L0
-   L0:
     PUTSTATIC Test.mixedChoices Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.mixedChoices Ljava/lang/Object;

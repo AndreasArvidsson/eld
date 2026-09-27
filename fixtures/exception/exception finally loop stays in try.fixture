@@ -270,7 +270,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ILOAD_0 0
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
-    GOTO L7
    L7:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "after loop"

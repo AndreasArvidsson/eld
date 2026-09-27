@@ -78,7 +78,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ILOAD_1 1
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
     ISTORE_2 2
-    GOTO L0
    L0:
     RETURN
     max stack 6 max locals 3

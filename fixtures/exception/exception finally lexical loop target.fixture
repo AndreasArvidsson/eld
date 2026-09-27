@@ -173,7 +173,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L0:
     NOP
     ICONST_1 1
-    IFEQ L3
+    IFEQ L5
     LDC 7
     ISTORE_0 0
    L1:
@@ -181,10 +181,11 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L2:
     ATHROW
    L3:
-    GOTO L5
+    NOP
+    NOP
+    ATHROW
    L4:
     ASTORE_1 1
-    GOTO L5
    L5:
     LDC 9
     IRETURN

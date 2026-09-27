@@ -162,17 +162,9 @@ Declarations:
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
-  field status Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field status Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "pending"
   field flag Z flags [PUBLIC, STATIC, FINAL] = 1
-  field number Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
-  method <clinit>()V flags [STATIC]
-    LDC "pending"
-    PUTSTATIC Test.status Ljava/lang/Object;
-    LDC 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    PUTSTATIC Test.number Ljava/lang/Object;
-    RETURN
-    max stack 1 max locals 0
+  field number I flags [PUBLIC, STATIC, FINAL] = 1
 
 --- OUTPUT ---
 

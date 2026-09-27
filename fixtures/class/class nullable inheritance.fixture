@@ -1073,12 +1073,14 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 1 max locals 1
   method accepts(LTest$Base;)Z flags [PUBLIC, STATIC]
     ALOAD_0 0
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNONNULL L0
+    ICONST_0 0
+    GOTO L1
+   L0:
     ICONST_1 1
-    IXOR
+   L1:
     IRETURN
-    max stack 2 max locals 1
+    max stack 1 max locals 1
   method multi(I)LTest$Base; flags [PUBLIC, STATIC]
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     ASTORE_1 1
@@ -1114,7 +1116,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     ASTORE_1 1
     POP
-    GOTO L5
    L5:
     ALOAD_1 1
     CHECKCAST Test$Base
@@ -1130,13 +1131,55 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.base LTest$Base;
     GETSTATIC Test.child LTest$Child;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    DUP2
+    POP
+    IFNULL L1
+    DUP
+    IFNULL L3
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L4
+   L0:
+    ICONST_1 1
+    GOTO L4
+   L1:
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L4
+   L2:
+    ICONST_1 1
+    GOTO L4
+   L3:
+    POP2
+    ICONST_0 0
+   L4:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.child LTest$Child;
     INVOKESTATIC Test.widen(LTest$Child;)LTest$Base;
     GETSTATIC Test.base LTest$Base;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    DUP2
+    POP
+    IFNULL L6
+    DUP
+    IFNULL L8
+    IF_ACMPEQ L5
+    ICONST_0 0
+    GOTO L9
+   L5:
+    ICONST_1 1
+    GOTO L9
+   L6:
+    IF_ACMPEQ L7
+    ICONST_0 0
+    GOTO L9
+   L7:
+    ICONST_1 1
+    GOTO L9
+   L8:
+    POP2
+    ICONST_0 0
+   L9:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.child LTest$Child;
@@ -1150,14 +1193,22 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.absent LTest$Base;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.absent LTest$Base;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNULL L10
+    ICONST_0 0
+    GOTO L11
+   L10:
+    ICONST_1 1
+   L11:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.child LTest$Child;
     INVOKESTATIC Test.widen(LTest$Child;)LTest$Base;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNULL L12
+    ICONST_0 0
+    GOTO L13
+   L12:
+    ICONST_1 1
+   L13:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.child LTest$Child;
@@ -1166,29 +1217,38 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 0
     INVOKESTATIC Test.multi(I)LTest$Base;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNULL L14
+    ICONST_0 0
+    GOTO L15
+   L14:
+    ICONST_1 1
+   L15:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 1
     INVOKESTATIC Test.multi(I)LTest$Base;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNONNULL L16
+    ICONST_0 0
+    GOTO L17
+   L16:
     ICONST_1 1
-    IXOR
+   L17:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 2
     INVOKESTATIC Test.multi(I)LTest$Base;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNONNULL L18
+    ICONST_0 0
+    GOTO L19
+   L18:
     ICONST_1 1
-    IXOR
+   L19:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    max stack 3 max locals 0
+    max stack 5 max locals 0
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -1198,6 +1258,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Child flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -1207,6 +1268,7 @@ class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     max stack 1 max locals 1
 
 class Test$Sibling extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Sibling flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

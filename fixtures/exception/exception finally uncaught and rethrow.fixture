@@ -384,55 +384,41 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_1 1
     GETSTATIC Test.original Ljava/io/IOException;
-    IF_ACMPEQ L4
-    ICONST_0 0
-    GOTO L5
-   L4:
-    ICONST_1 1
-   L5:
+    INVOKEVIRTUAL java/io/IOException.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
-   L6:
+   L4:
     NOP
-   L7:
+   L5:
     NOP
     ALOAD_1 1
     ATHROW
-   L8:
+   L6:
     ASTORE_2 2
-   L9:
+   L7:
     NOP
     ALOAD_2 2
     ATHROW
-   L10:
+   L8:
     ASTORE_3 3
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "rethrow cleanup"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     ALOAD_3 3
     ATHROW
-   L11:
+   L9:
     ASTORE 4
     NOP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD 4
     GETSTATIC Test.original Ljava/io/IOException;
-    IF_ACMPEQ L12
-    ICONST_0 0
-    GOTO L13
-   L12:
-    ICONST_1 1
-   L13:
+    INVOKEVIRTUAL java/io/IOException.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
-    GOTO L14
-   L14:
-    GOTO L15
-   L15:
     RETURN
     catch all from L1 to L2 handler L2
-    catch java/io/IOException from L7 to L8 handler L8
-    catch all from L7 to L8 handler L10
-    catch all from L9 to L10 handler L10
-    catch java/io/IOException from L6 to L11 handler L11
+    catch java/io/IOException from L5 to L6 handler L6
+    catch all from L5 to L6 handler L8
+    catch all from L7 to L8 handler L8
+    catch java/io/IOException from L4 to L9 handler L9
     catch java/io/IOException from L0 to L3 handler L3
     max stack 3 max locals 5
 

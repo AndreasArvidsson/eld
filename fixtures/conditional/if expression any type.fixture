@@ -250,7 +250,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GOTO L1
    L0:
     LDC "hello"
-    GOTO L1
    L1:
     PUTSTATIC Test.foo Ljava/lang/Object;
     ICONST_0 0
@@ -260,7 +259,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GOTO L3
    L2:
     LDC "hello"
-    GOTO L3
    L3:
     PUTSTATIC Test.bar Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;

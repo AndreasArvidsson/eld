@@ -474,7 +474,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "wrong broad catch"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L4
    L4:
     NOP
     NEW java/lang/Error
@@ -489,7 +488,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_3 3
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L6
    L6:
     NOP
     NEW java/lang/Exception
@@ -504,8 +502,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD 4
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L8
-   L8:
     RETURN
     catch java/io/IOException from L0 to L1 handler L1
     catch java/lang/RuntimeException from L0 to L1 handler L2

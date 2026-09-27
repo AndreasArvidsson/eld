@@ -595,7 +595,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_0 0
     ALOAD_0 0
     LDC ClassOrInterfaceDesc[Test$Cat]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L0
     GOTO L1
    L0:
@@ -606,7 +606,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L1:
     ALOAD_0 0
     LDC ClassOrInterfaceDesc[Test$Bird]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L2
     GOTO L3
    L2:
@@ -617,7 +617,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L3:
     ALOAD_0 0
     LDC ClassOrInterfaceDesc[Test$Dog]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L4
     GOTO L5
    L4:
@@ -636,7 +636,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_1 1
     ALOAD_1 1
     LDC ClassOrInterfaceDesc[Test$Pet]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L7
     GOTO L8
    L7:
@@ -655,7 +655,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ASTORE_2 2
     ALOAD_2 2
     LDC ClassOrInterfaceDesc[ArrayList]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/Class.equals(Ljava/lang/Object;)Z
     IFNE L10
     GOTO L11
    L10:
@@ -682,6 +682,7 @@ class Test$Pet extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, A
 
 class Test$Dog extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Pet
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Dog flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -692,6 +693,7 @@ class Test$Dog extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 class Test$Cat extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Animal
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Cat flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -702,6 +704,7 @@ class Test$Cat extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 class Test$Bird extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
   implements Test$Animal
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Bird flags [PUBLIC, STATIC, FINAL]
   method toString()Ljava/lang/String; flags [PUBLIC, FINAL]

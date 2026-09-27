@@ -277,16 +277,16 @@ Expression types:
   6:1-6:6 -> (any) => void
   6:1-6:27 -> void
   6:7-6:12 -> Box
-  6:7-6:19 -> (any) => bool
+  6:7-6:19 -> (Box) => bool
   6:7-6:26 -> bool
-  6:13-6:19 -> (any) => bool
+  6:13-6:19 -> (Box) => bool
   6:20-6:25 -> Box
   7:1-7:6 -> (any) => void
   7:1-7:28 -> void
   7:7-7:12 -> Box
-  7:7-7:19 -> (any) => bool
+  7:7-7:19 -> (Box) => bool
   7:7-7:27 -> bool
-  7:13-7:19 -> (any) => bool
+  7:13-7:19 -> (Box) => bool
   7:20-7:26 -> Box
   8:1-8:6 -> (any) => void
   8:1-8:44 -> void
@@ -311,10 +311,6 @@ Expression types:
   9:27-9:43 -> string
   9:33-9:41 -> () => string
 
-Conversions:
-  6:20-6:25 -> Box -> any
-  7:20-7:26 -> Box -> any
-
 Declarations:
   1:7-1:10 -> class Box
   3:7-3:12 -> const first: Box
@@ -325,11 +321,11 @@ References:
   4:20-4:23 -> 1:7-1:10
   6:1-6:6 -> builtin print
   6:7-6:12 -> 3:7-3:12
-  6:13-6:19 -> Box.equals(any): bool
+  6:13-6:19 -> Box.equals(Box): bool
   6:20-6:25 -> 3:7-3:12
   7:1-7:6 -> builtin print
   7:7-7:12 -> 3:7-3:12
-  7:13-7:19 -> Box.equals(any): bool
+  7:13-7:19 -> Box.equals(Box): bool
   7:20-7:26 -> 4:7-4:13
   8:1-8:6 -> builtin print
   8:7-8:12 -> 3:7-3:12
@@ -361,19 +357,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Box;
     GETSTATIC Test.first LTest$Box;
-    INVOKEVIRTUAL Test$Box.equals(Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.first LTest$Box;
-    GETSTATIC Test.second LTest$Box;
-    INVOKEVIRTUAL Test$Box.equals(Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.first LTest$Box;
-    INVOKEVIRTUAL Test$Box.hashCode()I
-    GETSTATIC Test.first LTest$Box;
-    INVOKEVIRTUAL Test$Box.hashCode()I
-    IF_ICMPEQ L0
+    IF_ACMPEQ L0
     ICONST_0 0
     GOTO L1
    L0:
@@ -382,15 +366,38 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Box;
+    GETSTATIC Test.second LTest$Box;
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.hashCode()I
+    GETSTATIC Test.first LTest$Box;
+    INVOKEVIRTUAL Test$Box.hashCode()I
+    IF_ICMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
     INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
     GETSTATIC Test.first LTest$Box;
     INVOKEVIRTUAL Test$Box.toString()Ljava/lang/String;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 3 max locals 0
 
 class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Box flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]

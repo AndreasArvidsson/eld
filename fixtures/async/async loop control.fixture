@@ -994,11 +994,13 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     RETURN
    L11:
     ALOAD_2 2
-    IFNULL L12
+    IFNULL L19
     ALOAD_2 2
     ATHROW
    L12:
-    GOTO L19
+    NOP
+    NOP
+    ATHROW
    L13:
     INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
     ALOAD_0 0
@@ -1220,7 +1222,8 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD 4
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
     RETURN
-    catch all from L1 to L37 handler L37
+    catch all from L1 to L12 handler L37
+    catch all from L13 to L37 handler L37
     max stack 6 max locals 5
 
 --- OUTPUT ---

@@ -175,27 +175,27 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC "hello"
     PUTSTATIC Test.value Ljava/lang/String;
     GETSTATIC Test.value Ljava/lang/String;
-    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    IFNONNULL L0
+    ICONST_0 0
+    GOTO L1
+   L0:
     ICONST_1 1
-    IXOR
-    IFEQ L0
+   L1:
+    IFEQ L2
     GETSTATIC Test.value Ljava/lang/String;
-    CHECKCAST java/lang/String
     LDC "!"
     INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
     LDC "hello!"
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
-    GOTO L1
-   L0:
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    GOTO L3
+   L2:
     ICONST_0 0
-   L1:
-    IFEQ L2
+   L3:
+    IFEQ L4
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "and"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L2
-   L2:
+   L4:
     RETURN
     max stack 2 max locals 0
 

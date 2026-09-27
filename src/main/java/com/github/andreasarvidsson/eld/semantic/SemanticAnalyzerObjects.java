@@ -388,14 +388,54 @@ public final class SemanticAnalyzerObjects {
         final ClassType type,
         final Symbol symbol
     ) {
+        if (
+            symbol instanceof FunctionSymbol function
+                && function.name().equals("equal")
+                && staticEqualitySignature(type, function)
+        ) {
+            if (!model.isStaticMember(function)) {
+                throw new SemanticException(
+                    function.range(),
+                    "Equality function 'equal' must be static"
+                );
+            }
+            if (model.getMemberVisibility(function) != Visibility.PUBLIC) {
+                throw new SemanticException(
+                    function.range(),
+                    "Equality function 'equal' must be public"
+                );
+            }
+            validateOverrideModifier(function, false);
+            return;
+        }
+        if (
+            symbol instanceof FunctionSymbol function
+                && function.name().equals("equals")
+        ) {
+            if (typedEquals(type, function)) {
+                validateOverrideModifier(function, false);
+                return;
+            }
+            if (
+                model.getSuperclass(type) == null || compatibleEqualsOwner(
+                    model.getSuperclass(type),
+                    function
+                ) == null
+            ) {
+                validateImplicitOverride(symbol);
+                return;
+            }
+        }
         final ClassType base = model.getSuperclass(type);
         if (base == null) {
             validateImplicitOverride(symbol);
             return;
         }
         final ClassType methodOwner =
-            symbol instanceof FunctionSymbol
-                ? classMethodOwner(base, symbol.name())
+            symbol instanceof FunctionSymbol function
+                ? function.name().equals("equals")
+                    ? compatibleEqualsOwner(base, function)
+                    : classMethodOwner(base, symbol.name())
                 : null;
         final ClassType owner =
             methodOwner != null
@@ -407,7 +447,13 @@ public final class SemanticAnalyzerObjects {
         }
         final Symbol inherited =
             methodOwner != null
-                ? Objects.requireNonNull(classMethod(base, symbol.name()))
+                ? Objects.requireNonNull(
+                    Objects
+                        .requireNonNull(
+                            analyzer.classMethods().get(methodOwner)
+                        )
+                        .get(symbol.name())
+                )
                 : Objects.requireNonNull(
                     Objects.requireNonNull(analyzer.classScopes().get(owner))
                         .resolveLocal(symbol.name())
@@ -510,6 +556,10 @@ public final class SemanticAnalyzerObjects {
         if (!(symbol instanceof FunctionSymbol function)) {
             return;
         }
+        if (function.name().equals("equals")) {
+            validateOverrideModifier(function, false);
+            return;
+        }
         final JavaMethodSymbol objectMethod =
             JavaTypes.objectMethod(
                 function.name(),
@@ -547,6 +597,46 @@ public final class SemanticAnalyzerObjects {
                 function.name()
             );
         }
+    }
+
+    private static boolean typedEquals(
+        final ClassType owner,
+        final FunctionSymbol function
+    ) {
+        final FunctionType signature = function.type();
+        return signature.parameterTypes().size() == 1
+            && signature.parameterTypes().getFirst().equals(owner)
+            && signature.returnType() == BuiltinType.BOOL;
+    }
+
+    private static boolean staticEqualitySignature(
+        final ClassType owner,
+        final FunctionSymbol function
+    ) {
+        final FunctionType signature = function.type();
+        return signature.parameterTypes().size() == 2
+            && signature.parameterTypes().get(0).equals(owner)
+            && signature.parameterTypes().get(1).equals(owner)
+            && signature.returnType() == BuiltinType.BOOL;
+    }
+
+    private @Nullable ClassType compatibleEqualsOwner(
+        final @Nullable ClassType base,
+        final FunctionSymbol function
+    ) {
+        for (ClassType current = base; current != null; current =
+            model.getSuperclass(current)) {
+            final FunctionSymbol inherited =
+                Objects.requireNonNull(analyzer.classMethods().get(current))
+                    .get("equals");
+            if (
+                inherited != null && model
+                    .isOverrideCompatible(function.type(), inherited.type())
+            ) {
+                return current;
+            }
+        }
+        return null;
     }
 
     private void validateOverrideModifier(

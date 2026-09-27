@@ -4,6 +4,9 @@ print(foo[1]);
 print(foo == foo);
 print(foo == (1, true));
 print(foo == (1, false));
+const dynamicFoo: any = foo;
+const dynamicEqual: any = (1, true);
+print(dynamicFoo == dynamicEqual);
 
 --- TOKENS ---
 
@@ -61,11 +64,36 @@ BOOLEAN_LITERAL "false" (6:18-6:23)
 RIGHT_PAREN (6:23-6:24)
 RIGHT_PAREN (6:24-6:25)
 SEMICOLON (6:25-6:26)
+CONST (7:1-7:6)
+IDENTIFIER "dynamicFoo" (7:7-7:17)
+COLON (7:17-7:18)
+IDENTIFIER "any" (7:19-7:22)
+EQUAL (7:23-7:24)
+IDENTIFIER "foo" (7:25-7:28)
+SEMICOLON (7:28-7:29)
+CONST (8:1-8:6)
+IDENTIFIER "dynamicEqual" (8:7-8:19)
+COLON (8:19-8:20)
+IDENTIFIER "any" (8:21-8:24)
+EQUAL (8:25-8:26)
+LEFT_PAREN (8:27-8:28)
+INTEGER_LITERAL "1" (8:28-8:29)
+COMMA (8:29-8:30)
+BOOLEAN_LITERAL "true" (8:31-8:35)
+RIGHT_PAREN (8:35-8:36)
+SEMICOLON (8:36-8:37)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "dynamicFoo" (9:7-9:17)
+EQUAL_EQUAL (9:18-9:20)
+IDENTIFIER "dynamicEqual" (9:21-9:33)
+RIGHT_PAREN (9:33-9:34)
+SEMICOLON (9:34-9:35)
 
 --- AST ---
 
 (Program
-  range: 1:1-6:26
+  range: 1:1-9:35
   (VariableDeclaration
     range: 1:1-1:23
     mutability: CONST
@@ -216,6 +244,69 @@ SEMICOLON (6:25-6:26)
       )
     )
   )
+  (VariableDeclaration
+    range: 7:1-7:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:17
+      name: "dynamicFoo"
+    )
+    (NamedTypeNode
+      range: 7:19-7:22
+      name: "any"
+    )
+    (IdentifierExpression
+      range: 7:25-7:28
+      name: "foo"
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:19
+      name: "dynamicEqual"
+    )
+    (NamedTypeNode
+      range: 8:21-8:24
+      name: "any"
+    )
+    (TupleExpression
+      range: 8:27-8:36
+      (LiteralExpression
+        range: 8:28-8:29
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 8:31-8:35
+        kind: BOOL
+        text: "true"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:35
+    (CallExpression
+      range: 9:1-9:34
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:33
+        (IdentifierExpression
+          range: 9:7-9:17
+          name: "dynamicFoo"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 9:21-9:33
+          name: "dynamicEqual"
+        )
+      )
+    )
+  )
 )
 
 --- SEMANTIC ---
@@ -253,9 +344,28 @@ Expression types:
   6:14-6:24 -> (i32, bool)
   6:15-6:16 -> i32
   6:18-6:23 -> bool
+  7:25-7:28 -> (i32, bool)
+  8:27-8:36 -> (i32, bool)
+  8:28-8:29 -> i32
+  8:31-8:35 -> bool
+  9:1-9:6 -> (any) => void
+  9:1-9:34 -> void
+  9:7-9:17 -> any
+  9:7-9:33 -> bool
+  9:21-9:33 -> any
+
+Resolved types:
+  7:19-7:22 -> any
+  8:21-8:24 -> any
+
+Conversions:
+  7:25-7:28 -> (i32, bool) -> any
+  8:27-8:36 -> (i32, bool) -> any
 
 Declarations:
   1:7-1:10 -> const foo: (i32, bool)
+  7:7-7:17 -> const dynamicFoo: any
+  8:7-8:19 -> const dynamicEqual: any
 
 References:
   2:1-2:6 -> builtin print
@@ -269,11 +379,17 @@ References:
   5:7-5:10 -> 1:7-1:10
   6:1-6:6 -> builtin print
   6:7-6:10 -> 1:7-1:10
+  7:25-7:28 -> 1:7-1:10
+  9:1-9:6 -> builtin print
+  9:7-9:17 -> 7:7-7:17
+  9:21-9:33 -> 8:7-8:19
 
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC, FINAL]
+  field dynamicFoo Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicEqual Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
@@ -308,7 +424,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
     GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
@@ -327,7 +443,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
@@ -346,7 +462,30 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
     AASTORE
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldTuple.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.foo Lcom/github/andreasarvidsson/eld/runtime/EldTuple;
+    PUTSTATIC Test.dynamicFoo Ljava/lang/Object;
+    NEW com/github/andreasarvidsson/eld/runtime/EldTuple
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldTuple.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.dynamicEqual Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicFoo Ljava/lang/Object;
+    GETSTATIC Test.dynamicEqual Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 8 max locals 0
@@ -358,4 +497,5 @@ true
 true
 true
 false
+true
 

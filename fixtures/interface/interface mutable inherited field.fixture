@@ -340,6 +340,7 @@ class Test$NamedValue extends java/lang/Object version 65.0 flags [PUBLIC, INTER
   method $get$name()Ljava/lang/String; flags [PUBLIC, ABSTRACT, SYNTHETIC]
 
 class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Base flags [PUBLIC, STATIC]
   field value I flags [PUBLIC]
@@ -358,6 +359,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 class Test$Box extends Test$Base version 65.0 flags [PUBLIC, SUPER]
   implements Test$NamedValue
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$Box flags [PUBLIC, STATIC]
   method $get$value()I flags [PUBLIC, SYNTHETIC]

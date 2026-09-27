@@ -321,7 +321,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_0 0
     INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
-    GOTO L3
    L3:
     RETURN
     catch java/io/IOException from L0 to L1 handler L2

@@ -1,0 +1,261 @@
+const left: any = 5;
+const number: i64 = 5;
+const right: any = number;
+print(left == right);
+print(right == left);
+print(left != right);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "left" (1:7-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "any" (1:13-1:16)
+EQUAL (1:17-1:18)
+INTEGER_LITERAL "5" (1:19-1:20)
+SEMICOLON (1:20-1:21)
+CONST (2:1-2:6)
+IDENTIFIER "number" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "i64" (2:15-2:18)
+EQUAL (2:19-2:20)
+INTEGER_LITERAL "5" (2:21-2:22)
+SEMICOLON (2:22-2:23)
+CONST (3:1-3:6)
+IDENTIFIER "right" (3:7-3:12)
+COLON (3:12-3:13)
+IDENTIFIER "any" (3:14-3:17)
+EQUAL (3:18-3:19)
+IDENTIFIER "number" (3:20-3:26)
+SEMICOLON (3:26-3:27)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "left" (4:7-4:11)
+EQUAL_EQUAL (4:12-4:14)
+IDENTIFIER "right" (4:15-4:20)
+RIGHT_PAREN (4:20-4:21)
+SEMICOLON (4:21-4:22)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "right" (5:7-5:12)
+EQUAL_EQUAL (5:13-5:15)
+IDENTIFIER "left" (5:16-5:20)
+RIGHT_PAREN (5:20-5:21)
+SEMICOLON (5:21-5:22)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "left" (6:7-6:11)
+BANG_EQUAL (6:12-6:14)
+IDENTIFIER "right" (6:15-6:20)
+RIGHT_PAREN (6:20-6:21)
+SEMICOLON (6:21-6:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:22
+  (VariableDeclaration
+    range: 1:1-1:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "left"
+    )
+    (NamedTypeNode
+      range: 1:13-1:16
+      name: "any"
+    )
+    (LiteralExpression
+      range: 1:19-1:20
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "number"
+    )
+    (NamedTypeNode
+      range: 2:15-2:18
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 2:21-2:22
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "right"
+    )
+    (NamedTypeNode
+      range: 3:14-3:17
+      name: "any"
+    )
+    (IdentifierExpression
+      range: 3:20-3:26
+      name: "number"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:22
+    (CallExpression
+      range: 4:1-4:21
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 4:7-4:20
+        (IdentifierExpression
+          range: 4:7-4:11
+          name: "left"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 4:15-4:20
+          name: "right"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:22
+    (CallExpression
+      range: 5:1-5:21
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 5:7-5:20
+        (IdentifierExpression
+          range: 5:7-5:12
+          name: "right"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 5:16-5:20
+          name: "left"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:22
+    (CallExpression
+      range: 6:1-6:21
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:20
+        (IdentifierExpression
+          range: 6:7-6:11
+          name: "left"
+        )
+        operator: NOT_EQUAL
+        (IdentifierExpression
+          range: 6:15-6:20
+          name: "right"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:19-1:20 -> i32
+  2:21-2:22 -> i64
+  3:20-3:26 -> i64
+  4:1-4:6 -> (any) => void
+  4:1-4:21 -> void
+  4:7-4:11 -> any
+  4:7-4:20 -> bool
+  4:15-4:20 -> any
+  5:1-5:6 -> (any) => void
+  5:1-5:21 -> void
+  5:7-5:12 -> any
+  5:7-5:20 -> bool
+  5:16-5:20 -> any
+  6:1-6:6 -> (any) => void
+  6:1-6:21 -> void
+  6:7-6:11 -> any
+  6:7-6:20 -> bool
+  6:15-6:20 -> any
+
+Resolved types:
+  1:13-1:16 -> any
+  2:15-2:18 -> i64
+  3:14-3:17 -> any
+
+Conversions:
+  1:19-1:20 -> i32 -> any
+  3:20-3:26 -> i64 -> any
+
+Declarations:
+  1:7-1:11 -> const left: any
+  2:7-2:13 -> const number: i64
+  3:7-3:12 -> const right: any
+
+References:
+  3:20-3:26 -> 2:7-2:13
+  4:1-4:6 -> builtin print
+  4:7-4:11 -> 1:7-1:11
+  4:15-4:20 -> 3:7-3:12
+  5:1-5:6 -> builtin print
+  5:7-5:12 -> 3:7-3:12
+  5:16-5:20 -> 1:7-1:11
+  6:1-6:6 -> builtin print
+  6:7-6:11 -> 1:7-1:11
+  6:15-6:20 -> 3:7-3:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field left Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field number J flags [PUBLIC, STATIC, FINAL] = 5
+  field right Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 5
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.left Ljava/lang/Object;
+    GETSTATIC Test.number J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    PUTSTATIC Test.right Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/lang/Object;
+    GETSTATIC Test.right Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.right Ljava/lang/Object;
+    GETSTATIC Test.left Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.left Ljava/lang/Object;
+    GETSTATIC Test.right Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    ICONST_1 1
+    IXOR
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+false
+

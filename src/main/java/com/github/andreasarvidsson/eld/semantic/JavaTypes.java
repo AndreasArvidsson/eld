@@ -198,6 +198,9 @@ public final class JavaTypes {
         final Range range,
         final boolean isStatic
     ) {
+        if (name.equals("equals")) {
+            return List.of();
+        }
         if (
             !METHODS.contains(name) && owner.javaClass() != Pattern.class
                 && owner.javaClass() != Matcher.class
@@ -303,9 +306,11 @@ public final class JavaTypes {
                 return new JavaMethodSymbol(
                     method,
                     new FunctionType(
-                        Arrays.stream(method.getGenericParameterTypes())
-                            .map(parameter -> resolve(parameter, OBJECT))
-                            .toList(),
+                        name.equals("equals")
+                            ? List.of(owner)
+                            : Arrays.stream(method.getGenericParameterTypes())
+                                .map(parameter -> resolve(parameter, OBJECT))
+                                .toList(),
                         name.equals("getClass")
                             ? classType(owner)
                             : resolve(method.getGenericReturnType(), OBJECT)

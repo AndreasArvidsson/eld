@@ -1,0 +1,1168 @@
+interface Marker {}
+class Box implements Marker {
+    public static func equal(a: Box, b: Box) bool { return true; }
+}
+class Child extends Box {
+    public static func equal(a: Child, b: Child) bool { return false; }
+}
+
+const first: Box = new Child();
+const second: Box = new Child();
+const markerFirstA: Marker | Box = first;
+const markerFirstB: Marker | Box = second;
+const boxFirstA: Box | Marker = first;
+const boxFirstB: Box | Marker = second;
+const same: Marker | Box = first;
+
+print(first == second);
+print(markerFirstA == markerFirstB);
+print(boxFirstA == boxFirstB);
+print(markerFirstA == same);
+const dynamicFirst: any = first;
+const dynamicSecond: any = second;
+print(dynamicFirst == dynamicSecond);
+print(dynamicFirst == dynamicFirst);
+const dynamicBaseA: any = new Box();
+const dynamicBaseB: any = new Box();
+print(dynamicBaseA == dynamicBaseB);
+print(dynamicFirst == dynamicBaseA);
+print(dynamicBaseA == dynamicFirst);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Marker" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+RIGHT_BRACE (1:19-1:20)
+CLASS (2:1-2:6)
+IDENTIFIER "Box" (2:7-2:10)
+IMPLEMENTS (2:11-2:21)
+IDENTIFIER "Marker" (2:22-2:28)
+LEFT_BRACE (2:29-2:30)
+PUBLIC (3:5-3:11)
+STATIC (3:12-3:18)
+FUNC (3:19-3:23)
+IDENTIFIER "equal" (3:24-3:29)
+LEFT_PAREN (3:29-3:30)
+IDENTIFIER "a" (3:30-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "Box" (3:33-3:36)
+COMMA (3:36-3:37)
+IDENTIFIER "b" (3:38-3:39)
+COLON (3:39-3:40)
+IDENTIFIER "Box" (3:41-3:44)
+RIGHT_PAREN (3:44-3:45)
+IDENTIFIER "bool" (3:46-3:50)
+LEFT_BRACE (3:51-3:52)
+RETURN (3:53-3:59)
+BOOLEAN_LITERAL "true" (3:60-3:64)
+SEMICOLON (3:64-3:65)
+RIGHT_BRACE (3:66-3:67)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Child" (5:7-5:12)
+EXTENDS (5:13-5:20)
+IDENTIFIER "Box" (5:21-5:24)
+LEFT_BRACE (5:25-5:26)
+PUBLIC (6:5-6:11)
+STATIC (6:12-6:18)
+FUNC (6:19-6:23)
+IDENTIFIER "equal" (6:24-6:29)
+LEFT_PAREN (6:29-6:30)
+IDENTIFIER "a" (6:30-6:31)
+COLON (6:31-6:32)
+IDENTIFIER "Child" (6:33-6:38)
+COMMA (6:38-6:39)
+IDENTIFIER "b" (6:40-6:41)
+COLON (6:41-6:42)
+IDENTIFIER "Child" (6:43-6:48)
+RIGHT_PAREN (6:48-6:49)
+IDENTIFIER "bool" (6:50-6:54)
+LEFT_BRACE (6:55-6:56)
+RETURN (6:57-6:63)
+BOOLEAN_LITERAL "false" (6:64-6:69)
+SEMICOLON (6:69-6:70)
+RIGHT_BRACE (6:71-6:72)
+RIGHT_BRACE (7:1-7:2)
+CONST (9:1-9:6)
+IDENTIFIER "first" (9:7-9:12)
+COLON (9:12-9:13)
+IDENTIFIER "Box" (9:14-9:17)
+EQUAL (9:18-9:19)
+NEW (9:20-9:23)
+IDENTIFIER "Child" (9:24-9:29)
+LEFT_PAREN (9:29-9:30)
+RIGHT_PAREN (9:30-9:31)
+SEMICOLON (9:31-9:32)
+CONST (10:1-10:6)
+IDENTIFIER "second" (10:7-10:13)
+COLON (10:13-10:14)
+IDENTIFIER "Box" (10:15-10:18)
+EQUAL (10:19-10:20)
+NEW (10:21-10:24)
+IDENTIFIER "Child" (10:25-10:30)
+LEFT_PAREN (10:30-10:31)
+RIGHT_PAREN (10:31-10:32)
+SEMICOLON (10:32-10:33)
+CONST (11:1-11:6)
+IDENTIFIER "markerFirstA" (11:7-11:19)
+COLON (11:19-11:20)
+IDENTIFIER "Marker" (11:21-11:27)
+PIPE (11:28-11:29)
+IDENTIFIER "Box" (11:30-11:33)
+EQUAL (11:34-11:35)
+IDENTIFIER "first" (11:36-11:41)
+SEMICOLON (11:41-11:42)
+CONST (12:1-12:6)
+IDENTIFIER "markerFirstB" (12:7-12:19)
+COLON (12:19-12:20)
+IDENTIFIER "Marker" (12:21-12:27)
+PIPE (12:28-12:29)
+IDENTIFIER "Box" (12:30-12:33)
+EQUAL (12:34-12:35)
+IDENTIFIER "second" (12:36-12:42)
+SEMICOLON (12:42-12:43)
+CONST (13:1-13:6)
+IDENTIFIER "boxFirstA" (13:7-13:16)
+COLON (13:16-13:17)
+IDENTIFIER "Box" (13:18-13:21)
+PIPE (13:22-13:23)
+IDENTIFIER "Marker" (13:24-13:30)
+EQUAL (13:31-13:32)
+IDENTIFIER "first" (13:33-13:38)
+SEMICOLON (13:38-13:39)
+CONST (14:1-14:6)
+IDENTIFIER "boxFirstB" (14:7-14:16)
+COLON (14:16-14:17)
+IDENTIFIER "Box" (14:18-14:21)
+PIPE (14:22-14:23)
+IDENTIFIER "Marker" (14:24-14:30)
+EQUAL (14:31-14:32)
+IDENTIFIER "second" (14:33-14:39)
+SEMICOLON (14:39-14:40)
+CONST (15:1-15:6)
+IDENTIFIER "same" (15:7-15:11)
+COLON (15:11-15:12)
+IDENTIFIER "Marker" (15:13-15:19)
+PIPE (15:20-15:21)
+IDENTIFIER "Box" (15:22-15:25)
+EQUAL (15:26-15:27)
+IDENTIFIER "first" (15:28-15:33)
+SEMICOLON (15:33-15:34)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "first" (17:7-17:12)
+EQUAL_EQUAL (17:13-17:15)
+IDENTIFIER "second" (17:16-17:22)
+RIGHT_PAREN (17:22-17:23)
+SEMICOLON (17:23-17:24)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "markerFirstA" (18:7-18:19)
+EQUAL_EQUAL (18:20-18:22)
+IDENTIFIER "markerFirstB" (18:23-18:35)
+RIGHT_PAREN (18:35-18:36)
+SEMICOLON (18:36-18:37)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "boxFirstA" (19:7-19:16)
+EQUAL_EQUAL (19:17-19:19)
+IDENTIFIER "boxFirstB" (19:20-19:29)
+RIGHT_PAREN (19:29-19:30)
+SEMICOLON (19:30-19:31)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "markerFirstA" (20:7-20:19)
+EQUAL_EQUAL (20:20-20:22)
+IDENTIFIER "same" (20:23-20:27)
+RIGHT_PAREN (20:27-20:28)
+SEMICOLON (20:28-20:29)
+CONST (21:1-21:6)
+IDENTIFIER "dynamicFirst" (21:7-21:19)
+COLON (21:19-21:20)
+IDENTIFIER "any" (21:21-21:24)
+EQUAL (21:25-21:26)
+IDENTIFIER "first" (21:27-21:32)
+SEMICOLON (21:32-21:33)
+CONST (22:1-22:6)
+IDENTIFIER "dynamicSecond" (22:7-22:20)
+COLON (22:20-22:21)
+IDENTIFIER "any" (22:22-22:25)
+EQUAL (22:26-22:27)
+IDENTIFIER "second" (22:28-22:34)
+SEMICOLON (22:34-22:35)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "dynamicFirst" (23:7-23:19)
+EQUAL_EQUAL (23:20-23:22)
+IDENTIFIER "dynamicSecond" (23:23-23:36)
+RIGHT_PAREN (23:36-23:37)
+SEMICOLON (23:37-23:38)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "dynamicFirst" (24:7-24:19)
+EQUAL_EQUAL (24:20-24:22)
+IDENTIFIER "dynamicFirst" (24:23-24:35)
+RIGHT_PAREN (24:35-24:36)
+SEMICOLON (24:36-24:37)
+CONST (25:1-25:6)
+IDENTIFIER "dynamicBaseA" (25:7-25:19)
+COLON (25:19-25:20)
+IDENTIFIER "any" (25:21-25:24)
+EQUAL (25:25-25:26)
+NEW (25:27-25:30)
+IDENTIFIER "Box" (25:31-25:34)
+LEFT_PAREN (25:34-25:35)
+RIGHT_PAREN (25:35-25:36)
+SEMICOLON (25:36-25:37)
+CONST (26:1-26:6)
+IDENTIFIER "dynamicBaseB" (26:7-26:19)
+COLON (26:19-26:20)
+IDENTIFIER "any" (26:21-26:24)
+EQUAL (26:25-26:26)
+NEW (26:27-26:30)
+IDENTIFIER "Box" (26:31-26:34)
+LEFT_PAREN (26:34-26:35)
+RIGHT_PAREN (26:35-26:36)
+SEMICOLON (26:36-26:37)
+IDENTIFIER "print" (27:1-27:6)
+LEFT_PAREN (27:6-27:7)
+IDENTIFIER "dynamicBaseA" (27:7-27:19)
+EQUAL_EQUAL (27:20-27:22)
+IDENTIFIER "dynamicBaseB" (27:23-27:35)
+RIGHT_PAREN (27:35-27:36)
+SEMICOLON (27:36-27:37)
+IDENTIFIER "print" (28:1-28:6)
+LEFT_PAREN (28:6-28:7)
+IDENTIFIER "dynamicFirst" (28:7-28:19)
+EQUAL_EQUAL (28:20-28:22)
+IDENTIFIER "dynamicBaseA" (28:23-28:35)
+RIGHT_PAREN (28:35-28:36)
+SEMICOLON (28:36-28:37)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "dynamicBaseA" (29:7-29:19)
+EQUAL_EQUAL (29:20-29:22)
+IDENTIFIER "dynamicFirst" (29:23-29:35)
+RIGHT_PAREN (29:35-29:36)
+SEMICOLON (29:36-29:37)
+
+--- AST ---
+
+(Program
+  range: 1:1-29:37
+  (InterfaceDeclaration
+    range: 1:1-1:20
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Marker"
+    )
+  )
+  (ClassDeclaration
+    range: 2:1-4:2
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "Box"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 2:22-2:28
+      name: "Marker"
+    )
+    (MemberDeclaration
+      range: 3:5-3:67
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 3:19-3:67
+        (IdentifierDeclaration
+          range: 3:24-3:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 3:30-3:36
+          (IdentifierDeclaration
+            range: 3:30-3:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 3:33-3:36
+            name: "Box"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 3:38-3:44
+          (IdentifierDeclaration
+            range: 3:38-3:39
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 3:41-3:44
+            name: "Box"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:46-3:50
+          name: "bool"
+        )
+        (BlockStatement
+          range: 3:51-3:67
+          (ReturnStatement
+            range: 3:53-3:65
+            (LiteralExpression
+              range: 3:60-3:64
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 5:21-5:24
+      name: "Box"
+    )
+    (MemberDeclaration
+      range: 6:5-6:72
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 6:19-6:72
+        (IdentifierDeclaration
+          range: 6:24-6:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 6:30-6:38
+          (IdentifierDeclaration
+            range: 6:30-6:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 6:33-6:38
+            name: "Child"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 6:40-6:48
+          (IdentifierDeclaration
+            range: 6:40-6:41
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 6:43-6:48
+            name: "Child"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:50-6:54
+          name: "bool"
+        )
+        (BlockStatement
+          range: 6:55-6:72
+          (ReturnStatement
+            range: 6:57-6:70
+            (LiteralExpression
+              range: 6:64-6:69
+              kind: BOOL
+              text: "false"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "first"
+    )
+    (NamedTypeNode
+      range: 9:14-9:17
+      name: "Box"
+    )
+    (NewExpression
+      range: 9:20-9:31
+      (IdentifierExpression
+        range: 9:24-9:29
+        name: "Child"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:13
+      name: "second"
+    )
+    (NamedTypeNode
+      range: 10:15-10:18
+      name: "Box"
+    )
+    (NewExpression
+      range: 10:21-10:32
+      (IdentifierExpression
+        range: 10:25-10:30
+        name: "Child"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:19
+      name: "markerFirstA"
+    )
+    (UnionTypeNode
+      range: 11:21-11:33
+      (NamedTypeNode
+        range: 11:21-11:27
+        name: "Marker"
+      )
+      (NamedTypeNode
+        range: 11:30-11:33
+        name: "Box"
+      )
+    )
+    (IdentifierExpression
+      range: 11:36-11:41
+      name: "first"
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:19
+      name: "markerFirstB"
+    )
+    (UnionTypeNode
+      range: 12:21-12:33
+      (NamedTypeNode
+        range: 12:21-12:27
+        name: "Marker"
+      )
+      (NamedTypeNode
+        range: 12:30-12:33
+        name: "Box"
+      )
+    )
+    (IdentifierExpression
+      range: 12:36-12:42
+      name: "second"
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:16
+      name: "boxFirstA"
+    )
+    (UnionTypeNode
+      range: 13:18-13:30
+      (NamedTypeNode
+        range: 13:18-13:21
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 13:24-13:30
+        name: "Marker"
+      )
+    )
+    (IdentifierExpression
+      range: 13:33-13:38
+      name: "first"
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:16
+      name: "boxFirstB"
+    )
+    (UnionTypeNode
+      range: 14:18-14:30
+      (NamedTypeNode
+        range: 14:18-14:21
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 14:24-14:30
+        name: "Marker"
+      )
+    )
+    (IdentifierExpression
+      range: 14:33-14:39
+      name: "second"
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:11
+      name: "same"
+    )
+    (UnionTypeNode
+      range: 15:13-15:25
+      (NamedTypeNode
+        range: 15:13-15:19
+        name: "Marker"
+      )
+      (NamedTypeNode
+        range: 15:22-15:25
+        name: "Box"
+      )
+    )
+    (IdentifierExpression
+      range: 15:28-15:33
+      name: "first"
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:24
+    (CallExpression
+      range: 17:1-17:23
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 17:7-17:22
+        (IdentifierExpression
+          range: 17:7-17:12
+          name: "first"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 17:16-17:22
+          name: "second"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:37
+    (CallExpression
+      range: 18:1-18:36
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 18:7-18:35
+        (IdentifierExpression
+          range: 18:7-18:19
+          name: "markerFirstA"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 18:23-18:35
+          name: "markerFirstB"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:31
+    (CallExpression
+      range: 19:1-19:30
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 19:7-19:29
+        (IdentifierExpression
+          range: 19:7-19:16
+          name: "boxFirstA"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 19:20-19:29
+          name: "boxFirstB"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:29
+    (CallExpression
+      range: 20:1-20:28
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 20:7-20:27
+        (IdentifierExpression
+          range: 20:7-20:19
+          name: "markerFirstA"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 20:23-20:27
+          name: "same"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:19
+      name: "dynamicFirst"
+    )
+    (NamedTypeNode
+      range: 21:21-21:24
+      name: "any"
+    )
+    (IdentifierExpression
+      range: 21:27-21:32
+      name: "first"
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:20
+      name: "dynamicSecond"
+    )
+    (NamedTypeNode
+      range: 22:22-22:25
+      name: "any"
+    )
+    (IdentifierExpression
+      range: 22:28-22:34
+      name: "second"
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:38
+    (CallExpression
+      range: 23:1-23:37
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 23:7-23:36
+        (IdentifierExpression
+          range: 23:7-23:19
+          name: "dynamicFirst"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 23:23-23:36
+          name: "dynamicSecond"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:37
+    (CallExpression
+      range: 24:1-24:36
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 24:7-24:35
+        (IdentifierExpression
+          range: 24:7-24:19
+          name: "dynamicFirst"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 24:23-24:35
+          name: "dynamicFirst"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 25:1-25:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 25:7-25:19
+      name: "dynamicBaseA"
+    )
+    (NamedTypeNode
+      range: 25:21-25:24
+      name: "any"
+    )
+    (NewExpression
+      range: 25:27-25:36
+      (IdentifierExpression
+        range: 25:31-25:34
+        name: "Box"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 26:1-26:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 26:7-26:19
+      name: "dynamicBaseB"
+    )
+    (NamedTypeNode
+      range: 26:21-26:24
+      name: "any"
+    )
+    (NewExpression
+      range: 26:27-26:36
+      (IdentifierExpression
+        range: 26:31-26:34
+        name: "Box"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 27:1-27:37
+    (CallExpression
+      range: 27:1-27:36
+      (IdentifierExpression
+        range: 27:1-27:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 27:7-27:35
+        (IdentifierExpression
+          range: 27:7-27:19
+          name: "dynamicBaseA"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 27:23-27:35
+          name: "dynamicBaseB"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 28:1-28:37
+    (CallExpression
+      range: 28:1-28:36
+      (IdentifierExpression
+        range: 28:1-28:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 28:7-28:35
+        (IdentifierExpression
+          range: 28:7-28:19
+          name: "dynamicFirst"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 28:23-28:35
+          name: "dynamicBaseA"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:37
+    (CallExpression
+      range: 29:1-29:36
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 29:7-29:35
+        (IdentifierExpression
+          range: 29:7-29:19
+          name: "dynamicBaseA"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 29:23-29:35
+          name: "dynamicFirst"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:60-3:64 -> bool
+  5:21-5:24 -> Box
+  6:64-6:69 -> bool
+  9:20-9:31 -> Child
+  9:24-9:29 -> Child
+  10:21-10:32 -> Child
+  10:25-10:30 -> Child
+  11:36-11:41 -> Box
+  12:36-12:42 -> Box
+  13:33-13:38 -> Box
+  14:33-14:39 -> Box
+  15:28-15:33 -> Box
+  17:1-17:6 -> (any) => void
+  17:1-17:23 -> void
+  17:7-17:12 -> Box
+  17:7-17:22 -> bool
+  17:16-17:22 -> Box
+  18:1-18:6 -> (any) => void
+  18:1-18:36 -> void
+  18:7-18:19 -> Marker | Box
+  18:7-18:35 -> bool
+  18:23-18:35 -> Marker | Box
+  19:1-19:6 -> (any) => void
+  19:1-19:30 -> void
+  19:7-19:16 -> Box | Marker
+  19:7-19:29 -> bool
+  19:20-19:29 -> Box | Marker
+  20:1-20:6 -> (any) => void
+  20:1-20:28 -> void
+  20:7-20:19 -> Marker | Box
+  20:7-20:27 -> bool
+  20:23-20:27 -> Marker | Box
+  21:27-21:32 -> Box
+  22:28-22:34 -> Box
+  23:1-23:6 -> (any) => void
+  23:1-23:37 -> void
+  23:7-23:19 -> any
+  23:7-23:36 -> bool
+  23:23-23:36 -> any
+  24:1-24:6 -> (any) => void
+  24:1-24:36 -> void
+  24:7-24:19 -> any
+  24:7-24:35 -> bool
+  24:23-24:35 -> any
+  25:27-25:36 -> Box
+  25:31-25:34 -> Box
+  26:27-26:36 -> Box
+  26:31-26:34 -> Box
+  27:1-27:6 -> (any) => void
+  27:1-27:36 -> void
+  27:7-27:19 -> any
+  27:7-27:35 -> bool
+  27:23-27:35 -> any
+  28:1-28:6 -> (any) => void
+  28:1-28:36 -> void
+  28:7-28:19 -> any
+  28:7-28:35 -> bool
+  28:23-28:35 -> any
+  29:1-29:6 -> (any) => void
+  29:1-29:36 -> void
+  29:7-29:19 -> any
+  29:7-29:35 -> bool
+  29:23-29:35 -> any
+
+Resolved types:
+  2:22-2:28 -> Marker
+  3:33-3:36 -> Box
+  3:41-3:44 -> Box
+  3:46-3:50 -> bool
+  6:33-6:38 -> Child
+  6:43-6:48 -> Child
+  6:50-6:54 -> bool
+  9:14-9:17 -> Box
+  10:15-10:18 -> Box
+  11:21-11:27 -> Marker
+  11:21-11:33 -> Marker | Box
+  11:30-11:33 -> Box
+  12:21-12:27 -> Marker
+  12:21-12:33 -> Marker | Box
+  12:30-12:33 -> Box
+  13:18-13:21 -> Box
+  13:18-13:30 -> Box | Marker
+  13:24-13:30 -> Marker
+  14:18-14:21 -> Box
+  14:18-14:30 -> Box | Marker
+  14:24-14:30 -> Marker
+  15:13-15:19 -> Marker
+  15:13-15:25 -> Marker | Box
+  15:22-15:25 -> Box
+  21:21-21:24 -> any
+  22:22-22:25 -> any
+  25:21-25:24 -> any
+  26:21-26:24 -> any
+
+Conversions:
+  11:36-11:41 -> Box -> Marker | Box
+  12:36-12:42 -> Box -> Marker | Box
+  13:33-13:38 -> Box -> Box | Marker
+  14:33-14:39 -> Box -> Box | Marker
+  15:28-15:33 -> Box -> Marker | Box
+  21:27-21:32 -> Box -> any
+  22:28-22:34 -> Box -> any
+  25:27-25:36 -> Box -> any
+  26:27-26:36 -> Box -> any
+
+Declarations:
+  1:11-1:17 -> interface Marker
+  2:7-2:10 -> class Box
+  3:24-3:29 -> func equal(Box, Box) => bool
+  3:30-3:31 -> const a: Box
+  3:38-3:39 -> const b: Box
+  5:7-5:12 -> class Child
+  6:24-6:29 -> func equal(Child, Child) => bool
+  6:30-6:31 -> const a: Child
+  6:40-6:41 -> const b: Child
+  9:7-9:12 -> const first: Box
+  10:7-10:13 -> const second: Box
+  11:7-11:19 -> const markerFirstA: Marker | Box
+  12:7-12:19 -> const markerFirstB: Marker | Box
+  13:7-13:16 -> const boxFirstA: Box | Marker
+  14:7-14:16 -> const boxFirstB: Box | Marker
+  15:7-15:11 -> const same: Marker | Box
+  21:7-21:19 -> const dynamicFirst: any
+  22:7-22:20 -> const dynamicSecond: any
+  25:7-25:19 -> const dynamicBaseA: any
+  26:7-26:19 -> const dynamicBaseB: any
+
+References:
+  5:21-5:24 -> 2:7-2:10
+  9:24-9:29 -> 5:7-5:12
+  10:25-10:30 -> 5:7-5:12
+  11:36-11:41 -> 9:7-9:12
+  12:36-12:42 -> 10:7-10:13
+  13:33-13:38 -> 9:7-9:12
+  14:33-14:39 -> 10:7-10:13
+  15:28-15:33 -> 9:7-9:12
+  17:1-17:6 -> builtin print
+  17:7-17:12 -> 9:7-9:12
+  17:16-17:22 -> 10:7-10:13
+  18:1-18:6 -> builtin print
+  18:7-18:19 -> 11:7-11:19
+  18:23-18:35 -> 12:7-12:19
+  19:1-19:6 -> builtin print
+  19:7-19:16 -> 13:7-13:16
+  19:20-19:29 -> 14:7-14:16
+  20:1-20:6 -> builtin print
+  20:7-20:19 -> 11:7-11:19
+  20:23-20:27 -> 15:7-15:11
+  21:27-21:32 -> 9:7-9:12
+  22:28-22:34 -> 10:7-10:13
+  23:1-23:6 -> builtin print
+  23:7-23:19 -> 21:7-21:19
+  23:23-23:36 -> 22:7-22:20
+  24:1-24:6 -> builtin print
+  24:7-24:19 -> 21:7-21:19
+  24:23-24:35 -> 21:7-21:19
+  25:31-25:34 -> 2:7-2:10
+  26:31-26:34 -> 2:7-2:10
+  27:1-27:6 -> builtin print
+  27:7-27:19 -> 25:7-25:19
+  27:23-27:35 -> 26:7-26:19
+  28:1-28:6 -> builtin print
+  28:7-28:19 -> 21:7-21:19
+  28:23-28:35 -> 25:7-25:19
+  29:1-29:6 -> builtin print
+  29:7-29:19 -> 25:7-25:19
+  29:23-29:35 -> 21:7-21:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Marker
+  nest member Test$Box
+  nest member Test$Child
+  inner class Test$Marker flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Box flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field first LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field second LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field markerFirstA Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field markerFirstB Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field boxFirstA Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field boxFirstB Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field same Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicFirst Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicSecond Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicBaseA Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  field dynamicBaseB Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.first LTest$Box;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.second LTest$Box;
+    GETSTATIC Test.first LTest$Box;
+    PUTSTATIC Test.markerFirstA Ljava/lang/Object;
+    GETSTATIC Test.second LTest$Box;
+    PUTSTATIC Test.markerFirstB Ljava/lang/Object;
+    GETSTATIC Test.first LTest$Box;
+    PUTSTATIC Test.boxFirstA Ljava/lang/Object;
+    GETSTATIC Test.second LTest$Box;
+    PUTSTATIC Test.boxFirstB Ljava/lang/Object;
+    GETSTATIC Test.first LTest$Box;
+    PUTSTATIC Test.same Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$Box;
+    GETSTATIC Test.second LTest$Box;
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.markerFirstA Ljava/lang/Object;
+    GETSTATIC Test.markerFirstB Ljava/lang/Object;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.boxFirstA Ljava/lang/Object;
+    GETSTATIC Test.boxFirstB Ljava/lang/Object;
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.markerFirstA Ljava/lang/Object;
+    GETSTATIC Test.same Ljava/lang/Object;
+    IF_ACMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.first LTest$Box;
+    PUTSTATIC Test.dynamicFirst Ljava/lang/Object;
+    GETSTATIC Test.second LTest$Box;
+    PUTSTATIC Test.dynamicSecond Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicFirst Ljava/lang/Object;
+    GETSTATIC Test.dynamicSecond Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicFirst Ljava/lang/Object;
+    GETSTATIC Test.dynamicFirst Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.dynamicBaseA Ljava/lang/Object;
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.dynamicBaseB Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicBaseA Ljava/lang/Object;
+    GETSTATIC Test.dynamicBaseB Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicFirst Ljava/lang/Object;
+    GETSTATIC Test.dynamicBaseA Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.dynamicBaseA Ljava/lang/Object;
+    GETSTATIC Test.dynamicFirst Ljava/lang/Object;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.dynamicEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Marker extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Marker flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Marker
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Box;LTest$Box;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Box
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Box
+    INVOKESTATIC Test$Box.equal(LTest$Box;LTest$Box;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Child extends Test$Box version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Box.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Child;LTest$Child;)Z flags [PUBLIC, STATIC]
+    ICONST_0 0
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Child
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Child
+    INVOKESTATIC Test$Child.equal(LTest$Child;LTest$Child;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+false
+false
+true
+false
+false
+true
+true
+true
+

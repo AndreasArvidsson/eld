@@ -365,10 +365,6 @@ public final class SemanticAnalyzerExpressionOperations {
         Type resolvedType = leftValueType;
         final boolean compatibleNumbers =
             numeric(leftType) && numeric(rightType);
-        final boolean relatedClasses =
-            leftValueType instanceof ClassType leftClass
-                && rightValueType instanceof ClassType rightClass
-                && model.commonClassType(leftClass, rightClass) != null;
         final boolean valid = switch (binary.operator()) {
             case AND, OR -> leftValueType == BuiltinType.BOOL
                 && rightValueType == BuiltinType.BOOL;
@@ -378,16 +374,8 @@ public final class SemanticAnalyzerExpressionOperations {
                     || builtin == BuiltinType.ANY
                     || builtin == BuiltinType.NULL
                     || builtin == BuiltinType.STRING);
-            case EQUAL, NOT_EQUAL -> unionEquality || compatibleNumbers
-                || ((leftValueType instanceof InterfaceType
-                    || rightValueType instanceof InterfaceType)
-                    && (model.isSubtype(leftType, rightType)
-                        || model.isSubtype(rightType, leftType)))
-                || relatedClasses
-                || (leftType.equals(rightType) && leftType != BuiltinType.VOID)
-                || ((leftType instanceof LiteralType
-                    || rightType instanceof LiteralType)
-                    && leftValueType.equals(rightValueType));
+            case EQUAL, NOT_EQUAL ->
+                equalityCompatible(model, leftType, rightType);
             case ADD ->
                 compatibleNumbers || (leftValueType == BuiltinType.STRING
                     && rightValueType == BuiltinType.STRING);
@@ -417,6 +405,53 @@ public final class SemanticAnalyzerExpressionOperations {
             binary.operator().isBool() ? BuiltinType.BOOL : resolvedType;
         model.setExpressionType(binary, resultType);
         return resultType;
+    }
+
+    public static boolean equalityCompatible(
+        final SemanticModel model,
+        final Type left,
+        final Type right
+    ) {
+        final Type a = LiteralType.unwrap(ConstType.unwrap(left));
+        final Type b = LiteralType.unwrap(ConstType.unwrap(right));
+        if (a == BuiltinType.VOID || b == BuiltinType.VOID) {
+            return false;
+        }
+        if (a == BuiltinType.NULL) {
+            return nullableEqualityType(b);
+        }
+        if (b == BuiltinType.NULL) {
+            return nullableEqualityType(a);
+        }
+        if (a == BuiltinType.ANY || b == BuiltinType.ANY) {
+            return true;
+        }
+        if (a instanceof UnionType || b instanceof UnionType) {
+            final List<Type> leftMembers =
+                a instanceof UnionType union ? union.memberTypes() : List.of(a);
+            final List<Type> rightMembers =
+                b instanceof UnionType union ? union.memberTypes() : List.of(b);
+            return leftMembers.stream()
+                .filter(member -> member != BuiltinType.NULL)
+                .anyMatch(
+                    member -> rightMembers.stream()
+                        .filter(other -> other != BuiltinType.NULL)
+                        .anyMatch(
+                            other -> equalityCompatible(model, member, other)
+                        )
+                );
+        }
+        return (numeric(a) && numeric(b)) || model.isSubtype(a, b)
+            || model.isSubtype(b, a);
+    }
+
+    private static boolean nullableEqualityType(final Type type) {
+        return type == BuiltinType.ANY || type == BuiltinType.NULL
+            || (type instanceof UnionType union && union.memberTypes()
+                .stream()
+                .anyMatch(
+                    SemanticAnalyzerExpressionOperations::nullableEqualityType
+                ));
     }
 
     public Type analyzeUnaryExpression(
@@ -553,7 +588,7 @@ public final class SemanticAnalyzerExpressionOperations {
     }
 
     // Keep the common integer width; character arithmetic still uses i32.
-    private static BuiltinType promotedNumericType(
+    public static BuiltinType promotedNumericType(
         final Type left,
         final Type right
     ) {

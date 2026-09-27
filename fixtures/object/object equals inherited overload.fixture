@@ -1,0 +1,520 @@
+class Animal {
+    public static func equal(a: Animal, b: Animal) bool { return true; }
+}
+class Cat extends Animal {
+    public func equals(value: i32) bool { return value == 1; }
+}
+const cat = new Cat();
+print(cat.equals(1));
+print(cat == cat);
+print(cat == new Cat());
+print(new Cat() == new Cat());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+LEFT_BRACE (1:14-1:15)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "equal" (2:24-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "a" (2:30-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "Animal" (2:33-2:39)
+COMMA (2:39-2:40)
+IDENTIFIER "b" (2:41-2:42)
+COLON (2:42-2:43)
+IDENTIFIER "Animal" (2:44-2:50)
+RIGHT_PAREN (2:50-2:51)
+IDENTIFIER "bool" (2:52-2:56)
+LEFT_BRACE (2:57-2:58)
+RETURN (2:59-2:65)
+BOOLEAN_LITERAL "true" (2:66-2:70)
+SEMICOLON (2:70-2:71)
+RIGHT_BRACE (2:72-2:73)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Cat" (4:7-4:10)
+EXTENDS (4:11-4:18)
+IDENTIFIER "Animal" (4:19-4:25)
+LEFT_BRACE (4:26-4:27)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "equals" (5:17-5:23)
+LEFT_PAREN (5:23-5:24)
+IDENTIFIER "value" (5:24-5:29)
+COLON (5:29-5:30)
+IDENTIFIER "i32" (5:31-5:34)
+RIGHT_PAREN (5:34-5:35)
+IDENTIFIER "bool" (5:36-5:40)
+LEFT_BRACE (5:41-5:42)
+RETURN (5:43-5:49)
+IDENTIFIER "value" (5:50-5:55)
+EQUAL_EQUAL (5:56-5:58)
+INTEGER_LITERAL "1" (5:59-5:60)
+SEMICOLON (5:60-5:61)
+RIGHT_BRACE (5:62-5:63)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+IDENTIFIER "cat" (7:7-7:10)
+EQUAL (7:11-7:12)
+NEW (7:13-7:16)
+IDENTIFIER "Cat" (7:17-7:20)
+LEFT_PAREN (7:20-7:21)
+RIGHT_PAREN (7:21-7:22)
+SEMICOLON (7:22-7:23)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "cat" (8:7-8:10)
+DOT (8:10-8:11)
+IDENTIFIER "equals" (8:11-8:17)
+LEFT_PAREN (8:17-8:18)
+INTEGER_LITERAL "1" (8:18-8:19)
+RIGHT_PAREN (8:19-8:20)
+RIGHT_PAREN (8:20-8:21)
+SEMICOLON (8:21-8:22)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "cat" (9:7-9:10)
+EQUAL_EQUAL (9:11-9:13)
+IDENTIFIER "cat" (9:14-9:17)
+RIGHT_PAREN (9:17-9:18)
+SEMICOLON (9:18-9:19)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "cat" (10:7-10:10)
+EQUAL_EQUAL (10:11-10:13)
+NEW (10:14-10:17)
+IDENTIFIER "Cat" (10:18-10:21)
+LEFT_PAREN (10:21-10:22)
+RIGHT_PAREN (10:22-10:23)
+RIGHT_PAREN (10:23-10:24)
+SEMICOLON (10:24-10:25)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+NEW (11:7-11:10)
+IDENTIFIER "Cat" (11:11-11:14)
+LEFT_PAREN (11:14-11:15)
+RIGHT_PAREN (11:15-11:16)
+EQUAL_EQUAL (11:17-11:19)
+NEW (11:20-11:23)
+IDENTIFIER "Cat" (11:24-11:27)
+LEFT_PAREN (11:27-11:28)
+RIGHT_PAREN (11:28-11:29)
+RIGHT_PAREN (11:29-11:30)
+SEMICOLON (11:30-11:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:31
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:73
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:73
+        (IdentifierDeclaration
+          range: 2:24-2:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:30-2:39
+          (IdentifierDeclaration
+            range: 2:30-2:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:33-2:39
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:41-2:50
+          (IdentifierDeclaration
+            range: 2:41-2:42
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:44-2:50
+            name: "Animal"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:52-2:56
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:57-2:73
+          (ReturnStatement
+            range: 2:59-2:71
+            (LiteralExpression
+              range: 2:66-2:70
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:10
+      name: "Cat"
+    )
+    (IdentifierExpression
+      range: 4:19-4:25
+      name: "Animal"
+    )
+    (MemberDeclaration
+      range: 5:5-5:63
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-5:63
+        (IdentifierDeclaration
+          range: 5:17-5:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 5:24-5:34
+          (IdentifierDeclaration
+            range: 5:24-5:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 5:31-5:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 5:36-5:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 5:41-5:63
+          (ReturnStatement
+            range: 5:43-5:61
+            (BinaryExpression
+              range: 5:50-5:60
+              (IdentifierExpression
+                range: 5:50-5:55
+                name: "value"
+              )
+              operator: EQUAL
+              (LiteralExpression
+                range: 5:59-5:60
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "cat"
+    )
+    type: null
+    (NewExpression
+      range: 7:13-7:22
+      (IdentifierExpression
+        range: 7:17-7:20
+        name: "Cat"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:22
+    (CallExpression
+      range: 8:1-8:21
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:20
+        (MemberExpression
+          range: 8:7-8:17
+          (IdentifierExpression
+            range: 8:7-8:10
+            name: "cat"
+          )
+          (IdentifierExpression
+            range: 8:11-8:17
+            name: "equals"
+          )
+        )
+        (LiteralExpression
+          range: 8:18-8:19
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:19
+    (CallExpression
+      range: 9:1-9:18
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:17
+        (IdentifierExpression
+          range: 9:7-9:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 9:14-9:17
+          name: "cat"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:25
+    (CallExpression
+      range: 10:1-10:24
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:7-10:23
+        (IdentifierExpression
+          range: 10:7-10:10
+          name: "cat"
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 10:14-10:23
+          (IdentifierExpression
+            range: 10:18-10:21
+            name: "Cat"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:31
+    (CallExpression
+      range: 11:1-11:30
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 11:7-11:29
+        (NewExpression
+          range: 11:7-11:16
+          (IdentifierExpression
+            range: 11:11-11:14
+            name: "Cat"
+          )
+        )
+        operator: EQUAL
+        (NewExpression
+          range: 11:20-11:29
+          (IdentifierExpression
+            range: 11:24-11:27
+            name: "Cat"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:66-2:70 -> bool
+  4:19-4:25 -> Animal
+  5:50-5:55 -> i32
+  5:50-5:60 -> bool
+  5:59-5:60 -> i32
+  7:13-7:22 -> Cat
+  7:17-7:20 -> Cat
+  8:1-8:6 -> (any) => void
+  8:1-8:21 -> void
+  8:7-8:10 -> Cat
+  8:7-8:17 -> (i32) => bool
+  8:7-8:20 -> bool
+  8:11-8:17 -> (i32) => bool
+  8:18-8:19 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:18 -> void
+  9:7-9:10 -> Cat
+  9:7-9:17 -> bool
+  9:14-9:17 -> Cat
+  10:1-10:6 -> (any) => void
+  10:1-10:24 -> void
+  10:7-10:10 -> Cat
+  10:7-10:23 -> bool
+  10:14-10:23 -> Cat
+  10:18-10:21 -> Cat
+  11:1-11:6 -> (any) => void
+  11:1-11:30 -> void
+  11:7-11:16 -> Cat
+  11:7-11:29 -> bool
+  11:11-11:14 -> Cat
+  11:20-11:29 -> Cat
+  11:24-11:27 -> Cat
+
+Resolved types:
+  2:33-2:39 -> Animal
+  2:44-2:50 -> Animal
+  2:52-2:56 -> bool
+  5:31-5:34 -> i32
+  5:36-5:40 -> bool
+
+Declarations:
+  1:7-1:13 -> class Animal
+  2:24-2:29 -> func equal(Animal, Animal) => bool
+  2:30-2:31 -> const a: Animal
+  2:41-2:42 -> const b: Animal
+  4:7-4:10 -> class Cat
+  5:17-5:23 -> func equals(i32) => bool
+  5:24-5:29 -> const value: i32
+  7:7-7:10 -> const cat: Cat
+
+References:
+  4:19-4:25 -> 1:7-1:13
+  5:50-5:55 -> 5:24-5:29
+  7:17-7:20 -> 4:7-4:10
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> 7:7-7:10
+  8:11-8:17 -> 5:17-5:23
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 7:7-7:10
+  9:14-9:17 -> 7:7-7:10
+  10:1-10:6 -> builtin print
+  10:7-10:10 -> 7:7-7:10
+  10:18-10:21 -> 4:7-4:10
+  11:1-11:6 -> builtin print
+  11:11-11:14 -> 4:7-4:10
+  11:24-11:27 -> 4:7-4:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  nest member Test$Cat
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  field cat LTest$Cat; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    PUTSTATIC Test.cat LTest$Cat;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Cat;
+    LDC 1
+    INVOKEVIRTUAL Test$Cat.equals(I)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Cat;
+    GETSTATIC Test.cat LTest$Cat;
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.cat LTest$Cat;
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    NEW Test$Cat
+    DUP
+    INVOKESPECIAL Test$Cat.<init>()V
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Animal;LTest$Animal;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Animal
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Animal
+    INVOKESTATIC Test$Animal.equal(LTest$Animal;LTest$Animal;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Cat extends Test$Animal version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Cat flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Animal.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equals(I)Z flags [PUBLIC]
+    ILOAD_1 1
+    LDC 1
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+true
+true
+true
+

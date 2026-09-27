@@ -291,8 +291,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.cause Ljava/lang/Throwable;
     INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
-    GOTO L2
-   L2:
     RETURN
     catch java/lang/RuntimeException from L0 to L1 handler L1
     max stack 4 max locals 2

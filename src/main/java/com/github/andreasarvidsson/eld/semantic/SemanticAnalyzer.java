@@ -572,7 +572,8 @@ public final class SemanticAnalyzer {
     private boolean hasConstantEquality(final Type type) {
         final Type unqualified = ConstType.unwrap(type);
         if (unqualified instanceof ClassType cls) {
-            return hasConstantObjectMethod(cls, "equals")
+            final FunctionSymbol equality = model.findStaticEquality(cls);
+            return (equality == null || constantCallable(equality))
                 && hasConstantObjectMethod(cls, "hashCode");
         }
         if (unqualified instanceof TupleType tuple) {
@@ -608,7 +609,7 @@ public final class SemanticAnalyzer {
         if (!hasConstantEquality(type)) {
             throw new SemanticException(
                 range,
-                "%s of type %s requires const equals and hashCode methods",
+                "%s of type %s requires const equal and hashCode methods",
                 usage,
                 type
             );

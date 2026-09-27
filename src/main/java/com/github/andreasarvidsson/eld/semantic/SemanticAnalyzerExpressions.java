@@ -252,6 +252,17 @@ public final class SemanticAnalyzerExpressions {
                         && model.getReference(
                             identifier
                         ) instanceof ClassDeclarationSymbol;
+                if (
+                    !classTarget && member.member().name().equals("equals")
+                        && (analyzingCallee || !hasEqualityField(memberTarget))
+                        && !hasEqualityOverload(memberTarget)
+                ) {
+                    final Type equalityMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (equalityMethod != null) {
+                        yield equalityMethod;
+                    }
+                }
                 if (memberTarget instanceof PromiseSourceType source) {
                     final String name = member.member().name();
                     if (
@@ -528,16 +539,6 @@ public final class SemanticAnalyzerExpressions {
                             contract
                         );
                     }
-                    final Type contextualObjectMethod =
-                        resolveContextualObjectMethod(
-                            member,
-                            memberTarget,
-                            symbol,
-                            classTarget
-                        );
-                    if (contextualObjectMethod != null) {
-                        yield contextualObjectMethod;
-                    }
                     model.setMemberOwner(member, contract);
                     model.setReference(member.member(), symbol);
                     model.setExpressionType(member.member(), symbol.type());
@@ -602,6 +603,14 @@ public final class SemanticAnalyzerExpressions {
                         classType.name()
                     );
                 }
+                if (classTarget && !model.isStaticMember(symbol)) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Instance member '%s' cannot be accessed on class %s",
+                        member.member().name(),
+                        classType.name()
+                    );
+                }
                 final Type contextualObjectMethod =
                     resolveContextualObjectMethod(
                         member,
@@ -611,14 +620,6 @@ public final class SemanticAnalyzerExpressions {
                     );
                 if (contextualObjectMethod != null) {
                     yield contextualObjectMethod;
-                }
-                if (classTarget && !model.isStaticMember(symbol)) {
-                    throw new SemanticException(
-                        member.member().range(),
-                        "Instance member '%s' cannot be accessed on class %s",
-                        member.member().name(),
-                        classType.name()
-                    );
                 }
                 final boolean objectOverloadCandidate =
                     analyzingCallee && callArity == 1
@@ -1000,6 +1001,11 @@ public final class SemanticAnalyzerExpressions {
             : null;
     }
 
+    private boolean hasEqualityOverload(final Type target) {
+        return target instanceof ClassType type
+            && analyzer.classMethod(type, "equals") != null;
+    }
+
     private @Nullable Type resolveObjectMethod(
         final MemberExpression member,
         final Type target
@@ -1026,6 +1032,14 @@ public final class SemanticAnalyzerExpressions {
         model.setReference(member.member(), method);
         model.setExpressionType(member.member(), method.type());
         return method.type();
+    }
+
+    private boolean hasEqualityField(final Type target) {
+        if (target instanceof ClassType type) {
+            return analyzer.classFieldOwner(type, "equals") != null;
+        }
+        return target instanceof InterfaceType type && type.javaClass() == null
+            && model.getInterface(type).fields().containsKey("equals");
     }
 
     private boolean acceptsArgumentCount(
@@ -1550,28 +1564,23 @@ public final class SemanticAnalyzerExpressions {
                 actual = analyzeExpression(argument, context, expected);
             }
             catch (final SemanticException exception) {
-                try {
-                    final Type objectResult =
-                        resolveOverloadedObjectMethod(
-                            call,
-                            callee,
-                            supplied,
-                            null,
-                            context
-                        );
-                    if (objectResult != null) {
-                        return objectResult;
-                    }
-                }
-                catch (final SemanticException ignored) {
-                    // Report the error from the declared overload.
+                final Type fallback =
+                    resolveOverloadedObjectMethod(
+                        call,
+                        callee,
+                        supplied,
+                        null,
+                        context
+                    );
+                if (fallback != null) {
+                    return fallback;
                 }
                 throw exception;
             }
             if (
                 analyzer.resolveAssignType(actual, expected, argument) == null
             ) {
-                final Type objectResult =
+                final Type fallback =
                     resolveOverloadedObjectMethod(
                         call,
                         callee,
@@ -1579,8 +1588,8 @@ public final class SemanticAnalyzerExpressions {
                         actual,
                         context
                     );
-                if (objectResult != null) {
-                    return objectResult;
+                if (fallback != null) {
+                    return fallback;
                 }
                 throw new SemanticException(
                     argument.range(),
@@ -1672,14 +1681,20 @@ public final class SemanticAnalyzerExpressions {
         }
         final Type owner =
             ConstType.unwrap(model.getExpressionType(member.target()));
-        if (!(owner instanceof ClassType || owner instanceof InterfaceType)) {
+        if (!(owner instanceof ClassType)) {
             return null;
         }
         final JavaMethodSymbol method =
             JavaTypes.objectMethod("equals", 1, member.range(), owner);
         final Type argumentType =
             actual == null
-                ? analyzeExpression(supplied, context, BuiltinType.ANY)
+                ? analyzeExpression(
+                    supplied,
+                    context,
+                    method == null
+                        ? BuiltinType.ANY
+                        : method.type().parameterTypes().getFirst()
+                )
                 : actual;
         if (
             method == null || analyzer.resolveAssignType(

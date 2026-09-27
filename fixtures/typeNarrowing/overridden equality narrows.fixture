@@ -1,0 +1,454 @@
+class Compare {
+    public static func equal(a: Compare, b: Compare) bool { return true; }
+    public func marker() string { return "x"; }
+}
+
+func unsafe(value: Compare | null) {
+    const compare = new Compare();
+    if (compare == value) {
+        print(value.marker());
+    }
+}
+unsafe(null);
+unsafe(new Compare());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Compare" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+STATIC (2:12-2:18)
+FUNC (2:19-2:23)
+IDENTIFIER "equal" (2:24-2:29)
+LEFT_PAREN (2:29-2:30)
+IDENTIFIER "a" (2:30-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "Compare" (2:33-2:40)
+COMMA (2:40-2:41)
+IDENTIFIER "b" (2:42-2:43)
+COLON (2:43-2:44)
+IDENTIFIER "Compare" (2:45-2:52)
+RIGHT_PAREN (2:52-2:53)
+IDENTIFIER "bool" (2:54-2:58)
+LEFT_BRACE (2:59-2:60)
+RETURN (2:61-2:67)
+BOOLEAN_LITERAL "true" (2:68-2:72)
+SEMICOLON (2:72-2:73)
+RIGHT_BRACE (2:74-2:75)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "marker" (3:17-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+IDENTIFIER "string" (3:26-3:32)
+LEFT_BRACE (3:33-3:34)
+RETURN (3:35-3:41)
+STRING_LITERAL "\"x\"" (3:42-3:45)
+SEMICOLON (3:45-3:46)
+RIGHT_BRACE (3:47-3:48)
+RIGHT_BRACE (4:1-4:2)
+FUNC (6:1-6:5)
+IDENTIFIER "unsafe" (6:6-6:12)
+LEFT_PAREN (6:12-6:13)
+IDENTIFIER "value" (6:13-6:18)
+COLON (6:18-6:19)
+IDENTIFIER "Compare" (6:20-6:27)
+PIPE (6:28-6:29)
+NULL (6:30-6:34)
+RIGHT_PAREN (6:34-6:35)
+LEFT_BRACE (6:36-6:37)
+CONST (7:5-7:10)
+IDENTIFIER "compare" (7:11-7:18)
+EQUAL (7:19-7:20)
+NEW (7:21-7:24)
+IDENTIFIER "Compare" (7:25-7:32)
+LEFT_PAREN (7:32-7:33)
+RIGHT_PAREN (7:33-7:34)
+SEMICOLON (7:34-7:35)
+IF (8:5-8:7)
+LEFT_PAREN (8:8-8:9)
+IDENTIFIER "compare" (8:9-8:16)
+EQUAL_EQUAL (8:17-8:19)
+IDENTIFIER "value" (8:20-8:25)
+RIGHT_PAREN (8:25-8:26)
+LEFT_BRACE (8:27-8:28)
+IDENTIFIER "print" (9:9-9:14)
+LEFT_PAREN (9:14-9:15)
+IDENTIFIER "value" (9:15-9:20)
+DOT (9:20-9:21)
+IDENTIFIER "marker" (9:21-9:27)
+LEFT_PAREN (9:27-9:28)
+RIGHT_PAREN (9:28-9:29)
+RIGHT_PAREN (9:29-9:30)
+SEMICOLON (9:30-9:31)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+IDENTIFIER "unsafe" (12:1-12:7)
+LEFT_PAREN (12:7-12:8)
+NULL (12:8-12:12)
+RIGHT_PAREN (12:12-12:13)
+SEMICOLON (12:13-12:14)
+IDENTIFIER "unsafe" (13:1-13:7)
+LEFT_PAREN (13:7-13:8)
+NEW (13:8-13:11)
+IDENTIFIER "Compare" (13:12-13:19)
+LEFT_PAREN (13:19-13:20)
+RIGHT_PAREN (13:20-13:21)
+RIGHT_PAREN (13:21-13:22)
+SEMICOLON (13:22-13:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:23
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Compare"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:75
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 2:19-2:75
+        (IdentifierDeclaration
+          range: 2:24-2:29
+          name: "equal"
+        )
+        (FunctionParameter
+          range: 2:30-2:40
+          (IdentifierDeclaration
+            range: 2:30-2:31
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:33-2:40
+            name: "Compare"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 2:42-2:52
+          (IdentifierDeclaration
+            range: 2:42-2:43
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 2:45-2:52
+            name: "Compare"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:54-2:58
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:59-2:75
+          (ReturnStatement
+            range: 2:61-2:73
+            (LiteralExpression
+              range: 2:68-2:72
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:48
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:48
+        (IdentifierDeclaration
+          range: 3:17-3:23
+          name: "marker"
+        )
+        (NamedTypeNode
+          range: 3:26-3:32
+          name: "string"
+        )
+        (BlockStatement
+          range: 3:33-3:48
+          (ReturnStatement
+            range: 3:35-3:46
+            (LiteralExpression
+              range: 3:42-3:45
+              kind: STRING
+              text: "\"x\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 6:1-11:2
+    (IdentifierDeclaration
+      range: 6:6-6:12
+      name: "unsafe"
+    )
+    (FunctionParameter
+      range: 6:13-6:34
+      (IdentifierDeclaration
+        range: 6:13-6:18
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 6:20-6:34
+        (NamedTypeNode
+          range: 6:20-6:27
+          name: "Compare"
+        )
+        (NamedTypeNode
+          range: 6:30-6:34
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 6:36-11:2
+      (VariableDeclaration
+        range: 7:5-7:35
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 7:11-7:18
+          name: "compare"
+        )
+        type: null
+        (NewExpression
+          range: 7:21-7:34
+          (IdentifierExpression
+            range: 7:25-7:32
+            name: "Compare"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 8:5-10:6
+        (IfExpression
+          range: 8:5-10:6
+          (BinaryExpression
+            range: 8:9-8:25
+            (IdentifierExpression
+              range: 8:9-8:16
+              name: "compare"
+            )
+            operator: EQUAL
+            (IdentifierExpression
+              range: 8:20-8:25
+              name: "value"
+            )
+          )
+          (BlockStatement
+            range: 8:27-10:6
+            (ExpressionStatement
+              range: 9:9-9:31
+              (CallExpression
+                range: 9:9-9:30
+                (IdentifierExpression
+                  range: 9:9-9:14
+                  name: "print"
+                )
+                (CallExpression
+                  range: 9:15-9:29
+                  (MemberExpression
+                    range: 9:15-9:27
+                    (IdentifierExpression
+                      range: 9:15-9:20
+                      name: "value"
+                    )
+                    (IdentifierExpression
+                      range: 9:21-9:27
+                      name: "marker"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          elseBranch: null
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:14
+    (CallExpression
+      range: 12:1-12:13
+      (IdentifierExpression
+        range: 12:1-12:7
+        name: "unsafe"
+      )
+      (LiteralExpression
+        range: 12:8-12:12
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:23
+    (CallExpression
+      range: 13:1-13:22
+      (IdentifierExpression
+        range: 13:1-13:7
+        name: "unsafe"
+      )
+      (NewExpression
+        range: 13:8-13:21
+        (IdentifierExpression
+          range: 13:12-13:19
+          name: "Compare"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:68-2:72 -> bool
+  3:42-3:45 -> string
+  7:21-7:34 -> Compare
+  7:25-7:32 -> Compare
+  8:5-10:6 -> void
+  8:9-8:16 -> Compare
+  8:9-8:25 -> bool
+  8:20-8:25 -> Compare | null
+  9:9-9:14 -> (any) => void
+  9:9-9:30 -> void
+  9:15-9:20 -> Compare
+  9:15-9:27 -> () => string
+  9:15-9:29 -> string
+  9:21-9:27 -> () => string
+  12:1-12:7 -> (Compare | null) => void
+  12:1-12:13 -> void
+  12:8-12:12 -> null
+  13:1-13:7 -> (Compare | null) => void
+  13:1-13:22 -> void
+  13:8-13:21 -> Compare
+  13:12-13:19 -> Compare
+
+Narrowed types:
+  9:15-9:20 -> Compare | null -> Compare
+
+Resolved types:
+  2:33-2:40 -> Compare
+  2:45-2:52 -> Compare
+  2:54-2:58 -> bool
+  3:26-3:32 -> string
+  6:20-6:27 -> Compare
+  6:20-6:34 -> Compare | null
+  6:30-6:34 -> null
+
+Conversions:
+  8:9-8:16 -> Compare -> Compare | null
+  12:8-12:12 -> null -> Compare | null
+  13:8-13:21 -> Compare -> Compare | null
+
+Declarations:
+  1:7-1:14 -> class Compare
+  2:24-2:29 -> func equal(Compare, Compare) => bool
+  2:30-2:31 -> const a: Compare
+  2:42-2:43 -> const b: Compare
+  3:17-3:23 -> func marker() => string
+  6:6-6:12 -> func unsafe(Compare | null) => void
+  6:13-6:18 -> const value: Compare | null
+  7:11-7:18 -> const compare: Compare
+
+References:
+  7:25-7:32 -> 1:7-1:14
+  8:9-8:16 -> 7:11-7:18
+  8:20-8:25 -> 6:13-6:18
+  9:9-9:14 -> builtin print
+  9:15-9:20 -> 6:13-6:18
+  9:21-9:27 -> 3:17-3:23
+  12:1-12:7 -> 6:6-6:12
+  13:1-13:7 -> 6:6-6:12
+  13:12-13:19 -> 1:7-1:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Compare
+  inner class Test$Compare flags [PUBLIC, STATIC]
+  method unsafe(LTest$Compare;)V flags [PUBLIC, STATIC]
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    ASTORE_1 1
+    ALOAD_1 1
+    ALOAD_0 0
+    DUP
+    IFNULL L0
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    GOTO L1
+   L0:
+    POP2
+    ICONST_0 0
+   L1:
+    IFEQ L2
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Compare.marker()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L2:
+    RETURN
+    max stack 3 max locals 2
+  method <clinit>()V flags [STATIC]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test.unsafe(LTest$Compare;)V
+    NEW Test$Compare
+    DUP
+    INVOKESPECIAL Test$Compare.<init>()V
+    INVOKESTATIC Test.unsafe(LTest$Compare;)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Compare extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Compare flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equal(LTest$Compare;LTest$Compare;)Z flags [PUBLIC, STATIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_1 1
+    INSTANCEOF Test$Compare
+    IFEQ L0
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Compare
+    INVOKESTATIC Test$Compare.equal(LTest$Compare;LTest$Compare;)Z
+    IRETURN
+   L0:
+    ICONST_0 0
+    IRETURN
+    max stack 2 max locals 2
+  method marker()Ljava/lang/String; flags [PUBLIC]
+    LDC "x"
+    ARETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+x
+

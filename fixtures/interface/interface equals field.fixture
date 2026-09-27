@@ -1,0 +1,532 @@
+interface Box {
+    var equals: i32;
+}
+class Value implements Box {
+    public var equals = 1;
+}
+const box: Box = new Value();
+print(box.equals);
+print(box.equals(box));
+const same: (Box) => bool = box.equals;
+print(same(box));
+print(same(new Value()));
+box.equals = 2;
+print(box.equals);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Box" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+VAR (2:5-2:8)
+IDENTIFIER "equals" (2:9-2:15)
+COLON (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+SEMICOLON (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Value" (4:7-4:12)
+IMPLEMENTS (4:13-4:23)
+IDENTIFIER "Box" (4:24-4:27)
+LEFT_BRACE (4:28-4:29)
+PUBLIC (5:5-5:11)
+VAR (5:12-5:15)
+IDENTIFIER "equals" (5:16-5:22)
+EQUAL (5:23-5:24)
+INTEGER_LITERAL "1" (5:25-5:26)
+SEMICOLON (5:26-5:27)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+IDENTIFIER "box" (7:7-7:10)
+COLON (7:10-7:11)
+IDENTIFIER "Box" (7:12-7:15)
+EQUAL (7:16-7:17)
+NEW (7:18-7:21)
+IDENTIFIER "Value" (7:22-7:27)
+LEFT_PAREN (7:27-7:28)
+RIGHT_PAREN (7:28-7:29)
+SEMICOLON (7:29-7:30)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "box" (8:7-8:10)
+DOT (8:10-8:11)
+IDENTIFIER "equals" (8:11-8:17)
+RIGHT_PAREN (8:17-8:18)
+SEMICOLON (8:18-8:19)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "box" (9:7-9:10)
+DOT (9:10-9:11)
+IDENTIFIER "equals" (9:11-9:17)
+LEFT_PAREN (9:17-9:18)
+IDENTIFIER "box" (9:18-9:21)
+RIGHT_PAREN (9:21-9:22)
+RIGHT_PAREN (9:22-9:23)
+SEMICOLON (9:23-9:24)
+CONST (10:1-10:6)
+IDENTIFIER "same" (10:7-10:11)
+COLON (10:11-10:12)
+LEFT_PAREN (10:13-10:14)
+IDENTIFIER "Box" (10:14-10:17)
+RIGHT_PAREN (10:17-10:18)
+ARROW (10:19-10:21)
+IDENTIFIER "bool" (10:22-10:26)
+EQUAL (10:27-10:28)
+IDENTIFIER "box" (10:29-10:32)
+DOT (10:32-10:33)
+IDENTIFIER "equals" (10:33-10:39)
+SEMICOLON (10:39-10:40)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "same" (11:7-11:11)
+LEFT_PAREN (11:11-11:12)
+IDENTIFIER "box" (11:12-11:15)
+RIGHT_PAREN (11:15-11:16)
+RIGHT_PAREN (11:16-11:17)
+SEMICOLON (11:17-11:18)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "same" (12:7-12:11)
+LEFT_PAREN (12:11-12:12)
+NEW (12:12-12:15)
+IDENTIFIER "Value" (12:16-12:21)
+LEFT_PAREN (12:21-12:22)
+RIGHT_PAREN (12:22-12:23)
+RIGHT_PAREN (12:23-12:24)
+RIGHT_PAREN (12:24-12:25)
+SEMICOLON (12:25-12:26)
+IDENTIFIER "box" (13:1-13:4)
+DOT (13:4-13:5)
+IDENTIFIER "equals" (13:5-13:11)
+EQUAL (13:12-13:13)
+INTEGER_LITERAL "2" (13:14-13:15)
+SEMICOLON (13:15-13:16)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "box" (14:7-14:10)
+DOT (14:10-14:11)
+IDENTIFIER "equals" (14:11-14:17)
+RIGHT_PAREN (14:17-14:18)
+SEMICOLON (14:18-14:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:19
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:14
+      name: "Box"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:21
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:15
+        name: "equals"
+      )
+      (NamedTypeNode
+        range: 2:17-2:20
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "Value"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 4:24-4:27
+      name: "Box"
+    )
+    (MemberDeclaration
+      range: 5:5-5:27
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 5:12-5:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:16-5:22
+          name: "equals"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:25-5:26
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "box"
+    )
+    (NamedTypeNode
+      range: 7:12-7:15
+      name: "Box"
+    )
+    (NewExpression
+      range: 7:18-7:29
+      (IdentifierExpression
+        range: 7:22-7:27
+        name: "Value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:19
+    (CallExpression
+      range: 8:1-8:18
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:17
+        (IdentifierExpression
+          range: 8:7-8:10
+          name: "box"
+        )
+        (IdentifierExpression
+          range: 8:11-8:17
+          name: "equals"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:24
+    (CallExpression
+      range: 9:1-9:23
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:22
+        (MemberExpression
+          range: 9:7-9:17
+          (IdentifierExpression
+            range: 9:7-9:10
+            name: "box"
+          )
+          (IdentifierExpression
+            range: 9:11-9:17
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 9:18-9:21
+          name: "box"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:11
+      name: "same"
+    )
+    (FunctionTypeNode
+      range: 10:13-10:26
+      (NamedTypeNode
+        range: 10:14-10:17
+        name: "Box"
+      )
+      (NamedTypeNode
+        range: 10:22-10:26
+        name: "bool"
+      )
+    )
+    (MemberExpression
+      range: 10:29-10:39
+      (IdentifierExpression
+        range: 10:29-10:32
+        name: "box"
+      )
+      (IdentifierExpression
+        range: 10:33-10:39
+        name: "equals"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:18
+    (CallExpression
+      range: 11:1-11:17
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:16
+        (IdentifierExpression
+          range: 11:7-11:11
+          name: "same"
+        )
+        (IdentifierExpression
+          range: 11:12-11:15
+          name: "box"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:26
+    (CallExpression
+      range: 12:1-12:25
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:24
+        (IdentifierExpression
+          range: 12:7-12:11
+          name: "same"
+        )
+        (NewExpression
+          range: 12:12-12:23
+          (IdentifierExpression
+            range: 12:16-12:21
+            name: "Value"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:16
+    (AssignmentExpression
+      range: 13:1-13:15
+      (MemberExpression
+        range: 13:1-13:11
+        (IdentifierExpression
+          range: 13:1-13:4
+          name: "box"
+        )
+        (IdentifierExpression
+          range: 13:5-13:11
+          name: "equals"
+        )
+      )
+      (LiteralExpression
+        range: 13:14-13:15
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:19
+    (CallExpression
+      range: 14:1-14:18
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 14:7-14:17
+        (IdentifierExpression
+          range: 14:7-14:10
+          name: "box"
+        )
+        (IdentifierExpression
+          range: 14:11-14:17
+          name: "equals"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:25-5:26 -> i32
+  7:18-7:29 -> Value
+  7:22-7:27 -> Value
+  8:1-8:6 -> (any) => void
+  8:1-8:18 -> void
+  8:7-8:10 -> Box
+  8:7-8:17 -> i32
+  8:11-8:17 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:23 -> void
+  9:7-9:10 -> Box
+  9:7-9:17 -> (Box) => bool
+  9:7-9:22 -> bool
+  9:11-9:17 -> (Box) => bool
+  9:18-9:21 -> Box
+  10:29-10:32 -> Box
+  10:29-10:39 -> (Box) => bool
+  10:33-10:39 -> (Box) => bool
+  11:1-11:6 -> (any) => void
+  11:1-11:17 -> void
+  11:7-11:11 -> (Box) => bool
+  11:7-11:16 -> bool
+  11:12-11:15 -> Box
+  12:1-12:6 -> (any) => void
+  12:1-12:25 -> void
+  12:7-12:11 -> (Box) => bool
+  12:7-12:24 -> bool
+  12:12-12:23 -> Value
+  12:16-12:21 -> Value
+  13:1-13:4 -> Box
+  13:1-13:11 -> i32
+  13:1-13:15 -> i32
+  13:5-13:11 -> i32
+  13:14-13:15 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:18 -> void
+  14:7-14:10 -> Box
+  14:7-14:17 -> i32
+  14:11-14:17 -> i32
+
+Resolved types:
+  2:17-2:20 -> i32
+  4:24-4:27 -> Box
+  7:12-7:15 -> Box
+  10:13-10:26 -> (Box) => bool
+  10:14-10:17 -> Box
+  10:22-10:26 -> bool
+
+Declarations:
+  1:11-1:14 -> interface Box
+  2:9-2:15 -> var equals: i32
+  4:7-4:12 -> class Value
+  5:16-5:22 -> var equals: i32
+  7:7-7:10 -> const box: Box
+  10:7-10:11 -> const same: (Box) => bool
+
+References:
+  7:22-7:27 -> 4:7-4:12
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> 7:7-7:10
+  8:11-8:17 -> 2:9-2:15
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 7:7-7:10
+  9:11-9:17 -> Box.equals(Box): bool
+  9:18-9:21 -> 7:7-7:10
+  10:29-10:32 -> 7:7-7:10
+  10:33-10:39 -> Box.equals(Box): bool
+  11:1-11:6 -> builtin print
+  11:7-11:11 -> 10:7-10:11
+  11:12-11:15 -> 7:7-7:10
+  12:1-12:6 -> builtin print
+  12:7-12:11 -> 10:7-10:11
+  12:16-12:21 -> 4:7-4:12
+  13:1-13:4 -> 7:7-7:10
+  13:5-13:11 -> 2:9-2:15
+  14:1-14:6 -> builtin print
+  14:7-14:10 -> 7:7-7:10
+  14:11-14:17 -> 2:9-2:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Box
+  nest member Test$Value
+  inner class Test$Box flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field box LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field same Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    PUTSTATIC Test.box LTest$Box;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEINTERFACE Test$Box.$get$equals()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    GETSTATIC Test.box LTest$Box;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC MethodHandleDesc[STATIC/EldEquality::identityEquals(Object,Object)boolean]
+    GETSTATIC Test.box LTest$Box;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[(Test$Box)boolean]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.same Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.same Ljava/lang/invoke/MethodHandle;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(LTest$Box;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.same Ljava/lang/invoke/MethodHandle;
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(LTest$Box;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.box LTest$Box;
+    LDC 2
+    DUP_X1
+    INVOKEINTERFACE Test$Box.$set$equals(I)V
+    POP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEINTERFACE Test$Box.$get$equals()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$equals()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method $set$equals(I)V flags [PUBLIC, ABSTRACT, SYNTHETIC]
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Box
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field equals I flags [PUBLIC]
+  method $get$equals()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Value.equals I
+    IRETURN
+    max stack 1 max locals 1
+  method $set$equals(I)V flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$Value.equals I
+    RETURN
+    max stack 2 max locals 2
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$Value.equals I
+    RETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+1
+true
+true
+false
+2
+

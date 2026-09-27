@@ -687,9 +687,9 @@ Expression types:
   9:1-9:6 -> (any) => void
   9:1-9:27 -> void
   9:7-9:11 -> string
-  9:7-9:18 -> (any) => bool
+  9:7-9:18 -> (string) => bool
   9:7-9:26 -> bool
-  9:12-9:18 -> (any) => bool
+  9:12-9:18 -> (string) => bool
   9:19-9:25 -> string
   10:1-10:6 -> (any) => void
   10:1-10:24 -> void
@@ -700,9 +700,9 @@ Expression types:
   11:1-11:6 -> (any) => void
   11:1-11:31 -> void
   11:7-11:12 -> (i32, bool)
-  11:7-11:19 -> (any) => bool
+  11:7-11:19 -> ((i32, bool)) => bool
   11:7-11:30 -> bool
-  11:13-11:19 -> (any) => bool
+  11:13-11:19 -> ((i32, bool)) => bool
   11:20-11:29 -> (i32, bool)
   11:21-11:22 -> i32
   11:24-11:28 -> bool
@@ -720,37 +720,37 @@ Expression types:
   13:1-13:6 -> (any) => void
   13:1-13:31 -> void
   13:7-13:14 -> Promise<i32>
-  13:7-13:21 -> (any) => bool
+  13:7-13:21 -> (Promise<i32>) => bool
   13:7-13:30 -> bool
-  13:15-13:21 -> (any) => bool
+  13:15-13:21 -> (Promise<i32>) => bool
   13:22-13:29 -> Promise<i32>
   14:1-14:6 -> (any) => void
   14:1-14:29 -> void
   14:7-14:13 -> PromiseSource<i32>
-  14:7-14:20 -> (any) => bool
+  14:7-14:20 -> (PromiseSource<i32>) => bool
   14:7-14:28 -> bool
-  14:14-14:20 -> (any) => bool
+  14:14-14:20 -> (PromiseSource<i32>) => bool
   14:21-14:27 -> PromiseSource<i32>
   15:1-15:6 -> (any) => void
   15:1-15:27 -> void
   15:7-15:12 -> (any) => void
-  15:7-15:19 -> (any) => bool
+  15:7-15:19 -> ((any) => void) => bool
   15:7-15:26 -> bool
-  15:13-15:19 -> (any) => bool
+  15:13-15:19 -> ((any) => void) => bool
   15:20-15:25 -> (any) => void
   16:1-16:6 -> (any) => void
   16:1-16:23 -> void
   16:7-16:10 -> (any) => [string]
-  16:7-16:17 -> (any) => bool
+  16:7-16:17 -> ((any) => [string]) => bool
   16:7-16:22 -> bool
-  16:11-16:17 -> (any) => bool
+  16:11-16:17 -> ((any) => [string]) => bool
   16:18-16:21 -> (any) => [string]
   17:1-17:6 -> (any) => void
   17:1-17:25 -> void
   17:7-17:11 -> (any) => void
-  17:7-17:18 -> (any) => bool
+  17:7-17:18 -> ((any) => void) => bool
   17:7-17:24 -> bool
-  17:12-17:18 -> (any) => bool
+  17:12-17:18 -> ((any) => void) => bool
   17:19-17:23 -> (any) => void
   18:1-18:6 -> (any) => void
   18:1-18:31 -> void
@@ -766,15 +766,6 @@ Resolved types:
   4:23-4:26 -> i32
   6:34-6:37 -> i32
 
-Conversions:
-  9:19-9:25 -> string -> any
-  11:20-11:29 -> (i32, bool) -> any
-  13:22-13:29 -> Promise<i32> -> any
-  14:21-14:27 -> PromiseSource<i32> -> any
-  15:20-15:25 -> (any) => void -> any
-  16:18-16:21 -> (any) => [string] -> any
-  17:19-17:23 -> (any) => void -> any
-
 Declarations:
   1:7-1:11 -> const text: string
   2:7-2:12 -> const array: [i32]
@@ -789,13 +780,13 @@ References:
   7:21-7:28 -> Regex.compile(string): Regex
   9:1-9:6 -> builtin print
   9:7-9:11 -> 1:7-1:11
-  9:12-9:18 -> string.equals(any): bool
+  9:12-9:18 -> string.equals(string): bool
   10:1-10:6 -> builtin print
   10:7-10:12 -> 2:7-2:12
   10:13-10:21 -> [i32].toString(): string
   11:1-11:6 -> builtin print
   11:7-11:12 -> 3:7-3:12
-  11:13-11:19 -> (i32, bool).equals(any): bool
+  11:13-11:19 -> (i32, bool).equals((i32, bool)): bool
   12:1-12:6 -> builtin print
   12:7-12:15 -> 4:7-4:15
   12:16-12:24 -> () => i32.hashCode(): i32
@@ -803,23 +794,23 @@ References:
   12:39-12:47 -> () => i32.hashCode(): i32
   13:1-13:6 -> builtin print
   13:7-13:14 -> 5:7-5:14
-  13:15-13:21 -> Promise<i32>.equals(any): bool
+  13:15-13:21 -> Promise<i32>.equals(Promise<i32>): bool
   13:22-13:29 -> 5:7-5:14
   14:1-14:6 -> builtin print
   14:7-14:13 -> 6:7-6:13
-  14:14-14:20 -> PromiseSource<i32>.equals(any): bool
+  14:14-14:20 -> PromiseSource<i32>.equals(PromiseSource<i32>): bool
   14:21-14:27 -> 6:7-6:13
   15:1-15:6 -> builtin print
   15:7-15:12 -> builtin print
-  15:13-15:19 -> (any) => void.equals(any): bool
+  15:13-15:19 -> (any) => void.equals((any) => void): bool
   15:20-15:25 -> builtin print
   16:1-16:6 -> builtin print
   16:7-16:10 -> builtin dir
-  16:11-16:17 -> (any) => [string].equals(any): bool
+  16:11-16:17 -> (any) => [string].equals((any) => [string]): bool
   16:18-16:21 -> builtin dir
   17:1-17:6 -> builtin print
   17:7-17:11 -> builtin help
-  17:12-17:18 -> (any) => void.equals(any): bool
+  17:12-17:18 -> (any) => void.equals((any) => void): bool
   17:19-17:23 -> builtin help
   18:1-18:6 -> builtin print
   18:7-18:12 -> 7:7-7:12
@@ -952,7 +943,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.regex Ljava/util/regex/Pattern;
     INVOKEVIRTUAL java/util/regex/Pattern.toString()Ljava/lang/String;
     LDC "x"
-    INVOKESTATIC java/util/Objects.equals(Ljava/lang/Object;Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 8 max locals 0

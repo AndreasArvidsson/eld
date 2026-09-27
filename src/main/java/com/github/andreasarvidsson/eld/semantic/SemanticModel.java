@@ -27,6 +27,7 @@ import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
+import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierPattern;
 import com.github.andreasarvidsson.eld.parser.RecordPattern;
 
@@ -329,6 +330,33 @@ public final class SemanticModel {
         final ClassType type
     ) {
         return classDeclarations.get(type);
+    }
+
+    public @Nullable FunctionSymbol findStaticEquality(final ClassType type) {
+        for (ClassType current = type; current != null; current =
+            getSuperclass(current)) {
+            final ClassDeclaration declaration = findClassDeclaration(current);
+            if (declaration == null) {
+                continue;
+            }
+            for (final MemberDeclaration member : declaration.members()) {
+                if (
+                    member.declaration() instanceof FunctionDeclaration function
+                        && getSymbol(
+                            function.name()
+                        ) instanceof FunctionSymbol symbol
+                        && symbol.name().equals("equal")
+                        && isStaticMember(symbol)
+                        && symbol.type().parameterTypes().size() == 2
+                        && symbol.type().parameterTypes().get(0).equals(current)
+                        && symbol.type().parameterTypes().get(1).equals(current)
+                        && symbol.type().returnType() == BuiltinType.BOOL
+                ) {
+                    return symbol;
+                }
+            }
+        }
+        return null;
     }
 
     public void setLambdaFunction(

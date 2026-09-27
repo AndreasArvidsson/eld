@@ -1,13 +1,9 @@
-class MutableFoo {
-    public var value = 0;
-    public func equals(value: i32) bool {
-        this.value++;
-        return true;
-    }
-}
 class PrivateFoo {
     func equals(value: i32) bool {
         return true;
+    }
+    public func check() bool {
+        return this.equals(1);
     }
 }
 class StaticFoo {
@@ -16,276 +12,207 @@ class StaticFoo {
     }
 }
 
-const mutable: const MutableFoo = new MutableFoo();
 const privateFoo = new PrivateFoo();
 const staticFoo = new StaticFoo();
-print(mutable.equals("x"));
-print(privateFoo.equals("x"));
+print(privateFoo.check());
+print(privateFoo.equals(privateFoo));
 print(StaticFoo.equals(1));
-print(staticFoo.equals("x"));
+print(staticFoo.equals(staticFoo));
 
 --- TOKENS ---
 
 CLASS (1:1-1:6)
-IDENTIFIER "MutableFoo" (1:7-1:17)
+IDENTIFIER "PrivateFoo" (1:7-1:17)
 LEFT_BRACE (1:18-1:19)
-PUBLIC (2:5-2:11)
-VAR (2:12-2:15)
-IDENTIFIER "value" (2:16-2:21)
-EQUAL (2:22-2:23)
-INTEGER_LITERAL "0" (2:24-2:25)
-SEMICOLON (2:25-2:26)
-PUBLIC (3:5-3:11)
-FUNC (3:12-3:16)
-IDENTIFIER "equals" (3:17-3:23)
-LEFT_PAREN (3:23-3:24)
-IDENTIFIER "value" (3:24-3:29)
-COLON (3:29-3:30)
-IDENTIFIER "i32" (3:31-3:34)
-RIGHT_PAREN (3:34-3:35)
-IDENTIFIER "bool" (3:36-3:40)
-LEFT_BRACE (3:41-3:42)
-THIS (4:9-4:13)
-DOT (4:13-4:14)
-IDENTIFIER "value" (4:14-4:19)
-PLUS_PLUS (4:19-4:21)
-SEMICOLON (4:21-4:22)
-RETURN (5:9-5:15)
-BOOLEAN_LITERAL "true" (5:16-5:20)
-SEMICOLON (5:20-5:21)
-RIGHT_BRACE (6:5-6:6)
-RIGHT_BRACE (7:1-7:2)
-CLASS (8:1-8:6)
-IDENTIFIER "PrivateFoo" (8:7-8:17)
-LEFT_BRACE (8:18-8:19)
-FUNC (9:5-9:9)
-IDENTIFIER "equals" (9:10-9:16)
-LEFT_PAREN (9:16-9:17)
-IDENTIFIER "value" (9:17-9:22)
-COLON (9:22-9:23)
-IDENTIFIER "i32" (9:24-9:27)
-RIGHT_PAREN (9:27-9:28)
-IDENTIFIER "bool" (9:29-9:33)
-LEFT_BRACE (9:34-9:35)
-RETURN (10:9-10:15)
-BOOLEAN_LITERAL "true" (10:16-10:20)
-SEMICOLON (10:20-10:21)
-RIGHT_BRACE (11:5-11:6)
-RIGHT_BRACE (12:1-12:2)
-CLASS (13:1-13:6)
-IDENTIFIER "StaticFoo" (13:7-13:16)
-LEFT_BRACE (13:17-13:18)
-PUBLIC (14:5-14:11)
-STATIC (14:12-14:18)
-FUNC (14:19-14:23)
-IDENTIFIER "equals" (14:24-14:30)
-LEFT_PAREN (14:30-14:31)
-IDENTIFIER "value" (14:31-14:36)
-COLON (14:36-14:37)
-IDENTIFIER "i32" (14:38-14:41)
-RIGHT_PAREN (14:41-14:42)
-IDENTIFIER "bool" (14:43-14:47)
-LEFT_BRACE (14:48-14:49)
-RETURN (15:9-15:15)
-BOOLEAN_LITERAL "true" (15:16-15:20)
-SEMICOLON (15:20-15:21)
-RIGHT_BRACE (16:5-16:6)
-RIGHT_BRACE (17:1-17:2)
-CONST (19:1-19:6)
-IDENTIFIER "mutable" (19:7-19:14)
-COLON (19:14-19:15)
-CONST (19:16-19:21)
-IDENTIFIER "MutableFoo" (19:22-19:32)
-EQUAL (19:33-19:34)
-NEW (19:35-19:38)
-IDENTIFIER "MutableFoo" (19:39-19:49)
-LEFT_PAREN (19:49-19:50)
-RIGHT_PAREN (19:50-19:51)
-SEMICOLON (19:51-19:52)
-CONST (20:1-20:6)
-IDENTIFIER "privateFoo" (20:7-20:17)
-EQUAL (20:18-20:19)
-NEW (20:20-20:23)
-IDENTIFIER "PrivateFoo" (20:24-20:34)
-LEFT_PAREN (20:34-20:35)
-RIGHT_PAREN (20:35-20:36)
-SEMICOLON (20:36-20:37)
-CONST (21:1-21:6)
-IDENTIFIER "staticFoo" (21:7-21:16)
-EQUAL (21:17-21:18)
-NEW (21:19-21:22)
-IDENTIFIER "StaticFoo" (21:23-21:32)
-LEFT_PAREN (21:32-21:33)
-RIGHT_PAREN (21:33-21:34)
-SEMICOLON (21:34-21:35)
-IDENTIFIER "print" (22:1-22:6)
-LEFT_PAREN (22:6-22:7)
-IDENTIFIER "mutable" (22:7-22:14)
-DOT (22:14-22:15)
-IDENTIFIER "equals" (22:15-22:21)
-LEFT_PAREN (22:21-22:22)
-STRING_LITERAL "\"x\"" (22:22-22:25)
-RIGHT_PAREN (22:25-22:26)
-RIGHT_PAREN (22:26-22:27)
-SEMICOLON (22:27-22:28)
-IDENTIFIER "print" (23:1-23:6)
-LEFT_PAREN (23:6-23:7)
-IDENTIFIER "privateFoo" (23:7-23:17)
-DOT (23:17-23:18)
-IDENTIFIER "equals" (23:18-23:24)
-LEFT_PAREN (23:24-23:25)
-STRING_LITERAL "\"x\"" (23:25-23:28)
-RIGHT_PAREN (23:28-23:29)
-RIGHT_PAREN (23:29-23:30)
-SEMICOLON (23:30-23:31)
-IDENTIFIER "print" (24:1-24:6)
-LEFT_PAREN (24:6-24:7)
-IDENTIFIER "StaticFoo" (24:7-24:16)
-DOT (24:16-24:17)
-IDENTIFIER "equals" (24:17-24:23)
-LEFT_PAREN (24:23-24:24)
-INTEGER_LITERAL "1" (24:24-24:25)
-RIGHT_PAREN (24:25-24:26)
-RIGHT_PAREN (24:26-24:27)
-SEMICOLON (24:27-24:28)
-IDENTIFIER "print" (25:1-25:6)
-LEFT_PAREN (25:6-25:7)
-IDENTIFIER "staticFoo" (25:7-25:16)
-DOT (25:16-25:17)
-IDENTIFIER "equals" (25:17-25:23)
-LEFT_PAREN (25:23-25:24)
-STRING_LITERAL "\"x\"" (25:24-25:27)
-RIGHT_PAREN (25:27-25:28)
-RIGHT_PAREN (25:28-25:29)
-SEMICOLON (25:29-25:30)
+FUNC (2:5-2:9)
+IDENTIFIER "equals" (2:10-2:16)
+LEFT_PAREN (2:16-2:17)
+IDENTIFIER "value" (2:17-2:22)
+COLON (2:22-2:23)
+IDENTIFIER "i32" (2:24-2:27)
+RIGHT_PAREN (2:27-2:28)
+IDENTIFIER "bool" (2:29-2:33)
+LEFT_BRACE (2:34-2:35)
+RETURN (3:9-3:15)
+BOOLEAN_LITERAL "true" (3:16-3:20)
+SEMICOLON (3:20-3:21)
+RIGHT_BRACE (4:5-4:6)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "check" (5:17-5:22)
+LEFT_PAREN (5:22-5:23)
+RIGHT_PAREN (5:23-5:24)
+IDENTIFIER "bool" (5:25-5:29)
+LEFT_BRACE (5:30-5:31)
+RETURN (6:9-6:15)
+THIS (6:16-6:20)
+DOT (6:20-6:21)
+IDENTIFIER "equals" (6:21-6:27)
+LEFT_PAREN (6:27-6:28)
+INTEGER_LITERAL "1" (6:28-6:29)
+RIGHT_PAREN (6:29-6:30)
+SEMICOLON (6:30-6:31)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+CLASS (9:1-9:6)
+IDENTIFIER "StaticFoo" (9:7-9:16)
+LEFT_BRACE (9:17-9:18)
+PUBLIC (10:5-10:11)
+STATIC (10:12-10:18)
+FUNC (10:19-10:23)
+IDENTIFIER "equals" (10:24-10:30)
+LEFT_PAREN (10:30-10:31)
+IDENTIFIER "value" (10:31-10:36)
+COLON (10:36-10:37)
+IDENTIFIER "i32" (10:38-10:41)
+RIGHT_PAREN (10:41-10:42)
+IDENTIFIER "bool" (10:43-10:47)
+LEFT_BRACE (10:48-10:49)
+RETURN (11:9-11:15)
+BOOLEAN_LITERAL "true" (11:16-11:20)
+SEMICOLON (11:20-11:21)
+RIGHT_BRACE (12:5-12:6)
+RIGHT_BRACE (13:1-13:2)
+CONST (15:1-15:6)
+IDENTIFIER "privateFoo" (15:7-15:17)
+EQUAL (15:18-15:19)
+NEW (15:20-15:23)
+IDENTIFIER "PrivateFoo" (15:24-15:34)
+LEFT_PAREN (15:34-15:35)
+RIGHT_PAREN (15:35-15:36)
+SEMICOLON (15:36-15:37)
+CONST (16:1-16:6)
+IDENTIFIER "staticFoo" (16:7-16:16)
+EQUAL (16:17-16:18)
+NEW (16:19-16:22)
+IDENTIFIER "StaticFoo" (16:23-16:32)
+LEFT_PAREN (16:32-16:33)
+RIGHT_PAREN (16:33-16:34)
+SEMICOLON (16:34-16:35)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "privateFoo" (17:7-17:17)
+DOT (17:17-17:18)
+IDENTIFIER "check" (17:18-17:23)
+LEFT_PAREN (17:23-17:24)
+RIGHT_PAREN (17:24-17:25)
+RIGHT_PAREN (17:25-17:26)
+SEMICOLON (17:26-17:27)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "privateFoo" (18:7-18:17)
+DOT (18:17-18:18)
+IDENTIFIER "equals" (18:18-18:24)
+LEFT_PAREN (18:24-18:25)
+IDENTIFIER "privateFoo" (18:25-18:35)
+RIGHT_PAREN (18:35-18:36)
+RIGHT_PAREN (18:36-18:37)
+SEMICOLON (18:37-18:38)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "StaticFoo" (19:7-19:16)
+DOT (19:16-19:17)
+IDENTIFIER "equals" (19:17-19:23)
+LEFT_PAREN (19:23-19:24)
+INTEGER_LITERAL "1" (19:24-19:25)
+RIGHT_PAREN (19:25-19:26)
+RIGHT_PAREN (19:26-19:27)
+SEMICOLON (19:27-19:28)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "staticFoo" (20:7-20:16)
+DOT (20:16-20:17)
+IDENTIFIER "equals" (20:17-20:23)
+LEFT_PAREN (20:23-20:24)
+IDENTIFIER "staticFoo" (20:24-20:33)
+RIGHT_PAREN (20:33-20:34)
+RIGHT_PAREN (20:34-20:35)
+SEMICOLON (20:35-20:36)
 
 --- AST ---
 
 (Program
-  range: 1:1-25:30
+  range: 1:1-20:36
   (ClassDeclaration
-    range: 1:1-7:2
+    range: 1:1-8:2
     (IdentifierDeclaration
       range: 1:7-1:17
-      name: "MutableFoo"
-    )
-    superClass: null
-    (MemberDeclaration
-      range: 2:5-2:26
-      visibility: PUBLIC
-      (VariableDeclaration
-        range: 2:12-2:26
-        mutability: VAR
-        (IdentifierDeclaration
-          range: 2:16-2:21
-          name: "value"
-        )
-        type: null
-        (LiteralExpression
-          range: 2:24-2:25
-          kind: INT
-          text: "0"
-        )
-      )
-    )
-    (MemberDeclaration
-      range: 3:5-6:6
-      visibility: PUBLIC
-      (FunctionDeclaration
-        range: 3:12-6:6
-        (IdentifierDeclaration
-          range: 3:17-3:23
-          name: "equals"
-        )
-        (FunctionParameter
-          range: 3:24-3:34
-          (IdentifierDeclaration
-            range: 3:24-3:29
-            name: "value"
-          )
-          (NamedTypeNode
-            range: 3:31-3:34
-            name: "i32"
-          )
-          optional: false
-          defaultValue: null
-        )
-        (NamedTypeNode
-          range: 3:36-3:40
-          name: "bool"
-        )
-        (BlockStatement
-          range: 3:41-6:6
-          (ExpressionStatement
-            range: 4:9-4:22
-            (PostfixExpression
-              range: 4:9-4:21
-              (MemberExpression
-                range: 4:9-4:19
-                (ThisExpression
-                  range: 4:9-4:13
-                )
-                (IdentifierExpression
-                  range: 4:14-4:19
-                  name: "value"
-                )
-              )
-              operator: INCREMENT
-            )
-          )
-          (ReturnStatement
-            range: 5:9-5:21
-            (LiteralExpression
-              range: 5:16-5:20
-              kind: BOOL
-              text: "true"
-            )
-          )
-        )
-      )
-    )
-  )
-  (ClassDeclaration
-    range: 8:1-12:2
-    (IdentifierDeclaration
-      range: 8:7-8:17
       name: "PrivateFoo"
     )
     superClass: null
     (MemberDeclaration
-      range: 9:5-11:6
+      range: 2:5-4:6
       visibility: PRIVATE
       (FunctionDeclaration
-        range: 9:5-11:6
+        range: 2:5-4:6
         (IdentifierDeclaration
-          range: 9:10-9:16
+          range: 2:10-2:16
           name: "equals"
         )
         (FunctionParameter
-          range: 9:17-9:27
+          range: 2:17-2:27
           (IdentifierDeclaration
-            range: 9:17-9:22
+            range: 2:17-2:22
             name: "value"
           )
           (NamedTypeNode
-            range: 9:24-9:27
+            range: 2:24-2:27
             name: "i32"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 9:29-9:33
+          range: 2:29-2:33
           name: "bool"
         )
         (BlockStatement
-          range: 9:34-11:6
+          range: 2:34-4:6
           (ReturnStatement
-            range: 10:9-10:21
+            range: 3:9-3:21
             (LiteralExpression
-              range: 10:16-10:20
+              range: 3:16-3:20
               kind: BOOL
               text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-7:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-7:6
+        (IdentifierDeclaration
+          range: 5:17-5:22
+          name: "check"
+        )
+        (NamedTypeNode
+          range: 5:25-5:29
+          name: "bool"
+        )
+        (BlockStatement
+          range: 5:30-7:6
+          (ReturnStatement
+            range: 6:9-6:31
+            (CallExpression
+              range: 6:16-6:30
+              (MemberExpression
+                range: 6:16-6:27
+                (ThisExpression
+                  range: 6:16-6:20
+                )
+                (IdentifierExpression
+                  range: 6:21-6:27
+                  name: "equals"
+                )
+              )
+              (LiteralExpression
+                range: 6:28-6:29
+                kind: INT
+                text: "1"
+              )
             )
           )
         )
@@ -293,45 +220,45 @@ SEMICOLON (25:29-25:30)
     )
   )
   (ClassDeclaration
-    range: 13:1-17:2
+    range: 9:1-13:2
     (IdentifierDeclaration
-      range: 13:7-13:16
+      range: 9:7-9:16
       name: "StaticFoo"
     )
     superClass: null
     (MemberDeclaration
-      range: 14:5-16:6
+      range: 10:5-12:6
       visibility: PUBLIC
       staticMember: true
       (FunctionDeclaration
-        range: 14:19-16:6
+        range: 10:19-12:6
         (IdentifierDeclaration
-          range: 14:24-14:30
+          range: 10:24-10:30
           name: "equals"
         )
         (FunctionParameter
-          range: 14:31-14:41
+          range: 10:31-10:41
           (IdentifierDeclaration
-            range: 14:31-14:36
+            range: 10:31-10:36
             name: "value"
           )
           (NamedTypeNode
-            range: 14:38-14:41
+            range: 10:38-10:41
             name: "i32"
           )
           optional: false
           defaultValue: null
         )
         (NamedTypeNode
-          range: 14:43-14:47
+          range: 10:43-10:47
           name: "bool"
         )
         (BlockStatement
-          range: 14:48-16:6
+          range: 10:48-12:6
           (ReturnStatement
-            range: 15:9-15:21
+            range: 11:9-11:21
             (LiteralExpression
-              range: 15:16-15:20
+              range: 11:16-11:20
               kind: BOOL
               text: "true"
             )
@@ -341,140 +268,112 @@ SEMICOLON (25:29-25:30)
     )
   )
   (VariableDeclaration
-    range: 19:1-19:52
+    range: 15:1-15:37
     mutability: CONST
     (IdentifierDeclaration
-      range: 19:7-19:14
-      name: "mutable"
-    )
-    (ConstTypeNode
-      range: 19:16-19:32
-      (NamedTypeNode
-        range: 19:22-19:32
-        name: "MutableFoo"
-      )
-    )
-    (NewExpression
-      range: 19:35-19:51
-      (IdentifierExpression
-        range: 19:39-19:49
-        name: "MutableFoo"
-      )
-    )
-  )
-  (VariableDeclaration
-    range: 20:1-20:37
-    mutability: CONST
-    (IdentifierDeclaration
-      range: 20:7-20:17
+      range: 15:7-15:17
       name: "privateFoo"
     )
     type: null
     (NewExpression
-      range: 20:20-20:36
+      range: 15:20-15:36
       (IdentifierExpression
-        range: 20:24-20:34
+        range: 15:24-15:34
         name: "PrivateFoo"
       )
     )
   )
   (VariableDeclaration
-    range: 21:1-21:35
+    range: 16:1-16:35
     mutability: CONST
     (IdentifierDeclaration
-      range: 21:7-21:16
+      range: 16:7-16:16
       name: "staticFoo"
     )
     type: null
     (NewExpression
-      range: 21:19-21:34
+      range: 16:19-16:34
       (IdentifierExpression
-        range: 21:23-21:32
+        range: 16:23-16:32
         name: "StaticFoo"
       )
     )
   )
   (ExpressionStatement
-    range: 22:1-22:28
+    range: 17:1-17:27
     (CallExpression
-      range: 22:1-22:27
+      range: 17:1-17:26
       (IdentifierExpression
-        range: 22:1-22:6
+        range: 17:1-17:6
         name: "print"
       )
       (CallExpression
-        range: 22:7-22:26
+        range: 17:7-17:25
         (MemberExpression
-          range: 22:7-22:21
+          range: 17:7-17:23
           (IdentifierExpression
-            range: 22:7-22:14
-            name: "mutable"
-          )
-          (IdentifierExpression
-            range: 22:15-22:21
-            name: "equals"
-          )
-        )
-        (LiteralExpression
-          range: 22:22-22:25
-          kind: STRING
-          text: "\"x\""
-        )
-      )
-    )
-  )
-  (ExpressionStatement
-    range: 23:1-23:31
-    (CallExpression
-      range: 23:1-23:30
-      (IdentifierExpression
-        range: 23:1-23:6
-        name: "print"
-      )
-      (CallExpression
-        range: 23:7-23:29
-        (MemberExpression
-          range: 23:7-23:24
-          (IdentifierExpression
-            range: 23:7-23:17
+            range: 17:7-17:17
             name: "privateFoo"
           )
           (IdentifierExpression
-            range: 23:18-23:24
-            name: "equals"
+            range: 17:18-17:23
+            name: "check"
           )
-        )
-        (LiteralExpression
-          range: 23:25-23:28
-          kind: STRING
-          text: "\"x\""
         )
       )
     )
   )
   (ExpressionStatement
-    range: 24:1-24:28
+    range: 18:1-18:38
     (CallExpression
-      range: 24:1-24:27
+      range: 18:1-18:37
       (IdentifierExpression
-        range: 24:1-24:6
+        range: 18:1-18:6
         name: "print"
       )
       (CallExpression
-        range: 24:7-24:26
+        range: 18:7-18:36
         (MemberExpression
-          range: 24:7-24:23
+          range: 18:7-18:24
           (IdentifierExpression
-            range: 24:7-24:16
+            range: 18:7-18:17
+            name: "privateFoo"
+          )
+          (IdentifierExpression
+            range: 18:18-18:24
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 18:25-18:35
+          name: "privateFoo"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:28
+    (CallExpression
+      range: 19:1-19:27
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (CallExpression
+        range: 19:7-19:26
+        (MemberExpression
+          range: 19:7-19:23
+          (IdentifierExpression
+            range: 19:7-19:16
             name: "StaticFoo"
           )
           (IdentifierExpression
-            range: 24:17-24:23
+            range: 19:17-19:23
             name: "equals"
           )
         )
         (LiteralExpression
-          range: 24:24-24:25
+          range: 19:24-19:25
           kind: INT
           text: "1"
         )
@@ -482,30 +381,29 @@ SEMICOLON (25:29-25:30)
     )
   )
   (ExpressionStatement
-    range: 25:1-25:30
+    range: 20:1-20:36
     (CallExpression
-      range: 25:1-25:29
+      range: 20:1-20:35
       (IdentifierExpression
-        range: 25:1-25:6
+        range: 20:1-20:6
         name: "print"
       )
       (CallExpression
-        range: 25:7-25:28
+        range: 20:7-20:34
         (MemberExpression
-          range: 25:7-25:23
+          range: 20:7-20:23
           (IdentifierExpression
-            range: 25:7-25:16
+            range: 20:7-20:16
             name: "staticFoo"
           )
           (IdentifierExpression
-            range: 25:17-25:23
+            range: 20:17-20:23
             name: "equals"
           )
         )
-        (LiteralExpression
-          range: 25:24-25:27
-          kind: STRING
-          text: "\"x\""
+        (IdentifierExpression
+          range: 20:24-20:33
+          name: "staticFoo"
         )
       )
     )
@@ -515,114 +413,92 @@ SEMICOLON (25:29-25:30)
 --- SEMANTIC ---
 
 Expression types:
-  2:24-2:25 -> i32
-  4:9-4:13 -> MutableFoo
-  4:9-4:19 -> i32
-  4:9-4:21 -> i32
-  4:14-4:19 -> i32
-  5:16-5:20 -> bool
-  10:16-10:20 -> bool
-  15:16-15:20 -> bool
-  19:35-19:51 -> MutableFoo
-  19:39-19:49 -> MutableFoo
-  20:20-20:36 -> PrivateFoo
-  20:24-20:34 -> PrivateFoo
-  21:19-21:34 -> StaticFoo
-  21:23-21:32 -> StaticFoo
-  22:1-22:6 -> (any) => void
-  22:1-22:27 -> void
-  22:7-22:14 -> const MutableFoo
-  22:7-22:21 -> (any) => bool
-  22:7-22:26 -> bool
-  22:15-22:21 -> (any) => bool
-  22:22-22:25 -> string
-  23:1-23:6 -> (any) => void
-  23:1-23:30 -> void
-  23:7-23:17 -> PrivateFoo
-  23:7-23:24 -> (any) => bool
-  23:7-23:29 -> bool
-  23:18-23:24 -> (any) => bool
-  23:25-23:28 -> string
-  24:1-24:6 -> (any) => void
-  24:1-24:27 -> void
-  24:7-24:16 -> StaticFoo
-  24:7-24:23 -> (i32) => bool
-  24:7-24:26 -> bool
-  24:17-24:23 -> (i32) => bool
-  24:24-24:25 -> i32
-  25:1-25:6 -> (any) => void
-  25:1-25:29 -> void
-  25:7-25:16 -> StaticFoo
-  25:7-25:23 -> (any) => bool
-  25:7-25:28 -> bool
-  25:17-25:23 -> (any) => bool
-  25:24-25:27 -> string
+  3:16-3:20 -> bool
+  6:16-6:20 -> PrivateFoo
+  6:16-6:27 -> (i32) => bool
+  6:16-6:30 -> bool
+  6:21-6:27 -> (i32) => bool
+  6:28-6:29 -> i32
+  11:16-11:20 -> bool
+  15:20-15:36 -> PrivateFoo
+  15:24-15:34 -> PrivateFoo
+  16:19-16:34 -> StaticFoo
+  16:23-16:32 -> StaticFoo
+  17:1-17:6 -> (any) => void
+  17:1-17:26 -> void
+  17:7-17:17 -> PrivateFoo
+  17:7-17:23 -> () => bool
+  17:7-17:25 -> bool
+  17:18-17:23 -> () => bool
+  18:1-18:6 -> (any) => void
+  18:1-18:37 -> void
+  18:7-18:17 -> PrivateFoo
+  18:7-18:24 -> (PrivateFoo) => bool
+  18:7-18:36 -> bool
+  18:18-18:24 -> (PrivateFoo) => bool
+  18:25-18:35 -> PrivateFoo
+  19:1-19:6 -> (any) => void
+  19:1-19:27 -> void
+  19:7-19:16 -> StaticFoo
+  19:7-19:23 -> (i32) => bool
+  19:7-19:26 -> bool
+  19:17-19:23 -> (i32) => bool
+  19:24-19:25 -> i32
+  20:1-20:6 -> (any) => void
+  20:1-20:35 -> void
+  20:7-20:16 -> StaticFoo
+  20:7-20:23 -> (StaticFoo) => bool
+  20:7-20:34 -> bool
+  20:17-20:23 -> (StaticFoo) => bool
+  20:24-20:33 -> StaticFoo
 
 Resolved types:
-  3:31-3:34 -> i32
-  3:36-3:40 -> bool
-  9:24-9:27 -> i32
-  9:29-9:33 -> bool
-  14:38-14:41 -> i32
-  14:43-14:47 -> bool
-  19:16-19:32 -> const MutableFoo
-  19:22-19:32 -> MutableFoo
-
-Conversions:
-  22:22-22:25 -> string -> any
-  23:25-23:28 -> string -> any
-  25:24-25:27 -> string -> any
+  2:24-2:27 -> i32
+  2:29-2:33 -> bool
+  5:25-5:29 -> bool
+  10:38-10:41 -> i32
+  10:43-10:47 -> bool
 
 Declarations:
-  1:7-1:17 -> class MutableFoo
-  2:16-2:21 -> var value: i32
-  3:17-3:23 -> func equals(i32) => bool
-  3:24-3:29 -> const value: i32
-  8:7-8:17 -> class PrivateFoo
-  9:10-9:16 -> func equals(i32) => bool
-  9:17-9:22 -> const value: i32
-  13:7-13:16 -> class StaticFoo
-  14:24-14:30 -> func equals(i32) => bool
-  14:31-14:36 -> const value: i32
-  19:7-19:14 -> const mutable: const MutableFoo
-  20:7-20:17 -> const privateFoo: PrivateFoo
-  21:7-21:16 -> const staticFoo: StaticFoo
+  1:7-1:17 -> class PrivateFoo
+  2:10-2:16 -> func equals(i32) => bool
+  2:17-2:22 -> const value: i32
+  5:17-5:22 -> func check() => bool
+  9:7-9:16 -> class StaticFoo
+  10:24-10:30 -> func equals(i32) => bool
+  10:31-10:36 -> const value: i32
+  15:7-15:17 -> const privateFoo: PrivateFoo
+  16:7-16:16 -> const staticFoo: StaticFoo
 
 References:
-  4:14-4:19 -> 2:16-2:21
-  19:39-19:49 -> 1:7-1:17
-  20:24-20:34 -> 8:7-8:17
-  21:23-21:32 -> 13:7-13:16
-  22:1-22:6 -> builtin print
-  22:7-22:14 -> 19:7-19:14
-  22:15-22:21 -> MutableFoo.equals(any): bool
-  23:1-23:6 -> builtin print
-  23:7-23:17 -> 20:7-20:17
-  23:18-23:24 -> PrivateFoo.equals(any): bool
-  24:1-24:6 -> builtin print
-  24:7-24:16 -> 13:7-13:16
-  24:17-24:23 -> 14:24-14:30
-  25:1-25:6 -> builtin print
-  25:7-25:16 -> 21:7-21:16
-  25:17-25:23 -> StaticFoo.equals(any): bool
+  6:21-6:27 -> 2:10-2:16
+  15:24-15:34 -> 1:7-1:17
+  16:23-16:32 -> 9:7-9:16
+  17:1-17:6 -> builtin print
+  17:7-17:17 -> 15:7-15:17
+  17:18-17:23 -> 5:17-5:22
+  18:1-18:6 -> builtin print
+  18:7-18:17 -> 15:7-15:17
+  18:18-18:24 -> PrivateFoo.equals(PrivateFoo): bool
+  18:25-18:35 -> 15:7-15:17
+  19:1-19:6 -> builtin print
+  19:7-19:16 -> 9:7-9:16
+  19:17-19:23 -> 10:24-10:30
+  20:1-20:6 -> builtin print
+  20:7-20:16 -> 16:7-16:16
+  20:17-20:23 -> StaticFoo.equals(StaticFoo): bool
+  20:24-20:33 -> 16:7-16:16
 
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
-  nest member Test$MutableFoo
   nest member Test$PrivateFoo
   nest member Test$StaticFoo
-  inner class Test$MutableFoo flags [PUBLIC, STATIC]
   inner class Test$PrivateFoo flags [PUBLIC, STATIC]
   inner class Test$StaticFoo flags [PUBLIC, STATIC]
-  field mutable LTest$MutableFoo; flags [PUBLIC, STATIC, FINAL]
   field privateFoo LTest$PrivateFoo; flags [PUBLIC, STATIC, FINAL]
   field staticFoo LTest$StaticFoo; flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
-    NEW Test$MutableFoo
-    DUP
-    INVOKESPECIAL Test$MutableFoo.<init>()V
-    PUTSTATIC Test.mutable LTest$MutableFoo;
     NEW Test$PrivateFoo
     DUP
     INVOKESPECIAL Test$PrivateFoo.<init>()V
@@ -632,14 +508,18 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL Test$StaticFoo.<init>()V
     PUTSTATIC Test.staticFoo LTest$StaticFoo;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.mutable LTest$MutableFoo;
-    LDC "x"
-    INVOKEVIRTUAL Test$MutableFoo.equals(Ljava/lang/Object;)Z
+    GETSTATIC Test.privateFoo LTest$PrivateFoo;
+    INVOKEVIRTUAL Test$PrivateFoo.check()Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.privateFoo LTest$PrivateFoo;
-    LDC "x"
-    INVOKEVIRTUAL Test$PrivateFoo.equals(Ljava/lang/Object;)Z
+    GETSTATIC Test.privateFoo LTest$PrivateFoo;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 1
@@ -647,38 +527,19 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.staticFoo LTest$StaticFoo;
-    LDC "x"
-    INVOKEVIRTUAL Test$StaticFoo.equals(Ljava/lang/Object;)Z
+    GETSTATIC Test.staticFoo LTest$StaticFoo;
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 3 max locals 0
 
-class Test$MutableFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
-  nest host Test
-  inner class Test$MutableFoo flags [PUBLIC, STATIC]
-  field value I flags [PUBLIC]
-  method <init>()V flags [PUBLIC]
-    ALOAD_0 0
-    INVOKESPECIAL java/lang/Object.<init>()V
-    ALOAD_0 0
-    LDC 0
-    PUTFIELD Test$MutableFoo.value I
-    RETURN
-    max stack 2 max locals 1
-  method equals(I)Z flags [PUBLIC]
-    ALOAD_0 0
-    DUP
-    GETFIELD Test$MutableFoo.value I
-    DUP_X1
-    ICONST_1 1
-    IADD
-    PUTFIELD Test$MutableFoo.value I
-    POP
-    ICONST_1 1
-    IRETURN
-    max stack 4 max locals 2
-
 class Test$PrivateFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$PrivateFoo flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -690,8 +551,15 @@ class Test$PrivateFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER
     ICONST_1 1
     IRETURN
     max stack 1 max locals 2
+  method check()Z flags [PUBLIC]
+    ALOAD_0 0
+    LDC 1
+    INVOKEVIRTUAL Test$PrivateFoo.equals(I)Z
+    IRETURN
+    max stack 2 max locals 1
 
 class Test$StaticFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
   nest host Test
   inner class Test$StaticFoo flags [PUBLIC, STATIC]
   method <init>()V flags [PUBLIC]
@@ -706,8 +574,8 @@ class Test$StaticFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
 
 --- OUTPUT ---
 
-false
-false
 true
-false
+true
+true
+true
 

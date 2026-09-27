@@ -97,7 +97,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ICONST_1 1
    L4:
     IFEQ L5
-    GOTO L5
    L5:
     RETURN
     max stack 2 max locals 0

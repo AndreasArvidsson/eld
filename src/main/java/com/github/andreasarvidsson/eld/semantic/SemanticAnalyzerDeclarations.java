@@ -477,6 +477,12 @@ public final class SemanticAnalyzerDeclarations {
                 model.setMemberVisibility(value, Visibility.PUBLIC);
             }
             else if (member instanceof InterfaceMethodDeclaration method) {
+                if (method.name().name().equals("equals")) {
+                    throw new SemanticException(
+                        method.name().range(),
+                        "Interface cannot declare ubiquitous method 'equals'"
+                    );
+                }
                 if (!ownMethods.add(method.name().name())) {
                     throw new SemanticException(
                         method.range(),
