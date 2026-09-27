@@ -190,6 +190,7 @@ public final class BytecodeGenerator {
                 .stream()
                 .anyMatch(
                     item -> item instanceof ClassDeclaration
+                        || item instanceof EnumDeclaration
                         || item instanceof RecordDeclaration
                         || item instanceof InterfaceDeclaration
                         || AstTraversal
@@ -369,6 +370,20 @@ public final class BytecodeGenerator {
                     );
                 }
             }
+            if (item instanceof EnumDeclaration enumeration) {
+                final ClassDeclaration declaration =
+                    semanticModel.getEnumClass(enumeration);
+                final String name = className(declaration);
+                if (
+                    classes
+                        .putIfAbsent(name, generateClass(declaration)) != null
+                ) {
+                    throw unsupported(
+                        enumeration,
+                        "Duplicate enum " + enumeration.name().name()
+                    );
+                }
+            }
         }
         classes.putAll(objectClasses);
         classes.replaceAll(
@@ -391,9 +406,11 @@ public final class BytecodeGenerator {
                     classDesc(
                         semanticModel.isRecordClass(generatedClass)
                             ? "java/lang/Record"
-                            : superclass == null
-                                ? "java/lang/Object"
-                                : classOwner(superclass)
+                            : semanticModel.isEnumClass(generatedClass)
+                                ? "java/lang/Enum"
+                                : superclass == null
+                                    ? "java/lang/Object"
+                                    : classOwner(superclass)
                     )
                 );
             }
@@ -932,6 +949,11 @@ public final class BytecodeGenerator {
             return function.name();
         }
         if (
+            semanticModel.isEnumClass(owner) && function.name().equals("values")
+        ) {
+            return "$eldValues";
+        }
+        if (
             function.name().equals("equals")
                 && methodDescriptor(function.type())
                     .equals("(Ljava/lang/Object;)Z")
@@ -1025,6 +1047,9 @@ public final class BytecodeGenerator {
         final ClassType classType =
             (ClassType) semanticModel.getSymbol(declaration.name()).type();
         final boolean recordClass = semanticModel.isRecordClass(declaration);
+        final @Nullable EnumDeclaration enumeration =
+            semanticModel.findEnumDeclaration(declaration);
+        final boolean enumClass = enumeration != null;
         final @Nullable RecordDeclaration record =
             recordClass
                 ? semanticModel.getRecordDeclaration(declaration)
@@ -1033,15 +1058,20 @@ public final class BytecodeGenerator {
         final String superclassOwner =
             recordClass
                 ? "java/lang/Record"
-                : superclass == null
-                    ? "java/lang/Object"
-                    : classOwner(superclass);
+                : enumClass
+                    ? "java/lang/Enum"
+                    : superclass == null
+                        ? "java/lang/Object"
+                        : classOwner(superclass);
         return classFile().build(classDesc(name), writer -> {
             final List<InnerClassInfo> innerClasses = new ArrayList<>();
             final List<ClassDesc> nestMembers = new ArrayList<>();
             writer.withVersion(JAVA_21_VERSION, 0);
             writer.withFlags(
-                ACC_PUBLIC | ACC_SUPER | (recordClass ? ACC_FINAL : 0)
+                ACC_PUBLIC | ACC_SUPER | (enumClass ? ACC_ENUM : 0)
+                    | (recordClass || semanticModel.isEnumClass(classType)
+                        ? ACC_FINAL
+                        : 0)
             );
             writer.withSuperclass(classDesc(superclassOwner));
             if (record != null) {
@@ -1083,7 +1113,9 @@ public final class BytecodeGenerator {
                     classDesc(name),
                     Optional.of(classDesc(moduleName)),
                     Optional.of(declaration.name().name()),
-                    ACC_PUBLIC | ACC_STATIC | (recordClass ? ACC_FINAL : 0)
+                    ACC_PUBLIC | ACC_STATIC
+                        | (recordClass || enumClass ? ACC_FINAL : 0)
+                        | (enumClass ? ACC_ENUM : 0)
                 )
             );
             final IdentityHashMap<Symbol, String> globals =
@@ -1119,7 +1151,11 @@ public final class BytecodeGenerator {
                                     : 0)
                                 | (variable.mutability() == Mutability.CONST
                                     ? ACC_FINAL
-                                    : 0),
+                                    : 0)
+                                | (enumClass && semanticModel.isEnumConstant(
+                                    classType,
+                                    variable.name().name()
+                                ) ? ACC_ENUM : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
                         fieldSignature(symbol.type()),
@@ -1246,7 +1282,9 @@ public final class BytecodeGenerator {
                     )
                 ),
                 "<init>",
-                methodDescriptor(constructorType),
+                enumClass
+                    ? enumConstructorDescriptor(constructorType)
+                    : methodDescriptor(constructorType),
                 null,
                 constructor -> {
                     final MethodGenerator initializer =
@@ -1256,6 +1294,10 @@ public final class BytecodeGenerator {
                             BuiltinType.VOID,
                             instance
                         );
+
+                    if (enumClass) {
+                        initializer.reserveLocals(3);
+                    }
 
                     if (declarationConstructor != null) {
                         for (final FunctionParameter parameter : declarationConstructor
@@ -1309,7 +1351,7 @@ public final class BytecodeGenerator {
                     initializer.finish(reachable);
                 }
             );
-            if (declarationConstructor != null) {
+            if (declarationConstructor != null && !enumClass) {
                 generateDefaultOverload(
                     writer,
                     "<init>",
@@ -1329,14 +1371,15 @@ public final class BytecodeGenerator {
                 final Declaration member = memberDeclaration.declaration();
                 if (member instanceof FunctionDeclaration function) {
                     if (
-                        record == null
-                            || declaresRecordMethod(
-                                record,
-                                function.name().name(),
-                                function.parameters().size()
-                            )
-                            || !function.name().name().equals("toString")
-                            || !function.parameters().isEmpty()
+                        !semanticModel.isEnumIntrinsic(function)
+                            && (record == null
+                                || declaresRecordMethod(
+                                    record,
+                                    function.name().name(),
+                                    function.parameters().size()
+                                )
+                                || !function.name().name().equals("toString")
+                                || !function.parameters().isEmpty())
                     ) {
                         generateFunction(
                             writer,
@@ -1348,6 +1391,9 @@ public final class BytecodeGenerator {
                         generateStaticEqualityBridge(writer, name, function);
                     }
                 }
+            }
+            if (enumeration != null) {
+                generateJavaEnumMethods(writer, name, enumeration);
             }
             generateInterfaceBridges(writer, name, classType);
             generateJavaBridges(
@@ -1363,6 +1409,58 @@ public final class BytecodeGenerator {
                 writer.with(NestMembersAttribute.ofSymbols(nestMembers));
             }
         });
+    }
+
+    private void generateJavaEnumMethods(
+        final ClassBuilder writer,
+        final String owner,
+        final EnumDeclaration enumeration
+    ) {
+        generateMethod(
+            writer,
+            ACC_PUBLIC | ACC_STATIC,
+            "values",
+            "()[L" + owner + ";",
+            null,
+            method -> {
+                method.ldc(enumeration.constants().size());
+                method.anewarray(classDesc(owner));
+                for (int i = 0; i < enumeration.constants().size(); i++) {
+                    method.dup();
+                    method.ldc(i);
+                    method.fieldAccess(
+                        GETSTATIC,
+                        classDesc(owner),
+                        enumeration.constants().get(i).name().name(),
+                        classDesc(owner)
+                    );
+                    method.aastore();
+                }
+                method.areturn();
+            }
+        );
+        generateMethod(
+            writer,
+            ACC_PUBLIC | ACC_STATIC,
+            "valueOf",
+            "(Ljava/lang/String;)L" + owner + ";",
+            null,
+            method -> {
+                method.ldc(classDesc(owner));
+                method.aload(0);
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc("java/lang/Enum"),
+                    "valueOf",
+                    MethodTypeDesc.ofDescriptor(
+                        "(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;"
+                    ),
+                    false
+                );
+                method.checkcast(classDesc(owner));
+                method.areturn();
+            }
+        );
     }
 
     private record InstanceContext(
@@ -2656,6 +2754,19 @@ public final class BytecodeGenerator {
                         )
                     );
                 }
+                else if (item instanceof EnumDeclaration enumeration) {
+                    final String name =
+                        className(semanticModel.getEnumClass(enumeration));
+                    nestMembers.add(classDesc(name));
+                    innerClasses.add(
+                        InnerClassInfo.of(
+                            classDesc(name),
+                            Optional.of(classDesc(moduleName)),
+                            Optional.of(enumeration.name().name()),
+                            ACC_PUBLIC | ACC_STATIC | ACC_FINAL | ACC_ENUM
+                        )
+                    );
+                }
                 else if (item instanceof InterfaceDeclaration contract) {
                     final String name =
                         interfaceOwner(
@@ -3427,6 +3538,10 @@ public final class BytecodeGenerator {
             .toString();
     }
 
+    private String enumConstructorDescriptor(final FunctionType type) {
+        return "(Ljava/lang/String;I" + methodDescriptor(type).substring(1);
+    }
+
     private static boolean reference(final Type type) {
         final Type unqualified = LiteralType.unwrap(ConstType.unwrap(type));
         return (unqualified instanceof UnionType
@@ -4078,6 +4193,22 @@ public final class BytecodeGenerator {
         }
 
         private void initializeBase(final List<Expression> arguments) {
+            if (constructorSuperclassOwner.equals("java/lang/Enum")) {
+                method.aload(0);
+                method.aload(1);
+                method.iload(2);
+                method.invoke(
+                    INVOKESPECIAL,
+                    classDesc("java/lang/Enum"),
+                    "<init>",
+                    MethodTypeDesc.ofDescriptor("(Ljava/lang/String;I)V"),
+                    false
+                );
+                for (final VariableDeclaration field : constructorFields) {
+                    item(field);
+                }
+                return;
+            }
             method.aload(0);
             final boolean previous = beforeBaseInitialization;
             beforeBaseInitialization = true;
@@ -4186,6 +4317,25 @@ public final class BytecodeGenerator {
                             .expression() instanceof IfExpression conditional
                     ) {
                         return conditional(conditional, method.newLabel());
+                    }
+                    if (
+                        statement
+                            .expression() instanceof AssignmentExpression assignment
+                            && assignment
+                                .target() instanceof MemberExpression member
+                            && member.target() instanceof ThisExpression
+                            && semanticModel.getMemberOwner(
+                                member
+                            ) instanceof ClassType owner
+                            && semanticModel.isEnumClass(owner)
+                    ) {
+                        memberReceiver(member);
+                        expression(assignment.value());
+                        storeMember(
+                            member,
+                            semanticModel.getExpressionType(member)
+                        );
+                        break;
                     }
                     discard(statement.expression());
                 }
@@ -7814,6 +7964,14 @@ public final class BytecodeGenerator {
                                 .getOrDefault(name, moduleName + "$" + name);
                         method.new_(classDesc(owner));
                         method.dup();
+                        final boolean enumConstant =
+                            semanticModel.isEnumConstantCreation(creation);
+                        if (enumConstant) {
+                            method.ldc(
+                                semanticModel.getEnumConstantName(creation)
+                            );
+                            method.ldc(semanticModel.getEnumOrdinal(creation));
+                        }
                         final FunctionType constructorType =
                             semanticModel.getConstructor(
                                 (ClassType) semanticModel
@@ -7829,9 +7987,11 @@ public final class BytecodeGenerator {
                             classDesc(owner),
                             "<init>",
                             MethodTypeDesc.ofDescriptor(
-                                omitted
-                                    ? defaultDescriptor(constructorType)
-                                    : methodDescriptor(constructorType)
+                                enumConstant
+                                    ? enumConstructorDescriptor(constructorType)
+                                    : omitted
+                                        ? defaultDescriptor(constructorType)
+                                        : methodDescriptor(constructorType)
                             ),
                             false
                         );

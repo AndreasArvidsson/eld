@@ -611,6 +611,17 @@ public final class SemanticAnalyzerExpressions {
                         classType.name()
                     );
                 }
+                if (
+                    analyzer.currentConstructor() != null
+                        && classType.equals(analyzer.currentInstance())
+                        && model
+                            .isEnumConstant(classType, member.member().name())
+                ) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Enum constructors cannot access enum constants"
+                    );
+                }
                 final Type contextualObjectMethod =
                     resolveContextualObjectMethod(
                         member,
@@ -843,6 +854,15 @@ public final class SemanticAnalyzerExpressions {
                     );
                 }
                 final ClassType classType = created.type();
+                if (
+                    model.isEnumClass(classType)
+                        && !model.isEnumConstantCreation(creation)
+                ) {
+                    throw new SemanticException(
+                        creation.range(),
+                        "Enum values can only be declared as constants"
+                    );
+                }
                 model.setExpressionType(creation.className(), classType);
                 if (
                     !analyzer.canAccess(

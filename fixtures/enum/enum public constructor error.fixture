@@ -1,0 +1,24 @@
+enum Status {
+    ACTIVE;
+
+    public Status() {}
+}
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Status" (1:6-1:12)
+LEFT_BRACE (1:13-1:14)
+IDENTIFIER "ACTIVE" (2:5-2:11)
+SEMICOLON (2:11-2:12)
+PUBLIC (4:5-4:11)
+IDENTIFIER "Status" (4:12-4:18)
+LEFT_PAREN (4:18-4:19)
+RIGHT_PAREN (4:19-4:20)
+LEFT_BRACE (4:21-4:22)
+RIGHT_BRACE (4:22-4:23)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+ParserException: Enum constructors must be private at 4:5-4:11

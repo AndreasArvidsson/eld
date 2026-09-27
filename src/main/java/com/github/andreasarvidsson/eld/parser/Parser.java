@@ -56,7 +56,7 @@ public final class Parser extends ParserBase {
             throw ParserException.expected("top-level declaration", current());
         }
         return switch (current().type()) {
-            case CONST, VAR, TYPE, CLASS, RECORD, INTERFACE, FUNC, FINAL,
+            case CONST, VAR, TYPE, CLASS, ENUM, RECORD, INTERFACE, FUNC, FINAL,
                 OVERRIDE, ASYNC -> parseTopLevelDeclaration();
             case PUBLIC, PROTECTED -> throw ParserException
                 .expected("top-level declaration", current());
@@ -77,6 +77,7 @@ public final class Parser extends ParserBase {
             case VAR -> parseVariableDeclaration(token, Mutability.VAR);
             case TYPE -> parseTypeAliasDeclaration(token);
             case CLASS -> parseClassDeclaration(token);
+            case ENUM -> parseEnumDeclaration(token);
             case RECORD -> parseRecordDeclaration(token);
             case INTERFACE -> parseInterfaceDeclaration(token);
             case FUNC -> parseFunctionDeclaration(token, false, List.of());
@@ -99,7 +100,7 @@ public final class Parser extends ParserBase {
                 return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
-            case TYPE, CLASS, RECORD, INTERFACE, CONSTRUCTOR, FUNC, FINAL,
+            case TYPE, CLASS, ENUM, RECORD, INTERFACE, CONSTRUCTOR, FUNC, FINAL,
                 OVERRIDE, ASYNC, PUBLIC, PROTECTED:
                 throw ParserException.expected("statement", token);
             case SUPER:
@@ -270,6 +271,132 @@ public final class Parser extends ParserBase {
             members,
             range
         );
+    }
+
+    private EnumDeclaration parseEnumDeclaration(final Token keyword) {
+        final Token name = expect(TokenType.IDENTIFIER);
+        final List<@NonNull TypeNode> interfaces = new ArrayList<>();
+        if (match(TokenType.IMPLEMENTS)) {
+            do {
+                interfaces.add(parseType());
+            } while (match(TokenType.COMMA));
+        }
+        expect(TokenType.LEFT_BRACE);
+        final List<@NonNull EnumConstant> constants = new ArrayList<>();
+        if (!check(TokenType.RIGHT_BRACE) && !check(TokenType.SEMICOLON)) {
+            do {
+                final Token constant = expect(TokenType.IDENTIFIER);
+                final List<Expression> arguments = new ArrayList<>();
+                if (match(TokenType.LEFT_PAREN)) {
+                    if (!check(TokenType.RIGHT_PAREN)) {
+                        do {
+                            arguments.add(parserExpressions.parseExpression());
+                        } while (match(TokenType.COMMA));
+                    }
+                    expect(TokenType.RIGHT_PAREN);
+                }
+                constants.add(
+                    new EnumConstant(
+                        new IdentifierDeclaration(
+                            constant.text(),
+                            constant.range()
+                        ),
+                        arguments,
+                        constant.range().union(peek(-1).range())
+                    )
+                );
+            } while (
+                match(TokenType.COMMA) && !check(TokenType.RIGHT_BRACE)
+                    && !check(TokenType.SEMICOLON)
+            );
+        }
+        final List<@NonNull MemberDeclaration> members = new ArrayList<>();
+        if (match(TokenType.SEMICOLON)) {
+            while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
+                final Token modifier =
+                    check(TokenType.PUBLIC) || check(TokenType.PROTECTED)
+                        ? advance()
+                        : null;
+                if (
+                    check(TokenType.IDENTIFIER)
+                        && current().text().equals(name.text())
+                        && check(1, TokenType.LEFT_PAREN)
+                ) {
+                    if (modifier != null) {
+                        throw new ParserException(
+                            modifier.range(),
+                            "Enum constructors must be private"
+                        );
+                    }
+                    final ConstructorDeclaration constructor =
+                        parseConstructorDeclaration(advance());
+                    validateEnumConstructor(constructor);
+                    members.add(
+                        new MemberDeclaration(
+                            Visibility.PRIVATE,
+                            false,
+                            constructor,
+                            constructor.range()
+                        )
+                    );
+                }
+                else {
+                    if (modifier != null) {
+                        goBack();
+                    }
+                    final MemberDeclaration member = parseClassMember();
+                    if (
+                        member.declaration() instanceof ConstructorDeclaration
+                            && member.visibility() != Visibility.PRIVATE
+                    ) {
+                        throw new ParserException(
+                            member.range(),
+                            "Enum constructors must be private"
+                        );
+                    }
+                    if (
+                        member
+                            .declaration() instanceof ConstructorDeclaration constructor
+                    ) {
+                        validateEnumConstructor(constructor);
+                    }
+                    if (
+                        member
+                            .declaration() instanceof FunctionDeclaration method
+                            && List.of("equals", "hashCode", "compareTo")
+                                .contains(method.name().name())
+                    ) {
+                        throw new ParserException(
+                            method.name().range(),
+                            "Method '%s' is final on enums",
+                            method.name().name()
+                        );
+                    }
+                    members.add(member);
+                }
+            }
+        }
+        final Token end = expect(TokenType.RIGHT_BRACE);
+        return new EnumDeclaration(
+            new IdentifierDeclaration(name.text(), name.range()),
+            interfaces,
+            constants,
+            members,
+            keyword.range().union(end.range())
+        );
+    }
+
+    private void validateEnumConstructor(
+        final ConstructorDeclaration constructor
+    ) {
+        for (final FunctionParameter parameter : constructor.parameters()) {
+            if (parameter.omittable()) {
+                throw new ParserException(
+                    parameter.range(),
+                    "Enum constructor parameters cannot be optional"
+                );
+            }
+        }
     }
 
     private MemberDeclaration parseClassMember() {

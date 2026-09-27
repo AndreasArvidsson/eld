@@ -18,6 +18,7 @@ public enum TokenType {
     VAR,
     TYPE,
     CLASS,
+    ENUM,
     RECORD,
     EXTENDS,
     INTERFACE,

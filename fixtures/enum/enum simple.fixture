@@ -1,0 +1,447 @@
+enum Direction {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+}
+
+print(Direction.NORTH == Direction.NORTH);
+print(Direction.NORTH == Direction.SOUTH);
+print(Direction.values()[2] == Direction.EAST);
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Direction" (1:6-1:15)
+LEFT_BRACE (1:16-1:17)
+IDENTIFIER "NORTH" (2:5-2:10)
+COMMA (2:10-2:11)
+IDENTIFIER "SOUTH" (3:5-3:10)
+COMMA (3:10-3:11)
+IDENTIFIER "EAST" (4:5-4:9)
+COMMA (4:9-4:10)
+IDENTIFIER "WEST" (5:5-5:9)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "Direction" (8:7-8:16)
+DOT (8:16-8:17)
+IDENTIFIER "NORTH" (8:17-8:22)
+EQUAL_EQUAL (8:23-8:25)
+IDENTIFIER "Direction" (8:26-8:35)
+DOT (8:35-8:36)
+IDENTIFIER "NORTH" (8:36-8:41)
+RIGHT_PAREN (8:41-8:42)
+SEMICOLON (8:42-8:43)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "Direction" (9:7-9:16)
+DOT (9:16-9:17)
+IDENTIFIER "NORTH" (9:17-9:22)
+EQUAL_EQUAL (9:23-9:25)
+IDENTIFIER "Direction" (9:26-9:35)
+DOT (9:35-9:36)
+IDENTIFIER "SOUTH" (9:36-9:41)
+RIGHT_PAREN (9:41-9:42)
+SEMICOLON (9:42-9:43)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "Direction" (10:7-10:16)
+DOT (10:16-10:17)
+IDENTIFIER "values" (10:17-10:23)
+LEFT_PAREN (10:23-10:24)
+RIGHT_PAREN (10:24-10:25)
+LEFT_BRACKET (10:25-10:26)
+INTEGER_LITERAL "2" (10:26-10:27)
+RIGHT_BRACKET (10:27-10:28)
+EQUAL_EQUAL (10:29-10:31)
+IDENTIFIER "Direction" (10:32-10:41)
+DOT (10:41-10:42)
+IDENTIFIER "EAST" (10:42-10:46)
+RIGHT_PAREN (10:46-10:47)
+SEMICOLON (10:47-10:48)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:48
+  (EnumDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:6-1:15
+      name: "Direction"
+    )
+    (EnumConstant
+      range: 2:5-2:10
+      (IdentifierDeclaration
+        range: 2:5-2:10
+        name: "NORTH"
+      )
+    )
+    (EnumConstant
+      range: 3:5-3:10
+      (IdentifierDeclaration
+        range: 3:5-3:10
+        name: "SOUTH"
+      )
+    )
+    (EnumConstant
+      range: 4:5-4:9
+      (IdentifierDeclaration
+        range: 4:5-4:9
+        name: "EAST"
+      )
+    )
+    (EnumConstant
+      range: 5:5-5:9
+      (IdentifierDeclaration
+        range: 5:5-5:9
+        name: "WEST"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:43
+    (CallExpression
+      range: 8:1-8:42
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:41
+        (MemberExpression
+          range: 8:7-8:22
+          (IdentifierExpression
+            range: 8:7-8:16
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 8:17-8:22
+            name: "NORTH"
+          )
+        )
+        operator: EQUAL
+        (MemberExpression
+          range: 8:26-8:41
+          (IdentifierExpression
+            range: 8:26-8:35
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 8:36-8:41
+            name: "NORTH"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:43
+    (CallExpression
+      range: 9:1-9:42
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 9:7-9:41
+        (MemberExpression
+          range: 9:7-9:22
+          (IdentifierExpression
+            range: 9:7-9:16
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 9:17-9:22
+            name: "NORTH"
+          )
+        )
+        operator: EQUAL
+        (MemberExpression
+          range: 9:26-9:41
+          (IdentifierExpression
+            range: 9:26-9:35
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 9:36-9:41
+            name: "SOUTH"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:48
+    (CallExpression
+      range: 10:1-10:47
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:7-10:46
+        (SubscriptExpression
+          range: 10:7-10:28
+          (CallExpression
+            range: 10:7-10:25
+            (MemberExpression
+              range: 10:7-10:23
+              (IdentifierExpression
+                range: 10:7-10:16
+                name: "Direction"
+              )
+              (IdentifierExpression
+                range: 10:17-10:23
+                name: "values"
+              )
+            )
+          )
+          (LiteralExpression
+            range: 10:26-10:27
+            kind: INT
+            text: "2"
+          )
+        )
+        operator: EQUAL
+        (MemberExpression
+          range: 10:32-10:46
+          (IdentifierExpression
+            range: 10:32-10:41
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 10:42-10:46
+            name: "EAST"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:6-1:15 -> [Direction]
+  2:5-2:10 -> Direction
+  3:5-3:10 -> Direction
+  4:5-4:9 -> Direction
+  5:5-5:9 -> Direction
+  8:1-8:6 -> (any) => void
+  8:1-8:42 -> void
+  8:7-8:16 -> Direction
+  8:7-8:22 -> Direction
+  8:7-8:41 -> bool
+  8:17-8:22 -> Direction
+  8:26-8:35 -> Direction
+  8:26-8:41 -> Direction
+  8:36-8:41 -> Direction
+  9:1-9:6 -> (any) => void
+  9:1-9:42 -> void
+  9:7-9:16 -> Direction
+  9:7-9:22 -> Direction
+  9:7-9:41 -> bool
+  9:17-9:22 -> Direction
+  9:26-9:35 -> Direction
+  9:26-9:41 -> Direction
+  9:36-9:41 -> Direction
+  10:1-10:6 -> (any) => void
+  10:1-10:47 -> void
+  10:7-10:16 -> Direction
+  10:7-10:23 -> () => [Direction]
+  10:7-10:25 -> [Direction]
+  10:7-10:28 -> Direction
+  10:7-10:46 -> bool
+  10:17-10:23 -> () => [Direction]
+  10:26-10:27 -> i32
+  10:32-10:41 -> Direction
+  10:32-10:46 -> Direction
+  10:42-10:46 -> Direction
+
+Resolved types:
+  1:6-1:15 -> Direction
+  1:6-1:15 -> [Direction]
+  1:6-1:15 -> i32
+  1:6-1:15 -> string
+  2:5-2:10 -> Direction
+  3:5-3:10 -> Direction
+  4:5-4:9 -> Direction
+  5:5-5:9 -> Direction
+
+Declarations:
+  1:6-1:15 -> class Direction
+  2:5-2:10 -> const NORTH: Direction
+  3:5-3:10 -> const SOUTH: Direction
+  4:5-4:9 -> const EAST: Direction
+  5:5-5:9 -> const WEST: Direction
+
+References:
+  2:5-2:10 -> 1:6-1:15
+  2:5-2:10 -> 2:5-2:10
+  3:5-3:10 -> 1:6-1:15
+  3:5-3:10 -> 3:5-3:10
+  4:5-4:9 -> 1:6-1:15
+  4:5-4:9 -> 4:5-4:9
+  5:5-5:9 -> 1:6-1:15
+  5:5-5:9 -> 5:5-5:9
+  8:1-8:6 -> builtin print
+  8:7-8:16 -> 1:6-1:15
+  8:17-8:22 -> 2:5-2:10
+  8:26-8:35 -> 1:6-1:15
+  8:36-8:41 -> 2:5-2:10
+  9:1-9:6 -> builtin print
+  9:7-9:16 -> 1:6-1:15
+  9:17-9:22 -> 2:5-2:10
+  9:26-9:35 -> 1:6-1:15
+  9:36-9:41 -> 3:5-3:10
+  10:1-10:6 -> builtin print
+  10:7-10:16 -> 1:6-1:15
+  10:17-10:23 -> 1:6-1:15
+  10:32-10:41 -> 1:6-1:15
+  10:42-10:46 -> 4:5-4:9
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Direction
+  inner class Test$Direction flags [PUBLIC, STATIC, FINAL, ENUM]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    IF_ACMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test$Direction.$eldValues()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$Direction
+    GETSTATIC Test$Direction.EAST LTest$Direction;
+    IF_ACMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Direction extends java/lang/Enum version 65.0 flags [PUBLIC, FINAL, SUPER, ENUM]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Direction flags [PUBLIC, STATIC, FINAL, ENUM]
+  field NORTH LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field SOUTH LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field EAST LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field WEST LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Direction
+    DUP
+    LDC "NORTH"
+    LDC 0
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.NORTH LTest$Direction;
+    NEW Test$Direction
+    DUP
+    LDC "SOUTH"
+    LDC 1
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.SOUTH LTest$Direction;
+    NEW Test$Direction
+    DUP
+    LDC "EAST"
+    LDC 2
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.EAST LTest$Direction;
+    NEW Test$Direction
+    DUP
+    LDC "WEST"
+    LDC 3
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.WEST LTest$Direction;
+    RETURN
+    max stack 4 max locals 0
+  method <init>(Ljava/lang/String;I)V flags [PRIVATE]
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL java/lang/Enum.<init>(Ljava/lang/String;I)V
+    RETURN
+    max stack 3 max locals 3
+  method $eldValues()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 4
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    AASTORE
+    DUP
+    LDC 2
+    GETSTATIC Test$Direction.EAST LTest$Direction;
+    AASTORE
+    DUP
+    LDC 3
+    GETSTATIC Test$Direction.WEST LTest$Direction;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    ARETURN
+    max stack 6 max locals 0
+  method values()[LTest$Direction; flags [PUBLIC, STATIC]
+    LDC 4
+    ANEWARRAY Test$Direction
+    DUP
+    LDC 0
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    AASTORE
+    DUP
+    LDC 2
+    GETSTATIC Test$Direction.EAST LTest$Direction;
+    AASTORE
+    DUP
+    LDC 3
+    GETSTATIC Test$Direction.WEST LTest$Direction;
+    AASTORE
+    ARETURN
+    max stack 4 max locals 0
+  method valueOf(Ljava/lang/String;)LTest$Direction; flags [PUBLIC, STATIC]
+    LDC ClassOrInterfaceDesc[Test$Direction]
+    ALOAD_0 0
+    INVOKESTATIC java/lang/Enum.valueOf(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+    CHECKCAST Test$Direction
+    ARETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+true
+false
+true
+

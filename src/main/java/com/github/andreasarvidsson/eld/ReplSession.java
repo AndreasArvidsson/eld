@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
+import com.github.andreasarvidsson.eld.parser.EnumDeclaration;
 import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import java.util.Map;
@@ -58,6 +59,12 @@ public final class ReplSession {
                 );
             }
             else if (item instanceof RecordDeclaration declaration) {
+                classOwners.put(
+                    declaration.name().name(),
+                    name + "$" + declaration.name().name()
+                );
+            }
+            else if (item instanceof EnumDeclaration declaration) {
                 classOwners.put(
                     declaration.name().name(),
                     name + "$" + declaration.name().name()

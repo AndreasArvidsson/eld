@@ -17,6 +17,7 @@ import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
+import com.github.andreasarvidsson.eld.parser.EnumDeclaration;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import java.util.Map;
 import java.util.HashMap;
@@ -118,6 +119,18 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<RecordDeclaration, ClassDeclaration> recordClasses =
         new IdentityHashMap<>();
+    private final IdentityHashMap<EnumDeclaration, ClassDeclaration> enumClasses =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<ClassDeclaration, EnumDeclaration> enumDeclarations =
+        new IdentityHashMap<>();
+    private final Set<NewExpression> enumConstantCreations =
+        Collections.newSetFromMap(new IdentityHashMap<>());
+    private final IdentityHashMap<NewExpression, Integer> enumOrdinals =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<NewExpression, String> enumNames =
+        new IdentityHashMap<>();
+    private final Set<FunctionDeclaration> enumIntrinsics =
+        Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<ClassDeclaration, RecordDeclaration> recordDeclarations =
         new IdentityHashMap<>();
     private final Set<ClassDeclaration> loweredRecordClasses =
@@ -392,6 +405,72 @@ public final class SemanticModel {
 
     public ClassDeclaration getRecordClass(final RecordDeclaration record) {
         return Objects.requireNonNull(recordClasses.get(record));
+    }
+
+    public void setEnumClass(
+        final EnumDeclaration enumeration,
+        final ClassDeclaration declaration
+    ) {
+        enumClasses.put(enumeration, declaration);
+        enumDeclarations.put(declaration, enumeration);
+    }
+
+    public ClassDeclaration getEnumClass(final EnumDeclaration enumeration) {
+        return Objects.requireNonNull(enumClasses.get(enumeration));
+    }
+
+    public @Nullable EnumDeclaration findEnumDeclaration(
+        final ClassDeclaration declaration
+    ) {
+        return enumDeclarations.get(declaration);
+    }
+
+    public boolean isEnumClass(final ClassType type) {
+        return enumClasses.values().stream().anyMatch(declaration -> {
+            final Symbol symbol = declarations.get(declaration.name());
+            return symbol != null && symbol.type().equals(type);
+        });
+    }
+
+    public void setEnumConstantCreation(
+        final NewExpression creation,
+        final String name,
+        final int ordinal
+    ) {
+        enumConstantCreations.add(creation);
+        enumNames.put(creation, name);
+        enumOrdinals.put(creation, ordinal);
+    }
+
+    public boolean isEnumConstantCreation(final NewExpression creation) {
+        return enumConstantCreations.contains(creation);
+    }
+
+    public String getEnumConstantName(final NewExpression creation) {
+        return Objects.requireNonNull(enumNames.get(creation));
+    }
+
+    public int getEnumOrdinal(final NewExpression creation) {
+        return Objects.requireNonNull(enumOrdinals.get(creation));
+    }
+
+    public boolean isEnumConstant(final ClassType type, final String name) {
+        return enumClasses.entrySet().stream().anyMatch(entry -> {
+            final Symbol symbol = declarations.get(entry.getValue().name());
+            return symbol != null && symbol.type().equals(type)
+                && entry.getKey()
+                    .constants()
+                    .stream()
+                    .anyMatch(constant -> constant.name().name().equals(name));
+        });
+    }
+
+    public void setEnumIntrinsic(final FunctionDeclaration method) {
+        enumIntrinsics.add(method);
+    }
+
+    public boolean isEnumIntrinsic(final FunctionDeclaration method) {
+        return enumIntrinsics.contains(method);
     }
 
     public boolean isRecordClass(final ClassDeclaration declaration) {

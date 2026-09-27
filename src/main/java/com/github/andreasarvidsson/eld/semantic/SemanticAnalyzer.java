@@ -34,6 +34,7 @@ import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.Declaration;
 import com.github.andreasarvidsson.eld.parser.DeclarationStatement;
 import com.github.andreasarvidsson.eld.parser.DoWhileStatement;
+import com.github.andreasarvidsson.eld.parser.EnumDeclaration;
 import com.github.andreasarvidsson.eld.parser.DestructuringAssignmentStatement;
 import com.github.andreasarvidsson.eld.parser.DestructuringDeclaration;
 import com.github.andreasarvidsson.eld.parser.DiscardPattern;
@@ -1334,6 +1335,54 @@ public final class SemanticAnalyzer {
                 analyzeInterfaceDeclaration(contract, context);
             case ClassDeclaration classDeclaration ->
                 analyzeClassDeclaration(classDeclaration, context);
+            case EnumDeclaration enumeration -> {
+                final ClassDeclaration lowered =
+                    EnumLowering.lower(enumeration);
+                model.setEnumClass(enumeration, lowered);
+                for (int i = 0; i < enumeration.constants().size(); i++) {
+                    final VariableDeclaration constant =
+                        (VariableDeclaration) lowered.members()
+                            .get(i)
+                            .declaration();
+                    model.setEnumConstantCreation(
+                        (NewExpression) constant.initializer(),
+                        enumeration.constants().get(i).name().name(),
+                        i
+                    );
+                }
+                for (int i = enumeration.constants().size(); i < lowered
+                    .members()
+                    .size(); i++) {
+                    final MemberDeclaration member = lowered.members().get(i);
+                    if (enumeration.members().contains(member)) {
+                        continue;
+                    }
+                    if (
+                        member
+                            .declaration() instanceof FunctionDeclaration method
+                    ) {
+                        model.setSyntheticDeclaration(method.name());
+                        method.parameters()
+                            .forEach(
+                                parameter -> model
+                                    .setSyntheticDeclaration(parameter.name())
+                            );
+                        if (
+                            List.of("name", "ordinal", "valueOf")
+                                .contains(method.name().name())
+                        ) {
+                            model.setEnumIntrinsic(method);
+                        }
+                    }
+                    else if (
+                        member
+                            .declaration() instanceof ConstructorDeclaration constructor
+                    ) {
+                        model.setSyntheticDeclaration(constructor);
+                    }
+                }
+                analyzeClassDeclaration(lowered, context);
+            }
             case RecordDeclaration record -> {
                 final ClassDeclaration lowered = RecordLowering.lower(record);
                 model.setRecordClass(record, lowered);

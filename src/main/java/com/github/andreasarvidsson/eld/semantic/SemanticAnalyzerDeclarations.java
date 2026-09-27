@@ -139,6 +139,12 @@ public final class SemanticAnalyzerDeclarations {
                 );
             }
             final ClassType superclass = superclassSymbol.type();
+            if (model.isEnumClass(superclass)) {
+                throw new SemanticException(
+                    superclassName.range(),
+                    "Enums cannot be extended"
+                );
+            }
             model.setExpressionType(superclassName, superclass);
             if (
                 superclass.equals(classType)
@@ -279,16 +285,29 @@ public final class SemanticAnalyzerDeclarations {
                 }
             }
         }
+        final Scope enumFieldScope = new Scope(context.scope());
         for (final MemberDeclaration memberDeclaration : declaration
             .members()) {
             final Declaration member = memberDeclaration.declaration();
             if (member instanceof VariableDeclaration field) {
-                analyzer.analyzeVariableDeclaration(field, context, members);
+                final SemanticContext fieldContext =
+                    model.isEnumClass(classType)
+                        && memberDeclaration.staticMember()
+                            ? new SemanticContext(enumFieldScope, null, 0)
+                            : context;
+                analyzer
+                    .analyzeVariableDeclaration(field, fieldContext, members);
                 setClassMemberMetadata(
                     memberDeclaration,
                     field.name(),
                     classType
                 );
+                if (
+                    model.isEnumClass(classType)
+                        && memberDeclaration.staticMember()
+                ) {
+                    enumFieldScope.declare(model.getSymbol(field.name()));
+                }
             }
             else if (member instanceof UninitializedVariableDeclaration field) {
                 final Type type = analyzer.resolveType(field.type(), context);
@@ -324,6 +343,22 @@ public final class SemanticAnalyzerDeclarations {
             }
         }
         validateInterfaces(classType, declaration);
+        final Scope enumScope = new Scope(context.scope());
+        if (model.isEnumClass(classType)) {
+            for (final Symbol symbol : members.symbols()) {
+                if (model.isStaticMember(symbol)) {
+                    enumScope.declare(symbol);
+                }
+            }
+        }
+        final SemanticContext bodyContext =
+            model.isEnumClass(classType)
+                ? new SemanticContext(
+                    enumScope,
+                    context.function(),
+                    context.loopDepth()
+                )
+                : context;
         final @Nullable ClassType previousInstance = analyzer.currentInstance();
         final @Nullable ConstructorDeclaration previousConstructor =
             analyzer.currentConstructor();
@@ -336,7 +371,9 @@ public final class SemanticAnalyzerDeclarations {
                     final @Nullable ClassType methodInstance =
                         memberDeclaration.staticMember() ? null : classType;
                     analyzer.setCurrentInstance(methodInstance);
-                    analyzer.analyzeFunctionBody(method, context);
+                    if (!model.isEnumIntrinsic(method)) {
+                        analyzer.analyzeFunctionBody(method, bodyContext);
+                    }
                 }
                 else if (
                     member instanceof StaticInitializerDeclaration initializer
@@ -347,7 +384,7 @@ public final class SemanticAnalyzerDeclarations {
                         analyzer.analyzeBlockStatement(
                             initializer.body(),
                             new SemanticContext(
-                                new Scope(context.scope()),
+                                new Scope(bodyContext.scope()),
                                 null,
                                 0
                             )

@@ -5,5 +5,5 @@ public sealed interface Declaration extends BlockItem
     FunctionDeclaration, IdentifierDeclaration, ConstructorDeclaration,
     UninitializedVariableDeclaration, InterfaceDeclaration,
     TypeAliasDeclaration, DestructuringDeclaration,
-    StaticInitializerDeclaration {
+    StaticInitializerDeclaration, EnumDeclaration {
 }

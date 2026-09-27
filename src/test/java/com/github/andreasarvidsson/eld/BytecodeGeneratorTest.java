@@ -57,6 +57,28 @@ import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
     @Test
+    void enumUsesJvmEnumMetadataAndJavaApi() throws Exception {
+        final Class<?> direction =
+            compileClass("enum Direction { NORTH, SOUTH }", "Test$Direction");
+        assertTrue(direction.isEnum());
+        final Object[] constants = direction.getEnumConstants();
+        assertEquals(2, constants.length);
+        final Enum<?> north = (Enum<?>) constants[0];
+        final Enum<?> south = (Enum<?>) constants[1];
+        assertEquals("NORTH", north.name());
+        assertEquals("NORTH", north.toString());
+        assertEquals("SOUTH", south.name());
+        assertSame(
+            south,
+            direction.getMethod("valueOf", String.class).invoke(null, "SOUTH")
+        );
+        assertNotSame(
+            direction.getMethod("values").invoke(null),
+            direction.getMethod("values").invoke(null)
+        );
+    }
+
+    @Test
     void nullableStringsUseStringPrintOverload() {
         final ClassModel module = inspect("""
             func show(value: string | null) { print(value); }

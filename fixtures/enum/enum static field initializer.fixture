@@ -1,0 +1,253 @@
+enum Direction {
+    NORTH,
+    SOUTH;
+
+    public static const first = NORTH;
+}
+
+print(Direction.first == Direction.NORTH);
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Direction" (1:6-1:15)
+LEFT_BRACE (1:16-1:17)
+IDENTIFIER "NORTH" (2:5-2:10)
+COMMA (2:10-2:11)
+IDENTIFIER "SOUTH" (3:5-3:10)
+SEMICOLON (3:10-3:11)
+PUBLIC (5:5-5:11)
+STATIC (5:12-5:18)
+CONST (5:19-5:24)
+IDENTIFIER "first" (5:25-5:30)
+EQUAL (5:31-5:32)
+IDENTIFIER "NORTH" (5:33-5:38)
+SEMICOLON (5:38-5:39)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "Direction" (8:7-8:16)
+DOT (8:16-8:17)
+IDENTIFIER "first" (8:17-8:22)
+EQUAL_EQUAL (8:23-8:25)
+IDENTIFIER "Direction" (8:26-8:35)
+DOT (8:35-8:36)
+IDENTIFIER "NORTH" (8:36-8:41)
+RIGHT_PAREN (8:41-8:42)
+SEMICOLON (8:42-8:43)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:43
+  (EnumDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:6-1:15
+      name: "Direction"
+    )
+    (EnumConstant
+      range: 2:5-2:10
+      (IdentifierDeclaration
+        range: 2:5-2:10
+        name: "NORTH"
+      )
+    )
+    (EnumConstant
+      range: 3:5-3:10
+      (IdentifierDeclaration
+        range: 3:5-3:10
+        name: "SOUTH"
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:39
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 5:19-5:39
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 5:25-5:30
+          name: "first"
+        )
+        type: null
+        (IdentifierExpression
+          range: 5:33-5:38
+          name: "NORTH"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:43
+    (CallExpression
+      range: 8:1-8:42
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:41
+        (MemberExpression
+          range: 8:7-8:22
+          (IdentifierExpression
+            range: 8:7-8:16
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 8:17-8:22
+            name: "first"
+          )
+        )
+        operator: EQUAL
+        (MemberExpression
+          range: 8:26-8:41
+          (IdentifierExpression
+            range: 8:26-8:35
+            name: "Direction"
+          )
+          (IdentifierExpression
+            range: 8:36-8:41
+            name: "NORTH"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:6-1:15 -> [Direction]
+  2:5-2:10 -> Direction
+  3:5-3:10 -> Direction
+  5:33-5:38 -> Direction
+  8:1-8:6 -> (any) => void
+  8:1-8:42 -> void
+  8:7-8:16 -> Direction
+  8:7-8:22 -> Direction
+  8:7-8:41 -> bool
+  8:17-8:22 -> Direction
+  8:26-8:35 -> Direction
+  8:26-8:41 -> Direction
+  8:36-8:41 -> Direction
+
+Resolved types:
+  1:6-1:15 -> Direction
+  1:6-1:15 -> [Direction]
+  1:6-1:15 -> i32
+  1:6-1:15 -> string
+  2:5-2:10 -> Direction
+  3:5-3:10 -> Direction
+
+Declarations:
+  1:6-1:15 -> class Direction
+  2:5-2:10 -> const NORTH: Direction
+  3:5-3:10 -> const SOUTH: Direction
+  5:25-5:30 -> const first: Direction
+
+References:
+  2:5-2:10 -> 1:6-1:15
+  2:5-2:10 -> 2:5-2:10
+  3:5-3:10 -> 1:6-1:15
+  3:5-3:10 -> 3:5-3:10
+  5:33-5:38 -> 2:5-2:10
+  8:1-8:6 -> builtin print
+  8:7-8:16 -> 1:6-1:15
+  8:17-8:22 -> 5:25-5:30
+  8:26-8:35 -> 1:6-1:15
+  8:36-8:41 -> 2:5-2:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Direction
+  inner class Test$Direction flags [PUBLIC, STATIC, FINAL, ENUM]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test$Direction.first LTest$Direction;
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Direction extends java/lang/Enum version 65.0 flags [PUBLIC, FINAL, SUPER, ENUM]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Direction flags [PUBLIC, STATIC, FINAL, ENUM]
+  field NORTH LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field SOUTH LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field first LTest$Direction; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Direction
+    DUP
+    LDC "NORTH"
+    LDC 0
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.NORTH LTest$Direction;
+    NEW Test$Direction
+    DUP
+    LDC "SOUTH"
+    LDC 1
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.SOUTH LTest$Direction;
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    PUTSTATIC Test$Direction.first LTest$Direction;
+    RETURN
+    max stack 4 max locals 0
+  method <init>(Ljava/lang/String;I)V flags [PRIVATE]
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL java/lang/Enum.<init>(Ljava/lang/String;I)V
+    RETURN
+    max stack 3 max locals 3
+  method $eldValues()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    ARETURN
+    max stack 6 max locals 0
+  method values()[LTest$Direction; flags [PUBLIC, STATIC]
+    LDC 2
+    ANEWARRAY Test$Direction
+    DUP
+    LDC 0
+    GETSTATIC Test$Direction.NORTH LTest$Direction;
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    AASTORE
+    ARETURN
+    max stack 4 max locals 0
+  method valueOf(Ljava/lang/String;)LTest$Direction; flags [PUBLIC, STATIC]
+    LDC ClassOrInterfaceDesc[Test$Direction]
+    ALOAD_0 0
+    INVOKESTATIC java/lang/Enum.valueOf(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+    CHECKCAST Test$Direction
+    ARETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+true
+

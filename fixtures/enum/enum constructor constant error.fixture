@@ -1,0 +1,93 @@
+enum Direction {
+    NORTH,
+    SOUTH;
+
+    Direction() {
+        print(Direction.SOUTH);
+    }
+}
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Direction" (1:6-1:15)
+LEFT_BRACE (1:16-1:17)
+IDENTIFIER "NORTH" (2:5-2:10)
+COMMA (2:10-2:11)
+IDENTIFIER "SOUTH" (3:5-3:10)
+SEMICOLON (3:10-3:11)
+IDENTIFIER "Direction" (5:5-5:14)
+LEFT_PAREN (5:14-5:15)
+RIGHT_PAREN (5:15-5:16)
+LEFT_BRACE (5:17-5:18)
+IDENTIFIER "print" (6:9-6:14)
+LEFT_PAREN (6:14-6:15)
+IDENTIFIER "Direction" (6:15-6:24)
+DOT (6:24-6:25)
+IDENTIFIER "SOUTH" (6:25-6:30)
+RIGHT_PAREN (6:30-6:31)
+SEMICOLON (6:31-6:32)
+RIGHT_BRACE (7:5-7:6)
+RIGHT_BRACE (8:1-8:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:2
+  (EnumDeclaration
+    range: 1:1-8:2
+    (IdentifierDeclaration
+      range: 1:6-1:15
+      name: "Direction"
+    )
+    (EnumConstant
+      range: 2:5-2:10
+      (IdentifierDeclaration
+        range: 2:5-2:10
+        name: "NORTH"
+      )
+    )
+    (EnumConstant
+      range: 3:5-3:10
+      (IdentifierDeclaration
+        range: 3:5-3:10
+        name: "SOUTH"
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-7:6
+      visibility: PRIVATE
+      (ConstructorDeclaration
+        range: 5:5-7:6
+        (BlockStatement
+          range: 5:17-7:6
+          (ExpressionStatement
+            range: 6:9-6:32
+            (CallExpression
+              range: 6:9-6:31
+              (IdentifierExpression
+                range: 6:9-6:14
+                name: "print"
+              )
+              (MemberExpression
+                range: 6:15-6:30
+                (IdentifierExpression
+                  range: 6:15-6:24
+                  name: "Direction"
+                )
+                (IdentifierExpression
+                  range: 6:25-6:30
+                  name: "SOUTH"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Enum constructors cannot access enum constants at 6:25-6:30
