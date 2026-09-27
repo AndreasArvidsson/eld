@@ -64,25 +64,23 @@ RIGHT_BRACE (6:1-6:2)
         range: 3:5-5:6
         (BlockStatement
           range: 3:19-5:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 4:9-4:24
-            (AssignmentExpression
-              range: 4:9-4:23
-              (MemberExpression
-                range: 4:9-4:19
-                (ThisExpression
-                  range: 4:9-4:13
-                )
-                (IdentifierExpression
-                  range: 4:14-4:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
               )
-              (LiteralExpression
-                range: 4:22-4:23
-                kind: INT
-                text: "2"
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
               )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 4:22-4:23
+              kind: INT
+              text: "2"
             )
           )
         )
@@ -93,4 +91,4 @@ RIGHT_BRACE (6:1-6:2)
 
 --- SEMANTIC ---
 
-SemanticException: Const field 'value' may already be initialized at 4:9-4:23
+SemanticException: Const field 'value' may already be initialized at 4:9-4:24

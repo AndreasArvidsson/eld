@@ -185,7 +185,8 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- add enum
+- Trim trailing empty line in fixtures output?
+- Bitwise operators. c-style but allow only for integers.
 - Overloaded functions
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
@@ -195,13 +196,12 @@ protected const bar = 0;
 - Collections std lib
 - create literal types from collection elements
 - Export & import
-- prohibit syntax like `if (value != null && (value = null) == null)`. Make assignment a statement instead of an expression.
-- Stream trailing empty line in fixtures output?
+- Remove postfix operator?
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion
 - Tree sitter parser
-- Warnings in addition to errors
+- Warnings in addition to errors. Flag to turn warnings into errors.
 - Operator overloading
 - Regex literals: `const re: regex = /^\d+$`;
 - Methods like `indexOf` should return `null` instead of `-1` on failure.

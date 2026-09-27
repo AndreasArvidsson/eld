@@ -277,14 +277,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method source()Ljava/util/Map; flags [PUBLIC, STATIC]
     signature ()Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;
     GETSTATIC Test.calls I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.calls I
-    POP
     GETSTATIC Test.old Ljava/util/Map;
     ARETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
   method <clinit>()V flags [STATIC]
     LDC 0
     PUTSTATIC Test.calls I

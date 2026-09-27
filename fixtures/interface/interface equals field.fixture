@@ -305,26 +305,24 @@ SEMICOLON (14:18-14:19)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 13:1-13:16
-    (AssignmentExpression
-      range: 13:1-13:15
-      (MemberExpression
-        range: 13:1-13:11
-        (IdentifierExpression
-          range: 13:1-13:4
-          name: "box"
-        )
-        (IdentifierExpression
-          range: 13:5-13:11
-          name: "equals"
-        )
+    (MemberExpression
+      range: 13:1-13:11
+      (IdentifierExpression
+        range: 13:1-13:4
+        name: "box"
       )
-      (LiteralExpression
-        range: 13:14-13:15
-        kind: INT
-        text: "2"
+      (IdentifierExpression
+        range: 13:5-13:11
+        name: "equals"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 13:14-13:15
+      kind: INT
+      text: "2"
     )
   )
   (ExpressionStatement
@@ -384,7 +382,6 @@ Expression types:
   12:16-12:21 -> Value
   13:1-13:4 -> Box
   13:1-13:11 -> i32
-  13:1-13:15 -> i32
   13:5-13:11 -> i32
   13:14-13:15 -> i32
   14:1-14:6 -> (any) => void
@@ -480,9 +477,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.box LTest$Box;
     LDC 2
-    DUP_X1
     INVOKEINTERFACE Test$Box.$set$equals(I)V
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.box LTest$Box;
     INVOKEINTERFACE Test$Box.$get$equals()I

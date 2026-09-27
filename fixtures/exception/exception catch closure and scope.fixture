@@ -158,28 +158,26 @@ RIGHT_BRACE (12:1-12:2)
       )
       (BlockStatement
         range: 4:26-6:2
-        (ExpressionStatement
+        (AssignmentStatement
           range: 5:5-5:36
-          (AssignmentExpression
-            range: 5:5-5:35
-            (IdentifierExpression
-              range: 5:5-5:12
-              name: "message"
-            )
-            (LambdaExpression
-              range: 5:15-5:35
-              (CallExpression
-                range: 5:21-5:35
-                (MemberExpression
-                  range: 5:21-5:33
-                  (IdentifierExpression
-                    range: 5:21-5:22
-                    name: "e"
-                  )
-                  (IdentifierExpression
-                    range: 5:23-5:33
-                    name: "getMessage"
-                  )
+          (IdentifierExpression
+            range: 5:5-5:12
+            name: "message"
+          )
+          operator: ASSIGN
+          (LambdaExpression
+            range: 5:15-5:35
+            (CallExpression
+              range: 5:21-5:35
+              (MemberExpression
+                range: 5:21-5:33
+                (IdentifierExpression
+                  range: 5:21-5:22
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 5:23-5:33
+                  name: "getMessage"
                 )
               )
             )
@@ -277,7 +275,6 @@ Expression types:
   3:15-3:26 -> IOException
   3:27-3:37 -> string
   5:5-5:12 -> () => string | null
-  5:5-5:35 -> () => string | null
   5:15-5:35 -> () => string | null
   5:21-5:22 -> IOException
   5:21-5:33 -> () => string | null
@@ -362,9 +359,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_0 0
     AASTORE
     INVOKESTATIC java/lang/invoke/MethodHandles.insertArguments(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
-    DUP
     PUTSTATIC Test.message Ljava/lang/invoke/MethodHandle;
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.message Ljava/lang/invoke/MethodHandle;
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;

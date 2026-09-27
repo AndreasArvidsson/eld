@@ -212,7 +212,7 @@ class CommandLineTest {
             session.evaluate("const nulls: [null] = [null, null];");
             session.evaluate("nulls[:];");
         });
-        assertEquals("3\n4\n[1, 2, 4]\nb\nc\n[a, c]\n[null, null]\n", output);
+        assertEquals("3\n[1, 2, 4]\nb\n[a, c]\n[null, null]\n", output);
     }
 
     @Test

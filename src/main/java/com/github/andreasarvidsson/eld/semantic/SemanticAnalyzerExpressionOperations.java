@@ -9,7 +9,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.IntegerLiterals;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
+import com.github.andreasarvidsson.eld.parser.AssignmentOperator;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BinaryOperator;
 import com.github.andreasarvidsson.eld.parser.Expression;
@@ -128,8 +129,8 @@ public final class SemanticAnalyzerExpressionOperations {
             && builtin != BuiltinType.I64;
     }
 
-    public Type analyzeAssignmentExpression(
-        final AssignmentExpression assignment,
+    public Type analyzeAssignmentStatement(
+        final AssignmentStatement assignment,
         final SemanticContext context
     ) {
         Type target =
@@ -141,12 +142,16 @@ public final class SemanticAnalyzerExpressionOperations {
                 .getReference(identifier) instanceof VariableSymbol variable
         ) {
             assignedVariable = variable;
-            target = variable.type();
-            model.setExpressionType(identifier, target);
-            model.clearNarrowedType(identifier);
+            if (assignment.operator() == AssignmentOperator.ASSIGN) {
+                target = variable.type();
+                model.setExpressionType(identifier, target);
+                model.clearNarrowedType(identifier);
+            }
         }
         if (
-            !(analyzer.isInConstructor() && context.function() == null
+            !(assignment.operator() == AssignmentOperator.ASSIGN
+                && analyzer.isInConstructor()
+                && context.function() == null
                 && unwrap(
                     assignment.target()
                 ) instanceof MemberExpression member
@@ -155,7 +160,8 @@ public final class SemanticAnalyzerExpressionOperations {
                     .equals(analyzer.currentInstance())
                 && model
                     .getReference(member.member()) instanceof VariableSymbol)
-                && !(analyzer.isAnalyzingStaticInitializer()
+                && !(assignment.operator() == AssignmentOperator.ASSIGN
+                    && analyzer.isAnalyzingStaticInitializer()
                     && context.function() == null
                     && unwrap(
                         assignment.target()
@@ -174,6 +180,15 @@ public final class SemanticAnalyzerExpressionOperations {
         }
         final Type value =
             expressions.analyzeExpression(assignment.value(), context, target);
+        if (
+            assignment.operator() != AssignmentOperator.ASSIGN
+                && (!numeric(target) || !numeric(value))
+        ) {
+            throw new SemanticException(
+                assignment.range(),
+                "Compound assignment requires numeric operands"
+            );
+        }
         if (
             analyzer
                 .resolveAssignType(value, target, assignment.value()) == null

@@ -185,31 +185,29 @@ SEMICOLON (16:27-16:28)
         )
         (BlockStatement
           range: 3:63-5:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 4:9-4:36
-            (AssignmentExpression
-              range: 4:9-4:35
-              (MemberExpression
-                range: 4:9-4:19
-                (ThisExpression
-                  range: 4:9-4:13
-                )
-                (IdentifierExpression
-                  range: 4:14-4:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
               )
-              (BinaryExpression
-                range: 4:22-4:35
-                (IdentifierExpression
-                  range: 4:22-4:27
-                  name: "value"
-                )
-                operator: ADD
-                (IdentifierExpression
-                  range: 4:30-4:35
-                  name: "extra"
-                )
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 4:22-4:35
+              (IdentifierExpression
+                range: 4:22-4:27
+                name: "value"
+              )
+              operator: ADD
+              (IdentifierExpression
+                range: 4:30-4:35
+                name: "extra"
               )
             )
           )
@@ -362,7 +360,6 @@ Expression types:
   3:60-3:61 -> i32
   4:9-4:13 -> Base
   4:9-4:19 -> i64
-  4:9-4:35 -> i64
   4:14-4:19 -> i64
   4:22-4:27 -> i64
   4:22-4:35 -> i64
@@ -464,9 +461,7 @@ class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     LLOAD_1 1
     LLOAD_3 3
     LADD
-    DUP2_X1
     PUTFIELD Test$Base.value J
-    POP2
     RETURN
     max stack 5 max locals 5
   method <init>(JJI)V flags [PROTECTED, SYNTHETIC]

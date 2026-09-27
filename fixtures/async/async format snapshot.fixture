@@ -104,27 +104,25 @@ SEMICOLON (12:13-12:14)
     )
     (BlockStatement
       range: 3:19-6:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 4:5-4:19
-        (AssignmentExpression
-          range: 4:5-4:18
-          (SubscriptExpression
-            range: 4:5-4:14
-            (IdentifierExpression
-              range: 4:5-4:11
-              name: "values"
-            )
-            (LiteralExpression
-              range: 4:12-4:13
-              kind: INT
-              text: "0"
-            )
+        (SubscriptExpression
+          range: 4:5-4:14
+          (IdentifierExpression
+            range: 4:5-4:11
+            name: "values"
           )
           (LiteralExpression
-            range: 4:17-4:18
+            range: 4:12-4:13
             kind: INT
-            text: "2"
+            text: "0"
           )
+        )
+        operator: ASSIGN
+        (LiteralExpression
+          range: 4:17-4:18
+          kind: INT
+          text: "2"
         )
       )
       (ReturnStatement
@@ -214,7 +212,6 @@ Expression types:
   1:17-1:18 -> i32
   4:5-4:11 -> [i32]
   4:5-4:14 -> i32
-  4:5-4:18 -> i32
   4:12-4:13 -> i32
   4:17-4:18 -> i32
   5:12-5:13 -> i32
@@ -254,12 +251,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 0
     LDC 2
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
-    POP
     LDC 3
     IRETURN
-    max stack 4 max locals 0
+    max stack 3 max locals 0
   method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
     NEW Test$$async0
     DUP

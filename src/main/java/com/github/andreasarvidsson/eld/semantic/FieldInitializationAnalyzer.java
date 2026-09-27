@@ -310,7 +310,7 @@ final class FieldInitializationAnalyzer {
                 }
                 return paths;
             }
-            case AssignmentExpression assignment: {
+            case AssignmentStatement assignment: {
                 final Symbol field = ownField(assignment.target());
                 if (field == null) {
                     return walk(
@@ -319,6 +319,16 @@ final class FieldInitializationAnalyzer {
                     );
                 }
                 requireBaseInitialized(path, assignment);
+                if (
+                    assignment.operator() != AssignmentOperator.ASSIGN
+                        && !path.definite().contains(field)
+                ) {
+                    throw new SemanticException(
+                        assignment.target().range(),
+                        "Field '%s' is read before initialization",
+                        field.name()
+                    );
+                }
                 final List<Path> values = walk(assignment.value(), paths);
                 final List<Path> assigned = new ArrayList<>();
                 for (final Path value : values) {
@@ -547,7 +557,7 @@ final class FieldInitializationAnalyzer {
         final Path initial,
         final @Nullable Expression condition,
         final Statement body,
-        final @Nullable Expression update,
+        final @Nullable AstNode update,
         final boolean doFirst
     ) {
         return loop(initial, condition, body, update, doFirst, false);
@@ -557,7 +567,7 @@ final class FieldInitializationAnalyzer {
         final Path initial,
         final @Nullable Expression condition,
         final Statement body,
-        final @Nullable Expression update,
+        final @Nullable AstNode update,
         final boolean doFirst,
         final boolean foreach
     ) {
@@ -598,7 +608,7 @@ final class FieldInitializationAnalyzer {
     private List<Path> loopBody(
         final Statement body,
         final List<Path> entry,
-        final @Nullable Expression update,
+        final @Nullable AstNode update,
         final List<Path> exits
     ) {
         final List<Path> back = new ArrayList<>();

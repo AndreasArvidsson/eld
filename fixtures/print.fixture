@@ -1,4 +1,7 @@
 print("Hello world");
+print("");
+print();
+print("END");
 
 --- TOKENS ---
 
@@ -7,11 +10,25 @@ LEFT_PAREN (1:6-1:7)
 STRING_LITERAL "\"Hello world\"" (1:7-1:20)
 RIGHT_PAREN (1:20-1:21)
 SEMICOLON (1:21-1:22)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"\"" (2:7-2:9)
+RIGHT_PAREN (2:9-2:10)
+SEMICOLON (2:10-2:11)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+RIGHT_PAREN (3:7-3:8)
+SEMICOLON (3:8-3:9)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"END\"" (4:7-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:22
+  range: 1:1-4:14
   (ExpressionStatement
     range: 1:1-1:22
     (CallExpression
@@ -27,6 +44,46 @@ SEMICOLON (1:21-1:22)
       )
     )
   )
+  (ExpressionStatement
+    range: 2:1-2:11
+    (CallExpression
+      range: 2:1-2:10
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 2:7-2:9
+        kind: STRING
+        text: "\"\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:9
+    (CallExpression
+      range: 3:1-3:8
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:14
+    (CallExpression
+      range: 4:1-4:13
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 4:7-4:12
+        kind: STRING
+        text: "\"END\""
+      )
+    )
+  )
 )
 
 --- SEMANTIC ---
@@ -35,9 +92,20 @@ Expression types:
   1:1-1:6 -> (any) => void
   1:1-1:21 -> void
   1:7-1:20 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:10 -> void
+  2:7-2:9 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:8 -> void
+  4:1-4:6 -> (any) => void
+  4:1-4:13 -> void
+  4:7-4:12 -> string
 
 References:
   1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+  3:1-3:6 -> builtin print
+  4:1-4:6 -> builtin print
 
 --- BYTECODE ---
 
@@ -46,10 +114,21 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "Hello world"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println()V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "END"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 2 max locals 0
 
 --- OUTPUT ---
 
 Hello world
+
+
+END
 

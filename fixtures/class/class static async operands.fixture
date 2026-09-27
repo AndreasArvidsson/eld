@@ -218,41 +218,39 @@ SEMICOLON (15:21-15:22)
               )
             )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 10:9-10:51
-            (AssignmentExpression
-              range: 10:9-10:50
-              (MemberExpression
-                range: 10:9-10:22
-                (IdentifierExpression
-                  range: 10:9-10:16
-                  name: "Example"
-                )
-                (IdentifierExpression
-                  range: 10:17-10:22
-                  name: "value"
-                )
+            (MemberExpression
+              range: 10:9-10:22
+              (IdentifierExpression
+                range: 10:9-10:16
+                name: "Example"
               )
-              (AwaitExpression
-                range: 10:25-10:50
-                (CallExpression
-                  range: 10:31-10:50
-                  (MemberExpression
-                    range: 10:31-10:46
-                    (IdentifierExpression
-                      range: 10:31-10:38
-                      name: "Promise"
-                    )
-                    (IdentifierExpression
-                      range: 10:39-10:46
-                      name: "resolve"
-                    )
+              (IdentifierExpression
+                range: 10:17-10:22
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (AwaitExpression
+              range: 10:25-10:50
+              (CallExpression
+                range: 10:31-10:50
+                (MemberExpression
+                  range: 10:31-10:46
+                  (IdentifierExpression
+                    range: 10:31-10:38
+                    name: "Promise"
                   )
-                  (LiteralExpression
-                    range: 10:47-10:49
-                    kind: INT
-                    text: "42"
+                  (IdentifierExpression
+                    range: 10:39-10:46
+                    name: "resolve"
                   )
+                )
+                (LiteralExpression
+                  range: 10:47-10:49
+                  kind: INT
+                  text: "42"
                 )
               )
             )
@@ -317,7 +315,6 @@ Expression types:
   9:47-9:49 -> i32
   10:9-10:16 -> Example
   10:9-10:22 -> i32
-  10:9-10:50 -> i32
   10:17-10:22 -> i32
   10:25-10:50 -> i32
   10:31-10:50 -> Promise<i32>
@@ -472,11 +469,7 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_1 1
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
-    ISTORE 4
-    ILOAD 4
-    DUP
     PUTSTATIC Test$Example.value I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test$Example.value I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
@@ -485,14 +478,14 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
     RETURN
    L6:
-    ASTORE 5
+    ASTORE 4
     ALOAD_0 0
     GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
-    ALOAD 5
+    ALOAD 4
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
     RETURN
     catch all from L1 to L6 handler L6
-    max stack 3 max locals 6
+    max stack 3 max locals 5
 
 --- OUTPUT ---
 

@@ -35,13 +35,16 @@ RIGHT_BRACE (1:22-1:23)
         text: "10"
       )
     )
-    (PostfixExpression
+    (ExpressionStatement
       range: 1:16-1:19
-      (IdentifierExpression
-        range: 1:16-1:17
-        name: "i"
+      (PostfixExpression
+        range: 1:16-1:19
+        (IdentifierExpression
+          range: 1:16-1:17
+          name: "i"
+        )
+        operator: INCREMENT
       )
-      operator: INCREMENT
     )
     (BlockStatement
       range: 1:21-1:23

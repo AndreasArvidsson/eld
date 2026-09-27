@@ -164,7 +164,8 @@ class PrimitiveArrayTest {
                     var values: [%s] = [%s, %s, %s];
                     var first = values[0];
                     var last = values[-1];
-                    var assigned = values[-1] = values[0];
+                    var assigned = values[0];
+                    values[-1] = assigned;
                     var copy = values[:];
                     var tail = values[-2:];
                     var head = values[:2];

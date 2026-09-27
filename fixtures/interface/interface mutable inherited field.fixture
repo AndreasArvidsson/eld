@@ -207,26 +207,24 @@ SEMICOLON (14:19-14:20)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 13:1-13:17
-    (AssignmentExpression
-      range: 13:1-13:16
-      (MemberExpression
-        range: 13:1-13:12
-        (IdentifierExpression
-          range: 13:1-13:6
-          name: "value"
-        )
-        (IdentifierExpression
-          range: 13:7-13:12
-          name: "value"
-        )
+    (MemberExpression
+      range: 13:1-13:12
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "value"
       )
-      (LiteralExpression
-        range: 13:15-13:16
-        kind: INT
-        text: "7"
+      (IdentifierExpression
+        range: 13:7-13:12
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 13:15-13:16
+      kind: INT
+      text: "7"
     )
   )
   (ExpressionStatement
@@ -262,7 +260,6 @@ Expression types:
   12:31-12:34 -> Box
   13:1-13:6 -> NamedValue
   13:1-13:12 -> i32
-  13:1-13:16 -> i32
   13:7-13:12 -> i32
   13:15-13:16 -> i32
   14:1-14:6 -> (any) => void
@@ -317,15 +314,13 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.value LTest$NamedValue;
     GETSTATIC Test.value LTest$NamedValue;
     LDC 7
-    DUP_X1
     INVOKEINTERFACE Test$NamedValue.$set$value(I)V
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.value LTest$NamedValue;
     INVOKEINTERFACE Test$NamedValue.$get$value()I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
 
 class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
   nest host Test

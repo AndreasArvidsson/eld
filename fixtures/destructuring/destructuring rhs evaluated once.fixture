@@ -255,11 +255,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field second I flags [PUBLIC, STATIC, FINAL]
   method run()Lcom/github/andreasarvidsson/eld/runtime/EldTuple; flags [PUBLIC, STATIC]
     GETSTATIC Test.calls I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.calls I
-    POP
     NEW com/github/andreasarvidsson/eld/runtime/EldTuple
     DUP
     LDC 2

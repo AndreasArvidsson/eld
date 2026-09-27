@@ -176,35 +176,33 @@ SEMICOLON (12:14-12:15)
     )
     (BlockStatement
       range: 3:21-5:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 4:5-4:28
-        (AssignmentExpression
-          range: 4:5-4:27
-          (IdentifierExpression
-            range: 4:5-4:10
-            name: "calls"
-          )
+        (IdentifierExpression
+          range: 4:5-4:10
+          name: "calls"
+        )
+        operator: ASSIGN
+        (BinaryExpression
+          range: 4:13-4:27
           (BinaryExpression
-            range: 4:13-4:27
-            (BinaryExpression
-              range: 4:13-4:23
-              (IdentifierExpression
-                range: 4:13-4:18
-                name: "calls"
-              )
-              operator: MULTIPLY
-              (LiteralExpression
-                range: 4:21-4:23
-                kind: INT
-                text: "10"
-              )
+            range: 4:13-4:23
+            (IdentifierExpression
+              range: 4:13-4:18
+              name: "calls"
             )
-            operator: ADD
+            operator: MULTIPLY
             (LiteralExpression
-              range: 4:26-4:27
+              range: 4:21-4:23
               kind: INT
-              text: "2"
+              text: "10"
             )
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 4:26-4:27
+            kind: INT
+            text: "2"
           )
         )
       )
@@ -242,57 +240,53 @@ SEMICOLON (12:14-12:15)
     )
     (BlockStatement
       range: 6:24-8:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 7:5-7:28
-        (AssignmentExpression
-          range: 7:5-7:27
-          (IdentifierExpression
-            range: 7:5-7:10
-            name: "calls"
-          )
+        (IdentifierExpression
+          range: 7:5-7:10
+          name: "calls"
+        )
+        operator: ASSIGN
+        (BinaryExpression
+          range: 7:13-7:27
           (BinaryExpression
-            range: 7:13-7:27
-            (BinaryExpression
-              range: 7:13-7:23
-              (IdentifierExpression
-                range: 7:13-7:18
-                name: "calls"
-              )
-              operator: MULTIPLY
-              (LiteralExpression
-                range: 7:21-7:23
-                kind: INT
-                text: "10"
-              )
-            )
-            operator: ADD
+            range: 7:13-7:23
             (IdentifierExpression
-              range: 7:26-7:27
-              name: "n"
+              range: 7:13-7:18
+              name: "calls"
             )
+            operator: MULTIPLY
+            (LiteralExpression
+              range: 7:21-7:23
+              kind: INT
+              text: "10"
+            )
+          )
+          operator: ADD
+          (IdentifierExpression
+            range: 7:26-7:27
+            name: "n"
           )
         )
       )
-      (ExpressionStatement
+      (AssignmentStatement
         range: 7:29-7:43
-        (AssignmentExpression
-          range: 7:29-7:42
-          (SubscriptExpression
-            range: 7:29-7:38
-            (IdentifierExpression
-              range: 7:29-7:35
-              name: "source"
-            )
-            (LiteralExpression
-              range: 7:36-7:37
-              kind: INT
-              text: "0"
-            )
-          )
+        (SubscriptExpression
+          range: 7:29-7:38
           (IdentifierExpression
-            range: 7:41-7:42
-            name: "n"
+            range: 7:29-7:35
+            name: "source"
           )
+          (LiteralExpression
+            range: 7:36-7:37
+            kind: INT
+            text: "0"
+          )
+        )
+        operator: ASSIGN
+        (IdentifierExpression
+          range: 7:41-7:42
+          name: "n"
         )
       )
       (ReturnStatement
@@ -424,7 +418,6 @@ Expression types:
   2:17-2:18 -> i32
   2:20-2:21 -> i32
   4:5-4:10 -> i32
-  4:5-4:27 -> i32
   4:13-4:18 -> i32
   4:13-4:23 -> i32
   4:13-4:27 -> i32
@@ -432,7 +425,6 @@ Expression types:
   4:26-4:27 -> i32
   4:36-4:42 -> [i32]
   7:5-7:10 -> i32
-  7:5-7:27 -> i32
   7:13-7:18 -> i32
   7:13-7:23 -> i32
   7:13-7:27 -> i32
@@ -440,7 +432,6 @@ Expression types:
   7:26-7:27 -> i32
   7:29-7:35 -> [i32]
   7:29-7:38 -> i32
-  7:29-7:42 -> i32
   7:36-7:37 -> i32
   7:41-7:42 -> i32
   7:51-7:52 -> i32
@@ -518,9 +509,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     IMUL
     LDC 2
     IADD
-    DUP
     PUTSTATIC Test.calls I
-    POP
     GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     ARETURN
     max stack 2 max locals 0
@@ -530,18 +519,14 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     IMUL
     ILOAD_0 0
     IADD
-    DUP
     PUTSTATIC Test.calls I
-    POP
     GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 0
     ILOAD_0 0
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
-    POP
     ILOAD_0 0
     IRETURN
-    max stack 4 max locals 1
+    max stack 3 max locals 1
   method <clinit>()V flags [STATIC]
     LDC 0
     PUTSTATIC Test.calls I

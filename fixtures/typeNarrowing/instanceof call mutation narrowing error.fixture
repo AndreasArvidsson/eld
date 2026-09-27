@@ -186,20 +186,18 @@ RIGHT_BRACE (13:1-13:2)
     )
     (BlockStatement
       range: 7:30-10:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 8:5-8:28
-        (AssignmentExpression
-          range: 8:5-8:27
+        (IdentifierExpression
+          range: 8:5-8:10
+          name: "value"
+        )
+        operator: ASSIGN
+        (NewExpression
+          range: 8:13-8:27
           (IdentifierExpression
-            range: 8:5-8:10
-            name: "value"
-          )
-          (NewExpression
-            range: 8:13-8:27
-            (IdentifierExpression
-              range: 8:17-8:25
-              name: "DerivedB"
-            )
+            range: 8:17-8:25
+            name: "DerivedB"
           )
         )
       )

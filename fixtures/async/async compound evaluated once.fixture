@@ -304,14 +304,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field calls I flags [PUBLIC, STATIC]
   method next()I flags [PUBLIC, STATIC]
     GETSTATIC Test.calls I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.calls I
-    POP
     GETSTATIC Test.calls I
     IRETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
   method consume(Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;)V flags [PUBLIC, STATIC]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0

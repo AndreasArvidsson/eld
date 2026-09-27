@@ -73,19 +73,17 @@ SEMICOLON (6:11-6:12)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 3:1-3:12
-    (AssignmentExpression
-      range: 3:1-3:11
-      (IdentifierExpression
-        range: 3:1-3:4
-        name: "foo"
-      )
-      (LiteralExpression
-        range: 3:7-3:11
-        kind: BOOL
-        text: "true"
-      )
+    (IdentifierExpression
+      range: 3:1-3:4
+      name: "foo"
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 3:7-3:11
+      kind: BOOL
+      text: "true"
     )
   )
   (ExpressionStatement
@@ -102,19 +100,17 @@ SEMICOLON (6:11-6:12)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 5:1-5:12
-    (AssignmentExpression
-      range: 5:1-5:11
-      (IdentifierExpression
-        range: 5:1-5:4
-        name: "foo"
-      )
-      (LiteralExpression
-        range: 5:7-5:11
-        kind: NULL
-        text: "null"
-      )
+    (IdentifierExpression
+      range: 5:1-5:4
+      name: "foo"
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 5:7-5:11
+      kind: NULL
+      text: "null"
     )
   )
   (ExpressionStatement
@@ -141,13 +137,11 @@ Expression types:
   2:1-2:11 -> void
   2:7-2:10 -> any
   3:1-3:4 -> any
-  3:1-3:11 -> any
   3:7-3:11 -> bool
   4:1-4:6 -> (any) => void
   4:1-4:11 -> void
   4:7-4:10 -> any
   5:1-5:4 -> any
-  5:1-5:11 -> any
   5:7-5:11 -> null
   6:1-6:6 -> (any) => void
   6:1-6:11 -> void
@@ -187,16 +181,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     ICONST_1 1
     INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
-    DUP
     PUTSTATIC Test.foo Ljava/lang/Object;
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo Ljava/lang/Object;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    DUP
     PUTSTATIC Test.foo Ljava/lang/Object;
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo Ljava/lang/Object;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V

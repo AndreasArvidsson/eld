@@ -134,17 +134,15 @@ SEMICOLON (13:18-13:19)
               )
             )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 6:9-6:23
-            (AssignmentExpression
-              range: 6:9-6:22
-              (IdentifierExpression
-                range: 6:9-6:15
-                name: "result"
-              )
-              (ThisExpression
-                range: 6:18-6:22
-              )
+            (IdentifierExpression
+              range: 6:9-6:15
+              name: "result"
+            )
+            operator: ASSIGN
+            (ThisExpression
+              range: 6:18-6:22
             )
           )
           (ReturnStatement
@@ -203,26 +201,24 @@ SEMICOLON (13:18-13:19)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 13:1-13:19
-    (AssignmentExpression
-      range: 13:1-13:18
-      (MemberExpression
-        range: 13:1-13:14
-        (IdentifierExpression
-          range: 13:1-13:8
-          name: "exposed"
-        )
-        (IdentifierExpression
-          range: 13:9-13:14
-          name: "value"
-        )
+    (MemberExpression
+      range: 13:1-13:14
+      (IdentifierExpression
+        range: 13:1-13:8
+        name: "exposed"
       )
-      (LiteralExpression
-        range: 13:17-13:18
-        kind: INT
-        text: "1"
+      (IdentifierExpression
+        range: 13:9-13:14
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 13:17-13:18
+      kind: INT
+      text: "1"
     )
   )
 )

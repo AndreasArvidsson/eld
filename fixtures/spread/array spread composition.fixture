@@ -313,27 +313,25 @@ SEMICOLON (13:13-13:14)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 8:1-8:14
-    (AssignmentExpression
-      range: 8:1-8:13
-      (SubscriptExpression
-        range: 8:1-8:9
-        (IdentifierExpression
-          range: 8:1-8:6
-          name: "first"
-        )
-        (LiteralExpression
-          range: 8:7-8:8
-          kind: INT
-          text: "0"
-        )
+    (SubscriptExpression
+      range: 8:1-8:9
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "first"
       )
       (LiteralExpression
-        range: 8:12-8:13
+        range: 8:7-8:8
         kind: INT
-        text: "9"
+        text: "0"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 8:12-8:13
+      kind: INT
+      text: "9"
     )
   )
   (ExpressionStatement
@@ -443,7 +441,6 @@ Expression types:
   7:37-7:40 -> string
   8:1-8:6 -> [i32]
   8:1-8:9 -> i32
-  8:1-8:13 -> i32
   8:7-8:8 -> i32
   8:12-8:13 -> i32
   9:1-9:6 -> (any) => void
@@ -762,9 +759,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.first Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 0
     LDC 9
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V

@@ -71,48 +71,44 @@ RIGHT_BRACE (8:1-8:2)
         range: 4:5-7:6
         (BlockStatement
           range: 4:12-7:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 5:9-5:27
-            (AssignmentExpression
-              range: 5:9-5:26
-              (MemberExpression
-                range: 5:9-5:22
-                (IdentifierExpression
-                  range: 5:9-5:16
-                  name: "Example"
-                )
-                (IdentifierExpression
-                  range: 5:17-5:22
-                  name: "value"
-                )
+            (MemberExpression
+              range: 5:9-5:22
+              (IdentifierExpression
+                range: 5:9-5:16
+                name: "Example"
               )
-              (LiteralExpression
-                range: 5:25-5:26
-                kind: INT
-                text: "1"
+              (IdentifierExpression
+                range: 5:17-5:22
+                name: "value"
               )
             )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 5:25-5:26
+              kind: INT
+              text: "1"
+            )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 6:9-6:27
-            (AssignmentExpression
-              range: 6:9-6:26
-              (MemberExpression
-                range: 6:9-6:22
-                (IdentifierExpression
-                  range: 6:9-6:16
-                  name: "Example"
-                )
-                (IdentifierExpression
-                  range: 6:17-6:22
-                  name: "value"
-                )
+            (MemberExpression
+              range: 6:9-6:22
+              (IdentifierExpression
+                range: 6:9-6:16
+                name: "Example"
               )
-              (LiteralExpression
-                range: 6:25-6:26
-                kind: INT
-                text: "2"
+              (IdentifierExpression
+                range: 6:17-6:22
+                name: "value"
               )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 6:25-6:26
+              kind: INT
+              text: "2"
             )
           )
         )
@@ -123,4 +119,4 @@ RIGHT_BRACE (8:1-8:2)
 
 --- SEMANTIC ---
 
-SemanticException: Const field 'value' may already be initialized at 6:9-6:26
+SemanticException: Const field 'value' may already be initialized at 6:9-6:27

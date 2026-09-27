@@ -242,34 +242,32 @@ SEMICOLON (17:24-17:25)
     )
     (BlockStatement
       range: 3:38-6:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 4:5-4:28
-        (AssignmentExpression
-          range: 4:5-4:27
-          (IdentifierExpression
-            range: 4:5-4:10
-            name: "calls"
-          )
+        (IdentifierExpression
+          range: 4:5-4:10
+          name: "calls"
+        )
+        operator: ASSIGN
+        (BinaryExpression
+          range: 4:13-4:27
           (BinaryExpression
-            range: 4:13-4:27
-            (BinaryExpression
-              range: 4:13-4:23
-              (IdentifierExpression
-                range: 4:13-4:18
-                name: "calls"
-              )
-              operator: MULTIPLY
-              (LiteralExpression
-                range: 4:21-4:23
-                kind: INT
-                text: "10"
-              )
-            )
-            operator: ADD
+            range: 4:13-4:23
             (IdentifierExpression
-              range: 4:26-4:27
-              name: "n"
+              range: 4:13-4:18
+              name: "calls"
             )
+            operator: MULTIPLY
+            (LiteralExpression
+              range: 4:21-4:23
+              kind: INT
+              text: "10"
+            )
+          )
+          operator: ADD
+          (IdentifierExpression
+            range: 4:26-4:27
+            name: "n"
           )
         )
       )
@@ -307,34 +305,32 @@ SEMICOLON (17:24-17:25)
     )
     (BlockStatement
       range: 7:24-10:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 8:5-8:28
-        (AssignmentExpression
-          range: 8:5-8:27
-          (IdentifierExpression
-            range: 8:5-8:10
-            name: "calls"
-          )
+        (IdentifierExpression
+          range: 8:5-8:10
+          name: "calls"
+        )
+        operator: ASSIGN
+        (BinaryExpression
+          range: 8:13-8:27
           (BinaryExpression
-            range: 8:13-8:27
-            (BinaryExpression
-              range: 8:13-8:23
-              (IdentifierExpression
-                range: 8:13-8:18
-                name: "calls"
-              )
-              operator: MULTIPLY
-              (LiteralExpression
-                range: 8:21-8:23
-                kind: INT
-                text: "10"
-              )
-            )
-            operator: ADD
+            range: 8:13-8:23
             (IdentifierExpression
-              range: 8:26-8:27
-              name: "n"
+              range: 8:13-8:18
+              name: "calls"
             )
+            operator: MULTIPLY
+            (LiteralExpression
+              range: 8:21-8:23
+              kind: INT
+              text: "10"
+            )
+          )
+          operator: ADD
+          (IdentifierExpression
+            range: 8:26-8:27
+            name: "n"
           )
         )
       )
@@ -581,7 +577,6 @@ Expression types:
   2:14-2:21 -> string
   2:23-2:25 -> i32
   4:5-4:10 -> i32
-  4:5-4:27 -> i32
   4:13-4:18 -> i32
   4:13-4:23 -> i32
   4:13-4:27 -> i32
@@ -589,7 +584,6 @@ Expression types:
   4:26-4:27 -> i32
   5:12-5:15 -> Map<string, i32>
   8:5-8:10 -> i32
-  8:5-8:27 -> i32
   8:13-8:18 -> i32
   8:13-8:23 -> i32
   8:13-8:27 -> i32
@@ -703,9 +697,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     IMUL
     ILOAD_0 0
     IADD
-    DUP
     PUTSTATIC Test.calls I
-    POP
     GETSTATIC Test.old Ljava/util/Map;
     ARETURN
     max stack 2 max locals 1
@@ -715,9 +707,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     IMUL
     ILOAD_0 0
     IADD
-    DUP
     PUTSTATIC Test.calls I
-    POP
     ILOAD_0 0
     IRETURN
     max stack 2 max locals 1

@@ -163,26 +163,24 @@ SEMICOLON (12:17-12:18)
       name: "box"
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 9:1-9:17
-    (AssignmentExpression
-      range: 9:1-9:16
-      (MemberExpression
-        range: 9:1-9:12
-        (IdentifierExpression
-          range: 9:1-9:6
-          name: "value"
-        )
-        (IdentifierExpression
-          range: 9:7-9:12
-          name: "value"
-        )
+    (MemberExpression
+      range: 9:1-9:12
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "value"
       )
-      (LiteralExpression
-        range: 9:15-9:16
-        kind: INT
-        text: "7"
+      (IdentifierExpression
+        range: 9:7-9:12
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 9:15-9:16
+      kind: INT
+      text: "7"
     )
   )
   (ExpressionStatement
@@ -263,7 +261,6 @@ Expression types:
   8:22-8:25 -> Box
   9:1-9:6 -> Value
   9:1-9:12 -> i32
-  9:1-9:16 -> i32
   9:7-9:12 -> i32
   9:15-9:16 -> i32
   10:1-10:6 -> (any) => void
@@ -329,9 +326,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.value LTest$Value;
     GETSTATIC Test.value LTest$Value;
     LDC 7
-    DUP_X1
     INVOKEINTERFACE Test$Value.$set$value(I)V
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.box LTest$Box;
     GETFIELD Test$Box.value I

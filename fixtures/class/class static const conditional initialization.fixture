@@ -83,26 +83,24 @@ RIGHT_BRACE (9:1-9:2)
               )
               (BlockStatement
                 range: 5:19-7:10
-                (ExpressionStatement
+                (AssignmentStatement
                   range: 6:13-6:31
-                  (AssignmentExpression
-                    range: 6:13-6:30
-                    (MemberExpression
-                      range: 6:13-6:26
-                      (IdentifierExpression
-                        range: 6:13-6:20
-                        name: "Example"
-                      )
-                      (IdentifierExpression
-                        range: 6:21-6:26
-                        name: "value"
-                      )
+                  (MemberExpression
+                    range: 6:13-6:26
+                    (IdentifierExpression
+                      range: 6:13-6:20
+                      name: "Example"
                     )
-                    (LiteralExpression
-                      range: 6:29-6:30
-                      kind: INT
-                      text: "1"
+                    (IdentifierExpression
+                      range: 6:21-6:26
+                      name: "value"
                     )
+                  )
+                  operator: ASSIGN
+                  (LiteralExpression
+                    range: 6:29-6:30
+                    kind: INT
+                    text: "1"
                   )
                 )
               )

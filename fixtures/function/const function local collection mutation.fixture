@@ -99,27 +99,25 @@ SEMICOLON (8:21-8:22)
           )
         )
       )
-      (ExpressionStatement
+      (AssignmentStatement
         range: 3:5-3:19
-        (AssignmentExpression
-          range: 3:5-3:18
-          (SubscriptExpression
-            range: 3:5-3:14
-            (IdentifierExpression
-              range: 3:5-3:11
-              name: "values"
-            )
-            (LiteralExpression
-              range: 3:12-3:13
-              kind: INT
-              text: "0"
-            )
+        (SubscriptExpression
+          range: 3:5-3:14
+          (IdentifierExpression
+            range: 3:5-3:11
+            name: "values"
           )
           (LiteralExpression
-            range: 3:17-3:18
+            range: 3:12-3:13
             kind: INT
-            text: "2"
+            text: "0"
           )
+        )
+        operator: ASSIGN
+        (LiteralExpression
+          range: 3:17-3:18
+          kind: INT
+          text: "2"
         )
       )
       (ExpressionStatement
@@ -184,7 +182,6 @@ Expression types:
   2:25-2:26 -> i32
   3:5-3:11 -> [i32]
   3:5-3:14 -> i32
-  3:5-3:18 -> i32
   3:12-3:13 -> i32
   3:17-3:18 -> i32
   4:5-4:11 -> [i32]
@@ -239,9 +236,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_0 0
     LDC 0
     LDC 2
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
-    POP
     ALOAD_0 0
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sort()V
     ALOAD_0 0

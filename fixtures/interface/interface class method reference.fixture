@@ -180,24 +180,22 @@ SEMICOLON (17:21-17:22)
         )
         (BlockStatement
           range: 6:36-8:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 7:9-7:28
-            (AssignmentExpression
-              range: 7:9-7:27
-              (MemberExpression
-                range: 7:9-7:19
-                (ThisExpression
-                  range: 7:9-7:13
-                )
-                (IdentifierExpression
-                  range: 7:14-7:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 7:9-7:19
+              (ThisExpression
+                range: 7:9-7:13
               )
               (IdentifierExpression
-                range: 7:22-7:27
+                range: 7:14-7:19
                 name: "value"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 7:22-7:27
+              name: "value"
             )
           )
         )
@@ -279,25 +277,23 @@ SEMICOLON (17:21-17:22)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 15:1-15:21
-    (AssignmentExpression
-      range: 15:1-15:20
+    (IdentifierExpression
+      range: 15:1-15:7
+      name: "reader"
+    )
+    operator: ASSIGN
+    (NewExpression
+      range: 15:10-15:20
       (IdentifierExpression
-        range: 15:1-15:7
-        name: "reader"
+        range: 15:14-15:17
+        name: "Box"
       )
-      (NewExpression
-        range: 15:10-15:20
-        (IdentifierExpression
-          range: 15:14-15:17
-          name: "Box"
-        )
-        (LiteralExpression
-          range: 15:18-15:19
-          kind: INT
-          text: "2"
-        )
+      (LiteralExpression
+        range: 15:18-15:19
+        kind: INT
+        text: "2"
       )
     )
   )
@@ -349,7 +345,6 @@ SEMICOLON (17:21-17:22)
 Expression types:
   7:9-7:13 -> Box
   7:9-7:19 -> i32
-  7:9-7:27 -> i32
   7:14-7:19 -> i32
   7:22-7:27 -> i32
   10:16-10:20 -> Box
@@ -362,7 +357,6 @@ Expression types:
   14:14-14:25 -> () => i32
   14:21-14:25 -> () => i32
   15:1-15:7 -> Reader
-  15:1-15:20 -> Reader
   15:10-15:20 -> Box
   15:14-15:17 -> Box
   15:18-15:19 -> i32
@@ -434,9 +428,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     LDC 2
     INVOKESPECIAL Test$Box.<init>(I)V
-    DUP
     PUTSTATIC Test.reader LTest$Reader;
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.read Ljava/lang/invoke/MethodHandle;
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
@@ -464,11 +456,9 @@ class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Box.value I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
   method read()I flags [PUBLIC]
     ALOAD_0 0
     GETFIELD Test$Box.value I

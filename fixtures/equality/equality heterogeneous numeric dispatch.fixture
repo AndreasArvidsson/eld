@@ -1222,24 +1222,20 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field rightCalls I flags [PUBLIC, STATIC]
   method left()Ljava/lang/Object; flags [PUBLIC, STATIC]
     GETSTATIC Test.leftCalls I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.leftCalls I
-    POP
     GETSTATIC Test.smallUnion Ljava/lang/Object;
     ARETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
   method right()I flags [PUBLIC, STATIC]
     GETSTATIC Test.rightCalls I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.rightCalls I
-    POP
     LDC 100
     IRETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
   method <clinit>()V flags [STATIC]
     GETSTATIC Test.small B
     INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;

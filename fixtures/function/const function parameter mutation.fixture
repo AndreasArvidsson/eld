@@ -98,26 +98,24 @@ SEMICOLON (9:18-9:19)
     returnType: null
     (BlockStatement
       range: 5:29-7:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 6:5-6:19
-        (AssignmentExpression
-          range: 6:5-6:18
-          (MemberExpression
-            range: 6:5-6:14
-            (IdentifierExpression
-              range: 6:5-6:8
-              name: "box"
-            )
-            (IdentifierExpression
-              range: 6:9-6:14
-              name: "value"
-            )
+        (MemberExpression
+          range: 6:5-6:14
+          (IdentifierExpression
+            range: 6:5-6:8
+            name: "box"
           )
-          (LiteralExpression
-            range: 6:17-6:18
-            kind: INT
-            text: "1"
+          (IdentifierExpression
+            range: 6:9-6:14
+            name: "value"
           )
+        )
+        operator: ASSIGN
+        (LiteralExpression
+          range: 6:17-6:18
+          kind: INT
+          text: "1"
         )
       )
     )

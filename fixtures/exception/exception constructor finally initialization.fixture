@@ -104,25 +104,23 @@ SEMICOLON (12:22-12:23)
             )
             (BlockStatement
               range: 6:19-8:10
-              (ExpressionStatement
+              (AssignmentStatement
                 range: 7:13-7:28
-                (AssignmentExpression
-                  range: 7:13-7:27
-                  (MemberExpression
-                    range: 7:13-7:23
-                    (ThisExpression
-                      range: 7:13-7:17
-                    )
-                    (IdentifierExpression
-                      range: 7:18-7:23
-                      name: "value"
-                    )
+                (MemberExpression
+                  range: 7:13-7:23
+                  (ThisExpression
+                    range: 7:13-7:17
                   )
-                  (LiteralExpression
-                    range: 7:26-7:27
-                    kind: INT
-                    text: "7"
+                  (IdentifierExpression
+                    range: 7:18-7:23
+                    name: "value"
                   )
+                )
+                operator: ASSIGN
+                (LiteralExpression
+                  range: 7:26-7:27
+                  kind: INT
+                  text: "7"
                 )
               )
             )
@@ -175,7 +173,6 @@ SEMICOLON (12:22-12:23)
 Expression types:
   7:13-7:17 -> Resource
   7:13-7:23 -> i32
-  7:13-7:27 -> i32
   7:18-7:23 -> i32
   7:26-7:27 -> i32
   11:18-11:32 -> Resource
@@ -233,9 +230,7 @@ class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
    L1:
     ALOAD_0 0
     LDC 7
-    DUP_X1
     PUTFIELD Test$Resource.value I
-    POP
     RETURN
    L2:
     ATHROW
@@ -243,13 +238,11 @@ class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     ASTORE_1 1
     ALOAD_0 0
     LDC 7
-    DUP_X1
     PUTFIELD Test$Resource.value I
-    POP
     ALOAD_1 1
     ATHROW
     catch all from L0 to L1 handler L3
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

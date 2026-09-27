@@ -235,27 +235,25 @@ SEMICOLON (31:13-31:14)
     )
     (BlockStatement
       range: 4:25-7:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 5:5-5:19
-        (AssignmentExpression
-          range: 5:5-5:18
-          (SubscriptExpression
-            range: 5:5-5:14
-            (IdentifierExpression
-              range: 5:5-5:11
-              name: "values"
-            )
-            (LiteralExpression
-              range: 5:12-5:13
-              kind: INT
-              text: "0"
-            )
+        (SubscriptExpression
+          range: 5:5-5:14
+          (IdentifierExpression
+            range: 5:5-5:11
+            name: "values"
           )
           (LiteralExpression
-            range: 5:17-5:18
+            range: 5:12-5:13
             kind: INT
-            text: "2"
+            text: "0"
           )
+        )
+        operator: ASSIGN
+        (LiteralExpression
+          range: 5:17-5:18
+          kind: INT
+          text: "2"
         )
       )
       (ReturnStatement
@@ -560,7 +558,6 @@ Expression types:
   2:30-2:31 -> i32
   5:5-5:11 -> [i32]
   5:5-5:14 -> i32
-  5:5-5:18 -> i32
   5:12-5:13 -> i32
   5:17-5:18 -> i32
   6:12-6:13 -> i32
@@ -667,12 +664,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     LDC 0
     LDC 2
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
-    POP
     LDC 3
     IRETURN
-    max stack 4 max locals 0
+    max stack 3 max locals 0
   method mutateProperties()I flags [PUBLIC, STATIC]
     GETSTATIC Test.properties Ljava/util/Map;
     LDC "value"

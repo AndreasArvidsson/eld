@@ -170,34 +170,32 @@ SEMICOLON (9:21-9:22)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 9:1-9:22
-    (AssignmentExpression
-      range: 9:1-9:21
-      (MemberExpression
-        range: 9:1-9:17
-        (SubscriptExpression
-          range: 9:1-9:11
-          (IdentifierExpression
-            range: 9:1-9:8
-            name: "exposed"
-          )
-          (LiteralExpression
-            range: 9:9-9:10
-            kind: INT
-            text: "0"
-          )
-        )
+    (MemberExpression
+      range: 9:1-9:17
+      (SubscriptExpression
+        range: 9:1-9:11
         (IdentifierExpression
-          range: 9:12-9:17
-          name: "value"
+          range: 9:1-9:8
+          name: "exposed"
+        )
+        (LiteralExpression
+          range: 9:9-9:10
+          kind: INT
+          text: "0"
         )
       )
-      (LiteralExpression
-        range: 9:20-9:21
-        kind: INT
-        text: "1"
+      (IdentifierExpression
+        range: 9:12-9:17
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 9:20-9:21
+      kind: INT
+      text: "1"
     )
   )
 )

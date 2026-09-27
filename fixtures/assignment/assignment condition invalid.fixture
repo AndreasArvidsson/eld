@@ -1,0 +1,26 @@
+var value = 0;
+if ((value = 10) == 10) {}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+IF (2:1-2:3)
+LEFT_PAREN (2:4-2:5)
+LEFT_PAREN (2:5-2:6)
+IDENTIFIER "value" (2:6-2:11)
+EQUAL (2:12-2:13)
+INTEGER_LITERAL "10" (2:14-2:16)
+RIGHT_PAREN (2:16-2:17)
+EQUAL_EQUAL (2:18-2:20)
+INTEGER_LITERAL "10" (2:21-2:23)
+RIGHT_PAREN (2:23-2:24)
+LEFT_BRACE (2:25-2:26)
+RIGHT_BRACE (2:26-2:27)
+
+--- AST ---
+
+ParserException: Expected RIGHT_PAREN, but found EQUAL at 2:12-2:13

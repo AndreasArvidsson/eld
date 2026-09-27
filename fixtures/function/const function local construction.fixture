@@ -117,24 +117,22 @@ SEMICOLON (14:21-14:22)
         )
         (BlockStatement
           range: 4:36-6:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 5:9-5:28
-            (AssignmentExpression
-              range: 5:9-5:27
-              (MemberExpression
-                range: 5:9-5:19
-                (ThisExpression
-                  range: 5:9-5:13
-                )
-                (IdentifierExpression
-                  range: 5:14-5:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 5:9-5:19
+              (ThisExpression
+                range: 5:9-5:13
               )
               (IdentifierExpression
-                range: 5:22-5:27
+                range: 5:14-5:19
                 name: "value"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 5:22-5:27
+              name: "value"
             )
           )
         )
@@ -215,7 +213,6 @@ SEMICOLON (14:21-14:22)
 Expression types:
   5:9-5:13 -> Box
   5:9-5:19 -> i32
-  5:9-5:27 -> i32
   5:14-5:19 -> i32
   5:22-5:27 -> i32
   10:17-10:28 -> Box
@@ -283,11 +280,9 @@ class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Box.value I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

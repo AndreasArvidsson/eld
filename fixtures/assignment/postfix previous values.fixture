@@ -1,0 +1,290 @@
+var value = 5;
+const previous = value++;
+print(previous);
+print(value);
+const beforeDecrement = value--;
+print(beforeDecrement);
+print(value);
+value--;
+print(value);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "5" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+CONST (2:1-2:6)
+IDENTIFIER "previous" (2:7-2:15)
+EQUAL (2:16-2:17)
+IDENTIFIER "value" (2:18-2:23)
+PLUS_PLUS (2:23-2:25)
+SEMICOLON (2:25-2:26)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "previous" (3:7-3:15)
+RIGHT_PAREN (3:15-3:16)
+SEMICOLON (3:16-3:17)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "value" (4:7-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
+CONST (5:1-5:6)
+IDENTIFIER "beforeDecrement" (5:7-5:22)
+EQUAL (5:23-5:24)
+IDENTIFIER "value" (5:25-5:30)
+MINUS_MINUS (5:30-5:32)
+SEMICOLON (5:32-5:33)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "beforeDecrement" (6:7-6:22)
+RIGHT_PAREN (6:22-6:23)
+SEMICOLON (6:23-6:24)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "value" (7:7-7:12)
+RIGHT_PAREN (7:12-7:13)
+SEMICOLON (7:13-7:14)
+IDENTIFIER "value" (8:1-8:6)
+MINUS_MINUS (8:6-8:8)
+SEMICOLON (8:8-8:9)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "value" (9:7-9:12)
+RIGHT_PAREN (9:12-9:13)
+SEMICOLON (9:13-9:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:14
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "5"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:15
+      name: "previous"
+    )
+    type: null
+    (PostfixExpression
+      range: 2:18-2:25
+      (IdentifierExpression
+        range: 2:18-2:23
+        name: "value"
+      )
+      operator: INCREMENT
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:17
+    (CallExpression
+      range: 3:1-3:16
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 3:7-3:15
+        name: "previous"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:14
+    (CallExpression
+      range: 4:1-4:13
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 4:7-4:12
+        name: "value"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:22
+      name: "beforeDecrement"
+    )
+    type: null
+    (PostfixExpression
+      range: 5:25-5:32
+      (IdentifierExpression
+        range: 5:25-5:30
+        name: "value"
+      )
+      operator: DECREMENT
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:24
+    (CallExpression
+      range: 6:1-6:23
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 6:7-6:22
+        name: "beforeDecrement"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:14
+    (CallExpression
+      range: 7:1-7:13
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:12
+        name: "value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:9
+    (PostfixExpression
+      range: 8:1-8:8
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "value"
+      )
+      operator: DECREMENT
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:14
+    (CallExpression
+      range: 9:1-9:13
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 9:7-9:12
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  2:18-2:23 -> i32
+  2:18-2:25 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:16 -> void
+  3:7-3:15 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:13 -> void
+  4:7-4:12 -> i32
+  5:25-5:30 -> i32
+  5:25-5:32 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:23 -> void
+  6:7-6:22 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:13 -> void
+  7:7-7:12 -> i32
+  8:1-8:6 -> i32
+  8:1-8:8 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:13 -> void
+  9:7-9:12 -> i32
+
+Declarations:
+  1:5-1:10 -> var value: i32
+  2:7-2:15 -> const previous: i32
+  5:7-5:22 -> const beforeDecrement: i32
+
+References:
+  2:18-2:23 -> 1:5-1:10
+  3:1-3:6 -> builtin print
+  3:7-3:15 -> 2:7-2:15
+  4:1-4:6 -> builtin print
+  4:7-4:12 -> 1:5-1:10
+  5:25-5:30 -> 1:5-1:10
+  6:1-6:6 -> builtin print
+  6:7-6:22 -> 5:7-5:22
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 1:5-1:10
+  8:1-8:6 -> 1:5-1:10
+  9:1-9:6 -> builtin print
+  9:7-9:12 -> 1:5-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC]
+  field previous I flags [PUBLIC, STATIC, FINAL]
+  field beforeDecrement I flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    LDC 5
+    PUTSTATIC Test.value I
+    GETSTATIC Test.value I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test.value I
+    PUTSTATIC Test.previous I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.previous I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.value I
+    DUP
+    ICONST_1 1
+    ISUB
+    PUTSTATIC Test.value I
+    PUTSTATIC Test.beforeDecrement I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.beforeDecrement I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.value I
+    ICONST_1 1
+    ISUB
+    PUTSTATIC Test.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+5
+6
+6
+5
+4
+

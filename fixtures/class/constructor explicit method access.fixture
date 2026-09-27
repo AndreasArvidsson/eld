@@ -296,13 +296,11 @@ class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     ALOAD_0 0
     DUP
     GETFIELD Test$Foo.value I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$Foo.value I
-    POP
     RETURN
-    max stack 4 max locals 1
+    max stack 3 max locals 1
   method getValue()I flags [PRIVATE]
     ALOAD_0 0
     GETFIELD Test$Foo.value I

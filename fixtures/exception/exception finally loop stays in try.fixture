@@ -250,12 +250,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ICONST_1 1
    L3:
     IFEQ L7
-    ILOAD_0 0
-    DUP
-    ICONST_1 1
-    IADD
-    ISTORE_0 0
-    POP
+    IINC 0 1
     ILOAD_0 0
     LDC 1
     IF_ICMPEQ L4
@@ -289,7 +284,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L10:
     RETURN
     catch all from L0 to L8 handler L9
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

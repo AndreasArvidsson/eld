@@ -100,34 +100,32 @@ SEMICOLON (6:20-6:21)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 6:1-6:21
-    (AssignmentExpression
-      range: 6:1-6:20
-      (MemberExpression
-        range: 6:1-6:16
-        (SubscriptExpression
-          range: 6:1-6:10
-          (IdentifierExpression
-            range: 6:1-6:7
-            name: "values"
-          )
-          (LiteralExpression
-            range: 6:8-6:9
-            kind: INT
-            text: "0"
-          )
-        )
+    (MemberExpression
+      range: 6:1-6:16
+      (SubscriptExpression
+        range: 6:1-6:10
         (IdentifierExpression
-          range: 6:11-6:16
-          name: "value"
+          range: 6:1-6:7
+          name: "values"
+        )
+        (LiteralExpression
+          range: 6:8-6:9
+          kind: INT
+          text: "0"
         )
       )
-      (LiteralExpression
-        range: 6:19-6:20
-        kind: INT
-        text: "2"
+      (IdentifierExpression
+        range: 6:11-6:16
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 6:19-6:20
+      kind: INT
+      text: "2"
     )
   )
 )

@@ -1,0 +1,17 @@
+var value = 5;
+--value;
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "5" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+MINUS_MINUS (2:1-2:3)
+IDENTIFIER "value" (2:3-2:8)
+SEMICOLON (2:8-2:9)
+
+--- AST ---
+
+ParserException: Expected expression, but found MINUS_MINUS at 2:1-2:3

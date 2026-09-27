@@ -233,11 +233,51 @@ public final class Parser extends ParserBase {
         return new ContinueStatement(range);
     }
 
-    private ExpressionStatement parseExpressionStatement() {
+    private Statement parseExpressionStatement() {
         final Expression expression = parserExpressions.parseExpression();
+        final AssignmentOperator operator = assignmentOperator();
+        if (operator != null) {
+            advance();
+            final Expression value = parserExpressions.parseExpression();
+            final Token semicolon = expect(TokenType.SEMICOLON);
+            return new AssignmentStatement(
+                expression,
+                operator,
+                value,
+                expression.range().union(semicolon.range())
+            );
+        }
         final Token semicolon = expect(TokenType.SEMICOLON);
         final Range range = expression.range().union(semicolon.range());
         return new ExpressionStatement(expression, range);
+    }
+
+    private @Nullable AssignmentOperator assignmentOperator() {
+        return switch (current().type()) {
+            case EQUAL -> AssignmentOperator.ASSIGN;
+            case PLUS_EQUAL -> AssignmentOperator.ADD;
+            case MINUS_EQUAL -> AssignmentOperator.SUBTRACT;
+            case STAR_EQUAL -> AssignmentOperator.MULTIPLY;
+            case SLASH_EQUAL -> AssignmentOperator.DIVIDE;
+            case PERCENT_EQUAL -> AssignmentOperator.MODULO;
+            default -> null;
+        };
+    }
+
+    private Statement parseForUpdate() {
+        final Expression expression = parserExpressions.parseExpression();
+        final @Nullable AssignmentOperator operator = assignmentOperator();
+        if (operator != null) {
+            advance();
+            final Expression value = parserExpressions.parseExpression();
+            return new AssignmentStatement(
+                expression,
+                operator,
+                value,
+                expression.range().union(value.range())
+            );
+        }
+        return new ExpressionStatement(expression, expression.range());
     }
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
@@ -864,10 +904,8 @@ public final class Parser extends ParserBase {
                 ? null
                 : parserExpressions.parseExpression();
         expect(TokenType.SEMICOLON);
-        final @Nullable Expression update =
-            check(TokenType.RIGHT_PAREN)
-                ? null
-                : parserExpressions.parseExpression();
+        final @Nullable Statement update =
+            check(TokenType.RIGHT_PAREN) ? null : parseForUpdate();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
         final Range range = keyword.range().union(body.range());

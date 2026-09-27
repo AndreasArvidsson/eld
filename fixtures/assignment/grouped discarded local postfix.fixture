@@ -1,0 +1,180 @@
+func run() {
+    var value = 1;
+    ((value++));
+    (value--);
+    print(value);
+}
+
+run();
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "run" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+LEFT_BRACE (1:12-1:13)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL (2:15-2:16)
+INTEGER_LITERAL "1" (2:17-2:18)
+SEMICOLON (2:18-2:19)
+LEFT_PAREN (3:5-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "value" (3:7-3:12)
+PLUS_PLUS (3:12-3:14)
+RIGHT_PAREN (3:14-3:15)
+RIGHT_PAREN (3:15-3:16)
+SEMICOLON (3:16-3:17)
+LEFT_PAREN (4:5-4:6)
+IDENTIFIER "value" (4:6-4:11)
+MINUS_MINUS (4:11-4:13)
+RIGHT_PAREN (4:13-4:14)
+SEMICOLON (4:14-4:15)
+IDENTIFIER "print" (5:5-5:10)
+LEFT_PAREN (5:10-5:11)
+IDENTIFIER "value" (5:11-5:16)
+RIGHT_PAREN (5:16-5:17)
+SEMICOLON (5:17-5:18)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "run" (8:1-8:4)
+LEFT_PAREN (8:4-8:5)
+RIGHT_PAREN (8:5-8:6)
+SEMICOLON (8:6-8:7)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:7
+  (FunctionDeclaration
+    range: 1:1-6:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:12-6:2
+      (VariableDeclaration
+        range: 2:5-2:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:14
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:17-2:18
+          kind: INT
+          text: "1"
+        )
+      )
+      (ExpressionStatement
+        range: 3:5-3:17
+        (GroupingExpression
+          range: 3:5-3:16
+          (GroupingExpression
+            range: 3:6-3:15
+            (PostfixExpression
+              range: 3:7-3:14
+              (IdentifierExpression
+                range: 3:7-3:12
+                name: "value"
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 4:5-4:15
+        (GroupingExpression
+          range: 4:5-4:14
+          (PostfixExpression
+            range: 4:6-4:13
+            (IdentifierExpression
+              range: 4:6-4:11
+              name: "value"
+            )
+            operator: DECREMENT
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 5:5-5:18
+        (CallExpression
+          range: 5:5-5:17
+          (IdentifierExpression
+            range: 5:5-5:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 5:11-5:16
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:7
+    (CallExpression
+      range: 8:1-8:6
+      (IdentifierExpression
+        range: 8:1-8:4
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:17-2:18 -> i32
+  3:5-3:16 -> i32
+  3:6-3:15 -> i32
+  3:7-3:12 -> i32
+  3:7-3:14 -> i32
+  4:5-4:14 -> i32
+  4:6-4:11 -> i32
+  4:6-4:13 -> i32
+  5:5-5:10 -> (any) => void
+  5:5-5:17 -> void
+  5:11-5:16 -> i32
+  8:1-8:4 -> () => void
+  8:1-8:6 -> void
+
+Declarations:
+  1:6-1:9 -> func run() => void
+  2:9-2:14 -> var value: i32
+
+References:
+  3:7-3:12 -> 2:9-2:14
+  4:6-4:11 -> 2:9-2:14
+  5:5-5:10 -> builtin print
+  5:11-5:16 -> 2:9-2:14
+  8:1-8:4 -> 1:6-1:9
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method run()V flags [PUBLIC, STATIC]
+    LDC 1
+    ISTORE_0 0
+    IINC 0 1
+    IINC 0 -1
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ILOAD_0 0
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 1
+  method <clinit>()V flags [STATIC]
+    INVOKESTATIC Test.run()V
+    RETURN
+    max stack 0 max locals 0
+
+--- OUTPUT ---
+
+1
+

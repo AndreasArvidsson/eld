@@ -60,27 +60,25 @@ SEMICOLON (2:14-2:15)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 2:1-2:15
-    (AssignmentExpression
-      range: 2:1-2:14
-      (SubscriptExpression
-        range: 2:1-2:10
-        (IdentifierExpression
-          range: 2:1-2:7
-          name: "values"
-        )
-        (LiteralExpression
-          range: 2:8-2:9
-          kind: INT
-          text: "0"
-        )
+    (SubscriptExpression
+      range: 2:1-2:10
+      (IdentifierExpression
+        range: 2:1-2:7
+        name: "values"
       )
       (LiteralExpression
-        range: 2:13-2:14
+        range: 2:8-2:9
         kind: INT
-        text: "3"
+        text: "0"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 2:13-2:14
+      kind: INT
+      text: "3"
     )
   )
 )

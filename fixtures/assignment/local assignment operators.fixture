@@ -1,0 +1,230 @@
+var value = 5;
+value = 12;
+value += 1;
+value -= 3;
+value *= 2;
+value /= 5;
+value %= 3;
+print(value);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "5" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+IDENTIFIER "value" (2:1-2:6)
+EQUAL (2:7-2:8)
+INTEGER_LITERAL "12" (2:9-2:11)
+SEMICOLON (2:11-2:12)
+IDENTIFIER "value" (3:1-3:6)
+PLUS_EQUAL (3:7-3:9)
+INTEGER_LITERAL "1" (3:10-3:11)
+SEMICOLON (3:11-3:12)
+IDENTIFIER "value" (4:1-4:6)
+MINUS_EQUAL (4:7-4:9)
+INTEGER_LITERAL "3" (4:10-4:11)
+SEMICOLON (4:11-4:12)
+IDENTIFIER "value" (5:1-5:6)
+STAR_EQUAL (5:7-5:9)
+INTEGER_LITERAL "2" (5:10-5:11)
+SEMICOLON (5:11-5:12)
+IDENTIFIER "value" (6:1-6:6)
+SLASH_EQUAL (6:7-6:9)
+INTEGER_LITERAL "5" (6:10-6:11)
+SEMICOLON (6:11-6:12)
+IDENTIFIER "value" (7:1-7:6)
+PERCENT_EQUAL (7:7-7:9)
+INTEGER_LITERAL "3" (7:10-7:11)
+SEMICOLON (7:11-7:12)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "value" (8:7-8:12)
+RIGHT_PAREN (8:12-8:13)
+SEMICOLON (8:13-8:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:14
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "5"
+    )
+  )
+  (AssignmentStatement
+    range: 2:1-2:12
+    (IdentifierExpression
+      range: 2:1-2:6
+      name: "value"
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 2:9-2:11
+      kind: INT
+      text: "12"
+    )
+  )
+  (AssignmentStatement
+    range: 3:1-3:12
+    (IdentifierExpression
+      range: 3:1-3:6
+      name: "value"
+    )
+    operator: ADD
+    (LiteralExpression
+      range: 3:10-3:11
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 4:1-4:12
+    (IdentifierExpression
+      range: 4:1-4:6
+      name: "value"
+    )
+    operator: SUBTRACT
+    (LiteralExpression
+      range: 4:10-4:11
+      kind: INT
+      text: "3"
+    )
+  )
+  (AssignmentStatement
+    range: 5:1-5:12
+    (IdentifierExpression
+      range: 5:1-5:6
+      name: "value"
+    )
+    operator: MULTIPLY
+    (LiteralExpression
+      range: 5:10-5:11
+      kind: INT
+      text: "2"
+    )
+  )
+  (AssignmentStatement
+    range: 6:1-6:12
+    (IdentifierExpression
+      range: 6:1-6:6
+      name: "value"
+    )
+    operator: DIVIDE
+    (LiteralExpression
+      range: 6:10-6:11
+      kind: INT
+      text: "5"
+    )
+  )
+  (AssignmentStatement
+    range: 7:1-7:12
+    (IdentifierExpression
+      range: 7:1-7:6
+      name: "value"
+    )
+    operator: MODULO
+    (LiteralExpression
+      range: 7:10-7:11
+      kind: INT
+      text: "3"
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:14
+    (CallExpression
+      range: 8:1-8:13
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 8:7-8:12
+        name: "value"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  2:1-2:6 -> i32
+  2:9-2:11 -> i32
+  3:1-3:6 -> i32
+  3:10-3:11 -> i32
+  4:1-4:6 -> i32
+  4:10-4:11 -> i32
+  5:1-5:6 -> i32
+  5:10-5:11 -> i32
+  6:1-6:6 -> i32
+  6:10-6:11 -> i32
+  7:1-7:6 -> i32
+  7:10-7:11 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:13 -> void
+  8:7-8:12 -> i32
+
+Declarations:
+  1:5-1:10 -> var value: i32
+
+References:
+  2:1-2:6 -> 1:5-1:10
+  3:1-3:6 -> 1:5-1:10
+  4:1-4:6 -> 1:5-1:10
+  5:1-5:6 -> 1:5-1:10
+  6:1-6:6 -> 1:5-1:10
+  7:1-7:6 -> 1:5-1:10
+  8:1-8:6 -> builtin print
+  8:7-8:12 -> 1:5-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 5
+    PUTSTATIC Test.value I
+    LDC 12
+    PUTSTATIC Test.value I
+    GETSTATIC Test.value I
+    LDC 1
+    IADD
+    PUTSTATIC Test.value I
+    GETSTATIC Test.value I
+    LDC 3
+    ISUB
+    PUTSTATIC Test.value I
+    GETSTATIC Test.value I
+    LDC 2
+    IMUL
+    PUTSTATIC Test.value I
+    GETSTATIC Test.value I
+    LDC 5
+    IDIV
+    PUTSTATIC Test.value I
+    GETSTATIC Test.value I
+    LDC 3
+    IREM
+    PUTSTATIC Test.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+1
+

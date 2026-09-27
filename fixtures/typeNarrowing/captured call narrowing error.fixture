@@ -85,19 +85,17 @@ RIGHT_BRACE (8:1-8:2)
     returnType: null
     (BlockStatement
       range: 2:14-4:2
-      (ExpressionStatement
+      (AssignmentStatement
         range: 3:5-3:18
-        (AssignmentExpression
-          range: 3:5-3:17
-          (IdentifierExpression
-            range: 3:5-3:10
-            name: "value"
-          )
-          (LiteralExpression
-            range: 3:13-3:17
-            kind: NULL
-            text: "null"
-          )
+        (IdentifierExpression
+          range: 3:5-3:10
+          name: "value"
+        )
+        operator: ASSIGN
+        (LiteralExpression
+          range: 3:13-3:17
+          kind: NULL
+          text: "null"
         )
       )
     )

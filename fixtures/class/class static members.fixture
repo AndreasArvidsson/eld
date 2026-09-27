@@ -150,39 +150,37 @@ SEMICOLON (13:22-13:23)
         )
         (BlockStatement
           range: 4:49-7:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 5:9-5:48
-            (AssignmentExpression
-              range: 5:9-5:47
+            (MemberExpression
+              range: 5:9-5:22
+              (IdentifierExpression
+                range: 5:9-5:16
+                name: "Counter"
+              )
+              (IdentifierExpression
+                range: 5:17-5:22
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 5:25-5:47
               (MemberExpression
-                range: 5:9-5:22
+                range: 5:25-5:38
                 (IdentifierExpression
-                  range: 5:9-5:16
+                  range: 5:25-5:32
                   name: "Counter"
                 )
                 (IdentifierExpression
-                  range: 5:17-5:22
+                  range: 5:33-5:38
                   name: "value"
                 )
               )
-              (BinaryExpression
-                range: 5:25-5:47
-                (MemberExpression
-                  range: 5:25-5:38
-                  (IdentifierExpression
-                    range: 5:25-5:32
-                    name: "Counter"
-                  )
-                  (IdentifierExpression
-                    range: 5:33-5:38
-                    name: "value"
-                  )
-                )
-                operator: ADD
-                (IdentifierExpression
-                  range: 5:41-5:47
-                  name: "amount"
-                )
+              operator: ADD
+              (IdentifierExpression
+                range: 5:41-5:47
+                name: "amount"
               )
             )
           )
@@ -249,26 +247,24 @@ SEMICOLON (13:22-13:23)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 12:1-12:19
-    (AssignmentExpression
-      range: 12:1-12:18
-      (MemberExpression
-        range: 12:1-12:14
-        (IdentifierExpression
-          range: 12:1-12:8
-          name: "Counter"
-        )
-        (IdentifierExpression
-          range: 12:9-12:14
-          name: "value"
-        )
+    (MemberExpression
+      range: 12:1-12:14
+      (IdentifierExpression
+        range: 12:1-12:8
+        name: "Counter"
       )
-      (LiteralExpression
-        range: 12:17-12:18
-        kind: INT
-        text: "7"
+      (IdentifierExpression
+        range: 12:9-12:14
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 12:17-12:18
+      kind: INT
+      text: "7"
     )
   )
   (ExpressionStatement
@@ -309,7 +305,6 @@ Expression types:
   4:42-4:43 -> i32
   5:9-5:16 -> Counter
   5:9-5:22 -> i32
-  5:9-5:47 -> i32
   5:17-5:22 -> i32
   5:25-5:32 -> Counter
   5:25-5:38 -> i32
@@ -332,7 +327,6 @@ Expression types:
   11:15-11:18 -> (i32) => i32
   12:1-12:8 -> Counter
   12:1-12:14 -> i32
-  12:1-12:18 -> i32
   12:9-12:14 -> i32
   12:17-12:18 -> i32
   13:1-13:6 -> (any) => void
@@ -388,9 +382,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESTATIC Test$Counter.add(II)I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     LDC 7
-    DUP
     PUTSTATIC Test$Counter.value I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 3
     INVOKESTATIC Test$Counter.add(I)I
@@ -417,9 +409,7 @@ class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     GETSTATIC Test$Counter.value I
     ILOAD_0 0
     IADD
-    DUP
     PUTSTATIC Test$Counter.value I
-    POP
     GETSTATIC Test$Counter.value I
     IRETURN
     max stack 2 max locals 1

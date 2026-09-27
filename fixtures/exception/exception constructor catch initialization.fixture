@@ -129,25 +129,23 @@ SEMICOLON (11:28-11:29)
               )
               (BlockStatement
                 range: 6:34-8:10
-                (ExpressionStatement
+                (AssignmentStatement
                   range: 7:13-7:28
-                  (AssignmentExpression
-                    range: 7:13-7:27
-                    (MemberExpression
-                      range: 7:13-7:23
-                      (ThisExpression
-                        range: 7:13-7:17
-                      )
-                      (IdentifierExpression
-                        range: 7:18-7:23
-                        name: "value"
-                      )
+                  (MemberExpression
+                    range: 7:13-7:23
+                    (ThisExpression
+                      range: 7:13-7:17
                     )
-                    (LiteralExpression
-                      range: 7:26-7:27
-                      kind: INT
-                      text: "8"
+                    (IdentifierExpression
+                      range: 7:18-7:23
+                      name: "value"
                     )
+                  )
+                  operator: ASSIGN
+                  (LiteralExpression
+                    range: 7:26-7:27
+                    kind: INT
+                    text: "8"
                   )
                 )
               )
@@ -192,7 +190,6 @@ Expression types:
   5:35-5:41 -> string
   7:13-7:17 -> Resource
   7:13-7:23 -> i32
-  7:13-7:27 -> i32
   7:18-7:23 -> i32
   7:26-7:27 -> i32
   11:1-11:6 -> (any) => void
@@ -255,9 +252,7 @@ class Test$Resource extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     NOP
     ALOAD_0 0
     LDC 8
-    DUP_X1
     PUTFIELD Test$Resource.value I
-    POP
     RETURN
     catch java/io/IOException from L0 to L1 handler L1
     max stack 3 max locals 2

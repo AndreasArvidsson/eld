@@ -1,0 +1,28 @@
+func result() i32 {
+    var value = 0;
+    return value = 10;
+}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "result" (1:6-1:12)
+LEFT_PAREN (1:12-1:13)
+RIGHT_PAREN (1:13-1:14)
+IDENTIFIER "i32" (1:15-1:18)
+LEFT_BRACE (1:19-1:20)
+VAR (2:5-2:8)
+IDENTIFIER "value" (2:9-2:14)
+EQUAL (2:15-2:16)
+INTEGER_LITERAL "0" (2:17-2:18)
+SEMICOLON (2:18-2:19)
+RETURN (3:5-3:11)
+IDENTIFIER "value" (3:12-3:17)
+EQUAL (3:18-3:19)
+INTEGER_LITERAL "10" (3:20-3:22)
+SEMICOLON (3:22-3:23)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+ParserException: Expected SEMICOLON, but found EQUAL at 3:18-3:19

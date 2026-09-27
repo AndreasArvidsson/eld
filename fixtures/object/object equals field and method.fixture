@@ -224,26 +224,24 @@ SEMICOLON (10:18-10:19)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 9:1-9:16
-    (AssignmentExpression
-      range: 9:1-9:15
-      (MemberExpression
-        range: 9:1-9:11
-        (IdentifierExpression
-          range: 9:1-9:4
-          name: "box"
-        )
-        (IdentifierExpression
-          range: 9:5-9:11
-          name: "equals"
-        )
+    (MemberExpression
+      range: 9:1-9:11
+      (IdentifierExpression
+        range: 9:1-9:4
+        name: "box"
       )
-      (LiteralExpression
-        range: 9:14-9:15
-        kind: INT
-        text: "2"
+      (IdentifierExpression
+        range: 9:5-9:11
+        name: "equals"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 9:14-9:15
+      kind: INT
+      text: "2"
     )
   )
   (ExpressionStatement
@@ -289,7 +287,6 @@ Expression types:
   8:18-8:21 -> Box
   9:1-9:4 -> Box
   9:1-9:11 -> i32
-  9:1-9:15 -> i32
   9:5-9:11 -> i32
   9:14-9:15 -> i32
   10:1-10:6 -> (any) => void
@@ -349,9 +346,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC Test.box LTest$Box;
     LDC 2
-    DUP_X1
     PUTFIELD Test$Box.equals I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.box LTest$Box;
     GETFIELD Test$Box.equals I

@@ -247,19 +247,17 @@ SEMICOLON (15:6-15:7)
           )
         )
       )
-      (ExpressionStatement
+      (AssignmentStatement
         range: 8:5-8:15
-        (AssignmentExpression
-          range: 8:5-8:14
-          (IdentifierExpression
-            range: 8:5-8:10
-            name: "value"
-          )
-          (LiteralExpression
-            range: 8:13-8:14
-            kind: INT
-            text: "4"
-          )
+        (IdentifierExpression
+          range: 8:5-8:10
+          name: "value"
+        )
+        operator: ASSIGN
+        (LiteralExpression
+          range: 8:13-8:14
+          kind: INT
+          text: "4"
         )
       )
       (ExpressionStatement
@@ -368,7 +366,6 @@ Expression types:
   7:18-7:29 -> () => i32
   7:24-7:29 -> i32
   8:5-8:10 -> i32
-  8:5-8:14 -> i32
   8:13-8:14 -> i32
   9:5-9:10 -> (any) => void
   9:5-9:18 -> void
@@ -426,7 +423,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ALOAD_0 0
     ICONST_0 0
     IALOAD
-    DUP
     ICONST_1 1
     IADD
     ISTORE_1 1
@@ -434,12 +430,11 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ICONST_0 0
     ILOAD_1 1
     IASTORE
-    POP
     ALOAD_0 0
     ICONST_0 0
     IALOAD
     IRETURN
-    max stack 4 max locals 2
+    max stack 3 max locals 2
   method $lambda1([I)I flags [PRIVATE, STATIC, SYNTHETIC]
     ALOAD_0 0
     ICONST_0 0
@@ -477,13 +472,11 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESTATIC java/lang/invoke/MethodHandles.insertArguments(Ljava/lang/invoke/MethodHandle;I[Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
     ASTORE_3 3
     LDC 4
-    DUP
     ISTORE 4
     ALOAD_0 0
     ICONST_0 0
     ILOAD 4
     IASTORE
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_2 2
     INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
@@ -500,13 +493,11 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 1 max locals 0
   method $lambda3()V flags [PRIVATE, STATIC, SYNTHETIC]
     GETSTATIC Test.count I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.count I
-    POP
     RETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
   method <clinit>()V flags [STATIC]
     LDC 0
     PUTSTATIC Test.count I

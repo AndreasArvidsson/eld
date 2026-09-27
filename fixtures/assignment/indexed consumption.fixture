@@ -1,0 +1,187 @@
+var values = [10, 20];
+var index = 0;
+print(values[index++]);
+print(index);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "values" (1:5-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "10" (1:15-1:17)
+COMMA (1:17-1:18)
+INTEGER_LITERAL "20" (1:19-1:21)
+RIGHT_BRACKET (1:21-1:22)
+SEMICOLON (1:22-1:23)
+VAR (2:1-2:4)
+IDENTIFIER "index" (2:5-2:10)
+EQUAL (2:11-2:12)
+INTEGER_LITERAL "0" (2:13-2:14)
+SEMICOLON (2:14-2:15)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "values" (3:7-3:13)
+LEFT_BRACKET (3:13-3:14)
+IDENTIFIER "index" (3:14-3:19)
+PLUS_PLUS (3:19-3:21)
+RIGHT_BRACKET (3:21-3:22)
+RIGHT_PAREN (3:22-3:23)
+SEMICOLON (3:23-3:24)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "index" (4:7-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:14
+  (VariableDeclaration
+    range: 1:1-1:23
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:11
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:22
+      (LiteralExpression
+        range: 1:15-1:17
+        kind: INT
+        text: "10"
+      )
+      (LiteralExpression
+        range: 1:19-1:21
+        kind: INT
+        text: "20"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:10
+      name: "index"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:13-2:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:24
+    (CallExpression
+      range: 3:1-3:23
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 3:7-3:22
+        (IdentifierExpression
+          range: 3:7-3:13
+          name: "values"
+        )
+        (PostfixExpression
+          range: 3:14-3:21
+          (IdentifierExpression
+            range: 3:14-3:19
+            name: "index"
+          )
+          operator: INCREMENT
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:14
+    (CallExpression
+      range: 4:1-4:13
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 4:7-4:12
+        name: "index"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:22 -> [i32]
+  1:15-1:17 -> i32
+  1:19-1:21 -> i32
+  2:13-2:14 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:23 -> void
+  3:7-3:13 -> [i32]
+  3:7-3:22 -> i32
+  3:14-3:19 -> i32
+  3:14-3:21 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:13 -> void
+  4:7-4:12 -> i32
+
+Declarations:
+  1:5-1:11 -> var values: [i32]
+  2:5-2:10 -> var index: i32
+
+References:
+  3:1-3:6 -> builtin print
+  3:7-3:13 -> 1:5-1:11
+  3:14-3:19 -> 2:5-2:10
+  4:1-4:6 -> builtin print
+  4:7-4:12 -> 2:5-2:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC]
+  field index I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 2
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 10
+    IASTORE
+    DUP
+    LDC 1
+    LDC 20
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC 0
+    PUTSTATIC Test.index I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC Test.index I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test.index I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 6 max locals 0
+
+--- OUTPUT ---
+
+10
+1
+

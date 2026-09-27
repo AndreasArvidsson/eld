@@ -86,7 +86,7 @@ public final class SemanticAnalyzerStatements {
 
         final Statement initializer = statement.initializer();
         final Expression condition = statement.condition();
-        final Expression update = statement.update();
+        final Statement update = statement.update();
 
         if (initializer != null) {
             analyzer.analyzeStatement(initializer, loopContext);
@@ -105,7 +105,7 @@ public final class SemanticAnalyzerStatements {
         }
 
         if (update != null) {
-            analyzeDiscardedExpression(update, loopContext);
+            analyzer.analyzeStatement(update, loopContext);
         }
 
         analyzer.analyzeBlockStatement(statement.body(), loopContext);

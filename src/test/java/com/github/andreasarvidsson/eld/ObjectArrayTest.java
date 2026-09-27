@@ -132,7 +132,8 @@ class ObjectArrayTest {
                     var negativeHead = values[:-1];
                     var negativeTail = values[-2:];
                     var negativeMiddle = values[-2:-1];
-                    var assigned = values[-1] = values[0];
+                    var assigned = values[0];
+                    values[-1] = assigned;
                     var nested = [values];
                     var row = nested[0];
                     func identity(input: [%s]) [%s] { return input; }

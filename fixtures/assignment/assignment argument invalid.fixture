@@ -1,0 +1,21 @@
+var value = 0;
+print(value = 10);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "value" (2:7-2:12)
+EQUAL (2:13-2:14)
+INTEGER_LITERAL "10" (2:15-2:17)
+RIGHT_PAREN (2:17-2:18)
+SEMICOLON (2:18-2:19)
+
+--- AST ---
+
+ParserException: Expected RIGHT_PAREN, but found EQUAL at 2:13-2:14

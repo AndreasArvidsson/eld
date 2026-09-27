@@ -131,24 +131,22 @@ SEMICOLON (14:22-14:23)
         )
         (BlockStatement
           range: 3:36-5:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 4:9-4:28
-            (AssignmentExpression
-              range: 4:9-4:27
-              (MemberExpression
-                range: 4:9-4:19
-                (ThisExpression
-                  range: 4:9-4:13
-                )
-                (IdentifierExpression
-                  range: 4:14-4:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
               )
               (IdentifierExpression
-                range: 4:22-4:27
+                range: 4:14-4:19
                 name: "value"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 4:22-4:27
+              name: "value"
             )
           )
         )
@@ -277,7 +275,6 @@ SEMICOLON (14:22-14:23)
 Expression types:
   4:9-4:13 -> Foo
   4:9-4:19 -> i32
-  4:9-4:27 -> i32
   4:14-4:19 -> i32
   4:22-4:27 -> i32
   7:16-7:20 -> Foo
@@ -348,17 +345,15 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.foo LTest$Foo;
     DUP
     GETFIELD Test$Foo.value I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$Foo.value I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.foo LTest$Foo;
     INVOKEVIRTUAL Test$Foo.getValue()I
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    max stack 4 max locals 0
+    max stack 3 max locals 0
 
 class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
@@ -370,11 +365,9 @@ class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
   method getValue()I flags [PUBLIC]
     ALOAD_0 0
     GETFIELD Test$Foo.value I

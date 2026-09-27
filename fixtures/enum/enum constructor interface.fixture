@@ -228,24 +228,22 @@ SEMICOLON (23:35-23:36)
         )
         (BlockStatement
           range: 12:27-14:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 13:9-13:28
-            (AssignmentExpression
-              range: 13:9-13:27
-              (MemberExpression
-                range: 13:9-13:19
-                (ThisExpression
-                  range: 13:9-13:13
-                )
-                (IdentifierExpression
-                  range: 13:14-13:19
-                  name: "label"
-                )
+            (MemberExpression
+              range: 13:9-13:19
+              (ThisExpression
+                range: 13:9-13:13
               )
               (IdentifierExpression
-                range: 13:22-13:27
+                range: 13:14-13:19
                 name: "label"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 13:22-13:27
+              name: "label"
             )
           )
         )
@@ -406,7 +404,6 @@ Expression types:
   8:11-8:18 -> string
   13:9-13:13 -> Status
   13:9-13:19 -> string
-  13:9-13:27 -> string
   13:14-13:19 -> string
   13:22-13:27 -> string
   17:16-17:20 -> Status

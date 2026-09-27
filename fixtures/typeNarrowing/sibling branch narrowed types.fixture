@@ -126,19 +126,17 @@ RIGHT_BRACE (11:1-11:2)
             )
             (BlockStatement
               range: 5:15-7:6
-              (ExpressionStatement
+              (AssignmentStatement
                 range: 6:9-6:22
-                (AssignmentExpression
-                  range: 6:9-6:21
-                  (IdentifierExpression
-                    range: 6:9-6:14
-                    name: "value"
-                  )
-                  (LiteralExpression
-                    range: 6:17-6:21
-                    kind: NULL
-                    text: "null"
-                  )
+                (IdentifierExpression
+                  range: 6:9-6:14
+                  name: "value"
+                )
+                operator: ASSIGN
+                (LiteralExpression
+                  range: 6:17-6:21
+                  kind: NULL
+                  text: "null"
                 )
               )
             )
@@ -188,7 +186,6 @@ Expression types:
   5:5-10:6 -> void
   5:9-5:13 -> bool
   6:9-6:14 -> string | null
-  6:9-6:21 -> string | null
   6:17-6:21 -> null
   9:9-9:14 -> (any) => void
   9:9-9:27 -> void
@@ -239,9 +236,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.flag Z
     IFEQ L2
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    DUP
     PUTSTATIC Test.value Ljava/lang/String;
-    POP
     GOTO L3
    L2:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;

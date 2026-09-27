@@ -1,0 +1,56 @@
+var value: i32 = 0;
+value = "text";
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "i32" (1:12-1:15)
+EQUAL (1:16-1:17)
+INTEGER_LITERAL "0" (1:18-1:19)
+SEMICOLON (1:19-1:20)
+IDENTIFIER "value" (2:1-2:6)
+EQUAL (2:7-2:8)
+STRING_LITERAL "\"text\"" (2:9-2:15)
+SEMICOLON (2:15-2:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:16
+  (VariableDeclaration
+    range: 1:1-1:20
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:12-1:15
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 1:18-1:19
+      kind: INT
+      text: "0"
+    )
+  )
+  (AssignmentStatement
+    range: 2:1-2:16
+    (IdentifierExpression
+      range: 2:1-2:6
+      name: "value"
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 2:9-2:15
+      kind: STRING
+      text: "\"text\""
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot assign string to i32 at 2:1-2:16

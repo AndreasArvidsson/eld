@@ -78,25 +78,23 @@ RIGHT_BRACE (7:1-7:2)
         returnType: null
         (BlockStatement
           range: 4:23-6:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 5:9-5:24
-            (AssignmentExpression
-              range: 5:9-5:23
-              (MemberExpression
-                range: 5:9-5:19
-                (ThisExpression
-                  range: 5:9-5:13
-                )
-                (IdentifierExpression
-                  range: 5:14-5:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 5:9-5:19
+              (ThisExpression
+                range: 5:9-5:13
               )
-              (LiteralExpression
-                range: 5:22-5:23
-                kind: INT
-                text: "1"
+              (IdentifierExpression
+                range: 5:14-5:19
+                name: "value"
               )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 5:22-5:23
+              kind: INT
+              text: "1"
             )
           )
         )

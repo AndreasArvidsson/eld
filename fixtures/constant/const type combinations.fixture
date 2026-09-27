@@ -412,24 +412,22 @@ RIGHT_BRACE (46:1-46:2)
         )
         (BlockStatement
           range: 3:36-5:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 4:9-4:28
-            (AssignmentExpression
-              range: 4:9-4:27
-              (MemberExpression
-                range: 4:9-4:19
-                (ThisExpression
-                  range: 4:9-4:13
-                )
-                (IdentifierExpression
-                  range: 4:14-4:19
-                  name: "value"
-                )
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
               )
               (IdentifierExpression
-                range: 4:22-4:27
+                range: 4:14-4:19
                 name: "value"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 4:22-4:27
+              name: "value"
             )
           )
         )
@@ -466,64 +464,60 @@ RIGHT_BRACE (46:1-46:2)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 9:1-9:25
-    (AssignmentExpression
-      range: 9:1-9:24
+    (SubscriptExpression
+      range: 9:1-9:11
+      (IdentifierExpression
+        range: 9:1-9:8
+        name: "mutable"
+      )
+      (LiteralExpression
+        range: 9:9-9:10
+        kind: INT
+        text: "0"
+      )
+    )
+    operator: ASSIGN
+    (NewExpression
+      range: 9:14-9:24
+      (IdentifierExpression
+        range: 9:18-9:21
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 9:22-9:23
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 10:1-10:22
+    (MemberExpression
+      range: 10:1-10:17
       (SubscriptExpression
-        range: 9:1-9:11
+        range: 10:1-10:11
         (IdentifierExpression
-          range: 9:1-9:8
+          range: 10:1-10:8
           name: "mutable"
         )
         (LiteralExpression
-          range: 9:9-9:10
+          range: 10:9-10:10
           kind: INT
           text: "0"
         )
       )
-      (NewExpression
-        range: 9:14-9:24
-        (IdentifierExpression
-          range: 9:18-9:21
-          name: "Foo"
-        )
-        (LiteralExpression
-          range: 9:22-9:23
-          kind: INT
-          text: "2"
-        )
+      (IdentifierExpression
+        range: 10:12-10:17
+        name: "value"
       )
     )
-  )
-  (ExpressionStatement
-    range: 10:1-10:22
-    (AssignmentExpression
-      range: 10:1-10:21
-      (MemberExpression
-        range: 10:1-10:17
-        (SubscriptExpression
-          range: 10:1-10:11
-          (IdentifierExpression
-            range: 10:1-10:8
-            name: "mutable"
-          )
-          (LiteralExpression
-            range: 10:9-10:10
-            kind: INT
-            text: "0"
-          )
-        )
-        (IdentifierExpression
-          range: 10:12-10:17
-          name: "value"
-        )
-      )
-      (LiteralExpression
-        range: 10:20-10:21
-        kind: INT
-        text: "3"
-      )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 10:20-10:21
+      kind: INT
+      text: "3"
     )
   )
   (VariableDeclaration
@@ -559,34 +553,32 @@ RIGHT_BRACE (46:1-46:2)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 13:1-13:20
-    (AssignmentExpression
-      range: 13:1-13:19
-      (MemberExpression
-        range: 13:1-13:15
-        (SubscriptExpression
-          range: 13:1-13:9
-          (IdentifierExpression
-            range: 13:1-13:6
-            name: "fixed"
-          )
-          (LiteralExpression
-            range: 13:7-13:8
-            kind: INT
-            text: "0"
-          )
-        )
+    (MemberExpression
+      range: 13:1-13:15
+      (SubscriptExpression
+        range: 13:1-13:9
         (IdentifierExpression
-          range: 13:10-13:15
-          name: "value"
+          range: 13:1-13:6
+          name: "fixed"
+        )
+        (LiteralExpression
+          range: 13:7-13:8
+          kind: INT
+          text: "0"
         )
       )
-      (LiteralExpression
-        range: 13:18-13:19
-        kind: INT
-        text: "5"
+      (IdentifierExpression
+        range: 13:10-13:15
+        name: "value"
       )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 13:18-13:19
+      kind: INT
+      text: "5"
     )
   )
   (VariableDeclaration
@@ -644,33 +636,31 @@ RIGHT_BRACE (46:1-46:2)
       )
     )
   )
-  (ExpressionStatement
+  (AssignmentStatement
     range: 17:1-17:31
-    (AssignmentExpression
-      range: 17:1-17:30
-      (SubscriptExpression
-        range: 17:1-17:17
-        (IdentifierExpression
-          range: 17:1-17:14
-          name: "fixedElements"
-        )
-        (LiteralExpression
-          range: 17:15-17:16
-          kind: INT
-          text: "0"
-        )
+    (SubscriptExpression
+      range: 17:1-17:17
+      (IdentifierExpression
+        range: 17:1-17:14
+        name: "fixedElements"
       )
-      (NewExpression
-        range: 17:20-17:30
-        (IdentifierExpression
-          range: 17:24-17:27
-          name: "Foo"
-        )
-        (LiteralExpression
-          range: 17:28-17:29
-          kind: INT
-          text: "7"
-        )
+      (LiteralExpression
+        range: 17:15-17:16
+        kind: INT
+        text: "0"
+      )
+    )
+    operator: ASSIGN
+    (NewExpression
+      range: 17:20-17:30
+      (IdentifierExpression
+        range: 17:24-17:27
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 17:28-17:29
+        kind: INT
+        text: "7"
       )
     )
   )
@@ -1192,7 +1182,6 @@ RIGHT_BRACE (46:1-46:2)
 Expression types:
   4:9-4:13 -> Foo
   4:9-4:19 -> i32
-  4:9-4:27 -> i32
   4:14-4:19 -> i32
   4:22-4:27 -> i32
   8:24-8:36 -> [Foo]
@@ -1201,7 +1190,6 @@ Expression types:
   8:33-8:34 -> i32
   9:1-9:8 -> [Foo]
   9:1-9:11 -> Foo
-  9:1-9:24 -> Foo
   9:9-9:10 -> i32
   9:14-9:24 -> Foo
   9:18-9:21 -> Foo
@@ -1209,7 +1197,6 @@ Expression types:
   10:1-10:8 -> [Foo]
   10:1-10:11 -> Foo
   10:1-10:17 -> i32
-  10:1-10:21 -> i32
   10:9-10:10 -> i32
   10:12-10:17 -> i32
   10:20-10:21 -> i32
@@ -1220,7 +1207,6 @@ Expression types:
   13:1-13:6 -> const [Foo]
   13:1-13:9 -> Foo
   13:1-13:15 -> i32
-  13:1-13:19 -> i32
   13:7-13:8 -> i32
   13:10-13:15 -> i32
   13:18-13:19 -> i32
@@ -1231,7 +1217,6 @@ Expression types:
   16:45-16:46 -> i32
   17:1-17:14 -> [const Foo]
   17:1-17:17 -> const Foo
-  17:1-17:30 -> const Foo
   17:15-17:16 -> i32
   17:20-17:30 -> Foo
   17:24-17:27 -> Foo
@@ -1483,17 +1468,13 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     LDC 2
     INVOKESPECIAL Test$Foo.<init>(I)V
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.set(ILjava/lang/Object;)V
-    POP
     GETSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     LDC 0
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
     CHECKCAST Test$Foo
     LDC 3
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
     LDC 1
@@ -1512,9 +1493,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
     CHECKCAST Test$Foo
     LDC 5
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
     GETSTATIC Test.mutable Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     PUTSTATIC Test.fixedView Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
@@ -1536,9 +1515,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     DUP
     LDC 7
     INVOKESPECIAL Test$Foo.<init>(I)V
-    DUP_X2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.set(ILjava/lang/Object;)V
-    POP
     NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
     DUP
     LDC 1
@@ -1686,11 +1663,9 @@ class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

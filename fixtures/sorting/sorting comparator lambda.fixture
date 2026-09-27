@@ -242,24 +242,22 @@ SEMICOLON (14:25-14:26)
         )
         (BlockStatement
           range: 3:34-3:53
-          (ExpressionStatement
+          (AssignmentStatement
             range: 3:36-3:51
-            (AssignmentExpression
-              range: 3:36-3:50
-              (MemberExpression
-                range: 3:36-3:44
-                (ThisExpression
-                  range: 3:36-3:40
-                )
-                (IdentifierExpression
-                  range: 3:41-3:44
-                  name: "age"
-                )
+            (MemberExpression
+              range: 3:36-3:44
+              (ThisExpression
+                range: 3:36-3:40
               )
               (IdentifierExpression
-                range: 3:47-3:50
+                range: 3:41-3:44
                 name: "age"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 3:47-3:50
+              name: "age"
             )
           )
         )
@@ -696,7 +694,6 @@ SEMICOLON (14:25-14:26)
 Expression types:
   3:36-3:40 -> Person
   3:36-3:44 -> i32
-  3:36-3:50 -> i32
   3:41-3:44 -> i32
   3:47-3:50 -> i32
   5:30-5:78 -> List<Person>
@@ -984,11 +981,9 @@ class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Person.age I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

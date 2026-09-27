@@ -170,24 +170,22 @@ SEMICOLON (13:19-13:20)
         returnType: null
         (BlockStatement
           range: 6:38-8:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 7:9-7:26
-            (AssignmentExpression
-              range: 7:9-7:25
-              (MemberExpression
-                range: 7:9-7:18
-                (ThisExpression
-                  range: 7:9-7:13
-                )
-                (IdentifierExpression
-                  range: 7:14-7:18
-                  name: "name"
-                )
+            (MemberExpression
+              range: 7:9-7:18
+              (ThisExpression
+                range: 7:9-7:13
               )
               (IdentifierExpression
-                range: 7:21-7:25
+                range: 7:14-7:18
                 name: "name"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 7:21-7:25
+              name: "name"
             )
           )
         )
@@ -277,7 +275,6 @@ Expression types:
   5:23-5:28 -> string
   7:9-7:13 -> Person
   7:9-7:18 -> string
-  7:9-7:25 -> string
   7:14-7:18 -> string
   7:21-7:25 -> string
   10:16-10:28 -> Person
@@ -370,11 +367,9 @@ class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   method rename(Ljava/lang/String;)V flags [PUBLIC]
     ALOAD_0 0
     ALOAD_1 1
-    DUP_X1
     PUTFIELD Test$Person.name Ljava/lang/String;
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

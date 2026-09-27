@@ -3,7 +3,7 @@ package com.github.andreasarvidsson.eld.semantic;
 import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BinaryOperator;
@@ -286,7 +286,7 @@ final class TypeNarrowing {
     static boolean hasMutation(final Expression expression) {
         return AstTraversal.anyMatch(
             expression,
-            node -> node instanceof AssignmentExpression
+            node -> node instanceof AssignmentStatement
                 || node instanceof CallExpression
                 || node instanceof NewExpression
                 || node instanceof PostfixExpression

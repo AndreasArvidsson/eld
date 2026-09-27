@@ -118,40 +118,38 @@ SEMICOLON (14:21-14:22)
               )
             )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 6:9-6:43
-            (AssignmentExpression
-              range: 6:9-6:42
+            (MemberExpression
+              range: 6:9-6:22
+              (IdentifierExpression
+                range: 6:9-6:16
+                name: "Example"
+              )
+              (IdentifierExpression
+                range: 6:17-6:22
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 6:25-6:42
               (MemberExpression
-                range: 6:9-6:22
+                range: 6:25-6:38
                 (IdentifierExpression
-                  range: 6:9-6:16
+                  range: 6:25-6:32
                   name: "Example"
                 )
                 (IdentifierExpression
-                  range: 6:17-6:22
+                  range: 6:33-6:38
                   name: "value"
                 )
               )
-              (BinaryExpression
-                range: 6:25-6:42
-                (MemberExpression
-                  range: 6:25-6:38
-                  (IdentifierExpression
-                    range: 6:25-6:32
-                    name: "Example"
-                  )
-                  (IdentifierExpression
-                    range: 6:33-6:38
-                    name: "value"
-                  )
-                )
-                operator: ADD
-                (LiteralExpression
-                  range: 6:41-6:42
-                  kind: INT
-                  text: "1"
-                )
+              operator: ADD
+              (LiteralExpression
+                range: 6:41-6:42
+                kind: INT
+                text: "1"
               )
             )
           )
@@ -166,40 +164,38 @@ SEMICOLON (14:21-14:22)
         range: 9:5-11:6
         (BlockStatement
           range: 9:12-11:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 10:9-10:43
-            (AssignmentExpression
-              range: 10:9-10:42
+            (MemberExpression
+              range: 10:9-10:22
+              (IdentifierExpression
+                range: 10:9-10:16
+                name: "Example"
+              )
+              (IdentifierExpression
+                range: 10:17-10:22
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 10:25-10:42
               (MemberExpression
-                range: 10:9-10:22
+                range: 10:25-10:38
                 (IdentifierExpression
-                  range: 10:9-10:16
+                  range: 10:25-10:32
                   name: "Example"
                 )
                 (IdentifierExpression
-                  range: 10:17-10:22
+                  range: 10:33-10:38
                   name: "value"
                 )
               )
-              (BinaryExpression
-                range: 10:25-10:42
-                (MemberExpression
-                  range: 10:25-10:38
-                  (IdentifierExpression
-                    range: 10:25-10:32
-                    name: "Example"
-                  )
-                  (IdentifierExpression
-                    range: 10:33-10:38
-                    name: "value"
-                  )
-                )
-                operator: MULTIPLY
-                (LiteralExpression
-                  range: 10:41-10:42
-                  kind: INT
-                  text: "2"
-                )
+              operator: MULTIPLY
+              (LiteralExpression
+                range: 10:41-10:42
+                kind: INT
+                text: "2"
               )
             )
           )
@@ -239,7 +235,6 @@ Expression types:
   5:15-5:29 -> string
   6:9-6:16 -> Example
   6:9-6:22 -> i32
-  6:9-6:42 -> i32
   6:17-6:22 -> i32
   6:25-6:32 -> Example
   6:25-6:38 -> i32
@@ -248,7 +243,6 @@ Expression types:
   6:41-6:42 -> i32
   10:9-10:16 -> Example
   10:9-10:22 -> i32
-  10:9-10:42 -> i32
   10:17-10:22 -> i32
   10:25-10:32 -> Example
   10:25-10:38 -> i32
@@ -305,15 +299,11 @@ class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     GETSTATIC Test$Example.value I
     LDC 1
     IADD
-    DUP
     PUTSTATIC Test$Example.value I
-    POP
     GETSTATIC Test$Example.value I
     LDC 2
     IMUL
-    DUP
     PUTSTATIC Test$Example.value I
-    POP
     RETURN
     max stack 2 max locals 0
   method <init>()V flags [PUBLIC]

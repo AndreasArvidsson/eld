@@ -443,13 +443,16 @@ SEMICOLON (31:13-31:14)
             text: "2"
           )
         )
-        (PostfixExpression
+        (ExpressionStatement
           range: 19:42-19:52
-          (IdentifierExpression
-            range: 19:42-19:50
-            name: "forIndex"
+          (PostfixExpression
+            range: 19:42-19:52
+            (IdentifierExpression
+              range: 19:42-19:50
+              name: "forIndex"
+            )
+            operator: INCREMENT
           )
-          operator: INCREMENT
         )
         (BlockStatement
           range: 19:54-22:6
@@ -778,11 +781,9 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$$async0.$local1 I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$$async0.$local1 I
-    POP
     INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
     ALOAD_0 0
     LDC 1
@@ -818,11 +819,9 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$$async0.$local3 I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$$async0.$local3 I
-    POP
     INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
     ALOAD_0 0
     LDC 2
@@ -888,11 +887,9 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$$async0.$local5 I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$$async0.$local5 I
-    POP
     GOTO L13
    L18:
     ALOAD_0 0

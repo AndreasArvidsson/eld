@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
 import com.github.andreasarvidsson.eld.Range;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
+import com.github.andreasarvidsson.eld.parser.AssignmentOperator;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
 import com.github.andreasarvidsson.eld.parser.Expression;
-import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionModifier;
@@ -67,13 +67,14 @@ public final class RecordLowering {
                 )
             );
             final MemberExpression target = member(componentName, parameter);
-            final AssignmentExpression assignment =
-                new AssignmentExpression(
+            final AssignmentStatement assignment =
+                new AssignmentStatement(
                     target,
-                    expression(componentName, parameter)
+                    AssignmentOperator.ASSIGN,
+                    expression(componentName, parameter),
+                    target.range().union(parameter.range())
                 );
-            assignments
-                .add(new ExpressionStatement(assignment, assignment.range()));
+            assignments.add(assignment);
             copyParameters.add(
                 new FunctionParameter(
                     identifier(componentName, parameter),

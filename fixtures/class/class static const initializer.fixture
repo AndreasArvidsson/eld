@@ -73,26 +73,24 @@ SEMICOLON (8:21-8:22)
         range: 4:5-6:6
         (BlockStatement
           range: 4:12-6:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 5:9-5:28
-            (AssignmentExpression
-              range: 5:9-5:27
-              (MemberExpression
-                range: 5:9-5:22
-                (IdentifierExpression
-                  range: 5:9-5:16
-                  name: "Example"
-                )
-                (IdentifierExpression
-                  range: 5:17-5:22
-                  name: "value"
-                )
+            (MemberExpression
+              range: 5:9-5:22
+              (IdentifierExpression
+                range: 5:9-5:16
+                name: "Example"
               )
-              (LiteralExpression
-                range: 5:25-5:27
-                kind: INT
-                text: "42"
+              (IdentifierExpression
+                range: 5:17-5:22
+                name: "value"
               )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 5:25-5:27
+              kind: INT
+              text: "42"
             )
           )
         )
@@ -127,7 +125,6 @@ SEMICOLON (8:21-8:22)
 Expression types:
   5:9-5:16 -> Example
   5:9-5:22 -> i32
-  5:9-5:27 -> i32
   5:17-5:22 -> i32
   5:25-5:27 -> i32
   8:1-8:6 -> (any) => void
@@ -169,11 +166,9 @@ class Test$Example extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   field value I flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
     LDC 42
-    DUP
     PUTSTATIC Test$Example.value I
-    POP
     RETURN
-    max stack 2 max locals 0
+    max stack 1 max locals 0
   method <init>()V flags [PUBLIC]
     ALOAD_0 0
     INVOKESPECIAL java/lang/Object.<init>()V

@@ -1,0 +1,21 @@
+var value = 0;
+const result = value = 10;
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "0" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+CONST (2:1-2:6)
+IDENTIFIER "result" (2:7-2:13)
+EQUAL (2:14-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "10" (2:24-2:26)
+SEMICOLON (2:26-2:27)
+
+--- AST ---
+
+ParserException: Expected SEMICOLON, but found EQUAL at 2:22-2:23

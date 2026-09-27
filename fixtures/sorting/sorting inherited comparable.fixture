@@ -254,24 +254,22 @@ SEMICOLON (20:25-20:26)
         )
         (BlockStatement
           range: 6:34-6:53
-          (ExpressionStatement
+          (AssignmentStatement
             range: 6:36-6:51
-            (AssignmentExpression
-              range: 6:36-6:50
-              (MemberExpression
-                range: 6:36-6:44
-                (ThisExpression
-                  range: 6:36-6:40
-                )
-                (IdentifierExpression
-                  range: 6:41-6:44
-                  name: "age"
-                )
+            (MemberExpression
+              range: 6:36-6:44
+              (ThisExpression
+                range: 6:36-6:40
               )
               (IdentifierExpression
-                range: 6:47-6:50
+                range: 6:41-6:44
                 name: "age"
               )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 6:47-6:50
+              name: "age"
             )
           )
         )
@@ -571,7 +569,6 @@ SEMICOLON (20:25-20:26)
 Expression types:
   6:36-6:40 -> Person
   6:36-6:44 -> i32
-  6:36-6:50 -> i32
   6:41-6:44 -> i32
   6:47-6:50 -> i32
   8:16-8:20 -> Person
@@ -769,11 +766,9 @@ class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     ALOAD_0 0
     ILOAD_1 1
-    DUP_X1
     PUTFIELD Test$Person.age I
-    POP
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
   method compareTo(LTest$Order;)I flags [PUBLIC]
     ALOAD_0 0
     GETFIELD Test$Person.age I

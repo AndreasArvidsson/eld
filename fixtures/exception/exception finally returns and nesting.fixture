@@ -184,19 +184,17 @@ SEMICOLON (31:20-31:21)
         )
         (BlockStatement
           range: 5:15-8:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 6:9-6:19
-            (AssignmentExpression
-              range: 6:9-6:18
-              (IdentifierExpression
-                range: 6:9-6:14
-                name: "value"
-              )
-              (LiteralExpression
-                range: 6:17-6:18
-                kind: INT
-                text: "9"
-              )
+            (IdentifierExpression
+              range: 6:9-6:14
+              name: "value"
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 6:17-6:18
+              kind: INT
+              text: "9"
             )
           )
           (ExpressionStatement
@@ -400,7 +398,6 @@ Expression types:
   1:13-1:14 -> i32
   4:16-4:21 -> i32
   6:9-6:14 -> i32
-  6:9-6:18 -> i32
   6:17-6:18 -> i32
   7:9-7:14 -> (any) => void
   7:9-7:31 -> void
@@ -467,9 +464,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ISTORE_0 0
    L1:
     LDC 9
-    DUP
     PUTSTATIC Test.value I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "saved cleanup"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
@@ -480,9 +475,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L3:
     ASTORE_1 1
     LDC 9
-    DUP
     PUTSTATIC Test.value I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC "saved cleanup"
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V

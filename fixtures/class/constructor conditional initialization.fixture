@@ -133,49 +133,45 @@ SEMICOLON (12:28-12:29)
               )
               (BlockStatement
                 range: 4:19-6:10
-                (ExpressionStatement
+                (AssignmentStatement
                   range: 5:13-5:28
-                  (AssignmentExpression
-                    range: 5:13-5:27
-                    (MemberExpression
-                      range: 5:13-5:23
-                      (ThisExpression
-                        range: 5:13-5:17
-                      )
-                      (IdentifierExpression
-                        range: 5:18-5:23
-                        name: "value"
-                      )
+                  (MemberExpression
+                    range: 5:13-5:23
+                    (ThisExpression
+                      range: 5:13-5:17
                     )
-                    (LiteralExpression
-                      range: 5:26-5:27
-                      kind: INT
-                      text: "1"
+                    (IdentifierExpression
+                      range: 5:18-5:23
+                      name: "value"
                     )
+                  )
+                  operator: ASSIGN
+                  (LiteralExpression
+                    range: 5:26-5:27
+                    kind: INT
+                    text: "1"
                   )
                 )
               )
               (BlockStatement
                 range: 6:16-8:10
-                (ExpressionStatement
+                (AssignmentStatement
                   range: 7:13-7:28
-                  (AssignmentExpression
-                    range: 7:13-7:27
-                    (MemberExpression
-                      range: 7:13-7:23
-                      (ThisExpression
-                        range: 7:13-7:17
-                      )
-                      (IdentifierExpression
-                        range: 7:18-7:23
-                        name: "value"
-                      )
+                  (MemberExpression
+                    range: 7:13-7:23
+                    (ThisExpression
+                      range: 7:13-7:17
                     )
-                    (LiteralExpression
-                      range: 7:26-7:27
-                      kind: INT
-                      text: "2"
+                    (IdentifierExpression
+                      range: 7:18-7:23
+                      name: "value"
                     )
+                  )
+                  operator: ASSIGN
+                  (LiteralExpression
+                    range: 7:26-7:27
+                    kind: INT
+                    text: "2"
                   )
                 )
               )
@@ -252,12 +248,10 @@ Expression types:
   4:13-4:17 -> bool
   5:13-5:17 -> Foo
   5:13-5:23 -> i32
-  5:13-5:27 -> i32
   5:18-5:23 -> i32
   5:26-5:27 -> i32
   7:13-7:17 -> Foo
   7:13-7:23 -> i32
-  7:13-7:27 -> i32
   7:18-7:23 -> i32
   7:26-7:27 -> i32
   11:1-11:6 -> (any) => void
@@ -331,19 +325,15 @@ class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     IFEQ L0
     ALOAD_0 0
     LDC 1
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
     GOTO L1
    L0:
     ALOAD_0 0
     LDC 2
-    DUP_X1
     PUTFIELD Test$Foo.value I
-    POP
    L1:
     RETURN
-    max stack 3 max locals 2
+    max stack 2 max locals 2
 
 --- OUTPUT ---
 

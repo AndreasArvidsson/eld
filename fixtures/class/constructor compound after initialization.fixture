@@ -1,0 +1,225 @@
+class Counter {
+    public var value: i32;
+    public constructor() {
+        this.value = 1;
+        this.value += 2;
+    }
+}
+
+print(new Counter().value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "i32" (2:23-2:26)
+SEMICOLON (2:26-2:27)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+THIS (4:9-4:13)
+DOT (4:13-4:14)
+IDENTIFIER "value" (4:14-4:19)
+EQUAL (4:20-4:21)
+INTEGER_LITERAL "1" (4:22-4:23)
+SEMICOLON (4:23-4:24)
+THIS (5:9-5:13)
+DOT (5:13-5:14)
+IDENTIFIER "value" (5:14-5:19)
+PLUS_EQUAL (5:20-5:22)
+INTEGER_LITERAL "2" (5:23-5:24)
+SEMICOLON (5:24-5:25)
+RIGHT_BRACE (6:5-6:6)
+RIGHT_BRACE (7:1-7:2)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+NEW (9:7-9:10)
+IDENTIFIER "Counter" (9:11-9:18)
+LEFT_PAREN (9:18-9:19)
+RIGHT_PAREN (9:19-9:20)
+DOT (9:20-9:21)
+IDENTIFIER "value" (9:21-9:26)
+RIGHT_PAREN (9:26-9:27)
+SEMICOLON (9:27-9:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:28
+  (ClassDeclaration
+    range: 1:1-7:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:27
+      visibility: PUBLIC
+      (UninitializedVariableDeclaration
+        range: 2:12-2:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:23-2:26
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-6:6
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 3:12-6:6
+        (BlockStatement
+          range: 3:26-6:6
+          (AssignmentStatement
+            range: 4:9-4:24
+            (MemberExpression
+              range: 4:9-4:19
+              (ThisExpression
+                range: 4:9-4:13
+              )
+              (IdentifierExpression
+                range: 4:14-4:19
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 4:22-4:23
+              kind: INT
+              text: "1"
+            )
+          )
+          (AssignmentStatement
+            range: 5:9-5:25
+            (MemberExpression
+              range: 5:9-5:19
+              (ThisExpression
+                range: 5:9-5:13
+              )
+              (IdentifierExpression
+                range: 5:14-5:19
+                name: "value"
+              )
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 5:23-5:24
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:28
+    (CallExpression
+      range: 9:1-9:27
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 9:7-9:26
+        (NewExpression
+          range: 9:7-9:20
+          (IdentifierExpression
+            range: 9:11-9:18
+            name: "Counter"
+          )
+        )
+        (IdentifierExpression
+          range: 9:21-9:26
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  4:9-4:13 -> Counter
+  4:9-4:19 -> i32
+  4:14-4:19 -> i32
+  4:22-4:23 -> i32
+  5:9-5:13 -> Counter
+  5:9-5:19 -> i32
+  5:14-5:19 -> i32
+  5:23-5:24 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:27 -> void
+  9:7-9:20 -> Counter
+  9:7-9:26 -> i32
+  9:11-9:18 -> Counter
+  9:21-9:26 -> i32
+
+Resolved types:
+  2:23-2:26 -> i32
+
+Declarations:
+  1:7-1:14 -> class Counter
+  2:16-2:21 -> var value: i32
+  3:12-6:6 -> constructor()
+
+References:
+  4:14-4:19 -> 2:16-2:21
+  5:14-5:19 -> 2:16-2:21
+  9:1-9:6 -> builtin print
+  9:11-9:18 -> 1:7-1:14
+  9:21-9:26 -> 2:16-2:21
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Counter
+    DUP
+    INVOKESPECIAL Test$Counter.<init>()V
+    GETFIELD Test$Counter.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$Counter.value I
+    ALOAD_0 0
+    DUP
+    GETFIELD Test$Counter.value I
+    LDC 2
+    IADD
+    PUTFIELD Test$Counter.value I
+    RETURN
+    max stack 3 max locals 1
+
+--- OUTPUT ---
+
+3
+

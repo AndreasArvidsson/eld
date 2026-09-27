@@ -1623,22 +1623,6 @@ public final class BytecodeGenerator {
                     operands.add(slice.endIndex());
                 }
             }
-            case AssignmentExpression assignment -> {
-                final Expression target = unwrapGrouping(assignment.target());
-                if (
-                    target instanceof MemberExpression member
-                        && !semanticModel.isStaticMember(
-                            semanticModel.getReference(member.member())
-                        )
-                ) {
-                    operands.add(member.target());
-                }
-                else if (target instanceof SubscriptExpression index) {
-                    operands.add(index.target());
-                    operands.add(index.index());
-                }
-                operands.add(assignment.value());
-            }
             case UnaryExpression unary -> {
                 final Expression target = unwrapGrouping(unary.operand());
                 if (
@@ -1682,6 +1666,27 @@ public final class BytecodeGenerator {
         final IdentityHashMap<ForEachStatement, Integer> loopIndexes
     ) {
         AstTraversal.walk(body, node -> {
+            if (
+                node instanceof AssignmentStatement assignment
+                    && containsAwaitNode(assignment)
+            ) {
+                final Expression target = unwrapGrouping(assignment.target());
+                if (
+                    target instanceof MemberExpression member
+                        && !semanticModel.isStaticMember(
+                            semanticModel.getReference(member.member())
+                        )
+                ) {
+                    addAsyncSpill(spills, member.target());
+                }
+                else if (target instanceof SubscriptExpression index) {
+                    addAsyncSpill(spills, index.target());
+                    addAsyncSpill(spills, index.index());
+                }
+                if (assignment.operator() != AssignmentOperator.ASSIGN) {
+                    addAsyncSpill(spills, target);
+                }
+            }
             if (
                 node instanceof ForEachStatement loop && AstTraversal
                     .anyMatch(loop.body(), AwaitExpression.class::isInstance)
@@ -4319,8 +4324,20 @@ public final class BytecodeGenerator {
                         return conditional(conditional, method.newLabel());
                     }
                     if (
-                        statement
-                            .expression() instanceof AssignmentExpression assignment
+                        unwrap(
+                            statement.expression()
+                        ) instanceof PostfixExpression postfix
+                            && !frameTemporaries.containsKey(postfix)
+                            && !expressionTemporaries.containsKey(postfix)
+                    ) {
+                        discardPostfix(postfix);
+                        break;
+                    }
+                    discard(statement.expression());
+                }
+                case AssignmentStatement assignment -> {
+                    if (
+                        assignment.operator() == AssignmentOperator.ASSIGN
                             && assignment
                                 .target() instanceof MemberExpression member
                             && member.target() instanceof ThisExpression
@@ -4335,9 +4352,10 @@ public final class BytecodeGenerator {
                             member,
                             semanticModel.getExpressionType(member)
                         );
-                        break;
                     }
-                    discard(statement.expression());
+                    else {
+                        assign(assignment);
+                    }
                 }
                 case DestructuringAssignmentStatement assignment -> destructure(
                     assignment.pattern(),
@@ -4516,7 +4534,7 @@ public final class BytecodeGenerator {
                 case ForStatement statement -> {
                     final Statement initializer = statement.initializer();
                     final Expression condition = statement.condition();
-                    final Expression update = statement.update();
+                    final Statement update = statement.update();
                     if (initializer != null) {
                         item(initializer);
                     }
@@ -4541,7 +4559,7 @@ public final class BytecodeGenerator {
                     if (loopBody(statement.body(), loop) || loop.hasContinue) {
                         method.labelBinding(next);
                         if (update != null) {
-                            discard(update);
+                            item(update);
                         }
                         method.branch(GOTO, start);
                     }
@@ -7737,7 +7755,8 @@ public final class BytecodeGenerator {
                                 DECREMENT -> increment(
                                     unary.operand(),
                                     unary.operator() == UnaryOperator.INCREMENT,
-                                    false
+                                    false,
+                                    true
                                 );
                             case PLUS -> expression(unary.operand());
                             case MINUS -> {
@@ -7762,6 +7781,7 @@ public final class BytecodeGenerator {
                     case PostfixExpression postfix -> increment(
                         postfix.operand(),
                         postfix.operator() == PostfixOperator.INCREMENT,
+                        true,
                         true
                     );
                     case TernaryExpression ternary -> {
@@ -7784,7 +7804,6 @@ public final class BytecodeGenerator {
                         yieldTargets.pop();
                     }
                     case SwitchExpression selection -> selection(selection);
-                    case AssignmentExpression assignment -> assign(assignment);
                     case CallExpression call -> call(call);
                     case AwaitExpression awaited -> {
                         if (asyncStateMachine != null) {
@@ -8027,15 +8046,38 @@ public final class BytecodeGenerator {
                 convertExpression(expression);
             }
             finally {
-                for (final Expression operand : preparedOperands) {
-                    frameTemporaries.remove(operand);
-                    formattedTemporaries.remove(operand);
-                    formattedLocalTemporaries.remove(operand);
-                    expressionTemporaries.remove(operand);
-                }
-                if (!preparedOperands.isEmpty()) {
-                    preparedCompounds.remove(expression);
-                }
+                clearPreparedOperands(expression, preparedOperands);
+            }
+        }
+
+        private void discardPostfix(final PostfixExpression postfix) {
+            final List<Expression> preparedOperands =
+                prepareCompoundExpression(postfix);
+            try {
+                increment(
+                    postfix.operand(),
+                    postfix.operator() == PostfixOperator.INCREMENT,
+                    true,
+                    false
+                );
+            }
+            finally {
+                clearPreparedOperands(postfix, preparedOperands);
+            }
+        }
+
+        private void clearPreparedOperands(
+            final Expression expression,
+            final List<Expression> preparedOperands
+        ) {
+            for (final Expression operand : preparedOperands) {
+                frameTemporaries.remove(operand);
+                formattedTemporaries.remove(operand);
+                formattedLocalTemporaries.remove(operand);
+                expressionTemporaries.remove(operand);
+            }
+            if (!preparedOperands.isEmpty()) {
+                preparedCompounds.remove(expression);
             }
         }
 
@@ -10079,7 +10121,7 @@ public final class BytecodeGenerator {
                                     later,
                                     node -> node instanceof CallExpression
                                         || node instanceof NewExpression
-                                        || node instanceof AssignmentExpression
+                                        || node instanceof AssignmentStatement
                                         || node instanceof UnaryExpression
                                         || node instanceof PostfixExpression
                                 )
@@ -10685,8 +10727,23 @@ public final class BytecodeGenerator {
             }
         }
 
-        private void assign(final AssignmentExpression assignment) {
+        private void assign(final AssignmentStatement assignment) {
+            if (assignment.operator() != AssignmentOperator.ASSIGN) {
+                compoundAssign(assignment);
+                return;
+            }
             final Expression target = unwrap(assignment.target());
+            if (
+                containsAwait(assignment)
+                    && (target instanceof SubscriptExpression
+                        || (target instanceof MemberExpression member
+                            && !semanticModel.isStaticMember(
+                                semanticModel.getReference(member.member())
+                            )))
+            ) {
+                assignAwait(assignment, target);
+                return;
+            }
             if (target instanceof IdentifierExpression identifier) {
                 final Symbol symbol = semanticModel.getReference(identifier);
                 final boolean containsAwait =
@@ -10694,62 +10751,278 @@ public final class BytecodeGenerator {
                         assignment.value(),
                         AwaitExpression.class::isInstance
                     );
-                final boolean instanceField;
                 if (containsAwait) {
                     expression(assignment.value());
                     final int value = reserve(symbol.type());
                     method.with(
                         localInstruction(storeOpcode(symbol.type()), value)
                     );
-                    instanceField = prepareStore(symbol);
+                    prepareStore(symbol);
                     method.with(
                         localInstruction(loadOpcode(symbol.type()), value)
                     );
                 }
                 else {
-                    instanceField = prepareStore(symbol);
+                    prepareStore(symbol);
                     expression(assignment.value());
                 }
-                method.with(
-                    simpleInstruction(
-                        slots(symbol.type()) == 2
-                            ? (instanceField ? DUP2_X1 : DUP2)
-                            : (instanceField ? DUP_X1 : DUP)
-                    )
-                );
                 store(symbol);
             }
             else if (target instanceof MemberExpression member) {
                 final Type type = semanticModel.getExpressionType(member);
-                final boolean staticMember =
-                    semanticModel.isStaticMember(
-                        semanticModel.getReference(member.member())
-                    );
                 memberReceiver(member);
                 expression(assignment.value());
-                method.with(
-                    simpleInstruction(
-                        slots(type) == 2
-                            ? staticMember ? DUP2 : DUP2_X1
-                            : staticMember ? DUP : DUP_X1
-                    )
-                );
                 storeMember(member, type);
             }
             else if (target instanceof SubscriptExpression index) {
                 arrayIndex(index);
                 expression(assignment.value());
-                method.with(
-                    simpleInstruction(
-                        slots(semanticModel.getExpressionType(index)) == 2
-                            ? DUP2_X2
-                            : DUP_X2
-                    )
-                );
                 arraySet(semanticModel.getExpressionType(index));
             }
             else {
                 throw unsupported(target, "Invalid assignment target");
+            }
+        }
+
+        private void assignAwait(
+            final AssignmentStatement assignment,
+            final Expression target
+        ) {
+            if (target instanceof MemberExpression member) {
+                if (
+                    !semanticModel.isStaticMember(
+                        semanticModel.getReference(member.member())
+                    )
+                ) {
+                    saveFrameTemporary(member.target());
+                }
+            }
+            else if (target instanceof SubscriptExpression index) {
+                saveFrameTemporary(index.target());
+                saveFrameTemporary(index.index());
+            }
+            expression(assignment.value());
+            final Type valueType =
+                semanticModel.getEffectiveType(assignment.value());
+            final int value = reserve(valueType);
+            method.with(localInstruction(storeOpcode(valueType), value));
+            if (target instanceof MemberExpression member) {
+                if (
+                    !semanticModel.isStaticMember(
+                        semanticModel.getReference(member.member())
+                    )
+                ) {
+                    loadFrameTemporary(member.target());
+                    frameTemporaries.remove(member.target());
+                }
+                method.with(localInstruction(loadOpcode(valueType), value));
+                storeMember(member, semanticModel.getExpressionType(member));
+            }
+            else if (target instanceof SubscriptExpression index) {
+                loadFrameTemporary(index.target());
+                loadFrameTemporary(index.index());
+                method.with(localInstruction(loadOpcode(valueType), value));
+                arraySet(semanticModel.getExpressionType(index));
+                frameTemporaries.remove(index.target());
+                frameTemporaries.remove(index.index());
+            }
+            else {
+                throw unsupported(target, "Invalid assignment target");
+            }
+        }
+
+        private void compoundAssign(final AssignmentStatement assignment) {
+            final Expression target = unwrap(assignment.target());
+            final Type type = semanticModel.getExpressionType(target);
+            if (containsAwait(assignment)) {
+                compoundAssignAwait(assignment, target, type);
+                return;
+            }
+            if (target instanceof IdentifierExpression identifier) {
+                final Symbol symbol = semanticModel.getReference(identifier);
+                if (
+                    (assignment.operator() == AssignmentOperator.ADD
+                        || assignment.operator() == AssignmentOperator.SUBTRACT)
+                        && assignment
+                            .value() instanceof LiteralExpression literal
+                        && literal.kind() == LiteralKind.INT
+                ) {
+                    final BigInteger value =
+                        IntegerLiterals.parse(literal.text());
+                    final BigInteger amount =
+                        assignment.operator() == AssignmentOperator.ADD
+                            ? value
+                            : value.negate();
+                    if (
+                        amount
+                            .compareTo(BigInteger.valueOf(Short.MIN_VALUE)) >= 0
+                            && amount.compareTo(
+                                BigInteger.valueOf(Short.MAX_VALUE)
+                            ) <= 0
+                            && tryLocalIncrement(
+                                symbol,
+                                type,
+                                amount.intValue()
+                            )
+                    ) {
+                        return;
+                    }
+                }
+                prepareStore(symbol);
+                load(symbol);
+                final boolean boxedStorage =
+                    reference(symbol.type()) && !symbol.type().equals(type);
+                if (boxedStorage) {
+                    readObject(type);
+                }
+                compoundValue(assignment, type);
+                if (boxedStorage) {
+                    box(type);
+                }
+                store(symbol);
+            }
+            else if (target instanceof MemberExpression member) {
+                final Symbol symbol =
+                    semanticModel.getReference(member.member());
+                final boolean staticMember =
+                    semanticModel.isStaticMember(symbol);
+                if (staticMember) {
+                    method.fieldAccess(
+                        GETSTATIC,
+                        classDesc(memberOwner(member)),
+                        symbol.name(),
+                        ClassDesc.ofDescriptor(descriptor(type))
+                    );
+                }
+                else {
+                    memberReceiver(member);
+                    method.dup();
+                    if (
+                        semanticModel
+                            .getMemberOwner(member) instanceof InterfaceType
+                    ) {
+                        method.invoke(
+                            INVOKEINTERFACE,
+                            classDesc(memberOwner(member)),
+                            "$get$" + symbol.name(),
+                            MethodTypeDesc
+                                .ofDescriptor("()" + descriptor(type)),
+                            true
+                        );
+                    }
+                    else {
+                        method.fieldAccess(
+                            GETFIELD,
+                            classDesc(memberOwner(member)),
+                            symbol.name(),
+                            ClassDesc.ofDescriptor(descriptor(type))
+                        );
+                    }
+                }
+                compoundValue(assignment, type);
+                storeMember(member, type);
+            }
+            else if (target instanceof SubscriptExpression index) {
+                arrayIndex(index);
+                method.dup2();
+                arrayGet(type);
+                compoundValue(assignment, type);
+                arraySet(type);
+            }
+            else {
+                throw unsupported(target, "Invalid assignment target");
+            }
+        }
+
+        private void compoundAssignAwait(
+            final AssignmentStatement assignment,
+            final Expression target,
+            final Type type
+        ) {
+            if (
+                target instanceof MemberExpression member && !semanticModel
+                    .isStaticMember(semanticModel.getReference(member.member()))
+            ) {
+                saveFrameTemporary(member.target());
+            }
+            else if (target instanceof SubscriptExpression index) {
+                saveFrameTemporary(index.target());
+                saveFrameTemporary(index.index());
+            }
+            saveFrameTemporary(target, type, () -> expression(target));
+            expression(assignment.value());
+            final Type valueType =
+                semanticModel.getEffectiveType(assignment.value());
+            final int value = reserve(valueType);
+            method.with(localInstruction(storeOpcode(valueType), value));
+            if (target instanceof IdentifierExpression identifier) {
+                final Symbol symbol = semanticModel.getReference(identifier);
+                prepareStore(symbol);
+                loadFrameTemporary(target, type);
+                method.with(localInstruction(loadOpcode(valueType), value));
+                compoundOperation(assignment, type);
+                if (reference(symbol.type()) && !symbol.type().equals(type)) {
+                    box(type);
+                }
+                store(symbol);
+            }
+            else if (target instanceof MemberExpression member) {
+                if (
+                    !semanticModel.isStaticMember(
+                        semanticModel.getReference(member.member())
+                    )
+                ) {
+                    loadFrameTemporary(member.target());
+                }
+                loadFrameTemporary(target, type);
+                method.with(localInstruction(loadOpcode(valueType), value));
+                compoundOperation(assignment, type);
+                storeMember(member, type);
+                frameTemporaries.remove(member.target());
+            }
+            else if (target instanceof SubscriptExpression index) {
+                loadFrameTemporary(index.target());
+                loadFrameTemporary(index.index());
+                loadFrameTemporary(target, type);
+                method.with(localInstruction(loadOpcode(valueType), value));
+                compoundOperation(assignment, type);
+                arraySet(type);
+                frameTemporaries.remove(index.target());
+                frameTemporaries.remove(index.index());
+            }
+            else {
+                throw unsupported(target, "Invalid assignment target");
+            }
+            frameTemporaries.remove(target);
+        }
+
+        private void compoundValue(
+            final AssignmentStatement assignment,
+            final Type type
+        ) {
+            expression(assignment.value());
+            compoundOperation(assignment, type);
+        }
+
+        private void compoundOperation(
+            final AssignmentStatement assignment,
+            final Type type
+        ) {
+            final Opcode operation = switch (assignment.operator()) {
+                case ADD -> IADD;
+                case SUBTRACT -> ISUB;
+                case MULTIPLY -> IMUL;
+                case DIVIDE -> IDIV;
+                case MODULO -> IREM;
+                case ASSIGN -> throw unsupported(
+                    assignment,
+                    "Invalid compound assignment"
+                );
+            };
+            method.with(simpleInstruction(opcode(type, operation)));
+            narrow(type);
+            if (type == BuiltinType.CHAR) {
+                method.i2c();
             }
         }
 
@@ -10783,12 +11056,19 @@ public final class BytecodeGenerator {
         private void increment(
             final Expression operand,
             final boolean increase,
-            final boolean postfix
+            final boolean postfix,
+            final boolean resultUsed
         ) {
             final Expression target = unwrap(operand);
             final Type type = semanticModel.getExpressionType(target);
             if (target instanceof IdentifierExpression identifier) {
                 final Symbol symbol = semanticModel.getReference(identifier);
+                if (
+                    !resultUsed
+                        && tryLocalIncrement(symbol, type, increase ? 1 : -1)
+                ) {
+                    return;
+                }
                 final boolean instanceField = prepareStore(symbol);
                 load(symbol);
                 final boolean boxedStorage =
@@ -10796,7 +11076,7 @@ public final class BytecodeGenerator {
                 if (boxedStorage) {
                     readObject(type);
                 }
-                if (postfix) {
+                if (resultUsed && postfix) {
                     method.with(
                         simpleInstruction(
                             slots(type) == 2
@@ -10806,7 +11086,7 @@ public final class BytecodeGenerator {
                     );
                 }
                 addOne(type, increase);
-                if (!postfix) {
+                if (resultUsed && !postfix) {
                     method.with(
                         simpleInstruction(
                             slots(type) == 2
@@ -10860,7 +11140,7 @@ public final class BytecodeGenerator {
                         );
                     }
                 }
-                if (postfix) {
+                if (resultUsed && postfix) {
                     method.with(
                         simpleInstruction(
                             slots(type) == 2
@@ -10870,7 +11150,7 @@ public final class BytecodeGenerator {
                     );
                 }
                 addOne(type, increase);
-                if (!postfix) {
+                if (resultUsed && !postfix) {
                     method.with(
                         simpleInstruction(
                             slots(type) == 2
@@ -10885,7 +11165,7 @@ public final class BytecodeGenerator {
                 arrayIndex(index);
                 method.dup2();
                 arrayGet(type);
-                if (postfix) {
+                if (resultUsed && postfix) {
                     method.with(
                         simpleInstruction(
                             slots(semanticModel.getExpressionType(index)) == 2
@@ -10895,7 +11175,7 @@ public final class BytecodeGenerator {
                     );
                 }
                 addOne(type, increase);
-                if (!postfix) {
+                if (resultUsed && !postfix) {
                     method.with(
                         simpleInstruction(
                             slots(semanticModel.getExpressionType(index)) == 2
@@ -10909,6 +11189,32 @@ public final class BytecodeGenerator {
             else {
                 throw unsupported(operand, "Invalid increment target");
             }
+        }
+
+        private boolean tryLocalIncrement(
+            final Symbol symbol,
+            final Type type,
+            final int amount
+        ) {
+            if (
+                type != BuiltinType.I32 || symbol.type() != BuiltinType.I32
+                    || cell(symbol)
+                    || semanticModel.isStaticMember(symbol)
+                    || captureFields.containsKey(symbol)
+                    || globals.containsKey(symbol)
+                    || (instance != null
+                        && instance.members().containsKey(symbol))
+                    || (lexicalInstance != null
+                        && lexicalInstance.members().containsKey(symbol))
+            ) {
+                return false;
+            }
+            final Integer slot = locals.get(symbol);
+            if (slot == null) {
+                return false;
+            }
+            method.iinc(slot, amount);
+            return true;
         }
 
         private void addOne(final Type type, final boolean increase) {

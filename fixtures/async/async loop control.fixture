@@ -369,13 +369,16 @@ SEMICOLON (42:13-42:14)
             text: "5"
           )
         )
-        (PostfixExpression
+        (ExpressionStatement
           range: 9:36-9:43
-          (IdentifierExpression
-            range: 9:36-9:41
-            name: "index"
+          (PostfixExpression
+            range: 9:36-9:43
+            (IdentifierExpression
+              range: 9:36-9:41
+              name: "index"
+            )
+            operator: INCREMENT
           )
-          operator: INCREMENT
         )
         (BlockStatement
           range: 9:45-19:6
@@ -471,25 +474,23 @@ SEMICOLON (42:13-42:14)
               elseBranch: null
             )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 18:9-18:27
-            (AssignmentExpression
-              range: 18:9-18:26
+            (IdentifierExpression
+              range: 18:9-18:12
+              name: "sum"
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 18:15-18:26
               (IdentifierExpression
-                range: 18:9-18:12
+                range: 18:15-18:18
                 name: "sum"
               )
-              (BinaryExpression
-                range: 18:15-18:26
-                (IdentifierExpression
-                  range: 18:15-18:18
-                  name: "sum"
-                )
-                operator: ADD
-                (IdentifierExpression
-                  range: 18:21-18:26
-                  name: "index"
-                )
+              operator: ADD
+              (IdentifierExpression
+                range: 18:21-18:26
+                name: "index"
               )
             )
           )
@@ -769,7 +770,6 @@ Expression types:
   15:13-15:23 -> bool
   15:22-15:23 -> i32
   18:9-18:12 -> i32
-  18:9-18:26 -> i32
   18:15-18:18 -> i32
   18:15-18:26 -> i32
   18:21-18:26 -> i32
@@ -934,11 +934,9 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$$async0.$local0 I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$$async0.$local0 I
-    POP
     INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
     ALOAD_0 0
     LDC 2
@@ -1034,18 +1032,14 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_0 0
     GETFIELD Test$$async0.$local2 I
     IADD
-    DUP_X1
     PUTFIELD Test$$async0.$local1 I
-    POP
    L19:
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$$async0.$local2 I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$$async0.$local2 I
-    POP
     GOTO L6
    L20:
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -1069,11 +1063,9 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$$async0.$local3 I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$$async0.$local3 I
-    POP
     ALOAD_0 0
     GETFIELD Test$$async0.$local3 I
     LDC 1

@@ -29,7 +29,8 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
+import com.github.andreasarvidsson.eld.parser.AssignmentOperator;
 import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
@@ -1242,7 +1243,6 @@ class BytecodeGeneratorTest {
     void constructorLambdasCannotAssignConstFields() {
         for (final String body : List.of(
             "const f = () => { this.value = 2; }; f();",
-            "const f = () => this.value = 2; f();",
             "const f = () => () => { this.value = 2; }; f()();"
         )) {
             assertThrows(
@@ -1255,6 +1255,13 @@ class BytecodeGeneratorTest {
                 body
             );
         }
+        assertThrows(
+            ParserException.class,
+            () -> compileClass(
+                "class C { public const value = 1; public constructor() { const f = () => this.value = 2; f(); } }",
+                "Test"
+            )
+        );
     }
 
     @Test
@@ -1918,7 +1925,8 @@ class BytecodeGeneratorTest {
                     }
                     const foo = new Foo();
                     const before = foo.value++;
-                    const assigned = foo.value = 8;
+                    foo.value = 8;
+                    const assigned = foo.value;
                     const result = foo.add(amount: 2);
                     const callback = foo.add;
                     const bound = callback(3);
@@ -2046,7 +2054,7 @@ class BytecodeGeneratorTest {
             System.setOut(previousOut);
         }
         assertEquals(
-            "5\n9\n",
+            "5\n",
             output.toString(Charset.defaultCharset()).replace("\r\n", "\n")
         );
     }
@@ -2811,14 +2819,17 @@ class BytecodeGeneratorTest {
             func index() i32 { calls = calls * 10 + 2; return -1; }
             func value() i32 { calls = calls * 10 + 3; return 40; }
             var read = values[index()];
-            var assigned = values[index()] = value();
+            var assigned = 0;
+            values[index()] = value();
+            assigned = values[-1];
             var old = values[index()]++;
             var updated = values[index()]--;
             var wide: i64 = 9000000000;
             var longs = [wide];
             var wideOld = longs[-1]++;
             var wideUpdated = longs[-1]--;
-            var wideAssigned = longs[-1] = 8000000000;
+            longs[-1] = 8000000000;
+            var wideAssigned = longs[-1];
             """);
         assertEquals(22322, type.getField("calls").get(null));
         assertEquals(20, type.getField("read").get(null));
@@ -3077,17 +3088,13 @@ class BytecodeGeneratorTest {
                 )
             );
             items.add(
-                new VariableDeclaration(
-                    Mutability.CONST,
-                    new IdentifierDeclaration("assigned", range),
-                    null,
-                    new AssignmentExpression(
-                        index,
-                        new LiteralExpression(
-                            i == 3 ? LiteralKind.FLOAT : LiteralKind.INT,
-                            assigned[i],
-                            range
-                        )
+                new AssignmentStatement(
+                    index,
+                    AssignmentOperator.ASSIGN,
+                    new LiteralExpression(
+                        i == 3 ? LiteralKind.FLOAT : LiteralKind.INT,
+                        assigned[i],
+                        range
                     ),
                     range
                 )
@@ -3147,16 +3154,20 @@ class BytecodeGeneratorTest {
         assertEquals(7, type.getField("selected").get(null));
         assertEquals(3, type.getField("decimal").get(null));
         assertEquals(-1.23456789012345, type.getField("precise").get(null));
-        final Class<?> counter = compileClass("""
-            class Counter {
-                public constructor() {}
-                public var count: i64 = 1;
-                public var real: f64 = 1.25;
-                public func old() i64 { return this.count++; }
-                public func next() f64 { this.real++; return this.real; }
-                public func set() i64 { return this.count = 9000000000; }
-            }
-            """, "Test$Counter");
+        final Class<?> counter =
+            compileClass(
+                """
+                    class Counter {
+                        public constructor() {}
+                        public var count: i64 = 1;
+                        public var real: f64 = 1.25;
+                        public func old() i64 { return this.count++; }
+                        public func next() f64 { this.real++; return this.real; }
+                        public func set() i64 { this.count = 9000000000; return this.count; }
+                    }
+                    """,
+                "Test$Counter"
+            );
         final Object instance = counter.getConstructor().newInstance();
         assertEquals(1L, counter.getMethod("old").invoke(instance));
         assertEquals(2.25, counter.getMethod("next").invoke(instance));
@@ -3224,8 +3235,8 @@ class BytecodeGeneratorTest {
                     };
                 }
                 var selected = 0;
-                switch (subject()) { case 1 => selected = 1 case 2, 3 => selected = 2 }
-                switch (99) { case 1, 2 => selected = 99 }
+                switch (subject()) { case 1 { selected = 1; } case 2, 3 { selected = 2; } }
+                switch (99) { case 1, 2 { selected = 99; } }
                 """;
         final var node = inspect(source);
         final var choose =
@@ -4789,7 +4800,6 @@ class BytecodeGeneratorTest {
 
     @Test
     void generatesAssignmentAndArrayUpdatesFromAst() throws Exception {
-        // These AST nodes exist, but their source syntax is not implemented by the parser yet.
         final Range range = new Range(1, 1, 1, 2);
         final IdentifierDeclaration name =
             new IdentifierDeclaration("values", range);
@@ -4826,21 +4836,15 @@ class BytecodeGeneratorTest {
                 new UnaryExpression(UnaryOperator.INCREMENT, first, range),
                 range
             );
-        final AssignmentExpression assignment =
-            new AssignmentExpression(
+        final AssignmentStatement assignment =
+            new AssignmentStatement(
                 first,
-                new LiteralExpression(LiteralKind.INT, "12", range)
-            );
-        final Program program =
-            new Program(
-                List.of(
-                    values,
-                    old,
-                    updated,
-                    new ExpressionStatement(assignment, range)
-                ),
+                AssignmentOperator.ASSIGN,
+                new LiteralExpression(LiteralKind.INT, "12", range),
                 range
             );
+        final Program program =
+            new Program(List.of(values, old, updated, assignment), range);
         final Class<?> type = compile(program);
         assertEquals(4, type.getField("old").get(null));
         assertEquals(6, type.getField("updated").get(null));

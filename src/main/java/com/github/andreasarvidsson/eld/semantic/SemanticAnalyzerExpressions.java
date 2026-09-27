@@ -19,9 +19,9 @@ import com.github.andreasarvidsson.eld.runtime.EldApi;
 import com.github.andreasarvidsson.eld.runtime.EldPromise;
 import com.github.andreasarvidsson.eld.runtime.PromiseSource;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
 import com.github.andreasarvidsson.eld.parser.ArraySpread;
 import com.github.andreasarvidsson.eld.parser.AwaitExpression;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
@@ -54,6 +54,12 @@ import com.github.andreasarvidsson.eld.parser.UnaryExpression;
 import com.github.andreasarvidsson.eld.parser.Visibility;
 
 public final class SemanticAnalyzerExpressions {
+    public void analyzeAssignmentStatement(
+        final AssignmentStatement assignment,
+        final SemanticContext context
+    ) {
+        operations.analyzeAssignmentStatement(assignment, context);
+    }
     private static final Set<String> MUTATING_COLLECTION_METHODS =
         Set.of(
             "add",
@@ -976,8 +982,6 @@ public final class SemanticAnalyzerExpressions {
                 operations.analyzeIndexExpression(index, context);
             case SliceExpression slice ->
                 operations.analyzeSliceExpression(slice, context);
-            case AssignmentExpression assignment ->
-                operations.analyzeAssignmentExpression(assignment, context);
             case TernaryExpression ternary ->
                 analyzer.analyzeTernaryExpression(ternary, context);
             case IfExpression conditional ->

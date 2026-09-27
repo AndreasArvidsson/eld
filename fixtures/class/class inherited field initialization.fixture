@@ -181,42 +181,40 @@ SEMICOLON (13:23-13:24)
               operator: INCREMENT
             )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 10:9-10:44
-            (AssignmentExpression
-              range: 10:9-10:43
+            (MemberExpression
+              range: 10:9-10:17
+              (ThisExpression
+                range: 10:9-10:13
+              )
+              (IdentifierExpression
+                range: 10:14-10:17
+                name: "own"
+              )
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 10:20-10:43
               (MemberExpression
-                range: 10:9-10:17
+                range: 10:20-10:30
                 (ThisExpression
-                  range: 10:9-10:13
+                  range: 10:20-10:24
                 )
                 (IdentifierExpression
-                  range: 10:14-10:17
-                  name: "own"
+                  range: 10:25-10:30
+                  name: "value"
                 )
               )
-              (BinaryExpression
-                range: 10:20-10:43
-                (MemberExpression
-                  range: 10:20-10:30
-                  (ThisExpression
-                    range: 10:20-10:24
-                  )
-                  (IdentifierExpression
-                    range: 10:25-10:30
-                    name: "value"
-                  )
+              operator: ADD
+              (MemberExpression
+                range: 10:33-10:43
+                (ThisExpression
+                  range: 10:33-10:37
                 )
-                operator: ADD
-                (MemberExpression
-                  range: 10:33-10:43
-                  (ThisExpression
-                    range: 10:33-10:37
-                  )
-                  (IdentifierExpression
-                    range: 10:38-10:43
-                    name: "fixed"
-                  )
+                (IdentifierExpression
+                  range: 10:38-10:43
+                  name: "fixed"
                 )
               )
             )
@@ -263,7 +261,6 @@ Expression types:
   9:14-9:19 -> i32
   10:9-10:13 -> Child
   10:9-10:17 -> i32
-  10:9-10:43 -> i32
   10:14-10:17 -> i32
   10:20-10:24 -> Child
   10:20-10:30 -> i32
@@ -346,22 +343,18 @@ class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
     ALOAD_0 0
     DUP
     GETFIELD Test$Base.value I
-    DUP_X1
     ICONST_1 1
     IADD
     PUTFIELD Test$Base.value I
-    POP
     ALOAD_0 0
     ALOAD_0 0
     GETFIELD Test$Base.value I
     ALOAD_0 0
     GETFIELD Test$Base.fixed I
     IADD
-    DUP_X1
     PUTFIELD Test$Child.own I
-    POP
     RETURN
-    max stack 4 max locals 1
+    max stack 3 max locals 1
 
 --- OUTPUT ---
 

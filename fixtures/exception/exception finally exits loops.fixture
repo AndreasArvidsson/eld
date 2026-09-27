@@ -288,11 +288,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L2:
     IFEQ L17
     GETSTATIC Test.index I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.index I
-    POP
    L3:
     NOP
     GETSTATIC Test.index I
@@ -356,7 +354,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     catch all from L3 to L6 handler L15
     catch all from L8 to L11 handler L15
     catch all from L13 to L14 handler L15
-    max stack 3 max locals 1
+    max stack 2 max locals 1
 
 --- OUTPUT ---
 

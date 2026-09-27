@@ -291,12 +291,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.value Ljava/lang/Integer;
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
-    DUP
     ICONST_1 1
     IADD
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     PUTSTATIC Test.value Ljava/lang/Integer;
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.value Ljava/lang/Integer;
     CHECKCAST java/lang/Integer
@@ -318,12 +316,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.large Ljava/lang/Long;
     CHECKCAST java/lang/Long
     INVOKEVIRTUAL java/lang/Long.longValue()J
-    DUP2
     LCONST_1 1
     LADD
     INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
     PUTSTATIC Test.large Ljava/lang/Long;
-    POP2
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.large Ljava/lang/Long;
     CHECKCAST java/lang/Long
@@ -331,7 +327,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(J)V
    L5:
     RETURN
-    max stack 6 max locals 0
+    max stack 4 max locals 0
 
 --- OUTPUT ---
 

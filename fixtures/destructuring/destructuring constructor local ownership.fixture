@@ -104,19 +104,17 @@ SEMICOLON (10:7-10:8)
               )
             )
           )
-          (ExpressionStatement
+          (AssignmentStatement
             range: 4:9-4:19
-            (AssignmentExpression
-              range: 4:9-4:18
-              (IdentifierExpression
-                range: 4:9-4:14
-                name: "value"
-              )
-              (LiteralExpression
-                range: 4:17-4:18
-                kind: INT
-                text: "3"
-              )
+            (IdentifierExpression
+              range: 4:9-4:14
+              name: "value"
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 4:17-4:18
+              kind: INT
+              text: "3"
             )
           )
         )
@@ -165,7 +163,6 @@ Expression types:
   3:27-3:28 -> i32
   3:30-3:31 -> i32
   4:9-4:14 -> i32
-  4:9-4:18 -> i32
   4:17-4:18 -> i32
   8:5-8:14 -> Box
   8:9-8:12 -> Box
@@ -230,9 +227,7 @@ class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKEVIRTUAL java/lang/Integer.intValue()I
     ISTORE_2 2
     LDC 3
-    DUP
     ISTORE_2 2
-    POP
     RETURN
     max stack 6 max locals 3
 

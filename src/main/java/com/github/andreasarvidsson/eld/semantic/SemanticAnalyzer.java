@@ -23,7 +23,7 @@ import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.AwaitExpression;
-import com.github.andreasarvidsson.eld.parser.AssignmentExpression;
+import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
 import com.github.andreasarvidsson.eld.parser.BlockItem;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
@@ -244,7 +244,7 @@ public final class SemanticAnalyzer {
                 )
                 : context;
         final Expression written = switch (node) {
-            case AssignmentExpression assignment -> assignment.target();
+            case AssignmentStatement assignment -> assignment.target();
             case PostfixExpression postfix -> postfix.operand();
             case UnaryExpression unary when unary
                 .operator() == UnaryOperator.INCREMENT
@@ -906,7 +906,7 @@ public final class SemanticAnalyzer {
         final boolean reassigned =
             AstTraversal.anyMatch(
                 context.scope(),
-                node -> (node instanceof AssignmentExpression assignment
+                node -> (node instanceof AssignmentStatement assignment
                     && Objects
                         .equals(directVariable(assignment.target()), variable))
                     || (node instanceof DestructuringAssignmentStatement destructuring
@@ -1081,7 +1081,7 @@ public final class SemanticAnalyzer {
                 return;
             }
             if (
-                node instanceof AssignmentExpression assignment
+                node instanceof AssignmentStatement assignment
                     && (receiverField(assignment.target())
                         || containsThisExpression(assignment.value()))
             ) {
@@ -1653,6 +1653,8 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         switch (statement) {
+            case AssignmentStatement assignment ->
+                expressions.analyzeAssignmentStatement(assignment, context);
             case DestructuringAssignmentStatement destructuring ->
                 analyzeDestructuringAssignment(destructuring, context);
             case SuperConstructorCall call -> {

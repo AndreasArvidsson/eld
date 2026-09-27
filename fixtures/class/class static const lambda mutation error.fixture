@@ -82,26 +82,24 @@ RIGHT_BRACE (10:1-10:2)
         range: 4:5-9:6
         (BlockStatement
           range: 4:12-9:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 5:9-5:27
-            (AssignmentExpression
-              range: 5:9-5:26
-              (MemberExpression
-                range: 5:9-5:22
-                (IdentifierExpression
-                  range: 5:9-5:16
-                  name: "Example"
-                )
-                (IdentifierExpression
-                  range: 5:17-5:22
-                  name: "value"
-                )
+            (MemberExpression
+              range: 5:9-5:22
+              (IdentifierExpression
+                range: 5:9-5:16
+                name: "Example"
               )
-              (LiteralExpression
-                range: 5:25-5:26
-                kind: INT
-                text: "1"
+              (IdentifierExpression
+                range: 5:17-5:22
+                name: "value"
               )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 5:25-5:26
+              kind: INT
+              text: "1"
             )
           )
           (VariableDeclaration
@@ -116,26 +114,24 @@ RIGHT_BRACE (10:1-10:2)
               range: 6:24-8:10
               (BlockStatement
                 range: 6:30-8:10
-                (ExpressionStatement
+                (AssignmentStatement
                   range: 7:13-7:31
-                  (AssignmentExpression
-                    range: 7:13-7:30
-                    (MemberExpression
-                      range: 7:13-7:26
-                      (IdentifierExpression
-                        range: 7:13-7:20
-                        name: "Example"
-                      )
-                      (IdentifierExpression
-                        range: 7:21-7:26
-                        name: "value"
-                      )
+                  (MemberExpression
+                    range: 7:13-7:26
+                    (IdentifierExpression
+                      range: 7:13-7:20
+                      name: "Example"
                     )
-                    (LiteralExpression
-                      range: 7:29-7:30
-                      kind: INT
-                      text: "2"
+                    (IdentifierExpression
+                      range: 7:21-7:26
+                      name: "value"
                     )
+                  )
+                  operator: ASSIGN
+                  (LiteralExpression
+                    range: 7:29-7:30
+                    kind: INT
+                    text: "2"
                   )
                 )
               )

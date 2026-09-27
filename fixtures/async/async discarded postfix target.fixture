@@ -1,0 +1,534 @@
+var values = [1];
+
+class Box {
+    public var value = 2;
+}
+var box = new Box();
+
+async func run() {
+    values[await Promise.resolve(0)]++;
+    (await Promise.resolve(box)).value++;
+    print(values[0]);
+    print(box.value);
+}
+
+ignore run();
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "values" (1:5-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "1" (1:15-1:16)
+RIGHT_BRACKET (1:16-1:17)
+SEMICOLON (1:17-1:18)
+CLASS (3:1-3:6)
+IDENTIFIER "Box" (3:7-3:10)
+LEFT_BRACE (3:11-3:12)
+PUBLIC (4:5-4:11)
+VAR (4:12-4:15)
+IDENTIFIER "value" (4:16-4:21)
+EQUAL (4:22-4:23)
+INTEGER_LITERAL "2" (4:24-4:25)
+SEMICOLON (4:25-4:26)
+RIGHT_BRACE (5:1-5:2)
+VAR (6:1-6:4)
+IDENTIFIER "box" (6:5-6:8)
+EQUAL (6:9-6:10)
+NEW (6:11-6:14)
+IDENTIFIER "Box" (6:15-6:18)
+LEFT_PAREN (6:18-6:19)
+RIGHT_PAREN (6:19-6:20)
+SEMICOLON (6:20-6:21)
+ASYNC (8:1-8:6)
+FUNC (8:7-8:11)
+IDENTIFIER "run" (8:12-8:15)
+LEFT_PAREN (8:15-8:16)
+RIGHT_PAREN (8:16-8:17)
+LEFT_BRACE (8:18-8:19)
+IDENTIFIER "values" (9:5-9:11)
+LEFT_BRACKET (9:11-9:12)
+AWAIT (9:12-9:17)
+IDENTIFIER "Promise" (9:18-9:25)
+DOT (9:25-9:26)
+IDENTIFIER "resolve" (9:26-9:33)
+LEFT_PAREN (9:33-9:34)
+INTEGER_LITERAL "0" (9:34-9:35)
+RIGHT_PAREN (9:35-9:36)
+RIGHT_BRACKET (9:36-9:37)
+PLUS_PLUS (9:37-9:39)
+SEMICOLON (9:39-9:40)
+LEFT_PAREN (10:5-10:6)
+AWAIT (10:6-10:11)
+IDENTIFIER "Promise" (10:12-10:19)
+DOT (10:19-10:20)
+IDENTIFIER "resolve" (10:20-10:27)
+LEFT_PAREN (10:27-10:28)
+IDENTIFIER "box" (10:28-10:31)
+RIGHT_PAREN (10:31-10:32)
+RIGHT_PAREN (10:32-10:33)
+DOT (10:33-10:34)
+IDENTIFIER "value" (10:34-10:39)
+PLUS_PLUS (10:39-10:41)
+SEMICOLON (10:41-10:42)
+IDENTIFIER "print" (11:5-11:10)
+LEFT_PAREN (11:10-11:11)
+IDENTIFIER "values" (11:11-11:17)
+LEFT_BRACKET (11:17-11:18)
+INTEGER_LITERAL "0" (11:18-11:19)
+RIGHT_BRACKET (11:19-11:20)
+RIGHT_PAREN (11:20-11:21)
+SEMICOLON (11:21-11:22)
+IDENTIFIER "print" (12:5-12:10)
+LEFT_PAREN (12:10-12:11)
+IDENTIFIER "box" (12:11-12:14)
+DOT (12:14-12:15)
+IDENTIFIER "value" (12:15-12:20)
+RIGHT_PAREN (12:20-12:21)
+SEMICOLON (12:21-12:22)
+RIGHT_BRACE (13:1-13:2)
+IGNORE (15:1-15:7)
+IDENTIFIER "run" (15:8-15:11)
+LEFT_PAREN (15:11-15:12)
+RIGHT_PAREN (15:12-15:13)
+SEMICOLON (15:13-15:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-15:14
+  (VariableDeclaration
+    range: 1:1-1:18
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:11
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:17
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-5:2
+    (IdentifierDeclaration
+      range: 3:7-3:10
+      name: "Box"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 4:5-4:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 4:12-4:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 4:16-4:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 4:24-4:25
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:21
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 6:5-6:8
+      name: "box"
+    )
+    type: null
+    (NewExpression
+      range: 6:11-6:20
+      (IdentifierExpression
+        range: 6:15-6:18
+        name: "Box"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 8:1-13:2
+    async: true
+    (IdentifierDeclaration
+      range: 8:12-8:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 8:18-13:2
+      (ExpressionStatement
+        range: 9:5-9:40
+        (PostfixExpression
+          range: 9:5-9:39
+          (SubscriptExpression
+            range: 9:5-9:37
+            (IdentifierExpression
+              range: 9:5-9:11
+              name: "values"
+            )
+            (AwaitExpression
+              range: 9:12-9:36
+              (CallExpression
+                range: 9:18-9:36
+                (MemberExpression
+                  range: 9:18-9:33
+                  (IdentifierExpression
+                    range: 9:18-9:25
+                    name: "Promise"
+                  )
+                  (IdentifierExpression
+                    range: 9:26-9:33
+                    name: "resolve"
+                  )
+                )
+                (LiteralExpression
+                  range: 9:34-9:35
+                  kind: INT
+                  text: "0"
+                )
+              )
+            )
+          )
+          operator: INCREMENT
+        )
+      )
+      (ExpressionStatement
+        range: 10:5-10:42
+        (PostfixExpression
+          range: 10:5-10:41
+          (MemberExpression
+            range: 10:5-10:39
+            (GroupingExpression
+              range: 10:5-10:33
+              (AwaitExpression
+                range: 10:6-10:32
+                (CallExpression
+                  range: 10:12-10:32
+                  (MemberExpression
+                    range: 10:12-10:27
+                    (IdentifierExpression
+                      range: 10:12-10:19
+                      name: "Promise"
+                    )
+                    (IdentifierExpression
+                      range: 10:20-10:27
+                      name: "resolve"
+                    )
+                  )
+                  (IdentifierExpression
+                    range: 10:28-10:31
+                    name: "box"
+                  )
+                )
+              )
+            )
+            (IdentifierExpression
+              range: 10:34-10:39
+              name: "value"
+            )
+          )
+          operator: INCREMENT
+        )
+      )
+      (ExpressionStatement
+        range: 11:5-11:22
+        (CallExpression
+          range: 11:5-11:21
+          (IdentifierExpression
+            range: 11:5-11:10
+            name: "print"
+          )
+          (SubscriptExpression
+            range: 11:11-11:20
+            (IdentifierExpression
+              range: 11:11-11:17
+              name: "values"
+            )
+            (LiteralExpression
+              range: 11:18-11:19
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 12:5-12:22
+        (CallExpression
+          range: 12:5-12:21
+          (IdentifierExpression
+            range: 12:5-12:10
+            name: "print"
+          )
+          (MemberExpression
+            range: 12:11-12:20
+            (IdentifierExpression
+              range: 12:11-12:14
+              name: "box"
+            )
+            (IdentifierExpression
+              range: 12:15-12:20
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 15:1-15:14
+    (CallExpression
+      range: 15:8-15:13
+      (IdentifierExpression
+        range: 15:8-15:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:17 -> [i32]
+  1:15-1:16 -> i32
+  4:24-4:25 -> i32
+  6:11-6:20 -> Box
+  6:15-6:18 -> Box
+  9:5-9:11 -> [i32]
+  9:5-9:37 -> i32
+  9:5-9:39 -> i32
+  9:12-9:36 -> i32
+  9:18-9:36 -> Promise<i32>
+  9:34-9:35 -> i32
+  10:5-10:33 -> Box
+  10:5-10:39 -> i32
+  10:5-10:41 -> i32
+  10:6-10:32 -> Box
+  10:12-10:32 -> Promise<Box>
+  10:28-10:31 -> Box
+  10:34-10:39 -> i32
+  11:5-11:10 -> (any) => void
+  11:5-11:21 -> void
+  11:11-11:17 -> [i32]
+  11:11-11:20 -> i32
+  11:18-11:19 -> i32
+  12:5-12:10 -> (any) => void
+  12:5-12:21 -> void
+  12:11-12:14 -> Box
+  12:11-12:20 -> i32
+  12:15-12:20 -> i32
+  15:8-15:11 -> () => Promise<void>
+  15:8-15:13 -> Promise<void>
+
+Declarations:
+  1:5-1:11 -> var values: [i32]
+  3:7-3:10 -> class Box
+  4:16-4:21 -> var value: i32
+  6:5-6:8 -> var box: Box
+  8:12-8:15 -> func run() => Promise<void>
+
+References:
+  6:15-6:18 -> 3:7-3:10
+  9:5-9:11 -> 1:5-1:11
+  10:28-10:31 -> 6:5-6:8
+  10:34-10:39 -> 4:16-4:21
+  11:5-11:10 -> builtin print
+  11:11-11:17 -> 1:5-1:11
+  12:5-12:10 -> builtin print
+  12:11-12:14 -> 6:5-6:8
+  12:15-12:20 -> 4:16-4:21
+  15:8-15:11 -> 8:12-8:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  nest member Test$Box
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC]
+  field box LTest$Box; flags [PUBLIC, STATIC]
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW Test$Box
+    DUP
+    INVOKESPECIAL Test$Box.<init>()V
+    PUTSTATIC Test.box LTest$Box;
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 6 max locals 0
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$Box.value I
+    RETURN
+    max stack 2 max locals 1
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  field $spills [Ljava/lang/Object; flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD_0 0
+    LDC 1
+    ANEWARRAY java/lang/Object
+    PUTFIELD Test$$async0.$spills [Ljava/lang/Object;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..2 default L0 0:L1 1:L2 2:L4
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    ASTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    ALOAD_3 3
+    AASTORE
+    LDC 0
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 4
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    AALOAD
+    LDC "I"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    ILOAD 4
+    DUP2
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    ICONST_1 1
+    IADD
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
+    GETSTATIC Test.box LTest$Box;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L4:
+    ALOAD_2 2
+    IFNULL L5
+    ALOAD_2 2
+    ATHROW
+   L5:
+    ALOAD_1 1
+    CHECKCAST Test$Box
+    ASTORE 5
+    ALOAD 5
+    DUP
+    GETFIELD Test$Box.value I
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$Box.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    GETFIELD Test$Box.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L6:
+    ASTORE 6
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 6
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L6 handler L6
+    max stack 4 max locals 7
+
+--- OUTPUT ---
+
+2
+3
+

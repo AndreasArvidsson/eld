@@ -1,0 +1,368 @@
+class Counter {
+    public var value = 5;
+}
+var counter = new Counter();
+counter.value = 6;
+counter.value += 3;
+print(counter.value++);
+print(counter.value);
+counter.value--;
+print(counter.value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "5" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+RIGHT_BRACE (3:1-3:2)
+VAR (4:1-4:4)
+IDENTIFIER "counter" (4:5-4:12)
+EQUAL (4:13-4:14)
+NEW (4:15-4:18)
+IDENTIFIER "Counter" (4:19-4:26)
+LEFT_PAREN (4:26-4:27)
+RIGHT_PAREN (4:27-4:28)
+SEMICOLON (4:28-4:29)
+IDENTIFIER "counter" (5:1-5:8)
+DOT (5:8-5:9)
+IDENTIFIER "value" (5:9-5:14)
+EQUAL (5:15-5:16)
+INTEGER_LITERAL "6" (5:17-5:18)
+SEMICOLON (5:18-5:19)
+IDENTIFIER "counter" (6:1-6:8)
+DOT (6:8-6:9)
+IDENTIFIER "value" (6:9-6:14)
+PLUS_EQUAL (6:15-6:17)
+INTEGER_LITERAL "3" (6:18-6:19)
+SEMICOLON (6:19-6:20)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "counter" (7:7-7:14)
+DOT (7:14-7:15)
+IDENTIFIER "value" (7:15-7:20)
+PLUS_PLUS (7:20-7:22)
+RIGHT_PAREN (7:22-7:23)
+SEMICOLON (7:23-7:24)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "counter" (8:7-8:14)
+DOT (8:14-8:15)
+IDENTIFIER "value" (8:15-8:20)
+RIGHT_PAREN (8:20-8:21)
+SEMICOLON (8:21-8:22)
+IDENTIFIER "counter" (9:1-9:8)
+DOT (9:8-9:9)
+IDENTIFIER "value" (9:9-9:14)
+MINUS_MINUS (9:14-9:16)
+SEMICOLON (9:16-9:17)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "counter" (10:7-10:14)
+DOT (10:14-10:15)
+IDENTIFIER "value" (10:15-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:22
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:29
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 4:5-4:12
+      name: "counter"
+    )
+    type: null
+    (NewExpression
+      range: 4:15-4:28
+      (IdentifierExpression
+        range: 4:19-4:26
+        name: "Counter"
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 5:1-5:19
+    (MemberExpression
+      range: 5:1-5:14
+      (IdentifierExpression
+        range: 5:1-5:8
+        name: "counter"
+      )
+      (IdentifierExpression
+        range: 5:9-5:14
+        name: "value"
+      )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 5:17-5:18
+      kind: INT
+      text: "6"
+    )
+  )
+  (AssignmentStatement
+    range: 6:1-6:20
+    (MemberExpression
+      range: 6:1-6:14
+      (IdentifierExpression
+        range: 6:1-6:8
+        name: "counter"
+      )
+      (IdentifierExpression
+        range: 6:9-6:14
+        name: "value"
+      )
+    )
+    operator: ADD
+    (LiteralExpression
+      range: 6:18-6:19
+      kind: INT
+      text: "3"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:24
+    (CallExpression
+      range: 7:1-7:23
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (PostfixExpression
+        range: 7:7-7:22
+        (MemberExpression
+          range: 7:7-7:20
+          (IdentifierExpression
+            range: 7:7-7:14
+            name: "counter"
+          )
+          (IdentifierExpression
+            range: 7:15-7:20
+            name: "value"
+          )
+        )
+        operator: INCREMENT
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:22
+    (CallExpression
+      range: 8:1-8:21
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:20
+        (IdentifierExpression
+          range: 8:7-8:14
+          name: "counter"
+        )
+        (IdentifierExpression
+          range: 8:15-8:20
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:17
+    (PostfixExpression
+      range: 9:1-9:16
+      (MemberExpression
+        range: 9:1-9:14
+        (IdentifierExpression
+          range: 9:1-9:8
+          name: "counter"
+        )
+        (IdentifierExpression
+          range: 9:9-9:14
+          name: "value"
+        )
+      )
+      operator: DECREMENT
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:22
+    (CallExpression
+      range: 10:1-10:21
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 10:7-10:20
+        (IdentifierExpression
+          range: 10:7-10:14
+          name: "counter"
+        )
+        (IdentifierExpression
+          range: 10:15-10:20
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:24-2:25 -> i32
+  4:15-4:28 -> Counter
+  4:19-4:26 -> Counter
+  5:1-5:8 -> Counter
+  5:1-5:14 -> i32
+  5:9-5:14 -> i32
+  5:17-5:18 -> i32
+  6:1-6:8 -> Counter
+  6:1-6:14 -> i32
+  6:9-6:14 -> i32
+  6:18-6:19 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:23 -> void
+  7:7-7:14 -> Counter
+  7:7-7:20 -> i32
+  7:7-7:22 -> i32
+  7:15-7:20 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:21 -> void
+  8:7-8:14 -> Counter
+  8:7-8:20 -> i32
+  8:15-8:20 -> i32
+  9:1-9:8 -> Counter
+  9:1-9:14 -> i32
+  9:1-9:16 -> i32
+  9:9-9:14 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:21 -> void
+  10:7-10:14 -> Counter
+  10:7-10:20 -> i32
+  10:15-10:20 -> i32
+
+Declarations:
+  1:7-1:14 -> class Counter
+  2:16-2:21 -> var value: i32
+  4:5-4:12 -> var counter: Counter
+
+References:
+  4:19-4:26 -> 1:7-1:14
+  5:1-5:8 -> 4:5-4:12
+  5:9-5:14 -> 2:16-2:21
+  6:1-6:8 -> 4:5-4:12
+  6:9-6:14 -> 2:16-2:21
+  7:1-7:6 -> builtin print
+  7:7-7:14 -> 4:5-4:12
+  7:15-7:20 -> 2:16-2:21
+  8:1-8:6 -> builtin print
+  8:7-8:14 -> 4:5-4:12
+  8:15-8:20 -> 2:16-2:21
+  9:1-9:8 -> 4:5-4:12
+  9:9-9:14 -> 2:16-2:21
+  10:1-10:6 -> builtin print
+  10:7-10:14 -> 4:5-4:12
+  10:15-10:20 -> 2:16-2:21
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field counter LTest$Counter; flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Counter
+    DUP
+    INVOKESPECIAL Test$Counter.<init>()V
+    PUTSTATIC Test.counter LTest$Counter;
+    GETSTATIC Test.counter LTest$Counter;
+    LDC 6
+    PUTFIELD Test$Counter.value I
+    GETSTATIC Test.counter LTest$Counter;
+    DUP
+    GETFIELD Test$Counter.value I
+    LDC 3
+    IADD
+    PUTFIELD Test$Counter.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
+    DUP
+    GETFIELD Test$Counter.value I
+    DUP_X1
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$Counter.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
+    GETFIELD Test$Counter.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.counter LTest$Counter;
+    DUP
+    GETFIELD Test$Counter.value I
+    ICONST_1 1
+    ISUB
+    PUTFIELD Test$Counter.value I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
+    GETFIELD Test$Counter.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 5
+    PUTFIELD Test$Counter.value I
+    RETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+9
+10
+9
+

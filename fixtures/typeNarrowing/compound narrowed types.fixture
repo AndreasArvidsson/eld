@@ -1,0 +1,337 @@
+var value: i32 | null = 1;
+var large: i64 | null = 4;
+
+if (value != null) {
+    value += 2;
+    print(value);
+}
+
+if (large != null) {
+    large -= 1;
+    print(large);
+}
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "i32" (1:12-1:15)
+PIPE (1:16-1:17)
+NULL (1:18-1:22)
+EQUAL (1:23-1:24)
+INTEGER_LITERAL "1" (1:25-1:26)
+SEMICOLON (1:26-1:27)
+VAR (2:1-2:4)
+IDENTIFIER "large" (2:5-2:10)
+COLON (2:10-2:11)
+IDENTIFIER "i64" (2:12-2:15)
+PIPE (2:16-2:17)
+NULL (2:18-2:22)
+EQUAL (2:23-2:24)
+INTEGER_LITERAL "4" (2:25-2:26)
+SEMICOLON (2:26-2:27)
+IF (4:1-4:3)
+LEFT_PAREN (4:4-4:5)
+IDENTIFIER "value" (4:5-4:10)
+BANG_EQUAL (4:11-4:13)
+NULL (4:14-4:18)
+RIGHT_PAREN (4:18-4:19)
+LEFT_BRACE (4:20-4:21)
+IDENTIFIER "value" (5:5-5:10)
+PLUS_EQUAL (5:11-5:13)
+INTEGER_LITERAL "2" (5:14-5:15)
+SEMICOLON (5:15-5:16)
+IDENTIFIER "print" (6:5-6:10)
+LEFT_PAREN (6:10-6:11)
+IDENTIFIER "value" (6:11-6:16)
+RIGHT_PAREN (6:16-6:17)
+SEMICOLON (6:17-6:18)
+RIGHT_BRACE (7:1-7:2)
+IF (9:1-9:3)
+LEFT_PAREN (9:4-9:5)
+IDENTIFIER "large" (9:5-9:10)
+BANG_EQUAL (9:11-9:13)
+NULL (9:14-9:18)
+RIGHT_PAREN (9:18-9:19)
+LEFT_BRACE (9:20-9:21)
+IDENTIFIER "large" (10:5-10:10)
+MINUS_EQUAL (10:11-10:13)
+INTEGER_LITERAL "1" (10:14-10:15)
+SEMICOLON (10:15-10:16)
+IDENTIFIER "print" (11:5-11:10)
+LEFT_PAREN (11:10-11:11)
+IDENTIFIER "large" (11:11-11:16)
+RIGHT_PAREN (11:16-11:17)
+SEMICOLON (11:17-11:18)
+RIGHT_BRACE (12:1-12:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:2
+  (VariableDeclaration
+    range: 1:1-1:27
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (UnionTypeNode
+      range: 1:12-1:22
+      (NamedTypeNode
+        range: 1:12-1:15
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 1:18-1:22
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 1:25-1:26
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:27
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:10
+      name: "large"
+    )
+    (UnionTypeNode
+      range: 2:12-2:22
+      (NamedTypeNode
+        range: 2:12-2:15
+        name: "i64"
+      )
+      (NamedTypeNode
+        range: 2:18-2:22
+        name: "null"
+      )
+    )
+    (LiteralExpression
+      range: 2:25-2:26
+      kind: INT
+      text: "4"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-7:2
+    (IfExpression
+      range: 4:1-7:2
+      (BinaryExpression
+        range: 4:5-4:18
+        (IdentifierExpression
+          range: 4:5-4:10
+          name: "value"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 4:14-4:18
+          kind: NULL
+          text: "null"
+        )
+      )
+      (BlockStatement
+        range: 4:20-7:2
+        (AssignmentStatement
+          range: 5:5-5:16
+          (IdentifierExpression
+            range: 5:5-5:10
+            name: "value"
+          )
+          operator: ADD
+          (LiteralExpression
+            range: 5:14-5:15
+            kind: INT
+            text: "2"
+          )
+        )
+        (ExpressionStatement
+          range: 6:5-6:18
+          (CallExpression
+            range: 6:5-6:17
+            (IdentifierExpression
+              range: 6:5-6:10
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 6:11-6:16
+              name: "value"
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-12:2
+    (IfExpression
+      range: 9:1-12:2
+      (BinaryExpression
+        range: 9:5-9:18
+        (IdentifierExpression
+          range: 9:5-9:10
+          name: "large"
+        )
+        operator: NOT_EQUAL
+        (LiteralExpression
+          range: 9:14-9:18
+          kind: NULL
+          text: "null"
+        )
+      )
+      (BlockStatement
+        range: 9:20-12:2
+        (AssignmentStatement
+          range: 10:5-10:16
+          (IdentifierExpression
+            range: 10:5-10:10
+            name: "large"
+          )
+          operator: SUBTRACT
+          (LiteralExpression
+            range: 10:14-10:15
+            kind: INT
+            text: "1"
+          )
+        )
+        (ExpressionStatement
+          range: 11:5-11:18
+          (CallExpression
+            range: 11:5-11:17
+            (IdentifierExpression
+              range: 11:5-11:10
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 11:11-11:16
+              name: "large"
+            )
+          )
+        )
+      )
+      elseBranch: null
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:25-1:26 -> i32
+  2:25-2:26 -> i32
+  4:1-7:2 -> void
+  4:5-4:10 -> i32 | null
+  4:5-4:18 -> bool
+  4:14-4:18 -> null
+  5:5-5:10 -> i32
+  5:14-5:15 -> i32
+  6:5-6:10 -> (any) => void
+  6:5-6:17 -> void
+  6:11-6:16 -> i32 | null
+  9:1-12:2 -> void
+  9:5-9:10 -> i64 | null
+  9:5-9:18 -> bool
+  9:14-9:18 -> null
+  10:5-10:10 -> i64
+  10:14-10:15 -> i64
+  11:5-11:10 -> (any) => void
+  11:5-11:17 -> void
+  11:11-11:16 -> i64 | null
+
+Narrowed types:
+  5:5-5:10 -> i32 | null -> i32
+  10:5-10:10 -> i64 | null -> i64
+
+Resolved types:
+  1:12-1:15 -> i32
+  1:12-1:22 -> i32 | null
+  1:18-1:22 -> null
+  2:12-2:15 -> i64
+  2:12-2:22 -> i64 | null
+  2:18-2:22 -> null
+
+Conversions:
+  1:25-1:26 -> i32 -> i32 | null
+  2:25-2:26 -> i32 -> i64 -> i64 | null
+  4:14-4:18 -> null -> i32 | null
+  9:14-9:18 -> null -> i64 | null
+
+Declarations:
+  1:5-1:10 -> var value: i32 | null
+  2:5-2:10 -> var large: i64 | null
+
+References:
+  4:5-4:10 -> 1:5-1:10
+  5:5-5:10 -> 1:5-1:10
+  6:5-6:10 -> builtin print
+  6:11-6:16 -> 1:5-1:10
+  9:5-9:10 -> 2:5-2:10
+  10:5-10:10 -> 2:5-2:10
+  11:5-11:10 -> builtin print
+  11:11-11:16 -> 2:5-2:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value Ljava/lang/Integer; flags [PUBLIC, STATIC]
+  field large Ljava/lang/Long; flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.value Ljava/lang/Integer;
+    LDC 4
+    I2L
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    PUTSTATIC Test.large Ljava/lang/Long;
+    GETSTATIC Test.value Ljava/lang/Integer;
+    IFNONNULL L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IFEQ L2
+    GETSTATIC Test.value Ljava/lang/Integer;
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    LDC 2
+    IADD
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    PUTSTATIC Test.value Ljava/lang/Integer;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+   L2:
+    GETSTATIC Test.large Ljava/lang/Long;
+    IFNONNULL L3
+    ICONST_0 0
+    GOTO L4
+   L3:
+    ICONST_1 1
+   L4:
+    IFEQ L5
+    GETSTATIC Test.large Ljava/lang/Long;
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LDC2_W 1
+    LSUB
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    PUTSTATIC Test.large Ljava/lang/Long;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.large Ljava/lang/Long;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+   L5:
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+3
+3
+

@@ -49,12 +49,7 @@ public class ParserExpressions extends ParserBase {
     }
 
     public Expression parseExpression() {
-        final Expression left = parseTernaryExpression();
-        if (match(TokenType.EQUAL)) {
-            final Expression value = parseExpression();
-            return new AssignmentExpression(left, value);
-        }
-        return left;
+        return parseTernaryExpression();
     }
 
     public CallExpression parseCallExpression(final Expression callee) {

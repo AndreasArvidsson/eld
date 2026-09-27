@@ -765,41 +765,39 @@ SEMICOLON (52:18-52:19)
         )
         (BlockStatement
           range: 38:23-41:6
-          (ExpressionStatement
+          (AssignmentStatement
             range: 39:9-39:50
-            (AssignmentExpression
-              range: 39:9-39:49
-              (IdentifierExpression
-                range: 39:9-39:14
-                name: "index"
-              )
-              (AwaitExpression
-                range: 39:17-39:49
-                (CallExpression
-                  range: 39:23-39:49
-                  (MemberExpression
-                    range: 39:23-39:38
-                    (IdentifierExpression
-                      range: 39:23-39:30
-                      name: "Promise"
-                    )
-                    (IdentifierExpression
-                      range: 39:31-39:38
-                      name: "resolve"
-                    )
+            (IdentifierExpression
+              range: 39:9-39:14
+              name: "index"
+            )
+            operator: ASSIGN
+            (AwaitExpression
+              range: 39:17-39:49
+              (CallExpression
+                range: 39:23-39:49
+                (MemberExpression
+                  range: 39:23-39:38
+                  (IdentifierExpression
+                    range: 39:23-39:30
+                    name: "Promise"
                   )
-                  (BinaryExpression
-                    range: 39:39-39:48
-                    (IdentifierExpression
-                      range: 39:39-39:44
-                      name: "index"
-                    )
-                    operator: ADD
-                    (LiteralExpression
-                      range: 39:47-39:48
-                      kind: INT
-                      text: "1"
-                    )
+                  (IdentifierExpression
+                    range: 39:31-39:38
+                    name: "resolve"
+                  )
+                )
+                (BinaryExpression
+                  range: 39:39-39:48
+                  (IdentifierExpression
+                    range: 39:39-39:44
+                    name: "index"
+                  )
+                  operator: ADD
+                  (LiteralExpression
+                    range: 39:47-39:48
+                    kind: INT
+                    text: "1"
                   )
                 )
               )
@@ -1008,7 +1006,6 @@ Expression types:
   38:12-38:21 -> bool
   38:20-38:21 -> i32
   39:9-39:14 -> i32
-  39:9-39:49 -> i32
   39:17-39:49 -> i32
   39:23-39:49 -> Promise<i32>
   39:39-39:44 -> i32
@@ -1567,13 +1564,9 @@ class Test$$async4 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
     ISTORE_3 3
-    ILOAD_3 3
-    ISTORE 4
     ALOAD_0 0
-    ILOAD 4
-    DUP_X1
+    ILOAD_3 3
     PUTFIELD Test$$async4.$local0 I
-    POP
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     ALOAD_0 0
     GETFIELD Test$$async4.$local0 I
@@ -1585,14 +1578,14 @@ class Test$$async4 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
     RETURN
    L8:
-    ASTORE 5
+    ASTORE 4
     ALOAD_0 0
     GETFIELD Test$$async4.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
-    ALOAD 5
+    ALOAD 4
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
     RETURN
     catch all from L1 to L8 handler L8
-    max stack 3 max locals 6
+    max stack 3 max locals 5
 
 class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
   nest host Test

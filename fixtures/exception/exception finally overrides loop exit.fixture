@@ -200,11 +200,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L2:
     IFEQ L12
     GETSTATIC Test.index I
-    DUP
     ICONST_1 1
     IADD
     PUTSTATIC Test.index I
-    POP
    L3:
     NOP
    L4:
@@ -241,7 +239,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
     catch all from L3 to L4 handler L8
-    max stack 3 max locals 1
+    max stack 2 max locals 1
 
 --- OUTPUT ---
 
