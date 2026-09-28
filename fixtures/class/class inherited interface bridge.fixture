@@ -1,0 +1,468 @@
+class Value {
+    public func number() i32 {
+        return 1;
+    }
+}
+
+class DetailedValue extends Value {
+    public override func number() i32 {
+        return 2;
+    }
+}
+
+interface Reader {
+    func read() Value;
+}
+
+class Base implements Reader {
+    public func read() DetailedValue {
+        return new DetailedValue();
+    }
+}
+
+class Child extends Base {}
+
+const reader: Reader = new Child();
+print(reader.read().number());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "number" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+LEFT_BRACE (2:30-2:31)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "DetailedValue" (7:7-7:20)
+EXTENDS (7:21-7:28)
+IDENTIFIER "Value" (7:29-7:34)
+LEFT_BRACE (7:35-7:36)
+PUBLIC (8:5-8:11)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "number" (8:26-8:32)
+LEFT_PAREN (8:32-8:33)
+RIGHT_PAREN (8:33-8:34)
+IDENTIFIER "i32" (8:35-8:38)
+LEFT_BRACE (8:39-8:40)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+INTERFACE (13:1-13:10)
+IDENTIFIER "Reader" (13:11-13:17)
+LEFT_BRACE (13:18-13:19)
+FUNC (14:5-14:9)
+IDENTIFIER "read" (14:10-14:14)
+LEFT_PAREN (14:14-14:15)
+RIGHT_PAREN (14:15-14:16)
+IDENTIFIER "Value" (14:17-14:22)
+SEMICOLON (14:22-14:23)
+RIGHT_BRACE (15:1-15:2)
+CLASS (17:1-17:6)
+IDENTIFIER "Base" (17:7-17:11)
+IMPLEMENTS (17:12-17:22)
+IDENTIFIER "Reader" (17:23-17:29)
+LEFT_BRACE (17:30-17:31)
+PUBLIC (18:5-18:11)
+FUNC (18:12-18:16)
+IDENTIFIER "read" (18:17-18:21)
+LEFT_PAREN (18:21-18:22)
+RIGHT_PAREN (18:22-18:23)
+IDENTIFIER "DetailedValue" (18:24-18:37)
+LEFT_BRACE (18:38-18:39)
+RETURN (19:9-19:15)
+NEW (19:16-19:19)
+IDENTIFIER "DetailedValue" (19:20-19:33)
+LEFT_PAREN (19:33-19:34)
+RIGHT_PAREN (19:34-19:35)
+SEMICOLON (19:35-19:36)
+RIGHT_BRACE (20:5-20:6)
+RIGHT_BRACE (21:1-21:2)
+CLASS (23:1-23:6)
+IDENTIFIER "Child" (23:7-23:12)
+EXTENDS (23:13-23:20)
+IDENTIFIER "Base" (23:21-23:25)
+LEFT_BRACE (23:26-23:27)
+RIGHT_BRACE (23:27-23:28)
+CONST (25:1-25:6)
+IDENTIFIER "reader" (25:7-25:13)
+COLON (25:13-25:14)
+IDENTIFIER "Reader" (25:15-25:21)
+EQUAL (25:22-25:23)
+NEW (25:24-25:27)
+IDENTIFIER "Child" (25:28-25:33)
+LEFT_PAREN (25:33-25:34)
+RIGHT_PAREN (25:34-25:35)
+SEMICOLON (25:35-25:36)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+IDENTIFIER "reader" (26:7-26:13)
+DOT (26:13-26:14)
+IDENTIFIER "read" (26:14-26:18)
+LEFT_PAREN (26:18-26:19)
+RIGHT_PAREN (26:19-26:20)
+DOT (26:20-26:21)
+IDENTIFIER "number" (26:21-26:27)
+LEFT_PAREN (26:27-26:28)
+RIGHT_PAREN (26:28-26:29)
+RIGHT_PAREN (26:29-26:30)
+SEMICOLON (26:30-26:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-26:31
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "number"
+        )
+        (NamedTypeNode
+          range: 2:26-2:29
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:30-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:20
+      name: "DetailedValue"
+    )
+    (IdentifierExpression
+      range: 7:29-7:34
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:26-8:32
+          name: "number"
+        )
+        (NamedTypeNode
+          range: 8:35-8:38
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:39-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 13:1-15:2
+    (IdentifierDeclaration
+      range: 13:11-13:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 14:5-14:23
+      (IdentifierDeclaration
+        range: 14:10-14:14
+        name: "read"
+      )
+      (NamedTypeNode
+        range: 14:17-14:22
+        name: "Value"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 17:1-21:2
+    (IdentifierDeclaration
+      range: 17:7-17:11
+      name: "Base"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 17:23-17:29
+      name: "Reader"
+    )
+    (MemberDeclaration
+      range: 18:5-20:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 18:12-20:6
+        (IdentifierDeclaration
+          range: 18:17-18:21
+          name: "read"
+        )
+        (NamedTypeNode
+          range: 18:24-18:37
+          name: "DetailedValue"
+        )
+        (BlockStatement
+          range: 18:38-20:6
+          (ReturnStatement
+            range: 19:9-19:36
+            (NewExpression
+              range: 19:16-19:35
+              (IdentifierExpression
+                range: 19:20-19:33
+                name: "DetailedValue"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 23:1-23:28
+    (IdentifierDeclaration
+      range: 23:7-23:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 23:21-23:25
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 25:1-25:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 25:7-25:13
+      name: "reader"
+    )
+    (NamedTypeNode
+      range: 25:15-25:21
+      name: "Reader"
+    )
+    (NewExpression
+      range: 25:24-25:35
+      (IdentifierExpression
+        range: 25:28-25:33
+        name: "Child"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:31
+    (CallExpression
+      range: 26:1-26:30
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (CallExpression
+        range: 26:7-26:29
+        (MemberExpression
+          range: 26:7-26:27
+          (CallExpression
+            range: 26:7-26:20
+            (MemberExpression
+              range: 26:7-26:18
+              (IdentifierExpression
+                range: 26:7-26:13
+                name: "reader"
+              )
+              (IdentifierExpression
+                range: 26:14-26:18
+                name: "read"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 26:21-26:27
+            name: "number"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:29-7:34 -> Value
+  9:16-9:17 -> i32
+  19:16-19:35 -> DetailedValue
+  19:20-19:33 -> DetailedValue
+  23:21-23:25 -> Base
+  25:24-25:35 -> Child
+  25:28-25:33 -> Child
+  26:1-26:6 -> (any) => void
+  26:1-26:30 -> void
+  26:7-26:13 -> Reader
+  26:7-26:18 -> () => Value
+  26:7-26:20 -> Value
+  26:7-26:27 -> () => i32
+  26:7-26:29 -> i32
+  26:14-26:18 -> () => Value
+  26:21-26:27 -> () => i32
+
+Resolved types:
+  2:26-2:29 -> i32
+  8:35-8:38 -> i32
+  14:17-14:22 -> Value
+  17:23-17:29 -> Reader
+  18:24-18:37 -> DetailedValue
+  25:15-25:21 -> Reader
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:17-2:23 -> func number() => i32
+  7:7-7:20 -> class DetailedValue
+  8:26-8:32 -> override func number() => i32
+  13:11-13:17 -> interface Reader
+  14:10-14:14 -> func read() => Value
+  17:7-17:11 -> class Base
+  18:17-18:21 -> func read() => DetailedValue
+  23:7-23:12 -> class Child
+  25:7-25:13 -> const reader: Reader
+
+References:
+  7:29-7:34 -> 1:7-1:12
+  19:20-19:33 -> 7:7-7:20
+  23:21-23:25 -> 17:7-17:11
+  25:28-25:33 -> 23:7-23:12
+  26:1-26:6 -> builtin print
+  26:7-26:13 -> 25:7-25:13
+  26:14-26:18 -> 14:10-14:14
+  26:21-26:27 -> 2:17-2:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$DetailedValue
+  nest member Test$Reader
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field reader LTest$Reader; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.reader LTest$Reader;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()LTest$Value;
+    INVOKEVIRTUAL Test$Value.number()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method number()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Value.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method number()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()LTest$Value; flags [PUBLIC, ABSTRACT]
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Reader
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method read()LTest$DetailedValue; flags [PUBLIC]
+    NEW Test$DetailedValue
+    DUP
+    INVOKESPECIAL Test$DetailedValue.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+  method read()LTest$Value; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Base.read()LTest$DetailedValue;
+    ARETURN
+    max stack 1 max locals 1
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+2

@@ -1,0 +1,603 @@
+abstract class Base implements Comparable<Base> {
+    public func compareTo(other: Base) i32 {
+        return 7;
+    }
+}
+
+class Child extends Base {}
+
+const comparable: Comparable<Base> = new Child();
+print(comparable.compareTo(new Child()));
+
+abstract class Ordering implements Comparator<Base> {
+    public func compare(a: Base, b: Base) i32 {
+        return 8;
+    }
+}
+
+class ChildOrdering extends Ordering {}
+
+const comparator: Comparator<Base> = new ChildOrdering();
+print(comparator.compare(new Child(), new Child()));
+
+--- TOKENS ---
+
+ABSTRACT (1:1-1:9)
+CLASS (1:10-1:15)
+IDENTIFIER "Base" (1:16-1:20)
+IMPLEMENTS (1:21-1:31)
+IDENTIFIER "Comparable" (1:32-1:42)
+LESS (1:42-1:43)
+IDENTIFIER "Base" (1:43-1:47)
+GREATER (1:47-1:48)
+LEFT_BRACE (1:49-1:50)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "compareTo" (2:17-2:26)
+LEFT_PAREN (2:26-2:27)
+IDENTIFIER "other" (2:27-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "Base" (2:34-2:38)
+RIGHT_PAREN (2:38-2:39)
+IDENTIFIER "i32" (2:40-2:43)
+LEFT_BRACE (2:44-2:45)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "7" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "Child" (7:7-7:12)
+EXTENDS (7:13-7:20)
+IDENTIFIER "Base" (7:21-7:25)
+LEFT_BRACE (7:26-7:27)
+RIGHT_BRACE (7:27-7:28)
+CONST (9:1-9:6)
+IDENTIFIER "comparable" (9:7-9:17)
+COLON (9:17-9:18)
+IDENTIFIER "Comparable" (9:19-9:29)
+LESS (9:29-9:30)
+IDENTIFIER "Base" (9:30-9:34)
+GREATER (9:34-9:35)
+EQUAL (9:36-9:37)
+NEW (9:38-9:41)
+IDENTIFIER "Child" (9:42-9:47)
+LEFT_PAREN (9:47-9:48)
+RIGHT_PAREN (9:48-9:49)
+SEMICOLON (9:49-9:50)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "comparable" (10:7-10:17)
+DOT (10:17-10:18)
+IDENTIFIER "compareTo" (10:18-10:27)
+LEFT_PAREN (10:27-10:28)
+NEW (10:28-10:31)
+IDENTIFIER "Child" (10:32-10:37)
+LEFT_PAREN (10:37-10:38)
+RIGHT_PAREN (10:38-10:39)
+RIGHT_PAREN (10:39-10:40)
+RIGHT_PAREN (10:40-10:41)
+SEMICOLON (10:41-10:42)
+ABSTRACT (12:1-12:9)
+CLASS (12:10-12:15)
+IDENTIFIER "Ordering" (12:16-12:24)
+IMPLEMENTS (12:25-12:35)
+IDENTIFIER "Comparator" (12:36-12:46)
+LESS (12:46-12:47)
+IDENTIFIER "Base" (12:47-12:51)
+GREATER (12:51-12:52)
+LEFT_BRACE (12:53-12:54)
+PUBLIC (13:5-13:11)
+FUNC (13:12-13:16)
+IDENTIFIER "compare" (13:17-13:24)
+LEFT_PAREN (13:24-13:25)
+IDENTIFIER "a" (13:25-13:26)
+COLON (13:26-13:27)
+IDENTIFIER "Base" (13:28-13:32)
+COMMA (13:32-13:33)
+IDENTIFIER "b" (13:34-13:35)
+COLON (13:35-13:36)
+IDENTIFIER "Base" (13:37-13:41)
+RIGHT_PAREN (13:41-13:42)
+IDENTIFIER "i32" (13:43-13:46)
+LEFT_BRACE (13:47-13:48)
+RETURN (14:9-14:15)
+INTEGER_LITERAL "8" (14:16-14:17)
+SEMICOLON (14:17-14:18)
+RIGHT_BRACE (15:5-15:6)
+RIGHT_BRACE (16:1-16:2)
+CLASS (18:1-18:6)
+IDENTIFIER "ChildOrdering" (18:7-18:20)
+EXTENDS (18:21-18:28)
+IDENTIFIER "Ordering" (18:29-18:37)
+LEFT_BRACE (18:38-18:39)
+RIGHT_BRACE (18:39-18:40)
+CONST (20:1-20:6)
+IDENTIFIER "comparator" (20:7-20:17)
+COLON (20:17-20:18)
+IDENTIFIER "Comparator" (20:19-20:29)
+LESS (20:29-20:30)
+IDENTIFIER "Base" (20:30-20:34)
+GREATER (20:34-20:35)
+EQUAL (20:36-20:37)
+NEW (20:38-20:41)
+IDENTIFIER "ChildOrdering" (20:42-20:55)
+LEFT_PAREN (20:55-20:56)
+RIGHT_PAREN (20:56-20:57)
+SEMICOLON (20:57-20:58)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "comparator" (21:7-21:17)
+DOT (21:17-21:18)
+IDENTIFIER "compare" (21:18-21:25)
+LEFT_PAREN (21:25-21:26)
+NEW (21:26-21:29)
+IDENTIFIER "Child" (21:30-21:35)
+LEFT_PAREN (21:35-21:36)
+RIGHT_PAREN (21:36-21:37)
+COMMA (21:37-21:38)
+NEW (21:39-21:42)
+IDENTIFIER "Child" (21:43-21:48)
+LEFT_PAREN (21:48-21:49)
+RIGHT_PAREN (21:49-21:50)
+RIGHT_PAREN (21:50-21:51)
+RIGHT_PAREN (21:51-21:52)
+SEMICOLON (21:52-21:53)
+
+--- AST ---
+
+(Program
+  range: 1:1-21:53
+  (ClassDeclaration
+    range: 1:1-5:2
+    abstractClass: true
+    (IdentifierDeclaration
+      range: 1:16-1:20
+      name: "Base"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 1:32-1:48
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:43-1:47
+        name: "Base"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 2:27-2:38
+          (IdentifierDeclaration
+            range: 2:27-2:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:34-2:38
+            name: "Base"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:40-2:43
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:44-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "7"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-7:28
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 7:21-7:25
+      name: "Base"
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:17
+      name: "comparable"
+    )
+    (NamedTypeNode
+      range: 9:19-9:35
+      name: "Comparable"
+      (NamedTypeNode
+        range: 9:30-9:34
+        name: "Base"
+      )
+    )
+    (NewExpression
+      range: 9:38-9:49
+      (IdentifierExpression
+        range: 9:42-9:47
+        name: "Child"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:42
+    (CallExpression
+      range: 10:1-10:41
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:40
+        (MemberExpression
+          range: 10:7-10:27
+          (IdentifierExpression
+            range: 10:7-10:17
+            name: "comparable"
+          )
+          (IdentifierExpression
+            range: 10:18-10:27
+            name: "compareTo"
+          )
+        )
+        (NewExpression
+          range: 10:28-10:39
+          (IdentifierExpression
+            range: 10:32-10:37
+            name: "Child"
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 12:1-16:2
+    abstractClass: true
+    (IdentifierDeclaration
+      range: 12:16-12:24
+      name: "Ordering"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 12:36-12:52
+      name: "Comparator"
+      (NamedTypeNode
+        range: 12:47-12:51
+        name: "Base"
+      )
+    )
+    (MemberDeclaration
+      range: 13:5-15:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 13:12-15:6
+        (IdentifierDeclaration
+          range: 13:17-13:24
+          name: "compare"
+        )
+        (FunctionParameter
+          range: 13:25-13:32
+          (IdentifierDeclaration
+            range: 13:25-13:26
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 13:28-13:32
+            name: "Base"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 13:34-13:41
+          (IdentifierDeclaration
+            range: 13:34-13:35
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 13:37-13:41
+            name: "Base"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 13:43-13:46
+          name: "i32"
+        )
+        (BlockStatement
+          range: 13:47-15:6
+          (ReturnStatement
+            range: 14:9-14:18
+            (LiteralExpression
+              range: 14:16-14:17
+              kind: INT
+              text: "8"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 18:1-18:40
+    (IdentifierDeclaration
+      range: 18:7-18:20
+      name: "ChildOrdering"
+    )
+    (IdentifierExpression
+      range: 18:29-18:37
+      name: "Ordering"
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:58
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:17
+      name: "comparator"
+    )
+    (NamedTypeNode
+      range: 20:19-20:35
+      name: "Comparator"
+      (NamedTypeNode
+        range: 20:30-20:34
+        name: "Base"
+      )
+    )
+    (NewExpression
+      range: 20:38-20:57
+      (IdentifierExpression
+        range: 20:42-20:55
+        name: "ChildOrdering"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:53
+    (CallExpression
+      range: 21:1-21:52
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (CallExpression
+        range: 21:7-21:51
+        (MemberExpression
+          range: 21:7-21:25
+          (IdentifierExpression
+            range: 21:7-21:17
+            name: "comparator"
+          )
+          (IdentifierExpression
+            range: 21:18-21:25
+            name: "compare"
+          )
+        )
+        (NewExpression
+          range: 21:26-21:37
+          (IdentifierExpression
+            range: 21:30-21:35
+            name: "Child"
+          )
+        )
+        (NewExpression
+          range: 21:39-21:50
+          (IdentifierExpression
+            range: 21:43-21:48
+            name: "Child"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:21-7:25 -> Base
+  9:38-9:49 -> Child
+  9:42-9:47 -> Child
+  10:1-10:6 -> (any) => void
+  10:1-10:41 -> void
+  10:7-10:17 -> Comparable<Base>
+  10:7-10:27 -> (Base) => i32
+  10:7-10:40 -> i32
+  10:18-10:27 -> (Base) => i32
+  10:28-10:39 -> Child
+  10:32-10:37 -> Child
+  14:16-14:17 -> i32
+  18:29-18:37 -> Ordering
+  20:38-20:57 -> ChildOrdering
+  20:42-20:55 -> ChildOrdering
+  21:1-21:6 -> (any) => void
+  21:1-21:52 -> void
+  21:7-21:17 -> Comparator<Base>
+  21:7-21:25 -> (Base, Base) => i32
+  21:7-21:51 -> i32
+  21:18-21:25 -> (Base, Base) => i32
+  21:26-21:37 -> Child
+  21:30-21:35 -> Child
+  21:39-21:50 -> Child
+  21:43-21:48 -> Child
+
+Resolved types:
+  1:32-1:48 -> Comparable<Base>
+  1:43-1:47 -> Base
+  2:34-2:38 -> Base
+  2:40-2:43 -> i32
+  9:19-9:35 -> Comparable<Base>
+  9:30-9:34 -> Base
+  12:36-12:52 -> Comparator<Base>
+  12:47-12:51 -> Base
+  13:28-13:32 -> Base
+  13:37-13:41 -> Base
+  13:43-13:46 -> i32
+  20:19-20:35 -> Comparator<Base>
+  20:30-20:34 -> Base
+
+Declarations:
+  1:16-1:20 -> class Base
+  2:17-2:26 -> func compareTo(Base) => i32
+  2:27-2:32 -> const other: Base
+  7:7-7:12 -> class Child
+  9:7-9:17 -> const comparable: Comparable<Base>
+  12:16-12:24 -> class Ordering
+  13:17-13:24 -> func compare(Base, Base) => i32
+  13:25-13:26 -> const a: Base
+  13:34-13:35 -> const b: Base
+  18:7-18:20 -> class ChildOrdering
+  20:7-20:17 -> const comparator: Comparator<Base>
+
+References:
+  7:21-7:25 -> 1:16-1:20
+  9:42-9:47 -> 7:7-7:12
+  10:1-10:6 -> builtin print
+  10:7-10:17 -> 9:7-9:17
+  10:18-10:27 -> Comparable<Base>.compareTo(Base): i32
+  10:32-10:37 -> 7:7-7:12
+  18:29-18:37 -> 12:16-12:24
+  20:42-20:55 -> 18:7-18:20
+  21:1-21:6 -> builtin print
+  21:7-21:17 -> 20:7-20:17
+  21:18-21:25 -> Comparator<Base>.compare(Base, Base): i32
+  21:30-21:35 -> 7:7-7:12
+  21:43-21:48 -> 7:7-7:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  nest member Test$Ordering
+  nest member Test$ChildOrdering
+  inner class Test$Base flags [PUBLIC, STATIC, ABSTRACT]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  inner class Test$Ordering flags [PUBLIC, STATIC, ABSTRACT]
+  inner class Test$ChildOrdering flags [PUBLIC, STATIC]
+  field comparable Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<LTest$Base;>;
+  field comparator Ljava/util/Comparator; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Comparator<LTest$Base;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.comparable Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.comparable Ljava/lang/Comparable;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    NEW Test$ChildOrdering
+    DUP
+    INVOKESPECIAL Test$ChildOrdering.<init>()V
+    PUTSTATIC Test.comparator Ljava/util/Comparator;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.comparator Ljava/util/Comparator;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    INVOKEINTERFACE java/util/Comparator.compare(Ljava/lang/Object;Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER, ABSTRACT]
+  implements java/lang/Comparable
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Base;>;Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC, ABSTRACT]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method compareTo(LTest$Base;)I flags [PUBLIC]
+    LDC 7
+    IRETURN
+    max stack 1 max locals 2
+  method compareTo(Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Base
+    INVOKEVIRTUAL Test$Base.compareTo(LTest$Base;)I
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Ordering extends java/lang/Object version 65.0 flags [PUBLIC, SUPER, ABSTRACT]
+  implements java/util/Comparator
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  signature Ljava/lang/Object;Ljava/util/Comparator<LTest$Base;>;Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;
+  nest host Test
+  inner class Test$Ordering flags [PUBLIC, STATIC, ABSTRACT]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method compare(LTest$Base;LTest$Base;)I flags [PUBLIC]
+    LDC 8
+    IRETURN
+    max stack 1 max locals 3
+  method compare(Ljava/lang/Object;Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Base
+    ALOAD_2 2
+    CHECKCAST Test$Base
+    INVOKEVIRTUAL Test$Ordering.compare(LTest$Base;LTest$Base;)I
+    IRETURN
+    max stack 3 max locals 3
+
+class Test$ChildOrdering extends Test$Ordering version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$ChildOrdering flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Ordering.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+7
+8

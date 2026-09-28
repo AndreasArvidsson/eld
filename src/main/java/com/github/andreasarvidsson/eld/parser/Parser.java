@@ -86,8 +86,8 @@ public final class Parser extends ParserBase {
             throw ParserException.expected("top-level declaration", current());
         }
         return switch (current().type()) {
-            case CONST, VAR, TYPE, CLASS, ENUM, RECORD, INTERFACE, FUNC, FINAL,
-                OVERRIDE, ASYNC -> parseTopLevelDeclaration();
+            case CONST, VAR, TYPE, CLASS, ABSTRACT, ENUM, RECORD, INTERFACE,
+                FUNC, FINAL, OVERRIDE, ASYNC -> parseTopLevelDeclaration();
             case PUBLIC, PROTECTED -> throw ParserException
                 .expected("top-level declaration", current());
             case STATIC -> throw new ParserException(
@@ -102,17 +102,27 @@ public final class Parser extends ParserBase {
         final Token token = advance();
         return switch (token.type()) {
             case CONST -> functionFollows()
-                ? parseModifiedFunctionDeclaration(token)
+                ? parseTopLevelFunctionDeclaration(token)
                 : parseVariableDeclaration(token, Mutability.CONST);
             case VAR -> parseVariableDeclaration(token, Mutability.VAR);
             case TYPE -> parseTypeAliasDeclaration(token);
             case CLASS -> parseClassDeclaration(token);
+            case ABSTRACT -> {
+                if (functionDeclarationStartsHere()) {
+                    throw new ParserException(
+                        token.range(),
+                        "'abstract' is only allowed on class methods"
+                    );
+                }
+                expect(TokenType.CLASS);
+                yield parseClassDeclaration(token, true);
+            }
             case ENUM -> parseEnumDeclaration(token);
             case RECORD -> parseRecordDeclaration(token);
             case INTERFACE -> parseInterfaceDeclaration(token);
             case FUNC -> parseFunctionDeclaration(token, false, List.of());
             case FINAL, OVERRIDE, ASYNC ->
-                parseModifiedFunctionDeclaration(token);
+                parseTopLevelFunctionDeclaration(token);
             default -> throw new IllegalStateException(
                 "Unexpected top-level declaration token: " + token.type()
             );
@@ -130,8 +140,8 @@ public final class Parser extends ParserBase {
                 return parseVariableDeclaration(token, Mutability.CONST);
             case VAR:
                 return parseVariableDeclaration(token, Mutability.VAR);
-            case TYPE, CLASS, ENUM, RECORD, INTERFACE, CONSTRUCTOR, FUNC, FINAL,
-                OVERRIDE, ASYNC, PUBLIC, PROTECTED:
+            case TYPE, CLASS, ABSTRACT, ENUM, RECORD, INTERFACE, CONSTRUCTOR,
+                FUNC, FINAL, OVERRIDE, ASYNC, PUBLIC, PROTECTED:
                 throw ParserException.expected("statement", token);
             case SUPER:
                 final CallExpression superCall =
@@ -334,6 +344,13 @@ public final class Parser extends ParserBase {
     }
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
+        return parseClassDeclaration(keyword, false);
+    }
+
+    private ClassDeclaration parseClassDeclaration(
+        final Token keyword,
+        final boolean abstractClass
+    ) {
         final Token name = expect(TokenType.IDENTIFIER);
         assertIdentifierCase(name, "class");
         final IdentifierExpression superclass;
@@ -359,6 +376,7 @@ public final class Parser extends ParserBase {
         final Range range = keyword.range().union(close.range());
         final var id = new IdentifierDeclaration(name.text(), name.range());
         return new ClassDeclaration(
+            abstractClass,
             id,
             superclass,
             implementedInterfaces,
@@ -522,6 +540,7 @@ public final class Parser extends ParserBase {
         while (
             check(constructorOffset, TokenType.CONST)
                 || check(constructorOffset, TokenType.FINAL)
+                || check(constructorOffset, TokenType.ABSTRACT)
                 || check(constructorOffset, TokenType.OVERRIDE)
                 || check(constructorOffset, TokenType.ASYNC)
         ) {
@@ -816,6 +835,7 @@ public final class Parser extends ParserBase {
         int offset = 0;
         while (
             check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.ABSTRACT)
                 || check(offset, TokenType.OVERRIDE)
                 || check(offset, TokenType.ASYNC)
         ) {
@@ -833,6 +853,7 @@ public final class Parser extends ParserBase {
         Token result = null;
         while (
             check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.ABSTRACT)
                 || check(offset, TokenType.OVERRIDE)
                 || check(offset, TokenType.ASYNC)
         ) {
@@ -848,6 +869,7 @@ public final class Parser extends ParserBase {
         int offset = 0;
         while (
             check(offset, TokenType.CONST) || check(offset, TokenType.FINAL)
+                || check(offset, TokenType.ABSTRACT)
                 || check(offset, TokenType.OVERRIDE)
                 || check(offset, TokenType.ASYNC)
         ) {
@@ -879,6 +901,7 @@ public final class Parser extends ParserBase {
                 final FunctionModifier value = switch (modifier.type()) {
                     case CONST -> FunctionModifier.CONST;
                     case FINAL -> FunctionModifier.FINAL;
+                    case ABSTRACT -> FunctionModifier.ABSTRACT;
                     case OVERRIDE -> FunctionModifier.OVERRIDE;
                     default -> throw new IllegalStateException(
                         "Unexpected function modifier: " + modifier.type()
@@ -896,6 +919,19 @@ public final class Parser extends ParserBase {
             modifier = advance();
         }
         return parseFunctionDeclaration(first, async, modifiers);
+    }
+
+    private FunctionDeclaration parseTopLevelFunctionDeclaration(
+        final Token first
+    ) {
+        final Token abstractModifier = functionModifier(TokenType.ABSTRACT);
+        if (abstractModifier != null) {
+            throw new ParserException(
+                abstractModifier.range(),
+                "'abstract' is only allowed on class methods"
+            );
+        }
+        return parseModifiedFunctionDeclaration(first);
     }
 
     private FunctionDeclaration parseFunctionDeclaration(
@@ -916,8 +952,19 @@ public final class Parser extends ParserBase {
         }
         expect(TokenType.RIGHT_PAREN);
         final TypeNode returnType =
-            check(TokenType.LEFT_BRACE) ? null : parseType();
-        final BlockStatement body = parseBlockStatement();
+            check(TokenType.LEFT_BRACE) || check(TokenType.SEMICOLON)
+                ? null
+                : parseType();
+        final boolean abstractMethod =
+            modifiers.contains(FunctionModifier.ABSTRACT);
+        final BlockStatement body;
+        if (abstractMethod) {
+            final Token end = expect(TokenType.SEMICOLON);
+            body = new BlockStatement(List.of(), end.range());
+        }
+        else {
+            body = parseBlockStatement();
+        }
         final Range range = keyword.range().union(body.range());
         return new FunctionDeclaration(
             async,

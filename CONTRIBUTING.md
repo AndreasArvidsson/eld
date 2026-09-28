@@ -185,7 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Support abstract classes with abstract methods
 - Sealed classes/interfaces
   - class Animal {} // extensible
   - class Animal permits Dog, Cat {} // only Dog and Cat may extend this

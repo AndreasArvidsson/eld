@@ -1,0 +1,14 @@
+abstract func noop();
+
+--- TOKENS ---
+
+ABSTRACT (1:1-1:9)
+FUNC (1:10-1:14)
+IDENTIFIER "noop" (1:15-1:19)
+LEFT_PAREN (1:19-1:20)
+RIGHT_PAREN (1:20-1:21)
+SEMICOLON (1:21-1:22)
+
+--- AST ---
+
+ParserException: 'abstract' is only allowed on class methods at 1:1-1:9

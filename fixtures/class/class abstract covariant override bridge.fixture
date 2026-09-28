@@ -1,0 +1,547 @@
+class Value {
+    public func number() i32 {
+        return 1;
+    }
+}
+
+class DetailedValue extends Value {
+    public override func number() i32 {
+        return 2;
+    }
+}
+
+class Base {
+    public func create() Value {
+        return new Value();
+    }
+}
+
+abstract class Deferred extends Base {
+    public abstract override func create() DetailedValue;
+}
+
+class Child extends Deferred {
+    public override func create() DetailedValue {
+        return new DetailedValue();
+    }
+}
+
+const base: Base = new Child();
+print(base.create().number());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "number" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+LEFT_BRACE (2:30-2:31)
+RETURN (3:9-3:15)
+INTEGER_LITERAL "1" (3:16-3:17)
+SEMICOLON (3:17-3:18)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CLASS (7:1-7:6)
+IDENTIFIER "DetailedValue" (7:7-7:20)
+EXTENDS (7:21-7:28)
+IDENTIFIER "Value" (7:29-7:34)
+LEFT_BRACE (7:35-7:36)
+PUBLIC (8:5-8:11)
+OVERRIDE (8:12-8:20)
+FUNC (8:21-8:25)
+IDENTIFIER "number" (8:26-8:32)
+LEFT_PAREN (8:32-8:33)
+RIGHT_PAREN (8:33-8:34)
+IDENTIFIER "i32" (8:35-8:38)
+LEFT_BRACE (8:39-8:40)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "2" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CLASS (13:1-13:6)
+IDENTIFIER "Base" (13:7-13:11)
+LEFT_BRACE (13:12-13:13)
+PUBLIC (14:5-14:11)
+FUNC (14:12-14:16)
+IDENTIFIER "create" (14:17-14:23)
+LEFT_PAREN (14:23-14:24)
+RIGHT_PAREN (14:24-14:25)
+IDENTIFIER "Value" (14:26-14:31)
+LEFT_BRACE (14:32-14:33)
+RETURN (15:9-15:15)
+NEW (15:16-15:19)
+IDENTIFIER "Value" (15:20-15:25)
+LEFT_PAREN (15:25-15:26)
+RIGHT_PAREN (15:26-15:27)
+SEMICOLON (15:27-15:28)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+ABSTRACT (19:1-19:9)
+CLASS (19:10-19:15)
+IDENTIFIER "Deferred" (19:16-19:24)
+EXTENDS (19:25-19:32)
+IDENTIFIER "Base" (19:33-19:37)
+LEFT_BRACE (19:38-19:39)
+PUBLIC (20:5-20:11)
+ABSTRACT (20:12-20:20)
+OVERRIDE (20:21-20:29)
+FUNC (20:30-20:34)
+IDENTIFIER "create" (20:35-20:41)
+LEFT_PAREN (20:41-20:42)
+RIGHT_PAREN (20:42-20:43)
+IDENTIFIER "DetailedValue" (20:44-20:57)
+SEMICOLON (20:57-20:58)
+RIGHT_BRACE (21:1-21:2)
+CLASS (23:1-23:6)
+IDENTIFIER "Child" (23:7-23:12)
+EXTENDS (23:13-23:20)
+IDENTIFIER "Deferred" (23:21-23:29)
+LEFT_BRACE (23:30-23:31)
+PUBLIC (24:5-24:11)
+OVERRIDE (24:12-24:20)
+FUNC (24:21-24:25)
+IDENTIFIER "create" (24:26-24:32)
+LEFT_PAREN (24:32-24:33)
+RIGHT_PAREN (24:33-24:34)
+IDENTIFIER "DetailedValue" (24:35-24:48)
+LEFT_BRACE (24:49-24:50)
+RETURN (25:9-25:15)
+NEW (25:16-25:19)
+IDENTIFIER "DetailedValue" (25:20-25:33)
+LEFT_PAREN (25:33-25:34)
+RIGHT_PAREN (25:34-25:35)
+SEMICOLON (25:35-25:36)
+RIGHT_BRACE (26:5-26:6)
+RIGHT_BRACE (27:1-27:2)
+CONST (29:1-29:6)
+IDENTIFIER "base" (29:7-29:11)
+COLON (29:11-29:12)
+IDENTIFIER "Base" (29:13-29:17)
+EQUAL (29:18-29:19)
+NEW (29:20-29:23)
+IDENTIFIER "Child" (29:24-29:29)
+LEFT_PAREN (29:29-29:30)
+RIGHT_PAREN (29:30-29:31)
+SEMICOLON (29:31-29:32)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "base" (30:7-30:11)
+DOT (30:11-30:12)
+IDENTIFIER "create" (30:12-30:18)
+LEFT_PAREN (30:18-30:19)
+RIGHT_PAREN (30:19-30:20)
+DOT (30:20-30:21)
+IDENTIFIER "number" (30:21-30:27)
+LEFT_PAREN (30:27-30:28)
+RIGHT_PAREN (30:28-30:29)
+RIGHT_PAREN (30:29-30:30)
+SEMICOLON (30:30-30:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-30:31
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-4:6
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "number"
+        )
+        (NamedTypeNode
+          range: 2:26-2:29
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:30-4:6
+          (ReturnStatement
+            range: 3:9-3:18
+            (LiteralExpression
+              range: 3:16-3:17
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:20
+      name: "DetailedValue"
+    )
+    (IdentifierExpression
+      range: 7:29-7:34
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 8:26-8:32
+          name: "number"
+        )
+        (NamedTypeNode
+          range: 8:35-8:38
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:39-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 13:1-17:2
+    (IdentifierDeclaration
+      range: 13:7-13:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 14:5-16:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 14:12-16:6
+        (IdentifierDeclaration
+          range: 14:17-14:23
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 14:26-14:31
+          name: "Value"
+        )
+        (BlockStatement
+          range: 14:32-16:6
+          (ReturnStatement
+            range: 15:9-15:28
+            (NewExpression
+              range: 15:16-15:27
+              (IdentifierExpression
+                range: 15:20-15:25
+                name: "Value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 19:1-21:2
+    abstractClass: true
+    (IdentifierDeclaration
+      range: 19:16-19:24
+      name: "Deferred"
+    )
+    (IdentifierExpression
+      range: 19:33-19:37
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 20:5-20:58
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 20:12-20:58
+        ABSTRACT
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 20:35-20:41
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 20:44-20:57
+          name: "DetailedValue"
+        )
+        (BlockStatement
+          range: 20:57-20:58
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 23:1-27:2
+    (IdentifierDeclaration
+      range: 23:7-23:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 23:21-23:29
+      name: "Deferred"
+    )
+    (MemberDeclaration
+      range: 24:5-26:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 24:12-26:6
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 24:26-24:32
+          name: "create"
+        )
+        (NamedTypeNode
+          range: 24:35-24:48
+          name: "DetailedValue"
+        )
+        (BlockStatement
+          range: 24:49-26:6
+          (ReturnStatement
+            range: 25:9-25:36
+            (NewExpression
+              range: 25:16-25:35
+              (IdentifierExpression
+                range: 25:20-25:33
+                name: "DetailedValue"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 29:1-29:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 29:7-29:11
+      name: "base"
+    )
+    (NamedTypeNode
+      range: 29:13-29:17
+      name: "Base"
+    )
+    (NewExpression
+      range: 29:20-29:31
+      (IdentifierExpression
+        range: 29:24-29:29
+        name: "Child"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:31
+    (CallExpression
+      range: 30:1-30:30
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (CallExpression
+        range: 30:7-30:29
+        (MemberExpression
+          range: 30:7-30:27
+          (CallExpression
+            range: 30:7-30:20
+            (MemberExpression
+              range: 30:7-30:18
+              (IdentifierExpression
+                range: 30:7-30:11
+                name: "base"
+              )
+              (IdentifierExpression
+                range: 30:12-30:18
+                name: "create"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 30:21-30:27
+            name: "number"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:17 -> i32
+  7:29-7:34 -> Value
+  9:16-9:17 -> i32
+  15:16-15:27 -> Value
+  15:20-15:25 -> Value
+  19:33-19:37 -> Base
+  23:21-23:29 -> Deferred
+  25:16-25:35 -> DetailedValue
+  25:20-25:33 -> DetailedValue
+  29:20-29:31 -> Child
+  29:24-29:29 -> Child
+  30:1-30:6 -> (any) => void
+  30:1-30:30 -> void
+  30:7-30:11 -> Base
+  30:7-30:18 -> () => Value
+  30:7-30:20 -> Value
+  30:7-30:27 -> () => i32
+  30:7-30:29 -> i32
+  30:12-30:18 -> () => Value
+  30:21-30:27 -> () => i32
+
+Resolved types:
+  2:26-2:29 -> i32
+  8:35-8:38 -> i32
+  14:26-14:31 -> Value
+  20:44-20:57 -> DetailedValue
+  24:35-24:48 -> DetailedValue
+  29:13-29:17 -> Base
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:17-2:23 -> func number() => i32
+  7:7-7:20 -> class DetailedValue
+  8:26-8:32 -> override func number() => i32
+  13:7-13:11 -> class Base
+  14:17-14:23 -> func create() => Value
+  19:16-19:24 -> class Deferred
+  20:35-20:41 -> abstract override func create() => DetailedValue
+  23:7-23:12 -> class Child
+  24:26-24:32 -> override func create() => DetailedValue
+  29:7-29:11 -> const base: Base
+
+References:
+  7:29-7:34 -> 1:7-1:12
+  15:20-15:25 -> 1:7-1:12
+  19:33-19:37 -> 13:7-13:11
+  23:21-23:29 -> 19:16-19:24
+  25:20-25:33 -> 7:7-7:20
+  29:24-29:29 -> 23:7-23:12
+  30:1-30:6 -> builtin print
+  30:7-30:11 -> 29:7-29:11
+  30:12-30:18 -> 14:17-14:23
+  30:21-30:27 -> 2:17-2:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$DetailedValue
+  nest member Test$Base
+  nest member Test$Deferred
+  nest member Test$Child
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Deferred flags [PUBLIC, STATIC, ABSTRACT]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field base LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.base LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.base LTest$Base;
+    INVOKEVIRTUAL Test$Base.create()LTest$Value;
+    INVOKEVIRTUAL Test$Value.number()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method number()I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$DetailedValue extends Test$Value version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$DetailedValue flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Value.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method number()I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()LTest$Value; flags [PUBLIC]
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+
+class Test$Deferred extends Test$Base version 65.0 flags [PUBLIC, SUPER, ABSTRACT]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Deferred flags [PUBLIC, STATIC, ABSTRACT]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()LTest$DetailedValue; flags [PUBLIC, ABSTRACT]
+  method create()LTest$Value; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Deferred.create()LTest$DetailedValue;
+    ARETURN
+    max stack 1 max locals 1
+
+class Test$Child extends Test$Deferred version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Deferred.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method create()LTest$DetailedValue; flags [PUBLIC]
+    NEW Test$DetailedValue
+    DUP
+    INVOKESPECIAL Test$DetailedValue.<init>()V
+    ARETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+2

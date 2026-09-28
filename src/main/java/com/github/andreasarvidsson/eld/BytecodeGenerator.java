@@ -1498,6 +1498,7 @@ public final class BytecodeGenerator {
             writer.withVersion(JAVA_21_VERSION, 0);
             writer.withFlags(
                 ACC_PUBLIC | ACC_SUPER | (enumClass ? ACC_ENUM : 0)
+                    | (declaration.abstractClass() ? ACC_ABSTRACT : 0)
                     | (recordClass || semanticModel.isEnumClass(classType)
                         ? ACC_FINAL
                         : 0)
@@ -1543,6 +1544,7 @@ public final class BytecodeGenerator {
                     Optional.of(classDesc(moduleName)),
                     Optional.of(declaration.name().name()),
                     ACC_PUBLIC | ACC_STATIC
+                        | (declaration.abstractClass() ? ACC_ABSTRACT : 0)
                         | (recordClass || enumClass ? ACC_FINAL : 0)
                         | (enumClass ? ACC_ENUM : 0)
                 )
@@ -1801,6 +1803,32 @@ public final class BytecodeGenerator {
                 .members()) {
                 final Declaration member = memberDeclaration.declaration();
                 if (member instanceof FunctionDeclaration function) {
+                    if (function.abstractMethod()) {
+                        final FunctionSymbol symbol =
+                            (FunctionSymbol) semanticModel
+                                .getSymbol(function.name());
+                        writer.withMethod(
+                            methodName(symbol),
+                            MethodTypeDesc
+                                .ofDescriptor(methodDescriptor(symbol.type())),
+                            visibilityAccess(memberDeclaration.visibility())
+                                | ACC_ABSTRACT,
+                            method -> {
+                                final String methodSignature =
+                                    methodSignature(symbol.type());
+                                if (methodSignature != null) {
+                                    method.with(
+                                        SignatureAttribute.of(
+                                            method.constantPool()
+                                                .utf8Entry(methodSignature)
+                                        )
+                                    );
+                                }
+                            }
+                        );
+                        generateOverrideBridges(writer, name, function);
+                        continue;
+                    }
                     if (
                         !semanticModel.isEnumIntrinsic(function)
                             && (record == null
@@ -1827,10 +1855,18 @@ public final class BytecodeGenerator {
                 generateJavaEnumMethods(writer, name, enumeration);
             }
             generateInterfaceBridges(writer, name, classType);
+            final List<InterfaceType> javaInterfaces = new ArrayList<>();
+            for (ClassType current = classType; current != null; current =
+                semanticModel.getSuperclass(current)) {
+                javaInterfaces
+                    .addAll(semanticModel.getImplementedInterfaces(current));
+            }
             generateJavaBridges(
                 writer,
                 name,
-                semanticModel.getImplementedInterfaces(classType)
+                classType,
+                declaration.abstractClass(),
+                javaInterfaces
             );
 
             if (!innerClasses.isEmpty()) {
@@ -3195,6 +3231,9 @@ public final class BytecodeGenerator {
                             Optional.of(classDesc(moduleName)),
                             Optional.of(declaration.name().name()),
                             ACC_PUBLIC | ACC_STATIC
+                                | (declaration.abstractClass()
+                                    ? ACC_ABSTRACT
+                                    : 0)
                         )
                     );
                 }
@@ -3764,6 +3803,8 @@ public final class BytecodeGenerator {
     private void generateJavaBridges(
         final ClassBuilder writer,
         final String owner,
+        final @Nullable ClassType classType,
+        final boolean abstractClass,
         final List<InterfaceType> interfaces
     ) {
         final Map<String, FunctionSymbol> bridges = new LinkedHashMap<>();
@@ -3775,6 +3816,26 @@ public final class BytecodeGenerator {
                     + ")I";
             if (erased.equals(methodDescriptor(type))) {
                 continue;
+            }
+            if (classType != null) {
+                if (
+                    abstractClass && !hasConcreteJavaBridge(classType, function)
+                ) {
+                    continue;
+                }
+                boolean inherited = false;
+                for (ClassType current =
+                    semanticModel
+                        .getSuperclass(classType); current != null; current =
+                            semanticModel.getSuperclass(current)) {
+                    if (hasConcreteJavaBridge(current, function)) {
+                        inherited = true;
+                        break;
+                    }
+                }
+                if (inherited) {
+                    continue;
+                }
             }
             generateMethod(
                 writer,
@@ -3808,6 +3869,26 @@ public final class BytecodeGenerator {
                 }
             );
         }
+    }
+
+    private boolean hasConcreteJavaBridge(
+        final ClassType classType,
+        final FunctionSymbol function
+    ) {
+        for (final SemanticModel.InterfaceBridge bridge : semanticModel
+            .getInterfaceBridges(classType)) {
+            final @Nullable FunctionDeclaration implementation =
+                semanticModel.getFunctionDeclaration(bridge.implementation());
+            if (
+                bridge.contract().name().equals(function.name())
+                    && bridge.contract().type().equals(function.type())
+                    && implementation != null
+                    && !implementation.abstractMethod()
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void generateOverrideBridges(
@@ -3929,11 +4010,8 @@ public final class BytecodeGenerator {
             final String implementationName = methodName(implementation);
             final String key = bridgeName + bridgeDescriptor;
             if (
-                (bridgeName.equals(implementationName)
-                    && (bridgeDescriptor.equals(implementationDescriptor)
-                        || semanticModel.getOverrideBridges(implementation)
-                            .contains(contract)))
-                    || !generated.add(key)
+                !requiresInterfaceBridge(bridge) || !generated.add(key)
+                    || hasInheritedInterfaceBridge(classType, key)
             ) {
                 continue;
             }
@@ -3968,6 +4046,40 @@ public final class BytecodeGenerator {
                 }
             );
         }
+    }
+
+    private boolean requiresInterfaceBridge(
+        final SemanticModel.InterfaceBridge bridge
+    ) {
+        final FunctionSymbol implementation = bridge.implementation();
+        final FunctionSymbol required = bridge.contract();
+        return !methodName(required).equals(methodName(implementation))
+            || (!methodDescriptor(required.type())
+                .equals(methodDescriptor(implementation.type()))
+                && !semanticModel.getOverrideBridges(implementation)
+                    .contains(required.type()));
+    }
+
+    private boolean hasInheritedInterfaceBridge(
+        final ClassType classType,
+        final String key
+    ) {
+        for (ClassType current =
+            semanticModel.getSuperclass(classType); current != null; current =
+                semanticModel.getSuperclass(current)) {
+            for (final SemanticModel.InterfaceBridge bridge : semanticModel
+                .getInterfaceBridges(current)) {
+                if (
+                    requiresInterfaceBridge(bridge) && key.equals(
+                        methodName(bridge.contract())
+                            + methodDescriptor(bridge.contract().type())
+                    )
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void collectJavaBridges(
@@ -9594,6 +9706,8 @@ public final class BytecodeGenerator {
                 generateJavaBridges(
                     writer,
                     info.owner(),
+                    null,
+                    false,
                     List.of(
                         (InterfaceType) semanticModel.getExpressionType(object)
                     )

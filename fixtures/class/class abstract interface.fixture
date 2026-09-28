@@ -1,0 +1,278 @@
+interface Reader {
+    func read() i32;
+}
+
+abstract class Base implements Reader {}
+
+class Child extends Base {
+    public func read() i32 {
+        return 9;
+    }
+}
+
+const reader: Reader = new Child();
+print(reader.read());
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Reader" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+FUNC (2:5-2:9)
+IDENTIFIER "read" (2:10-2:14)
+LEFT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+SEMICOLON (2:20-2:21)
+RIGHT_BRACE (3:1-3:2)
+ABSTRACT (5:1-5:9)
+CLASS (5:10-5:15)
+IDENTIFIER "Base" (5:16-5:20)
+IMPLEMENTS (5:21-5:31)
+IDENTIFIER "Reader" (5:32-5:38)
+LEFT_BRACE (5:39-5:40)
+RIGHT_BRACE (5:40-5:41)
+CLASS (7:1-7:6)
+IDENTIFIER "Child" (7:7-7:12)
+EXTENDS (7:13-7:20)
+IDENTIFIER "Base" (7:21-7:25)
+LEFT_BRACE (7:26-7:27)
+PUBLIC (8:5-8:11)
+FUNC (8:12-8:16)
+IDENTIFIER "read" (8:17-8:21)
+LEFT_PAREN (8:21-8:22)
+RIGHT_PAREN (8:22-8:23)
+IDENTIFIER "i32" (8:24-8:27)
+LEFT_BRACE (8:28-8:29)
+RETURN (9:9-9:15)
+INTEGER_LITERAL "9" (9:16-9:17)
+SEMICOLON (9:17-9:18)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+CONST (13:1-13:6)
+IDENTIFIER "reader" (13:7-13:13)
+COLON (13:13-13:14)
+IDENTIFIER "Reader" (13:15-13:21)
+EQUAL (13:22-13:23)
+NEW (13:24-13:27)
+IDENTIFIER "Child" (13:28-13:33)
+LEFT_PAREN (13:33-13:34)
+RIGHT_PAREN (13:34-13:35)
+SEMICOLON (13:35-13:36)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "reader" (14:7-14:13)
+DOT (14:13-14:14)
+IDENTIFIER "read" (14:14-14:18)
+LEFT_PAREN (14:18-14:19)
+RIGHT_PAREN (14:19-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:22
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Reader"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:21
+      (IdentifierDeclaration
+        range: 2:10-2:14
+        name: "read"
+      )
+      (NamedTypeNode
+        range: 2:17-2:20
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-5:41
+    abstractClass: true
+    (IdentifierDeclaration
+      range: 5:16-5:20
+      name: "Base"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:32-5:38
+      name: "Reader"
+    )
+  )
+  (ClassDeclaration
+    range: 7:1-11:2
+    (IdentifierDeclaration
+      range: 7:7-7:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 7:21-7:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-10:6
+        (IdentifierDeclaration
+          range: 8:17-8:21
+          name: "read"
+        )
+        (NamedTypeNode
+          range: 8:24-8:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:28-10:6
+          (ReturnStatement
+            range: 9:9-9:18
+            (LiteralExpression
+              range: 9:16-9:17
+              kind: INT
+              text: "9"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:13
+      name: "reader"
+    )
+    (NamedTypeNode
+      range: 13:15-13:21
+      name: "Reader"
+    )
+    (NewExpression
+      range: 13:24-13:35
+      (IdentifierExpression
+        range: 13:28-13:33
+        name: "Child"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:22
+    (CallExpression
+      range: 14:1-14:21
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:20
+        (MemberExpression
+          range: 14:7-14:18
+          (IdentifierExpression
+            range: 14:7-14:13
+            name: "reader"
+          )
+          (IdentifierExpression
+            range: 14:14-14:18
+            name: "read"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:21-7:25 -> Base
+  9:16-9:17 -> i32
+  13:24-13:35 -> Child
+  13:28-13:33 -> Child
+  14:1-14:6 -> (any) => void
+  14:1-14:21 -> void
+  14:7-14:13 -> Reader
+  14:7-14:18 -> () => i32
+  14:7-14:20 -> i32
+  14:14-14:18 -> () => i32
+
+Resolved types:
+  2:17-2:20 -> i32
+  5:32-5:38 -> Reader
+  8:24-8:27 -> i32
+  13:15-13:21 -> Reader
+
+Declarations:
+  1:11-1:17 -> interface Reader
+  2:10-2:14 -> func read() => i32
+  5:16-5:20 -> class Base
+  7:7-7:12 -> class Child
+  8:17-8:21 -> func read() => i32
+  13:7-13:13 -> const reader: Reader
+
+References:
+  7:21-7:25 -> 5:16-5:20
+  13:28-13:33 -> 7:7-7:12
+  14:1-14:6 -> builtin print
+  14:7-14:13 -> 13:7-13:13
+  14:14-14:18 -> 2:10-2:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Reader
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Base flags [PUBLIC, STATIC, ABSTRACT]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field reader LTest$Reader; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.reader LTest$Reader;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.reader LTest$Reader;
+    INVOKEINTERFACE Test$Reader.read()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Reader extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Reader flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method read()I flags [PUBLIC, ABSTRACT]
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER, ABSTRACT]
+  implements Test$Reader
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC, ABSTRACT]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method read()I flags [PUBLIC]
+    LDC 9
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+9

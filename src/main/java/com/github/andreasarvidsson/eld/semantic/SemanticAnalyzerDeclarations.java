@@ -253,6 +253,36 @@ public final class SemanticAnalyzerDeclarations {
                 memberDeclaration
                     .declaration() instanceof FunctionDeclaration method
             ) {
+                if (method.abstractMethod()) {
+                    if (!declaration.abstractClass()) {
+                        throw new SemanticException(
+                            method.range(),
+                            "Abstract methods require an abstract class"
+                        );
+                    }
+                    if (
+                        memberDeclaration.staticMember()
+                            || memberDeclaration
+                                .visibility() == Visibility.PRIVATE
+                            || method.finalMethod()
+                            || method.async()
+                    ) {
+                        throw new SemanticException(
+                            method.range(),
+                            "Abstract methods cannot be private, static, final, or async"
+                        );
+                    }
+                    if (
+                        method.parameters()
+                            .stream()
+                            .anyMatch(FunctionParameter::omittable)
+                    ) {
+                        throw new SemanticException(
+                            method.range(),
+                            "Abstract methods cannot have optional parameters or parameter defaults"
+                        );
+                    }
+                }
                 analyzer.registerFunction(method, context, members);
                 final FunctionSymbol function =
                     (FunctionSymbol) model.getSymbol(method.name());
@@ -325,6 +355,7 @@ public final class SemanticAnalyzerDeclarations {
                     .validateInheritedMember(classType, model.getSymbol(name));
             }
         }
+        validateAbstractMethods(classType, declaration);
         validateInterfaces(classType, declaration);
         final Scope enumScope = new Scope(context.scope());
         if (model.isEnumClass(classType)) {
@@ -354,7 +385,10 @@ public final class SemanticAnalyzerDeclarations {
                     final @Nullable ClassType methodInstance =
                         memberDeclaration.staticMember() ? null : classType;
                     analyzer.setCurrentInstance(methodInstance);
-                    if (!model.isEnumIntrinsic(method)) {
+                    if (
+                        !model.isEnumIntrinsic(method)
+                            && !method.abstractMethod()
+                    ) {
                         analyzer.analyzeFunctionBody(method, bodyContext);
                     }
                 }
@@ -405,6 +439,67 @@ public final class SemanticAnalyzerDeclarations {
         finally {
             analyzer.setCurrentInstance(previousInstance);
             analyzer.setCurrentConstructor(previousConstructor);
+        }
+    }
+
+    private void validateAbstractMethods(
+        final ClassType classType,
+        final ClassDeclaration declaration
+    ) {
+        if (declaration.abstractClass()) {
+            return;
+        }
+        for (ClassType current = classType; current != null; current =
+            model.getSuperclass(current)) {
+            final ClassDeclaration inheritedClass =
+                model.findClassDeclaration(current);
+            if (inheritedClass == null) {
+                continue;
+            }
+            for (final MemberDeclaration member : inheritedClass.members()) {
+                if (
+                    !(member
+                        .declaration() instanceof FunctionDeclaration source)
+                        || !source.abstractMethod()
+                ) {
+                    continue;
+                }
+                final FunctionSymbol method =
+                    (FunctionSymbol) model.getSymbol(source.name());
+                boolean implemented = false;
+                for (ClassType owner = classType; owner != null; owner =
+                    model.getSuperclass(owner)) {
+                    final Scope candidateScope = analyzer.classScope(owner);
+                    if (candidateScope != null) {
+                        for (final FunctionSymbol candidate : candidateScope
+                            .functionsLocal(method.name())) {
+                            if (
+                                candidate.type()
+                                    .parameterTypes()
+                                    .equals(method.type().parameterTypes())
+                            ) {
+                                final FunctionDeclaration implementation =
+                                    model.getFunctionDeclaration(candidate);
+                                implemented =
+                                    implementation != null
+                                        && !implementation.abstractMethod();
+                                break;
+                            }
+                        }
+                    }
+                    if (implemented || owner.equals(current)) {
+                        break;
+                    }
+                }
+                if (!implemented) {
+                    throw new SemanticException(
+                        declaration.range(),
+                        "Class %s must implement abstract method '%s'",
+                        classType.name(),
+                        method.name()
+                    );
+                }
+            }
         }
     }
 
@@ -818,6 +913,13 @@ public final class SemanticAnalyzerDeclarations {
                     ? interfaceImplementation(type, requiredMethod)
                     : null;
             if (
+                declaration.abstractClass()
+                    && contract instanceof FunctionSymbol
+                    && matched == null
+            ) {
+                continue;
+            }
+            if (
                 contract instanceof FunctionSymbol requiredMethod
                     && matched == null
                     && methods.stream()
@@ -971,8 +1073,11 @@ public final class SemanticAnalyzerDeclarations {
 
     private void addInterfaceBridges(final ClassType type) {
         final Set<InterfaceType> visited = new HashSet<>();
-        final List<InterfaceType> pending =
-            new ArrayList<>(model.getImplementedInterfaces(type));
+        final List<InterfaceType> pending = new ArrayList<>();
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            pending.addAll(model.getImplementedInterfaces(current));
+        }
         while (!pending.isEmpty()) {
             final InterfaceType interfaceType = pending.removeLast();
             if (!visited.add(interfaceType)) {

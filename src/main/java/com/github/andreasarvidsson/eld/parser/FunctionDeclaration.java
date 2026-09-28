@@ -23,4 +23,8 @@ public record FunctionDeclaration(
     public boolean overrideMethod() {
         return modifiers.contains(FunctionModifier.OVERRIDE);
     }
+
+    public boolean abstractMethod() {
+        return modifiers.contains(FunctionModifier.ABSTRACT);
+    }
 }

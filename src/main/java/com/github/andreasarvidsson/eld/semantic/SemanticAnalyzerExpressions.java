@@ -999,6 +999,14 @@ public final class SemanticAnalyzerExpressions {
                     );
                 }
                 final ClassType classType = created.type();
+                final var declaration = model.findClassDeclaration(classType);
+                if (declaration != null && declaration.abstractClass()) {
+                    throw new SemanticException(
+                        creation.range(),
+                        "Cannot instantiate abstract class %s",
+                        classType.name()
+                    );
+                }
                 if (
                     model.isEnumClass(classType)
                         && !model.isEnumConstantCreation(creation)

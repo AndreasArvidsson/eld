@@ -135,6 +135,7 @@ public final class RecordLowering {
         }
         members.addAll(record.methods());
         return new ClassDeclaration(
+            false,
             record.name(),
             null,
             record.implementedInterfaces(),

@@ -142,6 +142,7 @@ public final class EnumLowering {
             );
         }
         return new ClassDeclaration(
+            false,
             declaration.name(),
             null,
             declaration.implementedInterfaces(),
