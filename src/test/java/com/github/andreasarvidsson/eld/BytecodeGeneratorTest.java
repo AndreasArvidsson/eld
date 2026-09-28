@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 import com.github.andreasarvidsson.eld.lexer.Lexer;
+import com.github.andreasarvidsson.eld.lexer.TokenType;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
 import com.github.andreasarvidsson.eld.parser.AssignmentOperator;
@@ -57,6 +58,149 @@ import com.github.andreasarvidsson.eld.runtime.EldCharArray;
 import com.github.andreasarvidsson.eld.runtime.EldBooleanArray;
 
 class BytecodeGeneratorTest {
+    @Test
+    void angleTokensStaySeparate() {
+        assertEquals(
+            List.of(
+                TokenType.LESS,
+                TokenType.LESS,
+                TokenType.EQUAL,
+                TokenType.GREATER,
+                TokenType.GREATER,
+                TokenType.EQUAL,
+                TokenType.GREATER,
+                TokenType.GREATER,
+                TokenType.GREATER,
+                TokenType.EQUAL,
+                TokenType.LESS,
+                TokenType.EQUAL,
+                TokenType.GREATER,
+                TokenType.EQUAL
+            ),
+            new Lexer("<<= >>= >>>= <= >=").getTokens()
+                .stream()
+                .map(token -> token.type())
+                .toList()
+        );
+    }
+
+    @Test
+    void bitwiseOperatorsAndAssignments() throws Exception {
+        final Class<?> type = compile("""
+            var value = 0b1010;
+            value |= 0b0101;
+            value &= 0b1110;
+            value ^= 0b0011;
+            value <<= 1;
+            value >>= 2;
+            value >>>= 1;
+            const and = 6 & 3;
+            const or = 6 | 3;
+            const xor = 6 ^ 3;
+            const shifted = 1 + 2 << 3;
+            const signed = -8 >> 1;
+            const unsigned = -1 >>> 1;
+            const inverted = ~0;
+            var wide: i64 = -1;
+            wide >>>= 1;
+            var mixed = 1;
+            mixed |= wide;
+            var narrow: i8 = 1;
+            narrow |= 255;
+            narrow &= 255;
+            narrow ^= 255;
+            var largeLiteral: i8 = 1;
+            largeLiteral |= 3_000_000_255;
+            var wideChoice: i64 = 255;
+            var ternaryNarrow: i8 = 1;
+            ternaryNarrow |= true ? wideChoice : wideChoice;
+            const largeCount = -1 >>> 3_000_000_001;
+            var shiftedWide: i64 = -1;
+            shiftedWide >>>= 3_000_000_001;
+            """);
+        assertEquals(3, type.getField("value").get(null));
+        assertEquals(2, type.getField("and").get(null));
+        assertEquals(7, type.getField("or").get(null));
+        assertEquals(5, type.getField("xor").get(null));
+        assertEquals(24, type.getField("shifted").get(null));
+        assertEquals(-4, type.getField("signed").get(null));
+        assertEquals(2147483647, type.getField("unsigned").get(null));
+        assertEquals(-1, type.getField("inverted").get(null));
+        assertEquals(Long.MAX_VALUE, type.getField("wide").get(null));
+        assertEquals(-1, type.getField("mixed").get(null));
+        assertEquals((byte) 0, type.getField("narrow").get(null));
+        assertEquals((byte) -1, type.getField("largeLiteral").get(null));
+        assertEquals((byte) -1, type.getField("ternaryNarrow").get(null));
+        assertEquals(Integer.MAX_VALUE, type.getField("largeCount").get(null));
+        assertEquals(Long.MAX_VALUE, type.getField("shiftedWide").get(null));
+    }
+
+    @Test
+    void wideBitwiseLiteralsAndSignedBoundary() throws Exception {
+        final Class<?> type = compile("""
+            const left = 4_294_967_296 | 1;
+            const right = 1 | 4_294_967_296;
+            const shifted = 4_294_967_296 >>> 1;
+            const inverted = ~4_294_967_296;
+            const nested = ~(4_294_967_296 + 1);
+            const nestedCount = -1 >>> (3_000_000_000 + 1);
+            const signedBoundary = ~(-2_147_483_648);
+            var narrow: i8 = 1;
+            narrow |= 4_294_967_296 + 2;
+            var selected: i8 = 1;
+            selected |= true ? 4_294_967_296 + 2 : 0;
+            """);
+        assertEquals(4_294_967_297L, type.getField("left").get(null));
+        assertEquals(4_294_967_297L, type.getField("right").get(null));
+        assertEquals(2_147_483_648L, type.getField("shifted").get(null));
+        assertEquals(-4_294_967_297L, type.getField("inverted").get(null));
+        assertEquals(-4_294_967_298L, type.getField("nested").get(null));
+        assertEquals(Integer.MAX_VALUE, type.getField("nestedCount").get(null));
+        assertEquals(
+            Integer.MAX_VALUE,
+            type.getField("signedBoundary").get(null)
+        );
+        assertEquals((byte) 3, type.getField("narrow").get(null));
+        assertEquals((byte) 3, type.getField("selected").get(null));
+    }
+
+    @Test
+    void logicalAndBitwiseOperandsStaySeparate() {
+        for (final String source : List.of(
+            "1 && true;",
+            "true && 1;",
+            "1 || false;",
+            "false || 1;",
+            "!1;",
+            "true & 1;",
+            "true & false;",
+            "1 | false;",
+            "true | false;",
+            "true ^ false;",
+            "1 ^ true;",
+            "1.5 & 1;",
+            "1 | 2.5;",
+            "'a' ^ 1;",
+            "1.5 << 1;",
+            "1 >> true;",
+            "true >>> 1;",
+            "~true;",
+            "~1.5;",
+            "var value = true; value |= 1;",
+            "var value = 1; value &= true;",
+            "var value = 1; value ^= false;",
+            "var value = 1.5; value |= 1;",
+            "var value = 1; value >>= true;",
+            "var value = 1; value <<= false;"
+        )) {
+            assertThrows(
+                SemanticException.class,
+                () -> compile(source),
+                source
+            );
+        }
+    }
+
     @Test
     void enumUsesJvmEnumMetadataAndJavaApi() throws Exception {
         final Class<?> direction =
@@ -4575,6 +4719,28 @@ class BytecodeGeneratorTest {
         assertEquals(false, type.getMethod("conjunction").invoke(null));
         assertEquals(true, type.getMethod("disjunction").invoke(null));
         assertEquals(0, type.getField("counter").get(null));
+    }
+
+    @Test
+    void constantLogicalResultStillEvaluatesEffectfulLeftSide()
+        throws Exception {
+        final Class<?> type = compile("""
+            var counter = 0;
+            func left() bool { counter++; return false; }
+            func result() bool { return left() || true; }
+            func falseResult() bool { return left() && false; }
+            func failure() bool { return 1 / 0 > 0 || true; }
+            """);
+        assertEquals(true, type.getMethod("result").invoke(null));
+        assertEquals(1, type.getField("counter").get(null));
+        assertEquals(false, type.getMethod("falseResult").invoke(null));
+        assertEquals(2, type.getField("counter").get(null));
+        final InvocationTargetException failure =
+            assertThrows(
+                InvocationTargetException.class,
+                () -> type.getMethod("failure").invoke(null)
+            );
+        assertInstanceOf(ArithmeticException.class, failure.getCause());
     }
 
     @Test

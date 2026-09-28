@@ -1,0 +1,225 @@
+const value = 3;
+const enabled = true;
+const disabled = false;
+const result = value > 2 && (!enabled || disabled);
+print(result);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "value" (1:7-1:12)
+EQUAL (1:13-1:14)
+INTEGER_LITERAL "3" (1:15-1:16)
+SEMICOLON (1:16-1:17)
+CONST (2:1-2:6)
+IDENTIFIER "enabled" (2:7-2:14)
+EQUAL (2:15-2:16)
+BOOLEAN_LITERAL "true" (2:17-2:21)
+SEMICOLON (2:21-2:22)
+CONST (3:1-3:6)
+IDENTIFIER "disabled" (3:7-3:15)
+EQUAL (3:16-3:17)
+BOOLEAN_LITERAL "false" (3:18-3:23)
+SEMICOLON (3:23-3:24)
+CONST (4:1-4:6)
+IDENTIFIER "result" (4:7-4:13)
+EQUAL (4:14-4:15)
+IDENTIFIER "value" (4:16-4:21)
+GREATER (4:22-4:23)
+INTEGER_LITERAL "2" (4:24-4:25)
+AND (4:26-4:28)
+LEFT_PAREN (4:29-4:30)
+BANG (4:30-4:31)
+IDENTIFIER "enabled" (4:31-4:38)
+OR (4:39-4:41)
+IDENTIFIER "disabled" (4:42-4:50)
+RIGHT_PAREN (4:50-4:51)
+SEMICOLON (4:51-4:52)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "result" (5:7-5:13)
+RIGHT_PAREN (5:13-5:14)
+SEMICOLON (5:14-5:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:15
+  (VariableDeclaration
+    range: 1:1-1:17
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:15-1:16
+      kind: INT
+      text: "3"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:22
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "enabled"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:17-2:21
+      kind: BOOL
+      text: "true"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "disabled"
+    )
+    type: null
+    (LiteralExpression
+      range: 3:18-3:23
+      kind: BOOL
+      text: "false"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:52
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "result"
+    )
+    type: null
+    (BinaryExpression
+      range: 4:16-4:51
+      (BinaryExpression
+        range: 4:16-4:25
+        (IdentifierExpression
+          range: 4:16-4:21
+          name: "value"
+        )
+        operator: GREATER
+        (LiteralExpression
+          range: 4:24-4:25
+          kind: INT
+          text: "2"
+        )
+      )
+      operator: AND
+      (GroupingExpression
+        range: 4:29-4:51
+        (BinaryExpression
+          range: 4:30-4:50
+          (UnaryExpression
+            range: 4:30-4:38
+            operator: NOT
+            (IdentifierExpression
+              range: 4:31-4:38
+              name: "enabled"
+            )
+          )
+          operator: OR
+          (IdentifierExpression
+            range: 4:42-4:50
+            name: "disabled"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:15
+    (CallExpression
+      range: 5:1-5:14
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:13
+        name: "result"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:15-1:16 -> i32
+  2:17-2:21 -> bool
+  3:18-3:23 -> bool
+  4:16-4:21 -> i32
+  4:16-4:25 -> bool
+  4:16-4:51 -> bool
+  4:24-4:25 -> i32
+  4:29-4:51 -> bool
+  4:30-4:38 -> bool
+  4:30-4:50 -> bool
+  4:31-4:38 -> bool
+  4:42-4:50 -> bool
+  5:1-5:6 -> (any) => void
+  5:1-5:14 -> void
+  5:7-5:13 -> bool
+
+Declarations:
+  1:7-1:12 -> const value: i32
+  2:7-2:14 -> const enabled: bool
+  3:7-3:15 -> const disabled: bool
+  4:7-4:13 -> const result: bool
+
+References:
+  4:16-4:21 -> 1:7-1:12
+  4:31-4:38 -> 2:7-2:14
+  4:42-4:50 -> 3:7-3:15
+  5:1-5:6 -> builtin print
+  5:7-5:13 -> 4:7-4:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC, FINAL] = 3
+  field enabled Z flags [PUBLIC, STATIC, FINAL] = 1
+  field disabled Z flags [PUBLIC, STATIC, FINAL] = 0
+  field result Z flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC Test.value I
+    LDC 2
+    IF_ICMPGT L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    IFEQ L5
+    GETSTATIC Test.enabled Z
+    IFEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    IFNE L4
+    GETSTATIC Test.disabled Z
+    GOTO L6
+   L4:
+    ICONST_1 1
+    GOTO L6
+   L5:
+    ICONST_0 0
+   L6:
+    PUTSTATIC Test.result Z
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.result Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+false

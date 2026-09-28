@@ -13,6 +13,12 @@ public enum BinaryOperator {
     LESS_EQUAL,
     GREATER,
     GREATER_EQUAL,
+    SHIFT_LEFT,
+    SHIFT_RIGHT,
+    UNSIGNED_SHIFT_RIGHT,
+    BIT_AND,
+    BIT_OR,
+    BIT_XOR,
     AND,
     OR;
 

@@ -74,14 +74,18 @@ public enum TokenType {
     EQUAL_EQUAL,
     BANG,
     BANG_EQUAL,
+    TILDE,
 
     LESS,
-    LESS_EQUAL,
     GREATER,
-    GREATER_EQUAL,
 
     AND,
     OR,
+    BIT_AND,
+    BIT_AND_EQUAL,
+    BIT_OR_EQUAL,
+    BIT_XOR,
+    BIT_XOR_EQUAL,
 
     ARROW,
 

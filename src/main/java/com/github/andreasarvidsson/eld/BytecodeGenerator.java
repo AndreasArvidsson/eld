@@ -2876,12 +2876,30 @@ public final class BytecodeGenerator {
     // null means this expression must be evaluated at runtime. In particular,
     // JVM ConstantValue cannot represent null, arrays, or function references.
     private @Nullable Object constantValue(final Expression expression) {
-        final Type effective = semanticModel.getEffectiveType(expression);
+        return constantValue(
+            expression,
+            semanticModel.getEffectiveType(expression)
+        );
+    }
+
+    private @Nullable Object constantValueAtExpressionType(
+        final Expression expression
+    ) {
+        return constantValue(
+            expression,
+            semanticModel.getExpressionType(expression)
+        );
+    }
+
+    private @Nullable Object constantValue(
+        final Expression expression,
+        final Type resultType
+    ) {
         if (
-            (effective instanceof UnionType
-                && uniformUnionType(effective) == null)
-                || effective instanceof InterfaceType
-                || effective == BuiltinType.ANY
+            (resultType instanceof UnionType
+                && uniformUnionType(resultType) == null)
+                || resultType instanceof InterfaceType
+                || resultType == BuiltinType.ANY
         ) {
             return null;
         }
@@ -2905,20 +2923,22 @@ public final class BytecodeGenerator {
             default -> null;
         };
         if (value instanceof Number number) {
-            final Type type = semanticModel.getEffectiveType(expression);
-            if (type == BuiltinType.I8) {
+            if (resultType == BuiltinType.I8) {
                 return (int) number.byteValue();
             }
-            if (type == BuiltinType.I16) {
+            if (resultType == BuiltinType.I16) {
                 return (int) number.shortValue();
             }
-            if (type == BuiltinType.I64) {
+            if (resultType == BuiltinType.I32) {
+                return number.intValue();
+            }
+            if (resultType == BuiltinType.I64) {
                 return number.longValue();
             }
-            if (type == BuiltinType.F32) {
+            if (resultType == BuiltinType.F32) {
                 return number.floatValue();
             }
-            if (type == BuiltinType.F64) {
+            if (resultType == BuiltinType.F64) {
                 return number.doubleValue();
             }
         }
@@ -2974,6 +2994,15 @@ public final class BytecodeGenerator {
             case NOT -> operand instanceof Integer integer
                 ? (integer == 0 ? 1 : 0)
                 : null;
+            case BIT_NOT -> {
+                if (operand instanceof Integer integer) {
+                    yield ~integer;
+                }
+                if (operand instanceof Long integer) {
+                    yield ~integer;
+                }
+                yield null;
+            }
             default -> null;
         };
     }
@@ -2989,6 +3018,12 @@ public final class BytecodeGenerator {
                 // Preserve runtime exceptions and initialization order.
                 case DIVIDE -> b == 0 ? null : a / b;
                 case MODULO -> b == 0 ? null : a % b;
+                case BIT_AND -> a & b;
+                case BIT_OR -> a | b;
+                case BIT_XOR -> a ^ b;
+                case SHIFT_LEFT -> a << b;
+                case SHIFT_RIGHT -> a >> b;
+                case UNSIGNED_SHIFT_RIGHT -> a >>> b;
                 case EQUAL -> a.intValue() == b.intValue() ? 1 : 0;
                 case NOT_EQUAL -> a.intValue() != b.intValue() ? 1 : 0;
                 case LESS -> a < b ? 1 : 0;
@@ -2998,6 +3033,33 @@ public final class BytecodeGenerator {
                 case AND -> a != 0 && b != 0 ? 1 : 0;
                 case OR -> a != 0 || b != 0 ? 1 : 0;
                 case INSTANCEOF -> null;
+            };
+        }
+        if (left instanceof Long a && right instanceof Long b) {
+            return switch (binary.operator()) {
+                case ADD -> a + b;
+                case SUBTRACT -> a - b;
+                case MULTIPLY -> a * b;
+                case DIVIDE -> b == 0 ? null : a / b;
+                case MODULO -> b == 0 ? null : a % b;
+                case BIT_AND -> a & b;
+                case BIT_OR -> a | b;
+                case BIT_XOR -> a ^ b;
+                case EQUAL -> a.longValue() == b.longValue() ? 1 : 0;
+                case NOT_EQUAL -> a.longValue() != b.longValue() ? 1 : 0;
+                case LESS -> a < b ? 1 : 0;
+                case LESS_EQUAL -> a <= b ? 1 : 0;
+                case GREATER -> a > b ? 1 : 0;
+                case GREATER_EQUAL -> a >= b ? 1 : 0;
+                default -> null;
+            };
+        }
+        if (left instanceof Long a && right instanceof Integer b) {
+            return switch (binary.operator()) {
+                case SHIFT_LEFT -> a << b;
+                case SHIFT_RIGHT -> a >> b;
+                case UNSIGNED_SHIFT_RIGHT -> a >>> b;
+                default -> null;
             };
         }
         if (left instanceof Float a && right instanceof Float b) {
@@ -7758,23 +7820,73 @@ public final class BytecodeGenerator {
                                     false,
                                     true
                                 );
-                            case PLUS -> expression(unary.operand());
+                            case PLUS -> {
+                                final Object constant =
+                                    constantValueAtExpressionType(unary);
+                                if (constant instanceof Number number) {
+                                    method.ldc((ConstantDesc) number);
+                                }
+                                else {
+                                    expression(unary.operand());
+                                }
+                            }
                             case MINUS -> {
-                                expression(unary.operand());
-                                method.with(
-                                    simpleInstruction(
-                                        opcode(
-                                            semanticModel
-                                                .getExpressionType(unary),
-                                            INEG
+                                final Object constant =
+                                    constantValueAtExpressionType(unary);
+                                if (constant instanceof Number number) {
+                                    method.ldc((ConstantDesc) number);
+                                }
+                                else {
+                                    expression(unary.operand());
+                                    method.with(
+                                        simpleInstruction(
+                                            opcode(
+                                                semanticModel
+                                                    .getExpressionType(unary),
+                                                INEG
+                                            )
                                         )
-                                    )
-                                );
-                                narrow(semanticModel.getExpressionType(unary));
+                                    );
+                                    narrow(
+                                        semanticModel.getExpressionType(unary)
+                                    );
+                                }
                             }
                             case NOT -> {
+                                final Object constant =
+                                    constantValueAtExpressionType(unary);
+                                if (constant instanceof Integer result) {
+                                    method.ldc(result);
+                                }
+                                else {
+                                    expression(unary.operand());
+                                    booleanResult(IFEQ);
+                                }
+                            }
+                            case BIT_NOT -> {
+                                final Object constant =
+                                    constantValueAtExpressionType(unary);
+                                if (
+                                    constant instanceof Integer
+                                        || constant instanceof Long
+                                ) {
+                                    method.ldc((ConstantDesc) constant);
+                                    break;
+                                }
                                 expression(unary.operand());
-                                booleanResult(IFEQ);
+                                final Type type =
+                                    semanticModel.getExpressionType(unary);
+                                if (type == BuiltinType.I64) {
+                                    method.ldc(-1L);
+                                }
+                                else {
+                                    method.with(simpleInstruction(ICONST_M1));
+                                }
+                                method.with(
+                                    simpleInstruction(
+                                        type == BuiltinType.I64 ? LXOR : IXOR
+                                    )
+                                );
                             }
                         }
                     }
@@ -11008,12 +11120,28 @@ public final class BytecodeGenerator {
             final AssignmentStatement assignment,
             final Type type
         ) {
+            if (
+                (assignment.operator() == AssignmentOperator.SHIFT_LEFT
+                    || assignment.operator() == AssignmentOperator.SHIFT_RIGHT
+                    || assignment
+                        .operator() == AssignmentOperator.UNSIGNED_SHIFT_RIGHT)
+                    && semanticModel
+                        .getEffectiveType(assignment.value()) == BuiltinType.I64
+            ) {
+                method.l2i();
+            }
             final Opcode operation = switch (assignment.operator()) {
                 case ADD -> IADD;
                 case SUBTRACT -> ISUB;
                 case MULTIPLY -> IMUL;
                 case DIVIDE -> IDIV;
                 case MODULO -> IREM;
+                case BIT_AND -> IAND;
+                case BIT_OR -> IOR;
+                case BIT_XOR -> IXOR;
+                case SHIFT_LEFT -> ISHL;
+                case SHIFT_RIGHT -> ISHR;
+                case UNSIGNED_SHIFT_RIGHT -> IUSHR;
                 case ASSIGN -> throw unsupported(
                     assignment,
                     "Invalid compound assignment"
@@ -11238,13 +11366,49 @@ public final class BytecodeGenerator {
         private void binary(final BinaryExpression binary) {
             final BinaryOperator operator = binary.operator();
             if (
+                (operator == BinaryOperator.ADD
+                    || operator == BinaryOperator.SUBTRACT
+                    || operator == BinaryOperator.MULTIPLY
+                    || operator == BinaryOperator.DIVIDE
+                    || operator == BinaryOperator.MODULO
+                    || operator == BinaryOperator.BIT_AND
+                    || operator == BinaryOperator.BIT_OR
+                    || operator == BinaryOperator.BIT_XOR
+                    || operator == BinaryOperator.SHIFT_LEFT
+                    || operator == BinaryOperator.SHIFT_RIGHT
+                    || operator == BinaryOperator.UNSIGNED_SHIFT_RIGHT
+                    || operator == BinaryOperator.EQUAL
+                    || operator == BinaryOperator.NOT_EQUAL
+                    || operator == BinaryOperator.LESS
+                    || operator == BinaryOperator.LESS_EQUAL
+                    || operator == BinaryOperator.GREATER
+                    || operator == BinaryOperator.GREATER_EQUAL)
+                    && constantValueAtExpressionType(
+                        binary
+                    ) instanceof Number constant
+            ) {
+                method.ldc((ConstantDesc) constant);
+                return;
+            }
+            if (
+                (operator == BinaryOperator.AND
+                    || operator == BinaryOperator.OR)
+                    && constantValue(binary) instanceof Integer result
+            ) {
+                method
+                    .with(simpleInstruction(result == 0 ? ICONST_0 : ICONST_1));
+                return;
+            }
+            if (
                 (operator == BinaryOperator.AND
                     && isBooleanLiteral(binary.right(), false))
                     || (operator == BinaryOperator.OR
                         && isBooleanLiteral(binary.right(), true))
             ) {
-                expression(binary.left());
-                method.pop();
+                // A constant left side has no effects or runtime failure.
+                if (constantValue(binary.left()) == null) {
+                    discard(binary.left());
+                }
                 method.with(
                     simpleInstruction(
                         operator == BinaryOperator.AND ? ICONST_0 : ICONST_1
@@ -11523,6 +11687,12 @@ public final class BytecodeGenerator {
                 case MULTIPLY -> IMUL;
                 case DIVIDE -> IDIV;
                 case MODULO -> IREM;
+                case BIT_AND -> IAND;
+                case BIT_OR -> IOR;
+                case BIT_XOR -> IXOR;
+                case SHIFT_LEFT -> ISHL;
+                case SHIFT_RIGHT -> ISHR;
+                case UNSIGNED_SHIFT_RIGHT -> IUSHR;
                 default -> throw unsupported(
                     binary,
                     "Unsupported arithmetic operator"

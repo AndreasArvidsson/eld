@@ -1,0 +1,35 @@
+true && 1;
+
+--- TOKENS ---
+
+BOOLEAN_LITERAL "true" (1:1-1:5)
+AND (1:6-1:8)
+INTEGER_LITERAL "1" (1:9-1:10)
+SEMICOLON (1:10-1:11)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:11
+  (ExpressionStatement
+    range: 1:1-1:11
+    (BinaryExpression
+      range: 1:1-1:10
+      (LiteralExpression
+        range: 1:1-1:5
+        kind: BOOL
+        text: "true"
+      )
+      operator: AND
+      (LiteralExpression
+        range: 1:9-1:10
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Operator AND is not applicable to bool and i32 at 1:1-1:10

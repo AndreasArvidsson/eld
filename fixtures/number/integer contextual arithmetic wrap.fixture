@@ -819,52 +819,22 @@ References:
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
-  field addOverflow J flags [PUBLIC, STATIC, FINAL]
-  field addUnderflow J flags [PUBLIC, STATIC, FINAL]
-  field subtractOverflow J flags [PUBLIC, STATIC, FINAL]
-  field subtractUnderflow J flags [PUBLIC, STATIC, FINAL]
-  field multiplyPositive J flags [PUBLIC, STATIC, FINAL]
-  field multiplyNegative J flags [PUBLIC, STATIC, FINAL]
-  field divideOverflow J flags [PUBLIC, STATIC, FINAL]
+  field addOverflow J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
+  field addUnderflow J flags [PUBLIC, STATIC, FINAL] = 9223372036854775807
+  field subtractOverflow J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
+  field subtractUnderflow J flags [PUBLIC, STATIC, FINAL] = 9223372036854775807
+  field multiplyPositive J flags [PUBLIC, STATIC, FINAL] = -2
+  field multiplyNegative J flags [PUBLIC, STATIC, FINAL] = 0
+  field divideOverflow J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
   field negateMinimum J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
   field inferred I flags [PUBLIC, STATIC, FINAL] = -2147483648
   field boxed Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
   field union Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
   method <clinit>()V flags [STATIC]
-    LDC2_W 9223372036854775807
-    LDC2_W 1
-    LADD
-    PUTSTATIC Test.addOverflow J
-    LDC2_W -9223372036854775808
-    LDC2_W -1
-    LADD
-    PUTSTATIC Test.addUnderflow J
-    LDC2_W 9223372036854775807
-    LDC2_W -1
-    LSUB
-    PUTSTATIC Test.subtractOverflow J
-    LDC2_W -9223372036854775808
-    LDC2_W 1
-    LSUB
-    PUTSTATIC Test.subtractUnderflow J
-    LDC2_W 9223372036854775807
-    LDC2_W 2
-    LMUL
-    PUTSTATIC Test.multiplyPositive J
-    LDC2_W -9223372036854775808
-    LDC2_W 2
-    LMUL
-    PUTSTATIC Test.multiplyNegative J
-    LDC2_W -9223372036854775808
-    LDC2_W -1
-    LDIV
-    PUTSTATIC Test.divideOverflow J
     LDC -2147483648
-    INEG
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     PUTSTATIC Test.boxed Ljava/lang/Object;
     LDC -2147483648
-    INEG
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     PUTSTATIC Test.union Ljava/lang/Object;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
@@ -901,7 +871,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.union Ljava/lang/Object;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
     RETURN
-    max stack 4 max locals 0
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

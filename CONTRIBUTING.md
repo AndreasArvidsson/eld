@@ -185,7 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Bitwise operators. c-style but allow only for integers.
 - Overloaded functions
 - Sealed classes/interfaces
 - final classes? Probably not necessary if we have sealed classes
@@ -196,6 +195,7 @@ protected const bar = 0;
 - create literal types from collection elements
 - Export & import
 - Remove postfix operator?
+- constant control-flow elimination
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion

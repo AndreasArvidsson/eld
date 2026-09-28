@@ -6,5 +6,11 @@ public enum AssignmentOperator {
     SUBTRACT,
     MULTIPLY,
     DIVIDE,
-    MODULO
+    MODULO,
+    BIT_AND,
+    BIT_OR,
+    BIT_XOR,
+    SHIFT_LEFT,
+    SHIFT_RIGHT,
+    UNSIGNED_SHIFT_RIGHT
 }

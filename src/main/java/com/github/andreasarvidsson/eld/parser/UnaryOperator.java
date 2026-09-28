@@ -4,6 +4,7 @@ public enum UnaryOperator {
     PLUS,
     MINUS,
     NOT,
+    BIT_NOT,
     INCREMENT,
     DECREMENT
 }

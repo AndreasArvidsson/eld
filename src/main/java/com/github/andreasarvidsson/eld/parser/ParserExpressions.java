@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.lexer.Token;
 import com.github.andreasarvidsson.eld.lexer.TokenType;
@@ -22,14 +23,12 @@ public class ParserExpressions extends ParserBase {
                 Map.entry(TokenType.BANG_EQUAL, BinaryOperator.NOT_EQUAL),
                 Map.entry(TokenType.INSTANCEOF, BinaryOperator.INSTANCEOF),
                 Map.entry(TokenType.LESS, BinaryOperator.LESS),
-                Map.entry(TokenType.LESS_EQUAL, BinaryOperator.LESS_EQUAL),
                 Map.entry(TokenType.GREATER, BinaryOperator.GREATER),
-                Map.entry(
-                    TokenType.GREATER_EQUAL,
-                    BinaryOperator.GREATER_EQUAL
-                ),
                 Map.entry(TokenType.AND, BinaryOperator.AND),
-                Map.entry(TokenType.OR, BinaryOperator.OR)
+                Map.entry(TokenType.OR, BinaryOperator.OR),
+                Map.entry(TokenType.BIT_AND, BinaryOperator.BIT_AND),
+                Map.entry(TokenType.PIPE, BinaryOperator.BIT_OR),
+                Map.entry(TokenType.BIT_XOR, BinaryOperator.BIT_XOR)
             )
         );
 
@@ -196,12 +195,18 @@ public class ParserExpressions extends ParserBase {
     private Expression parseBinaryExpression(final int minimumPrecedence) {
         Expression left = parseUnaryExpression();
         while (!isAtEnd()) {
-            final BinaryOperator operator =
-                BINARY_OPERATORS.get(current().type());
+            final BinaryOperator operator = binaryOperator();
             if (operator == null || precedence(operator) < minimumPrecedence) {
                 break;
             }
-            advance();
+            final int tokens =
+                operator == BinaryOperator.UNSIGNED_SHIFT_RIGHT
+                    ? 3
+                    : isShift(operator) || operator == BinaryOperator.LESS_EQUAL
+                        || operator == BinaryOperator.GREATER_EQUAL ? 2 : 1;
+            for (int i = 0; i < tokens; i++) {
+                advance();
+            }
             final Expression right =
                 parseBinaryExpression(precedence(operator) + 1);
             left = new BinaryExpression(left, operator, right);
@@ -209,14 +214,50 @@ public class ParserExpressions extends ParserBase {
         return left;
     }
 
+    private @Nullable BinaryOperator binaryOperator() {
+        if (
+            angleSequence(TokenType.GREATER, 3, true)
+                || angleSequence(TokenType.GREATER, 2, true)
+                || angleSequence(TokenType.LESS, 2, true)
+        ) {
+            return null;
+        }
+        if (angleSequence(TokenType.GREATER, 3, false)) {
+            return BinaryOperator.UNSIGNED_SHIFT_RIGHT;
+        }
+        if (angleSequence(TokenType.GREATER, 2, false)) {
+            return BinaryOperator.SHIFT_RIGHT;
+        }
+        if (angleSequence(TokenType.LESS, 2, false)) {
+            return BinaryOperator.SHIFT_LEFT;
+        }
+        if (angleSequence(TokenType.LESS, 1, true)) {
+            return BinaryOperator.LESS_EQUAL;
+        }
+        if (angleSequence(TokenType.GREATER, 1, true)) {
+            return BinaryOperator.GREATER_EQUAL;
+        }
+        return BINARY_OPERATORS.get(current().type());
+    }
+
+    private static boolean isShift(final BinaryOperator operator) {
+        return operator == BinaryOperator.SHIFT_LEFT
+            || operator == BinaryOperator.SHIFT_RIGHT
+            || operator == BinaryOperator.UNSIGNED_SHIFT_RIGHT;
+    }
+
     private static int precedence(final BinaryOperator operator) {
         return switch (operator) {
             case OR -> 1;
             case AND -> 2;
-            case EQUAL, NOT_EQUAL -> 3;
-            case LESS, LESS_EQUAL, GREATER, GREATER_EQUAL, INSTANCEOF -> 4;
-            case ADD, SUBTRACT -> 5;
-            case MULTIPLY, DIVIDE, MODULO -> 6;
+            case BIT_OR -> 3;
+            case BIT_XOR -> 4;
+            case BIT_AND -> 5;
+            case EQUAL, NOT_EQUAL -> 6;
+            case LESS, LESS_EQUAL, GREATER, GREATER_EQUAL, INSTANCEOF -> 7;
+            case SHIFT_LEFT, SHIFT_RIGHT, UNSIGNED_SHIFT_RIGHT -> 8;
+            case ADD, SUBTRACT -> 9;
+            case MULTIPLY, DIVIDE, MODULO -> 10;
         };
     }
 
@@ -229,6 +270,7 @@ public class ParserExpressions extends ParserBase {
             case PLUS -> UnaryOperator.PLUS;
             case MINUS -> UnaryOperator.MINUS;
             case BANG -> UnaryOperator.NOT;
+            case TILDE -> UnaryOperator.BIT_NOT;
             default -> null;
         };
         if (token.type() == TokenType.AWAIT) {

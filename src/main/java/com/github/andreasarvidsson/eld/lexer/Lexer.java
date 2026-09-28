@@ -76,6 +76,9 @@ public class Lexer {
                 Map.entry('*', TokenType.STAR),
                 Map.entry('/', TokenType.SLASH),
                 Map.entry('%', TokenType.PERCENT),
+                Map.entry('&', TokenType.BIT_AND),
+                Map.entry('^', TokenType.BIT_XOR),
+                Map.entry('~', TokenType.TILDE),
                 Map.entry(':', TokenType.COLON),
                 Map.entry('.', TokenType.DOT),
                 Map.entry('?', TokenType.QUESTION),
@@ -104,10 +107,11 @@ public class Lexer {
                 Map.entry("/=", TokenType.SLASH_EQUAL),
                 Map.entry("%=", TokenType.PERCENT_EQUAL),
                 Map.entry("!=", TokenType.BANG_EQUAL),
-                Map.entry("<=", TokenType.LESS_EQUAL),
-                Map.entry(">=", TokenType.GREATER_EQUAL),
                 Map.entry("&&", TokenType.AND),
-                Map.entry("||", TokenType.OR)
+                Map.entry("||", TokenType.OR),
+                Map.entry("&=", TokenType.BIT_AND_EQUAL),
+                Map.entry("|=", TokenType.BIT_OR_EQUAL),
+                Map.entry("^=", TokenType.BIT_XOR_EQUAL)
             )
         );
 

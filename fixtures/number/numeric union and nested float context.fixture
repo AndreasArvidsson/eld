@@ -1312,14 +1312,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L17:
     PUTSTATIC Test.nullableEmptyResult Ljava/lang/Long;
     GETSTATIC Test.single F
-    LDC 2.0
-    LDC 3.0
-    FADD
+    LDC 5.0
     FADD
     PUTSTATIC Test.nested F
-    LDC 2.0
-    LDC 3.0
-    FADD
+    LDC 5.0
     GETSTATIC Test.single F
     FADD
     PUTSTATIC Test.reverseNested F

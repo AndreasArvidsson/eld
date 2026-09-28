@@ -1,0 +1,936 @@
+print(4_294_967_296 | 1);
+print(1 | 4_294_967_296);
+print(4_294_967_296 >>> 1);
+print(~4_294_967_296);
+print(~(4_294_967_296 + 1));
+print(-1 >>> (3_000_000_000 + 1));
+print(~(-2_147_483_648));
+print((-2_147_483_648) >>> 1);
+print(~5);
+print(6 & 3);
+print(6 ^ 3);
+print(4_294_967_296 & 4_294_967_297);
+print(4_294_967_296 ^ 1);
+print(4_294_967_296 << 2);
+print(4_294_967_296 >>> (3_000_000_000 + 1));
+var narrow: i8 = 1;
+narrow |= 4_294_967_296 | 2;
+print(narrow);
+var invertedNarrow: i8 = 1;
+invertedNarrow |= ~4_294_967_296;
+print(invertedNarrow);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+INTEGER_LITERAL "4_294_967_296" (1:7-1:20)
+PIPE (1:21-1:22)
+INTEGER_LITERAL "1" (1:23-1:24)
+RIGHT_PAREN (1:24-1:25)
+SEMICOLON (1:25-1:26)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+INTEGER_LITERAL "1" (2:7-2:8)
+PIPE (2:9-2:10)
+INTEGER_LITERAL "4_294_967_296" (2:11-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+INTEGER_LITERAL "4_294_967_296" (3:7-3:20)
+GREATER (3:21-3:22)
+GREATER (3:22-3:23)
+GREATER (3:23-3:24)
+INTEGER_LITERAL "1" (3:25-3:26)
+RIGHT_PAREN (3:26-3:27)
+SEMICOLON (3:27-3:28)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+TILDE (4:7-4:8)
+INTEGER_LITERAL "4_294_967_296" (4:8-4:21)
+RIGHT_PAREN (4:21-4:22)
+SEMICOLON (4:22-4:23)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+TILDE (5:7-5:8)
+LEFT_PAREN (5:8-5:9)
+INTEGER_LITERAL "4_294_967_296" (5:9-5:22)
+PLUS (5:23-5:24)
+INTEGER_LITERAL "1" (5:25-5:26)
+RIGHT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+SEMICOLON (5:28-5:29)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+MINUS (6:7-6:8)
+INTEGER_LITERAL "1" (6:8-6:9)
+GREATER (6:10-6:11)
+GREATER (6:11-6:12)
+GREATER (6:12-6:13)
+LEFT_PAREN (6:14-6:15)
+INTEGER_LITERAL "3_000_000_000" (6:15-6:28)
+PLUS (6:29-6:30)
+INTEGER_LITERAL "1" (6:31-6:32)
+RIGHT_PAREN (6:32-6:33)
+RIGHT_PAREN (6:33-6:34)
+SEMICOLON (6:34-6:35)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+TILDE (7:7-7:8)
+LEFT_PAREN (7:8-7:9)
+MINUS (7:9-7:10)
+INTEGER_LITERAL "2_147_483_648" (7:10-7:23)
+RIGHT_PAREN (7:23-7:24)
+RIGHT_PAREN (7:24-7:25)
+SEMICOLON (7:25-7:26)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+LEFT_PAREN (8:7-8:8)
+MINUS (8:8-8:9)
+INTEGER_LITERAL "2_147_483_648" (8:9-8:22)
+RIGHT_PAREN (8:22-8:23)
+GREATER (8:24-8:25)
+GREATER (8:25-8:26)
+GREATER (8:26-8:27)
+INTEGER_LITERAL "1" (8:28-8:29)
+RIGHT_PAREN (8:29-8:30)
+SEMICOLON (8:30-8:31)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+TILDE (9:7-9:8)
+INTEGER_LITERAL "5" (9:8-9:9)
+RIGHT_PAREN (9:9-9:10)
+SEMICOLON (9:10-9:11)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+INTEGER_LITERAL "6" (10:7-10:8)
+BIT_AND (10:9-10:10)
+INTEGER_LITERAL "3" (10:11-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+INTEGER_LITERAL "6" (11:7-11:8)
+BIT_XOR (11:9-11:10)
+INTEGER_LITERAL "3" (11:11-11:12)
+RIGHT_PAREN (11:12-11:13)
+SEMICOLON (11:13-11:14)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+INTEGER_LITERAL "4_294_967_296" (12:7-12:20)
+BIT_AND (12:21-12:22)
+INTEGER_LITERAL "4_294_967_297" (12:23-12:36)
+RIGHT_PAREN (12:36-12:37)
+SEMICOLON (12:37-12:38)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+INTEGER_LITERAL "4_294_967_296" (13:7-13:20)
+BIT_XOR (13:21-13:22)
+INTEGER_LITERAL "1" (13:23-13:24)
+RIGHT_PAREN (13:24-13:25)
+SEMICOLON (13:25-13:26)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+INTEGER_LITERAL "4_294_967_296" (14:7-14:20)
+LESS (14:21-14:22)
+LESS (14:22-14:23)
+INTEGER_LITERAL "2" (14:24-14:25)
+RIGHT_PAREN (14:25-14:26)
+SEMICOLON (14:26-14:27)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+INTEGER_LITERAL "4_294_967_296" (15:7-15:20)
+GREATER (15:21-15:22)
+GREATER (15:22-15:23)
+GREATER (15:23-15:24)
+LEFT_PAREN (15:25-15:26)
+INTEGER_LITERAL "3_000_000_000" (15:26-15:39)
+PLUS (15:40-15:41)
+INTEGER_LITERAL "1" (15:42-15:43)
+RIGHT_PAREN (15:43-15:44)
+RIGHT_PAREN (15:44-15:45)
+SEMICOLON (15:45-15:46)
+VAR (16:1-16:4)
+IDENTIFIER "narrow" (16:5-16:11)
+COLON (16:11-16:12)
+IDENTIFIER "i8" (16:13-16:15)
+EQUAL (16:16-16:17)
+INTEGER_LITERAL "1" (16:18-16:19)
+SEMICOLON (16:19-16:20)
+IDENTIFIER "narrow" (17:1-17:7)
+BIT_OR_EQUAL (17:8-17:10)
+INTEGER_LITERAL "4_294_967_296" (17:11-17:24)
+PIPE (17:25-17:26)
+INTEGER_LITERAL "2" (17:27-17:28)
+SEMICOLON (17:28-17:29)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "narrow" (18:7-18:13)
+RIGHT_PAREN (18:13-18:14)
+SEMICOLON (18:14-18:15)
+VAR (19:1-19:4)
+IDENTIFIER "invertedNarrow" (19:5-19:19)
+COLON (19:19-19:20)
+IDENTIFIER "i8" (19:21-19:23)
+EQUAL (19:24-19:25)
+INTEGER_LITERAL "1" (19:26-19:27)
+SEMICOLON (19:27-19:28)
+IDENTIFIER "invertedNarrow" (20:1-20:15)
+BIT_OR_EQUAL (20:16-20:18)
+TILDE (20:19-20:20)
+INTEGER_LITERAL "4_294_967_296" (20:20-20:33)
+SEMICOLON (20:33-20:34)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "invertedNarrow" (21:7-21:21)
+RIGHT_PAREN (21:21-21:22)
+SEMICOLON (21:22-21:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-21:23
+  (ExpressionStatement
+    range: 1:1-1:26
+    (CallExpression
+      range: 1:1-1:25
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 1:7-1:24
+        (LiteralExpression
+          range: 1:7-1:20
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: BIT_OR
+        (LiteralExpression
+          range: 1:23-1:24
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:26
+    (CallExpression
+      range: 2:1-2:25
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 2:7-2:24
+        (LiteralExpression
+          range: 2:7-2:8
+          kind: INT
+          text: "1"
+        )
+        operator: BIT_OR
+        (LiteralExpression
+          range: 2:11-2:24
+          kind: INT
+          text: "4_294_967_296"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:28
+    (CallExpression
+      range: 3:1-3:27
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 3:7-3:26
+        (LiteralExpression
+          range: 3:7-3:20
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: UNSIGNED_SHIFT_RIGHT
+        (LiteralExpression
+          range: 3:25-3:26
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:23
+    (CallExpression
+      range: 4:1-4:22
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (UnaryExpression
+        range: 4:7-4:21
+        operator: BIT_NOT
+        (LiteralExpression
+          range: 4:8-4:21
+          kind: INT
+          text: "4_294_967_296"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:29
+    (CallExpression
+      range: 5:1-5:28
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (UnaryExpression
+        range: 5:7-5:27
+        operator: BIT_NOT
+        (GroupingExpression
+          range: 5:8-5:27
+          (BinaryExpression
+            range: 5:9-5:26
+            (LiteralExpression
+              range: 5:9-5:22
+              kind: INT
+              text: "4_294_967_296"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 5:25-5:26
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:35
+    (CallExpression
+      range: 6:1-6:34
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:33
+        (UnaryExpression
+          range: 6:7-6:9
+          operator: MINUS
+          (LiteralExpression
+            range: 6:8-6:9
+            kind: INT
+            text: "1"
+          )
+        )
+        operator: UNSIGNED_SHIFT_RIGHT
+        (GroupingExpression
+          range: 6:14-6:33
+          (BinaryExpression
+            range: 6:15-6:32
+            (LiteralExpression
+              range: 6:15-6:28
+              kind: INT
+              text: "3_000_000_000"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 6:31-6:32
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:26
+    (CallExpression
+      range: 7:1-7:25
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (UnaryExpression
+        range: 7:7-7:24
+        operator: BIT_NOT
+        (GroupingExpression
+          range: 7:8-7:24
+          (UnaryExpression
+            range: 7:9-7:23
+            operator: MINUS
+            (LiteralExpression
+              range: 7:10-7:23
+              kind: INT
+              text: "2_147_483_648"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:31
+    (CallExpression
+      range: 8:1-8:30
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:29
+        (GroupingExpression
+          range: 8:7-8:23
+          (UnaryExpression
+            range: 8:8-8:22
+            operator: MINUS
+            (LiteralExpression
+              range: 8:9-8:22
+              kind: INT
+              text: "2_147_483_648"
+            )
+          )
+        )
+        operator: UNSIGNED_SHIFT_RIGHT
+        (LiteralExpression
+          range: 8:28-8:29
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:11
+    (CallExpression
+      range: 9:1-9:10
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (UnaryExpression
+        range: 9:7-9:9
+        operator: BIT_NOT
+        (LiteralExpression
+          range: 9:8-9:9
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:1-10:13
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 10:7-10:12
+        (LiteralExpression
+          range: 10:7-10:8
+          kind: INT
+          text: "6"
+        )
+        operator: BIT_AND
+        (LiteralExpression
+          range: 10:11-10:12
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:14
+    (CallExpression
+      range: 11:1-11:13
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 11:7-11:12
+        (LiteralExpression
+          range: 11:7-11:8
+          kind: INT
+          text: "6"
+        )
+        operator: BIT_XOR
+        (LiteralExpression
+          range: 11:11-11:12
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:38
+    (CallExpression
+      range: 12:1-12:37
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 12:7-12:36
+        (LiteralExpression
+          range: 12:7-12:20
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: BIT_AND
+        (LiteralExpression
+          range: 12:23-12:36
+          kind: INT
+          text: "4_294_967_297"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:26
+    (CallExpression
+      range: 13:1-13:25
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 13:7-13:24
+        (LiteralExpression
+          range: 13:7-13:20
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: BIT_XOR
+        (LiteralExpression
+          range: 13:23-13:24
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:27
+    (CallExpression
+      range: 14:1-14:26
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:25
+        (LiteralExpression
+          range: 14:7-14:20
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: SHIFT_LEFT
+        (LiteralExpression
+          range: 14:24-14:25
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:46
+    (CallExpression
+      range: 15:1-15:45
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 15:7-15:44
+        (LiteralExpression
+          range: 15:7-15:20
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: UNSIGNED_SHIFT_RIGHT
+        (GroupingExpression
+          range: 15:25-15:44
+          (BinaryExpression
+            range: 15:26-15:43
+            (LiteralExpression
+              range: 15:26-15:39
+              kind: INT
+              text: "3_000_000_000"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 15:42-15:43
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:20
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 16:5-16:11
+      name: "narrow"
+    )
+    (NamedTypeNode
+      range: 16:13-16:15
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 16:18-16:19
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 17:1-17:29
+    (IdentifierExpression
+      range: 17:1-17:7
+      name: "narrow"
+    )
+    operator: BIT_OR
+    (BinaryExpression
+      range: 17:11-17:28
+      (LiteralExpression
+        range: 17:11-17:24
+        kind: INT
+        text: "4_294_967_296"
+      )
+      operator: BIT_OR
+      (LiteralExpression
+        range: 17:27-17:28
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:15
+    (CallExpression
+      range: 18:1-18:14
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 18:7-18:13
+        name: "narrow"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:28
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 19:5-19:19
+      name: "invertedNarrow"
+    )
+    (NamedTypeNode
+      range: 19:21-19:23
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 19:26-19:27
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 20:1-20:34
+    (IdentifierExpression
+      range: 20:1-20:15
+      name: "invertedNarrow"
+    )
+    operator: BIT_OR
+    (UnaryExpression
+      range: 20:19-20:33
+      operator: BIT_NOT
+      (LiteralExpression
+        range: 20:20-20:33
+        kind: INT
+        text: "4_294_967_296"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:23
+    (CallExpression
+      range: 21:1-21:22
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 21:7-21:21
+        name: "invertedNarrow"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:25 -> void
+  1:7-1:20 -> i64
+  1:7-1:24 -> i64
+  1:23-1:24 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:25 -> void
+  2:7-2:8 -> i32
+  2:7-2:24 -> i64
+  2:11-2:24 -> i64
+  3:1-3:6 -> (any) => void
+  3:1-3:27 -> void
+  3:7-3:20 -> i64
+  3:7-3:26 -> i64
+  3:25-3:26 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:22 -> void
+  4:7-4:21 -> i64
+  4:8-4:21 -> i64
+  5:1-5:6 -> (any) => void
+  5:1-5:28 -> void
+  5:7-5:27 -> i64
+  5:8-5:27 -> i64
+  5:9-5:22 -> i64
+  5:9-5:26 -> i64
+  5:25-5:26 -> i64
+  6:1-6:6 -> (any) => void
+  6:1-6:34 -> void
+  6:7-6:9 -> i32
+  6:7-6:33 -> i32
+  6:8-6:9 -> i32
+  6:14-6:33 -> i64
+  6:15-6:28 -> i64
+  6:15-6:32 -> i64
+  6:31-6:32 -> i64
+  7:1-7:6 -> (any) => void
+  7:1-7:25 -> void
+  7:7-7:24 -> i32
+  7:8-7:24 -> i32
+  7:9-7:23 -> i32
+  7:10-7:23 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:30 -> void
+  8:7-8:23 -> i32
+  8:7-8:29 -> i32
+  8:8-8:22 -> i32
+  8:9-8:22 -> i32
+  8:28-8:29 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:10 -> void
+  9:7-9:9 -> i32
+  9:8-9:9 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:13 -> void
+  10:7-10:8 -> i32
+  10:7-10:12 -> i32
+  10:11-10:12 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:13 -> void
+  11:7-11:8 -> i32
+  11:7-11:12 -> i32
+  11:11-11:12 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:37 -> void
+  12:7-12:20 -> i64
+  12:7-12:36 -> i64
+  12:23-12:36 -> i64
+  13:1-13:6 -> (any) => void
+  13:1-13:25 -> void
+  13:7-13:20 -> i64
+  13:7-13:24 -> i64
+  13:23-13:24 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:26 -> void
+  14:7-14:20 -> i64
+  14:7-14:25 -> i64
+  14:24-14:25 -> i32
+  15:1-15:6 -> (any) => void
+  15:1-15:45 -> void
+  15:7-15:20 -> i64
+  15:7-15:44 -> i64
+  15:25-15:44 -> i64
+  15:26-15:39 -> i64
+  15:26-15:43 -> i64
+  15:42-15:43 -> i64
+  16:18-16:19 -> i32
+  17:1-17:7 -> i8
+  17:11-17:24 -> i64
+  17:11-17:28 -> i64
+  17:27-17:28 -> i32
+  18:1-18:6 -> (any) => void
+  18:1-18:14 -> void
+  18:7-18:13 -> i8
+  19:26-19:27 -> i32
+  20:1-20:15 -> i8
+  20:19-20:33 -> i64
+  20:20-20:33 -> i64
+  21:1-21:6 -> (any) => void
+  21:1-21:22 -> void
+  21:7-21:21 -> i8
+
+Resolved types:
+  16:13-16:15 -> i8
+  19:21-19:23 -> i8
+
+Conversions:
+  1:23-1:24 -> i32 -> i64
+  2:7-2:8 -> i32 -> i64
+  6:14-6:33 -> i64 -> i32
+  13:23-13:24 -> i32 -> i64
+  15:25-15:44 -> i64 -> i32
+  16:18-16:19 -> i32 -> i8
+  17:11-17:28 -> i64 -> i8
+  17:27-17:28 -> i32 -> i64
+  19:26-19:27 -> i32 -> i8
+  20:19-20:33 -> i64 -> i8
+
+Declarations:
+  16:5-16:11 -> var narrow: i8
+  19:5-19:19 -> var invertedNarrow: i8
+
+References:
+  1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+  3:1-3:6 -> builtin print
+  4:1-4:6 -> builtin print
+  5:1-5:6 -> builtin print
+  6:1-6:6 -> builtin print
+  7:1-7:6 -> builtin print
+  8:1-8:6 -> builtin print
+  9:1-9:6 -> builtin print
+  10:1-10:6 -> builtin print
+  11:1-11:6 -> builtin print
+  12:1-12:6 -> builtin print
+  13:1-13:6 -> builtin print
+  14:1-14:6 -> builtin print
+  15:1-15:6 -> builtin print
+  17:1-17:7 -> 16:5-16:11
+  18:1-18:6 -> builtin print
+  18:7-18:13 -> 16:5-16:11
+  20:1-20:15 -> 19:5-19:19
+  21:1-21:6 -> builtin print
+  21:7-21:21 -> 19:5-19:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field narrow B flags [PUBLIC, STATIC]
+  field invertedNarrow B flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 4294967297
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 4294967297
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 2147483648
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W -4294967297
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W -4294967298
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2147483647
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2147483647
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1073741824
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC -6
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 5
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 4294967296
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 4294967297
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 17179869184
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 2147483648
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    LDC 1
+    I2B
+    PUTSTATIC Test.narrow B
+    GETSTATIC Test.narrow B
+    LDC2_W 4294967298
+    L2I
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.narrow B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.narrow B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC 1
+    I2B
+    PUTSTATIC Test.invertedNarrow B
+    GETSTATIC Test.invertedNarrow B
+    LDC2_W -4294967297
+    L2I
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.invertedNarrow B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.invertedNarrow B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+4294967297
+4294967297
+2147483648
+-4294967297
+-4294967298
+2147483647
+2147483647
+1073741824
+-6
+2
+5
+4294967296
+4294967297
+17179869184
+2147483648
+3
+-1

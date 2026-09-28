@@ -1,25 +1,25 @@
--0.5+12.34-10;
+-0.5 + 12.34 - 10;
 
 --- TOKENS ---
 
 MINUS (1:1-1:2)
 FLOAT_LITERAL "0.5" (1:2-1:5)
-PLUS (1:5-1:6)
-FLOAT_LITERAL "12.34" (1:6-1:11)
-MINUS (1:11-1:12)
-INTEGER_LITERAL "10" (1:12-1:14)
-SEMICOLON (1:14-1:15)
+PLUS (1:6-1:7)
+FLOAT_LITERAL "12.34" (1:8-1:13)
+MINUS (1:14-1:15)
+INTEGER_LITERAL "10" (1:16-1:18)
+SEMICOLON (1:18-1:19)
 
 --- AST ---
 
 (Program
-  range: 1:1-1:15
+  range: 1:1-1:19
   (ExpressionStatement
-    range: 1:1-1:15
+    range: 1:1-1:19
     (BinaryExpression
-      range: 1:1-1:14
+      range: 1:1-1:18
       (BinaryExpression
-        range: 1:1-1:11
+        range: 1:1-1:13
         (UnaryExpression
           range: 1:1-1:5
           operator: MINUS
@@ -31,14 +31,14 @@ SEMICOLON (1:14-1:15)
         )
         operator: ADD
         (LiteralExpression
-          range: 1:6-1:11
+          range: 1:8-1:13
           kind: FLOAT
           text: "12.34"
         )
       )
       operator: SUBTRACT
       (LiteralExpression
-        range: 1:12-1:14
+        range: 1:16-1:18
         kind: INT
         text: "10"
       )
@@ -50,29 +50,23 @@ SEMICOLON (1:14-1:15)
 
 Expression types:
   1:1-1:5 -> f64
-  1:1-1:11 -> f64
-  1:1-1:14 -> f64
+  1:1-1:13 -> f64
+  1:1-1:18 -> f64
   1:2-1:5 -> f64
-  1:6-1:11 -> f64
-  1:12-1:14 -> i32
+  1:8-1:13 -> f64
+  1:16-1:18 -> i32
 
 Conversions:
-  1:12-1:14 -> i32 -> f64
+  1:16-1:18 -> i32 -> f64
 
 --- BYTECODE ---
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
-    LDC2_W 0.5
-    DNEG
-    LDC2_W 12.34
-    DADD
-    LDC 10
-    I2D
-    DSUB
+    LDC2_W 1.8399999999999999
     POP2
     RETURN
-    max stack 4 max locals 0
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

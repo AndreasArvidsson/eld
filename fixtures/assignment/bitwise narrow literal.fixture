@@ -1,0 +1,675 @@
+var value: i8 = 1;
+value |= 255;
+print(value);
+value &= 255;
+print(value);
+value ^= 255;
+print(value);
+var wideChoice: i64 = 255;
+value |= true ? wideChoice : wideChoice;
+print(value);
+var large: i8 = 1;
+large |= 3_000_000_255;
+print(large);
+var computed: i8 = 1;
+computed |= 4_294_967_296 + 2;
+print(computed);
+var selected: i8 = 1;
+selected |= true ? 4_294_967_296 + 2 : 0;
+print(selected);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "i8" (1:12-1:14)
+EQUAL (1:15-1:16)
+INTEGER_LITERAL "1" (1:17-1:18)
+SEMICOLON (1:18-1:19)
+IDENTIFIER "value" (2:1-2:6)
+BIT_OR_EQUAL (2:7-2:9)
+INTEGER_LITERAL "255" (2:10-2:13)
+SEMICOLON (2:13-2:14)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "value" (3:7-3:12)
+RIGHT_PAREN (3:12-3:13)
+SEMICOLON (3:13-3:14)
+IDENTIFIER "value" (4:1-4:6)
+BIT_AND_EQUAL (4:7-4:9)
+INTEGER_LITERAL "255" (4:10-4:13)
+SEMICOLON (4:13-4:14)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "value" (5:7-5:12)
+RIGHT_PAREN (5:12-5:13)
+SEMICOLON (5:13-5:14)
+IDENTIFIER "value" (6:1-6:6)
+BIT_XOR_EQUAL (6:7-6:9)
+INTEGER_LITERAL "255" (6:10-6:13)
+SEMICOLON (6:13-6:14)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "value" (7:7-7:12)
+RIGHT_PAREN (7:12-7:13)
+SEMICOLON (7:13-7:14)
+VAR (8:1-8:4)
+IDENTIFIER "wideChoice" (8:5-8:15)
+COLON (8:15-8:16)
+IDENTIFIER "i64" (8:17-8:20)
+EQUAL (8:21-8:22)
+INTEGER_LITERAL "255" (8:23-8:26)
+SEMICOLON (8:26-8:27)
+IDENTIFIER "value" (9:1-9:6)
+BIT_OR_EQUAL (9:7-9:9)
+BOOLEAN_LITERAL "true" (9:10-9:14)
+QUESTION (9:15-9:16)
+IDENTIFIER "wideChoice" (9:17-9:27)
+COLON (9:28-9:29)
+IDENTIFIER "wideChoice" (9:30-9:40)
+SEMICOLON (9:40-9:41)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "value" (10:7-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+VAR (11:1-11:4)
+IDENTIFIER "large" (11:5-11:10)
+COLON (11:10-11:11)
+IDENTIFIER "i8" (11:12-11:14)
+EQUAL (11:15-11:16)
+INTEGER_LITERAL "1" (11:17-11:18)
+SEMICOLON (11:18-11:19)
+IDENTIFIER "large" (12:1-12:6)
+BIT_OR_EQUAL (12:7-12:9)
+INTEGER_LITERAL "3_000_000_255" (12:10-12:23)
+SEMICOLON (12:23-12:24)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "large" (13:7-13:12)
+RIGHT_PAREN (13:12-13:13)
+SEMICOLON (13:13-13:14)
+VAR (14:1-14:4)
+IDENTIFIER "computed" (14:5-14:13)
+COLON (14:13-14:14)
+IDENTIFIER "i8" (14:15-14:17)
+EQUAL (14:18-14:19)
+INTEGER_LITERAL "1" (14:20-14:21)
+SEMICOLON (14:21-14:22)
+IDENTIFIER "computed" (15:1-15:9)
+BIT_OR_EQUAL (15:10-15:12)
+INTEGER_LITERAL "4_294_967_296" (15:13-15:26)
+PLUS (15:27-15:28)
+INTEGER_LITERAL "2" (15:29-15:30)
+SEMICOLON (15:30-15:31)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "computed" (16:7-16:15)
+RIGHT_PAREN (16:15-16:16)
+SEMICOLON (16:16-16:17)
+VAR (17:1-17:4)
+IDENTIFIER "selected" (17:5-17:13)
+COLON (17:13-17:14)
+IDENTIFIER "i8" (17:15-17:17)
+EQUAL (17:18-17:19)
+INTEGER_LITERAL "1" (17:20-17:21)
+SEMICOLON (17:21-17:22)
+IDENTIFIER "selected" (18:1-18:9)
+BIT_OR_EQUAL (18:10-18:12)
+BOOLEAN_LITERAL "true" (18:13-18:17)
+QUESTION (18:18-18:19)
+INTEGER_LITERAL "4_294_967_296" (18:20-18:33)
+PLUS (18:34-18:35)
+INTEGER_LITERAL "2" (18:36-18:37)
+COLON (18:38-18:39)
+INTEGER_LITERAL "0" (18:40-18:41)
+SEMICOLON (18:41-18:42)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "selected" (19:7-19:15)
+RIGHT_PAREN (19:15-19:16)
+SEMICOLON (19:16-19:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-19:17
+  (VariableDeclaration
+    range: 1:1-1:19
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 1:12-1:14
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 1:17-1:18
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 2:1-2:14
+    (IdentifierExpression
+      range: 2:1-2:6
+      name: "value"
+    )
+    operator: BIT_OR
+    (LiteralExpression
+      range: 2:10-2:13
+      kind: INT
+      text: "255"
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:14
+    (CallExpression
+      range: 3:1-3:13
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 3:7-3:12
+        name: "value"
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 4:1-4:14
+    (IdentifierExpression
+      range: 4:1-4:6
+      name: "value"
+    )
+    operator: BIT_AND
+    (LiteralExpression
+      range: 4:10-4:13
+      kind: INT
+      text: "255"
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:14
+    (CallExpression
+      range: 5:1-5:13
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:12
+        name: "value"
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 6:1-6:14
+    (IdentifierExpression
+      range: 6:1-6:6
+      name: "value"
+    )
+    operator: BIT_XOR
+    (LiteralExpression
+      range: 6:10-6:13
+      kind: INT
+      text: "255"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:14
+    (CallExpression
+      range: 7:1-7:13
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 7:7-7:12
+        name: "value"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:27
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 8:5-8:15
+      name: "wideChoice"
+    )
+    (NamedTypeNode
+      range: 8:17-8:20
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 8:23-8:26
+      kind: INT
+      text: "255"
+    )
+  )
+  (AssignmentStatement
+    range: 9:1-9:41
+    (IdentifierExpression
+      range: 9:1-9:6
+      name: "value"
+    )
+    operator: BIT_OR
+    (TernaryExpression
+      range: 9:10-9:40
+      (LiteralExpression
+        range: 9:10-9:14
+        kind: BOOL
+        text: "true"
+      )
+      (IdentifierExpression
+        range: 9:17-9:27
+        name: "wideChoice"
+      )
+      (IdentifierExpression
+        range: 9:30-9:40
+        name: "wideChoice"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:1-10:13
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 10:7-10:12
+        name: "value"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:19
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 11:5-11:10
+      name: "large"
+    )
+    (NamedTypeNode
+      range: 11:12-11:14
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 11:17-11:18
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 12:1-12:24
+    (IdentifierExpression
+      range: 12:1-12:6
+      name: "large"
+    )
+    operator: BIT_OR
+    (LiteralExpression
+      range: 12:10-12:23
+      kind: INT
+      text: "3_000_000_255"
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:14
+    (CallExpression
+      range: 13:1-13:13
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 13:7-13:12
+        name: "large"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:22
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 14:5-14:13
+      name: "computed"
+    )
+    (NamedTypeNode
+      range: 14:15-14:17
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 14:20-14:21
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 15:1-15:31
+    (IdentifierExpression
+      range: 15:1-15:9
+      name: "computed"
+    )
+    operator: BIT_OR
+    (BinaryExpression
+      range: 15:13-15:30
+      (LiteralExpression
+        range: 15:13-15:26
+        kind: INT
+        text: "4_294_967_296"
+      )
+      operator: ADD
+      (LiteralExpression
+        range: 15:29-15:30
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:17
+    (CallExpression
+      range: 16:1-16:16
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 16:7-16:15
+        name: "computed"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 17:1-17:22
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 17:5-17:13
+      name: "selected"
+    )
+    (NamedTypeNode
+      range: 17:15-17:17
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 17:20-17:21
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 18:1-18:42
+    (IdentifierExpression
+      range: 18:1-18:9
+      name: "selected"
+    )
+    operator: BIT_OR
+    (TernaryExpression
+      range: 18:13-18:41
+      (LiteralExpression
+        range: 18:13-18:17
+        kind: BOOL
+        text: "true"
+      )
+      (BinaryExpression
+        range: 18:20-18:37
+        (LiteralExpression
+          range: 18:20-18:33
+          kind: INT
+          text: "4_294_967_296"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 18:36-18:37
+          kind: INT
+          text: "2"
+        )
+      )
+      (LiteralExpression
+        range: 18:40-18:41
+        kind: INT
+        text: "0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:17
+    (CallExpression
+      range: 19:1-19:16
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 19:7-19:15
+        name: "selected"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:17-1:18 -> i32
+  2:1-2:6 -> i8
+  2:10-2:13 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:13 -> void
+  3:7-3:12 -> i8
+  4:1-4:6 -> i8
+  4:10-4:13 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:13 -> void
+  5:7-5:12 -> i8
+  6:1-6:6 -> i8
+  6:10-6:13 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:13 -> void
+  7:7-7:12 -> i8
+  8:23-8:26 -> i64
+  9:1-9:6 -> i8
+  9:10-9:14 -> bool
+  9:10-9:40 -> i64
+  9:17-9:27 -> i64
+  9:30-9:40 -> i64
+  10:1-10:6 -> (any) => void
+  10:1-10:13 -> void
+  10:7-10:12 -> i8
+  11:17-11:18 -> i32
+  12:1-12:6 -> i8
+  12:10-12:23 -> i64
+  13:1-13:6 -> (any) => void
+  13:1-13:13 -> void
+  13:7-13:12 -> i8
+  14:20-14:21 -> i32
+  15:1-15:9 -> i8
+  15:13-15:26 -> i64
+  15:13-15:30 -> i64
+  15:29-15:30 -> i64
+  16:1-16:6 -> (any) => void
+  16:1-16:16 -> void
+  16:7-16:15 -> i8
+  17:20-17:21 -> i32
+  18:1-18:9 -> i8
+  18:13-18:17 -> bool
+  18:13-18:41 -> i64
+  18:20-18:33 -> i64
+  18:20-18:37 -> i64
+  18:36-18:37 -> i64
+  18:40-18:41 -> i64
+  19:1-19:6 -> (any) => void
+  19:1-19:16 -> void
+  19:7-19:15 -> i8
+
+Resolved types:
+  1:12-1:14 -> i8
+  8:17-8:20 -> i64
+  11:12-11:14 -> i8
+  14:15-14:17 -> i8
+  17:15-17:17 -> i8
+
+Conversions:
+  1:17-1:18 -> i32 -> i8
+  2:10-2:13 -> i32 -> i8
+  4:10-4:13 -> i32 -> i8
+  6:10-6:13 -> i32 -> i8
+  9:10-9:40 -> i64 -> i8
+  11:17-11:18 -> i32 -> i8
+  12:10-12:23 -> i64 -> i8
+  14:20-14:21 -> i32 -> i8
+  15:13-15:30 -> i64 -> i8
+  17:20-17:21 -> i32 -> i8
+  18:13-18:41 -> i64 -> i8
+
+Declarations:
+  1:5-1:10 -> var value: i8
+  8:5-8:15 -> var wideChoice: i64
+  11:5-11:10 -> var large: i8
+  14:5-14:13 -> var computed: i8
+  17:5-17:13 -> var selected: i8
+
+References:
+  2:1-2:6 -> 1:5-1:10
+  3:1-3:6 -> builtin print
+  3:7-3:12 -> 1:5-1:10
+  4:1-4:6 -> 1:5-1:10
+  5:1-5:6 -> builtin print
+  5:7-5:12 -> 1:5-1:10
+  6:1-6:6 -> 1:5-1:10
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 1:5-1:10
+  9:1-9:6 -> 1:5-1:10
+  9:17-9:27 -> 8:5-8:15
+  9:30-9:40 -> 8:5-8:15
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 1:5-1:10
+  12:1-12:6 -> 11:5-11:10
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 11:5-11:10
+  15:1-15:9 -> 14:5-14:13
+  16:1-16:6 -> builtin print
+  16:7-16:15 -> 14:5-14:13
+  18:1-18:9 -> 17:5-17:13
+  19:1-19:6 -> builtin print
+  19:7-19:15 -> 17:5-17:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value B flags [PUBLIC, STATIC]
+  field wideChoice J flags [PUBLIC, STATIC]
+  field large B flags [PUBLIC, STATIC]
+  field computed B flags [PUBLIC, STATIC]
+  field selected B flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    I2B
+    PUTSTATIC Test.value B
+    GETSTATIC Test.value B
+    LDC 255
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.value B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.value B
+    LDC 255
+    I2B
+    IAND
+    I2B
+    PUTSTATIC Test.value B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC Test.value B
+    LDC 255
+    I2B
+    IXOR
+    I2B
+    PUTSTATIC Test.value B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC2_W 255
+    PUTSTATIC Test.wideChoice J
+    GETSTATIC Test.value B
+    ICONST_1 1
+    IFEQ L0
+    GETSTATIC Test.wideChoice J
+    GOTO L1
+   L0:
+    GETSTATIC Test.wideChoice J
+   L1:
+    L2I
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.value B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC 1
+    I2B
+    PUTSTATIC Test.large B
+    GETSTATIC Test.large B
+    LDC2_W 3000000255
+    L2I
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.large B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.large B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC 1
+    I2B
+    PUTSTATIC Test.computed B
+    GETSTATIC Test.computed B
+    LDC2_W 4294967298
+    L2I
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.computed B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.computed B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC 1
+    I2B
+    PUTSTATIC Test.selected B
+    GETSTATIC Test.selected B
+    ICONST_1 1
+    IFEQ L2
+    LDC2_W 4294967298
+    GOTO L3
+   L2:
+    LDC2_W 0
+   L3:
+    L2I
+    I2B
+    IOR
+    I2B
+    PUTSTATIC Test.selected B
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.selected B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+-1
+-1
+0
+-1
+-1
+3
+3

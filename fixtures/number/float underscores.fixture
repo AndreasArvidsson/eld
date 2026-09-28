@@ -34,8 +34,7 @@ Expression types:
 
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
-    LDC2_W 1234.567
-    DNEG
+    LDC2_W -1234.567
     POP2
     RETURN
     max stack 2 max locals 0

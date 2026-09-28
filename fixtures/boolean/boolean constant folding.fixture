@@ -1,0 +1,219 @@
+print(1 > 0);
+print(!true);
+print(1.0 <= 2.0);
+const boxed: any = !false;
+print(boxed);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+INTEGER_LITERAL "1" (1:7-1:8)
+GREATER (1:9-1:10)
+INTEGER_LITERAL "0" (1:11-1:12)
+RIGHT_PAREN (1:12-1:13)
+SEMICOLON (1:13-1:14)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+BANG (2:7-2:8)
+BOOLEAN_LITERAL "true" (2:8-2:12)
+RIGHT_PAREN (2:12-2:13)
+SEMICOLON (2:13-2:14)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+FLOAT_LITERAL "1.0" (3:7-3:10)
+LESS (3:11-3:12)
+EQUAL (3:12-3:13)
+FLOAT_LITERAL "2.0" (3:14-3:17)
+RIGHT_PAREN (3:17-3:18)
+SEMICOLON (3:18-3:19)
+CONST (4:1-4:6)
+IDENTIFIER "boxed" (4:7-4:12)
+COLON (4:12-4:13)
+IDENTIFIER "any" (4:14-4:17)
+EQUAL (4:18-4:19)
+BANG (4:20-4:21)
+BOOLEAN_LITERAL "false" (4:21-4:26)
+SEMICOLON (4:26-4:27)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "boxed" (5:7-5:12)
+RIGHT_PAREN (5:12-5:13)
+SEMICOLON (5:13-5:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:14
+  (ExpressionStatement
+    range: 1:1-1:14
+    (CallExpression
+      range: 1:1-1:13
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 1:7-1:12
+        (LiteralExpression
+          range: 1:7-1:8
+          kind: INT
+          text: "1"
+        )
+        operator: GREATER
+        (LiteralExpression
+          range: 1:11-1:12
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:14
+    (CallExpression
+      range: 2:1-2:13
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (UnaryExpression
+        range: 2:7-2:12
+        operator: NOT
+        (LiteralExpression
+          range: 2:8-2:12
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:19
+    (CallExpression
+      range: 3:1-3:18
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 3:7-3:17
+        (LiteralExpression
+          range: 3:7-3:10
+          kind: FLOAT
+          text: "1.0"
+        )
+        operator: LESS_EQUAL
+        (LiteralExpression
+          range: 3:14-3:17
+          kind: FLOAT
+          text: "2.0"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "boxed"
+    )
+    (NamedTypeNode
+      range: 4:14-4:17
+      name: "any"
+    )
+    (UnaryExpression
+      range: 4:20-4:26
+      operator: NOT
+      (LiteralExpression
+        range: 4:21-4:26
+        kind: BOOL
+        text: "false"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:14
+    (CallExpression
+      range: 5:1-5:13
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:12
+        name: "boxed"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:13 -> void
+  1:7-1:8 -> i32
+  1:7-1:12 -> bool
+  1:11-1:12 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:13 -> void
+  2:7-2:12 -> bool
+  2:8-2:12 -> bool
+  3:1-3:6 -> (any) => void
+  3:1-3:18 -> void
+  3:7-3:10 -> f64
+  3:7-3:17 -> bool
+  3:14-3:17 -> f64
+  4:20-4:26 -> bool
+  4:21-4:26 -> bool
+  5:1-5:6 -> (any) => void
+  5:1-5:13 -> void
+  5:7-5:12 -> any
+
+Resolved types:
+  4:14-4:17 -> any
+
+Conversions:
+  4:20-4:26 -> bool -> any
+
+Declarations:
+  4:7-4:12 -> const boxed: any
+
+References:
+  1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+  3:1-3:6 -> builtin print
+  5:1-5:6 -> builtin print
+  5:7-5:12 -> 4:7-4:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field boxed Ljava/lang/Object; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 0
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    PUTSTATIC Test.boxed Ljava/lang/Object;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.boxed Ljava/lang/Object;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+true
+false
+true
+true

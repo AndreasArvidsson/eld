@@ -237,7 +237,7 @@ public final class Parser extends ParserBase {
         final Expression expression = parserExpressions.parseExpression();
         final AssignmentOperator operator = assignmentOperator();
         if (operator != null) {
-            advance();
+            consumeAssignmentOperator(operator);
             final Expression value = parserExpressions.parseExpression();
             final Token semicolon = expect(TokenType.SEMICOLON);
             return new AssignmentStatement(
@@ -253,6 +253,15 @@ public final class Parser extends ParserBase {
     }
 
     private @Nullable AssignmentOperator assignmentOperator() {
+        if (angleSequence(TokenType.GREATER, 3, true)) {
+            return AssignmentOperator.UNSIGNED_SHIFT_RIGHT;
+        }
+        if (angleSequence(TokenType.GREATER, 2, true)) {
+            return AssignmentOperator.SHIFT_RIGHT;
+        }
+        if (angleSequence(TokenType.LESS, 2, true)) {
+            return AssignmentOperator.SHIFT_LEFT;
+        }
         return switch (current().type()) {
             case EQUAL -> AssignmentOperator.ASSIGN;
             case PLUS_EQUAL -> AssignmentOperator.ADD;
@@ -260,15 +269,29 @@ public final class Parser extends ParserBase {
             case STAR_EQUAL -> AssignmentOperator.MULTIPLY;
             case SLASH_EQUAL -> AssignmentOperator.DIVIDE;
             case PERCENT_EQUAL -> AssignmentOperator.MODULO;
+            case BIT_AND_EQUAL -> AssignmentOperator.BIT_AND;
+            case BIT_OR_EQUAL -> AssignmentOperator.BIT_OR;
+            case BIT_XOR_EQUAL -> AssignmentOperator.BIT_XOR;
             default -> null;
         };
+    }
+
+    private void consumeAssignmentOperator(final AssignmentOperator operator) {
+        final int count = switch (operator) {
+            case SHIFT_LEFT, SHIFT_RIGHT -> 3;
+            case UNSIGNED_SHIFT_RIGHT -> 4;
+            default -> 1;
+        };
+        for (int i = 0; i < count; i++) {
+            advance();
+        }
     }
 
     private Statement parseForUpdate() {
         final Expression expression = parserExpressions.parseExpression();
         final @Nullable AssignmentOperator operator = assignmentOperator();
         if (operator != null) {
-            advance();
+            consumeAssignmentOperator(operator);
             final Expression value = parserExpressions.parseExpression();
             return new AssignmentStatement(
                 expression,

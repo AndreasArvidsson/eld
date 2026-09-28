@@ -1002,7 +1002,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field a I flags [PUBLIC, STATIC, FINAL] = 1
   field b B flags [PUBLIC, STATIC, FINAL] = 1
   field c S flags [PUBLIC, STATIC, FINAL] = 1
-  field d J flags [PUBLIC, STATIC, FINAL]
+  field d J flags [PUBLIC, STATIC, FINAL] = 3000000001
   field e B flags [PUBLIC, STATIC, FINAL] = 127
   field x B flags [PUBLIC, STATIC, FINAL] = 1
   field y S flags [PUBLIC, STATIC, FINAL] = 2
@@ -1018,10 +1018,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   field selection J flags [PUBLIC, STATIC, FINAL]
   field minimum J flags [PUBLIC, STATIC, FINAL] = -9223372036854775808
   method <clinit>()V flags [STATIC]
-    LDC2_W 3000000000
-    LDC2_W 1
-    LADD
-    PUTSTATIC Test.d J
     GETSTATIC Test.x B
     I2S
     GETSTATIC Test.y S

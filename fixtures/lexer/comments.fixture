@@ -212,12 +212,10 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 42
     INVOKEVIRTUAL java/io/PrintStream.println(C)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC 8
-    LDC 2
-    IDIV
+    LDC 4
     INVOKEVIRTUAL java/io/PrintStream.println(I)V
     RETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

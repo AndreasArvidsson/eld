@@ -1,0 +1,331 @@
+print(1 + 2);
+print(1 - 2);
+print(1 * 2);
+print(5 / 2);
+print(5 % 2);
+print(-5 / 2);
+print(-5 % 2);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+INTEGER_LITERAL "1" (1:7-1:8)
+PLUS (1:9-1:10)
+INTEGER_LITERAL "2" (1:11-1:12)
+RIGHT_PAREN (1:12-1:13)
+SEMICOLON (1:13-1:14)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+INTEGER_LITERAL "1" (2:7-2:8)
+MINUS (2:9-2:10)
+INTEGER_LITERAL "2" (2:11-2:12)
+RIGHT_PAREN (2:12-2:13)
+SEMICOLON (2:13-2:14)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+INTEGER_LITERAL "1" (3:7-3:8)
+STAR (3:9-3:10)
+INTEGER_LITERAL "2" (3:11-3:12)
+RIGHT_PAREN (3:12-3:13)
+SEMICOLON (3:13-3:14)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+INTEGER_LITERAL "5" (4:7-4:8)
+SLASH (4:9-4:10)
+INTEGER_LITERAL "2" (4:11-4:12)
+RIGHT_PAREN (4:12-4:13)
+SEMICOLON (4:13-4:14)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+INTEGER_LITERAL "5" (5:7-5:8)
+PERCENT (5:9-5:10)
+INTEGER_LITERAL "2" (5:11-5:12)
+RIGHT_PAREN (5:12-5:13)
+SEMICOLON (5:13-5:14)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+MINUS (6:7-6:8)
+INTEGER_LITERAL "5" (6:8-6:9)
+SLASH (6:10-6:11)
+INTEGER_LITERAL "2" (6:12-6:13)
+RIGHT_PAREN (6:13-6:14)
+SEMICOLON (6:14-6:15)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+MINUS (7:7-7:8)
+INTEGER_LITERAL "5" (7:8-7:9)
+PERCENT (7:10-7:11)
+INTEGER_LITERAL "2" (7:12-7:13)
+RIGHT_PAREN (7:13-7:14)
+SEMICOLON (7:14-7:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:15
+  (ExpressionStatement
+    range: 1:1-1:14
+    (CallExpression
+      range: 1:1-1:13
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 1:7-1:12
+        (LiteralExpression
+          range: 1:7-1:8
+          kind: INT
+          text: "1"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 1:11-1:12
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:14
+    (CallExpression
+      range: 2:1-2:13
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 2:7-2:12
+        (LiteralExpression
+          range: 2:7-2:8
+          kind: INT
+          text: "1"
+        )
+        operator: SUBTRACT
+        (LiteralExpression
+          range: 2:11-2:12
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:14
+    (CallExpression
+      range: 3:1-3:13
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 3:7-3:12
+        (LiteralExpression
+          range: 3:7-3:8
+          kind: INT
+          text: "1"
+        )
+        operator: MULTIPLY
+        (LiteralExpression
+          range: 3:11-3:12
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:14
+    (CallExpression
+      range: 4:1-4:13
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 4:7-4:12
+        (LiteralExpression
+          range: 4:7-4:8
+          kind: INT
+          text: "5"
+        )
+        operator: DIVIDE
+        (LiteralExpression
+          range: 4:11-4:12
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:14
+    (CallExpression
+      range: 5:1-5:13
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 5:7-5:12
+        (LiteralExpression
+          range: 5:7-5:8
+          kind: INT
+          text: "5"
+        )
+        operator: MODULO
+        (LiteralExpression
+          range: 5:11-5:12
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:15
+    (CallExpression
+      range: 6:1-6:14
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:13
+        (UnaryExpression
+          range: 6:7-6:9
+          operator: MINUS
+          (LiteralExpression
+            range: 6:8-6:9
+            kind: INT
+            text: "5"
+          )
+        )
+        operator: DIVIDE
+        (LiteralExpression
+          range: 6:12-6:13
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:15
+    (CallExpression
+      range: 7:1-7:14
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 7:7-7:13
+        (UnaryExpression
+          range: 7:7-7:9
+          operator: MINUS
+          (LiteralExpression
+            range: 7:8-7:9
+            kind: INT
+            text: "5"
+          )
+        )
+        operator: MODULO
+        (LiteralExpression
+          range: 7:12-7:13
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:13 -> void
+  1:7-1:8 -> i32
+  1:7-1:12 -> i32
+  1:11-1:12 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:13 -> void
+  2:7-2:8 -> i32
+  2:7-2:12 -> i32
+  2:11-2:12 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:13 -> void
+  3:7-3:8 -> i32
+  3:7-3:12 -> i32
+  3:11-3:12 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:13 -> void
+  4:7-4:8 -> i32
+  4:7-4:12 -> i32
+  4:11-4:12 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:13 -> void
+  5:7-5:8 -> i32
+  5:7-5:12 -> i32
+  5:11-5:12 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:14 -> void
+  6:7-6:9 -> i32
+  6:7-6:13 -> i32
+  6:8-6:9 -> i32
+  6:12-6:13 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:14 -> void
+  7:7-7:9 -> i32
+  7:7-7:13 -> i32
+  7:8-7:9 -> i32
+  7:12-7:13 -> i32
+
+References:
+  1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+  3:1-3:6 -> builtin print
+  4:1-4:6 -> builtin print
+  5:1-5:6 -> builtin print
+  6:1-6:6 -> builtin print
+  7:1-7:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 3
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC -1
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC -2
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC -1
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+3
+-1
+2
+2
+1
+-2
+-1

@@ -1,0 +1,1191 @@
+var value = 1;
+var values = [5];
+var index = 0;
+async func run() {
+    var local = 1;
+    local |= await Promise.resolve(2);
+    value ^= await Promise.resolve(3);
+    values[index++] &= await Promise.resolve(4);
+    var wide: i64 = 1;
+    wide <<= await Promise.resolve(65);
+    var narrow: i8 = 1;
+    var wideCount: i64 = 255;
+    narrow |= await Promise.resolve(wideCount);
+    var shifted: i64 = -1;
+    shifted >>>= await Promise.resolve(wideCount);
+    print(local);
+    print(value);
+    print(values[0]);
+    print(index);
+    print(wide);
+    print(narrow);
+    print(shifted);
+}
+ignore run();
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value" (1:5-1:10)
+EQUAL (1:11-1:12)
+INTEGER_LITERAL "1" (1:13-1:14)
+SEMICOLON (1:14-1:15)
+VAR (2:1-2:4)
+IDENTIFIER "values" (2:5-2:11)
+EQUAL (2:12-2:13)
+LEFT_BRACKET (2:14-2:15)
+INTEGER_LITERAL "5" (2:15-2:16)
+RIGHT_BRACKET (2:16-2:17)
+SEMICOLON (2:17-2:18)
+VAR (3:1-3:4)
+IDENTIFIER "index" (3:5-3:10)
+EQUAL (3:11-3:12)
+INTEGER_LITERAL "0" (3:13-3:14)
+SEMICOLON (3:14-3:15)
+ASYNC (4:1-4:6)
+FUNC (4:7-4:11)
+IDENTIFIER "run" (4:12-4:15)
+LEFT_PAREN (4:15-4:16)
+RIGHT_PAREN (4:16-4:17)
+LEFT_BRACE (4:18-4:19)
+VAR (5:5-5:8)
+IDENTIFIER "local" (5:9-5:14)
+EQUAL (5:15-5:16)
+INTEGER_LITERAL "1" (5:17-5:18)
+SEMICOLON (5:18-5:19)
+IDENTIFIER "local" (6:5-6:10)
+BIT_OR_EQUAL (6:11-6:13)
+AWAIT (6:14-6:19)
+IDENTIFIER "Promise" (6:20-6:27)
+DOT (6:27-6:28)
+IDENTIFIER "resolve" (6:28-6:35)
+LEFT_PAREN (6:35-6:36)
+INTEGER_LITERAL "2" (6:36-6:37)
+RIGHT_PAREN (6:37-6:38)
+SEMICOLON (6:38-6:39)
+IDENTIFIER "value" (7:5-7:10)
+BIT_XOR_EQUAL (7:11-7:13)
+AWAIT (7:14-7:19)
+IDENTIFIER "Promise" (7:20-7:27)
+DOT (7:27-7:28)
+IDENTIFIER "resolve" (7:28-7:35)
+LEFT_PAREN (7:35-7:36)
+INTEGER_LITERAL "3" (7:36-7:37)
+RIGHT_PAREN (7:37-7:38)
+SEMICOLON (7:38-7:39)
+IDENTIFIER "values" (8:5-8:11)
+LEFT_BRACKET (8:11-8:12)
+IDENTIFIER "index" (8:12-8:17)
+PLUS_PLUS (8:17-8:19)
+RIGHT_BRACKET (8:19-8:20)
+BIT_AND_EQUAL (8:21-8:23)
+AWAIT (8:24-8:29)
+IDENTIFIER "Promise" (8:30-8:37)
+DOT (8:37-8:38)
+IDENTIFIER "resolve" (8:38-8:45)
+LEFT_PAREN (8:45-8:46)
+INTEGER_LITERAL "4" (8:46-8:47)
+RIGHT_PAREN (8:47-8:48)
+SEMICOLON (8:48-8:49)
+VAR (9:5-9:8)
+IDENTIFIER "wide" (9:9-9:13)
+COLON (9:13-9:14)
+IDENTIFIER "i64" (9:15-9:18)
+EQUAL (9:19-9:20)
+INTEGER_LITERAL "1" (9:21-9:22)
+SEMICOLON (9:22-9:23)
+IDENTIFIER "wide" (10:5-10:9)
+LESS (10:10-10:11)
+LESS (10:11-10:12)
+EQUAL (10:12-10:13)
+AWAIT (10:14-10:19)
+IDENTIFIER "Promise" (10:20-10:27)
+DOT (10:27-10:28)
+IDENTIFIER "resolve" (10:28-10:35)
+LEFT_PAREN (10:35-10:36)
+INTEGER_LITERAL "65" (10:36-10:38)
+RIGHT_PAREN (10:38-10:39)
+SEMICOLON (10:39-10:40)
+VAR (11:5-11:8)
+IDENTIFIER "narrow" (11:9-11:15)
+COLON (11:15-11:16)
+IDENTIFIER "i8" (11:17-11:19)
+EQUAL (11:20-11:21)
+INTEGER_LITERAL "1" (11:22-11:23)
+SEMICOLON (11:23-11:24)
+VAR (12:5-12:8)
+IDENTIFIER "wideCount" (12:9-12:18)
+COLON (12:18-12:19)
+IDENTIFIER "i64" (12:20-12:23)
+EQUAL (12:24-12:25)
+INTEGER_LITERAL "255" (12:26-12:29)
+SEMICOLON (12:29-12:30)
+IDENTIFIER "narrow" (13:5-13:11)
+BIT_OR_EQUAL (13:12-13:14)
+AWAIT (13:15-13:20)
+IDENTIFIER "Promise" (13:21-13:28)
+DOT (13:28-13:29)
+IDENTIFIER "resolve" (13:29-13:36)
+LEFT_PAREN (13:36-13:37)
+IDENTIFIER "wideCount" (13:37-13:46)
+RIGHT_PAREN (13:46-13:47)
+SEMICOLON (13:47-13:48)
+VAR (14:5-14:8)
+IDENTIFIER "shifted" (14:9-14:16)
+COLON (14:16-14:17)
+IDENTIFIER "i64" (14:18-14:21)
+EQUAL (14:22-14:23)
+MINUS (14:24-14:25)
+INTEGER_LITERAL "1" (14:25-14:26)
+SEMICOLON (14:26-14:27)
+IDENTIFIER "shifted" (15:5-15:12)
+GREATER (15:13-15:14)
+GREATER (15:14-15:15)
+GREATER (15:15-15:16)
+EQUAL (15:16-15:17)
+AWAIT (15:18-15:23)
+IDENTIFIER "Promise" (15:24-15:31)
+DOT (15:31-15:32)
+IDENTIFIER "resolve" (15:32-15:39)
+LEFT_PAREN (15:39-15:40)
+IDENTIFIER "wideCount" (15:40-15:49)
+RIGHT_PAREN (15:49-15:50)
+SEMICOLON (15:50-15:51)
+IDENTIFIER "print" (16:5-16:10)
+LEFT_PAREN (16:10-16:11)
+IDENTIFIER "local" (16:11-16:16)
+RIGHT_PAREN (16:16-16:17)
+SEMICOLON (16:17-16:18)
+IDENTIFIER "print" (17:5-17:10)
+LEFT_PAREN (17:10-17:11)
+IDENTIFIER "value" (17:11-17:16)
+RIGHT_PAREN (17:16-17:17)
+SEMICOLON (17:17-17:18)
+IDENTIFIER "print" (18:5-18:10)
+LEFT_PAREN (18:10-18:11)
+IDENTIFIER "values" (18:11-18:17)
+LEFT_BRACKET (18:17-18:18)
+INTEGER_LITERAL "0" (18:18-18:19)
+RIGHT_BRACKET (18:19-18:20)
+RIGHT_PAREN (18:20-18:21)
+SEMICOLON (18:21-18:22)
+IDENTIFIER "print" (19:5-19:10)
+LEFT_PAREN (19:10-19:11)
+IDENTIFIER "index" (19:11-19:16)
+RIGHT_PAREN (19:16-19:17)
+SEMICOLON (19:17-19:18)
+IDENTIFIER "print" (20:5-20:10)
+LEFT_PAREN (20:10-20:11)
+IDENTIFIER "wide" (20:11-20:15)
+RIGHT_PAREN (20:15-20:16)
+SEMICOLON (20:16-20:17)
+IDENTIFIER "print" (21:5-21:10)
+LEFT_PAREN (21:10-21:11)
+IDENTIFIER "narrow" (21:11-21:17)
+RIGHT_PAREN (21:17-21:18)
+SEMICOLON (21:18-21:19)
+IDENTIFIER "print" (22:5-22:10)
+LEFT_PAREN (22:10-22:11)
+IDENTIFIER "shifted" (22:11-22:18)
+RIGHT_PAREN (22:18-22:19)
+SEMICOLON (22:19-22:20)
+RIGHT_BRACE (23:1-23:2)
+IGNORE (24:1-24:7)
+IDENTIFIER "run" (24:8-24:11)
+LEFT_PAREN (24:11-24:12)
+RIGHT_PAREN (24:12-24:13)
+SEMICOLON (24:13-24:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-24:14
+  (VariableDeclaration
+    range: 1:1-1:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:10
+      name: "value"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:14
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:18
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:11
+      name: "values"
+    )
+    type: null
+    (ArrayExpression
+      range: 2:14-2:17
+      (LiteralExpression
+        range: 2:15-2:16
+        kind: INT
+        text: "5"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:15
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 3:5-3:10
+      name: "index"
+    )
+    type: null
+    (LiteralExpression
+      range: 3:13-3:14
+      kind: INT
+      text: "0"
+    )
+  )
+  (FunctionDeclaration
+    range: 4:1-23:2
+    async: true
+    (IdentifierDeclaration
+      range: 4:12-4:15
+      name: "run"
+    )
+    returnType: null
+    (BlockStatement
+      range: 4:18-23:2
+      (VariableDeclaration
+        range: 5:5-5:19
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:9-5:14
+          name: "local"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:17-5:18
+          kind: INT
+          text: "1"
+        )
+      )
+      (AssignmentStatement
+        range: 6:5-6:39
+        (IdentifierExpression
+          range: 6:5-6:10
+          name: "local"
+        )
+        operator: BIT_OR
+        (AwaitExpression
+          range: 6:14-6:38
+          (CallExpression
+            range: 6:20-6:38
+            (MemberExpression
+              range: 6:20-6:35
+              (IdentifierExpression
+                range: 6:20-6:27
+                name: "Promise"
+              )
+              (IdentifierExpression
+                range: 6:28-6:35
+                name: "resolve"
+              )
+            )
+            (LiteralExpression
+              range: 6:36-6:37
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+      (AssignmentStatement
+        range: 7:5-7:39
+        (IdentifierExpression
+          range: 7:5-7:10
+          name: "value"
+        )
+        operator: BIT_XOR
+        (AwaitExpression
+          range: 7:14-7:38
+          (CallExpression
+            range: 7:20-7:38
+            (MemberExpression
+              range: 7:20-7:35
+              (IdentifierExpression
+                range: 7:20-7:27
+                name: "Promise"
+              )
+              (IdentifierExpression
+                range: 7:28-7:35
+                name: "resolve"
+              )
+            )
+            (LiteralExpression
+              range: 7:36-7:37
+              kind: INT
+              text: "3"
+            )
+          )
+        )
+      )
+      (AssignmentStatement
+        range: 8:5-8:49
+        (SubscriptExpression
+          range: 8:5-8:20
+          (IdentifierExpression
+            range: 8:5-8:11
+            name: "values"
+          )
+          (PostfixExpression
+            range: 8:12-8:19
+            (IdentifierExpression
+              range: 8:12-8:17
+              name: "index"
+            )
+            operator: INCREMENT
+          )
+        )
+        operator: BIT_AND
+        (AwaitExpression
+          range: 8:24-8:48
+          (CallExpression
+            range: 8:30-8:48
+            (MemberExpression
+              range: 8:30-8:45
+              (IdentifierExpression
+                range: 8:30-8:37
+                name: "Promise"
+              )
+              (IdentifierExpression
+                range: 8:38-8:45
+                name: "resolve"
+              )
+            )
+            (LiteralExpression
+              range: 8:46-8:47
+              kind: INT
+              text: "4"
+            )
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 9:5-9:23
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 9:9-9:13
+          name: "wide"
+        )
+        (NamedTypeNode
+          range: 9:15-9:18
+          name: "i64"
+        )
+        (LiteralExpression
+          range: 9:21-9:22
+          kind: INT
+          text: "1"
+        )
+      )
+      (AssignmentStatement
+        range: 10:5-10:40
+        (IdentifierExpression
+          range: 10:5-10:9
+          name: "wide"
+        )
+        operator: SHIFT_LEFT
+        (AwaitExpression
+          range: 10:14-10:39
+          (CallExpression
+            range: 10:20-10:39
+            (MemberExpression
+              range: 10:20-10:35
+              (IdentifierExpression
+                range: 10:20-10:27
+                name: "Promise"
+              )
+              (IdentifierExpression
+                range: 10:28-10:35
+                name: "resolve"
+              )
+            )
+            (LiteralExpression
+              range: 10:36-10:38
+              kind: INT
+              text: "65"
+            )
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 11:5-11:24
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 11:9-11:15
+          name: "narrow"
+        )
+        (NamedTypeNode
+          range: 11:17-11:19
+          name: "i8"
+        )
+        (LiteralExpression
+          range: 11:22-11:23
+          kind: INT
+          text: "1"
+        )
+      )
+      (VariableDeclaration
+        range: 12:5-12:30
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 12:9-12:18
+          name: "wideCount"
+        )
+        (NamedTypeNode
+          range: 12:20-12:23
+          name: "i64"
+        )
+        (LiteralExpression
+          range: 12:26-12:29
+          kind: INT
+          text: "255"
+        )
+      )
+      (AssignmentStatement
+        range: 13:5-13:48
+        (IdentifierExpression
+          range: 13:5-13:11
+          name: "narrow"
+        )
+        operator: BIT_OR
+        (AwaitExpression
+          range: 13:15-13:47
+          (CallExpression
+            range: 13:21-13:47
+            (MemberExpression
+              range: 13:21-13:36
+              (IdentifierExpression
+                range: 13:21-13:28
+                name: "Promise"
+              )
+              (IdentifierExpression
+                range: 13:29-13:36
+                name: "resolve"
+              )
+            )
+            (IdentifierExpression
+              range: 13:37-13:46
+              name: "wideCount"
+            )
+          )
+        )
+      )
+      (VariableDeclaration
+        range: 14:5-14:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 14:9-14:16
+          name: "shifted"
+        )
+        (NamedTypeNode
+          range: 14:18-14:21
+          name: "i64"
+        )
+        (UnaryExpression
+          range: 14:24-14:26
+          operator: MINUS
+          (LiteralExpression
+            range: 14:25-14:26
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+      (AssignmentStatement
+        range: 15:5-15:51
+        (IdentifierExpression
+          range: 15:5-15:12
+          name: "shifted"
+        )
+        operator: UNSIGNED_SHIFT_RIGHT
+        (AwaitExpression
+          range: 15:18-15:50
+          (CallExpression
+            range: 15:24-15:50
+            (MemberExpression
+              range: 15:24-15:39
+              (IdentifierExpression
+                range: 15:24-15:31
+                name: "Promise"
+              )
+              (IdentifierExpression
+                range: 15:32-15:39
+                name: "resolve"
+              )
+            )
+            (IdentifierExpression
+              range: 15:40-15:49
+              name: "wideCount"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 16:5-16:18
+        (CallExpression
+          range: 16:5-16:17
+          (IdentifierExpression
+            range: 16:5-16:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 16:11-16:16
+            name: "local"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 17:5-17:18
+        (CallExpression
+          range: 17:5-17:17
+          (IdentifierExpression
+            range: 17:5-17:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 17:11-17:16
+            name: "value"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 18:5-18:22
+        (CallExpression
+          range: 18:5-18:21
+          (IdentifierExpression
+            range: 18:5-18:10
+            name: "print"
+          )
+          (SubscriptExpression
+            range: 18:11-18:20
+            (IdentifierExpression
+              range: 18:11-18:17
+              name: "values"
+            )
+            (LiteralExpression
+              range: 18:18-18:19
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 19:5-19:18
+        (CallExpression
+          range: 19:5-19:17
+          (IdentifierExpression
+            range: 19:5-19:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 19:11-19:16
+            name: "index"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 20:5-20:17
+        (CallExpression
+          range: 20:5-20:16
+          (IdentifierExpression
+            range: 20:5-20:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 20:11-20:15
+            name: "wide"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 21:5-21:19
+        (CallExpression
+          range: 21:5-21:18
+          (IdentifierExpression
+            range: 21:5-21:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 21:11-21:17
+            name: "narrow"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 22:5-22:20
+        (CallExpression
+          range: 22:5-22:19
+          (IdentifierExpression
+            range: 22:5-22:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 22:11-22:18
+            name: "shifted"
+          )
+        )
+      )
+    )
+  )
+  (IgnoreStatement
+    range: 24:1-24:14
+    (CallExpression
+      range: 24:8-24:13
+      (IdentifierExpression
+        range: 24:8-24:11
+        name: "run"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:14 -> i32
+  2:14-2:17 -> [i32]
+  2:15-2:16 -> i32
+  3:13-3:14 -> i32
+  5:17-5:18 -> i32
+  6:5-6:10 -> i32
+  6:14-6:38 -> i32
+  6:20-6:38 -> Promise<i32>
+  6:36-6:37 -> i32
+  7:5-7:10 -> i32
+  7:14-7:38 -> i32
+  7:20-7:38 -> Promise<i32>
+  7:36-7:37 -> i32
+  8:5-8:11 -> [i32]
+  8:5-8:20 -> i32
+  8:12-8:17 -> i32
+  8:12-8:19 -> i32
+  8:24-8:48 -> i32
+  8:30-8:48 -> Promise<i32>
+  8:46-8:47 -> i32
+  9:21-9:22 -> i64
+  10:5-10:9 -> i64
+  10:14-10:39 -> i32
+  10:20-10:39 -> Promise<i32>
+  10:36-10:38 -> i32
+  11:22-11:23 -> i32
+  12:26-12:29 -> i64
+  13:5-13:11 -> i8
+  13:15-13:47 -> i64
+  13:21-13:47 -> Promise<i64>
+  13:37-13:46 -> i64
+  14:24-14:26 -> i64
+  14:25-14:26 -> i64
+  15:5-15:12 -> i64
+  15:18-15:50 -> i64
+  15:24-15:50 -> Promise<i64>
+  15:40-15:49 -> i64
+  16:5-16:10 -> (any) => void
+  16:5-16:17 -> void
+  16:11-16:16 -> i32
+  17:5-17:10 -> (any) => void
+  17:5-17:17 -> void
+  17:11-17:16 -> i32
+  18:5-18:10 -> (any) => void
+  18:5-18:21 -> void
+  18:11-18:17 -> [i32]
+  18:11-18:20 -> i32
+  18:18-18:19 -> i32
+  19:5-19:10 -> (any) => void
+  19:5-19:17 -> void
+  19:11-19:16 -> i32
+  20:5-20:10 -> (any) => void
+  20:5-20:16 -> void
+  20:11-20:15 -> i64
+  21:5-21:10 -> (any) => void
+  21:5-21:18 -> void
+  21:11-21:17 -> i8
+  22:5-22:10 -> (any) => void
+  22:5-22:19 -> void
+  22:11-22:18 -> i64
+  24:8-24:11 -> () => Promise<void>
+  24:8-24:13 -> Promise<void>
+
+Resolved types:
+  9:15-9:18 -> i64
+  11:17-11:19 -> i8
+  12:20-12:23 -> i64
+  14:18-14:21 -> i64
+
+Conversions:
+  11:22-11:23 -> i32 -> i8
+  13:15-13:47 -> i64 -> i8
+
+Declarations:
+  1:5-1:10 -> var value: i32
+  2:5-2:11 -> var values: [i32]
+  3:5-3:10 -> var index: i32
+  4:12-4:15 -> func run() => Promise<void>
+  5:9-5:14 -> var local: i32
+  9:9-9:13 -> var wide: i64
+  11:9-11:15 -> var narrow: i8
+  12:9-12:18 -> var wideCount: i64
+  14:9-14:16 -> var shifted: i64
+
+References:
+  6:5-6:10 -> 5:9-5:14
+  7:5-7:10 -> 1:5-1:10
+  8:5-8:11 -> 2:5-2:11
+  8:12-8:17 -> 3:5-3:10
+  10:5-10:9 -> 9:9-9:13
+  13:5-13:11 -> 11:9-11:15
+  13:37-13:46 -> 12:9-12:18
+  15:5-15:12 -> 14:9-14:16
+  15:40-15:49 -> 12:9-12:18
+  16:5-16:10 -> builtin print
+  16:11-16:16 -> 5:9-5:14
+  17:5-17:10 -> builtin print
+  17:11-17:16 -> 1:5-1:10
+  18:5-18:10 -> builtin print
+  18:11-18:17 -> 2:5-2:11
+  19:5-19:10 -> builtin print
+  19:11-19:16 -> 3:5-3:10
+  20:5-20:10 -> builtin print
+  20:11-20:15 -> 9:9-9:13
+  21:5-21:10 -> builtin print
+  21:11-21:17 -> 11:9-11:15
+  22:5-22:10 -> builtin print
+  22:11-22:18 -> 14:9-14:16
+  24:8-24:11 -> 4:12-4:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$$async0
+  field value I flags [PUBLIC, STATIC]
+  field values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC]
+  field index I flags [PUBLIC, STATIC]
+  method run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise; flags [PUBLIC, STATIC]
+    NEW Test$$async0
+    DUP
+    INVOKESPECIAL Test$$async0.<init>()V
+    ASTORE_0 0
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC Test$$async0.resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.promise()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ARETURN
+    max stack 3 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    PUTSTATIC Test.value I
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 5
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC 0
+    PUTSTATIC Test.index I
+    INVOKESTATIC Test.run()Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    POP
+    RETURN
+    max stack 6 max locals 0
+
+class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SYNTHETIC]
+  nest host Test
+  field $source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource; flags [FINAL, SYNTHETIC]
+  field $state I flags [SYNTHETIC]
+  field $local0 I flags [SYNTHETIC]
+  field $local1 J flags [SYNTHETIC]
+  field $local2 B flags [SYNTHETIC]
+  field $local3 J flags [SYNTHETIC]
+  field $local4 J flags [SYNTHETIC]
+  field $spills [Ljava/lang/Object; flags [PRIVATE, FINAL, SYNTHETIC]
+  method <init>()V flags []
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW com/github/andreasarvidsson/eld/runtime/PromiseSource
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/PromiseSource.<init>()V
+    PUTFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD_0 0
+    LDC 8
+    ANEWARRAY java/lang/Object
+    PUTFIELD Test$$async0.$spills [Ljava/lang/Object;
+    RETURN
+    max stack 3 max locals 1
+  method resume(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Throwable;)V flags [STATIC, SYNTHETIC]
+    ALOAD_0 0
+    CHECKCAST Test$$async0
+    ASTORE_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$state I
+    TABLESWITCH 0..6 default L0 0:L1 1:L2 2:L4 3:L6 4:L8 5:L10 6:L12
+   L0:
+    NEW java/lang/IllegalStateException
+    DUP
+    LDC "Invalid async state"
+    INVOKESPECIAL java/lang/IllegalStateException.<init>(Ljava/lang/String;)V
+    ATHROW
+   L1:
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$local0 I
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local0 I
+    ISTORE_3 3
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    ILOAD_3 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L2:
+    ALOAD_2 2
+    IFNULL L3
+    ALOAD_2 2
+    ATHROW
+   L3:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 4
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 0
+    AALOAD
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ILOAD 4
+    IOR
+    PUTFIELD Test$$async0.$local0 I
+    GETSTATIC Test.value I
+    ISTORE 5
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 1
+    ILOAD 5
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    LDC 3
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L4:
+    ALOAD_2 2
+    IFNULL L5
+    ALOAD_2 2
+    ATHROW
+   L5:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 6
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 1
+    AALOAD
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ILOAD 6
+    IXOR
+    PUTSTATIC Test.value I
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    ASTORE 7
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 2
+    ALOAD 7
+    AASTORE
+    GETSTATIC Test.index I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test.index I
+    ISTORE 8
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 3
+    ILOAD 8
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 2
+    AALOAD
+    LDC "I"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 3
+    AALOAD
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    ISTORE 9
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 4
+    ILOAD 9
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    LDC 4
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 3
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L6:
+    ALOAD_2 2
+    IFNULL L7
+    ALOAD_2 2
+    ATHROW
+   L7:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 10
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 2
+    AALOAD
+    LDC "I"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 3
+    AALOAD
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 4
+    AALOAD
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ILOAD 10
+    IAND
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
+    ALOAD_0 0
+    LDC2_W 1
+    PUTFIELD Test$$async0.$local1 J
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local1 J
+    LSTORE 11
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 5
+    LLOAD 11
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    AASTORE
+    LDC 65
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 4
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L8:
+    ALOAD_2 2
+    IFNULL L9
+    ALOAD_2 2
+    ATHROW
+   L9:
+    ALOAD_1 1
+    CHECKCAST java/lang/Integer
+    INVOKEVIRTUAL java/lang/Integer.intValue()I
+    ISTORE 13
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 5
+    AALOAD
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    ILOAD 13
+    LSHL
+    PUTFIELD Test$$async0.$local1 J
+    ALOAD_0 0
+    LDC 1
+    I2B
+    PUTFIELD Test$$async0.$local2 B
+    ALOAD_0 0
+    LDC2_W 255
+    PUTFIELD Test$$async0.$local3 J
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local2 B
+    ISTORE 14
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 6
+    ILOAD 14
+    INVOKESTATIC java/lang/Byte.valueOf(B)Ljava/lang/Byte;
+    AASTORE
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local3 J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 5
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L10:
+    ALOAD_2 2
+    IFNULL L11
+    ALOAD_2 2
+    ATHROW
+   L11:
+    ALOAD_1 1
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    L2I
+    I2B
+    ISTORE 15
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 6
+    AALOAD
+    CHECKCAST java/lang/Byte
+    INVOKEVIRTUAL java/lang/Byte.byteValue()B
+    ILOAD 15
+    IOR
+    I2B
+    PUTFIELD Test$$async0.$local2 B
+    ALOAD_0 0
+    LDC2_W -1
+    PUTFIELD Test$$async0.$local4 J
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local4 J
+    LSTORE 16
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 7
+    LLOAD 16
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    AASTORE
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local3 J
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldPromise.resolve(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
+    ALOAD_0 0
+    LDC 6
+    PUTFIELD Test$$async0.$state I
+    LDC MethodHandleDesc[STATIC/Test$$async0::resume(Object,Object,Throwable)void]
+    ALOAD_0 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.then(Ljava/lang/invoke/MethodHandle;Ljava/lang/Object;)V
+    RETURN
+   L12:
+    ALOAD_2 2
+    IFNULL L13
+    ALOAD_2 2
+    ATHROW
+   L13:
+    ALOAD_1 1
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LSTORE 18
+    ALOAD_0 0
+    ALOAD_0 0
+    GETFIELD Test$$async0.$spills [Ljava/lang/Object;
+    LDC 7
+    AALOAD
+    CHECKCAST java/lang/Long
+    INVOKEVIRTUAL java/lang/Long.longValue()J
+    LLOAD 18
+    L2I
+    LUSHR
+    PUTFIELD Test$$async0.$local4 J
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local0 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.values Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.index I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local1 J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local2 B
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    GETFIELD Test$$async0.$local4 J
+    INVOKEVIRTUAL java/io/PrintStream.println(J)V
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.resolve()V
+    RETURN
+   L14:
+    ASTORE 20
+    ALOAD_0 0
+    GETFIELD Test$$async0.$source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
+    ALOAD 20
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.reject(Ljava/lang/Throwable;)V
+    RETURN
+    catch all from L1 to L14 handler L14
+    max stack 5 max locals 21
+
+--- OUTPUT ---
+
+3
+2
+4
+1
+2
+-1
+1

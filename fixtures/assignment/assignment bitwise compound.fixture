@@ -1,0 +1,685 @@
+var value1 = 1;
+var value2 = 1;
+var value3 = 1;
+var value4 = 8;
+var value5 = 8;
+var value6 = 8;
+var value7 = -8;
+var value8 = -8;
+
+value1 &= 2;
+value2 |= 2;
+value3 ^= 2;
+value4 <<= 1;
+value5 >>= 1;
+value6 >>>= 1;
+value7 >>= 1;
+value8 >>>= 1;
+
+print(value1);
+print(value2);
+print(value3);
+print(value4);
+print(value5);
+print(value6);
+print(value7);
+print(value8);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "value1" (1:5-1:11)
+EQUAL (1:12-1:13)
+INTEGER_LITERAL "1" (1:14-1:15)
+SEMICOLON (1:15-1:16)
+VAR (2:1-2:4)
+IDENTIFIER "value2" (2:5-2:11)
+EQUAL (2:12-2:13)
+INTEGER_LITERAL "1" (2:14-2:15)
+SEMICOLON (2:15-2:16)
+VAR (3:1-3:4)
+IDENTIFIER "value3" (3:5-3:11)
+EQUAL (3:12-3:13)
+INTEGER_LITERAL "1" (3:14-3:15)
+SEMICOLON (3:15-3:16)
+VAR (4:1-4:4)
+IDENTIFIER "value4" (4:5-4:11)
+EQUAL (4:12-4:13)
+INTEGER_LITERAL "8" (4:14-4:15)
+SEMICOLON (4:15-4:16)
+VAR (5:1-5:4)
+IDENTIFIER "value5" (5:5-5:11)
+EQUAL (5:12-5:13)
+INTEGER_LITERAL "8" (5:14-5:15)
+SEMICOLON (5:15-5:16)
+VAR (6:1-6:4)
+IDENTIFIER "value6" (6:5-6:11)
+EQUAL (6:12-6:13)
+INTEGER_LITERAL "8" (6:14-6:15)
+SEMICOLON (6:15-6:16)
+VAR (7:1-7:4)
+IDENTIFIER "value7" (7:5-7:11)
+EQUAL (7:12-7:13)
+MINUS (7:14-7:15)
+INTEGER_LITERAL "8" (7:15-7:16)
+SEMICOLON (7:16-7:17)
+VAR (8:1-8:4)
+IDENTIFIER "value8" (8:5-8:11)
+EQUAL (8:12-8:13)
+MINUS (8:14-8:15)
+INTEGER_LITERAL "8" (8:15-8:16)
+SEMICOLON (8:16-8:17)
+IDENTIFIER "value1" (10:1-10:7)
+BIT_AND_EQUAL (10:8-10:10)
+INTEGER_LITERAL "2" (10:11-10:12)
+SEMICOLON (10:12-10:13)
+IDENTIFIER "value2" (11:1-11:7)
+BIT_OR_EQUAL (11:8-11:10)
+INTEGER_LITERAL "2" (11:11-11:12)
+SEMICOLON (11:12-11:13)
+IDENTIFIER "value3" (12:1-12:7)
+BIT_XOR_EQUAL (12:8-12:10)
+INTEGER_LITERAL "2" (12:11-12:12)
+SEMICOLON (12:12-12:13)
+IDENTIFIER "value4" (13:1-13:7)
+LESS (13:8-13:9)
+LESS (13:9-13:10)
+EQUAL (13:10-13:11)
+INTEGER_LITERAL "1" (13:12-13:13)
+SEMICOLON (13:13-13:14)
+IDENTIFIER "value5" (14:1-14:7)
+GREATER (14:8-14:9)
+GREATER (14:9-14:10)
+EQUAL (14:10-14:11)
+INTEGER_LITERAL "1" (14:12-14:13)
+SEMICOLON (14:13-14:14)
+IDENTIFIER "value6" (15:1-15:7)
+GREATER (15:8-15:9)
+GREATER (15:9-15:10)
+GREATER (15:10-15:11)
+EQUAL (15:11-15:12)
+INTEGER_LITERAL "1" (15:13-15:14)
+SEMICOLON (15:14-15:15)
+IDENTIFIER "value7" (16:1-16:7)
+GREATER (16:8-16:9)
+GREATER (16:9-16:10)
+EQUAL (16:10-16:11)
+INTEGER_LITERAL "1" (16:12-16:13)
+SEMICOLON (16:13-16:14)
+IDENTIFIER "value8" (17:1-17:7)
+GREATER (17:8-17:9)
+GREATER (17:9-17:10)
+GREATER (17:10-17:11)
+EQUAL (17:11-17:12)
+INTEGER_LITERAL "1" (17:13-17:14)
+SEMICOLON (17:14-17:15)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "value1" (19:7-19:13)
+RIGHT_PAREN (19:13-19:14)
+SEMICOLON (19:14-19:15)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "value2" (20:7-20:13)
+RIGHT_PAREN (20:13-20:14)
+SEMICOLON (20:14-20:15)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "value3" (21:7-21:13)
+RIGHT_PAREN (21:13-21:14)
+SEMICOLON (21:14-21:15)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "value4" (22:7-22:13)
+RIGHT_PAREN (22:13-22:14)
+SEMICOLON (22:14-22:15)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "value5" (23:7-23:13)
+RIGHT_PAREN (23:13-23:14)
+SEMICOLON (23:14-23:15)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "value6" (24:7-24:13)
+RIGHT_PAREN (24:13-24:14)
+SEMICOLON (24:14-24:15)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+IDENTIFIER "value7" (25:7-25:13)
+RIGHT_PAREN (25:13-25:14)
+SEMICOLON (25:14-25:15)
+IDENTIFIER "print" (26:1-26:6)
+LEFT_PAREN (26:6-26:7)
+IDENTIFIER "value8" (26:7-26:13)
+RIGHT_PAREN (26:13-26:14)
+SEMICOLON (26:14-26:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-26:15
+  (VariableDeclaration
+    range: 1:1-1:16
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:11
+      name: "value1"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:14-1:15
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:16
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 2:5-2:11
+      name: "value2"
+    )
+    type: null
+    (LiteralExpression
+      range: 2:14-2:15
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:16
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 3:5-3:11
+      name: "value3"
+    )
+    type: null
+    (LiteralExpression
+      range: 3:14-3:15
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:16
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 4:5-4:11
+      name: "value4"
+    )
+    type: null
+    (LiteralExpression
+      range: 4:14-4:15
+      kind: INT
+      text: "8"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:16
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 5:5-5:11
+      name: "value5"
+    )
+    type: null
+    (LiteralExpression
+      range: 5:14-5:15
+      kind: INT
+      text: "8"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:16
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 6:5-6:11
+      name: "value6"
+    )
+    type: null
+    (LiteralExpression
+      range: 6:14-6:15
+      kind: INT
+      text: "8"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:17
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 7:5-7:11
+      name: "value7"
+    )
+    type: null
+    (UnaryExpression
+      range: 7:14-7:16
+      operator: MINUS
+      (LiteralExpression
+        range: 7:15-7:16
+        kind: INT
+        text: "8"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:17
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 8:5-8:11
+      name: "value8"
+    )
+    type: null
+    (UnaryExpression
+      range: 8:14-8:16
+      operator: MINUS
+      (LiteralExpression
+        range: 8:15-8:16
+        kind: INT
+        text: "8"
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 10:1-10:13
+    (IdentifierExpression
+      range: 10:1-10:7
+      name: "value1"
+    )
+    operator: BIT_AND
+    (LiteralExpression
+      range: 10:11-10:12
+      kind: INT
+      text: "2"
+    )
+  )
+  (AssignmentStatement
+    range: 11:1-11:13
+    (IdentifierExpression
+      range: 11:1-11:7
+      name: "value2"
+    )
+    operator: BIT_OR
+    (LiteralExpression
+      range: 11:11-11:12
+      kind: INT
+      text: "2"
+    )
+  )
+  (AssignmentStatement
+    range: 12:1-12:13
+    (IdentifierExpression
+      range: 12:1-12:7
+      name: "value3"
+    )
+    operator: BIT_XOR
+    (LiteralExpression
+      range: 12:11-12:12
+      kind: INT
+      text: "2"
+    )
+  )
+  (AssignmentStatement
+    range: 13:1-13:14
+    (IdentifierExpression
+      range: 13:1-13:7
+      name: "value4"
+    )
+    operator: SHIFT_LEFT
+    (LiteralExpression
+      range: 13:12-13:13
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 14:1-14:14
+    (IdentifierExpression
+      range: 14:1-14:7
+      name: "value5"
+    )
+    operator: SHIFT_RIGHT
+    (LiteralExpression
+      range: 14:12-14:13
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 15:1-15:15
+    (IdentifierExpression
+      range: 15:1-15:7
+      name: "value6"
+    )
+    operator: UNSIGNED_SHIFT_RIGHT
+    (LiteralExpression
+      range: 15:13-15:14
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 16:1-16:14
+    (IdentifierExpression
+      range: 16:1-16:7
+      name: "value7"
+    )
+    operator: SHIFT_RIGHT
+    (LiteralExpression
+      range: 16:12-16:13
+      kind: INT
+      text: "1"
+    )
+  )
+  (AssignmentStatement
+    range: 17:1-17:15
+    (IdentifierExpression
+      range: 17:1-17:7
+      name: "value8"
+    )
+    operator: UNSIGNED_SHIFT_RIGHT
+    (LiteralExpression
+      range: 17:13-17:14
+      kind: INT
+      text: "1"
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:15
+    (CallExpression
+      range: 19:1-19:14
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 19:7-19:13
+        name: "value1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:15
+    (CallExpression
+      range: 20:1-20:14
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 20:7-20:13
+        name: "value2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:15
+    (CallExpression
+      range: 21:1-21:14
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 21:7-21:13
+        name: "value3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:15
+    (CallExpression
+      range: 22:1-22:14
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 22:7-22:13
+        name: "value4"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:15
+    (CallExpression
+      range: 23:1-23:14
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 23:7-23:13
+        name: "value5"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:15
+    (CallExpression
+      range: 24:1-24:14
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 24:7-24:13
+        name: "value6"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:15
+    (CallExpression
+      range: 25:1-25:14
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 25:7-25:13
+        name: "value7"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 26:1-26:15
+    (CallExpression
+      range: 26:1-26:14
+      (IdentifierExpression
+        range: 26:1-26:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 26:7-26:13
+        name: "value8"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:15 -> i32
+  2:14-2:15 -> i32
+  3:14-3:15 -> i32
+  4:14-4:15 -> i32
+  5:14-5:15 -> i32
+  6:14-6:15 -> i32
+  7:14-7:16 -> i32
+  7:15-7:16 -> i32
+  8:14-8:16 -> i32
+  8:15-8:16 -> i32
+  10:1-10:7 -> i32
+  10:11-10:12 -> i32
+  11:1-11:7 -> i32
+  11:11-11:12 -> i32
+  12:1-12:7 -> i32
+  12:11-12:12 -> i32
+  13:1-13:7 -> i32
+  13:12-13:13 -> i32
+  14:1-14:7 -> i32
+  14:12-14:13 -> i32
+  15:1-15:7 -> i32
+  15:13-15:14 -> i32
+  16:1-16:7 -> i32
+  16:12-16:13 -> i32
+  17:1-17:7 -> i32
+  17:13-17:14 -> i32
+  19:1-19:6 -> (any) => void
+  19:1-19:14 -> void
+  19:7-19:13 -> i32
+  20:1-20:6 -> (any) => void
+  20:1-20:14 -> void
+  20:7-20:13 -> i32
+  21:1-21:6 -> (any) => void
+  21:1-21:14 -> void
+  21:7-21:13 -> i32
+  22:1-22:6 -> (any) => void
+  22:1-22:14 -> void
+  22:7-22:13 -> i32
+  23:1-23:6 -> (any) => void
+  23:1-23:14 -> void
+  23:7-23:13 -> i32
+  24:1-24:6 -> (any) => void
+  24:1-24:14 -> void
+  24:7-24:13 -> i32
+  25:1-25:6 -> (any) => void
+  25:1-25:14 -> void
+  25:7-25:13 -> i32
+  26:1-26:6 -> (any) => void
+  26:1-26:14 -> void
+  26:7-26:13 -> i32
+
+Declarations:
+  1:5-1:11 -> var value1: i32
+  2:5-2:11 -> var value2: i32
+  3:5-3:11 -> var value3: i32
+  4:5-4:11 -> var value4: i32
+  5:5-5:11 -> var value5: i32
+  6:5-6:11 -> var value6: i32
+  7:5-7:11 -> var value7: i32
+  8:5-8:11 -> var value8: i32
+
+References:
+  10:1-10:7 -> 1:5-1:11
+  11:1-11:7 -> 2:5-2:11
+  12:1-12:7 -> 3:5-3:11
+  13:1-13:7 -> 4:5-4:11
+  14:1-14:7 -> 5:5-5:11
+  15:1-15:7 -> 6:5-6:11
+  16:1-16:7 -> 7:5-7:11
+  17:1-17:7 -> 8:5-8:11
+  19:1-19:6 -> builtin print
+  19:7-19:13 -> 1:5-1:11
+  20:1-20:6 -> builtin print
+  20:7-20:13 -> 2:5-2:11
+  21:1-21:6 -> builtin print
+  21:7-21:13 -> 3:5-3:11
+  22:1-22:6 -> builtin print
+  22:7-22:13 -> 4:5-4:11
+  23:1-23:6 -> builtin print
+  23:7-23:13 -> 5:5-5:11
+  24:1-24:6 -> builtin print
+  24:7-24:13 -> 6:5-6:11
+  25:1-25:6 -> builtin print
+  25:7-25:13 -> 7:5-7:11
+  26:1-26:6 -> builtin print
+  26:7-26:13 -> 8:5-8:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value1 I flags [PUBLIC, STATIC]
+  field value2 I flags [PUBLIC, STATIC]
+  field value3 I flags [PUBLIC, STATIC]
+  field value4 I flags [PUBLIC, STATIC]
+  field value5 I flags [PUBLIC, STATIC]
+  field value6 I flags [PUBLIC, STATIC]
+  field value7 I flags [PUBLIC, STATIC]
+  field value8 I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    PUTSTATIC Test.value1 I
+    LDC 1
+    PUTSTATIC Test.value2 I
+    LDC 1
+    PUTSTATIC Test.value3 I
+    LDC 8
+    PUTSTATIC Test.value4 I
+    LDC 8
+    PUTSTATIC Test.value5 I
+    LDC 8
+    PUTSTATIC Test.value6 I
+    LDC -8
+    PUTSTATIC Test.value7 I
+    LDC -8
+    PUTSTATIC Test.value8 I
+    GETSTATIC Test.value1 I
+    LDC 2
+    IAND
+    PUTSTATIC Test.value1 I
+    GETSTATIC Test.value2 I
+    LDC 2
+    IOR
+    PUTSTATIC Test.value2 I
+    GETSTATIC Test.value3 I
+    LDC 2
+    IXOR
+    PUTSTATIC Test.value3 I
+    GETSTATIC Test.value4 I
+    LDC 1
+    ISHL
+    PUTSTATIC Test.value4 I
+    GETSTATIC Test.value5 I
+    LDC 1
+    ISHR
+    PUTSTATIC Test.value5 I
+    GETSTATIC Test.value6 I
+    LDC 1
+    IUSHR
+    PUTSTATIC Test.value6 I
+    GETSTATIC Test.value7 I
+    LDC 1
+    ISHR
+    PUTSTATIC Test.value7 I
+    GETSTATIC Test.value8 I
+    LDC 1
+    IUSHR
+    PUTSTATIC Test.value8 I
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value1 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value2 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value3 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value4 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value5 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value6 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value7 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value8 I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+0
+3
+3
+16
+4
+4
+-4
+2147483644

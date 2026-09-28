@@ -1,0 +1,247 @@
+const values: List<i32> = new ArrayList<i32>();
+const nested: List<List<i32>> = new ArrayList<List<i32>>();
+print(1 <= 2);
+print(2 >= 1);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "values" (1:7-1:13)
+COLON (1:13-1:14)
+IDENTIFIER "List" (1:15-1:19)
+LESS (1:19-1:20)
+IDENTIFIER "i32" (1:20-1:23)
+GREATER (1:23-1:24)
+EQUAL (1:25-1:26)
+NEW (1:27-1:30)
+IDENTIFIER "ArrayList" (1:31-1:40)
+LESS (1:40-1:41)
+IDENTIFIER "i32" (1:41-1:44)
+GREATER (1:44-1:45)
+LEFT_PAREN (1:45-1:46)
+RIGHT_PAREN (1:46-1:47)
+SEMICOLON (1:47-1:48)
+CONST (2:1-2:6)
+IDENTIFIER "nested" (2:7-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "List" (2:15-2:19)
+LESS (2:19-2:20)
+IDENTIFIER "List" (2:20-2:24)
+LESS (2:24-2:25)
+IDENTIFIER "i32" (2:25-2:28)
+GREATER (2:28-2:29)
+GREATER (2:29-2:30)
+EQUAL (2:31-2:32)
+NEW (2:33-2:36)
+IDENTIFIER "ArrayList" (2:37-2:46)
+LESS (2:46-2:47)
+IDENTIFIER "List" (2:47-2:51)
+LESS (2:51-2:52)
+IDENTIFIER "i32" (2:52-2:55)
+GREATER (2:55-2:56)
+GREATER (2:56-2:57)
+LEFT_PAREN (2:57-2:58)
+RIGHT_PAREN (2:58-2:59)
+SEMICOLON (2:59-2:60)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+INTEGER_LITERAL "1" (3:7-3:8)
+LESS (3:9-3:10)
+EQUAL (3:10-3:11)
+INTEGER_LITERAL "2" (3:12-3:13)
+RIGHT_PAREN (3:13-3:14)
+SEMICOLON (3:14-3:15)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+INTEGER_LITERAL "2" (4:7-4:8)
+GREATER (4:9-4:10)
+EQUAL (4:10-4:11)
+INTEGER_LITERAL "1" (4:12-4:13)
+RIGHT_PAREN (4:13-4:14)
+SEMICOLON (4:14-4:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:15
+  (VariableDeclaration
+    range: 1:1-1:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "values"
+    )
+    (NamedTypeNode
+      range: 1:15-1:24
+      name: "List"
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 1:27-1:47
+      (IdentifierExpression
+        range: 1:31-1:40
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 1:41-1:44
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:60
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:13
+      name: "nested"
+    )
+    (NamedTypeNode
+      range: 2:15-2:30
+      name: "List"
+      (NamedTypeNode
+        range: 2:20-2:29
+        name: "List"
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (NewExpression
+      range: 2:33-2:59
+      (IdentifierExpression
+        range: 2:37-2:46
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 2:47-2:56
+        name: "List"
+        (NamedTypeNode
+          range: 2:52-2:55
+          name: "i32"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:15
+    (CallExpression
+      range: 3:1-3:14
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 3:7-3:13
+        (LiteralExpression
+          range: 3:7-3:8
+          kind: INT
+          text: "1"
+        )
+        operator: LESS_EQUAL
+        (LiteralExpression
+          range: 3:12-3:13
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:15
+    (CallExpression
+      range: 4:1-4:14
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 4:7-4:13
+        (LiteralExpression
+          range: 4:7-4:8
+          kind: INT
+          text: "2"
+        )
+        operator: GREATER_EQUAL
+        (LiteralExpression
+          range: 4:12-4:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:27-1:47 -> ArrayList<i32>
+  1:31-1:40 -> ArrayList<i32>
+  2:33-2:59 -> ArrayList<List<i32>>
+  2:37-2:46 -> ArrayList<List<i32>>
+  3:1-3:6 -> (any) => void
+  3:1-3:14 -> void
+  3:7-3:8 -> i32
+  3:7-3:13 -> bool
+  3:12-3:13 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:14 -> void
+  4:7-4:8 -> i32
+  4:7-4:13 -> bool
+  4:12-4:13 -> i32
+
+Resolved types:
+  1:15-1:24 -> List<i32>
+  1:20-1:23 -> i32
+  1:27-1:47 -> ArrayList<i32>
+  1:41-1:44 -> i32
+  2:15-2:30 -> List<List<i32>>
+  2:20-2:29 -> List<i32>
+  2:25-2:28 -> i32
+  2:33-2:59 -> ArrayList<List<i32>>
+  2:47-2:56 -> List<i32>
+  2:52-2:55 -> i32
+
+Declarations:
+  1:7-1:13 -> const values: List<i32>
+  2:7-2:13 -> const nested: List<List<i32>>
+
+References:
+  1:31-1:40 -> 1:27-1:47
+  2:37-2:46 -> 2:33-2:59
+  3:1-3:6 -> builtin print
+  4:1-4:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field values Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field nested Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/util/List<Ljava/lang/Integer;>;>;
+  method <clinit>()V flags [STATIC]
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.values Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.nested Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+true
+true

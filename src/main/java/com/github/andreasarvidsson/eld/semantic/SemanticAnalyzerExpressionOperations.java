@@ -27,6 +27,7 @@ import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
 import com.github.andreasarvidsson.eld.parser.SliceExpression;
 import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
+import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.ThisExpression;
 import com.github.andreasarvidsson.eld.parser.UnaryExpression;
 import com.github.andreasarvidsson.eld.parser.UnaryOperator;
@@ -178,10 +179,51 @@ public final class SemanticAnalyzerExpressionOperations {
         ) {
             requireWritable(assignment.target());
         }
+        final boolean shiftAssignment = switch (assignment.operator()) {
+            case SHIFT_LEFT, SHIFT_RIGHT, UNSIGNED_SHIFT_RIGHT -> true;
+            default -> false;
+        };
+        final boolean bitwise = switch (assignment.operator()) {
+            case BIT_AND, BIT_OR, BIT_XOR, SHIFT_LEFT, SHIFT_RIGHT,
+                UNSIGNED_SHIFT_RIGHT -> true;
+            default -> false;
+        };
+        final Type expectedValueType;
+        if (bitwise && integer(target)) {
+            final boolean wideLiteral = wideIntegerLiteral(assignment.value());
+            if (shiftAssignment) {
+                expectedValueType = wideLiteral ? BuiltinType.I64 : null;
+            }
+            else if (
+                LiteralType.unwrap(ConstType.unwrap(target)) == BuiltinType.I64
+                    || wideLiteral
+            ) {
+                expectedValueType = BuiltinType.I64;
+            }
+            else {
+                expectedValueType = null;
+            }
+        }
+        else {
+            expectedValueType = target;
+        }
         final Type value =
-            expressions.analyzeExpression(assignment.value(), context, target);
+            expressions.analyzeExpression(
+                assignment.value(),
+                context,
+                expectedValueType
+            );
+        if (bitwise && (!integer(target) || !integer(value))) {
+            throw new SemanticException(
+                assignment.range(),
+                "Bitwise compound assignment requires integer operands"
+            );
+        }
+        if (bitwise && !shiftAssignment && !value.equals(target)) {
+            model.setConversionType(assignment.value(), target);
+        }
         if (
-            assignment.operator() != AssignmentOperator.ASSIGN
+            !bitwise && assignment.operator() != AssignmentOperator.ASSIGN
                 && (!numeric(target) || !numeric(value))
         ) {
             throw new SemanticException(
@@ -190,7 +232,7 @@ public final class SemanticAnalyzerExpressionOperations {
             );
         }
         if (
-            analyzer
+            !bitwise && analyzer
                 .resolveAssignType(value, target, assignment.value()) == null
         ) {
             throw new SemanticException(
@@ -309,7 +351,10 @@ public final class SemanticAnalyzerExpressionOperations {
             return finishBinaryExpression(binary, leftType, rightType);
         }
         final Type leftType =
-            expressions.analyzeExpression(binary.left(), context);
+            isBitwise(binary.operator()) && wideIntegerLiteral(binary.left())
+                ? expressions
+                    .analyzeExpression(binary.left(), context, BuiltinType.I64)
+                : expressions.analyzeExpression(binary.left(), context);
         SemanticContext rightContext = context;
         if (
             binary.operator() == BinaryOperator.AND
@@ -330,16 +375,29 @@ public final class SemanticAnalyzerExpressionOperations {
                     context.yieldType()
                 );
         }
-        final Type rightType =
+        final Type rightType;
+        if (
+            isBitwise(binary.operator()) && wideIntegerLiteral(binary.right())
+        ) {
+            rightType =
+                expressions.analyzeExpression(
+                    binary.right(),
+                    rightContext,
+                    BuiltinType.I64
+                );
+        }
+        else if (
             leftType instanceof BuiltinType builtin && builtin.isFloating()
                 && isFloatingLiteral(binary.right())
-                    ? expressions.analyzeExpression(
-                        binary.right(),
-                        rightContext,
-                        leftType
-                    )
-                    : expressions
-                        .analyzeExpression(binary.right(), rightContext);
+        ) {
+            rightType =
+                expressions
+                    .analyzeExpression(binary.right(), rightContext, leftType);
+        }
+        else {
+            rightType =
+                expressions.analyzeExpression(binary.right(), rightContext);
+        }
         return finishBinaryExpression(binary, leftType, rightType);
     }
 
@@ -383,6 +441,8 @@ public final class SemanticAnalyzerExpressionOperations {
         final boolean valid = switch (binary.operator()) {
             case AND, OR -> leftValueType == BuiltinType.BOOL
                 && rightValueType == BuiltinType.BOOL;
+            case BIT_AND, BIT_OR, BIT_XOR, SHIFT_LEFT, SHIFT_RIGHT,
+                UNSIGNED_SHIFT_RIGHT -> integer(leftType) && integer(rightType);
             case INSTANCEOF -> JavaTypes.isClassType(rightValueType)
                 && (leftValueType instanceof UnionType
                     || !(leftValueType instanceof BuiltinType builtin)
@@ -406,13 +466,25 @@ public final class SemanticAnalyzerExpressionOperations {
             );
         }
 
-        if (compatibleNumbers) {
+        if (compatibleNumbers && !isShift(binary.operator())) {
             resolvedType = promotedNumericType(leftType, rightType);
             if (!leftType.equals(resolvedType)) {
                 model.setConversionType(binary.left(), resolvedType);
             }
             if (!rightType.equals(resolvedType)) {
                 model.setConversionType(binary.right(), resolvedType);
+            }
+        }
+        if (isShift(binary.operator())) {
+            resolvedType =
+                leftValueType == BuiltinType.I64
+                    ? BuiltinType.I64
+                    : BuiltinType.I32;
+            if (!leftType.equals(resolvedType)) {
+                model.setConversionType(binary.left(), resolvedType);
+            }
+            if (!rightType.equals(BuiltinType.I32)) {
+                model.setConversionType(binary.right(), BuiltinType.I32);
             }
         }
 
@@ -481,7 +553,14 @@ public final class SemanticAnalyzerExpressionOperations {
             return type;
         }
         final Type operandType =
-            expressions.analyzeExpression(unary.operand(), context);
+            unary.operator() == UnaryOperator.BIT_NOT
+                && wideIntegerLiteral(unary.operand())
+                    ? expressions.analyzeExpression(
+                        unary.operand(),
+                        context,
+                        BuiltinType.I64
+                    )
+                    : expressions.analyzeExpression(unary.operand(), context);
         switch (unary.operator()) {
             case INCREMENT, DECREMENT -> {
                 requireWritable(unary.operand());
@@ -500,6 +579,14 @@ public final class SemanticAnalyzerExpressionOperations {
                     );
                 }
             }
+            case BIT_NOT -> {
+                if (!integer(operandType)) {
+                    throw new SemanticException(
+                        unary.range(),
+                        "Bitwise negation requires an integer operand"
+                    );
+                }
+            }
             case PLUS, MINUS -> {
                 if (!numeric(operandType)) {
                     throw new SemanticException(
@@ -514,7 +601,11 @@ public final class SemanticAnalyzerExpressionOperations {
             unary.operator() == UnaryOperator.PLUS
                 || unary.operator() == UnaryOperator.MINUS
                     ? promotedNumericType(operandType, BuiltinType.I32)
-                    : LiteralType.unwrap(operandType);
+                    : unary.operator() == UnaryOperator.BIT_NOT
+                        ? LiteralType.unwrap(operandType) == BuiltinType.I64
+                            ? BuiltinType.I64
+                            : BuiltinType.I32
+                        : LiteralType.unwrap(operandType);
         if (!operandType.equals(resultType)) {
             model.setConversionType(unary.operand(), resultType);
         }
@@ -646,6 +737,60 @@ public final class SemanticAnalyzerExpressionOperations {
         return LiteralType.unwrap(type) instanceof BuiltinType builtin
             && (builtin.isInteger() || builtin.isFloating()
                 || builtin == BuiltinType.CHAR);
+    }
+
+    private static boolean integer(final Type type) {
+        return LiteralType
+            .unwrap(ConstType.unwrap(type)) instanceof BuiltinType builtin
+            && builtin.isInteger();
+    }
+
+    private static boolean wideIntegerLiteral(final Expression expression) {
+        if (simpleIntegerLiteral(expression)) {
+            final BigInteger literal = integerLiteral(expression);
+            return literal != null
+                && literal.bitLength() >= BuiltinType.I32.bits();
+        }
+        if (expression instanceof GroupingExpression grouping) {
+            return wideIntegerLiteral(grouping.expression());
+        }
+        if (
+            expression instanceof UnaryExpression unary
+                && (unary.operator() == UnaryOperator.PLUS
+                    || unary.operator() == UnaryOperator.MINUS
+                    || unary.operator() == UnaryOperator.BIT_NOT)
+        ) {
+            return wideIntegerLiteral(unary.operand());
+        }
+        if (
+            expression instanceof BinaryExpression binary
+                && switch (binary.operator()) {
+                    case ADD, SUBTRACT, MULTIPLY, DIVIDE, MODULO, BIT_AND,
+                        BIT_OR, BIT_XOR, SHIFT_LEFT, SHIFT_RIGHT,
+                        UNSIGNED_SHIFT_RIGHT -> true;
+                    default -> false;
+                }
+        ) {
+            return wideIntegerLiteral(binary.left())
+                || wideIntegerLiteral(binary.right());
+        }
+        return expression instanceof TernaryExpression ternary
+            && (wideIntegerLiteral(ternary.thenBranch())
+                || wideIntegerLiteral(ternary.elseBranch()));
+    }
+
+    private static boolean isBitwise(final BinaryOperator operator) {
+        return switch (operator) {
+            case BIT_AND, BIT_OR, BIT_XOR, SHIFT_LEFT, SHIFT_RIGHT,
+                UNSIGNED_SHIFT_RIGHT -> true;
+            default -> false;
+        };
+    }
+
+    private static boolean isShift(final BinaryOperator operator) {
+        return operator == BinaryOperator.SHIFT_LEFT
+            || operator == BinaryOperator.SHIFT_RIGHT
+            || operator == BinaryOperator.UNSIGNED_SHIFT_RIGHT;
     }
 
     public static boolean isFloatingLiteral(final Expression expression) {

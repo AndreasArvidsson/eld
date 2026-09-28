@@ -58,12 +58,10 @@ References:
 class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method <clinit>()V flags [STATIC]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    LDC ""
-    LDC ""
-    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    LDC 1
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
-    max stack 3 max locals 0
+    max stack 2 max locals 0
 
 --- OUTPUT ---
 

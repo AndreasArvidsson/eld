@@ -75,6 +75,27 @@ public class ParserBase {
         return token;
     }
 
+    protected boolean angleSequence(
+        final TokenType angle,
+        final int count,
+        final boolean assignment
+    ) {
+        for (int i = 0; i < count; i++) {
+            if (!check(i, angle) || (i > 0 && !adjacent(i - 1))) {
+                return false;
+            }
+        }
+        return !assignment
+            || (check(count, TokenType.EQUAL) && adjacent(count - 1));
+    }
+
+    private boolean adjacent(final int offset) {
+        final Token first = tokens.peek(offset);
+        final Token second = tokens.peek(offset + 1);
+        return first != null && second != null
+            && first.range().end().equals(second.range().start());
+    }
+
     protected Position getLastPosition() {
         final @Nullable Token last = tokens.last();
         return last != null ? last.range().end() : new Position(0, 0);
