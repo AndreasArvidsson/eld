@@ -1,0 +1,7 @@
+interface Foo {
+    var 1bar: i32;
+}
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 2:9-2:13

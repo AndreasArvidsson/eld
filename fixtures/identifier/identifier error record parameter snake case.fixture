@@ -1,0 +1,16 @@
+record Foo(bar_baz: i32);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "bar_baz" (1:12-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "i32" (1:21-1:24)
+RIGHT_PAREN (1:24-1:25)
+SEMICOLON (1:25-1:26)
+
+--- AST ---
+
+ParserException: Invalid record parameter name: 'bar_baz' at 1:12-1:19

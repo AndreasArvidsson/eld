@@ -9,7 +9,37 @@ import com.github.andreasarvidsson.eld.lexer.Token;
 import com.github.andreasarvidsson.eld.lexer.TokenType;
 
 public final class Parser extends ParserBase {
+    private static final String PASCAL_CASE = "^[A-Z][A-Za-z0-9]*$";
+    private static final String CAMEL_CASE = "^[a-z][A-Za-z0-9]*$";
+    private static final String CAMEL_CASE_DISCARDABLE =
+        "^(?:[a-z][A-Za-z0-9]*|_)$";
+    private static final String CONSTANT_NAME =
+        "^[a-z][A-Za-z0-9]*|[A-Z][A-Z0-9_]*$";
+    private static final String UPPER_SNAKE_CASE =
+        "^[A-Z](?:[A-Z0-9_]*[A-Z0-9])?$";
+
     private final ParserExpressions parserExpressions;
+
+    static void assertIdentifierCase(final Token token, final String kind) {
+        final String pattern = switch (kind) {
+            case "class", "enum", "record", "interface" -> PASCAL_CASE;
+            case "function", "variable", "record parameter" -> CAMEL_CASE;
+            case "parameter" -> CAMEL_CASE_DISCARDABLE;
+            case "constant" -> CONSTANT_NAME;
+            case "enum constant" -> UPPER_SNAKE_CASE;
+            default -> throw new IllegalArgumentException(
+                "Unknown identifier kind: " + kind
+            );
+        };
+        if (!token.text().matches(pattern)) {
+            throw new ParserException(
+                token.range(),
+                "Invalid %s name: '%s'",
+                kind,
+                token.text()
+            );
+        }
+    }
 
     public Parser(final List<@NonNull Token> tokens) {
         final TokenStream tokenStream = new TokenStream(tokens);
@@ -305,6 +335,7 @@ public final class Parser extends ParserBase {
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "class");
         final IdentifierExpression superclass;
         if (match(TokenType.EXTENDS)) {
             final Token base = expect(TokenType.IDENTIFIER);
@@ -338,6 +369,7 @@ public final class Parser extends ParserBase {
 
     private EnumDeclaration parseEnumDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "enum");
         final List<@NonNull TypeNode> interfaces = new ArrayList<>();
         if (match(TokenType.IMPLEMENTS)) {
             do {
@@ -349,6 +381,7 @@ public final class Parser extends ParserBase {
         if (!check(TokenType.RIGHT_BRACE) && !check(TokenType.SEMICOLON)) {
             do {
                 final Token constant = expect(TokenType.IDENTIFIER);
+                assertIdentifierCase(constant, "enum constant");
                 final List<Expression> arguments = new ArrayList<>();
                 if (match(TokenType.LEFT_PAREN)) {
                     if (!check(TokenType.RIGHT_PAREN)) {
@@ -557,6 +590,7 @@ public final class Parser extends ParserBase {
 
     private RecordDeclaration parseRecordDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "record");
         final IdentifierDeclaration recordName =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
@@ -640,6 +674,7 @@ public final class Parser extends ParserBase {
 
     private RecordParameter parseRecordParameter() {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "record parameter");
         if (match(TokenType.QUESTION)) {
             throw new ParserException(
                 peek(-1).range(),
@@ -664,6 +699,7 @@ public final class Parser extends ParserBase {
         final Token keyword
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "interface");
         final List<@NonNull TypeNode> parents = new ArrayList<>();
         if (match(TokenType.EXTENDS)) {
             do {
@@ -705,6 +741,7 @@ public final class Parser extends ParserBase {
     private InterfaceMethodDeclaration parseInterfaceMethod() {
         final Token keyword = expect(TokenType.FUNC);
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "function");
         final IdentifierDeclaration id =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
@@ -748,6 +785,10 @@ public final class Parser extends ParserBase {
             );
         }
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(
+            name,
+            mutability == Mutability.CONST ? "constant" : "variable"
+        );
         final IdentifierDeclaration id =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.COLON);
@@ -863,6 +904,7 @@ public final class Parser extends ParserBase {
         final List<FunctionModifier> modifiers
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "function");
         final IdentifierDeclaration nameId =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
@@ -937,8 +979,12 @@ public final class Parser extends ParserBase {
 
     private ForEachStatement parseForEachStatement(final Token keyword) {
         final Token value = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(value, "variable");
         final Token index =
             match(TokenType.COMMA) ? expect(TokenType.IDENTIFIER) : null;
+        if (index != null) {
+            assertIdentifierCase(index, "variable");
+        }
         final IdentifierDeclaration valueId =
             new IdentifierDeclaration(value.text(), value.range());
         final IdentifierDeclaration indexId =
@@ -989,7 +1035,8 @@ public final class Parser extends ParserBase {
             !field
                 && (check(TokenType.LEFT_PAREN) || check(TokenType.LEFT_BRACE))
         ) {
-            final Pattern pattern = parsePattern(true);
+            final Pattern pattern =
+                parsePattern(true, mutability == Mutability.CONST);
             expect(TokenType.EQUAL);
             final Expression initializer = parserExpressions.parseExpression();
             final Token semicolon = expect(TokenType.SEMICOLON);
@@ -1001,6 +1048,10 @@ public final class Parser extends ParserBase {
             );
         }
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(
+            name,
+            mutability == Mutability.CONST ? "constant" : "variable"
+        );
         final @Nullable TypeNode type =
             match(TokenType.COLON) ? parseType() : null;
         final IdentifierDeclaration identifier =
@@ -1068,7 +1119,7 @@ public final class Parser extends ParserBase {
     }
 
     private DestructuringAssignmentStatement parseDestructuringAssignment() {
-        final Pattern pattern = parsePattern(false);
+        final Pattern pattern = parsePattern(false, false);
         expect(TokenType.EQUAL);
         final Expression value = parserExpressions.parseExpression();
         final Token semicolon = expect(TokenType.SEMICOLON);
@@ -1079,18 +1130,24 @@ public final class Parser extends ParserBase {
         );
     }
 
-    private Pattern parsePattern(final boolean declaration) {
+    private Pattern parsePattern(
+        final boolean declaration,
+        final boolean constant
+    ) {
         if (check(TokenType.LEFT_PAREN)) {
-            return parseTuplePattern(declaration);
+            return parseTuplePattern(declaration, constant);
         }
-        return parseRecordPattern(declaration);
+        return parseRecordPattern(declaration, constant);
     }
 
-    private TuplePattern parseTuplePattern(final boolean declaration) {
+    private TuplePattern parseTuplePattern(
+        final boolean declaration,
+        final boolean constant
+    ) {
         final Token open = expect(TokenType.LEFT_PAREN);
         final List<Pattern> elements = new ArrayList<>();
         do {
-            elements.add(parseIdentifierPattern(declaration, true));
+            elements.add(parseIdentifierPattern(declaration, constant, true));
         } while (match(TokenType.COMMA));
         final Token close = expect(TokenType.RIGHT_PAREN);
         if (elements.size() < 2) {
@@ -1105,7 +1162,10 @@ public final class Parser extends ParserBase {
         );
     }
 
-    private RecordPattern parseRecordPattern(final boolean declaration) {
+    private RecordPattern parseRecordPattern(
+        final boolean declaration,
+        final boolean constant
+    ) {
         final Token open = expect(TokenType.LEFT_BRACE);
         final List<RecordPatternField> fields = new ArrayList<>();
         if (!check(TokenType.RIGHT_BRACE)) {
@@ -1118,11 +1178,17 @@ public final class Parser extends ParserBase {
                     );
                 final Pattern target;
                 if (match(TokenType.AS)) {
-                    target = parseIdentifierPattern(declaration, true);
+                    target =
+                        parseIdentifierPattern(declaration, constant, true);
                 }
                 else {
                     target =
-                        parseIdentifierPattern(component, declaration, true);
+                        parseIdentifierPattern(
+                            component,
+                            declaration,
+                            constant,
+                            true
+                        );
                 }
                 fields.add(
                     new RecordPatternField(
@@ -1142,15 +1208,17 @@ public final class Parser extends ParserBase {
 
     private Pattern parseIdentifierPattern(
         final boolean declaration,
+        final boolean constant,
         final boolean allowType
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
-        return parseIdentifierPattern(name, declaration, allowType);
+        return parseIdentifierPattern(name, declaration, constant, allowType);
     }
 
     private Pattern parseIdentifierPattern(
         final Token name,
         final boolean declaration,
+        final boolean constant,
         final boolean allowType
     ) {
         if (name.text().equals("_")) {
@@ -1161,6 +1229,9 @@ public final class Parser extends ParserBase {
                 );
             }
             return new DiscardPattern(name.range());
+        }
+        if (declaration) {
+            assertIdentifierCase(name, constant ? "constant" : "variable");
         }
         final TypeNode type =
             declaration && allowType && match(TokenType.COLON)
@@ -1183,6 +1254,7 @@ public final class Parser extends ParserBase {
 
     private FunctionParameter parseFunctionParameter() {
         final Token name = expect(TokenType.IDENTIFIER);
+        assertIdentifierCase(name, "parameter");
         final boolean optional = match(TokenType.QUESTION);
         expect(TokenType.COLON);
         final TypeNode type = parseType();

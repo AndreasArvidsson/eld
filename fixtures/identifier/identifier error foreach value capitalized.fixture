@@ -1,0 +1,18 @@
+for (Foo: [1]) {}
+
+--- TOKENS ---
+
+FOR (1:1-1:4)
+LEFT_PAREN (1:5-1:6)
+IDENTIFIER "Foo" (1:6-1:9)
+COLON (1:9-1:10)
+LEFT_BRACKET (1:11-1:12)
+INTEGER_LITERAL "1" (1:12-1:13)
+RIGHT_BRACKET (1:13-1:14)
+RIGHT_PAREN (1:14-1:15)
+LEFT_BRACE (1:16-1:17)
+RIGHT_BRACE (1:17-1:18)
+
+--- AST ---
+
+ParserException: Invalid variable name: 'Foo' at 1:6-1:9

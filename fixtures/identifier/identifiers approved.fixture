@@ -1,0 +1,1633 @@
+class Box {
+    var variable: i32 = 0;
+    var variable2: i32 = 0;
+    var variableThree: i32 = 0;
+    const constant: i32 = 0;
+    const constant2: i32 = 0;
+    const constantThree: i32 = 0;
+    const CONSTANT_FOUR: i32 = 0;
+    func function(param: i32, param2: i32, paramThree: i32, _: i32) {}
+    func function2() {}
+    func functionThree() {}
+}
+enum Direction {
+    NORTH_1,
+    SOUTH;
+    var value1: i32 = 1;
+    const otherValue: i32 = 2;
+    const MAX_VALUE: i32 = 3;
+    func run(foo1: i32, barBaz: i32) {}
+}
+record Point(param: i32, param2: i32, paramThree: i32) {
+    func function(param: i32, param2: i32, paramThree: i32, _: i32) {}
+    func function2() {}
+    func functionThree() {}
+}
+interface Shape {
+    func run(foo1: i32, barBaz: i32);
+}
+
+var variable: i32 = 0;
+var variable2: i32 = 0;
+var variableThree: i32 = 0;
+const constant: i32 = 0;
+const constant2: i32 = 0;
+const constantThree: i32 = 0;
+const CONSTANT_FOUR: i32 = 0;
+func function(param: i32, param2: i32, paramThree: i32, _: i32) {}
+func function2() {}
+func functionThree() {}
+
+const operation: (i32, i32, i32, i32) => i32 =
+    (param, param2, paramThree, _) => param;
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Box" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+VAR (2:5-2:8)
+IDENTIFIER "variable" (2:9-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "i32" (2:19-2:22)
+EQUAL (2:23-2:24)
+INTEGER_LITERAL "0" (2:25-2:26)
+SEMICOLON (2:26-2:27)
+VAR (3:5-3:8)
+IDENTIFIER "variable2" (3:9-3:18)
+COLON (3:18-3:19)
+IDENTIFIER "i32" (3:20-3:23)
+EQUAL (3:24-3:25)
+INTEGER_LITERAL "0" (3:26-3:27)
+SEMICOLON (3:27-3:28)
+VAR (4:5-4:8)
+IDENTIFIER "variableThree" (4:9-4:22)
+COLON (4:22-4:23)
+IDENTIFIER "i32" (4:24-4:27)
+EQUAL (4:28-4:29)
+INTEGER_LITERAL "0" (4:30-4:31)
+SEMICOLON (4:31-4:32)
+CONST (5:5-5:10)
+IDENTIFIER "constant" (5:11-5:19)
+COLON (5:19-5:20)
+IDENTIFIER "i32" (5:21-5:24)
+EQUAL (5:25-5:26)
+INTEGER_LITERAL "0" (5:27-5:28)
+SEMICOLON (5:28-5:29)
+CONST (6:5-6:10)
+IDENTIFIER "constant2" (6:11-6:20)
+COLON (6:20-6:21)
+IDENTIFIER "i32" (6:22-6:25)
+EQUAL (6:26-6:27)
+INTEGER_LITERAL "0" (6:28-6:29)
+SEMICOLON (6:29-6:30)
+CONST (7:5-7:10)
+IDENTIFIER "constantThree" (7:11-7:24)
+COLON (7:24-7:25)
+IDENTIFIER "i32" (7:26-7:29)
+EQUAL (7:30-7:31)
+INTEGER_LITERAL "0" (7:32-7:33)
+SEMICOLON (7:33-7:34)
+CONST (8:5-8:10)
+IDENTIFIER "CONSTANT_FOUR" (8:11-8:24)
+COLON (8:24-8:25)
+IDENTIFIER "i32" (8:26-8:29)
+EQUAL (8:30-8:31)
+INTEGER_LITERAL "0" (8:32-8:33)
+SEMICOLON (8:33-8:34)
+FUNC (9:5-9:9)
+IDENTIFIER "function" (9:10-9:18)
+LEFT_PAREN (9:18-9:19)
+IDENTIFIER "param" (9:19-9:24)
+COLON (9:24-9:25)
+IDENTIFIER "i32" (9:26-9:29)
+COMMA (9:29-9:30)
+IDENTIFIER "param2" (9:31-9:37)
+COLON (9:37-9:38)
+IDENTIFIER "i32" (9:39-9:42)
+COMMA (9:42-9:43)
+IDENTIFIER "paramThree" (9:44-9:54)
+COLON (9:54-9:55)
+IDENTIFIER "i32" (9:56-9:59)
+COMMA (9:59-9:60)
+IDENTIFIER "_" (9:61-9:62)
+COLON (9:62-9:63)
+IDENTIFIER "i32" (9:64-9:67)
+RIGHT_PAREN (9:67-9:68)
+LEFT_BRACE (9:69-9:70)
+RIGHT_BRACE (9:70-9:71)
+FUNC (10:5-10:9)
+IDENTIFIER "function2" (10:10-10:19)
+LEFT_PAREN (10:19-10:20)
+RIGHT_PAREN (10:20-10:21)
+LEFT_BRACE (10:22-10:23)
+RIGHT_BRACE (10:23-10:24)
+FUNC (11:5-11:9)
+IDENTIFIER "functionThree" (11:10-11:23)
+LEFT_PAREN (11:23-11:24)
+RIGHT_PAREN (11:24-11:25)
+LEFT_BRACE (11:26-11:27)
+RIGHT_BRACE (11:27-11:28)
+RIGHT_BRACE (12:1-12:2)
+ENUM (13:1-13:5)
+IDENTIFIER "Direction" (13:6-13:15)
+LEFT_BRACE (13:16-13:17)
+IDENTIFIER "NORTH_1" (14:5-14:12)
+COMMA (14:12-14:13)
+IDENTIFIER "SOUTH" (15:5-15:10)
+SEMICOLON (15:10-15:11)
+VAR (16:5-16:8)
+IDENTIFIER "value1" (16:9-16:15)
+COLON (16:15-16:16)
+IDENTIFIER "i32" (16:17-16:20)
+EQUAL (16:21-16:22)
+INTEGER_LITERAL "1" (16:23-16:24)
+SEMICOLON (16:24-16:25)
+CONST (17:5-17:10)
+IDENTIFIER "otherValue" (17:11-17:21)
+COLON (17:21-17:22)
+IDENTIFIER "i32" (17:23-17:26)
+EQUAL (17:27-17:28)
+INTEGER_LITERAL "2" (17:29-17:30)
+SEMICOLON (17:30-17:31)
+CONST (18:5-18:10)
+IDENTIFIER "MAX_VALUE" (18:11-18:20)
+COLON (18:20-18:21)
+IDENTIFIER "i32" (18:22-18:25)
+EQUAL (18:26-18:27)
+INTEGER_LITERAL "3" (18:28-18:29)
+SEMICOLON (18:29-18:30)
+FUNC (19:5-19:9)
+IDENTIFIER "run" (19:10-19:13)
+LEFT_PAREN (19:13-19:14)
+IDENTIFIER "foo1" (19:14-19:18)
+COLON (19:18-19:19)
+IDENTIFIER "i32" (19:20-19:23)
+COMMA (19:23-19:24)
+IDENTIFIER "barBaz" (19:25-19:31)
+COLON (19:31-19:32)
+IDENTIFIER "i32" (19:33-19:36)
+RIGHT_PAREN (19:36-19:37)
+LEFT_BRACE (19:38-19:39)
+RIGHT_BRACE (19:39-19:40)
+RIGHT_BRACE (20:1-20:2)
+RECORD (21:1-21:7)
+IDENTIFIER "Point" (21:8-21:13)
+LEFT_PAREN (21:13-21:14)
+IDENTIFIER "param" (21:14-21:19)
+COLON (21:19-21:20)
+IDENTIFIER "i32" (21:21-21:24)
+COMMA (21:24-21:25)
+IDENTIFIER "param2" (21:26-21:32)
+COLON (21:32-21:33)
+IDENTIFIER "i32" (21:34-21:37)
+COMMA (21:37-21:38)
+IDENTIFIER "paramThree" (21:39-21:49)
+COLON (21:49-21:50)
+IDENTIFIER "i32" (21:51-21:54)
+RIGHT_PAREN (21:54-21:55)
+LEFT_BRACE (21:56-21:57)
+FUNC (22:5-22:9)
+IDENTIFIER "function" (22:10-22:18)
+LEFT_PAREN (22:18-22:19)
+IDENTIFIER "param" (22:19-22:24)
+COLON (22:24-22:25)
+IDENTIFIER "i32" (22:26-22:29)
+COMMA (22:29-22:30)
+IDENTIFIER "param2" (22:31-22:37)
+COLON (22:37-22:38)
+IDENTIFIER "i32" (22:39-22:42)
+COMMA (22:42-22:43)
+IDENTIFIER "paramThree" (22:44-22:54)
+COLON (22:54-22:55)
+IDENTIFIER "i32" (22:56-22:59)
+COMMA (22:59-22:60)
+IDENTIFIER "_" (22:61-22:62)
+COLON (22:62-22:63)
+IDENTIFIER "i32" (22:64-22:67)
+RIGHT_PAREN (22:67-22:68)
+LEFT_BRACE (22:69-22:70)
+RIGHT_BRACE (22:70-22:71)
+FUNC (23:5-23:9)
+IDENTIFIER "function2" (23:10-23:19)
+LEFT_PAREN (23:19-23:20)
+RIGHT_PAREN (23:20-23:21)
+LEFT_BRACE (23:22-23:23)
+RIGHT_BRACE (23:23-23:24)
+FUNC (24:5-24:9)
+IDENTIFIER "functionThree" (24:10-24:23)
+LEFT_PAREN (24:23-24:24)
+RIGHT_PAREN (24:24-24:25)
+LEFT_BRACE (24:26-24:27)
+RIGHT_BRACE (24:27-24:28)
+RIGHT_BRACE (25:1-25:2)
+INTERFACE (26:1-26:10)
+IDENTIFIER "Shape" (26:11-26:16)
+LEFT_BRACE (26:17-26:18)
+FUNC (27:5-27:9)
+IDENTIFIER "run" (27:10-27:13)
+LEFT_PAREN (27:13-27:14)
+IDENTIFIER "foo1" (27:14-27:18)
+COLON (27:18-27:19)
+IDENTIFIER "i32" (27:20-27:23)
+COMMA (27:23-27:24)
+IDENTIFIER "barBaz" (27:25-27:31)
+COLON (27:31-27:32)
+IDENTIFIER "i32" (27:33-27:36)
+RIGHT_PAREN (27:36-27:37)
+SEMICOLON (27:37-27:38)
+RIGHT_BRACE (28:1-28:2)
+VAR (30:1-30:4)
+IDENTIFIER "variable" (30:5-30:13)
+COLON (30:13-30:14)
+IDENTIFIER "i32" (30:15-30:18)
+EQUAL (30:19-30:20)
+INTEGER_LITERAL "0" (30:21-30:22)
+SEMICOLON (30:22-30:23)
+VAR (31:1-31:4)
+IDENTIFIER "variable2" (31:5-31:14)
+COLON (31:14-31:15)
+IDENTIFIER "i32" (31:16-31:19)
+EQUAL (31:20-31:21)
+INTEGER_LITERAL "0" (31:22-31:23)
+SEMICOLON (31:23-31:24)
+VAR (32:1-32:4)
+IDENTIFIER "variableThree" (32:5-32:18)
+COLON (32:18-32:19)
+IDENTIFIER "i32" (32:20-32:23)
+EQUAL (32:24-32:25)
+INTEGER_LITERAL "0" (32:26-32:27)
+SEMICOLON (32:27-32:28)
+CONST (33:1-33:6)
+IDENTIFIER "constant" (33:7-33:15)
+COLON (33:15-33:16)
+IDENTIFIER "i32" (33:17-33:20)
+EQUAL (33:21-33:22)
+INTEGER_LITERAL "0" (33:23-33:24)
+SEMICOLON (33:24-33:25)
+CONST (34:1-34:6)
+IDENTIFIER "constant2" (34:7-34:16)
+COLON (34:16-34:17)
+IDENTIFIER "i32" (34:18-34:21)
+EQUAL (34:22-34:23)
+INTEGER_LITERAL "0" (34:24-34:25)
+SEMICOLON (34:25-34:26)
+CONST (35:1-35:6)
+IDENTIFIER "constantThree" (35:7-35:20)
+COLON (35:20-35:21)
+IDENTIFIER "i32" (35:22-35:25)
+EQUAL (35:26-35:27)
+INTEGER_LITERAL "0" (35:28-35:29)
+SEMICOLON (35:29-35:30)
+CONST (36:1-36:6)
+IDENTIFIER "CONSTANT_FOUR" (36:7-36:20)
+COLON (36:20-36:21)
+IDENTIFIER "i32" (36:22-36:25)
+EQUAL (36:26-36:27)
+INTEGER_LITERAL "0" (36:28-36:29)
+SEMICOLON (36:29-36:30)
+FUNC (37:1-37:5)
+IDENTIFIER "function" (37:6-37:14)
+LEFT_PAREN (37:14-37:15)
+IDENTIFIER "param" (37:15-37:20)
+COLON (37:20-37:21)
+IDENTIFIER "i32" (37:22-37:25)
+COMMA (37:25-37:26)
+IDENTIFIER "param2" (37:27-37:33)
+COLON (37:33-37:34)
+IDENTIFIER "i32" (37:35-37:38)
+COMMA (37:38-37:39)
+IDENTIFIER "paramThree" (37:40-37:50)
+COLON (37:50-37:51)
+IDENTIFIER "i32" (37:52-37:55)
+COMMA (37:55-37:56)
+IDENTIFIER "_" (37:57-37:58)
+COLON (37:58-37:59)
+IDENTIFIER "i32" (37:60-37:63)
+RIGHT_PAREN (37:63-37:64)
+LEFT_BRACE (37:65-37:66)
+RIGHT_BRACE (37:66-37:67)
+FUNC (38:1-38:5)
+IDENTIFIER "function2" (38:6-38:15)
+LEFT_PAREN (38:15-38:16)
+RIGHT_PAREN (38:16-38:17)
+LEFT_BRACE (38:18-38:19)
+RIGHT_BRACE (38:19-38:20)
+FUNC (39:1-39:5)
+IDENTIFIER "functionThree" (39:6-39:19)
+LEFT_PAREN (39:19-39:20)
+RIGHT_PAREN (39:20-39:21)
+LEFT_BRACE (39:22-39:23)
+RIGHT_BRACE (39:23-39:24)
+CONST (41:1-41:6)
+IDENTIFIER "operation" (41:7-41:16)
+COLON (41:16-41:17)
+LEFT_PAREN (41:18-41:19)
+IDENTIFIER "i32" (41:19-41:22)
+COMMA (41:22-41:23)
+IDENTIFIER "i32" (41:24-41:27)
+COMMA (41:27-41:28)
+IDENTIFIER "i32" (41:29-41:32)
+COMMA (41:32-41:33)
+IDENTIFIER "i32" (41:34-41:37)
+RIGHT_PAREN (41:37-41:38)
+ARROW (41:39-41:41)
+IDENTIFIER "i32" (41:42-41:45)
+EQUAL (41:46-41:47)
+LEFT_PAREN (42:5-42:6)
+IDENTIFIER "param" (42:6-42:11)
+COMMA (42:11-42:12)
+IDENTIFIER "param2" (42:13-42:19)
+COMMA (42:19-42:20)
+IDENTIFIER "paramThree" (42:21-42:31)
+COMMA (42:31-42:32)
+IDENTIFIER "_" (42:33-42:34)
+RIGHT_PAREN (42:34-42:35)
+ARROW (42:36-42:38)
+IDENTIFIER "param" (42:39-42:44)
+SEMICOLON (42:44-42:45)
+
+--- AST ---
+
+(Program
+  range: 1:1-42:45
+  (ClassDeclaration
+    range: 1:1-12:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Box"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:27
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 2:5-2:27
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:9-2:17
+          name: "variable"
+        )
+        (NamedTypeNode
+          range: 2:19-2:22
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 2:25-2:26
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:28
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 3:5-3:28
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 3:9-3:18
+          name: "variable2"
+        )
+        (NamedTypeNode
+          range: 3:20-3:23
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 3:26-3:27
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:32
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 4:5-4:32
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 4:9-4:22
+          name: "variableThree"
+        )
+        (NamedTypeNode
+          range: 4:24-4:27
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 4:30-4:31
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:29
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 5:5-5:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 5:11-5:19
+          name: "constant"
+        )
+        (NamedTypeNode
+          range: 5:21-5:24
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 5:27-5:28
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-6:30
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 6:5-6:30
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 6:11-6:20
+          name: "constant2"
+        )
+        (NamedTypeNode
+          range: 6:22-6:25
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 6:28-6:29
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:34
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 7:5-7:34
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 7:11-7:24
+          name: "constantThree"
+        )
+        (NamedTypeNode
+          range: 7:26-7:29
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 7:32-7:33
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-8:34
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 8:5-8:34
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 8:11-8:24
+          name: "CONSTANT_FOUR"
+        )
+        (NamedTypeNode
+          range: 8:26-8:29
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 8:32-8:33
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 9:5-9:71
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 9:5-9:71
+        (IdentifierDeclaration
+          range: 9:10-9:18
+          name: "function"
+        )
+        (FunctionParameter
+          range: 9:19-9:29
+          (IdentifierDeclaration
+            range: 9:19-9:24
+            name: "param"
+          )
+          (NamedTypeNode
+            range: 9:26-9:29
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 9:31-9:42
+          (IdentifierDeclaration
+            range: 9:31-9:37
+            name: "param2"
+          )
+          (NamedTypeNode
+            range: 9:39-9:42
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 9:44-9:59
+          (IdentifierDeclaration
+            range: 9:44-9:54
+            name: "paramThree"
+          )
+          (NamedTypeNode
+            range: 9:56-9:59
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 9:61-9:67
+          (IdentifierDeclaration
+            range: 9:61-9:62
+            name: "_"
+          )
+          (NamedTypeNode
+            range: 9:64-9:67
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        returnType: null
+        (BlockStatement
+          range: 9:69-9:71
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 10:5-10:24
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 10:5-10:24
+        (IdentifierDeclaration
+          range: 10:10-10:19
+          name: "function2"
+        )
+        returnType: null
+        (BlockStatement
+          range: 10:22-10:24
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 11:5-11:28
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 11:5-11:28
+        (IdentifierDeclaration
+          range: 11:10-11:23
+          name: "functionThree"
+        )
+        returnType: null
+        (BlockStatement
+          range: 11:26-11:28
+        )
+      )
+    )
+  )
+  (EnumDeclaration
+    range: 13:1-20:2
+    (IdentifierDeclaration
+      range: 13:6-13:15
+      name: "Direction"
+    )
+    (EnumConstant
+      range: 14:5-14:12
+      (IdentifierDeclaration
+        range: 14:5-14:12
+        name: "NORTH_1"
+      )
+    )
+    (EnumConstant
+      range: 15:5-15:10
+      (IdentifierDeclaration
+        range: 15:5-15:10
+        name: "SOUTH"
+      )
+    )
+    (MemberDeclaration
+      range: 16:5-16:25
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 16:5-16:25
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 16:9-16:15
+          name: "value1"
+        )
+        (NamedTypeNode
+          range: 16:17-16:20
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 16:23-16:24
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 17:5-17:31
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 17:5-17:31
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 17:11-17:21
+          name: "otherValue"
+        )
+        (NamedTypeNode
+          range: 17:23-17:26
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 17:29-17:30
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 18:5-18:30
+      visibility: PRIVATE
+      (VariableDeclaration
+        range: 18:5-18:30
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 18:11-18:20
+          name: "MAX_VALUE"
+        )
+        (NamedTypeNode
+          range: 18:22-18:25
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 18:28-18:29
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 19:5-19:40
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 19:5-19:40
+        (IdentifierDeclaration
+          range: 19:10-19:13
+          name: "run"
+        )
+        (FunctionParameter
+          range: 19:14-19:23
+          (IdentifierDeclaration
+            range: 19:14-19:18
+            name: "foo1"
+          )
+          (NamedTypeNode
+            range: 19:20-19:23
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 19:25-19:36
+          (IdentifierDeclaration
+            range: 19:25-19:31
+            name: "barBaz"
+          )
+          (NamedTypeNode
+            range: 19:33-19:36
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        returnType: null
+        (BlockStatement
+          range: 19:38-19:40
+        )
+      )
+    )
+  )
+  (RecordDeclaration
+    range: 21:1-25:2
+    (IdentifierDeclaration
+      range: 21:8-21:13
+      name: "Point"
+    )
+    (RecordParameter
+      range: 21:14-21:24
+      (IdentifierDeclaration
+        range: 21:14-21:19
+        name: "param"
+      )
+      (NamedTypeNode
+        range: 21:21-21:24
+        name: "i32"
+      )
+    )
+    (RecordParameter
+      range: 21:26-21:37
+      (IdentifierDeclaration
+        range: 21:26-21:32
+        name: "param2"
+      )
+      (NamedTypeNode
+        range: 21:34-21:37
+        name: "i32"
+      )
+    )
+    (RecordParameter
+      range: 21:39-21:54
+      (IdentifierDeclaration
+        range: 21:39-21:49
+        name: "paramThree"
+      )
+      (NamedTypeNode
+        range: 21:51-21:54
+        name: "i32"
+      )
+    )
+    (MemberDeclaration
+      range: 22:5-22:71
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 22:5-22:71
+        (IdentifierDeclaration
+          range: 22:10-22:18
+          name: "function"
+        )
+        (FunctionParameter
+          range: 22:19-22:29
+          (IdentifierDeclaration
+            range: 22:19-22:24
+            name: "param"
+          )
+          (NamedTypeNode
+            range: 22:26-22:29
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 22:31-22:42
+          (IdentifierDeclaration
+            range: 22:31-22:37
+            name: "param2"
+          )
+          (NamedTypeNode
+            range: 22:39-22:42
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 22:44-22:59
+          (IdentifierDeclaration
+            range: 22:44-22:54
+            name: "paramThree"
+          )
+          (NamedTypeNode
+            range: 22:56-22:59
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 22:61-22:67
+          (IdentifierDeclaration
+            range: 22:61-22:62
+            name: "_"
+          )
+          (NamedTypeNode
+            range: 22:64-22:67
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        returnType: null
+        (BlockStatement
+          range: 22:69-22:71
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 23:5-23:24
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 23:5-23:24
+        (IdentifierDeclaration
+          range: 23:10-23:19
+          name: "function2"
+        )
+        returnType: null
+        (BlockStatement
+          range: 23:22-23:24
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 24:5-24:28
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 24:5-24:28
+        (IdentifierDeclaration
+          range: 24:10-24:23
+          name: "functionThree"
+        )
+        returnType: null
+        (BlockStatement
+          range: 24:26-24:28
+        )
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 26:1-28:2
+    (IdentifierDeclaration
+      range: 26:11-26:16
+      name: "Shape"
+    )
+    (InterfaceMethodDeclaration
+      range: 27:5-27:38
+      (IdentifierDeclaration
+        range: 27:10-27:13
+        name: "run"
+      )
+      (FunctionParameter
+        range: 27:14-27:23
+        (IdentifierDeclaration
+          range: 27:14-27:18
+          name: "foo1"
+        )
+        (NamedTypeNode
+          range: 27:20-27:23
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 27:25-27:36
+        (IdentifierDeclaration
+          range: 27:25-27:31
+          name: "barBaz"
+        )
+        (NamedTypeNode
+          range: 27:33-27:36
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      returnType: null
+    )
+  )
+  (VariableDeclaration
+    range: 30:1-30:23
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 30:5-30:13
+      name: "variable"
+    )
+    (NamedTypeNode
+      range: 30:15-30:18
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 30:21-30:22
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 31:1-31:24
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 31:5-31:14
+      name: "variable2"
+    )
+    (NamedTypeNode
+      range: 31:16-31:19
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 31:22-31:23
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 32:1-32:28
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 32:5-32:18
+      name: "variableThree"
+    )
+    (NamedTypeNode
+      range: 32:20-32:23
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 32:26-32:27
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 33:1-33:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 33:7-33:15
+      name: "constant"
+    )
+    (NamedTypeNode
+      range: 33:17-33:20
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 33:23-33:24
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 34:1-34:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 34:7-34:16
+      name: "constant2"
+    )
+    (NamedTypeNode
+      range: 34:18-34:21
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 34:24-34:25
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 35:1-35:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 35:7-35:20
+      name: "constantThree"
+    )
+    (NamedTypeNode
+      range: 35:22-35:25
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 35:28-35:29
+      kind: INT
+      text: "0"
+    )
+  )
+  (VariableDeclaration
+    range: 36:1-36:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 36:7-36:20
+      name: "CONSTANT_FOUR"
+    )
+    (NamedTypeNode
+      range: 36:22-36:25
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 36:28-36:29
+      kind: INT
+      text: "0"
+    )
+  )
+  (FunctionDeclaration
+    range: 37:1-37:67
+    (IdentifierDeclaration
+      range: 37:6-37:14
+      name: "function"
+    )
+    (FunctionParameter
+      range: 37:15-37:25
+      (IdentifierDeclaration
+        range: 37:15-37:20
+        name: "param"
+      )
+      (NamedTypeNode
+        range: 37:22-37:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 37:27-37:38
+      (IdentifierDeclaration
+        range: 37:27-37:33
+        name: "param2"
+      )
+      (NamedTypeNode
+        range: 37:35-37:38
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 37:40-37:55
+      (IdentifierDeclaration
+        range: 37:40-37:50
+        name: "paramThree"
+      )
+      (NamedTypeNode
+        range: 37:52-37:55
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 37:57-37:63
+      (IdentifierDeclaration
+        range: 37:57-37:58
+        name: "_"
+      )
+      (NamedTypeNode
+        range: 37:60-37:63
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 37:65-37:67
+    )
+  )
+  (FunctionDeclaration
+    range: 38:1-38:20
+    (IdentifierDeclaration
+      range: 38:6-38:15
+      name: "function2"
+    )
+    returnType: null
+    (BlockStatement
+      range: 38:18-38:20
+    )
+  )
+  (FunctionDeclaration
+    range: 39:1-39:24
+    (IdentifierDeclaration
+      range: 39:6-39:19
+      name: "functionThree"
+    )
+    returnType: null
+    (BlockStatement
+      range: 39:22-39:24
+    )
+  )
+  (VariableDeclaration
+    range: 41:1-42:45
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 41:7-41:16
+      name: "operation"
+    )
+    (FunctionTypeNode
+      range: 41:18-41:45
+      (NamedTypeNode
+        range: 41:19-41:22
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 41:24-41:27
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 41:29-41:32
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 41:34-41:37
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 41:42-41:45
+        name: "i32"
+      )
+    )
+    (LambdaExpression
+      range: 42:5-42:44
+      (LambdaParameter
+        range: 42:6-42:11
+        (IdentifierDeclaration
+          range: 42:6-42:11
+          name: "param"
+        )
+      )
+      (LambdaParameter
+        range: 42:13-42:19
+        (IdentifierDeclaration
+          range: 42:13-42:19
+          name: "param2"
+        )
+      )
+      (LambdaParameter
+        range: 42:21-42:31
+        (IdentifierDeclaration
+          range: 42:21-42:31
+          name: "paramThree"
+        )
+      )
+      (LambdaParameter
+        range: 42:33-42:34
+        (IdentifierDeclaration
+          range: 42:33-42:34
+          name: "_"
+        )
+      )
+      (IdentifierExpression
+        range: 42:39-42:44
+        name: "param"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:25-2:26 -> i32
+  3:26-3:27 -> i32
+  4:30-4:31 -> i32
+  5:27-5:28 -> i32
+  6:28-6:29 -> i32
+  7:32-7:33 -> i32
+  8:32-8:33 -> i32
+  13:6-13:15 -> [Direction]
+  14:5-14:12 -> Direction
+  15:5-15:10 -> Direction
+  16:23-16:24 -> i32
+  17:29-17:30 -> i32
+  18:28-18:29 -> i32
+  21:1-25:2 -> Point
+  21:1-25:2 -> string
+  21:8-21:13 -> Point
+  21:14-21:19 -> i32
+  21:14-21:24 -> Point
+  21:14-21:24 -> i32
+  21:14-21:24 -> string
+  21:26-21:32 -> i32
+  21:26-21:37 -> Point
+  21:26-21:37 -> i32
+  21:26-21:37 -> string
+  21:39-21:49 -> i32
+  21:39-21:54 -> Point
+  21:39-21:54 -> i32
+  21:39-21:54 -> string
+  30:21-30:22 -> i32
+  31:22-31:23 -> i32
+  32:26-32:27 -> i32
+  33:23-33:24 -> i32
+  34:24-34:25 -> i32
+  35:28-35:29 -> i32
+  36:28-36:29 -> i32
+  42:5-42:44 -> (i32, i32, i32, i32) => i32
+  42:39-42:44 -> i32
+
+Resolved types:
+  2:19-2:22 -> i32
+  3:20-3:23 -> i32
+  4:24-4:27 -> i32
+  5:21-5:24 -> i32
+  6:22-6:25 -> i32
+  7:26-7:29 -> i32
+  8:26-8:29 -> i32
+  9:26-9:29 -> i32
+  9:39-9:42 -> i32
+  9:56-9:59 -> i32
+  9:64-9:67 -> i32
+  13:6-13:15 -> Direction
+  13:6-13:15 -> [Direction]
+  13:6-13:15 -> i32
+  13:6-13:15 -> string
+  14:5-14:12 -> Direction
+  15:5-15:10 -> Direction
+  16:17-16:20 -> i32
+  17:23-17:26 -> i32
+  18:22-18:25 -> i32
+  19:20-19:23 -> i32
+  19:33-19:36 -> i32
+  21:8-21:13 -> Point
+  21:8-21:13 -> string
+  21:21-21:24 -> i32
+  21:34-21:37 -> i32
+  21:51-21:54 -> i32
+  22:26-22:29 -> i32
+  22:39-22:42 -> i32
+  22:56-22:59 -> i32
+  22:64-22:67 -> i32
+  27:20-27:23 -> i32
+  27:33-27:36 -> i32
+  30:15-30:18 -> i32
+  31:16-31:19 -> i32
+  32:20-32:23 -> i32
+  33:17-33:20 -> i32
+  34:18-34:21 -> i32
+  35:22-35:25 -> i32
+  36:22-36:25 -> i32
+  37:22-37:25 -> i32
+  37:35-37:38 -> i32
+  37:52-37:55 -> i32
+  37:60-37:63 -> i32
+  41:18-41:45 -> (i32, i32, i32, i32) => i32
+  41:19-41:22 -> i32
+  41:24-41:27 -> i32
+  41:29-41:32 -> i32
+  41:34-41:37 -> i32
+  41:42-41:45 -> i32
+
+Declarations:
+  1:7-1:10 -> class Box
+  2:9-2:17 -> var variable: i32
+  3:9-3:18 -> var variable2: i32
+  4:9-4:22 -> var variableThree: i32
+  5:11-5:19 -> const constant: i32
+  6:11-6:20 -> const constant2: i32
+  7:11-7:24 -> const constantThree: i32
+  8:11-8:24 -> const CONSTANT_FOUR: i32
+  9:10-9:18 -> func function(i32, i32, i32, i32) => void
+  9:19-9:24 -> const param: i32
+  9:31-9:37 -> const param2: i32
+  9:44-9:54 -> const paramThree: i32
+  10:10-10:19 -> func function2() => void
+  11:10-11:23 -> func functionThree() => void
+  13:6-13:15 -> class Direction
+  14:5-14:12 -> const NORTH_1: Direction
+  15:5-15:10 -> const SOUTH: Direction
+  16:9-16:15 -> var value1: i32
+  17:11-17:21 -> const otherValue: i32
+  18:11-18:20 -> const MAX_VALUE: i32
+  19:10-19:13 -> func run(i32, i32) => void
+  19:14-19:18 -> const foo1: i32
+  19:25-19:31 -> const barBaz: i32
+  21:8-21:13 -> record Point(param: i32, param2: i32, paramThree: i32)
+  22:10-22:18 -> func function(i32, i32, i32, i32) => void
+  22:19-22:24 -> const param: i32
+  22:31-22:37 -> const param2: i32
+  22:44-22:54 -> const paramThree: i32
+  23:10-23:19 -> func function2() => void
+  24:10-24:23 -> func functionThree() => void
+  26:11-26:16 -> interface Shape
+  27:10-27:13 -> func run(i32, i32) => void
+  27:14-27:18 -> const foo1: i32
+  27:25-27:31 -> const barBaz: i32
+  30:5-30:13 -> var variable: i32
+  31:5-31:14 -> var variable2: i32
+  32:5-32:18 -> var variableThree: i32
+  33:7-33:15 -> const constant: i32
+  34:7-34:16 -> const constant2: i32
+  35:7-35:20 -> const constantThree: i32
+  36:7-36:20 -> const CONSTANT_FOUR: i32
+  37:6-37:14 -> func function(i32, i32, i32, i32) => void
+  37:15-37:20 -> const param: i32
+  37:27-37:33 -> const param2: i32
+  37:40-37:50 -> const paramThree: i32
+  38:6-38:15 -> func function2() => void
+  39:6-39:19 -> func functionThree() => void
+  41:7-41:16 -> const operation: (i32, i32, i32, i32) => i32
+  42:6-42:11 -> const param: i32
+  42:13-42:19 -> const param2: i32
+  42:21-42:31 -> const paramThree: i32
+
+References:
+  14:5-14:12 -> 13:6-13:15
+  14:5-14:12 -> 14:5-14:12
+  15:5-15:10 -> 13:6-13:15
+  15:5-15:10 -> 15:5-15:10
+  21:8-21:13 -> 21:8-21:13
+  21:14-21:19 -> 21:14-21:19
+  21:26-21:32 -> 21:26-21:32
+  21:39-21:49 -> 21:39-21:49
+  42:39-42:44 -> 42:6-42:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Box
+  nest member Test$Direction
+  nest member Test$Point
+  nest member Test$Shape
+  inner class Test$Box flags [PUBLIC, STATIC]
+  inner class Test$Direction flags [PUBLIC, STATIC, FINAL, ENUM]
+  inner class Test$Point flags [PUBLIC, STATIC, FINAL]
+  inner class Test$Shape flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  field variable I flags [PUBLIC, STATIC]
+  field variable2 I flags [PUBLIC, STATIC]
+  field variableThree I flags [PUBLIC, STATIC]
+  field constant I flags [PUBLIC, STATIC, FINAL] = 0
+  field constant2 I flags [PUBLIC, STATIC, FINAL] = 0
+  field constantThree I flags [PUBLIC, STATIC, FINAL] = 0
+  field CONSTANT_FOUR I flags [PUBLIC, STATIC, FINAL] = 0
+  field operation Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method function(IIII)V flags [PUBLIC, STATIC]
+    RETURN
+    max stack 0 max locals 4
+  method function2()V flags [PUBLIC, STATIC]
+    RETURN
+    max stack 0 max locals 0
+  method functionThree()V flags [PUBLIC, STATIC]
+    RETURN
+    max stack 0 max locals 0
+  method $lambda0(IIII)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ILOAD_0 0
+    IRETURN
+    max stack 1 max locals 4
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.variable I
+    LDC 0
+    PUTSTATIC Test.variable2 I
+    LDC 0
+    PUTSTATIC Test.variableThree I
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int,int,int,int)int]
+    PUTSTATIC Test.operation Ljava/lang/invoke/MethodHandle;
+    RETURN
+    max stack 1 max locals 0
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC]
+  field variable I flags [PRIVATE]
+  field variable2 I flags [PRIVATE]
+  field variableThree I flags [PRIVATE]
+  field constant I flags [PRIVATE, FINAL]
+  field constant2 I flags [PRIVATE, FINAL]
+  field constantThree I flags [PRIVATE, FINAL]
+  field CONSTANT_FOUR I flags [PRIVATE, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.variable I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.variable2 I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.variableThree I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.constant I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.constant2 I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.constantThree I
+    ALOAD_0 0
+    LDC 0
+    PUTFIELD Test$Box.CONSTANT_FOUR I
+    RETURN
+    max stack 2 max locals 1
+  method function(IIII)V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 5
+  method function2()V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 1
+  method functionThree()V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 1
+
+class Test$Direction extends java/lang/Enum version 65.0 flags [PUBLIC, FINAL, SUPER, ENUM]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Direction flags [PUBLIC, STATIC, FINAL, ENUM]
+  field NORTH_1 LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field SOUTH LTest$Direction; flags [PUBLIC, STATIC, FINAL, ENUM]
+  field value1 I flags [PRIVATE]
+  field otherValue I flags [PRIVATE, FINAL]
+  field MAX_VALUE I flags [PRIVATE, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Direction
+    DUP
+    LDC "NORTH_1"
+    LDC 0
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.NORTH_1 LTest$Direction;
+    NEW Test$Direction
+    DUP
+    LDC "SOUTH"
+    LDC 1
+    INVOKESPECIAL Test$Direction.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$Direction.SOUTH LTest$Direction;
+    RETURN
+    max stack 4 max locals 0
+  method <init>(Ljava/lang/String;I)V flags [PRIVATE]
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL java/lang/Enum.<init>(Ljava/lang/String;I)V
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$Direction.value1 I
+    ALOAD_0 0
+    LDC 2
+    PUTFIELD Test$Direction.otherValue I
+    ALOAD_0 0
+    LDC 3
+    PUTFIELD Test$Direction.MAX_VALUE I
+    RETURN
+    max stack 3 max locals 3
+  method run(II)V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 3
+  method $eldValues()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test$Direction.NORTH_1 LTest$Direction;
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    ARETURN
+    max stack 6 max locals 0
+  method values()[LTest$Direction; flags [PUBLIC, STATIC]
+    LDC 2
+    ANEWARRAY Test$Direction
+    DUP
+    LDC 0
+    GETSTATIC Test$Direction.NORTH_1 LTest$Direction;
+    AASTORE
+    DUP
+    LDC 1
+    GETSTATIC Test$Direction.SOUTH LTest$Direction;
+    AASTORE
+    ARETURN
+    max stack 4 max locals 0
+  method valueOf(Ljava/lang/String;)LTest$Direction; flags [PUBLIC, STATIC]
+    LDC ClassOrInterfaceDesc[Test$Direction]
+    ALOAD_0 0
+    INVOKESTATIC java/lang/Enum.valueOf(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+    CHECKCAST Test$Direction
+    ARETURN
+    max stack 2 max locals 1
+
+class Test$Point extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Point flags [PUBLIC, STATIC, FINAL]
+  record component param I
+  record component param2 I
+  record component paramThree I
+  field param I flags [PRIVATE, FINAL]
+  field param2 I flags [PRIVATE, FINAL]
+  field paramThree I flags [PRIVATE, FINAL]
+  method param()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Point.param I
+    IRETURN
+    max stack 1 max locals 1
+  method param2()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Point.param2 I
+    IRETURN
+    max stack 1 max locals 1
+  method paramThree()I flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Point.paramThree I
+    IRETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Point("
+    ALOAD_1 1
+    LDC 6
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(III)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$Point.param I
+    ALOAD_0 0
+    ILOAD_2 2
+    PUTFIELD Test$Point.param2 I
+    ALOAD_0 0
+    ILOAD_3 3
+    PUTFIELD Test$Point.paramThree I
+    RETURN
+    max stack 2 max locals 4
+  method copy(III)LTest$Point; flags [PUBLIC]
+    NEW Test$Point
+    DUP
+    ILOAD_1 1
+    ILOAD_2 2
+    ILOAD_3 3
+    INVOKESPECIAL Test$Point.<init>(III)V
+    ARETURN
+    max stack 5 max locals 4
+  method copy(IIII)LTest$Point; flags [PUBLIC, SYNTHETIC]
+    ILOAD 4
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Point.param()I
+    ISTORE_1 1
+   L0:
+    ILOAD 4
+    LDC 2
+    IAND
+    IFEQ L1
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Point.param2()I
+    ISTORE_2 2
+   L1:
+    ILOAD 4
+    LDC 4
+    IAND
+    IFEQ L2
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Point.paramThree()I
+    ISTORE_3 3
+   L2:
+    ALOAD_0 0
+    ILOAD_1 1
+    ILOAD_2 2
+    ILOAD_3 3
+    INVOKEVIRTUAL Test$Point.copy(III)LTest$Point;
+    ARETURN
+    max stack 4 max locals 5
+  method function(IIII)V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 5
+  method function2()V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 1
+  method functionThree()V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 1
+
+class Test$Shape extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Shape flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method run(II)V flags [PUBLIC, ABSTRACT]
+
+--- OUTPUT ---
+

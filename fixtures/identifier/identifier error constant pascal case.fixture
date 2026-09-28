@@ -1,0 +1,13 @@
+const FooBar = 0;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "FooBar" (1:7-1:13)
+EQUAL (1:14-1:15)
+INTEGER_LITERAL "0" (1:16-1:17)
+SEMICOLON (1:17-1:18)
+
+--- AST ---
+
+ParserException: Invalid constant name: 'FooBar' at 1:7-1:13

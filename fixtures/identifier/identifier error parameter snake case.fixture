@@ -1,0 +1,17 @@
+func foo(bar_baz: i32) {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "bar_baz" (1:10-1:17)
+COLON (1:17-1:18)
+IDENTIFIER "i32" (1:19-1:22)
+RIGHT_PAREN (1:22-1:23)
+LEFT_BRACE (1:24-1:25)
+RIGHT_BRACE (1:25-1:26)
+
+--- AST ---
+
+ParserException: Invalid parameter name: 'bar_baz' at 1:10-1:17

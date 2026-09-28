@@ -1,0 +1,13 @@
+var Foo = 0;
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "Foo" (1:5-1:8)
+EQUAL (1:9-1:10)
+INTEGER_LITERAL "0" (1:11-1:12)
+SEMICOLON (1:12-1:13)
+
+--- AST ---
+
+ParserException: Invalid variable name: 'Foo' at 1:5-1:8

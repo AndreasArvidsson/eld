@@ -1,0 +1,5 @@
+class 1Foo {}
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:7-1:11

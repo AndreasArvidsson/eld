@@ -4,6 +4,10 @@ import com.github.andreasarvidsson.eld.Range;
 
 public record LambdaParameter(IdentifierDeclaration name) implements AstNode {
 
+    public boolean discarded() {
+        return name.name().equals("_");
+    }
+
     @Override
     public Range range() {
         return name.range();

@@ -1,0 +1,15 @@
+(FooBar) => {};
+
+--- TOKENS ---
+
+LEFT_PAREN (1:1-1:2)
+IDENTIFIER "FooBar" (1:2-1:8)
+RIGHT_PAREN (1:8-1:9)
+ARROW (1:10-1:12)
+LEFT_BRACE (1:13-1:14)
+RIGHT_BRACE (1:14-1:15)
+SEMICOLON (1:15-1:16)
+
+--- AST ---
+
+ParserException: Invalid parameter name: 'FooBar' at 1:2-1:8

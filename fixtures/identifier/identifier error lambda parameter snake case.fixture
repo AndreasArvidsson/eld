@@ -1,0 +1,15 @@
+(foo_bar) => {};
+
+--- TOKENS ---
+
+LEFT_PAREN (1:1-1:2)
+IDENTIFIER "foo_bar" (1:2-1:9)
+RIGHT_PAREN (1:9-1:10)
+ARROW (1:11-1:13)
+LEFT_BRACE (1:14-1:15)
+RIGHT_BRACE (1:15-1:16)
+SEMICOLON (1:16-1:17)
+
+--- AST ---
+
+ParserException: Invalid parameter name: 'foo_bar' at 1:2-1:9

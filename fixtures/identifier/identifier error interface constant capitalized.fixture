@@ -1,0 +1,19 @@
+interface Foo {
+    const Bar: i32;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Foo" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+CONST (2:5-2:10)
+IDENTIFIER "Bar" (2:11-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "i32" (2:16-2:19)
+SEMICOLON (2:19-2:20)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Invalid constant name: 'Bar' at 2:11-2:14

@@ -1,0 +1,12 @@
+interface _ {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "_" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+RIGHT_BRACE (1:14-1:15)
+
+--- AST ---
+
+ParserException: Invalid interface name: '_' at 1:11-1:12

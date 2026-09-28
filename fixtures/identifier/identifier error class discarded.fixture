@@ -1,0 +1,12 @@
+class _ {}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "_" (1:7-1:8)
+LEFT_BRACE (1:9-1:10)
+RIGHT_BRACE (1:10-1:11)
+
+--- AST ---
+
+ParserException: Invalid class name: '_' at 1:7-1:8

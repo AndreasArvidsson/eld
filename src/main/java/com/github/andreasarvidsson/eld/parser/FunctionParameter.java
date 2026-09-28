@@ -16,6 +16,10 @@ public record FunctionParameter(
         return optional || defaultValue != null;
     }
 
+    public boolean discarded() {
+        return name.name().equals("_");
+    }
+
     @Override
     public Range range() {
         return name.range()

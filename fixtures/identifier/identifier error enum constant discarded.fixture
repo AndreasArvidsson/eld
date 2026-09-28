@@ -1,0 +1,13 @@
+enum Value { _ }
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Value" (1:6-1:11)
+LEFT_BRACE (1:12-1:13)
+IDENTIFIER "_" (1:14-1:15)
+RIGHT_BRACE (1:16-1:17)
+
+--- AST ---
+
+ParserException: Invalid enum constant name: '_' at 1:14-1:15

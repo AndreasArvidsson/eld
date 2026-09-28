@@ -1,0 +1,20 @@
+class Foo {
+    func Bar() {}
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+FUNC (2:5-2:9)
+IDENTIFIER "Bar" (2:10-2:13)
+LEFT_PAREN (2:13-2:14)
+RIGHT_PAREN (2:14-2:15)
+LEFT_BRACE (2:16-2:17)
+RIGHT_BRACE (2:17-2:18)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Invalid function name: 'Bar' at 2:10-2:13

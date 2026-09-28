@@ -1,0 +1,12 @@
+interface FOO_BAR {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "FOO_BAR" (1:11-1:18)
+LEFT_BRACE (1:19-1:20)
+RIGHT_BRACE (1:20-1:21)
+
+--- AST ---
+
+ParserException: Invalid interface name: 'FOO_BAR' at 1:11-1:18

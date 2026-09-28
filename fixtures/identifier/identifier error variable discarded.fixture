@@ -1,0 +1,13 @@
+var _ = 0;
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "_" (1:5-1:6)
+EQUAL (1:7-1:8)
+INTEGER_LITERAL "0" (1:9-1:10)
+SEMICOLON (1:10-1:11)
+
+--- AST ---
+
+ParserException: Invalid variable name: '_' at 1:5-1:6

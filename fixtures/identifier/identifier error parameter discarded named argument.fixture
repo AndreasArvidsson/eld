@@ -1,0 +1,25 @@
+func foo(_: i32) {}
+foo(_: 1);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "_" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+RIGHT_PAREN (1:16-1:17)
+LEFT_BRACE (1:18-1:19)
+RIGHT_BRACE (1:19-1:20)
+IDENTIFIER "foo" (2:1-2:4)
+LEFT_PAREN (2:4-2:5)
+IDENTIFIER "_" (2:5-2:6)
+COLON (2:6-2:7)
+INTEGER_LITERAL "1" (2:8-2:9)
+RIGHT_PAREN (2:9-2:10)
+SEMICOLON (2:10-2:11)
+
+--- AST ---
+
+ParserException: A discard parameter cannot be named at 2:5-2:6

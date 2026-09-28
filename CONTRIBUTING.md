@@ -185,13 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- assert identifier case
-  Classes/records/interfaces/enums: `[A-Z][A-Za-z0-9]*`
-  functions: `[a-z][A-Za-z0-9]*`
-  variables/parameters: `[a-z][A-Za-z0-9]*` or discard `_`
-  constants: `[a-z][A-Za-z0-9]*` or `[A-Z][A-Z0-9_]*` or discard `_`
-  enum constants: `[A-Z][A-Z0-9_]*`
-  make one fixture file with all the approved versions and then one file for each failure.
 - Support abstract classes with abstract methods
 - Sealed classes/interfaces
   - class Animal {} // extensible

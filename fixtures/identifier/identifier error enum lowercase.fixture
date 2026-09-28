@@ -1,0 +1,12 @@
+enum foo {}
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_BRACE (1:10-1:11)
+RIGHT_BRACE (1:11-1:12)
+
+--- AST ---
+
+ParserException: Invalid enum name: 'foo' at 1:6-1:9

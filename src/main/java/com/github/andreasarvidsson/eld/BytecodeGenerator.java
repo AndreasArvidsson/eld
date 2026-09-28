@@ -624,9 +624,11 @@ public final class BytecodeGenerator {
             final IdentityHashMap<Symbol, String> globals =
                 new IdentityHashMap<>();
             for (final BlockItem item : program.items()) {
-                if (item instanceof VariableDeclaration variable) {
-                    final Symbol symbol =
-                        semanticModel.getSymbol(variable.name());
+                if (
+                    item instanceof VariableDeclaration variable && variable
+                        .name() instanceof IdentifierDeclaration binding
+                ) {
+                    final Symbol symbol = semanticModel.getSymbol(binding);
                     globals.put(symbol, symbol.name());
                 }
                 else if (item instanceof DestructuringDeclaration pattern) {
@@ -1365,6 +1367,15 @@ public final class BytecodeGenerator {
                 .toList();
     }
 
+    private int parameterLocal(
+        final MethodGenerator generator,
+        final FunctionParameter parameter
+    ) {
+        return parameter.discarded()
+            ? generator.reserve(semanticModel.getResolvedType(parameter.type()))
+            : generator.local(semanticModel.getSymbol(parameter.name()));
+    }
+
     private boolean erasedMethodCollision(
         final FunctionSymbol first,
         final FunctionSymbol second
@@ -1539,9 +1550,11 @@ public final class BytecodeGenerator {
             final IdentityHashMap<Symbol, String> globals =
                 new IdentityHashMap<>();
             for (final BlockItem item : program.items()) {
-                if (item instanceof VariableDeclaration variable) {
-                    final Symbol symbol =
-                        semanticModel.getSymbol(variable.name());
+                if (
+                    item instanceof VariableDeclaration variable && variable
+                        .name() instanceof IdentifierDeclaration binding
+                ) {
+                    final Symbol symbol = semanticModel.getSymbol(binding);
                     globals.put(symbol, symbol.name());
                 }
                 else if (item instanceof DestructuringDeclaration pattern) {
@@ -1555,7 +1568,8 @@ public final class BytecodeGenerator {
                 final Declaration member = memberDeclaration.declaration();
                 if (member instanceof VariableDeclaration variable) {
                     final Symbol symbol =
-                        semanticModel.getSymbol(variable.name());
+                        semanticModel
+                            .getSymbol((IdentifierDeclaration) variable.name());
                     if (!memberDeclaration.staticMember()) {
                         members.put(symbol, symbol.name());
                     }
@@ -1572,7 +1586,8 @@ public final class BytecodeGenerator {
                                     : 0)
                                 | (enumClass && semanticModel.isEnumConstant(
                                     classType,
-                                    variable.name().name()
+                                    ((IdentifierDeclaration) variable.name())
+                                        .name()
                                 ) ? ACC_ENUM : 0),
                         symbol.name(),
                         descriptor(symbol.type()),
@@ -1720,9 +1735,7 @@ public final class BytecodeGenerator {
                     if (declarationConstructor != null) {
                         for (final FunctionParameter parameter : declarationConstructor
                             .parameters()) {
-                            initializer.local(
-                                semanticModel.getSymbol(parameter.name())
-                            );
+                            parameterLocal(initializer, parameter);
                         }
                     }
                     initializer.constructorSuperclass = superclass;
@@ -2294,7 +2307,7 @@ public final class BytecodeGenerator {
 
                 for (final FunctionParameter parameter : function
                     .parameters()) {
-                    generator.local(semanticModel.getSymbol(parameter.name()));
+                    parameterLocal(generator, parameter);
                 }
                 generator.finish(generator.block(function.body()));
             }
@@ -2362,7 +2375,7 @@ public final class BytecodeGenerator {
                     new MethodGenerator(method, globals, resultType, instance);
                 for (final FunctionParameter parameter : function
                     .parameters()) {
-                    generator.local(semanticModel.getSymbol(parameter.name()));
+                    parameterLocal(generator, parameter);
                 }
                 generator.finish(generator.block(function.body()));
             }
@@ -2487,6 +2500,9 @@ public final class BytecodeGenerator {
         final IdentityHashMap<Symbol, String> fields = new IdentityHashMap<>();
         int fieldIndex = 0;
         for (final FunctionParameter parameter : function.parameters()) {
+            if (parameter.discarded()) {
+                continue;
+            }
             final Symbol parameterSymbol =
                 semanticModel.getSymbol(parameter.name());
             fields.put(parameterSymbol, "$local" + fieldIndex++);
@@ -2515,8 +2531,11 @@ public final class BytecodeGenerator {
             }
             final Symbol local;
             final Position definition;
-            if (node instanceof VariableDeclaration variable) {
-                local = semanticModel.getSymbol(variable.name());
+            if (
+                node instanceof VariableDeclaration variable
+                    && variable.name() instanceof IdentifierDeclaration name
+            ) {
+                local = semanticModel.getSymbol(name);
                 definition = variable.initializer().range().end();
             }
             else if (node instanceof CatchClause clause) {
@@ -2626,6 +2645,13 @@ public final class BytecodeGenerator {
                 }
                 for (final FunctionParameter parameter : function
                     .parameters()) {
+                    if (parameter.discarded()) {
+                        parameterSlot +=
+                            slots(
+                                semanticModel.getResolvedType(parameter.type())
+                            );
+                        continue;
+                    }
                     final Symbol parameterSymbol =
                         semanticModel.getSymbol(parameter.name());
                     method.aload(frameSlot);
@@ -2994,8 +3020,9 @@ public final class BytecodeGenerator {
                     );
                 generator.beforeBaseInitialization = name.equals("<init>");
 
+                final List<Integer> parameterSlots = new ArrayList<>();
                 for (final FunctionParameter parameter : parameters) {
-                    generator.local(semanticModel.getSymbol(parameter.name()));
+                    parameterSlots.add(parameterLocal(generator, parameter));
                 }
                 final boolean longMask = longOmissionMask(type);
                 final int mask = generator.nextLocal;
@@ -3028,9 +3055,7 @@ public final class BytecodeGenerator {
                     method.with(
                         localInstruction(
                             storeOpcode(type.parameterTypes().get(i)),
-                            generator.local(
-                                semanticModel.getSymbol(parameter.name())
-                            )
+                            parameterSlots.get(i)
                         )
                     );
                     method.labelBinding(supplied);
@@ -3038,13 +3063,12 @@ public final class BytecodeGenerator {
                 if (instance != null) {
                     method.aload(0);
                 }
-                for (final FunctionParameter parameter : parameters) {
-                    final Symbol symbol =
-                        semanticModel.getSymbol(parameter.name());
+                for (int i = 0; i < parameters.size(); i++) {
+                    final Type parameterType = type.parameterTypes().get(i);
                     method.with(
                         localInstruction(
-                            loadOpcode(symbol.type()),
-                            generator.local(symbol)
+                            loadOpcode(parameterType),
+                            parameterSlots.get(i)
                         )
                     );
                 }
@@ -3094,9 +3118,11 @@ public final class BytecodeGenerator {
             final List<BlockItem> initializers = new ArrayList<>();
             for (final BlockItem item : program.items()
                 .subList(0, previousItems)) {
-                if (item instanceof VariableDeclaration variable) {
-                    final Symbol symbol =
-                        semanticModel.getSymbol(variable.name());
+                if (
+                    item instanceof VariableDeclaration variable
+                        && variable.name() instanceof IdentifierDeclaration name
+                ) {
+                    final Symbol symbol = semanticModel.getSymbol(name);
                     globals.put(symbol, symbol.name());
                 }
                 else if (item instanceof DestructuringDeclaration pattern) {
@@ -3105,9 +3131,11 @@ public final class BytecodeGenerator {
             }
             for (final BlockItem item : program.items()
                 .subList(previousItems, program.items().size())) {
-                if (item instanceof VariableDeclaration variable) {
-                    final Symbol symbol =
-                        semanticModel.getSymbol(variable.name());
+                if (
+                    item instanceof VariableDeclaration variable
+                        && variable.name() instanceof IdentifierDeclaration name
+                ) {
+                    final Symbol symbol = semanticModel.getSymbol(name);
                     final Expression initializer = variable.initializer();
                     final Object constantValue =
                         variable.mutability() == Mutability.CONST
@@ -3129,6 +3157,12 @@ public final class BytecodeGenerator {
                         fieldSignature(symbol.type()),
                         constantValue
                     );
+                }
+                else if (
+                    item instanceof VariableDeclaration variable
+                        && variable.name() instanceof DiscardDeclaration
+                ) {
+                    initializers.add(item);
                 }
                 else if (item instanceof DestructuringDeclaration pattern) {
                     initializers.add(item);
@@ -4752,8 +4786,13 @@ public final class BytecodeGenerator {
                 case SuperConstructorCall call ->
                     initializeBase(call.arguments());
                 case VariableDeclaration variable -> {
+                    if (variable.name() instanceof DiscardDeclaration) {
+                        discard(variable.initializer());
+                        break;
+                    }
                     final Symbol symbol =
-                        semanticModel.getSymbol(variable.name());
+                        semanticModel
+                            .getSymbol((IdentifierDeclaration) variable.name());
                     if (cell(symbol)) {
                         method.iconst_1();
                         if (reference(symbol.type())) {
@@ -9516,11 +9555,21 @@ public final class BytecodeGenerator {
                             generator.captureFields.putAll(fields);
                             generator.lexicalReceiverOwner = receiverOwner;
 
-                            for (final LambdaParameter parameter : lambda
-                                .parameters()) {
-                                generator.local(
-                                    semanticModel.getSymbol(parameter.name())
-                                );
+                            for (int i = 0; i < lambda.parameters()
+                                .size(); i++) {
+                                final LambdaParameter parameter =
+                                    lambda.parameters().get(i);
+                                if (parameter.discarded()) {
+                                    generator.reserve(
+                                        signature.parameterTypes().get(i)
+                                    );
+                                }
+                                else {
+                                    generator.local(
+                                        semanticModel
+                                            .getSymbol(parameter.name())
+                                    );
+                                }
                             }
                             if (
                                 lambda.body() instanceof Expression expression
@@ -9620,10 +9669,17 @@ public final class BytecodeGenerator {
                     for (final Symbol capture : captures) {
                         generator.local(capture);
                     }
-                    for (final LambdaParameter parameter : lambda
-                        .parameters()) {
-                        generator
-                            .local(semanticModel.getSymbol(parameter.name()));
+                    for (int i = 0; i < lambda.parameters().size(); i++) {
+                        final LambdaParameter parameter =
+                            lambda.parameters().get(i);
+                        if (parameter.discarded()) {
+                            generator.reserve(type.parameterTypes().get(i));
+                        }
+                        else {
+                            generator.local(
+                                semanticModel.getSymbol(parameter.name())
+                            );
+                        }
                     }
                     if (lambda.body() instanceof Expression expression) {
                         generator.expression(expression);

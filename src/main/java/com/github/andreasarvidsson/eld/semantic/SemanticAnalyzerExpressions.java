@@ -1461,7 +1461,11 @@ public final class SemanticAnalyzerExpressions {
         final List<Type> parameterTypes =
             target != null ? target.parameterTypes() : List.of();
         for (int i = 0; i < lambda.parameters().size(); i++) {
-            final var name = lambda.parameters().get(i).name();
+            final var parameterNode = lambda.parameters().get(i);
+            if (parameterNode.discarded()) {
+                continue;
+            }
+            final var name = parameterNode.name();
             final VariableSymbol parameter =
                 new VariableSymbol(
                     name,

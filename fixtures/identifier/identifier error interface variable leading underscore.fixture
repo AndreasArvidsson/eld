@@ -1,0 +1,19 @@
+interface Foo {
+    var _bar: i32;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Foo" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+VAR (2:5-2:8)
+IDENTIFIER "_bar" (2:9-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "i32" (2:15-2:18)
+SEMICOLON (2:18-2:19)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Invalid variable name: '_bar' at 2:9-2:13

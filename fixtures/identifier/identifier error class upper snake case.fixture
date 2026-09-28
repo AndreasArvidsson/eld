@@ -1,0 +1,12 @@
+class FOO_BAR {}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "FOO_BAR" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+RIGHT_BRACE (1:16-1:17)
+
+--- AST ---
+
+ParserException: Invalid class name: 'FOO_BAR' at 1:7-1:14

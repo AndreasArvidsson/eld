@@ -1,0 +1,22 @@
+enum Foo {
+    A;
+    var _ = 0;
+}
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Foo" (1:6-1:9)
+LEFT_BRACE (1:10-1:11)
+IDENTIFIER "A" (2:5-2:6)
+SEMICOLON (2:6-2:7)
+VAR (3:5-3:8)
+IDENTIFIER "_" (3:9-3:10)
+EQUAL (3:11-3:12)
+INTEGER_LITERAL "0" (3:13-3:14)
+SEMICOLON (3:14-3:15)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+ParserException: Invalid variable name: '_' at 3:9-3:10

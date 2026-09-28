@@ -13,6 +13,7 @@ import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.BreakStatement;
 import com.github.andreasarvidsson.eld.parser.ContinueStatement;
 import com.github.andreasarvidsson.eld.parser.DoWhileStatement;
+import com.github.andreasarvidsson.eld.parser.DiscardDeclaration;
 import com.github.andreasarvidsson.eld.parser.ElseIfBranch;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.ExpressionStatement;
@@ -923,6 +924,10 @@ public final class SemanticAnalyzerStatements {
     ) {
         final TypeNode typeNode = declaration.type();
         final Expression initializer = declaration.initializer();
+        if (declaration.name() instanceof DiscardDeclaration) {
+            analyzer.analyzeExpression(initializer, context);
+            return;
+        }
         final Type declaredType =
             typeNode != null ? analyzer.resolveType(typeNode, context) : null;
         Type initializerType =
@@ -955,7 +960,7 @@ public final class SemanticAnalyzerStatements {
 
         final VariableSymbol symbol =
             new VariableSymbol(
-                declaration.name(),
+                (IdentifierDeclaration) declaration.name(),
                 declaredType != null
                     ? declaredType
                     : Objects.requireNonNull(initializerType),
@@ -963,7 +968,7 @@ public final class SemanticAnalyzerStatements {
             );
 
         destination.declare(symbol);
-        model.setSymbol(declaration.name(), symbol);
+        model.setSymbol((IdentifierDeclaration) declaration.name(), symbol);
         model.setVariableOwner(symbol, context.function());
         if (
             context.function() == null && analyzer.currentConstructor() != null
@@ -1009,11 +1014,17 @@ public final class SemanticAnalyzerStatements {
         for (final FunctionParameter param : declaration.parameters()) {
             final TypeNode typeNode = param.type();
             final Type paramType = resolveParameterType(param, context);
-            final VariableSymbol paramSymbol =
-                new VariableSymbol(param.name(), paramType, Mutability.CONST);
             model.setResolvedType(typeNode, paramType);
-            model.setSymbol(param.name(), paramSymbol);
-            functionScope.declare(paramSymbol);
+            if (!param.discarded()) {
+                final VariableSymbol paramSymbol =
+                    new VariableSymbol(
+                        param.name(),
+                        paramType,
+                        Mutability.CONST
+                    );
+                model.setSymbol(param.name(), paramSymbol);
+                functionScope.declare(paramSymbol);
+            }
             parameterTypes.add(paramType);
         }
 
@@ -1078,10 +1089,12 @@ public final class SemanticAnalyzerStatements {
         model.setSymbol(declaration.name(), symbol);
         model.setFunctionDeclaration(symbol, declaration);
         for (final FunctionParameter parameter : declaration.parameters()) {
-            model.setVariableOwner(
-                (VariableSymbol) model.getSymbol(parameter.name()),
-                symbol
-            );
+            if (!parameter.discarded()) {
+                model.setVariableOwner(
+                    (VariableSymbol) model.getSymbol(parameter.name()),
+                    symbol
+                );
+            }
         }
         if (declaration.async()) {
             model.setAsyncResultType(symbol, returnType);
@@ -1109,7 +1122,9 @@ public final class SemanticAnalyzerStatements {
                 parameter,
                 new SemanticContext(functionScope, symbol, 0)
             );
-            functionScope.declare(model.getSymbol(parameter.name()));
+            if (!parameter.discarded()) {
+                functionScope.declare(model.getSymbol(parameter.name()));
+            }
         }
         final SemanticContext functionContext =
             new SemanticContext(functionScope, symbol, 0);
@@ -1159,7 +1174,7 @@ public final class SemanticAnalyzerStatements {
                 "Await is not allowed in a parameter default value"
             );
         }
-        final Type expected = model.getSymbol(parameter.name()).type();
+        final Type expected = model.getResolvedType(parameter.type());
         final boolean previous = analyzer.isAnalyzingConstructorDefault();
         final Type actual;
         analyzer.setAnalyzingConstructorDefault(

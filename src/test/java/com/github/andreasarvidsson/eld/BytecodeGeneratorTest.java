@@ -2160,7 +2160,7 @@ class BytecodeGeneratorTest {
     void newRejectsUndefinedNamesNonClassesAndConstructorArguments() {
         for (final String source : List.of(
             "const value = new Missing();",
-            "const Foo = 1; const value = new Foo();",
+            "const foo = 1; const value = new foo();",
             "class Foo { public constructor() {} } const value = new Foo(1);",
             "class Foo { public constructor() {} } const value = new Foo(value: 1);"
         )) {

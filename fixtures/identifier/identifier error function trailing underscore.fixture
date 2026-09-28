@@ -1,0 +1,14 @@
+func foo_() {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo_" (1:6-1:10)
+LEFT_PAREN (1:10-1:11)
+RIGHT_PAREN (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+RIGHT_BRACE (1:14-1:15)
+
+--- AST ---
+
+ParserException: Invalid function name: 'foo_' at 1:6-1:10

@@ -219,10 +219,16 @@ public final class SemanticAnalyzerDeclarations {
                 final Type type =
                     analyzer.resolveParameterType(parameter, context);
                 parameterTypes.add(type);
-                model.setSymbol(
-                    parameter.name(),
-                    new VariableSymbol(parameter.name(), type, Mutability.CONST)
-                );
+                if (!parameter.discarded()) {
+                    model.setSymbol(
+                        parameter.name(),
+                        new VariableSymbol(
+                            parameter.name(),
+                            type,
+                            Mutability.CONST
+                        )
+                    );
+                }
             }
         }
         final FunctionType constructorType =
@@ -273,14 +279,16 @@ public final class SemanticAnalyzerDeclarations {
                     .analyzeVariableDeclaration(field, fieldContext, members);
                 setClassMemberMetadata(
                     memberDeclaration,
-                    field.name(),
+                    (IdentifierDeclaration) field.name(),
                     classType
                 );
                 if (
                     model.isEnumClass(classType)
                         && memberDeclaration.staticMember()
                 ) {
-                    enumFieldScope.declare(model.getSymbol(field.name()));
+                    enumFieldScope.declare(
+                        model.getSymbol((IdentifierDeclaration) field.name())
+                    );
                 }
             }
             else if (member instanceof UninitializedVariableDeclaration field) {
@@ -306,7 +314,8 @@ public final class SemanticAnalyzerDeclarations {
             .members()) {
             final Declaration member = memberDeclaration.declaration();
             final IdentifierDeclaration name = switch (member) {
-                case VariableDeclaration field -> field.name();
+                case VariableDeclaration field ->
+                    (IdentifierDeclaration) field.name();
                 case UninitializedVariableDeclaration field -> field.name();
                 case FunctionDeclaration method -> method.name();
                 default -> null;
@@ -379,7 +388,9 @@ public final class SemanticAnalyzerDeclarations {
                         parameter,
                         new SemanticContext(scope, null, 0)
                     );
-                    scope.declare(model.getSymbol(parameter.name()));
+                    if (!parameter.discarded()) {
+                        scope.declare(model.getSymbol(parameter.name()));
+                    }
                 }
                 analyzer.analyzeBlockStatement(
                     constructor.body(),
@@ -502,18 +513,20 @@ public final class SemanticAnalyzerDeclarations {
                     final Type parameterType =
                         analyzer.resolveParameterType(parameter, context);
                     parameters.add(parameterType);
-                    final VariableSymbol value =
-                        new VariableSymbol(
-                            parameter.name(),
-                            parameterType,
-                            Mutability.CONST
-                        );
-                    model.setSymbol(parameter.name(), value);
                     analyzer.analyzeParameterDefault(
                         parameter,
                         new SemanticContext(scope, null, 0)
                     );
-                    scope.declare(value);
+                    if (!parameter.discarded()) {
+                        final VariableSymbol value =
+                            new VariableSymbol(
+                                parameter.name(),
+                                parameterType,
+                                Mutability.CONST
+                            );
+                        model.setSymbol(parameter.name(), value);
+                        scope.declare(value);
+                    }
                 }
                 final FunctionSymbol value =
                     new FunctionSymbol(

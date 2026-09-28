@@ -1,0 +1,5 @@
+func foo(1bar: i32) {}
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:10-1:14

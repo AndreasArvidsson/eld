@@ -1,0 +1,12 @@
+enum _ {}
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "_" (1:6-1:7)
+LEFT_BRACE (1:8-1:9)
+RIGHT_BRACE (1:9-1:10)
+
+--- AST ---
+
+ParserException: Invalid enum name: '_' at 1:6-1:7

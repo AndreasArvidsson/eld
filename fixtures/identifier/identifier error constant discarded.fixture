@@ -1,0 +1,13 @@
+const _ = 0;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "_" (1:7-1:8)
+EQUAL (1:9-1:10)
+INTEGER_LITERAL "0" (1:11-1:12)
+SEMICOLON (1:12-1:13)
+
+--- AST ---
+
+ParserException: Invalid constant name: '_' at 1:7-1:8

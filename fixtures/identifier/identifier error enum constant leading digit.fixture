@@ -1,0 +1,5 @@
+enum Value { 1FOO }
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:14-1:18

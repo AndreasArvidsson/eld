@@ -59,6 +59,12 @@ public class ParserExpressions extends ParserBase {
             do {
                 if (check(TokenType.IDENTIFIER) && check(1, TokenType.COLON)) {
                     final Token name = advance();
+                    if (name.text().equals("_")) {
+                        throw new ParserException(
+                            name.range(),
+                            "A discard parameter cannot be named"
+                        );
+                    }
                     advance();
                     final Expression value = parseExpression();
                     arguments.add(
@@ -557,6 +563,7 @@ public class ParserExpressions extends ParserBase {
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
                 final Token name = expect(TokenType.IDENTIFIER);
+                Parser.assertIdentifierCase(name, "parameter");
                 final IdentifierDeclaration id =
                     new IdentifierDeclaration(name.text(), name.range());
                 parameters.add(new LambdaParameter(id));

@@ -1,0 +1,30 @@
+record Foo(bar: i32);
+const { bar as Baz } = new Foo(1);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "bar" (1:12-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+RIGHT_PAREN (1:20-1:21)
+SEMICOLON (1:21-1:22)
+CONST (2:1-2:6)
+LEFT_BRACE (2:7-2:8)
+IDENTIFIER "bar" (2:9-2:12)
+AS (2:13-2:15)
+IDENTIFIER "Baz" (2:16-2:19)
+RIGHT_BRACE (2:20-2:21)
+EQUAL (2:22-2:23)
+NEW (2:24-2:27)
+IDENTIFIER "Foo" (2:28-2:31)
+LEFT_PAREN (2:31-2:32)
+INTEGER_LITERAL "1" (2:32-2:33)
+RIGHT_PAREN (2:33-2:34)
+SEMICOLON (2:34-2:35)
+
+--- AST ---
+
+ParserException: Invalid constant name: 'Baz' at 2:16-2:19

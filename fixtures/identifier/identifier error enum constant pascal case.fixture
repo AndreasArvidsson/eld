@@ -1,0 +1,13 @@
+enum Value { FooBar }
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Value" (1:6-1:11)
+LEFT_BRACE (1:12-1:13)
+IDENTIFIER "FooBar" (1:14-1:20)
+RIGHT_BRACE (1:21-1:22)
+
+--- AST ---
+
+ParserException: Invalid enum constant name: 'FooBar' at 1:14-1:20

@@ -1,0 +1,5 @@
+interface 1Foo {}
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:11-1:15

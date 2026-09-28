@@ -1,0 +1,13 @@
+record _();
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "_" (1:8-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+SEMICOLON (1:11-1:12)
+
+--- AST ---
+
+ParserException: Invalid record name: '_' at 1:8-1:9

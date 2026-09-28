@@ -1,0 +1,22 @@
+enum Foo {
+    A;
+    const _ = 0;
+}
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "Foo" (1:6-1:9)
+LEFT_BRACE (1:10-1:11)
+IDENTIFIER "A" (2:5-2:6)
+SEMICOLON (2:6-2:7)
+CONST (3:5-3:10)
+IDENTIFIER "_" (3:11-3:12)
+EQUAL (3:13-3:14)
+INTEGER_LITERAL "0" (3:15-3:16)
+SEMICOLON (3:16-3:17)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+ParserException: Invalid constant name: '_' at 3:11-3:12

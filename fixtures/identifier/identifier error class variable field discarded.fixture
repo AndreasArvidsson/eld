@@ -1,0 +1,19 @@
+class Foo {
+    var _ = 0;
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+VAR (2:5-2:8)
+IDENTIFIER "_" (2:9-2:10)
+EQUAL (2:11-2:12)
+INTEGER_LITERAL "0" (2:13-2:14)
+SEMICOLON (2:14-2:15)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Invalid variable name: '_' at 2:9-2:10

@@ -1,0 +1,19 @@
+interface Foo {
+    func Bar();
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Foo" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+FUNC (2:5-2:9)
+IDENTIFIER "Bar" (2:10-2:13)
+LEFT_PAREN (2:13-2:14)
+RIGHT_PAREN (2:14-2:15)
+SEMICOLON (2:15-2:16)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+ParserException: Invalid function name: 'Bar' at 2:10-2:13

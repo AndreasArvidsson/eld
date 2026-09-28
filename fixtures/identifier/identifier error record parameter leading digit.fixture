@@ -1,0 +1,5 @@
+record Foo(1bar: i32);
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:12-1:16

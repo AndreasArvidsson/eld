@@ -1,0 +1,5 @@
+func 1foo() {}
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 1:6-1:10

@@ -1,0 +1,14 @@
+func _() {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "_" (1:6-1:7)
+LEFT_PAREN (1:7-1:8)
+RIGHT_PAREN (1:8-1:9)
+LEFT_BRACE (1:10-1:11)
+RIGHT_BRACE (1:11-1:12)
+
+--- AST ---
+
+ParserException: Invalid function name: '_' at 1:6-1:7

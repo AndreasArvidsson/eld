@@ -63,7 +63,8 @@ final class FieldInitializationAnalyzer {
             }
             final Declaration member = memberDeclaration.declaration();
             if (!staticFields && member instanceof VariableDeclaration field) {
-                final Symbol symbol = model.getSymbol(field.name());
+                final Symbol symbol =
+                    model.getSymbol((IdentifierDeclaration) field.name());
                 fields.add(symbol);
                 defaults.add(symbol);
             }

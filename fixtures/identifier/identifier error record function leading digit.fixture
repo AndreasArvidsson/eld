@@ -1,0 +1,7 @@
+record Foo() {
+    func 1bar() {}
+}
+
+--- TOKENS ---
+
+LexerException: Invalid numeric literal at 2:10-2:14

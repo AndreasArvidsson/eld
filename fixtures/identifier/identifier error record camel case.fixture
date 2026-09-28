@@ -1,0 +1,13 @@
+record fooBar();
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "fooBar" (1:8-1:14)
+LEFT_PAREN (1:14-1:15)
+RIGHT_PAREN (1:15-1:16)
+SEMICOLON (1:16-1:17)
+
+--- AST ---
+
+ParserException: Invalid record name: 'fooBar' at 1:8-1:14
