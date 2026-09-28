@@ -1,0 +1,705 @@
+interface Overloaded {
+    func f(values: List<i32>) string;
+    func f(values: List<string>) string;
+}
+interface Single {
+    func f(values: List<i32>) string;
+}
+class Both implements Overloaded, Single {
+    public func f(values: List<i32>) string { return "integers"; }
+    public func f(values: List<string>) string { return "strings"; }
+}
+const overloaded: Overloaded = new Both();
+const single: Single = new Both();
+print(overloaded.f(new ArrayList<i32>()));
+print(overloaded.f(new ArrayList<string>()));
+print(single.f(new ArrayList<i32>()));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Overloaded" (1:11-1:21)
+LEFT_BRACE (1:22-1:23)
+FUNC (2:5-2:9)
+IDENTIFIER "f" (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "values" (2:12-2:18)
+COLON (2:18-2:19)
+IDENTIFIER "List" (2:20-2:24)
+LESS (2:24-2:25)
+IDENTIFIER "i32" (2:25-2:28)
+GREATER (2:28-2:29)
+RIGHT_PAREN (2:29-2:30)
+IDENTIFIER "string" (2:31-2:37)
+SEMICOLON (2:37-2:38)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "values" (3:12-3:18)
+COLON (3:18-3:19)
+IDENTIFIER "List" (3:20-3:24)
+LESS (3:24-3:25)
+IDENTIFIER "string" (3:25-3:31)
+GREATER (3:31-3:32)
+RIGHT_PAREN (3:32-3:33)
+IDENTIFIER "string" (3:34-3:40)
+SEMICOLON (3:40-3:41)
+RIGHT_BRACE (4:1-4:2)
+INTERFACE (5:1-5:10)
+IDENTIFIER "Single" (5:11-5:17)
+LEFT_BRACE (5:18-5:19)
+FUNC (6:5-6:9)
+IDENTIFIER "f" (6:10-6:11)
+LEFT_PAREN (6:11-6:12)
+IDENTIFIER "values" (6:12-6:18)
+COLON (6:18-6:19)
+IDENTIFIER "List" (6:20-6:24)
+LESS (6:24-6:25)
+IDENTIFIER "i32" (6:25-6:28)
+GREATER (6:28-6:29)
+RIGHT_PAREN (6:29-6:30)
+IDENTIFIER "string" (6:31-6:37)
+SEMICOLON (6:37-6:38)
+RIGHT_BRACE (7:1-7:2)
+CLASS (8:1-8:6)
+IDENTIFIER "Both" (8:7-8:11)
+IMPLEMENTS (8:12-8:22)
+IDENTIFIER "Overloaded" (8:23-8:33)
+COMMA (8:33-8:34)
+IDENTIFIER "Single" (8:35-8:41)
+LEFT_BRACE (8:42-8:43)
+PUBLIC (9:5-9:11)
+FUNC (9:12-9:16)
+IDENTIFIER "f" (9:17-9:18)
+LEFT_PAREN (9:18-9:19)
+IDENTIFIER "values" (9:19-9:25)
+COLON (9:25-9:26)
+IDENTIFIER "List" (9:27-9:31)
+LESS (9:31-9:32)
+IDENTIFIER "i32" (9:32-9:35)
+GREATER (9:35-9:36)
+RIGHT_PAREN (9:36-9:37)
+IDENTIFIER "string" (9:38-9:44)
+LEFT_BRACE (9:45-9:46)
+RETURN (9:47-9:53)
+STRING_LITERAL "\"integers\"" (9:54-9:64)
+SEMICOLON (9:64-9:65)
+RIGHT_BRACE (9:66-9:67)
+PUBLIC (10:5-10:11)
+FUNC (10:12-10:16)
+IDENTIFIER "f" (10:17-10:18)
+LEFT_PAREN (10:18-10:19)
+IDENTIFIER "values" (10:19-10:25)
+COLON (10:25-10:26)
+IDENTIFIER "List" (10:27-10:31)
+LESS (10:31-10:32)
+IDENTIFIER "string" (10:32-10:38)
+GREATER (10:38-10:39)
+RIGHT_PAREN (10:39-10:40)
+IDENTIFIER "string" (10:41-10:47)
+LEFT_BRACE (10:48-10:49)
+RETURN (10:50-10:56)
+STRING_LITERAL "\"strings\"" (10:57-10:66)
+SEMICOLON (10:66-10:67)
+RIGHT_BRACE (10:68-10:69)
+RIGHT_BRACE (11:1-11:2)
+CONST (12:1-12:6)
+IDENTIFIER "overloaded" (12:7-12:17)
+COLON (12:17-12:18)
+IDENTIFIER "Overloaded" (12:19-12:29)
+EQUAL (12:30-12:31)
+NEW (12:32-12:35)
+IDENTIFIER "Both" (12:36-12:40)
+LEFT_PAREN (12:40-12:41)
+RIGHT_PAREN (12:41-12:42)
+SEMICOLON (12:42-12:43)
+CONST (13:1-13:6)
+IDENTIFIER "single" (13:7-13:13)
+COLON (13:13-13:14)
+IDENTIFIER "Single" (13:15-13:21)
+EQUAL (13:22-13:23)
+NEW (13:24-13:27)
+IDENTIFIER "Both" (13:28-13:32)
+LEFT_PAREN (13:32-13:33)
+RIGHT_PAREN (13:33-13:34)
+SEMICOLON (13:34-13:35)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "overloaded" (14:7-14:17)
+DOT (14:17-14:18)
+IDENTIFIER "f" (14:18-14:19)
+LEFT_PAREN (14:19-14:20)
+NEW (14:20-14:23)
+IDENTIFIER "ArrayList" (14:24-14:33)
+LESS (14:33-14:34)
+IDENTIFIER "i32" (14:34-14:37)
+GREATER (14:37-14:38)
+LEFT_PAREN (14:38-14:39)
+RIGHT_PAREN (14:39-14:40)
+RIGHT_PAREN (14:40-14:41)
+RIGHT_PAREN (14:41-14:42)
+SEMICOLON (14:42-14:43)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "overloaded" (15:7-15:17)
+DOT (15:17-15:18)
+IDENTIFIER "f" (15:18-15:19)
+LEFT_PAREN (15:19-15:20)
+NEW (15:20-15:23)
+IDENTIFIER "ArrayList" (15:24-15:33)
+LESS (15:33-15:34)
+IDENTIFIER "string" (15:34-15:40)
+GREATER (15:40-15:41)
+LEFT_PAREN (15:41-15:42)
+RIGHT_PAREN (15:42-15:43)
+RIGHT_PAREN (15:43-15:44)
+RIGHT_PAREN (15:44-15:45)
+SEMICOLON (15:45-15:46)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "single" (16:7-16:13)
+DOT (16:13-16:14)
+IDENTIFIER "f" (16:14-16:15)
+LEFT_PAREN (16:15-16:16)
+NEW (16:16-16:19)
+IDENTIFIER "ArrayList" (16:20-16:29)
+LESS (16:29-16:30)
+IDENTIFIER "i32" (16:30-16:33)
+GREATER (16:33-16:34)
+LEFT_PAREN (16:34-16:35)
+RIGHT_PAREN (16:35-16:36)
+RIGHT_PAREN (16:36-16:37)
+RIGHT_PAREN (16:37-16:38)
+SEMICOLON (16:38-16:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:39
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:21
+      name: "Overloaded"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:38
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 2:12-2:29
+        (IdentifierDeclaration
+          range: 2:12-2:18
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 2:20-2:29
+          name: "List"
+          (NamedTypeNode
+            range: 2:25-2:28
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:31-2:37
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:41
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:32
+        (IdentifierDeclaration
+          range: 3:12-3:18
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 3:20-3:32
+          name: "List"
+          (NamedTypeNode
+            range: 3:25-3:31
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:34-3:40
+        name: "string"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:11-5:17
+      name: "Single"
+    )
+    (InterfaceMethodDeclaration
+      range: 6:5-6:38
+      (IdentifierDeclaration
+        range: 6:10-6:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 6:12-6:29
+        (IdentifierDeclaration
+          range: 6:12-6:18
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 6:20-6:29
+          name: "List"
+          (NamedTypeNode
+            range: 6:25-6:28
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 6:31-6:37
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 8:1-11:2
+    (IdentifierDeclaration
+      range: 8:7-8:11
+      name: "Both"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 8:23-8:33
+      name: "Overloaded"
+    )
+    (NamedTypeNode
+      range: 8:35-8:41
+      name: "Single"
+    )
+    (MemberDeclaration
+      range: 9:5-9:67
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 9:12-9:67
+        (IdentifierDeclaration
+          range: 9:17-9:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 9:19-9:36
+          (IdentifierDeclaration
+            range: 9:19-9:25
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 9:27-9:36
+            name: "List"
+            (NamedTypeNode
+              range: 9:32-9:35
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 9:38-9:44
+          name: "string"
+        )
+        (BlockStatement
+          range: 9:45-9:67
+          (ReturnStatement
+            range: 9:47-9:65
+            (LiteralExpression
+              range: 9:54-9:64
+              kind: STRING
+              text: "\"integers\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 10:5-10:69
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 10:12-10:69
+        (IdentifierDeclaration
+          range: 10:17-10:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 10:19-10:39
+          (IdentifierDeclaration
+            range: 10:19-10:25
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 10:27-10:39
+            name: "List"
+            (NamedTypeNode
+              range: 10:32-10:38
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 10:41-10:47
+          name: "string"
+        )
+        (BlockStatement
+          range: 10:48-10:69
+          (ReturnStatement
+            range: 10:50-10:67
+            (LiteralExpression
+              range: 10:57-10:66
+              kind: STRING
+              text: "\"strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 12:1-12:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 12:7-12:17
+      name: "overloaded"
+    )
+    (NamedTypeNode
+      range: 12:19-12:29
+      name: "Overloaded"
+    )
+    (NewExpression
+      range: 12:32-12:42
+      (IdentifierExpression
+        range: 12:36-12:40
+        name: "Both"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:13
+      name: "single"
+    )
+    (NamedTypeNode
+      range: 13:15-13:21
+      name: "Single"
+    )
+    (NewExpression
+      range: 13:24-13:34
+      (IdentifierExpression
+        range: 13:28-13:32
+        name: "Both"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:43
+    (CallExpression
+      range: 14:1-14:42
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:41
+        (MemberExpression
+          range: 14:7-14:19
+          (IdentifierExpression
+            range: 14:7-14:17
+            name: "overloaded"
+          )
+          (IdentifierExpression
+            range: 14:18-14:19
+            name: "f"
+          )
+        )
+        (NewExpression
+          range: 14:20-14:40
+          (IdentifierExpression
+            range: 14:24-14:33
+            name: "ArrayList"
+          )
+          (NamedTypeNode
+            range: 14:34-14:37
+            name: "i32"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:46
+    (CallExpression
+      range: 15:1-15:45
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:44
+        (MemberExpression
+          range: 15:7-15:19
+          (IdentifierExpression
+            range: 15:7-15:17
+            name: "overloaded"
+          )
+          (IdentifierExpression
+            range: 15:18-15:19
+            name: "f"
+          )
+        )
+        (NewExpression
+          range: 15:20-15:43
+          (IdentifierExpression
+            range: 15:24-15:33
+            name: "ArrayList"
+          )
+          (NamedTypeNode
+            range: 15:34-15:40
+            name: "string"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:39
+    (CallExpression
+      range: 16:1-16:38
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:37
+        (MemberExpression
+          range: 16:7-16:15
+          (IdentifierExpression
+            range: 16:7-16:13
+            name: "single"
+          )
+          (IdentifierExpression
+            range: 16:14-16:15
+            name: "f"
+          )
+        )
+        (NewExpression
+          range: 16:16-16:36
+          (IdentifierExpression
+            range: 16:20-16:29
+            name: "ArrayList"
+          )
+          (NamedTypeNode
+            range: 16:30-16:33
+            name: "i32"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  9:54-9:64 -> string
+  10:57-10:66 -> string
+  12:32-12:42 -> Both
+  12:36-12:40 -> Both
+  13:24-13:34 -> Both
+  13:28-13:32 -> Both
+  14:1-14:6 -> (any) => void
+  14:1-14:42 -> void
+  14:7-14:17 -> Overloaded
+  14:7-14:19 -> (List<i32>) => string
+  14:7-14:41 -> string
+  14:18-14:19 -> (List<i32>) => string
+  14:20-14:40 -> ArrayList<i32>
+  14:24-14:33 -> ArrayList<i32>
+  15:1-15:6 -> (any) => void
+  15:1-15:45 -> void
+  15:7-15:17 -> Overloaded
+  15:7-15:19 -> (List<string>) => string
+  15:7-15:44 -> string
+  15:18-15:19 -> (List<string>) => string
+  15:20-15:43 -> ArrayList<string>
+  15:24-15:33 -> ArrayList<string>
+  16:1-16:6 -> (any) => void
+  16:1-16:38 -> void
+  16:7-16:13 -> Single
+  16:7-16:15 -> (List<i32>) => string
+  16:7-16:37 -> string
+  16:14-16:15 -> (List<i32>) => string
+  16:16-16:36 -> ArrayList<i32>
+  16:20-16:29 -> ArrayList<i32>
+
+Resolved types:
+  2:20-2:29 -> List<i32>
+  2:25-2:28 -> i32
+  2:31-2:37 -> string
+  3:20-3:32 -> List<string>
+  3:25-3:31 -> string
+  3:34-3:40 -> string
+  6:20-6:29 -> List<i32>
+  6:25-6:28 -> i32
+  6:31-6:37 -> string
+  8:23-8:33 -> Overloaded
+  8:35-8:41 -> Single
+  9:27-9:36 -> List<i32>
+  9:32-9:35 -> i32
+  9:38-9:44 -> string
+  10:27-10:39 -> List<string>
+  10:32-10:38 -> string
+  10:41-10:47 -> string
+  12:19-12:29 -> Overloaded
+  13:15-13:21 -> Single
+  14:20-14:40 -> ArrayList<i32>
+  14:34-14:37 -> i32
+  15:20-15:43 -> ArrayList<string>
+  15:34-15:40 -> string
+  16:16-16:36 -> ArrayList<i32>
+  16:30-16:33 -> i32
+
+Declarations:
+  1:11-1:21 -> interface Overloaded
+  2:10-2:11 -> func f(List<i32>) => string
+  2:12-2:18 -> const values: List<i32>
+  3:10-3:11 -> func f(List<string>) => string
+  3:12-3:18 -> const values: List<string>
+  5:11-5:17 -> interface Single
+  6:10-6:11 -> func f(List<i32>) => string
+  6:12-6:18 -> const values: List<i32>
+  8:7-8:11 -> class Both
+  9:17-9:18 -> func f(List<i32>) => string
+  9:19-9:25 -> const values: List<i32>
+  10:17-10:18 -> func f(List<string>) => string
+  10:19-10:25 -> const values: List<string>
+  12:7-12:17 -> const overloaded: Overloaded
+  13:7-13:13 -> const single: Single
+
+References:
+  12:36-12:40 -> 8:7-8:11
+  13:28-13:32 -> 8:7-8:11
+  14:1-14:6 -> builtin print
+  14:7-14:17 -> 12:7-12:17
+  14:18-14:19 -> 2:10-2:11
+  14:24-14:33 -> 14:20-14:40
+  15:1-15:6 -> builtin print
+  15:7-15:17 -> 12:7-12:17
+  15:18-15:19 -> 3:10-3:11
+  15:24-15:33 -> 15:20-15:43
+  16:1-16:6 -> builtin print
+  16:7-16:13 -> 13:7-13:13
+  16:14-16:15 -> 6:10-6:11
+  16:20-16:29 -> 16:16-16:36
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Overloaded
+  nest member Test$Single
+  nest member Test$Both
+  inner class Test$Overloaded flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Single flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Both flags [PUBLIC, STATIC]
+  field overloaded LTest$Overloaded; flags [PUBLIC, STATIC, FINAL]
+  field single LTest$Single; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Both
+    DUP
+    INVOKESPECIAL Test$Both.<init>()V
+    PUTSTATIC Test.overloaded LTest$Overloaded;
+    NEW Test$Both
+    DUP
+    INVOKESPECIAL Test$Both.<init>()V
+    PUTSTATIC Test.single LTest$Single;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.overloaded LTest$Overloaded;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    INVOKEINTERFACE Test$Overloaded.f$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.overloaded LTest$Overloaded;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    INVOKEINTERFACE Test$Overloaded.f$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.single LTest$Single;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    INVOKEINTERFACE Test$Single.f(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Overloaded extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Overloaded flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method f$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method f$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Single extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Single flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method f(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Both extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Overloaded
+  implements Test$Single
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Both flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method f$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 2
+  method f$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 2
+  method f(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL Test$Both.f$1(Ljava/util/List;)Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+integers
+strings
+integers

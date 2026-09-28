@@ -1,0 +1,302 @@
+func describe(values: List<i32>) string { return "integers"; }
+func describe(values: List<string>) string { return "strings"; }
+
+print(describe([1, 2]));
+print(describe(["a", "b"]));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "values" (1:15-1:21)
+COLON (1:21-1:22)
+IDENTIFIER "List" (1:23-1:27)
+LESS (1:27-1:28)
+IDENTIFIER "i32" (1:28-1:31)
+GREATER (1:31-1:32)
+RIGHT_PAREN (1:32-1:33)
+IDENTIFIER "string" (1:34-1:40)
+LEFT_BRACE (1:41-1:42)
+RETURN (1:43-1:49)
+STRING_LITERAL "\"integers\"" (1:50-1:60)
+SEMICOLON (1:60-1:61)
+RIGHT_BRACE (1:62-1:63)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "values" (2:15-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "List" (2:23-2:27)
+LESS (2:27-2:28)
+IDENTIFIER "string" (2:28-2:34)
+GREATER (2:34-2:35)
+RIGHT_PAREN (2:35-2:36)
+IDENTIFIER "string" (2:37-2:43)
+LEFT_BRACE (2:44-2:45)
+RETURN (2:46-2:52)
+STRING_LITERAL "\"strings\"" (2:53-2:62)
+SEMICOLON (2:62-2:63)
+RIGHT_BRACE (2:64-2:65)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "describe" (4:7-4:15)
+LEFT_PAREN (4:15-4:16)
+LEFT_BRACKET (4:16-4:17)
+INTEGER_LITERAL "1" (4:17-4:18)
+COMMA (4:18-4:19)
+INTEGER_LITERAL "2" (4:20-4:21)
+RIGHT_BRACKET (4:21-4:22)
+RIGHT_PAREN (4:22-4:23)
+RIGHT_PAREN (4:23-4:24)
+SEMICOLON (4:24-4:25)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "describe" (5:7-5:15)
+LEFT_PAREN (5:15-5:16)
+LEFT_BRACKET (5:16-5:17)
+STRING_LITERAL "\"a\"" (5:17-5:20)
+COMMA (5:20-5:21)
+STRING_LITERAL "\"b\"" (5:22-5:25)
+RIGHT_BRACKET (5:25-5:26)
+RIGHT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+SEMICOLON (5:28-5:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:29
+  (FunctionDeclaration
+    range: 1:1-1:63
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:32
+      (IdentifierDeclaration
+        range: 1:15-1:21
+        name: "values"
+      )
+      (NamedTypeNode
+        range: 1:23-1:32
+        name: "List"
+        (NamedTypeNode
+          range: 1:28-1:31
+          name: "i32"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:34-1:40
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:41-1:63
+      (ReturnStatement
+        range: 1:43-1:61
+        (LiteralExpression
+          range: 1:50-1:60
+          kind: STRING
+          text: "\"integers\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:65
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:35
+      (IdentifierDeclaration
+        range: 2:15-2:21
+        name: "values"
+      )
+      (NamedTypeNode
+        range: 2:23-2:35
+        name: "List"
+        (NamedTypeNode
+          range: 2:28-2:34
+          name: "string"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:37-2:43
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:44-2:65
+      (ReturnStatement
+        range: 2:46-2:63
+        (LiteralExpression
+          range: 2:53-2:62
+          kind: STRING
+          text: "\"strings\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:25
+    (CallExpression
+      range: 4:1-4:24
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:23
+        (IdentifierExpression
+          range: 4:7-4:15
+          name: "describe"
+        )
+        (ArrayExpression
+          range: 4:16-4:22
+          (LiteralExpression
+            range: 4:17-4:18
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 4:20-4:21
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:29
+    (CallExpression
+      range: 5:1-5:28
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:27
+        (IdentifierExpression
+          range: 5:7-5:15
+          name: "describe"
+        )
+        (ArrayExpression
+          range: 5:16-5:26
+          (LiteralExpression
+            range: 5:17-5:20
+            kind: STRING
+            text: "\"a\""
+          )
+          (LiteralExpression
+            range: 5:22-5:25
+            kind: STRING
+            text: "\"b\""
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:50-1:60 -> string
+  2:53-2:62 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:24 -> void
+  4:7-4:15 -> (List<i32>) => string
+  4:7-4:23 -> string
+  4:16-4:22 -> List<i32>
+  4:17-4:18 -> i32
+  4:20-4:21 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:28 -> void
+  5:7-5:15 -> (List<string>) => string
+  5:7-5:27 -> string
+  5:16-5:26 -> List<string>
+  5:17-5:20 -> string
+  5:22-5:25 -> string
+
+Resolved types:
+  1:23-1:32 -> List<i32>
+  1:28-1:31 -> i32
+  1:34-1:40 -> string
+  2:23-2:35 -> List<string>
+  2:28-2:34 -> string
+  2:37-2:43 -> string
+
+Declarations:
+  1:6-1:14 -> func describe(List<i32>) => string
+  1:15-1:21 -> const values: List<i32>
+  2:6-2:14 -> func describe(List<string>) => string
+  2:15-2:21 -> const values: List<string>
+
+References:
+  4:1-4:6 -> builtin print
+  4:7-4:15 -> 1:6-1:14
+  5:1-5:6 -> builtin print
+  5:7-5:15 -> 2:6-2:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 1
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/util/ArrayList
+    DUP
+    LDC 2
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
+    DUP
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
+    POP
+    INVOKESTATIC Test.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/util/ArrayList
+    DUP
+    LDC 2
+    INVOKESPECIAL java/util/ArrayList.<init>(I)V
+    DUP
+    LDC "a"
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
+    POP
+    DUP
+    LDC "b"
+    INVOKEVIRTUAL java/util/ArrayList.add(Ljava/lang/Object;)Z
+    POP
+    INVOKESTATIC Test.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+integers
+strings

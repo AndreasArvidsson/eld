@@ -1,0 +1,580 @@
+func pick(value: i8) string { return "small"; }
+func pick(value: i32) string { return "exact"; }
+print(pick(1));
+print(pick(value: 1));
+const small: i8 = 1;
+print(pick(small));
+func choose(value: i8) string { return "narrow"; }
+func choose(value: i64) string { return "widen"; }
+print(choose(1));
+func onlySmall(value: i8) string { return "only"; }
+print(onlySmall(1));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "pick" (1:6-1:10)
+LEFT_PAREN (1:10-1:11)
+IDENTIFIER "value" (1:11-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "i8" (1:18-1:20)
+RIGHT_PAREN (1:20-1:21)
+IDENTIFIER "string" (1:22-1:28)
+LEFT_BRACE (1:29-1:30)
+RETURN (1:31-1:37)
+STRING_LITERAL "\"small\"" (1:38-1:45)
+SEMICOLON (1:45-1:46)
+RIGHT_BRACE (1:47-1:48)
+FUNC (2:1-2:5)
+IDENTIFIER "pick" (2:6-2:10)
+LEFT_PAREN (2:10-2:11)
+IDENTIFIER "value" (2:11-2:16)
+COLON (2:16-2:17)
+IDENTIFIER "i32" (2:18-2:21)
+RIGHT_PAREN (2:21-2:22)
+IDENTIFIER "string" (2:23-2:29)
+LEFT_BRACE (2:30-2:31)
+RETURN (2:32-2:38)
+STRING_LITERAL "\"exact\"" (2:39-2:46)
+SEMICOLON (2:46-2:47)
+RIGHT_BRACE (2:48-2:49)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "pick" (3:7-3:11)
+LEFT_PAREN (3:11-3:12)
+INTEGER_LITERAL "1" (3:12-3:13)
+RIGHT_PAREN (3:13-3:14)
+RIGHT_PAREN (3:14-3:15)
+SEMICOLON (3:15-3:16)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "pick" (4:7-4:11)
+LEFT_PAREN (4:11-4:12)
+IDENTIFIER "value" (4:12-4:17)
+COLON (4:17-4:18)
+INTEGER_LITERAL "1" (4:19-4:20)
+RIGHT_PAREN (4:20-4:21)
+RIGHT_PAREN (4:21-4:22)
+SEMICOLON (4:22-4:23)
+CONST (5:1-5:6)
+IDENTIFIER "small" (5:7-5:12)
+COLON (5:12-5:13)
+IDENTIFIER "i8" (5:14-5:16)
+EQUAL (5:17-5:18)
+INTEGER_LITERAL "1" (5:19-5:20)
+SEMICOLON (5:20-5:21)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "pick" (6:7-6:11)
+LEFT_PAREN (6:11-6:12)
+IDENTIFIER "small" (6:12-6:17)
+RIGHT_PAREN (6:17-6:18)
+RIGHT_PAREN (6:18-6:19)
+SEMICOLON (6:19-6:20)
+FUNC (7:1-7:5)
+IDENTIFIER "choose" (7:6-7:12)
+LEFT_PAREN (7:12-7:13)
+IDENTIFIER "value" (7:13-7:18)
+COLON (7:18-7:19)
+IDENTIFIER "i8" (7:20-7:22)
+RIGHT_PAREN (7:22-7:23)
+IDENTIFIER "string" (7:24-7:30)
+LEFT_BRACE (7:31-7:32)
+RETURN (7:33-7:39)
+STRING_LITERAL "\"narrow\"" (7:40-7:48)
+SEMICOLON (7:48-7:49)
+RIGHT_BRACE (7:50-7:51)
+FUNC (8:1-8:5)
+IDENTIFIER "choose" (8:6-8:12)
+LEFT_PAREN (8:12-8:13)
+IDENTIFIER "value" (8:13-8:18)
+COLON (8:18-8:19)
+IDENTIFIER "i64" (8:20-8:23)
+RIGHT_PAREN (8:23-8:24)
+IDENTIFIER "string" (8:25-8:31)
+LEFT_BRACE (8:32-8:33)
+RETURN (8:34-8:40)
+STRING_LITERAL "\"widen\"" (8:41-8:48)
+SEMICOLON (8:48-8:49)
+RIGHT_BRACE (8:50-8:51)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "choose" (9:7-9:13)
+LEFT_PAREN (9:13-9:14)
+INTEGER_LITERAL "1" (9:14-9:15)
+RIGHT_PAREN (9:15-9:16)
+RIGHT_PAREN (9:16-9:17)
+SEMICOLON (9:17-9:18)
+FUNC (10:1-10:5)
+IDENTIFIER "onlySmall" (10:6-10:15)
+LEFT_PAREN (10:15-10:16)
+IDENTIFIER "value" (10:16-10:21)
+COLON (10:21-10:22)
+IDENTIFIER "i8" (10:23-10:25)
+RIGHT_PAREN (10:25-10:26)
+IDENTIFIER "string" (10:27-10:33)
+LEFT_BRACE (10:34-10:35)
+RETURN (10:36-10:42)
+STRING_LITERAL "\"only\"" (10:43-10:49)
+SEMICOLON (10:49-10:50)
+RIGHT_BRACE (10:51-10:52)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "onlySmall" (11:7-11:16)
+LEFT_PAREN (11:16-11:17)
+INTEGER_LITERAL "1" (11:17-11:18)
+RIGHT_PAREN (11:18-11:19)
+RIGHT_PAREN (11:19-11:20)
+SEMICOLON (11:20-11:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:21
+  (FunctionDeclaration
+    range: 1:1-1:48
+    (IdentifierDeclaration
+      range: 1:6-1:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 1:11-1:20
+      (IdentifierDeclaration
+        range: 1:11-1:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:18-1:20
+        name: "i8"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:22-1:28
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:29-1:48
+      (ReturnStatement
+        range: 1:31-1:46
+        (LiteralExpression
+          range: 1:38-1:45
+          kind: STRING
+          text: "\"small\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:49
+    (IdentifierDeclaration
+      range: 2:6-2:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 2:11-2:21
+      (IdentifierDeclaration
+        range: 2:11-2:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:18-2:21
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:23-2:29
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:30-2:49
+      (ReturnStatement
+        range: 2:32-2:47
+        (LiteralExpression
+          range: 2:39-2:46
+          kind: STRING
+          text: "\"exact\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:16
+    (CallExpression
+      range: 3:1-3:15
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:14
+        (IdentifierExpression
+          range: 3:7-3:11
+          name: "pick"
+        )
+        (LiteralExpression
+          range: 3:12-3:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:23
+    (CallExpression
+      range: 4:1-4:22
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:21
+        (IdentifierExpression
+          range: 4:7-4:11
+          name: "pick"
+        )
+        (NamedArgumentExpression
+          range: 4:12-4:20
+          (IdentifierDeclaration
+            range: 4:12-4:17
+            name: "value"
+          )
+          (LiteralExpression
+            range: 4:19-4:20
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "small"
+    )
+    (NamedTypeNode
+      range: 5:14-5:16
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 5:19-5:20
+      kind: INT
+      text: "1"
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:20
+    (CallExpression
+      range: 6:1-6:19
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:18
+        (IdentifierExpression
+          range: 6:7-6:11
+          name: "pick"
+        )
+        (IdentifierExpression
+          range: 6:12-6:17
+          name: "small"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-7:51
+    (IdentifierDeclaration
+      range: 7:6-7:12
+      name: "choose"
+    )
+    (FunctionParameter
+      range: 7:13-7:22
+      (IdentifierDeclaration
+        range: 7:13-7:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 7:20-7:22
+        name: "i8"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 7:24-7:30
+      name: "string"
+    )
+    (BlockStatement
+      range: 7:31-7:51
+      (ReturnStatement
+        range: 7:33-7:49
+        (LiteralExpression
+          range: 7:40-7:48
+          kind: STRING
+          text: "\"narrow\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 8:1-8:51
+    (IdentifierDeclaration
+      range: 8:6-8:12
+      name: "choose"
+    )
+    (FunctionParameter
+      range: 8:13-8:23
+      (IdentifierDeclaration
+        range: 8:13-8:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 8:20-8:23
+        name: "i64"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 8:25-8:31
+      name: "string"
+    )
+    (BlockStatement
+      range: 8:32-8:51
+      (ReturnStatement
+        range: 8:34-8:49
+        (LiteralExpression
+          range: 8:41-8:48
+          kind: STRING
+          text: "\"widen\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:18
+    (CallExpression
+      range: 9:1-9:17
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:16
+        (IdentifierExpression
+          range: 9:7-9:13
+          name: "choose"
+        )
+        (LiteralExpression
+          range: 9:14-9:15
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 10:1-10:52
+    (IdentifierDeclaration
+      range: 10:6-10:15
+      name: "onlySmall"
+    )
+    (FunctionParameter
+      range: 10:16-10:25
+      (IdentifierDeclaration
+        range: 10:16-10:21
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 10:23-10:25
+        name: "i8"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 10:27-10:33
+      name: "string"
+    )
+    (BlockStatement
+      range: 10:34-10:52
+      (ReturnStatement
+        range: 10:36-10:50
+        (LiteralExpression
+          range: 10:43-10:49
+          kind: STRING
+          text: "\"only\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:21
+    (CallExpression
+      range: 11:1-11:20
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:19
+        (IdentifierExpression
+          range: 11:7-11:16
+          name: "onlySmall"
+        )
+        (LiteralExpression
+          range: 11:17-11:18
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:38-1:45 -> string
+  2:39-2:46 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:15 -> void
+  3:7-3:11 -> (i32) => string
+  3:7-3:14 -> string
+  3:12-3:13 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:22 -> void
+  4:7-4:11 -> (i32) => string
+  4:7-4:21 -> string
+  4:19-4:20 -> i32
+  5:19-5:20 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:19 -> void
+  6:7-6:11 -> (i8) => string
+  6:7-6:18 -> string
+  6:12-6:17 -> i8
+  7:40-7:48 -> string
+  8:41-8:48 -> string
+  9:1-9:6 -> (any) => void
+  9:1-9:17 -> void
+  9:7-9:13 -> (i64) => string
+  9:7-9:16 -> string
+  9:14-9:15 -> i64
+  10:43-10:49 -> string
+  11:1-11:6 -> (any) => void
+  11:1-11:20 -> void
+  11:7-11:16 -> (i8) => string
+  11:7-11:19 -> string
+  11:17-11:18 -> i32
+
+Resolved types:
+  1:18-1:20 -> i8
+  1:22-1:28 -> string
+  2:18-2:21 -> i32
+  2:23-2:29 -> string
+  5:14-5:16 -> i8
+  7:20-7:22 -> i8
+  7:24-7:30 -> string
+  8:20-8:23 -> i64
+  8:25-8:31 -> string
+  10:23-10:25 -> i8
+  10:27-10:33 -> string
+
+Conversions:
+  5:19-5:20 -> i32 -> i8
+  11:17-11:18 -> i32 -> i8
+
+Declarations:
+  1:6-1:10 -> func pick(i8) => string
+  1:11-1:16 -> const value: i8
+  2:6-2:10 -> func pick(i32) => string
+  2:11-2:16 -> const value: i32
+  5:7-5:12 -> const small: i8
+  7:6-7:12 -> func choose(i8) => string
+  7:13-7:18 -> const value: i8
+  8:6-8:12 -> func choose(i64) => string
+  8:13-8:18 -> const value: i64
+  10:6-10:15 -> func onlySmall(i8) => string
+  10:16-10:21 -> const value: i8
+
+References:
+  3:1-3:6 -> builtin print
+  3:7-3:11 -> 2:6-2:10
+  4:1-4:6 -> builtin print
+  4:7-4:11 -> 2:6-2:10
+  6:1-6:6 -> builtin print
+  6:7-6:11 -> 1:6-1:10
+  6:12-6:17 -> 5:7-5:12
+  9:1-9:6 -> builtin print
+  9:7-9:13 -> 8:6-8:12
+  11:1-11:6 -> builtin print
+  11:7-11:16 -> 10:6-10:15
+
+Named arguments:
+  4:12-4:17 -> parameter 2:11-2:16
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field small B flags [PUBLIC, STATIC, FINAL] = 1
+  method pick(B)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "small"
+    ARETURN
+    max stack 1 max locals 1
+  method pick(I)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "exact"
+    ARETURN
+    max stack 1 max locals 1
+  method choose(B)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "narrow"
+    ARETURN
+    max stack 1 max locals 1
+  method choose(J)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "widen"
+    ARETURN
+    max stack 1 max locals 2
+  method onlySmall(B)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "only"
+    ARETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKESTATIC Test.pick(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    INVOKESTATIC Test.pick(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.small B
+    INVOKESTATIC Test.pick(B)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 1
+    INVOKESTATIC Test.choose(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    I2B
+    INVOKESTATIC Test.onlySmall(B)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+exact
+exact
+small
+widen
+only

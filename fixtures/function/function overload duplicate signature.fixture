@@ -1,0 +1,111 @@
+func describe(value: i32) string { return "first"; }
+func describe(value: i32) i32 { return 2; }
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "value" (1:15-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+RIGHT_PAREN (1:25-1:26)
+IDENTIFIER "string" (1:27-1:33)
+LEFT_BRACE (1:34-1:35)
+RETURN (1:36-1:42)
+STRING_LITERAL "\"first\"" (1:43-1:50)
+SEMICOLON (1:50-1:51)
+RIGHT_BRACE (1:52-1:53)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+RIGHT_PAREN (2:25-2:26)
+IDENTIFIER "i32" (2:27-2:30)
+LEFT_BRACE (2:31-2:32)
+RETURN (2:33-2:39)
+INTEGER_LITERAL "2" (2:40-2:41)
+SEMICOLON (2:41-2:42)
+RIGHT_BRACE (2:43-2:44)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:44
+  (FunctionDeclaration
+    range: 1:1-1:53
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:25
+      (IdentifierDeclaration
+        range: 1:15-1:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:22-1:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:27-1:33
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:34-1:53
+      (ReturnStatement
+        range: 1:36-1:51
+        (LiteralExpression
+          range: 1:43-1:50
+          kind: STRING
+          text: "\"first\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:44
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:25
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:22-2:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:27-2:30
+      name: "i32"
+    )
+    (BlockStatement
+      range: 2:31-2:44
+      (ReturnStatement
+        range: 2:33-2:42
+        (LiteralExpression
+          range: 2:40-2:41
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous overload of 'describe': duplicate callable signature at 2:6-2:14

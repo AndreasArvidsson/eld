@@ -621,8 +621,19 @@ public final class SemanticAnalyzer {
         final ClassType type,
         final String name
     ) {
-        final FunctionSymbol method = classMethod(type, name);
-        return method == null || constantCallable(method);
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope scope = classScopes.get(current);
+            if (scope == null) {
+                continue;
+            }
+            for (final FunctionSymbol method : scope.functionsLocal(name)) {
+                if (method.type().parameterTypes().isEmpty()) {
+                    return constantCallable(method);
+                }
+            }
+        }
+        return true;
     }
 
     private boolean isConstantCallableExpression(
@@ -663,7 +674,7 @@ public final class SemanticAnalyzer {
     private boolean hasConstantNaturalOrder(final Type element) {
         final Type unqualified = ConstType.unwrap(element);
         if (unqualified instanceof ClassType type) {
-            final FunctionSymbol compareTo = classMethod(type, "compareTo");
+            final FunctionSymbol compareTo = naturalOrderMethod(type);
             return compareTo != null && constantCallable(compareTo);
         }
         if (unqualified instanceof InterfaceType contract) {
@@ -672,6 +683,41 @@ public final class SemanticAnalyzer {
             return compareTo != null && constantCallable(compareTo);
         }
         return model.hasNaturalOrder(unqualified);
+    }
+
+    private @Nullable FunctionSymbol naturalOrderMethod(final ClassType type) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            for (final InterfaceType contract : model
+                .getImplementedInterfaces(current)) {
+                if (
+                    contract.javaClass() != Comparable.class
+                        || contract.typeArguments().size() != 1
+                ) {
+                    continue;
+                }
+                final Type argument = contract.typeArguments().getFirst();
+                for (ClassType implementation =
+                    type; implementation != null; implementation =
+                        model.getSuperclass(implementation)) {
+                    final Scope scope = classScopes.get(implementation);
+                    if (scope == null) {
+                        continue;
+                    }
+                    for (final FunctionSymbol method : scope
+                        .functionsLocal("compareTo")) {
+                        if (
+                            method.type()
+                                .parameterTypes()
+                                .equals(List.of(argument))
+                        ) {
+                            return method;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private static boolean isNullLiteral(final Expression expression) {
@@ -767,43 +813,54 @@ public final class SemanticAnalyzer {
     private boolean constantCallable(final FunctionSymbol function) {
         final FunctionDeclaration declaration =
             model.getFunctionDeclaration(function);
-        if (declaration != null) {
-            if (!declaration.constant()) {
-                return false;
-            }
-            final ClassType owner = model.findClassMemberOwner(function);
-            return owner == null || declaration.finalMethod()
-                || model.getMemberVisibility(function) == Visibility.PRIVATE
-                || classMethods.keySet()
-                    .stream()
-                    .filter(type -> !type.equals(owner))
-                    .filter(type -> model.isSubclassOf(type, owner))
-                    .map(type -> classMethod(type, function.name()))
-                    .filter(Objects::nonNull)
-                    .filter(method -> !Objects.equals(method, function))
-                    .distinct()
-                    .allMatch(this::declaredConstant);
-        }
-        final InterfaceType owner = interfaceMethodOwner(function);
-        if (owner == null) {
+        if (declaration == null) {
             return false;
         }
-        final List<FunctionSymbol> implementations =
-            classMethods.keySet()
+        if (!declaration.constant()) {
+            return false;
+        }
+        final ClassType owner = model.findClassMemberOwner(function);
+        return owner == null || declaration.finalMethod()
+            || model.getMemberVisibility(function) == Visibility.PRIVATE
+            || classMethods.keySet()
                 .stream()
-                .filter(type -> model.isSubtype(type, owner))
-                .map(type -> classMethod(type, function.name()))
+                .filter(type -> !type.equals(owner))
+                .filter(type -> model.isSubclassOf(type, owner))
+                .map(type -> classMethod(type, function))
                 .filter(Objects::nonNull)
+                .filter(method -> !Objects.equals(method, function))
                 .distinct()
-                .toList();
-        return !implementations.isEmpty()
-            && implementations.stream().allMatch(this::declaredConstant);
+                .allMatch(this::declaredConstant);
     }
 
     private boolean declaredConstant(final FunctionSymbol function) {
         final FunctionDeclaration declaration =
             model.getFunctionDeclaration(function);
         return declaration != null && declaration.constant();
+    }
+
+    private @Nullable FunctionSymbol classMethod(
+        final ClassType type,
+        final FunctionSymbol signature
+    ) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope scope = classScopes.get(current);
+            if (scope == null) {
+                continue;
+            }
+            for (final FunctionSymbol method : scope
+                .functionsLocal(signature.name())) {
+                if (
+                    method.type()
+                        .parameterTypes()
+                        .equals(signature.type().parameterTypes())
+                ) {
+                    return method;
+                }
+            }
+        }
+        return null;
     }
 
     private boolean isAllowedWrite(
@@ -1067,7 +1124,7 @@ public final class SemanticAnalyzer {
                 classMethods.keySet()
                     .stream()
                     .filter(type -> model.isSubtype(type, owner))
-                    .map(type -> classMethod(type, function.name()))
+                    .map(type -> classMethod(type, function))
                     .filter(Objects::nonNull)
                     .distinct()
                     .anyMatch(method -> mutatesReceiver(method, visiting));
@@ -1146,7 +1203,7 @@ public final class SemanticAnalyzer {
                     .stream()
                     .filter(type -> !type.equals(owner))
                     .filter(type -> model.isSubclassOf(type, owner))
-                    .map(type -> classMethod(type, function.name()))
+                    .map(type -> classMethod(type, function))
                     .filter(Objects::nonNull)
                     .filter(method -> !Objects.equals(method, function))
                     .distinct()
@@ -1164,8 +1221,7 @@ public final class SemanticAnalyzer {
             .stream()
             .filter(
                 type -> model.getInterface(type)
-                    .methods()
-                    .values()
+                    .allMethods()
                     .stream()
                     .anyMatch(method -> Objects.equals(method, function))
             )

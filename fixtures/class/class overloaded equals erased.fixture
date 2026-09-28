@@ -1,0 +1,401 @@
+class C {
+    public func equals(value: any) bool { return false; }
+    public func equals(value: i32 | string) bool { return true; }
+}
+const c = new C();
+print(c.equals(2));
+print(c.equals("text"));
+print(c.equals(c));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "C" (1:7-1:8)
+LEFT_BRACE (1:9-1:10)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "equals" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "any" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+IDENTIFIER "bool" (2:36-2:40)
+LEFT_BRACE (2:41-2:42)
+RETURN (2:43-2:49)
+BOOLEAN_LITERAL "false" (2:50-2:55)
+SEMICOLON (2:55-2:56)
+RIGHT_BRACE (2:57-2:58)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "equals" (3:17-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "value" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+PIPE (3:35-3:36)
+IDENTIFIER "string" (3:37-3:43)
+RIGHT_PAREN (3:43-3:44)
+IDENTIFIER "bool" (3:45-3:49)
+LEFT_BRACE (3:50-3:51)
+RETURN (3:52-3:58)
+BOOLEAN_LITERAL "true" (3:59-3:63)
+SEMICOLON (3:63-3:64)
+RIGHT_BRACE (3:65-3:66)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+IDENTIFIER "c" (5:7-5:8)
+EQUAL (5:9-5:10)
+NEW (5:11-5:14)
+IDENTIFIER "C" (5:15-5:16)
+LEFT_PAREN (5:16-5:17)
+RIGHT_PAREN (5:17-5:18)
+SEMICOLON (5:18-5:19)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "c" (6:7-6:8)
+DOT (6:8-6:9)
+IDENTIFIER "equals" (6:9-6:15)
+LEFT_PAREN (6:15-6:16)
+INTEGER_LITERAL "2" (6:16-6:17)
+RIGHT_PAREN (6:17-6:18)
+RIGHT_PAREN (6:18-6:19)
+SEMICOLON (6:19-6:20)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "c" (7:7-7:8)
+DOT (7:8-7:9)
+IDENTIFIER "equals" (7:9-7:15)
+LEFT_PAREN (7:15-7:16)
+STRING_LITERAL "\"text\"" (7:16-7:22)
+RIGHT_PAREN (7:22-7:23)
+RIGHT_PAREN (7:23-7:24)
+SEMICOLON (7:24-7:25)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "c" (8:7-8:8)
+DOT (8:8-8:9)
+IDENTIFIER "equals" (8:9-8:15)
+LEFT_PAREN (8:15-8:16)
+IDENTIFIER "c" (8:16-8:17)
+RIGHT_PAREN (8:17-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:20
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:8
+      name: "C"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:58
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:58
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:36-2:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:41-2:58
+          (ReturnStatement
+            range: 2:43-2:56
+            (LiteralExpression
+              range: 2:50-2:55
+              kind: BOOL
+              text: "false"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:66
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:66
+        (IdentifierDeclaration
+          range: 3:17-3:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 3:24-3:43
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "value"
+          )
+          (UnionTypeNode
+            range: 3:31-3:43
+            (NamedTypeNode
+              range: 3:31-3:34
+              name: "i32"
+            )
+            (NamedTypeNode
+              range: 3:37-3:43
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:45-3:49
+          name: "bool"
+        )
+        (BlockStatement
+          range: 3:50-3:66
+          (ReturnStatement
+            range: 3:52-3:64
+            (LiteralExpression
+              range: 3:59-3:63
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "c"
+    )
+    type: null
+    (NewExpression
+      range: 5:11-5:18
+      (IdentifierExpression
+        range: 5:15-5:16
+        name: "C"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:20
+    (CallExpression
+      range: 6:1-6:19
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:18
+        (MemberExpression
+          range: 6:7-6:15
+          (IdentifierExpression
+            range: 6:7-6:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 6:9-6:15
+            name: "equals"
+          )
+        )
+        (LiteralExpression
+          range: 6:16-6:17
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:25
+    (CallExpression
+      range: 7:1-7:24
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:23
+        (MemberExpression
+          range: 7:7-7:15
+          (IdentifierExpression
+            range: 7:7-7:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 7:9-7:15
+            name: "equals"
+          )
+        )
+        (LiteralExpression
+          range: 7:16-7:22
+          kind: STRING
+          text: "\"text\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:18
+        (MemberExpression
+          range: 8:7-8:15
+          (IdentifierExpression
+            range: 8:7-8:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 8:9-8:15
+            name: "equals"
+          )
+        )
+        (IdentifierExpression
+          range: 8:16-8:17
+          name: "c"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:50-2:55 -> bool
+  3:59-3:63 -> bool
+  5:11-5:18 -> C
+  5:15-5:16 -> C
+  6:1-6:6 -> (any) => void
+  6:1-6:19 -> void
+  6:7-6:8 -> C
+  6:7-6:15 -> (i32 | string) => bool
+  6:7-6:18 -> bool
+  6:9-6:15 -> (i32 | string) => bool
+  6:16-6:17 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:24 -> void
+  7:7-7:8 -> C
+  7:7-7:15 -> (i32 | string) => bool
+  7:7-7:23 -> bool
+  7:9-7:15 -> (i32 | string) => bool
+  7:16-7:22 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:8 -> C
+  8:7-8:15 -> (any) => bool
+  8:7-8:18 -> bool
+  8:9-8:15 -> (any) => bool
+  8:16-8:17 -> C
+
+Resolved types:
+  2:31-2:34 -> any
+  2:36-2:40 -> bool
+  3:31-3:34 -> i32
+  3:31-3:43 -> i32 | string
+  3:37-3:43 -> string
+  3:45-3:49 -> bool
+
+Conversions:
+  6:16-6:17 -> i32 -> i32 | string
+  7:16-7:22 -> string -> i32 | string
+  8:16-8:17 -> C -> any
+
+Declarations:
+  1:7-1:8 -> class C
+  2:17-2:23 -> func equals(any) => bool
+  2:24-2:29 -> const value: any
+  3:17-3:23 -> func equals(i32 | string) => bool
+  3:24-3:29 -> const value: i32 | string
+  5:7-5:8 -> const c: C
+
+References:
+  5:15-5:16 -> 1:7-1:8
+  6:1-6:6 -> builtin print
+  6:7-6:8 -> 5:7-5:8
+  6:9-6:15 -> 3:17-3:23
+  7:1-7:6 -> builtin print
+  7:7-7:8 -> 5:7-5:8
+  7:9-7:15 -> 3:17-3:23
+  8:1-8:6 -> builtin print
+  8:7-8:8 -> 5:7-5:8
+  8:9-8:15 -> 2:17-2:23
+  8:16-8:17 -> 5:7-5:8
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$C
+  inner class Test$C flags [PUBLIC, STATIC]
+  field c LTest$C; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$C
+    DUP
+    INVOKESPECIAL Test$C.<init>()V
+    PUTSTATIC Test.c LTest$C;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.c LTest$C;
+    LDC 2
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    INVOKEVIRTUAL Test$C.$eld$equals$2(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.c LTest$C;
+    LDC "text"
+    INVOKEVIRTUAL Test$C.$eld$equals$2(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.c LTest$C;
+    GETSTATIC Test.c LTest$C;
+    INVOKEVIRTUAL Test$C.$eld$equals$1(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$C extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$C flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method $eld$equals$1(Ljava/lang/Object;)Z flags [PUBLIC]
+    ICONST_0 0
+    IRETURN
+    max stack 1 max locals 2
+  method $eld$equals$2(Ljava/lang/Object;)Z flags [PUBLIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+true
+true
+false

@@ -216,7 +216,7 @@ Resolved types:
 Declarations:
   1:7-1:12 -> class Value
   2:11-2:17 -> const factor: i32
-  4:29-4:35 -> const final func double(i32) => i32
+  4:29-4:35 -> const final func double(i32?) => i32
   4:36-4:41 -> const value: i32
   5:13-5:19 -> var result: i32
 

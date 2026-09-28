@@ -1,0 +1,163 @@
+interface I {
+    func f(x: i32, y?: string);
+    func f(x: string);
+}
+class C implements I {
+    public func f(x: string) {}
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "I" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "f" (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "x" (2:12-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "i32" (2:15-2:18)
+COMMA (2:18-2:19)
+IDENTIFIER "y" (2:20-2:21)
+QUESTION (2:21-2:22)
+COLON (2:22-2:23)
+IDENTIFIER "string" (2:24-2:30)
+RIGHT_PAREN (2:30-2:31)
+SEMICOLON (2:31-2:32)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "x" (3:12-3:13)
+COLON (3:13-3:14)
+IDENTIFIER "string" (3:15-3:21)
+RIGHT_PAREN (3:21-3:22)
+SEMICOLON (3:22-3:23)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "C" (5:7-5:8)
+IMPLEMENTS (5:9-5:19)
+IDENTIFIER "I" (5:20-5:21)
+LEFT_BRACE (5:22-5:23)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "f" (6:17-6:18)
+LEFT_PAREN (6:18-6:19)
+IDENTIFIER "x" (6:19-6:20)
+COLON (6:20-6:21)
+IDENTIFIER "string" (6:22-6:28)
+RIGHT_PAREN (6:28-6:29)
+LEFT_BRACE (6:30-6:31)
+RIGHT_BRACE (6:31-6:32)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "I"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:32
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 2:12-2:18
+        (IdentifierDeclaration
+          range: 2:12-2:13
+          name: "x"
+        )
+        (NamedTypeNode
+          range: 2:15-2:18
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 2:20-2:30
+        (IdentifierDeclaration
+          range: 2:20-2:21
+          name: "y"
+        )
+        (NamedTypeNode
+          range: 2:24-2:30
+          name: "string"
+        )
+        optional: true
+        defaultValue: null
+      )
+      returnType: null
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:23
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:21
+        (IdentifierDeclaration
+          range: 3:12-3:13
+          name: "x"
+        )
+        (NamedTypeNode
+          range: 3:15-3:21
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      returnType: null
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "C"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:20-5:21
+      name: "I"
+    )
+    (MemberDeclaration
+      range: 6:5-6:32
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:32
+        (IdentifierDeclaration
+          range: 6:17-6:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 6:19-6:28
+          (IdentifierDeclaration
+            range: 6:19-6:20
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 6:22-6:28
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        returnType: null
+        (BlockStatement
+          range: 6:30-6:32
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Class C does not implement interface method f(i32, string?) at 5:1-7:2

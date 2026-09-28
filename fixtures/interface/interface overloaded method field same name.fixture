@@ -1,0 +1,539 @@
+interface Value {
+    const f: i32;
+    func f(value: i32) i32;
+    func f(value: string) i32;
+}
+class Impl implements Value {
+    public const f = 7;
+    public func f(value: i32) i32 { return value; }
+    public func f(value: string) i32 { return 2; }
+}
+const value: Value = new Impl();
+print(value.f);
+print(value.f(3));
+print(value.f("x"));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Value" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+CONST (2:5-2:10)
+IDENTIFIER "f" (2:11-2:12)
+COLON (2:12-2:13)
+IDENTIFIER "i32" (2:14-2:17)
+SEMICOLON (2:17-2:18)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "value" (3:12-3:17)
+COLON (3:17-3:18)
+IDENTIFIER "i32" (3:19-3:22)
+RIGHT_PAREN (3:22-3:23)
+IDENTIFIER "i32" (3:24-3:27)
+SEMICOLON (3:27-3:28)
+FUNC (4:5-4:9)
+IDENTIFIER "f" (4:10-4:11)
+LEFT_PAREN (4:11-4:12)
+IDENTIFIER "value" (4:12-4:17)
+COLON (4:17-4:18)
+IDENTIFIER "string" (4:19-4:25)
+RIGHT_PAREN (4:25-4:26)
+IDENTIFIER "i32" (4:27-4:30)
+SEMICOLON (4:30-4:31)
+RIGHT_BRACE (5:1-5:2)
+CLASS (6:1-6:6)
+IDENTIFIER "Impl" (6:7-6:11)
+IMPLEMENTS (6:12-6:22)
+IDENTIFIER "Value" (6:23-6:28)
+LEFT_BRACE (6:29-6:30)
+PUBLIC (7:5-7:11)
+CONST (7:12-7:17)
+IDENTIFIER "f" (7:18-7:19)
+EQUAL (7:20-7:21)
+INTEGER_LITERAL "7" (7:22-7:23)
+SEMICOLON (7:23-7:24)
+PUBLIC (8:5-8:11)
+FUNC (8:12-8:16)
+IDENTIFIER "f" (8:17-8:18)
+LEFT_PAREN (8:18-8:19)
+IDENTIFIER "value" (8:19-8:24)
+COLON (8:24-8:25)
+IDENTIFIER "i32" (8:26-8:29)
+RIGHT_PAREN (8:29-8:30)
+IDENTIFIER "i32" (8:31-8:34)
+LEFT_BRACE (8:35-8:36)
+RETURN (8:37-8:43)
+IDENTIFIER "value" (8:44-8:49)
+SEMICOLON (8:49-8:50)
+RIGHT_BRACE (8:51-8:52)
+PUBLIC (9:5-9:11)
+FUNC (9:12-9:16)
+IDENTIFIER "f" (9:17-9:18)
+LEFT_PAREN (9:18-9:19)
+IDENTIFIER "value" (9:19-9:24)
+COLON (9:24-9:25)
+IDENTIFIER "string" (9:26-9:32)
+RIGHT_PAREN (9:32-9:33)
+IDENTIFIER "i32" (9:34-9:37)
+LEFT_BRACE (9:38-9:39)
+RETURN (9:40-9:46)
+INTEGER_LITERAL "2" (9:47-9:48)
+SEMICOLON (9:48-9:49)
+RIGHT_BRACE (9:50-9:51)
+RIGHT_BRACE (10:1-10:2)
+CONST (11:1-11:6)
+IDENTIFIER "value" (11:7-11:12)
+COLON (11:12-11:13)
+IDENTIFIER "Value" (11:14-11:19)
+EQUAL (11:20-11:21)
+NEW (11:22-11:25)
+IDENTIFIER "Impl" (11:26-11:30)
+LEFT_PAREN (11:30-11:31)
+RIGHT_PAREN (11:31-11:32)
+SEMICOLON (11:32-11:33)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "value" (12:7-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "f" (12:13-12:14)
+RIGHT_PAREN (12:14-12:15)
+SEMICOLON (12:15-12:16)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "value" (13:7-13:12)
+DOT (13:12-13:13)
+IDENTIFIER "f" (13:13-13:14)
+LEFT_PAREN (13:14-13:15)
+INTEGER_LITERAL "3" (13:15-13:16)
+RIGHT_PAREN (13:16-13:17)
+RIGHT_PAREN (13:17-13:18)
+SEMICOLON (13:18-13:19)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "value" (14:7-14:12)
+DOT (14:12-14:13)
+IDENTIFIER "f" (14:13-14:14)
+LEFT_PAREN (14:14-14:15)
+STRING_LITERAL "\"x\"" (14:15-14:18)
+RIGHT_PAREN (14:18-14:19)
+RIGHT_PAREN (14:19-14:20)
+SEMICOLON (14:20-14:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-14:21
+  (InterfaceDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Value"
+    )
+    (UninitializedVariableDeclaration
+      range: 2:5-2:18
+      mutability: CONST
+      (IdentifierDeclaration
+        range: 2:11-2:12
+        name: "f"
+      )
+      (NamedTypeNode
+        range: 2:14-2:17
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:28
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:22
+        (IdentifierDeclaration
+          range: 3:12-3:17
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 3:19-3:22
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:24-3:27
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 4:5-4:31
+      (IdentifierDeclaration
+        range: 4:10-4:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 4:12-4:25
+        (IdentifierDeclaration
+          range: 4:12-4:17
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 4:19-4:25
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 4:27-4:30
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-10:2
+    (IdentifierDeclaration
+      range: 6:7-6:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 6:23-6:28
+      name: "Value"
+    )
+    (MemberDeclaration
+      range: 7:5-7:24
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 7:12-7:24
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 7:18-7:19
+          name: "f"
+        )
+        type: null
+        (LiteralExpression
+          range: 7:22-7:23
+          kind: INT
+          text: "7"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-8:52
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-8:52
+        (IdentifierDeclaration
+          range: 8:17-8:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 8:19-8:29
+          (IdentifierDeclaration
+            range: 8:19-8:24
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 8:26-8:29
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 8:31-8:34
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:35-8:52
+          (ReturnStatement
+            range: 8:37-8:50
+            (IdentifierExpression
+              range: 8:44-8:49
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 9:5-9:51
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 9:12-9:51
+        (IdentifierDeclaration
+          range: 9:17-9:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 9:19-9:32
+          (IdentifierDeclaration
+            range: 9:19-9:24
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 9:26-9:32
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 9:34-9:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 9:38-9:51
+          (ReturnStatement
+            range: 9:40-9:49
+            (LiteralExpression
+              range: 9:47-9:48
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 11:14-11:19
+      name: "Value"
+    )
+    (NewExpression
+      range: 11:22-11:32
+      (IdentifierExpression
+        range: 11:26-11:30
+        name: "Impl"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:16
+    (CallExpression
+      range: 12:1-12:15
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:14
+        (IdentifierExpression
+          range: 12:7-12:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 12:13-12:14
+          name: "f"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:19
+    (CallExpression
+      range: 13:1-13:18
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:17
+        (MemberExpression
+          range: 13:7-13:14
+          (IdentifierExpression
+            range: 13:7-13:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 13:13-13:14
+            name: "f"
+          )
+        )
+        (LiteralExpression
+          range: 13:15-13:16
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:21
+    (CallExpression
+      range: 14:1-14:20
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:19
+        (MemberExpression
+          range: 14:7-14:14
+          (IdentifierExpression
+            range: 14:7-14:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 14:13-14:14
+            name: "f"
+          )
+        )
+        (LiteralExpression
+          range: 14:15-14:18
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:22-7:23 -> i32
+  8:44-8:49 -> i32
+  9:47-9:48 -> i32
+  11:22-11:32 -> Impl
+  11:26-11:30 -> Impl
+  12:1-12:6 -> (any) => void
+  12:1-12:15 -> void
+  12:7-12:12 -> Value
+  12:7-12:14 -> i32
+  12:13-12:14 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:18 -> void
+  13:7-13:12 -> Value
+  13:7-13:14 -> (i32) => i32
+  13:7-13:17 -> i32
+  13:13-13:14 -> (i32) => i32
+  13:15-13:16 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:20 -> void
+  14:7-14:12 -> Value
+  14:7-14:14 -> (string) => i32
+  14:7-14:19 -> i32
+  14:13-14:14 -> (string) => i32
+  14:15-14:18 -> string
+
+Resolved types:
+  2:14-2:17 -> i32
+  3:19-3:22 -> i32
+  3:24-3:27 -> i32
+  4:19-4:25 -> string
+  4:27-4:30 -> i32
+  6:23-6:28 -> Value
+  8:26-8:29 -> i32
+  8:31-8:34 -> i32
+  9:26-9:32 -> string
+  9:34-9:37 -> i32
+  11:14-11:19 -> Value
+
+Declarations:
+  1:11-1:16 -> interface Value
+  2:11-2:12 -> const f: i32
+  3:10-3:11 -> func f(i32) => i32
+  3:12-3:17 -> const value: i32
+  4:10-4:11 -> func f(string) => i32
+  4:12-4:17 -> const value: string
+  6:7-6:11 -> class Impl
+  7:18-7:19 -> const f: i32
+  8:17-8:18 -> func f(i32) => i32
+  8:19-8:24 -> const value: i32
+  9:17-9:18 -> func f(string) => i32
+  9:19-9:24 -> const value: string
+  11:7-11:12 -> const value: Value
+
+References:
+  8:44-8:49 -> 8:19-8:24
+  11:26-11:30 -> 6:7-6:11
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 11:7-11:12
+  12:13-12:14 -> 2:11-2:12
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 11:7-11:12
+  13:13-13:14 -> 3:10-3:11
+  14:1-14:6 -> builtin print
+  14:7-14:12 -> 11:7-11:12
+  14:13-14:14 -> 4:10-4:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$Impl
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  field value LTest$Value; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Impl
+    DUP
+    INVOKESPECIAL Test$Impl.<init>()V
+    PUTSTATIC Test.value LTest$Value;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    INVOKEINTERFACE Test$Value.$get$f()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    LDC 3
+    INVOKEINTERFACE Test$Value.f(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    LDC "x"
+    INVOKEINTERFACE Test$Value.f(Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$f()I flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method f(I)I flags [PUBLIC, ABSTRACT]
+  method f(Ljava/lang/String;)I flags [PUBLIC, ABSTRACT]
+
+class Test$Impl extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Value
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  field f I flags [PUBLIC, FINAL]
+  method $get$f()I flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Impl.f I
+    IRETURN
+    max stack 1 max locals 1
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 7
+    PUTFIELD Test$Impl.f I
+    RETURN
+    max stack 2 max locals 1
+  method f(I)I flags [PUBLIC]
+    ILOAD_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method f(Ljava/lang/String;)I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+7
+3
+2

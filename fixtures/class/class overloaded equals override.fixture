@@ -1,0 +1,422 @@
+class Base {
+    public func equals(value: i32) bool { return true; }
+    public func equals(value: Base) bool { return true; }
+}
+
+class Child extends Base {
+    public override func equals(value: Base) bool { return false; }
+}
+
+print(new Child().equals(1));
+print(new Child().equals(new Base()));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "equals" (2:17-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+IDENTIFIER "bool" (2:36-2:40)
+LEFT_BRACE (2:41-2:42)
+RETURN (2:43-2:49)
+BOOLEAN_LITERAL "true" (2:50-2:54)
+SEMICOLON (2:54-2:55)
+RIGHT_BRACE (2:56-2:57)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "equals" (3:17-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "value" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "Base" (3:31-3:35)
+RIGHT_PAREN (3:35-3:36)
+IDENTIFIER "bool" (3:37-3:41)
+LEFT_BRACE (3:42-3:43)
+RETURN (3:44-3:50)
+BOOLEAN_LITERAL "true" (3:51-3:55)
+SEMICOLON (3:55-3:56)
+RIGHT_BRACE (3:57-3:58)
+RIGHT_BRACE (4:1-4:2)
+CLASS (6:1-6:6)
+IDENTIFIER "Child" (6:7-6:12)
+EXTENDS (6:13-6:20)
+IDENTIFIER "Base" (6:21-6:25)
+LEFT_BRACE (6:26-6:27)
+PUBLIC (7:5-7:11)
+OVERRIDE (7:12-7:20)
+FUNC (7:21-7:25)
+IDENTIFIER "equals" (7:26-7:32)
+LEFT_PAREN (7:32-7:33)
+IDENTIFIER "value" (7:33-7:38)
+COLON (7:38-7:39)
+IDENTIFIER "Base" (7:40-7:44)
+RIGHT_PAREN (7:44-7:45)
+IDENTIFIER "bool" (7:46-7:50)
+LEFT_BRACE (7:51-7:52)
+RETURN (7:53-7:59)
+BOOLEAN_LITERAL "false" (7:60-7:65)
+SEMICOLON (7:65-7:66)
+RIGHT_BRACE (7:67-7:68)
+RIGHT_BRACE (8:1-8:2)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+NEW (10:7-10:10)
+IDENTIFIER "Child" (10:11-10:16)
+LEFT_PAREN (10:16-10:17)
+RIGHT_PAREN (10:17-10:18)
+DOT (10:18-10:19)
+IDENTIFIER "equals" (10:19-10:25)
+LEFT_PAREN (10:25-10:26)
+INTEGER_LITERAL "1" (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+RIGHT_PAREN (10:28-10:29)
+SEMICOLON (10:29-10:30)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+NEW (11:7-11:10)
+IDENTIFIER "Child" (11:11-11:16)
+LEFT_PAREN (11:16-11:17)
+RIGHT_PAREN (11:17-11:18)
+DOT (11:18-11:19)
+IDENTIFIER "equals" (11:19-11:25)
+LEFT_PAREN (11:25-11:26)
+NEW (11:26-11:29)
+IDENTIFIER "Base" (11:30-11:34)
+LEFT_PAREN (11:34-11:35)
+RIGHT_PAREN (11:35-11:36)
+RIGHT_PAREN (11:36-11:37)
+RIGHT_PAREN (11:37-11:38)
+SEMICOLON (11:38-11:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:39
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:57
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:57
+        (IdentifierDeclaration
+          range: 2:17-2:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:36-2:40
+          name: "bool"
+        )
+        (BlockStatement
+          range: 2:41-2:57
+          (ReturnStatement
+            range: 2:43-2:55
+            (LiteralExpression
+              range: 2:50-2:54
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:58
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:58
+        (IdentifierDeclaration
+          range: 3:17-3:23
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 3:24-3:35
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:31-3:35
+            name: "Base"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:37-3:41
+          name: "bool"
+        )
+        (BlockStatement
+          range: 3:42-3:58
+          (ReturnStatement
+            range: 3:44-3:56
+            (LiteralExpression
+              range: 3:51-3:55
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-8:2
+    (IdentifierDeclaration
+      range: 6:7-6:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 6:21-6:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 7:5-7:68
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:68
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 7:26-7:32
+          name: "equals"
+        )
+        (FunctionParameter
+          range: 7:33-7:44
+          (IdentifierDeclaration
+            range: 7:33-7:38
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 7:40-7:44
+            name: "Base"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:46-7:50
+          name: "bool"
+        )
+        (BlockStatement
+          range: 7:51-7:68
+          (ReturnStatement
+            range: 7:53-7:66
+            (LiteralExpression
+              range: 7:60-7:65
+              kind: BOOL
+              text: "false"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:30
+    (CallExpression
+      range: 10:1-10:29
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:28
+        (MemberExpression
+          range: 10:7-10:25
+          (NewExpression
+            range: 10:7-10:18
+            (IdentifierExpression
+              range: 10:11-10:16
+              name: "Child"
+            )
+          )
+          (IdentifierExpression
+            range: 10:19-10:25
+            name: "equals"
+          )
+        )
+        (LiteralExpression
+          range: 10:26-10:27
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:39
+    (CallExpression
+      range: 11:1-11:38
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:37
+        (MemberExpression
+          range: 11:7-11:25
+          (NewExpression
+            range: 11:7-11:18
+            (IdentifierExpression
+              range: 11:11-11:16
+              name: "Child"
+            )
+          )
+          (IdentifierExpression
+            range: 11:19-11:25
+            name: "equals"
+          )
+        )
+        (NewExpression
+          range: 11:26-11:36
+          (IdentifierExpression
+            range: 11:30-11:34
+            name: "Base"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:50-2:54 -> bool
+  3:51-3:55 -> bool
+  6:21-6:25 -> Base
+  7:60-7:65 -> bool
+  10:1-10:6 -> (any) => void
+  10:1-10:29 -> void
+  10:7-10:18 -> Child
+  10:7-10:25 -> (i32) => bool
+  10:7-10:28 -> bool
+  10:11-10:16 -> Child
+  10:19-10:25 -> (i32) => bool
+  10:26-10:27 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:38 -> void
+  11:7-11:18 -> Child
+  11:7-11:25 -> (Base) => bool
+  11:7-11:37 -> bool
+  11:11-11:16 -> Child
+  11:19-11:25 -> (Base) => bool
+  11:26-11:36 -> Base
+  11:30-11:34 -> Base
+
+Resolved types:
+  2:31-2:34 -> i32
+  2:36-2:40 -> bool
+  3:31-3:35 -> Base
+  3:37-3:41 -> bool
+  7:40-7:44 -> Base
+  7:46-7:50 -> bool
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:17-2:23 -> func equals(i32) => bool
+  2:24-2:29 -> const value: i32
+  3:17-3:23 -> func equals(Base) => bool
+  3:24-3:29 -> const value: Base
+  6:7-6:12 -> class Child
+  7:26-7:32 -> override func equals(Base) => bool
+  7:33-7:38 -> const value: Base
+
+References:
+  6:21-6:25 -> 1:7-1:11
+  10:1-10:6 -> builtin print
+  10:11-10:16 -> 6:7-6:12
+  10:19-10:25 -> 2:17-2:23
+  11:1-11:6 -> builtin print
+  11:11-11:16 -> 6:7-6:12
+  11:19-11:25 -> 7:26-7:32
+  11:30-11:34 -> 1:7-1:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    LDC 1
+    INVOKEVIRTUAL Test$Base.equals(I)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    NEW Test$Base
+    DUP
+    INVOKESPECIAL Test$Base.<init>()V
+    INVOKEVIRTUAL Test$Child.equals(LTest$Base;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equals(I)Z flags [PUBLIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+  method equals(LTest$Base;)Z flags [PUBLIC]
+    ICONST_1 1
+    IRETURN
+    max stack 1 max locals 2
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method equals(LTest$Base;)Z flags [PUBLIC]
+    ICONST_0 0
+    IRETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+true
+false

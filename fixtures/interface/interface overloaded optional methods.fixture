@@ -1,0 +1,510 @@
+interface Printer {
+    func describe(value: i32, suffix?: string) string;
+    func describe(value: string) string;
+}
+class Both implements Printer {
+    public func describe(value: i32, suffix?: string) string { return "number"; }
+    public func describe(value: string) string { return "text"; }
+}
+const printer: Printer = new Both();
+print(printer.describe(2));
+print(printer.describe("x"));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Printer" (1:11-1:18)
+LEFT_BRACE (1:19-1:20)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "value" (2:19-2:24)
+COLON (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+COMMA (2:29-2:30)
+IDENTIFIER "suffix" (2:31-2:37)
+QUESTION (2:37-2:38)
+COLON (2:38-2:39)
+IDENTIFIER "string" (2:40-2:46)
+RIGHT_PAREN (2:46-2:47)
+IDENTIFIER "string" (2:48-2:54)
+SEMICOLON (2:54-2:55)
+FUNC (3:5-3:9)
+IDENTIFIER "describe" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "value" (3:19-3:24)
+COLON (3:24-3:25)
+IDENTIFIER "string" (3:26-3:32)
+RIGHT_PAREN (3:32-3:33)
+IDENTIFIER "string" (3:34-3:40)
+SEMICOLON (3:40-3:41)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Both" (5:7-5:11)
+IMPLEMENTS (5:12-5:22)
+IDENTIFIER "Printer" (5:23-5:30)
+LEFT_BRACE (5:31-5:32)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "describe" (6:17-6:25)
+LEFT_PAREN (6:25-6:26)
+IDENTIFIER "value" (6:26-6:31)
+COLON (6:31-6:32)
+IDENTIFIER "i32" (6:33-6:36)
+COMMA (6:36-6:37)
+IDENTIFIER "suffix" (6:38-6:44)
+QUESTION (6:44-6:45)
+COLON (6:45-6:46)
+IDENTIFIER "string" (6:47-6:53)
+RIGHT_PAREN (6:53-6:54)
+IDENTIFIER "string" (6:55-6:61)
+LEFT_BRACE (6:62-6:63)
+RETURN (6:64-6:70)
+STRING_LITERAL "\"number\"" (6:71-6:79)
+SEMICOLON (6:79-6:80)
+RIGHT_BRACE (6:81-6:82)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "describe" (7:17-7:25)
+LEFT_PAREN (7:25-7:26)
+IDENTIFIER "value" (7:26-7:31)
+COLON (7:31-7:32)
+IDENTIFIER "string" (7:33-7:39)
+RIGHT_PAREN (7:39-7:40)
+IDENTIFIER "string" (7:41-7:47)
+LEFT_BRACE (7:48-7:49)
+RETURN (7:50-7:56)
+STRING_LITERAL "\"text\"" (7:57-7:63)
+SEMICOLON (7:63-7:64)
+RIGHT_BRACE (7:65-7:66)
+RIGHT_BRACE (8:1-8:2)
+CONST (9:1-9:6)
+IDENTIFIER "printer" (9:7-9:14)
+COLON (9:14-9:15)
+IDENTIFIER "Printer" (9:16-9:23)
+EQUAL (9:24-9:25)
+NEW (9:26-9:29)
+IDENTIFIER "Both" (9:30-9:34)
+LEFT_PAREN (9:34-9:35)
+RIGHT_PAREN (9:35-9:36)
+SEMICOLON (9:36-9:37)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "printer" (10:7-10:14)
+DOT (10:14-10:15)
+IDENTIFIER "describe" (10:15-10:23)
+LEFT_PAREN (10:23-10:24)
+INTEGER_LITERAL "2" (10:24-10:25)
+RIGHT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+SEMICOLON (10:27-10:28)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "printer" (11:7-11:14)
+DOT (11:14-11:15)
+IDENTIFIER "describe" (11:15-11:23)
+LEFT_PAREN (11:23-11:24)
+STRING_LITERAL "\"x\"" (11:24-11:27)
+RIGHT_PAREN (11:27-11:28)
+RIGHT_PAREN (11:28-11:29)
+SEMICOLON (11:29-11:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:30
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:18
+      name: "Printer"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:55
+      (IdentifierDeclaration
+        range: 2:10-2:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 2:19-2:29
+        (IdentifierDeclaration
+          range: 2:19-2:24
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:26-2:29
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 2:31-2:46
+        (IdentifierDeclaration
+          range: 2:31-2:37
+          name: "suffix"
+        )
+        (NamedTypeNode
+          range: 2:40-2:46
+          name: "string"
+        )
+        optional: true
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:48-2:54
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:41
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 3:19-3:32
+        (IdentifierDeclaration
+          range: 3:19-3:24
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 3:26-3:32
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:34-3:40
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-8:2
+    (IdentifierDeclaration
+      range: 5:7-5:11
+      name: "Both"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:23-5:30
+      name: "Printer"
+    )
+    (MemberDeclaration
+      range: 6:5-6:82
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:82
+        (IdentifierDeclaration
+          range: 6:17-6:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 6:26-6:36
+          (IdentifierDeclaration
+            range: 6:26-6:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 6:33-6:36
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 6:38-6:53
+          (IdentifierDeclaration
+            range: 6:38-6:44
+            name: "suffix"
+          )
+          (NamedTypeNode
+            range: 6:47-6:53
+            name: "string"
+          )
+          optional: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:55-6:61
+          name: "string"
+        )
+        (BlockStatement
+          range: 6:62-6:82
+          (ReturnStatement
+            range: 6:64-6:80
+            (LiteralExpression
+              range: 6:71-6:79
+              kind: STRING
+              text: "\"number\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:66
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:66
+        (IdentifierDeclaration
+          range: 7:17-7:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 7:26-7:39
+          (IdentifierDeclaration
+            range: 7:26-7:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 7:33-7:39
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:41-7:47
+          name: "string"
+        )
+        (BlockStatement
+          range: 7:48-7:66
+          (ReturnStatement
+            range: 7:50-7:64
+            (LiteralExpression
+              range: 7:57-7:63
+              kind: STRING
+              text: "\"text\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:14
+      name: "printer"
+    )
+    (NamedTypeNode
+      range: 9:16-9:23
+      name: "Printer"
+    )
+    (NewExpression
+      range: 9:26-9:36
+      (IdentifierExpression
+        range: 9:30-9:34
+        name: "Both"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:28
+    (CallExpression
+      range: 10:1-10:27
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:26
+        (MemberExpression
+          range: 10:7-10:23
+          (IdentifierExpression
+            range: 10:7-10:14
+            name: "printer"
+          )
+          (IdentifierExpression
+            range: 10:15-10:23
+            name: "describe"
+          )
+        )
+        (LiteralExpression
+          range: 10:24-10:25
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:30
+    (CallExpression
+      range: 11:1-11:29
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:28
+        (MemberExpression
+          range: 11:7-11:23
+          (IdentifierExpression
+            range: 11:7-11:14
+            name: "printer"
+          )
+          (IdentifierExpression
+            range: 11:15-11:23
+            name: "describe"
+          )
+        )
+        (LiteralExpression
+          range: 11:24-11:27
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  6:71-6:79 -> string
+  7:57-7:63 -> string
+  9:26-9:36 -> Both
+  9:30-9:34 -> Both
+  10:1-10:6 -> (any) => void
+  10:1-10:27 -> void
+  10:7-10:14 -> Printer
+  10:7-10:23 -> (i32, string | null) => string
+  10:7-10:26 -> string
+  10:15-10:23 -> (i32, string | null) => string
+  10:24-10:25 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:29 -> void
+  11:7-11:14 -> Printer
+  11:7-11:23 -> (string) => string
+  11:7-11:28 -> string
+  11:15-11:23 -> (string) => string
+  11:24-11:27 -> string
+
+Resolved types:
+  2:26-2:29 -> i32
+  2:40-2:46 -> string | null
+  2:48-2:54 -> string
+  3:26-3:32 -> string
+  3:34-3:40 -> string
+  5:23-5:30 -> Printer
+  6:33-6:36 -> i32
+  6:47-6:53 -> string | null
+  6:55-6:61 -> string
+  7:33-7:39 -> string
+  7:41-7:47 -> string
+  9:16-9:23 -> Printer
+
+Declarations:
+  1:11-1:18 -> interface Printer
+  2:10-2:18 -> func describe(i32, string | null) => string
+  2:19-2:24 -> const value: i32
+  2:31-2:37 -> const suffix: string | null
+  3:10-3:18 -> func describe(string) => string
+  3:19-3:24 -> const value: string
+  5:7-5:11 -> class Both
+  6:17-6:25 -> func describe(i32, string?) => string
+  6:26-6:31 -> const value: i32
+  6:38-6:44 -> const suffix: string | null
+  7:17-7:25 -> func describe(string) => string
+  7:26-7:31 -> const value: string
+  9:7-9:14 -> const printer: Printer
+
+References:
+  9:30-9:34 -> 5:7-5:11
+  10:1-10:6 -> builtin print
+  10:7-10:14 -> 9:7-9:14
+  10:15-10:23 -> 2:10-2:18
+  11:1-11:6 -> builtin print
+  11:7-11:14 -> 9:7-9:14
+  11:15-11:23 -> 3:10-3:18
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Printer
+  nest member Test$Both
+  inner class Test$Printer flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Both flags [PUBLIC, STATIC]
+  field printer LTest$Printer; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Both
+    DUP
+    INVOKESPECIAL Test$Both.<init>()V
+    PUTSTATIC Test.printer LTest$Printer;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.printer LTest$Printer;
+    LDC 2
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    LDC 2
+    INVOKEINTERFACE Test$Printer.describe(ILjava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.printer LTest$Printer;
+    LDC "x"
+    INVOKEINTERFACE Test$Printer.describe(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Printer extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Printer flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe(ILjava/lang/String;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe(ILjava/lang/String;I)Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_2 2
+   L0:
+    ALOAD_0 0
+    ILOAD_1 1
+    ALOAD_2 2
+    INVOKEINTERFACE Test$Printer.describe(ILjava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 3 max locals 4
+  method describe(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Both extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Printer
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Both flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe(ILjava/lang/String;)Ljava/lang/String; flags [PUBLIC]
+    LDC "number"
+    ARETURN
+    max stack 1 max locals 3
+  method describe(ILjava/lang/String;I)Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_2 2
+   L0:
+    ALOAD_0 0
+    ILOAD_1 1
+    ALOAD_2 2
+    INVOKEVIRTUAL Test$Both.describe(ILjava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 3 max locals 4
+  method describe(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC]
+    LDC "text"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+number
+text

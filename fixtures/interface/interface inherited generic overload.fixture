@@ -1,0 +1,851 @@
+interface BasePrinter {
+    func describe(values: List<i32>) string;
+    func describe(values: List<string>) string;
+}
+interface Printer extends BasePrinter {
+    func describe(values: List<bool>) string;
+}
+class Both implements Printer {
+    public func describe(values: List<bool>) string { return "bools"; }
+    public func describe(values: List<string>) string { return "strings"; }
+    public func describe(values: List<i32>) string { return "integers"; }
+}
+const printer: Printer = new Both();
+const integers: List<i32> = new ArrayList<i32>();
+const strings: List<string> = new ArrayList<string>();
+const bools: List<bool> = new ArrayList<bool>();
+print(printer.describe(integers));
+print(printer.describe(strings));
+print(printer.describe(bools));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "BasePrinter" (1:11-1:22)
+LEFT_BRACE (1:23-1:24)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "values" (2:19-2:25)
+COLON (2:25-2:26)
+IDENTIFIER "List" (2:27-2:31)
+LESS (2:31-2:32)
+IDENTIFIER "i32" (2:32-2:35)
+GREATER (2:35-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+SEMICOLON (2:44-2:45)
+FUNC (3:5-3:9)
+IDENTIFIER "describe" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "values" (3:19-3:25)
+COLON (3:25-3:26)
+IDENTIFIER "List" (3:27-3:31)
+LESS (3:31-3:32)
+IDENTIFIER "string" (3:32-3:38)
+GREATER (3:38-3:39)
+RIGHT_PAREN (3:39-3:40)
+IDENTIFIER "string" (3:41-3:47)
+SEMICOLON (3:47-3:48)
+RIGHT_BRACE (4:1-4:2)
+INTERFACE (5:1-5:10)
+IDENTIFIER "Printer" (5:11-5:18)
+EXTENDS (5:19-5:26)
+IDENTIFIER "BasePrinter" (5:27-5:38)
+LEFT_BRACE (5:39-5:40)
+FUNC (6:5-6:9)
+IDENTIFIER "describe" (6:10-6:18)
+LEFT_PAREN (6:18-6:19)
+IDENTIFIER "values" (6:19-6:25)
+COLON (6:25-6:26)
+IDENTIFIER "List" (6:27-6:31)
+LESS (6:31-6:32)
+IDENTIFIER "bool" (6:32-6:36)
+GREATER (6:36-6:37)
+RIGHT_PAREN (6:37-6:38)
+IDENTIFIER "string" (6:39-6:45)
+SEMICOLON (6:45-6:46)
+RIGHT_BRACE (7:1-7:2)
+CLASS (8:1-8:6)
+IDENTIFIER "Both" (8:7-8:11)
+IMPLEMENTS (8:12-8:22)
+IDENTIFIER "Printer" (8:23-8:30)
+LEFT_BRACE (8:31-8:32)
+PUBLIC (9:5-9:11)
+FUNC (9:12-9:16)
+IDENTIFIER "describe" (9:17-9:25)
+LEFT_PAREN (9:25-9:26)
+IDENTIFIER "values" (9:26-9:32)
+COLON (9:32-9:33)
+IDENTIFIER "List" (9:34-9:38)
+LESS (9:38-9:39)
+IDENTIFIER "bool" (9:39-9:43)
+GREATER (9:43-9:44)
+RIGHT_PAREN (9:44-9:45)
+IDENTIFIER "string" (9:46-9:52)
+LEFT_BRACE (9:53-9:54)
+RETURN (9:55-9:61)
+STRING_LITERAL "\"bools\"" (9:62-9:69)
+SEMICOLON (9:69-9:70)
+RIGHT_BRACE (9:71-9:72)
+PUBLIC (10:5-10:11)
+FUNC (10:12-10:16)
+IDENTIFIER "describe" (10:17-10:25)
+LEFT_PAREN (10:25-10:26)
+IDENTIFIER "values" (10:26-10:32)
+COLON (10:32-10:33)
+IDENTIFIER "List" (10:34-10:38)
+LESS (10:38-10:39)
+IDENTIFIER "string" (10:39-10:45)
+GREATER (10:45-10:46)
+RIGHT_PAREN (10:46-10:47)
+IDENTIFIER "string" (10:48-10:54)
+LEFT_BRACE (10:55-10:56)
+RETURN (10:57-10:63)
+STRING_LITERAL "\"strings\"" (10:64-10:73)
+SEMICOLON (10:73-10:74)
+RIGHT_BRACE (10:75-10:76)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "describe" (11:17-11:25)
+LEFT_PAREN (11:25-11:26)
+IDENTIFIER "values" (11:26-11:32)
+COLON (11:32-11:33)
+IDENTIFIER "List" (11:34-11:38)
+LESS (11:38-11:39)
+IDENTIFIER "i32" (11:39-11:42)
+GREATER (11:42-11:43)
+RIGHT_PAREN (11:43-11:44)
+IDENTIFIER "string" (11:45-11:51)
+LEFT_BRACE (11:52-11:53)
+RETURN (11:54-11:60)
+STRING_LITERAL "\"integers\"" (11:61-11:71)
+SEMICOLON (11:71-11:72)
+RIGHT_BRACE (11:73-11:74)
+RIGHT_BRACE (12:1-12:2)
+CONST (13:1-13:6)
+IDENTIFIER "printer" (13:7-13:14)
+COLON (13:14-13:15)
+IDENTIFIER "Printer" (13:16-13:23)
+EQUAL (13:24-13:25)
+NEW (13:26-13:29)
+IDENTIFIER "Both" (13:30-13:34)
+LEFT_PAREN (13:34-13:35)
+RIGHT_PAREN (13:35-13:36)
+SEMICOLON (13:36-13:37)
+CONST (14:1-14:6)
+IDENTIFIER "integers" (14:7-14:15)
+COLON (14:15-14:16)
+IDENTIFIER "List" (14:17-14:21)
+LESS (14:21-14:22)
+IDENTIFIER "i32" (14:22-14:25)
+GREATER (14:25-14:26)
+EQUAL (14:27-14:28)
+NEW (14:29-14:32)
+IDENTIFIER "ArrayList" (14:33-14:42)
+LESS (14:42-14:43)
+IDENTIFIER "i32" (14:43-14:46)
+GREATER (14:46-14:47)
+LEFT_PAREN (14:47-14:48)
+RIGHT_PAREN (14:48-14:49)
+SEMICOLON (14:49-14:50)
+CONST (15:1-15:6)
+IDENTIFIER "strings" (15:7-15:14)
+COLON (15:14-15:15)
+IDENTIFIER "List" (15:16-15:20)
+LESS (15:20-15:21)
+IDENTIFIER "string" (15:21-15:27)
+GREATER (15:27-15:28)
+EQUAL (15:29-15:30)
+NEW (15:31-15:34)
+IDENTIFIER "ArrayList" (15:35-15:44)
+LESS (15:44-15:45)
+IDENTIFIER "string" (15:45-15:51)
+GREATER (15:51-15:52)
+LEFT_PAREN (15:52-15:53)
+RIGHT_PAREN (15:53-15:54)
+SEMICOLON (15:54-15:55)
+CONST (16:1-16:6)
+IDENTIFIER "bools" (16:7-16:12)
+COLON (16:12-16:13)
+IDENTIFIER "List" (16:14-16:18)
+LESS (16:18-16:19)
+IDENTIFIER "bool" (16:19-16:23)
+GREATER (16:23-16:24)
+EQUAL (16:25-16:26)
+NEW (16:27-16:30)
+IDENTIFIER "ArrayList" (16:31-16:40)
+LESS (16:40-16:41)
+IDENTIFIER "bool" (16:41-16:45)
+GREATER (16:45-16:46)
+LEFT_PAREN (16:46-16:47)
+RIGHT_PAREN (16:47-16:48)
+SEMICOLON (16:48-16:49)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "printer" (17:7-17:14)
+DOT (17:14-17:15)
+IDENTIFIER "describe" (17:15-17:23)
+LEFT_PAREN (17:23-17:24)
+IDENTIFIER "integers" (17:24-17:32)
+RIGHT_PAREN (17:32-17:33)
+RIGHT_PAREN (17:33-17:34)
+SEMICOLON (17:34-17:35)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "printer" (18:7-18:14)
+DOT (18:14-18:15)
+IDENTIFIER "describe" (18:15-18:23)
+LEFT_PAREN (18:23-18:24)
+IDENTIFIER "strings" (18:24-18:31)
+RIGHT_PAREN (18:31-18:32)
+RIGHT_PAREN (18:32-18:33)
+SEMICOLON (18:33-18:34)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "printer" (19:7-19:14)
+DOT (19:14-19:15)
+IDENTIFIER "describe" (19:15-19:23)
+LEFT_PAREN (19:23-19:24)
+IDENTIFIER "bools" (19:24-19:29)
+RIGHT_PAREN (19:29-19:30)
+RIGHT_PAREN (19:30-19:31)
+SEMICOLON (19:31-19:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-19:32
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:22
+      name: "BasePrinter"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:45
+      (IdentifierDeclaration
+        range: 2:10-2:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 2:19-2:36
+        (IdentifierDeclaration
+          range: 2:19-2:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 2:27-2:36
+          name: "List"
+          (NamedTypeNode
+            range: 2:32-2:35
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:38-2:44
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:48
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 3:19-3:39
+        (IdentifierDeclaration
+          range: 3:19-3:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 3:27-3:39
+          name: "List"
+          (NamedTypeNode
+            range: 3:32-3:38
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:41-3:47
+        name: "string"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:11-5:18
+      name: "Printer"
+    )
+    (NamedTypeNode
+      range: 5:27-5:38
+      name: "BasePrinter"
+    )
+    (InterfaceMethodDeclaration
+      range: 6:5-6:46
+      (IdentifierDeclaration
+        range: 6:10-6:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 6:19-6:37
+        (IdentifierDeclaration
+          range: 6:19-6:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 6:27-6:37
+          name: "List"
+          (NamedTypeNode
+            range: 6:32-6:36
+            name: "bool"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 6:39-6:45
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 8:1-12:2
+    (IdentifierDeclaration
+      range: 8:7-8:11
+      name: "Both"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 8:23-8:30
+      name: "Printer"
+    )
+    (MemberDeclaration
+      range: 9:5-9:72
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 9:12-9:72
+        (IdentifierDeclaration
+          range: 9:17-9:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 9:26-9:44
+          (IdentifierDeclaration
+            range: 9:26-9:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 9:34-9:44
+            name: "List"
+            (NamedTypeNode
+              range: 9:39-9:43
+              name: "bool"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 9:46-9:52
+          name: "string"
+        )
+        (BlockStatement
+          range: 9:53-9:72
+          (ReturnStatement
+            range: 9:55-9:70
+            (LiteralExpression
+              range: 9:62-9:69
+              kind: STRING
+              text: "\"bools\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 10:5-10:76
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 10:12-10:76
+        (IdentifierDeclaration
+          range: 10:17-10:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 10:26-10:46
+          (IdentifierDeclaration
+            range: 10:26-10:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 10:34-10:46
+            name: "List"
+            (NamedTypeNode
+              range: 10:39-10:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 10:48-10:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 10:55-10:76
+          (ReturnStatement
+            range: 10:57-10:74
+            (LiteralExpression
+              range: 10:64-10:73
+              kind: STRING
+              text: "\"strings\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 11:5-11:74
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:74
+        (IdentifierDeclaration
+          range: 11:17-11:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 11:26-11:43
+          (IdentifierDeclaration
+            range: 11:26-11:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 11:34-11:43
+            name: "List"
+            (NamedTypeNode
+              range: 11:39-11:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 11:45-11:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 11:52-11:74
+          (ReturnStatement
+            range: 11:54-11:72
+            (LiteralExpression
+              range: 11:61-11:71
+              kind: STRING
+              text: "\"integers\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:37
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:14
+      name: "printer"
+    )
+    (NamedTypeNode
+      range: 13:16-13:23
+      name: "Printer"
+    )
+    (NewExpression
+      range: 13:26-13:36
+      (IdentifierExpression
+        range: 13:30-13:34
+        name: "Both"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:15
+      name: "integers"
+    )
+    (NamedTypeNode
+      range: 14:17-14:26
+      name: "List"
+      (NamedTypeNode
+        range: 14:22-14:25
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 14:29-14:49
+      (IdentifierExpression
+        range: 14:33-14:42
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 14:43-14:46
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:14
+      name: "strings"
+    )
+    (NamedTypeNode
+      range: 15:16-15:28
+      name: "List"
+      (NamedTypeNode
+        range: 15:21-15:27
+        name: "string"
+      )
+    )
+    (NewExpression
+      range: 15:31-15:54
+      (IdentifierExpression
+        range: 15:35-15:44
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 15:45-15:51
+        name: "string"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:49
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:12
+      name: "bools"
+    )
+    (NamedTypeNode
+      range: 16:14-16:24
+      name: "List"
+      (NamedTypeNode
+        range: 16:19-16:23
+        name: "bool"
+      )
+    )
+    (NewExpression
+      range: 16:27-16:48
+      (IdentifierExpression
+        range: 16:31-16:40
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 16:41-16:45
+        name: "bool"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:35
+    (CallExpression
+      range: 17:1-17:34
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:33
+        (MemberExpression
+          range: 17:7-17:23
+          (IdentifierExpression
+            range: 17:7-17:14
+            name: "printer"
+          )
+          (IdentifierExpression
+            range: 17:15-17:23
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 17:24-17:32
+          name: "integers"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:34
+    (CallExpression
+      range: 18:1-18:33
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:32
+        (MemberExpression
+          range: 18:7-18:23
+          (IdentifierExpression
+            range: 18:7-18:14
+            name: "printer"
+          )
+          (IdentifierExpression
+            range: 18:15-18:23
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 18:24-18:31
+          name: "strings"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:32
+    (CallExpression
+      range: 19:1-19:31
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (CallExpression
+        range: 19:7-19:30
+        (MemberExpression
+          range: 19:7-19:23
+          (IdentifierExpression
+            range: 19:7-19:14
+            name: "printer"
+          )
+          (IdentifierExpression
+            range: 19:15-19:23
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 19:24-19:29
+          name: "bools"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  9:62-9:69 -> string
+  10:64-10:73 -> string
+  11:61-11:71 -> string
+  13:26-13:36 -> Both
+  13:30-13:34 -> Both
+  14:29-14:49 -> ArrayList<i32>
+  14:33-14:42 -> ArrayList<i32>
+  15:31-15:54 -> ArrayList<string>
+  15:35-15:44 -> ArrayList<string>
+  16:27-16:48 -> ArrayList<bool>
+  16:31-16:40 -> ArrayList<bool>
+  17:1-17:6 -> (any) => void
+  17:1-17:34 -> void
+  17:7-17:14 -> Printer
+  17:7-17:23 -> (List<i32>) => string
+  17:7-17:33 -> string
+  17:15-17:23 -> (List<i32>) => string
+  17:24-17:32 -> List<i32>
+  18:1-18:6 -> (any) => void
+  18:1-18:33 -> void
+  18:7-18:14 -> Printer
+  18:7-18:23 -> (List<string>) => string
+  18:7-18:32 -> string
+  18:15-18:23 -> (List<string>) => string
+  18:24-18:31 -> List<string>
+  19:1-19:6 -> (any) => void
+  19:1-19:31 -> void
+  19:7-19:14 -> Printer
+  19:7-19:23 -> (List<bool>) => string
+  19:7-19:30 -> string
+  19:15-19:23 -> (List<bool>) => string
+  19:24-19:29 -> List<bool>
+
+Resolved types:
+  2:27-2:36 -> List<i32>
+  2:32-2:35 -> i32
+  2:38-2:44 -> string
+  3:27-3:39 -> List<string>
+  3:32-3:38 -> string
+  3:41-3:47 -> string
+  5:27-5:38 -> BasePrinter
+  6:27-6:37 -> List<bool>
+  6:32-6:36 -> bool
+  6:39-6:45 -> string
+  8:23-8:30 -> Printer
+  9:34-9:44 -> List<bool>
+  9:39-9:43 -> bool
+  9:46-9:52 -> string
+  10:34-10:46 -> List<string>
+  10:39-10:45 -> string
+  10:48-10:54 -> string
+  11:34-11:43 -> List<i32>
+  11:39-11:42 -> i32
+  11:45-11:51 -> string
+  13:16-13:23 -> Printer
+  14:17-14:26 -> List<i32>
+  14:22-14:25 -> i32
+  14:29-14:49 -> ArrayList<i32>
+  14:43-14:46 -> i32
+  15:16-15:28 -> List<string>
+  15:21-15:27 -> string
+  15:31-15:54 -> ArrayList<string>
+  15:45-15:51 -> string
+  16:14-16:24 -> List<bool>
+  16:19-16:23 -> bool
+  16:27-16:48 -> ArrayList<bool>
+  16:41-16:45 -> bool
+
+Declarations:
+  1:11-1:22 -> interface BasePrinter
+  2:10-2:18 -> func describe(List<i32>) => string
+  2:19-2:25 -> const values: List<i32>
+  3:10-3:18 -> func describe(List<string>) => string
+  3:19-3:25 -> const values: List<string>
+  5:11-5:18 -> interface Printer
+  6:10-6:18 -> func describe(List<bool>) => string
+  6:19-6:25 -> const values: List<bool>
+  8:7-8:11 -> class Both
+  9:17-9:25 -> func describe(List<bool>) => string
+  9:26-9:32 -> const values: List<bool>
+  10:17-10:25 -> func describe(List<string>) => string
+  10:26-10:32 -> const values: List<string>
+  11:17-11:25 -> func describe(List<i32>) => string
+  11:26-11:32 -> const values: List<i32>
+  13:7-13:14 -> const printer: Printer
+  14:7-14:15 -> const integers: List<i32>
+  15:7-15:14 -> const strings: List<string>
+  16:7-16:12 -> const bools: List<bool>
+
+References:
+  13:30-13:34 -> 8:7-8:11
+  14:33-14:42 -> 14:29-14:49
+  15:35-15:44 -> 15:31-15:54
+  16:31-16:40 -> 16:27-16:48
+  17:1-17:6 -> builtin print
+  17:7-17:14 -> 13:7-13:14
+  17:15-17:23 -> 2:10-2:18
+  17:24-17:32 -> 14:7-14:15
+  18:1-18:6 -> builtin print
+  18:7-18:14 -> 13:7-13:14
+  18:15-18:23 -> 3:10-3:18
+  18:24-18:31 -> 15:7-15:14
+  19:1-19:6 -> builtin print
+  19:7-19:14 -> 13:7-13:14
+  19:15-19:23 -> 6:10-6:18
+  19:24-19:29 -> 16:7-16:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$BasePrinter
+  nest member Test$Printer
+  nest member Test$Both
+  inner class Test$BasePrinter flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Printer flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Both flags [PUBLIC, STATIC]
+  field printer LTest$Printer; flags [PUBLIC, STATIC, FINAL]
+  field integers Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field strings Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/String;>;
+  field bools Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Boolean;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$Both
+    DUP
+    INVOKESPECIAL Test$Both.<init>()V
+    PUTSTATIC Test.printer LTest$Printer;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.integers Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.strings Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.bools Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.printer LTest$Printer;
+    GETSTATIC Test.integers Ljava/util/List;
+    INVOKEINTERFACE Test$Printer.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.printer LTest$Printer;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEINTERFACE Test$Printer.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.printer LTest$Printer;
+    GETSTATIC Test.bools Ljava/util/List;
+    INVOKEINTERFACE Test$Printer.describe$3(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$BasePrinter extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$BasePrinter flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Printer extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  implements Test$BasePrinter
+  nest host Test
+  inner class Test$Printer flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Both extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Printer
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Both flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Boolean;>;)Ljava/lang/String;
+    LDC "bools"
+    ARETURN
+    max stack 1 max locals 2
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 2
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+integers
+strings
+bools

@@ -1,0 +1,534 @@
+interface I {
+    func f(x?: string) string;
+    func f(x: string | null, y: i32) string;
+}
+class C implements I {
+    public func f(x?: string) string { return "one"; }
+    public func f(x: string | null, y: i32) string { return "two"; }
+}
+const value: I = new C();
+print(value.f());
+print(value.f("a", 2));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "I" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "f" (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "x" (2:12-2:13)
+QUESTION (2:13-2:14)
+COLON (2:14-2:15)
+IDENTIFIER "string" (2:16-2:22)
+RIGHT_PAREN (2:22-2:23)
+IDENTIFIER "string" (2:24-2:30)
+SEMICOLON (2:30-2:31)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "x" (3:12-3:13)
+COLON (3:13-3:14)
+IDENTIFIER "string" (3:15-3:21)
+PIPE (3:22-3:23)
+NULL (3:24-3:28)
+COMMA (3:28-3:29)
+IDENTIFIER "y" (3:30-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "i32" (3:33-3:36)
+RIGHT_PAREN (3:36-3:37)
+IDENTIFIER "string" (3:38-3:44)
+SEMICOLON (3:44-3:45)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "C" (5:7-5:8)
+IMPLEMENTS (5:9-5:19)
+IDENTIFIER "I" (5:20-5:21)
+LEFT_BRACE (5:22-5:23)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "f" (6:17-6:18)
+LEFT_PAREN (6:18-6:19)
+IDENTIFIER "x" (6:19-6:20)
+QUESTION (6:20-6:21)
+COLON (6:21-6:22)
+IDENTIFIER "string" (6:23-6:29)
+RIGHT_PAREN (6:29-6:30)
+IDENTIFIER "string" (6:31-6:37)
+LEFT_BRACE (6:38-6:39)
+RETURN (6:40-6:46)
+STRING_LITERAL "\"one\"" (6:47-6:52)
+SEMICOLON (6:52-6:53)
+RIGHT_BRACE (6:54-6:55)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "f" (7:17-7:18)
+LEFT_PAREN (7:18-7:19)
+IDENTIFIER "x" (7:19-7:20)
+COLON (7:20-7:21)
+IDENTIFIER "string" (7:22-7:28)
+PIPE (7:29-7:30)
+NULL (7:31-7:35)
+COMMA (7:35-7:36)
+IDENTIFIER "y" (7:37-7:38)
+COLON (7:38-7:39)
+IDENTIFIER "i32" (7:40-7:43)
+RIGHT_PAREN (7:43-7:44)
+IDENTIFIER "string" (7:45-7:51)
+LEFT_BRACE (7:52-7:53)
+RETURN (7:54-7:60)
+STRING_LITERAL "\"two\"" (7:61-7:66)
+SEMICOLON (7:66-7:67)
+RIGHT_BRACE (7:68-7:69)
+RIGHT_BRACE (8:1-8:2)
+CONST (9:1-9:6)
+IDENTIFIER "value" (9:7-9:12)
+COLON (9:12-9:13)
+IDENTIFIER "I" (9:14-9:15)
+EQUAL (9:16-9:17)
+NEW (9:18-9:21)
+IDENTIFIER "C" (9:22-9:23)
+LEFT_PAREN (9:23-9:24)
+RIGHT_PAREN (9:24-9:25)
+SEMICOLON (9:25-9:26)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "value" (10:7-10:12)
+DOT (10:12-10:13)
+IDENTIFIER "f" (10:13-10:14)
+LEFT_PAREN (10:14-10:15)
+RIGHT_PAREN (10:15-10:16)
+RIGHT_PAREN (10:16-10:17)
+SEMICOLON (10:17-10:18)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "value" (11:7-11:12)
+DOT (11:12-11:13)
+IDENTIFIER "f" (11:13-11:14)
+LEFT_PAREN (11:14-11:15)
+STRING_LITERAL "\"a\"" (11:15-11:18)
+COMMA (11:18-11:19)
+INTEGER_LITERAL "2" (11:20-11:21)
+RIGHT_PAREN (11:21-11:22)
+RIGHT_PAREN (11:22-11:23)
+SEMICOLON (11:23-11:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:24
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "I"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:31
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 2:12-2:22
+        (IdentifierDeclaration
+          range: 2:12-2:13
+          name: "x"
+        )
+        (NamedTypeNode
+          range: 2:16-2:22
+          name: "string"
+        )
+        optional: true
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:24-2:30
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:45
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:28
+        (IdentifierDeclaration
+          range: 3:12-3:13
+          name: "x"
+        )
+        (UnionTypeNode
+          range: 3:15-3:28
+          (NamedTypeNode
+            range: 3:15-3:21
+            name: "string"
+          )
+          (NamedTypeNode
+            range: 3:24-3:28
+            name: "null"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 3:30-3:36
+        (IdentifierDeclaration
+          range: 3:30-3:31
+          name: "y"
+        )
+        (NamedTypeNode
+          range: 3:33-3:36
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:38-3:44
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-8:2
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "C"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:20-5:21
+      name: "I"
+    )
+    (MemberDeclaration
+      range: 6:5-6:55
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:55
+        (IdentifierDeclaration
+          range: 6:17-6:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 6:19-6:29
+          (IdentifierDeclaration
+            range: 6:19-6:20
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 6:23-6:29
+            name: "string"
+          )
+          optional: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:31-6:37
+          name: "string"
+        )
+        (BlockStatement
+          range: 6:38-6:55
+          (ReturnStatement
+            range: 6:40-6:53
+            (LiteralExpression
+              range: 6:47-6:52
+              kind: STRING
+              text: "\"one\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:69
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:69
+        (IdentifierDeclaration
+          range: 7:17-7:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 7:19-7:35
+          (IdentifierDeclaration
+            range: 7:19-7:20
+            name: "x"
+          )
+          (UnionTypeNode
+            range: 7:22-7:35
+            (NamedTypeNode
+              range: 7:22-7:28
+              name: "string"
+            )
+            (NamedTypeNode
+              range: 7:31-7:35
+              name: "null"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 7:37-7:43
+          (IdentifierDeclaration
+            range: 7:37-7:38
+            name: "y"
+          )
+          (NamedTypeNode
+            range: 7:40-7:43
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:45-7:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 7:52-7:69
+          (ReturnStatement
+            range: 7:54-7:67
+            (LiteralExpression
+              range: 7:61-7:66
+              kind: STRING
+              text: "\"two\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 9:14-9:15
+      name: "I"
+    )
+    (NewExpression
+      range: 9:18-9:25
+      (IdentifierExpression
+        range: 9:22-9:23
+        name: "C"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:18
+    (CallExpression
+      range: 10:1-10:17
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:16
+        (MemberExpression
+          range: 10:7-10:14
+          (IdentifierExpression
+            range: 10:7-10:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 10:13-10:14
+            name: "f"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:24
+    (CallExpression
+      range: 11:1-11:23
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:22
+        (MemberExpression
+          range: 11:7-11:14
+          (IdentifierExpression
+            range: 11:7-11:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 11:13-11:14
+            name: "f"
+          )
+        )
+        (LiteralExpression
+          range: 11:15-11:18
+          kind: STRING
+          text: "\"a\""
+        )
+        (LiteralExpression
+          range: 11:20-11:21
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  6:47-6:52 -> string
+  7:61-7:66 -> string
+  9:18-9:25 -> C
+  9:22-9:23 -> C
+  10:1-10:6 -> (any) => void
+  10:1-10:17 -> void
+  10:7-10:12 -> I
+  10:7-10:14 -> (string | null) => string
+  10:7-10:16 -> string
+  10:13-10:14 -> (string | null) => string
+  11:1-11:6 -> (any) => void
+  11:1-11:23 -> void
+  11:7-11:12 -> I
+  11:7-11:14 -> (string | null, i32) => string
+  11:7-11:22 -> string
+  11:13-11:14 -> (string | null, i32) => string
+  11:15-11:18 -> string
+  11:20-11:21 -> i32
+
+Resolved types:
+  2:16-2:22 -> string | null
+  2:24-2:30 -> string
+  3:15-3:21 -> string
+  3:15-3:28 -> string | null
+  3:24-3:28 -> null
+  3:33-3:36 -> i32
+  3:38-3:44 -> string
+  5:20-5:21 -> I
+  6:23-6:29 -> string | null
+  6:31-6:37 -> string
+  7:22-7:28 -> string
+  7:22-7:35 -> string | null
+  7:31-7:35 -> null
+  7:40-7:43 -> i32
+  7:45-7:51 -> string
+  9:14-9:15 -> I
+
+Conversions:
+  11:15-11:18 -> string -> string | null
+
+Declarations:
+  1:11-1:12 -> interface I
+  2:10-2:11 -> func f(string | null) => string
+  2:12-2:13 -> const x: string | null
+  3:10-3:11 -> func f(string | null, i32) => string
+  3:12-3:13 -> const x: string | null
+  3:30-3:31 -> const y: i32
+  5:7-5:8 -> class C
+  6:17-6:18 -> func f(string?) => string
+  6:19-6:20 -> const x: string | null
+  7:17-7:18 -> func f(string | null, i32) => string
+  7:19-7:20 -> const x: string | null
+  7:37-7:38 -> const y: i32
+  9:7-9:12 -> const value: I
+
+References:
+  9:22-9:23 -> 5:7-5:8
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 9:7-9:12
+  10:13-10:14 -> 2:10-2:11
+  11:1-11:6 -> builtin print
+  11:7-11:12 -> 9:7-9:12
+  11:13-11:14 -> 3:10-3:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$I
+  nest member Test$C
+  inner class Test$I flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$C flags [PUBLIC, STATIC]
+  field value LTest$I; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$C
+    DUP
+    INVOKESPECIAL Test$C.<init>()V
+    PUTSTATIC Test.value LTest$I;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$I;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    LDC 1
+    INVOKEINTERFACE Test$I.f$2(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$I;
+    LDC "a"
+    LDC 2
+    INVOKEINTERFACE Test$I.f$1(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$I extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$I flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method f$2(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method f$2(Ljava/lang/String;I)Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_1 1
+   L0:
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEINTERFACE Test$I.f$2(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 3
+  method f$1(Ljava/lang/String;I)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$C extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$I
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$C flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method f$2(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC]
+    LDC "one"
+    ARETURN
+    max stack 1 max locals 2
+  method f$2(Ljava/lang/String;I)Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_1 1
+   L0:
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL Test$C.f$2(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 3
+  method f$1(Ljava/lang/String;I)Ljava/lang/String; flags [PUBLIC]
+    LDC "two"
+    ARETURN
+    max stack 1 max locals 3
+
+--- OUTPUT ---
+
+one
+two

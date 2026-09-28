@@ -35,6 +35,12 @@ public record FunctionSymbol(
 
     @Override
     public String toString() {
+        return format(
+            type.parameterTypes().stream().map(Type::toString).toList()
+        );
+    }
+
+    public String format(final List<String> parameterTypes) {
         final String modifierText =
             modifiers.stream()
                 .map(modifier -> modifier.toString().toLowerCase(Locale.ROOT))
@@ -44,10 +50,7 @@ public record FunctionSymbol(
         return "%s%s(%s) => %s".formatted(
             prefix,
             name(),
-            type.parameterTypes()
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(", ")),
+            String.join(", ", parameterTypes),
             type.returnType()
         );
     }

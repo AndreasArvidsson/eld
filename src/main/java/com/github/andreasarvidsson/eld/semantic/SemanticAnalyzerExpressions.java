@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -163,12 +164,117 @@ public final class SemanticAnalyzerExpressions {
         contextualMember = member;
         contextualMemberType = expected;
         try {
-            return analyzeExpressionAsCallee(member, context, true);
+            final Type type = analyzeExpressionAsCallee(member, context, true);
+            final Type target =
+                ConstType.unwrap(model.getExpressionType(member.target()));
+            final List<FunctionSymbol> candidates;
+            if (target instanceof ClassType receiver) {
+                candidates =
+                    classOverloadCandidates(receiver, member.member().name());
+            }
+            else if (target instanceof InterfaceType contract) {
+                candidates =
+                    model.getInterface(contract)
+                        .methodOverloads(member.member().name());
+            }
+            else {
+                return type;
+            }
+            if (candidates.size() < 2) {
+                return type;
+            }
+            final boolean classTarget =
+                unwrap(
+                    member.target()
+                ) instanceof IdentifierExpression identifier
+                    && model.getReference(
+                        identifier
+                    ) instanceof ClassDeclarationSymbol;
+            final List<FunctionSymbol> matches =
+                candidates.stream()
+                    .filter(
+                        candidate -> candidate.type().equals(expected)
+                            && (target instanceof InterfaceType || model
+                                .isStaticMember(candidate) == classTarget)
+                    )
+                    .toList();
+            if (matches.size() != 1) {
+                throw new SemanticException(
+                    member.member().range(),
+                    "No overload of '%s' matches %s",
+                    member.member().name(),
+                    expected
+                );
+            }
+            final FunctionSymbol selected = matches.getFirst();
+            final ClassType owner = model.findClassMemberOwner(selected);
+            if (
+                owner != null && !analyzer
+                    .canAccess(owner, model.getMemberVisibility(selected))
+            ) {
+                throw new SemanticException(
+                    member.member().range(),
+                    "'%s' is %s",
+                    model.formatFunctionSignature(selected),
+                    model.getMemberVisibility(selected)
+                        .toString()
+                        .toLowerCase(Locale.ROOT)
+                );
+            }
+            model.setReference(member.member(), selected);
+            model.setExpressionType(member.member(), selected.type());
+            model.setExpressionType(member, selected.type());
+            if (model.getExpressionType(member.target()) instanceof ConstType) {
+                analyzer.recordConstMethodUse(member, selected);
+            }
+            if (owner != null) {
+                model.setMemberOwner(member, owner);
+            }
+            return selected.type();
         }
         finally {
             contextualMember = previousMember;
             contextualMemberType = previousType;
         }
+    }
+
+    public @Nullable Type analyzeFunctionReference(
+        final IdentifierExpression identifier,
+        final SemanticContext context,
+        final FunctionType expected
+    ) {
+        final List<FunctionSymbol> candidates =
+            context.scope().functions(identifier.name());
+        if (candidates.size() < 2) {
+            return null;
+        }
+        final List<FunctionSymbol> matches =
+            candidates.stream()
+                .filter(candidate -> candidate.type().equals(expected))
+                .toList();
+        if (matches.size() != 1) {
+            throw new SemanticException(
+                identifier.range(),
+                "No overload of '%s' matches %s",
+                identifier.name(),
+                expected
+            );
+        }
+        final FunctionSymbol selected = matches.getFirst();
+        if (
+            model.findClassMemberOwner(selected) != null
+                && !model.isStaticMember(selected)
+                && analyzer.currentInstance() == null
+        ) {
+            throw new SemanticException(
+                identifier.range(),
+                "Instance member '%s' is not available in a static member",
+                identifier.name()
+            );
+        }
+        model.setReference(identifier, selected);
+        model.setExpressionType(identifier, selected.type());
+        return selected.type();
     }
 
     public Type analyzeExpression(
@@ -532,6 +638,19 @@ public final class SemanticAnalyzerExpressions {
                     if (symbol == null) {
                         symbol = members.methods().get(member.member().name());
                     }
+                    if (
+                        !analyzingCallee
+                            && !Objects.equals(contextualMember, member)
+                            && symbol instanceof FunctionSymbol
+                            && members.methodOverloads(member.member().name())
+                                .size() > 1
+                    ) {
+                        throw new SemanticException(
+                            member.member().range(),
+                            "Ambiguous reference to overloaded method '%s'",
+                            member.member().name()
+                        );
+                    }
                     if (symbol == null) {
                         final Type objectMethod =
                             resolveObjectMethod(member, memberTarget);
@@ -609,7 +728,25 @@ public final class SemanticAnalyzerExpressions {
                         classType.name()
                     );
                 }
-                if (classTarget && !model.isStaticMember(symbol)) {
+                final boolean overloadedCall =
+                    analyzingCallee && symbol instanceof FunctionSymbol
+                        && hasClassOverloads(classType, member.member().name());
+                if (
+                    !analyzingCallee
+                        && !Objects.equals(contextualMember, member)
+                        && symbol instanceof FunctionSymbol
+                        && hasClassOverloads(classType, member.member().name())
+                ) {
+                    throw new SemanticException(
+                        member.member().range(),
+                        "Ambiguous reference to overloaded method '%s'",
+                        member.member().name()
+                    );
+                }
+                if (
+                    classTarget && !model.isStaticMember(symbol)
+                        && !overloadedCall
+                ) {
                     throw new SemanticException(
                         member.member().range(),
                         "Instance member '%s' cannot be accessed on class %s",
@@ -646,6 +783,7 @@ public final class SemanticAnalyzerExpressions {
                 if (
                     !classTarget && model.isStaticMember(symbol)
                         && !objectOverloadCandidate
+                        && !overloadedCall
                 ) {
                     throw new SemanticException(
                         member.member().range(),
@@ -656,10 +794,11 @@ public final class SemanticAnalyzerExpressions {
                 }
                 model.setMemberOwner(member, Objects.requireNonNull(owner));
                 if (
-                    !objectOverloadCandidate && !analyzer.canAccess(
-                        Objects.requireNonNull(owner),
-                        model.getMemberVisibility(symbol)
-                    )
+                    !objectOverloadCandidate && !overloadedCall
+                        && !analyzer.canAccess(
+                            Objects.requireNonNull(owner),
+                            model.getMemberVisibility(symbol)
+                        )
                 ) {
                     throw new SemanticException(
                         member.member().range(),
@@ -928,8 +1067,21 @@ public final class SemanticAnalyzerExpressions {
             }
             case LiteralExpression literal ->
                 operations.analyzeLiteralExpression(literal);
-            case IdentifierExpression identifier ->
-                operations.analyzeIdentifierExpression(identifier, context);
+            case IdentifierExpression identifier -> {
+                if (
+                    !analyzingCallee && context.scope()
+                        .functions(identifier.name())
+                        .size() > 1
+                ) {
+                    throw new SemanticException(
+                        identifier.range(),
+                        "Ambiguous reference to overloaded function '%s'",
+                        identifier.name()
+                    );
+                }
+                yield operations
+                    .analyzeIdentifierExpression(identifier, context);
+            }
             case TupleExpression tuple -> new TupleType(
                 tuple.elements()
                     .stream()
@@ -1428,7 +1580,7 @@ public final class SemanticAnalyzerExpressions {
         final boolean previousCallee = analyzingCallee;
         final int previousArity = callArity;
         final List<Expression> previousArguments = javaCallArguments;
-        final Type type;
+        Type type;
         analyzingCallee = true;
         callArity = call.arguments().size();
         javaCallArguments = call.arguments();
@@ -1439,6 +1591,10 @@ public final class SemanticAnalyzerExpressions {
             analyzingCallee = previousCallee;
             callArity = previousArity;
             javaCallArguments = previousArguments;
+        }
+        final Type selectedType = selectOverload(call, context);
+        if (selectedType != null) {
+            type = selectedType;
         }
         if (type == BuiltinFunctionType.ARRAY_SORT) {
             if (!call.arguments().isEmpty()) {
@@ -1641,6 +1797,462 @@ public final class SemanticAnalyzerExpressions {
         validateSelectedObjectOverload(callee);
         model.setArgumentParameters(call, parameters);
         return function.returnType();
+    }
+
+    private @Nullable Type selectOverload(
+        final CallExpression call,
+        final SemanticContext context
+    ) {
+        final Expression callee = unwrap(call.callee());
+        final IdentifierExpression name;
+        final List<FunctionSymbol> candidates;
+        if (callee instanceof IdentifierExpression identifier) {
+            name = identifier;
+            candidates = context.scope().functions(identifier.name());
+        }
+        else if (
+            callee instanceof MemberExpression member
+                && model.getMemberOwner(member) instanceof ClassType owner
+        ) {
+            name = member.member();
+            candidates = classOverloadCandidates(owner, name.name());
+        }
+        else if (
+            callee instanceof MemberExpression member
+                && model.getMemberOwner(member) instanceof InterfaceType owner
+        ) {
+            name = member.member();
+            candidates = model.getInterface(owner).methodOverloads(name.name());
+        }
+        else {
+            return null;
+        }
+        if (candidates.size() < 2) {
+            return null;
+        }
+        final List<Type> argumentTypes = new ArrayList<>();
+        final List<Boolean> overloadedReferences = new ArrayList<>();
+        final List<Boolean> wideIntegerLiterals = new ArrayList<>();
+        for (final Expression supplied : call.arguments()) {
+            final Expression argument =
+                supplied instanceof NamedArgumentExpression named
+                    ? named.value()
+                    : supplied;
+            final boolean overloadedReference =
+                isOverloadedReference(argument, context);
+            overloadedReferences.add(overloadedReference);
+            final BigInteger literal = integerLiteral(argument);
+            final boolean wideIntegerLiteral =
+                literal != null && literal.abs().bitLength() >= 32;
+            wideIntegerLiterals.add(wideIntegerLiteral);
+            argumentTypes.add(
+                unwrap(argument) instanceof LambdaExpression
+                    || unwrap(argument) instanceof ArrayExpression
+                    || unwrap(argument) instanceof MapExpression
+                    || unwrap(argument) instanceof ObjectExpression
+                    || overloadedReference
+                    || wideIntegerLiteral
+                        ? BuiltinType.ANY
+                        : analyzeExpression(argument, context)
+            );
+        }
+        final List<FunctionSymbol> applicable = new ArrayList<>();
+        for (final FunctionSymbol candidate : candidates) {
+            final ClassType owner = model.findClassMemberOwner(candidate);
+            if (callee instanceof MemberExpression member) {
+                final boolean classTarget =
+                    unwrap(
+                        member.target()
+                    ) instanceof IdentifierExpression identifier
+                        && model.getReference(
+                            identifier
+                        ) instanceof ClassDeclarationSymbol;
+                if (
+                    model.getMemberOwner(member) instanceof ClassType
+                        && (classTarget != model.isStaticMember(candidate)
+                            || owner == null)
+                ) {
+                    continue;
+                }
+            }
+            final List<IdentifierDeclaration> declarations =
+                model.getFunctionParameters(candidate);
+            if (call.arguments().size() > declarations.size()) {
+                continue;
+            }
+            final boolean[] assigned = new boolean[declarations.size()];
+            boolean valid = true;
+            for (int i = 0; i < call.arguments().size(); i++) {
+                final Expression supplied = call.arguments().get(i);
+                final int parameter =
+                    supplied instanceof NamedArgumentExpression named
+                        ? declarations.stream()
+                            .map(IdentifierDeclaration::name)
+                            .toList()
+                            .indexOf(named.name().name())
+                        : i;
+                if (parameter < 0 || assigned[parameter]) {
+                    valid = false;
+                    break;
+                }
+                assigned[parameter] = true;
+                final Type expected =
+                    candidate.type().parameterTypes().get(parameter);
+                final Type actual = argumentTypes.get(i);
+                final Expression argument =
+                    supplied instanceof NamedArgumentExpression named
+                        ? named.value()
+                        : supplied;
+                if (unwrap(argument) instanceof LambdaExpression lambda) {
+                    final FunctionType target =
+                        expected instanceof FunctionType function
+                            ? function
+                            : expected instanceof InterfaceType contract
+                                && contract.javaClass() == Comparator.class
+                                    ? JavaTypes.comparatorFunction(contract)
+                                    : null;
+                    if (
+                        target == null || target.parameterTypes()
+                            .size() != lambda.parameters().size()
+                    ) {
+                        valid = false;
+                        break;
+                    }
+                    if (
+                        !matchesContextualOverloadArgument(
+                            argument,
+                            expected,
+                            context
+                        )
+                    ) {
+                        valid = false;
+                        break;
+                    }
+                    continue;
+                }
+                if (
+                    (unwrap(argument) instanceof ArrayExpression
+                        || unwrap(argument) instanceof MapExpression
+                        || unwrap(argument) instanceof ObjectExpression)
+                        && !matchesContextualOverloadArgument(
+                            argument,
+                            expected,
+                            context
+                        )
+                ) {
+                    valid = false;
+                    break;
+                }
+                if (
+                    unwrap(argument) instanceof ArrayExpression
+                        || unwrap(argument) instanceof MapExpression
+                        || unwrap(argument) instanceof ObjectExpression
+                ) {
+                    continue;
+                }
+                if (overloadedReferences.get(i)) {
+                    if (
+                        !(expected instanceof FunctionType)
+                            || !matchesContextualOverloadArgument(
+                                argument,
+                                expected,
+                                context
+                            )
+                    ) {
+                        valid = false;
+                        break;
+                    }
+                    continue;
+                }
+                if (wideIntegerLiterals.get(i)) {
+                    if (
+                        !matchesContextualOverloadArgument(
+                            argument,
+                            expected,
+                            context
+                        )
+                    ) {
+                        valid = false;
+                        break;
+                    }
+                    continue;
+                }
+                if (
+                    !model.probeTypeAssignment(
+                        () -> analyzer.resolveAssignType(
+                            actual,
+                            expected,
+                            argument
+                        ) != null
+                    )
+                ) {
+                    valid = false;
+                    break;
+                }
+            }
+            for (int i = 0; i < assigned.length; i++) {
+                if (
+                    !assigned[i]
+                        && !model.getParameterDetails(declarations.get(i))
+                            .omittable()
+                ) {
+                    valid = false;
+                }
+            }
+            if (valid) {
+                applicable.add(candidate);
+            }
+        }
+        if (applicable.isEmpty()) {
+            if (
+                callee instanceof MemberExpression member
+                    && model.getMemberOwner(member) instanceof ClassType owner
+                    && call.arguments()
+                        .stream()
+                        .noneMatch(NamedArgumentExpression.class::isInstance)
+            ) {
+                final JavaMethodSymbol inherited =
+                    JavaTypes.objectMethod(
+                        name.name(),
+                        call.arguments().size(),
+                        member.range(),
+                        owner
+                    );
+                if (inherited != null) {
+                    model.setReference(name, inherited);
+                    model.setExpressionType(name, inherited.type());
+                    model.setExpressionType(member, inherited.type());
+                    Expression grouped = call.callee();
+                    while (grouped instanceof GroupingExpression grouping) {
+                        model.setExpressionType(grouping, inherited.type());
+                        grouped = grouping.expression();
+                    }
+                    return inherited.type();
+                }
+            }
+            throw new SemanticException(
+                call.range(),
+                "No overload of '%s' accepts these arguments",
+                name.name()
+            );
+        }
+        final List<FunctionSymbol> withoutNarrowing =
+            applicable.stream()
+                .filter(
+                    candidate -> !requiresNumericNarrowing(
+                        candidate,
+                        call,
+                        argumentTypes
+                    )
+                )
+                .toList();
+        final List<FunctionSymbol> ranked =
+            withoutNarrowing.isEmpty() ? applicable : withoutNarrowing;
+        final List<FunctionSymbol> mostSpecific =
+            ranked.stream()
+                .filter(
+                    candidate -> ranked.stream()
+                        .allMatch(
+                            other -> candidate.equals(other)
+                                || moreSpecific(candidate, other, call)
+                        )
+                )
+                .toList();
+        if (mostSpecific.size() != 1) {
+            throw new SemanticException(
+                call.range(),
+                "Ambiguous call to overloaded function '%s'",
+                name.name()
+            );
+        }
+        final FunctionSymbol best = mostSpecific.getFirst();
+        if (callee instanceof MemberExpression) {
+            final ClassType owner = model.findClassMemberOwner(best);
+            if (
+                owner != null && !analyzer
+                    .canAccess(owner, model.getMemberVisibility(best))
+            ) {
+                throw new SemanticException(
+                    call.range(),
+                    "'%s' is %s",
+                    model.formatFunctionSignature(best),
+                    model.getMemberVisibility(best)
+                        .toString()
+                        .toLowerCase(Locale.ROOT)
+                );
+            }
+        }
+        model.setReference(name, best);
+        model.setExpressionType(name, best.type());
+        model.setExpressionType(callee, best.type());
+        if (callee instanceof MemberExpression member) {
+            final ClassType owner = model.findClassMemberOwner(best);
+            if (owner != null) {
+                model.setMemberOwner(member, owner);
+            }
+            if (model.getExpressionType(member.target()) instanceof ConstType) {
+                analyzer.recordConstMethodUse(member, best);
+            }
+        }
+        Expression grouped = call.callee();
+        while (grouped instanceof GroupingExpression grouping) {
+            model.setExpressionType(grouping, best.type());
+            grouped = grouping.expression();
+        }
+        return best.type();
+    }
+
+    private boolean requiresNumericNarrowing(
+        final FunctionSymbol candidate,
+        final CallExpression call,
+        final List<Type> argumentTypes
+    ) {
+        final List<String> names =
+            model.getFunctionParameters(candidate)
+                .stream()
+                .map(IdentifierDeclaration::name)
+                .toList();
+        for (int i = 0; i < call.arguments().size(); i++) {
+            final Expression supplied = call.arguments().get(i);
+            final int parameter =
+                supplied instanceof NamedArgumentExpression named
+                    ? names.indexOf(named.name().name())
+                    : i;
+            final Type actual = argumentTypes.get(i);
+            final Type expected =
+                candidate.type().parameterTypes().get(parameter);
+            if (
+                actual instanceof BuiltinType source
+                    && expected instanceof BuiltinType target
+                    && (source.isInteger() || source.isFloating())
+                    && (target.isInteger() || target.isFloating())
+                    && source != target
+                    && !source.canWidenTo(target)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isOverloadedReference(
+        final Expression expression,
+        final SemanticContext context
+    ) {
+        final Expression reference = unwrap(expression);
+        if (reference instanceof IdentifierExpression identifier) {
+            return context.scope().functions(identifier.name()).size() > 1;
+        }
+        if (reference instanceof MemberExpression member) {
+            final Type target =
+                ConstType.unwrap(analyzeExpression(member.target(), context));
+            if (target instanceof ClassType owner) {
+                return hasClassOverloads(owner, member.member().name());
+            }
+            if (target instanceof InterfaceType owner) {
+                return model.getInterface(owner)
+                    .methodOverloads(member.member().name())
+                    .size() > 1;
+            }
+        }
+        return false;
+    }
+
+    private boolean matchesContextualOverloadArgument(
+        final Expression argument,
+        final Type expected,
+        final SemanticContext context
+    ) {
+        try {
+            return model.probeTypeAssignment(() -> {
+                final Type actual =
+                    analyzeExpression(argument, context, expected);
+                return analyzer
+                    .resolveAssignType(actual, expected, argument) != null;
+            });
+        }
+        catch (final SemanticException exception) {
+            return false;
+        }
+    }
+
+    private boolean moreSpecific(
+        final FunctionSymbol candidate,
+        final FunctionSymbol other,
+        final CallExpression call
+    ) {
+        final List<IdentifierDeclaration> candidateNames =
+            model.getFunctionParameters(candidate);
+        final List<IdentifierDeclaration> otherNames =
+            model.getFunctionParameters(other);
+        boolean strictlyMoreSpecific = false;
+        for (int i = 0; i < call.arguments().size(); i++) {
+            final Expression supplied = call.arguments().get(i);
+            final String named =
+                supplied instanceof NamedArgumentExpression argument
+                    ? argument.name().name()
+                    : null;
+            final int candidateIndex =
+                named == null
+                    ? i
+                    : candidateNames.stream()
+                        .map(IdentifierDeclaration::name)
+                        .toList()
+                        .indexOf(named);
+            final int otherIndex =
+                named == null
+                    ? i
+                    : otherNames.stream()
+                        .map(IdentifierDeclaration::name)
+                        .toList()
+                        .indexOf(named);
+            final Type narrower =
+                candidate.type().parameterTypes().get(candidateIndex);
+            final Type wider = other.type().parameterTypes().get(otherIndex);
+            if (!FunctionSignatures.isSubtype(narrower, wider, model)) {
+                return false;
+            }
+            if (!FunctionSignatures.isSubtype(wider, narrower, model)) {
+                strictlyMoreSpecific = true;
+            }
+        }
+        return strictlyMoreSpecific;
+    }
+
+    private boolean hasClassOverloads(final ClassType type, final String name) {
+        return classOverloadCandidates(type, name).size() > 1;
+    }
+
+    private List<FunctionSymbol> classOverloadCandidates(
+        final ClassType type,
+        final String name
+    ) {
+        final List<FunctionSymbol> methods = new ArrayList<>();
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope scope = analyzer.classScope(current);
+            if (scope != null) {
+                for (final FunctionSymbol method : scope.functionsLocal(name)) {
+                    if (
+                        !current.equals(type) && model
+                            .getMemberVisibility(method) == Visibility.PRIVATE
+                    ) {
+                        continue;
+                    }
+                    if (
+                        methods.stream()
+                            .noneMatch(
+                                existing -> existing.type()
+                                    .parameterTypes()
+                                    .equals(method.type().parameterTypes())
+                            )
+                    ) {
+                        methods.add(method);
+                    }
+                }
+            }
+        }
+        return methods;
     }
 
     private void validateSelectedObjectOverload(final Expression callee) {

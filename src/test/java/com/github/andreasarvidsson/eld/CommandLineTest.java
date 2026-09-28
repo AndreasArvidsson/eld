@@ -31,6 +31,47 @@ class CommandLineTest {
     }
 
     @Test
+    void replKeepsGenericOverloadNamesAcrossSubmissions() throws Exception {
+        final String output = capture(() -> {
+            final ReplSession session = new ReplSession();
+            session.evaluate(
+                "func pick(values: List<i32>) string { return \"integers\"; }"
+            );
+            session.evaluate(
+                "func pick(values: List<string>) string { return \"strings\"; }"
+            );
+            session.evaluate(
+                "const integers: List<i32> = new ArrayList<i32>(); pick(integers);"
+            );
+            session.evaluate(
+                "const strings: List<string> = new ArrayList<string>(); pick(strings);"
+            );
+        });
+        assertEquals("integers\nstrings\n", output);
+    }
+
+    @Test
+    void replKeepsInheritedMethodNameWhenJavaBridgeIsAdded() throws Exception {
+        final String output = capture(() -> {
+            final ReplSession session = new ReplSession();
+            session.evaluate(
+                "class Base { public func compareTo(other: any) i32 { return 4; } }"
+            );
+            session.evaluate(
+                "class Derived extends Base implements Comparable<Derived> {"
+                    + " public func compareTo(other: Derived) i32 { return 3; } }"
+            );
+            session.evaluate(
+                "const d = new Derived(); print(d.compareTo(\"text\"));"
+            );
+            session.evaluate(
+                "const x: Comparable<Derived> = d; print(x.compareTo(new Derived()));"
+            );
+        });
+        assertEquals("4\n3\n", output);
+    }
+
+    @Test
     void replSupportsInheritanceAcrossSubmissions() throws Exception {
         final String output = capture(() -> {
             final ReplSession session = new ReplSession();

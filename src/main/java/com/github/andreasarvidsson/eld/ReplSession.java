@@ -4,8 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.EnumDeclaration;
+import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.InterfaceDeclaration;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import java.util.Map;
@@ -23,6 +25,8 @@ public final class ReplSession {
     private final ModuleLoader loader = new ModuleLoader();
     private final List<BlockItem> items = new ArrayList<>();
     private final Map<String, String> classOwners = new HashMap<>();
+    private final IdentityHashMap<FunctionDeclaration, String> methodNames =
+        new IdentityHashMap<>();
     private String parent = "java/lang/Object";
     private int sequence;
 
@@ -38,6 +42,8 @@ public final class ReplSession {
         final Program program = new Program(combined, submission.range());
         final SemanticModel model = new SemanticAnalyzer().analyze(program);
         final String name = "Repl" + sequence++;
+        final IdentityHashMap<FunctionDeclaration, String> nextMethodNames =
+            new IdentityHashMap<>(methodNames);
         final Map<String, byte[]> classes =
             new BytecodeGenerator(
                 program,
@@ -45,12 +51,14 @@ public final class ReplSession {
                 name,
                 parent,
                 items.size(),
-                classOwners
+                classOwners,
+                nextMethodNames
             ).generateClasses();
         loader.add(classes);
         final Class<?> module = loader.loadClass(name);
         // Keep declarations even if execution fails: earlier mutations cannot be rolled back.
         items.addAll(submission.items());
+        methodNames.putAll(nextMethodNames);
         for (final BlockItem item : submission.items()) {
             if (item instanceof ClassDeclaration declaration) {
                 classOwners.put(

@@ -1,0 +1,715 @@
+func describe(value: i32) string { return "integer"; }
+func describe(value: string) string { return "string"; }
+
+const integerFunction: (i32) => string = describe;
+const stringFunction: (string) => string = describe;
+print(integerFunction(2));
+print(stringFunction("hello"));
+
+class Describer {
+    public func describe(value: i32) string { return "integer method"; }
+    public func describe(value: string) string { return "string method"; }
+}
+
+const describer = new Describer();
+const integerMethod: (i32) => string = describer.describe;
+const stringMethod: (string) => string = describer.describe;
+print(integerMethod(2));
+print(stringMethod("hello"));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "value" (1:15-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+RIGHT_PAREN (1:25-1:26)
+IDENTIFIER "string" (1:27-1:33)
+LEFT_BRACE (1:34-1:35)
+RETURN (1:36-1:42)
+STRING_LITERAL "\"integer\"" (1:43-1:52)
+SEMICOLON (1:52-1:53)
+RIGHT_BRACE (1:54-1:55)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "string" (2:22-2:28)
+RIGHT_PAREN (2:28-2:29)
+IDENTIFIER "string" (2:30-2:36)
+LEFT_BRACE (2:37-2:38)
+RETURN (2:39-2:45)
+STRING_LITERAL "\"string\"" (2:46-2:54)
+SEMICOLON (2:54-2:55)
+RIGHT_BRACE (2:56-2:57)
+CONST (4:1-4:6)
+IDENTIFIER "integerFunction" (4:7-4:22)
+COLON (4:22-4:23)
+LEFT_PAREN (4:24-4:25)
+IDENTIFIER "i32" (4:25-4:28)
+RIGHT_PAREN (4:28-4:29)
+ARROW (4:30-4:32)
+IDENTIFIER "string" (4:33-4:39)
+EQUAL (4:40-4:41)
+IDENTIFIER "describe" (4:42-4:50)
+SEMICOLON (4:50-4:51)
+CONST (5:1-5:6)
+IDENTIFIER "stringFunction" (5:7-5:21)
+COLON (5:21-5:22)
+LEFT_PAREN (5:23-5:24)
+IDENTIFIER "string" (5:24-5:30)
+RIGHT_PAREN (5:30-5:31)
+ARROW (5:32-5:34)
+IDENTIFIER "string" (5:35-5:41)
+EQUAL (5:42-5:43)
+IDENTIFIER "describe" (5:44-5:52)
+SEMICOLON (5:52-5:53)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "integerFunction" (6:7-6:22)
+LEFT_PAREN (6:22-6:23)
+INTEGER_LITERAL "2" (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "stringFunction" (7:7-7:21)
+LEFT_PAREN (7:21-7:22)
+STRING_LITERAL "\"hello\"" (7:22-7:29)
+RIGHT_PAREN (7:29-7:30)
+RIGHT_PAREN (7:30-7:31)
+SEMICOLON (7:31-7:32)
+CLASS (9:1-9:6)
+IDENTIFIER "Describer" (9:7-9:16)
+LEFT_BRACE (9:17-9:18)
+PUBLIC (10:5-10:11)
+FUNC (10:12-10:16)
+IDENTIFIER "describe" (10:17-10:25)
+LEFT_PAREN (10:25-10:26)
+IDENTIFIER "value" (10:26-10:31)
+COLON (10:31-10:32)
+IDENTIFIER "i32" (10:33-10:36)
+RIGHT_PAREN (10:36-10:37)
+IDENTIFIER "string" (10:38-10:44)
+LEFT_BRACE (10:45-10:46)
+RETURN (10:47-10:53)
+STRING_LITERAL "\"integer method\"" (10:54-10:70)
+SEMICOLON (10:70-10:71)
+RIGHT_BRACE (10:72-10:73)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "describe" (11:17-11:25)
+LEFT_PAREN (11:25-11:26)
+IDENTIFIER "value" (11:26-11:31)
+COLON (11:31-11:32)
+IDENTIFIER "string" (11:33-11:39)
+RIGHT_PAREN (11:39-11:40)
+IDENTIFIER "string" (11:41-11:47)
+LEFT_BRACE (11:48-11:49)
+RETURN (11:50-11:56)
+STRING_LITERAL "\"string method\"" (11:57-11:72)
+SEMICOLON (11:72-11:73)
+RIGHT_BRACE (11:74-11:75)
+RIGHT_BRACE (12:1-12:2)
+CONST (14:1-14:6)
+IDENTIFIER "describer" (14:7-14:16)
+EQUAL (14:17-14:18)
+NEW (14:19-14:22)
+IDENTIFIER "Describer" (14:23-14:32)
+LEFT_PAREN (14:32-14:33)
+RIGHT_PAREN (14:33-14:34)
+SEMICOLON (14:34-14:35)
+CONST (15:1-15:6)
+IDENTIFIER "integerMethod" (15:7-15:20)
+COLON (15:20-15:21)
+LEFT_PAREN (15:22-15:23)
+IDENTIFIER "i32" (15:23-15:26)
+RIGHT_PAREN (15:26-15:27)
+ARROW (15:28-15:30)
+IDENTIFIER "string" (15:31-15:37)
+EQUAL (15:38-15:39)
+IDENTIFIER "describer" (15:40-15:49)
+DOT (15:49-15:50)
+IDENTIFIER "describe" (15:50-15:58)
+SEMICOLON (15:58-15:59)
+CONST (16:1-16:6)
+IDENTIFIER "stringMethod" (16:7-16:19)
+COLON (16:19-16:20)
+LEFT_PAREN (16:21-16:22)
+IDENTIFIER "string" (16:22-16:28)
+RIGHT_PAREN (16:28-16:29)
+ARROW (16:30-16:32)
+IDENTIFIER "string" (16:33-16:39)
+EQUAL (16:40-16:41)
+IDENTIFIER "describer" (16:42-16:51)
+DOT (16:51-16:52)
+IDENTIFIER "describe" (16:52-16:60)
+SEMICOLON (16:60-16:61)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "integerMethod" (17:7-17:20)
+LEFT_PAREN (17:20-17:21)
+INTEGER_LITERAL "2" (17:21-17:22)
+RIGHT_PAREN (17:22-17:23)
+RIGHT_PAREN (17:23-17:24)
+SEMICOLON (17:24-17:25)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "stringMethod" (18:7-18:19)
+LEFT_PAREN (18:19-18:20)
+STRING_LITERAL "\"hello\"" (18:20-18:27)
+RIGHT_PAREN (18:27-18:28)
+RIGHT_PAREN (18:28-18:29)
+SEMICOLON (18:29-18:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-18:30
+  (FunctionDeclaration
+    range: 1:1-1:55
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:25
+      (IdentifierDeclaration
+        range: 1:15-1:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:22-1:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:27-1:33
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:34-1:55
+      (ReturnStatement
+        range: 1:36-1:53
+        (LiteralExpression
+          range: 1:43-1:52
+          kind: STRING
+          text: "\"integer\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:57
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:28
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:22-2:28
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:30-2:36
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:37-2:57
+      (ReturnStatement
+        range: 2:39-2:55
+        (LiteralExpression
+          range: 2:46-2:54
+          kind: STRING
+          text: "\"string\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:22
+      name: "integerFunction"
+    )
+    (FunctionTypeNode
+      range: 4:24-4:39
+      (NamedTypeNode
+        range: 4:25-4:28
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 4:33-4:39
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 4:42-4:50
+      name: "describe"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:53
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:21
+      name: "stringFunction"
+    )
+    (FunctionTypeNode
+      range: 5:23-5:41
+      (NamedTypeNode
+        range: 5:24-5:30
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 5:35-5:41
+        name: "string"
+      )
+    )
+    (IdentifierExpression
+      range: 5:44-5:52
+      name: "describe"
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:27
+    (CallExpression
+      range: 6:1-6:26
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:25
+        (IdentifierExpression
+          range: 6:7-6:22
+          name: "integerFunction"
+        )
+        (LiteralExpression
+          range: 6:23-6:24
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:32
+    (CallExpression
+      range: 7:1-7:31
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:30
+        (IdentifierExpression
+          range: 7:7-7:21
+          name: "stringFunction"
+        )
+        (LiteralExpression
+          range: 7:22-7:29
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-12:2
+    (IdentifierDeclaration
+      range: 9:7-9:16
+      name: "Describer"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 10:5-10:73
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 10:12-10:73
+        (IdentifierDeclaration
+          range: 10:17-10:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 10:26-10:36
+          (IdentifierDeclaration
+            range: 10:26-10:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 10:33-10:36
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 10:38-10:44
+          name: "string"
+        )
+        (BlockStatement
+          range: 10:45-10:73
+          (ReturnStatement
+            range: 10:47-10:71
+            (LiteralExpression
+              range: 10:54-10:70
+              kind: STRING
+              text: "\"integer method\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 11:5-11:75
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:75
+        (IdentifierDeclaration
+          range: 11:17-11:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 11:26-11:39
+          (IdentifierDeclaration
+            range: 11:26-11:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 11:33-11:39
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 11:41-11:47
+          name: "string"
+        )
+        (BlockStatement
+          range: 11:48-11:75
+          (ReturnStatement
+            range: 11:50-11:73
+            (LiteralExpression
+              range: 11:57-11:72
+              kind: STRING
+              text: "\"string method\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:16
+      name: "describer"
+    )
+    type: null
+    (NewExpression
+      range: 14:19-14:34
+      (IdentifierExpression
+        range: 14:23-14:32
+        name: "Describer"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:59
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:20
+      name: "integerMethod"
+    )
+    (FunctionTypeNode
+      range: 15:22-15:37
+      (NamedTypeNode
+        range: 15:23-15:26
+        name: "i32"
+      )
+      (NamedTypeNode
+        range: 15:31-15:37
+        name: "string"
+      )
+    )
+    (MemberExpression
+      range: 15:40-15:58
+      (IdentifierExpression
+        range: 15:40-15:49
+        name: "describer"
+      )
+      (IdentifierExpression
+        range: 15:50-15:58
+        name: "describe"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:61
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:19
+      name: "stringMethod"
+    )
+    (FunctionTypeNode
+      range: 16:21-16:39
+      (NamedTypeNode
+        range: 16:22-16:28
+        name: "string"
+      )
+      (NamedTypeNode
+        range: 16:33-16:39
+        name: "string"
+      )
+    )
+    (MemberExpression
+      range: 16:42-16:60
+      (IdentifierExpression
+        range: 16:42-16:51
+        name: "describer"
+      )
+      (IdentifierExpression
+        range: 16:52-16:60
+        name: "describe"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:25
+    (CallExpression
+      range: 17:1-17:24
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:23
+        (IdentifierExpression
+          range: 17:7-17:20
+          name: "integerMethod"
+        )
+        (LiteralExpression
+          range: 17:21-17:22
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:30
+    (CallExpression
+      range: 18:1-18:29
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:28
+        (IdentifierExpression
+          range: 18:7-18:19
+          name: "stringMethod"
+        )
+        (LiteralExpression
+          range: 18:20-18:27
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:43-1:52 -> string
+  2:46-2:54 -> string
+  4:42-4:50 -> (i32) => string
+  5:44-5:52 -> (string) => string
+  6:1-6:6 -> (any) => void
+  6:1-6:26 -> void
+  6:7-6:22 -> (i32) => string
+  6:7-6:25 -> string
+  6:23-6:24 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:31 -> void
+  7:7-7:21 -> (string) => string
+  7:7-7:30 -> string
+  7:22-7:29 -> string
+  10:54-10:70 -> string
+  11:57-11:72 -> string
+  14:19-14:34 -> Describer
+  14:23-14:32 -> Describer
+  15:40-15:49 -> Describer
+  15:40-15:58 -> (i32) => string
+  15:50-15:58 -> (i32) => string
+  16:42-16:51 -> Describer
+  16:42-16:60 -> (string) => string
+  16:52-16:60 -> (string) => string
+  17:1-17:6 -> (any) => void
+  17:1-17:24 -> void
+  17:7-17:20 -> (i32) => string
+  17:7-17:23 -> string
+  17:21-17:22 -> i32
+  18:1-18:6 -> (any) => void
+  18:1-18:29 -> void
+  18:7-18:19 -> (string) => string
+  18:7-18:28 -> string
+  18:20-18:27 -> string
+
+Resolved types:
+  1:22-1:25 -> i32
+  1:27-1:33 -> string
+  2:22-2:28 -> string
+  2:30-2:36 -> string
+  4:24-4:39 -> (i32) => string
+  4:25-4:28 -> i32
+  4:33-4:39 -> string
+  5:23-5:41 -> (string) => string
+  5:24-5:30 -> string
+  5:35-5:41 -> string
+  10:33-10:36 -> i32
+  10:38-10:44 -> string
+  11:33-11:39 -> string
+  11:41-11:47 -> string
+  15:22-15:37 -> (i32) => string
+  15:23-15:26 -> i32
+  15:31-15:37 -> string
+  16:21-16:39 -> (string) => string
+  16:22-16:28 -> string
+  16:33-16:39 -> string
+
+Declarations:
+  1:6-1:14 -> func describe(i32) => string
+  1:15-1:20 -> const value: i32
+  2:6-2:14 -> func describe(string) => string
+  2:15-2:20 -> const value: string
+  4:7-4:22 -> const integerFunction: (i32) => string
+  5:7-5:21 -> const stringFunction: (string) => string
+  9:7-9:16 -> class Describer
+  10:17-10:25 -> func describe(i32) => string
+  10:26-10:31 -> const value: i32
+  11:17-11:25 -> func describe(string) => string
+  11:26-11:31 -> const value: string
+  14:7-14:16 -> const describer: Describer
+  15:7-15:20 -> const integerMethod: (i32) => string
+  16:7-16:19 -> const stringMethod: (string) => string
+
+References:
+  4:42-4:50 -> 1:6-1:14
+  5:44-5:52 -> 2:6-2:14
+  6:1-6:6 -> builtin print
+  6:7-6:22 -> 4:7-4:22
+  7:1-7:6 -> builtin print
+  7:7-7:21 -> 5:7-5:21
+  14:23-14:32 -> 9:7-9:16
+  15:40-15:49 -> 14:7-14:16
+  15:50-15:58 -> 10:17-10:25
+  16:42-16:51 -> 14:7-14:16
+  16:52-16:60 -> 11:17-11:25
+  17:1-17:6 -> builtin print
+  17:7-17:20 -> 15:7-15:20
+  18:1-18:6 -> builtin print
+  18:7-18:19 -> 16:7-16:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Describer
+  inner class Test$Describer flags [PUBLIC, STATIC]
+  field integerFunction Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field stringFunction Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field describer LTest$Describer; flags [PUBLIC, STATIC, FINAL]
+  field integerMethod Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field stringMethod Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method describe(I)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "integer"
+    ARETURN
+    max stack 1 max locals 1
+  method describe(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "string"
+    ARETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::describe(int)String]
+    PUTSTATIC Test.integerFunction Ljava/lang/invoke/MethodHandle;
+    LDC MethodHandleDesc[STATIC/Test::describe(String)String]
+    PUTSTATIC Test.stringFunction Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.integerFunction Ljava/lang/invoke/MethodHandle;
+    LDC 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.stringFunction Ljava/lang/invoke/MethodHandle;
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    NEW Test$Describer
+    DUP
+    INVOKESPECIAL Test$Describer.<init>()V
+    PUTSTATIC Test.describer LTest$Describer;
+    LDC MethodHandleDesc[VIRTUAL/Test$Describer::describe(Test$Describer,int)String]
+    GETSTATIC Test.describer LTest$Describer;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.integerMethod Ljava/lang/invoke/MethodHandle;
+    LDC MethodHandleDesc[VIRTUAL/Test$Describer::describe(Test$Describer,String)String]
+    GETSTATIC Test.describer LTest$Describer;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.stringMethod Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.integerMethod Ljava/lang/invoke/MethodHandle;
+    LDC 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.stringMethod Ljava/lang/invoke/MethodHandle;
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Describer extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Describer flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe(I)Ljava/lang/String; flags [PUBLIC]
+    LDC "integer method"
+    ARETURN
+    max stack 1 max locals 2
+  method describe(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC]
+    LDC "string method"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+integer
+string
+integer method
+string method

@@ -185,22 +185,35 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Overloaded functions
-- Sealed classes/interfaces
-- final classes? Probably not necessary if we have sealed classes
-- abstract classes?
-- String std lib
 - assert identifier case
+  Classes/records/interfaces/enums: `[A-Z][A-Za-z0-9]*`
+  functions: `[a-z][A-Za-z0-9]*`
+  variables/parameters: `[a-z][A-Za-z0-9]*` or discard `_`
+  constants: `[a-z][A-Za-z0-9]*` or `[A-Z][A-Z0-9_]*` or discard `_`
+  enum constants: `[A-Z][A-Z0-9_]*`
+  make one fixture file with all the approved versions and then one file for each failure.
+- Support abstract classes with abstract methods
+- Sealed classes/interfaces
+  - class Animal {} // extensible
+  - class Animal permits Dog, Cat {} // only Dog and Cat may extend this
+  - class Animal permits {} // nothing may extend this
+- Add python \* operator to force following parameters to be used named only
+  - treat \* purely as a parameter-list marker, not an AST parameter itself. Parameters after it get namedOnly: true.
+- String std lib
 - Collections std lib
 - create literal types from collection elements
 - Export & import
-- Remove postfix operator?
 - constant control-flow elimination
+  - Optimize code and show warnings
+  - Suppress warnings with comments: // eld-disable-next-line constant-condition
+- Warnings in addition to errors.
+  - Flag to turn warnings into errors.
+  - Unused variables
+  - Dead code
 - Vscode extension with syntax highlighting
 - Formatter
 - LSP, linting, code completion
 - Tree sitter parser
-- Warnings in addition to errors. Flag to turn warnings into errors.
-- Operator overloading
+- Operator overloading. We have already added `==`.
 - Regex literals: `const re: regex = /^\d+$`;
 - Methods like `indexOf` should return `null` instead of `-1` on failure.

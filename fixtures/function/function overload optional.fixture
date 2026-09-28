@@ -1,0 +1,322 @@
+func describe(value: i32, suffix?: string) string { return "integer"; }
+func describe(value: string) string { return "string"; }
+
+print(describe(2));
+print(describe(2, "!"));
+print(describe("hello"));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "value" (1:15-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+COMMA (1:25-1:26)
+IDENTIFIER "suffix" (1:27-1:33)
+QUESTION (1:33-1:34)
+COLON (1:34-1:35)
+IDENTIFIER "string" (1:36-1:42)
+RIGHT_PAREN (1:42-1:43)
+IDENTIFIER "string" (1:44-1:50)
+LEFT_BRACE (1:51-1:52)
+RETURN (1:53-1:59)
+STRING_LITERAL "\"integer\"" (1:60-1:69)
+SEMICOLON (1:69-1:70)
+RIGHT_BRACE (1:71-1:72)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "string" (2:22-2:28)
+RIGHT_PAREN (2:28-2:29)
+IDENTIFIER "string" (2:30-2:36)
+LEFT_BRACE (2:37-2:38)
+RETURN (2:39-2:45)
+STRING_LITERAL "\"string\"" (2:46-2:54)
+SEMICOLON (2:54-2:55)
+RIGHT_BRACE (2:56-2:57)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "describe" (4:7-4:15)
+LEFT_PAREN (4:15-4:16)
+INTEGER_LITERAL "2" (4:16-4:17)
+RIGHT_PAREN (4:17-4:18)
+RIGHT_PAREN (4:18-4:19)
+SEMICOLON (4:19-4:20)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "describe" (5:7-5:15)
+LEFT_PAREN (5:15-5:16)
+INTEGER_LITERAL "2" (5:16-5:17)
+COMMA (5:17-5:18)
+STRING_LITERAL "\"!\"" (5:19-5:22)
+RIGHT_PAREN (5:22-5:23)
+RIGHT_PAREN (5:23-5:24)
+SEMICOLON (5:24-5:25)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "describe" (6:7-6:15)
+LEFT_PAREN (6:15-6:16)
+STRING_LITERAL "\"hello\"" (6:16-6:23)
+RIGHT_PAREN (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+SEMICOLON (6:25-6:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:26
+  (FunctionDeclaration
+    range: 1:1-1:72
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:25
+      (IdentifierDeclaration
+        range: 1:15-1:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:22-1:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:27-1:42
+      (IdentifierDeclaration
+        range: 1:27-1:33
+        name: "suffix"
+      )
+      (NamedTypeNode
+        range: 1:36-1:42
+        name: "string"
+      )
+      optional: true
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:44-1:50
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:51-1:72
+      (ReturnStatement
+        range: 1:53-1:70
+        (LiteralExpression
+          range: 1:60-1:69
+          kind: STRING
+          text: "\"integer\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:57
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:28
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:22-2:28
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:30-2:36
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:37-2:57
+      (ReturnStatement
+        range: 2:39-2:55
+        (LiteralExpression
+          range: 2:46-2:54
+          kind: STRING
+          text: "\"string\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:20
+    (CallExpression
+      range: 4:1-4:19
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:18
+        (IdentifierExpression
+          range: 4:7-4:15
+          name: "describe"
+        )
+        (LiteralExpression
+          range: 4:16-4:17
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:25
+    (CallExpression
+      range: 5:1-5:24
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:23
+        (IdentifierExpression
+          range: 5:7-5:15
+          name: "describe"
+        )
+        (LiteralExpression
+          range: 5:16-5:17
+          kind: INT
+          text: "2"
+        )
+        (LiteralExpression
+          range: 5:19-5:22
+          kind: STRING
+          text: "\"!\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:26
+    (CallExpression
+      range: 6:1-6:25
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:24
+        (IdentifierExpression
+          range: 6:7-6:15
+          name: "describe"
+        )
+        (LiteralExpression
+          range: 6:16-6:23
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:60-1:69 -> string
+  2:46-2:54 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:19 -> void
+  4:7-4:15 -> (i32, string | null) => string
+  4:7-4:18 -> string
+  4:16-4:17 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:24 -> void
+  5:7-5:15 -> (i32, string | null) => string
+  5:7-5:23 -> string
+  5:16-5:17 -> i32
+  5:19-5:22 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:25 -> void
+  6:7-6:15 -> (string) => string
+  6:7-6:24 -> string
+  6:16-6:23 -> string
+
+Resolved types:
+  1:22-1:25 -> i32
+  1:36-1:42 -> string | null
+  1:44-1:50 -> string
+  2:22-2:28 -> string
+  2:30-2:36 -> string
+
+Conversions:
+  5:19-5:22 -> string -> string | null
+
+Declarations:
+  1:6-1:14 -> func describe(i32, string?) => string
+  1:15-1:20 -> const value: i32
+  1:27-1:33 -> const suffix: string | null
+  2:6-2:14 -> func describe(string) => string
+  2:15-2:20 -> const value: string
+
+References:
+  4:1-4:6 -> builtin print
+  4:7-4:15 -> 1:6-1:14
+  5:1-5:6 -> builtin print
+  5:7-5:15 -> 1:6-1:14
+  6:1-6:6 -> builtin print
+  6:7-6:15 -> 2:6-2:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method describe(ILjava/lang/String;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "integer"
+    ARETURN
+    max stack 1 max locals 2
+  method describe(ILjava/lang/String;I)Ljava/lang/String; flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 2
+    IAND
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_1 1
+   L0:
+    ILOAD_0 0
+    ALOAD_1 1
+    INVOKESTATIC Test.describe(ILjava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 3
+  method describe(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "string"
+    ARETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    LDC 2
+    INVOKESTATIC Test.describe(ILjava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    LDC "!"
+    INVOKESTATIC Test.describe(ILjava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    INVOKESTATIC Test.describe(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+integer
+integer
+string

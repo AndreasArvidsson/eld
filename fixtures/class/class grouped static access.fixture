@@ -237,7 +237,7 @@ Resolved types:
 Declarations:
   1:7-1:14 -> class Example
   2:25-2:30 -> const value: i32
-  4:24-4:27 -> func add(i32) => i32
+  4:24-4:27 -> func add(i32?) => i32
   4:28-4:34 -> const amount: i32
 
 References:

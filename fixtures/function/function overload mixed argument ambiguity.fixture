@@ -1,0 +1,179 @@
+func foo(a: i32, b: string, c: bool) string { return "first"; }
+func foo(x: i32, c: bool, b: string) string { return "second"; }
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "a" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+COMMA (1:16-1:17)
+IDENTIFIER "b" (1:18-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "string" (1:21-1:27)
+COMMA (1:27-1:28)
+IDENTIFIER "c" (1:29-1:30)
+COLON (1:30-1:31)
+IDENTIFIER "bool" (1:32-1:36)
+RIGHT_PAREN (1:36-1:37)
+IDENTIFIER "string" (1:38-1:44)
+LEFT_BRACE (1:45-1:46)
+RETURN (1:47-1:53)
+STRING_LITERAL "\"first\"" (1:54-1:61)
+SEMICOLON (1:61-1:62)
+RIGHT_BRACE (1:63-1:64)
+FUNC (2:1-2:5)
+IDENTIFIER "foo" (2:6-2:9)
+LEFT_PAREN (2:9-2:10)
+IDENTIFIER "x" (2:10-2:11)
+COLON (2:11-2:12)
+IDENTIFIER "i32" (2:13-2:16)
+COMMA (2:16-2:17)
+IDENTIFIER "c" (2:18-2:19)
+COLON (2:19-2:20)
+IDENTIFIER "bool" (2:21-2:25)
+COMMA (2:25-2:26)
+IDENTIFIER "b" (2:27-2:28)
+COLON (2:28-2:29)
+IDENTIFIER "string" (2:30-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+LEFT_BRACE (2:45-2:46)
+RETURN (2:47-2:53)
+STRING_LITERAL "\"second\"" (2:54-2:62)
+SEMICOLON (2:62-2:63)
+RIGHT_BRACE (2:64-2:65)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:65
+  (FunctionDeclaration
+    range: 1:1-1:64
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:16
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:18-1:27
+      (IdentifierDeclaration
+        range: 1:18-1:19
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:21-1:27
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:29-1:36
+      (IdentifierDeclaration
+        range: 1:29-1:30
+        name: "c"
+      )
+      (NamedTypeNode
+        range: 1:32-1:36
+        name: "bool"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:38-1:44
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:45-1:64
+      (ReturnStatement
+        range: 1:47-1:62
+        (LiteralExpression
+          range: 1:54-1:61
+          kind: STRING
+          text: "\"first\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:65
+    (IdentifierDeclaration
+      range: 2:6-2:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 2:10-2:16
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "x"
+      )
+      (NamedTypeNode
+        range: 2:13-2:16
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 2:18-2:25
+      (IdentifierDeclaration
+        range: 2:18-2:19
+        name: "c"
+      )
+      (NamedTypeNode
+        range: 2:21-2:25
+        name: "bool"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 2:27-2:36
+      (IdentifierDeclaration
+        range: 2:27-2:28
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 2:30-2:36
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:38-2:44
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:45-2:65
+      (ReturnStatement
+        range: 2:47-2:63
+        (LiteralExpression
+          range: 2:54-2:62
+          kind: STRING
+          text: "\"second\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous overload of 'foo': overlapping callable signatures at 2:6-2:9

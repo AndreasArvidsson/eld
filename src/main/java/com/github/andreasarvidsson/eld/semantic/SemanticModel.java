@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectMember;
@@ -44,6 +45,8 @@ public final class SemanticModel {
     private static final String ARROW = " -> ";
     private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
         new IdentityHashMap<>();
+    private final IdentityHashMap<FunctionParameter, Type> declaredParameterTypes =
+        new IdentityHashMap<>();
     private final Map<ClassType, List<FunctionParameter>> constructorParameters =
         new HashMap<>();
     private final IdentityHashMap<ObjectExpression, List<ObjectMember>> objectMembers =
@@ -58,6 +61,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> expressionTypes =
         new IdentityHashMap<>();
+    private final IdentityHashMap<Expression, Type> probedExpressionTypes =
+        new IdentityHashMap<>();
     private final Set<Expression> switchTypeMatches =
         Collections.newSetFromMap(new IdentityHashMap<>());
     private final Set<Expression> switchDualMatches =
@@ -66,6 +71,7 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<Expression, Type> conversionTypes =
         new IdentityHashMap<>();
+    private int typeProbeDepth;
     private final IdentityHashMap<Expression, Type> unionMemberTypes =
         new IdentityHashMap<>();
     private final IdentityHashMap<TypeNode, Type> resolvedTypes =
@@ -84,6 +90,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final Map<ClassType, List<InterfaceBridge>> interfaceBridges =
         new HashMap<>();
+    private final IdentityHashMap<FunctionSymbol, InterfaceType> interfaceMethodOwners =
+        new IdentityHashMap<>();
     private final IdentityHashMap<VariableSymbol, FunctionSymbol> variableOwners =
         new IdentityHashMap<>();
     private final IdentityHashMap<VariableSymbol, ClassType> constructorVariableOwners =
@@ -208,8 +216,39 @@ public final class SemanticModel {
         return functionDeclarations.get(function);
     }
 
+    public void setDeclaredParameterType(
+        final FunctionParameter parameter,
+        final Type type
+    ) {
+        declaredParameterTypes.put(parameter, type);
+    }
+
     public Map<FunctionSymbol, FunctionDeclaration> getFunctionDeclarations() {
         return Collections.unmodifiableMap(functionDeclarations);
+    }
+
+    public String formatFunctionSignature(final FunctionSymbol function) {
+        final FunctionDeclaration declaration =
+            getFunctionDeclaration(function);
+        final List<IdentifierDeclaration> parameters =
+            functionParameters.get(function);
+        final List<String> parameterTypes =
+            declaration != null
+                ? declaration.parameters()
+                    .stream()
+                    .map(this::formatParameterType)
+                    .toList()
+                : parameters != null
+                    ? parameters.stream()
+                        .map(this::getParameterDetails)
+                        .map(this::formatParameterType)
+                        .toList()
+                    : function.type()
+                        .parameterTypes()
+                        .stream()
+                        .map(Type::toString)
+                        .toList();
+        return function.name() + "(" + String.join(", ", parameterTypes) + ")";
     }
 
     public boolean isOverrideCompatible(
@@ -253,14 +292,8 @@ public final class SemanticModel {
     public void addInterfaceBridge(
         final ClassType owner,
         final FunctionSymbol implementation,
-        final FunctionType contract
+        final FunctionSymbol contract
     ) {
-        if (
-            implementation.type().equals(contract)
-                || getOverrideBridges(implementation).contains(contract)
-        ) {
-            return;
-        }
         final InterfaceBridge bridge =
             new InterfaceBridge(implementation, contract);
         final List<InterfaceBridge> bridges =
@@ -275,8 +308,21 @@ public final class SemanticModel {
     }
 
     public record InterfaceBridge(
-        FunctionSymbol implementation, FunctionType contract
+        FunctionSymbol implementation, FunctionSymbol contract
     ) {
+    }
+
+    public void setInterfaceMethodOwner(
+        final FunctionSymbol method,
+        final InterfaceType owner
+    ) {
+        interfaceMethodOwners.put(method, owner);
+    }
+
+    public @Nullable InterfaceType findInterfaceMethodOwner(
+        final FunctionSymbol method
+    ) {
+        return interfaceMethodOwners.get(method);
     }
 
     public void setVariableOwner(
@@ -879,10 +925,21 @@ public final class SemanticModel {
         final Expression expression,
         final Type type
     ) {
-        expressionTypes.put(expression, type);
+        if (typeProbeDepth > 0) {
+            probedExpressionTypes.put(expression, type);
+        }
+        else {
+            expressionTypes.put(expression, type);
+        }
     }
 
     public Type getExpressionType(final Expression expression) {
+        if (typeProbeDepth > 0) {
+            final Type probed = probedExpressionTypes.get(expression);
+            if (probed != null) {
+                return probed;
+            }
+        }
         return Objects.requireNonNull(expressionTypes.get(expression));
     }
 
@@ -923,7 +980,23 @@ public final class SemanticModel {
         final Expression expression,
         final Type type
     ) {
-        conversionTypes.put(expression, type);
+        if (typeProbeDepth == 0) {
+            conversionTypes.put(expression, type);
+        }
+    }
+
+    public boolean probeTypeAssignment(final BooleanSupplier check) {
+        final IdentityHashMap<Expression, Type> previousTypes =
+            new IdentityHashMap<>(probedExpressionTypes);
+        typeProbeDepth++;
+        try {
+            return check.getAsBoolean();
+        }
+        finally {
+            typeProbeDepth--;
+            probedExpressionTypes.clear();
+            probedExpressionTypes.putAll(previousTypes);
+        }
     }
 
     public Type getConversionType(final Expression expression) {
@@ -944,8 +1017,10 @@ public final class SemanticModel {
         final Type member,
         final UnionType union
     ) {
-        unionMemberTypes.put(expression, member);
-        setConversionType(expression, union);
+        if (typeProbeDepth == 0) {
+            unionMemberTypes.put(expression, member);
+            setConversionType(expression, union);
+        }
     }
 
     public Type getUnionMemberType(final Expression expression) {
@@ -1113,6 +1188,18 @@ public final class SemanticModel {
     }
 
     private String formatDeclaration(final Symbol symbol) {
+        if (symbol instanceof FunctionSymbol function) {
+            final FunctionDeclaration declaration =
+                getFunctionDeclaration(function);
+            if (declaration != null) {
+                final List<String> parameterTypes =
+                    declaration.parameters()
+                        .stream()
+                        .map(this::formatParameterType)
+                        .toList();
+                return function.format(parameterTypes);
+            }
+        }
         if (
             symbol instanceof VariableSymbol variable
                 && isConstantCallable(variable)
@@ -1124,6 +1211,17 @@ public final class SemanticModel {
             );
         }
         return symbol.toString();
+    }
+
+    private String formatParameterType(final FunctionParameter parameter) {
+        final Type declared = declaredParameterTypes.get(parameter);
+        if (declared == null) {
+            return parameter.type() + (parameter.omittable() ? "?" : "");
+        }
+        final String text = declared.toString();
+        return parameter.omittable()
+            ? declared instanceof UnionType ? "(" + text + ")?" : text + "?"
+            : text;
     }
 
     private static void appendSection(

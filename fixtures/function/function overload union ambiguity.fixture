@@ -1,0 +1,99 @@
+func describe(value: i32 | null) {}
+func describe(value: string | null) {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "value" (1:15-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+PIPE (1:26-1:27)
+NULL (1:28-1:32)
+RIGHT_PAREN (1:32-1:33)
+LEFT_BRACE (1:34-1:35)
+RIGHT_BRACE (1:35-1:36)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "string" (2:22-2:28)
+PIPE (2:29-2:30)
+NULL (2:31-2:35)
+RIGHT_PAREN (2:35-2:36)
+LEFT_BRACE (2:37-2:38)
+RIGHT_BRACE (2:38-2:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:39
+  (FunctionDeclaration
+    range: 1:1-1:36
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:32
+      (IdentifierDeclaration
+        range: 1:15-1:20
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 1:22-1:32
+        (NamedTypeNode
+          range: 1:22-1:25
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 1:28-1:32
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:34-1:36
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:39
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:35
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (UnionTypeNode
+        range: 2:22-2:35
+        (NamedTypeNode
+          range: 2:22-2:28
+          name: "string"
+        )
+        (NamedTypeNode
+          range: 2:31-2:35
+          name: "null"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 2:37-2:39
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous overload of 'describe': overlapping callable signatures at 2:6-2:14

@@ -1,0 +1,366 @@
+func describe(values: List<i32>) string { return "integers"; }
+func describe(values: List<string>) string { return "strings"; }
+
+const integers: List<i32> = new ArrayList<i32>();
+const strings: List<string> = new ArrayList<string>();
+print(describe(integers));
+print(describe(strings));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "values" (1:15-1:21)
+COLON (1:21-1:22)
+IDENTIFIER "List" (1:23-1:27)
+LESS (1:27-1:28)
+IDENTIFIER "i32" (1:28-1:31)
+GREATER (1:31-1:32)
+RIGHT_PAREN (1:32-1:33)
+IDENTIFIER "string" (1:34-1:40)
+LEFT_BRACE (1:41-1:42)
+RETURN (1:43-1:49)
+STRING_LITERAL "\"integers\"" (1:50-1:60)
+SEMICOLON (1:60-1:61)
+RIGHT_BRACE (1:62-1:63)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "values" (2:15-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "List" (2:23-2:27)
+LESS (2:27-2:28)
+IDENTIFIER "string" (2:28-2:34)
+GREATER (2:34-2:35)
+RIGHT_PAREN (2:35-2:36)
+IDENTIFIER "string" (2:37-2:43)
+LEFT_BRACE (2:44-2:45)
+RETURN (2:46-2:52)
+STRING_LITERAL "\"strings\"" (2:53-2:62)
+SEMICOLON (2:62-2:63)
+RIGHT_BRACE (2:64-2:65)
+CONST (4:1-4:6)
+IDENTIFIER "integers" (4:7-4:15)
+COLON (4:15-4:16)
+IDENTIFIER "List" (4:17-4:21)
+LESS (4:21-4:22)
+IDENTIFIER "i32" (4:22-4:25)
+GREATER (4:25-4:26)
+EQUAL (4:27-4:28)
+NEW (4:29-4:32)
+IDENTIFIER "ArrayList" (4:33-4:42)
+LESS (4:42-4:43)
+IDENTIFIER "i32" (4:43-4:46)
+GREATER (4:46-4:47)
+LEFT_PAREN (4:47-4:48)
+RIGHT_PAREN (4:48-4:49)
+SEMICOLON (4:49-4:50)
+CONST (5:1-5:6)
+IDENTIFIER "strings" (5:7-5:14)
+COLON (5:14-5:15)
+IDENTIFIER "List" (5:16-5:20)
+LESS (5:20-5:21)
+IDENTIFIER "string" (5:21-5:27)
+GREATER (5:27-5:28)
+EQUAL (5:29-5:30)
+NEW (5:31-5:34)
+IDENTIFIER "ArrayList" (5:35-5:44)
+LESS (5:44-5:45)
+IDENTIFIER "string" (5:45-5:51)
+GREATER (5:51-5:52)
+LEFT_PAREN (5:52-5:53)
+RIGHT_PAREN (5:53-5:54)
+SEMICOLON (5:54-5:55)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "describe" (6:7-6:15)
+LEFT_PAREN (6:15-6:16)
+IDENTIFIER "integers" (6:16-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "describe" (7:7-7:15)
+LEFT_PAREN (7:15-7:16)
+IDENTIFIER "strings" (7:16-7:23)
+RIGHT_PAREN (7:23-7:24)
+RIGHT_PAREN (7:24-7:25)
+SEMICOLON (7:25-7:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:26
+  (FunctionDeclaration
+    range: 1:1-1:63
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:32
+      (IdentifierDeclaration
+        range: 1:15-1:21
+        name: "values"
+      )
+      (NamedTypeNode
+        range: 1:23-1:32
+        name: "List"
+        (NamedTypeNode
+          range: 1:28-1:31
+          name: "i32"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:34-1:40
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:41-1:63
+      (ReturnStatement
+        range: 1:43-1:61
+        (LiteralExpression
+          range: 1:50-1:60
+          kind: STRING
+          text: "\"integers\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:65
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:35
+      (IdentifierDeclaration
+        range: 2:15-2:21
+        name: "values"
+      )
+      (NamedTypeNode
+        range: 2:23-2:35
+        name: "List"
+        (NamedTypeNode
+          range: 2:28-2:34
+          name: "string"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:37-2:43
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:44-2:65
+      (ReturnStatement
+        range: 2:46-2:63
+        (LiteralExpression
+          range: 2:53-2:62
+          kind: STRING
+          text: "\"strings\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:15
+      name: "integers"
+    )
+    (NamedTypeNode
+      range: 4:17-4:26
+      name: "List"
+      (NamedTypeNode
+        range: 4:22-4:25
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 4:29-4:49
+      (IdentifierExpression
+        range: 4:33-4:42
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 4:43-4:46
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:14
+      name: "strings"
+    )
+    (NamedTypeNode
+      range: 5:16-5:28
+      name: "List"
+      (NamedTypeNode
+        range: 5:21-5:27
+        name: "string"
+      )
+    )
+    (NewExpression
+      range: 5:31-5:54
+      (IdentifierExpression
+        range: 5:35-5:44
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 5:45-5:51
+        name: "string"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:27
+    (CallExpression
+      range: 6:1-6:26
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:25
+        (IdentifierExpression
+          range: 6:7-6:15
+          name: "describe"
+        )
+        (IdentifierExpression
+          range: 6:16-6:24
+          name: "integers"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:26
+    (CallExpression
+      range: 7:1-7:25
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:24
+        (IdentifierExpression
+          range: 7:7-7:15
+          name: "describe"
+        )
+        (IdentifierExpression
+          range: 7:16-7:23
+          name: "strings"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:50-1:60 -> string
+  2:53-2:62 -> string
+  4:29-4:49 -> ArrayList<i32>
+  4:33-4:42 -> ArrayList<i32>
+  5:31-5:54 -> ArrayList<string>
+  5:35-5:44 -> ArrayList<string>
+  6:1-6:6 -> (any) => void
+  6:1-6:26 -> void
+  6:7-6:15 -> (List<i32>) => string
+  6:7-6:25 -> string
+  6:16-6:24 -> List<i32>
+  7:1-7:6 -> (any) => void
+  7:1-7:25 -> void
+  7:7-7:15 -> (List<string>) => string
+  7:7-7:24 -> string
+  7:16-7:23 -> List<string>
+
+Resolved types:
+  1:23-1:32 -> List<i32>
+  1:28-1:31 -> i32
+  1:34-1:40 -> string
+  2:23-2:35 -> List<string>
+  2:28-2:34 -> string
+  2:37-2:43 -> string
+  4:17-4:26 -> List<i32>
+  4:22-4:25 -> i32
+  4:29-4:49 -> ArrayList<i32>
+  4:43-4:46 -> i32
+  5:16-5:28 -> List<string>
+  5:21-5:27 -> string
+  5:31-5:54 -> ArrayList<string>
+  5:45-5:51 -> string
+
+Declarations:
+  1:6-1:14 -> func describe(List<i32>) => string
+  1:15-1:21 -> const values: List<i32>
+  2:6-2:14 -> func describe(List<string>) => string
+  2:15-2:21 -> const values: List<string>
+  4:7-4:15 -> const integers: List<i32>
+  5:7-5:14 -> const strings: List<string>
+
+References:
+  4:33-4:42 -> 4:29-4:49
+  5:35-5:44 -> 5:31-5:54
+  6:1-6:6 -> builtin print
+  6:7-6:15 -> 1:6-1:14
+  6:16-6:24 -> 4:7-4:15
+  7:1-7:6 -> builtin print
+  7:7-7:15 -> 2:6-2:14
+  7:16-7:23 -> 5:7-5:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field integers Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field strings Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/String;>;
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 1
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.integers Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.strings Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.integers Ljava/util/List;
+    INVOKESTATIC Test.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKESTATIC Test.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+integers
+strings

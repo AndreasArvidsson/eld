@@ -1,0 +1,330 @@
+interface I {
+    func f(value: i32) i32;
+    func f(value: string) i32;
+}
+class C implements I {
+    public func f(value: string) i32 { return 2; }
+    public const func f(value: i32) i32 { return 1; }
+}
+const func test(value: I) i32 { return value.f(1); }
+print(test(new C()));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "I" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "f" (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "value" (2:12-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "i32" (2:19-2:22)
+RIGHT_PAREN (2:22-2:23)
+IDENTIFIER "i32" (2:24-2:27)
+SEMICOLON (2:27-2:28)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "value" (3:12-3:17)
+COLON (3:17-3:18)
+IDENTIFIER "string" (3:19-3:25)
+RIGHT_PAREN (3:25-3:26)
+IDENTIFIER "i32" (3:27-3:30)
+SEMICOLON (3:30-3:31)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "C" (5:7-5:8)
+IMPLEMENTS (5:9-5:19)
+IDENTIFIER "I" (5:20-5:21)
+LEFT_BRACE (5:22-5:23)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "f" (6:17-6:18)
+LEFT_PAREN (6:18-6:19)
+IDENTIFIER "value" (6:19-6:24)
+COLON (6:24-6:25)
+IDENTIFIER "string" (6:26-6:32)
+RIGHT_PAREN (6:32-6:33)
+IDENTIFIER "i32" (6:34-6:37)
+LEFT_BRACE (6:38-6:39)
+RETURN (6:40-6:46)
+INTEGER_LITERAL "2" (6:47-6:48)
+SEMICOLON (6:48-6:49)
+RIGHT_BRACE (6:50-6:51)
+PUBLIC (7:5-7:11)
+CONST (7:12-7:17)
+FUNC (7:18-7:22)
+IDENTIFIER "f" (7:23-7:24)
+LEFT_PAREN (7:24-7:25)
+IDENTIFIER "value" (7:25-7:30)
+COLON (7:30-7:31)
+IDENTIFIER "i32" (7:32-7:35)
+RIGHT_PAREN (7:35-7:36)
+IDENTIFIER "i32" (7:37-7:40)
+LEFT_BRACE (7:41-7:42)
+RETURN (7:43-7:49)
+INTEGER_LITERAL "1" (7:50-7:51)
+SEMICOLON (7:51-7:52)
+RIGHT_BRACE (7:53-7:54)
+RIGHT_BRACE (8:1-8:2)
+CONST (9:1-9:6)
+FUNC (9:7-9:11)
+IDENTIFIER "test" (9:12-9:16)
+LEFT_PAREN (9:16-9:17)
+IDENTIFIER "value" (9:17-9:22)
+COLON (9:22-9:23)
+IDENTIFIER "I" (9:24-9:25)
+RIGHT_PAREN (9:25-9:26)
+IDENTIFIER "i32" (9:27-9:30)
+LEFT_BRACE (9:31-9:32)
+RETURN (9:33-9:39)
+IDENTIFIER "value" (9:40-9:45)
+DOT (9:45-9:46)
+IDENTIFIER "f" (9:46-9:47)
+LEFT_PAREN (9:47-9:48)
+INTEGER_LITERAL "1" (9:48-9:49)
+RIGHT_PAREN (9:49-9:50)
+SEMICOLON (9:50-9:51)
+RIGHT_BRACE (9:52-9:53)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "test" (10:7-10:11)
+LEFT_PAREN (10:11-10:12)
+NEW (10:12-10:15)
+IDENTIFIER "C" (10:16-10:17)
+LEFT_PAREN (10:17-10:18)
+RIGHT_PAREN (10:18-10:19)
+RIGHT_PAREN (10:19-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:22
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "I"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:28
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 2:12-2:22
+        (IdentifierDeclaration
+          range: 2:12-2:17
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:19-2:22
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:24-2:27
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:31
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:25
+        (IdentifierDeclaration
+          range: 3:12-3:17
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 3:19-3:25
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:27-3:30
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-8:2
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "C"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:20-5:21
+      name: "I"
+    )
+    (MemberDeclaration
+      range: 6:5-6:51
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:51
+        (IdentifierDeclaration
+          range: 6:17-6:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 6:19-6:32
+          (IdentifierDeclaration
+            range: 6:19-6:24
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 6:26-6:32
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:34-6:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:38-6:51
+          (ReturnStatement
+            range: 6:40-6:49
+            (LiteralExpression
+              range: 6:47-6:48
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:54
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:54
+        CONST
+        (IdentifierDeclaration
+          range: 7:23-7:24
+          name: "f"
+        )
+        (FunctionParameter
+          range: 7:25-7:35
+          (IdentifierDeclaration
+            range: 7:25-7:30
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 7:32-7:35
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:37-7:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 7:41-7:54
+          (ReturnStatement
+            range: 7:43-7:52
+            (LiteralExpression
+              range: 7:50-7:51
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 9:1-9:53
+    CONST
+    (IdentifierDeclaration
+      range: 9:12-9:16
+      name: "test"
+    )
+    (FunctionParameter
+      range: 9:17-9:25
+      (IdentifierDeclaration
+        range: 9:17-9:22
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 9:24-9:25
+        name: "I"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 9:27-9:30
+      name: "i32"
+    )
+    (BlockStatement
+      range: 9:31-9:53
+      (ReturnStatement
+        range: 9:33-9:51
+        (CallExpression
+          range: 9:40-9:50
+          (MemberExpression
+            range: 9:40-9:47
+            (IdentifierExpression
+              range: 9:40-9:45
+              name: "value"
+            )
+            (IdentifierExpression
+              range: 9:46-9:47
+              name: "f"
+            )
+          )
+          (LiteralExpression
+            range: 9:48-9:49
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:22
+    (CallExpression
+      range: 10:1-10:21
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:20
+        (IdentifierExpression
+          range: 10:7-10:11
+          name: "test"
+        )
+        (NewExpression
+          range: 10:12-10:19
+          (IdentifierExpression
+            range: 10:16-10:17
+            name: "C"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'test' cannot call non-const function 'f' at 9:40-9:50

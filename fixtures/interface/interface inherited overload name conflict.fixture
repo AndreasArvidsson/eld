@@ -1,0 +1,554 @@
+interface Tri {
+    func describe(values: List<bool>) string;
+    func describe(values: List<i32>) string;
+    func describe(values: List<string>) string;
+}
+interface Pair {
+    func describe(values: List<i32>) string;
+    func describe(values: List<string>) string;
+}
+class Base {
+    public func describe(values: List<i32>) string { return "integers"; }
+    public func describe(values: List<string>) string { return "strings"; }
+}
+class First extends Base implements Tri {
+    public func describe(values: List<bool>) string { return "booleans"; }
+}
+class Second extends Base implements Pair {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Tri" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "values" (2:19-2:25)
+COLON (2:25-2:26)
+IDENTIFIER "List" (2:27-2:31)
+LESS (2:31-2:32)
+IDENTIFIER "bool" (2:32-2:36)
+GREATER (2:36-2:37)
+RIGHT_PAREN (2:37-2:38)
+IDENTIFIER "string" (2:39-2:45)
+SEMICOLON (2:45-2:46)
+FUNC (3:5-3:9)
+IDENTIFIER "describe" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "values" (3:19-3:25)
+COLON (3:25-3:26)
+IDENTIFIER "List" (3:27-3:31)
+LESS (3:31-3:32)
+IDENTIFIER "i32" (3:32-3:35)
+GREATER (3:35-3:36)
+RIGHT_PAREN (3:36-3:37)
+IDENTIFIER "string" (3:38-3:44)
+SEMICOLON (3:44-3:45)
+FUNC (4:5-4:9)
+IDENTIFIER "describe" (4:10-4:18)
+LEFT_PAREN (4:18-4:19)
+IDENTIFIER "values" (4:19-4:25)
+COLON (4:25-4:26)
+IDENTIFIER "List" (4:27-4:31)
+LESS (4:31-4:32)
+IDENTIFIER "string" (4:32-4:38)
+GREATER (4:38-4:39)
+RIGHT_PAREN (4:39-4:40)
+IDENTIFIER "string" (4:41-4:47)
+SEMICOLON (4:47-4:48)
+RIGHT_BRACE (5:1-5:2)
+INTERFACE (6:1-6:10)
+IDENTIFIER "Pair" (6:11-6:15)
+LEFT_BRACE (6:16-6:17)
+FUNC (7:5-7:9)
+IDENTIFIER "describe" (7:10-7:18)
+LEFT_PAREN (7:18-7:19)
+IDENTIFIER "values" (7:19-7:25)
+COLON (7:25-7:26)
+IDENTIFIER "List" (7:27-7:31)
+LESS (7:31-7:32)
+IDENTIFIER "i32" (7:32-7:35)
+GREATER (7:35-7:36)
+RIGHT_PAREN (7:36-7:37)
+IDENTIFIER "string" (7:38-7:44)
+SEMICOLON (7:44-7:45)
+FUNC (8:5-8:9)
+IDENTIFIER "describe" (8:10-8:18)
+LEFT_PAREN (8:18-8:19)
+IDENTIFIER "values" (8:19-8:25)
+COLON (8:25-8:26)
+IDENTIFIER "List" (8:27-8:31)
+LESS (8:31-8:32)
+IDENTIFIER "string" (8:32-8:38)
+GREATER (8:38-8:39)
+RIGHT_PAREN (8:39-8:40)
+IDENTIFIER "string" (8:41-8:47)
+SEMICOLON (8:47-8:48)
+RIGHT_BRACE (9:1-9:2)
+CLASS (10:1-10:6)
+IDENTIFIER "Base" (10:7-10:11)
+LEFT_BRACE (10:12-10:13)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "describe" (11:17-11:25)
+LEFT_PAREN (11:25-11:26)
+IDENTIFIER "values" (11:26-11:32)
+COLON (11:32-11:33)
+IDENTIFIER "List" (11:34-11:38)
+LESS (11:38-11:39)
+IDENTIFIER "i32" (11:39-11:42)
+GREATER (11:42-11:43)
+RIGHT_PAREN (11:43-11:44)
+IDENTIFIER "string" (11:45-11:51)
+LEFT_BRACE (11:52-11:53)
+RETURN (11:54-11:60)
+STRING_LITERAL "\"integers\"" (11:61-11:71)
+SEMICOLON (11:71-11:72)
+RIGHT_BRACE (11:73-11:74)
+PUBLIC (12:5-12:11)
+FUNC (12:12-12:16)
+IDENTIFIER "describe" (12:17-12:25)
+LEFT_PAREN (12:25-12:26)
+IDENTIFIER "values" (12:26-12:32)
+COLON (12:32-12:33)
+IDENTIFIER "List" (12:34-12:38)
+LESS (12:38-12:39)
+IDENTIFIER "string" (12:39-12:45)
+GREATER (12:45-12:46)
+RIGHT_PAREN (12:46-12:47)
+IDENTIFIER "string" (12:48-12:54)
+LEFT_BRACE (12:55-12:56)
+RETURN (12:57-12:63)
+STRING_LITERAL "\"strings\"" (12:64-12:73)
+SEMICOLON (12:73-12:74)
+RIGHT_BRACE (12:75-12:76)
+RIGHT_BRACE (13:1-13:2)
+CLASS (14:1-14:6)
+IDENTIFIER "First" (14:7-14:12)
+EXTENDS (14:13-14:20)
+IDENTIFIER "Base" (14:21-14:25)
+IMPLEMENTS (14:26-14:36)
+IDENTIFIER "Tri" (14:37-14:40)
+LEFT_BRACE (14:41-14:42)
+PUBLIC (15:5-15:11)
+FUNC (15:12-15:16)
+IDENTIFIER "describe" (15:17-15:25)
+LEFT_PAREN (15:25-15:26)
+IDENTIFIER "values" (15:26-15:32)
+COLON (15:32-15:33)
+IDENTIFIER "List" (15:34-15:38)
+LESS (15:38-15:39)
+IDENTIFIER "bool" (15:39-15:43)
+GREATER (15:43-15:44)
+RIGHT_PAREN (15:44-15:45)
+IDENTIFIER "string" (15:46-15:52)
+LEFT_BRACE (15:53-15:54)
+RETURN (15:55-15:61)
+STRING_LITERAL "\"booleans\"" (15:62-15:72)
+SEMICOLON (15:72-15:73)
+RIGHT_BRACE (15:74-15:75)
+RIGHT_BRACE (16:1-16:2)
+CLASS (17:1-17:6)
+IDENTIFIER "Second" (17:7-17:13)
+EXTENDS (17:14-17:21)
+IDENTIFIER "Base" (17:22-17:26)
+IMPLEMENTS (17:27-17:37)
+IDENTIFIER "Pair" (17:38-17:42)
+LEFT_BRACE (17:43-17:44)
+RIGHT_BRACE (17:44-17:45)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:45
+  (InterfaceDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:11-1:14
+      name: "Tri"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:46
+      (IdentifierDeclaration
+        range: 2:10-2:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 2:19-2:37
+        (IdentifierDeclaration
+          range: 2:19-2:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 2:27-2:37
+          name: "List"
+          (NamedTypeNode
+            range: 2:32-2:36
+            name: "bool"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:39-2:45
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:45
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 3:19-3:36
+        (IdentifierDeclaration
+          range: 3:19-3:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 3:27-3:36
+          name: "List"
+          (NamedTypeNode
+            range: 3:32-3:35
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:38-3:44
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 4:5-4:48
+      (IdentifierDeclaration
+        range: 4:10-4:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 4:19-4:39
+        (IdentifierDeclaration
+          range: 4:19-4:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 4:27-4:39
+          name: "List"
+          (NamedTypeNode
+            range: 4:32-4:38
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 4:41-4:47
+        name: "string"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 6:1-9:2
+    (IdentifierDeclaration
+      range: 6:11-6:15
+      name: "Pair"
+    )
+    (InterfaceMethodDeclaration
+      range: 7:5-7:45
+      (IdentifierDeclaration
+        range: 7:10-7:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 7:19-7:36
+        (IdentifierDeclaration
+          range: 7:19-7:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 7:27-7:36
+          name: "List"
+          (NamedTypeNode
+            range: 7:32-7:35
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 7:38-7:44
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 8:5-8:48
+      (IdentifierDeclaration
+        range: 8:10-8:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 8:19-8:39
+        (IdentifierDeclaration
+          range: 8:19-8:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 8:27-8:39
+          name: "List"
+          (NamedTypeNode
+            range: 8:32-8:38
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 8:41-8:47
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 10:1-13:2
+    (IdentifierDeclaration
+      range: 10:7-10:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 11:5-11:74
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:74
+        (IdentifierDeclaration
+          range: 11:17-11:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 11:26-11:43
+          (IdentifierDeclaration
+            range: 11:26-11:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 11:34-11:43
+            name: "List"
+            (NamedTypeNode
+              range: 11:39-11:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 11:45-11:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 11:52-11:74
+          (ReturnStatement
+            range: 11:54-11:72
+            (LiteralExpression
+              range: 11:61-11:71
+              kind: STRING
+              text: "\"integers\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 12:5-12:76
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 12:12-12:76
+        (IdentifierDeclaration
+          range: 12:17-12:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 12:26-12:46
+          (IdentifierDeclaration
+            range: 12:26-12:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 12:34-12:46
+            name: "List"
+            (NamedTypeNode
+              range: 12:39-12:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 12:48-12:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 12:55-12:76
+          (ReturnStatement
+            range: 12:57-12:74
+            (LiteralExpression
+              range: 12:64-12:73
+              kind: STRING
+              text: "\"strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 14:1-16:2
+    (IdentifierDeclaration
+      range: 14:7-14:12
+      name: "First"
+    )
+    (IdentifierExpression
+      range: 14:21-14:25
+      name: "Base"
+    )
+    (NamedTypeNode
+      range: 14:37-14:40
+      name: "Tri"
+    )
+    (MemberDeclaration
+      range: 15:5-15:75
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 15:12-15:75
+        (IdentifierDeclaration
+          range: 15:17-15:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 15:26-15:44
+          (IdentifierDeclaration
+            range: 15:26-15:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 15:34-15:44
+            name: "List"
+            (NamedTypeNode
+              range: 15:39-15:43
+              name: "bool"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 15:46-15:52
+          name: "string"
+        )
+        (BlockStatement
+          range: 15:53-15:75
+          (ReturnStatement
+            range: 15:55-15:73
+            (LiteralExpression
+              range: 15:62-15:72
+              kind: STRING
+              text: "\"booleans\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 17:1-17:45
+    (IdentifierDeclaration
+      range: 17:7-17:13
+      name: "Second"
+    )
+    (IdentifierExpression
+      range: 17:22-17:26
+      name: "Base"
+    )
+    (NamedTypeNode
+      range: 17:38-17:42
+      name: "Pair"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  11:61-11:71 -> string
+  12:64-12:73 -> string
+  14:21-14:25 -> Base
+  15:62-15:72 -> string
+  17:22-17:26 -> Base
+
+Resolved types:
+  2:27-2:37 -> List<bool>
+  2:32-2:36 -> bool
+  2:39-2:45 -> string
+  3:27-3:36 -> List<i32>
+  3:32-3:35 -> i32
+  3:38-3:44 -> string
+  4:27-4:39 -> List<string>
+  4:32-4:38 -> string
+  4:41-4:47 -> string
+  7:27-7:36 -> List<i32>
+  7:32-7:35 -> i32
+  7:38-7:44 -> string
+  8:27-8:39 -> List<string>
+  8:32-8:38 -> string
+  8:41-8:47 -> string
+  11:34-11:43 -> List<i32>
+  11:39-11:42 -> i32
+  11:45-11:51 -> string
+  12:34-12:46 -> List<string>
+  12:39-12:45 -> string
+  12:48-12:54 -> string
+  14:37-14:40 -> Tri
+  15:34-15:44 -> List<bool>
+  15:39-15:43 -> bool
+  15:46-15:52 -> string
+  17:38-17:42 -> Pair
+
+Declarations:
+  1:11-1:14 -> interface Tri
+  2:10-2:18 -> func describe(List<bool>) => string
+  2:19-2:25 -> const values: List<bool>
+  3:10-3:18 -> func describe(List<i32>) => string
+  3:19-3:25 -> const values: List<i32>
+  4:10-4:18 -> func describe(List<string>) => string
+  4:19-4:25 -> const values: List<string>
+  6:11-6:15 -> interface Pair
+  7:10-7:18 -> func describe(List<i32>) => string
+  7:19-7:25 -> const values: List<i32>
+  8:10-8:18 -> func describe(List<string>) => string
+  8:19-8:25 -> const values: List<string>
+  10:7-10:11 -> class Base
+  11:17-11:25 -> func describe(List<i32>) => string
+  11:26-11:32 -> const values: List<i32>
+  12:17-12:25 -> func describe(List<string>) => string
+  12:26-12:32 -> const values: List<string>
+  14:7-14:12 -> class First
+  15:17-15:25 -> func describe(List<bool>) => string
+  15:26-15:32 -> const values: List<bool>
+  17:7-17:13 -> class Second
+
+References:
+  14:21-14:25 -> 10:7-10:11
+  17:22-17:26 -> 10:7-10:11
+
+--- BYTECODE ---
+
+BytecodeException: Incompatible interface overload names for describe(List<i32>) in class Base

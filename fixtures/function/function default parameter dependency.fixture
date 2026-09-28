@@ -215,7 +215,7 @@ Resolved types:
   1:25-1:28 -> i32
 
 Declarations:
-  1:6-1:9 -> func foo(i32, i32) => void
+  1:6-1:9 -> func foo(i32?, i32?) => void
   1:10-1:11 -> const a: i32
   1:22-1:23 -> const b: i32
 
@@ -274,8 +274,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 3
     INVOKESTATIC Test.foo(III)V
     LDC 5
-    ISTORE_0 0
-    ILOAD_0 0
     ICONST_0 0
     LDC 2
     INVOKESTATIC Test.foo(III)V
@@ -283,7 +281,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 10
     INVOKESTATIC Test.foo(II)V
     RETURN
-    max stack 3 max locals 1
+    max stack 3 max locals 0
 
 --- OUTPUT ---
 

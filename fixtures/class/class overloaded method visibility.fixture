@@ -1,0 +1,272 @@
+class Describer {
+    func describe(value: i32) string { return "private"; }
+    public func describe(value: string) string { return "public"; }
+}
+
+const describer = new Describer();
+print(describer.describe("hello"));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Describer" (1:7-1:16)
+LEFT_BRACE (1:17-1:18)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "value" (2:19-2:24)
+COLON (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+RIGHT_PAREN (2:29-2:30)
+IDENTIFIER "string" (2:31-2:37)
+LEFT_BRACE (2:38-2:39)
+RETURN (2:40-2:46)
+STRING_LITERAL "\"private\"" (2:47-2:56)
+SEMICOLON (2:56-2:57)
+RIGHT_BRACE (2:58-2:59)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "describe" (3:17-3:25)
+LEFT_PAREN (3:25-3:26)
+IDENTIFIER "value" (3:26-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "string" (3:33-3:39)
+RIGHT_PAREN (3:39-3:40)
+IDENTIFIER "string" (3:41-3:47)
+LEFT_BRACE (3:48-3:49)
+RETURN (3:50-3:56)
+STRING_LITERAL "\"public\"" (3:57-3:65)
+SEMICOLON (3:65-3:66)
+RIGHT_BRACE (3:67-3:68)
+RIGHT_BRACE (4:1-4:2)
+CONST (6:1-6:6)
+IDENTIFIER "describer" (6:7-6:16)
+EQUAL (6:17-6:18)
+NEW (6:19-6:22)
+IDENTIFIER "Describer" (6:23-6:32)
+LEFT_PAREN (6:32-6:33)
+RIGHT_PAREN (6:33-6:34)
+SEMICOLON (6:34-6:35)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "describer" (7:7-7:16)
+DOT (7:16-7:17)
+IDENTIFIER "describe" (7:17-7:25)
+LEFT_PAREN (7:25-7:26)
+STRING_LITERAL "\"hello\"" (7:26-7:33)
+RIGHT_PAREN (7:33-7:34)
+RIGHT_PAREN (7:34-7:35)
+SEMICOLON (7:35-7:36)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:36
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:16
+      name: "Describer"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:59
+      visibility: PRIVATE
+      (FunctionDeclaration
+        range: 2:5-2:59
+        (IdentifierDeclaration
+          range: 2:10-2:18
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 2:19-2:29
+          (IdentifierDeclaration
+            range: 2:19-2:24
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:26-2:29
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:31-2:37
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:38-2:59
+          (ReturnStatement
+            range: 2:40-2:57
+            (LiteralExpression
+              range: 2:47-2:56
+              kind: STRING
+              text: "\"private\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:68
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:68
+        (IdentifierDeclaration
+          range: 3:17-3:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 3:26-3:39
+          (IdentifierDeclaration
+            range: 3:26-3:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:33-3:39
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:41-3:47
+          name: "string"
+        )
+        (BlockStatement
+          range: 3:48-3:68
+          (ReturnStatement
+            range: 3:50-3:66
+            (LiteralExpression
+              range: 3:57-3:65
+              kind: STRING
+              text: "\"public\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:16
+      name: "describer"
+    )
+    type: null
+    (NewExpression
+      range: 6:19-6:34
+      (IdentifierExpression
+        range: 6:23-6:32
+        name: "Describer"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:36
+    (CallExpression
+      range: 7:1-7:35
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:34
+        (MemberExpression
+          range: 7:7-7:25
+          (IdentifierExpression
+            range: 7:7-7:16
+            name: "describer"
+          )
+          (IdentifierExpression
+            range: 7:17-7:25
+            name: "describe"
+          )
+        )
+        (LiteralExpression
+          range: 7:26-7:33
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:47-2:56 -> string
+  3:57-3:65 -> string
+  6:19-6:34 -> Describer
+  6:23-6:32 -> Describer
+  7:1-7:6 -> (any) => void
+  7:1-7:35 -> void
+  7:7-7:16 -> Describer
+  7:7-7:25 -> (string) => string
+  7:7-7:34 -> string
+  7:17-7:25 -> (string) => string
+  7:26-7:33 -> string
+
+Resolved types:
+  2:26-2:29 -> i32
+  2:31-2:37 -> string
+  3:33-3:39 -> string
+  3:41-3:47 -> string
+
+Declarations:
+  1:7-1:16 -> class Describer
+  2:10-2:18 -> func describe(i32) => string
+  2:19-2:24 -> const value: i32
+  3:17-3:25 -> func describe(string) => string
+  3:26-3:31 -> const value: string
+  6:7-6:16 -> const describer: Describer
+
+References:
+  6:23-6:32 -> 1:7-1:16
+  7:1-7:6 -> builtin print
+  7:7-7:16 -> 6:7-6:16
+  7:17-7:25 -> 3:17-3:25
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Describer
+  inner class Test$Describer flags [PUBLIC, STATIC]
+  field describer LTest$Describer; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Describer
+    DUP
+    INVOKESPECIAL Test$Describer.<init>()V
+    PUTSTATIC Test.describer LTest$Describer;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.describer LTest$Describer;
+    LDC "hello"
+    INVOKEVIRTUAL Test$Describer.describe(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Describer extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Describer flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe(I)Ljava/lang/String; flags [PRIVATE]
+    LDC "private"
+    ARETURN
+    max stack 1 max locals 2
+  method describe(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC]
+    LDC "public"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+public

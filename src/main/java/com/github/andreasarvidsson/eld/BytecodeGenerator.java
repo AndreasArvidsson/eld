@@ -55,6 +55,7 @@ import com.github.andreasarvidsson.eld.semantic.LiteralType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceContract;
 import com.github.andreasarvidsson.eld.semantic.VariableSymbol;
 import com.github.andreasarvidsson.eld.semantic.FunctionSymbol;
+import com.github.andreasarvidsson.eld.semantic.FunctionSignatures;
 import com.github.andreasarvidsson.eld.semantic.FunctionType;
 import com.github.andreasarvidsson.eld.semantic.SemanticModel;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
@@ -77,6 +78,7 @@ public final class BytecodeGenerator {
     private final Program program;
     private final SemanticModel semanticModel;
     private final Map<String, String> classOwners;
+    private final @Nullable Map<FunctionDeclaration, String> previousMethodNames;
     private @Nullable ClassBuilder currentWriter;
     private String currentOwner;
     private int nextLambda;
@@ -174,7 +176,28 @@ public final class BytecodeGenerator {
         final int previousItems,
         final Map<String, String> classOwners
     ) {
+        this(
+            program,
+            semanticModel,
+            moduleName,
+            parentName,
+            previousItems,
+            classOwners,
+            null
+        );
+    }
+
+    BytecodeGenerator(
+        final Program program,
+        final SemanticModel semanticModel,
+        final String moduleName,
+        final String parentName,
+        final int previousItems,
+        final Map<String, String> classOwners,
+        final @Nullable Map<FunctionDeclaration, String> previousMethodNames
+    ) {
         this.classOwners = Map.copyOf(classOwners);
+        this.previousMethodNames = previousMethodNames;
         this.program = program;
         this.semanticModel = semanticModel;
         this.moduleName = moduleName;
@@ -297,12 +320,11 @@ public final class BytecodeGenerator {
                             }
                             for (final FunctionSymbol function : semanticModel
                                 .getInterface(type)
-                                .methods()
-                                .values()) {
+                                .allMethods()) {
                                 declareMethod(
                                     writer,
                                     ACC_PUBLIC | ACC_ABSTRACT,
-                                    function.name(),
+                                    methodName(function),
                                     methodDescriptor(function.type()),
                                     null
                                 );
@@ -311,7 +333,7 @@ public final class BytecodeGenerator {
                                         writer,
                                         ACC_PUBLIC | ACC_ABSTRACT
                                             | ACC_SYNTHETIC,
-                                        function.name(),
+                                        methodName(function),
                                         defaultDescriptor(function.type()),
                                         null
                                     );
@@ -635,19 +657,19 @@ public final class BytecodeGenerator {
                     }
                 }
                 else if (member instanceof InterfaceMethodDeclaration method) {
-                    final FunctionType signature =
-                        (FunctionType) semanticModel.getSymbol(method.name())
-                            .type();
+                    final FunctionSymbol function =
+                        (FunctionSymbol) semanticModel.getSymbol(method.name());
+                    final FunctionType signature = function.type();
                     declareMethod(
                         writer,
                         ACC_PUBLIC | ACC_ABSTRACT,
-                        method.name().name(),
+                        methodName(function),
                         methodDescriptor(signature),
                         null
                     );
                     generateDefaultOverload(
                         writer,
-                        method.name().name(),
+                        methodName(function),
                         signature,
                         method.parameters(),
                         globals,
@@ -944,21 +966,26 @@ public final class BytecodeGenerator {
     }
 
     private String methodName(final FunctionSymbol function) {
+        final InterfaceType contract =
+            semanticModel.findInterfaceMethodOwner(function);
+        if (contract != null) {
+            return interfaceMethodName(contract, function);
+        }
         final ClassType owner = semanticModel.findClassMemberOwner(function);
         if (owner == null) {
-            return function.name();
+            return overloadedMethodName(function, function.name(), owner);
         }
         if (
             semanticModel.isEnumClass(owner) && function.name().equals("values")
         ) {
-            return "$eldValues";
+            return overloadedMethodName(function, "$eldValues", owner);
         }
         if (
             function.name().equals("equals")
                 && methodDescriptor(function.type())
                     .equals("(Ljava/lang/Object;)Z")
         ) {
-            return "$eld$equals";
+            return overloadedMethodName(function, "$eld$equals", owner);
         }
         final RecordDeclaration record =
             semanticModel.findRecordDeclaration(owner);
@@ -969,9 +996,400 @@ public final class BytecodeGenerator {
                     parameter -> parameter.name().name().equals(function.name())
                 )
         ) {
-            return "$" + function.name();
+            return overloadedMethodName(function, "$" + function.name(), owner);
+        }
+        return overloadedMethodName(function, function.name(), owner);
+    }
+
+    private String interfaceMethodName(
+        final InterfaceType owner,
+        final FunctionSymbol function
+    ) {
+        final List<FunctionSymbol> candidates =
+            semanticModel.getInterface(owner)
+                .methodOverloads(function.name())
+                .stream()
+                .sorted(
+                    Comparator.comparing(
+                        candidate -> candidate.type()
+                            .parameterTypes()
+                            .toString()
+                    )
+                )
+                .toList();
+        final Set<String> used = new HashSet<>();
+        for (final FunctionSymbol candidate : candidates) {
+            if (
+                !owner.equals(semanticModel.findInterfaceMethodOwner(candidate))
+            ) {
+                used.add(methodName(candidate));
+            }
+        }
+        int suffix = 1;
+        for (final FunctionSymbol candidate : candidates) {
+            if (
+                !owner.equals(semanticModel.findInterfaceMethodOwner(candidate))
+            ) {
+                continue;
+            }
+            final boolean collision =
+                candidates.stream()
+                    .anyMatch(
+                        other -> !other.type()
+                            .parameterTypes()
+                            .equals(candidate.type().parameterTypes())
+                            && (FunctionSignatures.overlap(
+                                candidate.type(),
+                                functionParameters(candidate),
+                                other.type(),
+                                functionParameters(other),
+                                this::descriptor
+                            ) || erasedMethodCollision(candidate, other))
+                    );
+            String name = candidate.name();
+            if (collision) {
+                do {
+                    name = candidate.name() + "$" + suffix++;
+                } while (used.contains(name));
+            }
+            used.add(name);
+            if (candidate.equals(function)) {
+                return name;
+            }
         }
         return function.name();
+    }
+
+    private String overloadedMethodName(
+        final FunctionSymbol function,
+        final String name,
+        final @Nullable ClassType owner
+    ) {
+        final @Nullable Map<FunctionDeclaration, String> fixed =
+            previousMethodNames;
+        final FunctionDeclaration declaration =
+            semanticModel.getFunctionDeclaration(function);
+        if (fixed != null && declaration != null) {
+            final String previous = fixed.get(declaration);
+            if (previous != null) {
+                return previous;
+            }
+        }
+        final List<FunctionSymbol> candidates =
+            semanticModel.getFunctionDeclarations()
+                .keySet()
+                .stream()
+                .filter(
+                    candidate -> candidate.name().equals(function.name())
+                        && sameMethodFamily(
+                            owner,
+                            semanticModel.findClassMemberOwner(candidate)
+                        )
+                )
+                .sorted(
+                    Comparator
+                        .comparingInt(
+                            (FunctionSymbol candidate) -> classDepth(
+                                semanticModel.findClassMemberOwner(candidate)
+                            )
+                        )
+                        .thenComparing(
+                            candidate -> candidate.type()
+                                .parameterTypes()
+                                .toString()
+                        )
+                        .thenComparing(FunctionSymbol::range)
+                )
+                .toList();
+        final List<List<Type>> signatures = new ArrayList<>();
+        for (final FunctionSymbol candidate : candidates) {
+            final List<Type> signature = candidate.type().parameterTypes();
+            if (!signatures.contains(signature)) {
+                signatures.add(signature);
+            }
+        }
+        final Map<List<Type>, String> assigned = new LinkedHashMap<>();
+        final Set<String> used = new HashSet<>();
+        if (fixed != null) {
+            for (final FunctionSymbol candidate : candidates) {
+                final FunctionDeclaration prior =
+                    semanticModel.getFunctionDeclaration(candidate);
+                final String previous = prior == null ? null : fixed.get(prior);
+                if (previous != null) {
+                    assigned.putIfAbsent(
+                        candidate.type().parameterTypes(),
+                        previous
+                    );
+                    used.add(previous);
+                }
+            }
+        }
+        if (owner != null) {
+            for (final FunctionSymbol candidate : candidates) {
+                final ClassType candidateOwner =
+                    semanticModel.findClassMemberOwner(candidate);
+                if (candidateOwner != null && !candidateOwner.equals(owner)) {
+                    final String inheritedName = methodName(candidate);
+                    assigned.putIfAbsent(
+                        candidate.type().parameterTypes(),
+                        inheritedName
+                    );
+                    used.add(inheritedName);
+                }
+            }
+        }
+        for (final FunctionSymbol candidate : candidates) {
+            final ClassType candidateOwner =
+                semanticModel.findClassMemberOwner(candidate);
+            final String required =
+                candidateOwner == null || !candidateOwner.equals(owner)
+                    ? null
+                    : interfaceMethodNameForClassFunction(
+                        candidateOwner,
+                        candidate
+                    );
+            if (required != null) {
+                assigned
+                    .putIfAbsent(candidate.type().parameterTypes(), required);
+                used.add(required);
+            }
+        }
+        for (int i = 0; i < signatures.size(); i++) {
+            final List<Type> signature = signatures.get(i);
+            if (assigned.containsKey(signature)) {
+                continue;
+            }
+            final FunctionSymbol candidate =
+                candidates.stream()
+                    .filter(
+                        method -> method.type()
+                            .parameterTypes()
+                            .equals(signature)
+                    )
+                    .findFirst()
+                    .orElseThrow();
+            final boolean collision =
+                candidates.stream()
+                    .anyMatch(
+                        other -> !other.type()
+                            .parameterTypes()
+                            .equals(signature)
+                            && (FunctionSignatures.overlap(
+                                candidate.type(),
+                                functionParameters(candidate),
+                                other.type(),
+                                functionParameters(other),
+                                this::descriptor
+                            ) || erasedMethodCollision(candidate, other))
+                    );
+            if (!collision && !javaBridgeCollision(candidate, owner)) {
+                assigned.put(signature, name);
+                continue;
+            }
+            int suffix = i + 1;
+            String mangled;
+            do {
+                mangled = name + "$" + suffix++;
+            } while (used.contains(mangled));
+            assigned.put(signature, mangled);
+            used.add(mangled);
+        }
+        final String selected =
+            assigned.getOrDefault(function.type().parameterTypes(), name);
+        if (fixed != null && declaration != null) {
+            fixed.put(declaration, selected);
+        }
+        return selected;
+    }
+
+    private boolean javaBridgeCollision(
+        final FunctionSymbol function,
+        final @Nullable ClassType owner
+    ) {
+        if (owner == null) {
+            return false;
+        }
+        final String descriptor = methodDescriptor(function.type());
+        // A later REPL subclass cannot rename a method emitted by an earlier submission.
+        if (
+            previousMethodNames != null && ((function.name().equals("compareTo")
+                && descriptor.equals("(Ljava/lang/Object;)I"))
+                || (function.name().equals("compare") && descriptor
+                    .equals("(Ljava/lang/Object;Ljava/lang/Object;)I")))
+        ) {
+            final Map<String, FunctionSymbol> existing = new LinkedHashMap<>();
+            collectJavaBridges(
+                semanticModel.getImplementedInterfaces(owner),
+                existing
+            );
+            final FunctionSymbol contract = existing.get(function.name());
+            if (
+                contract == null
+                    || !methodDescriptor(contract.type()).equals(descriptor)
+            ) {
+                return true;
+            }
+        }
+        for (final ClassType descendant : semanticModel.getClassTypes()) {
+            if (!semanticModel.isSubtype(descendant, owner)) {
+                continue;
+            }
+            final Map<String, FunctionSymbol> bridges = new LinkedHashMap<>();
+            collectJavaBridges(
+                semanticModel.getImplementedInterfaces(descendant),
+                bridges
+            );
+            for (final FunctionSymbol bridge : bridges.values()) {
+                if (!bridge.name().equals(function.name())) {
+                    continue;
+                }
+                final String erased =
+                    "(" + "Ljava/lang/Object;"
+                        .repeat(bridge.type().parameterTypes().size()) + ")I";
+                if (
+                    descriptor.equals(erased)
+                        && !methodDescriptor(bridge.type()).equals(erased)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private @Nullable String interfaceMethodNameForClassFunction(
+        final ClassType owner,
+        final FunctionSymbol function
+    ) {
+        String requiredName = null;
+        for (final ClassType descendant : semanticModel.getClassTypes()) {
+            if (
+                !semanticModel.isSubtype(descendant, owner)
+                    || overridesBetween(descendant, owner, function)
+            ) {
+                continue;
+            }
+            for (final InterfaceType contract : semanticModel
+                .getImplementedInterfaces(descendant)) {
+                if (contract.javaClass() != null) {
+                    continue;
+                }
+                for (final FunctionSymbol required : semanticModel
+                    .getInterface(contract)
+                    .methodOverloads(function.name())) {
+                    if (
+                        required.type()
+                            .parameterTypes()
+                            .equals(function.type().parameterTypes())
+                    ) {
+                        final String name = methodName(required);
+                        if (requiredName == null) {
+                            requiredName = name;
+                        }
+                        else if (
+                            !requiredName.equals(name)
+                                && !descendant.equals(owner)
+                        ) {
+                            throw new BytecodeException(
+                                "Incompatible interface overload names for %s in class %s",
+                                semanticModel.formatFunctionSignature(function),
+                                owner.name()
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        return requiredName;
+    }
+
+    private boolean overridesBetween(
+        final ClassType descendant,
+        final ClassType owner,
+        final FunctionSymbol function
+    ) {
+        for (ClassType current = descendant; !current.equals(owner); current =
+            Objects.requireNonNull(semanticModel.getSuperclass(current))) {
+            final ClassType candidateOwner = current;
+            if (
+                semanticModel.getFunctionDeclarations()
+                    .keySet()
+                    .stream()
+                    .anyMatch(
+                        candidate -> candidateOwner.equals(
+                            semanticModel.findClassMemberOwner(candidate)
+                        ) && candidate.name().equals(function.name())
+                            && candidate.type()
+                                .parameterTypes()
+                                .equals(function.type().parameterTypes())
+                    )
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean sameMethodFamily(
+        final @Nullable ClassType first,
+        final @Nullable ClassType second
+    ) {
+        if (first == null) {
+            return second == null;
+        }
+        if (second == null) {
+            return false;
+        }
+        return semanticModel.isSubtype(first, second);
+    }
+
+    private int classDepth(final @Nullable ClassType type) {
+        int depth = 0;
+        for (ClassType current = type; current != null; current =
+            semanticModel.getSuperclass(current)) {
+            depth++;
+        }
+        return depth;
+    }
+
+    private List<FunctionParameter> functionParameters(
+        final FunctionSymbol function
+    ) {
+        final FunctionDeclaration declaration =
+            semanticModel.getFunctionDeclaration(function);
+        return declaration != null
+            ? declaration.parameters()
+            : semanticModel.getFunctionParameters(function)
+                .stream()
+                .map(semanticModel::getParameterDetails)
+                .toList();
+    }
+
+    private boolean erasedMethodCollision(
+        final FunctionSymbol first,
+        final FunctionSymbol second
+    ) {
+        final Set<String> emitted = emittedParameterDescriptors(first);
+        return emittedParameterDescriptors(second).stream()
+            .anyMatch(emitted::contains);
+    }
+
+    private Set<String> emittedParameterDescriptors(
+        final FunctionSymbol function
+    ) {
+        final Set<String> emitted = new HashSet<>();
+        final String descriptor = methodDescriptor(function.type());
+        emitted.add(descriptor.substring(0, descriptor.indexOf(')') + 1));
+        if (
+            functionParameters(function).stream()
+                .anyMatch(FunctionParameter::omittable)
+        ) {
+            final String defaultMethod = defaultDescriptor(function.type());
+            emitted.add(
+                defaultMethod.substring(0, defaultMethod.indexOf(')') + 1)
+            );
+        }
+        return emitted;
     }
 
     private boolean hasMethod(
@@ -3468,13 +3886,19 @@ public final class BytecodeGenerator {
         for (final SemanticModel.InterfaceBridge bridge : semanticModel
             .getInterfaceBridges(classType)) {
             final FunctionSymbol implementation = bridge.implementation();
-            final FunctionType contract = bridge.contract();
+            final FunctionSymbol required = bridge.contract();
+            final FunctionType contract = required.type();
             final String implementationDescriptor =
                 methodDescriptor(implementation.type());
             final String bridgeDescriptor = methodDescriptor(contract);
-            final String key = methodName(implementation) + bridgeDescriptor;
+            final String bridgeName = methodName(required);
+            final String implementationName = methodName(implementation);
+            final String key = bridgeName + bridgeDescriptor;
             if (
-                bridgeDescriptor.equals(implementationDescriptor)
+                (bridgeName.equals(implementationName)
+                    && (bridgeDescriptor.equals(implementationDescriptor)
+                        || semanticModel.getOverrideBridges(implementation)
+                            .contains(contract)))
                     || !generated.add(key)
             ) {
                 continue;
@@ -3484,7 +3908,7 @@ public final class BytecodeGenerator {
                 visibilityAccess(
                     semanticModel.getMemberVisibility(implementation)
                 ) | ACC_BRIDGE | ACC_SYNTHETIC,
-                methodName(implementation),
+                bridgeName,
                 bridgeDescriptor,
                 null,
                 method -> {
@@ -3500,7 +3924,7 @@ public final class BytecodeGenerator {
                     method.invoke(
                         INVOKEVIRTUAL,
                         classDesc(owner),
-                        methodName(implementation),
+                        implementationName,
                         MethodTypeDesc.ofDescriptor(implementationDescriptor),
                         false
                     );
@@ -9927,8 +10351,7 @@ public final class BytecodeGenerator {
             final FunctionType type
         ) {
             if (
-                arguments.size() != type.parameterTypes().size()
-                    || parameters.size() != arguments.size()
+                parameters.size() != arguments.size()
                     || IntStream.range(0, parameters.size())
                         .anyMatch(index -> parameters.get(index) != index)
             ) {
@@ -9940,6 +10363,17 @@ public final class BytecodeGenerator {
                         ? named.value()
                         : supplied
                 );
+            }
+            if (arguments.size() < type.parameterTypes().size()) {
+                final boolean[] assigned =
+                    new boolean[type.parameterTypes().size()];
+                for (int i = 0; i < arguments.size(); i++) {
+                    assigned[i] = true;
+                }
+                for (int i = arguments.size(); i < assigned.length; i++) {
+                    omittedValue(type.parameterTypes().get(i));
+                }
+                omissionMask(assigned, type);
             }
             return true;
         }

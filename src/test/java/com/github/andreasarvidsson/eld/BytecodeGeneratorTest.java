@@ -899,7 +899,6 @@ class BytecodeGeneratorTest {
             "class Base { public constructor(value: i32) {} } class Child extends Base {}",
             "class Base { public func f() i32 { return 1; } } class Child extends Base { func f() i32 { return 2; } }",
             "class Base { public func f() i32 { return 1; } } class Child extends Base { protected func f() i32 { return 2; } }",
-            "class Base { protected func f() i32 { return 1; } } class Child extends Base { public func f(value: i32) i32 { return value; } }",
             "class Base { public func f() i32 { return 1; } } class Child extends Base { public var f = 1; }",
             "class Base { var value = 1; } class Child extends Base { public func f() i32 { return this.value; } }",
             "class Base { func f() i32 { return 1; } } class Child extends Base { public func g() i32 { return this.f(); } }",

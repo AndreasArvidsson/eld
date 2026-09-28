@@ -905,8 +905,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.updated LTest$Options;
     GETSTATIC Test.updated LTest$Options;
     LDC "bar"
-    ASTORE_1 1
-    ALOAD_1 1
     ICONST_0 0
     LDC 2
     INVOKEVIRTUAL Test$Options.copy(Ljava/lang/String;II)LTest$Options;
@@ -926,9 +924,9 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.measurement LTest$Measurement;
     GETSTATIC Test.measurement LTest$Measurement;
     LDC2_W 2.5
-    DSTORE_2 2
+    DSTORE_1 1
     LCONST_0 0
-    DLOAD_2 2
+    DLOAD_1 1
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
     LDC 5
     INVOKEVIRTUAL Test$Measurement.copy(JDLjava/lang/String;I)LTest$Measurement;
@@ -966,7 +964,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL Test$Measurement.note()Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
-    max stack 7 max locals 4
+    max stack 7 max locals 3
 
 class Test$Options extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
   implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject

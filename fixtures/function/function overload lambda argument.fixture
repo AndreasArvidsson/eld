@@ -1,0 +1,607 @@
+func apply(value: i32, mapper: (i32) => i32) i32 {
+    return mapper(value);
+}
+func apply(value: string, mapper: (string) => string) string {
+    return mapper(value);
+}
+
+print(apply(2, (value) => value + 1));
+
+func produce(value: i32, factory: () => i32) i32 { return value + factory(); }
+func produce(value: string, factory: () => string) string { return value + factory(); }
+print(produce(2, () => 3));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "apply" (1:6-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "value" (1:12-1:17)
+COLON (1:17-1:18)
+IDENTIFIER "i32" (1:19-1:22)
+COMMA (1:22-1:23)
+IDENTIFIER "mapper" (1:24-1:30)
+COLON (1:30-1:31)
+LEFT_PAREN (1:32-1:33)
+IDENTIFIER "i32" (1:33-1:36)
+RIGHT_PAREN (1:36-1:37)
+ARROW (1:38-1:40)
+IDENTIFIER "i32" (1:41-1:44)
+RIGHT_PAREN (1:44-1:45)
+IDENTIFIER "i32" (1:46-1:49)
+LEFT_BRACE (1:50-1:51)
+RETURN (2:5-2:11)
+IDENTIFIER "mapper" (2:12-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "value" (2:19-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+RIGHT_BRACE (3:1-3:2)
+FUNC (4:1-4:5)
+IDENTIFIER "apply" (4:6-4:11)
+LEFT_PAREN (4:11-4:12)
+IDENTIFIER "value" (4:12-4:17)
+COLON (4:17-4:18)
+IDENTIFIER "string" (4:19-4:25)
+COMMA (4:25-4:26)
+IDENTIFIER "mapper" (4:27-4:33)
+COLON (4:33-4:34)
+LEFT_PAREN (4:35-4:36)
+IDENTIFIER "string" (4:36-4:42)
+RIGHT_PAREN (4:42-4:43)
+ARROW (4:44-4:46)
+IDENTIFIER "string" (4:47-4:53)
+RIGHT_PAREN (4:53-4:54)
+IDENTIFIER "string" (4:55-4:61)
+LEFT_BRACE (4:62-4:63)
+RETURN (5:5-5:11)
+IDENTIFIER "mapper" (5:12-5:18)
+LEFT_PAREN (5:18-5:19)
+IDENTIFIER "value" (5:19-5:24)
+RIGHT_PAREN (5:24-5:25)
+SEMICOLON (5:25-5:26)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "apply" (8:7-8:12)
+LEFT_PAREN (8:12-8:13)
+INTEGER_LITERAL "2" (8:13-8:14)
+COMMA (8:14-8:15)
+LEFT_PAREN (8:16-8:17)
+IDENTIFIER "value" (8:17-8:22)
+RIGHT_PAREN (8:22-8:23)
+ARROW (8:24-8:26)
+IDENTIFIER "value" (8:27-8:32)
+PLUS (8:33-8:34)
+INTEGER_LITERAL "1" (8:35-8:36)
+RIGHT_PAREN (8:36-8:37)
+RIGHT_PAREN (8:37-8:38)
+SEMICOLON (8:38-8:39)
+FUNC (10:1-10:5)
+IDENTIFIER "produce" (10:6-10:13)
+LEFT_PAREN (10:13-10:14)
+IDENTIFIER "value" (10:14-10:19)
+COLON (10:19-10:20)
+IDENTIFIER "i32" (10:21-10:24)
+COMMA (10:24-10:25)
+IDENTIFIER "factory" (10:26-10:33)
+COLON (10:33-10:34)
+LEFT_PAREN (10:35-10:36)
+RIGHT_PAREN (10:36-10:37)
+ARROW (10:38-10:40)
+IDENTIFIER "i32" (10:41-10:44)
+RIGHT_PAREN (10:44-10:45)
+IDENTIFIER "i32" (10:46-10:49)
+LEFT_BRACE (10:50-10:51)
+RETURN (10:52-10:58)
+IDENTIFIER "value" (10:59-10:64)
+PLUS (10:65-10:66)
+IDENTIFIER "factory" (10:67-10:74)
+LEFT_PAREN (10:74-10:75)
+RIGHT_PAREN (10:75-10:76)
+SEMICOLON (10:76-10:77)
+RIGHT_BRACE (10:78-10:79)
+FUNC (11:1-11:5)
+IDENTIFIER "produce" (11:6-11:13)
+LEFT_PAREN (11:13-11:14)
+IDENTIFIER "value" (11:14-11:19)
+COLON (11:19-11:20)
+IDENTIFIER "string" (11:21-11:27)
+COMMA (11:27-11:28)
+IDENTIFIER "factory" (11:29-11:36)
+COLON (11:36-11:37)
+LEFT_PAREN (11:38-11:39)
+RIGHT_PAREN (11:39-11:40)
+ARROW (11:41-11:43)
+IDENTIFIER "string" (11:44-11:50)
+RIGHT_PAREN (11:50-11:51)
+IDENTIFIER "string" (11:52-11:58)
+LEFT_BRACE (11:59-11:60)
+RETURN (11:61-11:67)
+IDENTIFIER "value" (11:68-11:73)
+PLUS (11:74-11:75)
+IDENTIFIER "factory" (11:76-11:83)
+LEFT_PAREN (11:83-11:84)
+RIGHT_PAREN (11:84-11:85)
+SEMICOLON (11:85-11:86)
+RIGHT_BRACE (11:87-11:88)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "produce" (12:7-12:14)
+LEFT_PAREN (12:14-12:15)
+INTEGER_LITERAL "2" (12:15-12:16)
+COMMA (12:16-12:17)
+LEFT_PAREN (12:18-12:19)
+RIGHT_PAREN (12:19-12:20)
+ARROW (12:21-12:23)
+INTEGER_LITERAL "3" (12:24-12:25)
+RIGHT_PAREN (12:25-12:26)
+RIGHT_PAREN (12:26-12:27)
+SEMICOLON (12:27-12:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:28
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:11
+      name: "apply"
+    )
+    (FunctionParameter
+      range: 1:12-1:22
+      (IdentifierDeclaration
+        range: 1:12-1:17
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:19-1:22
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:24-1:44
+      (IdentifierDeclaration
+        range: 1:24-1:30
+        name: "mapper"
+      )
+      (FunctionTypeNode
+        range: 1:32-1:44
+        (NamedTypeNode
+          range: 1:33-1:36
+          name: "i32"
+        )
+        (NamedTypeNode
+          range: 1:41-1:44
+          name: "i32"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:46-1:49
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:50-3:2
+      (ReturnStatement
+        range: 2:5-2:26
+        (CallExpression
+          range: 2:12-2:25
+          (IdentifierExpression
+            range: 2:12-2:18
+            name: "mapper"
+          )
+          (IdentifierExpression
+            range: 2:19-2:24
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:6-4:11
+      name: "apply"
+    )
+    (FunctionParameter
+      range: 4:12-4:25
+      (IdentifierDeclaration
+        range: 4:12-4:17
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 4:19-4:25
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 4:27-4:53
+      (IdentifierDeclaration
+        range: 4:27-4:33
+        name: "mapper"
+      )
+      (FunctionTypeNode
+        range: 4:35-4:53
+        (NamedTypeNode
+          range: 4:36-4:42
+          name: "string"
+        )
+        (NamedTypeNode
+          range: 4:47-4:53
+          name: "string"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 4:55-4:61
+      name: "string"
+    )
+    (BlockStatement
+      range: 4:62-6:2
+      (ReturnStatement
+        range: 5:5-5:26
+        (CallExpression
+          range: 5:12-5:25
+          (IdentifierExpression
+            range: 5:12-5:18
+            name: "mapper"
+          )
+          (IdentifierExpression
+            range: 5:19-5:24
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:39
+    (CallExpression
+      range: 8:1-8:38
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:37
+        (IdentifierExpression
+          range: 8:7-8:12
+          name: "apply"
+        )
+        (LiteralExpression
+          range: 8:13-8:14
+          kind: INT
+          text: "2"
+        )
+        (LambdaExpression
+          range: 8:16-8:36
+          (LambdaParameter
+            range: 8:17-8:22
+            (IdentifierDeclaration
+              range: 8:17-8:22
+              name: "value"
+            )
+          )
+          (BinaryExpression
+            range: 8:27-8:36
+            (IdentifierExpression
+              range: 8:27-8:32
+              name: "value"
+            )
+            operator: ADD
+            (LiteralExpression
+              range: 8:35-8:36
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 10:1-10:79
+    (IdentifierDeclaration
+      range: 10:6-10:13
+      name: "produce"
+    )
+    (FunctionParameter
+      range: 10:14-10:24
+      (IdentifierDeclaration
+        range: 10:14-10:19
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 10:21-10:24
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 10:26-10:44
+      (IdentifierDeclaration
+        range: 10:26-10:33
+        name: "factory"
+      )
+      (FunctionTypeNode
+        range: 10:35-10:44
+        (NamedTypeNode
+          range: 10:41-10:44
+          name: "i32"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 10:46-10:49
+      name: "i32"
+    )
+    (BlockStatement
+      range: 10:50-10:79
+      (ReturnStatement
+        range: 10:52-10:77
+        (BinaryExpression
+          range: 10:59-10:76
+          (IdentifierExpression
+            range: 10:59-10:64
+            name: "value"
+          )
+          operator: ADD
+          (CallExpression
+            range: 10:67-10:76
+            (IdentifierExpression
+              range: 10:67-10:74
+              name: "factory"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 11:1-11:88
+    (IdentifierDeclaration
+      range: 11:6-11:13
+      name: "produce"
+    )
+    (FunctionParameter
+      range: 11:14-11:27
+      (IdentifierDeclaration
+        range: 11:14-11:19
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 11:21-11:27
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 11:29-11:50
+      (IdentifierDeclaration
+        range: 11:29-11:36
+        name: "factory"
+      )
+      (FunctionTypeNode
+        range: 11:38-11:50
+        (NamedTypeNode
+          range: 11:44-11:50
+          name: "string"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 11:52-11:58
+      name: "string"
+    )
+    (BlockStatement
+      range: 11:59-11:88
+      (ReturnStatement
+        range: 11:61-11:86
+        (BinaryExpression
+          range: 11:68-11:85
+          (IdentifierExpression
+            range: 11:68-11:73
+            name: "value"
+          )
+          operator: ADD
+          (CallExpression
+            range: 11:76-11:85
+            (IdentifierExpression
+              range: 11:76-11:83
+              name: "factory"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:28
+    (CallExpression
+      range: 12:1-12:27
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:26
+        (IdentifierExpression
+          range: 12:7-12:14
+          name: "produce"
+        )
+        (LiteralExpression
+          range: 12:15-12:16
+          kind: INT
+          text: "2"
+        )
+        (LambdaExpression
+          range: 12:18-12:25
+          (LiteralExpression
+            range: 12:24-12:25
+            kind: INT
+            text: "3"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:12-2:18 -> (i32) => i32
+  2:12-2:25 -> i32
+  2:19-2:24 -> i32
+  5:12-5:18 -> (string) => string
+  5:12-5:25 -> string
+  5:19-5:24 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:38 -> void
+  8:7-8:12 -> (i32, (i32) => i32) => i32
+  8:7-8:37 -> i32
+  8:13-8:14 -> i32
+  8:16-8:36 -> (i32) => i32
+  8:27-8:32 -> i32
+  8:27-8:36 -> i32
+  8:35-8:36 -> i32
+  10:59-10:64 -> i32
+  10:59-10:76 -> i32
+  10:67-10:74 -> () => i32
+  10:67-10:76 -> i32
+  11:68-11:73 -> string
+  11:68-11:85 -> string
+  11:76-11:83 -> () => string
+  11:76-11:85 -> string
+  12:1-12:6 -> (any) => void
+  12:1-12:27 -> void
+  12:7-12:14 -> (i32, () => i32) => i32
+  12:7-12:26 -> i32
+  12:15-12:16 -> i32
+  12:18-12:25 -> () => i32
+  12:24-12:25 -> i32
+
+Resolved types:
+  1:19-1:22 -> i32
+  1:32-1:44 -> (i32) => i32
+  1:33-1:36 -> i32
+  1:41-1:44 -> i32
+  1:46-1:49 -> i32
+  4:19-4:25 -> string
+  4:35-4:53 -> (string) => string
+  4:36-4:42 -> string
+  4:47-4:53 -> string
+  4:55-4:61 -> string
+  10:21-10:24 -> i32
+  10:35-10:44 -> () => i32
+  10:41-10:44 -> i32
+  10:46-10:49 -> i32
+  11:21-11:27 -> string
+  11:38-11:50 -> () => string
+  11:44-11:50 -> string
+  11:52-11:58 -> string
+
+Declarations:
+  1:6-1:11 -> func apply(i32, (i32) => i32) => i32
+  1:12-1:17 -> const value: i32
+  1:24-1:30 -> const mapper: (i32) => i32
+  4:6-4:11 -> func apply(string, (string) => string) => string
+  4:12-4:17 -> const value: string
+  4:27-4:33 -> const mapper: (string) => string
+  8:17-8:22 -> const value: i32
+  10:6-10:13 -> func produce(i32, () => i32) => i32
+  10:14-10:19 -> const value: i32
+  10:26-10:33 -> const factory: () => i32
+  11:6-11:13 -> func produce(string, () => string) => string
+  11:14-11:19 -> const value: string
+  11:29-11:36 -> const factory: () => string
+
+References:
+  2:12-2:18 -> 1:24-1:30
+  2:19-2:24 -> 1:12-1:17
+  5:12-5:18 -> 4:27-4:33
+  5:19-5:24 -> 4:12-4:17
+  8:1-8:6 -> builtin print
+  8:7-8:12 -> 1:6-1:11
+  8:27-8:32 -> 8:17-8:22
+  10:59-10:64 -> 10:14-10:19
+  10:67-10:74 -> 10:26-10:33
+  11:68-11:73 -> 11:14-11:19
+  11:76-11:83 -> 11:29-11:36
+  12:1-12:6 -> builtin print
+  12:7-12:14 -> 10:6-10:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method apply(ILjava/lang/invoke/MethodHandle;)I flags [PUBLIC, STATIC]
+    ALOAD_1 1
+    ILOAD_0 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)I
+    IRETURN
+    max stack 2 max locals 2
+  method apply(Ljava/lang/String;Ljava/lang/invoke/MethodHandle;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    ALOAD_1 1
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 2
+  method produce(ILjava/lang/invoke/MethodHandle;)I flags [PUBLIC, STATIC]
+    ILOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+  method produce(Ljava/lang/String;Ljava/lang/invoke/MethodHandle;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 2
+  method $lambda0(I)I flags [PRIVATE, STATIC, SYNTHETIC]
+    ILOAD_0 0
+    LDC 1
+    IADD
+    IRETURN
+    max stack 2 max locals 1
+  method $lambda1()I flags [PRIVATE, STATIC, SYNTHETIC]
+    LDC 3
+    IRETURN
+    max stack 1 max locals 0
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int)int]
+    INVOKESTATIC Test.apply(ILjava/lang/invoke/MethodHandle;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 2
+    LDC MethodHandleDesc[STATIC/Test::$lambda1()int]
+    INVOKESTATIC Test.produce(ILjava/lang/invoke/MethodHandle;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+3
+5

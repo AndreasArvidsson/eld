@@ -50,6 +50,16 @@ public final class SemanticAnalyzerObjects {
                 "Java collection types require a Java collection instance"
             );
         }
+        for (final var entry : contract.overloads().entrySet()) {
+            if (entry.getValue().size() > 1) {
+                throw new SemanticException(
+                    object.range(),
+                    "Object literal cannot implement overloaded interface method '%s' of %s",
+                    entry.getKey(),
+                    type
+                );
+            }
+        }
         final List<ObjectEntry> evaluation = new ArrayList<>();
         final Map<String, ObjectMember> effective = new LinkedHashMap<>();
         final Set<String> explicitNames = new HashSet<>();
@@ -276,22 +286,59 @@ public final class SemanticAnalyzerObjects {
             spreadSource instanceof InterfaceType contract
                 && contract.javaClass() == null
         ) {
-            result.putAll(model.getInterface(contract).fields());
-            result.putAll(model.getInterface(contract).methods());
+            final InterfaceContract members = model.getInterface(contract);
+            for (final var entry : members.overloads().entrySet()) {
+                if (entry.getValue().size() > 1) {
+                    throw new SemanticException(
+                        range,
+                        "Cannot spread overloaded method '%s' of %s",
+                        entry.getKey(),
+                        source
+                    );
+                }
+            }
+            result.putAll(members.fields());
+            result.putAll(members.methods());
         }
         else if (spreadSource instanceof ClassType cls) {
+            final Map<String, FunctionSymbol> visibleMethods =
+                new LinkedHashMap<>();
             for (ClassType current = cls; current != null; current =
                 model.getSuperclass(current)) {
-                for (final FunctionSymbol method : analyzer.classMethods()
+                final Scope scope = analyzer.classScopes().get(current);
+                for (final FunctionSymbol representative : analyzer
+                    .classMethods()
                     .getOrDefault(current, Map.of())
                     .values()) {
-                    if (
-                        model.getMemberVisibility(method) == Visibility.PUBLIC
-                    ) {
+                    if (scope == null) {
+                        continue;
+                    }
+                    for (final FunctionSymbol method : scope
+                        .functionsLocal(representative.name())) {
+                        if (
+                            model.getMemberVisibility(
+                                method
+                            ) != Visibility.PUBLIC
+                        ) {
+                            continue;
+                        }
+                        final FunctionSymbol previous =
+                            visibleMethods.putIfAbsent(method.name(), method);
+                        if (
+                            previous != null && !previous.type()
+                                .parameterTypes()
+                                .equals(method.type().parameterTypes())
+                        ) {
+                            throw new SemanticException(
+                                range,
+                                "Cannot spread overloaded method '%s' of %s",
+                                method.name(),
+                                source
+                            );
+                        }
                         result.putIfAbsent(method.name(), method);
                     }
                 }
-                final Scope scope = analyzer.classScopes().get(current);
                 if (scope != null) {
                     for (final Symbol symbol : scope.symbols()) {
                         if (
@@ -431,11 +478,44 @@ public final class SemanticAnalyzerObjects {
             validateImplicitOverride(symbol);
             return;
         }
+        if (symbol instanceof FunctionSymbol function) {
+            validateInheritedOverloads(base, function);
+        }
+        ClassType signatureOwner = null;
+        if (
+            symbol instanceof FunctionSymbol function
+                && !function.name().equals("equals")
+                && classMethodOwner(base, function.name()) != null
+        ) {
+            for (ClassType current = base; current != null; current =
+                model.getSuperclass(current)) {
+                final Scope scope = analyzer.classScope(current);
+                if (
+                    scope != null && scope.functionsLocal(function.name())
+                        .stream()
+                        .anyMatch(
+                            inherited -> inherited.type()
+                                .parameterTypes()
+                                .equals(function.type().parameterTypes())
+                        )
+                ) {
+                    signatureOwner = current;
+                    break;
+                }
+            }
+            if (
+                signatureOwner == null
+                    && classFieldOwner(base, function.name()) == null
+            ) {
+                validateImplicitOverride(symbol);
+                return;
+            }
+        }
         final ClassType methodOwner =
             symbol instanceof FunctionSymbol function
                 ? function.name().equals("equals")
                     ? compatibleEqualsOwner(base, function)
-                    : classMethodOwner(base, symbol.name())
+                    : signatureOwner
                 : null;
         final ClassType owner =
             methodOwner != null
@@ -446,18 +526,40 @@ public final class SemanticAnalyzerObjects {
             return;
         }
         final Symbol inherited =
-            methodOwner != null
-                ? Objects.requireNonNull(
-                    Objects
-                        .requireNonNull(
-                            analyzer.classMethods().get(methodOwner)
+            signatureOwner != null
+                && symbol instanceof FunctionSymbol declaredMethod
+                    ? Objects
+                        .requireNonNull(analyzer.classScope(signatureOwner))
+                        .functionsLocal(symbol.name())
+                        .stream()
+                        .filter(
+                            candidate -> candidate.type()
+                                .parameterTypes()
+                                .equals(declaredMethod.type().parameterTypes())
                         )
-                        .get(symbol.name())
-                )
-                : Objects.requireNonNull(
-                    Objects.requireNonNull(analyzer.classScopes().get(owner))
-                        .resolveLocal(symbol.name())
-                );
+                        .findFirst()
+                        .orElseThrow()
+                    : methodOwner != null
+                        ? Objects
+                            .requireNonNull(analyzer.classScope(methodOwner))
+                            .functionsLocal(symbol.name())
+                            .stream()
+                            .filter(
+                                candidate -> symbol instanceof FunctionSymbol method
+                                    && model.isOverrideCompatible(
+                                        method.type(),
+                                        candidate.type()
+                                    )
+                            )
+                            .findFirst()
+                            .orElseThrow()
+                        : Objects.requireNonNull(
+                            Objects
+                                .requireNonNull(
+                                    analyzer.classScopes().get(owner)
+                                )
+                                .resolveLocal(symbol.name())
+                        );
         final Visibility visibility = model.getMemberVisibility(inherited);
         if (visibility == Visibility.PRIVATE) {
             validateImplicitOverride(symbol);
@@ -552,6 +654,64 @@ public final class SemanticAnalyzerObjects {
         }
     }
 
+    private void validateInheritedOverloads(
+        final ClassType base,
+        final FunctionSymbol function
+    ) {
+        final FunctionDeclaration declaration =
+            model.getFunctionDeclaration(function);
+        if (declaration == null) {
+            return;
+        }
+        for (ClassType current = base; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope scope = analyzer.classScope(current);
+            if (scope == null) {
+                continue;
+            }
+            for (final FunctionSymbol inherited : scope
+                .functionsLocal(function.name())) {
+                if (
+                    model.getMemberVisibility(inherited) == Visibility.PRIVATE
+                        || inherited.type()
+                            .parameterTypes()
+                            .equals(function.type().parameterTypes())
+                ) {
+                    continue;
+                }
+                final FunctionDeclaration prior =
+                    model.getFunctionDeclaration(inherited);
+                if (prior == null) {
+                    continue;
+                }
+                if (
+                    FunctionSignatures
+                        .overlap(
+                            inherited.type(),
+                            prior.parameters(),
+                            function.type(),
+                            declaration.parameters(),
+                            type -> type
+                        )
+                        || FunctionSignatures.ambiguous(
+                            inherited.type(),
+                            prior.parameters(),
+                            function.type(),
+                            declaration.parameters(),
+                            (source, target) -> FunctionSignatures
+                                .isSubtype(source, target, model)
+                        )
+                ) {
+                    throw new SemanticException(
+                        function.range(),
+                        "Ambiguous overload of '%s': overlapping inherited callable signatures",
+                        function.name()
+                    );
+                }
+            }
+        }
+    }
+
     private void validateImplicitOverride(final Symbol symbol) {
         if (!(symbol instanceof FunctionSymbol function)) {
             return;
@@ -626,12 +786,16 @@ public final class SemanticAnalyzerObjects {
     ) {
         for (ClassType current = base; current != null; current =
             model.getSuperclass(current)) {
-            final FunctionSymbol inherited =
-                Objects.requireNonNull(analyzer.classMethods().get(current))
-                    .get("equals");
+            final Scope scope = analyzer.classScope(current);
             if (
-                inherited != null && model
-                    .isOverrideCompatible(function.type(), inherited.type())
+                scope != null && scope.functionsLocal("equals")
+                    .stream()
+                    .anyMatch(
+                        inherited -> model.isOverrideCompatible(
+                            function.type(),
+                            inherited.type()
+                        )
+                    )
             ) {
                 return current;
             }

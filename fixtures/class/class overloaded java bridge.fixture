@@ -1,0 +1,1467 @@
+class Direct implements Comparable<Direct> {
+    public func compareTo(other: Direct) i32 { return 1; }
+    public func compareTo(other: any) i32 { return 2; }
+}
+const direct = new Direct();
+const directContract: Comparable<Direct> = direct;
+print(direct.compareTo(new Direct()));
+print(direct.compareTo("text"));
+print(directContract.compareTo(new Direct()));
+
+class Base {
+    public func compareTo(other: any) i32 { return 4; }
+}
+class Derived extends Base implements Comparable<Derived> {
+    public func compareTo(other: Derived) i32 { return 3; }
+}
+const derived = new Derived();
+const derivedContract: Comparable<Derived> = derived;
+print(derived.compareTo(new Derived()));
+print(derived.compareTo("text"));
+print(derivedContract.compareTo(new Derived()));
+
+class Ordering implements Comparator<Ordering> {
+    public func compare(left: Ordering, right: Ordering) i32 { return 5; }
+    public func compare(left: any, right: any) i32 { return 6; }
+}
+const ordering = new Ordering();
+const orderingContract: Comparator<Ordering> = ordering;
+print(ordering.compare(new Ordering(), new Ordering()));
+print(ordering.compare("a", "b"));
+print(orderingContract.compare(new Ordering(), new Ordering()));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Direct" (1:7-1:13)
+IMPLEMENTS (1:14-1:24)
+IDENTIFIER "Comparable" (1:25-1:35)
+LESS (1:35-1:36)
+IDENTIFIER "Direct" (1:36-1:42)
+GREATER (1:42-1:43)
+LEFT_BRACE (1:44-1:45)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "compareTo" (2:17-2:26)
+LEFT_PAREN (2:26-2:27)
+IDENTIFIER "other" (2:27-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "Direct" (2:34-2:40)
+RIGHT_PAREN (2:40-2:41)
+IDENTIFIER "i32" (2:42-2:45)
+LEFT_BRACE (2:46-2:47)
+RETURN (2:48-2:54)
+INTEGER_LITERAL "1" (2:55-2:56)
+SEMICOLON (2:56-2:57)
+RIGHT_BRACE (2:58-2:59)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "compareTo" (3:17-3:26)
+LEFT_PAREN (3:26-3:27)
+IDENTIFIER "other" (3:27-3:32)
+COLON (3:32-3:33)
+IDENTIFIER "any" (3:34-3:37)
+RIGHT_PAREN (3:37-3:38)
+IDENTIFIER "i32" (3:39-3:42)
+LEFT_BRACE (3:43-3:44)
+RETURN (3:45-3:51)
+INTEGER_LITERAL "2" (3:52-3:53)
+SEMICOLON (3:53-3:54)
+RIGHT_BRACE (3:55-3:56)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+IDENTIFIER "direct" (5:7-5:13)
+EQUAL (5:14-5:15)
+NEW (5:16-5:19)
+IDENTIFIER "Direct" (5:20-5:26)
+LEFT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+SEMICOLON (5:28-5:29)
+CONST (6:1-6:6)
+IDENTIFIER "directContract" (6:7-6:21)
+COLON (6:21-6:22)
+IDENTIFIER "Comparable" (6:23-6:33)
+LESS (6:33-6:34)
+IDENTIFIER "Direct" (6:34-6:40)
+GREATER (6:40-6:41)
+EQUAL (6:42-6:43)
+IDENTIFIER "direct" (6:44-6:50)
+SEMICOLON (6:50-6:51)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "direct" (7:7-7:13)
+DOT (7:13-7:14)
+IDENTIFIER "compareTo" (7:14-7:23)
+LEFT_PAREN (7:23-7:24)
+NEW (7:24-7:27)
+IDENTIFIER "Direct" (7:28-7:34)
+LEFT_PAREN (7:34-7:35)
+RIGHT_PAREN (7:35-7:36)
+RIGHT_PAREN (7:36-7:37)
+RIGHT_PAREN (7:37-7:38)
+SEMICOLON (7:38-7:39)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "direct" (8:7-8:13)
+DOT (8:13-8:14)
+IDENTIFIER "compareTo" (8:14-8:23)
+LEFT_PAREN (8:23-8:24)
+STRING_LITERAL "\"text\"" (8:24-8:30)
+RIGHT_PAREN (8:30-8:31)
+RIGHT_PAREN (8:31-8:32)
+SEMICOLON (8:32-8:33)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "directContract" (9:7-9:21)
+DOT (9:21-9:22)
+IDENTIFIER "compareTo" (9:22-9:31)
+LEFT_PAREN (9:31-9:32)
+NEW (9:32-9:35)
+IDENTIFIER "Direct" (9:36-9:42)
+LEFT_PAREN (9:42-9:43)
+RIGHT_PAREN (9:43-9:44)
+RIGHT_PAREN (9:44-9:45)
+RIGHT_PAREN (9:45-9:46)
+SEMICOLON (9:46-9:47)
+CLASS (11:1-11:6)
+IDENTIFIER "Base" (11:7-11:11)
+LEFT_BRACE (11:12-11:13)
+PUBLIC (12:5-12:11)
+FUNC (12:12-12:16)
+IDENTIFIER "compareTo" (12:17-12:26)
+LEFT_PAREN (12:26-12:27)
+IDENTIFIER "other" (12:27-12:32)
+COLON (12:32-12:33)
+IDENTIFIER "any" (12:34-12:37)
+RIGHT_PAREN (12:37-12:38)
+IDENTIFIER "i32" (12:39-12:42)
+LEFT_BRACE (12:43-12:44)
+RETURN (12:45-12:51)
+INTEGER_LITERAL "4" (12:52-12:53)
+SEMICOLON (12:53-12:54)
+RIGHT_BRACE (12:55-12:56)
+RIGHT_BRACE (13:1-13:2)
+CLASS (14:1-14:6)
+IDENTIFIER "Derived" (14:7-14:14)
+EXTENDS (14:15-14:22)
+IDENTIFIER "Base" (14:23-14:27)
+IMPLEMENTS (14:28-14:38)
+IDENTIFIER "Comparable" (14:39-14:49)
+LESS (14:49-14:50)
+IDENTIFIER "Derived" (14:50-14:57)
+GREATER (14:57-14:58)
+LEFT_BRACE (14:59-14:60)
+PUBLIC (15:5-15:11)
+FUNC (15:12-15:16)
+IDENTIFIER "compareTo" (15:17-15:26)
+LEFT_PAREN (15:26-15:27)
+IDENTIFIER "other" (15:27-15:32)
+COLON (15:32-15:33)
+IDENTIFIER "Derived" (15:34-15:41)
+RIGHT_PAREN (15:41-15:42)
+IDENTIFIER "i32" (15:43-15:46)
+LEFT_BRACE (15:47-15:48)
+RETURN (15:49-15:55)
+INTEGER_LITERAL "3" (15:56-15:57)
+SEMICOLON (15:57-15:58)
+RIGHT_BRACE (15:59-15:60)
+RIGHT_BRACE (16:1-16:2)
+CONST (17:1-17:6)
+IDENTIFIER "derived" (17:7-17:14)
+EQUAL (17:15-17:16)
+NEW (17:17-17:20)
+IDENTIFIER "Derived" (17:21-17:28)
+LEFT_PAREN (17:28-17:29)
+RIGHT_PAREN (17:29-17:30)
+SEMICOLON (17:30-17:31)
+CONST (18:1-18:6)
+IDENTIFIER "derivedContract" (18:7-18:22)
+COLON (18:22-18:23)
+IDENTIFIER "Comparable" (18:24-18:34)
+LESS (18:34-18:35)
+IDENTIFIER "Derived" (18:35-18:42)
+GREATER (18:42-18:43)
+EQUAL (18:44-18:45)
+IDENTIFIER "derived" (18:46-18:53)
+SEMICOLON (18:53-18:54)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "derived" (19:7-19:14)
+DOT (19:14-19:15)
+IDENTIFIER "compareTo" (19:15-19:24)
+LEFT_PAREN (19:24-19:25)
+NEW (19:25-19:28)
+IDENTIFIER "Derived" (19:29-19:36)
+LEFT_PAREN (19:36-19:37)
+RIGHT_PAREN (19:37-19:38)
+RIGHT_PAREN (19:38-19:39)
+RIGHT_PAREN (19:39-19:40)
+SEMICOLON (19:40-19:41)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "derived" (20:7-20:14)
+DOT (20:14-20:15)
+IDENTIFIER "compareTo" (20:15-20:24)
+LEFT_PAREN (20:24-20:25)
+STRING_LITERAL "\"text\"" (20:25-20:31)
+RIGHT_PAREN (20:31-20:32)
+RIGHT_PAREN (20:32-20:33)
+SEMICOLON (20:33-20:34)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "derivedContract" (21:7-21:22)
+DOT (21:22-21:23)
+IDENTIFIER "compareTo" (21:23-21:32)
+LEFT_PAREN (21:32-21:33)
+NEW (21:33-21:36)
+IDENTIFIER "Derived" (21:37-21:44)
+LEFT_PAREN (21:44-21:45)
+RIGHT_PAREN (21:45-21:46)
+RIGHT_PAREN (21:46-21:47)
+RIGHT_PAREN (21:47-21:48)
+SEMICOLON (21:48-21:49)
+CLASS (23:1-23:6)
+IDENTIFIER "Ordering" (23:7-23:15)
+IMPLEMENTS (23:16-23:26)
+IDENTIFIER "Comparator" (23:27-23:37)
+LESS (23:37-23:38)
+IDENTIFIER "Ordering" (23:38-23:46)
+GREATER (23:46-23:47)
+LEFT_BRACE (23:48-23:49)
+PUBLIC (24:5-24:11)
+FUNC (24:12-24:16)
+IDENTIFIER "compare" (24:17-24:24)
+LEFT_PAREN (24:24-24:25)
+IDENTIFIER "left" (24:25-24:29)
+COLON (24:29-24:30)
+IDENTIFIER "Ordering" (24:31-24:39)
+COMMA (24:39-24:40)
+IDENTIFIER "right" (24:41-24:46)
+COLON (24:46-24:47)
+IDENTIFIER "Ordering" (24:48-24:56)
+RIGHT_PAREN (24:56-24:57)
+IDENTIFIER "i32" (24:58-24:61)
+LEFT_BRACE (24:62-24:63)
+RETURN (24:64-24:70)
+INTEGER_LITERAL "5" (24:71-24:72)
+SEMICOLON (24:72-24:73)
+RIGHT_BRACE (24:74-24:75)
+PUBLIC (25:5-25:11)
+FUNC (25:12-25:16)
+IDENTIFIER "compare" (25:17-25:24)
+LEFT_PAREN (25:24-25:25)
+IDENTIFIER "left" (25:25-25:29)
+COLON (25:29-25:30)
+IDENTIFIER "any" (25:31-25:34)
+COMMA (25:34-25:35)
+IDENTIFIER "right" (25:36-25:41)
+COLON (25:41-25:42)
+IDENTIFIER "any" (25:43-25:46)
+RIGHT_PAREN (25:46-25:47)
+IDENTIFIER "i32" (25:48-25:51)
+LEFT_BRACE (25:52-25:53)
+RETURN (25:54-25:60)
+INTEGER_LITERAL "6" (25:61-25:62)
+SEMICOLON (25:62-25:63)
+RIGHT_BRACE (25:64-25:65)
+RIGHT_BRACE (26:1-26:2)
+CONST (27:1-27:6)
+IDENTIFIER "ordering" (27:7-27:15)
+EQUAL (27:16-27:17)
+NEW (27:18-27:21)
+IDENTIFIER "Ordering" (27:22-27:30)
+LEFT_PAREN (27:30-27:31)
+RIGHT_PAREN (27:31-27:32)
+SEMICOLON (27:32-27:33)
+CONST (28:1-28:6)
+IDENTIFIER "orderingContract" (28:7-28:23)
+COLON (28:23-28:24)
+IDENTIFIER "Comparator" (28:25-28:35)
+LESS (28:35-28:36)
+IDENTIFIER "Ordering" (28:36-28:44)
+GREATER (28:44-28:45)
+EQUAL (28:46-28:47)
+IDENTIFIER "ordering" (28:48-28:56)
+SEMICOLON (28:56-28:57)
+IDENTIFIER "print" (29:1-29:6)
+LEFT_PAREN (29:6-29:7)
+IDENTIFIER "ordering" (29:7-29:15)
+DOT (29:15-29:16)
+IDENTIFIER "compare" (29:16-29:23)
+LEFT_PAREN (29:23-29:24)
+NEW (29:24-29:27)
+IDENTIFIER "Ordering" (29:28-29:36)
+LEFT_PAREN (29:36-29:37)
+RIGHT_PAREN (29:37-29:38)
+COMMA (29:38-29:39)
+NEW (29:40-29:43)
+IDENTIFIER "Ordering" (29:44-29:52)
+LEFT_PAREN (29:52-29:53)
+RIGHT_PAREN (29:53-29:54)
+RIGHT_PAREN (29:54-29:55)
+RIGHT_PAREN (29:55-29:56)
+SEMICOLON (29:56-29:57)
+IDENTIFIER "print" (30:1-30:6)
+LEFT_PAREN (30:6-30:7)
+IDENTIFIER "ordering" (30:7-30:15)
+DOT (30:15-30:16)
+IDENTIFIER "compare" (30:16-30:23)
+LEFT_PAREN (30:23-30:24)
+STRING_LITERAL "\"a\"" (30:24-30:27)
+COMMA (30:27-30:28)
+STRING_LITERAL "\"b\"" (30:29-30:32)
+RIGHT_PAREN (30:32-30:33)
+RIGHT_PAREN (30:33-30:34)
+SEMICOLON (30:34-30:35)
+IDENTIFIER "print" (31:1-31:6)
+LEFT_PAREN (31:6-31:7)
+IDENTIFIER "orderingContract" (31:7-31:23)
+DOT (31:23-31:24)
+IDENTIFIER "compare" (31:24-31:31)
+LEFT_PAREN (31:31-31:32)
+NEW (31:32-31:35)
+IDENTIFIER "Ordering" (31:36-31:44)
+LEFT_PAREN (31:44-31:45)
+RIGHT_PAREN (31:45-31:46)
+COMMA (31:46-31:47)
+NEW (31:48-31:51)
+IDENTIFIER "Ordering" (31:52-31:60)
+LEFT_PAREN (31:60-31:61)
+RIGHT_PAREN (31:61-31:62)
+RIGHT_PAREN (31:62-31:63)
+RIGHT_PAREN (31:63-31:64)
+SEMICOLON (31:64-31:65)
+
+--- AST ---
+
+(Program
+  range: 1:1-31:65
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Direct"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 1:25-1:43
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:36-1:42
+        name: "Direct"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-2:59
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:59
+        (IdentifierDeclaration
+          range: 2:17-2:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 2:27-2:40
+          (IdentifierDeclaration
+            range: 2:27-2:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:34-2:40
+            name: "Direct"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:42-2:45
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:46-2:59
+          (ReturnStatement
+            range: 2:48-2:57
+            (LiteralExpression
+              range: 2:55-2:56
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:56
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:56
+        (IdentifierDeclaration
+          range: 3:17-3:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 3:27-3:37
+          (IdentifierDeclaration
+            range: 3:27-3:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 3:34-3:37
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:39-3:42
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:43-3:56
+          (ReturnStatement
+            range: 3:45-3:54
+            (LiteralExpression
+              range: 3:52-3:53
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "direct"
+    )
+    type: null
+    (NewExpression
+      range: 5:16-5:28
+      (IdentifierExpression
+        range: 5:20-5:26
+        name: "Direct"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:51
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:21
+      name: "directContract"
+    )
+    (NamedTypeNode
+      range: 6:23-6:41
+      name: "Comparable"
+      (NamedTypeNode
+        range: 6:34-6:40
+        name: "Direct"
+      )
+    )
+    (IdentifierExpression
+      range: 6:44-6:50
+      name: "direct"
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:39
+    (CallExpression
+      range: 7:1-7:38
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:37
+        (MemberExpression
+          range: 7:7-7:23
+          (IdentifierExpression
+            range: 7:7-7:13
+            name: "direct"
+          )
+          (IdentifierExpression
+            range: 7:14-7:23
+            name: "compareTo"
+          )
+        )
+        (NewExpression
+          range: 7:24-7:36
+          (IdentifierExpression
+            range: 7:28-7:34
+            name: "Direct"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:33
+    (CallExpression
+      range: 8:1-8:32
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:31
+        (MemberExpression
+          range: 8:7-8:23
+          (IdentifierExpression
+            range: 8:7-8:13
+            name: "direct"
+          )
+          (IdentifierExpression
+            range: 8:14-8:23
+            name: "compareTo"
+          )
+        )
+        (LiteralExpression
+          range: 8:24-8:30
+          kind: STRING
+          text: "\"text\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:47
+    (CallExpression
+      range: 9:1-9:46
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:45
+        (MemberExpression
+          range: 9:7-9:31
+          (IdentifierExpression
+            range: 9:7-9:21
+            name: "directContract"
+          )
+          (IdentifierExpression
+            range: 9:22-9:31
+            name: "compareTo"
+          )
+        )
+        (NewExpression
+          range: 9:32-9:44
+          (IdentifierExpression
+            range: 9:36-9:42
+            name: "Direct"
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 11:1-13:2
+    (IdentifierDeclaration
+      range: 11:7-11:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 12:5-12:56
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 12:12-12:56
+        (IdentifierDeclaration
+          range: 12:17-12:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 12:27-12:37
+          (IdentifierDeclaration
+            range: 12:27-12:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 12:34-12:37
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 12:39-12:42
+          name: "i32"
+        )
+        (BlockStatement
+          range: 12:43-12:56
+          (ReturnStatement
+            range: 12:45-12:54
+            (LiteralExpression
+              range: 12:52-12:53
+              kind: INT
+              text: "4"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 14:1-16:2
+    (IdentifierDeclaration
+      range: 14:7-14:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 14:23-14:27
+      name: "Base"
+    )
+    (NamedTypeNode
+      range: 14:39-14:58
+      name: "Comparable"
+      (NamedTypeNode
+        range: 14:50-14:57
+        name: "Derived"
+      )
+    )
+    (MemberDeclaration
+      range: 15:5-15:60
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 15:12-15:60
+        (IdentifierDeclaration
+          range: 15:17-15:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 15:27-15:41
+          (IdentifierDeclaration
+            range: 15:27-15:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 15:34-15:41
+            name: "Derived"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 15:43-15:46
+          name: "i32"
+        )
+        (BlockStatement
+          range: 15:47-15:60
+          (ReturnStatement
+            range: 15:49-15:58
+            (LiteralExpression
+              range: 15:56-15:57
+              kind: INT
+              text: "3"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 17:1-17:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 17:7-17:14
+      name: "derived"
+    )
+    type: null
+    (NewExpression
+      range: 17:17-17:30
+      (IdentifierExpression
+        range: 17:21-17:28
+        name: "Derived"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:54
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:22
+      name: "derivedContract"
+    )
+    (NamedTypeNode
+      range: 18:24-18:43
+      name: "Comparable"
+      (NamedTypeNode
+        range: 18:35-18:42
+        name: "Derived"
+      )
+    )
+    (IdentifierExpression
+      range: 18:46-18:53
+      name: "derived"
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:41
+    (CallExpression
+      range: 19:1-19:40
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (CallExpression
+        range: 19:7-19:39
+        (MemberExpression
+          range: 19:7-19:24
+          (IdentifierExpression
+            range: 19:7-19:14
+            name: "derived"
+          )
+          (IdentifierExpression
+            range: 19:15-19:24
+            name: "compareTo"
+          )
+        )
+        (NewExpression
+          range: 19:25-19:38
+          (IdentifierExpression
+            range: 19:29-19:36
+            name: "Derived"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:34
+    (CallExpression
+      range: 20:1-20:33
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (CallExpression
+        range: 20:7-20:32
+        (MemberExpression
+          range: 20:7-20:24
+          (IdentifierExpression
+            range: 20:7-20:14
+            name: "derived"
+          )
+          (IdentifierExpression
+            range: 20:15-20:24
+            name: "compareTo"
+          )
+        )
+        (LiteralExpression
+          range: 20:25-20:31
+          kind: STRING
+          text: "\"text\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:49
+    (CallExpression
+      range: 21:1-21:48
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (CallExpression
+        range: 21:7-21:47
+        (MemberExpression
+          range: 21:7-21:32
+          (IdentifierExpression
+            range: 21:7-21:22
+            name: "derivedContract"
+          )
+          (IdentifierExpression
+            range: 21:23-21:32
+            name: "compareTo"
+          )
+        )
+        (NewExpression
+          range: 21:33-21:46
+          (IdentifierExpression
+            range: 21:37-21:44
+            name: "Derived"
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 23:1-26:2
+    (IdentifierDeclaration
+      range: 23:7-23:15
+      name: "Ordering"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 23:27-23:47
+      name: "Comparator"
+      (NamedTypeNode
+        range: 23:38-23:46
+        name: "Ordering"
+      )
+    )
+    (MemberDeclaration
+      range: 24:5-24:75
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 24:12-24:75
+        (IdentifierDeclaration
+          range: 24:17-24:24
+          name: "compare"
+        )
+        (FunctionParameter
+          range: 24:25-24:39
+          (IdentifierDeclaration
+            range: 24:25-24:29
+            name: "left"
+          )
+          (NamedTypeNode
+            range: 24:31-24:39
+            name: "Ordering"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 24:41-24:56
+          (IdentifierDeclaration
+            range: 24:41-24:46
+            name: "right"
+          )
+          (NamedTypeNode
+            range: 24:48-24:56
+            name: "Ordering"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 24:58-24:61
+          name: "i32"
+        )
+        (BlockStatement
+          range: 24:62-24:75
+          (ReturnStatement
+            range: 24:64-24:73
+            (LiteralExpression
+              range: 24:71-24:72
+              kind: INT
+              text: "5"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 25:5-25:65
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 25:12-25:65
+        (IdentifierDeclaration
+          range: 25:17-25:24
+          name: "compare"
+        )
+        (FunctionParameter
+          range: 25:25-25:34
+          (IdentifierDeclaration
+            range: 25:25-25:29
+            name: "left"
+          )
+          (NamedTypeNode
+            range: 25:31-25:34
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 25:36-25:46
+          (IdentifierDeclaration
+            range: 25:36-25:41
+            name: "right"
+          )
+          (NamedTypeNode
+            range: 25:43-25:46
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 25:48-25:51
+          name: "i32"
+        )
+        (BlockStatement
+          range: 25:52-25:65
+          (ReturnStatement
+            range: 25:54-25:63
+            (LiteralExpression
+              range: 25:61-25:62
+              kind: INT
+              text: "6"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 27:1-27:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 27:7-27:15
+      name: "ordering"
+    )
+    type: null
+    (NewExpression
+      range: 27:18-27:32
+      (IdentifierExpression
+        range: 27:22-27:30
+        name: "Ordering"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 28:1-28:57
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 28:7-28:23
+      name: "orderingContract"
+    )
+    (NamedTypeNode
+      range: 28:25-28:45
+      name: "Comparator"
+      (NamedTypeNode
+        range: 28:36-28:44
+        name: "Ordering"
+      )
+    )
+    (IdentifierExpression
+      range: 28:48-28:56
+      name: "ordering"
+    )
+  )
+  (ExpressionStatement
+    range: 29:1-29:57
+    (CallExpression
+      range: 29:1-29:56
+      (IdentifierExpression
+        range: 29:1-29:6
+        name: "print"
+      )
+      (CallExpression
+        range: 29:7-29:55
+        (MemberExpression
+          range: 29:7-29:23
+          (IdentifierExpression
+            range: 29:7-29:15
+            name: "ordering"
+          )
+          (IdentifierExpression
+            range: 29:16-29:23
+            name: "compare"
+          )
+        )
+        (NewExpression
+          range: 29:24-29:38
+          (IdentifierExpression
+            range: 29:28-29:36
+            name: "Ordering"
+          )
+        )
+        (NewExpression
+          range: 29:40-29:54
+          (IdentifierExpression
+            range: 29:44-29:52
+            name: "Ordering"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 30:1-30:35
+    (CallExpression
+      range: 30:1-30:34
+      (IdentifierExpression
+        range: 30:1-30:6
+        name: "print"
+      )
+      (CallExpression
+        range: 30:7-30:33
+        (MemberExpression
+          range: 30:7-30:23
+          (IdentifierExpression
+            range: 30:7-30:15
+            name: "ordering"
+          )
+          (IdentifierExpression
+            range: 30:16-30:23
+            name: "compare"
+          )
+        )
+        (LiteralExpression
+          range: 30:24-30:27
+          kind: STRING
+          text: "\"a\""
+        )
+        (LiteralExpression
+          range: 30:29-30:32
+          kind: STRING
+          text: "\"b\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 31:1-31:65
+    (CallExpression
+      range: 31:1-31:64
+      (IdentifierExpression
+        range: 31:1-31:6
+        name: "print"
+      )
+      (CallExpression
+        range: 31:7-31:63
+        (MemberExpression
+          range: 31:7-31:31
+          (IdentifierExpression
+            range: 31:7-31:23
+            name: "orderingContract"
+          )
+          (IdentifierExpression
+            range: 31:24-31:31
+            name: "compare"
+          )
+        )
+        (NewExpression
+          range: 31:32-31:46
+          (IdentifierExpression
+            range: 31:36-31:44
+            name: "Ordering"
+          )
+        )
+        (NewExpression
+          range: 31:48-31:62
+          (IdentifierExpression
+            range: 31:52-31:60
+            name: "Ordering"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:55-2:56 -> i32
+  3:52-3:53 -> i32
+  5:16-5:28 -> Direct
+  5:20-5:26 -> Direct
+  6:44-6:50 -> Direct
+  7:1-7:6 -> (any) => void
+  7:1-7:38 -> void
+  7:7-7:13 -> Direct
+  7:7-7:23 -> (Direct) => i32
+  7:7-7:37 -> i32
+  7:14-7:23 -> (Direct) => i32
+  7:24-7:36 -> Direct
+  7:28-7:34 -> Direct
+  8:1-8:6 -> (any) => void
+  8:1-8:32 -> void
+  8:7-8:13 -> Direct
+  8:7-8:23 -> (any) => i32
+  8:7-8:31 -> i32
+  8:14-8:23 -> (any) => i32
+  8:24-8:30 -> string
+  9:1-9:6 -> (any) => void
+  9:1-9:46 -> void
+  9:7-9:21 -> Comparable<Direct>
+  9:7-9:31 -> (Direct) => i32
+  9:7-9:45 -> i32
+  9:22-9:31 -> (Direct) => i32
+  9:32-9:44 -> Direct
+  9:36-9:42 -> Direct
+  12:52-12:53 -> i32
+  14:23-14:27 -> Base
+  15:56-15:57 -> i32
+  17:17-17:30 -> Derived
+  17:21-17:28 -> Derived
+  18:46-18:53 -> Derived
+  19:1-19:6 -> (any) => void
+  19:1-19:40 -> void
+  19:7-19:14 -> Derived
+  19:7-19:24 -> (Derived) => i32
+  19:7-19:39 -> i32
+  19:15-19:24 -> (Derived) => i32
+  19:25-19:38 -> Derived
+  19:29-19:36 -> Derived
+  20:1-20:6 -> (any) => void
+  20:1-20:33 -> void
+  20:7-20:14 -> Derived
+  20:7-20:24 -> (any) => i32
+  20:7-20:32 -> i32
+  20:15-20:24 -> (any) => i32
+  20:25-20:31 -> string
+  21:1-21:6 -> (any) => void
+  21:1-21:48 -> void
+  21:7-21:22 -> Comparable<Derived>
+  21:7-21:32 -> (Derived) => i32
+  21:7-21:47 -> i32
+  21:23-21:32 -> (Derived) => i32
+  21:33-21:46 -> Derived
+  21:37-21:44 -> Derived
+  24:71-24:72 -> i32
+  25:61-25:62 -> i32
+  27:18-27:32 -> Ordering
+  27:22-27:30 -> Ordering
+  28:48-28:56 -> Ordering
+  29:1-29:6 -> (any) => void
+  29:1-29:56 -> void
+  29:7-29:15 -> Ordering
+  29:7-29:23 -> (Ordering, Ordering) => i32
+  29:7-29:55 -> i32
+  29:16-29:23 -> (Ordering, Ordering) => i32
+  29:24-29:38 -> Ordering
+  29:28-29:36 -> Ordering
+  29:40-29:54 -> Ordering
+  29:44-29:52 -> Ordering
+  30:1-30:6 -> (any) => void
+  30:1-30:34 -> void
+  30:7-30:15 -> Ordering
+  30:7-30:23 -> (any, any) => i32
+  30:7-30:33 -> i32
+  30:16-30:23 -> (any, any) => i32
+  30:24-30:27 -> string
+  30:29-30:32 -> string
+  31:1-31:6 -> (any) => void
+  31:1-31:64 -> void
+  31:7-31:23 -> Comparator<Ordering>
+  31:7-31:31 -> (Ordering, Ordering) => i32
+  31:7-31:63 -> i32
+  31:24-31:31 -> (Ordering, Ordering) => i32
+  31:32-31:46 -> Ordering
+  31:36-31:44 -> Ordering
+  31:48-31:62 -> Ordering
+  31:52-31:60 -> Ordering
+
+Resolved types:
+  1:25-1:43 -> Comparable<Direct>
+  1:36-1:42 -> Direct
+  2:34-2:40 -> Direct
+  2:42-2:45 -> i32
+  3:34-3:37 -> any
+  3:39-3:42 -> i32
+  6:23-6:41 -> Comparable<Direct>
+  6:34-6:40 -> Direct
+  12:34-12:37 -> any
+  12:39-12:42 -> i32
+  14:39-14:58 -> Comparable<Derived>
+  14:50-14:57 -> Derived
+  15:34-15:41 -> Derived
+  15:43-15:46 -> i32
+  18:24-18:43 -> Comparable<Derived>
+  18:35-18:42 -> Derived
+  23:27-23:47 -> Comparator<Ordering>
+  23:38-23:46 -> Ordering
+  24:31-24:39 -> Ordering
+  24:48-24:56 -> Ordering
+  24:58-24:61 -> i32
+  25:31-25:34 -> any
+  25:43-25:46 -> any
+  25:48-25:51 -> i32
+  28:25-28:45 -> Comparator<Ordering>
+  28:36-28:44 -> Ordering
+
+Conversions:
+  8:24-8:30 -> string -> any
+  20:25-20:31 -> string -> any
+  30:24-30:27 -> string -> any
+  30:29-30:32 -> string -> any
+
+Declarations:
+  1:7-1:13 -> class Direct
+  2:17-2:26 -> func compareTo(Direct) => i32
+  2:27-2:32 -> const other: Direct
+  3:17-3:26 -> func compareTo(any) => i32
+  3:27-3:32 -> const other: any
+  5:7-5:13 -> const direct: Direct
+  6:7-6:21 -> const directContract: Comparable<Direct>
+  11:7-11:11 -> class Base
+  12:17-12:26 -> func compareTo(any) => i32
+  12:27-12:32 -> const other: any
+  14:7-14:14 -> class Derived
+  15:17-15:26 -> func compareTo(Derived) => i32
+  15:27-15:32 -> const other: Derived
+  17:7-17:14 -> const derived: Derived
+  18:7-18:22 -> const derivedContract: Comparable<Derived>
+  23:7-23:15 -> class Ordering
+  24:17-24:24 -> func compare(Ordering, Ordering) => i32
+  24:25-24:29 -> const left: Ordering
+  24:41-24:46 -> const right: Ordering
+  25:17-25:24 -> func compare(any, any) => i32
+  25:25-25:29 -> const left: any
+  25:36-25:41 -> const right: any
+  27:7-27:15 -> const ordering: Ordering
+  28:7-28:23 -> const orderingContract: Comparator<Ordering>
+
+References:
+  5:20-5:26 -> 1:7-1:13
+  6:44-6:50 -> 5:7-5:13
+  7:1-7:6 -> builtin print
+  7:7-7:13 -> 5:7-5:13
+  7:14-7:23 -> 2:17-2:26
+  7:28-7:34 -> 1:7-1:13
+  8:1-8:6 -> builtin print
+  8:7-8:13 -> 5:7-5:13
+  8:14-8:23 -> 3:17-3:26
+  9:1-9:6 -> builtin print
+  9:7-9:21 -> 6:7-6:21
+  9:22-9:31 -> Comparable<Direct>.compareTo(Direct): i32
+  9:36-9:42 -> 1:7-1:13
+  14:23-14:27 -> 11:7-11:11
+  17:21-17:28 -> 14:7-14:14
+  18:46-18:53 -> 17:7-17:14
+  19:1-19:6 -> builtin print
+  19:7-19:14 -> 17:7-17:14
+  19:15-19:24 -> 15:17-15:26
+  19:29-19:36 -> 14:7-14:14
+  20:1-20:6 -> builtin print
+  20:7-20:14 -> 17:7-17:14
+  20:15-20:24 -> 12:17-12:26
+  21:1-21:6 -> builtin print
+  21:7-21:22 -> 18:7-18:22
+  21:23-21:32 -> Comparable<Derived>.compareTo(Derived): i32
+  21:37-21:44 -> 14:7-14:14
+  27:22-27:30 -> 23:7-23:15
+  28:48-28:56 -> 27:7-27:15
+  29:1-29:6 -> builtin print
+  29:7-29:15 -> 27:7-27:15
+  29:16-29:23 -> 24:17-24:24
+  29:28-29:36 -> 23:7-23:15
+  29:44-29:52 -> 23:7-23:15
+  30:1-30:6 -> builtin print
+  30:7-30:15 -> 27:7-27:15
+  30:16-30:23 -> 25:17-25:24
+  31:1-31:6 -> builtin print
+  31:7-31:23 -> 28:7-28:23
+  31:24-31:31 -> Comparator<Ordering>.compare(Ordering, Ordering): i32
+  31:36-31:44 -> 23:7-23:15
+  31:52-31:60 -> 23:7-23:15
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Direct
+  nest member Test$Base
+  nest member Test$Derived
+  nest member Test$Ordering
+  inner class Test$Direct flags [PUBLIC, STATIC]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  inner class Test$Ordering flags [PUBLIC, STATIC]
+  field direct LTest$Direct; flags [PUBLIC, STATIC, FINAL]
+  field directContract Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<LTest$Direct;>;
+  field derived LTest$Derived; flags [PUBLIC, STATIC, FINAL]
+  field derivedContract Ljava/lang/Comparable; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/lang/Comparable<LTest$Derived;>;
+  field ordering LTest$Ordering; flags [PUBLIC, STATIC, FINAL]
+  field orderingContract Ljava/util/Comparator; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/Comparator<LTest$Ordering;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$Direct
+    DUP
+    INVOKESPECIAL Test$Direct.<init>()V
+    PUTSTATIC Test.direct LTest$Direct;
+    GETSTATIC Test.direct LTest$Direct;
+    PUTSTATIC Test.directContract Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.direct LTest$Direct;
+    NEW Test$Direct
+    DUP
+    INVOKESPECIAL Test$Direct.<init>()V
+    INVOKEVIRTUAL Test$Direct.compareTo(LTest$Direct;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.direct LTest$Direct;
+    LDC "text"
+    INVOKEVIRTUAL Test$Direct.compareTo$2(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.directContract Ljava/lang/Comparable;
+    NEW Test$Direct
+    DUP
+    INVOKESPECIAL Test$Direct.<init>()V
+    INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    PUTSTATIC Test.derived LTest$Derived;
+    GETSTATIC Test.derived LTest$Derived;
+    PUTSTATIC Test.derivedContract Ljava/lang/Comparable;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derived LTest$Derived;
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    INVOKEVIRTUAL Test$Derived.compareTo(LTest$Derived;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derived LTest$Derived;
+    LDC "text"
+    INVOKEVIRTUAL Test$Base.compareTo$1(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derivedContract Ljava/lang/Comparable;
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    INVOKEINTERFACE java/lang/Comparable.compareTo(Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    NEW Test$Ordering
+    DUP
+    INVOKESPECIAL Test$Ordering.<init>()V
+    PUTSTATIC Test.ordering LTest$Ordering;
+    GETSTATIC Test.ordering LTest$Ordering;
+    PUTSTATIC Test.orderingContract Ljava/util/Comparator;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ordering LTest$Ordering;
+    NEW Test$Ordering
+    DUP
+    INVOKESPECIAL Test$Ordering.<init>()V
+    NEW Test$Ordering
+    DUP
+    INVOKESPECIAL Test$Ordering.<init>()V
+    INVOKEVIRTUAL Test$Ordering.compare(LTest$Ordering;LTest$Ordering;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ordering LTest$Ordering;
+    LDC "a"
+    LDC "b"
+    INVOKEVIRTUAL Test$Ordering.compare$2(Ljava/lang/Object;Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.orderingContract Ljava/util/Comparator;
+    NEW Test$Ordering
+    DUP
+    INVOKESPECIAL Test$Ordering.<init>()V
+    NEW Test$Ordering
+    DUP
+    INVOKESPECIAL Test$Ordering.<init>()V
+    INVOKEINTERFACE java/util/Comparator.compare(Ljava/lang/Object;Ljava/lang/Object;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Direct extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements java/lang/Comparable
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  signature Ljava/lang/Object;Ljava/lang/Comparable<LTest$Direct;>;Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;
+  nest host Test
+  inner class Test$Direct flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method compareTo(LTest$Direct;)I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 2
+  method compareTo$2(Ljava/lang/Object;)I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 2
+  method compareTo(Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Direct
+    INVOKEVIRTUAL Test$Direct.compareTo(LTest$Direct;)I
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method compareTo$1(Ljava/lang/Object;)I flags [PUBLIC]
+    LDC 4
+    IRETURN
+    max stack 1 max locals 2
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements java/lang/Comparable
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  signature LTest$Base;Ljava/lang/Comparable<LTest$Derived;>;Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method compareTo(LTest$Derived;)I flags [PUBLIC]
+    LDC 3
+    IRETURN
+    max stack 1 max locals 2
+  method compareTo(Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Derived
+    INVOKEVIRTUAL Test$Derived.compareTo(LTest$Derived;)I
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Ordering extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements java/util/Comparator
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  signature Ljava/lang/Object;Ljava/util/Comparator<LTest$Ordering;>;Lcom/github/andreasarvidsson/eld/runtime/EldEquality$EldObject;
+  nest host Test
+  inner class Test$Ordering flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method compare(LTest$Ordering;LTest$Ordering;)I flags [PUBLIC]
+    LDC 5
+    IRETURN
+    max stack 1 max locals 3
+  method compare$2(Ljava/lang/Object;Ljava/lang/Object;)I flags [PUBLIC]
+    LDC 6
+    IRETURN
+    max stack 1 max locals 3
+  method compare(Ljava/lang/Object;Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    CHECKCAST Test$Ordering
+    ALOAD_2 2
+    CHECKCAST Test$Ordering
+    INVOKEVIRTUAL Test$Ordering.compare(LTest$Ordering;LTest$Ordering;)I
+    IRETURN
+    max stack 3 max locals 3
+
+--- OUTPUT ---
+
+1
+2
+1
+3
+4
+3
+5
+6
+5

@@ -1,0 +1,342 @@
+func choose(value: i32) string { return "small"; }
+func choose(value: i64) string { return "wide"; }
+
+print(choose(2147483648));
+print(choose(value: 2147483648));
+print(choose((2147483648)));
+print(choose(-2147483649));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "choose" (1:6-1:12)
+LEFT_PAREN (1:12-1:13)
+IDENTIFIER "value" (1:13-1:18)
+COLON (1:18-1:19)
+IDENTIFIER "i32" (1:20-1:23)
+RIGHT_PAREN (1:23-1:24)
+IDENTIFIER "string" (1:25-1:31)
+LEFT_BRACE (1:32-1:33)
+RETURN (1:34-1:40)
+STRING_LITERAL "\"small\"" (1:41-1:48)
+SEMICOLON (1:48-1:49)
+RIGHT_BRACE (1:50-1:51)
+FUNC (2:1-2:5)
+IDENTIFIER "choose" (2:6-2:12)
+LEFT_PAREN (2:12-2:13)
+IDENTIFIER "value" (2:13-2:18)
+COLON (2:18-2:19)
+IDENTIFIER "i64" (2:20-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "string" (2:25-2:31)
+LEFT_BRACE (2:32-2:33)
+RETURN (2:34-2:40)
+STRING_LITERAL "\"wide\"" (2:41-2:47)
+SEMICOLON (2:47-2:48)
+RIGHT_BRACE (2:49-2:50)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "choose" (4:7-4:13)
+LEFT_PAREN (4:13-4:14)
+INTEGER_LITERAL "2147483648" (4:14-4:24)
+RIGHT_PAREN (4:24-4:25)
+RIGHT_PAREN (4:25-4:26)
+SEMICOLON (4:26-4:27)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "choose" (5:7-5:13)
+LEFT_PAREN (5:13-5:14)
+IDENTIFIER "value" (5:14-5:19)
+COLON (5:19-5:20)
+INTEGER_LITERAL "2147483648" (5:21-5:31)
+RIGHT_PAREN (5:31-5:32)
+RIGHT_PAREN (5:32-5:33)
+SEMICOLON (5:33-5:34)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "choose" (6:7-6:13)
+LEFT_PAREN (6:13-6:14)
+LEFT_PAREN (6:14-6:15)
+INTEGER_LITERAL "2147483648" (6:15-6:25)
+RIGHT_PAREN (6:25-6:26)
+RIGHT_PAREN (6:26-6:27)
+RIGHT_PAREN (6:27-6:28)
+SEMICOLON (6:28-6:29)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "choose" (7:7-7:13)
+LEFT_PAREN (7:13-7:14)
+MINUS (7:14-7:15)
+INTEGER_LITERAL "2147483649" (7:15-7:25)
+RIGHT_PAREN (7:25-7:26)
+RIGHT_PAREN (7:26-7:27)
+SEMICOLON (7:27-7:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:28
+  (FunctionDeclaration
+    range: 1:1-1:51
+    (IdentifierDeclaration
+      range: 1:6-1:12
+      name: "choose"
+    )
+    (FunctionParameter
+      range: 1:13-1:23
+      (IdentifierDeclaration
+        range: 1:13-1:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:25-1:31
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:32-1:51
+      (ReturnStatement
+        range: 1:34-1:49
+        (LiteralExpression
+          range: 1:41-1:48
+          kind: STRING
+          text: "\"small\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:50
+    (IdentifierDeclaration
+      range: 2:6-2:12
+      name: "choose"
+    )
+    (FunctionParameter
+      range: 2:13-2:23
+      (IdentifierDeclaration
+        range: 2:13-2:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:20-2:23
+        name: "i64"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:25-2:31
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:32-2:50
+      (ReturnStatement
+        range: 2:34-2:48
+        (LiteralExpression
+          range: 2:41-2:47
+          kind: STRING
+          text: "\"wide\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:27
+    (CallExpression
+      range: 4:1-4:26
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:25
+        (IdentifierExpression
+          range: 4:7-4:13
+          name: "choose"
+        )
+        (LiteralExpression
+          range: 4:14-4:24
+          kind: INT
+          text: "2147483648"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:34
+    (CallExpression
+      range: 5:1-5:33
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:32
+        (IdentifierExpression
+          range: 5:7-5:13
+          name: "choose"
+        )
+        (NamedArgumentExpression
+          range: 5:14-5:31
+          (IdentifierDeclaration
+            range: 5:14-5:19
+            name: "value"
+          )
+          (LiteralExpression
+            range: 5:21-5:31
+            kind: INT
+            text: "2147483648"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:29
+    (CallExpression
+      range: 6:1-6:28
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:27
+        (IdentifierExpression
+          range: 6:7-6:13
+          name: "choose"
+        )
+        (GroupingExpression
+          range: 6:14-6:26
+          (LiteralExpression
+            range: 6:15-6:25
+            kind: INT
+            text: "2147483648"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:28
+    (CallExpression
+      range: 7:1-7:27
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:26
+        (IdentifierExpression
+          range: 7:7-7:13
+          name: "choose"
+        )
+        (UnaryExpression
+          range: 7:14-7:25
+          operator: MINUS
+          (LiteralExpression
+            range: 7:15-7:25
+            kind: INT
+            text: "2147483649"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:41-1:48 -> string
+  2:41-2:47 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:26 -> void
+  4:7-4:13 -> (i64) => string
+  4:7-4:25 -> string
+  4:14-4:24 -> i64
+  5:1-5:6 -> (any) => void
+  5:1-5:33 -> void
+  5:7-5:13 -> (i64) => string
+  5:7-5:32 -> string
+  5:21-5:31 -> i64
+  6:1-6:6 -> (any) => void
+  6:1-6:28 -> void
+  6:7-6:13 -> (i64) => string
+  6:7-6:27 -> string
+  6:14-6:26 -> i64
+  6:15-6:25 -> i64
+  7:1-7:6 -> (any) => void
+  7:1-7:27 -> void
+  7:7-7:13 -> (i64) => string
+  7:7-7:26 -> string
+  7:14-7:25 -> i64
+  7:15-7:25 -> i64
+
+Resolved types:
+  1:20-1:23 -> i32
+  1:25-1:31 -> string
+  2:20-2:23 -> i64
+  2:25-2:31 -> string
+
+Declarations:
+  1:6-1:12 -> func choose(i32) => string
+  1:13-1:18 -> const value: i32
+  2:6-2:12 -> func choose(i64) => string
+  2:13-2:18 -> const value: i64
+
+References:
+  4:1-4:6 -> builtin print
+  4:7-4:13 -> 2:6-2:12
+  5:1-5:6 -> builtin print
+  5:7-5:13 -> 2:6-2:12
+  6:1-6:6 -> builtin print
+  6:7-6:13 -> 2:6-2:12
+  7:1-7:6 -> builtin print
+  7:7-7:13 -> 2:6-2:12
+
+Named arguments:
+  5:14-5:19 -> parameter 2:13-2:18
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method choose(I)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "small"
+    ARETURN
+    max stack 1 max locals 1
+  method choose(J)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "wide"
+    ARETURN
+    max stack 1 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 2147483648
+    INVOKESTATIC Test.choose(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 2147483648
+    INVOKESTATIC Test.choose(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 2147483648
+    INVOKESTATIC Test.choose(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W -2147483649
+    INVOKESTATIC Test.choose(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+wide
+wide
+wide
+wide

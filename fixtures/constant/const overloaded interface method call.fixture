@@ -1,0 +1,358 @@
+interface I {
+    func f(x: i32) i32;
+    func f(x: string) i32;
+}
+class C implements I {
+    public var value: i32 = 0;
+    public func f(x: i32) i32 { return 1; }
+    public func f(x: string) i32 { this.value = 2; return this.value; }
+}
+const c: const I = new C();
+print(c.f("x"));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "I" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "f" (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "x" (2:12-2:13)
+COLON (2:13-2:14)
+IDENTIFIER "i32" (2:15-2:18)
+RIGHT_PAREN (2:18-2:19)
+IDENTIFIER "i32" (2:20-2:23)
+SEMICOLON (2:23-2:24)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "x" (3:12-3:13)
+COLON (3:13-3:14)
+IDENTIFIER "string" (3:15-3:21)
+RIGHT_PAREN (3:21-3:22)
+IDENTIFIER "i32" (3:23-3:26)
+SEMICOLON (3:26-3:27)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "C" (5:7-5:8)
+IMPLEMENTS (5:9-5:19)
+IDENTIFIER "I" (5:20-5:21)
+LEFT_BRACE (5:22-5:23)
+PUBLIC (6:5-6:11)
+VAR (6:12-6:15)
+IDENTIFIER "value" (6:16-6:21)
+COLON (6:21-6:22)
+IDENTIFIER "i32" (6:23-6:26)
+EQUAL (6:27-6:28)
+INTEGER_LITERAL "0" (6:29-6:30)
+SEMICOLON (6:30-6:31)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "f" (7:17-7:18)
+LEFT_PAREN (7:18-7:19)
+IDENTIFIER "x" (7:19-7:20)
+COLON (7:20-7:21)
+IDENTIFIER "i32" (7:22-7:25)
+RIGHT_PAREN (7:25-7:26)
+IDENTIFIER "i32" (7:27-7:30)
+LEFT_BRACE (7:31-7:32)
+RETURN (7:33-7:39)
+INTEGER_LITERAL "1" (7:40-7:41)
+SEMICOLON (7:41-7:42)
+RIGHT_BRACE (7:43-7:44)
+PUBLIC (8:5-8:11)
+FUNC (8:12-8:16)
+IDENTIFIER "f" (8:17-8:18)
+LEFT_PAREN (8:18-8:19)
+IDENTIFIER "x" (8:19-8:20)
+COLON (8:20-8:21)
+IDENTIFIER "string" (8:22-8:28)
+RIGHT_PAREN (8:28-8:29)
+IDENTIFIER "i32" (8:30-8:33)
+LEFT_BRACE (8:34-8:35)
+THIS (8:36-8:40)
+DOT (8:40-8:41)
+IDENTIFIER "value" (8:41-8:46)
+EQUAL (8:47-8:48)
+INTEGER_LITERAL "2" (8:49-8:50)
+SEMICOLON (8:50-8:51)
+RETURN (8:52-8:58)
+THIS (8:59-8:63)
+DOT (8:63-8:64)
+IDENTIFIER "value" (8:64-8:69)
+SEMICOLON (8:69-8:70)
+RIGHT_BRACE (8:71-8:72)
+RIGHT_BRACE (9:1-9:2)
+CONST (10:1-10:6)
+IDENTIFIER "c" (10:7-10:8)
+COLON (10:8-10:9)
+CONST (10:10-10:15)
+IDENTIFIER "I" (10:16-10:17)
+EQUAL (10:18-10:19)
+NEW (10:20-10:23)
+IDENTIFIER "C" (10:24-10:25)
+LEFT_PAREN (10:25-10:26)
+RIGHT_PAREN (10:26-10:27)
+SEMICOLON (10:27-10:28)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "c" (11:7-11:8)
+DOT (11:8-11:9)
+IDENTIFIER "f" (11:9-11:10)
+LEFT_PAREN (11:10-11:11)
+STRING_LITERAL "\"x\"" (11:11-11:14)
+RIGHT_PAREN (11:14-11:15)
+RIGHT_PAREN (11:15-11:16)
+SEMICOLON (11:16-11:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:17
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "I"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:24
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 2:12-2:18
+        (IdentifierDeclaration
+          range: 2:12-2:13
+          name: "x"
+        )
+        (NamedTypeNode
+          range: 2:15-2:18
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:20-2:23
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:27
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:21
+        (IdentifierDeclaration
+          range: 3:12-3:13
+          name: "x"
+        )
+        (NamedTypeNode
+          range: 3:15-3:21
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:23-3:26
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-9:2
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "C"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:20-5:21
+      name: "I"
+    )
+    (MemberDeclaration
+      range: 6:5-6:31
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 6:12-6:31
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 6:16-6:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 6:23-6:26
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 6:29-6:30
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:44
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:44
+        (IdentifierDeclaration
+          range: 7:17-7:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 7:19-7:25
+          (IdentifierDeclaration
+            range: 7:19-7:20
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 7:22-7:25
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:27-7:30
+          name: "i32"
+        )
+        (BlockStatement
+          range: 7:31-7:44
+          (ReturnStatement
+            range: 7:33-7:42
+            (LiteralExpression
+              range: 7:40-7:41
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-8:72
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-8:72
+        (IdentifierDeclaration
+          range: 8:17-8:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 8:19-8:28
+          (IdentifierDeclaration
+            range: 8:19-8:20
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 8:22-8:28
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 8:30-8:33
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:34-8:72
+          (AssignmentStatement
+            range: 8:36-8:51
+            (MemberExpression
+              range: 8:36-8:46
+              (ThisExpression
+                range: 8:36-8:40
+              )
+              (IdentifierExpression
+                range: 8:41-8:46
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 8:49-8:50
+              kind: INT
+              text: "2"
+            )
+          )
+          (ReturnStatement
+            range: 8:52-8:70
+            (MemberExpression
+              range: 8:59-8:69
+              (ThisExpression
+                range: 8:59-8:63
+              )
+              (IdentifierExpression
+                range: 8:64-8:69
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:8
+      name: "c"
+    )
+    (ConstTypeNode
+      range: 10:10-10:17
+      (NamedTypeNode
+        range: 10:16-10:17
+        name: "I"
+      )
+    )
+    (NewExpression
+      range: 10:20-10:27
+      (IdentifierExpression
+        range: 10:24-10:25
+        name: "C"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:17
+    (CallExpression
+      range: 11:1-11:16
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:15
+        (MemberExpression
+          range: 11:7-11:10
+          (IdentifierExpression
+            range: 11:7-11:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 11:9-11:10
+            name: "f"
+          )
+        )
+        (LiteralExpression
+          range: 11:11-11:14
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot call mutating method 'f' through a const object at 11:7-11:10

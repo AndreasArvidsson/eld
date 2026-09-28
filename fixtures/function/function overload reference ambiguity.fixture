@@ -1,0 +1,131 @@
+func describe(value: i32) string { return "integer"; }
+func describe(value: string) string { return "string"; }
+
+const reference = describe;
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "value" (1:15-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+RIGHT_PAREN (1:25-1:26)
+IDENTIFIER "string" (1:27-1:33)
+LEFT_BRACE (1:34-1:35)
+RETURN (1:36-1:42)
+STRING_LITERAL "\"integer\"" (1:43-1:52)
+SEMICOLON (1:52-1:53)
+RIGHT_BRACE (1:54-1:55)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "string" (2:22-2:28)
+RIGHT_PAREN (2:28-2:29)
+IDENTIFIER "string" (2:30-2:36)
+LEFT_BRACE (2:37-2:38)
+RETURN (2:39-2:45)
+STRING_LITERAL "\"string\"" (2:46-2:54)
+SEMICOLON (2:54-2:55)
+RIGHT_BRACE (2:56-2:57)
+CONST (4:1-4:6)
+IDENTIFIER "reference" (4:7-4:16)
+EQUAL (4:17-4:18)
+IDENTIFIER "describe" (4:19-4:27)
+SEMICOLON (4:27-4:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:28
+  (FunctionDeclaration
+    range: 1:1-1:55
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:25
+      (IdentifierDeclaration
+        range: 1:15-1:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:22-1:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:27-1:33
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:34-1:55
+      (ReturnStatement
+        range: 1:36-1:53
+        (LiteralExpression
+          range: 1:43-1:52
+          kind: STRING
+          text: "\"integer\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:57
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:28
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:22-2:28
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:30-2:36
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:37-2:57
+      (ReturnStatement
+        range: 2:39-2:55
+        (LiteralExpression
+          range: 2:46-2:54
+          kind: STRING
+          text: "\"string\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:16
+      name: "reference"
+    )
+    type: null
+    (IdentifierExpression
+      range: 4:19-4:27
+      name: "describe"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous reference to overloaded function 'describe' at 4:19-4:27

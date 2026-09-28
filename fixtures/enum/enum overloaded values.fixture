@@ -1,0 +1,504 @@
+enum E {
+    A;
+    public static func values(x: List<i32>) string { return "numbers"; }
+    public static func values(x: List<string>) string { return "strings"; }
+}
+print(E.values()[0] == E.A);
+print(E.values(new ArrayList<i32>()));
+print(E.values(new ArrayList<string>()));
+
+--- TOKENS ---
+
+ENUM (1:1-1:5)
+IDENTIFIER "E" (1:6-1:7)
+LEFT_BRACE (1:8-1:9)
+IDENTIFIER "A" (2:5-2:6)
+SEMICOLON (2:6-2:7)
+PUBLIC (3:5-3:11)
+STATIC (3:12-3:18)
+FUNC (3:19-3:23)
+IDENTIFIER "values" (3:24-3:30)
+LEFT_PAREN (3:30-3:31)
+IDENTIFIER "x" (3:31-3:32)
+COLON (3:32-3:33)
+IDENTIFIER "List" (3:34-3:38)
+LESS (3:38-3:39)
+IDENTIFIER "i32" (3:39-3:42)
+GREATER (3:42-3:43)
+RIGHT_PAREN (3:43-3:44)
+IDENTIFIER "string" (3:45-3:51)
+LEFT_BRACE (3:52-3:53)
+RETURN (3:54-3:60)
+STRING_LITERAL "\"numbers\"" (3:61-3:70)
+SEMICOLON (3:70-3:71)
+RIGHT_BRACE (3:72-3:73)
+PUBLIC (4:5-4:11)
+STATIC (4:12-4:18)
+FUNC (4:19-4:23)
+IDENTIFIER "values" (4:24-4:30)
+LEFT_PAREN (4:30-4:31)
+IDENTIFIER "x" (4:31-4:32)
+COLON (4:32-4:33)
+IDENTIFIER "List" (4:34-4:38)
+LESS (4:38-4:39)
+IDENTIFIER "string" (4:39-4:45)
+GREATER (4:45-4:46)
+RIGHT_PAREN (4:46-4:47)
+IDENTIFIER "string" (4:48-4:54)
+LEFT_BRACE (4:55-4:56)
+RETURN (4:57-4:63)
+STRING_LITERAL "\"strings\"" (4:64-4:73)
+SEMICOLON (4:73-4:74)
+RIGHT_BRACE (4:75-4:76)
+RIGHT_BRACE (5:1-5:2)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "E" (6:7-6:8)
+DOT (6:8-6:9)
+IDENTIFIER "values" (6:9-6:15)
+LEFT_PAREN (6:15-6:16)
+RIGHT_PAREN (6:16-6:17)
+LEFT_BRACKET (6:17-6:18)
+INTEGER_LITERAL "0" (6:18-6:19)
+RIGHT_BRACKET (6:19-6:20)
+EQUAL_EQUAL (6:21-6:23)
+IDENTIFIER "E" (6:24-6:25)
+DOT (6:25-6:26)
+IDENTIFIER "A" (6:26-6:27)
+RIGHT_PAREN (6:27-6:28)
+SEMICOLON (6:28-6:29)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "E" (7:7-7:8)
+DOT (7:8-7:9)
+IDENTIFIER "values" (7:9-7:15)
+LEFT_PAREN (7:15-7:16)
+NEW (7:16-7:19)
+IDENTIFIER "ArrayList" (7:20-7:29)
+LESS (7:29-7:30)
+IDENTIFIER "i32" (7:30-7:33)
+GREATER (7:33-7:34)
+LEFT_PAREN (7:34-7:35)
+RIGHT_PAREN (7:35-7:36)
+RIGHT_PAREN (7:36-7:37)
+RIGHT_PAREN (7:37-7:38)
+SEMICOLON (7:38-7:39)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "E" (8:7-8:8)
+DOT (8:8-8:9)
+IDENTIFIER "values" (8:9-8:15)
+LEFT_PAREN (8:15-8:16)
+NEW (8:16-8:19)
+IDENTIFIER "ArrayList" (8:20-8:29)
+LESS (8:29-8:30)
+IDENTIFIER "string" (8:30-8:36)
+GREATER (8:36-8:37)
+LEFT_PAREN (8:37-8:38)
+RIGHT_PAREN (8:38-8:39)
+RIGHT_PAREN (8:39-8:40)
+RIGHT_PAREN (8:40-8:41)
+SEMICOLON (8:41-8:42)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:42
+  (EnumDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:6-1:7
+      name: "E"
+    )
+    (EnumConstant
+      range: 2:5-2:6
+      (IdentifierDeclaration
+        range: 2:5-2:6
+        name: "A"
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:73
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 3:19-3:73
+        (IdentifierDeclaration
+          range: 3:24-3:30
+          name: "values"
+        )
+        (FunctionParameter
+          range: 3:31-3:43
+          (IdentifierDeclaration
+            range: 3:31-3:32
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 3:34-3:43
+            name: "List"
+            (NamedTypeNode
+              range: 3:39-3:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:45-3:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 3:52-3:73
+          (ReturnStatement
+            range: 3:54-3:71
+            (LiteralExpression
+              range: 3:61-3:70
+              kind: STRING
+              text: "\"numbers\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:76
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 4:19-4:76
+        (IdentifierDeclaration
+          range: 4:24-4:30
+          name: "values"
+        )
+        (FunctionParameter
+          range: 4:31-4:46
+          (IdentifierDeclaration
+            range: 4:31-4:32
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 4:34-4:46
+            name: "List"
+            (NamedTypeNode
+              range: 4:39-4:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 4:48-4:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 4:55-4:76
+          (ReturnStatement
+            range: 4:57-4:74
+            (LiteralExpression
+              range: 4:64-4:73
+              kind: STRING
+              text: "\"strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:29
+    (CallExpression
+      range: 6:1-6:28
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 6:7-6:27
+        (SubscriptExpression
+          range: 6:7-6:20
+          (CallExpression
+            range: 6:7-6:17
+            (MemberExpression
+              range: 6:7-6:15
+              (IdentifierExpression
+                range: 6:7-6:8
+                name: "E"
+              )
+              (IdentifierExpression
+                range: 6:9-6:15
+                name: "values"
+              )
+            )
+          )
+          (LiteralExpression
+            range: 6:18-6:19
+            kind: INT
+            text: "0"
+          )
+        )
+        operator: EQUAL
+        (MemberExpression
+          range: 6:24-6:27
+          (IdentifierExpression
+            range: 6:24-6:25
+            name: "E"
+          )
+          (IdentifierExpression
+            range: 6:26-6:27
+            name: "A"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:39
+    (CallExpression
+      range: 7:1-7:38
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:37
+        (MemberExpression
+          range: 7:7-7:15
+          (IdentifierExpression
+            range: 7:7-7:8
+            name: "E"
+          )
+          (IdentifierExpression
+            range: 7:9-7:15
+            name: "values"
+          )
+        )
+        (NewExpression
+          range: 7:16-7:36
+          (IdentifierExpression
+            range: 7:20-7:29
+            name: "ArrayList"
+          )
+          (NamedTypeNode
+            range: 7:30-7:33
+            name: "i32"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:42
+    (CallExpression
+      range: 8:1-8:41
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:40
+        (MemberExpression
+          range: 8:7-8:15
+          (IdentifierExpression
+            range: 8:7-8:8
+            name: "E"
+          )
+          (IdentifierExpression
+            range: 8:9-8:15
+            name: "values"
+          )
+        )
+        (NewExpression
+          range: 8:16-8:39
+          (IdentifierExpression
+            range: 8:20-8:29
+            name: "ArrayList"
+          )
+          (NamedTypeNode
+            range: 8:30-8:36
+            name: "string"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:6-1:7 -> [E]
+  2:5-2:6 -> E
+  3:61-3:70 -> string
+  4:64-4:73 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:28 -> void
+  6:7-6:8 -> E
+  6:7-6:15 -> () => [E]
+  6:7-6:17 -> [E]
+  6:7-6:20 -> E
+  6:7-6:27 -> bool
+  6:9-6:15 -> () => [E]
+  6:18-6:19 -> i32
+  6:24-6:25 -> E
+  6:24-6:27 -> E
+  6:26-6:27 -> E
+  7:1-7:6 -> (any) => void
+  7:1-7:38 -> void
+  7:7-7:8 -> E
+  7:7-7:15 -> (List<i32>) => string
+  7:7-7:37 -> string
+  7:9-7:15 -> (List<i32>) => string
+  7:16-7:36 -> ArrayList<i32>
+  7:20-7:29 -> ArrayList<i32>
+  8:1-8:6 -> (any) => void
+  8:1-8:41 -> void
+  8:7-8:8 -> E
+  8:7-8:15 -> (List<string>) => string
+  8:7-8:40 -> string
+  8:9-8:15 -> (List<string>) => string
+  8:16-8:39 -> ArrayList<string>
+  8:20-8:29 -> ArrayList<string>
+
+Resolved types:
+  1:6-1:7 -> E
+  1:6-1:7 -> [E]
+  1:6-1:7 -> i32
+  1:6-1:7 -> string
+  2:5-2:6 -> E
+  3:34-3:43 -> List<i32>
+  3:39-3:42 -> i32
+  3:45-3:51 -> string
+  4:34-4:46 -> List<string>
+  4:39-4:45 -> string
+  4:48-4:54 -> string
+  7:16-7:36 -> ArrayList<i32>
+  7:30-7:33 -> i32
+  8:16-8:39 -> ArrayList<string>
+  8:30-8:36 -> string
+
+Declarations:
+  1:6-1:7 -> class E
+  2:5-2:6 -> const A: E
+  3:24-3:30 -> func values(List<i32>) => string
+  3:31-3:32 -> const x: List<i32>
+  4:24-4:30 -> func values(List<string>) => string
+  4:31-4:32 -> const x: List<string>
+
+References:
+  2:5-2:6 -> 1:6-1:7
+  2:5-2:6 -> 2:5-2:6
+  6:1-6:6 -> builtin print
+  6:7-6:8 -> 1:6-1:7
+  6:9-6:15 -> 1:6-1:7
+  6:24-6:25 -> 1:6-1:7
+  6:26-6:27 -> 2:5-2:6
+  7:1-7:6 -> builtin print
+  7:7-7:8 -> 1:6-1:7
+  7:9-7:15 -> 3:24-3:30
+  7:20-7:29 -> 7:16-7:36
+  8:1-8:6 -> builtin print
+  8:7-8:8 -> 1:6-1:7
+  8:9-8:15 -> 4:24-4:30
+  8:20-8:29 -> 8:16-8:39
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$E
+  inner class Test$E flags [PUBLIC, STATIC, FINAL, ENUM]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKESTATIC Test$E.$eldValues()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC 0
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.get(I)Ljava/lang/Object;
+    CHECKCAST Test$E
+    GETSTATIC Test$E.A LTest$E;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    INVOKESTATIC Test$E.$eldValues$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    INVOKESTATIC Test$E.$eldValues$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$E extends java/lang/Enum version 65.0 flags [PUBLIC, FINAL, SUPER, ENUM]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$E flags [PUBLIC, STATIC, FINAL, ENUM]
+  field A LTest$E; flags [PUBLIC, STATIC, FINAL, ENUM]
+  method <clinit>()V flags [STATIC]
+    NEW Test$E
+    DUP
+    LDC "A"
+    LDC 0
+    INVOKESPECIAL Test$E.<init>(Ljava/lang/String;I)V
+    PUTSTATIC Test$E.A LTest$E;
+    RETURN
+    max stack 4 max locals 0
+  method <init>(Ljava/lang/String;I)V flags [PRIVATE]
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESPECIAL java/lang/Enum.<init>(Ljava/lang/String;I)V
+    RETURN
+    max stack 3 max locals 3
+  method $eldValues$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "numbers"
+    ARETURN
+    max stack 1 max locals 1
+  method $eldValues$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 1
+  method $eldValues()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 1
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    GETSTATIC Test$E.A LTest$E;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    ARETURN
+    max stack 6 max locals 0
+  method values()[LTest$E; flags [PUBLIC, STATIC]
+    LDC 1
+    ANEWARRAY Test$E
+    DUP
+    LDC 0
+    GETSTATIC Test$E.A LTest$E;
+    AASTORE
+    ARETURN
+    max stack 4 max locals 0
+  method valueOf(Ljava/lang/String;)LTest$E; flags [PUBLIC, STATIC]
+    LDC ClassOrInterfaceDesc[Test$E]
+    ALOAD_0 0
+    INVOKESTATIC java/lang/Enum.valueOf(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+    CHECKCAST Test$E
+    ARETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+true
+numbers
+strings

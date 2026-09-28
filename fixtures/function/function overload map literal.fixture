@@ -1,0 +1,273 @@
+func describe(values: Map<string, i64>) string { return "map"; }
+func describe(value: i32) string { return "integer"; }
+print(describe({"answer": 42}));
+print(describe({}));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "values" (1:15-1:21)
+COLON (1:21-1:22)
+IDENTIFIER "Map" (1:23-1:26)
+LESS (1:26-1:27)
+IDENTIFIER "string" (1:27-1:33)
+COMMA (1:33-1:34)
+IDENTIFIER "i64" (1:35-1:38)
+GREATER (1:38-1:39)
+RIGHT_PAREN (1:39-1:40)
+IDENTIFIER "string" (1:41-1:47)
+LEFT_BRACE (1:48-1:49)
+RETURN (1:50-1:56)
+STRING_LITERAL "\"map\"" (1:57-1:62)
+SEMICOLON (1:62-1:63)
+RIGHT_BRACE (1:64-1:65)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+RIGHT_PAREN (2:25-2:26)
+IDENTIFIER "string" (2:27-2:33)
+LEFT_BRACE (2:34-2:35)
+RETURN (2:36-2:42)
+STRING_LITERAL "\"integer\"" (2:43-2:52)
+SEMICOLON (2:52-2:53)
+RIGHT_BRACE (2:54-2:55)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "describe" (3:7-3:15)
+LEFT_PAREN (3:15-3:16)
+LEFT_BRACE (3:16-3:17)
+STRING_LITERAL "\"answer\"" (3:17-3:25)
+COLON (3:25-3:26)
+INTEGER_LITERAL "42" (3:27-3:29)
+RIGHT_BRACE (3:29-3:30)
+RIGHT_PAREN (3:30-3:31)
+RIGHT_PAREN (3:31-3:32)
+SEMICOLON (3:32-3:33)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "describe" (4:7-4:15)
+LEFT_PAREN (4:15-4:16)
+LEFT_BRACE (4:16-4:17)
+RIGHT_BRACE (4:17-4:18)
+RIGHT_PAREN (4:18-4:19)
+RIGHT_PAREN (4:19-4:20)
+SEMICOLON (4:20-4:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:21
+  (FunctionDeclaration
+    range: 1:1-1:65
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:39
+      (IdentifierDeclaration
+        range: 1:15-1:21
+        name: "values"
+      )
+      (NamedTypeNode
+        range: 1:23-1:39
+        name: "Map"
+        (NamedTypeNode
+          range: 1:27-1:33
+          name: "string"
+        )
+        (NamedTypeNode
+          range: 1:35-1:38
+          name: "i64"
+        )
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:41-1:47
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:48-1:65
+      (ReturnStatement
+        range: 1:50-1:63
+        (LiteralExpression
+          range: 1:57-1:62
+          kind: STRING
+          text: "\"map\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:55
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:25
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:22-2:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:27-2:33
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:34-2:55
+      (ReturnStatement
+        range: 2:36-2:53
+        (LiteralExpression
+          range: 2:43-2:52
+          kind: STRING
+          text: "\"integer\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:33
+    (CallExpression
+      range: 3:1-3:32
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:31
+        (IdentifierExpression
+          range: 3:7-3:15
+          name: "describe"
+        )
+        (MapExpression
+          range: 3:16-3:30
+          (MapEntry
+            range: 3:17-3:29
+            (LiteralExpression
+              range: 3:17-3:25
+              kind: STRING
+              text: "\"answer\""
+            )
+            (LiteralExpression
+              range: 3:27-3:29
+              kind: INT
+              text: "42"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:21
+    (CallExpression
+      range: 4:1-4:20
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:19
+        (IdentifierExpression
+          range: 4:7-4:15
+          name: "describe"
+        )
+        (MapExpression
+          range: 4:16-4:18
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:57-1:62 -> string
+  2:43-2:52 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:32 -> void
+  3:7-3:15 -> (Map<string, i64>) => string
+  3:7-3:31 -> string
+  3:16-3:30 -> Map<string, i64>
+  3:17-3:25 -> string
+  3:27-3:29 -> i64
+  4:1-4:6 -> (any) => void
+  4:1-4:20 -> void
+  4:7-4:15 -> (Map<string, i64>) => string
+  4:7-4:19 -> string
+  4:16-4:18 -> Map<string, i64>
+
+Resolved types:
+  1:23-1:39 -> Map<string, i64>
+  1:27-1:33 -> string
+  1:35-1:38 -> i64
+  1:41-1:47 -> string
+  2:22-2:25 -> i32
+  2:27-2:33 -> string
+
+Declarations:
+  1:6-1:14 -> func describe(Map<string, i64>) => string
+  1:15-1:21 -> const values: Map<string, i64>
+  2:6-2:14 -> func describe(i32) => string
+  2:15-2:20 -> const value: i32
+
+References:
+  3:1-3:6 -> builtin print
+  3:7-3:15 -> 1:6-1:14
+  4:1-4:6 -> builtin print
+  4:7-4:15 -> 1:6-1:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method describe(Ljava/util/Map;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    signature (Ljava/util/Map<Ljava/lang/String;Ljava/lang/Long;>;)Ljava/lang/String;
+    LDC "map"
+    ARETURN
+    max stack 1 max locals 1
+  method describe(I)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "integer"
+    ARETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    DUP
+    LDC "answer"
+    LDC2_W 42
+    INVOKESTATIC java/lang/Long.valueOf(J)Ljava/lang/Long;
+    INVOKEINTERFACE java/util/Map.put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    POP
+    INVOKESTATIC Test.describe(Ljava/util/Map;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW java/util/LinkedHashMap
+    DUP
+    INVOKESPECIAL java/util/LinkedHashMap.<init>()V
+    INVOKESTATIC Test.describe(Ljava/util/Map;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 6 max locals 0
+
+--- OUTPUT ---
+
+map
+map

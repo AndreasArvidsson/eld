@@ -334,7 +334,7 @@ Conversions:
 
 Declarations:
   1:6-1:16 -> func getDefault() => i32
-  6:6-6:9 -> func foo(i32, i32 | null, i32) => void
+  6:6-6:9 -> func foo(i32, i32?, i32?) => void
   6:10-6:11 -> const a: i32
   6:18-6:19 -> const b: i32 | null
   6:27-6:28 -> const c: i32
@@ -407,26 +407,18 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 3
     INVOKESTATIC Test.foo(ILjava/lang/Integer;I)V
     LDC 1
-    ISTORE_0 0
     LDC 5
     INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    ASTORE_1 1
-    ILOAD_0 0
-    ALOAD_1 1
     ICONST_0 0
     LDC 4
     INVOKESTATIC Test.foo(ILjava/lang/Integer;II)V
     LDC 1
-    ISTORE_2 2
     ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
-    ASTORE_3 3
-    ILOAD_2 2
-    ALOAD_3 3
     ICONST_0 0
     LDC 4
     INVOKESTATIC Test.foo(ILjava/lang/Integer;II)V
     RETURN
-    max stack 4 max locals 4
+    max stack 4 max locals 0
 
 --- OUTPUT ---
 

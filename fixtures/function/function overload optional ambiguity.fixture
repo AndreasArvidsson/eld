@@ -1,0 +1,99 @@
+func describe(value: i32, suffix?: string) {}
+func describe(value: i32) {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "describe" (1:6-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "value" (1:15-1:20)
+COLON (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+COMMA (1:25-1:26)
+IDENTIFIER "suffix" (1:27-1:33)
+QUESTION (1:33-1:34)
+COLON (1:34-1:35)
+IDENTIFIER "string" (1:36-1:42)
+RIGHT_PAREN (1:42-1:43)
+LEFT_BRACE (1:44-1:45)
+RIGHT_BRACE (1:45-1:46)
+FUNC (2:1-2:5)
+IDENTIFIER "describe" (2:6-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+RIGHT_PAREN (2:25-2:26)
+LEFT_BRACE (2:27-2:28)
+RIGHT_BRACE (2:28-2:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:29
+  (FunctionDeclaration
+    range: 1:1-1:46
+    (IdentifierDeclaration
+      range: 1:6-1:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 1:15-1:25
+      (IdentifierDeclaration
+        range: 1:15-1:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:22-1:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:27-1:42
+      (IdentifierDeclaration
+        range: 1:27-1:33
+        name: "suffix"
+      )
+      (NamedTypeNode
+        range: 1:36-1:42
+        name: "string"
+      )
+      optional: true
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:44-1:46
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:29
+    (IdentifierDeclaration
+      range: 2:6-2:14
+      name: "describe"
+    )
+    (FunctionParameter
+      range: 2:15-2:25
+      (IdentifierDeclaration
+        range: 2:15-2:20
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:22-2:25
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 2:27-2:29
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous overload of 'describe': duplicate callable signature at 2:6-2:14

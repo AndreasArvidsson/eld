@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
 import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
@@ -169,7 +170,7 @@ public final class SemanticAnalyzerDeclarations {
                 );
             }
         }
-        final Scope members = new Scope(null);
+        final Scope members = Scope.classMembers();
         analyzer.classScopes().put(classType, members);
         analyzer.classMethods().put(classType, new LinkedHashMap<>());
         ConstructorDeclaration constructor = null;
@@ -246,25 +247,7 @@ public final class SemanticAnalyzerDeclarations {
                 memberDeclaration
                     .declaration() instanceof FunctionDeclaration method
             ) {
-                final boolean fieldWithSameName =
-                    declaration.members()
-                        .stream()
-                        .map(MemberDeclaration::declaration)
-                        .anyMatch(member -> switch (member) {
-                            case VariableDeclaration field -> field.name()
-                                .name()
-                                .equals(method.name().name());
-                            case UninitializedVariableDeclaration field ->
-                                field.name()
-                                    .name()
-                                    .equals(method.name().name());
-                            default -> false;
-                        });
-                analyzer.registerFunction(
-                    method,
-                    context,
-                    fieldWithSameName ? new Scope(null) : members
-                );
+                analyzer.registerFunction(method, context, members);
                 final FunctionSymbol function =
                     (FunctionSymbol) model.getSymbol(method.name());
                 setClassMemberMetadata(
@@ -272,17 +255,8 @@ public final class SemanticAnalyzerDeclarations {
                     method.name(),
                     classType
                 );
-                if (
-                    Objects
-                        .requireNonNull(analyzer.classMethods().get(classType))
-                        .putIfAbsent(function.name(), function) != null
-                ) {
-                    throw new SemanticException(
-                        method.range(),
-                        "Duplicate method: %s",
-                        function.name()
-                    );
-                }
+                Objects.requireNonNull(analyzer.classMethods().get(classType))
+                    .putIfAbsent(function.name(), function);
             }
         }
         final Scope enumFieldScope = new Scope(context.scope());
@@ -448,6 +422,8 @@ public final class SemanticAnalyzerDeclarations {
         final List<InterfaceType> parents = new ArrayList<>();
         final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
         final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
+        final Map<String, List<FunctionSymbol>> overloads =
+            new LinkedHashMap<>();
         final Map<String, List<FunctionSymbol>> inheritedMethods =
             new LinkedHashMap<>();
         for (final TypeNode node : declaration.superInterfaces()) {
@@ -484,15 +460,15 @@ public final class SemanticAnalyzerDeclarations {
             parents.add(contract);
             mergeContract(fields, model.getInterface(contract).fields(), node);
             model.getInterface(contract)
-                .methods()
+                .overloads()
                 .forEach(
-                    (name, method) -> inheritedMethods
+                    (name, inherited) -> inheritedMethods
                         .computeIfAbsent(name, _ -> new ArrayList<>())
-                        .add(method)
+                        .addAll(inherited)
                 );
         }
         final Set<String> ownFields = new java.util.HashSet<>();
-        final Set<String> ownMethods = new java.util.HashSet<>();
+        final Set<FunctionSymbol> ownMethods = new HashSet<>();
         for (final var member : declaration.members()) {
             if (member instanceof UninitializedVariableDeclaration field) {
                 if (!ownFields.add(field.name().name())) {
@@ -518,13 +494,6 @@ public final class SemanticAnalyzerDeclarations {
                     throw new SemanticException(
                         method.name().range(),
                         "Interface cannot declare ubiquitous method 'equals'"
-                    );
-                }
-                if (!ownMethods.add(method.name().name())) {
-                    throw new SemanticException(
-                        method.range(),
-                        "Duplicate interface method: %s",
-                        method.name().name()
                     );
                 }
                 final List<Type> parameters = new ArrayList<>();
@@ -557,24 +526,8 @@ public final class SemanticAnalyzerDeclarations {
                                     .resolveType(method.returnType(), context)
                         )
                     );
-                if (
-                    inheritedMethods.getOrDefault(value.name(), List.of())
-                        .stream()
-                        .anyMatch(
-                            inherited -> !model.isOverrideCompatible(
-                                value.type(),
-                                inherited.type()
-                            )
-                        )
-                ) {
-                    throw new SemanticException(
-                        method.range(),
-                        "Conflicting interface member '%s'",
-                        value.name()
-                    );
-                }
-                methods.put(value.name(), value);
                 model.setSymbol(method.name(), value);
+                model.setInterfaceMethodOwner(value, type);
                 model.setMemberVisibility(value, Visibility.PUBLIC);
                 model.setFunctionParameters(
                     value,
@@ -583,40 +536,144 @@ public final class SemanticAnalyzerDeclarations {
                         .map(FunctionParameter::name)
                         .toList()
                 );
+                final List<FunctionSymbol> declared =
+                    overloads
+                        .computeIfAbsent(value.name(), _ -> new ArrayList<>());
+                if (
+                    declared.stream()
+                        .anyMatch(
+                            existing -> existing.type()
+                                .parameterTypes()
+                                .equals(value.type().parameterTypes())
+                        )
+                ) {
+                    throw new SemanticException(
+                        method.range(),
+                        "Duplicate interface method: %s",
+                        value.name()
+                    );
+                }
+                declared.add(value);
+                ownMethods.add(value);
             }
         }
         for (final var entry : inheritedMethods.entrySet()) {
-            if (ownMethods.contains(entry.getKey())) {
-                continue;
+            final List<FunctionSymbol> declared =
+                overloads
+                    .computeIfAbsent(entry.getKey(), _ -> new ArrayList<>());
+            for (final FunctionSymbol inherited : entry.getValue()) {
+                int override = -1;
+                for (int i = 0; i < declared.size(); i++) {
+                    if (
+                        declared.get(i)
+                            .type()
+                            .parameterTypes()
+                            .equals(inherited.type().parameterTypes())
+                    ) {
+                        override = i;
+                        break;
+                    }
+                }
+                if (override >= 0) {
+                    final FunctionSymbol existing = declared.get(override);
+                    if (
+                        model.isOverrideCompatible(
+                            existing.type(),
+                            inherited.type()
+                        )
+                    ) {
+                        continue;
+                    }
+                    if (
+                        model.isOverrideCompatible(
+                            inherited.type(),
+                            existing.type()
+                        ) && !ownMethods.contains(existing)
+                    ) {
+                        declared.set(override, inherited);
+                    }
+                    else {
+                        throw new SemanticException(
+                            declaration.range(),
+                            "Conflicting interface member '%s'",
+                            entry.getKey()
+                        );
+                    }
+                }
+                else {
+                    declared.add(inherited);
+                }
             }
-            final FunctionSymbol resolved =
-                entry.getValue()
-                    .stream()
-                    .filter(
-                        candidate -> entry.getValue()
-                            .stream()
-                            .allMatch(
-                                inherited -> model.isOverrideCompatible(
-                                    candidate.type(),
-                                    inherited.type()
-                                )
-                            )
-                    )
-                    .findFirst()
-                    .orElse(null);
-            if (resolved == null) {
-                throw new SemanticException(
-                    declaration.range(),
-                    "Conflicting interface member '%s'",
-                    entry.getKey()
-                );
+        }
+        for (final var entry : overloads.entrySet()) {
+            final List<FunctionSymbol> candidates = entry.getValue();
+            for (int i = 0; i < candidates.size(); i++) {
+                for (int j = i + 1; j < candidates.size(); j++) {
+                    validateInterfaceOverload(
+                        candidates.get(i),
+                        candidates.get(j),
+                        declaration,
+                        type
+                    );
+                }
             }
-            methods.put(entry.getKey(), resolved);
+            methods.put(entry.getKey(), candidates.getFirst());
         }
         model.setInterface(
             type,
-            new InterfaceContract(List.copyOf(parents), fields, methods)
+            new InterfaceContract(
+                List.copyOf(parents),
+                fields,
+                methods,
+                overloads
+            )
         );
+    }
+
+    private void validateInterfaceOverload(
+        final FunctionSymbol left,
+        final FunctionSymbol right,
+        final InterfaceDeclaration declaration,
+        final InterfaceType owner
+    ) {
+        final List<FunctionParameter> leftParameters =
+            model.getFunctionParameters(left)
+                .stream()
+                .map(model::getParameterDetails)
+                .toList();
+        final List<FunctionParameter> rightParameters =
+            model.getFunctionParameters(right)
+                .stream()
+                .map(model::getParameterDetails)
+                .toList();
+        if (
+            FunctionSignatures
+                .overlap(
+                    left.type(),
+                    leftParameters,
+                    right.type(),
+                    rightParameters,
+                    type -> type
+                )
+                || FunctionSignatures.ambiguous(
+                    left.type(),
+                    leftParameters,
+                    right.type(),
+                    rightParameters,
+                    (source, target) -> FunctionSignatures
+                        .isSubtype(source, target, model)
+                )
+        ) {
+            throw new SemanticException(
+                owner.equals(model.findInterfaceMethodOwner(right))
+                    ? right.range()
+                    : owner.equals(model.findInterfaceMethodOwner(left))
+                        ? left.range()
+                        : declaration.range(),
+                "Ambiguous overload of '%s': overlapping callable signatures",
+                left.name()
+            );
+        }
     }
 
     private <S extends Symbol> void mergeContract(
@@ -652,6 +709,7 @@ public final class SemanticAnalyzerDeclarations {
     ) {
         final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
         final List<FunctionSymbol> methods = new ArrayList<>();
+        final List<InterfaceMethodRequirement> requirements = new ArrayList<>();
         for (ClassType current = type; current != null; current =
             model.getSuperclass(current)) {
             for (final InterfaceType contract : model
@@ -661,7 +719,76 @@ public final class SemanticAnalyzerDeclarations {
                     model.getInterface(contract).fields(),
                     declaration
                 );
-                methods.addAll(model.getInterface(contract).methods().values());
+                for (final FunctionSymbol method : model.getInterface(contract)
+                    .allMethods()) {
+                    methods.add(method);
+                    requirements
+                        .add(new InterfaceMethodRequirement(contract, method));
+                }
+            }
+        }
+        for (int i = 0; i < requirements.size(); i++) {
+            final InterfaceMethodRequirement left = requirements.get(i);
+            for (int j = i + 1; j < requirements.size(); j++) {
+                final InterfaceMethodRequirement right = requirements.get(j);
+                if (
+                    left.source().equals(right.source())
+                        || model.isSubtype(left.source(), right.source())
+                        || model.isSubtype(right.source(), left.source())
+                        || !left.method().name().equals(right.method().name())
+                        || left.method()
+                            .type()
+                            .parameterTypes()
+                            .equals(right.method().type().parameterTypes())
+                ) {
+                    continue;
+                }
+                if (
+                    left.source().javaClass() != null
+                        || right.source().javaClass() != null
+                ) {
+                    if (
+                        javaInterfaceBridgeCollision(left, right)
+                            || javaInterfaceBridgeCollision(right, left)
+                    ) {
+                        throw new SemanticException(
+                            declaration.range(),
+                            "Class %s cannot implement '%s' and '%s': Java bridge collision",
+                            type,
+                            model.formatFunctionSignature(left.method()),
+                            model.formatFunctionSignature(right.method())
+                        );
+                    }
+                    continue;
+                }
+                final List<FunctionParameter> leftParameters =
+                    model.getFunctionParameters(left.method())
+                        .stream()
+                        .map(model::getParameterDetails)
+                        .toList();
+                final List<FunctionParameter> rightParameters =
+                    model.getFunctionParameters(right.method())
+                        .stream()
+                        .map(model::getParameterDetails)
+                        .toList();
+                if (
+                    FunctionSignatures.overlap(
+                        left.method().type(),
+                        leftParameters,
+                        right.method().type(),
+                        rightParameters,
+                        this::erasedOverloadType
+                    ) && !interfaceOverloadsBoth(left, right)
+                        && !interfaceOverloadsBoth(right, left)
+                ) {
+                    throw new SemanticException(
+                        declaration.range(),
+                        "Class %s cannot implement erased overloads '%s' and '%s' from unrelated interfaces",
+                        type,
+                        model.formatFunctionSignature(left.method()),
+                        model.formatFunctionSignature(right.method())
+                    );
+                }
             }
         }
         final Map<String, VariableSymbol> implementations =
@@ -673,9 +800,35 @@ public final class SemanticAnalyzerDeclarations {
                 contract instanceof VariableSymbol
                     ? analyzer.classFieldOwner(type, contract.name())
                     : analyzer.memberOwner(type, contract.name());
+            final FunctionSymbol matched =
+                contract instanceof FunctionSymbol requiredMethod
+                    ? interfaceImplementation(type, requiredMethod)
+                    : null;
+            if (
+                contract instanceof FunctionSymbol requiredMethod
+                    && matched == null
+                    && methods.stream()
+                        .anyMatch(
+                            other -> other.name().equals(requiredMethod.name())
+                                && !other.type()
+                                    .parameterTypes()
+                                    .equals(
+                                        requiredMethod.type().parameterTypes()
+                                    )
+                        )
+            ) {
+                throw new SemanticException(
+                    declaration.range(),
+                    "Class %s does not implement interface method %s",
+                    type,
+                    model.formatFunctionSignature(requiredMethod)
+                );
+            }
             final Symbol implementation =
                 contract instanceof FunctionSymbol
-                    ? analyzer.classMethod(type, contract.name())
+                    ? matched != null
+                        ? matched
+                        : analyzer.classMethod(type, contract.name())
                     : owner == null
                         ? null
                         : Objects
@@ -744,6 +897,65 @@ public final class SemanticAnalyzerDeclarations {
         model.setInterfaceFields(type, implementations);
     }
 
+    private boolean interfaceOverloadsBoth(
+        final InterfaceMethodRequirement overload,
+        final InterfaceMethodRequirement other
+    ) {
+        return model.getInterface(overload.source())
+            .methodOverloads(overload.method().name())
+            .stream()
+            .anyMatch(
+                method -> method.type()
+                    .parameterTypes()
+                    .equals(other.method().type().parameterTypes())
+            );
+    }
+
+    private boolean javaInterfaceBridgeCollision(
+        final InterfaceMethodRequirement java,
+        final InterfaceMethodRequirement other
+    ) {
+        if (
+            java.source().javaClass() != Comparable.class
+                && java.source().javaClass() != Comparator.class
+        ) {
+            return false;
+        }
+        final FunctionType required = java.method().type();
+        final FunctionType competing = other.method().type();
+        if (
+            required.returnType() != BuiltinType.I32
+                || competing.returnType() != BuiltinType.I32
+                || required.parameterTypes()
+                    .size() != competing.parameterTypes().size()
+        ) {
+            return false;
+        }
+        boolean sameErasure = true;
+        for (int i = 0; i < required.parameterTypes().size(); i++) {
+            if (
+                !Objects.equals(
+                    erasedOverloadType(required.parameterTypes().get(i)),
+                    erasedOverloadType(competing.parameterTypes().get(i))
+                )
+            ) {
+                sameErasure = false;
+                break;
+            }
+        }
+        return sameErasure || (required.parameterTypes()
+            .stream()
+            .anyMatch(
+                parameter -> !erasedOverloadType(parameter).equals(Object.class)
+            )
+            && competing.parameterTypes()
+                .stream()
+                .allMatch(
+                    parameter -> erasedOverloadType(parameter)
+                        .equals(Object.class)
+                ));
+    }
+
     private void addInterfaceBridges(final ClassType type) {
         final Set<InterfaceType> visited = new HashSet<>();
         final List<InterfaceType> pending =
@@ -756,23 +968,112 @@ public final class SemanticAnalyzerDeclarations {
             final InterfaceContract contract =
                 model.getInterface(interfaceType);
             pending.addAll(contract.superInterfaces());
-            for (final FunctionSymbol method : contract.methods().values()) {
+            for (final FunctionSymbol method : contract.allMethods()) {
                 final FunctionSymbol implementation =
-                    analyzer.classMethod(type, method.name());
+                    interfaceImplementation(type, method);
                 if (
                     implementation != null && model.isOverrideCompatible(
                         implementation.type(),
                         method.type()
                     )
                 ) {
-                    model.addInterfaceBridge(
-                        type,
-                        implementation,
-                        method.type()
-                    );
+                    model.addInterfaceBridge(type, implementation, method);
                 }
             }
         }
+    }
+
+    private @Nullable FunctionSymbol interfaceImplementation(
+        final ClassType type,
+        final FunctionSymbol contract
+    ) {
+        for (ClassType current = type; current != null; current =
+            model.getSuperclass(current)) {
+            final Scope scope = analyzer.classScope(current);
+            if (scope == null) {
+                continue;
+            }
+            for (final FunctionSymbol method : scope
+                .functionsLocal(contract.name())) {
+                if (
+                    method.type()
+                        .parameterTypes()
+                        .equals(contract.type().parameterTypes())
+                ) {
+                    return method;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Object erasedOverloadType(final Type type) {
+        final Type unqualified = LiteralType.unwrap(ConstType.unwrap(type));
+        return switch (unqualified) {
+            case BuiltinType.STRING -> String.class;
+            case BuiltinType.ANY, BuiltinType.NULL -> Object.class;
+            case InterfaceType contract when contract.javaClass() != null ->
+                contract.javaClass();
+            case ArrayType array ->
+                RuntimeAbi.array(array.elementType()).descriptor;
+            case TupleType _ -> TupleType.class;
+            case FunctionType _,BuiltinFunctionType _ -> FunctionType.class;
+            case PromiseType _ -> PromiseType.class;
+            case PromiseSourceType _ -> PromiseSourceType.class;
+            case UnionType union -> {
+                final List<Type> uniform =
+                    union.memberTypes()
+                        .stream()
+                        .map(LiteralType::unwrap)
+                        .map(ConstType::unwrap)
+                        .distinct()
+                        .toList();
+                if (
+                    uniform.size() == 1
+                        && uniform.getFirst() instanceof BuiltinType builtin
+                        && (builtin.isInteger() || builtin.isFloating()
+                            || builtin == BuiltinType.BOOL
+                            || builtin == BuiltinType.CHAR
+                            || builtin == BuiltinType.STRING)
+                ) {
+                    yield erasedOverloadType(builtin);
+                }
+                final List<Type> members =
+                    union.memberTypes()
+                        .stream()
+                        .filter(member -> member != BuiltinType.NULL)
+                        .distinct()
+                        .toList();
+                if (members.size() != 1) {
+                    yield Object.class;
+                }
+                final Type member = members.getFirst();
+                yield member instanceof BuiltinType builtin
+                    ? boxedOverloadType(builtin)
+                    : erasedOverloadType(member);
+            }
+            default -> unqualified;
+        };
+    }
+
+    private Object boxedOverloadType(final BuiltinType type) {
+        return switch (type) {
+            case I8 -> Byte.class;
+            case I16 -> Short.class;
+            case I32 -> Integer.class;
+            case I64 -> Long.class;
+            case F32 -> Float.class;
+            case F64 -> Double.class;
+            case BOOL -> Boolean.class;
+            case CHAR -> Character.class;
+            case STRING -> String.class;
+            case NULL, ANY, VOID -> Object.class;
+        };
+    }
+
+    private record InterfaceMethodRequirement(
+        InterfaceType source, FunctionSymbol method
+    ) {
     }
 
 }

@@ -1,0 +1,498 @@
+class Base {
+    public func describe(values: List<i32>) string { return "integers"; }
+}
+
+class Child extends Base {
+    public func describe(values: List<string>) string { return "strings"; }
+}
+
+const child = new Child();
+const integers: List<i32> = new ArrayList<i32>();
+const strings: List<string> = new ArrayList<string>();
+print(child.describe(integers));
+print(child.describe(strings));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "describe" (2:17-2:25)
+LEFT_PAREN (2:25-2:26)
+IDENTIFIER "values" (2:26-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "List" (2:34-2:38)
+LESS (2:38-2:39)
+IDENTIFIER "i32" (2:39-2:42)
+GREATER (2:42-2:43)
+RIGHT_PAREN (2:43-2:44)
+IDENTIFIER "string" (2:45-2:51)
+LEFT_BRACE (2:52-2:53)
+RETURN (2:54-2:60)
+STRING_LITERAL "\"integers\"" (2:61-2:71)
+SEMICOLON (2:71-2:72)
+RIGHT_BRACE (2:73-2:74)
+RIGHT_BRACE (3:1-3:2)
+CLASS (5:1-5:6)
+IDENTIFIER "Child" (5:7-5:12)
+EXTENDS (5:13-5:20)
+IDENTIFIER "Base" (5:21-5:25)
+LEFT_BRACE (5:26-5:27)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "describe" (6:17-6:25)
+LEFT_PAREN (6:25-6:26)
+IDENTIFIER "values" (6:26-6:32)
+COLON (6:32-6:33)
+IDENTIFIER "List" (6:34-6:38)
+LESS (6:38-6:39)
+IDENTIFIER "string" (6:39-6:45)
+GREATER (6:45-6:46)
+RIGHT_PAREN (6:46-6:47)
+IDENTIFIER "string" (6:48-6:54)
+LEFT_BRACE (6:55-6:56)
+RETURN (6:57-6:63)
+STRING_LITERAL "\"strings\"" (6:64-6:73)
+SEMICOLON (6:73-6:74)
+RIGHT_BRACE (6:75-6:76)
+RIGHT_BRACE (7:1-7:2)
+CONST (9:1-9:6)
+IDENTIFIER "child" (9:7-9:12)
+EQUAL (9:13-9:14)
+NEW (9:15-9:18)
+IDENTIFIER "Child" (9:19-9:24)
+LEFT_PAREN (9:24-9:25)
+RIGHT_PAREN (9:25-9:26)
+SEMICOLON (9:26-9:27)
+CONST (10:1-10:6)
+IDENTIFIER "integers" (10:7-10:15)
+COLON (10:15-10:16)
+IDENTIFIER "List" (10:17-10:21)
+LESS (10:21-10:22)
+IDENTIFIER "i32" (10:22-10:25)
+GREATER (10:25-10:26)
+EQUAL (10:27-10:28)
+NEW (10:29-10:32)
+IDENTIFIER "ArrayList" (10:33-10:42)
+LESS (10:42-10:43)
+IDENTIFIER "i32" (10:43-10:46)
+GREATER (10:46-10:47)
+LEFT_PAREN (10:47-10:48)
+RIGHT_PAREN (10:48-10:49)
+SEMICOLON (10:49-10:50)
+CONST (11:1-11:6)
+IDENTIFIER "strings" (11:7-11:14)
+COLON (11:14-11:15)
+IDENTIFIER "List" (11:16-11:20)
+LESS (11:20-11:21)
+IDENTIFIER "string" (11:21-11:27)
+GREATER (11:27-11:28)
+EQUAL (11:29-11:30)
+NEW (11:31-11:34)
+IDENTIFIER "ArrayList" (11:35-11:44)
+LESS (11:44-11:45)
+IDENTIFIER "string" (11:45-11:51)
+GREATER (11:51-11:52)
+LEFT_PAREN (11:52-11:53)
+RIGHT_PAREN (11:53-11:54)
+SEMICOLON (11:54-11:55)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "child" (12:7-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "describe" (12:13-12:21)
+LEFT_PAREN (12:21-12:22)
+IDENTIFIER "integers" (12:22-12:30)
+RIGHT_PAREN (12:30-12:31)
+RIGHT_PAREN (12:31-12:32)
+SEMICOLON (12:32-12:33)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "child" (13:7-13:12)
+DOT (13:12-13:13)
+IDENTIFIER "describe" (13:13-13:21)
+LEFT_PAREN (13:21-13:22)
+IDENTIFIER "strings" (13:22-13:29)
+RIGHT_PAREN (13:29-13:30)
+RIGHT_PAREN (13:30-13:31)
+SEMICOLON (13:31-13:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:32
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:74
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:74
+        (IdentifierDeclaration
+          range: 2:17-2:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 2:26-2:43
+          (IdentifierDeclaration
+            range: 2:26-2:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 2:34-2:43
+            name: "List"
+            (NamedTypeNode
+              range: 2:39-2:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:45-2:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:52-2:74
+          (ReturnStatement
+            range: 2:54-2:72
+            (LiteralExpression
+              range: 2:61-2:71
+              kind: STRING
+              text: "\"integers\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 5:21-5:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 6:5-6:76
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:76
+        (IdentifierDeclaration
+          range: 6:17-6:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 6:26-6:46
+          (IdentifierDeclaration
+            range: 6:26-6:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 6:34-6:46
+            name: "List"
+            (NamedTypeNode
+              range: 6:39-6:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 6:48-6:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 6:55-6:76
+          (ReturnStatement
+            range: 6:57-6:74
+            (LiteralExpression
+              range: 6:64-6:73
+              kind: STRING
+              text: "\"strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "child"
+    )
+    type: null
+    (NewExpression
+      range: 9:15-9:26
+      (IdentifierExpression
+        range: 9:19-9:24
+        name: "Child"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:15
+      name: "integers"
+    )
+    (NamedTypeNode
+      range: 10:17-10:26
+      name: "List"
+      (NamedTypeNode
+        range: 10:22-10:25
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 10:29-10:49
+      (IdentifierExpression
+        range: 10:33-10:42
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 10:43-10:46
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:14
+      name: "strings"
+    )
+    (NamedTypeNode
+      range: 11:16-11:28
+      name: "List"
+      (NamedTypeNode
+        range: 11:21-11:27
+        name: "string"
+      )
+    )
+    (NewExpression
+      range: 11:31-11:54
+      (IdentifierExpression
+        range: 11:35-11:44
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 11:45-11:51
+        name: "string"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:33
+    (CallExpression
+      range: 12:1-12:32
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:31
+        (MemberExpression
+          range: 12:7-12:21
+          (IdentifierExpression
+            range: 12:7-12:12
+            name: "child"
+          )
+          (IdentifierExpression
+            range: 12:13-12:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 12:22-12:30
+          name: "integers"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:32
+    (CallExpression
+      range: 13:1-13:31
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:30
+        (MemberExpression
+          range: 13:7-13:21
+          (IdentifierExpression
+            range: 13:7-13:12
+            name: "child"
+          )
+          (IdentifierExpression
+            range: 13:13-13:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 13:22-13:29
+          name: "strings"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:61-2:71 -> string
+  5:21-5:25 -> Base
+  6:64-6:73 -> string
+  9:15-9:26 -> Child
+  9:19-9:24 -> Child
+  10:29-10:49 -> ArrayList<i32>
+  10:33-10:42 -> ArrayList<i32>
+  11:31-11:54 -> ArrayList<string>
+  11:35-11:44 -> ArrayList<string>
+  12:1-12:6 -> (any) => void
+  12:1-12:32 -> void
+  12:7-12:12 -> Child
+  12:7-12:21 -> (List<i32>) => string
+  12:7-12:31 -> string
+  12:13-12:21 -> (List<i32>) => string
+  12:22-12:30 -> List<i32>
+  13:1-13:6 -> (any) => void
+  13:1-13:31 -> void
+  13:7-13:12 -> Child
+  13:7-13:21 -> (List<string>) => string
+  13:7-13:30 -> string
+  13:13-13:21 -> (List<string>) => string
+  13:22-13:29 -> List<string>
+
+Resolved types:
+  2:34-2:43 -> List<i32>
+  2:39-2:42 -> i32
+  2:45-2:51 -> string
+  6:34-6:46 -> List<string>
+  6:39-6:45 -> string
+  6:48-6:54 -> string
+  10:17-10:26 -> List<i32>
+  10:22-10:25 -> i32
+  10:29-10:49 -> ArrayList<i32>
+  10:43-10:46 -> i32
+  11:16-11:28 -> List<string>
+  11:21-11:27 -> string
+  11:31-11:54 -> ArrayList<string>
+  11:45-11:51 -> string
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:17-2:25 -> func describe(List<i32>) => string
+  2:26-2:32 -> const values: List<i32>
+  5:7-5:12 -> class Child
+  6:17-6:25 -> func describe(List<string>) => string
+  6:26-6:32 -> const values: List<string>
+  9:7-9:12 -> const child: Child
+  10:7-10:15 -> const integers: List<i32>
+  11:7-11:14 -> const strings: List<string>
+
+References:
+  5:21-5:25 -> 1:7-1:11
+  9:19-9:24 -> 5:7-5:12
+  10:33-10:42 -> 10:29-10:49
+  11:35-11:44 -> 11:31-11:54
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 9:7-9:12
+  12:13-12:21 -> 2:17-2:25
+  12:22-12:30 -> 10:7-10:15
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 9:7-9:12
+  13:13-13:21 -> 6:17-6:25
+  13:22-13:29 -> 11:7-11:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field child LTest$Child; flags [PUBLIC, STATIC, FINAL]
+  field integers Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field strings Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.child LTest$Child;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.integers Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.strings Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    GETSTATIC Test.integers Ljava/util/List;
+    INVOKEVIRTUAL Test$Base.describe(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEVIRTUAL Test$Child.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 2
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+integers
+strings

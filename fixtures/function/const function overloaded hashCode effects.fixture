@@ -1,0 +1,284 @@
+class Value {
+    public const func hashCode(value: i32) i32 { return value; }
+    public override func hashCode() i32 { print("effect"); return 0; }
+}
+const func addValue() i32 {
+    var values = new HashSet<Value>();
+    values.add(new Value());
+    return values.size();
+}
+print(addValue());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "hashCode" (2:23-2:31)
+LEFT_PAREN (2:31-2:32)
+IDENTIFIER "value" (2:32-2:37)
+COLON (2:37-2:38)
+IDENTIFIER "i32" (2:39-2:42)
+RIGHT_PAREN (2:42-2:43)
+IDENTIFIER "i32" (2:44-2:47)
+LEFT_BRACE (2:48-2:49)
+RETURN (2:50-2:56)
+IDENTIFIER "value" (2:57-2:62)
+SEMICOLON (2:62-2:63)
+RIGHT_BRACE (2:64-2:65)
+PUBLIC (3:5-3:11)
+OVERRIDE (3:12-3:20)
+FUNC (3:21-3:25)
+IDENTIFIER "hashCode" (3:26-3:34)
+LEFT_PAREN (3:34-3:35)
+RIGHT_PAREN (3:35-3:36)
+IDENTIFIER "i32" (3:37-3:40)
+LEFT_BRACE (3:41-3:42)
+IDENTIFIER "print" (3:43-3:48)
+LEFT_PAREN (3:48-3:49)
+STRING_LITERAL "\"effect\"" (3:49-3:57)
+RIGHT_PAREN (3:57-3:58)
+SEMICOLON (3:58-3:59)
+RETURN (3:60-3:66)
+INTEGER_LITERAL "0" (3:67-3:68)
+SEMICOLON (3:68-3:69)
+RIGHT_BRACE (3:70-3:71)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+FUNC (5:7-5:11)
+IDENTIFIER "addValue" (5:12-5:20)
+LEFT_PAREN (5:20-5:21)
+RIGHT_PAREN (5:21-5:22)
+IDENTIFIER "i32" (5:23-5:26)
+LEFT_BRACE (5:27-5:28)
+VAR (6:5-6:8)
+IDENTIFIER "values" (6:9-6:15)
+EQUAL (6:16-6:17)
+NEW (6:18-6:21)
+IDENTIFIER "HashSet" (6:22-6:29)
+LESS (6:29-6:30)
+IDENTIFIER "Value" (6:30-6:35)
+GREATER (6:35-6:36)
+LEFT_PAREN (6:36-6:37)
+RIGHT_PAREN (6:37-6:38)
+SEMICOLON (6:38-6:39)
+IDENTIFIER "values" (7:5-7:11)
+DOT (7:11-7:12)
+IDENTIFIER "add" (7:12-7:15)
+LEFT_PAREN (7:15-7:16)
+NEW (7:16-7:19)
+IDENTIFIER "Value" (7:20-7:25)
+LEFT_PAREN (7:25-7:26)
+RIGHT_PAREN (7:26-7:27)
+RIGHT_PAREN (7:27-7:28)
+SEMICOLON (7:28-7:29)
+RETURN (8:5-8:11)
+IDENTIFIER "values" (8:12-8:18)
+DOT (8:18-8:19)
+IDENTIFIER "size" (8:19-8:23)
+LEFT_PAREN (8:23-8:24)
+RIGHT_PAREN (8:24-8:25)
+SEMICOLON (8:25-8:26)
+RIGHT_BRACE (9:1-9:2)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "addValue" (10:7-10:15)
+LEFT_PAREN (10:15-10:16)
+RIGHT_PAREN (10:16-10:17)
+RIGHT_PAREN (10:17-10:18)
+SEMICOLON (10:18-10:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:19
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:65
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:65
+        CONST
+        (IdentifierDeclaration
+          range: 2:23-2:31
+          name: "hashCode"
+        )
+        (FunctionParameter
+          range: 2:32-2:42
+          (IdentifierDeclaration
+            range: 2:32-2:37
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:39-2:42
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:44-2:47
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:48-2:65
+          (ReturnStatement
+            range: 2:50-2:63
+            (IdentifierExpression
+              range: 2:57-2:62
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:71
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:71
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 3:26-3:34
+          name: "hashCode"
+        )
+        (NamedTypeNode
+          range: 3:37-3:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:41-3:71
+          (ExpressionStatement
+            range: 3:43-3:59
+            (CallExpression
+              range: 3:43-3:58
+              (IdentifierExpression
+                range: 3:43-3:48
+                name: "print"
+              )
+              (LiteralExpression
+                range: 3:49-3:57
+                kind: STRING
+                text: "\"effect\""
+              )
+            )
+          )
+          (ReturnStatement
+            range: 3:60-3:69
+            (LiteralExpression
+              range: 3:67-3:68
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 5:1-9:2
+    CONST
+    (IdentifierDeclaration
+      range: 5:12-5:20
+      name: "addValue"
+    )
+    (NamedTypeNode
+      range: 5:23-5:26
+      name: "i32"
+    )
+    (BlockStatement
+      range: 5:27-9:2
+      (VariableDeclaration
+        range: 6:5-6:39
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 6:9-6:15
+          name: "values"
+        )
+        type: null
+        (NewExpression
+          range: 6:18-6:38
+          (IdentifierExpression
+            range: 6:22-6:29
+            name: "HashSet"
+          )
+          (NamedTypeNode
+            range: 6:30-6:35
+            name: "Value"
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 7:5-7:29
+        (CallExpression
+          range: 7:5-7:28
+          (MemberExpression
+            range: 7:5-7:15
+            (IdentifierExpression
+              range: 7:5-7:11
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 7:12-7:15
+              name: "add"
+            )
+          )
+          (NewExpression
+            range: 7:16-7:27
+            (IdentifierExpression
+              range: 7:20-7:25
+              name: "Value"
+            )
+          )
+        )
+      )
+      (ReturnStatement
+        range: 8:5-8:26
+        (CallExpression
+          range: 8:12-8:25
+          (MemberExpression
+            range: 8:12-8:23
+            (IdentifierExpression
+              range: 8:12-8:18
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 8:19-8:23
+              name: "size"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:19
+    (CallExpression
+      range: 10:1-10:18
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:17
+        (IdentifierExpression
+          range: 10:7-10:15
+          name: "addValue"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'addValue' cannot call collection method 'add' because it may invoke non-const element behavior at 7:5-7:15

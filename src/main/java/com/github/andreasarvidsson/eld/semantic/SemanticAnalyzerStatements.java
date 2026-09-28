@@ -1037,6 +1037,43 @@ public final class SemanticAnalyzerStatements {
                 declaration.modifiers()
             );
 
+        for (final FunctionSymbol existing : destination
+            .functionsLocal(symbol.name())) {
+            final FunctionDeclaration prior =
+                model.getFunctionDeclaration(existing);
+            if (
+                prior != null && FunctionSignatures.overlap(
+                    existing.type(),
+                    prior.parameters(),
+                    symbol.type(),
+                    declaration.parameters(),
+                    type -> type
+                )
+            ) {
+                throw new SemanticException(
+                    declaration.name().range(),
+                    "Ambiguous overload of '%s': duplicate callable signature",
+                    symbol.name()
+                );
+            }
+            if (
+                prior != null && FunctionSignatures.ambiguous(
+                    existing.type(),
+                    prior.parameters(),
+                    symbol.type(),
+                    declaration.parameters(),
+                    (source, target) -> FunctionSignatures
+                        .isSubtype(source, target, model)
+                )
+            ) {
+                throw new SemanticException(
+                    declaration.name().range(),
+                    "Ambiguous overload of '%s': overlapping callable signatures",
+                    symbol.name()
+                );
+            }
+        }
+
         destination.declare(symbol);
         model.setSymbol(declaration.name(), symbol);
         model.setFunctionDeclaration(symbol, declaration);
@@ -1091,6 +1128,7 @@ public final class SemanticAnalyzerStatements {
             );
         }
         final Type declared = analyzer.resolveType(parameter.type(), context);
+        model.setDeclaredParameterType(parameter, declared);
         final List<Type> members =
             new ArrayList<>(
                 declared instanceof UnionType union

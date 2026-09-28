@@ -1,0 +1,284 @@
+class Value implements Comparable<Value> {
+    public const func compareTo(other: i32) i32 { return 0; }
+    public func compareTo(other: Value) i32 { print("effect"); return 0; }
+}
+const func sorted() {
+    var values: List<Value> = [new Value(), new Value()];
+    values.sort();
+}
+sorted();
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+IMPLEMENTS (1:13-1:23)
+IDENTIFIER "Comparable" (1:24-1:34)
+LESS (1:34-1:35)
+IDENTIFIER "Value" (1:35-1:40)
+GREATER (1:40-1:41)
+LEFT_BRACE (1:42-1:43)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "compareTo" (2:23-2:32)
+LEFT_PAREN (2:32-2:33)
+IDENTIFIER "other" (2:33-2:38)
+COLON (2:38-2:39)
+IDENTIFIER "i32" (2:40-2:43)
+RIGHT_PAREN (2:43-2:44)
+IDENTIFIER "i32" (2:45-2:48)
+LEFT_BRACE (2:49-2:50)
+RETURN (2:51-2:57)
+INTEGER_LITERAL "0" (2:58-2:59)
+SEMICOLON (2:59-2:60)
+RIGHT_BRACE (2:61-2:62)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "compareTo" (3:17-3:26)
+LEFT_PAREN (3:26-3:27)
+IDENTIFIER "other" (3:27-3:32)
+COLON (3:32-3:33)
+IDENTIFIER "Value" (3:34-3:39)
+RIGHT_PAREN (3:39-3:40)
+IDENTIFIER "i32" (3:41-3:44)
+LEFT_BRACE (3:45-3:46)
+IDENTIFIER "print" (3:47-3:52)
+LEFT_PAREN (3:52-3:53)
+STRING_LITERAL "\"effect\"" (3:53-3:61)
+RIGHT_PAREN (3:61-3:62)
+SEMICOLON (3:62-3:63)
+RETURN (3:64-3:70)
+INTEGER_LITERAL "0" (3:71-3:72)
+SEMICOLON (3:72-3:73)
+RIGHT_BRACE (3:74-3:75)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+FUNC (5:7-5:11)
+IDENTIFIER "sorted" (5:12-5:18)
+LEFT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+LEFT_BRACE (5:21-5:22)
+VAR (6:5-6:8)
+IDENTIFIER "values" (6:9-6:15)
+COLON (6:15-6:16)
+IDENTIFIER "List" (6:17-6:21)
+LESS (6:21-6:22)
+IDENTIFIER "Value" (6:22-6:27)
+GREATER (6:27-6:28)
+EQUAL (6:29-6:30)
+LEFT_BRACKET (6:31-6:32)
+NEW (6:32-6:35)
+IDENTIFIER "Value" (6:36-6:41)
+LEFT_PAREN (6:41-6:42)
+RIGHT_PAREN (6:42-6:43)
+COMMA (6:43-6:44)
+NEW (6:45-6:48)
+IDENTIFIER "Value" (6:49-6:54)
+LEFT_PAREN (6:54-6:55)
+RIGHT_PAREN (6:55-6:56)
+RIGHT_BRACKET (6:56-6:57)
+SEMICOLON (6:57-6:58)
+IDENTIFIER "values" (7:5-7:11)
+DOT (7:11-7:12)
+IDENTIFIER "sort" (7:12-7:16)
+LEFT_PAREN (7:16-7:17)
+RIGHT_PAREN (7:17-7:18)
+SEMICOLON (7:18-7:19)
+RIGHT_BRACE (8:1-8:2)
+IDENTIFIER "sorted" (9:1-9:7)
+LEFT_PAREN (9:7-9:8)
+RIGHT_PAREN (9:8-9:9)
+SEMICOLON (9:9-9:10)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:10
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 1:24-1:41
+      name: "Comparable"
+      (NamedTypeNode
+        range: 1:35-1:40
+        name: "Value"
+      )
+    )
+    (MemberDeclaration
+      range: 2:5-2:62
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:62
+        CONST
+        (IdentifierDeclaration
+          range: 2:23-2:32
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 2:33-2:43
+          (IdentifierDeclaration
+            range: 2:33-2:38
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 2:40-2:43
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:45-2:48
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:49-2:62
+          (ReturnStatement
+            range: 2:51-2:60
+            (LiteralExpression
+              range: 2:58-2:59
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:75
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:75
+        (IdentifierDeclaration
+          range: 3:17-3:26
+          name: "compareTo"
+        )
+        (FunctionParameter
+          range: 3:27-3:39
+          (IdentifierDeclaration
+            range: 3:27-3:32
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 3:34-3:39
+            name: "Value"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:41-3:44
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:45-3:75
+          (ExpressionStatement
+            range: 3:47-3:63
+            (CallExpression
+              range: 3:47-3:62
+              (IdentifierExpression
+                range: 3:47-3:52
+                name: "print"
+              )
+              (LiteralExpression
+                range: 3:53-3:61
+                kind: STRING
+                text: "\"effect\""
+              )
+            )
+          )
+          (ReturnStatement
+            range: 3:64-3:73
+            (LiteralExpression
+              range: 3:71-3:72
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 5:1-8:2
+    CONST
+    (IdentifierDeclaration
+      range: 5:12-5:18
+      name: "sorted"
+    )
+    returnType: null
+    (BlockStatement
+      range: 5:21-8:2
+      (VariableDeclaration
+        range: 6:5-6:58
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 6:9-6:15
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 6:17-6:28
+          name: "List"
+          (NamedTypeNode
+            range: 6:22-6:27
+            name: "Value"
+          )
+        )
+        (ArrayExpression
+          range: 6:31-6:57
+          (NewExpression
+            range: 6:32-6:43
+            (IdentifierExpression
+              range: 6:36-6:41
+              name: "Value"
+            )
+          )
+          (NewExpression
+            range: 6:45-6:56
+            (IdentifierExpression
+              range: 6:49-6:54
+              name: "Value"
+            )
+          )
+        )
+      )
+      (ExpressionStatement
+        range: 7:5-7:19
+        (CallExpression
+          range: 7:5-7:18
+          (MemberExpression
+            range: 7:5-7:16
+            (IdentifierExpression
+              range: 7:5-7:11
+              name: "values"
+            )
+            (IdentifierExpression
+              range: 7:12-7:16
+              name: "sort"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:10
+    (CallExpression
+      range: 9:1-9:9
+      (IdentifierExpression
+        range: 9:1-9:7
+        name: "sorted"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const function 'sorted' cannot call non-const natural ordering in 'sort' at 7:5-7:18

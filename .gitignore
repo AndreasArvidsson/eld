@@ -1,4 +1,4 @@
-/.tmp-*/
 /target/
 /.codex-*
+/.tmp-*
 /src/test/resources/testSubsetGrep.properties

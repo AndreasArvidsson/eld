@@ -1,0 +1,1075 @@
+interface A {
+    func describe(values: List<i32>) string;
+    func describe(values: List<string>) string;
+}
+interface B {
+    func describe(values: List<string>) string;
+    func describe(values: List<i32>) string;
+}
+class Root {}
+class First extends Root implements A {
+    public func describe(values: List<i32>) string { return "first ints"; }
+    public func describe(values: List<string>) string { return "first strings"; }
+}
+class Second extends Root implements B {
+    public func describe(values: List<i32>) string { return "second ints"; }
+    public func describe(values: List<string>) string { return "second strings"; }
+}
+const first: A = new First();
+const second: B = new Second();
+const ints: List<i32> = new ArrayList<i32>();
+const strings: List<string> = new ArrayList<string>();
+print(first.describe(ints));
+print(first.describe(strings));
+print(second.describe(ints));
+print(second.describe(strings));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "A" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "values" (2:19-2:25)
+COLON (2:25-2:26)
+IDENTIFIER "List" (2:27-2:31)
+LESS (2:31-2:32)
+IDENTIFIER "i32" (2:32-2:35)
+GREATER (2:35-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+SEMICOLON (2:44-2:45)
+FUNC (3:5-3:9)
+IDENTIFIER "describe" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "values" (3:19-3:25)
+COLON (3:25-3:26)
+IDENTIFIER "List" (3:27-3:31)
+LESS (3:31-3:32)
+IDENTIFIER "string" (3:32-3:38)
+GREATER (3:38-3:39)
+RIGHT_PAREN (3:39-3:40)
+IDENTIFIER "string" (3:41-3:47)
+SEMICOLON (3:47-3:48)
+RIGHT_BRACE (4:1-4:2)
+INTERFACE (5:1-5:10)
+IDENTIFIER "B" (5:11-5:12)
+LEFT_BRACE (5:13-5:14)
+FUNC (6:5-6:9)
+IDENTIFIER "describe" (6:10-6:18)
+LEFT_PAREN (6:18-6:19)
+IDENTIFIER "values" (6:19-6:25)
+COLON (6:25-6:26)
+IDENTIFIER "List" (6:27-6:31)
+LESS (6:31-6:32)
+IDENTIFIER "string" (6:32-6:38)
+GREATER (6:38-6:39)
+RIGHT_PAREN (6:39-6:40)
+IDENTIFIER "string" (6:41-6:47)
+SEMICOLON (6:47-6:48)
+FUNC (7:5-7:9)
+IDENTIFIER "describe" (7:10-7:18)
+LEFT_PAREN (7:18-7:19)
+IDENTIFIER "values" (7:19-7:25)
+COLON (7:25-7:26)
+IDENTIFIER "List" (7:27-7:31)
+LESS (7:31-7:32)
+IDENTIFIER "i32" (7:32-7:35)
+GREATER (7:35-7:36)
+RIGHT_PAREN (7:36-7:37)
+IDENTIFIER "string" (7:38-7:44)
+SEMICOLON (7:44-7:45)
+RIGHT_BRACE (8:1-8:2)
+CLASS (9:1-9:6)
+IDENTIFIER "Root" (9:7-9:11)
+LEFT_BRACE (9:12-9:13)
+RIGHT_BRACE (9:13-9:14)
+CLASS (10:1-10:6)
+IDENTIFIER "First" (10:7-10:12)
+EXTENDS (10:13-10:20)
+IDENTIFIER "Root" (10:21-10:25)
+IMPLEMENTS (10:26-10:36)
+IDENTIFIER "A" (10:37-10:38)
+LEFT_BRACE (10:39-10:40)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "describe" (11:17-11:25)
+LEFT_PAREN (11:25-11:26)
+IDENTIFIER "values" (11:26-11:32)
+COLON (11:32-11:33)
+IDENTIFIER "List" (11:34-11:38)
+LESS (11:38-11:39)
+IDENTIFIER "i32" (11:39-11:42)
+GREATER (11:42-11:43)
+RIGHT_PAREN (11:43-11:44)
+IDENTIFIER "string" (11:45-11:51)
+LEFT_BRACE (11:52-11:53)
+RETURN (11:54-11:60)
+STRING_LITERAL "\"first ints\"" (11:61-11:73)
+SEMICOLON (11:73-11:74)
+RIGHT_BRACE (11:75-11:76)
+PUBLIC (12:5-12:11)
+FUNC (12:12-12:16)
+IDENTIFIER "describe" (12:17-12:25)
+LEFT_PAREN (12:25-12:26)
+IDENTIFIER "values" (12:26-12:32)
+COLON (12:32-12:33)
+IDENTIFIER "List" (12:34-12:38)
+LESS (12:38-12:39)
+IDENTIFIER "string" (12:39-12:45)
+GREATER (12:45-12:46)
+RIGHT_PAREN (12:46-12:47)
+IDENTIFIER "string" (12:48-12:54)
+LEFT_BRACE (12:55-12:56)
+RETURN (12:57-12:63)
+STRING_LITERAL "\"first strings\"" (12:64-12:79)
+SEMICOLON (12:79-12:80)
+RIGHT_BRACE (12:81-12:82)
+RIGHT_BRACE (13:1-13:2)
+CLASS (14:1-14:6)
+IDENTIFIER "Second" (14:7-14:13)
+EXTENDS (14:14-14:21)
+IDENTIFIER "Root" (14:22-14:26)
+IMPLEMENTS (14:27-14:37)
+IDENTIFIER "B" (14:38-14:39)
+LEFT_BRACE (14:40-14:41)
+PUBLIC (15:5-15:11)
+FUNC (15:12-15:16)
+IDENTIFIER "describe" (15:17-15:25)
+LEFT_PAREN (15:25-15:26)
+IDENTIFIER "values" (15:26-15:32)
+COLON (15:32-15:33)
+IDENTIFIER "List" (15:34-15:38)
+LESS (15:38-15:39)
+IDENTIFIER "i32" (15:39-15:42)
+GREATER (15:42-15:43)
+RIGHT_PAREN (15:43-15:44)
+IDENTIFIER "string" (15:45-15:51)
+LEFT_BRACE (15:52-15:53)
+RETURN (15:54-15:60)
+STRING_LITERAL "\"second ints\"" (15:61-15:74)
+SEMICOLON (15:74-15:75)
+RIGHT_BRACE (15:76-15:77)
+PUBLIC (16:5-16:11)
+FUNC (16:12-16:16)
+IDENTIFIER "describe" (16:17-16:25)
+LEFT_PAREN (16:25-16:26)
+IDENTIFIER "values" (16:26-16:32)
+COLON (16:32-16:33)
+IDENTIFIER "List" (16:34-16:38)
+LESS (16:38-16:39)
+IDENTIFIER "string" (16:39-16:45)
+GREATER (16:45-16:46)
+RIGHT_PAREN (16:46-16:47)
+IDENTIFIER "string" (16:48-16:54)
+LEFT_BRACE (16:55-16:56)
+RETURN (16:57-16:63)
+STRING_LITERAL "\"second strings\"" (16:64-16:80)
+SEMICOLON (16:80-16:81)
+RIGHT_BRACE (16:82-16:83)
+RIGHT_BRACE (17:1-17:2)
+CONST (18:1-18:6)
+IDENTIFIER "first" (18:7-18:12)
+COLON (18:12-18:13)
+IDENTIFIER "A" (18:14-18:15)
+EQUAL (18:16-18:17)
+NEW (18:18-18:21)
+IDENTIFIER "First" (18:22-18:27)
+LEFT_PAREN (18:27-18:28)
+RIGHT_PAREN (18:28-18:29)
+SEMICOLON (18:29-18:30)
+CONST (19:1-19:6)
+IDENTIFIER "second" (19:7-19:13)
+COLON (19:13-19:14)
+IDENTIFIER "B" (19:15-19:16)
+EQUAL (19:17-19:18)
+NEW (19:19-19:22)
+IDENTIFIER "Second" (19:23-19:29)
+LEFT_PAREN (19:29-19:30)
+RIGHT_PAREN (19:30-19:31)
+SEMICOLON (19:31-19:32)
+CONST (20:1-20:6)
+IDENTIFIER "ints" (20:7-20:11)
+COLON (20:11-20:12)
+IDENTIFIER "List" (20:13-20:17)
+LESS (20:17-20:18)
+IDENTIFIER "i32" (20:18-20:21)
+GREATER (20:21-20:22)
+EQUAL (20:23-20:24)
+NEW (20:25-20:28)
+IDENTIFIER "ArrayList" (20:29-20:38)
+LESS (20:38-20:39)
+IDENTIFIER "i32" (20:39-20:42)
+GREATER (20:42-20:43)
+LEFT_PAREN (20:43-20:44)
+RIGHT_PAREN (20:44-20:45)
+SEMICOLON (20:45-20:46)
+CONST (21:1-21:6)
+IDENTIFIER "strings" (21:7-21:14)
+COLON (21:14-21:15)
+IDENTIFIER "List" (21:16-21:20)
+LESS (21:20-21:21)
+IDENTIFIER "string" (21:21-21:27)
+GREATER (21:27-21:28)
+EQUAL (21:29-21:30)
+NEW (21:31-21:34)
+IDENTIFIER "ArrayList" (21:35-21:44)
+LESS (21:44-21:45)
+IDENTIFIER "string" (21:45-21:51)
+GREATER (21:51-21:52)
+LEFT_PAREN (21:52-21:53)
+RIGHT_PAREN (21:53-21:54)
+SEMICOLON (21:54-21:55)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "first" (22:7-22:12)
+DOT (22:12-22:13)
+IDENTIFIER "describe" (22:13-22:21)
+LEFT_PAREN (22:21-22:22)
+IDENTIFIER "ints" (22:22-22:26)
+RIGHT_PAREN (22:26-22:27)
+RIGHT_PAREN (22:27-22:28)
+SEMICOLON (22:28-22:29)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "first" (23:7-23:12)
+DOT (23:12-23:13)
+IDENTIFIER "describe" (23:13-23:21)
+LEFT_PAREN (23:21-23:22)
+IDENTIFIER "strings" (23:22-23:29)
+RIGHT_PAREN (23:29-23:30)
+RIGHT_PAREN (23:30-23:31)
+SEMICOLON (23:31-23:32)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "second" (24:7-24:13)
+DOT (24:13-24:14)
+IDENTIFIER "describe" (24:14-24:22)
+LEFT_PAREN (24:22-24:23)
+IDENTIFIER "ints" (24:23-24:27)
+RIGHT_PAREN (24:27-24:28)
+RIGHT_PAREN (24:28-24:29)
+SEMICOLON (24:29-24:30)
+IDENTIFIER "print" (25:1-25:6)
+LEFT_PAREN (25:6-25:7)
+IDENTIFIER "second" (25:7-25:13)
+DOT (25:13-25:14)
+IDENTIFIER "describe" (25:14-25:22)
+LEFT_PAREN (25:22-25:23)
+IDENTIFIER "strings" (25:23-25:30)
+RIGHT_PAREN (25:30-25:31)
+RIGHT_PAREN (25:31-25:32)
+SEMICOLON (25:32-25:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-25:33
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "A"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:45
+      (IdentifierDeclaration
+        range: 2:10-2:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 2:19-2:36
+        (IdentifierDeclaration
+          range: 2:19-2:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 2:27-2:36
+          name: "List"
+          (NamedTypeNode
+            range: 2:32-2:35
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:38-2:44
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:48
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 3:19-3:39
+        (IdentifierDeclaration
+          range: 3:19-3:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 3:27-3:39
+          name: "List"
+          (NamedTypeNode
+            range: 3:32-3:38
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:41-3:47
+        name: "string"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 5:1-8:2
+    (IdentifierDeclaration
+      range: 5:11-5:12
+      name: "B"
+    )
+    (InterfaceMethodDeclaration
+      range: 6:5-6:48
+      (IdentifierDeclaration
+        range: 6:10-6:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 6:19-6:39
+        (IdentifierDeclaration
+          range: 6:19-6:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 6:27-6:39
+          name: "List"
+          (NamedTypeNode
+            range: 6:32-6:38
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 6:41-6:47
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 7:5-7:45
+      (IdentifierDeclaration
+        range: 7:10-7:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 7:19-7:36
+        (IdentifierDeclaration
+          range: 7:19-7:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 7:27-7:36
+          name: "List"
+          (NamedTypeNode
+            range: 7:32-7:35
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 7:38-7:44
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-9:14
+    (IdentifierDeclaration
+      range: 9:7-9:11
+      name: "Root"
+    )
+    superClass: null
+  )
+  (ClassDeclaration
+    range: 10:1-13:2
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "First"
+    )
+    (IdentifierExpression
+      range: 10:21-10:25
+      name: "Root"
+    )
+    (NamedTypeNode
+      range: 10:37-10:38
+      name: "A"
+    )
+    (MemberDeclaration
+      range: 11:5-11:76
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:76
+        (IdentifierDeclaration
+          range: 11:17-11:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 11:26-11:43
+          (IdentifierDeclaration
+            range: 11:26-11:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 11:34-11:43
+            name: "List"
+            (NamedTypeNode
+              range: 11:39-11:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 11:45-11:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 11:52-11:76
+          (ReturnStatement
+            range: 11:54-11:74
+            (LiteralExpression
+              range: 11:61-11:73
+              kind: STRING
+              text: "\"first ints\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 12:5-12:82
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 12:12-12:82
+        (IdentifierDeclaration
+          range: 12:17-12:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 12:26-12:46
+          (IdentifierDeclaration
+            range: 12:26-12:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 12:34-12:46
+            name: "List"
+            (NamedTypeNode
+              range: 12:39-12:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 12:48-12:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 12:55-12:82
+          (ReturnStatement
+            range: 12:57-12:80
+            (LiteralExpression
+              range: 12:64-12:79
+              kind: STRING
+              text: "\"first strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 14:1-17:2
+    (IdentifierDeclaration
+      range: 14:7-14:13
+      name: "Second"
+    )
+    (IdentifierExpression
+      range: 14:22-14:26
+      name: "Root"
+    )
+    (NamedTypeNode
+      range: 14:38-14:39
+      name: "B"
+    )
+    (MemberDeclaration
+      range: 15:5-15:77
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 15:12-15:77
+        (IdentifierDeclaration
+          range: 15:17-15:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 15:26-15:43
+          (IdentifierDeclaration
+            range: 15:26-15:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 15:34-15:43
+            name: "List"
+            (NamedTypeNode
+              range: 15:39-15:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 15:45-15:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 15:52-15:77
+          (ReturnStatement
+            range: 15:54-15:75
+            (LiteralExpression
+              range: 15:61-15:74
+              kind: STRING
+              text: "\"second ints\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 16:5-16:83
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 16:12-16:83
+        (IdentifierDeclaration
+          range: 16:17-16:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 16:26-16:46
+          (IdentifierDeclaration
+            range: 16:26-16:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 16:34-16:46
+            name: "List"
+            (NamedTypeNode
+              range: 16:39-16:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 16:48-16:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 16:55-16:83
+          (ReturnStatement
+            range: 16:57-16:81
+            (LiteralExpression
+              range: 16:64-16:80
+              kind: STRING
+              text: "\"second strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:12
+      name: "first"
+    )
+    (NamedTypeNode
+      range: 18:14-18:15
+      name: "A"
+    )
+    (NewExpression
+      range: 18:18-18:29
+      (IdentifierExpression
+        range: 18:22-18:27
+        name: "First"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:13
+      name: "second"
+    )
+    (NamedTypeNode
+      range: 19:15-19:16
+      name: "B"
+    )
+    (NewExpression
+      range: 19:19-19:31
+      (IdentifierExpression
+        range: 19:23-19:29
+        name: "Second"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:11
+      name: "ints"
+    )
+    (NamedTypeNode
+      range: 20:13-20:22
+      name: "List"
+      (NamedTypeNode
+        range: 20:18-20:21
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 20:25-20:45
+      (IdentifierExpression
+        range: 20:29-20:38
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 20:39-20:42
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 21:1-21:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 21:7-21:14
+      name: "strings"
+    )
+    (NamedTypeNode
+      range: 21:16-21:28
+      name: "List"
+      (NamedTypeNode
+        range: 21:21-21:27
+        name: "string"
+      )
+    )
+    (NewExpression
+      range: 21:31-21:54
+      (IdentifierExpression
+        range: 21:35-21:44
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 21:45-21:51
+        name: "string"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:29
+    (CallExpression
+      range: 22:1-22:28
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (CallExpression
+        range: 22:7-22:27
+        (MemberExpression
+          range: 22:7-22:21
+          (IdentifierExpression
+            range: 22:7-22:12
+            name: "first"
+          )
+          (IdentifierExpression
+            range: 22:13-22:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 22:22-22:26
+          name: "ints"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:32
+    (CallExpression
+      range: 23:1-23:31
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (CallExpression
+        range: 23:7-23:30
+        (MemberExpression
+          range: 23:7-23:21
+          (IdentifierExpression
+            range: 23:7-23:12
+            name: "first"
+          )
+          (IdentifierExpression
+            range: 23:13-23:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 23:22-23:29
+          name: "strings"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:30
+    (CallExpression
+      range: 24:1-24:29
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (CallExpression
+        range: 24:7-24:28
+        (MemberExpression
+          range: 24:7-24:22
+          (IdentifierExpression
+            range: 24:7-24:13
+            name: "second"
+          )
+          (IdentifierExpression
+            range: 24:14-24:22
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 24:23-24:27
+          name: "ints"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 25:1-25:33
+    (CallExpression
+      range: 25:1-25:32
+      (IdentifierExpression
+        range: 25:1-25:6
+        name: "print"
+      )
+      (CallExpression
+        range: 25:7-25:31
+        (MemberExpression
+          range: 25:7-25:22
+          (IdentifierExpression
+            range: 25:7-25:13
+            name: "second"
+          )
+          (IdentifierExpression
+            range: 25:14-25:22
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 25:23-25:30
+          name: "strings"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  10:21-10:25 -> Root
+  11:61-11:73 -> string
+  12:64-12:79 -> string
+  14:22-14:26 -> Root
+  15:61-15:74 -> string
+  16:64-16:80 -> string
+  18:18-18:29 -> First
+  18:22-18:27 -> First
+  19:19-19:31 -> Second
+  19:23-19:29 -> Second
+  20:25-20:45 -> ArrayList<i32>
+  20:29-20:38 -> ArrayList<i32>
+  21:31-21:54 -> ArrayList<string>
+  21:35-21:44 -> ArrayList<string>
+  22:1-22:6 -> (any) => void
+  22:1-22:28 -> void
+  22:7-22:12 -> A
+  22:7-22:21 -> (List<i32>) => string
+  22:7-22:27 -> string
+  22:13-22:21 -> (List<i32>) => string
+  22:22-22:26 -> List<i32>
+  23:1-23:6 -> (any) => void
+  23:1-23:31 -> void
+  23:7-23:12 -> A
+  23:7-23:21 -> (List<string>) => string
+  23:7-23:30 -> string
+  23:13-23:21 -> (List<string>) => string
+  23:22-23:29 -> List<string>
+  24:1-24:6 -> (any) => void
+  24:1-24:29 -> void
+  24:7-24:13 -> B
+  24:7-24:22 -> (List<i32>) => string
+  24:7-24:28 -> string
+  24:14-24:22 -> (List<i32>) => string
+  24:23-24:27 -> List<i32>
+  25:1-25:6 -> (any) => void
+  25:1-25:32 -> void
+  25:7-25:13 -> B
+  25:7-25:22 -> (List<string>) => string
+  25:7-25:31 -> string
+  25:14-25:22 -> (List<string>) => string
+  25:23-25:30 -> List<string>
+
+Resolved types:
+  2:27-2:36 -> List<i32>
+  2:32-2:35 -> i32
+  2:38-2:44 -> string
+  3:27-3:39 -> List<string>
+  3:32-3:38 -> string
+  3:41-3:47 -> string
+  6:27-6:39 -> List<string>
+  6:32-6:38 -> string
+  6:41-6:47 -> string
+  7:27-7:36 -> List<i32>
+  7:32-7:35 -> i32
+  7:38-7:44 -> string
+  10:37-10:38 -> A
+  11:34-11:43 -> List<i32>
+  11:39-11:42 -> i32
+  11:45-11:51 -> string
+  12:34-12:46 -> List<string>
+  12:39-12:45 -> string
+  12:48-12:54 -> string
+  14:38-14:39 -> B
+  15:34-15:43 -> List<i32>
+  15:39-15:42 -> i32
+  15:45-15:51 -> string
+  16:34-16:46 -> List<string>
+  16:39-16:45 -> string
+  16:48-16:54 -> string
+  18:14-18:15 -> A
+  19:15-19:16 -> B
+  20:13-20:22 -> List<i32>
+  20:18-20:21 -> i32
+  20:25-20:45 -> ArrayList<i32>
+  20:39-20:42 -> i32
+  21:16-21:28 -> List<string>
+  21:21-21:27 -> string
+  21:31-21:54 -> ArrayList<string>
+  21:45-21:51 -> string
+
+Declarations:
+  1:11-1:12 -> interface A
+  2:10-2:18 -> func describe(List<i32>) => string
+  2:19-2:25 -> const values: List<i32>
+  3:10-3:18 -> func describe(List<string>) => string
+  3:19-3:25 -> const values: List<string>
+  5:11-5:12 -> interface B
+  6:10-6:18 -> func describe(List<string>) => string
+  6:19-6:25 -> const values: List<string>
+  7:10-7:18 -> func describe(List<i32>) => string
+  7:19-7:25 -> const values: List<i32>
+  9:7-9:11 -> class Root
+  10:7-10:12 -> class First
+  11:17-11:25 -> func describe(List<i32>) => string
+  11:26-11:32 -> const values: List<i32>
+  12:17-12:25 -> func describe(List<string>) => string
+  12:26-12:32 -> const values: List<string>
+  14:7-14:13 -> class Second
+  15:17-15:25 -> func describe(List<i32>) => string
+  15:26-15:32 -> const values: List<i32>
+  16:17-16:25 -> func describe(List<string>) => string
+  16:26-16:32 -> const values: List<string>
+  18:7-18:12 -> const first: A
+  19:7-19:13 -> const second: B
+  20:7-20:11 -> const ints: List<i32>
+  21:7-21:14 -> const strings: List<string>
+
+References:
+  10:21-10:25 -> 9:7-9:11
+  14:22-14:26 -> 9:7-9:11
+  18:22-18:27 -> 10:7-10:12
+  19:23-19:29 -> 14:7-14:13
+  20:29-20:38 -> 20:25-20:45
+  21:35-21:44 -> 21:31-21:54
+  22:1-22:6 -> builtin print
+  22:7-22:12 -> 18:7-18:12
+  22:13-22:21 -> 2:10-2:18
+  22:22-22:26 -> 20:7-20:11
+  23:1-23:6 -> builtin print
+  23:7-23:12 -> 18:7-18:12
+  23:13-23:21 -> 3:10-3:18
+  23:22-23:29 -> 21:7-21:14
+  24:1-24:6 -> builtin print
+  24:7-24:13 -> 19:7-19:13
+  24:14-24:22 -> 7:10-7:18
+  24:23-24:27 -> 20:7-20:11
+  25:1-25:6 -> builtin print
+  25:7-25:13 -> 19:7-19:13
+  25:14-25:22 -> 6:10-6:18
+  25:23-25:30 -> 21:7-21:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$A
+  nest member Test$B
+  nest member Test$Root
+  nest member Test$First
+  nest member Test$Second
+  inner class Test$A flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$B flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Root flags [PUBLIC, STATIC]
+  inner class Test$First flags [PUBLIC, STATIC]
+  inner class Test$Second flags [PUBLIC, STATIC]
+  field first LTest$A; flags [PUBLIC, STATIC, FINAL]
+  field second LTest$B; flags [PUBLIC, STATIC, FINAL]
+  field ints Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field strings Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$First
+    DUP
+    INVOKESPECIAL Test$First.<init>()V
+    PUTSTATIC Test.first LTest$A;
+    NEW Test$Second
+    DUP
+    INVOKESPECIAL Test$Second.<init>()V
+    PUTSTATIC Test.second LTest$B;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.ints Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.strings Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$A;
+    GETSTATIC Test.ints Ljava/util/List;
+    INVOKEINTERFACE Test$A.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.first LTest$A;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEINTERFACE Test$A.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.second LTest$B;
+    GETSTATIC Test.ints Ljava/util/List;
+    INVOKEINTERFACE Test$B.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.second LTest$B;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEINTERFACE Test$B.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$A extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$A flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$B extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$B flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Root extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Root flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+class Test$First extends Test$Root version 65.0 flags [PUBLIC, SUPER]
+  implements Test$A
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$First flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Root.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "first ints"
+    ARETURN
+    max stack 1 max locals 2
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "first strings"
+    ARETURN
+    max stack 1 max locals 2
+
+class Test$Second extends Test$Root version 65.0 flags [PUBLIC, SUPER]
+  implements Test$B
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Second flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Root.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "second ints"
+    ARETURN
+    max stack 1 max locals 2
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "second strings"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+first ints
+first strings
+second ints
+second strings

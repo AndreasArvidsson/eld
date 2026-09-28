@@ -1,0 +1,207 @@
+func pick(value: i64) string { return "wide"; }
+
+const value: i32 = 1;
+print(pick(value));
+print(pick(1));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "pick" (1:6-1:10)
+LEFT_PAREN (1:10-1:11)
+IDENTIFIER "value" (1:11-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "i64" (1:18-1:21)
+RIGHT_PAREN (1:21-1:22)
+IDENTIFIER "string" (1:23-1:29)
+LEFT_BRACE (1:30-1:31)
+RETURN (1:32-1:38)
+STRING_LITERAL "\"wide\"" (1:39-1:45)
+SEMICOLON (1:45-1:46)
+RIGHT_BRACE (1:47-1:48)
+CONST (3:1-3:6)
+IDENTIFIER "value" (3:7-3:12)
+COLON (3:12-3:13)
+IDENTIFIER "i32" (3:14-3:17)
+EQUAL (3:18-3:19)
+INTEGER_LITERAL "1" (3:20-3:21)
+SEMICOLON (3:21-3:22)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "pick" (4:7-4:11)
+LEFT_PAREN (4:11-4:12)
+IDENTIFIER "value" (4:12-4:17)
+RIGHT_PAREN (4:17-4:18)
+RIGHT_PAREN (4:18-4:19)
+SEMICOLON (4:19-4:20)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "pick" (5:7-5:11)
+LEFT_PAREN (5:11-5:12)
+INTEGER_LITERAL "1" (5:12-5:13)
+RIGHT_PAREN (5:13-5:14)
+RIGHT_PAREN (5:14-5:15)
+SEMICOLON (5:15-5:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:16
+  (FunctionDeclaration
+    range: 1:1-1:48
+    (IdentifierDeclaration
+      range: 1:6-1:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 1:11-1:21
+      (IdentifierDeclaration
+        range: 1:11-1:16
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:18-1:21
+        name: "i64"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:23-1:29
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:30-1:48
+      (ReturnStatement
+        range: 1:32-1:46
+        (LiteralExpression
+          range: 1:39-1:45
+          kind: STRING
+          text: "\"wide\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:22
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 3:14-3:17
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 3:20-3:21
+      kind: INT
+      text: "1"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:20
+    (CallExpression
+      range: 4:1-4:19
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:18
+        (IdentifierExpression
+          range: 4:7-4:11
+          name: "pick"
+        )
+        (IdentifierExpression
+          range: 4:12-4:17
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:16
+    (CallExpression
+      range: 5:1-5:15
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:14
+        (IdentifierExpression
+          range: 5:7-5:11
+          name: "pick"
+        )
+        (LiteralExpression
+          range: 5:12-5:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:39-1:45 -> string
+  3:20-3:21 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:19 -> void
+  4:7-4:11 -> (i64) => string
+  4:7-4:18 -> string
+  4:12-4:17 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:15 -> void
+  5:7-5:11 -> (i64) => string
+  5:7-5:14 -> string
+  5:12-5:13 -> i64
+
+Resolved types:
+  1:18-1:21 -> i64
+  1:23-1:29 -> string
+  3:14-3:17 -> i32
+
+Conversions:
+  4:12-4:17 -> i32 -> i64
+
+Declarations:
+  1:6-1:10 -> func pick(i64) => string
+  1:11-1:16 -> const value: i64
+  3:7-3:12 -> const value: i32
+
+References:
+  4:1-4:6 -> builtin print
+  4:7-4:11 -> 1:6-1:10
+  4:12-4:17 -> 3:7-3:12
+  5:1-5:6 -> builtin print
+  5:7-5:11 -> 1:6-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field value I flags [PUBLIC, STATIC, FINAL] = 1
+  method pick(J)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "wide"
+    ARETURN
+    max stack 1 max locals 2
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value I
+    I2L
+    INVOKESTATIC Test.pick(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC2_W 1
+    INVOKESTATIC Test.pick(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+wide
+wide

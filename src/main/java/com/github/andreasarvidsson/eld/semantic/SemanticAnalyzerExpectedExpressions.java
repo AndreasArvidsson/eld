@@ -13,6 +13,7 @@ import com.github.andreasarvidsson.eld.parser.ObjectSpread;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
+import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
@@ -159,6 +160,17 @@ public final class SemanticAnalyzerExpectedExpressions {
             }
             model.setExpressionType(array, list);
             return expected instanceof ConstType ? expected : list;
+        }
+        if (
+            expected instanceof FunctionType function
+                && expression instanceof IdentifierExpression identifier
+        ) {
+            final @Nullable Type selected =
+                expressions
+                    .analyzeFunctionReference(identifier, context, function);
+            if (selected != null) {
+                return selected;
+            }
         }
         if (
             expected instanceof FunctionType function

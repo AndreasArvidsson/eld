@@ -1,0 +1,157 @@
+interface I {
+    func f(value: i32) i32;
+    func f(value: string) i32;
+}
+func test(instance: I) {
+    const reference = instance.f;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "I" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "f" (2:10-2:11)
+LEFT_PAREN (2:11-2:12)
+IDENTIFIER "value" (2:12-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "i32" (2:19-2:22)
+RIGHT_PAREN (2:22-2:23)
+IDENTIFIER "i32" (2:24-2:27)
+SEMICOLON (2:27-2:28)
+FUNC (3:5-3:9)
+IDENTIFIER "f" (3:10-3:11)
+LEFT_PAREN (3:11-3:12)
+IDENTIFIER "value" (3:12-3:17)
+COLON (3:17-3:18)
+IDENTIFIER "string" (3:19-3:25)
+RIGHT_PAREN (3:25-3:26)
+IDENTIFIER "i32" (3:27-3:30)
+SEMICOLON (3:30-3:31)
+RIGHT_BRACE (4:1-4:2)
+FUNC (5:1-5:5)
+IDENTIFIER "test" (5:6-5:10)
+LEFT_PAREN (5:10-5:11)
+IDENTIFIER "instance" (5:11-5:19)
+COLON (5:19-5:20)
+IDENTIFIER "I" (5:21-5:22)
+RIGHT_PAREN (5:22-5:23)
+LEFT_BRACE (5:24-5:25)
+CONST (6:5-6:10)
+IDENTIFIER "reference" (6:11-6:20)
+EQUAL (6:21-6:22)
+IDENTIFIER "instance" (6:23-6:31)
+DOT (6:31-6:32)
+IDENTIFIER "f" (6:32-6:33)
+SEMICOLON (6:33-6:34)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "I"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:28
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 2:12-2:22
+        (IdentifierDeclaration
+          range: 2:12-2:17
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:19-2:22
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:24-2:27
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:31
+      (IdentifierDeclaration
+        range: 3:10-3:11
+        name: "f"
+      )
+      (FunctionParameter
+        range: 3:12-3:25
+        (IdentifierDeclaration
+          range: 3:12-3:17
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 3:19-3:25
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:27-3:30
+        name: "i32"
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 5:1-7:2
+    (IdentifierDeclaration
+      range: 5:6-5:10
+      name: "test"
+    )
+    (FunctionParameter
+      range: 5:11-5:22
+      (IdentifierDeclaration
+        range: 5:11-5:19
+        name: "instance"
+      )
+      (NamedTypeNode
+        range: 5:21-5:22
+        name: "I"
+      )
+      optional: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 5:24-7:2
+      (VariableDeclaration
+        range: 6:5-6:34
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 6:11-6:20
+          name: "reference"
+        )
+        type: null
+        (MemberExpression
+          range: 6:23-6:33
+          (IdentifierExpression
+            range: 6:23-6:31
+            name: "instance"
+          )
+          (IdentifierExpression
+            range: 6:32-6:33
+            name: "f"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous reference to overloaded method 'f' at 6:32-6:33

@@ -1,0 +1,1050 @@
+interface Tri {
+    func describe(values: List<bool>) string;
+    func describe(values: List<i32>) string;
+    func describe(values: List<string>) string;
+}
+class Base {
+    public func describe(values: List<i32>) string { return "integers"; }
+    public func describe(values: List<string>) string { return "strings"; }
+}
+class Child extends Base implements Tri {
+    public func describe(values: List<bool>) string { return "booleans"; }
+}
+const child = new Child();
+const contract: Tri = child;
+const booleans: List<bool> = new ArrayList<bool>();
+const ints: List<i32> = new ArrayList<i32>();
+const strings: List<string> = new ArrayList<string>();
+print(child.describe(booleans));
+print(child.describe(ints));
+print(child.describe(strings));
+print(contract.describe(booleans));
+print(contract.describe(ints));
+print(contract.describe(strings));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Tri" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "values" (2:19-2:25)
+COLON (2:25-2:26)
+IDENTIFIER "List" (2:27-2:31)
+LESS (2:31-2:32)
+IDENTIFIER "bool" (2:32-2:36)
+GREATER (2:36-2:37)
+RIGHT_PAREN (2:37-2:38)
+IDENTIFIER "string" (2:39-2:45)
+SEMICOLON (2:45-2:46)
+FUNC (3:5-3:9)
+IDENTIFIER "describe" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "values" (3:19-3:25)
+COLON (3:25-3:26)
+IDENTIFIER "List" (3:27-3:31)
+LESS (3:31-3:32)
+IDENTIFIER "i32" (3:32-3:35)
+GREATER (3:35-3:36)
+RIGHT_PAREN (3:36-3:37)
+IDENTIFIER "string" (3:38-3:44)
+SEMICOLON (3:44-3:45)
+FUNC (4:5-4:9)
+IDENTIFIER "describe" (4:10-4:18)
+LEFT_PAREN (4:18-4:19)
+IDENTIFIER "values" (4:19-4:25)
+COLON (4:25-4:26)
+IDENTIFIER "List" (4:27-4:31)
+LESS (4:31-4:32)
+IDENTIFIER "string" (4:32-4:38)
+GREATER (4:38-4:39)
+RIGHT_PAREN (4:39-4:40)
+IDENTIFIER "string" (4:41-4:47)
+SEMICOLON (4:47-4:48)
+RIGHT_BRACE (5:1-5:2)
+CLASS (6:1-6:6)
+IDENTIFIER "Base" (6:7-6:11)
+LEFT_BRACE (6:12-6:13)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "describe" (7:17-7:25)
+LEFT_PAREN (7:25-7:26)
+IDENTIFIER "values" (7:26-7:32)
+COLON (7:32-7:33)
+IDENTIFIER "List" (7:34-7:38)
+LESS (7:38-7:39)
+IDENTIFIER "i32" (7:39-7:42)
+GREATER (7:42-7:43)
+RIGHT_PAREN (7:43-7:44)
+IDENTIFIER "string" (7:45-7:51)
+LEFT_BRACE (7:52-7:53)
+RETURN (7:54-7:60)
+STRING_LITERAL "\"integers\"" (7:61-7:71)
+SEMICOLON (7:71-7:72)
+RIGHT_BRACE (7:73-7:74)
+PUBLIC (8:5-8:11)
+FUNC (8:12-8:16)
+IDENTIFIER "describe" (8:17-8:25)
+LEFT_PAREN (8:25-8:26)
+IDENTIFIER "values" (8:26-8:32)
+COLON (8:32-8:33)
+IDENTIFIER "List" (8:34-8:38)
+LESS (8:38-8:39)
+IDENTIFIER "string" (8:39-8:45)
+GREATER (8:45-8:46)
+RIGHT_PAREN (8:46-8:47)
+IDENTIFIER "string" (8:48-8:54)
+LEFT_BRACE (8:55-8:56)
+RETURN (8:57-8:63)
+STRING_LITERAL "\"strings\"" (8:64-8:73)
+SEMICOLON (8:73-8:74)
+RIGHT_BRACE (8:75-8:76)
+RIGHT_BRACE (9:1-9:2)
+CLASS (10:1-10:6)
+IDENTIFIER "Child" (10:7-10:12)
+EXTENDS (10:13-10:20)
+IDENTIFIER "Base" (10:21-10:25)
+IMPLEMENTS (10:26-10:36)
+IDENTIFIER "Tri" (10:37-10:40)
+LEFT_BRACE (10:41-10:42)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "describe" (11:17-11:25)
+LEFT_PAREN (11:25-11:26)
+IDENTIFIER "values" (11:26-11:32)
+COLON (11:32-11:33)
+IDENTIFIER "List" (11:34-11:38)
+LESS (11:38-11:39)
+IDENTIFIER "bool" (11:39-11:43)
+GREATER (11:43-11:44)
+RIGHT_PAREN (11:44-11:45)
+IDENTIFIER "string" (11:46-11:52)
+LEFT_BRACE (11:53-11:54)
+RETURN (11:55-11:61)
+STRING_LITERAL "\"booleans\"" (11:62-11:72)
+SEMICOLON (11:72-11:73)
+RIGHT_BRACE (11:74-11:75)
+RIGHT_BRACE (12:1-12:2)
+CONST (13:1-13:6)
+IDENTIFIER "child" (13:7-13:12)
+EQUAL (13:13-13:14)
+NEW (13:15-13:18)
+IDENTIFIER "Child" (13:19-13:24)
+LEFT_PAREN (13:24-13:25)
+RIGHT_PAREN (13:25-13:26)
+SEMICOLON (13:26-13:27)
+CONST (14:1-14:6)
+IDENTIFIER "contract" (14:7-14:15)
+COLON (14:15-14:16)
+IDENTIFIER "Tri" (14:17-14:20)
+EQUAL (14:21-14:22)
+IDENTIFIER "child" (14:23-14:28)
+SEMICOLON (14:28-14:29)
+CONST (15:1-15:6)
+IDENTIFIER "booleans" (15:7-15:15)
+COLON (15:15-15:16)
+IDENTIFIER "List" (15:17-15:21)
+LESS (15:21-15:22)
+IDENTIFIER "bool" (15:22-15:26)
+GREATER (15:26-15:27)
+EQUAL (15:28-15:29)
+NEW (15:30-15:33)
+IDENTIFIER "ArrayList" (15:34-15:43)
+LESS (15:43-15:44)
+IDENTIFIER "bool" (15:44-15:48)
+GREATER (15:48-15:49)
+LEFT_PAREN (15:49-15:50)
+RIGHT_PAREN (15:50-15:51)
+SEMICOLON (15:51-15:52)
+CONST (16:1-16:6)
+IDENTIFIER "ints" (16:7-16:11)
+COLON (16:11-16:12)
+IDENTIFIER "List" (16:13-16:17)
+LESS (16:17-16:18)
+IDENTIFIER "i32" (16:18-16:21)
+GREATER (16:21-16:22)
+EQUAL (16:23-16:24)
+NEW (16:25-16:28)
+IDENTIFIER "ArrayList" (16:29-16:38)
+LESS (16:38-16:39)
+IDENTIFIER "i32" (16:39-16:42)
+GREATER (16:42-16:43)
+LEFT_PAREN (16:43-16:44)
+RIGHT_PAREN (16:44-16:45)
+SEMICOLON (16:45-16:46)
+CONST (17:1-17:6)
+IDENTIFIER "strings" (17:7-17:14)
+COLON (17:14-17:15)
+IDENTIFIER "List" (17:16-17:20)
+LESS (17:20-17:21)
+IDENTIFIER "string" (17:21-17:27)
+GREATER (17:27-17:28)
+EQUAL (17:29-17:30)
+NEW (17:31-17:34)
+IDENTIFIER "ArrayList" (17:35-17:44)
+LESS (17:44-17:45)
+IDENTIFIER "string" (17:45-17:51)
+GREATER (17:51-17:52)
+LEFT_PAREN (17:52-17:53)
+RIGHT_PAREN (17:53-17:54)
+SEMICOLON (17:54-17:55)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "child" (18:7-18:12)
+DOT (18:12-18:13)
+IDENTIFIER "describe" (18:13-18:21)
+LEFT_PAREN (18:21-18:22)
+IDENTIFIER "booleans" (18:22-18:30)
+RIGHT_PAREN (18:30-18:31)
+RIGHT_PAREN (18:31-18:32)
+SEMICOLON (18:32-18:33)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "child" (19:7-19:12)
+DOT (19:12-19:13)
+IDENTIFIER "describe" (19:13-19:21)
+LEFT_PAREN (19:21-19:22)
+IDENTIFIER "ints" (19:22-19:26)
+RIGHT_PAREN (19:26-19:27)
+RIGHT_PAREN (19:27-19:28)
+SEMICOLON (19:28-19:29)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "child" (20:7-20:12)
+DOT (20:12-20:13)
+IDENTIFIER "describe" (20:13-20:21)
+LEFT_PAREN (20:21-20:22)
+IDENTIFIER "strings" (20:22-20:29)
+RIGHT_PAREN (20:29-20:30)
+RIGHT_PAREN (20:30-20:31)
+SEMICOLON (20:31-20:32)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "contract" (21:7-21:15)
+DOT (21:15-21:16)
+IDENTIFIER "describe" (21:16-21:24)
+LEFT_PAREN (21:24-21:25)
+IDENTIFIER "booleans" (21:25-21:33)
+RIGHT_PAREN (21:33-21:34)
+RIGHT_PAREN (21:34-21:35)
+SEMICOLON (21:35-21:36)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "contract" (22:7-22:15)
+DOT (22:15-22:16)
+IDENTIFIER "describe" (22:16-22:24)
+LEFT_PAREN (22:24-22:25)
+IDENTIFIER "ints" (22:25-22:29)
+RIGHT_PAREN (22:29-22:30)
+RIGHT_PAREN (22:30-22:31)
+SEMICOLON (22:31-22:32)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "contract" (23:7-23:15)
+DOT (23:15-23:16)
+IDENTIFIER "describe" (23:16-23:24)
+LEFT_PAREN (23:24-23:25)
+IDENTIFIER "strings" (23:25-23:32)
+RIGHT_PAREN (23:32-23:33)
+RIGHT_PAREN (23:33-23:34)
+SEMICOLON (23:34-23:35)
+
+--- AST ---
+
+(Program
+  range: 1:1-23:35
+  (InterfaceDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:11-1:14
+      name: "Tri"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:46
+      (IdentifierDeclaration
+        range: 2:10-2:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 2:19-2:37
+        (IdentifierDeclaration
+          range: 2:19-2:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 2:27-2:37
+          name: "List"
+          (NamedTypeNode
+            range: 2:32-2:36
+            name: "bool"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:39-2:45
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:45
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 3:19-3:36
+        (IdentifierDeclaration
+          range: 3:19-3:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 3:27-3:36
+          name: "List"
+          (NamedTypeNode
+            range: 3:32-3:35
+            name: "i32"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:38-3:44
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 4:5-4:48
+      (IdentifierDeclaration
+        range: 4:10-4:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 4:19-4:39
+        (IdentifierDeclaration
+          range: 4:19-4:25
+          name: "values"
+        )
+        (NamedTypeNode
+          range: 4:27-4:39
+          name: "List"
+          (NamedTypeNode
+            range: 4:32-4:38
+            name: "string"
+          )
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 4:41-4:47
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-9:2
+    (IdentifierDeclaration
+      range: 6:7-6:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 7:5-7:74
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:74
+        (IdentifierDeclaration
+          range: 7:17-7:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 7:26-7:43
+          (IdentifierDeclaration
+            range: 7:26-7:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 7:34-7:43
+            name: "List"
+            (NamedTypeNode
+              range: 7:39-7:42
+              name: "i32"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:45-7:51
+          name: "string"
+        )
+        (BlockStatement
+          range: 7:52-7:74
+          (ReturnStatement
+            range: 7:54-7:72
+            (LiteralExpression
+              range: 7:61-7:71
+              kind: STRING
+              text: "\"integers\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-8:76
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-8:76
+        (IdentifierDeclaration
+          range: 8:17-8:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 8:26-8:46
+          (IdentifierDeclaration
+            range: 8:26-8:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 8:34-8:46
+            name: "List"
+            (NamedTypeNode
+              range: 8:39-8:45
+              name: "string"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 8:48-8:54
+          name: "string"
+        )
+        (BlockStatement
+          range: 8:55-8:76
+          (ReturnStatement
+            range: 8:57-8:74
+            (LiteralExpression
+              range: 8:64-8:73
+              kind: STRING
+              text: "\"strings\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 10:1-12:2
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 10:21-10:25
+      name: "Base"
+    )
+    (NamedTypeNode
+      range: 10:37-10:40
+      name: "Tri"
+    )
+    (MemberDeclaration
+      range: 11:5-11:75
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:75
+        (IdentifierDeclaration
+          range: 11:17-11:25
+          name: "describe"
+        )
+        (FunctionParameter
+          range: 11:26-11:44
+          (IdentifierDeclaration
+            range: 11:26-11:32
+            name: "values"
+          )
+          (NamedTypeNode
+            range: 11:34-11:44
+            name: "List"
+            (NamedTypeNode
+              range: 11:39-11:43
+              name: "bool"
+            )
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 11:46-11:52
+          name: "string"
+        )
+        (BlockStatement
+          range: 11:53-11:75
+          (ReturnStatement
+            range: 11:55-11:73
+            (LiteralExpression
+              range: 11:62-11:72
+              kind: STRING
+              text: "\"booleans\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:12
+      name: "child"
+    )
+    type: null
+    (NewExpression
+      range: 13:15-13:26
+      (IdentifierExpression
+        range: 13:19-13:24
+        name: "Child"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:15
+      name: "contract"
+    )
+    (NamedTypeNode
+      range: 14:17-14:20
+      name: "Tri"
+    )
+    (IdentifierExpression
+      range: 14:23-14:28
+      name: "child"
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:52
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:15
+      name: "booleans"
+    )
+    (NamedTypeNode
+      range: 15:17-15:27
+      name: "List"
+      (NamedTypeNode
+        range: 15:22-15:26
+        name: "bool"
+      )
+    )
+    (NewExpression
+      range: 15:30-15:51
+      (IdentifierExpression
+        range: 15:34-15:43
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 15:44-15:48
+        name: "bool"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:46
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:11
+      name: "ints"
+    )
+    (NamedTypeNode
+      range: 16:13-16:22
+      name: "List"
+      (NamedTypeNode
+        range: 16:18-16:21
+        name: "i32"
+      )
+    )
+    (NewExpression
+      range: 16:25-16:45
+      (IdentifierExpression
+        range: 16:29-16:38
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 16:39-16:42
+        name: "i32"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 17:1-17:55
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 17:7-17:14
+      name: "strings"
+    )
+    (NamedTypeNode
+      range: 17:16-17:28
+      name: "List"
+      (NamedTypeNode
+        range: 17:21-17:27
+        name: "string"
+      )
+    )
+    (NewExpression
+      range: 17:31-17:54
+      (IdentifierExpression
+        range: 17:35-17:44
+        name: "ArrayList"
+      )
+      (NamedTypeNode
+        range: 17:45-17:51
+        name: "string"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:33
+    (CallExpression
+      range: 18:1-18:32
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:31
+        (MemberExpression
+          range: 18:7-18:21
+          (IdentifierExpression
+            range: 18:7-18:12
+            name: "child"
+          )
+          (IdentifierExpression
+            range: 18:13-18:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 18:22-18:30
+          name: "booleans"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:29
+    (CallExpression
+      range: 19:1-19:28
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (CallExpression
+        range: 19:7-19:27
+        (MemberExpression
+          range: 19:7-19:21
+          (IdentifierExpression
+            range: 19:7-19:12
+            name: "child"
+          )
+          (IdentifierExpression
+            range: 19:13-19:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 19:22-19:26
+          name: "ints"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:32
+    (CallExpression
+      range: 20:1-20:31
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (CallExpression
+        range: 20:7-20:30
+        (MemberExpression
+          range: 20:7-20:21
+          (IdentifierExpression
+            range: 20:7-20:12
+            name: "child"
+          )
+          (IdentifierExpression
+            range: 20:13-20:21
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 20:22-20:29
+          name: "strings"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:36
+    (CallExpression
+      range: 21:1-21:35
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (CallExpression
+        range: 21:7-21:34
+        (MemberExpression
+          range: 21:7-21:24
+          (IdentifierExpression
+            range: 21:7-21:15
+            name: "contract"
+          )
+          (IdentifierExpression
+            range: 21:16-21:24
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 21:25-21:33
+          name: "booleans"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:32
+    (CallExpression
+      range: 22:1-22:31
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (CallExpression
+        range: 22:7-22:30
+        (MemberExpression
+          range: 22:7-22:24
+          (IdentifierExpression
+            range: 22:7-22:15
+            name: "contract"
+          )
+          (IdentifierExpression
+            range: 22:16-22:24
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 22:25-22:29
+          name: "ints"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:35
+    (CallExpression
+      range: 23:1-23:34
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (CallExpression
+        range: 23:7-23:33
+        (MemberExpression
+          range: 23:7-23:24
+          (IdentifierExpression
+            range: 23:7-23:15
+            name: "contract"
+          )
+          (IdentifierExpression
+            range: 23:16-23:24
+            name: "describe"
+          )
+        )
+        (IdentifierExpression
+          range: 23:25-23:32
+          name: "strings"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:61-7:71 -> string
+  8:64-8:73 -> string
+  10:21-10:25 -> Base
+  11:62-11:72 -> string
+  13:15-13:26 -> Child
+  13:19-13:24 -> Child
+  14:23-14:28 -> Child
+  15:30-15:51 -> ArrayList<bool>
+  15:34-15:43 -> ArrayList<bool>
+  16:25-16:45 -> ArrayList<i32>
+  16:29-16:38 -> ArrayList<i32>
+  17:31-17:54 -> ArrayList<string>
+  17:35-17:44 -> ArrayList<string>
+  18:1-18:6 -> (any) => void
+  18:1-18:32 -> void
+  18:7-18:12 -> Child
+  18:7-18:21 -> (List<bool>) => string
+  18:7-18:31 -> string
+  18:13-18:21 -> (List<bool>) => string
+  18:22-18:30 -> List<bool>
+  19:1-19:6 -> (any) => void
+  19:1-19:28 -> void
+  19:7-19:12 -> Child
+  19:7-19:21 -> (List<i32>) => string
+  19:7-19:27 -> string
+  19:13-19:21 -> (List<i32>) => string
+  19:22-19:26 -> List<i32>
+  20:1-20:6 -> (any) => void
+  20:1-20:31 -> void
+  20:7-20:12 -> Child
+  20:7-20:21 -> (List<string>) => string
+  20:7-20:30 -> string
+  20:13-20:21 -> (List<string>) => string
+  20:22-20:29 -> List<string>
+  21:1-21:6 -> (any) => void
+  21:1-21:35 -> void
+  21:7-21:15 -> Tri
+  21:7-21:24 -> (List<bool>) => string
+  21:7-21:34 -> string
+  21:16-21:24 -> (List<bool>) => string
+  21:25-21:33 -> List<bool>
+  22:1-22:6 -> (any) => void
+  22:1-22:31 -> void
+  22:7-22:15 -> Tri
+  22:7-22:24 -> (List<i32>) => string
+  22:7-22:30 -> string
+  22:16-22:24 -> (List<i32>) => string
+  22:25-22:29 -> List<i32>
+  23:1-23:6 -> (any) => void
+  23:1-23:34 -> void
+  23:7-23:15 -> Tri
+  23:7-23:24 -> (List<string>) => string
+  23:7-23:33 -> string
+  23:16-23:24 -> (List<string>) => string
+  23:25-23:32 -> List<string>
+
+Resolved types:
+  2:27-2:37 -> List<bool>
+  2:32-2:36 -> bool
+  2:39-2:45 -> string
+  3:27-3:36 -> List<i32>
+  3:32-3:35 -> i32
+  3:38-3:44 -> string
+  4:27-4:39 -> List<string>
+  4:32-4:38 -> string
+  4:41-4:47 -> string
+  7:34-7:43 -> List<i32>
+  7:39-7:42 -> i32
+  7:45-7:51 -> string
+  8:34-8:46 -> List<string>
+  8:39-8:45 -> string
+  8:48-8:54 -> string
+  10:37-10:40 -> Tri
+  11:34-11:44 -> List<bool>
+  11:39-11:43 -> bool
+  11:46-11:52 -> string
+  14:17-14:20 -> Tri
+  15:17-15:27 -> List<bool>
+  15:22-15:26 -> bool
+  15:30-15:51 -> ArrayList<bool>
+  15:44-15:48 -> bool
+  16:13-16:22 -> List<i32>
+  16:18-16:21 -> i32
+  16:25-16:45 -> ArrayList<i32>
+  16:39-16:42 -> i32
+  17:16-17:28 -> List<string>
+  17:21-17:27 -> string
+  17:31-17:54 -> ArrayList<string>
+  17:45-17:51 -> string
+
+Declarations:
+  1:11-1:14 -> interface Tri
+  2:10-2:18 -> func describe(List<bool>) => string
+  2:19-2:25 -> const values: List<bool>
+  3:10-3:18 -> func describe(List<i32>) => string
+  3:19-3:25 -> const values: List<i32>
+  4:10-4:18 -> func describe(List<string>) => string
+  4:19-4:25 -> const values: List<string>
+  6:7-6:11 -> class Base
+  7:17-7:25 -> func describe(List<i32>) => string
+  7:26-7:32 -> const values: List<i32>
+  8:17-8:25 -> func describe(List<string>) => string
+  8:26-8:32 -> const values: List<string>
+  10:7-10:12 -> class Child
+  11:17-11:25 -> func describe(List<bool>) => string
+  11:26-11:32 -> const values: List<bool>
+  13:7-13:12 -> const child: Child
+  14:7-14:15 -> const contract: Tri
+  15:7-15:15 -> const booleans: List<bool>
+  16:7-16:11 -> const ints: List<i32>
+  17:7-17:14 -> const strings: List<string>
+
+References:
+  10:21-10:25 -> 6:7-6:11
+  13:19-13:24 -> 10:7-10:12
+  14:23-14:28 -> 13:7-13:12
+  15:34-15:43 -> 15:30-15:51
+  16:29-16:38 -> 16:25-16:45
+  17:35-17:44 -> 17:31-17:54
+  18:1-18:6 -> builtin print
+  18:7-18:12 -> 13:7-13:12
+  18:13-18:21 -> 11:17-11:25
+  18:22-18:30 -> 15:7-15:15
+  19:1-19:6 -> builtin print
+  19:7-19:12 -> 13:7-13:12
+  19:13-19:21 -> 7:17-7:25
+  19:22-19:26 -> 16:7-16:11
+  20:1-20:6 -> builtin print
+  20:7-20:12 -> 13:7-13:12
+  20:13-20:21 -> 8:17-8:25
+  20:22-20:29 -> 17:7-17:14
+  21:1-21:6 -> builtin print
+  21:7-21:15 -> 14:7-14:15
+  21:16-21:24 -> 2:10-2:18
+  21:25-21:33 -> 15:7-15:15
+  22:1-22:6 -> builtin print
+  22:7-22:15 -> 14:7-14:15
+  22:16-22:24 -> 3:10-3:18
+  22:25-22:29 -> 16:7-16:11
+  23:1-23:6 -> builtin print
+  23:7-23:15 -> 14:7-14:15
+  23:16-23:24 -> 4:10-4:18
+  23:25-23:32 -> 17:7-17:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Tri
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Tri flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  field child LTest$Child; flags [PUBLIC, STATIC, FINAL]
+  field contract LTest$Tri; flags [PUBLIC, STATIC, FINAL]
+  field booleans Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Boolean;>;
+  field ints Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/Integer;>;
+  field strings Ljava/util/List; flags [PUBLIC, STATIC, FINAL]
+    signature Ljava/util/List<Ljava/lang/String;>;
+  method <clinit>()V flags [STATIC]
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    PUTSTATIC Test.child LTest$Child;
+    GETSTATIC Test.child LTest$Child;
+    PUTSTATIC Test.contract LTest$Tri;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.booleans Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.ints Ljava/util/List;
+    NEW java/util/ArrayList
+    DUP
+    INVOKESPECIAL java/util/ArrayList.<init>()V
+    PUTSTATIC Test.strings Ljava/util/List;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    GETSTATIC Test.booleans Ljava/util/List;
+    INVOKEVIRTUAL Test$Child.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    GETSTATIC Test.ints Ljava/util/List;
+    INVOKEVIRTUAL Test$Base.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.child LTest$Child;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEVIRTUAL Test$Base.describe$3(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.contract LTest$Tri;
+    GETSTATIC Test.booleans Ljava/util/List;
+    INVOKEINTERFACE Test$Tri.describe$1(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.contract LTest$Tri;
+    GETSTATIC Test.ints Ljava/util/List;
+    INVOKEINTERFACE Test$Tri.describe$2(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.contract LTest$Tri;
+    GETSTATIC Test.strings Ljava/util/List;
+    INVOKEINTERFACE Test$Tri.describe$3(Ljava/util/List;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Tri extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Tri flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 2
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 2
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Tri
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Boolean;>;)Ljava/lang/String;
+    LDC "booleans"
+    ARETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+booleans
+integers
+strings
+booleans
+integers
+strings

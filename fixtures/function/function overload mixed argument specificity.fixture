@@ -1,0 +1,304 @@
+func foo(a: i32, b: string, c: bool) string { return "narrow"; }
+func foo(x: i64, c: bool, b: string) string { return "wide"; }
+print(foo(1, b: "s", c: true));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "a" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+COMMA (1:16-1:17)
+IDENTIFIER "b" (1:18-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "string" (1:21-1:27)
+COMMA (1:27-1:28)
+IDENTIFIER "c" (1:29-1:30)
+COLON (1:30-1:31)
+IDENTIFIER "bool" (1:32-1:36)
+RIGHT_PAREN (1:36-1:37)
+IDENTIFIER "string" (1:38-1:44)
+LEFT_BRACE (1:45-1:46)
+RETURN (1:47-1:53)
+STRING_LITERAL "\"narrow\"" (1:54-1:62)
+SEMICOLON (1:62-1:63)
+RIGHT_BRACE (1:64-1:65)
+FUNC (2:1-2:5)
+IDENTIFIER "foo" (2:6-2:9)
+LEFT_PAREN (2:9-2:10)
+IDENTIFIER "x" (2:10-2:11)
+COLON (2:11-2:12)
+IDENTIFIER "i64" (2:13-2:16)
+COMMA (2:16-2:17)
+IDENTIFIER "c" (2:18-2:19)
+COLON (2:19-2:20)
+IDENTIFIER "bool" (2:21-2:25)
+COMMA (2:25-2:26)
+IDENTIFIER "b" (2:27-2:28)
+COLON (2:28-2:29)
+IDENTIFIER "string" (2:30-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+LEFT_BRACE (2:45-2:46)
+RETURN (2:47-2:53)
+STRING_LITERAL "\"wide\"" (2:54-2:60)
+SEMICOLON (2:60-2:61)
+RIGHT_BRACE (2:62-2:63)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "foo" (3:7-3:10)
+LEFT_PAREN (3:10-3:11)
+INTEGER_LITERAL "1" (3:11-3:12)
+COMMA (3:12-3:13)
+IDENTIFIER "b" (3:14-3:15)
+COLON (3:15-3:16)
+STRING_LITERAL "\"s\"" (3:17-3:20)
+COMMA (3:20-3:21)
+IDENTIFIER "c" (3:22-3:23)
+COLON (3:23-3:24)
+BOOLEAN_LITERAL "true" (3:25-3:29)
+RIGHT_PAREN (3:29-3:30)
+RIGHT_PAREN (3:30-3:31)
+SEMICOLON (3:31-3:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:32
+  (FunctionDeclaration
+    range: 1:1-1:65
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:16
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:18-1:27
+      (IdentifierDeclaration
+        range: 1:18-1:19
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:21-1:27
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:29-1:36
+      (IdentifierDeclaration
+        range: 1:29-1:30
+        name: "c"
+      )
+      (NamedTypeNode
+        range: 1:32-1:36
+        name: "bool"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:38-1:44
+      name: "string"
+    )
+    (BlockStatement
+      range: 1:45-1:65
+      (ReturnStatement
+        range: 1:47-1:63
+        (LiteralExpression
+          range: 1:54-1:62
+          kind: STRING
+          text: "\"narrow\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:63
+    (IdentifierDeclaration
+      range: 2:6-2:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 2:10-2:16
+      (IdentifierDeclaration
+        range: 2:10-2:11
+        name: "x"
+      )
+      (NamedTypeNode
+        range: 2:13-2:16
+        name: "i64"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 2:18-2:25
+      (IdentifierDeclaration
+        range: 2:18-2:19
+        name: "c"
+      )
+      (NamedTypeNode
+        range: 2:21-2:25
+        name: "bool"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 2:27-2:36
+      (IdentifierDeclaration
+        range: 2:27-2:28
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 2:30-2:36
+        name: "string"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:38-2:44
+      name: "string"
+    )
+    (BlockStatement
+      range: 2:45-2:63
+      (ReturnStatement
+        range: 2:47-2:61
+        (LiteralExpression
+          range: 2:54-2:60
+          kind: STRING
+          text: "\"wide\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:32
+    (CallExpression
+      range: 3:1-3:31
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:30
+        (IdentifierExpression
+          range: 3:7-3:10
+          name: "foo"
+        )
+        (LiteralExpression
+          range: 3:11-3:12
+          kind: INT
+          text: "1"
+        )
+        (NamedArgumentExpression
+          range: 3:14-3:20
+          (IdentifierDeclaration
+            range: 3:14-3:15
+            name: "b"
+          )
+          (LiteralExpression
+            range: 3:17-3:20
+            kind: STRING
+            text: "\"s\""
+          )
+        )
+        (NamedArgumentExpression
+          range: 3:22-3:29
+          (IdentifierDeclaration
+            range: 3:22-3:23
+            name: "c"
+          )
+          (LiteralExpression
+            range: 3:25-3:29
+            kind: BOOL
+            text: "true"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:54-1:62 -> string
+  2:54-2:60 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:31 -> void
+  3:7-3:10 -> (i32, string, bool) => string
+  3:7-3:30 -> string
+  3:11-3:12 -> i32
+  3:17-3:20 -> string
+  3:25-3:29 -> bool
+
+Resolved types:
+  1:13-1:16 -> i32
+  1:21-1:27 -> string
+  1:32-1:36 -> bool
+  1:38-1:44 -> string
+  2:13-2:16 -> i64
+  2:21-2:25 -> bool
+  2:30-2:36 -> string
+  2:38-2:44 -> string
+
+Declarations:
+  1:6-1:9 -> func foo(i32, string, bool) => string
+  1:10-1:11 -> const a: i32
+  1:18-1:19 -> const b: string
+  1:29-1:30 -> const c: bool
+  2:6-2:9 -> func foo(i64, bool, string) => string
+  2:10-2:11 -> const x: i64
+  2:18-2:19 -> const c: bool
+  2:27-2:28 -> const b: string
+
+References:
+  3:1-3:6 -> builtin print
+  3:7-3:10 -> 1:6-1:9
+
+Named arguments:
+  3:14-3:15 -> parameter 1:18-1:19
+  3:22-3:23 -> parameter 1:29-1:30
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method foo(ILjava/lang/String;Z)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "narrow"
+    ARETURN
+    max stack 1 max locals 3
+  method foo(JZLjava/lang/String;)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "wide"
+    ARETURN
+    max stack 1 max locals 4
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC 1
+    LDC "s"
+    ICONST_1 1
+    INVOKESTATIC Test.foo(ILjava/lang/String;Z)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+narrow

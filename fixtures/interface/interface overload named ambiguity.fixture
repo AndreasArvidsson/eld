@@ -1,0 +1,128 @@
+interface Printer {
+    func describe(a: i32, b: string) string;
+    func describe(b: string, a: i32) string;
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Printer" (1:11-1:18)
+LEFT_BRACE (1:19-1:20)
+FUNC (2:5-2:9)
+IDENTIFIER "describe" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "a" (2:19-2:20)
+COLON (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+COMMA (2:25-2:26)
+IDENTIFIER "b" (2:27-2:28)
+COLON (2:28-2:29)
+IDENTIFIER "string" (2:30-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+SEMICOLON (2:44-2:45)
+FUNC (3:5-3:9)
+IDENTIFIER "describe" (3:10-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "b" (3:19-3:20)
+COLON (3:20-3:21)
+IDENTIFIER "string" (3:22-3:28)
+COMMA (3:28-3:29)
+IDENTIFIER "a" (3:30-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "i32" (3:33-3:36)
+RIGHT_PAREN (3:36-3:37)
+IDENTIFIER "string" (3:38-3:44)
+SEMICOLON (3:44-3:45)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:2
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:18
+      name: "Printer"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:45
+      (IdentifierDeclaration
+        range: 2:10-2:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 2:19-2:25
+        (IdentifierDeclaration
+          range: 2:19-2:20
+          name: "a"
+        )
+        (NamedTypeNode
+          range: 2:22-2:25
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 2:27-2:36
+        (IdentifierDeclaration
+          range: 2:27-2:28
+          name: "b"
+        )
+        (NamedTypeNode
+          range: 2:30-2:36
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:38-2:44
+        name: "string"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:45
+      (IdentifierDeclaration
+        range: 3:10-3:18
+        name: "describe"
+      )
+      (FunctionParameter
+        range: 3:19-3:28
+        (IdentifierDeclaration
+          range: 3:19-3:20
+          name: "b"
+        )
+        (NamedTypeNode
+          range: 3:22-3:28
+          name: "string"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 3:30-3:36
+        (IdentifierDeclaration
+          range: 3:30-3:31
+          name: "a"
+        )
+        (NamedTypeNode
+          range: 3:33-3:36
+          name: "i32"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:38-3:44
+        name: "string"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous overload of 'describe': overlapping callable signatures at 3:10-3:18

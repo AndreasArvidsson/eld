@@ -1,0 +1,271 @@
+class C {
+    public var value: i32 = 0;
+    public func f(x: i32) i32 { return 1; }
+    public func f(x: string) i32 { this.value = 2; return this.value; }
+}
+const c: const C = new C();
+print(c.f("x"));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "C" (1:7-1:8)
+LEFT_BRACE (1:9-1:10)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+COLON (2:21-2:22)
+IDENTIFIER "i32" (2:23-2:26)
+EQUAL (2:27-2:28)
+INTEGER_LITERAL "0" (2:29-2:30)
+SEMICOLON (2:30-2:31)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "f" (3:17-3:18)
+LEFT_PAREN (3:18-3:19)
+IDENTIFIER "x" (3:19-3:20)
+COLON (3:20-3:21)
+IDENTIFIER "i32" (3:22-3:25)
+RIGHT_PAREN (3:25-3:26)
+IDENTIFIER "i32" (3:27-3:30)
+LEFT_BRACE (3:31-3:32)
+RETURN (3:33-3:39)
+INTEGER_LITERAL "1" (3:40-3:41)
+SEMICOLON (3:41-3:42)
+RIGHT_BRACE (3:43-3:44)
+PUBLIC (4:5-4:11)
+FUNC (4:12-4:16)
+IDENTIFIER "f" (4:17-4:18)
+LEFT_PAREN (4:18-4:19)
+IDENTIFIER "x" (4:19-4:20)
+COLON (4:20-4:21)
+IDENTIFIER "string" (4:22-4:28)
+RIGHT_PAREN (4:28-4:29)
+IDENTIFIER "i32" (4:30-4:33)
+LEFT_BRACE (4:34-4:35)
+THIS (4:36-4:40)
+DOT (4:40-4:41)
+IDENTIFIER "value" (4:41-4:46)
+EQUAL (4:47-4:48)
+INTEGER_LITERAL "2" (4:49-4:50)
+SEMICOLON (4:50-4:51)
+RETURN (4:52-4:58)
+THIS (4:59-4:63)
+DOT (4:63-4:64)
+IDENTIFIER "value" (4:64-4:69)
+SEMICOLON (4:69-4:70)
+RIGHT_BRACE (4:71-4:72)
+RIGHT_BRACE (5:1-5:2)
+CONST (6:1-6:6)
+IDENTIFIER "c" (6:7-6:8)
+COLON (6:8-6:9)
+CONST (6:10-6:15)
+IDENTIFIER "C" (6:16-6:17)
+EQUAL (6:18-6:19)
+NEW (6:20-6:23)
+IDENTIFIER "C" (6:24-6:25)
+LEFT_PAREN (6:25-6:26)
+RIGHT_PAREN (6:26-6:27)
+SEMICOLON (6:27-6:28)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "c" (7:7-7:8)
+DOT (7:8-7:9)
+IDENTIFIER "f" (7:9-7:10)
+LEFT_PAREN (7:10-7:11)
+STRING_LITERAL "\"x\"" (7:11-7:14)
+RIGHT_PAREN (7:14-7:15)
+RIGHT_PAREN (7:15-7:16)
+SEMICOLON (7:16-7:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:17
+  (ClassDeclaration
+    range: 1:1-5:2
+    (IdentifierDeclaration
+      range: 1:7-1:8
+      name: "C"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:31
+      visibility: PUBLIC
+      (VariableDeclaration
+        range: 2:12-2:31
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:23-2:26
+          name: "i32"
+        )
+        (LiteralExpression
+          range: 2:29-2:30
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:44
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:44
+        (IdentifierDeclaration
+          range: 3:17-3:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 3:19-3:25
+          (IdentifierDeclaration
+            range: 3:19-3:20
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 3:22-3:25
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:27-3:30
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:31-3:44
+          (ReturnStatement
+            range: 3:33-3:42
+            (LiteralExpression
+              range: 3:40-3:41
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:72
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-4:72
+        (IdentifierDeclaration
+          range: 4:17-4:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 4:19-4:28
+          (IdentifierDeclaration
+            range: 4:19-4:20
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 4:22-4:28
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 4:30-4:33
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:34-4:72
+          (AssignmentStatement
+            range: 4:36-4:51
+            (MemberExpression
+              range: 4:36-4:46
+              (ThisExpression
+                range: 4:36-4:40
+              )
+              (IdentifierExpression
+                range: 4:41-4:46
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 4:49-4:50
+              kind: INT
+              text: "2"
+            )
+          )
+          (ReturnStatement
+            range: 4:52-4:70
+            (MemberExpression
+              range: 4:59-4:69
+              (ThisExpression
+                range: 4:59-4:63
+              )
+              (IdentifierExpression
+                range: 4:64-4:69
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:8
+      name: "c"
+    )
+    (ConstTypeNode
+      range: 6:10-6:17
+      (NamedTypeNode
+        range: 6:16-6:17
+        name: "C"
+      )
+    )
+    (NewExpression
+      range: 6:20-6:27
+      (IdentifierExpression
+        range: 6:24-6:25
+        name: "C"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:17
+    (CallExpression
+      range: 7:1-7:16
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:15
+        (MemberExpression
+          range: 7:7-7:10
+          (IdentifierExpression
+            range: 7:7-7:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 7:9-7:10
+            name: "f"
+          )
+        )
+        (LiteralExpression
+          range: 7:11-7:14
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot call mutating method 'f' through a const object at 7:7-7:10

@@ -1,0 +1,357 @@
+class Base {
+    public const func f(value: i32) i32 { return 1; }
+}
+class Child extends Base {
+    public func f(value: string) i32 { return 2; }
+}
+const func test(value: Base) i32 { return value.f(1); }
+print(test(new Child()));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+FUNC (2:18-2:22)
+IDENTIFIER "f" (2:23-2:24)
+LEFT_PAREN (2:24-2:25)
+IDENTIFIER "value" (2:25-2:30)
+COLON (2:30-2:31)
+IDENTIFIER "i32" (2:32-2:35)
+RIGHT_PAREN (2:35-2:36)
+IDENTIFIER "i32" (2:37-2:40)
+LEFT_BRACE (2:41-2:42)
+RETURN (2:43-2:49)
+INTEGER_LITERAL "1" (2:50-2:51)
+SEMICOLON (2:51-2:52)
+RIGHT_BRACE (2:53-2:54)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Child" (4:7-4:12)
+EXTENDS (4:13-4:20)
+IDENTIFIER "Base" (4:21-4:25)
+LEFT_BRACE (4:26-4:27)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "f" (5:17-5:18)
+LEFT_PAREN (5:18-5:19)
+IDENTIFIER "value" (5:19-5:24)
+COLON (5:24-5:25)
+IDENTIFIER "string" (5:26-5:32)
+RIGHT_PAREN (5:32-5:33)
+IDENTIFIER "i32" (5:34-5:37)
+LEFT_BRACE (5:38-5:39)
+RETURN (5:40-5:46)
+INTEGER_LITERAL "2" (5:47-5:48)
+SEMICOLON (5:48-5:49)
+RIGHT_BRACE (5:50-5:51)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+FUNC (7:7-7:11)
+IDENTIFIER "test" (7:12-7:16)
+LEFT_PAREN (7:16-7:17)
+IDENTIFIER "value" (7:17-7:22)
+COLON (7:22-7:23)
+IDENTIFIER "Base" (7:24-7:28)
+RIGHT_PAREN (7:28-7:29)
+IDENTIFIER "i32" (7:30-7:33)
+LEFT_BRACE (7:34-7:35)
+RETURN (7:36-7:42)
+IDENTIFIER "value" (7:43-7:48)
+DOT (7:48-7:49)
+IDENTIFIER "f" (7:49-7:50)
+LEFT_PAREN (7:50-7:51)
+INTEGER_LITERAL "1" (7:51-7:52)
+RIGHT_PAREN (7:52-7:53)
+SEMICOLON (7:53-7:54)
+RIGHT_BRACE (7:55-7:56)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "test" (8:7-8:11)
+LEFT_PAREN (8:11-8:12)
+NEW (8:12-8:15)
+IDENTIFIER "Child" (8:16-8:21)
+LEFT_PAREN (8:21-8:22)
+RIGHT_PAREN (8:22-8:23)
+RIGHT_PAREN (8:23-8:24)
+RIGHT_PAREN (8:24-8:25)
+SEMICOLON (8:25-8:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:26
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:54
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:54
+        CONST
+        (IdentifierDeclaration
+          range: 2:23-2:24
+          name: "f"
+        )
+        (FunctionParameter
+          range: 2:25-2:35
+          (IdentifierDeclaration
+            range: 2:25-2:30
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:32-2:35
+            name: "i32"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:37-2:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:41-2:54
+          (ReturnStatement
+            range: 2:43-2:52
+            (LiteralExpression
+              range: 2:50-2:51
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "Child"
+    )
+    (IdentifierExpression
+      range: 4:21-4:25
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 5:5-5:51
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-5:51
+        (IdentifierDeclaration
+          range: 5:17-5:18
+          name: "f"
+        )
+        (FunctionParameter
+          range: 5:19-5:32
+          (IdentifierDeclaration
+            range: 5:19-5:24
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 5:26-5:32
+            name: "string"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 5:34-5:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:38-5:51
+          (ReturnStatement
+            range: 5:40-5:49
+            (LiteralExpression
+              range: 5:47-5:48
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-7:56
+    CONST
+    (IdentifierDeclaration
+      range: 7:12-7:16
+      name: "test"
+    )
+    (FunctionParameter
+      range: 7:17-7:28
+      (IdentifierDeclaration
+        range: 7:17-7:22
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 7:24-7:28
+        name: "Base"
+      )
+      optional: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 7:30-7:33
+      name: "i32"
+    )
+    (BlockStatement
+      range: 7:34-7:56
+      (ReturnStatement
+        range: 7:36-7:54
+        (CallExpression
+          range: 7:43-7:53
+          (MemberExpression
+            range: 7:43-7:50
+            (IdentifierExpression
+              range: 7:43-7:48
+              name: "value"
+            )
+            (IdentifierExpression
+              range: 7:49-7:50
+              name: "f"
+            )
+          )
+          (LiteralExpression
+            range: 7:51-7:52
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:26
+    (CallExpression
+      range: 8:1-8:25
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:24
+        (IdentifierExpression
+          range: 8:7-8:11
+          name: "test"
+        )
+        (NewExpression
+          range: 8:12-8:23
+          (IdentifierExpression
+            range: 8:16-8:21
+            name: "Child"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:50-2:51 -> i32
+  4:21-4:25 -> Base
+  5:47-5:48 -> i32
+  7:43-7:48 -> Base
+  7:43-7:50 -> (i32) => i32
+  7:43-7:53 -> i32
+  7:49-7:50 -> (i32) => i32
+  7:51-7:52 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:25 -> void
+  8:7-8:11 -> (Base) => i32
+  8:7-8:24 -> i32
+  8:12-8:23 -> Child
+  8:16-8:21 -> Child
+
+Resolved types:
+  2:32-2:35 -> i32
+  2:37-2:40 -> i32
+  5:26-5:32 -> string
+  5:34-5:37 -> i32
+  7:24-7:28 -> Base
+  7:30-7:33 -> i32
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:23-2:24 -> const func f(i32) => i32
+  2:25-2:30 -> const value: i32
+  4:7-4:12 -> class Child
+  5:17-5:18 -> func f(string) => i32
+  5:19-5:24 -> const value: string
+  7:12-7:16 -> const func test(Base) => i32
+  7:17-7:22 -> const value: Base
+
+References:
+  4:21-4:25 -> 1:7-1:11
+  7:43-7:48 -> 7:17-7:22
+  7:49-7:50 -> 2:23-2:24
+  8:1-8:6 -> builtin print
+  8:7-8:11 -> 7:12-7:16
+  8:16-8:21 -> 4:7-4:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Child
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method test(LTest$Base;)I flags [PUBLIC, STATIC]
+    ALOAD_0 0
+    LDC 1
+    INVOKEVIRTUAL Test$Base.f(I)I
+    IRETURN
+    max stack 2 max locals 1
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Child
+    DUP
+    INVOKESPECIAL Test$Child.<init>()V
+    INVOKESTATIC Test.test(LTest$Base;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method f(I)I flags [PUBLIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 2
+
+class Test$Child extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Child flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method f(Ljava/lang/String;)I flags [PUBLIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 2
+
+--- OUTPUT ---
+
+1

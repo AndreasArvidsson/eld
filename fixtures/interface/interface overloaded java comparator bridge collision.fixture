@@ -1,0 +1,250 @@
+interface I { func compare(left: any, right: any) i32; }
+class C implements I, Comparator<C> {
+    public func compare(left: any, right: any) i32 { return 2; }
+    public func compare(left: C, right: C) i32 { return 1; }
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "I" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (1:15-1:19)
+IDENTIFIER "compare" (1:20-1:27)
+LEFT_PAREN (1:27-1:28)
+IDENTIFIER "left" (1:28-1:32)
+COLON (1:32-1:33)
+IDENTIFIER "any" (1:34-1:37)
+COMMA (1:37-1:38)
+IDENTIFIER "right" (1:39-1:44)
+COLON (1:44-1:45)
+IDENTIFIER "any" (1:46-1:49)
+RIGHT_PAREN (1:49-1:50)
+IDENTIFIER "i32" (1:51-1:54)
+SEMICOLON (1:54-1:55)
+RIGHT_BRACE (1:56-1:57)
+CLASS (2:1-2:6)
+IDENTIFIER "C" (2:7-2:8)
+IMPLEMENTS (2:9-2:19)
+IDENTIFIER "I" (2:20-2:21)
+COMMA (2:21-2:22)
+IDENTIFIER "Comparator" (2:23-2:33)
+LESS (2:33-2:34)
+IDENTIFIER "C" (2:34-2:35)
+GREATER (2:35-2:36)
+LEFT_BRACE (2:37-2:38)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "compare" (3:17-3:24)
+LEFT_PAREN (3:24-3:25)
+IDENTIFIER "left" (3:25-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "any" (3:31-3:34)
+COMMA (3:34-3:35)
+IDENTIFIER "right" (3:36-3:41)
+COLON (3:41-3:42)
+IDENTIFIER "any" (3:43-3:46)
+RIGHT_PAREN (3:46-3:47)
+IDENTIFIER "i32" (3:48-3:51)
+LEFT_BRACE (3:52-3:53)
+RETURN (3:54-3:60)
+INTEGER_LITERAL "2" (3:61-3:62)
+SEMICOLON (3:62-3:63)
+RIGHT_BRACE (3:64-3:65)
+PUBLIC (4:5-4:11)
+FUNC (4:12-4:16)
+IDENTIFIER "compare" (4:17-4:24)
+LEFT_PAREN (4:24-4:25)
+IDENTIFIER "left" (4:25-4:29)
+COLON (4:29-4:30)
+IDENTIFIER "C" (4:31-4:32)
+COMMA (4:32-4:33)
+IDENTIFIER "right" (4:34-4:39)
+COLON (4:39-4:40)
+IDENTIFIER "C" (4:41-4:42)
+RIGHT_PAREN (4:42-4:43)
+IDENTIFIER "i32" (4:44-4:47)
+LEFT_BRACE (4:48-4:49)
+RETURN (4:50-4:56)
+INTEGER_LITERAL "1" (4:57-4:58)
+SEMICOLON (4:58-4:59)
+RIGHT_BRACE (4:60-4:61)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (InterfaceDeclaration
+    range: 1:1-1:57
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "I"
+    )
+    (InterfaceMethodDeclaration
+      range: 1:15-1:55
+      (IdentifierDeclaration
+        range: 1:20-1:27
+        name: "compare"
+      )
+      (FunctionParameter
+        range: 1:28-1:37
+        (IdentifierDeclaration
+          range: 1:28-1:32
+          name: "left"
+        )
+        (NamedTypeNode
+          range: 1:34-1:37
+          name: "any"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (FunctionParameter
+        range: 1:39-1:49
+        (IdentifierDeclaration
+          range: 1:39-1:44
+          name: "right"
+        )
+        (NamedTypeNode
+          range: 1:46-1:49
+          name: "any"
+        )
+        optional: false
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 1:51-1:54
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 2:1-5:2
+    (IdentifierDeclaration
+      range: 2:7-2:8
+      name: "C"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 2:20-2:21
+      name: "I"
+    )
+    (NamedTypeNode
+      range: 2:23-2:36
+      name: "Comparator"
+      (NamedTypeNode
+        range: 2:34-2:35
+        name: "C"
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:65
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:65
+        (IdentifierDeclaration
+          range: 3:17-3:24
+          name: "compare"
+        )
+        (FunctionParameter
+          range: 3:25-3:34
+          (IdentifierDeclaration
+            range: 3:25-3:29
+            name: "left"
+          )
+          (NamedTypeNode
+            range: 3:31-3:34
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 3:36-3:46
+          (IdentifierDeclaration
+            range: 3:36-3:41
+            name: "right"
+          )
+          (NamedTypeNode
+            range: 3:43-3:46
+            name: "any"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:48-3:51
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:52-3:65
+          (ReturnStatement
+            range: 3:54-3:63
+            (LiteralExpression
+              range: 3:61-3:62
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:61
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 4:12-4:61
+        (IdentifierDeclaration
+          range: 4:17-4:24
+          name: "compare"
+        )
+        (FunctionParameter
+          range: 4:25-4:32
+          (IdentifierDeclaration
+            range: 4:25-4:29
+            name: "left"
+          )
+          (NamedTypeNode
+            range: 4:31-4:32
+            name: "C"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:34-4:42
+          (IdentifierDeclaration
+            range: 4:34-4:39
+            name: "right"
+          )
+          (NamedTypeNode
+            range: 4:41-4:42
+            name: "C"
+          )
+          optional: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 4:44-4:47
+          name: "i32"
+        )
+        (BlockStatement
+          range: 4:48-4:61
+          (ReturnStatement
+            range: 4:50-4:59
+            (LiteralExpression
+              range: 4:57-4:58
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Class C cannot implement 'compare(any, any)' and 'compare(C, C)': Java bridge collision at 2:1-5:2
