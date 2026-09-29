@@ -131,6 +131,7 @@ SEMICOLON (9:9-9:10)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -170,6 +171,7 @@ SEMICOLON (9:9-9:10)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

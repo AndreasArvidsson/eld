@@ -138,6 +138,7 @@ SEMICOLON (11:30-11:31)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -151,6 +152,7 @@ SEMICOLON (11:30-11:31)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -201,6 +203,7 @@ SEMICOLON (11:30-11:31)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -364,9 +367,9 @@ Expression types:
   8:1-8:6 -> (any) => void
   8:1-8:21 -> void
   8:7-8:10 -> Cat
-  8:7-8:17 -> (i32) => bool
+  8:7-8:17 -> (value: i32) => bool
   8:7-8:20 -> bool
-  8:11-8:17 -> (i32) => bool
+  8:11-8:17 -> (value: i32) => bool
   8:18-8:19 -> i32
   9:1-9:6 -> (any) => void
   9:1-9:18 -> void
@@ -396,11 +399,11 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> class Animal
-  2:24-2:29 -> func equal(Animal, Animal) => bool
+  2:24-2:29 -> func equal(a: Animal, b: Animal) => bool
   2:30-2:31 -> const a: Animal
   2:41-2:42 -> const b: Animal
   4:7-4:10 -> class Cat
-  5:17-5:23 -> func equals(i32) => bool
+  5:17-5:23 -> func equals(value: i32) => bool
   5:24-5:29 -> const value: i32
   7:7-7:10 -> const cat: Cat
 

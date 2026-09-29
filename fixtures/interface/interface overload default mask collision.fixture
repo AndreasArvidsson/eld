@@ -141,6 +141,7 @@ SEMICOLON (11:23-11:24)
           name: "string"
         )
         optional: true
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -172,6 +173,7 @@ SEMICOLON (11:23-11:24)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (FunctionParameter
@@ -185,6 +187,7 @@ SEMICOLON (11:23-11:24)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -224,6 +227,7 @@ SEMICOLON (11:23-11:24)
             name: "string"
           )
           optional: true
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -270,6 +274,7 @@ SEMICOLON (11:23-11:24)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -283,6 +288,7 @@ SEMICOLON (11:23-11:24)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -392,15 +398,15 @@ Expression types:
   10:1-10:6 -> (any) => void
   10:1-10:17 -> void
   10:7-10:12 -> I
-  10:7-10:14 -> (string | null) => string
+  10:7-10:14 -> (x: string | null) => string
   10:7-10:16 -> string
-  10:13-10:14 -> (string | null) => string
+  10:13-10:14 -> (x: string | null) => string
   11:1-11:6 -> (any) => void
   11:1-11:23 -> void
   11:7-11:12 -> I
-  11:7-11:14 -> (string | null, i32) => string
+  11:7-11:14 -> (x: string | null, y: i32) => string
   11:7-11:22 -> string
-  11:13-11:14 -> (string | null, i32) => string
+  11:13-11:14 -> (x: string | null, y: i32) => string
   11:15-11:18 -> string
   11:20-11:21 -> i32
 
@@ -427,15 +433,15 @@ Conversions:
 
 Declarations:
   1:11-1:12 -> interface I
-  2:10-2:11 -> func f(string | null) => string
+  2:10-2:11 -> func f(x: string | null) => string
   2:12-2:13 -> const x: string | null
-  3:10-3:11 -> func f(string | null, i32) => string
+  3:10-3:11 -> func f(x: string | null, y: i32) => string
   3:12-3:13 -> const x: string | null
   3:30-3:31 -> const y: i32
   5:7-5:8 -> class C
-  6:17-6:18 -> func f(string?) => string
+  6:17-6:18 -> func f(x?: string) => string
   6:19-6:20 -> const x: string | null
-  7:17-7:18 -> func f(string | null, i32) => string
+  7:17-7:18 -> func f(x: string | null, y: i32) => string
   7:19-7:20 -> const x: string | null
   7:37-7:38 -> const y: i32
   9:7-9:12 -> const value: I

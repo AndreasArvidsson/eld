@@ -160,6 +160,7 @@ SEMICOLON (20:35-20:36)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -247,6 +248,7 @@ SEMICOLON (20:35-20:36)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -415,9 +417,9 @@ SEMICOLON (20:35-20:36)
 Expression types:
   3:16-3:20 -> bool
   6:16-6:20 -> PrivateFoo
-  6:16-6:27 -> (i32) => bool
+  6:16-6:27 -> (value: i32) => bool
   6:16-6:30 -> bool
-  6:21-6:27 -> (i32) => bool
+  6:21-6:27 -> (value: i32) => bool
   6:28-6:29 -> i32
   11:16-11:20 -> bool
   15:20-15:36 -> PrivateFoo
@@ -440,9 +442,9 @@ Expression types:
   19:1-19:6 -> (any) => void
   19:1-19:27 -> void
   19:7-19:16 -> StaticFoo
-  19:7-19:23 -> (i32) => bool
+  19:7-19:23 -> (value: i32) => bool
   19:7-19:26 -> bool
-  19:17-19:23 -> (i32) => bool
+  19:17-19:23 -> (value: i32) => bool
   19:24-19:25 -> i32
   20:1-20:6 -> (any) => void
   20:1-20:35 -> void
@@ -461,11 +463,11 @@ Resolved types:
 
 Declarations:
   1:7-1:17 -> class PrivateFoo
-  2:10-2:16 -> func equals(i32) => bool
+  2:10-2:16 -> func equals(value: i32) => bool
   2:17-2:22 -> const value: i32
   5:17-5:22 -> func check() => bool
   9:7-9:16 -> class StaticFoo
-  10:24-10:30 -> func equals(i32) => bool
+  10:24-10:30 -> func equals(value: i32) => bool
   10:31-10:36 -> const value: i32
   15:7-15:17 -> const privateFoo: PrivateFoo
   16:7-16:16 -> const staticFoo: StaticFoo

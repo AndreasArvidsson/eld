@@ -209,6 +209,7 @@ SEMICOLON (17:25-17:26)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement
@@ -254,6 +255,7 @@ SEMICOLON (17:25-17:26)
             name: "Person"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -620,7 +622,7 @@ Declarations:
   2:18-2:21 -> const age: i32
   3:12-5:6 -> constructor(age: i32)
   3:24-3:27 -> const age: i32
-  6:17-6:26 -> func compareTo(Person) => i32
+  6:17-6:26 -> func compareTo(other: Person) => i32
   6:27-6:32 -> const other: Person
   10:7-10:13 -> const people: ArrayList<Person>
 

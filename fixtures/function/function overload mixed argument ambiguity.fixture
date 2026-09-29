@@ -67,6 +67,7 @@ RIGHT_BRACE (2:64-2:65)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -80,6 +81,7 @@ RIGHT_BRACE (2:64-2:65)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -93,6 +95,7 @@ RIGHT_BRACE (2:64-2:65)
         name: "bool"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -128,6 +131,7 @@ RIGHT_BRACE (2:64-2:65)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -141,6 +145,7 @@ RIGHT_BRACE (2:64-2:65)
         name: "bool"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -154,6 +159,7 @@ RIGHT_BRACE (2:64-2:65)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode

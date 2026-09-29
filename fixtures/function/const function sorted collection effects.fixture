@@ -127,6 +127,7 @@ RIGHT_BRACE (13:1-13:2)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

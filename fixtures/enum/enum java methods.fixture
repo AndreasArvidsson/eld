@@ -309,10 +309,10 @@ Expression types:
   9:1-9:6 -> (any) => void
   9:1-9:53 -> void
   9:7-9:16 -> Direction
-  9:7-9:24 -> (string) => Direction
+  9:7-9:24 -> (name: string) => Direction
   9:7-9:33 -> Direction
   9:7-9:52 -> bool
-  9:17-9:24 -> (string) => Direction
+  9:17-9:24 -> (name: string) => Direction
   9:25-9:32 -> string
   9:37-9:46 -> Direction
   9:37-9:52 -> Direction

@@ -184,6 +184,7 @@ SEMICOLON (21:52-21:53)
             name: "Base"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -305,6 +306,7 @@ SEMICOLON (21:52-21:53)
             name: "Base"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -318,6 +320,7 @@ SEMICOLON (21:52-21:53)
             name: "Base"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -459,12 +462,12 @@ Resolved types:
 
 Declarations:
   1:16-1:20 -> class Base
-  2:17-2:26 -> func compareTo(Base) => i32
+  2:17-2:26 -> func compareTo(other: Base) => i32
   2:27-2:32 -> const other: Base
   7:7-7:12 -> class Child
   9:7-9:17 -> const comparable: Comparable<Base>
   12:16-12:24 -> class Ordering
-  13:17-13:24 -> func compare(Base, Base) => i32
+  13:17-13:24 -> func compare(a: Base, b: Base) => i32
   13:25-13:26 -> const a: Base
   13:34-13:35 -> const b: Base
   18:7-18:20 -> class ChildOrdering

@@ -167,6 +167,7 @@ SEMICOLON (10:44-10:45)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -222,6 +223,7 @@ SEMICOLON (10:44-10:45)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -265,6 +267,7 @@ SEMICOLON (10:44-10:45)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -415,4 +418,4 @@ SEMICOLON (10:44-10:45)
 
 --- SEMANTIC ---
 
-SemanticException: Class C cannot implement 'compareTo(List<string>)' and 'compareTo(List<i32>)': Java bridge collision at 2:1-5:2
+SemanticException: Class C cannot implement 'compareTo(other: List<string>)' and 'compareTo(List<i32>)': Java bridge collision at 2:1-5:2

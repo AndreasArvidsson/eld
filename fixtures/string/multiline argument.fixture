@@ -51,6 +51,7 @@ SEMICOLON (7:5-7:6)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -106,7 +107,7 @@ Expression types:
   2:11-2:16 -> string
   2:11-2:34 -> bool
   2:20-2:34 -> string
-  4:1-4:8 -> (string) => void
+  4:1-4:8 -> (value: string) => void
   4:1-7:5 -> void
   4:9-7:4 -> string
 
@@ -114,7 +115,7 @@ Resolved types:
   1:21-1:27 -> string
 
 Declarations:
-  1:6-1:13 -> func consume(string) => void
+  1:6-1:13 -> func consume(value: string) => void
   1:14-1:19 -> const value: string
 
 References:

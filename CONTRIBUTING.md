@@ -185,12 +185,14 @@ protected const bar = 0;
 
 ### Miscellaneous
 
+- Clean up ast
+  - OVERRIDE => override: false
+  - functions have CONST. => constant: true
+  - AstPrinter on purpose hides false abstractClass, staticMember, staticMember. Show these explicitly.
 - Sealed classes/interfaces
   - class Animal {} // extensible
   - class Animal permits Dog, Cat {} // only Dog and Cat may extend this
   - class Animal permits {} // nothing may extend this
-- Add python \* operator to force following parameters to be used named only
-  - treat \* purely as a parameter-list marker, not an AST parameter itself. Parameters after it get namedOnly: true.
 - String std lib
 - Collections std lib
 - create literal types from collection elements

@@ -290,6 +290,7 @@ SEMICOLON (29:36-29:37)
             name: "Box"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -303,6 +304,7 @@ SEMICOLON (29:36-29:37)
             name: "Box"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -354,6 +356,7 @@ SEMICOLON (29:36-29:37)
             name: "Child"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -367,6 +370,7 @@ SEMICOLON (29:36-29:37)
             name: "Child"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -921,11 +925,11 @@ Conversions:
 Declarations:
   1:11-1:17 -> interface Marker
   2:7-2:10 -> class Box
-  3:24-3:29 -> func equal(Box, Box) => bool
+  3:24-3:29 -> func equal(a: Box, b: Box) => bool
   3:30-3:31 -> const a: Box
   3:38-3:39 -> const b: Box
   5:7-5:12 -> class Child
-  6:24-6:29 -> func equal(Child, Child) => bool
+  6:24-6:29 -> func equal(a: Child, b: Child) => bool
   6:30-6:31 -> const a: Child
   6:40-6:41 -> const b: Child
   9:7-9:12 -> const first: Box

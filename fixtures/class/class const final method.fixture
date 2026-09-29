@@ -111,6 +111,7 @@ SEMICOLON (10:28-10:29)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           (LiteralExpression
             range: 4:49-4:51
             kind: INT
@@ -204,10 +205,10 @@ Expression types:
   10:1-10:6 -> (any) => void
   10:1-10:28 -> void
   10:7-10:18 -> Value
-  10:7-10:25 -> (i32) => i32
+  10:7-10:25 -> (value: i32) => i32
   10:7-10:27 -> i32
   10:11-10:16 -> Value
-  10:19-10:25 -> (i32) => i32
+  10:19-10:25 -> (value: i32) => i32
 
 Resolved types:
   4:43-4:46 -> i32
@@ -216,7 +217,7 @@ Resolved types:
 Declarations:
   1:7-1:12 -> class Value
   2:11-2:17 -> const factor: i32
-  4:29-4:35 -> const final func double(i32?) => i32
+  4:29-4:35 -> const final func double(value?: i32) => i32
   4:36-4:41 -> const value: i32
   5:13-5:19 -> var result: i32
 

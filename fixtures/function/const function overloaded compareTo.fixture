@@ -131,6 +131,7 @@ SEMICOLON (10:16-10:17)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -171,6 +172,7 @@ SEMICOLON (10:16-10:17)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -312,9 +314,9 @@ Resolved types:
 
 Declarations:
   1:7-1:12 -> class Value
-  2:17-2:26 -> func compareTo(i32) => i32
+  2:17-2:26 -> func compareTo(other: i32) => i32
   2:27-2:32 -> const other: i32
-  3:23-3:32 -> const func compareTo(Value) => i32
+  3:23-3:32 -> const func compareTo(other: Value) => i32
   3:33-3:38 -> const other: Value
   5:12-5:18 -> const func sorted() => void
   6:9-6:15 -> var values: List<Value>

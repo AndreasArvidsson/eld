@@ -82,6 +82,7 @@ RIGHT_BRACE (8:1-8:2)
             name: "bool"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement

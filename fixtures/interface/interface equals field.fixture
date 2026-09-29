@@ -239,9 +239,14 @@ SEMICOLON (14:18-14:19)
     )
     (FunctionTypeNode
       range: 10:13-10:26
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 10:14-10:17
-        name: "Box"
+        label: null
+        (NamedTypeNode
+          range: 10:14-10:17
+          name: "Box"
+        )
       )
       (NamedTypeNode
         range: 10:22-10:26

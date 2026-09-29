@@ -10,6 +10,7 @@ import com.github.andreasarvidsson.eld.parser.ArrayTypeNode;
 import com.github.andreasarvidsson.eld.parser.ConstTypeNode;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.FunctionTypeNode;
+import com.github.andreasarvidsson.eld.parser.FunctionTypeParameter;
 import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralExpression;
 import com.github.andreasarvidsson.eld.parser.LiteralKind;
@@ -25,6 +26,21 @@ public final class SemanticAnalyzerTypes {
 
     public SemanticAnalyzerTypes(final SemanticModel model) {
         this.model = model;
+    }
+
+    public Type resolveReturnType(
+        final TypeNode typeNode,
+        final SemanticContext context
+    ) {
+        if (
+            typeNode instanceof NamedTypeNode named
+                && named.name().equals("void")
+                && named.typeArguments().isEmpty()
+        ) {
+            model.setResolvedType(named, BuiltinType.VOID);
+            return BuiltinType.VOID;
+        }
+        return resolveType(typeNode, context);
     }
 
     public Type resolveType(
@@ -92,12 +108,25 @@ public final class SemanticAnalyzerTypes {
                 final Type returnType =
                     returnTypeNode == null
                         ? BuiltinType.VOID
-                        : resolveType(returnTypeNode, context);
+                        : resolveReturnType(returnTypeNode, context);
                 final List<Type> parameterTypes = new ArrayList<>();
-                for (final TypeNode paramTypeNode : function.parameterTypes()) {
-                    parameterTypes.add(resolveType(paramTypeNode, context));
+                final List<@Nullable String> parameterNames = new ArrayList<>();
+                boolean hasLabel = false;
+                for (final FunctionTypeParameter parameter : function
+                    .parameters()) {
+                    parameterTypes.add(resolveType(parameter.type(), context));
+                    parameterNames.add(parameter.label());
+                    hasLabel |= parameter.label() != null;
                 }
-                final Type type = new FunctionType(parameterTypes, returnType);
+                final Type type =
+                    new FunctionType(
+                        parameterTypes,
+                        returnType,
+                        hasLabel ? parameterNames : List.<@Nullable String>of(),
+                        function.namedOnlyStart() == null
+                            ? -1
+                            : function.namedOnlyStart()
+                    );
                 model.setResolvedType(function, type);
                 yield type;
             }
@@ -404,6 +433,13 @@ public final class SemanticAnalyzerTypes {
             model.setExpressionType(tuple, to);
             return to;
         }
+        if (
+            from instanceof FunctionType source
+                && to instanceof FunctionType target
+                && source.matchesSignature(target)
+        ) {
+            return target;
+        }
         if (from.equals(to)) {
             return from;
         }
@@ -633,6 +669,12 @@ public final class SemanticAnalyzerTypes {
         final NamedTypeNode named,
         final SemanticContext context
     ) {
+        if (named.name().equals("void")) {
+            throw new SemanticException(
+                named.range(),
+                "'void' is only allowed as a return type"
+            );
+        }
         if (
             named.name().equals("Promise")
                 || named.name().equals("PromiseSource")

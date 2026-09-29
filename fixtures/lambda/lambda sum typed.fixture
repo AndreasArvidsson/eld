@@ -48,13 +48,22 @@ SEMICOLON (2:17-2:18)
     )
     (FunctionTypeNode
       range: 1:12-1:29
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 1:13-1:16
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 1:13-1:16
+          name: "i32"
+        )
       )
-      (NamedTypeNode
+      (FunctionTypeParameter
         range: 1:18-1:21
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 1:18-1:21
+          name: "i32"
+        )
       )
       (NamedTypeNode
         range: 1:26-1:29

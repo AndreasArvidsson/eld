@@ -180,6 +180,7 @@ SEMICOLON (16:22-16:23)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (UnionTypeNode
@@ -533,7 +534,7 @@ SEMICOLON (16:22-16:23)
 
 Expression types:
   2:12-2:17 -> 0 | 1
-  5:22-5:30 -> (0 | 1) => 0 | 1
+  5:22-5:30 -> (value: 0 | 1) => 0 | 1
   5:22-5:33 -> 0 | 1
   5:31-5:32 -> i32
   6:1-6:6 -> (any) => void
@@ -620,7 +621,7 @@ Conversions:
   16:16-16:21 -> string -> "yes" -> "yes" | "no"
 
 Declarations:
-  1:6-1:14 -> func identity(0 | 1) => 0 | 1
+  1:6-1:14 -> func identity(value: 0 | 1) => 0 | 1
   1:15-1:20 -> const value: 0 | 1
   5:7-5:12 -> const value: 0 | 1
   7:7-7:13 -> const values: [0 | 1]

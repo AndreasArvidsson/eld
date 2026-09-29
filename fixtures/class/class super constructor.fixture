@@ -156,6 +156,7 @@ SEMICOLON (16:27-16:28)
             name: "i64"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -169,6 +170,7 @@ SEMICOLON (16:27-16:28)
             name: "i64"
           )
           optional: false
+          namedOnly: false
           (BinaryExpression
             range: 3:52-3:61
             (IdentifierExpression
@@ -272,6 +274,7 @@ SEMICOLON (16:27-16:28)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           (LiteralExpression
             range: 11:37-11:38
             kind: INT
@@ -400,12 +403,12 @@ Conversions:
 Declarations:
   1:7-1:11 -> class Base
   2:19-2:24 -> var value: i64
-  3:15-5:6 -> constructor(value: i64, extra: i64)
+  3:15-5:6 -> constructor(value: i64, extra?: i64)
   3:27-3:32 -> const value: i64
   3:39-3:44 -> const extra: i64
   6:17-6:21 -> func read() => i64
   10:7-10:12 -> class Child
-  11:12-13:6 -> constructor(value: i32)
+  11:12-13:6 -> constructor(value?: i32)
   11:24-11:29 -> const value: i32
 
 References:

@@ -125,6 +125,7 @@ SEMICOLON (12:18-12:19)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -328,9 +329,9 @@ Expression types:
   8:1-8:6 -> (any) => void
   8:1-8:21 -> void
   8:7-8:10 -> Foo
-  8:7-8:17 -> (i32) => bool
+  8:7-8:17 -> (value: i32) => bool
   8:7-8:20 -> bool
-  8:11-8:17 -> (i32) => bool
+  8:11-8:17 -> (value: i32) => bool
   8:18-8:19 -> i32
   9:1-9:6 -> (any) => void
   9:1-9:23 -> void
@@ -350,9 +351,9 @@ Expression types:
   11:1-11:6 -> (any) => void
   11:1-11:28 -> void
   11:7-11:10 -> Foo
-  11:7-11:17 -> (i32) => bool
+  11:7-11:17 -> (value: i32) => bool
   11:7-11:27 -> bool
-  11:11-11:17 -> (i32) => bool
+  11:11-11:17 -> (value: i32) => bool
   11:25-11:26 -> i32
   12:1-12:6 -> (any) => void
   12:1-12:18 -> void
@@ -366,7 +367,7 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:17-2:23 -> func equals(i32) => bool
+  2:17-2:23 -> func equals(value: i32) => bool
   2:24-2:29 -> const value: i32
   7:7-7:10 -> const foo: Foo
 

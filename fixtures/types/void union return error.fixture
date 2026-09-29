@@ -1,0 +1,44 @@
+func foo() void | null {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+RIGHT_PAREN (1:10-1:11)
+IDENTIFIER "void" (1:12-1:16)
+PIPE (1:17-1:18)
+NULL (1:19-1:23)
+LEFT_BRACE (1:24-1:25)
+RIGHT_BRACE (1:25-1:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:26
+  (FunctionDeclaration
+    range: 1:1-1:26
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (UnionTypeNode
+      range: 1:12-1:23
+      (NamedTypeNode
+        range: 1:12-1:16
+        name: "void"
+      )
+      (NamedTypeNode
+        range: 1:19-1:23
+        name: "null"
+      )
+    )
+    (BlockStatement
+      range: 1:24-1:26
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: 'void' is only allowed as a return type at 1:12-1:16

@@ -126,6 +126,7 @@ SEMICOLON (11:38-11:39)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -165,6 +166,7 @@ SEMICOLON (11:38-11:39)
             name: "Base"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -216,6 +218,7 @@ SEMICOLON (11:38-11:39)
             name: "Base"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -314,18 +317,18 @@ Expression types:
   10:1-10:6 -> (any) => void
   10:1-10:29 -> void
   10:7-10:18 -> Child
-  10:7-10:25 -> (i32) => bool
+  10:7-10:25 -> (value: i32) => bool
   10:7-10:28 -> bool
   10:11-10:16 -> Child
-  10:19-10:25 -> (i32) => bool
+  10:19-10:25 -> (value: i32) => bool
   10:26-10:27 -> i32
   11:1-11:6 -> (any) => void
   11:1-11:38 -> void
   11:7-11:18 -> Child
-  11:7-11:25 -> (Base) => bool
+  11:7-11:25 -> (value: Base) => bool
   11:7-11:37 -> bool
   11:11-11:16 -> Child
-  11:19-11:25 -> (Base) => bool
+  11:19-11:25 -> (value: Base) => bool
   11:26-11:36 -> Base
   11:30-11:34 -> Base
 
@@ -339,12 +342,12 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:17-2:23 -> func equals(i32) => bool
+  2:17-2:23 -> func equals(value: i32) => bool
   2:24-2:29 -> const value: i32
-  3:17-3:23 -> func equals(Base) => bool
+  3:17-3:23 -> func equals(value: Base) => bool
   3:24-3:29 -> const value: Base
   6:7-6:12 -> class Child
-  7:26-7:32 -> override func equals(Base) => bool
+  7:26-7:32 -> override func equals(value: Base) => bool
   7:33-7:38 -> const value: Base
 
 References:

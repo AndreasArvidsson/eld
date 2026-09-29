@@ -253,15 +253,15 @@ SEMICOLON (34:27-34:28)
     )
     (FunctionParameter
       range: 1:19-1:25
-      (IdentifierDeclaration
+      (DiscardDeclaration
         range: 1:19-1:20
-        name: "_"
       )
       (NamedTypeNode
         range: 1:22-1:25
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -275,6 +275,7 @@ SEMICOLON (34:27-34:28)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -328,13 +329,22 @@ SEMICOLON (34:27-34:28)
     )
     (FunctionTypeNode
       range: 6:22-6:39
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 6:23-6:26
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 6:23-6:26
+          name: "i32"
+        )
       )
-      (NamedTypeNode
+      (FunctionTypeParameter
         range: 6:28-6:31
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 6:28-6:31
+          name: "i32"
+        )
       )
       (NamedTypeNode
         range: 6:36-6:39
@@ -345,9 +355,8 @@ SEMICOLON (34:27-34:28)
       range: 6:42-6:59
       (LambdaParameter
         range: 6:43-6:44
-        (IdentifierDeclaration
+        (DiscardDeclaration
           range: 6:43-6:44
-          name: "_"
         )
       )
       (LambdaParameter
@@ -420,15 +429,15 @@ SEMICOLON (34:27-34:28)
         range: 11:12-13:6
         (FunctionParameter
           range: 11:24-11:30
-          (IdentifierDeclaration
+          (DiscardDeclaration
             range: 11:24-11:25
-            name: "_"
           )
           (NamedTypeNode
             range: 11:27-11:30
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -442,6 +451,7 @@ SEMICOLON (34:27-34:28)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement
@@ -510,15 +520,15 @@ SEMICOLON (34:27-34:28)
     )
     (FunctionParameter
       range: 17:21-17:31
-      (IdentifierDeclaration
+      (DiscardDeclaration
         range: 17:21-17:22
-        name: "_"
       )
       (NamedTypeNode
         range: 17:24-17:27
         name: "i32"
       )
       optional: false
+      namedOnly: false
       (LiteralExpression
         range: 17:30-17:31
         kind: INT
@@ -536,6 +546,7 @@ SEMICOLON (34:27-34:28)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       (LiteralExpression
         range: 17:45-17:46
         kind: INT
@@ -582,15 +593,15 @@ SEMICOLON (34:27-34:28)
     )
     (FunctionParameter
       range: 22:22-22:29
-      (IdentifierDeclaration
+      (DiscardDeclaration
         range: 22:22-22:23
-        name: "_"
       )
       (NamedTypeNode
         range: 22:26-22:29
         name: "i32"
       )
       optional: true
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -604,6 +615,7 @@ SEMICOLON (34:27-34:28)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       (LiteralExpression
         range: 22:43-22:44
         kind: INT
@@ -651,15 +663,15 @@ SEMICOLON (34:27-34:28)
     )
     (FunctionParameter
       range: 27:25-27:31
-      (IdentifierDeclaration
+      (DiscardDeclaration
         range: 27:25-27:26
-        name: "_"
       )
       (NamedTypeNode
         range: 27:28-27:31
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -673,6 +685,7 @@ SEMICOLON (34:27-34:28)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -780,7 +793,7 @@ Expression types:
   2:12-2:16 -> i32
   4:1-4:6 -> (any) => void
   4:1-4:26 -> void
-  4:7-4:19 -> (i32, i32) => i32
+  4:7-4:19 -> (i32, next: i32) => i32
   4:7-4:25 -> i32
   4:20-4:21 -> i32
   4:23-4:24 -> i32
@@ -809,13 +822,13 @@ Expression types:
   18:12-18:16 -> i32
   20:1-20:6 -> (any) => void
   20:1-20:24 -> void
-  20:7-20:21 -> (i32, i32) => i32
+  20:7-20:21 -> (i32, next: i32) => i32
   20:7-20:23 -> i32
   22:43-22:44 -> i32
   23:12-23:16 -> i32
   25:1-25:6 -> (any) => void
   25:1-25:25 -> void
-  25:7-25:22 -> (i32 | null, i32) => i32
+  25:7-25:22 -> (i32 | null, next: i32) => i32
   25:7-25:24 -> i32
   28:19-28:46 -> i32
   28:25-28:46 -> Promise<i32>
@@ -824,7 +837,7 @@ Expression types:
   32:5-32:10 -> (any) => void
   32:5-32:36 -> void
   32:11-32:35 -> i32
-  32:17-32:29 -> (i32, i32) => Promise<i32>
+  32:17-32:29 -> (i32, next: i32) => Promise<i32>
   32:17-32:35 -> Promise<i32>
   32:30-32:31 -> i32
   32:33-32:34 -> i32
@@ -853,19 +866,19 @@ Resolved types:
   27:44-27:47 -> i32
 
 Declarations:
-  1:6-1:18 -> func discardFirst(i32, i32) => i32
+  1:6-1:18 -> func discardFirst(i32, next: i32) => i32
   1:27-1:31 -> const next: i32
   6:7-6:20 -> const discardLambda: (i32, i32) => i32
   6:46-6:50 -> const next: i32
   9:7-9:18 -> class DiscardCtor
   10:16-10:21 -> var value: i32
-  11:12-13:6 -> constructor(_: i32, next: i32)
+  11:12-13:6 -> constructor(i32, next: i32)
   11:32-11:36 -> const next: i32
-  17:6-17:20 -> func discardDefault(i32?, i32?) => i32
+  17:6-17:20 -> func discardDefault(i32?, next?: i32) => i32
   17:33-17:37 -> const next: i32
-  22:6-22:21 -> func discardOptional(i32?, i32?) => i32
+  22:6-22:21 -> func discardOptional(i32?, next?: i32) => i32
   22:31-22:35 -> const next: i32
-  27:12-27:24 -> func discardAsync(i32, i32) => Promise<i32>
+  27:12-27:24 -> func discardAsync(i32, next: i32) => Promise<i32>
   27:33-27:37 -> const next: i32
   28:11-28:16 -> const value: i32
   31:12-31:29 -> func printDiscardAsync() => Promise<void>

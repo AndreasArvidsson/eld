@@ -267,6 +267,7 @@ SEMICOLON (18:31-18:32)
     )
     (FunctionTypeNode
       range: 4:17-4:26
+      namedOnlyStart: null
       (NamedTypeNode
         range: 4:23-4:26
         name: "i32"

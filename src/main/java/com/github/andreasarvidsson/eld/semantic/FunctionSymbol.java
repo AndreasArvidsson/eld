@@ -4,6 +4,7 @@ import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.FunctionModifier;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import java.util.List;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,16 @@ public record FunctionSymbol(
     }
 
     public String format(final List<String> parameterTypes) {
+        return format(
+            parameterTypes,
+            Collections.nCopies(parameterTypes.size(), false)
+        );
+    }
+
+    public String format(
+        final List<String> parameterTypes,
+        final List<Boolean> omittable
+    ) {
         final String modifierText =
             modifiers.stream()
                 .map(modifier -> modifier.toString().toLowerCase(Locale.ROOT))
@@ -50,7 +61,7 @@ public record FunctionSymbol(
         return "%s%s(%s) => %s".formatted(
             prefix,
             name(),
-            String.join(", ", parameterTypes),
+            type.formatLabeledParameters(parameterTypes, omittable),
             type.returnType()
         );
     }

@@ -1,0 +1,219 @@
+class C {
+    public func pick(*, a: i32) i32 { return 1; }
+    public func pick(*, b: i32) i32 { return 2; }
+}
+var object = new C();
+const callback: (*, c: i32) => i32 = object.pick;
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "C" (1:7-1:8)
+LEFT_BRACE (1:9-1:10)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "pick" (2:17-2:21)
+LEFT_PAREN (2:21-2:22)
+STAR (2:22-2:23)
+COMMA (2:23-2:24)
+IDENTIFIER "a" (2:25-2:26)
+COLON (2:26-2:27)
+IDENTIFIER "i32" (2:28-2:31)
+RIGHT_PAREN (2:31-2:32)
+IDENTIFIER "i32" (2:33-2:36)
+LEFT_BRACE (2:37-2:38)
+RETURN (2:39-2:45)
+INTEGER_LITERAL "1" (2:46-2:47)
+SEMICOLON (2:47-2:48)
+RIGHT_BRACE (2:49-2:50)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "pick" (3:17-3:21)
+LEFT_PAREN (3:21-3:22)
+STAR (3:22-3:23)
+COMMA (3:23-3:24)
+IDENTIFIER "b" (3:25-3:26)
+COLON (3:26-3:27)
+IDENTIFIER "i32" (3:28-3:31)
+RIGHT_PAREN (3:31-3:32)
+IDENTIFIER "i32" (3:33-3:36)
+LEFT_BRACE (3:37-3:38)
+RETURN (3:39-3:45)
+INTEGER_LITERAL "2" (3:46-3:47)
+SEMICOLON (3:47-3:48)
+RIGHT_BRACE (3:49-3:50)
+RIGHT_BRACE (4:1-4:2)
+VAR (5:1-5:4)
+IDENTIFIER "object" (5:5-5:11)
+EQUAL (5:12-5:13)
+NEW (5:14-5:17)
+IDENTIFIER "C" (5:18-5:19)
+LEFT_PAREN (5:19-5:20)
+RIGHT_PAREN (5:20-5:21)
+SEMICOLON (5:21-5:22)
+CONST (6:1-6:6)
+IDENTIFIER "callback" (6:7-6:15)
+COLON (6:15-6:16)
+LEFT_PAREN (6:17-6:18)
+STAR (6:18-6:19)
+COMMA (6:19-6:20)
+IDENTIFIER "c" (6:21-6:22)
+COLON (6:22-6:23)
+IDENTIFIER "i32" (6:24-6:27)
+RIGHT_PAREN (6:27-6:28)
+ARROW (6:29-6:31)
+IDENTIFIER "i32" (6:32-6:35)
+EQUAL (6:36-6:37)
+IDENTIFIER "object" (6:38-6:44)
+DOT (6:44-6:45)
+IDENTIFIER "pick" (6:45-6:49)
+SEMICOLON (6:49-6:50)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:50
+  (ClassDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:7-1:8
+      name: "C"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:50
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:50
+        (IdentifierDeclaration
+          range: 2:17-2:21
+          name: "pick"
+        )
+        (FunctionParameter
+          range: 2:25-2:31
+          (IdentifierDeclaration
+            range: 2:25-2:26
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 2:28-2:31
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:33-2:36
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:37-2:50
+          (ReturnStatement
+            range: 2:39-2:48
+            (LiteralExpression
+              range: 2:46-2:47
+              kind: INT
+              text: "1"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:50
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 3:12-3:50
+        (IdentifierDeclaration
+          range: 3:17-3:21
+          name: "pick"
+        )
+        (FunctionParameter
+          range: 3:25-3:31
+          (IdentifierDeclaration
+            range: 3:25-3:26
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 3:28-3:31
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:33-3:36
+          name: "i32"
+        )
+        (BlockStatement
+          range: 3:37-3:50
+          (ReturnStatement
+            range: 3:39-3:48
+            (LiteralExpression
+              range: 3:46-3:47
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:22
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 5:5-5:11
+      name: "object"
+    )
+    type: null
+    (NewExpression
+      range: 5:14-5:21
+      (IdentifierExpression
+        range: 5:18-5:19
+        name: "C"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:50
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:15
+      name: "callback"
+    )
+    (FunctionTypeNode
+      range: 6:17-6:35
+      namedOnlyStart: 0
+      (FunctionTypeParameter
+        range: 6:21-6:27
+        label: "c"
+        (NamedTypeNode
+          range: 6:24-6:27
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 6:32-6:35
+        name: "i32"
+      )
+    )
+    (MemberExpression
+      range: 6:38-6:49
+      (IdentifierExpression
+        range: 6:38-6:44
+        name: "object"
+      )
+      (IdentifierExpression
+        range: 6:45-6:49
+        name: "pick"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous reference to overloaded method 'pick' at 6:45-6:49

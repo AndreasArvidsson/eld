@@ -74,6 +74,7 @@ SEMICOLON (9:11-9:12)
         range: 1:18-1:24
         name: "string"
       )
+      namedOnly: false
     )
     (MemberDeclaration
       range: 2:5-4:6

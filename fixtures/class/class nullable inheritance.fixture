@@ -314,6 +314,7 @@ SEMICOLON (34:24-34:25)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (UnionTypeNode
@@ -362,6 +363,7 @@ SEMICOLON (34:24-34:25)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -405,6 +407,7 @@ SEMICOLON (34:24-34:25)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (UnionTypeNode
@@ -889,14 +892,14 @@ Expression types:
   24:15-24:20 -> Child | null
   25:1-25:6 -> (any) => void
   25:1-25:28 -> void
-  25:7-25:12 -> (Child | null) => Base | null
+  25:7-25:12 -> (value: Child | null) => Base | null
   25:7-25:19 -> Base | null
   25:7-25:27 -> bool
   25:13-25:18 -> Child | null
   25:23-25:27 -> Base | null
   26:1-26:6 -> (any) => void
   26:1-26:22 -> void
-  26:7-26:14 -> (Base | null) => bool
+  26:7-26:14 -> (value: Base | null) => bool
   26:7-26:21 -> bool
   26:15-26:20 -> Child | null
   27:1-27:6 -> Child | null
@@ -909,33 +912,33 @@ Expression types:
   29:17-29:21 -> null
   30:1-30:6 -> (any) => void
   30:1-30:28 -> void
-  30:7-30:12 -> (Child | null) => Base | null
+  30:7-30:12 -> (value: Child | null) => Base | null
   30:7-30:19 -> Base | null
   30:7-30:27 -> bool
   30:13-30:18 -> Child | null
   30:23-30:27 -> null
   31:1-31:6 -> (any) => void
   31:1-31:22 -> void
-  31:7-31:14 -> (Base | null) => bool
+  31:7-31:14 -> (value: Base | null) => bool
   31:7-31:21 -> bool
   31:15-31:20 -> Child | null
   32:1-32:6 -> (any) => void
   32:1-32:24 -> void
-  32:7-32:12 -> (i32) => Base | null
+  32:7-32:12 -> (choice: i32) => Base | null
   32:7-32:15 -> Base | null
   32:7-32:23 -> bool
   32:13-32:14 -> i32
   32:19-32:23 -> null
   33:1-33:6 -> (any) => void
   33:1-33:24 -> void
-  33:7-33:12 -> (i32) => Base | null
+  33:7-33:12 -> (choice: i32) => Base | null
   33:7-33:15 -> Base | null
   33:7-33:23 -> bool
   33:13-33:14 -> i32
   33:19-33:23 -> null
   34:1-34:6 -> (any) => void
   34:1-34:24 -> void
-  34:7-34:12 -> (i32) => Base | null
+  34:7-34:12 -> (choice: i32) => Base | null
   34:7-34:15 -> Base | null
   34:7-34:23 -> bool
   34:13-34:14 -> i32
@@ -994,11 +997,11 @@ Declarations:
   1:7-1:11 -> class Base
   2:7-2:12 -> class Child
   3:7-3:14 -> class Sibling
-  5:6-5:11 -> func widen(Child | null) => Base | null
+  5:6-5:11 -> func widen(value: Child | null) => Base | null
   5:12-5:17 -> const value: Child | null
-  8:6-8:13 -> func accepts(Base | null) => bool
+  8:6-8:13 -> func accepts(value: Base | null) => bool
   8:14-8:19 -> const value: Base | null
-  11:6-11:11 -> func multi(i32) => Base | null
+  11:6-11:11 -> func multi(choice: i32) => Base | null
   11:12-11:18 -> const choice: i32
   12:9-12:14 -> var value: Child | Sibling | null
   22:5-22:10 -> var child: Child | null

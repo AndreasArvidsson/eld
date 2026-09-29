@@ -54,6 +54,7 @@ RIGHT_BRACE (2:38-2:39)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -85,6 +86,7 @@ RIGHT_BRACE (2:38-2:39)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null

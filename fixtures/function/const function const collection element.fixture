@@ -142,6 +142,7 @@ SEMICOLON (17:18-17:19)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -155,6 +156,7 @@ SEMICOLON (17:18-17:19)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -361,7 +363,7 @@ Resolved types:
 
 Declarations:
   1:7-1:12 -> class Value
-  2:30-2:35 -> const func equal(Value, Value) => bool
+  2:30-2:35 -> const func equal(a: Value, b: Value) => bool
   2:36-2:37 -> const a: Value
   2:46-2:47 -> const b: Value
   5:32-5:40 -> const override func hashCode() => i32

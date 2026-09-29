@@ -203,6 +203,7 @@ SEMICOLON (16:38-16:39)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -231,6 +232,7 @@ SEMICOLON (16:38-16:39)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -266,6 +268,7 @@ SEMICOLON (16:38-16:39)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -313,6 +316,7 @@ SEMICOLON (16:38-16:39)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -356,6 +360,7 @@ SEMICOLON (16:38-16:39)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -533,25 +538,25 @@ Expression types:
   14:1-14:6 -> (any) => void
   14:1-14:42 -> void
   14:7-14:17 -> Overloaded
-  14:7-14:19 -> (List<i32>) => string
+  14:7-14:19 -> (values: List<i32>) => string
   14:7-14:41 -> string
-  14:18-14:19 -> (List<i32>) => string
+  14:18-14:19 -> (values: List<i32>) => string
   14:20-14:40 -> ArrayList<i32>
   14:24-14:33 -> ArrayList<i32>
   15:1-15:6 -> (any) => void
   15:1-15:45 -> void
   15:7-15:17 -> Overloaded
-  15:7-15:19 -> (List<string>) => string
+  15:7-15:19 -> (values: List<string>) => string
   15:7-15:44 -> string
-  15:18-15:19 -> (List<string>) => string
+  15:18-15:19 -> (values: List<string>) => string
   15:20-15:43 -> ArrayList<string>
   15:24-15:33 -> ArrayList<string>
   16:1-16:6 -> (any) => void
   16:1-16:38 -> void
   16:7-16:13 -> Single
-  16:7-16:15 -> (List<i32>) => string
+  16:7-16:15 -> (values: List<i32>) => string
   16:7-16:37 -> string
-  16:14-16:15 -> (List<i32>) => string
+  16:14-16:15 -> (values: List<i32>) => string
   16:16-16:36 -> ArrayList<i32>
   16:20-16:29 -> ArrayList<i32>
 
@@ -584,17 +589,17 @@ Resolved types:
 
 Declarations:
   1:11-1:21 -> interface Overloaded
-  2:10-2:11 -> func f(List<i32>) => string
+  2:10-2:11 -> func f(values: List<i32>) => string
   2:12-2:18 -> const values: List<i32>
-  3:10-3:11 -> func f(List<string>) => string
+  3:10-3:11 -> func f(values: List<string>) => string
   3:12-3:18 -> const values: List<string>
   5:11-5:17 -> interface Single
-  6:10-6:11 -> func f(List<i32>) => string
+  6:10-6:11 -> func f(values: List<i32>) => string
   6:12-6:18 -> const values: List<i32>
   8:7-8:11 -> class Both
-  9:17-9:18 -> func f(List<i32>) => string
+  9:17-9:18 -> func f(values: List<i32>) => string
   9:19-9:25 -> const values: List<i32>
-  10:17-10:18 -> func f(List<string>) => string
+  10:17-10:18 -> func f(values: List<string>) => string
   10:19-10:25 -> const values: List<string>
   12:7-12:17 -> const overloaded: Overloaded
   13:7-13:13 -> const single: Single
@@ -654,7 +659,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     NEW java/util/ArrayList
     DUP
     INVOKESPECIAL java/util/ArrayList.<init>()V
-    INVOKEINTERFACE Test$Single.f(Ljava/util/List;)Ljava/lang/String;
+    INVOKEINTERFACE Test$Single.f$1(Ljava/util/List;)Ljava/lang/String;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     RETURN
     max stack 4 max locals 0
@@ -668,7 +673,7 @@ class Test$Overloaded extends java/lang/Object version 65.0 flags [PUBLIC, INTER
 class Test$Single extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
   nest host Test
   inner class Test$Single flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
-  method f(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method f$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
 
 class Test$Both extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   implements Test$Overloaded
@@ -691,12 +696,6 @@ class Test$Both extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     LDC "strings"
     ARETURN
     max stack 1 max locals 2
-  method f(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, BRIDGE, SYNTHETIC]
-    ALOAD_0 0
-    ALOAD_1 1
-    INVOKEVIRTUAL Test$Both.f$1(Ljava/util/List;)Ljava/lang/String;
-    ARETURN
-    max stack 2 max locals 2
 
 --- OUTPUT ---
 

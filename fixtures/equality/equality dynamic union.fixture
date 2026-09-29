@@ -178,6 +178,7 @@ SEMICOLON (16:27-16:28)
             name: "Box"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -191,6 +192,7 @@ SEMICOLON (16:27-16:28)
             name: "Box"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -599,7 +601,7 @@ Conversions:
 
 Declarations:
   1:7-1:10 -> class Box
-  2:24-2:29 -> func equal(Box, Box) => bool
+  2:24-2:29 -> func equal(a: Box, b: Box) => bool
   2:30-2:31 -> const a: Box
   2:38-2:39 -> const b: Box
   5:7-5:14 -> const missing: i32 | Box | null

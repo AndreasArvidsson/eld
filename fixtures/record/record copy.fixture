@@ -224,6 +224,7 @@ SEMICOLON (21:21-21:22)
         range: 1:22-1:28
         name: "string"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 1:30-1:40
@@ -235,6 +236,7 @@ SEMICOLON (21:21-21:22)
         range: 1:37-1:40
         name: "i32"
       )
+      namedOnly: false
     )
     (MemberDeclaration
       range: 2:5-4:6
@@ -302,6 +304,7 @@ SEMICOLON (21:21-21:22)
         range: 6:27-6:30
         name: "i64"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 6:32-6:42
@@ -313,6 +316,7 @@ SEMICOLON (21:21-21:22)
         range: 6:39-6:42
         name: "f64"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 6:44-6:63
@@ -331,6 +335,7 @@ SEMICOLON (21:21-21:22)
           name: "null"
         )
       )
+      namedOnly: false
     )
   )
   (VariableDeclaration
@@ -732,28 +737,28 @@ Expression types:
   8:30-8:35 -> string
   8:37-8:39 -> i32
   9:17-9:25 -> Options
-  9:17-9:30 -> (string, i32) => Options
+  9:17-9:30 -> (name: string, value: i32) => Options
   9:17-9:40 -> Options
-  9:26-9:30 -> (string, i32) => Options
+  9:26-9:30 -> (name: string, value: i32) => Options
   9:38-9:39 -> i32
   10:17-10:24 -> Options
-  10:17-10:29 -> (string, i32) => Options
+  10:17-10:29 -> (name: string, value: i32) => Options
   10:17-10:42 -> Options
-  10:25-10:29 -> (string, i32) => Options
+  10:25-10:29 -> (name: string, value: i32) => Options
   10:36-10:41 -> string
   11:19-11:26 -> Options
-  11:19-11:31 -> (string, i32) => Options
+  11:19-11:31 -> (name: string, value: i32) => Options
   11:19-11:33 -> Options
-  11:27-11:31 -> (string, i32) => Options
+  11:27-11:31 -> (name: string, value: i32) => Options
   12:21-12:62 -> Measurement
   12:25-12:36 -> Measurement
   12:37-12:50 -> i64
   12:52-12:55 -> f64
   12:57-12:61 -> null
   13:18-13:29 -> Measurement
-  13:18-13:34 -> (i64, f64, string | null) => Measurement
+  13:18-13:34 -> (total: i64, ratio: f64, note: string | null) => Measurement
   13:18-13:46 -> Measurement
-  13:30-13:34 -> (i64, f64, string | null) => Measurement
+  13:30-13:34 -> (total: i64, ratio: f64, note: string | null) => Measurement
   13:42-13:45 -> f64
   14:1-14:6 -> (any) => void
   14:1-14:21 -> void

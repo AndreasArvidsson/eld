@@ -202,13 +202,15 @@ public final class SemanticAnalyzerDeclarations {
             );
         }
         if (superclass != null && !explicitSuper) {
-            for (final FunctionParameter parameter : model
-                .getConstructorParameters(superclass)) {
+            final List<FunctionParameter> inheritedParameters =
+                model.getConstructorParameters(superclass);
+            for (int i = 0; i < inheritedParameters.size(); i++) {
+                final FunctionParameter parameter = inheritedParameters.get(i);
                 if (!parameter.omittable()) {
                     throw new SemanticException(
                         Objects.requireNonNull(superclassName).range(),
                         "Base constructor requires argument: %s",
-                        parameter.name().name()
+                        parameter.displayName(i)
                     );
                 }
             }
@@ -221,9 +223,9 @@ public final class SemanticAnalyzerDeclarations {
                 parameterTypes.add(type);
                 if (!parameter.discarded()) {
                     model.setSymbol(
-                        parameter.name(),
+                        parameter.identifier(),
                         new VariableSymbol(
-                            parameter.name(),
+                            parameter.identifier(),
                             type,
                             Mutability.CONST
                         )
@@ -244,7 +246,14 @@ public final class SemanticAnalyzerDeclarations {
         if (constructor != null) {
             model.setConstructorSymbol(
                 constructor,
-                new ConstructorSymbol(constructor, constructorType)
+                new ConstructorSymbol(
+                    constructor,
+                    constructorType,
+                    constructor.parameters()
+                        .stream()
+                        .map(model::getDeclaredParameterType)
+                        .toList()
+                )
             );
         }
         for (final MemberDeclaration memberDeclaration : declaration
@@ -423,7 +432,7 @@ public final class SemanticAnalyzerDeclarations {
                         new SemanticContext(scope, null, 0)
                     );
                     if (!parameter.discarded()) {
-                        scope.declare(model.getSymbol(parameter.name()));
+                        scope.declare(model.getSymbol(parameter.identifier()));
                     }
                 }
                 analyzer.analyzeBlockStatement(
@@ -475,8 +484,7 @@ public final class SemanticAnalyzerDeclarations {
                             .functionsLocal(method.name())) {
                             if (
                                 candidate.type()
-                                    .parameterTypes()
-                                    .equals(method.type().parameterTypes())
+                                    .sameOverloadSignature(method.type())
                             ) {
                                 final FunctionDeclaration implementation =
                                     model.getFunctionDeclaration(candidate);
@@ -615,23 +623,26 @@ public final class SemanticAnalyzerDeclarations {
                     if (!parameter.discarded()) {
                         final VariableSymbol value =
                             new VariableSymbol(
-                                parameter.name(),
+                                parameter.identifier(),
                                 parameterType,
                                 Mutability.CONST
                             );
-                        model.setSymbol(parameter.name(), value);
+                        model.setSymbol(parameter.identifier(), value);
                         scope.declare(value);
                     }
                 }
                 final FunctionSymbol value =
                     new FunctionSymbol(
                         method.name(),
-                        new FunctionType(
+                        FunctionType.declared(
                             parameters,
                             method.returnType() == null
                                 ? BuiltinType.VOID
-                                : analyzer
-                                    .resolveType(method.returnType(), context)
+                                : analyzer.resolveReturnType(
+                                    method.returnType(),
+                                    context
+                                ),
+                            method.parameters()
                         )
                     );
                 model.setSymbol(method.name(), value);
@@ -647,19 +658,43 @@ public final class SemanticAnalyzerDeclarations {
                 final List<FunctionSymbol> declared =
                     overloads
                         .computeIfAbsent(value.name(), _ -> new ArrayList<>());
-                if (
-                    declared.stream()
-                        .anyMatch(
-                            existing -> existing.type()
-                                .parameterTypes()
-                                .equals(value.type().parameterTypes())
-                        )
-                ) {
-                    throw new SemanticException(
-                        method.range(),
-                        "Duplicate interface method: %s",
-                        value.name()
-                    );
+                for (final FunctionSymbol existing : declared) {
+                    final List<FunctionParameter> existingParameters =
+                        model.getFunctionParameters(existing)
+                            .stream()
+                            .map(model::getParameterDetails)
+                            .toList();
+                    if (existing.type().equals(value.type())) {
+                        throw new SemanticException(
+                            method.range(),
+                            "Duplicate interface method: %s",
+                            value.name()
+                        );
+                    }
+                    if (
+                        FunctionSignatures
+                            .overlap(
+                                existing.type(),
+                                existingParameters,
+                                value.type(),
+                                method.parameters(),
+                                parameterType -> parameterType
+                            )
+                            || FunctionSignatures.ambiguous(
+                                existing.type(),
+                                existingParameters,
+                                value.type(),
+                                method.parameters(),
+                                (source, target) -> FunctionSignatures
+                                    .isSubtype(source, target, model)
+                            )
+                    ) {
+                        throw new SemanticException(
+                            method.range(),
+                            "Ambiguous overload of '%s': overlapping callable signatures",
+                            value.name()
+                        );
+                    }
                 }
                 declared.add(value);
                 ownMethods.add(value);
@@ -675,8 +710,7 @@ public final class SemanticAnalyzerDeclarations {
                     if (
                         declared.get(i)
                             .type()
-                            .parameterTypes()
-                            .equals(inherited.type().parameterTypes())
+                            .sameOverloadSignature(inherited.type())
                     ) {
                         override = i;
                         break;
@@ -846,8 +880,7 @@ public final class SemanticAnalyzerDeclarations {
                         || !left.method().name().equals(right.method().name())
                         || left.method()
                             .type()
-                            .parameterTypes()
-                            .equals(right.method().type().parameterTypes())
+                            .sameOverloadSignature(right.method().type())
                 ) {
                     continue;
                 }
@@ -1021,8 +1054,7 @@ public final class SemanticAnalyzerDeclarations {
             .stream()
             .anyMatch(
                 method -> method.type()
-                    .parameterTypes()
-                    .equals(other.method().type().parameterTypes())
+                    .sameOverloadSignature(other.method().type())
             );
     }
 
@@ -1113,11 +1145,7 @@ public final class SemanticAnalyzerDeclarations {
             }
             for (final FunctionSymbol method : scope
                 .functionsLocal(contract.name())) {
-                if (
-                    method.type()
-                        .parameterTypes()
-                        .equals(contract.type().parameterTypes())
-                ) {
+                if (method.type().sameOverloadSignature(contract.type())) {
                     return method;
                 }
             }

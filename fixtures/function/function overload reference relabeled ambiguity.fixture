@@ -1,0 +1,250 @@
+func pick(*, a: i32) i32 { return 1; }
+func pick(*, b: i32) i32 { return 2; }
+
+const aliasA: (*, a: i32) => i32 = pick;
+const aliasB: (*, b: i32) => i32 = pick;
+const aliasC: (*, c: i32) => i32 = pick;
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "pick" (1:6-1:10)
+LEFT_PAREN (1:10-1:11)
+STAR (1:11-1:12)
+COMMA (1:12-1:13)
+IDENTIFIER "a" (1:14-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+RIGHT_PAREN (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+LEFT_BRACE (1:26-1:27)
+RETURN (1:28-1:34)
+INTEGER_LITERAL "1" (1:35-1:36)
+SEMICOLON (1:36-1:37)
+RIGHT_BRACE (1:38-1:39)
+FUNC (2:1-2:5)
+IDENTIFIER "pick" (2:6-2:10)
+LEFT_PAREN (2:10-2:11)
+STAR (2:11-2:12)
+COMMA (2:12-2:13)
+IDENTIFIER "b" (2:14-2:15)
+COLON (2:15-2:16)
+IDENTIFIER "i32" (2:17-2:20)
+RIGHT_PAREN (2:20-2:21)
+IDENTIFIER "i32" (2:22-2:25)
+LEFT_BRACE (2:26-2:27)
+RETURN (2:28-2:34)
+INTEGER_LITERAL "2" (2:35-2:36)
+SEMICOLON (2:36-2:37)
+RIGHT_BRACE (2:38-2:39)
+CONST (4:1-4:6)
+IDENTIFIER "aliasA" (4:7-4:13)
+COLON (4:13-4:14)
+LEFT_PAREN (4:15-4:16)
+STAR (4:16-4:17)
+COMMA (4:17-4:18)
+IDENTIFIER "a" (4:19-4:20)
+COLON (4:20-4:21)
+IDENTIFIER "i32" (4:22-4:25)
+RIGHT_PAREN (4:25-4:26)
+ARROW (4:27-4:29)
+IDENTIFIER "i32" (4:30-4:33)
+EQUAL (4:34-4:35)
+IDENTIFIER "pick" (4:36-4:40)
+SEMICOLON (4:40-4:41)
+CONST (5:1-5:6)
+IDENTIFIER "aliasB" (5:7-5:13)
+COLON (5:13-5:14)
+LEFT_PAREN (5:15-5:16)
+STAR (5:16-5:17)
+COMMA (5:17-5:18)
+IDENTIFIER "b" (5:19-5:20)
+COLON (5:20-5:21)
+IDENTIFIER "i32" (5:22-5:25)
+RIGHT_PAREN (5:25-5:26)
+ARROW (5:27-5:29)
+IDENTIFIER "i32" (5:30-5:33)
+EQUAL (5:34-5:35)
+IDENTIFIER "pick" (5:36-5:40)
+SEMICOLON (5:40-5:41)
+CONST (6:1-6:6)
+IDENTIFIER "aliasC" (6:7-6:13)
+COLON (6:13-6:14)
+LEFT_PAREN (6:15-6:16)
+STAR (6:16-6:17)
+COMMA (6:17-6:18)
+IDENTIFIER "c" (6:19-6:20)
+COLON (6:20-6:21)
+IDENTIFIER "i32" (6:22-6:25)
+RIGHT_PAREN (6:25-6:26)
+ARROW (6:27-6:29)
+IDENTIFIER "i32" (6:30-6:33)
+EQUAL (6:34-6:35)
+IDENTIFIER "pick" (6:36-6:40)
+SEMICOLON (6:40-6:41)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:41
+  (FunctionDeclaration
+    range: 1:1-1:39
+    (IdentifierDeclaration
+      range: 1:6-1:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 1:14-1:20
+      (IdentifierDeclaration
+        range: 1:14-1:15
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "i32"
+      )
+      optional: false
+      namedOnly: true
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:22-1:25
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:26-1:39
+      (ReturnStatement
+        range: 1:28-1:37
+        (LiteralExpression
+          range: 1:35-1:36
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:39
+    (IdentifierDeclaration
+      range: 2:6-2:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 2:14-2:20
+      (IdentifierDeclaration
+        range: 2:14-2:15
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 2:17-2:20
+        name: "i32"
+      )
+      optional: false
+      namedOnly: true
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:22-2:25
+      name: "i32"
+    )
+    (BlockStatement
+      range: 2:26-2:39
+      (ReturnStatement
+        range: 2:28-2:37
+        (LiteralExpression
+          range: 2:35-2:36
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "aliasA"
+    )
+    (FunctionTypeNode
+      range: 4:15-4:33
+      namedOnlyStart: 0
+      (FunctionTypeParameter
+        range: 4:19-4:25
+        label: "a"
+        (NamedTypeNode
+          range: 4:22-4:25
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 4:30-4:33
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 4:36-4:40
+      name: "pick"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "aliasB"
+    )
+    (FunctionTypeNode
+      range: 5:15-5:33
+      namedOnlyStart: 0
+      (FunctionTypeParameter
+        range: 5:19-5:25
+        label: "b"
+        (NamedTypeNode
+          range: 5:22-5:25
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 5:30-5:33
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 5:36-5:40
+      name: "pick"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:13
+      name: "aliasC"
+    )
+    (FunctionTypeNode
+      range: 6:15-6:33
+      namedOnlyStart: 0
+      (FunctionTypeParameter
+        range: 6:19-6:25
+        label: "c"
+        (NamedTypeNode
+          range: 6:22-6:25
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 6:30-6:33
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 6:36-6:40
+      name: "pick"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous reference to overloaded function 'pick' at 6:36-6:40

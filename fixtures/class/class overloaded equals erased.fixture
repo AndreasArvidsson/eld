@@ -113,6 +113,7 @@ SEMICOLON (8:19-8:20)
             name: "any"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -159,6 +160,7 @@ SEMICOLON (8:19-8:20)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -293,23 +295,23 @@ Expression types:
   6:1-6:6 -> (any) => void
   6:1-6:19 -> void
   6:7-6:8 -> C
-  6:7-6:15 -> (i32 | string) => bool
+  6:7-6:15 -> (value: i32 | string) => bool
   6:7-6:18 -> bool
-  6:9-6:15 -> (i32 | string) => bool
+  6:9-6:15 -> (value: i32 | string) => bool
   6:16-6:17 -> i32
   7:1-7:6 -> (any) => void
   7:1-7:24 -> void
   7:7-7:8 -> C
-  7:7-7:15 -> (i32 | string) => bool
+  7:7-7:15 -> (value: i32 | string) => bool
   7:7-7:23 -> bool
-  7:9-7:15 -> (i32 | string) => bool
+  7:9-7:15 -> (value: i32 | string) => bool
   7:16-7:22 -> string
   8:1-8:6 -> (any) => void
   8:1-8:19 -> void
   8:7-8:8 -> C
-  8:7-8:15 -> (any) => bool
+  8:7-8:15 -> (value: any) => bool
   8:7-8:18 -> bool
-  8:9-8:15 -> (any) => bool
+  8:9-8:15 -> (value: any) => bool
   8:16-8:17 -> C
 
 Resolved types:
@@ -327,9 +329,9 @@ Conversions:
 
 Declarations:
   1:7-1:8 -> class C
-  2:17-2:23 -> func equals(any) => bool
+  2:17-2:23 -> func equals(value: any) => bool
   2:24-2:29 -> const value: any
-  3:17-3:23 -> func equals(i32 | string) => bool
+  3:17-3:23 -> func equals(value: i32 | string) => bool
   3:24-3:29 -> const value: i32 | string
   5:7-5:8 -> const c: C
 

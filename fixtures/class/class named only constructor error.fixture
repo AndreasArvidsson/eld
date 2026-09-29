@@ -1,0 +1,117 @@
+class Foo {
+    public constructor(*, value: i32) {}
+}
+
+new Foo(value: 1);
+new Foo(1);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+STAR (2:24-2:25)
+COMMA (2:25-2:26)
+IDENTIFIER "value" (2:27-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "i32" (2:34-2:37)
+RIGHT_PAREN (2:37-2:38)
+LEFT_BRACE (2:39-2:40)
+RIGHT_BRACE (2:40-2:41)
+RIGHT_BRACE (3:1-3:2)
+NEW (5:1-5:4)
+IDENTIFIER "Foo" (5:5-5:8)
+LEFT_PAREN (5:8-5:9)
+IDENTIFIER "value" (5:9-5:14)
+COLON (5:14-5:15)
+INTEGER_LITERAL "1" (5:16-5:17)
+RIGHT_PAREN (5:17-5:18)
+SEMICOLON (5:18-5:19)
+NEW (6:1-6:4)
+IDENTIFIER "Foo" (6:5-6:8)
+LEFT_PAREN (6:8-6:9)
+INTEGER_LITERAL "1" (6:9-6:10)
+RIGHT_PAREN (6:10-6:11)
+SEMICOLON (6:11-6:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:12
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:41
+      visibility: PUBLIC
+      (ConstructorDeclaration
+        range: 2:12-2:41
+        (FunctionParameter
+          range: 2:27-2:37
+          (IdentifierDeclaration
+            range: 2:27-2:32
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:34-2:37
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 2:39-2:41
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:19
+    (NewExpression
+      range: 5:1-5:18
+      (IdentifierExpression
+        range: 5:5-5:8
+        name: "Foo"
+      )
+      (NamedArgumentExpression
+        range: 5:9-5:17
+        (IdentifierDeclaration
+          range: 5:9-5:14
+          name: "value"
+        )
+        (LiteralExpression
+          range: 5:16-5:17
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:12
+    (NewExpression
+      range: 6:1-6:11
+      (IdentifierExpression
+        range: 6:5-6:8
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 6:9-6:10
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Parameter value must be supplied by name at 6:9-6:10

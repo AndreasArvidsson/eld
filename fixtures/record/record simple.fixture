@@ -92,6 +92,7 @@ SEMICOLON (8:11-8:12)
         range: 1:18-1:24
         name: "string"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 1:26-1:36
@@ -103,6 +104,7 @@ SEMICOLON (8:11-8:12)
         range: 1:33-1:36
         name: "i32"
       )
+      namedOnly: false
     )
   )
   (VariableDeclaration

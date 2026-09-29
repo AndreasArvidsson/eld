@@ -93,6 +93,7 @@ SEMICOLON (9:18-9:19)
         name: "Box"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null

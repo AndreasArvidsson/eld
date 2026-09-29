@@ -43,6 +43,7 @@ RIGHT_BRACE (1:36-1:37)
         )
       )
       optional: true
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -60,7 +61,7 @@ Resolved types:
   1:27-1:33 -> string
 
 Declarations:
-  1:6-1:12 -> func choose((i32 | string)?) => void
+  1:6-1:12 -> func choose(value?: (i32 | string)) => void
   1:13-1:18 -> const value: i32 | string | null
 
 --- BYTECODE ---

@@ -63,6 +63,7 @@ SEMICOLON (7:31-7:32)
         range: 1:21-1:24
         name: "i32"
       )
+      namedOnly: false
     )
     (MemberDeclaration
       range: 2:5-4:6

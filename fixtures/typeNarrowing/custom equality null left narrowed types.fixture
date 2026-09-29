@@ -137,6 +137,7 @@ RIGHT_BRACE (15:1-15:2)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -150,6 +151,7 @@ RIGHT_BRACE (15:1-15:2)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -386,7 +388,7 @@ Conversions:
 
 Declarations:
   1:7-1:14 -> class Compare
-  2:24-2:29 -> func equal(Compare, Compare) => bool
+  2:24-2:29 -> func equal(a: Compare, b: Compare) => bool
   2:30-2:31 -> const a: Compare
   2:42-2:43 -> const b: Compare
   3:17-3:23 -> func marker() => string

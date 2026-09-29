@@ -3,7 +3,6 @@ package com.github.andreasarvidsson.eld.semantic;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class RecordSymbol implements ClassDeclarationSymbol {
@@ -44,14 +43,22 @@ public final class RecordSymbol implements ClassDeclarationSymbol {
 
     @Override
     public String toString() {
+        final int namedOnlyStart =
+            IntStream.range(0, declaration.parameters().size())
+                .filter(i -> declaration.parameters().get(i).namedOnly())
+                .findFirst()
+                .orElse(-1);
         return "record %s(%s)".formatted(
             name(),
-            IntStream.range(0, declaration.parameters().size())
-                .mapToObj(
-                    i -> declaration.parameters().get(i).name().name() + ": "
-                        + componentTypes.get(i)
-                )
-                .collect(Collectors.joining(", "))
+            FunctionType.formatParameters(
+                IntStream.range(0, declaration.parameters().size())
+                    .mapToObj(
+                        i -> declaration.parameters().get(i).name().name()
+                            + ": " + componentTypes.get(i)
+                    )
+                    .toList(),
+                namedOnlyStart
+            )
         );
     }
 }

@@ -1,0 +1,54 @@
+const callback: (void) => i32 = null;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "callback" (1:7-1:15)
+COLON (1:15-1:16)
+LEFT_PAREN (1:17-1:18)
+IDENTIFIER "void" (1:18-1:22)
+RIGHT_PAREN (1:22-1:23)
+ARROW (1:24-1:26)
+IDENTIFIER "i32" (1:27-1:30)
+EQUAL (1:31-1:32)
+NULL (1:33-1:37)
+SEMICOLON (1:37-1:38)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:38
+  (VariableDeclaration
+    range: 1:1-1:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:15
+      name: "callback"
+    )
+    (FunctionTypeNode
+      range: 1:17-1:30
+      namedOnlyStart: null
+      (FunctionTypeParameter
+        range: 1:18-1:22
+        label: null
+        (NamedTypeNode
+          range: 1:18-1:22
+          name: "void"
+        )
+      )
+      (NamedTypeNode
+        range: 1:27-1:30
+        name: "i32"
+      )
+    )
+    (LiteralExpression
+      range: 1:33-1:37
+      kind: NULL
+      text: "null"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: 'void' is only allowed as a return type at 1:18-1:22

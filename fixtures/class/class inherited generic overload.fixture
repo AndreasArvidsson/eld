@@ -154,6 +154,7 @@ SEMICOLON (13:31-13:32)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -208,6 +209,7 @@ SEMICOLON (13:31-13:32)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -371,16 +373,16 @@ Expression types:
   12:1-12:6 -> (any) => void
   12:1-12:32 -> void
   12:7-12:12 -> Child
-  12:7-12:21 -> (List<i32>) => string
+  12:7-12:21 -> (values: List<i32>) => string
   12:7-12:31 -> string
-  12:13-12:21 -> (List<i32>) => string
+  12:13-12:21 -> (values: List<i32>) => string
   12:22-12:30 -> List<i32>
   13:1-13:6 -> (any) => void
   13:1-13:31 -> void
   13:7-13:12 -> Child
-  13:7-13:21 -> (List<string>) => string
+  13:7-13:21 -> (values: List<string>) => string
   13:7-13:30 -> string
-  13:13-13:21 -> (List<string>) => string
+  13:13-13:21 -> (values: List<string>) => string
   13:22-13:29 -> List<string>
 
 Resolved types:
@@ -401,10 +403,10 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:17-2:25 -> func describe(List<i32>) => string
+  2:17-2:25 -> func describe(values: List<i32>) => string
   2:26-2:32 -> const values: List<i32>
   5:7-5:12 -> class Child
-  6:17-6:25 -> func describe(List<string>) => string
+  6:17-6:25 -> func describe(values: List<string>) => string
   6:26-6:32 -> const values: List<string>
   9:7-9:12 -> const child: Child
   10:7-10:15 -> const integers: List<i32>

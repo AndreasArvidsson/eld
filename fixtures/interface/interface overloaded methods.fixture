@@ -172,6 +172,7 @@ SEMICOLON (15:25-15:26)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -196,6 +197,7 @@ SEMICOLON (15:25-15:26)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -235,6 +237,7 @@ SEMICOLON (15:25-15:26)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -274,6 +277,7 @@ SEMICOLON (15:25-15:26)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -380,9 +384,14 @@ SEMICOLON (15:25-15:26)
     )
     (FunctionTypeNode
       range: 12:22-12:37
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 12:23-12:26
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 12:23-12:26
+          name: "i32"
+        )
       )
       (NamedTypeNode
         range: 12:31-12:37
@@ -410,9 +419,14 @@ SEMICOLON (15:25-15:26)
     )
     (FunctionTypeNode
       range: 13:21-13:39
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 13:22-13:28
-        name: "string"
+        label: null
+        (NamedTypeNode
+          range: 13:22-13:28
+          name: "string"
+        )
       )
       (NamedTypeNode
         range: 13:33-13:39
@@ -487,23 +501,23 @@ Expression types:
   10:1-10:6 -> (any) => void
   10:1-10:27 -> void
   10:7-10:14 -> Printer
-  10:7-10:23 -> (i32) => string
+  10:7-10:23 -> (value: i32) => string
   10:7-10:26 -> string
-  10:15-10:23 -> (i32) => string
+  10:15-10:23 -> (value: i32) => string
   10:24-10:25 -> i32
   11:1-11:6 -> (any) => void
   11:1-11:29 -> void
   11:7-11:14 -> Printer
-  11:7-11:23 -> (string) => string
+  11:7-11:23 -> (value: string) => string
   11:7-11:28 -> string
-  11:15-11:23 -> (string) => string
+  11:15-11:23 -> (value: string) => string
   11:24-11:27 -> string
   12:40-12:47 -> Printer
-  12:40-12:56 -> (i32) => string
-  12:48-12:56 -> (i32) => string
+  12:40-12:56 -> (value: i32) => string
+  12:48-12:56 -> (value: i32) => string
   13:42-13:49 -> Printer
-  13:42-13:58 -> (string) => string
-  13:50-13:58 -> (string) => string
+  13:42-13:58 -> (value: string) => string
+  13:50-13:58 -> (value: string) => string
   14:1-14:6 -> (any) => void
   14:1-14:24 -> void
   14:7-14:20 -> (i32) => string
@@ -535,14 +549,14 @@ Resolved types:
 
 Declarations:
   1:11-1:18 -> interface Printer
-  2:10-2:18 -> func describe(i32) => string
+  2:10-2:18 -> func describe(value: i32) => string
   2:19-2:24 -> const value: i32
-  3:10-3:18 -> func describe(string) => string
+  3:10-3:18 -> func describe(value: string) => string
   3:19-3:24 -> const value: string
   5:7-5:11 -> class Both
-  6:17-6:25 -> func describe(string) => string
+  6:17-6:25 -> func describe(value: string) => string
   6:26-6:31 -> const value: string
-  7:17-7:25 -> func describe(i32) => string
+  7:17-7:25 -> func describe(value: i32) => string
   7:26-7:31 -> const value: i32
   9:7-9:14 -> const printer: Printer
   12:7-12:20 -> const integerMethod: (i32) => string

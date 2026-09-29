@@ -159,6 +159,7 @@ SEMICOLON (14:20-14:21)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -183,6 +184,7 @@ SEMICOLON (14:20-14:21)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -240,6 +242,7 @@ SEMICOLON (14:20-14:21)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -278,6 +281,7 @@ SEMICOLON (14:20-14:21)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -414,16 +418,16 @@ Expression types:
   13:1-13:6 -> (any) => void
   13:1-13:18 -> void
   13:7-13:12 -> Value
-  13:7-13:14 -> (i32) => i32
+  13:7-13:14 -> (value: i32) => i32
   13:7-13:17 -> i32
-  13:13-13:14 -> (i32) => i32
+  13:13-13:14 -> (value: i32) => i32
   13:15-13:16 -> i32
   14:1-14:6 -> (any) => void
   14:1-14:20 -> void
   14:7-14:12 -> Value
-  14:7-14:14 -> (string) => i32
+  14:7-14:14 -> (value: string) => i32
   14:7-14:19 -> i32
-  14:13-14:14 -> (string) => i32
+  14:13-14:14 -> (value: string) => i32
   14:15-14:18 -> string
 
 Resolved types:
@@ -442,15 +446,15 @@ Resolved types:
 Declarations:
   1:11-1:16 -> interface Value
   2:11-2:12 -> const f: i32
-  3:10-3:11 -> func f(i32) => i32
+  3:10-3:11 -> func f(value: i32) => i32
   3:12-3:17 -> const value: i32
-  4:10-4:11 -> func f(string) => i32
+  4:10-4:11 -> func f(value: string) => i32
   4:12-4:17 -> const value: string
   6:7-6:11 -> class Impl
   7:18-7:19 -> const f: i32
-  8:17-8:18 -> func f(i32) => i32
+  8:17-8:18 -> func f(value: i32) => i32
   8:19-8:24 -> const value: i32
-  9:17-9:18 -> func f(string) => i32
+  9:17-9:18 -> func f(value: string) => i32
   9:19-9:24 -> const value: string
   11:7-11:12 -> const value: Value
 

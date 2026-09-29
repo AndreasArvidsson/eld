@@ -91,6 +91,7 @@ SEMICOLON (10:36-10:37)
             name: "Key"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -104,6 +105,7 @@ SEMICOLON (10:36-10:37)
             name: "Key"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

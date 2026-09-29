@@ -52,6 +52,7 @@ RIGHT_BRACE (4:27-4:28)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement

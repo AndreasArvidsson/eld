@@ -92,6 +92,7 @@ RIGHT_BRACE (9:1-9:2)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -105,6 +106,7 @@ RIGHT_BRACE (9:1-9:2)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -149,6 +151,7 @@ RIGHT_BRACE (9:1-9:2)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -224,10 +227,10 @@ Conversions:
 
 Declarations:
   1:7-1:14 -> class Compare
-  2:24-2:29 -> func equal(Compare, Compare) => bool
+  2:24-2:29 -> func equal(a: Compare, b: Compare) => bool
   2:30-2:31 -> const a: Compare
   2:42-2:43 -> const b: Compare
-  5:6-5:12 -> func unsafe(Compare | null) => void
+  5:6-5:12 -> func unsafe(value: Compare | null) => void
   5:13-5:18 -> const value: Compare | null
   7:15-7:23 -> const narrowed: null
 

@@ -1,0 +1,38 @@
+var x: void = null;
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "x" (1:5-1:6)
+COLON (1:6-1:7)
+IDENTIFIER "void" (1:8-1:12)
+EQUAL (1:13-1:14)
+NULL (1:15-1:19)
+SEMICOLON (1:19-1:20)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:20
+  (VariableDeclaration
+    range: 1:1-1:20
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:6
+      name: "x"
+    )
+    (NamedTypeNode
+      range: 1:8-1:12
+      name: "void"
+    )
+    (LiteralExpression
+      range: 1:15-1:19
+      kind: NULL
+      text: "null"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: 'void' is only allowed as a return type at 1:8-1:12

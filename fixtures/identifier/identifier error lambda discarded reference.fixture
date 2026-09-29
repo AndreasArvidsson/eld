@@ -31,9 +31,14 @@ SEMICOLON (1:41-1:42)
     )
     (FunctionTypeNode
       range: 1:18-1:30
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 1:19-1:22
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 1:19-1:22
+          name: "i32"
+        )
       )
       (NamedTypeNode
         range: 1:27-1:30
@@ -44,9 +49,8 @@ SEMICOLON (1:41-1:42)
       range: 1:33-1:41
       (LambdaParameter
         range: 1:34-1:35
-        (IdentifierDeclaration
+        (DiscardDeclaration
           range: 1:34-1:35
-          name: "_"
         )
       )
       (IdentifierExpression

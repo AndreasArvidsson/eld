@@ -117,6 +117,7 @@ RIGHT_BRACE (10:1-10:2)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -152,6 +153,7 @@ RIGHT_BRACE (10:1-10:2)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -199,6 +201,7 @@ RIGHT_BRACE (10:1-10:2)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -242,6 +245,7 @@ RIGHT_BRACE (10:1-10:2)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -266,4 +270,4 @@ RIGHT_BRACE (10:1-10:2)
 
 --- SEMANTIC ---
 
-SemanticException: Class Both cannot implement erased overloads 'describe(List<i32>)' and 'describe(List<string>)' from unrelated interfaces at 7:1-10:2
+SemanticException: Class Both cannot implement erased overloads 'describe(values: List<i32>)' and 'describe(values: List<string>)' from unrelated interfaces at 7:1-10:2

@@ -282,6 +282,7 @@ SEMICOLON (23:34-23:35)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -310,6 +311,7 @@ SEMICOLON (23:34-23:35)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -338,6 +340,7 @@ SEMICOLON (23:34-23:35)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -377,6 +380,7 @@ SEMICOLON (23:34-23:35)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -420,6 +424,7 @@ SEMICOLON (23:34-23:35)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -478,6 +483,7 @@ SEMICOLON (23:34-23:35)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -800,44 +806,44 @@ Expression types:
   18:1-18:6 -> (any) => void
   18:1-18:32 -> void
   18:7-18:12 -> Child
-  18:7-18:21 -> (List<bool>) => string
+  18:7-18:21 -> (values: List<bool>) => string
   18:7-18:31 -> string
-  18:13-18:21 -> (List<bool>) => string
+  18:13-18:21 -> (values: List<bool>) => string
   18:22-18:30 -> List<bool>
   19:1-19:6 -> (any) => void
   19:1-19:28 -> void
   19:7-19:12 -> Child
-  19:7-19:21 -> (List<i32>) => string
+  19:7-19:21 -> (values: List<i32>) => string
   19:7-19:27 -> string
-  19:13-19:21 -> (List<i32>) => string
+  19:13-19:21 -> (values: List<i32>) => string
   19:22-19:26 -> List<i32>
   20:1-20:6 -> (any) => void
   20:1-20:31 -> void
   20:7-20:12 -> Child
-  20:7-20:21 -> (List<string>) => string
+  20:7-20:21 -> (values: List<string>) => string
   20:7-20:30 -> string
-  20:13-20:21 -> (List<string>) => string
+  20:13-20:21 -> (values: List<string>) => string
   20:22-20:29 -> List<string>
   21:1-21:6 -> (any) => void
   21:1-21:35 -> void
   21:7-21:15 -> Tri
-  21:7-21:24 -> (List<bool>) => string
+  21:7-21:24 -> (values: List<bool>) => string
   21:7-21:34 -> string
-  21:16-21:24 -> (List<bool>) => string
+  21:16-21:24 -> (values: List<bool>) => string
   21:25-21:33 -> List<bool>
   22:1-22:6 -> (any) => void
   22:1-22:31 -> void
   22:7-22:15 -> Tri
-  22:7-22:24 -> (List<i32>) => string
+  22:7-22:24 -> (values: List<i32>) => string
   22:7-22:30 -> string
-  22:16-22:24 -> (List<i32>) => string
+  22:16-22:24 -> (values: List<i32>) => string
   22:25-22:29 -> List<i32>
   23:1-23:6 -> (any) => void
   23:1-23:34 -> void
   23:7-23:15 -> Tri
-  23:7-23:24 -> (List<string>) => string
+  23:7-23:24 -> (values: List<string>) => string
   23:7-23:33 -> string
-  23:16-23:24 -> (List<string>) => string
+  23:16-23:24 -> (values: List<string>) => string
   23:25-23:32 -> List<string>
 
 Resolved types:
@@ -876,19 +882,19 @@ Resolved types:
 
 Declarations:
   1:11-1:14 -> interface Tri
-  2:10-2:18 -> func describe(List<bool>) => string
+  2:10-2:18 -> func describe(values: List<bool>) => string
   2:19-2:25 -> const values: List<bool>
-  3:10-3:18 -> func describe(List<i32>) => string
+  3:10-3:18 -> func describe(values: List<i32>) => string
   3:19-3:25 -> const values: List<i32>
-  4:10-4:18 -> func describe(List<string>) => string
+  4:10-4:18 -> func describe(values: List<string>) => string
   4:19-4:25 -> const values: List<string>
   6:7-6:11 -> class Base
-  7:17-7:25 -> func describe(List<i32>) => string
+  7:17-7:25 -> func describe(values: List<i32>) => string
   7:26-7:32 -> const values: List<i32>
-  8:17-8:25 -> func describe(List<string>) => string
+  8:17-8:25 -> func describe(values: List<string>) => string
   8:26-8:32 -> const values: List<string>
   10:7-10:12 -> class Child
-  11:17-11:25 -> func describe(List<bool>) => string
+  11:17-11:25 -> func describe(values: List<bool>) => string
   11:26-11:32 -> const values: List<bool>
   13:7-13:12 -> const child: Child
   14:7-14:15 -> const contract: Tri

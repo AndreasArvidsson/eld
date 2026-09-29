@@ -92,6 +92,7 @@ SEMICOLON (7:26-7:27)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -142,6 +143,7 @@ SEMICOLON (7:26-7:27)
             name: "any"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -208,11 +210,11 @@ Expression types:
   7:1-7:6 -> (any) => void
   7:1-7:26 -> void
   7:7-7:20 -> Child
-  7:7-7:22 -> (any) => string
+  7:7-7:22 -> (value: any) => string
   7:7-7:25 -> string
   7:8-7:19 -> Child
   7:12-7:17 -> Child
-  7:21-7:22 -> (any) => string
+  7:21-7:22 -> (value: any) => string
   7:23-7:24 -> i32
 
 Resolved types:
@@ -226,10 +228,10 @@ Conversions:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:10-2:11 -> func f(i32) => string
+  2:10-2:11 -> func f(value: i32) => string
   2:12-2:17 -> const value: i32
   4:7-4:12 -> class Child
-  5:17-5:18 -> func f(any) => string
+  5:17-5:18 -> func f(value: any) => string
   5:19-5:24 -> const value: any
 
 References:

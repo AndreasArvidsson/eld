@@ -71,6 +71,7 @@ SEMICOLON (6:24-6:25)
         name: "Matcher"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode

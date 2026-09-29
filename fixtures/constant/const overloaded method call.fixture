@@ -130,6 +130,7 @@ SEMICOLON (7:16-7:17)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -169,6 +170,7 @@ SEMICOLON (7:16-7:17)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

@@ -564,9 +564,16 @@ public class ParserExpressions extends ParserBase {
             do {
                 final Token name = expect(TokenType.IDENTIFIER);
                 Parser.assertIdentifierCase(name, "parameter");
-                final IdentifierDeclaration id =
-                    new IdentifierDeclaration(name.text(), name.range());
-                parameters.add(new LambdaParameter(id));
+                parameters.add(
+                    new LambdaParameter(
+                        name.text().equals("_")
+                            ? new DiscardDeclaration(name.range())
+                            : new IdentifierDeclaration(
+                                name.text(),
+                                name.range()
+                            )
+                    )
+                );
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);

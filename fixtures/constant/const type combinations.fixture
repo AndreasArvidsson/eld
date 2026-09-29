@@ -408,6 +408,7 @@ RIGHT_BRACE (46:1-46:2)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement
@@ -798,6 +799,7 @@ RIGHT_BRACE (46:1-46:2)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (ConstTypeNode
@@ -835,6 +837,7 @@ RIGHT_BRACE (46:1-46:2)
         name: "any"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -1269,24 +1272,24 @@ Expression types:
   37:14-37:19 -> i32
   38:1-38:6 -> (any) => void
   38:1-38:30 -> void
-  38:7-38:15 -> (const Foo) => const Foo
+  38:7-38:15 -> (value: const Foo) => const Foo
   38:7-38:23 -> const Foo
   38:7-38:29 -> i32
   38:16-38:22 -> const Foo
   38:24-38:29 -> i32
   39:1-39:6 -> (any) => void
   39:1-39:23 -> void
-  39:7-39:14 -> (any) => i32
+  39:7-39:14 -> (value: any) => i32
   39:7-39:22 -> i32
   39:15-39:21 -> const Foo
   40:1-40:6 -> (any) => void
   40:1-40:22 -> void
-  40:7-40:14 -> (any) => i32
+  40:7-40:14 -> (value: any) => i32
   40:7-40:21 -> i32
   40:15-40:20 -> const [Foo]
   41:1-41:6 -> (any) => void
   41:1-41:25 -> void
-  41:7-41:14 -> (any) => i32
+  41:7-41:14 -> (value: any) => i32
   41:7-41:24 -> i32
   41:15-41:23 -> const Foo | null
   42:1-42:6 -> (any) => void
@@ -1362,9 +1365,9 @@ Declarations:
   21:7-21:13 -> const object: const Foo
   22:7-22:15 -> const optional: const Foo | null
   23:7-23:13 -> const copied: [Foo]
-  25:6-25:14 -> func identity(const Foo) => const Foo
+  25:6-25:14 -> func identity(value: const Foo) => const Foo
   25:15-25:20 -> const value: const Foo
-  29:6-29:13 -> func consume(any) => i32
+  29:6-29:13 -> func consume(value: any) => i32
   29:14-29:19 -> const value: any
   44:6-44:11 -> const value: Foo
 

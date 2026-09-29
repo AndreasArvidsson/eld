@@ -101,6 +101,7 @@ RIGHT_BRACE (13:1-13:2)
             name: "Key"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -114,6 +115,7 @@ RIGHT_BRACE (13:1-13:2)
             name: "Key"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

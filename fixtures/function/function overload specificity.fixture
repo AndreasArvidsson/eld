@@ -121,6 +121,7 @@ SEMICOLON (10:24-10:25)
         name: "Animal"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -156,6 +157,7 @@ SEMICOLON (10:24-10:25)
         name: "Dog"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -264,12 +266,12 @@ Expression types:
   8:24-8:27 -> Dog
   9:1-9:6 -> (any) => void
   9:1-9:21 -> void
-  9:7-9:15 -> (Dog) => string
+  9:7-9:15 -> (value: Dog) => string
   9:7-9:20 -> string
   9:16-9:19 -> Dog
   10:1-10:6 -> (any) => void
   10:1-10:24 -> void
-  10:7-10:15 -> (Animal) => string
+  10:7-10:15 -> (value: Animal) => string
   10:7-10:23 -> string
   10:16-10:22 -> Animal
 
@@ -284,9 +286,9 @@ Resolved types:
 Declarations:
   1:7-1:13 -> class Animal
   2:7-2:10 -> class Dog
-  4:6-4:14 -> func describe(Animal) => string
+  4:6-4:14 -> func describe(value: Animal) => string
   4:15-4:20 -> const value: Animal
-  5:6-5:14 -> func describe(Dog) => string
+  5:6-5:14 -> func describe(value: Dog) => string
   5:15-5:20 -> const value: Dog
   7:7-7:10 -> const dog: Dog
   8:7-8:13 -> const animal: Animal

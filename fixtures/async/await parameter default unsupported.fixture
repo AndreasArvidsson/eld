@@ -57,6 +57,7 @@ SEMICOLON (5:13-5:14)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       (AwaitExpression
         range: 1:29-1:53
         (CallExpression

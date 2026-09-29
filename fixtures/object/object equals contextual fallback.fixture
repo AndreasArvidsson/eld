@@ -113,6 +113,7 @@ SEMICOLON (11:24-11:25)
             name: "any"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -273,23 +274,23 @@ Expression types:
   8:1-8:6 -> (any) => void
   8:1-8:23 -> void
   8:7-8:10 -> Foo
-  8:7-8:17 -> (any) => bool
+  8:7-8:17 -> (value: any) => bool
   8:7-8:22 -> bool
-  8:11-8:17 -> (any) => bool
+  8:11-8:17 -> (value: any) => bool
   8:18-8:21 -> string
   9:1-9:6 -> (any) => void
   9:1-9:23 -> void
   9:7-9:10 -> Foo
-  9:7-9:17 -> (any) => bool
+  9:7-9:17 -> (value: any) => bool
   9:7-9:22 -> bool
-  9:11-9:17 -> (any) => bool
+  9:11-9:17 -> (value: any) => bool
   9:18-9:21 -> Foo
   10:1-10:6 -> (any) => void
   10:1-10:29 -> void
   10:7-10:10 -> Foo
-  10:7-10:17 -> (any) => bool
+  10:7-10:17 -> (value: any) => bool
   10:7-10:28 -> bool
-  10:11-10:17 -> (any) => bool
+  10:11-10:17 -> (value: any) => bool
   10:18-10:27 -> Foo
   10:22-10:25 -> Foo
   11:1-11:6 -> (any) => void
@@ -310,7 +311,7 @@ Conversions:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:17-2:23 -> func equals(any) => bool
+  2:17-2:23 -> func equals(value: any) => bool
   2:24-2:29 -> const value: any
   7:7-7:10 -> const foo: Foo
 

@@ -121,6 +121,7 @@ SEMICOLON (8:36-8:37)
         range: 1:13-1:16
         name: "i32"
       )
+      namedOnly: false
     )
     (MemberDeclaration
       range: 2:5-2:66
@@ -146,6 +147,7 @@ SEMICOLON (8:36-8:37)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -189,6 +191,7 @@ SEMICOLON (8:36-8:37)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -346,17 +349,17 @@ Expression types:
   7:1-7:6 -> (any) => void
   7:1-7:33 -> void
   7:7-7:8 -> R
-  7:7-7:10 -> (List<i32>) => string
+  7:7-7:10 -> (values: List<i32>) => string
   7:7-7:32 -> string
-  7:9-7:10 -> (List<i32>) => string
+  7:9-7:10 -> (values: List<i32>) => string
   7:11-7:31 -> ArrayList<i32>
   7:15-7:24 -> ArrayList<i32>
   8:1-8:6 -> (any) => void
   8:1-8:36 -> void
   8:7-8:8 -> R
-  8:7-8:10 -> (List<string>) => string
+  8:7-8:10 -> (values: List<string>) => string
   8:7-8:35 -> string
-  8:9-8:10 -> (List<string>) => string
+  8:9-8:10 -> (values: List<string>) => string
   8:11-8:34 -> ArrayList<string>
   8:15-8:24 -> ArrayList<string>
 
@@ -377,9 +380,9 @@ Resolved types:
 
 Declarations:
   1:8-1:9 -> record R(f: i32)
-  2:17-2:18 -> func f(List<i32>) => string
+  2:17-2:18 -> func f(values: List<i32>) => string
   2:19-2:25 -> const values: List<i32>
-  3:17-3:18 -> func f(List<string>) => string
+  3:17-3:18 -> func f(values: List<string>) => string
   3:19-3:25 -> const values: List<string>
   5:7-5:8 -> const r: R
 

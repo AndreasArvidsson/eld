@@ -250,6 +250,7 @@ SEMICOLON (23:25-23:26)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -263,6 +264,7 @@ SEMICOLON (23:25-23:26)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -302,6 +304,7 @@ SEMICOLON (23:25-23:26)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -369,6 +372,7 @@ SEMICOLON (23:25-23:26)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -382,6 +386,7 @@ SEMICOLON (23:25-23:26)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -727,9 +732,9 @@ SEMICOLON (23:25-23:26)
 Expression types:
   2:66-2:70 -> bool
   3:54-3:60 -> Animal
-  3:54-3:66 -> (Animal, Animal) => bool
+  3:54-3:66 -> (a: Animal, b: Animal) => bool
   3:54-3:79 -> bool
-  3:61-3:66 -> (Animal, Animal) => bool
+  3:61-3:66 -> (a: Animal, b: Animal) => bool
   3:67-3:71 -> Animal
   3:73-3:78 -> Animal
   5:19-5:25 -> Animal
@@ -768,25 +773,25 @@ Expression types:
   19:1-19:6 -> (any) => void
   19:1-19:33 -> void
   19:7-19:13 -> Animal
-  19:7-19:19 -> (Animal, Animal) => bool
+  19:7-19:19 -> (a: Animal, b: Animal) => bool
   19:7-19:32 -> bool
-  19:14-19:19 -> (Animal, Animal) => bool
+  19:14-19:19 -> (a: Animal, b: Animal) => bool
   19:20-19:26 -> Animal
   19:28-19:31 -> Cat
   20:1-20:6 -> (any) => void
   20:1-20:33 -> void
   20:7-20:13 -> Animal
-  20:7-20:19 -> (Animal, Animal) => bool
+  20:7-20:19 -> (a: Animal, b: Animal) => bool
   20:7-20:32 -> bool
-  20:14-20:19 -> (Animal, Animal) => bool
+  20:14-20:19 -> (a: Animal, b: Animal) => bool
   20:20-20:26 -> Animal
   20:28-20:31 -> Dog
   21:1-21:6 -> (any) => void
   21:1-21:24 -> void
   21:7-21:10 -> Cat
-  21:7-21:18 -> (Animal) => bool
+  21:7-21:18 -> (other: Animal) => bool
   21:7-21:23 -> bool
-  21:11-21:18 -> (Animal) => bool
+  21:11-21:18 -> (other: Animal) => bool
   21:19-21:22 -> Dog
   22:1-22:6 -> (any) => void
   22:1-22:23 -> void
@@ -812,13 +817,13 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> class Animal
-  2:24-2:29 -> func equal(Animal, Animal) => bool
+  2:24-2:29 -> func equal(a: Animal, b: Animal) => bool
   2:30-2:31 -> const a: Animal
   2:41-2:42 -> const b: Animal
-  3:17-3:24 -> func through(Animal) => bool
+  3:17-3:24 -> func through(other: Animal) => bool
   3:25-3:30 -> const other: Animal
   5:7-5:10 -> class Cat
-  6:24-6:29 -> func equal(Cat, Cat) => bool
+  6:24-6:29 -> func equal(a: Cat, b: Cat) => bool
   6:30-6:31 -> const a: Cat
   6:38-6:39 -> const b: Cat
   8:7-8:10 -> class Dog

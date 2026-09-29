@@ -967,6 +967,30 @@ public final class BytecodeGenerator {
             );
     }
 
+    private record OverloadSignature(
+        List<Type> parameterTypes, int namedOnlyStart,
+        List<String> namedOnlyLabels
+    ) {
+    }
+
+    private OverloadSignature overloadSignature(final FunctionSymbol function) {
+        final FunctionType type = function.type();
+        final List<@Nullable String> labels = type.parameterNames();
+        return new OverloadSignature(
+            type.parameterTypes(),
+            type.namedOnlyStart(),
+            IntStream.range(0, type.parameterTypes().size())
+                .mapToObj(
+                    i -> i >= type.namedOnlyStart()
+                        && type.namedOnlyStart() >= 0
+                        && !labels.isEmpty()
+                            ? Objects.toString(labels.get(i), "")
+                            : ""
+                )
+                .toList()
+        );
+    }
+
     private String methodName(final FunctionSymbol function) {
         final InterfaceType contract =
             semanticModel.findInterfaceMethodOwner(function);
@@ -1007,6 +1031,49 @@ public final class BytecodeGenerator {
         final InterfaceType owner,
         final FunctionSymbol function
     ) {
+        final Map<OverloadSignature, String> assigned = new LinkedHashMap<>();
+        final Set<String> used = new HashSet<>();
+        final String descriptor = methodDescriptor(function.type());
+        for (final InterfaceType contract : semanticModel.getInterfaceTypes()) {
+            if (contract.javaClass() != null) {
+                continue;
+            }
+            for (final FunctionSymbol candidate : semanticModel
+                .getInterface(contract)
+                .methodOverloads(function.name())) {
+                if (
+                    !contract.equals(
+                        semanticModel.findInterfaceMethodOwner(candidate)
+                    ) || !methodDescriptor(candidate.type()).equals(descriptor)
+                ) {
+                    continue;
+                }
+                final OverloadSignature signature =
+                    overloadSignature(candidate);
+                String name = assigned.get(signature);
+                if (name == null) {
+                    name = localInterfaceMethodName(contract, candidate);
+                    if (used.contains(name)) {
+                        int suffix = 1;
+                        do {
+                            name = candidate.name() + "$" + suffix++;
+                        } while (used.contains(name));
+                    }
+                    assigned.put(signature, name);
+                    used.add(name);
+                }
+                if (candidate.equals(function)) {
+                    return name;
+                }
+            }
+        }
+        return localInterfaceMethodName(owner, function);
+    }
+
+    private String localInterfaceMethodName(
+        final InterfaceType owner,
+        final FunctionSymbol function
+    ) {
         final List<FunctionSymbol> candidates =
             semanticModel.getInterface(owner)
                 .methodOverloads(function.name())
@@ -1034,19 +1101,22 @@ public final class BytecodeGenerator {
             ) {
                 continue;
             }
+            final OverloadSignature signature = overloadSignature(candidate);
             final boolean collision =
                 candidates.stream()
                     .anyMatch(
-                        other -> !other.type()
-                            .parameterTypes()
-                            .equals(candidate.type().parameterTypes())
-                            && (FunctionSignatures.overlap(
-                                candidate.type(),
-                                functionParameters(candidate),
-                                other.type(),
-                                functionParameters(other),
-                                this::descriptor
-                            ) || erasedMethodCollision(candidate, other))
+                        other -> !overloadSignature(other).equals(signature)
+                            && (other.type()
+                                .parameterTypes()
+                                .equals(candidate.type().parameterTypes())
+                                || FunctionSignatures.overlap(
+                                    candidate.type(),
+                                    functionParameters(candidate),
+                                    other.type(),
+                                    functionParameters(other),
+                                    this::descriptor
+                                )
+                                || erasedMethodCollision(candidate, other))
                     );
             String name = candidate.name();
             if (collision) {
@@ -1103,14 +1173,14 @@ public final class BytecodeGenerator {
                         .thenComparing(FunctionSymbol::range)
                 )
                 .toList();
-        final List<List<Type>> signatures = new ArrayList<>();
+        final List<OverloadSignature> signatures = new ArrayList<>();
         for (final FunctionSymbol candidate : candidates) {
-            final List<Type> signature = candidate.type().parameterTypes();
+            final OverloadSignature signature = overloadSignature(candidate);
             if (!signatures.contains(signature)) {
                 signatures.add(signature);
             }
         }
-        final Map<List<Type>, String> assigned = new LinkedHashMap<>();
+        final Map<OverloadSignature, String> assigned = new LinkedHashMap<>();
         final Set<String> used = new HashSet<>();
         if (fixed != null) {
             for (final FunctionSymbol candidate : candidates) {
@@ -1118,10 +1188,8 @@ public final class BytecodeGenerator {
                     semanticModel.getFunctionDeclaration(candidate);
                 final String previous = prior == null ? null : fixed.get(prior);
                 if (previous != null) {
-                    assigned.putIfAbsent(
-                        candidate.type().parameterTypes(),
-                        previous
-                    );
+                    assigned
+                        .putIfAbsent(overloadSignature(candidate), previous);
                     used.add(previous);
                 }
             }
@@ -1133,7 +1201,7 @@ public final class BytecodeGenerator {
                 if (candidateOwner != null && !candidateOwner.equals(owner)) {
                     final String inheritedName = methodName(candidate);
                     assigned.putIfAbsent(
-                        candidate.type().parameterTypes(),
+                        overloadSignature(candidate),
                         inheritedName
                     );
                     used.add(inheritedName);
@@ -1151,38 +1219,37 @@ public final class BytecodeGenerator {
                         candidate
                     );
             if (required != null) {
-                assigned
-                    .putIfAbsent(candidate.type().parameterTypes(), required);
+                assigned.putIfAbsent(overloadSignature(candidate), required);
                 used.add(required);
             }
         }
         for (int i = 0; i < signatures.size(); i++) {
-            final List<Type> signature = signatures.get(i);
+            final OverloadSignature signature = signatures.get(i);
             if (assigned.containsKey(signature)) {
                 continue;
             }
             final FunctionSymbol candidate =
                 candidates.stream()
                     .filter(
-                        method -> method.type()
-                            .parameterTypes()
-                            .equals(signature)
+                        method -> overloadSignature(method).equals(signature)
                     )
                     .findFirst()
                     .orElseThrow();
             final boolean collision =
                 candidates.stream()
                     .anyMatch(
-                        other -> !other.type()
-                            .parameterTypes()
-                            .equals(signature)
-                            && (FunctionSignatures.overlap(
-                                candidate.type(),
-                                functionParameters(candidate),
-                                other.type(),
-                                functionParameters(other),
-                                this::descriptor
-                            ) || erasedMethodCollision(candidate, other))
+                        other -> !overloadSignature(other).equals(signature)
+                            && (other.type()
+                                .parameterTypes()
+                                .equals(signature.parameterTypes())
+                                || FunctionSignatures.overlap(
+                                    candidate.type(),
+                                    functionParameters(candidate),
+                                    other.type(),
+                                    functionParameters(other),
+                                    this::descriptor
+                                )
+                                || erasedMethodCollision(candidate, other))
                     );
             if (!collision && !javaBridgeCollision(candidate, owner)) {
                 assigned.put(signature, name);
@@ -1197,7 +1264,7 @@ public final class BytecodeGenerator {
             used.add(mangled);
         }
         final String selected =
-            assigned.getOrDefault(function.type().parameterTypes(), name);
+            assigned.getOrDefault(overloadSignature(function), name);
         if (fixed != null && declaration != null) {
             fixed.put(declaration, selected);
         }
@@ -1280,9 +1347,8 @@ public final class BytecodeGenerator {
                     .getInterface(contract)
                     .methodOverloads(function.name())) {
                     if (
-                        required.type()
-                            .parameterTypes()
-                            .equals(function.type().parameterTypes())
+                        overloadSignature(required)
+                            .equals(overloadSignature(function))
                     ) {
                         final String name = methodName(required);
                         if (requiredName == null) {
@@ -1321,9 +1387,8 @@ public final class BytecodeGenerator {
                         candidate -> candidateOwner.equals(
                             semanticModel.findClassMemberOwner(candidate)
                         ) && candidate.name().equals(function.name())
-                            && candidate.type()
-                                .parameterTypes()
-                                .equals(function.type().parameterTypes())
+                            && overloadSignature(candidate)
+                                .equals(overloadSignature(function))
                     )
             ) {
                 return true;
@@ -1373,7 +1438,7 @@ public final class BytecodeGenerator {
     ) {
         return parameter.discarded()
             ? generator.reserve(semanticModel.getResolvedType(parameter.type()))
-            : generator.local(semanticModel.getSymbol(parameter.name()));
+            : generator.local(semanticModel.getSymbol(parameter.identifier()));
     }
 
     private boolean erasedMethodCollision(
@@ -1754,7 +1819,7 @@ public final class BytecodeGenerator {
                         declarationConstructor != null
                             && declarationConstructor.hasExplicitSuperCall();
                     if (!explicitSuper) {
-                        initializer.initializeBase(List.of());
+                        initializer.initializeBase(List.of(), List.of());
                     }
                     final boolean reachable;
                     if (record != null) {
@@ -2540,7 +2605,7 @@ public final class BytecodeGenerator {
                 continue;
             }
             final Symbol parameterSymbol =
-                semanticModel.getSymbol(parameter.name());
+                semanticModel.getSymbol(parameter.identifier());
             fields.put(parameterSymbol, "$local" + fieldIndex++);
         }
         final int[] nextField = {fieldIndex};
@@ -2689,7 +2754,7 @@ public final class BytecodeGenerator {
                         continue;
                     }
                     final Symbol parameterSymbol =
-                        semanticModel.getSymbol(parameter.name());
+                        semanticModel.getSymbol(parameter.identifier());
                     method.aload(frameSlot);
                     method.with(
                         localInstruction(
@@ -4012,6 +4077,16 @@ public final class BytecodeGenerator {
             if (
                 !requiresInterfaceBridge(bridge) || !generated.add(key)
                     || hasInheritedInterfaceBridge(classType, key)
+                    || semanticModel.getFunctionDeclarations()
+                        .keySet()
+                        .stream()
+                        .anyMatch(
+                            candidate -> classType.equals(
+                                semanticModel.findClassMemberOwner(candidate)
+                            ) && methodName(candidate).equals(bridgeName)
+                                && methodDescriptor(candidate.type())
+                                    .equals(bridgeDescriptor)
+                        )
             ) {
                 continue;
             }
@@ -4829,7 +4904,10 @@ public final class BytecodeGenerator {
             return true;
         }
 
-        private void initializeBase(final List<Expression> arguments) {
+        private void initializeBase(
+            final List<Expression> arguments,
+            final List<Integer> parameters
+        ) {
             if (constructorSuperclassOwner.equals("java/lang/Enum")) {
                 method.aload(0);
                 method.aload(1);
@@ -4847,29 +4925,58 @@ public final class BytecodeGenerator {
                 return;
             }
             method.aload(0);
-            final boolean previous = beforeBaseInitialization;
-            beforeBaseInitialization = true;
-            for (final Expression argument : arguments) {
-                expression(argument);
-            }
-            beforeBaseInitialization = previous;
             final FunctionType type =
                 constructorSuperclass == null
                     ? null
                     : semanticModel.getConstructor(constructorSuperclass);
             final boolean omitted =
                 type != null && arguments.size() < type.parameterTypes().size();
-            if (type != null && omitted) {
-                final boolean[] assigned =
-                    new boolean[type.parameterTypes().size()];
-                for (int i = 0; i < assigned.length; i++) {
-                    assigned[i] = i < arguments.size();
-                    if (!assigned[i]) {
+            final boolean previous = beforeBaseInitialization;
+            beforeBaseInitialization = true;
+            if (type == null) {
+                for (final Expression argument : arguments) {
+                    expression(argument);
+                }
+            }
+            else if (!orderedArguments(arguments, parameters, type)) {
+                final int[] locals = new int[type.parameterTypes().size()];
+                final boolean[] assigned = new boolean[locals.length];
+                for (int i = 0; i < arguments.size(); i++) {
+                    final Expression supplied = arguments.get(i);
+                    final Expression value =
+                        supplied instanceof NamedArgumentExpression named
+                            ? named.value()
+                            : supplied;
+                    final int parameter = parameters.get(i);
+                    final Type parameterType =
+                        type.parameterTypes().get(parameter);
+                    final int slot = nextLocal;
+                    nextLocal += slots(parameterType);
+                    locals[parameter] = slot;
+                    assigned[parameter] = true;
+                    expression(value);
+                    method.with(
+                        localInstruction(storeOpcode(parameterType), slot)
+                    );
+                }
+                for (int i = 0; i < locals.length; i++) {
+                    if (assigned[i]) {
+                        method.with(
+                            localInstruction(
+                                loadOpcode(type.parameterTypes().get(i)),
+                                locals[i]
+                            )
+                        );
+                    }
+                    else {
                         omittedValue(type.parameterTypes().get(i));
                     }
                 }
-                omissionMask(assigned, type);
+                if (omitted) {
+                    omissionMask(assigned, type);
+                }
             }
+            beforeBaseInitialization = previous;
             method.invoke(
                 INVOKESPECIAL,
                 classDesc(constructorSuperclassOwner),
@@ -4895,8 +5002,10 @@ public final class BytecodeGenerator {
                     item,
                     "Static initializer outside class initialization"
                 );
-                case SuperConstructorCall call ->
-                    initializeBase(call.arguments());
+                case SuperConstructorCall call -> initializeBase(
+                    call.arguments(),
+                    semanticModel.getSuperConstructorArgumentParameters(call)
+                );
                 case VariableDeclaration variable -> {
                     if (variable.name() instanceof DiscardDeclaration) {
                         discard(variable.initializer());
@@ -9678,8 +9787,10 @@ public final class BytecodeGenerator {
                                 }
                                 else {
                                     generator.local(
-                                        semanticModel
-                                            .getSymbol(parameter.name())
+                                        semanticModel.getSymbol(
+                                            (IdentifierDeclaration) parameter
+                                                .name()
+                                        )
                                     );
                                 }
                             }
@@ -9791,7 +9902,9 @@ public final class BytecodeGenerator {
                         }
                         else {
                             generator.local(
-                                semanticModel.getSymbol(parameter.name())
+                                semanticModel.getSymbol(
+                                    (IdentifierDeclaration) parameter.name()
+                                )
                             );
                         }
                     }

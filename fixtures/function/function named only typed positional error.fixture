@@ -1,0 +1,105 @@
+func run(f: (i32, *, i32) => i32) {
+    f(1, 2);
+}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "run" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "f" (1:10-1:11)
+COLON (1:11-1:12)
+LEFT_PAREN (1:13-1:14)
+IDENTIFIER "i32" (1:14-1:17)
+COMMA (1:17-1:18)
+STAR (1:19-1:20)
+COMMA (1:20-1:21)
+IDENTIFIER "i32" (1:22-1:25)
+RIGHT_PAREN (1:25-1:26)
+ARROW (1:27-1:29)
+IDENTIFIER "i32" (1:30-1:33)
+RIGHT_PAREN (1:33-1:34)
+LEFT_BRACE (1:35-1:36)
+IDENTIFIER "f" (2:5-2:6)
+LEFT_PAREN (2:6-2:7)
+INTEGER_LITERAL "1" (2:7-2:8)
+COMMA (2:8-2:9)
+INTEGER_LITERAL "2" (2:10-2:11)
+RIGHT_PAREN (2:11-2:12)
+SEMICOLON (2:12-2:13)
+RIGHT_BRACE (3:1-3:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:2
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "run"
+    )
+    (FunctionParameter
+      range: 1:10-1:33
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "f"
+      )
+      (FunctionTypeNode
+        range: 1:13-1:33
+        namedOnlyStart: 1
+        (FunctionTypeParameter
+          range: 1:14-1:17
+          label: null
+          (NamedTypeNode
+            range: 1:14-1:17
+            name: "i32"
+          )
+        )
+        (FunctionTypeParameter
+          range: 1:22-1:25
+          label: null
+          (NamedTypeNode
+            range: 1:22-1:25
+            name: "i32"
+          )
+        )
+        (NamedTypeNode
+          range: 1:30-1:33
+          name: "i32"
+        )
+      )
+      optional: false
+      namedOnly: false
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:35-3:2
+      (ExpressionStatement
+        range: 2:5-2:13
+        (CallExpression
+          range: 2:5-2:12
+          (IdentifierExpression
+            range: 2:5-2:6
+            name: "f"
+          )
+          (LiteralExpression
+            range: 2:7-2:8
+            kind: INT
+            text: "1"
+          )
+          (LiteralExpression
+            range: 2:10-2:11
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Parameter 2 must be supplied by name at 2:10-2:11

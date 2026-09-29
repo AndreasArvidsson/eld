@@ -1,0 +1,363 @@
+class Base {
+    public func value(*, x: i32) i32 { return x + 1; }
+}
+class Derived extends Base {
+    public override func value(*, x: i32) i32 { return x + 10; }
+}
+
+const base: Base = new Derived();
+print(base.value(x: 2));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+STAR (2:23-2:24)
+COMMA (2:24-2:25)
+IDENTIFIER "x" (2:26-2:27)
+COLON (2:27-2:28)
+IDENTIFIER "i32" (2:29-2:32)
+RIGHT_PAREN (2:32-2:33)
+IDENTIFIER "i32" (2:34-2:37)
+LEFT_BRACE (2:38-2:39)
+RETURN (2:40-2:46)
+IDENTIFIER "x" (2:47-2:48)
+PLUS (2:49-2:50)
+INTEGER_LITERAL "1" (2:51-2:52)
+SEMICOLON (2:52-2:53)
+RIGHT_BRACE (2:54-2:55)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Derived" (4:7-4:14)
+EXTENDS (4:15-4:22)
+IDENTIFIER "Base" (4:23-4:27)
+LEFT_BRACE (4:28-4:29)
+PUBLIC (5:5-5:11)
+OVERRIDE (5:12-5:20)
+FUNC (5:21-5:25)
+IDENTIFIER "value" (5:26-5:31)
+LEFT_PAREN (5:31-5:32)
+STAR (5:32-5:33)
+COMMA (5:33-5:34)
+IDENTIFIER "x" (5:35-5:36)
+COLON (5:36-5:37)
+IDENTIFIER "i32" (5:38-5:41)
+RIGHT_PAREN (5:41-5:42)
+IDENTIFIER "i32" (5:43-5:46)
+LEFT_BRACE (5:47-5:48)
+RETURN (5:49-5:55)
+IDENTIFIER "x" (5:56-5:57)
+PLUS (5:58-5:59)
+INTEGER_LITERAL "10" (5:60-5:62)
+SEMICOLON (5:62-5:63)
+RIGHT_BRACE (5:64-5:65)
+RIGHT_BRACE (6:1-6:2)
+CONST (8:1-8:6)
+IDENTIFIER "base" (8:7-8:11)
+COLON (8:11-8:12)
+IDENTIFIER "Base" (8:13-8:17)
+EQUAL (8:18-8:19)
+NEW (8:20-8:23)
+IDENTIFIER "Derived" (8:24-8:31)
+LEFT_PAREN (8:31-8:32)
+RIGHT_PAREN (8:32-8:33)
+SEMICOLON (8:33-8:34)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "base" (9:7-9:11)
+DOT (9:11-9:12)
+IDENTIFIER "value" (9:12-9:17)
+LEFT_PAREN (9:17-9:18)
+IDENTIFIER "x" (9:18-9:19)
+COLON (9:19-9:20)
+INTEGER_LITERAL "2" (9:21-9:22)
+RIGHT_PAREN (9:22-9:23)
+RIGHT_PAREN (9:23-9:24)
+SEMICOLON (9:24-9:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:25
+  (ClassDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    superClass: null
+    (MemberDeclaration
+      range: 2:5-2:55
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 2:12-2:55
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (FunctionParameter
+          range: 2:26-2:32
+          (IdentifierDeclaration
+            range: 2:26-2:27
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 2:29-2:32
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:34-2:37
+          name: "i32"
+        )
+        (BlockStatement
+          range: 2:38-2:55
+          (ReturnStatement
+            range: 2:40-2:53
+            (BinaryExpression
+              range: 2:47-2:52
+              (IdentifierExpression
+                range: 2:47-2:48
+                name: "x"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 2:51-2:52
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:7-4:14
+      name: "Derived"
+    )
+    (IdentifierExpression
+      range: 4:23-4:27
+      name: "Base"
+    )
+    (MemberDeclaration
+      range: 5:5-5:65
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 5:12-5:65
+        OVERRIDE
+        (IdentifierDeclaration
+          range: 5:26-5:31
+          name: "value"
+        )
+        (FunctionParameter
+          range: 5:35-5:41
+          (IdentifierDeclaration
+            range: 5:35-5:36
+            name: "x"
+          )
+          (NamedTypeNode
+            range: 5:38-5:41
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 5:43-5:46
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:47-5:65
+          (ReturnStatement
+            range: 5:49-5:63
+            (BinaryExpression
+              range: 5:56-5:62
+              (IdentifierExpression
+                range: 5:56-5:57
+                name: "x"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 5:60-5:62
+                kind: INT
+                text: "10"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:34
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:11
+      name: "base"
+    )
+    (NamedTypeNode
+      range: 8:13-8:17
+      name: "Base"
+    )
+    (NewExpression
+      range: 8:20-8:33
+      (IdentifierExpression
+        range: 8:24-8:31
+        name: "Derived"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:25
+    (CallExpression
+      range: 9:1-9:24
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:23
+        (MemberExpression
+          range: 9:7-9:17
+          (IdentifierExpression
+            range: 9:7-9:11
+            name: "base"
+          )
+          (IdentifierExpression
+            range: 9:12-9:17
+            name: "value"
+          )
+        )
+        (NamedArgumentExpression
+          range: 9:18-9:22
+          (IdentifierDeclaration
+            range: 9:18-9:19
+            name: "x"
+          )
+          (LiteralExpression
+            range: 9:21-9:22
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:47-2:48 -> i32
+  2:47-2:52 -> i32
+  2:51-2:52 -> i32
+  4:23-4:27 -> Base
+  5:56-5:57 -> i32
+  5:56-5:62 -> i32
+  5:60-5:62 -> i32
+  8:20-8:33 -> Derived
+  8:24-8:31 -> Derived
+  9:1-9:6 -> (any) => void
+  9:1-9:24 -> void
+  9:7-9:11 -> Base
+  9:7-9:17 -> (*, x: i32) => i32
+  9:7-9:23 -> i32
+  9:12-9:17 -> (*, x: i32) => i32
+  9:21-9:22 -> i32
+
+Resolved types:
+  2:29-2:32 -> i32
+  2:34-2:37 -> i32
+  5:38-5:41 -> i32
+  5:43-5:46 -> i32
+  8:13-8:17 -> Base
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:17-2:22 -> func value(*, x: i32) => i32
+  2:26-2:27 -> const x: i32
+  4:7-4:14 -> class Derived
+  5:26-5:31 -> override func value(*, x: i32) => i32
+  5:35-5:36 -> const x: i32
+  8:7-8:11 -> const base: Base
+
+References:
+  2:47-2:48 -> 2:26-2:27
+  4:23-4:27 -> 1:7-1:11
+  5:56-5:57 -> 5:35-5:36
+  8:24-8:31 -> 4:7-4:14
+  9:1-9:6 -> builtin print
+  9:7-9:11 -> 8:7-8:11
+  9:12-9:17 -> 2:17-2:22
+
+Named arguments:
+  9:18-9:19 -> parameter 2:26-2:27
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field base LTest$Base; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Derived
+    DUP
+    INVOKESPECIAL Test$Derived.<init>()V
+    PUTSTATIC Test.base LTest$Base;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.base LTest$Base;
+    LDC 2
+    INVOKEVIRTUAL Test$Base.value(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value(I)I flags [PUBLIC]
+    ILOAD_1 1
+    LDC 1
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method value(I)I flags [PUBLIC]
+    ILOAD_1 1
+    LDC 10
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+12

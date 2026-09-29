@@ -28,6 +28,7 @@ import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
+import com.github.andreasarvidsson.eld.parser.BindingDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierPattern;
@@ -38,12 +39,13 @@ import java.util.Collections;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
+import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
 
 public final class SemanticModel {
     private static final String ARROW = " -> ";
-    private final IdentityHashMap<IdentifierDeclaration, FunctionParameter> parameterDetails =
+    private final IdentityHashMap<BindingDeclaration, FunctionParameter> parameterDetails =
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionParameter, Type> declaredParameterTypes =
         new IdentityHashMap<>();
@@ -82,7 +84,7 @@ public final class SemanticModel {
         Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<AstNode, Symbol> references =
         new IdentityHashMap<>();
-    private final IdentityHashMap<FunctionSymbol, List<IdentifierDeclaration>> functionParameters =
+    private final IdentityHashMap<FunctionSymbol, List<BindingDeclaration>> functionParameters =
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionSymbol, FunctionDeclaration> functionDeclarations =
         new IdentityHashMap<>();
@@ -111,6 +113,8 @@ public final class SemanticModel {
     private final IdentityHashMap<CallExpression, Method> promiseMethods =
         new IdentityHashMap<>();
     private final IdentityHashMap<NewExpression, List<Integer>> constructorArgumentParameters =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<SuperConstructorCall, List<Integer>> superConstructorArgumentParameters =
         new IdentityHashMap<>();
     private final Map<ClassType, FunctionType> constructors = new HashMap<>();
     private final Map<ClassType, Visibility> constructorVisibility =
@@ -223,6 +227,10 @@ public final class SemanticModel {
         declaredParameterTypes.put(parameter, type);
     }
 
+    public Type getDeclaredParameterType(final FunctionParameter parameter) {
+        return Objects.requireNonNull(declaredParameterTypes.get(parameter));
+    }
+
     public Map<FunctionSymbol, FunctionDeclaration> getFunctionDeclarations() {
         return Collections.unmodifiableMap(functionDeclarations);
     }
@@ -230,7 +238,7 @@ public final class SemanticModel {
     public String formatFunctionSignature(final FunctionSymbol function) {
         final FunctionDeclaration declaration =
             getFunctionDeclaration(function);
-        final List<IdentifierDeclaration> parameters =
+        final List<BindingDeclaration> parameters =
             functionParameters.get(function);
         final List<String> parameterTypes =
             declaration != null
@@ -248,7 +256,21 @@ public final class SemanticModel {
                         .stream()
                         .map(Type::toString)
                         .toList();
-        return function.name() + "(" + String.join(", ", parameterTypes) + ")";
+        final List<Boolean> omittable =
+            declaration != null
+                ? declaration.parameters()
+                    .stream()
+                    .map(FunctionParameter::omittable)
+                    .toList()
+                : parameters != null
+                    ? parameters.stream()
+                        .map(this::getParameterDetails)
+                        .map(FunctionParameter::omittable)
+                        .toList()
+                    : Collections.nCopies(parameterTypes.size(), false);
+        return function.name() + "("
+            + function.type().formatLabeledParameters(parameterTypes, omittable)
+            + ")";
     }
 
     public boolean isOverrideCompatible(
@@ -265,8 +287,8 @@ public final class SemanticModel {
                         inheritedPromise.valueType()
                     )
                     : isSubtype(implementationReturn, inheritedReturn);
-        return implementation.parameterTypes()
-            .equals(inherited.parameterTypes()) && compatibleReturn;
+        return implementation.sameOverloadSignature(inherited)
+            && compatibleReturn;
     }
 
     public void addOverrideBridge(
@@ -876,7 +898,7 @@ public final class SemanticModel {
     }
 
     public FunctionParameter getParameterDetails(
-        final IdentifierDeclaration name
+        final BindingDeclaration name
     ) {
         return Objects.requireNonNull(parameterDetails.get(name));
     }
@@ -1073,12 +1095,12 @@ public final class SemanticModel {
 
     public void setFunctionParameters(
         final FunctionSymbol function,
-        final List<IdentifierDeclaration> parameters
+        final List<BindingDeclaration> parameters
     ) {
         functionParameters.put(function, List.copyOf(parameters));
     }
 
-    public List<IdentifierDeclaration> getFunctionParameters(
+    public List<BindingDeclaration> getFunctionParameters(
         final FunctionSymbol function
     ) {
         return Objects.requireNonNull(functionParameters.get(function));
@@ -1088,6 +1110,10 @@ public final class SemanticModel {
         final IdentifierDeclaration argument,
         final IdentifierDeclaration parameter
     ) {
+        // Record lowering uses a parameter's source range for generated copy arguments.
+        if (argument.range().equals(parameter.range())) {
+            return;
+        }
         namedArguments.put(argument, parameter);
     }
 
@@ -1114,6 +1140,20 @@ public final class SemanticModel {
     ) {
         return Objects
             .requireNonNull(constructorArgumentParameters.get(creation));
+    }
+
+    public void setSuperConstructorArgumentParameters(
+        final SuperConstructorCall call,
+        final List<Integer> parameters
+    ) {
+        superConstructorArgumentParameters.put(call, List.copyOf(parameters));
+    }
+
+    public List<Integer> getSuperConstructorArgumentParameters(
+        final SuperConstructorCall call
+    ) {
+        return Objects
+            .requireNonNull(superConstructorArgumentParameters.get(call));
     }
 
     @Override
@@ -1197,7 +1237,13 @@ public final class SemanticModel {
                         .stream()
                         .map(this::formatParameterType)
                         .toList();
-                return function.format(parameterTypes);
+                return function.format(
+                    parameterTypes,
+                    declaration.parameters()
+                        .stream()
+                        .map(FunctionParameter::omittable)
+                        .toList()
+                );
             }
         }
         if (
@@ -1216,11 +1262,11 @@ public final class SemanticModel {
     private String formatParameterType(final FunctionParameter parameter) {
         final Type declared = declaredParameterTypes.get(parameter);
         if (declared == null) {
-            return parameter.type() + (parameter.omittable() ? "?" : "");
+            return parameter.type().toString();
         }
         final String text = declared.toString();
-        return parameter.omittable()
-            ? declared instanceof UnionType ? "(" + text + ")?" : text + "?"
+        return parameter.omittable() && declared instanceof UnionType
+            ? "(" + text + ")"
             : text;
     }
 

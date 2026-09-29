@@ -1,0 +1,267 @@
+interface Action {
+    func foo() void;
+    func bar();
+}
+class TaskA implements Action {
+    public func foo() void {}
+    public func bar() void {}
+}
+class TaskB implements Action {
+    public func foo() {}
+    public func bar() {}
+}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Action" (1:11-1:17)
+LEFT_BRACE (1:18-1:19)
+FUNC (2:5-2:9)
+IDENTIFIER "foo" (2:10-2:13)
+LEFT_PAREN (2:13-2:14)
+RIGHT_PAREN (2:14-2:15)
+IDENTIFIER "void" (2:16-2:20)
+SEMICOLON (2:20-2:21)
+FUNC (3:5-3:9)
+IDENTIFIER "bar" (3:10-3:13)
+LEFT_PAREN (3:13-3:14)
+RIGHT_PAREN (3:14-3:15)
+SEMICOLON (3:15-3:16)
+RIGHT_BRACE (4:1-4:2)
+CLASS (5:1-5:6)
+IDENTIFIER "TaskA" (5:7-5:12)
+IMPLEMENTS (5:13-5:23)
+IDENTIFIER "Action" (5:24-5:30)
+LEFT_BRACE (5:31-5:32)
+PUBLIC (6:5-6:11)
+FUNC (6:12-6:16)
+IDENTIFIER "foo" (6:17-6:20)
+LEFT_PAREN (6:20-6:21)
+RIGHT_PAREN (6:21-6:22)
+IDENTIFIER "void" (6:23-6:27)
+LEFT_BRACE (6:28-6:29)
+RIGHT_BRACE (6:29-6:30)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "bar" (7:17-7:20)
+LEFT_PAREN (7:20-7:21)
+RIGHT_PAREN (7:21-7:22)
+IDENTIFIER "void" (7:23-7:27)
+LEFT_BRACE (7:28-7:29)
+RIGHT_BRACE (7:29-7:30)
+RIGHT_BRACE (8:1-8:2)
+CLASS (9:1-9:6)
+IDENTIFIER "TaskB" (9:7-9:12)
+IMPLEMENTS (9:13-9:23)
+IDENTIFIER "Action" (9:24-9:30)
+LEFT_BRACE (9:31-9:32)
+PUBLIC (10:5-10:11)
+FUNC (10:12-10:16)
+IDENTIFIER "foo" (10:17-10:20)
+LEFT_PAREN (10:20-10:21)
+RIGHT_PAREN (10:21-10:22)
+LEFT_BRACE (10:23-10:24)
+RIGHT_BRACE (10:24-10:25)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "bar" (11:17-11:20)
+LEFT_PAREN (11:20-11:21)
+RIGHT_PAREN (11:21-11:22)
+LEFT_BRACE (11:23-11:24)
+RIGHT_BRACE (11:24-11:25)
+RIGHT_BRACE (12:1-12:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:2
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Action"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:21
+      (IdentifierDeclaration
+        range: 2:10-2:13
+        name: "foo"
+      )
+      (NamedTypeNode
+        range: 2:16-2:20
+        name: "void"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:16
+      (IdentifierDeclaration
+        range: 3:10-3:13
+        name: "bar"
+      )
+      returnType: null
+    )
+  )
+  (ClassDeclaration
+    range: 5:1-8:2
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "TaskA"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 5:24-5:30
+      name: "Action"
+    )
+    (MemberDeclaration
+      range: 6:5-6:30
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 6:12-6:30
+        (IdentifierDeclaration
+          range: 6:17-6:20
+          name: "foo"
+        )
+        (NamedTypeNode
+          range: 6:23-6:27
+          name: "void"
+        )
+        (BlockStatement
+          range: 6:28-6:30
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:30
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:30
+        (IdentifierDeclaration
+          range: 7:17-7:20
+          name: "bar"
+        )
+        (NamedTypeNode
+          range: 7:23-7:27
+          name: "void"
+        )
+        (BlockStatement
+          range: 7:28-7:30
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-12:2
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "TaskB"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 9:24-9:30
+      name: "Action"
+    )
+    (MemberDeclaration
+      range: 10:5-10:25
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 10:12-10:25
+        (IdentifierDeclaration
+          range: 10:17-10:20
+          name: "foo"
+        )
+        returnType: null
+        (BlockStatement
+          range: 10:23-10:25
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 11:5-11:25
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:25
+        (IdentifierDeclaration
+          range: 11:17-11:20
+          name: "bar"
+        )
+        returnType: null
+        (BlockStatement
+          range: 11:23-11:25
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Resolved types:
+  2:16-2:20 -> void
+  5:24-5:30 -> Action
+  6:23-6:27 -> void
+  7:23-7:27 -> void
+  9:24-9:30 -> Action
+
+Declarations:
+  1:11-1:17 -> interface Action
+  2:10-2:13 -> func foo() => void
+  3:10-3:13 -> func bar() => void
+  5:7-5:12 -> class TaskA
+  6:17-6:20 -> func foo() => void
+  7:17-7:20 -> func bar() => void
+  9:7-9:12 -> class TaskB
+  10:17-10:20 -> func foo() => void
+  11:17-11:20 -> func bar() => void
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Action
+  nest member Test$TaskA
+  nest member Test$TaskB
+  inner class Test$Action flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$TaskA flags [PUBLIC, STATIC]
+  inner class Test$TaskB flags [PUBLIC, STATIC]
+
+class Test$Action extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Action flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method foo()V flags [PUBLIC, ABSTRACT]
+  method bar()V flags [PUBLIC, ABSTRACT]
+
+class Test$TaskA extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Action
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$TaskA flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method foo()V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 1
+  method bar()V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 1
+
+class Test$TaskB extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Action
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$TaskB flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method foo()V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 1
+  method bar()V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 1
+
+--- OUTPUT ---
+

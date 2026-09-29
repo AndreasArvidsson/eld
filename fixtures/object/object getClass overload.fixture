@@ -88,6 +88,7 @@ SEMICOLON (8:44-8:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -186,10 +187,10 @@ Expression types:
   7:1-7:6 -> (any) => void
   7:1-7:29 -> void
   7:7-7:16 -> Foo
-  7:7-7:25 -> (i32) => string
+  7:7-7:25 -> (value: i32) => string
   7:7-7:28 -> string
   7:11-7:14 -> Foo
-  7:17-7:25 -> (i32) => string
+  7:17-7:25 -> (value: i32) => string
   7:26-7:27 -> i32
   8:1-8:6 -> (any) => void
   8:1-8:44 -> void
@@ -208,7 +209,7 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:17-2:25 -> func getClass(i32) => string
+  2:17-2:25 -> func getClass(value: i32) => string
   2:26-2:31 -> const value: i32
 
 References:

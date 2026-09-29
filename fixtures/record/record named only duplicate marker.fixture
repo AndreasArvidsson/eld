@@ -1,0 +1,24 @@
+record Foo(*, a: i32, *, b: i32);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+STAR (1:12-1:13)
+COMMA (1:13-1:14)
+IDENTIFIER "a" (1:15-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "i32" (1:18-1:21)
+COMMA (1:21-1:22)
+STAR (1:23-1:24)
+COMMA (1:24-1:25)
+IDENTIFIER "b" (1:26-1:27)
+COLON (1:27-1:28)
+IDENTIFIER "i32" (1:29-1:32)
+RIGHT_PAREN (1:32-1:33)
+SEMICOLON (1:33-1:34)
+
+--- AST ---
+
+ParserException: Duplicate '*' parameter marker at 1:23-1:24

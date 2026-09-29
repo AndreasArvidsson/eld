@@ -2,10 +2,10 @@ package com.github.andreasarvidsson.eld.parser;
 
 import com.github.andreasarvidsson.eld.Range;
 
-public record LambdaParameter(IdentifierDeclaration name) implements AstNode {
+public record LambdaParameter(BindingDeclaration name) implements AstNode {
 
     public boolean discarded() {
-        return name.name().equals("_");
+        return name instanceof DiscardDeclaration;
     }
 
     @Override

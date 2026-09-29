@@ -139,6 +139,7 @@ SEMICOLON (10:31-10:32)
           name: "any"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -186,6 +187,7 @@ SEMICOLON (10:31-10:32)
             name: "any"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -225,6 +227,7 @@ SEMICOLON (10:31-10:32)
             name: "C"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -361,4 +364,4 @@ SEMICOLON (10:31-10:32)
 
 --- SEMANTIC ---
 
-SemanticException: Class C cannot implement 'compareTo(any)' and 'compareTo(C)': Java bridge collision at 2:1-5:2
+SemanticException: Class C cannot implement 'compareTo(other: any)' and 'compareTo(C)': Java bridge collision at 2:1-5:2

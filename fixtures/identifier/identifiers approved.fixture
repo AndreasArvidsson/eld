@@ -525,6 +525,7 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -538,6 +539,7 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -551,19 +553,20 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
           range: 9:61-9:67
-          (IdentifierDeclaration
+          (DiscardDeclaration
             range: 9:61-9:62
-            name: "_"
           )
           (NamedTypeNode
             range: 9:64-9:67
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null
@@ -706,6 +709,7 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -719,6 +723,7 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null
@@ -744,6 +749,7 @@ SEMICOLON (42:44-42:45)
         range: 21:21-21:24
         name: "i32"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 21:26-21:37
@@ -755,6 +761,7 @@ SEMICOLON (42:44-42:45)
         range: 21:34-21:37
         name: "i32"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 21:39-21:54
@@ -766,6 +773,7 @@ SEMICOLON (42:44-42:45)
         range: 21:51-21:54
         name: "i32"
       )
+      namedOnly: false
     )
     (MemberDeclaration
       range: 22:5-22:71
@@ -787,6 +795,7 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -800,6 +809,7 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -813,19 +823,20 @@ SEMICOLON (42:44-42:45)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
           range: 22:61-22:67
-          (IdentifierDeclaration
+          (DiscardDeclaration
             range: 22:61-22:62
-            name: "_"
           )
           (NamedTypeNode
             range: 22:64-22:67
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null
@@ -888,6 +899,7 @@ SEMICOLON (42:44-42:45)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (FunctionParameter
@@ -901,6 +913,7 @@ SEMICOLON (42:44-42:45)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       returnType: null
@@ -1042,6 +1055,7 @@ SEMICOLON (42:44-42:45)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -1055,6 +1069,7 @@ SEMICOLON (42:44-42:45)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -1068,19 +1083,20 @@ SEMICOLON (42:44-42:45)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
       range: 37:57-37:63
-      (IdentifierDeclaration
+      (DiscardDeclaration
         range: 37:57-37:58
-        name: "_"
       )
       (NamedTypeNode
         range: 37:60-37:63
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -1119,21 +1135,38 @@ SEMICOLON (42:44-42:45)
     )
     (FunctionTypeNode
       range: 41:18-41:45
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 41:19-41:22
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 41:19-41:22
+          name: "i32"
+        )
       )
-      (NamedTypeNode
+      (FunctionTypeParameter
         range: 41:24-41:27
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 41:24-41:27
+          name: "i32"
+        )
       )
-      (NamedTypeNode
+      (FunctionTypeParameter
         range: 41:29-41:32
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 41:29-41:32
+          name: "i32"
+        )
       )
-      (NamedTypeNode
+      (FunctionTypeParameter
         range: 41:34-41:37
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 41:34-41:37
+          name: "i32"
+        )
       )
       (NamedTypeNode
         range: 41:42-41:45
@@ -1165,9 +1198,8 @@ SEMICOLON (42:44-42:45)
       )
       (LambdaParameter
         range: 42:33-42:34
-        (IdentifierDeclaration
+        (DiscardDeclaration
           range: 42:33-42:34
-          name: "_"
         )
       )
       (IdentifierExpression
@@ -1280,7 +1312,7 @@ Declarations:
   6:11-6:20 -> const constant2: i32
   7:11-7:24 -> const constantThree: i32
   8:11-8:24 -> const CONSTANT_FOUR: i32
-  9:10-9:18 -> func function(i32, i32, i32, i32) => void
+  9:10-9:18 -> func function(param: i32, param2: i32, paramThree: i32, i32) => void
   9:19-9:24 -> const param: i32
   9:31-9:37 -> const param2: i32
   9:44-9:54 -> const paramThree: i32
@@ -1292,18 +1324,18 @@ Declarations:
   16:9-16:15 -> var value1: i32
   17:11-17:21 -> const otherValue: i32
   18:11-18:20 -> const MAX_VALUE: i32
-  19:10-19:13 -> func run(i32, i32) => void
+  19:10-19:13 -> func run(foo1: i32, barBaz: i32) => void
   19:14-19:18 -> const foo1: i32
   19:25-19:31 -> const barBaz: i32
   21:8-21:13 -> record Point(param: i32, param2: i32, paramThree: i32)
-  22:10-22:18 -> func function(i32, i32, i32, i32) => void
+  22:10-22:18 -> func function(param: i32, param2: i32, paramThree: i32, i32) => void
   22:19-22:24 -> const param: i32
   22:31-22:37 -> const param2: i32
   22:44-22:54 -> const paramThree: i32
   23:10-23:19 -> func function2() => void
   24:10-24:23 -> func functionThree() => void
   26:11-26:16 -> interface Shape
-  27:10-27:13 -> func run(i32, i32) => void
+  27:10-27:13 -> func run(foo1: i32, barBaz: i32) => void
   27:14-27:18 -> const foo1: i32
   27:25-27:31 -> const barBaz: i32
   30:5-30:13 -> var variable: i32
@@ -1313,7 +1345,7 @@ Declarations:
   34:7-34:16 -> const constant2: i32
   35:7-35:20 -> const constantThree: i32
   36:7-36:20 -> const CONSTANT_FOUR: i32
-  37:6-37:14 -> func function(i32, i32, i32, i32) => void
+  37:6-37:14 -> func function(param: i32, param2: i32, paramThree: i32, i32) => void
   37:15-37:20 -> const param: i32
   37:27-37:33 -> const param2: i32
   37:40-37:50 -> const paramThree: i32

@@ -78,6 +78,7 @@ RIGHT_BRACE (7:1-7:2)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -102,6 +103,7 @@ RIGHT_BRACE (7:1-7:2)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -141,6 +143,7 @@ RIGHT_BRACE (7:1-7:2)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -165,4 +168,4 @@ RIGHT_BRACE (7:1-7:2)
 
 --- SEMANTIC ---
 
-SemanticException: Class NumberPrinter does not implement interface method describe(string) at 5:1-7:2
+SemanticException: Class NumberPrinter does not implement interface method describe(value: string) at 5:1-7:2

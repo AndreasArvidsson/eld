@@ -189,6 +189,7 @@ RIGHT_BRACE (17:44-17:45)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -217,6 +218,7 @@ RIGHT_BRACE (17:44-17:45)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -245,6 +247,7 @@ RIGHT_BRACE (17:44-17:45)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -280,6 +283,7 @@ RIGHT_BRACE (17:44-17:45)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -308,6 +312,7 @@ RIGHT_BRACE (17:44-17:45)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -347,6 +352,7 @@ RIGHT_BRACE (17:44-17:45)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -390,6 +396,7 @@ RIGHT_BRACE (17:44-17:45)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -448,6 +455,7 @@ RIGHT_BRACE (17:44-17:45)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -524,24 +532,24 @@ Resolved types:
 
 Declarations:
   1:11-1:14 -> interface Tri
-  2:10-2:18 -> func describe(List<bool>) => string
+  2:10-2:18 -> func describe(values: List<bool>) => string
   2:19-2:25 -> const values: List<bool>
-  3:10-3:18 -> func describe(List<i32>) => string
+  3:10-3:18 -> func describe(values: List<i32>) => string
   3:19-3:25 -> const values: List<i32>
-  4:10-4:18 -> func describe(List<string>) => string
+  4:10-4:18 -> func describe(values: List<string>) => string
   4:19-4:25 -> const values: List<string>
   6:11-6:15 -> interface Pair
-  7:10-7:18 -> func describe(List<i32>) => string
+  7:10-7:18 -> func describe(values: List<i32>) => string
   7:19-7:25 -> const values: List<i32>
-  8:10-8:18 -> func describe(List<string>) => string
+  8:10-8:18 -> func describe(values: List<string>) => string
   8:19-8:25 -> const values: List<string>
   10:7-10:11 -> class Base
-  11:17-11:25 -> func describe(List<i32>) => string
+  11:17-11:25 -> func describe(values: List<i32>) => string
   11:26-11:32 -> const values: List<i32>
-  12:17-12:25 -> func describe(List<string>) => string
+  12:17-12:25 -> func describe(values: List<string>) => string
   12:26-12:32 -> const values: List<string>
   14:7-14:12 -> class First
-  15:17-15:25 -> func describe(List<bool>) => string
+  15:17-15:25 -> func describe(values: List<bool>) => string
   15:26-15:32 -> const values: List<bool>
   17:7-17:13 -> class Second
 
@@ -551,4 +559,77 @@ References:
 
 --- BYTECODE ---
 
-BytecodeException: Incompatible interface overload names for describe(List<i32>) in class Base
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Tri
+  nest member Test$Pair
+  nest member Test$Base
+  nest member Test$First
+  nest member Test$Second
+  inner class Test$Tri flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Pair flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$First flags [PUBLIC, STATIC]
+  inner class Test$Second flags [PUBLIC, STATIC]
+
+class Test$Tri extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Tri flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Pair extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Pair flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC, ABSTRACT]
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$2(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Integer;>;)Ljava/lang/String;
+    LDC "integers"
+    ARETURN
+    max stack 1 max locals 2
+  method describe$3(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/String;>;)Ljava/lang/String;
+    LDC "strings"
+    ARETURN
+    max stack 1 max locals 2
+
+class Test$First extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Tri
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$First flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method describe$1(Ljava/util/List;)Ljava/lang/String; flags [PUBLIC]
+    signature (Ljava/util/List<Ljava/lang/Boolean;>;)Ljava/lang/String;
+    LDC "booleans"
+    ARETURN
+    max stack 1 max locals 2
+
+class Test$Second extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Pair
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Second flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL Test$Base.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+

@@ -22,6 +22,7 @@ import com.github.andreasarvidsson.eld.parser.LiteralKind;
 import com.github.andreasarvidsson.eld.parser.MemberDeclaration;
 import com.github.andreasarvidsson.eld.parser.MemberExpression;
 import com.github.andreasarvidsson.eld.parser.Mutability;
+import com.github.andreasarvidsson.eld.parser.NamedArgumentExpression;
 import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.RecordDeclaration;
@@ -50,7 +51,10 @@ public final class RecordLowering {
             constructorParameters.add(
                 new FunctionParameter(
                     identifier(componentName, parameter),
-                    parameter.type()
+                    parameter.type(),
+                    false,
+                    parameter.namedOnly(),
+                    null
                 )
             );
             members.add(
@@ -80,10 +84,20 @@ public final class RecordLowering {
                     identifier(componentName, parameter),
                     parameter.type(),
                     false,
+                    parameter.namedOnly(),
                     member(componentName, parameter)
                 )
             );
-            copyArguments.add(expression(componentName, parameter));
+            final Expression copyArgument =
+                expression(componentName, parameter);
+            copyArguments.add(
+                parameter.namedOnly()
+                    ? new NamedArgumentExpression(
+                        identifier(componentName, parameter),
+                        copyArgument
+                    )
+                    : copyArgument
+            );
         }
 
         members.add(

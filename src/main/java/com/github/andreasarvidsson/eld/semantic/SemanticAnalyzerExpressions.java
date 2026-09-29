@@ -32,6 +32,7 @@ import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.GroupingExpression;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
+import com.github.andreasarvidsson.eld.parser.BindingDeclaration;
 import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 import com.github.andreasarvidsson.eld.parser.IfExpression;
 import com.github.andreasarvidsson.eld.parser.LambdaExpression;
@@ -44,6 +45,7 @@ import com.github.andreasarvidsson.eld.parser.NamedTypeNode;
 import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.ObjectExpression;
 import com.github.andreasarvidsson.eld.parser.PostfixExpression;
+import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.ReturnStatement;
 import com.github.andreasarvidsson.eld.parser.SliceExpression;
 import com.github.andreasarvidsson.eld.parser.SubscriptExpression;
@@ -191,19 +193,29 @@ public final class SemanticAnalyzerExpressions {
                         identifier
                     ) instanceof ClassDeclarationSymbol;
             final List<FunctionSymbol> matches =
-                candidates.stream()
-                    .filter(
-                        candidate -> candidate.type().equals(expected)
-                            && (target instanceof InterfaceType || model
-                                .isStaticMember(candidate) == classTarget)
-                    )
-                    .toList();
-            if (matches.size() != 1) {
+                matchingFunctionReferences(
+                    candidates.stream()
+                        .filter(
+                            candidate -> target instanceof InterfaceType
+                                || model
+                                    .isStaticMember(candidate) == classTarget
+                        )
+                        .toList(),
+                    expected
+                );
+            if (matches.isEmpty()) {
                 throw new SemanticException(
                     member.member().range(),
                     "No overload of '%s' matches %s",
                     member.member().name(),
                     expected
+                );
+            }
+            if (matches.size() > 1) {
+                throw new SemanticException(
+                    member.member().range(),
+                    "Ambiguous reference to overloaded method '%s'",
+                    member.member().name()
                 );
             }
             final FunctionSymbol selected = matches.getFirst();
@@ -249,15 +261,20 @@ public final class SemanticAnalyzerExpressions {
             return null;
         }
         final List<FunctionSymbol> matches =
-            candidates.stream()
-                .filter(candidate -> candidate.type().equals(expected))
-                .toList();
-        if (matches.size() != 1) {
+            matchingFunctionReferences(candidates, expected);
+        if (matches.isEmpty()) {
             throw new SemanticException(
                 identifier.range(),
                 "No overload of '%s' matches %s",
                 identifier.name(),
                 expected
+            );
+        }
+        if (matches.size() > 1) {
+            throw new SemanticException(
+                identifier.range(),
+                "Ambiguous reference to overloaded function '%s'",
+                identifier.name()
             );
         }
         final FunctionSymbol selected = matches.getFirst();
@@ -275,6 +292,23 @@ public final class SemanticAnalyzerExpressions {
         model.setReference(identifier, selected);
         model.setExpressionType(identifier, selected.type());
         return selected.type();
+    }
+
+    private List<FunctionSymbol> matchingFunctionReferences(
+        final List<FunctionSymbol> candidates,
+        final FunctionType expected
+    ) {
+        final List<FunctionSymbol> matches =
+            candidates.stream()
+                .filter(
+                    candidate -> candidate.type().matchesSignature(expected)
+                )
+                .toList();
+        final List<FunctionSymbol> exact =
+            matches.stream()
+                .filter(candidate -> candidate.type().equals(expected))
+                .toList();
+        return exact.isEmpty() ? matches : exact;
     }
 
     public Type analyzeExpression(
@@ -1237,7 +1271,7 @@ public final class SemanticAnalyzerExpressions {
         if (count > total) {
             return false;
         }
-        final List<IdentifierDeclaration> parameters =
+        final List<BindingDeclaration> parameters =
             model.getFunctionParameters(function);
         if (parameters.size() != total) {
             return count == total;
@@ -1308,10 +1342,11 @@ public final class SemanticAnalyzerExpressions {
 
     public void analyzeConstructorArguments(
         final ClassType classType,
-        final List<Expression> arguments,
-        final Range range,
+        final SuperConstructorCall call,
         final SemanticContext context
     ) {
+        final List<Expression> arguments = call.arguments();
+        final Range range = call.range();
         final FunctionType constructor = model.getConstructor(classType);
         if (arguments.size() > constructor.parameterTypes().size()) {
             throw new SemanticException(
@@ -1321,9 +1356,66 @@ public final class SemanticAnalyzerExpressions {
                 arguments.size()
             );
         }
+        final List<FunctionParameter> parameters =
+            model.getConstructorParameters(classType);
+        final List<String> names =
+            parameters.stream()
+                .map(parameter -> parameter.name().label())
+                .toList();
+        final List<Integer> argumentParameters = new ArrayList<>();
+        final boolean[] assigned = new boolean[parameters.size()];
+        boolean seenNamed = false;
         for (int i = 0; i < arguments.size(); i++) {
-            final Expression argument = arguments.get(i);
-            final Type expectedType = constructor.parameterTypes().get(i);
+            final Expression supplied = arguments.get(i);
+            final Expression argument;
+            final int parameter;
+            if (supplied instanceof NamedArgumentExpression named) {
+                seenNamed = true;
+                parameter = names.indexOf(named.name().name());
+                if (parameter < 0) {
+                    throw new SemanticException(
+                        named.name().range(),
+                        "Unknown constructor parameter: %s",
+                        named.name().name()
+                    );
+                }
+                argument = named.value();
+                model.setNamedArgument(
+                    named.name(),
+                    parameters.get(parameter).identifier()
+                );
+            }
+            else {
+                if (seenNamed) {
+                    throw new SemanticException(
+                        supplied.range(),
+                        "Positional arguments must precede named arguments"
+                    );
+                }
+                parameter = i;
+                argument = supplied;
+            }
+            if (
+                parameters.get(parameter).namedOnly()
+                    && !(supplied instanceof NamedArgumentExpression)
+            ) {
+                throw new SemanticException(
+                    supplied.range(),
+                    "Parameter %s must be supplied by name",
+                    names.get(parameter)
+                );
+            }
+            if (assigned[parameter]) {
+                throw new SemanticException(
+                    supplied.range(),
+                    "Argument supplied more than once for constructor parameter: %s",
+                    names.get(parameter)
+                );
+            }
+            assigned[parameter] = true;
+            argumentParameters.add(parameter);
+            final Type expectedType =
+                constructor.parameterTypes().get(parameter);
             final Type actual =
                 analyzeExpression(argument, context, expectedType);
             if (
@@ -1338,17 +1430,16 @@ public final class SemanticAnalyzerExpressions {
                 );
             }
         }
-        final List<FunctionParameter> parameters =
-            model.getConstructorParameters(classType);
-        for (int i = arguments.size(); i < parameters.size(); i++) {
-            if (!parameters.get(i).omittable()) {
+        for (int i = 0; i < parameters.size(); i++) {
+            if (!assigned[i] && !parameters.get(i).omittable()) {
                 throw new SemanticException(
                     range,
                     "Missing required constructor argument: %s",
-                    parameters.get(i).name().name()
+                    parameters.get(i).displayName(i)
                 );
             }
         }
+        model.setSuperConstructorArgumentParameters(call, argumentParameters);
     }
 
     private void analyzeConstructorArguments(
@@ -1371,7 +1462,7 @@ public final class SemanticAnalyzerExpressions {
         }
         final List<String> names =
             declarations.stream()
-                .map(parameter -> parameter.name().name())
+                .map(parameter -> parameter.name().label())
                 .toList();
         final List<Integer> parameters = new ArrayList<>();
         final boolean[] assigned =
@@ -1401,6 +1492,13 @@ public final class SemanticAnalyzerExpressions {
                     );
                 }
                 parameter = i;
+                if (declarations.get(parameter).namedOnly()) {
+                    throw new SemanticException(
+                        supplied.range(),
+                        "Parameter %s must be supplied by name",
+                        names.get(parameter)
+                    );
+                }
                 argument = supplied;
             }
             if (assigned[parameter]) {
@@ -1415,7 +1513,7 @@ public final class SemanticAnalyzerExpressions {
             if (supplied instanceof NamedArgumentExpression named) {
                 model.setNamedArgument(
                     named.name(),
-                    declarations.get(parameter).name()
+                    declarations.get(parameter).identifier()
                 );
             }
             final Type expected = constructor.parameterTypes().get(parameter);
@@ -1436,7 +1534,7 @@ public final class SemanticAnalyzerExpressions {
                 throw new SemanticException(
                     range,
                     "Missing required constructor argument: %s",
-                    declarations.get(i).name().name()
+                    declarations.get(i).displayName(i)
                 );
             }
         }
@@ -1473,7 +1571,8 @@ public final class SemanticAnalyzerExpressions {
             if (parameterNode.discarded()) {
                 continue;
             }
-            final var name = parameterNode.name();
+            final IdentifierDeclaration name =
+                (IdentifierDeclaration) parameterNode.name();
             final VariableSymbol parameter =
                 new VariableSymbol(
                     name,
@@ -1693,13 +1792,12 @@ public final class SemanticAnalyzerExpressions {
                 : callee instanceof MemberExpression member
                     ? member.member()
                     : null;
-        final List<IdentifierDeclaration> declarations =
+        final List<BindingDeclaration> declarations =
             functionName != null && model
                 .getReference(functionName) instanceof FunctionSymbol symbol
                     ? model.getFunctionParameters(symbol)
                     : List.of();
-        final List<String> names =
-            declarations.stream().map(IdentifierDeclaration::name).toList();
+        final List<@Nullable String> names = function.parameterNames();
         final List<Integer> parameters = new ArrayList<>();
         final boolean[] assigned =
             new boolean[function.parameterTypes().size()];
@@ -1710,12 +1808,6 @@ public final class SemanticAnalyzerExpressions {
             final int parameter;
             if (supplied instanceof NamedArgumentExpression named) {
                 seenNamed = true;
-                if (names.isEmpty()) {
-                    throw new SemanticException(
-                        named.range(),
-                        "Named arguments require a declared function"
-                    );
-                }
                 parameter = names.indexOf(named.name().name());
                 if (parameter < 0) {
                     throw new SemanticException(
@@ -1734,6 +1826,21 @@ public final class SemanticAnalyzerExpressions {
                     );
                 }
                 parameter = i;
+                if (
+                    (declarations.isEmpty()
+                        ? function.namedOnlyStart() >= 0
+                            && parameter >= function.namedOnlyStart()
+                        : model.getParameterDetails(declarations.get(parameter))
+                            .namedOnly())
+                ) {
+                    throw new SemanticException(
+                        supplied.range(),
+                        "Parameter %s must be supplied by name",
+                        names.isEmpty()
+                            ? Integer.toString(parameter + 1)
+                            : names.get(parameter)
+                    );
+                }
                 argument = supplied;
             }
             if (assigned[parameter]) {
@@ -1745,10 +1852,13 @@ public final class SemanticAnalyzerExpressions {
             }
             assigned[parameter] = true;
             parameters.add(parameter);
-            if (supplied instanceof NamedArgumentExpression named) {
+            if (
+                supplied instanceof NamedArgumentExpression named
+                    && !declarations.isEmpty()
+            ) {
                 model.setNamedArgument(
                     named.name(),
-                    declarations.get(parameter)
+                    (IdentifierDeclaration) declarations.get(parameter)
                 );
             }
             final Type expected = function.parameterTypes().get(parameter);
@@ -1887,7 +1997,7 @@ public final class SemanticAnalyzerExpressions {
                     continue;
                 }
             }
-            final List<IdentifierDeclaration> declarations =
+            final List<BindingDeclaration> declarations =
                 model.getFunctionParameters(candidate);
             if (call.arguments().size() > declarations.size()) {
                 continue;
@@ -1899,11 +2009,19 @@ public final class SemanticAnalyzerExpressions {
                 final int parameter =
                     supplied instanceof NamedArgumentExpression named
                         ? declarations.stream()
-                            .map(IdentifierDeclaration::name)
+                            .map(BindingDeclaration::label)
                             .toList()
                             .indexOf(named.name().name())
                         : i;
-                if (parameter < 0 || assigned[parameter]) {
+                if (
+                    parameter < 0 || assigned[parameter]
+                        || (!(supplied instanceof NamedArgumentExpression)
+                            && model
+                                .getParameterDetails(
+                                    declarations.get(parameter)
+                                )
+                                .namedOnly())
+                ) {
                     valid = false;
                     break;
                 }
@@ -2122,7 +2240,7 @@ public final class SemanticAnalyzerExpressions {
         final List<String> names =
             model.getFunctionParameters(candidate)
                 .stream()
-                .map(IdentifierDeclaration::name)
+                .map(BindingDeclaration::label)
                 .toList();
         for (int i = 0; i < call.arguments().size(); i++) {
             final Expression supplied = call.arguments().get(i);
@@ -2193,9 +2311,9 @@ public final class SemanticAnalyzerExpressions {
         final FunctionSymbol other,
         final CallExpression call
     ) {
-        final List<IdentifierDeclaration> candidateNames =
+        final List<BindingDeclaration> candidateNames =
             model.getFunctionParameters(candidate);
-        final List<IdentifierDeclaration> otherNames =
+        final List<BindingDeclaration> otherNames =
             model.getFunctionParameters(other);
         boolean strictlyMoreSpecific = false;
         for (int i = 0; i < call.arguments().size(); i++) {
@@ -2208,14 +2326,14 @@ public final class SemanticAnalyzerExpressions {
                 named == null
                     ? i
                     : candidateNames.stream()
-                        .map(IdentifierDeclaration::name)
+                        .map(BindingDeclaration::label)
                         .toList()
                         .indexOf(named);
             final int otherIndex =
                 named == null
                     ? i
                     : otherNames.stream()
-                        .map(IdentifierDeclaration::name)
+                        .map(BindingDeclaration::label)
                         .toList()
                         .indexOf(named);
             final Type narrower =
@@ -2255,8 +2373,7 @@ public final class SemanticAnalyzerExpressions {
                         methods.stream()
                             .noneMatch(
                                 existing -> existing.type()
-                                    .parameterTypes()
-                                    .equals(method.type().parameterTypes())
+                                    .sameOverloadSignature(method.type())
                             )
                     ) {
                         methods.add(method);

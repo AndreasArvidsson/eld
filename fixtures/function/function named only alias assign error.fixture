@@ -1,0 +1,145 @@
+func sum(a: i32, *, b: i32) i32 {
+    return a + b;
+}
+
+const alias: (i32, i32) => i32 = sum;
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "sum" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "a" (1:10-1:11)
+COLON (1:11-1:12)
+IDENTIFIER "i32" (1:13-1:16)
+COMMA (1:16-1:17)
+STAR (1:18-1:19)
+COMMA (1:19-1:20)
+IDENTIFIER "b" (1:21-1:22)
+COLON (1:22-1:23)
+IDENTIFIER "i32" (1:24-1:27)
+RIGHT_PAREN (1:27-1:28)
+IDENTIFIER "i32" (1:29-1:32)
+LEFT_BRACE (1:33-1:34)
+RETURN (2:5-2:11)
+IDENTIFIER "a" (2:12-2:13)
+PLUS (2:14-2:15)
+IDENTIFIER "b" (2:16-2:17)
+SEMICOLON (2:17-2:18)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "alias" (5:7-5:12)
+COLON (5:12-5:13)
+LEFT_PAREN (5:14-5:15)
+IDENTIFIER "i32" (5:15-5:18)
+COMMA (5:18-5:19)
+IDENTIFIER "i32" (5:20-5:23)
+RIGHT_PAREN (5:23-5:24)
+ARROW (5:25-5:27)
+IDENTIFIER "i32" (5:28-5:31)
+EQUAL (5:32-5:33)
+IDENTIFIER "sum" (5:34-5:37)
+SEMICOLON (5:37-5:38)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:38
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "sum"
+    )
+    (FunctionParameter
+      range: 1:10-1:16
+      (IdentifierDeclaration
+        range: 1:10-1:11
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 1:13-1:16
+        name: "i32"
+      )
+      optional: false
+      namedOnly: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:21-1:27
+      (IdentifierDeclaration
+        range: 1:21-1:22
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:24-1:27
+        name: "i32"
+      )
+      optional: false
+      namedOnly: true
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:29-1:32
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:33-3:2
+      (ReturnStatement
+        range: 2:5-2:18
+        (BinaryExpression
+          range: 2:12-2:17
+          (IdentifierExpression
+            range: 2:12-2:13
+            name: "a"
+          )
+          operator: ADD
+          (IdentifierExpression
+            range: 2:16-2:17
+            name: "b"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:38
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "alias"
+    )
+    (FunctionTypeNode
+      range: 5:14-5:31
+      namedOnlyStart: null
+      (FunctionTypeParameter
+        range: 5:15-5:18
+        label: null
+        (NamedTypeNode
+          range: 5:15-5:18
+          name: "i32"
+        )
+      )
+      (FunctionTypeParameter
+        range: 5:20-5:23
+        label: null
+        (NamedTypeNode
+          range: 5:20-5:23
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 5:28-5:31
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 5:34-5:37
+      name: "sum"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type mismatch: cannot assign (a: i32, *, b: i32) => i32 to (i32, i32) => i32 at 5:34-5:37

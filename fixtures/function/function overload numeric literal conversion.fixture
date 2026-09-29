@@ -148,6 +148,7 @@ SEMICOLON (11:20-11:21)
         name: "i8"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -183,6 +184,7 @@ SEMICOLON (11:20-11:21)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -307,6 +309,7 @@ SEMICOLON (11:20-11:21)
         name: "i8"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -342,6 +345,7 @@ SEMICOLON (11:20-11:21)
         name: "i64"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -399,6 +403,7 @@ SEMICOLON (11:20-11:21)
         name: "i8"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -448,31 +453,31 @@ Expression types:
   2:39-2:46 -> string
   3:1-3:6 -> (any) => void
   3:1-3:15 -> void
-  3:7-3:11 -> (i32) => string
+  3:7-3:11 -> (value: i32) => string
   3:7-3:14 -> string
   3:12-3:13 -> i32
   4:1-4:6 -> (any) => void
   4:1-4:22 -> void
-  4:7-4:11 -> (i32) => string
+  4:7-4:11 -> (value: i32) => string
   4:7-4:21 -> string
   4:19-4:20 -> i32
   5:19-5:20 -> i32
   6:1-6:6 -> (any) => void
   6:1-6:19 -> void
-  6:7-6:11 -> (i8) => string
+  6:7-6:11 -> (value: i8) => string
   6:7-6:18 -> string
   6:12-6:17 -> i8
   7:40-7:48 -> string
   8:41-8:48 -> string
   9:1-9:6 -> (any) => void
   9:1-9:17 -> void
-  9:7-9:13 -> (i64) => string
+  9:7-9:13 -> (value: i64) => string
   9:7-9:16 -> string
   9:14-9:15 -> i64
   10:43-10:49 -> string
   11:1-11:6 -> (any) => void
   11:1-11:20 -> void
-  11:7-11:16 -> (i8) => string
+  11:7-11:16 -> (value: i8) => string
   11:7-11:19 -> string
   11:17-11:18 -> i32
 
@@ -494,16 +499,16 @@ Conversions:
   11:17-11:18 -> i32 -> i8
 
 Declarations:
-  1:6-1:10 -> func pick(i8) => string
+  1:6-1:10 -> func pick(value: i8) => string
   1:11-1:16 -> const value: i8
-  2:6-2:10 -> func pick(i32) => string
+  2:6-2:10 -> func pick(value: i32) => string
   2:11-2:16 -> const value: i32
   5:7-5:12 -> const small: i8
-  7:6-7:12 -> func choose(i8) => string
+  7:6-7:12 -> func choose(value: i8) => string
   7:13-7:18 -> const value: i8
-  8:6-8:12 -> func choose(i64) => string
+  8:6-8:12 -> func choose(value: i64) => string
   8:13-8:18 -> const value: i64
-  10:6-10:15 -> func onlySmall(i8) => string
+  10:6-10:15 -> func onlySmall(value: i8) => string
   10:16-10:21 -> const value: i8
 
 References:

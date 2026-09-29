@@ -1,0 +1,140 @@
+func foo(_?: i32, b?: i32, c: i32 = 0) {}
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "_" (1:10-1:11)
+QUESTION (1:11-1:12)
+COLON (1:12-1:13)
+IDENTIFIER "i32" (1:14-1:17)
+COMMA (1:17-1:18)
+IDENTIFIER "b" (1:19-1:20)
+QUESTION (1:20-1:21)
+COLON (1:21-1:22)
+IDENTIFIER "i32" (1:23-1:26)
+COMMA (1:26-1:27)
+IDENTIFIER "c" (1:28-1:29)
+COLON (1:29-1:30)
+IDENTIFIER "i32" (1:31-1:34)
+EQUAL (1:35-1:36)
+INTEGER_LITERAL "0" (1:37-1:38)
+RIGHT_PAREN (1:38-1:39)
+LEFT_BRACE (1:40-1:41)
+RIGHT_BRACE (1:41-1:42)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:42
+  (FunctionDeclaration
+    range: 1:1-1:42
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:17
+      (DiscardDeclaration
+        range: 1:10-1:11
+      )
+      (NamedTypeNode
+        range: 1:14-1:17
+        name: "i32"
+      )
+      optional: true
+      namedOnly: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:19-1:26
+      (IdentifierDeclaration
+        range: 1:19-1:20
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 1:23-1:26
+        name: "i32"
+      )
+      optional: true
+      namedOnly: false
+      defaultValue: null
+    )
+    (FunctionParameter
+      range: 1:28-1:38
+      (IdentifierDeclaration
+        range: 1:28-1:29
+        name: "c"
+      )
+      (NamedTypeNode
+        range: 1:31-1:34
+        name: "i32"
+      )
+      optional: false
+      namedOnly: false
+      (LiteralExpression
+        range: 1:37-1:38
+        kind: INT
+        text: "0"
+      )
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:40-1:42
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:37-1:38 -> i32
+
+Resolved types:
+  1:14-1:17 -> i32 | null
+  1:23-1:26 -> i32 | null
+  1:31-1:34 -> i32
+
+Declarations:
+  1:6-1:9 -> func foo(i32?, b?: i32, c?: i32) => void
+  1:19-1:20 -> const b: i32 | null
+  1:28-1:29 -> const c: i32
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method foo(Ljava/lang/Integer;Ljava/lang/Integer;I)V flags [PUBLIC, STATIC]
+    RETURN
+    max stack 0 max locals 3
+  method foo(Ljava/lang/Integer;Ljava/lang/Integer;II)V flags [PUBLIC, STATIC, SYNTHETIC]
+    ILOAD_3 3
+    LDC 1
+    IAND
+    IFEQ L0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_0 0
+   L0:
+    ILOAD_3 3
+    LDC 2
+    IAND
+    IFEQ L1
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ASTORE_1 1
+   L1:
+    ILOAD_3 3
+    LDC 4
+    IAND
+    IFEQ L2
+    LDC 0
+    ISTORE_2 2
+   L2:
+    ALOAD_0 0
+    ALOAD_1 1
+    ILOAD_2 2
+    INVOKESTATIC Test.foo(Ljava/lang/Integer;Ljava/lang/Integer;I)V
+    RETURN
+    max stack 3 max locals 4
+
+--- OUTPUT ---
+

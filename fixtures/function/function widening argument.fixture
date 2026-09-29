@@ -64,6 +64,7 @@ SEMICOLON (5:15-5:16)
         name: "i64"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -151,12 +152,12 @@ Expression types:
   3:20-3:21 -> i32
   4:1-4:6 -> (any) => void
   4:1-4:19 -> void
-  4:7-4:11 -> (i64) => string
+  4:7-4:11 -> (value: i64) => string
   4:7-4:18 -> string
   4:12-4:17 -> i32
   5:1-5:6 -> (any) => void
   5:1-5:15 -> void
-  5:7-5:11 -> (i64) => string
+  5:7-5:11 -> (value: i64) => string
   5:7-5:14 -> string
   5:12-5:13 -> i64
 
@@ -169,7 +170,7 @@ Conversions:
   4:12-4:17 -> i32 -> i64
 
 Declarations:
-  1:6-1:10 -> func pick(i64) => string
+  1:6-1:10 -> func pick(value: i64) => string
   1:11-1:16 -> const value: i64
   3:7-3:12 -> const value: i32
 

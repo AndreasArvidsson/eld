@@ -196,6 +196,7 @@ SEMICOLON (15:38-15:39)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -231,6 +232,7 @@ SEMICOLON (15:38-15:39)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -266,6 +268,7 @@ SEMICOLON (15:38-15:39)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -276,9 +279,14 @@ SEMICOLON (15:38-15:39)
       )
       (FunctionTypeNode
         range: 3:32-3:47
-        (NamedTypeNode
+        namedOnlyStart: null
+        (FunctionTypeParameter
           range: 3:33-3:36
-          name: "i32"
+          label: null
+          (NamedTypeNode
+            range: 3:33-3:36
+            name: "i32"
+          )
         )
         (NamedTypeNode
           range: 3:41-3:47
@@ -286,6 +294,7 @@ SEMICOLON (15:38-15:39)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -327,6 +336,7 @@ SEMICOLON (15:38-15:39)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -337,9 +347,14 @@ SEMICOLON (15:38-15:39)
       )
       (FunctionTypeNode
         range: 4:35-4:53
-        (NamedTypeNode
+        namedOnlyStart: null
+        (FunctionTypeParameter
           range: 4:36-4:42
-          name: "string"
+          label: null
+          (NamedTypeNode
+            range: 4:36-4:42
+            name: "string"
+          )
         )
         (NamedTypeNode
           range: 4:47-4:53
@@ -347,6 +362,7 @@ SEMICOLON (15:38-15:39)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -450,6 +466,7 @@ SEMICOLON (15:38-15:39)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -489,6 +506,7 @@ SEMICOLON (15:38-15:39)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -606,36 +624,36 @@ Expression types:
   4:78-4:83 -> string
   6:1-6:6 -> (any) => void
   6:1-6:26 -> void
-  6:7-6:12 -> (i32, (i32) => string) => string
+  6:7-6:12 -> (value: i32, mapper: (i32) => string) => string
   6:7-6:25 -> string
   6:13-6:14 -> i32
-  6:16-6:24 -> (i32) => string
+  6:16-6:24 -> (value: i32) => string
   7:1-7:6 -> (any) => void
   7:1-7:28 -> void
-  7:7-7:12 -> (string, (string) => string) => string
+  7:7-7:12 -> (value: string, mapper: (string) => string) => string
   7:7-7:27 -> string
   7:13-7:16 -> string
-  7:18-7:26 -> (string) => string
+  7:18-7:26 -> (value: string) => string
   10:54-10:70 -> string
   11:57-11:72 -> string
   13:19-13:34 -> Describer
   13:23-13:32 -> Describer
   14:1-14:6 -> (any) => void
   14:1-14:36 -> void
-  14:7-14:12 -> (i32, (i32) => string) => string
+  14:7-14:12 -> (value: i32, mapper: (i32) => string) => string
   14:7-14:35 -> string
   14:13-14:14 -> i32
   14:16-14:25 -> Describer
-  14:16-14:34 -> (i32) => string
-  14:26-14:34 -> (i32) => string
+  14:16-14:34 -> (value: i32) => string
+  14:26-14:34 -> (value: i32) => string
   15:1-15:6 -> (any) => void
   15:1-15:38 -> void
-  15:7-15:12 -> (string, (string) => string) => string
+  15:7-15:12 -> (value: string, mapper: (string) => string) => string
   15:7-15:37 -> string
   15:13-15:16 -> string
   15:18-15:27 -> Describer
-  15:18-15:36 -> (string) => string
-  15:28-15:36 -> (string) => string
+  15:18-15:36 -> (value: string) => string
+  15:28-15:36 -> (value: string) => string
 
 Resolved types:
   1:22-1:25 -> i32
@@ -658,20 +676,20 @@ Resolved types:
   11:41-11:47 -> string
 
 Declarations:
-  1:6-1:14 -> func describe(i32) => string
+  1:6-1:14 -> func describe(value: i32) => string
   1:15-1:20 -> const value: i32
-  2:6-2:14 -> func describe(string) => string
+  2:6-2:14 -> func describe(value: string) => string
   2:15-2:20 -> const value: string
-  3:6-3:11 -> func apply(i32, (i32) => string) => string
+  3:6-3:11 -> func apply(value: i32, mapper: (i32) => string) => string
   3:12-3:17 -> const value: i32
   3:24-3:30 -> const mapper: (i32) => string
-  4:6-4:11 -> func apply(string, (string) => string) => string
+  4:6-4:11 -> func apply(value: string, mapper: (string) => string) => string
   4:12-4:17 -> const value: string
   4:27-4:33 -> const mapper: (string) => string
   9:7-9:16 -> class Describer
-  10:17-10:25 -> func describe(i32) => string
+  10:17-10:25 -> func describe(value: i32) => string
   10:26-10:31 -> const value: i32
-  11:17-11:25 -> func describe(string) => string
+  11:17-11:25 -> func describe(value: string) => string
   11:26-11:31 -> const value: string
   13:7-13:16 -> const describer: Describer
 

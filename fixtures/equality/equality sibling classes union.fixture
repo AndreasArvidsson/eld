@@ -174,6 +174,7 @@ SEMICOLON (19:28-19:29)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -187,6 +188,7 @@ SEMICOLON (19:28-19:29)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -519,7 +521,7 @@ Conversions:
 
 Declarations:
   1:7-1:13 -> class Animal
-  2:24-2:29 -> func equal(Animal, Animal) => bool
+  2:24-2:29 -> func equal(a: Animal, b: Animal) => bool
   2:30-2:31 -> const a: Animal
   2:41-2:42 -> const b: Animal
   6:7-6:10 -> class Cat

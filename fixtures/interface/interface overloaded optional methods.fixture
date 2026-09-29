@@ -136,6 +136,7 @@ SEMICOLON (11:29-11:30)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (FunctionParameter
@@ -149,6 +150,7 @@ SEMICOLON (11:29-11:30)
           name: "string"
         )
         optional: true
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -173,6 +175,7 @@ SEMICOLON (11:29-11:30)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -212,6 +215,7 @@ SEMICOLON (11:29-11:30)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -225,6 +229,7 @@ SEMICOLON (11:29-11:30)
             name: "string"
           )
           optional: true
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -264,6 +269,7 @@ SEMICOLON (11:29-11:30)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -373,16 +379,16 @@ Expression types:
   10:1-10:6 -> (any) => void
   10:1-10:27 -> void
   10:7-10:14 -> Printer
-  10:7-10:23 -> (i32, string | null) => string
+  10:7-10:23 -> (value: i32, suffix: string | null) => string
   10:7-10:26 -> string
-  10:15-10:23 -> (i32, string | null) => string
+  10:15-10:23 -> (value: i32, suffix: string | null) => string
   10:24-10:25 -> i32
   11:1-11:6 -> (any) => void
   11:1-11:29 -> void
   11:7-11:14 -> Printer
-  11:7-11:23 -> (string) => string
+  11:7-11:23 -> (value: string) => string
   11:7-11:28 -> string
-  11:15-11:23 -> (string) => string
+  11:15-11:23 -> (value: string) => string
   11:24-11:27 -> string
 
 Resolved types:
@@ -401,16 +407,16 @@ Resolved types:
 
 Declarations:
   1:11-1:18 -> interface Printer
-  2:10-2:18 -> func describe(i32, string | null) => string
+  2:10-2:18 -> func describe(value: i32, suffix: string | null) => string
   2:19-2:24 -> const value: i32
   2:31-2:37 -> const suffix: string | null
-  3:10-3:18 -> func describe(string) => string
+  3:10-3:18 -> func describe(value: string) => string
   3:19-3:24 -> const value: string
   5:7-5:11 -> class Both
-  6:17-6:25 -> func describe(i32, string?) => string
+  6:17-6:25 -> func describe(value: i32, suffix?: string) => string
   6:26-6:31 -> const value: i32
   6:38-6:44 -> const suffix: string | null
-  7:17-7:25 -> func describe(string) => string
+  7:17-7:25 -> func describe(value: string) => string
   7:26-7:31 -> const value: string
   9:7-9:14 -> const printer: Printer
 

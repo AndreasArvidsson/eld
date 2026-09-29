@@ -173,6 +173,7 @@ SEMICOLON (10:29-10:30)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -186,6 +187,7 @@ SEMICOLON (10:29-10:30)
         name: "i32"
       )
       optional: true
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -225,6 +227,7 @@ SEMICOLON (10:29-10:30)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -238,6 +241,7 @@ SEMICOLON (10:29-10:30)
         name: "string"
       )
       optional: true
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -277,6 +281,7 @@ SEMICOLON (10:29-10:30)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -290,6 +295,7 @@ SEMICOLON (10:29-10:30)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -473,17 +479,17 @@ Expression types:
   7:34-7:43 -> ArrayList<bool>
   8:1-8:6 -> (any) => void
   8:1-8:22 -> void
-  8:7-8:11 -> (List<i32>, i32 | null) => string
+  8:7-8:11 -> (values: List<i32>, count: i32 | null) => string
   8:7-8:21 -> string
   8:12-8:20 -> List<i32>
   9:1-9:6 -> (any) => void
   9:1-9:21 -> void
-  9:7-9:11 -> (List<string>, string | null) => string
+  9:7-9:11 -> (values: List<string>, label: string | null) => string
   9:7-9:20 -> string
   9:12-9:19 -> List<string>
   10:1-10:6 -> (any) => void
   10:1-10:29 -> void
-  10:7-10:11 -> (List<bool>, string) => string
+  10:7-10:11 -> (values: List<bool>, label: string) => string
   10:7-10:28 -> string
   10:12-10:20 -> List<bool>
   10:22-10:27 -> string
@@ -515,13 +521,13 @@ Resolved types:
   7:44-7:48 -> bool
 
 Declarations:
-  1:6-1:10 -> func pick(List<i32>, i32?) => string
+  1:6-1:10 -> func pick(values: List<i32>, count?: i32) => string
   1:11-1:17 -> const values: List<i32>
   1:30-1:35 -> const count: i32 | null
-  2:6-2:10 -> func pick(List<string>, string?) => string
+  2:6-2:10 -> func pick(values: List<string>, label?: string) => string
   2:11-2:17 -> const values: List<string>
   2:33-2:38 -> const label: string | null
-  3:6-3:10 -> func pick(List<bool>, string) => string
+  3:6-3:10 -> func pick(values: List<bool>, label: string) => string
   3:11-3:17 -> const values: List<bool>
   3:31-3:36 -> const label: string
   5:7-5:15 -> const integers: List<i32>

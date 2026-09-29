@@ -57,6 +57,7 @@ SEMICOLON (5:17-5:18)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -70,6 +71,7 @@ SEMICOLON (5:17-5:18)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -132,7 +134,7 @@ Expression types:
   2:16-2:17 -> i32
   5:1-5:6 -> (any) => void
   5:1-5:17 -> void
-  5:7-5:10 -> (i32, i32) => i32
+  5:7-5:10 -> (a: i32, b: i32) => i32
   5:7-5:16 -> i32
   5:11-5:12 -> i32
   5:14-5:15 -> i32
@@ -143,7 +145,7 @@ Resolved types:
   1:26-1:29 -> i32
 
 Declarations:
-  1:6-1:9 -> func sum(i32, i32) => i32
+  1:6-1:9 -> func sum(a: i32, b: i32) => i32
   1:10-1:11 -> const a: i32
   1:18-1:19 -> const b: i32
 

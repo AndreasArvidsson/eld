@@ -88,6 +88,7 @@ SEMICOLON (5:28-5:29)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -127,6 +128,7 @@ SEMICOLON (5:28-5:29)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -214,14 +216,14 @@ Expression types:
   2:53-2:62 -> string
   4:1-4:6 -> (any) => void
   4:1-4:24 -> void
-  4:7-4:15 -> (List<i32>) => string
+  4:7-4:15 -> (values: List<i32>) => string
   4:7-4:23 -> string
   4:16-4:22 -> List<i32>
   4:17-4:18 -> i32
   4:20-4:21 -> i32
   5:1-5:6 -> (any) => void
   5:1-5:28 -> void
-  5:7-5:15 -> (List<string>) => string
+  5:7-5:15 -> (values: List<string>) => string
   5:7-5:27 -> string
   5:16-5:26 -> List<string>
   5:17-5:20 -> string
@@ -236,9 +238,9 @@ Resolved types:
   2:37-2:43 -> string
 
 Declarations:
-  1:6-1:14 -> func describe(List<i32>) => string
+  1:6-1:14 -> func describe(values: List<i32>) => string
   1:15-1:21 -> const values: List<i32>
-  2:6-2:14 -> func describe(List<string>) => string
+  2:6-2:14 -> func describe(values: List<string>) => string
   2:15-2:21 -> const values: List<string>
 
 References:

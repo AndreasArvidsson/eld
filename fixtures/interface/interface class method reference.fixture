@@ -176,6 +176,7 @@ SEMICOLON (17:21-17:22)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement

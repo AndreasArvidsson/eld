@@ -1,0 +1,33 @@
+const callback: (a: i32, a: i32) => i32 = (x, y) => x + y;
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "callback" (1:7-1:15)
+COLON (1:15-1:16)
+LEFT_PAREN (1:17-1:18)
+IDENTIFIER "a" (1:18-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "i32" (1:21-1:24)
+COMMA (1:24-1:25)
+IDENTIFIER "a" (1:26-1:27)
+COLON (1:27-1:28)
+IDENTIFIER "i32" (1:29-1:32)
+RIGHT_PAREN (1:32-1:33)
+ARROW (1:34-1:36)
+IDENTIFIER "i32" (1:37-1:40)
+EQUAL (1:41-1:42)
+LEFT_PAREN (1:43-1:44)
+IDENTIFIER "x" (1:44-1:45)
+COMMA (1:45-1:46)
+IDENTIFIER "y" (1:47-1:48)
+RIGHT_PAREN (1:48-1:49)
+ARROW (1:50-1:52)
+IDENTIFIER "x" (1:53-1:54)
+PLUS (1:55-1:56)
+IDENTIFIER "y" (1:57-1:58)
+SEMICOLON (1:58-1:59)
+
+--- AST ---
+
+ParserException: Duplicate function type parameter label: a at 1:26-1:27

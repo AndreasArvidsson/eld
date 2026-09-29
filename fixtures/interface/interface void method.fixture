@@ -111,6 +111,7 @@ SEMICOLON (13:19-13:20)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       returnType: null
@@ -165,6 +166,7 @@ SEMICOLON (13:19-13:20)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null
@@ -281,9 +283,9 @@ Expression types:
   10:20-10:26 -> Person
   11:27-11:33 -> Person
   12:1-12:7 -> Renamable
-  12:1-12:14 -> (string) => void
+  12:1-12:14 -> (name: string) => void
   12:1-12:23 -> void
-  12:8-12:14 -> (string) => void
+  12:8-12:14 -> (name: string) => void
   12:15-12:22 -> string
   13:1-13:6 -> (any) => void
   13:1-13:19 -> void
@@ -299,11 +301,11 @@ Resolved types:
 
 Declarations:
   1:11-1:20 -> interface Renamable
-  2:10-2:16 -> func rename(string) => void
+  2:10-2:16 -> func rename(name: string) => void
   2:17-2:21 -> const name: string
   4:7-4:13 -> class Person
   5:16-5:20 -> var name: string
-  6:17-6:23 -> func rename(string) => void
+  6:17-6:23 -> func rename(name: string) => void
   6:24-6:28 -> const name: string
   10:7-10:13 -> const person: Person
   11:7-11:13 -> const action: Renamable

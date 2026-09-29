@@ -73,6 +73,7 @@ RIGHT_BRACE (8:1-8:2)
         range: 1:19-1:22
         name: "i32"
       )
+      namedOnly: false
     )
   )
   (ClassDeclaration

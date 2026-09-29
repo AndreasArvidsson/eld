@@ -294,6 +294,7 @@ SEMICOLON (25:32-25:33)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -322,6 +323,7 @@ SEMICOLON (25:32-25:33)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -357,6 +359,7 @@ SEMICOLON (25:32-25:33)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -385,6 +388,7 @@ SEMICOLON (25:32-25:33)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -439,6 +443,7 @@ SEMICOLON (25:32-25:33)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -482,6 +487,7 @@ SEMICOLON (25:32-25:33)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -540,6 +546,7 @@ SEMICOLON (25:32-25:33)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -583,6 +590,7 @@ SEMICOLON (25:32-25:33)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -829,30 +837,30 @@ Expression types:
   22:1-22:6 -> (any) => void
   22:1-22:28 -> void
   22:7-22:12 -> A
-  22:7-22:21 -> (List<i32>) => string
+  22:7-22:21 -> (values: List<i32>) => string
   22:7-22:27 -> string
-  22:13-22:21 -> (List<i32>) => string
+  22:13-22:21 -> (values: List<i32>) => string
   22:22-22:26 -> List<i32>
   23:1-23:6 -> (any) => void
   23:1-23:31 -> void
   23:7-23:12 -> A
-  23:7-23:21 -> (List<string>) => string
+  23:7-23:21 -> (values: List<string>) => string
   23:7-23:30 -> string
-  23:13-23:21 -> (List<string>) => string
+  23:13-23:21 -> (values: List<string>) => string
   23:22-23:29 -> List<string>
   24:1-24:6 -> (any) => void
   24:1-24:29 -> void
   24:7-24:13 -> B
-  24:7-24:22 -> (List<i32>) => string
+  24:7-24:22 -> (values: List<i32>) => string
   24:7-24:28 -> string
-  24:14-24:22 -> (List<i32>) => string
+  24:14-24:22 -> (values: List<i32>) => string
   24:23-24:27 -> List<i32>
   25:1-25:6 -> (any) => void
   25:1-25:32 -> void
   25:7-25:13 -> B
-  25:7-25:22 -> (List<string>) => string
+  25:7-25:22 -> (values: List<string>) => string
   25:7-25:31 -> string
-  25:14-25:22 -> (List<string>) => string
+  25:14-25:22 -> (values: List<string>) => string
   25:23-25:30 -> List<string>
 
 Resolved types:
@@ -895,25 +903,25 @@ Resolved types:
 
 Declarations:
   1:11-1:12 -> interface A
-  2:10-2:18 -> func describe(List<i32>) => string
+  2:10-2:18 -> func describe(values: List<i32>) => string
   2:19-2:25 -> const values: List<i32>
-  3:10-3:18 -> func describe(List<string>) => string
+  3:10-3:18 -> func describe(values: List<string>) => string
   3:19-3:25 -> const values: List<string>
   5:11-5:12 -> interface B
-  6:10-6:18 -> func describe(List<string>) => string
+  6:10-6:18 -> func describe(values: List<string>) => string
   6:19-6:25 -> const values: List<string>
-  7:10-7:18 -> func describe(List<i32>) => string
+  7:10-7:18 -> func describe(values: List<i32>) => string
   7:19-7:25 -> const values: List<i32>
   9:7-9:11 -> class Root
   10:7-10:12 -> class First
-  11:17-11:25 -> func describe(List<i32>) => string
+  11:17-11:25 -> func describe(values: List<i32>) => string
   11:26-11:32 -> const values: List<i32>
-  12:17-12:25 -> func describe(List<string>) => string
+  12:17-12:25 -> func describe(values: List<string>) => string
   12:26-12:32 -> const values: List<string>
   14:7-14:13 -> class Second
-  15:17-15:25 -> func describe(List<i32>) => string
+  15:17-15:25 -> func describe(values: List<i32>) => string
   15:26-15:32 -> const values: List<i32>
-  16:17-16:25 -> func describe(List<string>) => string
+  16:17-16:25 -> func describe(values: List<string>) => string
   16:26-16:32 -> const values: List<string>
   18:7-18:12 -> const first: A
   19:7-19:13 -> const second: B

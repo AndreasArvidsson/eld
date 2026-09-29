@@ -1,0 +1,266 @@
+func foo(value: i32) void {
+    print(value);
+}
+
+const alias = foo;
+const typedAlias: (i32) => void = alias;
+
+foo(1);
+alias(2);
+typedAlias(3);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+IDENTIFIER "value" (1:10-1:15)
+COLON (1:15-1:16)
+IDENTIFIER "i32" (1:17-1:20)
+RIGHT_PAREN (1:20-1:21)
+IDENTIFIER "void" (1:22-1:26)
+LEFT_BRACE (1:27-1:28)
+IDENTIFIER "print" (2:5-2:10)
+LEFT_PAREN (2:10-2:11)
+IDENTIFIER "value" (2:11-2:16)
+RIGHT_PAREN (2:16-2:17)
+SEMICOLON (2:17-2:18)
+RIGHT_BRACE (3:1-3:2)
+CONST (5:1-5:6)
+IDENTIFIER "alias" (5:7-5:12)
+EQUAL (5:13-5:14)
+IDENTIFIER "foo" (5:15-5:18)
+SEMICOLON (5:18-5:19)
+CONST (6:1-6:6)
+IDENTIFIER "typedAlias" (6:7-6:17)
+COLON (6:17-6:18)
+LEFT_PAREN (6:19-6:20)
+IDENTIFIER "i32" (6:20-6:23)
+RIGHT_PAREN (6:23-6:24)
+ARROW (6:25-6:27)
+IDENTIFIER "void" (6:28-6:32)
+EQUAL (6:33-6:34)
+IDENTIFIER "alias" (6:35-6:40)
+SEMICOLON (6:40-6:41)
+IDENTIFIER "foo" (8:1-8:4)
+LEFT_PAREN (8:4-8:5)
+INTEGER_LITERAL "1" (8:5-8:6)
+RIGHT_PAREN (8:6-8:7)
+SEMICOLON (8:7-8:8)
+IDENTIFIER "alias" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+INTEGER_LITERAL "2" (9:7-9:8)
+RIGHT_PAREN (9:8-9:9)
+SEMICOLON (9:9-9:10)
+IDENTIFIER "typedAlias" (10:1-10:11)
+LEFT_PAREN (10:11-10:12)
+INTEGER_LITERAL "3" (10:12-10:13)
+RIGHT_PAREN (10:13-10:14)
+SEMICOLON (10:14-10:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:15
+  (FunctionDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:10-1:20
+      (IdentifierDeclaration
+        range: 1:10-1:15
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "i32"
+      )
+      optional: false
+      namedOnly: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:22-1:26
+      name: "void"
+    )
+    (BlockStatement
+      range: 1:27-3:2
+      (ExpressionStatement
+        range: 2:5-2:18
+        (CallExpression
+          range: 2:5-2:17
+          (IdentifierExpression
+            range: 2:5-2:10
+            name: "print"
+          )
+          (IdentifierExpression
+            range: 2:11-2:16
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:12
+      name: "alias"
+    )
+    type: null
+    (IdentifierExpression
+      range: 5:15-5:18
+      name: "foo"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:17
+      name: "typedAlias"
+    )
+    (FunctionTypeNode
+      range: 6:19-6:32
+      namedOnlyStart: null
+      (FunctionTypeParameter
+        range: 6:20-6:23
+        label: null
+        (NamedTypeNode
+          range: 6:20-6:23
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 6:28-6:32
+        name: "void"
+      )
+    )
+    (IdentifierExpression
+      range: 6:35-6:40
+      name: "alias"
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:8
+    (CallExpression
+      range: 8:1-8:7
+      (IdentifierExpression
+        range: 8:1-8:4
+        name: "foo"
+      )
+      (LiteralExpression
+        range: 8:5-8:6
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:10
+    (CallExpression
+      range: 9:1-9:9
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "alias"
+      )
+      (LiteralExpression
+        range: 9:7-9:8
+        kind: INT
+        text: "2"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:15
+    (CallExpression
+      range: 10:1-10:14
+      (IdentifierExpression
+        range: 10:1-10:11
+        name: "typedAlias"
+      )
+      (LiteralExpression
+        range: 10:12-10:13
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:5-2:10 -> (any) => void
+  2:5-2:17 -> void
+  2:11-2:16 -> i32
+  5:15-5:18 -> (value: i32) => void
+  6:35-6:40 -> (value: i32) => void
+  8:1-8:4 -> (value: i32) => void
+  8:1-8:7 -> void
+  8:5-8:6 -> i32
+  9:1-9:6 -> (value: i32) => void
+  9:1-9:9 -> void
+  9:7-9:8 -> i32
+  10:1-10:11 -> (i32) => void
+  10:1-10:14 -> void
+  10:12-10:13 -> i32
+
+Resolved types:
+  1:17-1:20 -> i32
+  1:22-1:26 -> void
+  6:19-6:32 -> (i32) => void
+  6:20-6:23 -> i32
+  6:28-6:32 -> void
+
+Declarations:
+  1:6-1:9 -> func foo(value: i32) => void
+  1:10-1:15 -> const value: i32
+  5:7-5:12 -> const alias: (value: i32) => void
+  6:7-6:17 -> const typedAlias: (i32) => void
+
+References:
+  2:5-2:10 -> builtin print
+  2:11-2:16 -> 1:10-1:15
+  5:15-5:18 -> 1:6-1:9
+  6:35-6:40 -> 5:7-5:12
+  8:1-8:4 -> 1:6-1:9
+  9:1-9:6 -> 5:7-5:12
+  10:1-10:11 -> 6:7-6:17
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field alias Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field typedAlias Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method foo(I)V flags [PUBLIC, STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ILOAD_0 0
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::foo(int)void]
+    PUTSTATIC Test.alias Ljava/lang/invoke/MethodHandle;
+    GETSTATIC Test.alias Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.typedAlias Ljava/lang/invoke/MethodHandle;
+    LDC 1
+    INVOKESTATIC Test.foo(I)V
+    GETSTATIC Test.alias Ljava/lang/invoke/MethodHandle;
+    LDC 2
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)V
+    GETSTATIC Test.typedAlias Ljava/lang/invoke/MethodHandle;
+    LDC 3
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+1
+2
+3

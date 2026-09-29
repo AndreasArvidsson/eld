@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 
 /** Checks whether optional parameters allow two functions to accept the same signature. */
@@ -62,10 +63,12 @@ public final class FunctionSignatures {
                         .allMatch(FunctionParameter::omittable);
             for (int i = 0; i < positional; i++) {
                 if (
-                    !Objects.equals(
-                        key.apply(left.parameterTypes().get(i)),
-                        key.apply(right.parameterTypes().get(i))
-                    )
+                    leftParameters.get(i).namedOnly()
+                        || rightParameters.get(i).namedOnly()
+                        || !Objects.equals(
+                            key.apply(left.parameterTypes().get(i)),
+                            key.apply(right.parameterTypes().get(i))
+                        )
                 ) {
                     shared = false;
                     break;
@@ -137,6 +140,12 @@ public final class FunctionSignatures {
     ) {
         int positionalState = 0;
         for (int i = 0; i < positional; i++) {
+            if (
+                leftParameters.get(i).namedOnly()
+                    || rightParameters.get(i).namedOnly()
+            ) {
+                return false;
+            }
             final Type leftType = left.parameterTypes().get(i);
             final Type rightType = right.parameterTypes().get(i);
             if (!sharesValue(leftType, rightType, isSubtype)) {
@@ -149,18 +158,46 @@ public final class FunctionSignatures {
                 positionalState |= 1;
             }
         }
+        final List<@Nullable String> leftNames = left.parameterNames();
+        final List<@Nullable String> rightNames = right.parameterNames();
+        if (
+            leftNames.size() != leftParameters.size()
+                || rightNames.size() != rightParameters.size()
+        ) {
+            return false;
+        }
+        for (int i = positional; i < leftNames.size(); i++) {
+            if (
+                leftNames.get(i) == null && !leftParameters.get(i).omittable()
+            ) {
+                return false;
+            }
+        }
+        for (int i = positional; i < rightNames.size(); i++) {
+            if (
+                rightNames.get(i) == null && !rightParameters.get(i).omittable()
+            ) {
+                return false;
+            }
+        }
         final Set<String> names = new LinkedHashSet<>();
-        leftParameters.subList(positional, leftParameters.size())
-            .forEach(parameter -> names.add(parameter.name().name()));
-        rightParameters.subList(positional, rightParameters.size())
-            .forEach(parameter -> names.add(parameter.name().name()));
+        for (int i = positional; i < leftNames.size(); i++) {
+            final @Nullable String label = leftNames.get(i);
+            if (label != null) {
+                names.add(label);
+            }
+        }
+        for (int i = positional; i < rightNames.size(); i++) {
+            final @Nullable String label = rightNames.get(i);
+            if (label != null) {
+                names.add(label);
+            }
+        }
         final boolean[] reachable = new boolean[4];
         reachable[positionalState] = true;
         for (final String name : names) {
-            final int leftIndex =
-                parameterIndex(leftParameters, name, positional);
-            final int rightIndex =
-                parameterIndex(rightParameters, name, positional);
+            final int leftIndex = parameterIndex(leftNames, name, positional);
+            final int rightIndex = parameterIndex(rightNames, name, positional);
             if (leftIndex < 0) {
                 if (!rightParameters.get(rightIndex).omittable()) {
                     return false;
@@ -208,12 +245,12 @@ public final class FunctionSignatures {
     }
 
     private static int parameterIndex(
-        final List<FunctionParameter> parameters,
+        final List<@Nullable String> labels,
         final String name,
         final int start
     ) {
-        for (int i = start; i < parameters.size(); i++) {
-            if (parameters.get(i).name().name().equals(name)) {
+        for (int i = start; i < labels.size(); i++) {
+            if (name.equals(labels.get(i))) {
                 return i;
             }
         }

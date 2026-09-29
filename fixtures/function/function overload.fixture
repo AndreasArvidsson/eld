@@ -70,6 +70,7 @@ SEMICOLON (5:25-5:26)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -105,6 +106,7 @@ SEMICOLON (5:25-5:26)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -176,12 +178,12 @@ Expression types:
   2:46-2:54 -> string
   4:1-4:6 -> (any) => void
   4:1-4:19 -> void
-  4:7-4:15 -> (i32) => string
+  4:7-4:15 -> (value: i32) => string
   4:7-4:18 -> string
   4:16-4:17 -> i32
   5:1-5:6 -> (any) => void
   5:1-5:25 -> void
-  5:7-5:15 -> (string) => string
+  5:7-5:15 -> (value: string) => string
   5:7-5:24 -> string
   5:16-5:23 -> string
 
@@ -192,9 +194,9 @@ Resolved types:
   2:30-2:36 -> string
 
 Declarations:
-  1:6-1:14 -> func describe(i32) => string
+  1:6-1:14 -> func describe(value: i32) => string
   1:15-1:20 -> const value: i32
-  2:6-2:14 -> func describe(string) => string
+  2:6-2:14 -> func describe(value: string) => string
   2:15-2:20 -> const value: string
 
 References:

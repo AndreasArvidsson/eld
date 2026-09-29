@@ -51,6 +51,7 @@ RIGHT_BRACE (2:43-2:44)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -86,6 +87,7 @@ RIGHT_BRACE (2:43-2:44)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode

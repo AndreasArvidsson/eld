@@ -148,6 +148,7 @@ SEMICOLON (14:30-14:31)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -161,6 +162,7 @@ SEMICOLON (14:30-14:31)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -235,6 +237,7 @@ SEMICOLON (14:30-14:31)
         name: "Animal"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -248,6 +251,7 @@ SEMICOLON (14:30-14:31)
         name: "Cat"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null

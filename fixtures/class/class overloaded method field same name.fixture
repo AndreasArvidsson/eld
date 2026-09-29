@@ -133,6 +133,7 @@ SEMICOLON (9:16-9:17)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -171,6 +172,7 @@ SEMICOLON (9:16-9:17)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -304,16 +306,16 @@ Expression types:
   8:1-8:6 -> (any) => void
   8:1-8:14 -> void
   8:7-8:8 -> C
-  8:7-8:10 -> (i32) => i32
+  8:7-8:10 -> (x: i32) => i32
   8:7-8:13 -> i32
-  8:9-8:10 -> (i32) => i32
+  8:9-8:10 -> (x: i32) => i32
   8:11-8:12 -> i32
   9:1-9:6 -> (any) => void
   9:1-9:16 -> void
   9:7-9:8 -> C
-  9:7-9:10 -> (string) => i32
+  9:7-9:10 -> (x: string) => i32
   9:7-9:15 -> i32
-  9:9-9:10 -> (string) => i32
+  9:9-9:10 -> (x: string) => i32
   9:11-9:14 -> string
 
 Resolved types:
@@ -325,9 +327,9 @@ Resolved types:
 Declarations:
   1:7-1:8 -> class C
   2:18-2:19 -> const f: i32
-  3:17-3:18 -> func f(i32) => i32
+  3:17-3:18 -> func f(x: i32) => i32
   3:19-3:20 -> const x: i32
-  4:17-4:18 -> func f(string) => i32
+  4:17-4:18 -> func f(x: string) => i32
   4:19-4:20 -> const x: string
   6:7-6:8 -> const c: C
 

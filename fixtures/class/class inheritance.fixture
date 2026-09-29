@@ -181,6 +181,7 @@ SEMICOLON (20:33-20:34)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           (LiteralExpression
             range: 3:40-3:41
             kind: INT
@@ -304,6 +305,7 @@ SEMICOLON (20:33-20:34)
         )
         (FunctionTypeNode
           range: 14:29-14:38
+          namedOnlyStart: null
           (NamedTypeNode
             range: 14:35-14:38
             name: "i32"
@@ -460,7 +462,7 @@ Resolved types:
 Declarations:
   1:7-1:11 -> class Base
   2:19-2:24 -> var value: i32
-  3:15-5:6 -> constructor(value: i32)
+  3:15-5:6 -> constructor(value?: i32)
   3:27-3:32 -> const value: i32
   6:17-6:21 -> func read() => i32
   10:7-10:12 -> class Child

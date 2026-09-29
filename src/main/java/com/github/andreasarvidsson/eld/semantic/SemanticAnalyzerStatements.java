@@ -1018,11 +1018,11 @@ public final class SemanticAnalyzerStatements {
             if (!param.discarded()) {
                 final VariableSymbol paramSymbol =
                     new VariableSymbol(
-                        param.name(),
+                        param.identifier(),
                         paramType,
                         Mutability.CONST
                     );
-                model.setSymbol(param.name(), paramSymbol);
+                model.setSymbol(param.identifier(), paramSymbol);
                 functionScope.declare(paramSymbol);
             }
             parameterTypes.add(paramType);
@@ -1030,7 +1030,7 @@ public final class SemanticAnalyzerStatements {
 
         final Type returnType =
             declaration.returnType() != null
-                ? analyzer.resolveType(
+                ? analyzer.resolveReturnType(
                     Objects.requireNonNull(declaration.returnType()),
                     context
                 )
@@ -1041,9 +1041,10 @@ public final class SemanticAnalyzerStatements {
         final FunctionSymbol symbol =
             new FunctionSymbol(
                 declaration.name(),
-                new FunctionType(
+                FunctionType.declared(
                     Objects.requireNonNull(parameterTypes),
-                    callableReturnType
+                    callableReturnType,
+                    declaration.parameters()
                 ),
                 declaration.modifiers()
             );
@@ -1091,7 +1092,7 @@ public final class SemanticAnalyzerStatements {
         for (final FunctionParameter parameter : declaration.parameters()) {
             if (!parameter.discarded()) {
                 model.setVariableOwner(
-                    (VariableSymbol) model.getSymbol(parameter.name()),
+                    (VariableSymbol) model.getSymbol(parameter.identifier()),
                     symbol
                 );
             }
@@ -1123,7 +1124,7 @@ public final class SemanticAnalyzerStatements {
                 new SemanticContext(functionScope, symbol, 0)
             );
             if (!parameter.discarded()) {
-                functionScope.declare(model.getSymbol(parameter.name()));
+                functionScope.declare(model.getSymbol(parameter.identifier()));
             }
         }
         final SemanticContext functionContext =

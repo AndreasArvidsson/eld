@@ -142,6 +142,7 @@ SEMICOLON (8:41-8:42)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -186,6 +187,7 @@ SEMICOLON (8:41-8:42)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -347,17 +349,17 @@ Expression types:
   7:1-7:6 -> (any) => void
   7:1-7:38 -> void
   7:7-7:8 -> E
-  7:7-7:15 -> (List<i32>) => string
+  7:7-7:15 -> (x: List<i32>) => string
   7:7-7:37 -> string
-  7:9-7:15 -> (List<i32>) => string
+  7:9-7:15 -> (x: List<i32>) => string
   7:16-7:36 -> ArrayList<i32>
   7:20-7:29 -> ArrayList<i32>
   8:1-8:6 -> (any) => void
   8:1-8:41 -> void
   8:7-8:8 -> E
-  8:7-8:15 -> (List<string>) => string
+  8:7-8:15 -> (x: List<string>) => string
   8:7-8:40 -> string
-  8:9-8:15 -> (List<string>) => string
+  8:9-8:15 -> (x: List<string>) => string
   8:16-8:39 -> ArrayList<string>
   8:20-8:29 -> ArrayList<string>
 
@@ -381,9 +383,9 @@ Resolved types:
 Declarations:
   1:6-1:7 -> class E
   2:5-2:6 -> const A: E
-  3:24-3:30 -> func values(List<i32>) => string
+  3:24-3:30 -> func values(x: List<i32>) => string
   3:31-3:32 -> const x: List<i32>
-  4:24-4:30 -> func values(List<string>) => string
+  4:24-4:30 -> func values(x: List<string>) => string
   4:31-4:32 -> const x: List<string>
 
 References:

@@ -150,6 +150,7 @@ SEMICOLON (14:35-14:36)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -163,6 +164,7 @@ SEMICOLON (14:35-14:36)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -244,6 +246,7 @@ SEMICOLON (14:35-14:36)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -257,6 +260,7 @@ SEMICOLON (14:35-14:36)
         name: "Cat"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -353,7 +357,7 @@ Expression types:
   10:15-10:25 -> () => string
   10:15-10:27 -> string
   10:21-10:25 -> () => string
-  14:1-14:13 -> (Cat | Dog, Cat) => void
+  14:1-14:13 -> (value: Cat | Dog, cat: Cat) => void
   14:1-14:35 -> void
   14:14-14:23 -> Cat
   14:18-14:21 -> Cat
@@ -380,12 +384,12 @@ Conversions:
 Declarations:
   1:7-1:13 -> class Animal
   2:7-2:10 -> class Cat
-  3:24-3:29 -> func equal(Cat, Cat) => bool
+  3:24-3:29 -> func equal(a: Cat, b: Cat) => bool
   3:30-3:31 -> const a: Cat
   3:38-3:39 -> const b: Cat
   4:17-4:21 -> func meow() => string
   6:7-6:10 -> class Dog
-  8:6-8:18 -> func inspectUnion(Cat | Dog, Cat) => void
+  8:6-8:18 -> func inspectUnion(value: Cat | Dog, cat: Cat) => void
   8:19-8:24 -> const value: Cat | Dog
   8:37-8:40 -> const cat: Cat
 

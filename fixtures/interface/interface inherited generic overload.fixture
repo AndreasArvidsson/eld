@@ -243,6 +243,7 @@ SEMICOLON (19:31-19:32)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -271,6 +272,7 @@ SEMICOLON (19:31-19:32)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -310,6 +312,7 @@ SEMICOLON (19:31-19:32)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -353,6 +356,7 @@ SEMICOLON (19:31-19:32)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -396,6 +400,7 @@ SEMICOLON (19:31-19:32)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -439,6 +444,7 @@ SEMICOLON (19:31-19:32)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -662,23 +668,23 @@ Expression types:
   17:1-17:6 -> (any) => void
   17:1-17:34 -> void
   17:7-17:14 -> Printer
-  17:7-17:23 -> (List<i32>) => string
+  17:7-17:23 -> (values: List<i32>) => string
   17:7-17:33 -> string
-  17:15-17:23 -> (List<i32>) => string
+  17:15-17:23 -> (values: List<i32>) => string
   17:24-17:32 -> List<i32>
   18:1-18:6 -> (any) => void
   18:1-18:33 -> void
   18:7-18:14 -> Printer
-  18:7-18:23 -> (List<string>) => string
+  18:7-18:23 -> (values: List<string>) => string
   18:7-18:32 -> string
-  18:15-18:23 -> (List<string>) => string
+  18:15-18:23 -> (values: List<string>) => string
   18:24-18:31 -> List<string>
   19:1-19:6 -> (any) => void
   19:1-19:31 -> void
   19:7-19:14 -> Printer
-  19:7-19:23 -> (List<bool>) => string
+  19:7-19:23 -> (values: List<bool>) => string
   19:7-19:30 -> string
-  19:15-19:23 -> (List<bool>) => string
+  19:15-19:23 -> (values: List<bool>) => string
   19:24-19:29 -> List<bool>
 
 Resolved types:
@@ -718,19 +724,19 @@ Resolved types:
 
 Declarations:
   1:11-1:22 -> interface BasePrinter
-  2:10-2:18 -> func describe(List<i32>) => string
+  2:10-2:18 -> func describe(values: List<i32>) => string
   2:19-2:25 -> const values: List<i32>
-  3:10-3:18 -> func describe(List<string>) => string
+  3:10-3:18 -> func describe(values: List<string>) => string
   3:19-3:25 -> const values: List<string>
   5:11-5:18 -> interface Printer
-  6:10-6:18 -> func describe(List<bool>) => string
+  6:10-6:18 -> func describe(values: List<bool>) => string
   6:19-6:25 -> const values: List<bool>
   8:7-8:11 -> class Both
-  9:17-9:25 -> func describe(List<bool>) => string
+  9:17-9:25 -> func describe(values: List<bool>) => string
   9:26-9:32 -> const values: List<bool>
-  10:17-10:25 -> func describe(List<string>) => string
+  10:17-10:25 -> func describe(values: List<string>) => string
   10:26-10:32 -> const values: List<string>
-  11:17-11:25 -> func describe(List<i32>) => string
+  11:17-11:25 -> func describe(values: List<i32>) => string
   11:26-11:32 -> const values: List<i32>
   13:7-13:14 -> const printer: Printer
   14:7-14:15 -> const integers: List<i32>

@@ -145,6 +145,7 @@ SEMICOLON (14:24-14:25)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -196,6 +197,7 @@ SEMICOLON (14:24-14:25)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -235,6 +237,7 @@ SEMICOLON (14:24-14:25)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -389,23 +392,23 @@ Expression types:
   12:1-12:6 -> (any) => void
   12:1-12:25 -> void
   12:7-12:12 -> Child
-  12:7-12:21 -> (i32) => string
+  12:7-12:21 -> (value: i32) => string
   12:7-12:24 -> string
-  12:13-12:21 -> (i32) => string
+  12:13-12:21 -> (value: i32) => string
   12:22-12:23 -> i32
   13:1-13:6 -> (any) => void
   13:1-13:31 -> void
   13:7-13:12 -> Child
-  13:7-13:21 -> (string) => string
+  13:7-13:21 -> (value: string) => string
   13:7-13:30 -> string
-  13:13-13:21 -> (string) => string
+  13:13-13:21 -> (value: string) => string
   13:22-13:29 -> string
   14:1-14:6 -> (any) => void
   14:1-14:24 -> void
   14:7-14:11 -> Base
-  14:7-14:20 -> (i32) => string
+  14:7-14:20 -> (value: i32) => string
   14:7-14:23 -> string
-  14:12-14:20 -> (i32) => string
+  14:12-14:20 -> (value: i32) => string
   14:21-14:22 -> i32
 
 Resolved types:
@@ -419,12 +422,12 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:17-2:25 -> func describe(i32) => string
+  2:17-2:25 -> func describe(value: i32) => string
   2:26-2:31 -> const value: i32
   5:7-5:12 -> class Child
-  6:26-6:34 -> override func describe(i32) => string
+  6:26-6:34 -> override func describe(value: i32) => string
   6:35-6:40 -> const value: i32
-  7:17-7:25 -> func describe(string) => string
+  7:17-7:25 -> func describe(value: string) => string
   7:26-7:31 -> const value: string
   10:7-10:12 -> const child: Child
   11:7-11:11 -> const base: Base

@@ -143,6 +143,7 @@ SEMICOLON (15:21-15:22)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null
@@ -307,9 +308,9 @@ Expression types:
   5:9-5:21 -> void
   5:15-5:20 -> i32
   9:9-9:16 -> Example
-  9:9-9:24 -> (i32) => void
+  9:9-9:24 -> (value: i32) => void
   9:9-9:51 -> void
-  9:17-9:24 -> (i32) => void
+  9:17-9:24 -> (value: i32) => void
   9:25-9:50 -> i32
   9:31-9:50 -> Promise<i32>
   9:47-9:49 -> i32
@@ -335,7 +336,7 @@ Resolved types:
 Declarations:
   1:7-1:14 -> class Example
   2:23-2:28 -> var value: i32
-  4:24-4:31 -> func consume(i32) => void
+  4:24-4:31 -> func consume(value: i32) => void
   4:32-4:37 -> const value: i32
   8:30-8:33 -> func run() => Promise<void>
 

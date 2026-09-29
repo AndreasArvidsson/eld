@@ -152,6 +152,7 @@ SEMICOLON (10:31-10:32)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -208,6 +209,7 @@ SEMICOLON (10:31-10:32)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -247,6 +249,7 @@ SEMICOLON (10:31-10:32)
             name: "C"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -393,9 +396,9 @@ Expression types:
   9:1-9:6 -> (any) => void
   9:1-9:22 -> void
   9:7-9:8 -> I
-  9:7-9:18 -> (1 | 2) => i32
+  9:7-9:18 -> (other: 1 | 2) => i32
   9:7-9:21 -> i32
-  9:9-9:18 -> (1 | 2) => i32
+  9:9-9:18 -> (other: 1 | 2) => i32
   9:19-9:20 -> i32
   10:1-10:6 -> (any) => void
   10:1-10:31 -> void
@@ -429,12 +432,12 @@ Conversions:
 
 Declarations:
   1:11-1:12 -> interface I
-  1:20-1:29 -> func compareTo(1 | 2) => i32
+  1:20-1:29 -> func compareTo(other: 1 | 2) => i32
   1:30-1:35 -> const other: 1 | 2
   2:7-2:8 -> class C
-  3:17-3:26 -> func compareTo(1 | 2) => i32
+  3:17-3:26 -> func compareTo(other: 1 | 2) => i32
   3:27-3:32 -> const other: 1 | 2
-  4:17-4:26 -> func compareTo(C) => i32
+  4:17-4:26 -> func compareTo(other: C) => i32
   4:27-4:32 -> const other: C
   6:7-6:8 -> const c: C
   7:7-7:8 -> const i: I

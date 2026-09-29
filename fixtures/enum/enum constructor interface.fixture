@@ -224,6 +224,7 @@ SEMICOLON (23:35-23:36)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement

@@ -78,6 +78,7 @@ RIGHT_BRACE (7:1-7:2)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -91,6 +92,7 @@ RIGHT_BRACE (7:1-7:2)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null
@@ -130,6 +132,7 @@ RIGHT_BRACE (7:1-7:2)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -143,6 +146,7 @@ RIGHT_BRACE (7:1-7:2)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         returnType: null

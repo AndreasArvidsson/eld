@@ -350,6 +350,7 @@ SEMICOLON (22:28-22:29)
         text: "0xFF"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -592,7 +593,7 @@ Expression types:
   21:7-21:16 -> i32
   22:1-22:6 -> (any) => void
   22:1-22:28 -> void
-  22:7-22:14 -> (0xFF) => bool
+  22:7-22:14 -> (value: 0xFF) => bool
   22:7-22:27 -> bool
   22:15-22:26 -> i32
 
@@ -618,7 +619,7 @@ Declarations:
   8:7-8:11 -> const wide: i64
   9:7-9:14 -> const minimum: i64
   10:7-10:16 -> const minimum32: i32
-  11:6-11:13 -> func matches(0xFF) => bool
+  11:6-11:13 -> func matches(value: 0xFF) => bool
   11:14-11:19 -> const value: 0xFF
 
 References:

@@ -1,0 +1,102 @@
+func foo(*, value: i32) {}
+
+foo(value: 1);
+foo(1);
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "foo" (1:6-1:9)
+LEFT_PAREN (1:9-1:10)
+STAR (1:10-1:11)
+COMMA (1:11-1:12)
+IDENTIFIER "value" (1:13-1:18)
+COLON (1:18-1:19)
+IDENTIFIER "i32" (1:20-1:23)
+RIGHT_PAREN (1:23-1:24)
+LEFT_BRACE (1:25-1:26)
+RIGHT_BRACE (1:26-1:27)
+IDENTIFIER "foo" (3:1-3:4)
+LEFT_PAREN (3:4-3:5)
+IDENTIFIER "value" (3:5-3:10)
+COLON (3:10-3:11)
+INTEGER_LITERAL "1" (3:12-3:13)
+RIGHT_PAREN (3:13-3:14)
+SEMICOLON (3:14-3:15)
+IDENTIFIER "foo" (4:1-4:4)
+LEFT_PAREN (4:4-4:5)
+INTEGER_LITERAL "1" (4:5-4:6)
+RIGHT_PAREN (4:6-4:7)
+SEMICOLON (4:7-4:8)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:8
+  (FunctionDeclaration
+    range: 1:1-1:27
+    (IdentifierDeclaration
+      range: 1:6-1:9
+      name: "foo"
+    )
+    (FunctionParameter
+      range: 1:13-1:23
+      (IdentifierDeclaration
+        range: 1:13-1:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+      optional: false
+      namedOnly: true
+      defaultValue: null
+    )
+    returnType: null
+    (BlockStatement
+      range: 1:25-1:27
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:15
+    (CallExpression
+      range: 3:1-3:14
+      (IdentifierExpression
+        range: 3:1-3:4
+        name: "foo"
+      )
+      (NamedArgumentExpression
+        range: 3:5-3:13
+        (IdentifierDeclaration
+          range: 3:5-3:10
+          name: "value"
+        )
+        (LiteralExpression
+          range: 3:12-3:13
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:8
+    (CallExpression
+      range: 4:1-4:7
+      (IdentifierExpression
+        range: 4:1-4:4
+        name: "foo"
+      )
+      (LiteralExpression
+        range: 4:5-4:6
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Parameter value must be supplied by name at 4:5-4:6

@@ -6,7 +6,7 @@ public sealed interface AstNode permits BlockItem, Expression, TypeNode,
     FunctionParameter, LambdaParameter, RecordParameter, Program, ElseIfBranch,
     SwitchBranch, SwitchElseBranch, SwitchBranchBody, MemberDeclaration,
     InterfaceMemberDeclaration, ObjectEntry, MapElement, CatchClause, Pattern,
-    RecordPatternField, EnumConstant {
+    RecordPatternField, EnumConstant, FunctionTypeParameter {
 
     Range range();
 

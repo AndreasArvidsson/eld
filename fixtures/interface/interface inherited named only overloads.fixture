@@ -1,0 +1,561 @@
+interface A {
+    func pick(*, a: i32) i32;
+}
+interface B {
+    func pick(*, b: i32) i32;
+}
+interface C extends A, B {}
+
+class Both implements C {
+    public func pick(*, a: i32) i32 { return a + 1; }
+    public func pick(*, b: i32) i32 { return b + 10; }
+}
+
+const value: C = new Both();
+print(value.pick(a: 1));
+print(value.pick(b: 2));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "A" (1:11-1:12)
+LEFT_BRACE (1:13-1:14)
+FUNC (2:5-2:9)
+IDENTIFIER "pick" (2:10-2:14)
+LEFT_PAREN (2:14-2:15)
+STAR (2:15-2:16)
+COMMA (2:16-2:17)
+IDENTIFIER "a" (2:18-2:19)
+COLON (2:19-2:20)
+IDENTIFIER "i32" (2:21-2:24)
+RIGHT_PAREN (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+SEMICOLON (2:29-2:30)
+RIGHT_BRACE (3:1-3:2)
+INTERFACE (4:1-4:10)
+IDENTIFIER "B" (4:11-4:12)
+LEFT_BRACE (4:13-4:14)
+FUNC (5:5-5:9)
+IDENTIFIER "pick" (5:10-5:14)
+LEFT_PAREN (5:14-5:15)
+STAR (5:15-5:16)
+COMMA (5:16-5:17)
+IDENTIFIER "b" (5:18-5:19)
+COLON (5:19-5:20)
+IDENTIFIER "i32" (5:21-5:24)
+RIGHT_PAREN (5:24-5:25)
+IDENTIFIER "i32" (5:26-5:29)
+SEMICOLON (5:29-5:30)
+RIGHT_BRACE (6:1-6:2)
+INTERFACE (7:1-7:10)
+IDENTIFIER "C" (7:11-7:12)
+EXTENDS (7:13-7:20)
+IDENTIFIER "A" (7:21-7:22)
+COMMA (7:22-7:23)
+IDENTIFIER "B" (7:24-7:25)
+LEFT_BRACE (7:26-7:27)
+RIGHT_BRACE (7:27-7:28)
+CLASS (9:1-9:6)
+IDENTIFIER "Both" (9:7-9:11)
+IMPLEMENTS (9:12-9:22)
+IDENTIFIER "C" (9:23-9:24)
+LEFT_BRACE (9:25-9:26)
+PUBLIC (10:5-10:11)
+FUNC (10:12-10:16)
+IDENTIFIER "pick" (10:17-10:21)
+LEFT_PAREN (10:21-10:22)
+STAR (10:22-10:23)
+COMMA (10:23-10:24)
+IDENTIFIER "a" (10:25-10:26)
+COLON (10:26-10:27)
+IDENTIFIER "i32" (10:28-10:31)
+RIGHT_PAREN (10:31-10:32)
+IDENTIFIER "i32" (10:33-10:36)
+LEFT_BRACE (10:37-10:38)
+RETURN (10:39-10:45)
+IDENTIFIER "a" (10:46-10:47)
+PLUS (10:48-10:49)
+INTEGER_LITERAL "1" (10:50-10:51)
+SEMICOLON (10:51-10:52)
+RIGHT_BRACE (10:53-10:54)
+PUBLIC (11:5-11:11)
+FUNC (11:12-11:16)
+IDENTIFIER "pick" (11:17-11:21)
+LEFT_PAREN (11:21-11:22)
+STAR (11:22-11:23)
+COMMA (11:23-11:24)
+IDENTIFIER "b" (11:25-11:26)
+COLON (11:26-11:27)
+IDENTIFIER "i32" (11:28-11:31)
+RIGHT_PAREN (11:31-11:32)
+IDENTIFIER "i32" (11:33-11:36)
+LEFT_BRACE (11:37-11:38)
+RETURN (11:39-11:45)
+IDENTIFIER "b" (11:46-11:47)
+PLUS (11:48-11:49)
+INTEGER_LITERAL "10" (11:50-11:52)
+SEMICOLON (11:52-11:53)
+RIGHT_BRACE (11:54-11:55)
+RIGHT_BRACE (12:1-12:2)
+CONST (14:1-14:6)
+IDENTIFIER "value" (14:7-14:12)
+COLON (14:12-14:13)
+IDENTIFIER "C" (14:14-14:15)
+EQUAL (14:16-14:17)
+NEW (14:18-14:21)
+IDENTIFIER "Both" (14:22-14:26)
+LEFT_PAREN (14:26-14:27)
+RIGHT_PAREN (14:27-14:28)
+SEMICOLON (14:28-14:29)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "value" (15:7-15:12)
+DOT (15:12-15:13)
+IDENTIFIER "pick" (15:13-15:17)
+LEFT_PAREN (15:17-15:18)
+IDENTIFIER "a" (15:18-15:19)
+COLON (15:19-15:20)
+INTEGER_LITERAL "1" (15:21-15:22)
+RIGHT_PAREN (15:22-15:23)
+RIGHT_PAREN (15:23-15:24)
+SEMICOLON (15:24-15:25)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "value" (16:7-16:12)
+DOT (16:12-16:13)
+IDENTIFIER "pick" (16:13-16:17)
+LEFT_PAREN (16:17-16:18)
+IDENTIFIER "b" (16:18-16:19)
+COLON (16:19-16:20)
+INTEGER_LITERAL "2" (16:21-16:22)
+RIGHT_PAREN (16:22-16:23)
+RIGHT_PAREN (16:23-16:24)
+SEMICOLON (16:24-16:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:25
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:12
+      name: "A"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:30
+      (IdentifierDeclaration
+        range: 2:10-2:14
+        name: "pick"
+      )
+      (FunctionParameter
+        range: 2:18-2:24
+        (IdentifierDeclaration
+          range: 2:18-2:19
+          name: "a"
+        )
+        (NamedTypeNode
+          range: 2:21-2:24
+          name: "i32"
+        )
+        optional: false
+        namedOnly: true
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:26-2:29
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 4:1-6:2
+    (IdentifierDeclaration
+      range: 4:11-4:12
+      name: "B"
+    )
+    (InterfaceMethodDeclaration
+      range: 5:5-5:30
+      (IdentifierDeclaration
+        range: 5:10-5:14
+        name: "pick"
+      )
+      (FunctionParameter
+        range: 5:18-5:24
+        (IdentifierDeclaration
+          range: 5:18-5:19
+          name: "b"
+        )
+        (NamedTypeNode
+          range: 5:21-5:24
+          name: "i32"
+        )
+        optional: false
+        namedOnly: true
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 5:26-5:29
+        name: "i32"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 7:1-7:28
+    (IdentifierDeclaration
+      range: 7:11-7:12
+      name: "C"
+    )
+    (NamedTypeNode
+      range: 7:21-7:22
+      name: "A"
+    )
+    (NamedTypeNode
+      range: 7:24-7:25
+      name: "B"
+    )
+  )
+  (ClassDeclaration
+    range: 9:1-12:2
+    (IdentifierDeclaration
+      range: 9:7-9:11
+      name: "Both"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 9:23-9:24
+      name: "C"
+    )
+    (MemberDeclaration
+      range: 10:5-10:54
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 10:12-10:54
+        (IdentifierDeclaration
+          range: 10:17-10:21
+          name: "pick"
+        )
+        (FunctionParameter
+          range: 10:25-10:31
+          (IdentifierDeclaration
+            range: 10:25-10:26
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 10:28-10:31
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 10:33-10:36
+          name: "i32"
+        )
+        (BlockStatement
+          range: 10:37-10:54
+          (ReturnStatement
+            range: 10:39-10:52
+            (BinaryExpression
+              range: 10:46-10:51
+              (IdentifierExpression
+                range: 10:46-10:47
+                name: "a"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 10:50-10:51
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 11:5-11:55
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 11:12-11:55
+        (IdentifierDeclaration
+          range: 11:17-11:21
+          name: "pick"
+        )
+        (FunctionParameter
+          range: 11:25-11:31
+          (IdentifierDeclaration
+            range: 11:25-11:26
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 11:28-11:31
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 11:33-11:36
+          name: "i32"
+        )
+        (BlockStatement
+          range: 11:37-11:55
+          (ReturnStatement
+            range: 11:39-11:53
+            (BinaryExpression
+              range: 11:46-11:52
+              (IdentifierExpression
+                range: 11:46-11:47
+                name: "b"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 11:50-11:52
+                kind: INT
+                text: "10"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 14:1-14:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 14:7-14:12
+      name: "value"
+    )
+    (NamedTypeNode
+      range: 14:14-14:15
+      name: "C"
+    )
+    (NewExpression
+      range: 14:18-14:28
+      (IdentifierExpression
+        range: 14:22-14:26
+        name: "Both"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:25
+    (CallExpression
+      range: 15:1-15:24
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:23
+        (MemberExpression
+          range: 15:7-15:17
+          (IdentifierExpression
+            range: 15:7-15:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 15:13-15:17
+            name: "pick"
+          )
+        )
+        (NamedArgumentExpression
+          range: 15:18-15:22
+          (IdentifierDeclaration
+            range: 15:18-15:19
+            name: "a"
+          )
+          (LiteralExpression
+            range: 15:21-15:22
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:25
+    (CallExpression
+      range: 16:1-16:24
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:23
+        (MemberExpression
+          range: 16:7-16:17
+          (IdentifierExpression
+            range: 16:7-16:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 16:13-16:17
+            name: "pick"
+          )
+        )
+        (NamedArgumentExpression
+          range: 16:18-16:22
+          (IdentifierDeclaration
+            range: 16:18-16:19
+            name: "b"
+          )
+          (LiteralExpression
+            range: 16:21-16:22
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  10:46-10:47 -> i32
+  10:46-10:51 -> i32
+  10:50-10:51 -> i32
+  11:46-11:47 -> i32
+  11:46-11:52 -> i32
+  11:50-11:52 -> i32
+  14:18-14:28 -> Both
+  14:22-14:26 -> Both
+  15:1-15:6 -> (any) => void
+  15:1-15:24 -> void
+  15:7-15:12 -> C
+  15:7-15:17 -> (*, a: i32) => i32
+  15:7-15:23 -> i32
+  15:13-15:17 -> (*, a: i32) => i32
+  15:21-15:22 -> i32
+  16:1-16:6 -> (any) => void
+  16:1-16:24 -> void
+  16:7-16:12 -> C
+  16:7-16:17 -> (*, b: i32) => i32
+  16:7-16:23 -> i32
+  16:13-16:17 -> (*, b: i32) => i32
+  16:21-16:22 -> i32
+
+Resolved types:
+  2:21-2:24 -> i32
+  2:26-2:29 -> i32
+  5:21-5:24 -> i32
+  5:26-5:29 -> i32
+  7:21-7:22 -> A
+  7:24-7:25 -> B
+  9:23-9:24 -> C
+  10:28-10:31 -> i32
+  10:33-10:36 -> i32
+  11:28-11:31 -> i32
+  11:33-11:36 -> i32
+  14:14-14:15 -> C
+
+Declarations:
+  1:11-1:12 -> interface A
+  2:10-2:14 -> func pick(*, a: i32) => i32
+  2:18-2:19 -> const a: i32
+  4:11-4:12 -> interface B
+  5:10-5:14 -> func pick(*, b: i32) => i32
+  5:18-5:19 -> const b: i32
+  7:11-7:12 -> interface C
+  9:7-9:11 -> class Both
+  10:17-10:21 -> func pick(*, a: i32) => i32
+  10:25-10:26 -> const a: i32
+  11:17-11:21 -> func pick(*, b: i32) => i32
+  11:25-11:26 -> const b: i32
+  14:7-14:12 -> const value: C
+
+References:
+  10:46-10:47 -> 10:25-10:26
+  11:46-11:47 -> 11:25-11:26
+  14:22-14:26 -> 9:7-9:11
+  15:1-15:6 -> builtin print
+  15:7-15:12 -> 14:7-14:12
+  15:13-15:17 -> 2:10-2:14
+  16:1-16:6 -> builtin print
+  16:7-16:12 -> 14:7-14:12
+  16:13-16:17 -> 5:10-5:14
+
+Named arguments:
+  15:18-15:19 -> parameter 2:18-2:19
+  16:18-16:19 -> parameter 5:18-5:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$A
+  nest member Test$B
+  nest member Test$C
+  nest member Test$Both
+  inner class Test$A flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$B flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$C flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Both flags [PUBLIC, STATIC]
+  field value LTest$C; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Both
+    DUP
+    INVOKESPECIAL Test$Both.<init>()V
+    PUTSTATIC Test.value LTest$C;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$C;
+    LDC 1
+    INVOKEINTERFACE Test$C.pick(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$C;
+    LDC 2
+    INVOKEINTERFACE Test$C.pick$1(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$A extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$A flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method pick(I)I flags [PUBLIC, ABSTRACT]
+
+class Test$B extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$B flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method pick$1(I)I flags [PUBLIC, ABSTRACT]
+
+class Test$C extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  implements Test$A
+  implements Test$B
+  nest host Test
+  inner class Test$C flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+
+class Test$Both extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$C
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Both flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method pick(I)I flags [PUBLIC]
+    ILOAD_1 1
+    LDC 1
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+  method pick$1(I)I flags [PUBLIC]
+    ILOAD_1 1
+    LDC 10
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+2
+12

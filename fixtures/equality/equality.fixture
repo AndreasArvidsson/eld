@@ -953,6 +953,7 @@ SEMICOLON (57:38-57:39)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -966,6 +967,7 @@ SEMICOLON (57:38-57:39)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -1594,7 +1596,7 @@ Declarations:
   30:7-30:14 -> const derived: Derived
   31:7-31:14 -> const renamed: Base
   36:7-36:14 -> class Compare
-  37:24-37:29 -> func equal(Compare, Compare) => bool
+  37:24-37:29 -> func equal(a: Compare, b: Compare) => bool
   37:30-37:31 -> const a: Compare
   37:42-37:43 -> const b: Compare
   41:7-41:14 -> const compare: Compare

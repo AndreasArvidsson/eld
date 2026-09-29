@@ -126,6 +126,7 @@ SEMICOLON (10:18-10:19)
         range: 1:17-1:20
         name: "i32"
       )
+      namedOnly: false
     )
     (RecordParameter
       range: 1:22-1:28
@@ -137,6 +138,7 @@ SEMICOLON (10:18-10:19)
         range: 1:25-1:28
         name: "i32"
       )
+      namedOnly: false
     )
   )
   (VariableDeclaration
@@ -174,9 +176,14 @@ SEMICOLON (10:18-10:19)
     )
     (FunctionTypeNode
       range: 4:15-4:30
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 4:16-4:21
-        name: "Point"
+        label: null
+        (NamedTypeNode
+          range: 4:16-4:21
+          name: "Point"
+        )
       )
       (NamedTypeNode
         range: 4:26-4:30
@@ -204,6 +211,7 @@ SEMICOLON (10:18-10:19)
     )
     (FunctionTypeNode
       range: 5:17-5:26
+      namedOnlyStart: null
       (NamedTypeNode
         range: 5:23-5:26
         name: "i32"
@@ -230,6 +238,7 @@ SEMICOLON (10:18-10:19)
     )
     (FunctionTypeNode
       range: 6:17-6:29
+      namedOnlyStart: null
       (NamedTypeNode
         range: 6:23-6:29
         name: "string"

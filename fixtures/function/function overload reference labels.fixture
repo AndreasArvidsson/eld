@@ -1,0 +1,469 @@
+func choose(value: i32) i32 { return 1; }
+func choose(value: string) i32 { return 2; }
+const positional: (string) => i32 = choose;
+print(positional("x"));
+
+func pick(*, a: i32) i32 { return 3; }
+func pick(*, b: i32) i32 { return 4; }
+const labeled: (*, b: i32) => i32 = pick;
+print(labeled(b: 1));
+
+--- TOKENS ---
+
+FUNC (1:1-1:5)
+IDENTIFIER "choose" (1:6-1:12)
+LEFT_PAREN (1:12-1:13)
+IDENTIFIER "value" (1:13-1:18)
+COLON (1:18-1:19)
+IDENTIFIER "i32" (1:20-1:23)
+RIGHT_PAREN (1:23-1:24)
+IDENTIFIER "i32" (1:25-1:28)
+LEFT_BRACE (1:29-1:30)
+RETURN (1:31-1:37)
+INTEGER_LITERAL "1" (1:38-1:39)
+SEMICOLON (1:39-1:40)
+RIGHT_BRACE (1:41-1:42)
+FUNC (2:1-2:5)
+IDENTIFIER "choose" (2:6-2:12)
+LEFT_PAREN (2:12-2:13)
+IDENTIFIER "value" (2:13-2:18)
+COLON (2:18-2:19)
+IDENTIFIER "string" (2:20-2:26)
+RIGHT_PAREN (2:26-2:27)
+IDENTIFIER "i32" (2:28-2:31)
+LEFT_BRACE (2:32-2:33)
+RETURN (2:34-2:40)
+INTEGER_LITERAL "2" (2:41-2:42)
+SEMICOLON (2:42-2:43)
+RIGHT_BRACE (2:44-2:45)
+CONST (3:1-3:6)
+IDENTIFIER "positional" (3:7-3:17)
+COLON (3:17-3:18)
+LEFT_PAREN (3:19-3:20)
+IDENTIFIER "string" (3:20-3:26)
+RIGHT_PAREN (3:26-3:27)
+ARROW (3:28-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+EQUAL (3:35-3:36)
+IDENTIFIER "choose" (3:37-3:43)
+SEMICOLON (3:43-3:44)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "positional" (4:7-4:17)
+LEFT_PAREN (4:17-4:18)
+STRING_LITERAL "\"x\"" (4:18-4:21)
+RIGHT_PAREN (4:21-4:22)
+RIGHT_PAREN (4:22-4:23)
+SEMICOLON (4:23-4:24)
+FUNC (6:1-6:5)
+IDENTIFIER "pick" (6:6-6:10)
+LEFT_PAREN (6:10-6:11)
+STAR (6:11-6:12)
+COMMA (6:12-6:13)
+IDENTIFIER "a" (6:14-6:15)
+COLON (6:15-6:16)
+IDENTIFIER "i32" (6:17-6:20)
+RIGHT_PAREN (6:20-6:21)
+IDENTIFIER "i32" (6:22-6:25)
+LEFT_BRACE (6:26-6:27)
+RETURN (6:28-6:34)
+INTEGER_LITERAL "3" (6:35-6:36)
+SEMICOLON (6:36-6:37)
+RIGHT_BRACE (6:38-6:39)
+FUNC (7:1-7:5)
+IDENTIFIER "pick" (7:6-7:10)
+LEFT_PAREN (7:10-7:11)
+STAR (7:11-7:12)
+COMMA (7:12-7:13)
+IDENTIFIER "b" (7:14-7:15)
+COLON (7:15-7:16)
+IDENTIFIER "i32" (7:17-7:20)
+RIGHT_PAREN (7:20-7:21)
+IDENTIFIER "i32" (7:22-7:25)
+LEFT_BRACE (7:26-7:27)
+RETURN (7:28-7:34)
+INTEGER_LITERAL "4" (7:35-7:36)
+SEMICOLON (7:36-7:37)
+RIGHT_BRACE (7:38-7:39)
+CONST (8:1-8:6)
+IDENTIFIER "labeled" (8:7-8:14)
+COLON (8:14-8:15)
+LEFT_PAREN (8:16-8:17)
+STAR (8:17-8:18)
+COMMA (8:18-8:19)
+IDENTIFIER "b" (8:20-8:21)
+COLON (8:21-8:22)
+IDENTIFIER "i32" (8:23-8:26)
+RIGHT_PAREN (8:26-8:27)
+ARROW (8:28-8:30)
+IDENTIFIER "i32" (8:31-8:34)
+EQUAL (8:35-8:36)
+IDENTIFIER "pick" (8:37-8:41)
+SEMICOLON (8:41-8:42)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "labeled" (9:7-9:14)
+LEFT_PAREN (9:14-9:15)
+IDENTIFIER "b" (9:15-9:16)
+COLON (9:16-9:17)
+INTEGER_LITERAL "1" (9:18-9:19)
+RIGHT_PAREN (9:19-9:20)
+RIGHT_PAREN (9:20-9:21)
+SEMICOLON (9:21-9:22)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:22
+  (FunctionDeclaration
+    range: 1:1-1:42
+    (IdentifierDeclaration
+      range: 1:6-1:12
+      name: "choose"
+    )
+    (FunctionParameter
+      range: 1:13-1:23
+      (IdentifierDeclaration
+        range: 1:13-1:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:20-1:23
+        name: "i32"
+      )
+      optional: false
+      namedOnly: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 1:25-1:28
+      name: "i32"
+    )
+    (BlockStatement
+      range: 1:29-1:42
+      (ReturnStatement
+        range: 1:31-1:40
+        (LiteralExpression
+          range: 1:38-1:39
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:45
+    (IdentifierDeclaration
+      range: 2:6-2:12
+      name: "choose"
+    )
+    (FunctionParameter
+      range: 2:13-2:26
+      (IdentifierDeclaration
+        range: 2:13-2:18
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 2:20-2:26
+        name: "string"
+      )
+      optional: false
+      namedOnly: false
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 2:28-2:31
+      name: "i32"
+    )
+    (BlockStatement
+      range: 2:32-2:45
+      (ReturnStatement
+        range: 2:34-2:43
+        (LiteralExpression
+          range: 2:41-2:42
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:17
+      name: "positional"
+    )
+    (FunctionTypeNode
+      range: 3:19-3:34
+      namedOnlyStart: null
+      (FunctionTypeParameter
+        range: 3:20-3:26
+        label: null
+        (NamedTypeNode
+          range: 3:20-3:26
+          name: "string"
+        )
+      )
+      (NamedTypeNode
+        range: 3:31-3:34
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 3:37-3:43
+      name: "choose"
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:24
+    (CallExpression
+      range: 4:1-4:23
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:22
+        (IdentifierExpression
+          range: 4:7-4:17
+          name: "positional"
+        )
+        (LiteralExpression
+          range: 4:18-4:21
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 6:1-6:39
+    (IdentifierDeclaration
+      range: 6:6-6:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 6:14-6:20
+      (IdentifierDeclaration
+        range: 6:14-6:15
+        name: "a"
+      )
+      (NamedTypeNode
+        range: 6:17-6:20
+        name: "i32"
+      )
+      optional: false
+      namedOnly: true
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 6:22-6:25
+      name: "i32"
+    )
+    (BlockStatement
+      range: 6:26-6:39
+      (ReturnStatement
+        range: 6:28-6:37
+        (LiteralExpression
+          range: 6:35-6:36
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (FunctionDeclaration
+    range: 7:1-7:39
+    (IdentifierDeclaration
+      range: 7:6-7:10
+      name: "pick"
+    )
+    (FunctionParameter
+      range: 7:14-7:20
+      (IdentifierDeclaration
+        range: 7:14-7:15
+        name: "b"
+      )
+      (NamedTypeNode
+        range: 7:17-7:20
+        name: "i32"
+      )
+      optional: false
+      namedOnly: true
+      defaultValue: null
+    )
+    (NamedTypeNode
+      range: 7:22-7:25
+      name: "i32"
+    )
+    (BlockStatement
+      range: 7:26-7:39
+      (ReturnStatement
+        range: 7:28-7:37
+        (LiteralExpression
+          range: 7:35-7:36
+          kind: INT
+          text: "4"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:42
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "labeled"
+    )
+    (FunctionTypeNode
+      range: 8:16-8:34
+      namedOnlyStart: 0
+      (FunctionTypeParameter
+        range: 8:20-8:26
+        label: "b"
+        (NamedTypeNode
+          range: 8:23-8:26
+          name: "i32"
+        )
+      )
+      (NamedTypeNode
+        range: 8:31-8:34
+        name: "i32"
+      )
+    )
+    (IdentifierExpression
+      range: 8:37-8:41
+      name: "pick"
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:22
+    (CallExpression
+      range: 9:1-9:21
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:20
+        (IdentifierExpression
+          range: 9:7-9:14
+          name: "labeled"
+        )
+        (NamedArgumentExpression
+          range: 9:15-9:19
+          (IdentifierDeclaration
+            range: 9:15-9:16
+            name: "b"
+          )
+          (LiteralExpression
+            range: 9:18-9:19
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:38-1:39 -> i32
+  2:41-2:42 -> i32
+  3:37-3:43 -> (value: string) => i32
+  4:1-4:6 -> (any) => void
+  4:1-4:23 -> void
+  4:7-4:17 -> (string) => i32
+  4:7-4:22 -> i32
+  4:18-4:21 -> string
+  6:35-6:36 -> i32
+  7:35-7:36 -> i32
+  8:37-8:41 -> (*, b: i32) => i32
+  9:1-9:6 -> (any) => void
+  9:1-9:21 -> void
+  9:7-9:14 -> (*, b: i32) => i32
+  9:7-9:20 -> i32
+  9:18-9:19 -> i32
+
+Resolved types:
+  1:20-1:23 -> i32
+  1:25-1:28 -> i32
+  2:20-2:26 -> string
+  2:28-2:31 -> i32
+  3:19-3:34 -> (string) => i32
+  3:20-3:26 -> string
+  3:31-3:34 -> i32
+  6:17-6:20 -> i32
+  6:22-6:25 -> i32
+  7:17-7:20 -> i32
+  7:22-7:25 -> i32
+  8:16-8:34 -> (*, b: i32) => i32
+  8:23-8:26 -> i32
+  8:31-8:34 -> i32
+
+Declarations:
+  1:6-1:12 -> func choose(value: i32) => i32
+  1:13-1:18 -> const value: i32
+  2:6-2:12 -> func choose(value: string) => i32
+  2:13-2:18 -> const value: string
+  3:7-3:17 -> const positional: (string) => i32
+  6:6-6:10 -> func pick(*, a: i32) => i32
+  6:14-6:15 -> const a: i32
+  7:6-7:10 -> func pick(*, b: i32) => i32
+  7:14-7:15 -> const b: i32
+  8:7-8:14 -> const labeled: (*, b: i32) => i32
+
+References:
+  3:37-3:43 -> 2:6-2:12
+  4:1-4:6 -> builtin print
+  4:7-4:17 -> 3:7-3:17
+  8:37-8:41 -> 7:6-7:10
+  9:1-9:6 -> builtin print
+  9:7-9:14 -> 8:7-8:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field positional Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field labeled Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method choose(I)I flags [PUBLIC, STATIC]
+    LDC 1
+    IRETURN
+    max stack 1 max locals 1
+  method choose(Ljava/lang/String;)I flags [PUBLIC, STATIC]
+    LDC 2
+    IRETURN
+    max stack 1 max locals 1
+  method pick$1(I)I flags [PUBLIC, STATIC]
+    LDC 3
+    IRETURN
+    max stack 1 max locals 1
+  method pick$2(I)I flags [PUBLIC, STATIC]
+    LDC 4
+    IRETURN
+    max stack 1 max locals 1
+  method <clinit>()V flags [STATIC]
+    LDC MethodHandleDesc[STATIC/Test::choose(String)int]
+    PUTSTATIC Test.positional Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.positional Ljava/lang/invoke/MethodHandle;
+    LDC "x"
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC MethodHandleDesc[STATIC/Test::pick$2(int)int]
+    PUTSTATIC Test.labeled Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.labeled Ljava/lang/invoke/MethodHandle;
+    LDC 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+2
+4

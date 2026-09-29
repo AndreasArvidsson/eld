@@ -282,6 +282,7 @@ SEMICOLON (28:56-28:57)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -295,6 +296,7 @@ SEMICOLON (28:56-28:57)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -308,6 +310,7 @@ SEMICOLON (28:56-28:57)
             name: "i64"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -321,6 +324,7 @@ SEMICOLON (28:56-28:57)
             name: "f64"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -374,6 +378,7 @@ SEMICOLON (28:56-28:57)
             name: "Value"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -387,6 +392,7 @@ SEMICOLON (28:56-28:57)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -400,6 +406,7 @@ SEMICOLON (28:56-28:57)
             name: "i64"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -413,6 +420,7 @@ SEMICOLON (28:56-28:57)
             name: "f64"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -562,11 +570,11 @@ Expression types:
   28:1-28:6 -> (any) => void
   28:1-28:56 -> void
   28:7-28:11 -> Base
-  28:7-28:18 -> (Value, i32, i64, f64) => Value
+  28:7-28:18 -> (reference: Value, count: i32, wide: i64, ratio: f64) => Value
   28:7-28:47 -> Value
   28:7-28:53 -> () => i32
   28:7-28:55 -> i32
-  28:12-28:18 -> (Value, i32, i64, f64) => Value
+  28:12-28:18 -> (reference: Value, count: i32, wide: i64, ratio: f64) => Value
   28:19-28:30 -> Value
   28:23-28:28 -> Value
   28:32-28:33 -> i32
@@ -597,13 +605,13 @@ Declarations:
   7:7-7:20 -> class DetailedValue
   8:26-8:31 -> override func value() => i32
   13:7-13:11 -> class Base
-  14:17-14:23 -> func create(Value, i32, i64, f64) => Value
+  14:17-14:23 -> func create(reference: Value, count: i32, wide: i64, ratio: f64) => Value
   14:24-14:33 -> const reference: Value
   14:42-14:47 -> const count: i32
   14:54-14:58 -> const wide: i64
   14:65-14:70 -> const ratio: f64
   19:7-19:14 -> class Derived
-  20:26-20:32 -> override func create(Value, i32, i64, f64) => DetailedValue
+  20:26-20:32 -> override func create(reference: Value, count: i32, wide: i64, ratio: f64) => DetailedValue
   20:33-20:42 -> const reference: Value
   20:51-20:56 -> const count: i32
   20:63-20:67 -> const wide: i64

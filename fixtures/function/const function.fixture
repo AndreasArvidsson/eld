@@ -107,6 +107,7 @@ SEMICOLON (13:20-13:21)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -151,6 +152,7 @@ SEMICOLON (13:20-13:21)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -243,12 +245,12 @@ Expression types:
   8:26-8:31 -> i32
   9:5-9:10 -> i32
   9:5-9:12 -> i32
-  10:12-10:18 -> (i32) => i32
+  10:12-10:18 -> (value: i32) => i32
   10:12-10:25 -> i32
   10:19-10:24 -> i32
   13:1-13:6 -> (any) => void
   13:1-13:20 -> void
-  13:7-13:16 -> (i32) => i32
+  13:7-13:16 -> (value: i32) => i32
   13:7-13:19 -> i32
   13:17-13:18 -> i32
 
@@ -260,9 +262,9 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> const offset: i32
-  3:12-3:18 -> const func double(i32) => i32
+  3:12-3:18 -> const func double(value: i32) => i32
   3:19-3:24 -> const value: i32
-  7:12-7:21 -> const func calculate(i32) => i32
+  7:12-7:21 -> const func calculate(value: i32) => i32
   7:22-7:27 -> const value: i32
   8:9-8:14 -> var local: i32
 

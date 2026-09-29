@@ -157,6 +157,7 @@ SEMICOLON (15:44-15:45)
             name: "Box"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -170,6 +171,7 @@ SEMICOLON (15:44-15:45)
             name: "Box"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -275,13 +277,22 @@ SEMICOLON (15:44-15:45)
     )
     (FunctionTypeNode
       range: 12:14-12:32
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 12:15-12:18
-        name: "Box"
+        label: null
+        (NamedTypeNode
+          range: 12:15-12:18
+          name: "Box"
+        )
       )
-      (NamedTypeNode
+      (FunctionTypeParameter
         range: 12:20-12:23
-        name: "Box"
+        label: null
+        (NamedTypeNode
+          range: 12:20-12:23
+          name: "Box"
+        )
       )
       (NamedTypeNode
         range: 12:28-12:32
@@ -430,8 +441,8 @@ Expression types:
   11:7-11:22 -> bool
   11:16-11:22 -> Box
   12:35-12:38 -> Box
-  12:35-12:44 -> (Box, Box) => bool
-  12:39-12:44 -> (Box, Box) => bool
+  12:35-12:44 -> (a: Box, b: Box) => bool
+  12:39-12:44 -> (a: Box, b: Box) => bool
   13:1-13:6 -> (any) => void
   13:1-13:28 -> void
   13:7-13:12 -> (Box, Box) => bool
@@ -472,7 +483,7 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Box
-  2:24-2:29 -> func equal(Box, Box) => bool
+  2:24-2:29 -> func equal(a: Box, b: Box) => bool
   2:30-2:31 -> const a: Box
   2:38-2:39 -> const b: Box
   7:7-7:12 -> const first: Box

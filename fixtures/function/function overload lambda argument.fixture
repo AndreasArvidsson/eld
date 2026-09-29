@@ -160,6 +160,7 @@ SEMICOLON (12:27-12:28)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -170,9 +171,14 @@ SEMICOLON (12:27-12:28)
       )
       (FunctionTypeNode
         range: 1:32-1:44
-        (NamedTypeNode
+        namedOnlyStart: null
+        (FunctionTypeParameter
           range: 1:33-1:36
-          name: "i32"
+          label: null
+          (NamedTypeNode
+            range: 1:33-1:36
+            name: "i32"
+          )
         )
         (NamedTypeNode
           range: 1:41-1:44
@@ -180,6 +186,7 @@ SEMICOLON (12:27-12:28)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -221,6 +228,7 @@ SEMICOLON (12:27-12:28)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -231,9 +239,14 @@ SEMICOLON (12:27-12:28)
       )
       (FunctionTypeNode
         range: 4:35-4:53
-        (NamedTypeNode
+        namedOnlyStart: null
+        (FunctionTypeParameter
           range: 4:36-4:42
-          name: "string"
+          label: null
+          (NamedTypeNode
+            range: 4:36-4:42
+            name: "string"
+          )
         )
         (NamedTypeNode
           range: 4:47-4:53
@@ -241,6 +254,7 @@ SEMICOLON (12:27-12:28)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -327,6 +341,7 @@ SEMICOLON (12:27-12:28)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -337,12 +352,14 @@ SEMICOLON (12:27-12:28)
       )
       (FunctionTypeNode
         range: 10:35-10:44
+        namedOnlyStart: null
         (NamedTypeNode
           range: 10:41-10:44
           name: "i32"
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -388,6 +405,7 @@ SEMICOLON (12:27-12:28)
         name: "string"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -398,12 +416,14 @@ SEMICOLON (12:27-12:28)
       )
       (FunctionTypeNode
         range: 11:38-11:50
+        namedOnlyStart: null
         (NamedTypeNode
           range: 11:44-11:50
           name: "string"
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (NamedTypeNode
@@ -475,7 +495,7 @@ Expression types:
   5:19-5:24 -> string
   8:1-8:6 -> (any) => void
   8:1-8:38 -> void
-  8:7-8:12 -> (i32, (i32) => i32) => i32
+  8:7-8:12 -> (value: i32, mapper: (i32) => i32) => i32
   8:7-8:37 -> i32
   8:13-8:14 -> i32
   8:16-8:36 -> (i32) => i32
@@ -492,7 +512,7 @@ Expression types:
   11:76-11:85 -> string
   12:1-12:6 -> (any) => void
   12:1-12:27 -> void
-  12:7-12:14 -> (i32, () => i32) => i32
+  12:7-12:14 -> (value: i32, factory: () => i32) => i32
   12:7-12:26 -> i32
   12:15-12:16 -> i32
   12:18-12:25 -> () => i32
@@ -519,17 +539,17 @@ Resolved types:
   11:52-11:58 -> string
 
 Declarations:
-  1:6-1:11 -> func apply(i32, (i32) => i32) => i32
+  1:6-1:11 -> func apply(value: i32, mapper: (i32) => i32) => i32
   1:12-1:17 -> const value: i32
   1:24-1:30 -> const mapper: (i32) => i32
-  4:6-4:11 -> func apply(string, (string) => string) => string
+  4:6-4:11 -> func apply(value: string, mapper: (string) => string) => string
   4:12-4:17 -> const value: string
   4:27-4:33 -> const mapper: (string) => string
   8:17-8:22 -> const value: i32
-  10:6-10:13 -> func produce(i32, () => i32) => i32
+  10:6-10:13 -> func produce(value: i32, factory: () => i32) => i32
   10:14-10:19 -> const value: i32
   10:26-10:33 -> const factory: () => i32
-  11:6-11:13 -> func produce(string, () => string) => string
+  11:6-11:13 -> func produce(value: string, factory: () => string) => string
   11:14-11:19 -> const value: string
   11:29-11:36 -> const factory: () => string
 

@@ -126,6 +126,7 @@ SEMICOLON (12:28-12:29)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -179,9 +180,14 @@ SEMICOLON (12:28-12:29)
     )
     (FunctionTypeNode
       range: 8:16-8:29
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 8:17-8:20
-        name: "i32"
+        label: null
+        (NamedTypeNode
+          range: 8:17-8:20
+          name: "i32"
+        )
       )
       (NamedTypeNode
         range: 8:25-8:29
@@ -209,9 +215,14 @@ SEMICOLON (12:28-12:29)
     )
     (FunctionTypeNode
       range: 9:18-9:31
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 9:19-9:22
-        name: "Foo"
+        label: null
+        (NamedTypeNode
+          range: 9:19-9:22
+          name: "Foo"
+        )
       )
       (NamedTypeNode
         range: 9:27-9:31
@@ -308,8 +319,8 @@ Expression types:
   7:13-7:22 -> Foo
   7:17-7:20 -> Foo
   8:32-8:35 -> Foo
-  8:32-8:42 -> (i32) => bool
-  8:36-8:42 -> (i32) => bool
+  8:32-8:42 -> (value: i32) => bool
+  8:36-8:42 -> (value: i32) => bool
   9:34-9:37 -> Foo
   9:34-9:44 -> (Foo) => bool
   9:38-9:44 -> (Foo) => bool
@@ -342,7 +353,7 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:17-2:23 -> func equals(i32) => bool
+  2:17-2:23 -> func equals(value: i32) => bool
   2:24-2:29 -> const value: i32
   7:7-7:10 -> const foo: Foo
   8:7-8:14 -> const numeric: (i32) => bool

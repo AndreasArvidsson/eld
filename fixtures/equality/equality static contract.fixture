@@ -351,6 +351,7 @@ SEMICOLON (34:27-34:28)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -364,6 +365,7 @@ SEMICOLON (34:27-34:28)
             name: "Animal"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -444,6 +446,7 @@ SEMICOLON (34:27-34:28)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -457,6 +460,7 @@ SEMICOLON (34:27-34:28)
             name: "Cat"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -1210,12 +1214,12 @@ Conversions:
 
 Declarations:
   1:7-1:13 -> class Animal
-  2:30-2:35 -> const func equal(Animal, Animal) => bool
+  2:30-2:35 -> const func equal(a: Animal, b: Animal) => bool
   2:36-2:37 -> const a: Animal
   2:47-2:48 -> const b: Animal
   3:32-3:40 -> const override func hashCode() => i32
   5:7-5:10 -> class Cat
-  6:30-6:35 -> const func equal(Cat, Cat) => bool
+  6:30-6:35 -> const func equal(a: Cat, b: Cat) => bool
   6:36-6:37 -> const a: Cat
   6:44-6:45 -> const b: Cat
   8:7-8:10 -> class Dog

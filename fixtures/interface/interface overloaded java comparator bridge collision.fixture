@@ -98,6 +98,7 @@ RIGHT_BRACE (5:1-5:2)
           name: "any"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (FunctionParameter
@@ -111,6 +112,7 @@ RIGHT_BRACE (5:1-5:2)
           name: "any"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -158,6 +160,7 @@ RIGHT_BRACE (5:1-5:2)
             name: "any"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -171,6 +174,7 @@ RIGHT_BRACE (5:1-5:2)
             name: "any"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -210,6 +214,7 @@ RIGHT_BRACE (5:1-5:2)
             name: "C"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -223,6 +228,7 @@ RIGHT_BRACE (5:1-5:2)
             name: "C"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -247,4 +253,4 @@ RIGHT_BRACE (5:1-5:2)
 
 --- SEMANTIC ---
 
-SemanticException: Class C cannot implement 'compare(any, any)' and 'compare(C, C)': Java bridge collision at 2:1-5:2
+SemanticException: Class C cannot implement 'compare(left: any, right: any)' and 'compare(C, C)': Java bridge collision at 2:1-5:2

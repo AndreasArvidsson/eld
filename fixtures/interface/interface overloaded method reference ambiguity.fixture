@@ -74,6 +74,7 @@ RIGHT_BRACE (7:1-7:2)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -98,6 +99,7 @@ RIGHT_BRACE (7:1-7:2)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -123,6 +125,7 @@ RIGHT_BRACE (7:1-7:2)
         name: "I"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null

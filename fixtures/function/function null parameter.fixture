@@ -71,6 +71,7 @@ SEMICOLON (6:13-6:14)
         name: "i32"
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     (FunctionParameter
@@ -91,6 +92,7 @@ SEMICOLON (6:13-6:14)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -175,11 +177,11 @@ Expression types:
   2:14-2:15 -> i32
   2:16-2:17 -> string
   2:18-2:19 -> i32 | null
-  5:1-5:4 -> (i32, i32 | null) => void
+  5:1-5:4 -> (a: i32, b: i32 | null) => void
   5:1-5:10 -> void
   5:5-5:6 -> i32
   5:8-5:9 -> i32
-  6:1-6:4 -> (i32, i32 | null) => void
+  6:1-6:4 -> (a: i32, b: i32 | null) => void
   6:1-6:13 -> void
   6:5-6:6 -> i32
   6:8-6:12 -> null
@@ -195,7 +197,7 @@ Conversions:
   6:8-6:12 -> null -> i32 | null
 
 Declarations:
-  1:6-1:9 -> func foo(i32, i32 | null) => void
+  1:6-1:9 -> func foo(a: i32, b: i32 | null) => void
   1:10-1:11 -> const a: i32
   1:18-1:19 -> const b: i32 | null
 

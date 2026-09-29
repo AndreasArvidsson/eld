@@ -61,6 +61,7 @@ RIGHT_BRACE (5:1-5:2)
             name: "Foo"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -74,6 +75,7 @@ RIGHT_BRACE (5:1-5:2)
             name: "Foo"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

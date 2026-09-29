@@ -119,6 +119,7 @@ SEMICOLON (12:28-12:29)
             name: "bool"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (BlockStatement

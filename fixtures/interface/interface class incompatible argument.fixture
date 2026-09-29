@@ -70,6 +70,7 @@ RIGHT_BRACE (8:1-8:2)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -109,6 +110,7 @@ RIGHT_BRACE (8:1-8:2)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -133,4 +135,4 @@ RIGHT_BRACE (8:1-8:2)
 
 --- SEMANTIC ---
 
-SemanticException: Interface member 'apply' expects (i32) => i32, found (string) => i32 at 5:17-5:22
+SemanticException: Interface member 'apply' expects (value: i32) => i32, found (value: string) => i32 at 5:17-5:22

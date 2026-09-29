@@ -72,6 +72,7 @@ SEMICOLON (6:27-6:28)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode

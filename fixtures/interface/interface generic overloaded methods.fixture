@@ -228,6 +228,7 @@ SEMICOLON (17:28-17:29)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -256,6 +257,7 @@ SEMICOLON (17:28-17:29)
           )
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -299,6 +301,7 @@ SEMICOLON (17:28-17:29)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -342,6 +345,7 @@ SEMICOLON (17:28-17:29)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -385,6 +389,7 @@ SEMICOLON (17:28-17:29)
             )
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -622,23 +627,23 @@ Expression types:
   15:1-15:6 -> (any) => void
   15:1-15:34 -> void
   15:7-15:14 -> Printer
-  15:7-15:23 -> (List<i32>) => string
+  15:7-15:23 -> (values: List<i32>) => string
   15:7-15:33 -> string
-  15:15-15:23 -> (List<i32>) => string
+  15:15-15:23 -> (values: List<i32>) => string
   15:24-15:32 -> List<i32>
   16:1-16:6 -> (any) => void
   16:1-16:33 -> void
   16:7-16:14 -> Printer
-  16:7-16:23 -> (List<string>) => string
+  16:7-16:23 -> (values: List<string>) => string
   16:7-16:32 -> string
-  16:15-16:23 -> (List<string>) => string
+  16:15-16:23 -> (values: List<string>) => string
   16:24-16:31 -> List<string>
   17:1-17:6 -> (any) => void
   17:1-17:28 -> void
   17:7-17:11 -> Both
-  17:7-17:20 -> (List<bool>) => string
+  17:7-17:20 -> (values: List<bool>) => string
   17:7-17:27 -> string
-  17:12-17:20 -> (List<bool>) => string
+  17:12-17:20 -> (values: List<bool>) => string
   17:21-17:26 -> List<bool>
 
 Resolved types:
@@ -674,16 +679,16 @@ Resolved types:
 
 Declarations:
   1:11-1:18 -> interface Printer
-  2:10-2:18 -> func describe(List<i32>) => string
+  2:10-2:18 -> func describe(values: List<i32>) => string
   2:19-2:25 -> const values: List<i32>
-  3:10-3:18 -> func describe(List<string>) => string
+  3:10-3:18 -> func describe(values: List<string>) => string
   3:19-3:25 -> const values: List<string>
   5:7-5:11 -> class Both
-  6:17-6:25 -> func describe(List<bool>) => string
+  6:17-6:25 -> func describe(values: List<bool>) => string
   6:26-6:32 -> const values: List<bool>
-  7:17-7:25 -> func describe(List<string>) => string
+  7:17-7:25 -> func describe(values: List<string>) => string
   7:26-7:32 -> const values: List<string>
-  8:17-8:25 -> func describe(List<i32>) => string
+  8:17-8:25 -> func describe(values: List<i32>) => string
   8:26-8:32 -> const values: List<i32>
   10:7-10:11 -> const both: Both
   11:7-11:14 -> const printer: Printer

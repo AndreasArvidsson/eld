@@ -623,8 +623,10 @@ public final class SemanticAnalyzerObjects {
             ) {
                 throw new SemanticException(
                     symbol.range(),
-                    "Overriding method '%s' must have matching parameter types and a covariant return type",
-                    symbol.name()
+                    "Overriding method '%s' has incompatible signature: expected %s, found %s",
+                    symbol.name(),
+                    inheritedFunction.type(),
+                    functionSymbol.type()
                 );
             }
             validateOverrideModifier(functionSymbol, true);

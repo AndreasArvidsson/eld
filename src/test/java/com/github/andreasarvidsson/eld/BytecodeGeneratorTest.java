@@ -2203,6 +2203,34 @@ class BytecodeGeneratorTest {
     }
 
     @Test
+    void replKeepsInterfaceMethodNameAfterAnotherInterfaceIsAdded()
+        throws Exception {
+        final var output = new java.io.ByteArrayOutputStream();
+        final var previousOut = System.out;
+        try (final var capture = new PrintStream(output)) {
+            System.setOut(capture);
+            final ReplSession session = new ReplSession();
+            session.evaluate("""
+                interface A { func pick(*, a: i32) i32; }
+                class Impl implements A {
+                    public func pick(*, a: i32) i32 { return a + 1; }
+                }
+                const value: A = new Impl();
+                print(value.pick(a: 1));
+                """);
+            session.evaluate("interface B { func pick(*, b: i32) i32; }");
+            session.evaluate("print(value.pick(a: 2));");
+        }
+        finally {
+            System.setOut(previousOut);
+        }
+        assertEquals(
+            "2\n3\n",
+            output.toString(Charset.defaultCharset()).replace("\r\n", "\n")
+        );
+    }
+
+    @Test
     void anyTargetsConvertIfAndSwitchBranchesIndividually() throws Exception {
         final Class<?> type = compile("""
             func unionConditional(flag: bool) i32 | string {
@@ -2577,9 +2605,8 @@ class BytecodeGeneratorTest {
             SemanticException.class,
             () -> compile("print(value: 1);")
         );
-        assertThrows(
-            SemanticException.class,
-            () -> compile("func f(a: i32) {}\nconst alias = f;\nalias(a: 1);")
+        assertNotNull(
+            compile("func f(a: i32) {}\nconst alias = f;\nalias(a: 1);")
         );
     }
 

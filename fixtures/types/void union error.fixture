@@ -1,0 +1,39 @@
+type MaybeVoid = void | null;
+
+--- TOKENS ---
+
+TYPE (1:1-1:5)
+IDENTIFIER "MaybeVoid" (1:6-1:15)
+EQUAL (1:16-1:17)
+IDENTIFIER "void" (1:18-1:22)
+PIPE (1:23-1:24)
+NULL (1:25-1:29)
+SEMICOLON (1:29-1:30)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:30
+  (TypeAliasDeclaration
+    range: 1:1-1:30
+    (IdentifierDeclaration
+      range: 1:6-1:15
+      name: "MaybeVoid"
+    )
+    (UnionTypeNode
+      range: 1:18-1:29
+      (NamedTypeNode
+        range: 1:18-1:22
+        name: "void"
+      )
+      (NamedTypeNode
+        range: 1:25-1:29
+        name: "null"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: 'void' is only allowed as a return type at 1:18-1:22

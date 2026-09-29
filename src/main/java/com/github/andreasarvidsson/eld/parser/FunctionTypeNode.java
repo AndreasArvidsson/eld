@@ -8,7 +8,8 @@ import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 
 public record FunctionTypeNode(
-    List<@NonNull TypeNode> parameterTypes, @Nullable TypeNode returnType,
-    Range range
+    @Nullable Integer namedOnlyStart,
+    List<@NonNull FunctionTypeParameter> parameters,
+    @Nullable TypeNode returnType, Range range
 ) implements TypeNode {
 }

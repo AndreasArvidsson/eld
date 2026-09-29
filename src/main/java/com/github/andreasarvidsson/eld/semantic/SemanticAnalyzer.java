@@ -1736,12 +1736,8 @@ public final class SemanticAnalyzer {
                 final boolean previous = analyzingSuperArguments;
                 analyzingSuperArguments = true;
                 try {
-                    expressions.analyzeConstructorArguments(
-                        superclass,
-                        call.arguments(),
-                        call.range(),
-                        context
-                    );
+                    expressions
+                        .analyzeConstructorArguments(superclass, call, context);
                 }
                 finally {
                     analyzingSuperArguments = previous;
@@ -2178,6 +2174,13 @@ public final class SemanticAnalyzer {
         final SemanticContext context
     ) {
         return types.resolveNamedType(named, context);
+    }
+
+    public Type resolveReturnType(
+        final TypeNode typeNode,
+        final SemanticContext context
+    ) {
+        return types.resolveReturnType(typeNode, context);
     }
 
     public Type analyzeExpression(

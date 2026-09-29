@@ -63,6 +63,7 @@ RIGHT_BRACE (4:1-4:2)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (FunctionParameter
@@ -76,6 +77,7 @@ RIGHT_BRACE (4:1-4:2)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -100,6 +102,7 @@ RIGHT_BRACE (4:1-4:2)
           name: "string"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (FunctionParameter
@@ -113,6 +116,7 @@ RIGHT_BRACE (4:1-4:2)
           name: "i32"
         )
         optional: false
+        namedOnly: false
         defaultValue: null
       )
       (NamedTypeNode
@@ -125,4 +129,4 @@ RIGHT_BRACE (4:1-4:2)
 
 --- SEMANTIC ---
 
-SemanticException: Ambiguous overload of 'describe': overlapping callable signatures at 3:10-3:18
+SemanticException: Ambiguous overload of 'describe': overlapping callable signatures at 3:5-3:45

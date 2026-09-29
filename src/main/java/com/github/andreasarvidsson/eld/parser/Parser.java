@@ -614,9 +614,25 @@ public final class Parser extends ParserBase {
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
         final List<RecordParameter> parameters = new ArrayList<>();
+        boolean namedOnly = false;
         if (!check(TokenType.RIGHT_PAREN)) {
             do {
-                final RecordParameter parameter = parseRecordParameter();
+                final Token marker = current();
+                if (match(TokenType.STAR)) {
+                    if (namedOnly) {
+                        throw new ParserException(
+                            marker.range(),
+                            "Duplicate '*' parameter marker"
+                        );
+                    }
+                    namedOnly = true;
+                    expect(TokenType.COMMA);
+                    if (check(TokenType.RIGHT_PAREN)) {
+                        throw ParserException.expected("parameter", current());
+                    }
+                }
+                final RecordParameter parameter =
+                    parseRecordParameter(namedOnly);
                 if (parameter.name().name().equals("copy")) {
                     throw new ParserException(
                         parameter.name().range(),
@@ -691,7 +707,7 @@ public final class Parser extends ParserBase {
         );
     }
 
-    private RecordParameter parseRecordParameter() {
+    private RecordParameter parseRecordParameter(final boolean namedOnly) {
         final Token name = expect(TokenType.IDENTIFIER);
         assertIdentifierCase(name, "record parameter");
         if (match(TokenType.QUESTION)) {
@@ -710,7 +726,8 @@ public final class Parser extends ParserBase {
         }
         return new RecordParameter(
             new IdentifierDeclaration(name.text(), name.range()),
-            type
+            type,
+            namedOnly
         );
     }
 
@@ -764,18 +781,15 @@ public final class Parser extends ParserBase {
         final IdentifierDeclaration id =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
-        final List<@NonNull FunctionParameter> parameters = new ArrayList<>();
-        if (!check(TokenType.RIGHT_PAREN)) {
-            do {
-                final FunctionParameter parameter = parseFunctionParameter();
-                if (parameter.defaultValue() != null) {
-                    throw new ParserException(
-                        parameter.defaultValue().range(),
-                        "Interface parameters cannot have default values"
-                    );
-                }
-                parameters.add(parameter);
-            } while (match(TokenType.COMMA));
+        final List<@NonNull FunctionParameter> parameters =
+            parseFunctionParameters();
+        for (final FunctionParameter parameter : parameters) {
+            if (parameter.defaultValue() != null) {
+                throw new ParserException(
+                    parameter.defaultValue().range(),
+                    "Interface parameters cannot have default values"
+                );
+            }
         }
         expect(TokenType.RIGHT_PAREN);
         final TypeNode returnType =
@@ -944,12 +958,8 @@ public final class Parser extends ParserBase {
         final IdentifierDeclaration nameId =
             new IdentifierDeclaration(name.text(), name.range());
         expect(TokenType.LEFT_PAREN);
-        final List<@NonNull FunctionParameter> parameters = new ArrayList<>();
-        if (!check(TokenType.RIGHT_PAREN)) {
-            do {
-                parameters.add(parseFunctionParameter());
-            } while (match(TokenType.COMMA));
-        }
+        final List<@NonNull FunctionParameter> parameters =
+            parseFunctionParameters();
         expect(TokenType.RIGHT_PAREN);
         final TypeNode returnType =
             check(TokenType.LEFT_BRACE) || check(TokenType.SEMICOLON)
@@ -1299,7 +1309,32 @@ public final class Parser extends ParserBase {
         );
     }
 
-    private FunctionParameter parseFunctionParameter() {
+    private List<@NonNull FunctionParameter> parseFunctionParameters() {
+        final List<@NonNull FunctionParameter> parameters = new ArrayList<>();
+        boolean namedOnly = false;
+        if (!check(TokenType.RIGHT_PAREN)) {
+            do {
+                final Token marker = current();
+                if (match(TokenType.STAR)) {
+                    if (namedOnly) {
+                        throw new ParserException(
+                            marker.range(),
+                            "Duplicate '*' parameter marker"
+                        );
+                    }
+                    namedOnly = true;
+                    expect(TokenType.COMMA);
+                    if (check(TokenType.RIGHT_PAREN)) {
+                        throw ParserException.expected("parameter", current());
+                    }
+                }
+                parameters.add(parseFunctionParameter(namedOnly));
+            } while (match(TokenType.COMMA));
+        }
+        return parameters;
+    }
+
+    private FunctionParameter parseFunctionParameter(final boolean namedOnly) {
         final Token name = expect(TokenType.IDENTIFIER);
         assertIdentifierCase(name, "parameter");
         final boolean optional = match(TokenType.QUESTION);
@@ -1308,9 +1343,12 @@ public final class Parser extends ParserBase {
         final Expression defaultValue =
             match(TokenType.EQUAL) ? parserExpressions.parseExpression() : null;
         return new FunctionParameter(
-            new IdentifierDeclaration(name.text(), name.range()),
+            name.text().equals("_")
+                ? new DiscardDeclaration(name.range())
+                : new IdentifierDeclaration(name.text(), name.range()),
             type,
             optional,
+            namedOnly,
             defaultValue
         );
     }
@@ -1319,12 +1357,8 @@ public final class Parser extends ParserBase {
         final Token keyword
     ) {
         expect(TokenType.LEFT_PAREN);
-        final List<FunctionParameter> parameters = new ArrayList<>();
-        if (!check(TokenType.RIGHT_PAREN)) {
-            do {
-                parameters.add(parseFunctionParameter());
-            } while (match(TokenType.COMMA));
-        }
+        final List<@NonNull FunctionParameter> parameters =
+            parseFunctionParameters();
         expect(TokenType.RIGHT_PAREN);
         final BlockStatement body = parseBlockStatement();
         return new ConstructorDeclaration(
@@ -1357,9 +1391,57 @@ public final class Parser extends ParserBase {
         final Token open = matchToken(TokenType.LEFT_PAREN);
         if (open != null) {
             final List<TypeNode> elementTypes = new ArrayList<>();
+            final List<FunctionTypeParameter> functionParameters =
+                new ArrayList<>();
+            @Nullable
+            Integer namedOnlyStart = null;
             if (!check(TokenType.RIGHT_PAREN)) {
                 do {
-                    elementTypes.add(parseType());
+                    final Token marker = current();
+                    if (match(TokenType.STAR)) {
+                        if (namedOnlyStart != null) {
+                            throw new ParserException(
+                                marker.range(),
+                                "Duplicate '*' parameter marker"
+                            );
+                        }
+                        namedOnlyStart = elementTypes.size();
+                        expect(TokenType.COMMA);
+                        if (check(TokenType.RIGHT_PAREN)) {
+                            throw ParserException.expected("type", current());
+                        }
+                    }
+                    final Token label =
+                        check(TokenType.IDENTIFIER) && check(1, TokenType.COLON)
+                            ? advance()
+                            : null;
+                    if (label != null) {
+                        if (
+                            functionParameters.stream()
+                                .anyMatch(
+                                    parameter -> label.text()
+                                        .equals(parameter.label())
+                                )
+                        ) {
+                            throw new ParserException(
+                                label.range(),
+                                "Duplicate function type parameter label: %s",
+                                label.text()
+                            );
+                        }
+                        expect(TokenType.COLON);
+                    }
+                    final TypeNode type = parseType();
+                    elementTypes.add(type);
+                    functionParameters.add(
+                        new FunctionTypeParameter(
+                            label == null ? null : label.text(),
+                            type,
+                            label == null
+                                ? type.range()
+                                : label.range().union(type.range())
+                        )
+                    );
                 } while (match(TokenType.COMMA));
             }
             final Token close = expect(TokenType.RIGHT_PAREN);
@@ -1374,7 +1456,8 @@ public final class Parser extends ParserBase {
                         || check(TokenType.LEFT_BRACKET)
                         || check(TokenType.CONST) ? parseType() : null;
                 return new FunctionTypeNode(
-                    elementTypes,
+                    namedOnlyStart,
+                    functionParameters,
                     returnType,
                     open.range()
                         .union(
@@ -1383,6 +1466,20 @@ public final class Parser extends ParserBase {
                                 : arrow.range()
                         )
                 );
+            }
+            if (namedOnlyStart != null) {
+                throw new ParserException(
+                    open.range().union(close.range()),
+                    "'*' is only allowed in function types"
+                );
+            }
+            for (final FunctionTypeParameter parameter : functionParameters) {
+                if (parameter.label() != null) {
+                    throw new ParserException(
+                        parameter.range(),
+                        "Parameter labels are only allowed in function types"
+                    );
+                }
             }
             if (elementTypes.size() < 2) {
                 throw new ParserException(

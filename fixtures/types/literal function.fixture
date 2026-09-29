@@ -61,10 +61,15 @@ SEMICOLON (6:16-6:17)
     )
     (FunctionTypeNode
       range: 1:17-1:25
-      (LiteralTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 1:18-1:19
-        kind: INT
-        text: "0"
+        label: null
+        (LiteralTypeNode
+          range: 1:18-1:19
+          kind: INT
+          text: "0"
+        )
       )
       (LiteralTypeNode
         range: 1:24-1:25

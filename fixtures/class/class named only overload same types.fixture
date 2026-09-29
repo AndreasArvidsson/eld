@@ -1,0 +1,506 @@
+interface Calls {
+    func foo(*, a: i32) i32;
+    func foo(*, b: i32) i32;
+}
+
+class Impl implements Calls {
+    public func foo(*, a: i32) i32 { return a + 1; }
+    public func foo(*, b: i32) i32 { return b + 2; }
+}
+
+const calls: Calls = new Impl();
+print(calls.foo(a: 1));
+print(calls.foo(b: 2));
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Calls" (1:11-1:16)
+LEFT_BRACE (1:17-1:18)
+FUNC (2:5-2:9)
+IDENTIFIER "foo" (2:10-2:13)
+LEFT_PAREN (2:13-2:14)
+STAR (2:14-2:15)
+COMMA (2:15-2:16)
+IDENTIFIER "a" (2:17-2:18)
+COLON (2:18-2:19)
+IDENTIFIER "i32" (2:20-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+FUNC (3:5-3:9)
+IDENTIFIER "foo" (3:10-3:13)
+LEFT_PAREN (3:13-3:14)
+STAR (3:14-3:15)
+COMMA (3:15-3:16)
+IDENTIFIER "b" (3:17-3:18)
+COLON (3:18-3:19)
+IDENTIFIER "i32" (3:20-3:23)
+RIGHT_PAREN (3:23-3:24)
+IDENTIFIER "i32" (3:25-3:28)
+SEMICOLON (3:28-3:29)
+RIGHT_BRACE (4:1-4:2)
+CLASS (6:1-6:6)
+IDENTIFIER "Impl" (6:7-6:11)
+IMPLEMENTS (6:12-6:22)
+IDENTIFIER "Calls" (6:23-6:28)
+LEFT_BRACE (6:29-6:30)
+PUBLIC (7:5-7:11)
+FUNC (7:12-7:16)
+IDENTIFIER "foo" (7:17-7:20)
+LEFT_PAREN (7:20-7:21)
+STAR (7:21-7:22)
+COMMA (7:22-7:23)
+IDENTIFIER "a" (7:24-7:25)
+COLON (7:25-7:26)
+IDENTIFIER "i32" (7:27-7:30)
+RIGHT_PAREN (7:30-7:31)
+IDENTIFIER "i32" (7:32-7:35)
+LEFT_BRACE (7:36-7:37)
+RETURN (7:38-7:44)
+IDENTIFIER "a" (7:45-7:46)
+PLUS (7:47-7:48)
+INTEGER_LITERAL "1" (7:49-7:50)
+SEMICOLON (7:50-7:51)
+RIGHT_BRACE (7:52-7:53)
+PUBLIC (8:5-8:11)
+FUNC (8:12-8:16)
+IDENTIFIER "foo" (8:17-8:20)
+LEFT_PAREN (8:20-8:21)
+STAR (8:21-8:22)
+COMMA (8:22-8:23)
+IDENTIFIER "b" (8:24-8:25)
+COLON (8:25-8:26)
+IDENTIFIER "i32" (8:27-8:30)
+RIGHT_PAREN (8:30-8:31)
+IDENTIFIER "i32" (8:32-8:35)
+LEFT_BRACE (8:36-8:37)
+RETURN (8:38-8:44)
+IDENTIFIER "b" (8:45-8:46)
+PLUS (8:47-8:48)
+INTEGER_LITERAL "2" (8:49-8:50)
+SEMICOLON (8:50-8:51)
+RIGHT_BRACE (8:52-8:53)
+RIGHT_BRACE (9:1-9:2)
+CONST (11:1-11:6)
+IDENTIFIER "calls" (11:7-11:12)
+COLON (11:12-11:13)
+IDENTIFIER "Calls" (11:14-11:19)
+EQUAL (11:20-11:21)
+NEW (11:22-11:25)
+IDENTIFIER "Impl" (11:26-11:30)
+LEFT_PAREN (11:30-11:31)
+RIGHT_PAREN (11:31-11:32)
+SEMICOLON (11:32-11:33)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "calls" (12:7-12:12)
+DOT (12:12-12:13)
+IDENTIFIER "foo" (12:13-12:16)
+LEFT_PAREN (12:16-12:17)
+IDENTIFIER "a" (12:17-12:18)
+COLON (12:18-12:19)
+INTEGER_LITERAL "1" (12:20-12:21)
+RIGHT_PAREN (12:21-12:22)
+RIGHT_PAREN (12:22-12:23)
+SEMICOLON (12:23-12:24)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "calls" (13:7-13:12)
+DOT (13:12-13:13)
+IDENTIFIER "foo" (13:13-13:16)
+LEFT_PAREN (13:16-13:17)
+IDENTIFIER "b" (13:17-13:18)
+COLON (13:18-13:19)
+INTEGER_LITERAL "2" (13:20-13:21)
+RIGHT_PAREN (13:21-13:22)
+RIGHT_PAREN (13:22-13:23)
+SEMICOLON (13:23-13:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:24
+  (InterfaceDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:11-1:16
+      name: "Calls"
+    )
+    (InterfaceMethodDeclaration
+      range: 2:5-2:29
+      (IdentifierDeclaration
+        range: 2:10-2:13
+        name: "foo"
+      )
+      (FunctionParameter
+        range: 2:17-2:23
+        (IdentifierDeclaration
+          range: 2:17-2:18
+          name: "a"
+        )
+        (NamedTypeNode
+          range: 2:20-2:23
+          name: "i32"
+        )
+        optional: false
+        namedOnly: true
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 2:25-2:28
+        name: "i32"
+      )
+    )
+    (InterfaceMethodDeclaration
+      range: 3:5-3:29
+      (IdentifierDeclaration
+        range: 3:10-3:13
+        name: "foo"
+      )
+      (FunctionParameter
+        range: 3:17-3:23
+        (IdentifierDeclaration
+          range: 3:17-3:18
+          name: "b"
+        )
+        (NamedTypeNode
+          range: 3:20-3:23
+          name: "i32"
+        )
+        optional: false
+        namedOnly: true
+        defaultValue: null
+      )
+      (NamedTypeNode
+        range: 3:25-3:28
+        name: "i32"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-9:2
+    (IdentifierDeclaration
+      range: 6:7-6:11
+      name: "Impl"
+    )
+    superClass: null
+    (NamedTypeNode
+      range: 6:23-6:28
+      name: "Calls"
+    )
+    (MemberDeclaration
+      range: 7:5-7:53
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 7:12-7:53
+        (IdentifierDeclaration
+          range: 7:17-7:20
+          name: "foo"
+        )
+        (FunctionParameter
+          range: 7:24-7:30
+          (IdentifierDeclaration
+            range: 7:24-7:25
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 7:27-7:30
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 7:32-7:35
+          name: "i32"
+        )
+        (BlockStatement
+          range: 7:36-7:53
+          (ReturnStatement
+            range: 7:38-7:51
+            (BinaryExpression
+              range: 7:45-7:50
+              (IdentifierExpression
+                range: 7:45-7:46
+                name: "a"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 7:49-7:50
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-8:53
+      visibility: PUBLIC
+      (FunctionDeclaration
+        range: 8:12-8:53
+        (IdentifierDeclaration
+          range: 8:17-8:20
+          name: "foo"
+        )
+        (FunctionParameter
+          range: 8:24-8:30
+          (IdentifierDeclaration
+            range: 8:24-8:25
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 8:27-8:30
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 8:32-8:35
+          name: "i32"
+        )
+        (BlockStatement
+          range: 8:36-8:53
+          (ReturnStatement
+            range: 8:38-8:51
+            (BinaryExpression
+              range: 8:45-8:50
+              (IdentifierExpression
+                range: 8:45-8:46
+                name: "b"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 8:49-8:50
+                kind: INT
+                text: "2"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:12
+      name: "calls"
+    )
+    (NamedTypeNode
+      range: 11:14-11:19
+      name: "Calls"
+    )
+    (NewExpression
+      range: 11:22-11:32
+      (IdentifierExpression
+        range: 11:26-11:30
+        name: "Impl"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:24
+    (CallExpression
+      range: 12:1-12:23
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:22
+        (MemberExpression
+          range: 12:7-12:16
+          (IdentifierExpression
+            range: 12:7-12:12
+            name: "calls"
+          )
+          (IdentifierExpression
+            range: 12:13-12:16
+            name: "foo"
+          )
+        )
+        (NamedArgumentExpression
+          range: 12:17-12:21
+          (IdentifierDeclaration
+            range: 12:17-12:18
+            name: "a"
+          )
+          (LiteralExpression
+            range: 12:20-12:21
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:24
+    (CallExpression
+      range: 13:1-13:23
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:22
+        (MemberExpression
+          range: 13:7-13:16
+          (IdentifierExpression
+            range: 13:7-13:12
+            name: "calls"
+          )
+          (IdentifierExpression
+            range: 13:13-13:16
+            name: "foo"
+          )
+        )
+        (NamedArgumentExpression
+          range: 13:17-13:21
+          (IdentifierDeclaration
+            range: 13:17-13:18
+            name: "b"
+          )
+          (LiteralExpression
+            range: 13:20-13:21
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  7:45-7:46 -> i32
+  7:45-7:50 -> i32
+  7:49-7:50 -> i32
+  8:45-8:46 -> i32
+  8:45-8:50 -> i32
+  8:49-8:50 -> i32
+  11:22-11:32 -> Impl
+  11:26-11:30 -> Impl
+  12:1-12:6 -> (any) => void
+  12:1-12:23 -> void
+  12:7-12:12 -> Calls
+  12:7-12:16 -> (*, a: i32) => i32
+  12:7-12:22 -> i32
+  12:13-12:16 -> (*, a: i32) => i32
+  12:20-12:21 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:23 -> void
+  13:7-13:12 -> Calls
+  13:7-13:16 -> (*, b: i32) => i32
+  13:7-13:22 -> i32
+  13:13-13:16 -> (*, b: i32) => i32
+  13:20-13:21 -> i32
+
+Resolved types:
+  2:20-2:23 -> i32
+  2:25-2:28 -> i32
+  3:20-3:23 -> i32
+  3:25-3:28 -> i32
+  6:23-6:28 -> Calls
+  7:27-7:30 -> i32
+  7:32-7:35 -> i32
+  8:27-8:30 -> i32
+  8:32-8:35 -> i32
+  11:14-11:19 -> Calls
+
+Declarations:
+  1:11-1:16 -> interface Calls
+  2:10-2:13 -> func foo(*, a: i32) => i32
+  2:17-2:18 -> const a: i32
+  3:10-3:13 -> func foo(*, b: i32) => i32
+  3:17-3:18 -> const b: i32
+  6:7-6:11 -> class Impl
+  7:17-7:20 -> func foo(*, a: i32) => i32
+  7:24-7:25 -> const a: i32
+  8:17-8:20 -> func foo(*, b: i32) => i32
+  8:24-8:25 -> const b: i32
+  11:7-11:12 -> const calls: Calls
+
+References:
+  7:45-7:46 -> 7:24-7:25
+  8:45-8:46 -> 8:24-8:25
+  11:26-11:30 -> 6:7-6:11
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 11:7-11:12
+  12:13-12:16 -> 2:10-2:13
+  13:1-13:6 -> builtin print
+  13:7-13:12 -> 11:7-11:12
+  13:13-13:16 -> 3:10-3:13
+
+Named arguments:
+  12:17-12:18 -> parameter 2:17-2:18
+  13:17-13:18 -> parameter 3:17-3:18
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Calls
+  nest member Test$Impl
+  inner class Test$Calls flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  field calls LTest$Calls; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Impl
+    DUP
+    INVOKESPECIAL Test$Impl.<init>()V
+    PUTSTATIC Test.calls LTest$Calls;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calls LTest$Calls;
+    LDC 1
+    INVOKEINTERFACE Test$Calls.foo$1(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.calls LTest$Calls;
+    LDC 2
+    INVOKEINTERFACE Test$Calls.foo$2(I)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Calls extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Calls flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method foo$1(I)I flags [PUBLIC, ABSTRACT]
+  method foo$2(I)I flags [PUBLIC, ABSTRACT]
+
+class Test$Impl extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Calls
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Impl flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method foo$1(I)I flags [PUBLIC]
+    ILOAD_1 1
+    LDC 1
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+  method foo$2(I)I flags [PUBLIC]
+    ILOAD_1 1
+    LDC 2
+    IADD
+    IRETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+2
+4

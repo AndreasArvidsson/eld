@@ -142,6 +142,7 @@ SEMICOLON (8:21-8:22)
             name: "i32"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -181,6 +182,7 @@ SEMICOLON (8:21-8:22)
             name: "string"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -256,9 +258,14 @@ SEMICOLON (8:21-8:22)
     )
     (FunctionTypeNode
       range: 7:17-7:32
-      (NamedTypeNode
+      namedOnlyStart: null
+      (FunctionTypeParameter
         range: 7:18-7:24
-        name: "string"
+        label: null
+        (NamedTypeNode
+          range: 7:18-7:24
+          name: "string"
+        )
       )
       (NamedTypeNode
         range: 7:29-7:32

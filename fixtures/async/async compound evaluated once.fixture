@@ -155,6 +155,7 @@ SEMICOLON (17:13-17:14)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -261,7 +262,7 @@ Expression types:
   9:5-9:10 -> (any) => void
   9:5-9:18 -> void
   9:11-9:17 -> [i32]
-  13:5-13:12 -> ([i32]) => void
+  13:5-13:12 -> (values: [i32]) => void
   13:5-13:45 -> void
   13:13-13:44 -> [i32]
   13:14-13:43 -> i32
@@ -282,7 +283,7 @@ Resolved types:
 Declarations:
   1:5-1:10 -> var calls: i32
   3:6-3:10 -> func next() => i32
-  8:6-8:13 -> func consume([i32]) => void
+  8:6-8:13 -> func consume(values: [i32]) => void
   8:14-8:20 -> const values: [i32]
   12:12-12:15 -> func run() => Promise<void>
 

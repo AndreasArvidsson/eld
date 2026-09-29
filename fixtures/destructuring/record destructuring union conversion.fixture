@@ -53,6 +53,7 @@ SEMICOLON (3:11-3:12)
         range: 1:17-1:20
         name: "i32"
       )
+      namedOnly: false
     )
   )
   (DestructuringDeclaration

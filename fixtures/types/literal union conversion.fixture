@@ -674,6 +674,7 @@ SEMICOLON (77:35-77:36)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -2225,13 +2226,13 @@ Expression types:
   8:16-8:21 -> (any) => void
   8:16-8:29 -> void
   8:22-8:28 -> string
-  11:1-11:6 -> (0 | 1 | 2) => void
+  11:1-11:6 -> (source: 0 | 1 | 2) => void
   11:1-11:9 -> void
   11:7-11:8 -> i32
-  12:1-12:6 -> (0 | 1 | 2) => void
+  12:1-12:6 -> (source: 0 | 1 | 2) => void
   12:1-12:9 -> void
   12:7-12:8 -> i32
-  13:1-13:6 -> (0 | 1 | 2) => void
+  13:1-13:6 -> (source: 0 | 1 | 2) => void
   13:1-13:9 -> void
   13:7-13:8 -> i32
   14:27-14:28 -> i32
@@ -2524,7 +2525,7 @@ Conversions:
   76:36-76:55 -> 0 | f32 -> f32
 
 Declarations:
-  1:6-1:11 -> func check(0 | 1 | 2) => void
+  1:6-1:11 -> func check(source: 0 | 1 | 2) => void
   1:12-1:18 -> const source: 0 | 1 | 2
   2:11-2:17 -> const target: 0 | 1 | i64
   14:7-14:19 -> const ordinaryZero: i32

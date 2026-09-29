@@ -130,6 +130,7 @@ SEMICOLON (13:22-13:23)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (FunctionParameter
@@ -143,6 +144,7 @@ SEMICOLON (13:22-13:23)
             name: "Compare"
           )
           optional: false
+          namedOnly: false
           defaultValue: null
         )
         (NamedTypeNode
@@ -213,6 +215,7 @@ SEMICOLON (13:22-13:23)
         )
       )
       optional: false
+      namedOnly: false
       defaultValue: null
     )
     returnType: null
@@ -333,10 +336,10 @@ Expression types:
   9:15-9:27 -> () => string
   9:15-9:29 -> string
   9:21-9:27 -> () => string
-  12:1-12:7 -> (Compare | null) => void
+  12:1-12:7 -> (value: Compare | null) => void
   12:1-12:13 -> void
   12:8-12:12 -> null
-  13:1-13:7 -> (Compare | null) => void
+  13:1-13:7 -> (value: Compare | null) => void
   13:1-13:22 -> void
   13:8-13:21 -> Compare
   13:12-13:19 -> Compare
@@ -360,11 +363,11 @@ Conversions:
 
 Declarations:
   1:7-1:14 -> class Compare
-  2:24-2:29 -> func equal(Compare, Compare) => bool
+  2:24-2:29 -> func equal(a: Compare, b: Compare) => bool
   2:30-2:31 -> const a: Compare
   2:42-2:43 -> const b: Compare
   3:17-3:23 -> func marker() => string
-  6:6-6:12 -> func unsafe(Compare | null) => void
+  6:6-6:12 -> func unsafe(value: Compare | null) => void
   6:13-6:18 -> const value: Compare | null
   7:11-7:18 -> const compare: Compare
 
