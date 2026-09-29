@@ -110,6 +110,7 @@ RIGHT_BRACE (7:1-7:2)
   )
   (FunctionDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:6-5:10
       name: "test"

@@ -209,6 +209,7 @@ SEMICOLON (20:25-20:26)
   )
   (ClassDeclaration
     range: 4:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:13
       name: "Person"
@@ -221,6 +222,7 @@ SEMICOLON (20:25-20:26)
     (MemberDeclaration
       range: 5:5-5:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 5:12-5:27
         mutability: CONST
@@ -237,6 +239,7 @@ SEMICOLON (20:25-20:26)
     (MemberDeclaration
       range: 6:5-6:53
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 6:12-6:53
         (FunctionParameter
@@ -279,8 +282,10 @@ SEMICOLON (20:25-20:26)
     (MemberDeclaration
       range: 7:5-9:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-9:6
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:26
           name: "compareTo"
@@ -345,6 +350,7 @@ SEMICOLON (20:25-20:26)
   )
   (ClassDeclaration
     range: 11:1-15:2
+    modifiers: []
     (IdentifierDeclaration
       range: 11:7-11:12
       name: "Child"
@@ -356,6 +362,7 @@ SEMICOLON (20:25-20:26)
     (MemberDeclaration
       range: 12:5-14:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 12:12-14:6
         (FunctionParameter
@@ -644,13 +651,13 @@ Declarations:
   1:11-1:16 -> interface Order
   2:11-2:14 -> const age: i32
   4:7-4:13 -> class Person
-  5:18-5:21 -> const age: i32
-  6:12-6:53 -> constructor(age: i32)
+  5:18-5:21 -> public const age: i32
+  6:12-6:53 -> public constructor(age: i32)
   6:24-6:27 -> const age: i32
-  7:17-7:26 -> func compareTo(other: Order) => i32
+  7:17-7:26 -> public func compareTo(other: Order) => i32
   7:27-7:32 -> const other: Order
   11:7-11:12 -> class Child
-  12:12-14:6 -> constructor(age: i32)
+  12:12-14:6 -> public constructor(age: i32)
   12:24-12:27 -> const age: i32
   16:7-16:13 -> const people: List<Order>
 

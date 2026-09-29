@@ -104,6 +104,7 @@ SEMICOLON (13:22-13:23)
   range: 1:1-13:23
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Compare"
@@ -115,6 +116,7 @@ SEMICOLON (13:22-13:23)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-2:75
+        modifiers: []
         (IdentifierDeclaration
           range: 2:24-2:29
           name: "equal"
@@ -167,8 +169,10 @@ SEMICOLON (13:22-13:23)
     (MemberDeclaration
       range: 3:5-3:48
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:48
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:23
           name: "marker"
@@ -193,6 +197,7 @@ SEMICOLON (13:22-13:23)
   )
   (FunctionDeclaration
     range: 6:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:6-6:12
       name: "unsafe"
@@ -363,10 +368,10 @@ Conversions:
 
 Declarations:
   1:7-1:14 -> class Compare
-  2:24-2:29 -> func equal(a: Compare, b: Compare) => bool
+  2:24-2:29 -> public static func equal(a: Compare, b: Compare) => bool
   2:30-2:31 -> const a: Compare
   2:42-2:43 -> const b: Compare
-  3:17-3:23 -> func marker() => string
+  3:17-3:23 -> public func marker() => string
   6:6-6:12 -> func unsafe(value: Compare | null) => void
   6:13-6:18 -> const value: Compare | null
   7:11-7:18 -> const compare: Compare

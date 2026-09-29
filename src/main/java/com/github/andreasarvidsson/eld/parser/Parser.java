@@ -115,12 +115,15 @@ public final class Parser extends ParserBase {
                     );
                 }
                 expect(TokenType.CLASS);
-                yield parseClassDeclaration(token, true);
+                yield parseClassDeclaration(
+                    token,
+                    List.of(ClassModifier.ABSTRACT)
+                );
             }
             case ENUM -> parseEnumDeclaration(token);
             case RECORD -> parseRecordDeclaration(token);
             case INTERFACE -> parseInterfaceDeclaration(token);
-            case FUNC -> parseFunctionDeclaration(token, false, List.of());
+            case FUNC -> parseFunctionDeclaration(token, List.of());
             case FINAL, OVERRIDE, ASYNC ->
                 parseTopLevelFunctionDeclaration(token);
             default -> throw new IllegalStateException(
@@ -344,12 +347,12 @@ public final class Parser extends ParserBase {
     }
 
     private ClassDeclaration parseClassDeclaration(final Token keyword) {
-        return parseClassDeclaration(keyword, false);
+        return parseClassDeclaration(keyword, List.of());
     }
 
     private ClassDeclaration parseClassDeclaration(
         final Token keyword,
-        final boolean abstractClass
+        final List<@NonNull ClassModifier> modifiers
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
         assertIdentifierCase(name, "class");
@@ -376,7 +379,7 @@ public final class Parser extends ParserBase {
         final Range range = keyword.range().union(close.range());
         final var id = new IdentifierDeclaration(name.text(), name.range());
         return new ClassDeclaration(
-            abstractClass,
+            modifiers,
             id,
             superclass,
             implementedInterfaces,
@@ -896,43 +899,32 @@ public final class Parser extends ParserBase {
         final Token first
     ) {
         if (first.type() == TokenType.FUNC) {
-            return parseFunctionDeclaration(first, false, List.of());
+            return parseFunctionDeclaration(first, List.of());
         }
         final List<FunctionModifier> modifiers = new ArrayList<>();
-        boolean async = false;
         Token modifier = first;
         while (modifier.type() != TokenType.FUNC) {
-            if (modifier.type() == TokenType.ASYNC) {
-                if (async) {
-                    throw new ParserException(
-                        modifier.range(),
-                        "Duplicate async function modifier"
-                    );
-                }
-                async = true;
+            final FunctionModifier value = switch (modifier.type()) {
+                case CONST -> FunctionModifier.CONST;
+                case FINAL -> FunctionModifier.FINAL;
+                case ABSTRACT -> FunctionModifier.ABSTRACT;
+                case OVERRIDE -> FunctionModifier.OVERRIDE;
+                case ASYNC -> FunctionModifier.ASYNC;
+                default -> throw new IllegalStateException(
+                    "Unexpected function modifier: " + modifier.type()
+                );
+            };
+            if (modifiers.contains(value)) {
+                throw new ParserException(
+                    modifier.range(),
+                    "Duplicate function modifier: %s",
+                    modifier.text()
+                );
             }
-            else {
-                final FunctionModifier value = switch (modifier.type()) {
-                    case CONST -> FunctionModifier.CONST;
-                    case FINAL -> FunctionModifier.FINAL;
-                    case ABSTRACT -> FunctionModifier.ABSTRACT;
-                    case OVERRIDE -> FunctionModifier.OVERRIDE;
-                    default -> throw new IllegalStateException(
-                        "Unexpected function modifier: " + modifier.type()
-                    );
-                };
-                if (modifiers.contains(value)) {
-                    throw new ParserException(
-                        modifier.range(),
-                        "Duplicate function modifier: %s",
-                        modifier.text()
-                    );
-                }
-                modifiers.add(value);
-            }
+            modifiers.add(value);
             modifier = advance();
         }
-        return parseFunctionDeclaration(first, async, modifiers);
+        return parseFunctionDeclaration(first, modifiers);
     }
 
     private FunctionDeclaration parseTopLevelFunctionDeclaration(
@@ -950,7 +942,6 @@ public final class Parser extends ParserBase {
 
     private FunctionDeclaration parseFunctionDeclaration(
         final Token keyword,
-        final boolean async,
         final List<FunctionModifier> modifiers
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
@@ -977,7 +968,6 @@ public final class Parser extends ParserBase {
         }
         final Range range = keyword.range().union(body.range());
         return new FunctionDeclaration(
-            async,
             List.copyOf(modifiers),
             nameId,
             parameters,

@@ -48,7 +48,7 @@ SEMICOLON (7:9-7:10)
   )
   (FunctionDeclaration
     range: 3:1-5:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 3:12-3:18
       name: "mutate"

@@ -66,6 +66,7 @@ RIGHT_BRACE (11:1-11:2)
   )
   (ClassDeclaration
     range: 3:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 3:7-3:14
       name: "Counter"
@@ -74,6 +75,7 @@ RIGHT_BRACE (11:1-11:2)
     (MemberDeclaration
       range: 4:5-6:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 4:12-6:6
         (BlockStatement
@@ -95,7 +97,7 @@ RIGHT_BRACE (11:1-11:2)
   )
   (FunctionDeclaration
     range: 9:1-11:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 9:12-9:18
       name: "create"

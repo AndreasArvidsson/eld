@@ -338,6 +338,7 @@ SEMICOLON (31:64-31:65)
   range: 1:1-31:65
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:13
       name: "Direct"
@@ -354,8 +355,10 @@ SEMICOLON (31:64-31:65)
     (MemberDeclaration
       range: 2:5-2:59
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-2:59
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:26
           name: "compareTo"
@@ -394,8 +397,10 @@ SEMICOLON (31:64-31:65)
     (MemberDeclaration
       range: 3:5-3:56
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:56
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:26
           name: "compareTo"
@@ -561,6 +566,7 @@ SEMICOLON (31:64-31:65)
   )
   (ClassDeclaration
     range: 11:1-13:2
+    modifiers: []
     (IdentifierDeclaration
       range: 11:7-11:11
       name: "Base"
@@ -569,8 +575,10 @@ SEMICOLON (31:64-31:65)
     (MemberDeclaration
       range: 12:5-12:56
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 12:12-12:56
+        modifiers: []
         (IdentifierDeclaration
           range: 12:17-12:26
           name: "compareTo"
@@ -609,6 +617,7 @@ SEMICOLON (31:64-31:65)
   )
   (ClassDeclaration
     range: 14:1-16:2
+    modifiers: []
     (IdentifierDeclaration
       range: 14:7-14:14
       name: "Derived"
@@ -628,8 +637,10 @@ SEMICOLON (31:64-31:65)
     (MemberDeclaration
       range: 15:5-15:60
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 15:12-15:60
+        modifiers: []
         (IdentifierDeclaration
           range: 15:17-15:26
           name: "compareTo"
@@ -795,6 +806,7 @@ SEMICOLON (31:64-31:65)
   )
   (ClassDeclaration
     range: 23:1-26:2
+    modifiers: []
     (IdentifierDeclaration
       range: 23:7-23:15
       name: "Ordering"
@@ -811,8 +823,10 @@ SEMICOLON (31:64-31:65)
     (MemberDeclaration
       range: 24:5-24:75
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 24:12-24:75
+        modifiers: []
         (IdentifierDeclaration
           range: 24:17-24:24
           name: "compare"
@@ -865,8 +879,10 @@ SEMICOLON (31:64-31:65)
     (MemberDeclaration
       range: 25:5-25:65
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 25:12-25:65
+        modifiers: []
         (IdentifierDeclaration
           range: 25:17-25:24
           name: "compare"
@@ -1195,25 +1211,25 @@ Conversions:
 
 Declarations:
   1:7-1:13 -> class Direct
-  2:17-2:26 -> func compareTo(other: Direct) => i32
+  2:17-2:26 -> public func compareTo(other: Direct) => i32
   2:27-2:32 -> const other: Direct
-  3:17-3:26 -> func compareTo(other: any) => i32
+  3:17-3:26 -> public func compareTo(other: any) => i32
   3:27-3:32 -> const other: any
   5:7-5:13 -> const direct: Direct
   6:7-6:21 -> const directContract: Comparable<Direct>
   11:7-11:11 -> class Base
-  12:17-12:26 -> func compareTo(other: any) => i32
+  12:17-12:26 -> public func compareTo(other: any) => i32
   12:27-12:32 -> const other: any
   14:7-14:14 -> class Derived
-  15:17-15:26 -> func compareTo(other: Derived) => i32
+  15:17-15:26 -> public func compareTo(other: Derived) => i32
   15:27-15:32 -> const other: Derived
   17:7-17:14 -> const derived: Derived
   18:7-18:22 -> const derivedContract: Comparable<Derived>
   23:7-23:15 -> class Ordering
-  24:17-24:24 -> func compare(left: Ordering, right: Ordering) => i32
+  24:17-24:24 -> public func compare(left: Ordering, right: Ordering) => i32
   24:25-24:29 -> const left: Ordering
   24:41-24:46 -> const right: Ordering
-  25:17-25:24 -> func compare(left: any, right: any) => i32
+  25:17-25:24 -> public func compare(left: any, right: any) => i32
   25:25-25:29 -> const left: any
   25:36-25:41 -> const right: any
   27:7-27:15 -> const ordering: Ordering

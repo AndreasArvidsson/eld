@@ -97,6 +97,7 @@ SEMICOLON (9:42-9:43)
   range: 1:1-9:43
   (ClassDeclaration
     range: 1:1-1:23
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:20
       name: "WithoutEquals"
@@ -105,6 +106,7 @@ SEMICOLON (9:42-9:43)
   )
   (ClassDeclaration
     range: 2:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:17
       name: "WithEquals"
@@ -116,6 +118,7 @@ SEMICOLON (9:42-9:43)
       staticMember: true
       (FunctionDeclaration
         range: 3:19-3:81
+        modifiers: []
         (IdentifierDeclaration
           range: 3:24-3:29
           name: "equal"
@@ -326,7 +329,7 @@ Conversions:
 Declarations:
   1:7-1:20 -> class WithoutEquals
   2:7-2:17 -> class WithEquals
-  3:24-3:29 -> func equal(a: WithEquals, b: WithEquals) => bool
+  3:24-3:29 -> public static func equal(a: WithEquals, b: WithEquals) => bool
   3:30-3:31 -> const a: WithEquals
   3:45-3:46 -> const b: WithEquals
   7:7-7:22 -> const dynamicWithoutA: any

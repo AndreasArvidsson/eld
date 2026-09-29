@@ -126,8 +126,10 @@ SEMICOLON (8:36-8:37)
     (MemberDeclaration
       range: 2:5-2:66
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-2:66
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:18
           name: "f"
@@ -170,8 +172,10 @@ SEMICOLON (8:36-8:37)
     (MemberDeclaration
       range: 3:5-3:69
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:69
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:18
           name: "f"
@@ -380,9 +384,9 @@ Resolved types:
 
 Declarations:
   1:8-1:9 -> record R(f: i32)
-  2:17-2:18 -> func f(values: List<i32>) => string
+  2:17-2:18 -> public func f(values: List<i32>) => string
   2:19-2:25 -> const values: List<i32>
-  3:17-3:18 -> func f(values: List<string>) => string
+  3:17-3:18 -> public func f(values: List<string>) => string
   3:19-3:25 -> const values: List<string>
   5:7-5:8 -> const r: R
 

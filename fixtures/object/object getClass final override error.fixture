@@ -32,6 +32,7 @@ RIGHT_BRACE (5:1-5:2)
   range: 1:1-5:2
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Value"
@@ -40,9 +41,10 @@ RIGHT_BRACE (5:1-5:2)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 2:26-2:34
           name: "getClass"

@@ -208,6 +208,7 @@ SEMICOLON (15:25-15:26)
   )
   (ClassDeclaration
     range: 5:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:11
       name: "Both"
@@ -220,8 +221,10 @@ SEMICOLON (15:25-15:26)
     (MemberDeclaration
       range: 6:5-6:66
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:66
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:25
           name: "describe"
@@ -260,8 +263,10 @@ SEMICOLON (15:25-15:26)
     (MemberDeclaration
       range: 7:5-7:65
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:65
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:25
           name: "describe"
@@ -554,9 +559,9 @@ Declarations:
   3:10-3:18 -> func describe(value: string) => string
   3:19-3:24 -> const value: string
   5:7-5:11 -> class Both
-  6:17-6:25 -> func describe(value: string) => string
+  6:17-6:25 -> public func describe(value: string) => string
   6:26-6:31 -> const value: string
-  7:17-7:25 -> func describe(value: i32) => string
+  7:17-7:25 -> public func describe(value: i32) => string
   7:26-7:31 -> const value: i32
   9:7-9:14 -> const printer: Printer
   12:7-12:20 -> const integerMethod: (i32) => string

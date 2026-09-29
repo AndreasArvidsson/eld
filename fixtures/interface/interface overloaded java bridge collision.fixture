@@ -150,6 +150,7 @@ SEMICOLON (10:31-10:32)
   )
   (ClassDeclaration
     range: 2:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:8
       name: "C"
@@ -170,8 +171,10 @@ SEMICOLON (10:31-10:32)
     (MemberDeclaration
       range: 3:5-3:56
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:56
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:26
           name: "compareTo"
@@ -210,8 +213,10 @@ SEMICOLON (10:31-10:32)
     (MemberDeclaration
       range: 4:5-4:54
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-4:54
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:26
           name: "compareTo"

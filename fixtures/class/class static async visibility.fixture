@@ -107,6 +107,7 @@ SEMICOLON (18:13-18:14)
   range: 1:1-18:14
   (ClassDeclaration
     range: 1:1-13:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"
@@ -118,7 +119,7 @@ SEMICOLON (18:13-18:14)
       staticMember: true
       (FunctionDeclaration
         range: 2:12-4:6
-        async: true
+        modifiers: [ASYNC]
         (IdentifierDeclaration
           range: 2:23-2:35
           name: "privateValue"
@@ -163,7 +164,7 @@ SEMICOLON (18:13-18:14)
       staticMember: true
       (FunctionDeclaration
         range: 6:22-8:6
-        async: true
+        modifiers: [ASYNC]
         (IdentifierDeclaration
           range: 6:33-6:47
           name: "protectedValue"
@@ -208,7 +209,7 @@ SEMICOLON (18:13-18:14)
       staticMember: true
       (FunctionDeclaration
         range: 10:19-12:6
-        async: true
+        modifiers: [ASYNC]
         (IdentifierDeclaration
           range: 10:30-10:35
           name: "value"
@@ -245,7 +246,7 @@ SEMICOLON (18:13-18:14)
   )
   (FunctionDeclaration
     range: 15:1-17:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 15:12-15:15
       name: "run"
@@ -325,10 +326,10 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Example
-  2:23-2:35 -> func privateValue() => Promise<i32>
-  6:33-6:47 -> func protectedValue() => Promise<i32>
-  10:30-10:35 -> func value() => Promise<i32>
-  15:12-15:15 -> func run() => Promise<void>
+  2:23-2:35 -> static async func privateValue() => Promise<i32>
+  6:33-6:47 -> protected static async func protectedValue() => Promise<i32>
+  10:30-10:35 -> public static async func value() => Promise<i32>
+  15:12-15:15 -> async func run() => Promise<void>
 
 References:
   11:22-11:29 -> 1:7-1:14

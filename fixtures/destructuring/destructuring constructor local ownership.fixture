@@ -61,6 +61,7 @@ SEMICOLON (10:7-10:8)
   range: 1:1-10:8
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Box"
@@ -69,6 +70,7 @@ SEMICOLON (10:7-10:8)
     (MemberDeclaration
       range: 2:5-5:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 2:12-5:6
         (BlockStatement
@@ -123,7 +125,7 @@ SEMICOLON (10:7-10:8)
   )
   (FunctionDeclaration
     range: 7:1-9:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 7:12-7:16
       name: "make"
@@ -171,7 +173,7 @@ Expression types:
 
 Declarations:
   1:7-1:10 -> class Box
-  2:12-5:6 -> constructor()
+  2:12-5:6 -> public constructor()
   3:14-3:19 -> var value: i32
   7:12-7:16 -> const func make() => void
 

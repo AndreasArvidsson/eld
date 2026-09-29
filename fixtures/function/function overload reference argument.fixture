@@ -181,6 +181,7 @@ SEMICOLON (15:38-15:39)
   range: 1:1-15:39
   (FunctionDeclaration
     range: 1:1-1:55
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:14
       name: "describe"
@@ -217,6 +218,7 @@ SEMICOLON (15:38-15:39)
   )
   (FunctionDeclaration
     range: 2:1-2:57
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:14
       name: "describe"
@@ -253,6 +255,7 @@ SEMICOLON (15:38-15:39)
   )
   (FunctionDeclaration
     range: 3:1-3:81
+    modifiers: []
     (IdentifierDeclaration
       range: 3:6-3:11
       name: "apply"
@@ -321,6 +324,7 @@ SEMICOLON (15:38-15:39)
   )
   (FunctionDeclaration
     range: 4:1-4:87
+    modifiers: []
     (IdentifierDeclaration
       range: 4:6-4:11
       name: "apply"
@@ -441,6 +445,7 @@ SEMICOLON (15:38-15:39)
   )
   (ClassDeclaration
     range: 9:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:16
       name: "Describer"
@@ -449,8 +454,10 @@ SEMICOLON (15:38-15:39)
     (MemberDeclaration
       range: 10:5-10:73
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 10:12-10:73
+        modifiers: []
         (IdentifierDeclaration
           range: 10:17-10:25
           name: "describe"
@@ -489,8 +496,10 @@ SEMICOLON (15:38-15:39)
     (MemberDeclaration
       range: 11:5-11:75
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-11:75
+        modifiers: []
         (IdentifierDeclaration
           range: 11:17-11:25
           name: "describe"
@@ -687,9 +696,9 @@ Declarations:
   4:12-4:17 -> const value: string
   4:27-4:33 -> const mapper: (string) => string
   9:7-9:16 -> class Describer
-  10:17-10:25 -> func describe(value: i32) => string
+  10:17-10:25 -> public func describe(value: i32) => string
   10:26-10:31 -> const value: i32
-  11:17-11:25 -> func describe(value: string) => string
+  11:17-11:25 -> public func describe(value: string) => string
   11:26-11:31 -> const value: string
   13:7-13:16 -> const describer: Describer
 

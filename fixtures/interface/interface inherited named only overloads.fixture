@@ -217,6 +217,7 @@ SEMICOLON (16:24-16:25)
   )
   (ClassDeclaration
     range: 9:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:11
       name: "Both"
@@ -229,8 +230,10 @@ SEMICOLON (16:24-16:25)
     (MemberDeclaration
       range: 10:5-10:54
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 10:12-10:54
+        modifiers: []
         (IdentifierDeclaration
           range: 10:17-10:21
           name: "pick"
@@ -277,8 +280,10 @@ SEMICOLON (16:24-16:25)
     (MemberDeclaration
       range: 11:5-11:55
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-11:55
+        modifiers: []
         (IdentifierDeclaration
           range: 11:17-11:21
           name: "pick"
@@ -465,9 +470,9 @@ Declarations:
   5:18-5:19 -> const b: i32
   7:11-7:12 -> interface C
   9:7-9:11 -> class Both
-  10:17-10:21 -> func pick(*, a: i32) => i32
+  10:17-10:21 -> public func pick(*, a: i32) => i32
   10:25-10:26 -> const a: i32
-  11:17-11:21 -> func pick(*, b: i32) => i32
+  11:17-11:21 -> public func pick(*, b: i32) => i32
   11:25-11:26 -> const b: i32
   14:7-14:12 -> const value: C
 

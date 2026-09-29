@@ -106,6 +106,7 @@ RIGHT_BRACE (13:1-13:2)
   )
   (FunctionDeclaration
     range: 2:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:10
       name: "read"
@@ -124,6 +125,7 @@ RIGHT_BRACE (13:1-13:2)
   )
   (FunctionDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:6-5:13
       name: "forward"

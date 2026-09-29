@@ -62,6 +62,7 @@ RIGHT_BRACE (9:1-9:2)
   )
   (ClassDeclaration
     range: 5:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:11
       name: "Impl"
@@ -74,8 +75,10 @@ RIGHT_BRACE (9:1-9:2)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:21
           name: "read"
@@ -114,7 +117,7 @@ Declarations:
   1:11-1:17 -> interface Reader
   2:10-2:14 -> func read() => i32
   5:7-5:11 -> class Impl
-  6:17-6:21 -> func read() => i32
+  6:17-6:21 -> public func read() => i32
 
 --- BYTECODE ---
 

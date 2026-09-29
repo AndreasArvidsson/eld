@@ -91,7 +91,7 @@ SEMICOLON (13:20-13:21)
   )
   (FunctionDeclaration
     range: 3:1-5:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 3:12-3:18
       name: "double"
@@ -136,7 +136,7 @@ SEMICOLON (13:20-13:21)
   )
   (FunctionDeclaration
     range: 7:1-11:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 7:12-7:21
       name: "calculate"

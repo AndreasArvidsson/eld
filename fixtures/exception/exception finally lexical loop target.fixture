@@ -61,6 +61,7 @@ SEMICOLON (13:13-13:14)
   range: 1:1-13:14
   (FunctionDeclaration
     range: 1:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:9
       name: "run"

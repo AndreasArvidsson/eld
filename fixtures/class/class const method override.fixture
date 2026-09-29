@@ -127,6 +127,7 @@ SEMICOLON (26:34-26:35)
   range: 1:1-26:35
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:16
       name: "ConstBase"
@@ -135,9 +136,10 @@ SEMICOLON (26:34-26:35)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 2:23-2:28
           name: "value"
@@ -162,6 +164,7 @@ SEMICOLON (26:34-26:35)
   )
   (ClassDeclaration
     range: 7:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:17
       name: "ConstChild"
@@ -173,10 +176,10 @@ SEMICOLON (26:34-26:35)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
-        CONST
-        OVERRIDE
+        modifiers: [CONST, OVERRIDE]
         (IdentifierDeclaration
           range: 8:32-8:37
           name: "value"
@@ -201,6 +204,7 @@ SEMICOLON (26:34-26:35)
   )
   (ClassDeclaration
     range: 13:1-17:2
+    modifiers: []
     (IdentifierDeclaration
       range: 13:7-13:18
       name: "MutableBase"
@@ -209,8 +213,10 @@ SEMICOLON (26:34-26:35)
     (MemberDeclaration
       range: 14:5-16:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 14:12-16:6
+        modifiers: []
         (IdentifierDeclaration
           range: 14:17-14:22
           name: "value"
@@ -235,6 +241,7 @@ SEMICOLON (26:34-26:35)
   )
   (ClassDeclaration
     range: 19:1-23:2
+    modifiers: []
     (IdentifierDeclaration
       range: 19:7-19:19
       name: "ConstDerived"
@@ -246,10 +253,10 @@ SEMICOLON (26:34-26:35)
     (MemberDeclaration
       range: 20:5-22:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 20:12-22:6
-        CONST
-        OVERRIDE
+        modifiers: [CONST, OVERRIDE]
         (IdentifierDeclaration
           range: 20:32-20:37
           name: "value"
@@ -360,13 +367,13 @@ Resolved types:
 
 Declarations:
   1:7-1:16 -> class ConstBase
-  2:23-2:28 -> const func value() => i32
+  2:23-2:28 -> public const func value() => i32
   7:7-7:17 -> class ConstChild
-  8:32-8:37 -> const override func value() => i32
+  8:32-8:37 -> public const override func value() => i32
   13:7-13:18 -> class MutableBase
-  14:17-14:22 -> func value() => i32
+  14:17-14:22 -> public func value() => i32
   19:7-19:19 -> class ConstDerived
-  20:32-20:37 -> const override func value() => i32
+  20:32-20:37 -> public const override func value() => i32
 
 References:
   7:26-7:35 -> 1:7-1:16

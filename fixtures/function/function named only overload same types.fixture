@@ -59,6 +59,7 @@ SEMICOLON (5:10-5:11)
   range: 1:1-5:11
   (FunctionDeclaration
     range: 1:1-1:34
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:9
       name: "foo"
@@ -99,6 +100,7 @@ SEMICOLON (5:10-5:11)
   )
   (FunctionDeclaration
     range: 2:1-2:34
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:9
       name: "foo"

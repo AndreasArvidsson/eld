@@ -13,6 +13,7 @@ RIGHT_BRACE (1:12-1:13)
   range: 1:1-1:13
   (ClassDeclaration
     range: 1:1-1:13
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"

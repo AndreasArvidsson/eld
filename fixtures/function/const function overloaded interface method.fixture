@@ -162,6 +162,7 @@ SEMICOLON (10:21-10:22)
   )
   (ClassDeclaration
     range: 5:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:8
       name: "C"
@@ -174,8 +175,10 @@ SEMICOLON (10:21-10:22)
     (MemberDeclaration
       range: 6:5-6:51
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:51
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:18
           name: "f"
@@ -214,9 +217,10 @@ SEMICOLON (10:21-10:22)
     (MemberDeclaration
       range: 7:5-7:54
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:54
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 7:23-7:24
           name: "f"
@@ -255,7 +259,7 @@ SEMICOLON (10:21-10:22)
   )
   (FunctionDeclaration
     range: 9:1-9:53
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 9:12-9:16
       name: "test"

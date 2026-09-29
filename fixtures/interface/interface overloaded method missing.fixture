@@ -114,6 +114,7 @@ RIGHT_BRACE (7:1-7:2)
   )
   (ClassDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:20
       name: "NumberPrinter"
@@ -126,8 +127,10 @@ RIGHT_BRACE (7:1-7:2)
     (MemberDeclaration
       range: 6:5-6:65
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:65
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:25
           name: "describe"

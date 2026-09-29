@@ -3,7 +3,7 @@ package com.github.andreasarvidsson.eld.parser;
 import java.lang.reflect.RecordComponent;
 import java.util.List;
 import java.util.Objects;
-
+import java.util.stream.Collectors;
 import org.jspecify.annotations.Nullable;
 
 public class AstPrinter {
@@ -62,16 +62,19 @@ public class AstPrinter {
                 continue;
             }
 
-            try {
-                final Object value = component.getAccessor().invoke(node);
-                if (
-                    (component.getName().equals("async")
-                        || component.getName().equals("staticMember")
-                        || component.getName().equals("abstractClass"))
-                        && Boolean.FALSE.equals(value)
-                ) {
+            if (component.getName().equals("modifiers")) {
+                if (node instanceof ClassDeclaration cls) {
+                    appendModifiers(output, cls.modifiers(), depth + 1);
                     continue;
                 }
+                if (node instanceof FunctionDeclaration func) {
+                    appendModifiers(output, func.modifiers(), depth + 1);
+                    continue;
+                }
+            }
+
+            try {
+                final Object value = component.getAccessor().invoke(node);
                 if (value instanceof List<?>) {
                     append(output, value, depth);
                 }
@@ -120,6 +123,20 @@ public class AstPrinter {
             }
         }
         output.append('"');
+    }
+
+    private static void appendModifiers(
+        final StringBuilder output,
+        List<? extends Enum<?>> modifiers,
+        final int depth
+    ) {
+        newline(output, depth);
+        output.append("modifiers: ");
+        output.append(
+            modifiers.stream()
+                .map(Enum::name)
+                .collect(Collectors.joining(", ", "[", "]"))
+        );
     }
 
     private static void newline(final StringBuilder output, final int depth) {

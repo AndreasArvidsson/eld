@@ -271,11 +271,11 @@ Resolved types:
   5:5-5:9 -> Direction
 
 Declarations:
-  1:6-1:15 -> class Direction
-  2:5-2:10 -> const NORTH: Direction
-  3:5-3:10 -> const SOUTH: Direction
-  4:5-4:9 -> const EAST: Direction
-  5:5-5:9 -> const WEST: Direction
+  1:6-1:15 -> enum Direction
+  2:5-2:10 -> public static const NORTH: Direction
+  3:5-3:10 -> public static const SOUTH: Direction
+  4:5-4:9 -> public static const EAST: Direction
+  5:5-5:9 -> public static const WEST: Direction
 
 References:
   2:5-2:10 -> 1:6-1:15

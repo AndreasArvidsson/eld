@@ -1,10 +1,16 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import com.github.andreasarvidsson.eld.Range;
+import com.github.andreasarvidsson.eld.parser.ClassModifier;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 
-public record ClassSymbol(IdentifierDeclaration declaration, ClassType type)
-    implements ClassDeclarationSymbol {
+public record ClassSymbol(
+    IdentifierDeclaration declaration, ClassType type,
+    List<@NonNull ClassModifier> modifiers
+) implements ClassDeclarationSymbol {
 
     @Override
     public String name() {
@@ -18,7 +24,12 @@ public record ClassSymbol(IdentifierDeclaration declaration, ClassType type)
 
     @Override
     public String toString() {
-        return "class %s".formatted(name());
+        final String modifierText =
+            modifiers.stream()
+                .map(modifier -> modifier.value())
+                .collect(Collectors.joining(" "));
+        final String prefix = modifierText.isEmpty() ? "" : modifierText + " ";
+        return "%sclass %s".formatted(prefix, name());
     }
 
 }

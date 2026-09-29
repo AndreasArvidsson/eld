@@ -103,6 +103,7 @@ SEMICOLON (12:17-12:18)
   )
   (ClassDeclaration
     range: 4:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:10
       name: "Box"
@@ -115,6 +116,7 @@ SEMICOLON (12:17-12:18)
     (MemberDeclaration
       range: 5:5-5:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 5:12-5:26
         mutability: VAR
@@ -289,7 +291,7 @@ Declarations:
   1:11-1:16 -> interface Value
   2:9-2:14 -> var value: i32
   4:7-4:10 -> class Box
-  5:16-5:21 -> var value: i32
+  5:16-5:21 -> public var value: i32
   7:7-7:10 -> const box: Box
   8:7-8:12 -> const value: Value
 

@@ -371,6 +371,7 @@ RIGHT_BRACE (46:1-46:2)
   range: 1:1-46:2
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -379,6 +380,7 @@ RIGHT_BRACE (46:1-46:2)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:27
         mutability: VAR
@@ -395,6 +397,7 @@ RIGHT_BRACE (46:1-46:2)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-5:6
         (FunctionParameter
@@ -781,6 +784,7 @@ RIGHT_BRACE (46:1-46:2)
   )
   (FunctionDeclaration
     range: 25:1-27:2
+    modifiers: []
     (IdentifierDeclaration
       range: 25:6-25:14
       name: "identity"
@@ -822,6 +826,7 @@ RIGHT_BRACE (46:1-46:2)
   )
   (FunctionDeclaration
     range: 29:1-31:2
+    modifiers: []
     (IdentifierDeclaration
       range: 29:6-29:13
       name: "consume"
@@ -1354,8 +1359,8 @@ Conversions:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:16-2:21 -> var value: i32
-  3:12-5:6 -> constructor(value: i32)
+  2:16-2:21 -> public var value: i32
+  3:12-5:6 -> public constructor(value: i32)
   3:24-3:29 -> const value: i32
   8:7-8:14 -> const mutable: [Foo]
   12:7-12:12 -> const fixed: const [Foo]

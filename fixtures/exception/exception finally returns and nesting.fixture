@@ -160,6 +160,7 @@ SEMICOLON (31:20-31:21)
   )
   (FunctionDeclaration
     range: 2:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:11
       name: "saved"
@@ -218,6 +219,7 @@ SEMICOLON (31:20-31:21)
   )
   (FunctionDeclaration
     range: 10:1-20:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:6-10:12
       name: "nested"
@@ -288,6 +290,7 @@ SEMICOLON (31:20-31:21)
   )
   (FunctionDeclaration
     range: 21:1-27:2
+    modifiers: []
     (IdentifierDeclaration
       range: 21:6-21:16
       name: "overridden"

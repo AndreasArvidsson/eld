@@ -126,6 +126,7 @@ SEMICOLON (26:32-26:33)
   range: 1:1-26:33
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Value"
@@ -134,8 +135,10 @@ SEMICOLON (26:32-26:33)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:22
           name: "value"
@@ -160,6 +163,7 @@ SEMICOLON (26:32-26:33)
   )
   (ClassDeclaration
     range: 7:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:20
       name: "DetailedValue"
@@ -171,9 +175,10 @@ SEMICOLON (26:32-26:33)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 8:26-8:31
           name: "value"
@@ -216,6 +221,7 @@ SEMICOLON (26:32-26:33)
   )
   (ClassDeclaration
     range: 17:1-21:2
+    modifiers: []
     (IdentifierDeclaration
       range: 17:7-17:11
       name: "Base"
@@ -224,8 +230,10 @@ SEMICOLON (26:32-26:33)
     (MemberDeclaration
       range: 18:5-20:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 18:12-20:6
+        modifiers: []
         (IdentifierDeclaration
           range: 18:17-18:23
           name: "create"
@@ -252,6 +260,7 @@ SEMICOLON (26:32-26:33)
   )
   (ClassDeclaration
     range: 23:1-23:47
+    modifiers: []
     (IdentifierDeclaration
       range: 23:7-23:12
       name: "Child"
@@ -351,13 +360,13 @@ Resolved types:
 
 Declarations:
   1:7-1:12 -> class Value
-  2:17-2:22 -> func value() => i32
+  2:17-2:22 -> public func value() => i32
   7:7-7:20 -> class DetailedValue
-  8:26-8:31 -> override func value() => i32
+  8:26-8:31 -> public override func value() => i32
   13:11-13:18 -> interface Factory
   14:10-14:16 -> func create() => Value
   17:7-17:11 -> class Base
-  18:17-18:23 -> func create() => DetailedValue
+  18:17-18:23 -> public func create() => DetailedValue
   23:7-23:12 -> class Child
   25:7-25:14 -> const factory: Factory
 

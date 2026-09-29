@@ -52,7 +52,7 @@ SEMICOLON (7:13-7:14)
   range: 1:1-7:14
   (FunctionDeclaration
     range: 1:1-5:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 1:12-1:15
       name: "run"
@@ -155,7 +155,7 @@ Expression types:
   7:8-7:13 -> Promise<void>
 
 Declarations:
-  1:12-1:15 -> func run() => Promise<void>
+  1:12-1:15 -> async func run() => Promise<void>
   2:12-2:17 -> const value: i32
 
 References:

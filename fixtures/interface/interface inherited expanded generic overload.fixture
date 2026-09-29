@@ -351,6 +351,7 @@ SEMICOLON (23:34-23:35)
   )
   (ClassDeclaration
     range: 6:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:7-6:11
       name: "Base"
@@ -359,8 +360,10 @@ SEMICOLON (23:34-23:35)
     (MemberDeclaration
       range: 7:5-7:74
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:74
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:25
           name: "describe"
@@ -403,8 +406,10 @@ SEMICOLON (23:34-23:35)
     (MemberDeclaration
       range: 8:5-8:76
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-8:76
+        modifiers: []
         (IdentifierDeclaration
           range: 8:17-8:25
           name: "describe"
@@ -447,6 +452,7 @@ SEMICOLON (23:34-23:35)
   )
   (ClassDeclaration
     range: 10:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:7-10:12
       name: "Child"
@@ -462,8 +468,10 @@ SEMICOLON (23:34-23:35)
     (MemberDeclaration
       range: 11:5-11:75
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-11:75
+        modifiers: []
         (IdentifierDeclaration
           range: 11:17-11:25
           name: "describe"
@@ -889,12 +897,12 @@ Declarations:
   4:10-4:18 -> func describe(values: List<string>) => string
   4:19-4:25 -> const values: List<string>
   6:7-6:11 -> class Base
-  7:17-7:25 -> func describe(values: List<i32>) => string
+  7:17-7:25 -> public func describe(values: List<i32>) => string
   7:26-7:32 -> const values: List<i32>
-  8:17-8:25 -> func describe(values: List<string>) => string
+  8:17-8:25 -> public func describe(values: List<string>) => string
   8:26-8:32 -> const values: List<string>
   10:7-10:12 -> class Child
-  11:17-11:25 -> func describe(values: List<bool>) => string
+  11:17-11:25 -> public func describe(values: List<bool>) => string
   11:26-11:32 -> const values: List<bool>
   13:7-13:12 -> const child: Child
   14:7-14:15 -> const contract: Tri

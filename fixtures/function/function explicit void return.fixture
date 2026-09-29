@@ -64,6 +64,7 @@ SEMICOLON (10:14-10:15)
   range: 1:1-10:15
   (FunctionDeclaration
     range: 1:1-3:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:9
       name: "foo"

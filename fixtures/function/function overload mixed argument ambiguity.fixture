@@ -52,6 +52,7 @@ RIGHT_BRACE (2:64-2:65)
   range: 1:1-2:65
   (FunctionDeclaration
     range: 1:1-1:64
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:9
       name: "foo"
@@ -116,6 +117,7 @@ RIGHT_BRACE (2:64-2:65)
   )
   (FunctionDeclaration
     range: 2:1-2:65
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:9
       name: "foo"

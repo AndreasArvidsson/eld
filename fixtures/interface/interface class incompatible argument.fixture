@@ -81,6 +81,7 @@ RIGHT_BRACE (8:1-8:2)
   )
   (ClassDeclaration
     range: 4:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:11
       name: "Impl"
@@ -93,8 +94,10 @@ RIGHT_BRACE (8:1-8:2)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 5:17-5:22
           name: "apply"

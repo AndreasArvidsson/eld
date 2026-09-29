@@ -86,6 +86,7 @@ SEMICOLON (17:31-17:32)
   range: 1:1-17:32
   (ClassDeclaration
     range: 1:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -94,9 +95,10 @@ SEMICOLON (17:31-17:32)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 2:5-4:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 2:16-2:21
           name: "value"
@@ -121,9 +123,10 @@ SEMICOLON (17:31-17:32)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 6:23-6:30
           name: "doubled"
@@ -165,6 +168,7 @@ SEMICOLON (17:31-17:32)
   )
   (ClassDeclaration
     range: 11:1-15:2
+    modifiers: []
     (IdentifierDeclaration
       range: 11:7-11:14
       name: "Derived"
@@ -176,8 +180,10 @@ SEMICOLON (17:31-17:32)
     (MemberDeclaration
       range: 12:5-14:6
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 12:5-14:6
+        modifiers: []
         (IdentifierDeclaration
           range: 12:10-12:15
           name: "value"
@@ -257,7 +263,7 @@ Resolved types:
 Declarations:
   1:7-1:11 -> class Base
   2:16-2:21 -> const func value() => i32
-  6:23-6:30 -> const func doubled() => i32
+  6:23-6:30 -> public const func doubled() => i32
   11:7-11:14 -> class Derived
   12:10-12:15 -> func value() => i32
 

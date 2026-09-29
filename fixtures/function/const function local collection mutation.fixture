@@ -61,7 +61,7 @@ SEMICOLON (8:21-8:22)
   range: 1:1-8:22
   (FunctionDeclaration
     range: 1:1-6:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 1:12-1:23
       name: "firstSorted"

@@ -83,6 +83,7 @@ SEMICOLON (9:14-9:15)
   )
   (FunctionDeclaration
     range: 2:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:9
       name: "run"

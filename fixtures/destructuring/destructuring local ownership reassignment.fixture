@@ -90,7 +90,7 @@ RIGHT_BRACE (7:1-7:2)
   )
   (FunctionDeclaration
     range: 2:1-7:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 2:12-2:18
       name: "mutate"

@@ -170,6 +170,7 @@ SEMICOLON (17:25-17:26)
   range: 1:1-17:26
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:13
       name: "Person"
@@ -178,6 +179,7 @@ SEMICOLON (17:25-17:26)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:27
         mutability: CONST
@@ -194,6 +196,7 @@ SEMICOLON (17:25-17:26)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-5:6
         (FunctionParameter
@@ -236,6 +239,7 @@ SEMICOLON (17:25-17:26)
   )
   (ClassDeclaration
     range: 7:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:12
       name: "ByAge"
@@ -252,8 +256,10 @@ SEMICOLON (17:25-17:26)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
+        modifiers: []
         (IdentifierDeclaration
           range: 8:17-8:24
           name: "compare"
@@ -616,11 +622,11 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> class Person
-  2:18-2:21 -> const age: i32
-  3:12-5:6 -> constructor(age: i32)
+  2:18-2:21 -> public const age: i32
+  3:12-5:6 -> public constructor(age: i32)
   3:24-3:27 -> const age: i32
   7:7-7:12 -> class ByAge
-  8:17-8:24 -> func compare(a: Person, b: Person) => i32
+  8:17-8:24 -> public func compare(a: Person, b: Person) => i32
   8:25-8:26 -> const a: Person
   8:36-8:37 -> const b: Person
   12:7-12:13 -> const people: List<Person>

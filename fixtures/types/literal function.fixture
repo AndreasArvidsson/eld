@@ -116,6 +116,7 @@ SEMICOLON (6:16-6:17)
   )
   (FunctionDeclaration
     range: 3:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 3:6-3:12
       name: "status"

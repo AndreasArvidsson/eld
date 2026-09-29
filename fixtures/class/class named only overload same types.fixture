@@ -180,6 +180,7 @@ SEMICOLON (13:23-13:24)
   )
   (ClassDeclaration
     range: 6:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:7-6:11
       name: "Impl"
@@ -192,8 +193,10 @@ SEMICOLON (13:23-13:24)
     (MemberDeclaration
       range: 7:5-7:53
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:53
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:20
           name: "foo"
@@ -240,8 +243,10 @@ SEMICOLON (13:23-13:24)
     (MemberDeclaration
       range: 8:5-8:53
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-8:53
+        modifiers: []
         (IdentifierDeclaration
           range: 8:17-8:20
           name: "foo"
@@ -424,9 +429,9 @@ Declarations:
   3:10-3:13 -> func foo(*, b: i32) => i32
   3:17-3:18 -> const b: i32
   6:7-6:11 -> class Impl
-  7:17-7:20 -> func foo(*, a: i32) => i32
+  7:17-7:20 -> public func foo(*, a: i32) => i32
   7:24-7:25 -> const a: i32
-  8:17-8:20 -> func foo(*, b: i32) => i32
+  8:17-8:20 -> public func foo(*, b: i32) => i32
   8:24-8:25 -> const b: i32
   11:7-11:12 -> const calls: Calls
 

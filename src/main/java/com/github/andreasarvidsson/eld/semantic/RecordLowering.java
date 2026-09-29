@@ -114,7 +114,6 @@ public final class RecordLowering {
         );
         final FunctionDeclaration copy =
             new FunctionDeclaration(
-                false,
                 List.of(),
                 new IdentifierDeclaration("copy", record.name().range()),
                 copyParameters,
@@ -149,7 +148,7 @@ public final class RecordLowering {
         }
         members.addAll(record.methods());
         return new ClassDeclaration(
-            false,
+            List.of(),
             record.name(),
             null,
             record.implementedInterfaces(),
@@ -189,7 +188,6 @@ public final class RecordLowering {
         parts.add(stringLiteral(")", range));
         final FunctionDeclaration method =
             new FunctionDeclaration(
-                false,
                 List.of(FunctionModifier.OVERRIDE),
                 new IdentifierDeclaration("toString", record.name().range()),
                 List.of(),

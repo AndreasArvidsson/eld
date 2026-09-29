@@ -46,6 +46,7 @@ RIGHT_BRACE (4:31-4:32)
   )
   (ClassDeclaration
     range: 4:1-4:32
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:12
       name: "Empty"

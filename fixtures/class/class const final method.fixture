@@ -66,6 +66,7 @@ SEMICOLON (10:28-10:29)
   range: 1:1-10:29
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Value"
@@ -74,6 +75,7 @@ SEMICOLON (10:28-10:29)
     (MemberDeclaration
       range: 2:5-2:22
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 2:5-2:22
         mutability: CONST
@@ -92,10 +94,10 @@ SEMICOLON (10:28-10:29)
     (MemberDeclaration
       range: 4:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-7:6
-        CONST
-        FINAL
+        modifiers: [FINAL, CONST]
         (IdentifierDeclaration
           range: 4:29-4:35
           name: "double"
@@ -217,7 +219,7 @@ Resolved types:
 Declarations:
   1:7-1:12 -> class Value
   2:11-2:17 -> const factor: i32
-  4:29-4:35 -> const final func double(value?: i32) => i32
+  4:29-4:35 -> public final const func double(value?: i32) => i32
   4:36-4:41 -> const value: i32
   5:13-5:19 -> var result: i32
 

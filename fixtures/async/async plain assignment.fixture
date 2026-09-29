@@ -205,6 +205,7 @@ SEMICOLON (24:13-24:14)
   )
   (ClassDeclaration
     range: 4:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:10
       name: "Box"
@@ -213,6 +214,7 @@ SEMICOLON (24:13-24:14)
     (MemberDeclaration
       range: 5:5-5:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 5:12-5:26
         mutability: VAR
@@ -247,6 +249,7 @@ SEMICOLON (24:13-24:14)
   )
   (FunctionDeclaration
     range: 9:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:6-9:13
       name: "nextBox"
@@ -283,7 +286,7 @@ SEMICOLON (24:13-24:14)
   )
   (FunctionDeclaration
     range: 14:1-22:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 14:12-14:15
       name: "run"
@@ -593,10 +596,10 @@ Declarations:
   1:5-1:11 -> var values: [i32]
   2:5-2:10 -> var index: i32
   4:7-4:10 -> class Box
-  5:16-5:21 -> var value: i32
+  5:16-5:21 -> public var value: i32
   7:5-7:8 -> var box: Box
   9:6-9:13 -> func nextBox() => Box
-  14:12-14:15 -> func run() => Promise<void>
+  14:12-14:15 -> async func run() => Promise<void>
 
 References:
   7:15-7:18 -> 4:7-4:10

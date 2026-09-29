@@ -121,6 +121,7 @@ RIGHT_BRACE (7:1-7:2)
   )
   (ClassDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:8
       name: "C"
@@ -133,8 +134,10 @@ RIGHT_BRACE (7:1-7:2)
     (MemberDeclaration
       range: 6:5-6:32
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:32
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:18
           name: "f"

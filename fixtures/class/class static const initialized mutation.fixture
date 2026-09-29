@@ -34,6 +34,7 @@ RIGHT_BRACE (7:1-7:2)
   range: 1:1-7:2
   (ClassDeclaration
     range: 1:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"

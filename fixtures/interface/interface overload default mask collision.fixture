@@ -198,6 +198,7 @@ SEMICOLON (11:23-11:24)
   )
   (ClassDeclaration
     range: 5:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:8
       name: "C"
@@ -210,8 +211,10 @@ SEMICOLON (11:23-11:24)
     (MemberDeclaration
       range: 6:5-6:55
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:55
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:18
           name: "f"
@@ -250,8 +253,10 @@ SEMICOLON (11:23-11:24)
     (MemberDeclaration
       range: 7:5-7:69
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:69
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:18
           name: "f"
@@ -439,9 +444,9 @@ Declarations:
   3:12-3:13 -> const x: string | null
   3:30-3:31 -> const y: i32
   5:7-5:8 -> class C
-  6:17-6:18 -> func f(x?: string) => string
+  6:17-6:18 -> public func f(x?: string) => string
   6:19-6:20 -> const x: string | null
-  7:17-7:18 -> func f(x: string | null, y: i32) => string
+  7:17-7:18 -> public func f(x: string | null, y: i32) => string
   7:19-7:20 -> const x: string | null
   7:37-7:38 -> const y: i32
   9:7-9:12 -> const value: I

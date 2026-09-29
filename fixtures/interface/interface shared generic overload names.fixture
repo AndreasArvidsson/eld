@@ -279,6 +279,7 @@ SEMICOLON (16:38-16:39)
   )
   (ClassDeclaration
     range: 8:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 8:7-8:11
       name: "Both"
@@ -295,8 +296,10 @@ SEMICOLON (16:38-16:39)
     (MemberDeclaration
       range: 9:5-9:67
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 9:12-9:67
+        modifiers: []
         (IdentifierDeclaration
           range: 9:17-9:18
           name: "f"
@@ -339,8 +342,10 @@ SEMICOLON (16:38-16:39)
     (MemberDeclaration
       range: 10:5-10:69
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 10:12-10:69
+        modifiers: []
         (IdentifierDeclaration
           range: 10:17-10:18
           name: "f"
@@ -597,9 +602,9 @@ Declarations:
   6:10-6:11 -> func f(values: List<i32>) => string
   6:12-6:18 -> const values: List<i32>
   8:7-8:11 -> class Both
-  9:17-9:18 -> func f(values: List<i32>) => string
+  9:17-9:18 -> public func f(values: List<i32>) => string
   9:19-9:25 -> const values: List<i32>
-  10:17-10:18 -> func f(values: List<string>) => string
+  10:17-10:18 -> public func f(values: List<string>) => string
   10:19-10:25 -> const values: List<string>
   12:7-12:17 -> const overloaded: Overloaded
   13:7-13:13 -> const single: Single

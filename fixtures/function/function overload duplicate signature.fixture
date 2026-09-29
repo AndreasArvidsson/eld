@@ -36,6 +36,7 @@ RIGHT_BRACE (2:43-2:44)
   range: 1:1-2:44
   (FunctionDeclaration
     range: 1:1-1:53
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:14
       name: "describe"
@@ -72,6 +73,7 @@ RIGHT_BRACE (2:43-2:44)
   )
   (FunctionDeclaration
     range: 2:1-2:44
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:14
       name: "describe"

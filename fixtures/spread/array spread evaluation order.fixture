@@ -163,6 +163,7 @@ SEMICOLON (12:14-12:15)
   )
   (FunctionDeclaration
     range: 3:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 3:6-3:12
       name: "spread"
@@ -217,6 +218,7 @@ SEMICOLON (12:14-12:15)
   )
   (FunctionDeclaration
     range: 6:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:6-6:11
       name: "value"

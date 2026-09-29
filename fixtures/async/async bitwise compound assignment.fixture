@@ -247,7 +247,7 @@ SEMICOLON (24:13-24:14)
   )
   (FunctionDeclaration
     range: 4:1-23:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 4:12-4:15
       name: "run"
@@ -730,7 +730,7 @@ Declarations:
   1:5-1:10 -> var value: i32
   2:5-2:11 -> var values: [i32]
   3:5-3:10 -> var index: i32
-  4:12-4:15 -> func run() => Promise<void>
+  4:12-4:15 -> async func run() => Promise<void>
   5:9-5:14 -> var local: i32
   9:9-9:13 -> var wide: i64
   11:9-11:15 -> var narrow: i8

@@ -645,6 +645,7 @@ SEMICOLON (77:35-77:36)
   range: 1:1-77:36
   (FunctionDeclaration
     range: 1:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:11
       name: "check"

@@ -78,6 +78,7 @@ RIGHT_BRACE (8:1-8:2)
   )
   (FunctionDeclaration
     range: 2:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:11
       name: "clear"

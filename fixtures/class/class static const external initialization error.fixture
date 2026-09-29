@@ -54,6 +54,7 @@ RIGHT_BRACE (13:1-13:2)
   range: 1:1-13:2
   (ClassDeclaration
     range: 1:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Owner"
@@ -110,6 +111,7 @@ RIGHT_BRACE (13:1-13:2)
   )
   (ClassDeclaration
     range: 9:1-13:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:12
       name: "Other"

@@ -57,6 +57,7 @@ RIGHT_BRACE (8:1-8:2)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PRIVATE
+      staticMember: false
       (ConstructorDeclaration
         range: 5:5-7:6
         (BlockStatement

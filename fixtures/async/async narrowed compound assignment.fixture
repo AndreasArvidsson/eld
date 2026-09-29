@@ -86,7 +86,7 @@ SEMICOLON (10:13-10:14)
   )
   (FunctionDeclaration
     range: 3:1-8:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 3:12-3:15
       name: "run"
@@ -207,7 +207,7 @@ Conversions:
 
 Declarations:
   1:5-1:10 -> var value: i32 | null
-  3:12-3:15 -> func run() => Promise<void>
+  3:12-3:15 -> async func run() => Promise<void>
 
 References:
   4:9-4:14 -> 1:5-1:10

@@ -94,6 +94,7 @@ SEMICOLON (12:13-12:14)
   )
   (FunctionDeclaration
     range: 3:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 3:6-3:12
       name: "mutate"
@@ -137,7 +138,7 @@ SEMICOLON (12:13-12:14)
   )
   (FunctionDeclaration
     range: 8:1-10:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 8:12-8:15
       name: "run"
@@ -233,7 +234,7 @@ Resolved types:
 Declarations:
   1:7-1:13 -> const values: [i32]
   3:6-3:12 -> func mutate() => i32
-  8:12-8:15 -> func run() => Promise<void>
+  8:12-8:15 -> async func run() => Promise<void>
 
 References:
   4:5-4:11 -> 1:7-1:13

@@ -90,7 +90,7 @@ SEMICOLON (15:26-15:27)
   range: 1:1-15:27
   (ClassDeclaration
     range: 1:1-6:2
-    abstractClass: true
+    modifiers: [ABSTRACT]
     (IdentifierDeclaration
       range: 1:16-1:20
       name: "Base"
@@ -99,9 +99,10 @@ SEMICOLON (15:26-15:27)
     (MemberDeclaration
       range: 2:5-2:38
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-2:38
-        ABSTRACT
+        modifiers: [ABSTRACT]
         (IdentifierDeclaration
           range: 2:26-2:31
           name: "value"
@@ -118,8 +119,10 @@ SEMICOLON (15:26-15:27)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-5:6
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:24
           name: "doubled"
@@ -161,6 +164,7 @@ SEMICOLON (15:26-15:27)
   )
   (ClassDeclaration
     range: 8:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 8:7-8:12
       name: "Child"
@@ -172,9 +176,10 @@ SEMICOLON (15:26-15:27)
     (MemberDeclaration
       range: 9:5-11:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 9:12-11:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 9:26-9:31
           name: "value"
@@ -269,11 +274,11 @@ Resolved types:
   14:17-14:21 -> Base
 
 Declarations:
-  1:16-1:20 -> class Base
-  2:26-2:31 -> abstract func value() => i32
-  3:17-3:24 -> func doubled() => i32
+  1:16-1:20 -> abstract class Base
+  2:26-2:31 -> public abstract func value() => i32
+  3:17-3:24 -> public func doubled() => i32
   8:7-8:12 -> class Child
-  9:26-9:31 -> override func value() => i32
+  9:26-9:31 -> public override func value() => i32
   14:7-14:15 -> const instance: Base
 
 References:

@@ -74,7 +74,6 @@ public final class EnumLowering {
                 Visibility.PUBLIC,
                 true,
                 new FunctionDeclaration(
-                    false,
                     List.of(),
                     new IdentifierDeclaration("values", range),
                     List.of(),
@@ -104,7 +103,6 @@ public final class EnumLowering {
         members.add(intrinsic("ordinal", "i32", false, range));
         final FunctionDeclaration valueOf =
             new FunctionDeclaration(
-                false,
                 List.of(),
                 new IdentifierDeclaration("valueOf", range),
                 List.of(
@@ -142,7 +140,7 @@ public final class EnumLowering {
             );
         }
         return new ClassDeclaration(
-            false,
+            List.of(),
             declaration.name(),
             null,
             declaration.implementedInterfaces(),
@@ -161,7 +159,6 @@ public final class EnumLowering {
             Visibility.PUBLIC,
             staticMember,
             new FunctionDeclaration(
-                false,
                 List.of(),
                 new IdentifierDeclaration(name, range),
                 List.of(),

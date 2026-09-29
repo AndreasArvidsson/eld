@@ -50,6 +50,7 @@ SEMICOLON (6:19-6:20)
   range: 1:1-6:20
   (FunctionDeclaration
     range: 1:1-3:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:9
       name: "sum"

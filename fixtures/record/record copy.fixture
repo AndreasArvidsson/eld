@@ -241,8 +241,10 @@ SEMICOLON (21:21-21:22)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:22
           name: "label"
@@ -821,7 +823,7 @@ Conversions:
 
 Declarations:
   1:8-1:15 -> record Options(name: string, value: i32)
-  2:17-2:22 -> func label() => string
+  2:17-2:22 -> public func label() => string
   6:8-6:19 -> record Measurement(total: i64, ratio: f64, note: string | null)
   8:7-8:15 -> const original: Options
   9:7-9:14 -> const updated: Options

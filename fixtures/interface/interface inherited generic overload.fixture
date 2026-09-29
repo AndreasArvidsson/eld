@@ -323,6 +323,7 @@ SEMICOLON (19:31-19:32)
   )
   (ClassDeclaration
     range: 8:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 8:7-8:11
       name: "Both"
@@ -335,8 +336,10 @@ SEMICOLON (19:31-19:32)
     (MemberDeclaration
       range: 9:5-9:72
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 9:12-9:72
+        modifiers: []
         (IdentifierDeclaration
           range: 9:17-9:25
           name: "describe"
@@ -379,8 +382,10 @@ SEMICOLON (19:31-19:32)
     (MemberDeclaration
       range: 10:5-10:76
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 10:12-10:76
+        modifiers: []
         (IdentifierDeclaration
           range: 10:17-10:25
           name: "describe"
@@ -423,8 +428,10 @@ SEMICOLON (19:31-19:32)
     (MemberDeclaration
       range: 11:5-11:74
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-11:74
+        modifiers: []
         (IdentifierDeclaration
           range: 11:17-11:25
           name: "describe"
@@ -732,11 +739,11 @@ Declarations:
   6:10-6:18 -> func describe(values: List<bool>) => string
   6:19-6:25 -> const values: List<bool>
   8:7-8:11 -> class Both
-  9:17-9:25 -> func describe(values: List<bool>) => string
+  9:17-9:25 -> public func describe(values: List<bool>) => string
   9:26-9:32 -> const values: List<bool>
-  10:17-10:25 -> func describe(values: List<string>) => string
+  10:17-10:25 -> public func describe(values: List<string>) => string
   10:26-10:32 -> const values: List<string>
-  11:17-11:25 -> func describe(values: List<i32>) => string
+  11:17-11:25 -> public func describe(values: List<i32>) => string
   11:26-11:32 -> const values: List<i32>
   13:7-13:14 -> const printer: Printer
   14:7-14:15 -> const integers: List<i32>

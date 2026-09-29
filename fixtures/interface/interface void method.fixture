@@ -119,6 +119,7 @@ SEMICOLON (13:19-13:20)
   )
   (ClassDeclaration
     range: 4:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:13
       name: "Person"
@@ -131,6 +132,7 @@ SEMICOLON (13:19-13:20)
     (MemberDeclaration
       range: 5:5-5:29
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 5:12-5:29
         mutability: VAR
@@ -149,8 +151,10 @@ SEMICOLON (13:19-13:20)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:23
           name: "rename"
@@ -304,8 +308,8 @@ Declarations:
   2:10-2:16 -> func rename(name: string) => void
   2:17-2:21 -> const name: string
   4:7-4:13 -> class Person
-  5:16-5:20 -> var name: string
-  6:17-6:23 -> func rename(name: string) => void
+  5:16-5:20 -> public var name: string
+  6:17-6:23 -> public func rename(name: string) => void
   6:24-6:28 -> const name: string
   10:7-10:13 -> const person: Person
   11:7-11:13 -> const action: Renamable

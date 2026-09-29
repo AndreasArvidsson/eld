@@ -24,6 +24,7 @@ SEMICOLON (2:25-2:26)
   range: 1:1-2:26
   (ClassDeclaration
     range: 1:1-1:13
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Cat"

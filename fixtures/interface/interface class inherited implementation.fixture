@@ -89,6 +89,7 @@ SEMICOLON (11:21-11:22)
   )
   (ClassDeclaration
     range: 4:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:11
       name: "Base"
@@ -97,8 +98,10 @@ SEMICOLON (11:21-11:22)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 5:17-5:21
           name: "read"
@@ -123,6 +126,7 @@ SEMICOLON (11:21-11:22)
   )
   (ClassDeclaration
     range: 9:1-9:46
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:12
       name: "Child"
@@ -205,7 +209,7 @@ Declarations:
   1:11-1:17 -> interface Reader
   2:10-2:14 -> func read() => i32
   4:7-4:11 -> class Base
-  5:17-5:21 -> func read() => i32
+  5:17-5:21 -> public func read() => i32
   9:7-9:12 -> class Child
   10:7-10:13 -> const reader: Reader
 

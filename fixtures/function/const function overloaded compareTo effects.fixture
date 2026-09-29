@@ -97,6 +97,7 @@ SEMICOLON (9:9-9:10)
   range: 1:1-9:10
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Value"
@@ -113,9 +114,10 @@ SEMICOLON (9:9-9:10)
     (MemberDeclaration
       range: 2:5-2:62
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-2:62
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 2:23-2:32
           name: "compareTo"
@@ -154,8 +156,10 @@ SEMICOLON (9:9-9:10)
     (MemberDeclaration
       range: 3:5-3:75
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:75
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:26
           name: "compareTo"
@@ -209,7 +213,7 @@ SEMICOLON (9:9-9:10)
   )
   (FunctionDeclaration
     range: 5:1-8:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 5:12-5:18
       name: "sorted"

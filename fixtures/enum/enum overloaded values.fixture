@@ -123,6 +123,7 @@ SEMICOLON (8:41-8:42)
       staticMember: true
       (FunctionDeclaration
         range: 3:19-3:73
+        modifiers: []
         (IdentifierDeclaration
           range: 3:24-3:30
           name: "values"
@@ -168,6 +169,7 @@ SEMICOLON (8:41-8:42)
       staticMember: true
       (FunctionDeclaration
         range: 4:19-4:76
+        modifiers: []
         (IdentifierDeclaration
           range: 4:24-4:30
           name: "values"
@@ -381,11 +383,11 @@ Resolved types:
   8:30-8:36 -> string
 
 Declarations:
-  1:6-1:7 -> class E
-  2:5-2:6 -> const A: E
-  3:24-3:30 -> func values(x: List<i32>) => string
+  1:6-1:7 -> enum E
+  2:5-2:6 -> public static const A: E
+  3:24-3:30 -> public static func values(x: List<i32>) => string
   3:31-3:32 -> const x: List<i32>
-  4:24-4:30 -> func values(x: List<string>) => string
+  4:24-4:30 -> public static func values(x: List<string>) => string
   4:31-4:32 -> const x: List<string>
 
 References:

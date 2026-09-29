@@ -49,6 +49,7 @@ SEMICOLON (5:15-5:16)
   range: 1:1-5:16
   (FunctionDeclaration
     range: 1:1-1:48
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:10
       name: "pick"

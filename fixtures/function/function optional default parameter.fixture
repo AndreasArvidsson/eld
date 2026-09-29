@@ -25,6 +25,7 @@ RIGHT_BRACE (1:32-1:33)
   range: 1:1-1:33
   (FunctionDeclaration
     range: 1:1-1:33
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:9
       name: "foo"

@@ -215,6 +215,7 @@ RIGHT_BRACE (17:1-17:2)
   )
   (ClassDeclaration
     range: 9:1-9:14
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:11
       name: "Base"
@@ -223,6 +224,7 @@ RIGHT_BRACE (17:1-17:2)
   )
   (ClassDeclaration
     range: 10:1-10:28
+    modifiers: []
     (IdentifierDeclaration
       range: 10:7-10:12
       name: "Child"

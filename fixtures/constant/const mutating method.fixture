@@ -84,6 +84,7 @@ SEMICOLON (15:20-15:21)
   range: 1:1-15:21
   (ClassDeclaration
     range: 1:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -92,6 +93,7 @@ SEMICOLON (15:20-15:21)
     (MemberDeclaration
       range: 2:5-2:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 2:12-2:26
         mutability: VAR
@@ -110,8 +112,10 @@ SEMICOLON (15:20-15:21)
     (MemberDeclaration
       range: 4:5-6:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-6:6
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:25
           name: "getValue"
@@ -141,8 +145,10 @@ SEMICOLON (15:20-15:21)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
+        modifiers: []
         (IdentifierDeclaration
           range: 8:17-8:26
           name: "increment"

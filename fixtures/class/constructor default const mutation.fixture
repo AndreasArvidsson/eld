@@ -34,6 +34,7 @@ RIGHT_BRACE (6:1-6:2)
   range: 1:1-6:2
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -42,6 +43,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 2:5-2:21
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 2:5-2:21
         mutability: CONST
@@ -60,6 +62,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PRIVATE
+      staticMember: false
       (ConstructorDeclaration
         range: 3:5-5:6
         (BlockStatement

@@ -42,6 +42,7 @@ SEMICOLON (5:23-5:24)
   range: 1:1-5:24
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"
@@ -141,8 +142,8 @@ Expression types:
 
 Declarations:
   1:7-1:14 -> class Example
-  2:25-2:29 -> const base: i32
-  3:25-3:32 -> const doubled: i32
+  2:25-2:29 -> public static const base: i32
+  3:25-3:32 -> public static const doubled: i32
 
 References:
   3:35-3:42 -> 1:7-1:14

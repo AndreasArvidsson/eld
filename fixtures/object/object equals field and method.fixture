@@ -85,6 +85,7 @@ SEMICOLON (10:18-10:19)
   range: 1:1-10:19
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Box"
@@ -93,6 +94,7 @@ SEMICOLON (10:18-10:19)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 2:12-2:27
         mutability: VAR
@@ -114,6 +116,7 @@ SEMICOLON (10:18-10:19)
       staticMember: true
       (FunctionDeclaration
         range: 3:19-3:67
+        modifiers: []
         (IdentifierDeclaration
           range: 3:24-3:29
           name: "equal"
@@ -304,8 +307,8 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Box
-  2:16-2:22 -> var equals: i32
-  3:24-3:29 -> func equal(a: Box, b: Box) => bool
+  2:16-2:22 -> public var equals: i32
+  3:24-3:29 -> public static func equal(a: Box, b: Box) => bool
   3:30-3:31 -> const a: Box
   3:38-3:39 -> const b: Box
   6:7-6:10 -> const box: Box

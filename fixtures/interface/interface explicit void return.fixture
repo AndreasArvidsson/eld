@@ -103,6 +103,7 @@ RIGHT_BRACE (12:1-12:2)
   )
   (ClassDeclaration
     range: 5:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:12
       name: "TaskA"
@@ -115,8 +116,10 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 6:5-6:30
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:30
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:20
           name: "foo"
@@ -133,8 +136,10 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 7:5-7:30
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:30
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:20
           name: "bar"
@@ -151,6 +156,7 @@ RIGHT_BRACE (12:1-12:2)
   )
   (ClassDeclaration
     range: 9:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:12
       name: "TaskB"
@@ -163,8 +169,10 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 10:5-10:25
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 10:12-10:25
+        modifiers: []
         (IdentifierDeclaration
           range: 10:17-10:20
           name: "foo"
@@ -178,8 +186,10 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 11:5-11:25
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-11:25
+        modifiers: []
         (IdentifierDeclaration
           range: 11:17-11:20
           name: "bar"
@@ -207,11 +217,11 @@ Declarations:
   2:10-2:13 -> func foo() => void
   3:10-3:13 -> func bar() => void
   5:7-5:12 -> class TaskA
-  6:17-6:20 -> func foo() => void
-  7:17-7:20 -> func bar() => void
+  6:17-6:20 -> public func foo() => void
+  7:17-7:20 -> public func bar() => void
   9:7-9:12 -> class TaskB
-  10:17-10:20 -> func foo() => void
-  11:17-11:20 -> func bar() => void
+  10:17-10:20 -> public func foo() => void
+  11:17-11:20 -> public func bar() => void
 
 --- BYTECODE ---
 

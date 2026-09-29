@@ -54,6 +54,7 @@ RIGHT_BRACE (6:1-6:2)
   )
   (ClassDeclaration
     range: 4:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:10
       name: "Box"
@@ -66,6 +67,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 5:5-5:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 5:12-5:27
         mutability: VAR

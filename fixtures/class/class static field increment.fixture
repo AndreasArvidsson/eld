@@ -85,6 +85,7 @@ SEMICOLON (11:20-11:21)
   range: 1:1-11:21
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"
@@ -321,8 +322,8 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Example
-  2:23-2:28 -> var value: i32
-  3:23-3:27 -> var wide: i64
+  2:23-2:28 -> public static var value: i32
+  3:23-3:27 -> public static var wide: i64
 
 References:
   6:1-6:6 -> builtin print

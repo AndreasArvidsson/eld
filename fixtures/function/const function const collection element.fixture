@@ -115,6 +115,7 @@ SEMICOLON (17:18-17:19)
   range: 1:1-17:19
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Value"
@@ -126,7 +127,7 @@ SEMICOLON (17:18-17:19)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-4:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 2:30-2:35
           name: "equal"
@@ -179,10 +180,10 @@ SEMICOLON (17:18-17:19)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
-        CONST
-        OVERRIDE
+        modifiers: [CONST, OVERRIDE]
         (IdentifierDeclaration
           range: 5:32-5:40
           name: "hashCode"
@@ -207,7 +208,7 @@ SEMICOLON (17:18-17:19)
   )
   (FunctionDeclaration
     range: 10:1-15:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 10:12-10:20
       name: "addValue"
@@ -363,10 +364,10 @@ Resolved types:
 
 Declarations:
   1:7-1:12 -> class Value
-  2:30-2:35 -> const func equal(a: Value, b: Value) => bool
+  2:30-2:35 -> public static const func equal(a: Value, b: Value) => bool
   2:36-2:37 -> const a: Value
   2:46-2:47 -> const b: Value
-  5:32-5:40 -> const override func hashCode() => i32
+  5:32-5:40 -> public const override func hashCode() => i32
   10:12-10:20 -> const func addValue() => i32
   11:9-11:15 -> var values: HashSet<Value>
 

@@ -134,6 +134,7 @@ SEMICOLON (14:18-14:19)
   )
   (ClassDeclaration
     range: 4:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:12
       name: "Value"
@@ -146,6 +147,7 @@ SEMICOLON (14:18-14:19)
     (MemberDeclaration
       range: 5:5-5:27
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 5:12-5:27
         mutability: VAR
@@ -407,7 +409,7 @@ Declarations:
   1:11-1:14 -> interface Box
   2:9-2:15 -> var equals: i32
   4:7-4:12 -> class Value
-  5:16-5:22 -> var equals: i32
+  5:16-5:22 -> public var equals: i32
   7:7-7:10 -> const box: Box
   10:7-10:11 -> const same: (Box) => bool
 

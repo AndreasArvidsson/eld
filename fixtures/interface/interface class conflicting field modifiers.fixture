@@ -87,6 +87,7 @@ RIGHT_BRACE (9:1-9:2)
   )
   (ClassDeclaration
     range: 7:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:10
       name: "Box"
@@ -103,6 +104,7 @@ RIGHT_BRACE (9:1-9:2)
     (MemberDeclaration
       range: 8:5-8:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 8:12-8:26
         mutability: VAR

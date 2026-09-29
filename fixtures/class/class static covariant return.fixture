@@ -88,6 +88,7 @@ SEMICOLON (15:32-15:33)
   range: 1:1-15:33
   (ClassDeclaration
     range: 1:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -99,6 +100,7 @@ SEMICOLON (15:32-15:33)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:24-2:30
           name: "create"
@@ -125,8 +127,10 @@ SEMICOLON (15:32-15:33)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:22
           name: "value"
@@ -151,6 +155,7 @@ SEMICOLON (15:32-15:33)
   )
   (ClassDeclaration
     range: 10:1-14:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:7-10:14
       name: "Derived"
@@ -165,7 +170,7 @@ SEMICOLON (15:32-15:33)
       staticMember: true
       (FunctionDeclaration
         range: 11:19-13:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 11:33-11:39
           name: "create"

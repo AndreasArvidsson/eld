@@ -43,6 +43,7 @@ RIGHT_BRACE (2:29-2:30)
   )
   (ClassDeclaration
     range: 2:1-2:30
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:14
       name: "Derived"

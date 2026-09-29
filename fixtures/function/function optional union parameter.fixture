@@ -21,6 +21,7 @@ RIGHT_BRACE (1:36-1:37)
   range: 1:1-1:37
   (FunctionDeclaration
     range: 1:1-1:37
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:12
       name: "choose"

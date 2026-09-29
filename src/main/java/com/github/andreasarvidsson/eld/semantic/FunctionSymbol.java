@@ -1,16 +1,16 @@
 package com.github.andreasarvidsson.eld.semantic;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.FunctionModifier;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
-import java.util.List;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 public record FunctionSymbol(
     IdentifierDeclaration declaration, FunctionType type,
-    List<FunctionModifier> modifiers
+    List<@NonNull FunctionModifier> modifiers
 ) implements Symbol {
 
     public FunctionSymbol(
@@ -54,11 +54,10 @@ public record FunctionSymbol(
     ) {
         final String modifierText =
             modifiers.stream()
-                .map(modifier -> modifier.toString().toLowerCase(Locale.ROOT))
+                .map(modifier -> modifier.value())
                 .collect(Collectors.joining(" "));
-        final String prefix =
-            modifierText.isEmpty() ? "func " : modifierText + " func ";
-        return "%s%s(%s) => %s".formatted(
+        final String prefix = modifierText.isEmpty() ? "" : modifierText + " ";
+        return "%sfunc %s(%s) => %s".formatted(
             prefix,
             name(),
             type.formatLabeledParameters(parameterTypes, omittable),

@@ -33,6 +33,7 @@ RIGHT_BRACE (6:1-6:2)
   range: 1:1-6:2
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -41,6 +42,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 2:5-2:19
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 2:5-2:19
         mutability: VAR
@@ -59,8 +61,10 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 3:5-5:6
+        modifiers: []
         (IdentifierDeclaration
           range: 3:10-3:18
           name: "getValue"

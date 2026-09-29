@@ -399,6 +399,7 @@ SEMICOLON (25:32-25:33)
   )
   (ClassDeclaration
     range: 9:1-9:14
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:11
       name: "Root"
@@ -407,6 +408,7 @@ SEMICOLON (25:32-25:33)
   )
   (ClassDeclaration
     range: 10:1-13:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:7-10:12
       name: "First"
@@ -422,8 +424,10 @@ SEMICOLON (25:32-25:33)
     (MemberDeclaration
       range: 11:5-11:76
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-11:76
+        modifiers: []
         (IdentifierDeclaration
           range: 11:17-11:25
           name: "describe"
@@ -466,8 +470,10 @@ SEMICOLON (25:32-25:33)
     (MemberDeclaration
       range: 12:5-12:82
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 12:12-12:82
+        modifiers: []
         (IdentifierDeclaration
           range: 12:17-12:25
           name: "describe"
@@ -510,6 +516,7 @@ SEMICOLON (25:32-25:33)
   )
   (ClassDeclaration
     range: 14:1-17:2
+    modifiers: []
     (IdentifierDeclaration
       range: 14:7-14:13
       name: "Second"
@@ -525,8 +532,10 @@ SEMICOLON (25:32-25:33)
     (MemberDeclaration
       range: 15:5-15:77
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 15:12-15:77
+        modifiers: []
         (IdentifierDeclaration
           range: 15:17-15:25
           name: "describe"
@@ -569,8 +578,10 @@ SEMICOLON (25:32-25:33)
     (MemberDeclaration
       range: 16:5-16:83
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 16:12-16:83
+        modifiers: []
         (IdentifierDeclaration
           range: 16:17-16:25
           name: "describe"
@@ -914,14 +925,14 @@ Declarations:
   7:19-7:25 -> const values: List<i32>
   9:7-9:11 -> class Root
   10:7-10:12 -> class First
-  11:17-11:25 -> func describe(values: List<i32>) => string
+  11:17-11:25 -> public func describe(values: List<i32>) => string
   11:26-11:32 -> const values: List<i32>
-  12:17-12:25 -> func describe(values: List<string>) => string
+  12:17-12:25 -> public func describe(values: List<string>) => string
   12:26-12:32 -> const values: List<string>
   14:7-14:13 -> class Second
-  15:17-15:25 -> func describe(values: List<i32>) => string
+  15:17-15:25 -> public func describe(values: List<i32>) => string
   15:26-15:32 -> const values: List<i32>
-  16:17-16:25 -> func describe(values: List<string>) => string
+  16:17-16:25 -> public func describe(values: List<string>) => string
   16:26-16:32 -> const values: List<string>
   18:7-18:12 -> const first: A
   19:7-19:13 -> const second: B

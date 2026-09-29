@@ -80,6 +80,8 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<AstNode, Symbol> declarations =
         new IdentityHashMap<>();
+    private final IdentityHashMap<AstNode, MemberDeclaration> memberDeclarations =
+        new IdentityHashMap<>();
     private final Set<AstNode> syntheticDeclarations =
         Collections.newSetFromMap(new IdentityHashMap<>());
     private final IdentityHashMap<AstNode, Symbol> references =
@@ -632,6 +634,13 @@ public final class SemanticModel {
         final ClassType owner
     ) {
         classMemberOwners.put(symbol, owner);
+    }
+
+    public void setMemberDeclaration(
+        final AstNode declaration,
+        final MemberDeclaration member
+    ) {
+        memberDeclarations.put(declaration, member);
     }
 
     public ClassType getClassMemberOwner(final Symbol symbol) {
@@ -1187,7 +1196,12 @@ public final class SemanticModel {
             lines,
             "Declarations:",
             sourceDeclarations,
-            (declaration, symbol) -> formatDeclaration(symbol)
+            (declaration, symbol) -> {
+                final MemberDeclaration member =
+                    memberDeclarations.get(declaration);
+                return (member == null ? "" : member.getDeclarationPrefix())
+                    + formatDeclaration(symbol);
+            }
         );
         appendSection(
             lines,

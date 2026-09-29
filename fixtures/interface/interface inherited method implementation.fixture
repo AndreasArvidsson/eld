@@ -130,6 +130,7 @@ SEMICOLON (18:21-18:22)
   )
   (ClassDeclaration
     range: 9:1-15:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:11
       name: "Impl"
@@ -142,6 +143,7 @@ SEMICOLON (18:21-18:22)
     (MemberDeclaration
       range: 10:5-10:34
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 10:12-10:34
         mutability: CONST
@@ -160,8 +162,10 @@ SEMICOLON (18:21-18:22)
     (MemberDeclaration
       range: 12:5-14:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 12:12-14:6
+        modifiers: []
         (IdentifierDeclaration
           range: 12:17-12:21
           name: "read"
@@ -257,8 +261,8 @@ Declarations:
   5:11-5:22 -> interface NamedReader
   6:11-6:15 -> const name: string
   9:7-9:11 -> class Impl
-  10:18-10:22 -> const name: string
-  12:17-12:21 -> func read() => i32
+  10:18-10:22 -> public const name: string
+  12:17-12:21 -> public func read() => i32
   17:7-17:13 -> const reader: Reader
 
 References:

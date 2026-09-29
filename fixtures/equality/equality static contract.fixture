@@ -324,6 +324,7 @@ SEMICOLON (34:27-34:28)
   range: 1:1-34:28
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:13
       name: "Animal"
@@ -335,7 +336,7 @@ SEMICOLON (34:27-34:28)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-2:79
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 2:30-2:35
           name: "equal"
@@ -388,10 +389,10 @@ SEMICOLON (34:27-34:28)
     (MemberDeclaration
       range: 3:5-3:60
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:60
-        CONST
-        OVERRIDE
+        modifiers: [CONST, OVERRIDE]
         (IdentifierDeclaration
           range: 3:32-3:40
           name: "hashCode"
@@ -416,6 +417,7 @@ SEMICOLON (34:27-34:28)
   )
   (ClassDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:10
       name: "Cat"
@@ -430,7 +432,7 @@ SEMICOLON (34:27-34:28)
       staticMember: true
       (FunctionDeclaration
         range: 6:19-6:74
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 6:30-6:35
           name: "equal"
@@ -483,6 +485,7 @@ SEMICOLON (34:27-34:28)
   )
   (ClassDeclaration
     range: 8:1-8:28
+    modifiers: []
     (IdentifierDeclaration
       range: 8:7-8:10
       name: "Dog"
@@ -1214,12 +1217,12 @@ Conversions:
 
 Declarations:
   1:7-1:13 -> class Animal
-  2:30-2:35 -> const func equal(a: Animal, b: Animal) => bool
+  2:30-2:35 -> public static const func equal(a: Animal, b: Animal) => bool
   2:36-2:37 -> const a: Animal
   2:47-2:48 -> const b: Animal
-  3:32-3:40 -> const override func hashCode() => i32
+  3:32-3:40 -> public const override func hashCode() => i32
   5:7-5:10 -> class Cat
-  6:30-6:35 -> const func equal(a: Cat, b: Cat) => bool
+  6:30-6:35 -> public static const func equal(a: Cat, b: Cat) => bool
   6:36-6:37 -> const a: Cat
   6:44-6:45 -> const b: Cat
   8:7-8:10 -> class Dog

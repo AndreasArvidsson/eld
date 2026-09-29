@@ -127,6 +127,7 @@ SEMICOLON (26:30-26:31)
   range: 1:1-26:31
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:12
       name: "Value"
@@ -135,8 +136,10 @@ SEMICOLON (26:30-26:31)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:23
           name: "number"
@@ -161,6 +164,7 @@ SEMICOLON (26:30-26:31)
   )
   (ClassDeclaration
     range: 7:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:20
       name: "DetailedValue"
@@ -172,9 +176,10 @@ SEMICOLON (26:30-26:31)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 8:26-8:32
           name: "number"
@@ -217,7 +222,7 @@ SEMICOLON (26:30-26:31)
   )
   (ClassDeclaration
     range: 17:1-17:41
-    abstractClass: true
+    modifiers: [ABSTRACT]
     (IdentifierDeclaration
       range: 17:16-17:20
       name: "Base"
@@ -230,6 +235,7 @@ SEMICOLON (26:30-26:31)
   )
   (ClassDeclaration
     range: 19:1-23:2
+    modifiers: []
     (IdentifierDeclaration
       range: 19:7-19:12
       name: "Child"
@@ -241,8 +247,10 @@ SEMICOLON (26:30-26:31)
     (MemberDeclaration
       range: 20:5-22:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 20:12-22:6
+        modifiers: []
         (IdentifierDeclaration
           range: 20:17-20:21
           name: "read"
@@ -353,14 +361,14 @@ Resolved types:
 
 Declarations:
   1:7-1:12 -> class Value
-  2:17-2:23 -> func number() => i32
+  2:17-2:23 -> public func number() => i32
   7:7-7:20 -> class DetailedValue
-  8:26-8:32 -> override func number() => i32
+  8:26-8:32 -> public override func number() => i32
   13:11-13:17 -> interface Reader
   14:10-14:14 -> func read() => Value
-  17:16-17:20 -> class Base
+  17:16-17:20 -> abstract class Base
   19:7-19:12 -> class Child
-  20:17-20:21 -> func read() => DetailedValue
+  20:17-20:21 -> public func read() => DetailedValue
   25:7-25:13 -> const reader: Reader
 
 References:

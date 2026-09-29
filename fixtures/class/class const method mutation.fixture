@@ -48,6 +48,7 @@ SEMICOLON (9:26-9:27)
   range: 1:1-9:27
   (ClassDeclaration
     range: 1:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -56,6 +57,7 @@ SEMICOLON (9:26-9:27)
     (MemberDeclaration
       range: 2:5-2:19
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 2:5-2:19
         mutability: VAR
@@ -74,9 +76,10 @@ SEMICOLON (9:26-9:27)
     (MemberDeclaration
       range: 4:5-6:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-6:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 4:23-4:32
           name: "increment"

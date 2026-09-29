@@ -43,6 +43,7 @@ SEMICOLON (8:21-8:22)
   range: 1:1-8:22
   (ClassDeclaration
     range: 1:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"
@@ -138,7 +139,7 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Example
-  2:25-2:30 -> const value: i32
+  2:25-2:30 -> public static const value: i32
 
 References:
   5:9-5:16 -> 1:7-1:14

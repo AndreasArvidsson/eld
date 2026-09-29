@@ -167,7 +167,7 @@ SEMICOLON (10:13-10:14)
   )
   (FunctionDeclaration
     range: 6:1-8:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 6:12-6:15
       name: "run"
@@ -249,7 +249,7 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> const source: PromiseSource<i32>
-  6:12-6:15 -> func run() => Promise<void>
+  6:12-6:15 -> async func run() => Promise<void>
 
 References:
   2:1-2:7 -> 1:7-1:13

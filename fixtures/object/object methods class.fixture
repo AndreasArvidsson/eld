@@ -87,6 +87,7 @@ SEMICOLON (9:44-9:45)
   range: 1:1-9:45
   (ClassDeclaration
     range: 1:1-1:13
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Box"

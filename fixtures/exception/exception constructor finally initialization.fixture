@@ -65,6 +65,7 @@ SEMICOLON (12:22-12:23)
   range: 1:1-12:23
   (ClassDeclaration
     range: 1:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:15
       name: "Resource"
@@ -73,6 +74,7 @@ SEMICOLON (12:22-12:23)
     (MemberDeclaration
       range: 2:5-2:29
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:29
         mutability: CONST
@@ -89,6 +91,7 @@ SEMICOLON (12:22-12:23)
     (MemberDeclaration
       range: 3:5-9:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-9:6
         (BlockStatement
@@ -188,8 +191,8 @@ Resolved types:
 
 Declarations:
   1:7-1:15 -> class Resource
-  2:18-2:23 -> const value: i32
-  3:12-9:6 -> constructor()
+  2:18-2:23 -> public const value: i32
+  3:12-9:6 -> public constructor()
   11:7-11:15 -> const resource: Resource
 
 References:

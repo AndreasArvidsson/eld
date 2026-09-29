@@ -84,8 +84,10 @@ RIGHT_BRACE (7:1-7:2)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:21
           name: "name"
@@ -110,8 +112,10 @@ RIGHT_BRACE (7:1-7:2)
     (MemberDeclaration
       range: 5:5-5:27
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-5:27
+        modifiers: []
         (IdentifierDeclaration
           range: 5:17-5:22
           name: "value"
@@ -125,8 +129,10 @@ RIGHT_BRACE (7:1-7:2)
     (MemberDeclaration
       range: 6:5-6:29
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:29
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:24
           name: "unknown"
@@ -164,9 +170,9 @@ Resolved types:
 
 Declarations:
   1:8-1:11 -> record Foo(name: string, value: i32)
-  2:17-2:21 -> func name() => string
-  5:17-5:22 -> func value() => void
-  6:17-6:24 -> func unknown() => void
+  2:17-2:21 -> public func name() => string
+  5:17-5:22 -> public func value() => void
+  6:17-6:24 -> public func unknown() => void
 
 References:
   1:8-1:11 -> 1:8-1:11

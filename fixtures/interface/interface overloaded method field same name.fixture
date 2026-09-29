@@ -195,6 +195,7 @@ SEMICOLON (14:20-14:21)
   )
   (ClassDeclaration
     range: 6:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:7-6:11
       name: "Impl"
@@ -207,6 +208,7 @@ SEMICOLON (14:20-14:21)
     (MemberDeclaration
       range: 7:5-7:24
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 7:12-7:24
         mutability: CONST
@@ -225,8 +227,10 @@ SEMICOLON (14:20-14:21)
     (MemberDeclaration
       range: 8:5-8:52
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-8:52
+        modifiers: []
         (IdentifierDeclaration
           range: 8:17-8:18
           name: "f"
@@ -264,8 +268,10 @@ SEMICOLON (14:20-14:21)
     (MemberDeclaration
       range: 9:5-9:51
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 9:12-9:51
+        modifiers: []
         (IdentifierDeclaration
           range: 9:17-9:18
           name: "f"
@@ -451,10 +457,10 @@ Declarations:
   4:10-4:11 -> func f(value: string) => i32
   4:12-4:17 -> const value: string
   6:7-6:11 -> class Impl
-  7:18-7:19 -> const f: i32
-  8:17-8:18 -> func f(value: i32) => i32
+  7:18-7:19 -> public const f: i32
+  8:17-8:18 -> public func f(value: i32) => i32
   8:19-8:24 -> const value: i32
-  9:17-9:18 -> func f(value: string) => i32
+  9:17-9:18 -> public func f(value: string) => i32
   9:19-9:24 -> const value: string
   11:7-11:12 -> const value: Value
 

@@ -93,6 +93,7 @@ SEMICOLON (13:22-13:23)
   range: 1:1-13:23
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -123,6 +124,7 @@ SEMICOLON (13:22-13:23)
       staticMember: true
       (FunctionDeclaration
         range: 4:19-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 4:24-4:27
           name: "add"
@@ -344,8 +346,8 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Counter
-  2:23-2:28 -> var value: i32
-  4:24-4:27 -> func add(amount?: i32) => i32
+  2:23-2:28 -> public static var value: i32
+  4:24-4:27 -> public static func add(amount?: i32) => i32
   4:28-4:34 -> const amount: i32
 
 References:

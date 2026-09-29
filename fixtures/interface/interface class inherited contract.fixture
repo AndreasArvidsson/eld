@@ -117,6 +117,7 @@ SEMICOLON (12:19-12:20)
   )
   (ClassDeclaration
     range: 7:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:10
       name: "Box"
@@ -129,6 +130,7 @@ SEMICOLON (12:19-12:20)
     (MemberDeclaration
       range: 8:5-8:28
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 8:12-8:28
         mutability: CONST
@@ -147,6 +149,7 @@ SEMICOLON (12:19-12:20)
     (MemberDeclaration
       range: 9:5-9:31
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 9:12-9:31
         mutability: CONST
@@ -231,8 +234,8 @@ Declarations:
   4:11-4:21 -> interface NamedValue
   5:11-5:15 -> const name: string
   7:7-7:10 -> class Box
-  8:18-8:23 -> const value: i32
-  9:18-9:22 -> const name: string
+  8:18-8:23 -> public const value: i32
+  9:18-9:22 -> public const name: string
   11:7-11:12 -> const value: Value
 
 References:

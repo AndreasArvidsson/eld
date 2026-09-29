@@ -135,6 +135,7 @@ SEMICOLON (20:35-20:36)
   range: 1:1-20:36
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:17
       name: "PrivateFoo"
@@ -143,8 +144,10 @@ SEMICOLON (20:35-20:36)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 2:5-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:10-2:16
           name: "equals"
@@ -183,8 +186,10 @@ SEMICOLON (20:35-20:36)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 5:17-5:22
           name: "check"
@@ -222,6 +227,7 @@ SEMICOLON (20:35-20:36)
   )
   (ClassDeclaration
     range: 9:1-13:2
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:16
       name: "StaticFoo"
@@ -233,6 +239,7 @@ SEMICOLON (20:35-20:36)
       staticMember: true
       (FunctionDeclaration
         range: 10:19-12:6
+        modifiers: []
         (IdentifierDeclaration
           range: 10:24-10:30
           name: "equals"
@@ -465,9 +472,9 @@ Declarations:
   1:7-1:17 -> class PrivateFoo
   2:10-2:16 -> func equals(value: i32) => bool
   2:17-2:22 -> const value: i32
-  5:17-5:22 -> func check() => bool
+  5:17-5:22 -> public func check() => bool
   9:7-9:16 -> class StaticFoo
-  10:24-10:30 -> func equals(value: i32) => bool
+  10:24-10:30 -> public static func equals(value: i32) => bool
   10:31-10:36 -> const value: i32
   15:7-15:17 -> const privateFoo: PrivateFoo
   16:7-16:16 -> const staticFoo: StaticFoo

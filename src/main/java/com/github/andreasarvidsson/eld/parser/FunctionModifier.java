@@ -1,8 +1,15 @@
 package com.github.andreasarvidsson.eld.parser;
 
+import java.util.Locale;
+
 public enum FunctionModifier {
-    CONST,
+    ABSTRACT,
     FINAL,
-    OVERRIDE,
-    ABSTRACT
+    CONST,
+    ASYNC,
+    OVERRIDE;
+
+    public String value() {
+        return this.name().toLowerCase(Locale.ROOT);
+    }
 }

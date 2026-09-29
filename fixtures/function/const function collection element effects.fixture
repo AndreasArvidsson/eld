@@ -91,6 +91,7 @@ RIGHT_BRACE (12:1-12:2)
   )
   (ClassDeclaration
     range: 3:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 3:7-3:12
       name: "Value"
@@ -102,6 +103,7 @@ RIGHT_BRACE (12:1-12:2)
       staticMember: true
       (FunctionDeclaration
         range: 4:19-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 4:24-4:29
           name: "equal"
@@ -165,7 +167,7 @@ RIGHT_BRACE (12:1-12:2)
   )
   (FunctionDeclaration
     range: 10:1-12:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 10:12-10:20
       name: "contains"

@@ -101,6 +101,7 @@ SEMICOLON (12:28-12:29)
   range: 1:1-12:29
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -109,8 +110,10 @@ SEMICOLON (12:28-12:29)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:23
           name: "equals"
@@ -353,7 +356,7 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:17-2:23 -> func equals(value: i32) => bool
+  2:17-2:23 -> public func equals(value: i32) => bool
   2:24-2:29 -> const value: i32
   7:7-7:10 -> const foo: Foo
   8:7-8:14 -> const numeric: (i32) => bool

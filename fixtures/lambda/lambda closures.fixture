@@ -177,6 +177,7 @@ SEMICOLON (15:6-15:7)
   )
   (FunctionDeclaration
     range: 4:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:6-4:9
       name: "run"

@@ -1,0 +1,16 @@
+final final func value() {}
+
+--- TOKENS ---
+
+FINAL (1:1-1:6)
+FINAL (1:7-1:12)
+FUNC (1:13-1:17)
+IDENTIFIER "value" (1:18-1:23)
+LEFT_PAREN (1:23-1:24)
+RIGHT_PAREN (1:24-1:25)
+LEFT_BRACE (1:26-1:27)
+RIGHT_BRACE (1:27-1:28)
+
+--- AST ---
+
+ParserException: Duplicate function modifier: final at 1:7-1:12

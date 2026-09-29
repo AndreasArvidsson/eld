@@ -146,6 +146,7 @@ SEMICOLON (14:31-14:32)
   range: 1:1-14:32
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -154,8 +155,10 @@ SEMICOLON (14:31-14:32)
     (MemberDeclaration
       range: 2:5-2:78
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-2:78
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:25
           name: "describe"
@@ -198,8 +201,10 @@ SEMICOLON (14:31-14:32)
     (MemberDeclaration
       range: 3:5-3:80
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:80
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:25
           name: "describe"
@@ -242,6 +247,7 @@ SEMICOLON (14:31-14:32)
   )
   (ClassDeclaration
     range: 6:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:7-6:12
       name: "Child"
@@ -253,9 +259,10 @@ SEMICOLON (14:31-14:32)
     (MemberDeclaration
       range: 7:5-7:88
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:88
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 7:26-7:34
           name: "describe"
@@ -477,12 +484,12 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:17-2:25 -> func describe(values: List<i32>) => string
+  2:17-2:25 -> public func describe(values: List<i32>) => string
   2:26-2:32 -> const values: List<i32>
-  3:17-3:25 -> func describe(values: List<string>) => string
+  3:17-3:25 -> public func describe(values: List<string>) => string
   3:26-3:32 -> const values: List<string>
   6:7-6:12 -> class Child
-  7:26-7:34 -> override func describe(values: List<i32>) => string
+  7:26-7:34 -> public override func describe(values: List<i32>) => string
   7:35-7:41 -> const values: List<i32>
   10:7-10:12 -> const child: Base
   11:7-11:15 -> const integers: List<i32>

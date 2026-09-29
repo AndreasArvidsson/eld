@@ -63,6 +63,7 @@ SEMICOLON (6:19-6:20)
   range: 1:1-6:20
   (FunctionDeclaration
     range: 1:1-1:48
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:10
       name: "pick"
@@ -99,6 +100,7 @@ SEMICOLON (6:19-6:20)
   )
   (FunctionDeclaration
     range: 2:1-2:49
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:10
       name: "pick"

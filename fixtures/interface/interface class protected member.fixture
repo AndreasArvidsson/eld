@@ -54,6 +54,7 @@ RIGHT_BRACE (6:1-6:2)
   )
   (ClassDeclaration
     range: 4:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:11
       name: "Impl"
@@ -66,6 +67,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 5:5-5:29
       visibility: PROTECTED
+      staticMember: false
       (VariableDeclaration
         range: 5:15-5:29
         mutability: VAR

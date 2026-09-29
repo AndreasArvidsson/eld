@@ -75,6 +75,7 @@ RIGHT_BRACE (12:1-12:2)
   range: 1:1-12:2
   (ClassDeclaration
     range: 1:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -83,6 +84,7 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 2:5-2:28
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 2:12-2:28
         (BlockStatement
@@ -93,6 +95,7 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 3:5-3:24
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 3:5-3:24
         mutability: CONST
@@ -111,6 +114,7 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 4:5-4:30
       visibility: PROTECTED
+      staticMember: false
       (VariableDeclaration
         range: 4:15-4:30
         mutability: VAR
@@ -129,8 +133,10 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 5:17-5:21
           name: "next"
@@ -164,8 +170,10 @@ RIGHT_BRACE (12:1-12:2)
     (MemberDeclaration
       range: 8:4-11:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:11-11:6
+        modifiers: []
         (IdentifierDeclaration
           range: 8:16-8:22
           name: "invoke"
@@ -232,11 +240,11 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Counter
-  2:12-2:28 -> constructor()
+  2:12-2:28 -> public constructor()
   3:11-3:18 -> const initial: i32
-  4:19-4:24 -> var count: i32
-  5:17-5:21 -> func next() => i32
-  8:16-8:22 -> func invoke() => i32
+  4:19-4:24 -> protected var count: i32
+  5:17-5:21 -> public func next() => i32
+  8:16-8:22 -> public func invoke() => i32
   9:15-9:23 -> const callback: () => i32
 
 References:

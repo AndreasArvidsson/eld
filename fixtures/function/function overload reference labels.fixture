@@ -117,6 +117,7 @@ SEMICOLON (9:21-9:22)
   range: 1:1-9:22
   (FunctionDeclaration
     range: 1:1-1:42
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:12
       name: "choose"
@@ -153,6 +154,7 @@ SEMICOLON (9:21-9:22)
   )
   (FunctionDeclaration
     range: 2:1-2:45
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:12
       name: "choose"
@@ -239,6 +241,7 @@ SEMICOLON (9:21-9:22)
   )
   (FunctionDeclaration
     range: 6:1-6:39
+    modifiers: []
     (IdentifierDeclaration
       range: 6:6-6:10
       name: "pick"
@@ -275,6 +278,7 @@ SEMICOLON (9:21-9:22)
   )
   (FunctionDeclaration
     range: 7:1-7:39
+    modifiers: []
     (IdentifierDeclaration
       range: 7:6-7:10
       name: "pick"

@@ -70,6 +70,7 @@ SEMICOLON (10:23-10:24)
   range: 1:1-10:24
   (ClassDeclaration
     range: 1:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"
@@ -100,6 +101,7 @@ SEMICOLON (10:23-10:24)
       staticMember: true
       (FunctionDeclaration
         range: 4:19-6:6
+        modifiers: []
         (IdentifierDeclaration
           range: 4:24-4:27
           name: "add"
@@ -237,8 +239,8 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Example
-  2:25-2:30 -> const value: i32
-  4:24-4:27 -> func add(amount?: i32) => i32
+  2:25-2:30 -> public static const value: i32
+  4:24-4:27 -> public static func add(amount?: i32) => i32
   4:28-4:34 -> const amount: i32
 
 References:

@@ -135,6 +135,7 @@ SEMICOLON (10:39-10:40)
   range: 1:1-10:40
   (FunctionDeclaration
     range: 1:1-1:63
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:14
       name: "describe"
@@ -175,6 +176,7 @@ SEMICOLON (10:39-10:40)
   )
   (FunctionDeclaration
     range: 2:1-2:65
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:14
       name: "describe"
@@ -296,6 +298,7 @@ SEMICOLON (10:39-10:40)
   )
   (FunctionDeclaration
     range: 8:1-8:73
+    modifiers: []
     (IdentifierDeclaration
       range: 8:6-8:15
       name: "transform"
@@ -344,6 +347,7 @@ SEMICOLON (10:39-10:40)
   )
   (FunctionDeclaration
     range: 9:1-9:78
+    modifiers: []
     (IdentifierDeclaration
       range: 9:6-9:15
       name: "transform"

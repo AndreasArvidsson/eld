@@ -164,6 +164,7 @@ SEMICOLON (17:25-17:26)
   range: 1:1-17:26
   (ClassDeclaration
     range: 1:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:13
       name: "Person"
@@ -180,6 +181,7 @@ SEMICOLON (17:25-17:26)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:27
         mutability: CONST
@@ -196,6 +198,7 @@ SEMICOLON (17:25-17:26)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-5:6
         (FunctionParameter
@@ -238,8 +241,10 @@ SEMICOLON (17:25-17:26)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:26
           name: "compareTo"
@@ -619,10 +624,10 @@ Resolved types:
 
 Declarations:
   1:7-1:13 -> class Person
-  2:18-2:21 -> const age: i32
-  3:12-5:6 -> constructor(age: i32)
+  2:18-2:21 -> public const age: i32
+  3:12-5:6 -> public constructor(age: i32)
   3:24-3:27 -> const age: i32
-  6:17-6:26 -> func compareTo(other: Person) => i32
+  6:17-6:26 -> public func compareTo(other: Person) => i32
   6:27-6:32 -> const other: Person
   10:7-10:13 -> const people: ArrayList<Person>
 

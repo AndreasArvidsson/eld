@@ -271,6 +271,7 @@ SEMICOLON (31:13-31:14)
   )
   (ClassDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:14
       name: "Counter"
@@ -279,6 +280,7 @@ SEMICOLON (31:13-31:14)
     (MemberDeclaration
       range: 6:5-6:27
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 6:12-6:27
         mutability: VAR
@@ -313,6 +315,7 @@ SEMICOLON (31:13-31:14)
   )
   (FunctionDeclaration
     range: 10:1-13:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:6-10:12
       name: "change"
@@ -356,7 +359,7 @@ SEMICOLON (31:13-31:14)
   )
   (FunctionDeclaration
     range: 15:1-29:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 15:12-15:15
       name: "run"
@@ -819,10 +822,10 @@ Declarations:
   2:5-2:11 -> var values: [i32]
   3:5-3:10 -> var index: i32
   5:7-5:14 -> class Counter
-  6:16-6:22 -> var number: i32
+  6:16-6:22 -> public var number: i32
   8:5-8:12 -> var counter: Counter
   10:6-10:12 -> func change() => i32
-  15:12-15:15 -> func run() => Promise<void>
+  15:12-15:15 -> async func run() => Promise<void>
   16:9-16:14 -> var local: i32
 
 References:

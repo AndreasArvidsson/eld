@@ -53,6 +53,7 @@ RIGHT_BRACE (11:1-11:2)
   range: 1:1-11:2
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -61,9 +62,10 @@ RIGHT_BRACE (11:1-11:2)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
-        FINAL
+        modifiers: [FINAL]
         (IdentifierDeclaration
           range: 2:23-2:28
           name: "value"
@@ -88,6 +90,7 @@ RIGHT_BRACE (11:1-11:2)
   )
   (ClassDeclaration
     range: 7:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:12
       name: "Child"
@@ -99,9 +102,10 @@ RIGHT_BRACE (11:1-11:2)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 8:26-8:31
           name: "value"

@@ -87,6 +87,7 @@ SEMICOLON (10:24-10:25)
   range: 1:1-10:25
   (ClassDeclaration
     range: 1:1-1:16
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:13
       name: "Animal"
@@ -95,6 +96,7 @@ SEMICOLON (10:24-10:25)
   )
   (ClassDeclaration
     range: 2:1-2:28
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:10
       name: "Dog"
@@ -106,6 +108,7 @@ SEMICOLON (10:24-10:25)
   )
   (FunctionDeclaration
     range: 4:1-4:57
+    modifiers: []
     (IdentifierDeclaration
       range: 4:6-4:14
       name: "describe"
@@ -142,6 +145,7 @@ SEMICOLON (10:24-10:25)
   )
   (FunctionDeclaration
     range: 5:1-5:51
+    modifiers: []
     (IdentifierDeclaration
       range: 5:6-5:14
       name: "describe"

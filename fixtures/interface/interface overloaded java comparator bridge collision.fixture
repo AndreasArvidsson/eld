@@ -123,6 +123,7 @@ RIGHT_BRACE (5:1-5:2)
   )
   (ClassDeclaration
     range: 2:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:8
       name: "C"
@@ -143,8 +144,10 @@ RIGHT_BRACE (5:1-5:2)
     (MemberDeclaration
       range: 3:5-3:65
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:65
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:24
           name: "compare"
@@ -197,8 +200,10 @@ RIGHT_BRACE (5:1-5:2)
     (MemberDeclaration
       range: 4:5-4:61
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-4:61
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:24
           name: "compare"

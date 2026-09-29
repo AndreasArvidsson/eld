@@ -99,6 +99,7 @@ RIGHT_BRACE (13:1-13:2)
   )
   (ClassDeclaration
     range: 3:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 3:7-3:12
       name: "Value"
@@ -115,8 +116,10 @@ RIGHT_BRACE (13:1-13:2)
     (MemberDeclaration
       range: 4:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:26
           name: "compareTo"
@@ -166,7 +169,7 @@ RIGHT_BRACE (13:1-13:2)
   )
   (FunctionDeclaration
     range: 10:1-13:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 10:12-10:18
       name: "sorted"

@@ -80,6 +80,7 @@ SEMICOLON (13:18-13:19)
   range: 1:1-13:19
   (ClassDeclaration
     range: 1:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -88,6 +89,7 @@ SEMICOLON (13:18-13:19)
     (MemberDeclaration
       range: 2:5-2:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 2:12-2:26
         mutability: VAR
@@ -106,8 +108,10 @@ SEMICOLON (13:18-13:19)
     (MemberDeclaration
       range: 4:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:23
           name: "expose"

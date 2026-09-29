@@ -119,6 +119,7 @@ SEMICOLON (16:27-16:28)
   range: 1:1-16:28
   (ClassDeclaration
     range: 1:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -127,6 +128,7 @@ SEMICOLON (16:27-16:28)
     (MemberDeclaration
       range: 2:5-2:30
       visibility: PROTECTED
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:15-2:30
         mutability: VAR
@@ -143,6 +145,7 @@ SEMICOLON (16:27-16:28)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PROTECTED
+      staticMember: false
       (ConstructorDeclaration
         range: 3:15-5:6
         (FunctionParameter
@@ -219,8 +222,10 @@ SEMICOLON (16:27-16:28)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:21
           name: "read"
@@ -250,6 +255,7 @@ SEMICOLON (16:27-16:28)
   )
   (ClassDeclaration
     range: 10:1-14:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:7-10:12
       name: "Child"
@@ -261,6 +267,7 @@ SEMICOLON (16:27-16:28)
     (MemberDeclaration
       range: 11:5-13:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 11:12-13:6
         (FunctionParameter
@@ -402,13 +409,13 @@ Conversions:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:19-2:24 -> var value: i64
-  3:15-5:6 -> constructor(value: i64, extra?: i64)
+  2:19-2:24 -> protected var value: i64
+  3:15-5:6 -> protected constructor(value: i64, extra?: i64)
   3:27-3:32 -> const value: i64
   3:39-3:44 -> const extra: i64
-  6:17-6:21 -> func read() => i64
+  6:17-6:21 -> public func read() => i64
   10:7-10:12 -> class Child
-  11:12-13:6 -> constructor(value?: i32)
+  11:12-13:6 -> public constructor(value?: i32)
   11:24-11:29 -> const value: i32
 
 References:

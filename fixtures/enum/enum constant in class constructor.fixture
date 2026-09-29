@@ -70,6 +70,7 @@ SEMICOLON (12:13-12:14)
   )
   (ClassDeclaration
     range: 6:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 6:7-6:13
       name: "Holder"
@@ -78,6 +79,7 @@ SEMICOLON (12:13-12:14)
     (MemberDeclaration
       range: 7:5-9:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 7:12-9:6
         (BlockStatement
@@ -142,11 +144,11 @@ Resolved types:
   3:5-3:10 -> Direction
 
 Declarations:
-  1:6-1:15 -> class Direction
-  2:5-2:10 -> const NORTH: Direction
-  3:5-3:10 -> const SOUTH: Direction
+  1:6-1:15 -> enum Direction
+  2:5-2:10 -> public static const NORTH: Direction
+  3:5-3:10 -> public static const SOUTH: Direction
   6:7-6:13 -> class Holder
-  7:12-9:6 -> constructor()
+  7:12-9:6 -> public constructor()
 
 References:
   2:5-2:10 -> 1:6-1:15

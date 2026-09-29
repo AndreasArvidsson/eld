@@ -144,6 +144,7 @@ SEMICOLON (20:33-20:34)
   range: 1:1-20:34
   (ClassDeclaration
     range: 1:1-9:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -152,6 +153,7 @@ SEMICOLON (20:33-20:34)
     (MemberDeclaration
       range: 2:5-2:30
       visibility: PROTECTED
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:15-2:30
         mutability: VAR
@@ -168,6 +170,7 @@ SEMICOLON (20:33-20:34)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PROTECTED
+      staticMember: false
       (ConstructorDeclaration
         range: 3:15-5:6
         (FunctionParameter
@@ -214,8 +217,10 @@ SEMICOLON (20:33-20:34)
     (MemberDeclaration
       range: 6:5-8:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-8:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:21
           name: "read"
@@ -245,6 +250,7 @@ SEMICOLON (20:33-20:34)
   )
   (ClassDeclaration
     range: 10:1-17:2
+    modifiers: []
     (IdentifierDeclaration
       range: 10:7-10:12
       name: "Child"
@@ -256,9 +262,10 @@ SEMICOLON (20:33-20:34)
     (MemberDeclaration
       range: 11:5-13:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 11:12-13:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 11:26-11:30
           name: "read"
@@ -297,8 +304,10 @@ SEMICOLON (20:33-20:34)
     (MemberDeclaration
       range: 14:5-16:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 14:12-16:6
+        modifiers: []
         (IdentifierDeclaration
           range: 14:17-14:26
           name: "reference"
@@ -461,13 +470,13 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:19-2:24 -> var value: i32
-  3:15-5:6 -> constructor(value?: i32)
+  2:19-2:24 -> protected var value: i32
+  3:15-5:6 -> protected constructor(value?: i32)
   3:27-3:32 -> const value: i32
-  6:17-6:21 -> func read() => i32
+  6:17-6:21 -> public func read() => i32
   10:7-10:12 -> class Child
-  11:26-11:30 -> override func read() => i32
-  14:17-14:26 -> func reference() => () => i32
+  11:26-11:30 -> public override func read() => i32
+  14:17-14:26 -> public func reference() => () => i32
   18:7-18:15 -> const instance: Base
 
 References:

@@ -52,6 +52,7 @@ RIGHT_BRACE (10:1-10:2)
   range: 1:1-10:2
   (ClassDeclaration
     range: 1:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"

@@ -47,6 +47,7 @@ RIGHT_BRACE (10:1-10:2)
   range: 1:1-10:2
   (ClassDeclaration
     range: 1:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:15
       name: "Resource"
@@ -55,6 +56,7 @@ RIGHT_BRACE (10:1-10:2)
     (MemberDeclaration
       range: 2:5-2:29
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:29
         mutability: CONST
@@ -71,6 +73,7 @@ RIGHT_BRACE (10:1-10:2)
     (MemberDeclaration
       range: 3:5-9:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-9:6
         (BlockStatement

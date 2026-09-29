@@ -334,6 +334,7 @@ SEMICOLON (22:28-22:29)
   )
   (FunctionDeclaration
     range: 11:1-11:56
+    modifiers: []
     (IdentifierDeclaration
       range: 11:6-11:13
       name: "matches"

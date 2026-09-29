@@ -156,6 +156,7 @@ SEMICOLON (16:22-16:23)
   range: 1:1-16:23
   (FunctionDeclaration
     range: 1:1-3:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:14
       name: "identity"

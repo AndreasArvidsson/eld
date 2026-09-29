@@ -58,6 +58,7 @@ SEMICOLON (7:30-7:31)
   range: 1:1-7:31
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -66,8 +67,10 @@ SEMICOLON (7:30-7:31)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:20
           name: "sum"
@@ -194,7 +197,7 @@ Resolved types:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:17-2:20 -> func sum(a: i32, *, b: i32) => i32
+  2:17-2:20 -> public func sum(a: i32, *, b: i32) => i32
   2:21-2:22 -> const a: i32
   2:32-2:33 -> const b: i32
 

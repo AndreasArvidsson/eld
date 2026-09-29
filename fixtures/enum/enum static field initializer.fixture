@@ -143,10 +143,10 @@ Resolved types:
   3:5-3:10 -> Direction
 
 Declarations:
-  1:6-1:15 -> class Direction
-  2:5-2:10 -> const NORTH: Direction
-  3:5-3:10 -> const SOUTH: Direction
-  5:25-5:30 -> const first: Direction
+  1:6-1:15 -> enum Direction
+  2:5-2:10 -> public static const NORTH: Direction
+  3:5-3:10 -> public static const SOUTH: Direction
+  5:25-5:30 -> public static const first: Direction
 
 References:
   2:5-2:10 -> 1:6-1:15

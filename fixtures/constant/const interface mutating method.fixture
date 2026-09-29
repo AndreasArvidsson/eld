@@ -97,6 +97,7 @@ SEMICOLON (12:25-12:26)
   )
   (ClassDeclaration
     range: 4:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:12
       name: "Value"
@@ -109,6 +110,7 @@ SEMICOLON (12:25-12:26)
     (MemberDeclaration
       range: 5:5-5:19
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 5:5-5:19
         mutability: VAR
@@ -127,8 +129,10 @@ SEMICOLON (12:25-12:26)
     (MemberDeclaration
       range: 6:5-9:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-9:6
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:26
           name: "increment"

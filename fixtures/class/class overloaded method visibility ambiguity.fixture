@@ -64,6 +64,7 @@ SEMICOLON (7:29-7:30)
   range: 1:1-7:30
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:16
       name: "Describer"
@@ -72,8 +73,10 @@ SEMICOLON (7:29-7:30)
     (MemberDeclaration
       range: 2:5-2:59
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 2:5-2:59
+        modifiers: []
         (IdentifierDeclaration
           range: 2:10-2:18
           name: "describe"
@@ -112,8 +115,10 @@ SEMICOLON (7:29-7:30)
     (MemberDeclaration
       range: 3:5-3:68
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:68
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:25
           name: "describe"

@@ -64,6 +64,7 @@ SEMICOLON (4:20-4:21)
   range: 1:1-4:21
   (FunctionDeclaration
     range: 1:1-1:65
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:14
       name: "describe"
@@ -108,6 +109,7 @@ SEMICOLON (4:20-4:21)
   )
   (FunctionDeclaration
     range: 2:1-2:55
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:14
       name: "describe"

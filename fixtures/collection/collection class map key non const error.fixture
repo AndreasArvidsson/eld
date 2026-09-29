@@ -65,6 +65,7 @@ SEMICOLON (10:36-10:37)
   range: 1:1-10:37
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Key"
@@ -76,6 +77,7 @@ SEMICOLON (10:36-10:37)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:24-2:29
           name: "equal"
@@ -128,9 +130,10 @@ SEMICOLON (10:36-10:37)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 5:26-5:34
           name: "hashCode"

@@ -178,8 +178,10 @@ SEMICOLON (25:10-25:11)
     (MemberDeclaration
       range: 9:5-11:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 9:12-11:6
+        modifiers: []
         (IdentifierDeclaration
           range: 9:17-9:22
           name: "label"
@@ -204,6 +206,7 @@ SEMICOLON (25:10-25:11)
   )
   (ClassDeclaration
     range: 14:1-20:2
+    modifiers: []
     (IdentifierDeclaration
       range: 14:7-14:10
       name: "Bar"
@@ -212,6 +215,7 @@ SEMICOLON (25:10-25:11)
     (MemberDeclaration
       range: 15:5-15:28
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 15:12-15:28
         mutability: CONST
@@ -230,6 +234,7 @@ SEMICOLON (25:10-25:11)
     (MemberDeclaration
       range: 16:5-16:28
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 16:12-16:28
         (BlockStatement
@@ -240,8 +245,10 @@ SEMICOLON (25:10-25:11)
     (MemberDeclaration
       range: 17:5-19:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 17:12-19:6
+        modifiers: []
         (IdentifierDeclaration
           range: 17:17-17:20
           name: "get"
@@ -271,6 +278,7 @@ SEMICOLON (25:10-25:11)
   )
   (FunctionDeclaration
     range: 22:1-22:14
+    modifiers: []
     (IdentifierDeclaration
       range: 22:6-22:9
       name: "baz"
@@ -344,11 +352,11 @@ Declarations:
   4:11-4:15 -> const name: string
   5:10-5:15 -> func label() => string
   8:8-8:11 -> record Foo(value: i32)
-  9:17-9:22 -> func label() => string
+  9:17-9:22 -> public func label() => string
   14:7-14:10 -> class Bar
-  15:18-15:23 -> const value: i32
-  16:12-16:28 -> constructor()
-  17:17-17:20 -> func get() => i32
+  15:18-15:23 -> public const value: i32
+  16:12-16:28 -> public constructor()
+  17:17-17:20 -> public func get() => i32
   22:6-22:9 -> func baz() => void
   24:7-24:8 -> const a: i32
   25:5-25:6 -> var b: i32

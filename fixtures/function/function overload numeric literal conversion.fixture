@@ -133,6 +133,7 @@ SEMICOLON (11:20-11:21)
   range: 1:1-11:21
   (FunctionDeclaration
     range: 1:1-1:48
+    modifiers: []
     (IdentifierDeclaration
       range: 1:6-1:10
       name: "pick"
@@ -169,6 +170,7 @@ SEMICOLON (11:20-11:21)
   )
   (FunctionDeclaration
     range: 2:1-2:49
+    modifiers: []
     (IdentifierDeclaration
       range: 2:6-2:10
       name: "pick"
@@ -294,6 +296,7 @@ SEMICOLON (11:20-11:21)
   )
   (FunctionDeclaration
     range: 7:1-7:51
+    modifiers: []
     (IdentifierDeclaration
       range: 7:6-7:12
       name: "choose"
@@ -330,6 +333,7 @@ SEMICOLON (11:20-11:21)
   )
   (FunctionDeclaration
     range: 8:1-8:51
+    modifiers: []
     (IdentifierDeclaration
       range: 8:6-8:12
       name: "choose"
@@ -388,6 +392,7 @@ SEMICOLON (11:20-11:21)
   )
   (FunctionDeclaration
     range: 10:1-10:52
+    modifiers: []
     (IdentifierDeclaration
       range: 10:6-10:15
       name: "onlySmall"

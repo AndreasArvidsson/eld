@@ -42,6 +42,7 @@ RIGHT_BRACE (8:1-8:2)
   range: 1:1-8:2
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Foo"
@@ -50,8 +51,10 @@ RIGHT_BRACE (8:1-8:2)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 2:5-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:10-2:18
           name: "getValue"
@@ -76,8 +79,10 @@ RIGHT_BRACE (8:1-8:2)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 5:5-7:6
+        modifiers: []
         (IdentifierDeclaration
           range: 5:10-5:15
           name: "other"

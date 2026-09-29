@@ -93,6 +93,7 @@ SEMICOLON (13:26-13:27)
   range: 1:1-13:27
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Key"
@@ -104,7 +105,7 @@ SEMICOLON (13:26-13:27)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-4:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 2:30-2:35
           name: "equal"
@@ -157,10 +158,10 @@ SEMICOLON (13:26-13:27)
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 5:12-7:6
-        CONST
-        OVERRIDE
+        modifiers: [CONST, OVERRIDE]
         (IdentifierDeclaration
           range: 5:32-5:40
           name: "hashCode"
@@ -300,10 +301,10 @@ Conversions:
 
 Declarations:
   1:7-1:10 -> class Key
-  2:30-2:35 -> const func equal(a: Key, b: Key) => bool
+  2:30-2:35 -> public static const func equal(a: Key, b: Key) => bool
   2:36-2:37 -> const a: Key
   2:44-2:45 -> const b: Key
-  5:32-5:40 -> const override func hashCode() => i32
+  5:32-5:40 -> public const override func hashCode() => i32
   10:7-10:13 -> const stored: Key
   11:7-11:13 -> const lookup: Key
   12:7-12:13 -> const values: Map<Key, string>

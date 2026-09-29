@@ -163,6 +163,7 @@ SEMICOLON (25:39-25:40)
   )
   (ClassDeclaration
     range: 4:1-4:43
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:15
       name: "Combined"
@@ -215,6 +216,7 @@ SEMICOLON (25:39-25:40)
   )
   (ClassDeclaration
     range: 14:1-18:2
+    modifiers: []
     (IdentifierDeclaration
       range: 14:7-14:14
       name: "Factory"
@@ -231,8 +233,10 @@ SEMICOLON (25:39-25:40)
     (MemberDeclaration
       range: 15:5-17:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 15:12-17:6
+        modifiers: []
         (IdentifierDeclaration
           range: 15:17-15:23
           name: "create"
@@ -451,7 +455,7 @@ Declarations:
   10:11-10:24 -> interface SecondFactory
   11:10-11:16 -> func create() => Second
   14:7-14:14 -> class Factory
-  15:17-15:23 -> func create() => Combined
+  15:17-15:23 -> public func create() => Combined
   20:7-20:12 -> const first: FirstFactory
   21:7-21:13 -> const second: SecondFactory
   22:7-22:17 -> const firstValue: First

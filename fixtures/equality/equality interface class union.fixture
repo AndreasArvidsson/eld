@@ -260,6 +260,7 @@ SEMICOLON (29:36-29:37)
   )
   (ClassDeclaration
     range: 2:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:10
       name: "Box"
@@ -275,6 +276,7 @@ SEMICOLON (29:36-29:37)
       staticMember: true
       (FunctionDeclaration
         range: 3:19-3:67
+        modifiers: []
         (IdentifierDeclaration
           range: 3:24-3:29
           name: "equal"
@@ -327,6 +329,7 @@ SEMICOLON (29:36-29:37)
   )
   (ClassDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:12
       name: "Child"
@@ -341,6 +344,7 @@ SEMICOLON (29:36-29:37)
       staticMember: true
       (FunctionDeclaration
         range: 6:19-6:72
+        modifiers: []
         (IdentifierDeclaration
           range: 6:24-6:29
           name: "equal"
@@ -925,11 +929,11 @@ Conversions:
 Declarations:
   1:11-1:17 -> interface Marker
   2:7-2:10 -> class Box
-  3:24-3:29 -> func equal(a: Box, b: Box) => bool
+  3:24-3:29 -> public static func equal(a: Box, b: Box) => bool
   3:30-3:31 -> const a: Box
   3:38-3:39 -> const b: Box
   5:7-5:12 -> class Child
-  6:24-6:29 -> func equal(a: Child, b: Child) => bool
+  6:24-6:29 -> public static func equal(a: Child, b: Child) => bool
   6:30-6:31 -> const a: Child
   6:40-6:41 -> const b: Child
   9:7-9:12 -> const first: Box

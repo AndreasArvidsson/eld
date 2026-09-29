@@ -52,6 +52,7 @@ SEMICOLON (5:21-5:22)
   )
   (ClassDeclaration
     range: 2:1-2:31
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:10
       name: "Box"

@@ -74,6 +74,7 @@ SEMICOLON (14:21-14:22)
   range: 1:1-14:22
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -82,8 +83,10 @@ SEMICOLON (14:21-14:22)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:22
           name: "value"
@@ -108,6 +111,7 @@ SEMICOLON (14:21-14:22)
   )
   (ClassDeclaration
     range: 7:1-11:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:14
       name: "Derived"
@@ -119,9 +123,10 @@ SEMICOLON (14:21-14:22)
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-10:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 8:26-8:31
           name: "value"
@@ -211,9 +216,9 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:17-2:22 -> func value() => i32
+  2:17-2:22 -> public func value() => i32
   7:7-7:14 -> class Derived
-  8:26-8:31 -> override func value() => i32
+  8:26-8:31 -> public override func value() => i32
   13:7-13:12 -> const value: Base
 
 References:

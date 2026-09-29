@@ -78,6 +78,7 @@ RIGHT_BRACE (8:1-8:2)
   )
   (ClassDeclaration
     range: 2:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:14
       name: "Example"
@@ -86,6 +87,7 @@ RIGHT_BRACE (8:1-8:2)
     (MemberDeclaration
       range: 3:5-3:22
       visibility: PRIVATE
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 3:5-3:22
         mutability: CONST
@@ -102,6 +104,7 @@ RIGHT_BRACE (8:1-8:2)
     (MemberDeclaration
       range: 4:5-7:6
       visibility: PRIVATE
+      staticMember: false
       (ConstructorDeclaration
         range: 4:5-7:6
         (BlockStatement

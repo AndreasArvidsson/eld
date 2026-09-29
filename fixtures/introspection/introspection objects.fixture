@@ -99,6 +99,7 @@ SEMICOLON (12:11-12:12)
   range: 1:1-12:12
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -107,6 +108,7 @@ SEMICOLON (12:11-12:12)
     (MemberDeclaration
       range: 2:5-2:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 2:12-2:26
         mutability: VAR
@@ -125,6 +127,7 @@ SEMICOLON (12:11-12:12)
     (MemberDeclaration
       range: 3:5-3:28
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-3:28
         (BlockStatement
@@ -135,8 +138,10 @@ SEMICOLON (12:11-12:12)
     (MemberDeclaration
       range: 4:5-4:52
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-4:52
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:21
           name: "next"
@@ -170,8 +175,10 @@ SEMICOLON (12:11-12:12)
     (MemberDeclaration
       range: 5:5-5:36
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 5:5-5:36
+        modifiers: []
         (IdentifierDeclaration
           range: 5:10-5:16
           name: "hidden"
@@ -332,9 +339,9 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Counter
-  2:16-2:21 -> var value: i32
-  3:12-3:28 -> constructor()
-  4:17-4:21 -> func next() => i32
+  2:16-2:21 -> public var value: i32
+  3:12-3:28 -> public constructor()
+  4:17-4:21 -> public func next() => i32
   5:10-5:16 -> func hidden() => i32
   7:7-7:14 -> const counter: Counter
   8:7-8:14 -> const inspect: (any) => [string]

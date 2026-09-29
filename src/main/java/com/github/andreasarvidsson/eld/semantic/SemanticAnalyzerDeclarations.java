@@ -14,6 +14,7 @@ import com.github.andreasarvidsson.eld.parser.AstNode;
 import com.github.andreasarvidsson.eld.parser.ClassDeclaration;
 import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
 import com.github.andreasarvidsson.eld.parser.Declaration;
+import com.github.andreasarvidsson.eld.parser.EnumDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
@@ -78,10 +79,18 @@ public final class SemanticAnalyzerDeclarations {
         final @Nullable RecordDeclaration record
     ) {
         final ClassType classType = new ClassType(declaration.name().name());
+        final EnumDeclaration enumeration =
+            model.findEnumDeclaration(declaration);
         final ClassDeclarationSymbol classSymbol =
-            record == null
-                ? new ClassSymbol(declaration.name(), classType)
-                : new RecordSymbol(record, classType);
+            record != null
+                ? new RecordSymbol(record, classType)
+                : enumeration != null
+                    ? new EnumSymbol(enumeration, classType)
+                    : new ClassSymbol(
+                        declaration.name(),
+                        classType,
+                        declaration.modifiers()
+                    );
         model.setSymbol(declaration.name(), classSymbol);
         model.setClassDeclaration(classType, declaration);
         context.scope().declare(classSymbol);
@@ -132,7 +141,8 @@ public final class SemanticAnalyzerDeclarations {
             if (
                 !(model.getReference(
                     superclassName
-                ) instanceof ClassSymbol superclassSymbol)
+                ) instanceof ClassDeclarationSymbol superclassSymbol)
+                    || superclassSymbol instanceof RecordSymbol
             ) {
                 throw new SemanticException(
                     superclassName.range(),
@@ -179,6 +189,7 @@ public final class SemanticAnalyzerDeclarations {
             .members()) {
             final Declaration member = memberDeclaration.declaration();
             if (member instanceof ConstructorDeclaration candidate) {
+                model.setMemberDeclaration(candidate, memberDeclaration);
                 if (constructor != null) {
                     throw new SemanticException(
                         candidate.range(),
@@ -517,6 +528,7 @@ public final class SemanticAnalyzerDeclarations {
         final ClassType classType
     ) {
         final Symbol symbol = model.getSymbol(name);
+        model.setMemberDeclaration(name, memberDeclaration);
         model.setMemberVisibility(symbol, memberDeclaration.visibility());
         model.setClassMemberOwner(symbol, classType);
         if (memberDeclaration.staticMember()) {

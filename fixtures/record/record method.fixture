@@ -79,8 +79,10 @@ SEMICOLON (9:11-9:12)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:22
           name: "value"
@@ -195,7 +197,7 @@ Resolved types:
 
 Declarations:
   1:8-1:11 -> record Foo(name: string)
-  2:17-2:22 -> func value() => i32
+  2:17-2:22 -> public func value() => i32
   7:7-7:10 -> const foo: Foo
 
 References:

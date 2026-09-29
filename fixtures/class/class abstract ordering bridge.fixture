@@ -150,7 +150,7 @@ SEMICOLON (21:52-21:53)
   range: 1:1-21:53
   (ClassDeclaration
     range: 1:1-5:2
-    abstractClass: true
+    modifiers: [ABSTRACT]
     (IdentifierDeclaration
       range: 1:16-1:20
       name: "Base"
@@ -167,8 +167,10 @@ SEMICOLON (21:52-21:53)
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 2:12-4:6
+        modifiers: []
         (IdentifierDeclaration
           range: 2:17-2:26
           name: "compareTo"
@@ -207,6 +209,7 @@ SEMICOLON (21:52-21:53)
   )
   (ClassDeclaration
     range: 7:1-7:28
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:12
       name: "Child"
@@ -272,7 +275,7 @@ SEMICOLON (21:52-21:53)
   )
   (ClassDeclaration
     range: 12:1-16:2
-    abstractClass: true
+    modifiers: [ABSTRACT]
     (IdentifierDeclaration
       range: 12:16-12:24
       name: "Ordering"
@@ -289,8 +292,10 @@ SEMICOLON (21:52-21:53)
     (MemberDeclaration
       range: 13:5-15:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 13:12-15:6
+        modifiers: []
         (IdentifierDeclaration
           range: 13:17-13:24
           name: "compare"
@@ -343,6 +348,7 @@ SEMICOLON (21:52-21:53)
   )
   (ClassDeclaration
     range: 18:1-18:40
+    modifiers: []
     (IdentifierDeclaration
       range: 18:7-18:20
       name: "ChildOrdering"
@@ -461,13 +467,13 @@ Resolved types:
   20:30-20:34 -> Base
 
 Declarations:
-  1:16-1:20 -> class Base
-  2:17-2:26 -> func compareTo(other: Base) => i32
+  1:16-1:20 -> abstract class Base
+  2:17-2:26 -> public func compareTo(other: Base) => i32
   2:27-2:32 -> const other: Base
   7:7-7:12 -> class Child
   9:7-9:17 -> const comparable: Comparable<Base>
-  12:16-12:24 -> class Ordering
-  13:17-13:24 -> func compare(a: Base, b: Base) => i32
+  12:16-12:24 -> abstract class Ordering
+  13:17-13:24 -> public func compare(a: Base, b: Base) => i32
   13:25-13:26 -> const a: Base
   13:34-13:35 -> const b: Base
   18:7-18:20 -> class ChildOrdering

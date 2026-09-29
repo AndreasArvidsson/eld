@@ -55,6 +55,7 @@ RIGHT_BRACE (6:1-6:2)
   )
   (ClassDeclaration
     range: 4:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 4:7-4:21
       name: "Implementation"

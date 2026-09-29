@@ -55,6 +55,7 @@ SEMICOLON (9:27-9:28)
   range: 1:1-9:28
   (ClassDeclaration
     range: 1:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -63,6 +64,7 @@ SEMICOLON (9:27-9:28)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:27
         mutability: VAR
@@ -79,6 +81,7 @@ SEMICOLON (9:27-9:28)
     (MemberDeclaration
       range: 3:5-6:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-6:6
         (BlockStatement
@@ -174,8 +177,8 @@ Resolved types:
 
 Declarations:
   1:7-1:14 -> class Counter
-  2:16-2:21 -> var value: i32
-  3:12-6:6 -> constructor()
+  2:16-2:21 -> public var value: i32
+  3:12-6:6 -> public constructor()
 
 References:
   4:14-4:19 -> 2:16-2:21

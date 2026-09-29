@@ -30,6 +30,7 @@ RIGHT_BRACE (5:1-5:2)
   range: 1:1-5:2
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Example"
@@ -41,7 +42,7 @@ RIGHT_BRACE (5:1-5:2)
       staticMember: true
       (FunctionDeclaration
         range: 2:19-4:6
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 2:33-2:41
           name: "toString"

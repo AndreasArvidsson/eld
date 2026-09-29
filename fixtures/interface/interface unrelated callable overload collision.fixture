@@ -184,6 +184,7 @@ RIGHT_BRACE (10:1-10:2)
   )
   (ClassDeclaration
     range: 7:1-10:2
+    modifiers: []
     (IdentifierDeclaration
       range: 7:7-7:11
       name: "Both"
@@ -200,8 +201,10 @@ RIGHT_BRACE (10:1-10:2)
     (MemberDeclaration
       range: 8:5-8:80
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 8:12-8:80
+        modifiers: []
         (IdentifierDeclaration
           range: 8:17-8:25
           name: "describe"
@@ -252,8 +255,10 @@ RIGHT_BRACE (10:1-10:2)
     (MemberDeclaration
       range: 9:5-9:82
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 9:12-9:82
+        modifiers: []
         (IdentifierDeclaration
           range: 9:17-9:25
           name: "describe"

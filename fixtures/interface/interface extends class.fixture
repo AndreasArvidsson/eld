@@ -20,6 +20,7 @@ RIGHT_BRACE (2:31-2:32)
   range: 1:1-2:32
   (ClassDeclaration
     range: 1:1-1:14
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"

@@ -36,6 +36,7 @@ RIGHT_BRACE (6:1-6:2)
   range: 1:1-6:2
   (ClassDeclaration
     range: 1:1-6:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:14
       name: "Counter"
@@ -44,6 +45,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 2:12-2:27
         mutability: VAR
@@ -60,6 +62,7 @@ RIGHT_BRACE (6:1-6:2)
     (MemberDeclaration
       range: 3:5-5:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 3:12-5:6
         (BlockStatement

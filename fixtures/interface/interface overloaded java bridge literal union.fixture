@@ -163,6 +163,7 @@ SEMICOLON (10:31-10:32)
   )
   (ClassDeclaration
     range: 2:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:8
       name: "C"
@@ -183,8 +184,10 @@ SEMICOLON (10:31-10:32)
     (MemberDeclaration
       range: 3:5-3:58
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:58
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:26
           name: "compareTo"
@@ -232,8 +235,10 @@ SEMICOLON (10:31-10:32)
     (MemberDeclaration
       range: 4:5-4:54
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-4:54
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:26
           name: "compareTo"
@@ -435,9 +440,9 @@ Declarations:
   1:20-1:29 -> func compareTo(other: 1 | 2) => i32
   1:30-1:35 -> const other: 1 | 2
   2:7-2:8 -> class C
-  3:17-3:26 -> func compareTo(other: 1 | 2) => i32
+  3:17-3:26 -> public func compareTo(other: 1 | 2) => i32
   3:27-3:32 -> const other: 1 | 2
-  4:17-4:26 -> func compareTo(other: C) => i32
+  4:17-4:26 -> public func compareTo(other: C) => i32
   4:27-4:32 -> const other: C
   6:7-6:8 -> const c: C
   7:7-7:8 -> const i: I

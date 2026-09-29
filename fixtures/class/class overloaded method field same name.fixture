@@ -90,6 +90,7 @@ SEMICOLON (9:16-9:17)
   range: 1:1-9:17
   (ClassDeclaration
     range: 1:1-5:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:8
       name: "C"
@@ -98,6 +99,7 @@ SEMICOLON (9:16-9:17)
     (MemberDeclaration
       range: 2:5-2:24
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 2:12-2:24
         mutability: CONST
@@ -116,8 +118,10 @@ SEMICOLON (9:16-9:17)
     (MemberDeclaration
       range: 3:5-3:44
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 3:12-3:44
+        modifiers: []
         (IdentifierDeclaration
           range: 3:17-3:18
           name: "f"
@@ -155,8 +159,10 @@ SEMICOLON (9:16-9:17)
     (MemberDeclaration
       range: 4:5-4:47
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-4:47
+        modifiers: []
         (IdentifierDeclaration
           range: 4:17-4:18
           name: "f"
@@ -326,10 +332,10 @@ Resolved types:
 
 Declarations:
   1:7-1:8 -> class C
-  2:18-2:19 -> const f: i32
-  3:17-3:18 -> func f(x: i32) => i32
+  2:18-2:19 -> public const f: i32
+  3:17-3:18 -> public func f(x: i32) => i32
   3:19-3:20 -> const x: i32
-  4:17-4:18 -> func f(x: string) => i32
+  4:17-4:18 -> public func f(x: string) => i32
   4:19-4:20 -> const x: string
   6:7-6:8 -> const c: C
 

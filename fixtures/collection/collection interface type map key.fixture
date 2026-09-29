@@ -97,6 +97,7 @@ SEMICOLON (8:24-8:25)
   )
   (ClassDeclaration
     range: 2:1-2:33
+    modifiers: []
     (IdentifierDeclaration
       range: 2:7-2:13
       name: "Circle"

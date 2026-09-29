@@ -58,7 +58,7 @@ SEMICOLON (7:15-7:16)
   range: 1:1-7:16
   (FunctionDeclaration
     range: 1:1-5:2
-    CONST
+    modifiers: [CONST]
     (IdentifierDeclaration
       range: 1:12-1:17
       name: "count"

@@ -3856,7 +3856,7 @@ public final class BytecodeGenerator {
                         descriptor(parameter)
                     )
                 )
-                .collect(java.util.stream.Collectors.joining())
+                .collect(Collectors.joining())
             + ")"
             + Objects.requireNonNullElse(
                 fieldSignature(type.returnType()),

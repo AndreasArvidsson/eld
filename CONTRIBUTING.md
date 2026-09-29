@@ -185,10 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Clean up ast
-  - OVERRIDE => override: false
-  - functions have CONST. => constant: true
-  - AstPrinter on purpose hides false abstractClass, staticMember, staticMember. Show these explicitly.
 - Sealed classes/interfaces
   - class Animal {} // extensible
   - class Animal permits Dog, Cat {} // only Dog and Cat may extend this
@@ -208,6 +204,7 @@ protected const bar = 0;
 - Formatter
 - LSP, linting, code completion
 - Tree sitter parser
+- Update documentation with code examples for every single syntax.
 - Operator overloading. We have already added `==`.
 - Regex literals: `const re: regex = /^\d+$`;
 - Methods like `indexOf` should return `null` instead of `-1` on failure.

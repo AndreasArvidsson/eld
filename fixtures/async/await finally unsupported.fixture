@@ -47,7 +47,7 @@ SEMICOLON (9:13-9:14)
   range: 1:1-9:14
   (FunctionDeclaration
     range: 1:1-7:2
-    async: true
+    modifiers: [ASYNC]
     (IdentifierDeclaration
       range: 1:12-1:15
       name: "run"

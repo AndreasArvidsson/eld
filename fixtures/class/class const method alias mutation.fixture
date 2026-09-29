@@ -56,6 +56,7 @@ SEMICOLON (10:19-10:20)
   range: 1:1-10:20
   (ClassDeclaration
     range: 1:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Box"
@@ -64,6 +65,7 @@ SEMICOLON (10:19-10:20)
     (MemberDeclaration
       range: 2:5-2:26
       visibility: PUBLIC
+      staticMember: false
       (VariableDeclaration
         range: 2:12-2:26
         mutability: VAR
@@ -82,9 +84,10 @@ SEMICOLON (10:19-10:20)
     (MemberDeclaration
       range: 4:5-7:6
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 4:12-7:6
-        CONST
+        modifiers: [CONST]
         (IdentifierDeclaration
           range: 4:23-4:29
           name: "mutate"

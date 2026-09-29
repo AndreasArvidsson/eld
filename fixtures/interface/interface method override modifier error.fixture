@@ -53,6 +53,7 @@ RIGHT_BRACE (7:1-7:2)
   )
   (ClassDeclaration
     range: 5:1-7:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:11
       name: "Impl"
@@ -65,9 +66,10 @@ RIGHT_BRACE (7:1-7:2)
     (MemberDeclaration
       range: 6:5-6:34
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:34
-        OVERRIDE
+        modifiers: [OVERRIDE]
         (IdentifierDeclaration
           range: 6:26-6:29
           name: "run"

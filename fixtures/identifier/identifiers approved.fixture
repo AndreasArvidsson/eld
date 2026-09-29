@@ -353,6 +353,7 @@ SEMICOLON (42:44-42:45)
   range: 1:1-42:45
   (ClassDeclaration
     range: 1:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:10
       name: "Box"
@@ -361,6 +362,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 2:5-2:27
         mutability: VAR
@@ -382,6 +384,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 3:5-3:28
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 3:5-3:28
         mutability: VAR
@@ -403,6 +406,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 4:5-4:32
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 4:5-4:32
         mutability: VAR
@@ -424,6 +428,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 5:5-5:29
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 5:5-5:29
         mutability: CONST
@@ -445,6 +450,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 6:5-6:30
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 6:5-6:30
         mutability: CONST
@@ -466,6 +472,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 7:5-7:34
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 7:5-7:34
         mutability: CONST
@@ -487,6 +494,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 8:5-8:34
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 8:5-8:34
         mutability: CONST
@@ -508,8 +516,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 9:5-9:71
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 9:5-9:71
+        modifiers: []
         (IdentifierDeclaration
           range: 9:10-9:18
           name: "function"
@@ -578,8 +588,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 10:5-10:24
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 10:5-10:24
+        modifiers: []
         (IdentifierDeclaration
           range: 10:10-10:19
           name: "function2"
@@ -593,8 +605,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 11:5-11:28
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 11:5-11:28
+        modifiers: []
         (IdentifierDeclaration
           range: 11:10-11:23
           name: "functionThree"
@@ -629,6 +643,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 16:5-16:25
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 16:5-16:25
         mutability: VAR
@@ -650,6 +665,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 17:5-17:31
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 17:5-17:31
         mutability: CONST
@@ -671,6 +687,7 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 18:5-18:30
       visibility: PRIVATE
+      staticMember: false
       (VariableDeclaration
         range: 18:5-18:30
         mutability: CONST
@@ -692,8 +709,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 19:5-19:40
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 19:5-19:40
+        modifiers: []
         (IdentifierDeclaration
           range: 19:10-19:13
           name: "run"
@@ -778,8 +797,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 22:5-22:71
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 22:5-22:71
+        modifiers: []
         (IdentifierDeclaration
           range: 22:10-22:18
           name: "function"
@@ -848,8 +869,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 23:5-23:24
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 23:5-23:24
+        modifiers: []
         (IdentifierDeclaration
           range: 23:10-23:19
           name: "function2"
@@ -863,8 +886,10 @@ SEMICOLON (42:44-42:45)
     (MemberDeclaration
       range: 24:5-24:28
       visibility: PRIVATE
+      staticMember: false
       (FunctionDeclaration
         range: 24:5-24:28
+        modifiers: []
         (IdentifierDeclaration
           range: 24:10-24:23
           name: "functionThree"
@@ -1040,6 +1065,7 @@ SEMICOLON (42:44-42:45)
   )
   (FunctionDeclaration
     range: 37:1-37:67
+    modifiers: []
     (IdentifierDeclaration
       range: 37:6-37:14
       name: "function"
@@ -1106,6 +1132,7 @@ SEMICOLON (42:44-42:45)
   )
   (FunctionDeclaration
     range: 38:1-38:20
+    modifiers: []
     (IdentifierDeclaration
       range: 38:6-38:15
       name: "function2"
@@ -1117,6 +1144,7 @@ SEMICOLON (42:44-42:45)
   )
   (FunctionDeclaration
     range: 39:1-39:24
+    modifiers: []
     (IdentifierDeclaration
       range: 39:6-39:19
       name: "functionThree"
@@ -1318,9 +1346,9 @@ Declarations:
   9:44-9:54 -> const paramThree: i32
   10:10-10:19 -> func function2() => void
   11:10-11:23 -> func functionThree() => void
-  13:6-13:15 -> class Direction
-  14:5-14:12 -> const NORTH_1: Direction
-  15:5-15:10 -> const SOUTH: Direction
+  13:6-13:15 -> enum Direction
+  14:5-14:12 -> public static const NORTH_1: Direction
+  15:5-15:10 -> public static const SOUTH: Direction
   16:9-16:15 -> var value1: i32
   17:11-17:21 -> const otherValue: i32
   18:11-18:20 -> const MAX_VALUE: i32

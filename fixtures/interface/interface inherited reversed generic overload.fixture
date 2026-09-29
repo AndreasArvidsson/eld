@@ -251,6 +251,7 @@ SEMICOLON (17:34-17:35)
   )
   (ClassDeclaration
     range: 5:1-8:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:11
       name: "Base"
@@ -259,8 +260,10 @@ SEMICOLON (17:34-17:35)
     (MemberDeclaration
       range: 6:5-6:74
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 6:12-6:74
+        modifiers: []
         (IdentifierDeclaration
           range: 6:17-6:25
           name: "describe"
@@ -303,8 +306,10 @@ SEMICOLON (17:34-17:35)
     (MemberDeclaration
       range: 7:5-7:76
       visibility: PUBLIC
+      staticMember: false
       (FunctionDeclaration
         range: 7:12-7:76
+        modifiers: []
         (IdentifierDeclaration
           range: 7:17-7:25
           name: "describe"
@@ -347,6 +352,7 @@ SEMICOLON (17:34-17:35)
   )
   (ClassDeclaration
     range: 9:1-9:48
+    modifiers: []
     (IdentifierDeclaration
       range: 9:7-9:12
       name: "Child"
@@ -633,9 +639,9 @@ Declarations:
   3:10-3:18 -> func describe(values: List<i32>) => string
   3:19-3:25 -> const values: List<i32>
   5:7-5:11 -> class Base
-  6:17-6:25 -> func describe(values: List<i32>) => string
+  6:17-6:25 -> public func describe(values: List<i32>) => string
   6:26-6:32 -> const values: List<i32>
-  7:17-7:25 -> func describe(values: List<string>) => string
+  7:17-7:25 -> public func describe(values: List<string>) => string
   7:26-7:32 -> const values: List<string>
   9:7-9:12 -> class Child
   10:7-10:12 -> const child: Child

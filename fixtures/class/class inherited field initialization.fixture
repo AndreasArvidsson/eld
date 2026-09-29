@@ -86,6 +86,7 @@ SEMICOLON (13:23-13:24)
   range: 1:1-13:24
   (ClassDeclaration
     range: 1:1-4:2
+    modifiers: []
     (IdentifierDeclaration
       range: 1:7-1:11
       name: "Base"
@@ -94,6 +95,7 @@ SEMICOLON (13:23-13:24)
     (MemberDeclaration
       range: 2:5-2:29
       visibility: PROTECTED
+      staticMember: false
       (VariableDeclaration
         range: 2:15-2:29
         mutability: VAR
@@ -112,6 +114,7 @@ SEMICOLON (13:23-13:24)
     (MemberDeclaration
       range: 3:5-3:31
       visibility: PROTECTED
+      staticMember: false
       (VariableDeclaration
         range: 3:15-3:31
         mutability: CONST
@@ -130,6 +133,7 @@ SEMICOLON (13:23-13:24)
   )
   (ClassDeclaration
     range: 5:1-12:2
+    modifiers: []
     (IdentifierDeclaration
       range: 5:7-5:12
       name: "Child"
@@ -141,6 +145,7 @@ SEMICOLON (13:23-13:24)
     (MemberDeclaration
       range: 6:5-6:27
       visibility: PUBLIC
+      staticMember: false
       (UninitializedVariableDeclaration
         range: 6:12-6:27
         mutability: CONST
@@ -157,6 +162,7 @@ SEMICOLON (13:23-13:24)
     (MemberDeclaration
       range: 7:5-11:6
       visibility: PUBLIC
+      staticMember: false
       (ConstructorDeclaration
         range: 7:12-11:6
         (BlockStatement
@@ -281,11 +287,11 @@ Resolved types:
 
 Declarations:
   1:7-1:11 -> class Base
-  2:19-2:24 -> var value: i32
-  3:21-3:26 -> const fixed: i32
+  2:19-2:24 -> protected var value: i32
+  3:21-3:26 -> protected const fixed: i32
   5:7-5:12 -> class Child
-  6:18-6:21 -> const own: i32
-  7:12-11:6 -> constructor()
+  6:18-6:21 -> public const own: i32
+  7:12-11:6 -> public constructor()
 
 References:
   5:21-5:25 -> 1:7-1:11
