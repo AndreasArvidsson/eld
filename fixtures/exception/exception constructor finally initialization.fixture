@@ -70,7 +70,9 @@ SEMICOLON (12:22-12:23)
       range: 1:7-1:15
       name: "Resource"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:29
       visibility: PUBLIC

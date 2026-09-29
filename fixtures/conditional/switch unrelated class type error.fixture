@@ -47,7 +47,9 @@ RIGHT_BRACE (7:1-7:2)
       range: 1:7-1:12
       name: "First"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 2:1-2:16
@@ -56,7 +58,9 @@ RIGHT_BRACE (7:1-7:2)
       range: 2:7-2:13
       name: "Second"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ExpressionStatement
     range: 4:1-7:2

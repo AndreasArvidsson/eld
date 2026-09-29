@@ -123,6 +123,7 @@ SEMICOLON (8:36-8:37)
       )
       namedOnly: false
     )
+    implements: null
     (MemberDeclaration
       range: 2:5-2:66
       visibility: PUBLIC

@@ -24,6 +24,7 @@ public enum TokenType {
     EXTENDS,
     INTERFACE,
     IMPLEMENTS,
+    PERMITS,
     AS,
     INSTANCEOF,
     NEW,

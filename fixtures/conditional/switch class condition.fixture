@@ -100,7 +100,9 @@ RIGHT_BRACE (15:1-15:2)
       range: 1:7-1:10
       name: "Key"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC

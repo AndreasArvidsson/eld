@@ -39,6 +39,7 @@ RIGHT_BRACE (6:1-6:2)
       range: 1:11-1:16
       name: "Value"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:20
       mutability: VAR
@@ -59,11 +60,15 @@ RIGHT_BRACE (6:1-6:2)
       range: 4:7-4:10
       name: "Box"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 4:22-4:27
-      name: "Value"
+    extends: null
+    (Implements
+      range: 4:11-4:27
+      (NamedTypeNode
+        range: 4:22-4:27
+        name: "Value"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 5:5-5:28
       visibility: PUBLIC

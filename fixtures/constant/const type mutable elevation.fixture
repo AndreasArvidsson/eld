@@ -36,7 +36,9 @@ SEMICOLON (3:37-3:38)
       range: 1:7-1:10
       name: "Foo"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 2:1-2:27

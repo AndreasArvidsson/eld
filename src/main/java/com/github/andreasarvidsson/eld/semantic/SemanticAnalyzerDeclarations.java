@@ -2,6 +2,7 @@ package com.github.andreasarvidsson.eld.semantic;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,6 +34,9 @@ import com.github.andreasarvidsson.eld.parser.Visibility;
 public final class SemanticAnalyzerDeclarations {
     private final SemanticAnalyzer analyzer;
     private final SemanticModel model;
+    private final Map<Type, List<IdentifierExpression>> permittedDeclarations =
+        new LinkedHashMap<>();
+    private final Map<String, Set<Type>> directParents = new HashMap<>();
 
     public SemanticAnalyzerDeclarations(
         final SemanticAnalyzer analyzer,
@@ -40,6 +44,70 @@ public final class SemanticAnalyzerDeclarations {
     ) {
         this.analyzer = analyzer;
         this.model = model;
+    }
+
+    private void registerPermittedSubclasses(
+        final Type type,
+        final @Nullable List<IdentifierExpression> permitted
+    ) {
+        if (permitted == null) {
+            return;
+        }
+        final Set<String> names = new HashSet<>();
+        for (final IdentifierExpression name : permitted) {
+            if (!names.add(name.name())) {
+                throw new SemanticException(
+                    name.range(),
+                    "Duplicate permitted subclass: %s",
+                    name.name()
+                );
+            }
+            if (name.name().equals(type.toString())) {
+                throw new SemanticException(
+                    name.range(),
+                    "A type cannot permit itself"
+                );
+            }
+        }
+        model.setPermittedSubclasses(type, List.copyOf(names));
+        permittedDeclarations.put(type, permitted);
+    }
+
+    private void recordDirectParent(final String name, final Type parent) {
+        directParents.computeIfAbsent(name, _ -> new HashSet<>()).add(parent);
+    }
+
+    public void validatePermittedSubclasses() {
+        for (final var entry : permittedDeclarations.entrySet()) {
+            for (final IdentifierExpression name : entry.getValue()) {
+                if (
+                    !directParents.getOrDefault(name.name(), Set.of())
+                        .contains(entry.getKey())
+                ) {
+                    throw new SemanticException(
+                        name.range(),
+                        "Permitted type %s must directly extend or implement %s",
+                        name.name(),
+                        entry.getKey()
+                    );
+                }
+            }
+        }
+    }
+
+    private void requirePermittedSubclass(
+        final Type parent,
+        final String name,
+        final AstNode node
+    ) {
+        if (!model.permitsSubclass(parent, name)) {
+            throw new SemanticException(
+                node.range(),
+                "Type %s does not permit %s",
+                parent,
+                name
+            );
+        }
     }
 
     public void analyzeClassDeclaration(
@@ -78,6 +146,15 @@ public final class SemanticAnalyzerDeclarations {
         final SemanticContext context,
         final @Nullable RecordDeclaration record
     ) {
+        if (
+            declaration.finalClass()
+                && declaration.permittedSubclasses() != null
+        ) {
+            throw new SemanticException(
+                declaration.range(),
+                "Final class cannot declare permitted subclasses"
+            );
+        }
         final ClassType classType = new ClassType(declaration.name().name());
         final EnumDeclaration enumeration =
             model.findEnumDeclaration(declaration);
@@ -89,50 +166,61 @@ public final class SemanticAnalyzerDeclarations {
                     : new ClassSymbol(
                         declaration.name(),
                         classType,
-                        declaration.modifiers()
+                        declaration.modifiers(),
+                        declaration.permittedSubclasses()
                     );
         model.setSymbol(declaration.name(), classSymbol);
         model.setClassDeclaration(classType, declaration);
         context.scope().declare(classSymbol);
+        registerPermittedSubclasses(
+            classType,
+            declaration.permittedSubclasses()
+        );
         final List<InterfaceType> implemented = new ArrayList<>();
-        for (final TypeNode node : declaration.implementedInterfaces()) {
-            final Type type = analyzer.resolveType(node, context);
-            if (!(type instanceof InterfaceType contract)) {
-                throw new SemanticException(
-                    node.range(),
-                    "'implements' requires an interface"
-                );
+        final var implementedInterfaces = declaration.implementedInterfaces();
+        if (implementedInterfaces != null) {
+            for (final TypeNode node : implementedInterfaces) {
+                final Type type = analyzer.resolveType(node, context);
+                if (!(type instanceof InterfaceType contract)) {
+                    throw new SemanticException(
+                        node.range(),
+                        "'implements' requires an interface"
+                    );
+                }
+                if (
+                    contract.javaClass() != null
+                        && contract.javaClass() != Comparable.class
+                        && contract.javaClass() != java.util.Comparator.class
+                ) {
+                    throw new SemanticException(
+                        node.range(),
+                        "Only Comparable and Comparator can be implemented from the Java collection API"
+                    );
+                }
+                if (
+                    contract.javaClass() != null && implemented.stream()
+                        .anyMatch(
+                            previous -> previous.javaClass() == contract
+                                .javaClass()
+                        )
+                ) {
+                    throw new SemanticException(
+                        node.range(),
+                        "Duplicate implemented Java interface: %s",
+                        contract.name()
+                    );
+                }
+                if (implemented.contains(contract)) {
+                    throw new SemanticException(
+                        node.range(),
+                        "Duplicate implemented interface: %s",
+                        contract
+                    );
+                }
+                requirePermittedSubclass(contract, classType.name(), node);
+                recordDirectParent(classType.name(), contract);
+                implemented.add(contract);
             }
-            if (
-                contract.javaClass() != null
-                    && contract.javaClass() != Comparable.class
-                    && contract.javaClass() != java.util.Comparator.class
-            ) {
-                throw new SemanticException(
-                    node.range(),
-                    "Only Comparable and Comparator can be implemented from the Java collection API"
-                );
-            }
-            if (
-                contract.javaClass() != null && implemented.stream()
-                    .anyMatch(
-                        previous -> previous.javaClass() == contract.javaClass()
-                    )
-            ) {
-                throw new SemanticException(
-                    node.range(),
-                    "Duplicate implemented Java interface: %s",
-                    contract.name()
-                );
-            }
-            if (implemented.contains(contract)) {
-                throw new SemanticException(
-                    node.range(),
-                    "Duplicate implemented interface: %s",
-                    contract
-                );
-            }
-            implemented.add(contract);
         }
         model.setImplementedInterfaces(classType, implemented);
         final IdentifierExpression superclassName = declaration.superClass();
@@ -150,6 +238,20 @@ public final class SemanticAnalyzerDeclarations {
                 );
             }
             final ClassType superclass = superclassSymbol.type();
+            final ClassDeclaration baseDeclaration =
+                model.findClassDeclaration(superclass);
+            if (baseDeclaration != null && baseDeclaration.finalClass()) {
+                throw new SemanticException(
+                    superclassName.range(),
+                    "Final class %s cannot be extended",
+                    superclass.name()
+                );
+            }
+            requirePermittedSubclass(
+                superclass,
+                classType.name(),
+                superclassName
+            );
             if (model.isEnumClass(superclass)) {
                 throw new SemanticException(
                     superclassName.range(),
@@ -167,6 +269,7 @@ public final class SemanticAnalyzerDeclarations {
                 );
             }
             model.setSuperclass(classType, superclass);
+            recordDirectParent(classType.name(), superclass);
             if (
                 !analyzer.canAccess(
                     superclass,
@@ -542,9 +645,14 @@ public final class SemanticAnalyzerDeclarations {
     ) {
         final InterfaceType type = new InterfaceType(declaration.name().name());
         final InterfaceSymbol symbol =
-            new InterfaceSymbol(declaration.name(), type);
+            new InterfaceSymbol(
+                declaration.name(),
+                type,
+                declaration.permittedSubclasses()
+            );
         context.scope().declare(symbol);
         model.setSymbol(declaration.name(), symbol);
+        registerPermittedSubclasses(type, declaration.permittedSubclasses());
         final List<InterfaceType> parents = new ArrayList<>();
         final Map<String, VariableSymbol> fields = new LinkedHashMap<>();
         final Map<String, FunctionSymbol> methods = new LinkedHashMap<>();
@@ -573,6 +681,8 @@ public final class SemanticAnalyzerDeclarations {
                     contract
                 );
             }
+            requirePermittedSubclass(contract, type.name(), node);
+            recordDirectParent(type.name(), contract);
             if (
                 contract.javaClass() != null
                     && contract.javaClass() != Comparable.class

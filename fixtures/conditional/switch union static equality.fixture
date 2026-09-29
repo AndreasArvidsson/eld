@@ -102,7 +102,9 @@ RIGHT_BRACE (12:1-12:2)
       range: 1:7-1:13
       name: "Animal"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:79
       visibility: PUBLIC
@@ -167,10 +169,15 @@ RIGHT_BRACE (12:1-12:2)
       range: 4:7-4:10
       name: "Cat"
     )
-    (IdentifierExpression
-      range: 4:19-4:25
-      name: "Animal"
+    (Extends
+      range: 4:11-4:25
+      (IdentifierExpression
+        range: 4:19-4:25
+        name: "Animal"
+      )
     )
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 5:1-5:28
@@ -179,10 +186,15 @@ RIGHT_BRACE (12:1-12:2)
       range: 5:7-5:10
       name: "Dog"
     )
-    (IdentifierExpression
-      range: 5:19-5:25
-      name: "Animal"
+    (Extends
+      range: 5:11-5:25
+      (IdentifierExpression
+        range: 5:19-5:25
+        name: "Animal"
+      )
     )
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 7:1-7:41

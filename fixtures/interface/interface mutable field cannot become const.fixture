@@ -38,6 +38,7 @@ RIGHT_BRACE (6:1-6:2)
       range: 1:11-1:16
       name: "Value"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:20
       mutability: VAR
@@ -61,6 +62,7 @@ RIGHT_BRACE (6:1-6:2)
       range: 4:28-4:33
       name: "Value"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 5:5-5:22
       mutability: CONST

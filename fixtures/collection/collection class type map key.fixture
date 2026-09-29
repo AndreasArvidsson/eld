@@ -49,7 +49,9 @@ SEMICOLON (5:25-5:26)
       range: 1:7-1:12
       name: "First"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 2:1-2:16
@@ -58,7 +60,9 @@ SEMICOLON (5:25-5:26)
       range: 2:7-2:13
       name: "Second"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 4:1-4:50

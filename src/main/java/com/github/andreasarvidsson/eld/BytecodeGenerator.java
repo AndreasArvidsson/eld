@@ -588,6 +588,23 @@ public final class BytecodeGenerator {
             final List<ClassDesc> nestMembers = new ArrayList<>();
             writer.withVersion(JAVA_21_VERSION, 0);
             writer.withFlags(ACC_PUBLIC | ACC_INTERFACE | ACC_ABSTRACT);
+            if (declaration.permittedSubclasses() != null) {
+                writer.with(
+                    PermittedSubclassesAttribute.ofSymbols(
+                        declaration.permittedSubclasses()
+                            .stream()
+                            .map(
+                                name -> classDesc(
+                                    classOwners.getOrDefault(
+                                        name.name(),
+                                        moduleName + "$" + name.name()
+                                    )
+                                )
+                            )
+                            .toList()
+                    )
+                );
+            }
             writer.withSuperclass(classDesc("java/lang/Object"));
             generateClassSignature(
                 writer,
@@ -1548,6 +1565,8 @@ public final class BytecodeGenerator {
             recordClass
                 ? semanticModel.getRecordDeclaration(declaration)
                 : null;
+        final boolean finalClass =
+            recordClass || enumClass || declaration.finalClass();
         final ClassType superclass = semanticModel.getSuperclass(classType);
         final String superclassOwner =
             recordClass
@@ -1564,10 +1583,28 @@ public final class BytecodeGenerator {
             writer.withFlags(
                 ACC_PUBLIC | ACC_SUPER | (enumClass ? ACC_ENUM : 0)
                     | (declaration.abstractClass() ? ACC_ABSTRACT : 0)
-                    | (recordClass || semanticModel.isEnumClass(classType)
-                        ? ACC_FINAL
-                        : 0)
+                    | (finalClass ? ACC_FINAL : 0)
             );
+            if (declaration.permittedSubclasses() != null) {
+                writer
+                    .with(
+                        PermittedSubclassesAttribute
+                            .ofSymbols(
+                                declaration.permittedSubclasses()
+                                    .stream()
+                                    .map(
+                                        permitted -> classDesc(
+                                            classOwners.getOrDefault(
+                                                permitted.name(),
+                                                moduleName + "$"
+                                                    + permitted.name()
+                                            )
+                                        )
+                                    )
+                                    .toList()
+                            )
+                    );
+            }
             writer.withSuperclass(classDesc(superclassOwner));
             if (record != null) {
                 generateRecordAttribute(writer, record);
@@ -1610,7 +1647,7 @@ public final class BytecodeGenerator {
                     Optional.of(declaration.name().name()),
                     ACC_PUBLIC | ACC_STATIC
                         | (declaration.abstractClass() ? ACC_ABSTRACT : 0)
-                        | (recordClass || enumClass ? ACC_FINAL : 0)
+                        | (finalClass ? ACC_FINAL : 0)
                         | (enumClass ? ACC_ENUM : 0)
                 )
             );
@@ -3299,6 +3336,7 @@ public final class BytecodeGenerator {
                                 | (declaration.abstractClass()
                                     ? ACC_ABSTRACT
                                     : 0)
+                                | (declaration.finalClass() ? ACC_FINAL : 0)
                         )
                     );
                 }

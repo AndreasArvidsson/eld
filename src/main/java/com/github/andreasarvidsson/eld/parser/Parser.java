@@ -82,6 +82,7 @@ public final class Parser extends ParserBase {
         if (
             (check(TokenType.FINAL) || check(TokenType.OVERRIDE)
                 || check(TokenType.ASYNC)) && !functionDeclarationStartsHere()
+                && !(check(TokenType.FINAL) && check(1, TokenType.CLASS))
         ) {
             throw ParserException.expected("top-level declaration", current());
         }
@@ -124,8 +125,16 @@ public final class Parser extends ParserBase {
             case RECORD -> parseRecordDeclaration(token);
             case INTERFACE -> parseInterfaceDeclaration(token);
             case FUNC -> parseFunctionDeclaration(token, List.of());
-            case FINAL, OVERRIDE, ASYNC ->
-                parseTopLevelFunctionDeclaration(token);
+            case FINAL -> {
+                if (match(TokenType.CLASS)) {
+                    yield parseClassDeclaration(
+                        token,
+                        List.of(ClassModifier.FINAL)
+                    );
+                }
+                yield parseTopLevelFunctionDeclaration(token);
+            }
+            case OVERRIDE, ASYNC -> parseTopLevelFunctionDeclaration(token);
             default -> throw new IllegalStateException(
                 "Unexpected top-level declaration token: " + token.type()
             );
@@ -356,20 +365,9 @@ public final class Parser extends ParserBase {
     ) {
         final Token name = expect(TokenType.IDENTIFIER);
         assertIdentifierCase(name, "class");
-        final IdentifierExpression superclass;
-        if (match(TokenType.EXTENDS)) {
-            final Token base = expect(TokenType.IDENTIFIER);
-            superclass = new IdentifierExpression(base.text(), base.range());
-        }
-        else {
-            superclass = null;
-        }
-        final List<@NonNull TypeNode> implementedInterfaces = new ArrayList<>();
-        if (match(TokenType.IMPLEMENTS)) {
-            do {
-                implementedInterfaces.add(parseType());
-            } while (match(TokenType.COMMA));
-        }
+        final var extendsNode = parseExtends();
+        final var implementsNode = parseImplements();
+        final var permitsNode = parsePermits();
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull MemberDeclaration> members = new ArrayList<>();
         while (!check(TokenType.RIGHT_BRACE) && !isAtEnd()) {
@@ -381,8 +379,9 @@ public final class Parser extends ParserBase {
         return new ClassDeclaration(
             modifiers,
             id,
-            superclass,
-            implementedInterfaces,
+            extendsNode,
+            implementsNode,
+            permitsNode,
             members,
             range
         );
@@ -391,12 +390,7 @@ public final class Parser extends ParserBase {
     private EnumDeclaration parseEnumDeclaration(final Token keyword) {
         final Token name = expect(TokenType.IDENTIFIER);
         assertIdentifierCase(name, "enum");
-        final List<@NonNull TypeNode> interfaces = new ArrayList<>();
-        if (match(TokenType.IMPLEMENTS)) {
-            do {
-                interfaces.add(parseType());
-            } while (match(TokenType.COMMA));
-        }
+        final var implementsNode = parseImplements();
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull EnumConstant> constants = new ArrayList<>();
         if (!check(TokenType.RIGHT_BRACE) && !check(TokenType.SEMICOLON)) {
@@ -496,7 +490,7 @@ public final class Parser extends ParserBase {
         final Token end = expect(TokenType.RIGHT_BRACE);
         return new EnumDeclaration(
             new IdentifierDeclaration(name.text(), name.range()),
-            interfaces,
+            implementsNode,
             constants,
             members,
             keyword.range().union(end.range())
@@ -646,12 +640,7 @@ public final class Parser extends ParserBase {
             } while (match(TokenType.COMMA));
         }
         expect(TokenType.RIGHT_PAREN);
-        final List<@NonNull TypeNode> implementedInterfaces = new ArrayList<>();
-        if (match(TokenType.IMPLEMENTS)) {
-            do {
-                implementedInterfaces.add(parseType());
-            } while (match(TokenType.COMMA));
-        }
+        final var implementedInterfaces = parseImplements();
         final List<@NonNull MemberDeclaration> methods = new ArrayList<>();
         final Token end;
         if (match(TokenType.SEMICOLON)) {
@@ -745,6 +734,7 @@ public final class Parser extends ParserBase {
                 parents.add(parseType());
             } while (match(TokenType.COMMA));
         }
+        final @Nullable Permits permitted = parsePermits();
         expect(TokenType.LEFT_BRACE);
         final List<@NonNull InterfaceMemberDeclaration> members =
             new ArrayList<>();
@@ -755,8 +745,54 @@ public final class Parser extends ParserBase {
         return new InterfaceDeclaration(
             new IdentifierDeclaration(name.text(), name.range()),
             parents,
+            permitted,
             members,
             keyword.range().union(end.range())
+        );
+    }
+
+    private @Nullable Extends parseExtends() {
+        final @Nullable Token keyword = matchToken(TokenType.EXTENDS);
+        if (keyword == null) {
+            return null;
+        }
+        final Token name = expect(TokenType.IDENTIFIER);
+        final IdentifierExpression superclass =
+            new IdentifierExpression(name.text(), name.range());
+        return new Extends(
+            keyword.range().union(superclass.range()),
+            superclass
+        );
+    }
+
+    private @Nullable Implements parseImplements() {
+        final @Nullable Token keyword = matchToken(TokenType.IMPLEMENTS);
+        if (keyword == null) {
+            return null;
+        }
+        final List<@NonNull TypeNode> values = new ArrayList<>();
+        do {
+            values.add(parseType());
+        } while (match(TokenType.COMMA));
+        return new Implements(
+            keyword.range().union(values.getLast().range()),
+            values
+        );
+    }
+
+    private @Nullable Permits parsePermits() {
+        final @Nullable Token keyword = matchToken(TokenType.PERMITS);
+        if (keyword == null) {
+            return null;
+        }
+        final List<@NonNull IdentifierExpression> values = new ArrayList<>();
+        do {
+            final Token name = expect(TokenType.IDENTIFIER);
+            values.add(new IdentifierExpression(name.text(), name.range()));
+        } while (match(TokenType.COMMA));
+        return new Permits(
+            keyword.range().union(values.getLast().range()),
+            values
         );
     }
 

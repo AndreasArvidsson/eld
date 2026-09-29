@@ -98,7 +98,9 @@ SEMICOLON (13:22-13:23)
       range: 1:7-1:14
       name: "Counter"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:34
       visibility: PUBLIC

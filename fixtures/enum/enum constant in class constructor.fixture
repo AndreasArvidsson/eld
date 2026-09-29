@@ -53,6 +53,7 @@ SEMICOLON (12:13-12:14)
       range: 1:6-1:15
       name: "Direction"
     )
+    implements: null
     (EnumConstant
       range: 2:5-2:10
       (IdentifierDeclaration
@@ -75,7 +76,9 @@ SEMICOLON (12:13-12:14)
       range: 6:7-6:13
       name: "Holder"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 7:5-9:6
       visibility: PUBLIC

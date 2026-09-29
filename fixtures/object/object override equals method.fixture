@@ -102,7 +102,9 @@ SEMICOLON (9:42-9:43)
       range: 1:7-1:20
       name: "WithoutEquals"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 2:1-4:2
@@ -111,7 +113,9 @@ SEMICOLON (9:42-9:43)
       range: 2:7-2:17
       name: "WithEquals"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 3:5-3:81
       visibility: PUBLIC

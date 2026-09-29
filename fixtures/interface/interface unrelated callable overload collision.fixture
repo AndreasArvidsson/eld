@@ -100,6 +100,7 @@ RIGHT_BRACE (10:1-10:2)
       range: 1:11-1:20
       name: "IntMapper"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:51
       (IdentifierDeclaration
@@ -144,6 +145,7 @@ RIGHT_BRACE (10:1-10:2)
       range: 4:11-4:23
       name: "StringMapper"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 5:5-5:54
       (IdentifierDeclaration
@@ -189,15 +191,19 @@ RIGHT_BRACE (10:1-10:2)
       range: 7:7-7:11
       name: "Both"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 7:23-7:32
-      name: "IntMapper"
+    extends: null
+    (Implements
+      range: 7:12-7:46
+      (NamedTypeNode
+        range: 7:23-7:32
+        name: "IntMapper"
+      )
+      (NamedTypeNode
+        range: 7:34-7:46
+        name: "StringMapper"
+      )
     )
-    (NamedTypeNode
-      range: 7:34-7:46
-      name: "StringMapper"
-    )
+    permits: null
     (MemberDeclaration
       range: 8:5-8:80
       visibility: PUBLIC

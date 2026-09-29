@@ -67,6 +67,7 @@ SEMICOLON (6:6-6:7)
       )
       namedOnly: false
     )
+    implements: null
   )
   (VariableDeclaration
     range: 2:1-5:3

@@ -4,6 +4,7 @@ import java.lang.reflect.RecordComponent;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class AstPrinter {
@@ -63,35 +64,34 @@ public class AstPrinter {
             }
 
             if (component.getName().equals("modifiers")) {
-                if (node instanceof ClassDeclaration cls) {
-                    appendModifiers(output, cls.modifiers(), depth + 1);
-                    continue;
-                }
-                if (node instanceof FunctionDeclaration func) {
-                    appendModifiers(output, func.modifiers(), depth + 1);
-                    continue;
-                }
+                final var modifiers = getModifiers(node);
+                newline(output, depth + 1);
+                output.append("modifiers: ");
+                output.append(
+                    modifiers.stream()
+                        .map(Enum::name)
+                        .collect(Collectors.joining(", ", "[", "]"))
+                );
+                continue;
             }
 
-            try {
-                final Object value = component.getAccessor().invoke(node);
-                if (value instanceof List<?>) {
-                    append(output, value, depth);
-                }
-                else {
-                    newline(output, depth + 1);
-                    if (!(value instanceof AstNode)) {
-                        output.append(component.getName()).append(": ");
-                    }
-                    append(output, value, depth + 1);
-                }
+            final String componentName = switch (component.getName()) {
+                case "extendsNode" -> "extends";
+                case "permitsNode" -> "permits";
+                case "implementsNode" -> "implements";
+                default -> component.getName();
+            };
+
+            final Object value = getValue(node, component);
+            if (value instanceof List<?>) {
+                append(output, value, depth);
             }
-            catch (final ReflectiveOperationException e) {
-                throw new IllegalStateException(
-                    "Cannot read " + type.getSimpleName() + "."
-                        + component.getName(),
-                    e
-                );
+            else {
+                newline(output, depth + 1);
+                if (!(value instanceof AstNode)) {
+                    output.append(componentName).append(": ");
+                }
+                append(output, value, depth + 1);
             }
         }
 
@@ -125,21 +125,38 @@ public class AstPrinter {
         output.append('"');
     }
 
-    private static void appendModifiers(
-        final StringBuilder output,
-        List<? extends Enum<?>> modifiers,
-        final int depth
-    ) {
-        newline(output, depth);
-        output.append("modifiers: ");
-        output.append(
-            modifiers.stream()
-                .map(Enum::name)
-                .collect(Collectors.joining(", ", "[", "]"))
-        );
-    }
-
     private static void newline(final StringBuilder output, final int depth) {
         output.append('\n').append("  ".repeat(depth));
+    }
+
+    private static Object getValue(
+        final AstNode node,
+        final RecordComponent component
+    ) {
+        try {
+            return component.getAccessor().invoke(node);
+        }
+        catch (final ReflectiveOperationException e) {
+            throw new IllegalStateException(
+                "Cannot read " + node.getClass().getSimpleName() + "."
+                    + component.getName(),
+                e
+            );
+        }
+    }
+
+    private static List<? extends @NonNull Enum<?>> getModifiers(
+        final AstNode node
+    ) {
+        return switch (node) {
+            case ClassDeclaration cls -> cls.modifiers();
+            case FunctionDeclaration func -> func.modifiers();
+            default -> throw new RuntimeException(
+                String.format(
+                    "Unexpected node type: %s",
+                    node.getClass().getName()
+                )
+            );
+        };
     }
 }

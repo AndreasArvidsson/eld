@@ -77,6 +77,21 @@ public class BytecodeUtil {
                             .append('\n')
                     )
             );
+        model.findAttribute(Attributes.permittedSubclasses())
+            .ifPresent(permitted -> {
+                final List<String> subclasses =
+                    permitted.permittedSubclasses()
+                        .stream()
+                        .map(entry -> entry.asInternalName())
+                        .toList();
+                text.append("  permits ")
+                    .append(
+                        subclasses.isEmpty()
+                            ? "[]"
+                            : String.join(", ", subclasses)
+                    )
+                    .append('\n');
+            });
         model.findAttribute(Attributes.record())
             .ifPresent(record -> record.components().forEach(component -> {
                 text.append("  record component ")

@@ -90,7 +90,9 @@ SEMICOLON (8:25-8:26)
       range: 1:7-1:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:54
       visibility: PUBLIC
@@ -141,10 +143,15 @@ SEMICOLON (8:25-8:26)
       range: 4:7-4:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 4:21-4:25
-      name: "Base"
+    (Extends
+      range: 4:13-4:25
+      (IdentifierExpression
+        range: 4:21-4:25
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 5:5-5:51
       visibility: PUBLIC

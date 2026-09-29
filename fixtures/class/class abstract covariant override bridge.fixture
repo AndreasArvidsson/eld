@@ -154,7 +154,9 @@ SEMICOLON (30:30-30:31)
       range: 1:7-1:12
       name: "Value"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
@@ -191,10 +193,15 @@ SEMICOLON (30:30-30:31)
       range: 7:7-7:20
       name: "DetailedValue"
     )
-    (IdentifierExpression
-      range: 7:29-7:34
-      name: "Value"
+    (Extends
+      range: 7:21-7:34
+      (IdentifierExpression
+        range: 7:29-7:34
+        name: "Value"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
@@ -231,7 +238,9 @@ SEMICOLON (30:30-30:31)
       range: 13:7-13:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 14:5-16:6
       visibility: PUBLIC
@@ -270,10 +279,15 @@ SEMICOLON (30:30-30:31)
       range: 19:16-19:24
       name: "Deferred"
     )
-    (IdentifierExpression
-      range: 19:33-19:37
-      name: "Base"
+    (Extends
+      range: 19:25-19:37
+      (IdentifierExpression
+        range: 19:33-19:37
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 20:5-20:58
       visibility: PUBLIC
@@ -302,10 +316,15 @@ SEMICOLON (30:30-30:31)
       range: 23:7-23:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 23:21-23:29
-      name: "Deferred"
+    (Extends
+      range: 23:13-23:29
+      (IdentifierExpression
+        range: 23:21-23:29
+        name: "Deferred"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 24:5-26:6
       visibility: PUBLIC

@@ -46,6 +46,7 @@ RIGHT_BRACE (4:1-4:2)
       range: 1:11-1:18
       name: "Printer"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:45
       (IdentifierDeclaration

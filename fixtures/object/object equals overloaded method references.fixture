@@ -106,7 +106,9 @@ SEMICOLON (12:28-12:29)
       range: 1:7-1:10
       name: "Foo"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC

@@ -92,7 +92,9 @@ SEMICOLON (10:24-10:25)
       range: 1:7-1:13
       name: "Animal"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 2:1-2:28
@@ -101,10 +103,15 @@ SEMICOLON (10:24-10:25)
       range: 2:7-2:10
       name: "Dog"
     )
-    (IdentifierExpression
-      range: 2:19-2:25
-      name: "Animal"
+    (Extends
+      range: 2:11-2:25
+      (IdentifierExpression
+        range: 2:19-2:25
+        name: "Animal"
+      )
     )
+    implements: null
+    permits: null
   )
   (FunctionDeclaration
     range: 4:1-4:57

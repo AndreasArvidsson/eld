@@ -96,7 +96,9 @@ RIGHT_BRACE (12:1-12:2)
       range: 3:7-3:12
       name: "Value"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 4:5-7:6
       visibility: PUBLIC

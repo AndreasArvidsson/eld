@@ -95,7 +95,9 @@ SEMICOLON (9:16-9:17)
       range: 1:7-1:8
       name: "C"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:24
       visibility: PUBLIC

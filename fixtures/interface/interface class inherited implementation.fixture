@@ -75,6 +75,7 @@ SEMICOLON (11:21-11:22)
       range: 1:11-1:17
       name: "Reader"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:21
       (IdentifierDeclaration
@@ -94,7 +95,9 @@ SEMICOLON (11:21-11:22)
       range: 4:7-4:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 5:5-7:6
       visibility: PUBLIC
@@ -131,14 +134,21 @@ SEMICOLON (11:21-11:22)
       range: 9:7-9:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 9:21-9:25
-      name: "Base"
+    (Extends
+      range: 9:13-9:25
+      (IdentifierExpression
+        range: 9:21-9:25
+        name: "Base"
+      )
     )
-    (NamedTypeNode
-      range: 9:37-9:43
-      name: "Reader"
+    (Implements
+      range: 9:26-9:43
+      (NamedTypeNode
+        range: 9:37-9:43
+        name: "Reader"
+      )
     )
+    permits: null
   )
   (VariableDeclaration
     range: 10:1-10:36

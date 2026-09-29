@@ -76,7 +76,9 @@ RIGHT_BRACE (10:1-10:2)
       range: 1:7-1:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 2:1-2:30
@@ -85,10 +87,15 @@ RIGHT_BRACE (10:1-10:2)
       range: 2:7-2:14
       name: "Derived"
     )
-    (IdentifierExpression
-      range: 2:23-2:27
-      name: "Base"
+    (Extends
+      range: 2:15-2:27
+      (IdentifierExpression
+        range: 2:23-2:27
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 4:1-4:29

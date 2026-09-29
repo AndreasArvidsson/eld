@@ -36,7 +36,9 @@ RIGHT_BRACE (4:27-4:28)
       range: 1:7-1:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:38
       visibility: PUBLIC
@@ -70,10 +72,15 @@ RIGHT_BRACE (4:27-4:28)
       range: 4:7-4:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 4:21-4:25
-      name: "Base"
+    (Extends
+      range: 4:13-4:25
+      (IdentifierExpression
+        range: 4:21-4:25
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
   )
 )
 

@@ -796,7 +796,9 @@ SEMICOLON (57:38-57:39)
       range: 27:7-27:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 28:1-28:30
@@ -805,10 +807,15 @@ SEMICOLON (57:38-57:39)
       range: 28:7-28:14
       name: "Derived"
     )
-    (IdentifierExpression
-      range: 28:23-28:27
-      name: "Base"
+    (Extends
+      range: 28:15-28:27
+      (IdentifierExpression
+        range: 28:23-28:27
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 29:1-29:25
@@ -934,7 +941,9 @@ SEMICOLON (57:38-57:39)
       range: 36:7-36:14
       name: "Compare"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 37:5-39:6
       visibility: PUBLIC

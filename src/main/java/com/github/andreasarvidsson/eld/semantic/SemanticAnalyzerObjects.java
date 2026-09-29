@@ -41,6 +41,13 @@ public final class SemanticAnalyzerObjects {
         final InterfaceType type
     ) {
         final InterfaceContract contract = model.getInterface(type);
+        if (model.isSealed(type)) {
+            throw new SemanticException(
+                object.range(),
+                "Object literal cannot implement sealed interface %s",
+                type
+            );
+        }
         if (
             type.javaClass() != null && type.javaClass() != Comparable.class
                 && type.javaClass() != Comparator.class

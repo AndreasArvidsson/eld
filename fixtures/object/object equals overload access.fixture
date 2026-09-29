@@ -140,7 +140,9 @@ SEMICOLON (20:35-20:36)
       range: 1:7-1:17
       name: "PrivateFoo"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PRIVATE
@@ -232,7 +234,9 @@ SEMICOLON (20:35-20:36)
       range: 9:7-9:16
       name: "StaticFoo"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 10:5-12:6
       visibility: PUBLIC

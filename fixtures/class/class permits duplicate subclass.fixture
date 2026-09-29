@@ -1,0 +1,43 @@
+class Animal permits Dog, Dog {}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+PERMITS (1:14-1:21)
+IDENTIFIER "Dog" (1:22-1:25)
+COMMA (1:25-1:26)
+IDENTIFIER "Dog" (1:27-1:30)
+LEFT_BRACE (1:31-1:32)
+RIGHT_BRACE (1:32-1:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-1:33
+  (ClassDeclaration
+    range: 1:1-1:33
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:13
+      name: "Animal"
+    )
+    extends: null
+    implements: null
+    (Permits
+      range: 1:14-1:30
+      (IdentifierExpression
+        range: 1:22-1:25
+        name: "Dog"
+      )
+      (IdentifierExpression
+        range: 1:27-1:30
+        name: "Dog"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Duplicate permitted subclass: Dog at 1:27-1:30

@@ -1,0 +1,9 @@
+package com.github.andreasarvidsson.eld.parser;
+
+import java.util.List;
+import org.jspecify.annotations.NonNull;
+import com.github.andreasarvidsson.eld.Range;
+
+public record Implements(Range range, List<@NonNull TypeNode> interfaces)
+    implements AstNode {
+}

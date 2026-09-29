@@ -124,6 +124,7 @@ SEMICOLON (11:23-11:24)
       range: 1:11-1:12
       name: "I"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:31
       (IdentifierDeclaration
@@ -203,11 +204,15 @@ SEMICOLON (11:23-11:24)
       range: 5:7-5:8
       name: "C"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 5:20-5:21
-      name: "I"
+    extends: null
+    (Implements
+      range: 5:9-5:21
+      (NamedTypeNode
+        range: 5:20-5:21
+        name: "I"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 6:5-6:55
       visibility: PUBLIC

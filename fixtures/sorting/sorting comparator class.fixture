@@ -175,7 +175,9 @@ SEMICOLON (17:25-17:26)
       range: 1:7-1:13
       name: "Person"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:27
       visibility: PUBLIC
@@ -244,15 +246,19 @@ SEMICOLON (17:25-17:26)
       range: 7:7-7:12
       name: "ByAge"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 7:24-7:42
-      name: "Comparator"
+    extends: null
+    (Implements
+      range: 7:13-7:42
       (NamedTypeNode
-        range: 7:35-7:41
-        name: "Person"
+        range: 7:24-7:42
+        name: "Comparator"
+        (NamedTypeNode
+          range: 7:35-7:41
+          name: "Person"
+        )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC

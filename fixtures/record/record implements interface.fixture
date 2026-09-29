@@ -68,6 +68,7 @@ SEMICOLON (8:14-8:15)
       range: 1:11-1:16
       name: "Named"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:24
       mutability: CONST
@@ -111,9 +112,12 @@ SEMICOLON (8:14-8:15)
       )
       namedOnly: false
     )
-    (NamedTypeNode
-      range: 5:53-5:58
-      name: "Named"
+    (Implements
+      range: 5:42-5:58
+      (NamedTypeNode
+        range: 5:53-5:58
+        name: "Named"
+      )
     )
   )
   (VariableDeclaration

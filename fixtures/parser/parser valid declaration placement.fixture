@@ -133,6 +133,7 @@ SEMICOLON (25:10-25:11)
       range: 3:11-3:16
       name: "Named"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 4:5-4:24
       mutability: CONST
@@ -175,6 +176,7 @@ SEMICOLON (25:10-25:11)
       )
       namedOnly: false
     )
+    implements: null
     (MemberDeclaration
       range: 9:5-11:6
       visibility: PUBLIC
@@ -211,7 +213,9 @@ SEMICOLON (25:10-25:11)
       range: 14:7-14:10
       name: "Bar"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 15:5-15:28
       visibility: PUBLIC

@@ -29,7 +29,9 @@ SEMICOLON (2:25-2:26)
       range: 1:7-1:10
       name: "Cat"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ExpressionStatement
     range: 2:1-2:26

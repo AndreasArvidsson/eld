@@ -285,7 +285,9 @@ SEMICOLON (19:14-19:15)
       range: 7:7-7:16
       name: "Direction"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 8:5-8:26
       visibility: PRIVATE

@@ -83,6 +83,7 @@ SEMICOLON (12:25-12:26)
       range: 1:11-1:18
       name: "Counter"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:26
       (IdentifierDeclaration
@@ -102,11 +103,15 @@ SEMICOLON (12:25-12:26)
       range: 4:7-4:12
       name: "Value"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 4:24-4:31
-      name: "Counter"
+    extends: null
+    (Implements
+      range: 4:13-4:31
+      (NamedTypeNode
+        range: 4:24-4:31
+        name: "Counter"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 5:5-5:19
       visibility: PRIVATE

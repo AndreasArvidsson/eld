@@ -128,6 +128,7 @@ SEMICOLON (14:29-14:30)
       range: 1:11-1:19
       name: "Integers"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:38
       (IdentifierDeclaration
@@ -160,6 +161,7 @@ SEMICOLON (14:29-14:30)
       range: 4:11-4:18
       name: "Strings"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 5:5-5:41
       (IdentifierDeclaration
@@ -193,15 +195,19 @@ SEMICOLON (14:29-14:30)
       range: 7:7-7:11
       name: "Both"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 7:23-7:31
-      name: "Integers"
+    extends: null
+    (Implements
+      range: 7:12-7:40
+      (NamedTypeNode
+        range: 7:23-7:31
+        name: "Integers"
+      )
+      (NamedTypeNode
+        range: 7:33-7:40
+        name: "Strings"
+      )
     )
-    (NamedTypeNode
-      range: 7:33-7:40
-      name: "Strings"
-    )
+    permits: null
     (MemberDeclaration
       range: 8:5-8:67
       visibility: PUBLIC

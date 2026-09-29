@@ -155,15 +155,19 @@ SEMICOLON (21:52-21:53)
       range: 1:16-1:20
       name: "Base"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 1:32-1:48
-      name: "Comparable"
+    extends: null
+    (Implements
+      range: 1:21-1:48
       (NamedTypeNode
-        range: 1:43-1:47
-        name: "Base"
+        range: 1:32-1:48
+        name: "Comparable"
+        (NamedTypeNode
+          range: 1:43-1:47
+          name: "Base"
+        )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
@@ -214,10 +218,15 @@ SEMICOLON (21:52-21:53)
       range: 7:7-7:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 7:21-7:25
-      name: "Base"
+    (Extends
+      range: 7:13-7:25
+      (IdentifierExpression
+        range: 7:21-7:25
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 9:1-9:50
@@ -280,15 +289,19 @@ SEMICOLON (21:52-21:53)
       range: 12:16-12:24
       name: "Ordering"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 12:36-12:52
-      name: "Comparator"
+    extends: null
+    (Implements
+      range: 12:25-12:52
       (NamedTypeNode
-        range: 12:47-12:51
-        name: "Base"
+        range: 12:36-12:52
+        name: "Comparator"
+        (NamedTypeNode
+          range: 12:47-12:51
+          name: "Base"
+        )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 13:5-15:6
       visibility: PUBLIC
@@ -353,10 +366,15 @@ SEMICOLON (21:52-21:53)
       range: 18:7-18:20
       name: "ChildOrdering"
     )
-    (IdentifierExpression
-      range: 18:29-18:37
-      name: "Ordering"
+    (Extends
+      range: 18:21-18:37
+      (IdentifierExpression
+        range: 18:29-18:37
+        name: "Ordering"
+      )
     )
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 20:1-20:58

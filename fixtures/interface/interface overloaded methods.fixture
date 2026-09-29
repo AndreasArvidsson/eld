@@ -155,6 +155,7 @@ SEMICOLON (15:25-15:26)
       range: 1:11-1:18
       name: "Printer"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:38
       (IdentifierDeclaration
@@ -213,11 +214,15 @@ SEMICOLON (15:25-15:26)
       range: 5:7-5:11
       name: "Both"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 5:23-5:30
-      name: "Printer"
+    extends: null
+    (Implements
+      range: 5:12-5:30
+      (NamedTypeNode
+        range: 5:23-5:30
+        name: "Printer"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 6:5-6:66
       visibility: PUBLIC

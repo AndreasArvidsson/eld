@@ -1,0 +1,53 @@
+interface Animal permits Dog {}
+interface Cat extends Animal {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Animal" (1:11-1:17)
+PERMITS (1:18-1:25)
+IDENTIFIER "Dog" (1:26-1:29)
+LEFT_BRACE (1:30-1:31)
+RIGHT_BRACE (1:31-1:32)
+INTERFACE (2:1-2:10)
+IDENTIFIER "Cat" (2:11-2:14)
+EXTENDS (2:15-2:22)
+IDENTIFIER "Animal" (2:23-2:29)
+LEFT_BRACE (2:30-2:31)
+RIGHT_BRACE (2:31-2:32)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:32
+  (InterfaceDeclaration
+    range: 1:1-1:32
+    (IdentifierDeclaration
+      range: 1:11-1:17
+      name: "Animal"
+    )
+    (Permits
+      range: 1:18-1:29
+      (IdentifierExpression
+        range: 1:26-1:29
+        name: "Dog"
+      )
+    )
+  )
+  (InterfaceDeclaration
+    range: 2:1-2:32
+    (IdentifierDeclaration
+      range: 2:11-2:14
+      name: "Cat"
+    )
+    (NamedTypeNode
+      range: 2:23-2:29
+      name: "Animal"
+    )
+    permits: null
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Type Animal does not permit Cat at 2:23-2:29

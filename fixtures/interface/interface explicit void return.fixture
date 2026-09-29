@@ -81,6 +81,7 @@ RIGHT_BRACE (12:1-12:2)
       range: 1:11-1:17
       name: "Action"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:21
       (IdentifierDeclaration
@@ -108,11 +109,15 @@ RIGHT_BRACE (12:1-12:2)
       range: 5:7-5:12
       name: "TaskA"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 5:24-5:30
-      name: "Action"
+    extends: null
+    (Implements
+      range: 5:13-5:30
+      (NamedTypeNode
+        range: 5:24-5:30
+        name: "Action"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 6:5-6:30
       visibility: PUBLIC
@@ -161,11 +166,15 @@ RIGHT_BRACE (12:1-12:2)
       range: 9:7-9:12
       name: "TaskB"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 9:24-9:30
-      name: "Action"
+    extends: null
+    (Implements
+      range: 9:13-9:30
+      (NamedTypeNode
+        range: 9:24-9:30
+        name: "Action"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 10:5-10:25
       visibility: PUBLIC

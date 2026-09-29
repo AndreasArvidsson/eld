@@ -151,7 +151,8 @@ public final class RecordLowering {
             List.of(),
             record.name(),
             null,
-            record.implementedInterfaces(),
+            record.implementsNode(),
+            null,
             members,
             range
         );

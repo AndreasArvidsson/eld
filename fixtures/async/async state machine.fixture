@@ -357,7 +357,9 @@ SEMICOLON (52:18-52:19)
       range: 4:7-4:13
       name: "Runner"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 5:5-5:28
       visibility: PUBLIC

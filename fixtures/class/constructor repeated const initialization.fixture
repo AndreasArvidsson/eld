@@ -46,7 +46,9 @@ RIGHT_BRACE (7:1-7:2)
       range: 1:7-1:10
       name: "Foo"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:22
       visibility: PRIVATE

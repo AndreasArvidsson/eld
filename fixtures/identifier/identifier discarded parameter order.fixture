@@ -407,7 +407,9 @@ SEMICOLON (34:27-34:28)
       range: 9:7-9:18
       name: "DiscardCtor"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 10:5-10:27
       visibility: PUBLIC

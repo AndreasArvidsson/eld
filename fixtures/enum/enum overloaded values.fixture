@@ -110,6 +110,7 @@ SEMICOLON (8:41-8:42)
       range: 1:6-1:7
       name: "E"
     )
+    implements: null
     (EnumConstant
       range: 2:5-2:6
       (IdentifierDeclaration

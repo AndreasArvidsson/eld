@@ -153,6 +153,7 @@ SEMICOLON (25:39-25:40)
       range: 1:11-1:16
       name: "First"
     )
+    permits: null
   )
   (InterfaceDeclaration
     range: 2:1-2:20
@@ -160,6 +161,7 @@ SEMICOLON (25:39-25:40)
       range: 2:11-2:17
       name: "Second"
     )
+    permits: null
   )
   (ClassDeclaration
     range: 4:1-4:43
@@ -168,15 +170,19 @@ SEMICOLON (25:39-25:40)
       range: 4:7-4:15
       name: "Combined"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 4:27-4:32
-      name: "First"
+    extends: null
+    (Implements
+      range: 4:16-4:40
+      (NamedTypeNode
+        range: 4:27-4:32
+        name: "First"
+      )
+      (NamedTypeNode
+        range: 4:34-4:40
+        name: "Second"
+      )
     )
-    (NamedTypeNode
-      range: 4:34-4:40
-      name: "Second"
-    )
+    permits: null
   )
   (InterfaceDeclaration
     range: 6:1-8:2
@@ -184,6 +190,7 @@ SEMICOLON (25:39-25:40)
       range: 6:11-6:23
       name: "FirstFactory"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 7:5-7:25
       (IdentifierDeclaration
@@ -202,6 +209,7 @@ SEMICOLON (25:39-25:40)
       range: 10:11-10:24
       name: "SecondFactory"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 11:5-11:26
       (IdentifierDeclaration
@@ -221,15 +229,19 @@ SEMICOLON (25:39-25:40)
       range: 14:7-14:14
       name: "Factory"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 14:26-14:38
-      name: "FirstFactory"
+    extends: null
+    (Implements
+      range: 14:15-14:53
+      (NamedTypeNode
+        range: 14:26-14:38
+        name: "FirstFactory"
+      )
+      (NamedTypeNode
+        range: 14:40-14:53
+        name: "SecondFactory"
+      )
     )
-    (NamedTypeNode
-      range: 14:40-14:53
-      name: "SecondFactory"
-    )
+    permits: null
     (MemberDeclaration
       range: 15:5-17:6
       visibility: PUBLIC

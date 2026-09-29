@@ -185,10 +185,6 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- Sealed classes/interfaces
-  - class Animal {} // extensible
-  - class Animal permits Dog, Cat {} // only Dog and Cat may extend this
-  - class Animal permits {} // nothing may extend this
 - String std lib
 - Collections std lib
 - create literal types from collection elements

@@ -27,6 +27,7 @@ public class Lexer {
                 Map.entry("extends", TokenType.EXTENDS),
                 Map.entry("interface", TokenType.INTERFACE),
                 Map.entry("implements", TokenType.IMPLEMENTS),
+                Map.entry("permits", TokenType.PERMITS),
                 Map.entry("as", TokenType.AS),
                 Map.entry("instanceof", TokenType.INSTANCEOF),
                 Map.entry("new", TokenType.NEW),

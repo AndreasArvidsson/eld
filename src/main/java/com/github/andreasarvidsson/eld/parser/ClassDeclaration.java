@@ -9,9 +9,9 @@ import com.github.andreasarvidsson.eld.Range;
 
 public record ClassDeclaration(
     List<@NonNull ClassModifier> modifiers, IdentifierDeclaration name,
-    @Nullable IdentifierExpression superClass,
-    List<@NonNull TypeNode> implementedInterfaces,
-    List<@NonNull MemberDeclaration> members, Range range
+    @Nullable Extends extendsNode, @Nullable Implements implementsNode,
+    @Nullable Permits permitsNode, List<@NonNull MemberDeclaration> members,
+    Range range
 ) implements Declaration {
     public ClassDeclaration {
         final var sorted = new ArrayList<>(modifiers);
@@ -22,4 +22,21 @@ public record ClassDeclaration(
     public boolean abstractClass() {
         return modifiers.contains(ClassModifier.ABSTRACT);
     }
+
+    public boolean finalClass() {
+        return modifiers.contains(ClassModifier.FINAL);
+    }
+
+    public @Nullable IdentifierExpression superClass() {
+        return extendsNode == null ? null : extendsNode.superClass();
+    }
+
+    public @Nullable List<@NonNull TypeNode> implementedInterfaces() {
+        return implementsNode == null ? null : implementsNode.interfaces();
+    }
+
+    public @Nullable List<@NonNull IdentifierExpression> permittedSubclasses() {
+        return permitsNode == null ? null : permitsNode.subClasses();
+    }
+
 }

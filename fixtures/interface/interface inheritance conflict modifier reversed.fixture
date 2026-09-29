@@ -45,6 +45,7 @@ RIGHT_BRACE (7:27-7:28)
       range: 1:11-1:12
       name: "A"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:22
       mutability: CONST
@@ -64,6 +65,7 @@ RIGHT_BRACE (7:27-7:28)
       range: 4:11-4:12
       name: "B"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 5:5-5:20
       mutability: VAR
@@ -91,6 +93,7 @@ RIGHT_BRACE (7:27-7:28)
       range: 7:24-7:25
       name: "A"
     )
+    permits: null
   )
 )
 

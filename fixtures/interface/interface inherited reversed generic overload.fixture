@@ -190,6 +190,7 @@ SEMICOLON (17:34-17:35)
       range: 1:11-1:19
       name: "Reversed"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:48
       (IdentifierDeclaration
@@ -256,7 +257,9 @@ SEMICOLON (17:34-17:35)
       range: 5:7-5:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 6:5-6:74
       visibility: PUBLIC
@@ -357,14 +360,21 @@ SEMICOLON (17:34-17:35)
       range: 9:7-9:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 9:21-9:25
-      name: "Base"
+    (Extends
+      range: 9:13-9:25
+      (IdentifierExpression
+        range: 9:21-9:25
+        name: "Base"
+      )
     )
-    (NamedTypeNode
-      range: 9:37-9:45
-      name: "Reversed"
+    (Implements
+      range: 9:26-9:45
+      (NamedTypeNode
+        range: 9:37-9:45
+        name: "Reversed"
+      )
     )
+    permits: null
   )
   (VariableDeclaration
     range: 10:1-10:27

@@ -1,0 +1,13 @@
+interface Animal permits {}
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Animal" (1:11-1:17)
+PERMITS (1:18-1:25)
+LEFT_BRACE (1:26-1:27)
+RIGHT_BRACE (1:27-1:28)
+
+--- AST ---
+
+ParserException: Expected IDENTIFIER, but found LEFT_BRACE at 1:26-1:27

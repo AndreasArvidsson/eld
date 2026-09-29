@@ -99,15 +99,19 @@ RIGHT_BRACE (13:1-13:2)
       range: 3:7-3:12
       name: "Value"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 3:24-3:41
-      name: "Comparable"
+    extends: null
+    (Implements
+      range: 3:13-3:41
       (NamedTypeNode
-        range: 3:35-3:40
-        name: "Value"
+        range: 3:24-3:41
+        name: "Comparable"
+        (NamedTypeNode
+          range: 3:35-3:40
+          name: "Value"
+        )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 4:5-7:6
       visibility: PUBLIC

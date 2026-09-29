@@ -75,6 +75,7 @@ RIGHT_BRACE (8:1-8:2)
       )
       namedOnly: false
     )
+    implements: null
   )
   (ClassDeclaration
     range: 2:1-8:2
@@ -83,7 +84,9 @@ RIGHT_BRACE (8:1-8:2)
       range: 2:7-2:14
       name: "Example"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 3:5-3:22
       visibility: PRIVATE

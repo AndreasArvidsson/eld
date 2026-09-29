@@ -42,6 +42,7 @@ RIGHT_BRACE (7:1-7:2)
       range: 1:11-1:17
       name: "Reader"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:20
       (IdentifierDeclaration
@@ -61,11 +62,15 @@ RIGHT_BRACE (7:1-7:2)
       range: 5:7-5:11
       name: "Impl"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 5:23-5:29
-      name: "Reader"
+    extends: null
+    (Implements
+      range: 5:12-5:29
+      (NamedTypeNode
+        range: 5:23-5:29
+        name: "Reader"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 6:5-6:28
       visibility: PROTECTED

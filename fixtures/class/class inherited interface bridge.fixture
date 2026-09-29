@@ -131,7 +131,9 @@ SEMICOLON (26:30-26:31)
       range: 1:7-1:12
       name: "Value"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
@@ -168,10 +170,15 @@ SEMICOLON (26:30-26:31)
       range: 7:7-7:20
       name: "DetailedValue"
     )
-    (IdentifierExpression
-      range: 7:29-7:34
-      name: "Value"
+    (Extends
+      range: 7:21-7:34
+      (IdentifierExpression
+        range: 7:29-7:34
+        name: "Value"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
@@ -207,6 +214,7 @@ SEMICOLON (26:30-26:31)
       range: 13:11-13:17
       name: "Reader"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 14:5-14:23
       (IdentifierDeclaration
@@ -226,11 +234,15 @@ SEMICOLON (26:30-26:31)
       range: 17:7-17:11
       name: "Base"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 17:23-17:29
-      name: "Reader"
+    extends: null
+    (Implements
+      range: 17:12-17:29
+      (NamedTypeNode
+        range: 17:23-17:29
+        name: "Reader"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 18:5-20:6
       visibility: PUBLIC
@@ -269,10 +281,15 @@ SEMICOLON (26:30-26:31)
       range: 23:7-23:12
       name: "Child"
     )
-    (IdentifierExpression
-      range: 23:21-23:25
-      name: "Base"
+    (Extends
+      range: 23:13-23:25
+      (IdentifierExpression
+        range: 23:21-23:25
+        name: "Base"
+      )
     )
+    implements: null
+    permits: null
   )
   (VariableDeclaration
     range: 25:1-25:36

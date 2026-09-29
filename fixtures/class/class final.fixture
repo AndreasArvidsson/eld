@@ -1,0 +1,111 @@
+final class Animal {}
+print(new Animal() instanceof Animal);
+
+--- TOKENS ---
+
+FINAL (1:1-1:6)
+CLASS (1:7-1:12)
+IDENTIFIER "Animal" (1:13-1:19)
+LEFT_BRACE (1:20-1:21)
+RIGHT_BRACE (1:21-1:22)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+NEW (2:7-2:10)
+IDENTIFIER "Animal" (2:11-2:17)
+LEFT_PAREN (2:17-2:18)
+RIGHT_PAREN (2:18-2:19)
+INSTANCEOF (2:20-2:30)
+IDENTIFIER "Animal" (2:31-2:37)
+RIGHT_PAREN (2:37-2:38)
+SEMICOLON (2:38-2:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:39
+  (ClassDeclaration
+    range: 1:1-1:22
+    modifiers: [FINAL]
+    (IdentifierDeclaration
+      range: 1:13-1:19
+      name: "Animal"
+    )
+    extends: null
+    implements: null
+    permits: null
+  )
+  (ExpressionStatement
+    range: 2:1-2:39
+    (CallExpression
+      range: 2:1-2:38
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 2:7-2:37
+        (NewExpression
+          range: 2:7-2:19
+          (IdentifierExpression
+            range: 2:11-2:17
+            name: "Animal"
+          )
+        )
+        operator: INSTANCEOF
+        (IdentifierExpression
+          range: 2:31-2:37
+          name: "Animal"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:1-2:6 -> (any) => void
+  2:1-2:38 -> void
+  2:7-2:19 -> Animal
+  2:7-2:37 -> bool
+  2:11-2:17 -> Animal
+  2:31-2:37 -> Type<Animal>
+
+Declarations:
+  1:13-1:19 -> final class Animal
+
+References:
+  2:1-2:6 -> builtin print
+  2:11-2:17 -> 1:13-1:19
+  2:31-2:37 -> 1:13-1:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Animal
+  inner class Test$Animal flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Animal
+    DUP
+    INVOKESPECIAL Test$Animal.<init>()V
+    LDC ClassOrInterfaceDesc[Test$Animal]
+    SWAP
+    INVOKEVIRTUAL java/lang/Class.isInstance(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Animal extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Animal flags [PUBLIC, STATIC, FINAL]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+true

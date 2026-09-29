@@ -95,6 +95,7 @@ SEMICOLON (4:11-4:12)
       )
       namedOnly: false
     )
+    implements: null
   )
   (DestructuringDeclaration
     range: 2:1-2:37

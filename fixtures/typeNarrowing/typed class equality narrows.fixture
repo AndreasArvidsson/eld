@@ -118,7 +118,9 @@ SEMICOLON (14:35-14:36)
       range: 1:7-1:13
       name: "Animal"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 2:1-5:2
@@ -127,10 +129,15 @@ SEMICOLON (14:35-14:36)
       range: 2:7-2:10
       name: "Cat"
     )
-    (IdentifierExpression
-      range: 2:19-2:25
-      name: "Animal"
+    (Extends
+      range: 2:11-2:25
+      (IdentifierExpression
+        range: 2:19-2:25
+        name: "Animal"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 3:5-3:67
       visibility: PUBLIC
@@ -223,10 +230,15 @@ SEMICOLON (14:35-14:36)
       range: 6:7-6:10
       name: "Dog"
     )
-    (IdentifierExpression
-      range: 6:19-6:25
-      name: "Animal"
+    (Extends
+      range: 6:11-6:25
+      (IdentifierExpression
+        range: 6:19-6:25
+        name: "Animal"
+      )
     )
+    implements: null
+    permits: null
   )
   (FunctionDeclaration
     range: 8:1-12:2

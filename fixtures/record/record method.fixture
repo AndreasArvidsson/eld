@@ -76,6 +76,7 @@ SEMICOLON (9:11-9:12)
       )
       namedOnly: false
     )
+    implements: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC

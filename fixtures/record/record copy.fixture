@@ -238,6 +238,7 @@ SEMICOLON (21:21-21:22)
       )
       namedOnly: false
     )
+    implements: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
@@ -339,6 +340,7 @@ SEMICOLON (21:21-21:22)
       )
       namedOnly: false
     )
+    implements: null
   )
   (VariableDeclaration
     range: 8:1-8:41

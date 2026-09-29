@@ -31,7 +31,9 @@ SEMICOLON (4:13-4:14)
       range: 1:7-1:13
       name: "Secret"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:21
       visibility: PRIVATE

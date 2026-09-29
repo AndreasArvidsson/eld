@@ -134,6 +134,7 @@ SEMICOLON (23:35-23:36)
       range: 1:11-1:19
       name: "Complete"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:28
       (IdentifierDeclaration
@@ -152,9 +153,12 @@ SEMICOLON (23:35-23:36)
       range: 5:6-5:12
       name: "Status"
     )
-    (NamedTypeNode
-      range: 5:24-5:32
-      name: "Complete"
+    (Implements
+      range: 5:13-5:32
+      (NamedTypeNode
+        range: 5:24-5:32
+        name: "Complete"
+      )
     )
     (EnumConstant
       range: 6:5-6:23

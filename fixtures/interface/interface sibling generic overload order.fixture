@@ -273,6 +273,7 @@ SEMICOLON (25:32-25:33)
       range: 1:11-1:12
       name: "A"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:45
       (IdentifierDeclaration
@@ -338,6 +339,7 @@ SEMICOLON (25:32-25:33)
       range: 5:11-5:12
       name: "B"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 6:5-6:48
       (IdentifierDeclaration
@@ -404,7 +406,9 @@ SEMICOLON (25:32-25:33)
       range: 9:7-9:11
       name: "Root"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (ClassDeclaration
     range: 10:1-13:2
@@ -413,14 +417,21 @@ SEMICOLON (25:32-25:33)
       range: 10:7-10:12
       name: "First"
     )
-    (IdentifierExpression
-      range: 10:21-10:25
-      name: "Root"
+    (Extends
+      range: 10:13-10:25
+      (IdentifierExpression
+        range: 10:21-10:25
+        name: "Root"
+      )
     )
-    (NamedTypeNode
-      range: 10:37-10:38
-      name: "A"
+    (Implements
+      range: 10:26-10:38
+      (NamedTypeNode
+        range: 10:37-10:38
+        name: "A"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 11:5-11:76
       visibility: PUBLIC
@@ -521,14 +532,21 @@ SEMICOLON (25:32-25:33)
       range: 14:7-14:13
       name: "Second"
     )
-    (IdentifierExpression
-      range: 14:22-14:26
-      name: "Root"
+    (Extends
+      range: 14:14-14:26
+      (IdentifierExpression
+        range: 14:22-14:26
+        name: "Root"
+      )
     )
-    (NamedTypeNode
-      range: 14:38-14:39
-      name: "B"
+    (Implements
+      range: 14:27-14:39
+      (NamedTypeNode
+        range: 14:38-14:39
+        name: "B"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 15:5-15:77
       visibility: PUBLIC

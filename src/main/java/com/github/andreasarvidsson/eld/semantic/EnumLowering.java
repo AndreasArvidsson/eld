@@ -143,7 +143,8 @@ public final class EnumLowering {
             List.of(),
             declaration.name(),
             null,
-            declaration.implementedInterfaces(),
+            declaration.implementsNode(),
+            null,
             members,
             declaration.range()
         );

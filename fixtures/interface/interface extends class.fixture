@@ -25,7 +25,9 @@ RIGHT_BRACE (2:31-2:32)
       range: 1:7-1:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
   )
   (InterfaceDeclaration
     range: 2:1-2:32
@@ -37,6 +39,7 @@ RIGHT_BRACE (2:31-2:32)
       range: 2:25-2:29
       name: "Base"
     )
+    permits: null
   )
 )
 

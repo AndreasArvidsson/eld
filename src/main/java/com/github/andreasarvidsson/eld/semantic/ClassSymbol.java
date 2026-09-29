@@ -3,13 +3,16 @@ package com.github.andreasarvidsson.eld.semantic;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.ClassModifier;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
+import com.github.andreasarvidsson.eld.parser.IdentifierExpression;
 
 public record ClassSymbol(
     IdentifierDeclaration declaration, ClassType type,
-    List<@NonNull ClassModifier> modifiers
+    List<@NonNull ClassModifier> modifiers,
+    @Nullable List<@NonNull IdentifierExpression> permittedSubclasses
 ) implements ClassDeclarationSymbol {
 
     @Override
@@ -29,7 +32,15 @@ public record ClassSymbol(
                 .map(modifier -> modifier.value())
                 .collect(Collectors.joining(" "));
         final String prefix = modifierText.isEmpty() ? "" : modifierText + " ";
-        return "%sclass %s".formatted(prefix, name());
+        final String permits =
+            permittedSubclasses == null
+                ? ""
+                : permittedSubclasses.isEmpty()
+                    ? " permits"
+                    : " permits " + permittedSubclasses.stream()
+                        .map(IdentifierExpression::name)
+                        .collect(Collectors.joining(", "));
+        return "%sclass %s%s".formatted(prefix, name(), permits);
     }
 
 }

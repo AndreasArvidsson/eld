@@ -146,6 +146,7 @@ SEMICOLON (10:44-10:45)
       range: 1:11-1:12
       name: "I"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 1:15-1:55
       (IdentifierDeclaration
@@ -183,23 +184,27 @@ SEMICOLON (10:44-10:45)
       range: 2:7-2:8
       name: "C"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 2:20-2:21
-      name: "I"
-    )
-    (NamedTypeNode
-      range: 2:23-2:44
-      name: "Comparable"
+    extends: null
+    (Implements
+      range: 2:9-2:44
       (NamedTypeNode
-        range: 2:34-2:43
-        name: "List"
+        range: 2:20-2:21
+        name: "I"
+      )
+      (NamedTypeNode
+        range: 2:23-2:44
+        name: "Comparable"
         (NamedTypeNode
-          range: 2:39-2:42
-          name: "i32"
+          range: 2:34-2:43
+          name: "List"
+          (NamedTypeNode
+            range: 2:39-2:42
+            name: "i32"
+          )
         )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 3:5-3:62
       visibility: PUBLIC

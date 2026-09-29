@@ -450,7 +450,9 @@ SEMICOLON (15:38-15:39)
       range: 9:7-9:16
       name: "Describer"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 10:5-10:73
       visibility: PUBLIC

@@ -76,6 +76,7 @@ SEMICOLON (4:27-4:28)
       )
       namedOnly: false
     )
+    implements: null
   )
   (VariableDeclaration
     range: 2:1-2:15

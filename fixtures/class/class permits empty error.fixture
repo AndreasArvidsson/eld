@@ -1,0 +1,13 @@
+class Animal permits {}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Animal" (1:7-1:13)
+PERMITS (1:14-1:21)
+LEFT_BRACE (1:22-1:23)
+RIGHT_BRACE (1:23-1:24)
+
+--- AST ---
+
+ParserException: Expected IDENTIFIER, but found LEFT_BRACE at 1:22-1:23

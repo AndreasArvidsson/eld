@@ -343,15 +343,19 @@ SEMICOLON (31:64-31:65)
       range: 1:7-1:13
       name: "Direct"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 1:25-1:43
-      name: "Comparable"
+    extends: null
+    (Implements
+      range: 1:14-1:43
       (NamedTypeNode
-        range: 1:36-1:42
-        name: "Direct"
+        range: 1:25-1:43
+        name: "Comparable"
+        (NamedTypeNode
+          range: 1:36-1:42
+          name: "Direct"
+        )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 2:5-2:59
       visibility: PUBLIC
@@ -571,7 +575,9 @@ SEMICOLON (31:64-31:65)
       range: 11:7-11:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 12:5-12:56
       visibility: PUBLIC
@@ -622,18 +628,25 @@ SEMICOLON (31:64-31:65)
       range: 14:7-14:14
       name: "Derived"
     )
-    (IdentifierExpression
-      range: 14:23-14:27
-      name: "Base"
-    )
-    (NamedTypeNode
-      range: 14:39-14:58
-      name: "Comparable"
-      (NamedTypeNode
-        range: 14:50-14:57
-        name: "Derived"
+    (Extends
+      range: 14:15-14:27
+      (IdentifierExpression
+        range: 14:23-14:27
+        name: "Base"
       )
     )
+    (Implements
+      range: 14:28-14:58
+      (NamedTypeNode
+        range: 14:39-14:58
+        name: "Comparable"
+        (NamedTypeNode
+          range: 14:50-14:57
+          name: "Derived"
+        )
+      )
+    )
+    permits: null
     (MemberDeclaration
       range: 15:5-15:60
       visibility: PUBLIC
@@ -811,15 +824,19 @@ SEMICOLON (31:64-31:65)
       range: 23:7-23:15
       name: "Ordering"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 23:27-23:47
-      name: "Comparator"
+    extends: null
+    (Implements
+      range: 23:16-23:47
       (NamedTypeNode
-        range: 23:38-23:46
-        name: "Ordering"
+        range: 23:27-23:47
+        name: "Comparator"
+        (NamedTypeNode
+          range: 23:38-23:46
+          name: "Ordering"
+        )
       )
     )
+    permits: null
     (MemberDeclaration
       range: 24:5-24:75
       visibility: PUBLIC

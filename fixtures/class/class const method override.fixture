@@ -132,7 +132,9 @@ SEMICOLON (26:34-26:35)
       range: 1:7-1:16
       name: "ConstBase"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
@@ -169,10 +171,15 @@ SEMICOLON (26:34-26:35)
       range: 7:7-7:17
       name: "ConstChild"
     )
-    (IdentifierExpression
-      range: 7:26-7:35
-      name: "ConstBase"
+    (Extends
+      range: 7:18-7:35
+      (IdentifierExpression
+        range: 7:26-7:35
+        name: "ConstBase"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
@@ -209,7 +216,9 @@ SEMICOLON (26:34-26:35)
       range: 13:7-13:18
       name: "MutableBase"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 14:5-16:6
       visibility: PUBLIC
@@ -246,10 +255,15 @@ SEMICOLON (26:34-26:35)
       range: 19:7-19:19
       name: "ConstDerived"
     )
-    (IdentifierExpression
-      range: 19:28-19:39
-      name: "MutableBase"
+    (Extends
+      range: 19:20-19:39
+      (IdentifierExpression
+        range: 19:28-19:39
+        name: "MutableBase"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 20:5-22:6
       visibility: PUBLIC

@@ -48,6 +48,7 @@ SEMICOLON (7:32-7:33)
       range: 1:11-1:16
       name: "Value"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:22
       mutability: CONST
@@ -68,7 +69,9 @@ SEMICOLON (7:32-7:33)
       range: 4:7-4:11
       name: "Impl"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 5:5-5:26
       visibility: PUBLIC

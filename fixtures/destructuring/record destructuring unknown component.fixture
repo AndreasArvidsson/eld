@@ -63,6 +63,7 @@ SEMICOLON (2:28-2:29)
       )
       namedOnly: false
     )
+    implements: null
   )
   (DestructuringDeclaration
     range: 2:1-2:29

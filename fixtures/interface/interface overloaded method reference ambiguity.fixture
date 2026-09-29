@@ -57,6 +57,7 @@ RIGHT_BRACE (7:1-7:2)
       range: 1:11-1:12
       name: "I"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:28
       (IdentifierDeclaration

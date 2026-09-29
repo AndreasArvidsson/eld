@@ -79,6 +79,7 @@ SEMICOLON (12:19-12:20)
       range: 1:11-1:16
       name: "Value"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:22
       mutability: CONST
@@ -102,6 +103,7 @@ SEMICOLON (12:19-12:20)
       range: 4:30-4:35
       name: "Value"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 5:5-5:24
       mutability: CONST
@@ -122,11 +124,15 @@ SEMICOLON (12:19-12:20)
       range: 7:7-7:10
       name: "Box"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 7:22-7:32
-      name: "NamedValue"
+    extends: null
+    (Implements
+      range: 7:11-7:32
+      (NamedTypeNode
+        range: 7:22-7:32
+        name: "NamedValue"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 8:5-8:28
       visibility: PUBLIC

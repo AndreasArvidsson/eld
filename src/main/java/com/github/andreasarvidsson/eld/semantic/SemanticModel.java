@@ -108,6 +108,7 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final Map<ClassType, ClassDeclaration> classDeclarations =
         new HashMap<>();
+    private final Map<Type, List<String>> permittedSubclasses = new HashMap<>();
     private final IdentityHashMap<IdentifierDeclaration, IdentifierDeclaration> namedArguments =
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, List<Integer>> argumentParameters =
@@ -407,6 +408,22 @@ public final class SemanticModel {
         final ClassDeclaration declaration
     ) {
         classDeclarations.put(type, declaration);
+    }
+
+    public void setPermittedSubclasses(
+        final Type type,
+        final List<String> names
+    ) {
+        permittedSubclasses.put(type, List.copyOf(names));
+    }
+
+    public boolean permitsSubclass(final Type type, final String name) {
+        final List<String> permitted = permittedSubclasses.get(type);
+        return permitted == null || permitted.contains(name);
+    }
+
+    public boolean isSealed(final Type type) {
+        return permittedSubclasses.containsKey(type);
     }
 
     public @Nullable ClassDeclaration findClassDeclaration(

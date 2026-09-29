@@ -47,7 +47,9 @@ SEMICOLON (5:23-5:24)
       range: 1:7-1:14
       name: "Example"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:35
       visibility: PUBLIC

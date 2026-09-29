@@ -167,7 +167,9 @@ SEMICOLON (31:40-31:41)
       range: 1:7-1:12
       name: "Value"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-4:6
       visibility: PUBLIC
@@ -204,10 +206,15 @@ SEMICOLON (31:40-31:41)
       range: 7:7-7:20
       name: "DetailedValue"
     )
-    (IdentifierExpression
-      range: 7:29-7:34
-      name: "Value"
+    (Extends
+      range: 7:21-7:34
+      (IdentifierExpression
+        range: 7:29-7:34
+        name: "Value"
+      )
     )
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 8:5-10:6
       visibility: PUBLIC
@@ -243,6 +250,7 @@ SEMICOLON (31:40-31:41)
       range: 13:11-13:18
       name: "Factory"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 14:5-14:25
       (IdentifierDeclaration
@@ -265,6 +273,7 @@ SEMICOLON (31:40-31:41)
       range: 17:35-17:42
       name: "Factory"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 18:5-18:33
       (IdentifierDeclaration
@@ -284,11 +293,15 @@ SEMICOLON (31:40-31:41)
       range: 21:7-21:11
       name: "Impl"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 21:23-21:38
-      name: "DetailedFactory"
+    extends: null
+    (Implements
+      range: 21:12-21:38
+      (NamedTypeNode
+        range: 21:23-21:38
+        name: "DetailedFactory"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 22:5-24:6
       visibility: PUBLIC

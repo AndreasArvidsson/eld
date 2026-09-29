@@ -109,7 +109,9 @@ SEMICOLON (13:22-13:23)
       range: 1:7-1:14
       name: "Compare"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:75
       visibility: PUBLIC

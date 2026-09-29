@@ -61,6 +61,7 @@ RIGHT_BRACE (7:1-7:2)
       range: 1:11-1:18
       name: "Printer"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:38
       (IdentifierDeclaration
@@ -119,11 +120,15 @@ RIGHT_BRACE (7:1-7:2)
       range: 5:7-5:20
       name: "NumberPrinter"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 5:32-5:39
-      name: "Printer"
+    extends: null
+    (Implements
+      range: 5:21-5:39
+      (NamedTypeNode
+        range: 5:32-5:39
+        name: "Printer"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 6:5-6:65
       visibility: PUBLIC

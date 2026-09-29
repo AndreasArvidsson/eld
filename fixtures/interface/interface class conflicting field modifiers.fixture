@@ -53,6 +53,7 @@ RIGHT_BRACE (9:1-9:2)
       range: 1:11-1:19
       name: "ReadOnly"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 2:5-2:22
       mutability: CONST
@@ -72,6 +73,7 @@ RIGHT_BRACE (9:1-9:2)
       range: 4:11-4:18
       name: "Mutable"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 5:5-5:20
       mutability: VAR
@@ -92,15 +94,19 @@ RIGHT_BRACE (9:1-9:2)
       range: 7:7-7:10
       name: "Box"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 7:22-7:30
-      name: "ReadOnly"
+    extends: null
+    (Implements
+      range: 7:11-7:39
+      (NamedTypeNode
+        range: 7:22-7:30
+        name: "ReadOnly"
+      )
+      (NamedTypeNode
+        range: 7:32-7:39
+        name: "Mutable"
+      )
     )
-    (NamedTypeNode
-      range: 7:32-7:39
-      name: "Mutable"
-    )
+    permits: null
     (MemberDeclaration
       range: 8:5-8:26
       visibility: PUBLIC

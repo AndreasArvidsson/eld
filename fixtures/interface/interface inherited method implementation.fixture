@@ -93,6 +93,7 @@ SEMICOLON (18:21-18:22)
       range: 1:11-1:17
       name: "Reader"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:21
       (IdentifierDeclaration
@@ -115,6 +116,7 @@ SEMICOLON (18:21-18:22)
       range: 5:31-5:37
       name: "Reader"
     )
+    permits: null
     (UninitializedVariableDeclaration
       range: 6:5-6:24
       mutability: CONST
@@ -135,11 +137,15 @@ SEMICOLON (18:21-18:22)
       range: 9:7-9:11
       name: "Impl"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 9:23-9:34
-      name: "NamedReader"
+    extends: null
+    (Implements
+      range: 9:12-9:34
+      (NamedTypeNode
+        range: 9:23-9:34
+        name: "NamedReader"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 10:5-10:34
       visibility: PUBLIC

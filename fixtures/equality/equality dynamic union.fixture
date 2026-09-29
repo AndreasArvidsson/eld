@@ -157,7 +157,9 @@ SEMICOLON (16:27-16:28)
       range: 1:7-1:10
       name: "Box"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 2:5-2:67
       visibility: PUBLIC

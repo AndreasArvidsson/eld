@@ -1340,6 +1340,7 @@ public final class SemanticAnalyzer {
         for (final @NonNull BlockItem item : program.items()) {
             analyzeBlockItem(item, context, program);
         }
+        declarations.validatePermittedSubclasses();
     }
 
     public void analyzeBlockStatement(

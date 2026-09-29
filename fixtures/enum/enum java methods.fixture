@@ -88,6 +88,7 @@ SEMICOLON (10:48-10:49)
       range: 1:6-1:15
       name: "Direction"
     )
+    implements: null
     (EnumConstant
       range: 2:5-2:10
       (IdentifierDeclaration

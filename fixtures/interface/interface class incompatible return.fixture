@@ -42,6 +42,7 @@ RIGHT_BRACE (6:1-6:2)
       range: 1:11-1:20
       name: "Operation"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:22
       (IdentifierDeclaration
@@ -61,11 +62,15 @@ RIGHT_BRACE (6:1-6:2)
       range: 4:7-4:11
       name: "Impl"
     )
-    superClass: null
-    (NamedTypeNode
-      range: 4:23-4:32
-      name: "Operation"
+    extends: null
+    (Implements
+      range: 4:12-4:32
+      (NamedTypeNode
+        range: 4:23-4:32
+        name: "Operation"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 5:5-5:32
       visibility: PUBLIC

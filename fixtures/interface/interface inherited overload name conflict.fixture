@@ -168,6 +168,7 @@ RIGHT_BRACE (17:44-17:45)
       range: 1:11-1:14
       name: "Tri"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 2:5-2:46
       (IdentifierDeclaration
@@ -262,6 +263,7 @@ RIGHT_BRACE (17:44-17:45)
       range: 6:11-6:15
       name: "Pair"
     )
+    permits: null
     (InterfaceMethodDeclaration
       range: 7:5-7:45
       (IdentifierDeclaration
@@ -328,7 +330,9 @@ RIGHT_BRACE (17:44-17:45)
       range: 10:7-10:11
       name: "Base"
     )
-    superClass: null
+    extends: null
+    implements: null
+    permits: null
     (MemberDeclaration
       range: 11:5-11:74
       visibility: PUBLIC
@@ -429,14 +433,21 @@ RIGHT_BRACE (17:44-17:45)
       range: 14:7-14:12
       name: "First"
     )
-    (IdentifierExpression
-      range: 14:21-14:25
-      name: "Base"
+    (Extends
+      range: 14:13-14:25
+      (IdentifierExpression
+        range: 14:21-14:25
+        name: "Base"
+      )
     )
-    (NamedTypeNode
-      range: 14:37-14:40
-      name: "Tri"
+    (Implements
+      range: 14:26-14:40
+      (NamedTypeNode
+        range: 14:37-14:40
+        name: "Tri"
+      )
     )
+    permits: null
     (MemberDeclaration
       range: 15:5-15:75
       visibility: PUBLIC
@@ -491,14 +502,21 @@ RIGHT_BRACE (17:44-17:45)
       range: 17:7-17:13
       name: "Second"
     )
-    (IdentifierExpression
-      range: 17:22-17:26
-      name: "Base"
+    (Extends
+      range: 17:14-17:26
+      (IdentifierExpression
+        range: 17:22-17:26
+        name: "Base"
+      )
     )
-    (NamedTypeNode
-      range: 17:38-17:42
-      name: "Pair"
+    (Implements
+      range: 17:27-17:42
+      (NamedTypeNode
+        range: 17:38-17:42
+        name: "Pair"
+      )
     )
+    permits: null
   )
 )
 
