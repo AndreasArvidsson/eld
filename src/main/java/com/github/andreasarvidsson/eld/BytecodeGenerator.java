@@ -42,7 +42,9 @@ import java.util.stream.Collectors;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.*;
 import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
+import com.github.andreasarvidsson.eld.runtime.EldArray;
 import com.github.andreasarvidsson.eld.semantic.ArrayType;
+import com.github.andreasarvidsson.eld.semantic.ArrayMethods;
 import com.github.andreasarvidsson.eld.semantic.TupleType;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionSymbol;
 import com.github.andreasarvidsson.eld.semantic.BuiltinFunctionType;
@@ -9254,7 +9256,7 @@ public final class BytecodeGenerator {
                     MethodTypeDesc.ofDescriptor(
                         "(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;"
                     ),
-                    false
+                    true
                 );
                 method.checkcast(
                     classDesc(RuntimeAbi.array(array.elementType()).owner)
@@ -10248,6 +10250,233 @@ public final class BytecodeGenerator {
             }
         }
 
+        private void arrayBuiltinCall(
+            final CallExpression call,
+            final String arrayMethod
+        ) {
+            final MemberExpression member =
+                (MemberExpression) unwrap(call.callee());
+            expression(member.target());
+            final ArrayType sourceArray =
+                arrayType(semanticModel.getExpressionType(member.target()));
+            final String arrayOwner =
+                RuntimeAbi.array(sourceArray.elementType()).owner;
+            final String elementDescriptor =
+                RuntimeAbi.array(sourceArray.elementType()).elementDescriptor;
+            final boolean primitiveElement = elementDescriptor.length() == 1;
+            if (arrayMethod.equals("clear")) {
+                final ArrayType array =
+                    arrayType(semanticModel.getExpressionType(member.target()));
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(RuntimeAbi.array(array.elementType()).owner),
+                    "clear",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+                return;
+            }
+            if (arrayMethod.equals("reverseInPlace")) {
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(arrayOwner),
+                    "reverseInPlace",
+                    MethodTypeDesc.ofDescriptor("()V"),
+                    false
+                );
+                return;
+            }
+            final String array =
+                "Lcom/github/andreasarvidsson/eld/runtime/EldArray;";
+            final String handle = "Ljava/lang/invoke/MethodHandle;";
+            final String object = "Ljava/lang/Object;";
+            String name;
+            String parameters;
+            String returned;
+            switch (arrayMethod) {
+                case "addAll" -> {
+                    name = "addAll";
+                    parameters = array + "L" + arrayOwner + ";";
+                    returned = "V";
+                    expression(call.arguments().getFirst());
+                }
+                case "add", "addFront" -> {
+                    name = arrayMethod;
+                    returned = "V";
+                    if (call.arguments().size() == 1) {
+                        final Expression argument = call.arguments().getFirst();
+                        parameters =
+                            array + (primitiveElement
+                                ? elementDescriptor
+                                : object);
+                        expression(argument);
+                        if (!primitiveElement) {
+                            box(semanticModel.getEffectiveType(argument));
+                        }
+                    }
+                    else {
+                        parameters =
+                            array + (primitiveElement
+                                ? "[" + elementDescriptor
+                                : "[Ljava/lang/Object;");
+                        method.ldc(call.arguments().size());
+                        if (primitiveElement) {
+                            method.newarray(
+                                RuntimeAbi.array(
+                                    sourceArray.elementType()
+                                ).creationKind
+                            );
+                        }
+                        else {
+                            method.anewarray(classDesc("java/lang/Object"));
+                        }
+                        for (int i = 0; i < call.arguments().size(); i++) {
+                            final Expression argument = call.arguments().get(i);
+                            method.dup();
+                            method.ldc(i);
+                            expression(argument);
+                            if (primitiveElement) {
+                                method.with(
+                                    simpleInstruction(
+                                        arrayStoreOpcode(
+                                            sourceArray.elementType()
+                                        )
+                                    )
+                                );
+                            }
+                            else {
+                                box(semanticModel.getEffectiveType(argument));
+                                method.aastore();
+                            }
+                        }
+                    }
+                }
+                case "insertAt" -> {
+                    name = "insertAt";
+                    parameters =
+                        array + (primitiveElement ? elementDescriptor : object)
+                            + "I";
+                    returned = "V";
+                    final Expression value = call.arguments().getFirst();
+                    expression(value);
+                    if (!primitiveElement) {
+                        box(semanticModel.getEffectiveType(value));
+                    }
+                    expression(call.arguments().get(1));
+                }
+                case "reduce" -> {
+                    name = "reduce";
+                    parameters = array + handle + object;
+                    returned = object;
+                    expression(call.arguments().get(0));
+                    final Expression initial = call.arguments().get(1);
+                    expression(initial);
+                    box(semanticModel.getEffectiveType(initial));
+                }
+                case "contains", "remove", "removeAll", "removeIf" -> {
+                    final Expression argument = call.arguments().getFirst();
+                    final boolean predicate =
+                        (arrayMethod.equals("remove")
+                            || arrayMethod.equals("removeIf"))
+                            && semanticModel.getExpressionType(
+                                argument
+                            ) instanceof FunctionType;
+                    name = switch (arrayMethod) {
+                        case "contains" -> "contains";
+                        case "removeAll" -> "removeAll";
+                        case "removeIf" -> "removeIf";
+                        default -> "remove";
+                    };
+                    parameters =
+                        array + (predicate
+                            ? handle
+                            : primitiveElement ? elementDescriptor : object);
+                    returned = arrayMethod.equals("removeAll") ? "I" : "Z";
+                    expression(argument);
+                    if (!predicate && !primitiveElement) {
+                        box(semanticModel.getEffectiveType(argument));
+                    }
+                }
+                case "index", "lastIndex" -> {
+                    name = arrayMethod.equals("index") ? "index" : "lastIndex";
+                    parameters =
+                        array + (primitiveElement ? elementDescriptor : object);
+                    returned = "Ljava/lang/Integer;";
+                    final Expression argument = call.arguments().getFirst();
+                    expression(argument);
+                    if (!primitiveElement) {
+                        box(semanticModel.getEffectiveType(argument));
+                    }
+                    if (call.arguments().size() == 2) {
+                        expression(call.arguments().get(1));
+                        parameters += "I";
+                    }
+                }
+                case "removeAt" -> {
+                    name = "removeAt";
+                    parameters = array + "I";
+                    returned = primitiveElement ? elementDescriptor : object;
+                    expression(call.arguments().getFirst());
+                }
+                case "find", "findLast", "findIndex", "findLastIndex" -> {
+                    final boolean indexed =
+                        arrayMethod.equals("findIndex")
+                            || arrayMethod.equals("findLastIndex");
+                    name = arrayMethod;
+                    parameters = array + handle;
+                    returned = indexed ? "Ljava/lang/Integer;" : object;
+                    expression(call.arguments().getFirst());
+                }
+                case "any", "all" -> {
+                    name = arrayMethod.equals("any") ? "any" : "all";
+                    parameters = array + handle;
+                    returned = "Z";
+                    expression(call.arguments().getFirst());
+                }
+                case "join" -> {
+                    name = "join";
+                    parameters =
+                        array + (call.arguments().isEmpty()
+                            ? ""
+                            : "Ljava/lang/String;");
+                    returned = "Ljava/lang/String;";
+                    if (!call.arguments().isEmpty()) {
+                        expression(call.arguments().getFirst());
+                    }
+                }
+                default -> throw new IllegalStateException(
+                    "Unexpected array method: " + arrayMethod
+                );
+            }
+            method.invoke(
+                INVOKEVIRTUAL,
+                classDesc(arrayOwner),
+                name,
+                MethodTypeDesc.ofDescriptor(
+                    "(" + parameters.substring(array.length()) + ")" + returned
+                ),
+                false
+            );
+            if (
+                arrayMethod.equals("reduce") || arrayMethod.equals("find")
+                    || arrayMethod.equals("findLast")
+                    || (arrayMethod.equals("removeAt") && !primitiveElement)
+            ) {
+                final Type result = semanticModel.getExpressionType(call);
+                final String descriptor = descriptor(result);
+                if (descriptor.length() == 1) {
+                    readObject(result);
+                }
+                else if (!descriptor.equals(object)) {
+                    method.checkcast(
+                        classDesc(
+                            internalName(ClassDesc.ofDescriptor(descriptor))
+                        )
+                    );
+                }
+            }
+        }
+
         private void call(final CallExpression call) {
             final Method promiseMethod = semanticModel.getPromiseMethod(call);
             final @Nullable Type preparedCalleeType =
@@ -10281,19 +10510,143 @@ public final class BytecodeGenerator {
                 return;
             }
             final Type calleeType = Objects.requireNonNull(preparedCalleeType);
-            if (calleeType == BuiltinFunctionType.ARRAY_SORT) {
+            final MemberExpression arrayMember =
+                unwrap(call.callee()) instanceof MemberExpression member
+                    && semanticModel.getMemberOwner(member) instanceof ArrayType
+                    && ArrayMethods.isSpecial(member.member().name())
+                        ? member
+                        : null;
+            final String arrayMethod =
+                arrayMember == null ? null : arrayMember.member().name();
+            if ("sortInPlace".equals(arrayMethod)) {
                 final MemberExpression member =
-                    (MemberExpression) unwrap(call.callee());
+                    Objects.requireNonNull(arrayMember);
                 expression(member.target());
-                final ArrayType array =
+                final ArrayType source =
                     arrayType(semanticModel.getExpressionType(member.target()));
+                if (!call.arguments().isEmpty()) {
+                    expression(call.arguments().getFirst());
+                }
                 method.invoke(
                     INVOKEVIRTUAL,
-                    classDesc(RuntimeAbi.array(array.elementType()).owner),
-                    "sort",
-                    MethodTypeDesc.ofDescriptor("()V"),
+                    classDesc(RuntimeAbi.array(source.elementType()).owner),
+                    "sortInPlace",
+                    MethodTypeDesc.ofDescriptor(
+                        call.arguments().isEmpty()
+                            ? "()V"
+                            : "(Ljava/lang/invoke/MethodHandle;)V"
+                    ),
                     false
                 );
+                return;
+            }
+            if ("sort".equals(arrayMethod)) {
+                final MemberExpression member =
+                    Objects.requireNonNull(arrayMember);
+                expression(member.target());
+                final ArrayType source =
+                    arrayType(semanticModel.getExpressionType(member.target()));
+                final String owner =
+                    RuntimeAbi.array(source.elementType()).owner;
+                if (!call.arguments().isEmpty()) {
+                    expression(call.arguments().getFirst());
+                }
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(owner),
+                    "sort",
+                    MethodTypeDesc.ofDescriptor(
+                        (call.arguments().isEmpty()
+                            ? "()"
+                            : "(Ljava/lang/invoke/MethodHandle;)") + "L" + owner
+                            + ";"
+                    ),
+                    false
+                );
+                return;
+            }
+            if ("reverse".equals(arrayMethod) || "copy".equals(arrayMethod)) {
+                final MemberExpression member =
+                    Objects.requireNonNull(arrayMember);
+                expression(member.target());
+                final ArrayType source =
+                    arrayType(semanticModel.getExpressionType(member.target()));
+                final String owner =
+                    RuntimeAbi.array(source.elementType()).owner;
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(owner),
+                    arrayMethod,
+                    MethodTypeDesc.ofDescriptor("()L" + owner + ";"),
+                    false
+                );
+                return;
+            }
+            if (
+                "filter".equals(arrayMethod) || "map".equals(arrayMethod)
+                    || "concat".equals(arrayMethod)
+            ) {
+                final MemberExpression member =
+                    Objects.requireNonNull(arrayMember);
+                expression(member.target());
+                final String name;
+                final String parameters;
+                if ("filter".equals(arrayMethod)) {
+                    name = "filter";
+                    parameters = "Ljava/lang/invoke/MethodHandle;";
+                    expression(call.arguments().getFirst());
+                }
+                else if ("map".equals(arrayMethod)) {
+                    name = "map";
+                    parameters =
+                        "Ljava/lang/invoke/MethodHandle;Ljava/lang/String;";
+                    expression(call.arguments().getFirst());
+                }
+                else {
+                    final ArrayType sourceArray =
+                        arrayType(
+                            semanticModel.getExpressionType(member.target())
+                        );
+                    name = "concat";
+                    parameters =
+                        "L" + RuntimeAbi.array(sourceArray.elementType()).owner
+                            + ";";
+                    expression(call.arguments().getFirst());
+                }
+                final ArrayType source =
+                    arrayType(semanticModel.getExpressionType(member.target()));
+                final String owner =
+                    RuntimeAbi.array(source.elementType()).owner;
+                final boolean map = "map".equals(arrayMethod);
+                if (map) {
+                    final ArrayType result =
+                        arrayType(semanticModel.getExpressionType(call));
+                    method.ldc(
+                        RuntimeAbi.array(result.elementType()).elementDescriptor
+                    );
+                }
+                method.invoke(
+                    INVOKEVIRTUAL,
+                    classDesc(owner),
+                    name,
+                    MethodTypeDesc.ofDescriptor(
+                        "(" + parameters + ")L" + (map
+                            ? "com/github/andreasarvidsson/eld/runtime/EldArray"
+                            : owner) + ";"
+                    ),
+                    false
+                );
+                if (map) {
+                    final ArrayType result =
+                        arrayType(semanticModel.getExpressionType(call));
+                    method.checkcast(
+                        classDesc(RuntimeAbi.array(result.elementType()).owner)
+                    );
+                }
+                return;
+            }
+            if (arrayMethod != null) {
+                arrayBuiltinCall(call, arrayMethod);
                 return;
             }
             if (calleeType == BuiltinFunctionType.PRINT) {
@@ -11431,6 +11784,12 @@ public final class BytecodeGenerator {
             final MemberExpression member,
             final Method method
         ) {
+            if (
+                method.getDeclaringClass() == EldArray.class && semanticModel
+                    .getMemberOwner(member) instanceof ArrayType array
+            ) {
+                return classDesc(RuntimeAbi.array(array.elementType()).owner);
+            }
             if (method.getDeclaringClass() != Object.class) {
                 return classDesc(
                     method.getDeclaringClass().getName().replace('.', '/')
@@ -11474,6 +11833,12 @@ public final class BytecodeGenerator {
             final MemberExpression member,
             final Method method
         ) {
+            if (
+                method.getDeclaringClass() == EldArray.class
+                    && semanticModel.getMemberOwner(member) instanceof ArrayType
+            ) {
+                return false;
+            }
             if (method.getDeclaringClass().isInterface()) {
                 return true;
             }

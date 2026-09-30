@@ -320,12 +320,7 @@ public final class SemanticAnalyzer {
                     && allowedJavaMethod(member, method, context);
         }
         else if (symbol instanceof BuiltinFunctionSymbol builtin) {
-            allowed =
-                builtin.type() == BuiltinFunctionType.DIR
-                    || (builtin.type() == BuiltinFunctionType.ARRAY_SORT
-                        && callee instanceof MemberExpression member
-                        && isLocallyOwned(member.target(), context)
-                        && hasConstantNaturalOrder(member));
+            allowed = builtin.type() == BuiltinFunctionType.DIR;
         }
         else if (symbol instanceof VariableSymbol variable) {
             allowed = constantLocalCallable(variable, context);
@@ -734,6 +729,22 @@ public final class SemanticAnalyzer {
         final EffectContext context
     ) {
         final Type target = model.getMemberOwner(member);
+        if (
+            target instanceof ArrayType
+                && member.member().name().equals("isEmpty")
+        ) {
+            return true;
+        }
+        if (
+            target instanceof ArrayType
+                && ArrayMethods.isSpecial(member.member().name())
+        ) {
+            final String name = member.member().name();
+            return !ArrayMethods.mutates(name)
+                || (isLocallyOwned(member.target(), context)
+                    && (!(name.equals("sort") || name.equals("sortInPlace"))
+                        || hasConstantNaturalOrder(member)));
+        }
         if (
             target instanceof InterfaceType contract
                 && contract.javaClass() != null

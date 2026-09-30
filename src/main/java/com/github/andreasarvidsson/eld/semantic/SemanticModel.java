@@ -42,6 +42,7 @@ import com.github.andreasarvidsson.eld.parser.NewExpression;
 import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.Visibility;
 import org.jspecify.annotations.Nullable;
+import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
 
 public final class SemanticModel {
     private static final String ARROW = " -> ";
@@ -1244,10 +1245,14 @@ public final class SemanticModel {
                             parameters.add(owner);
                         }
                         parameters.addAll(method.type().parameterTypes());
+                        final Class<?> declaringClass =
+                            owner instanceof ArrayType array
+                                && ArrayMethods.isSpecial(method.name())
+                                    ? RuntimeAbi
+                                        .array(array.elementType()).runtimeClass
+                                    : method.method().getDeclaringClass();
                         return "%s.%s(%s): %s".formatted(
-                            formatJavaClassName(
-                                method.method().getDeclaringClass()
-                            ),
+                            formatJavaClassName(declaringClass),
                             method.name(),
                             parameters.stream()
                                 .map(Type::toString)

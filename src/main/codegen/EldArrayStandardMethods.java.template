@@ -1,0 +1,159 @@
+    public ${SELF} filter(final MethodHandle predicate) throws Throwable {
+        final ${SELF} result = copy();
+        int count = 0;
+        for (int index = 0; index < length; index++) {
+            final ${ELEMENT_TYPE} value = elements[index];
+            if (test(predicate, value, index)) {
+                result.elements[count++] = value;
+            }
+        }
+${FILTER_CLEANUP}
+        result.length = count;
+        return result;
+    }
+
+    public EldArray<?> map(final MethodHandle transform, final String elementDescriptor) throws Throwable {
+${MAP_BODY}
+    }
+
+    public void reverseInPlace() {
+        for (int left = 0, right = length - 1;
+            left < right; left++, right--) {
+            final ${ELEMENT_TYPE} value = elements[left];
+            elements[left] = elements[right];
+            elements[right] = value;
+        }
+    }
+
+    public ${SELF} concat(final ${SELF} additional) {
+        final ${SELF} result = copy();
+        result.ensureCapacity(length + additional.length);
+        System.arraycopy(
+            additional.elements, 0, result.elements, length, additional.length
+        );
+        result.length += additional.length;
+        return result;
+    }
+
+    public Object reduce(final MethodHandle reducer, final Object initial) throws Throwable {
+${REDUCE_BODY}
+    }
+
+    public @Nullable Object find(final MethodHandle predicate) throws Throwable {
+        return find(predicate, false);
+    }
+
+    public @Nullable Object findLast(final MethodHandle predicate) throws Throwable {
+        return find(predicate, true);
+    }
+
+    private @Nullable Object find(final MethodHandle predicate, final boolean last) throws Throwable {
+        final int start = last ? length - 1 : 0;
+        final int end = last ? -1 : length;
+        final int step = last ? -1 : 1;
+        for (int index = start; index != end; index += step) {
+            final ${ELEMENT_TYPE} value = elements[index];
+            if (test(predicate, value, index)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    public @Nullable Integer findIndex(final MethodHandle predicate) throws Throwable {
+        return findIndex(predicate, false);
+    }
+
+    public @Nullable Integer findLastIndex(final MethodHandle predicate) throws Throwable {
+        return findIndex(predicate, true);
+    }
+
+    private @Nullable Integer findIndex(final MethodHandle predicate, final boolean last) throws Throwable {
+        final int start = last ? length - 1 : 0;
+        final int end = last ? -1 : length;
+        final int step = last ? -1 : 1;
+        for (int index = start; index != end; index += step) {
+            if (test(predicate, elements[index], index)) {
+                return index;
+            }
+        }
+        return null;
+    }
+
+    public boolean any(final MethodHandle predicate) throws Throwable {
+        for (int index = 0; index < length; index++) {
+            if (test(predicate, elements[index], index)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean all(final MethodHandle predicate) throws Throwable {
+        for (int index = 0; index < length; index++) {
+            if (!test(predicate, elements[index], index)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String join() {
+        return join(", ");
+    }
+
+    public String join(final String separator) {
+        final StringBuilder result = new StringBuilder();
+        for (int index = 0; index < length; index++) {
+            if (index > 0) {
+                result.append(separator);
+            }
+            result.append(elements[index]);
+        }
+        return result.toString();
+    }
+
+    public boolean remove(final MethodHandle predicate) throws Throwable {
+        for (int index = 0; index < length; index++) {
+            if (test(predicate, elements[index], index)) {
+                removeAt(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeIf(final MethodHandle predicate) throws Throwable {
+        boolean removed = false;
+        for (int index = 0,
+            originalIndex = 0; index < length; originalIndex++) {
+            if (test(predicate, elements[index], originalIndex)) {
+                removeAt(index);
+                removed = true;
+            }
+            else {
+                index++;
+            }
+        }
+        return removed;
+    }
+
+${NATURAL_SORT_METHODS}
+
+    public void sortInPlace(final MethodHandle comparator) throws Throwable {
+        ${COMPARATOR_SORT_BODY}
+    }
+
+    public ${SELF} sort(final MethodHandle comparator) throws Throwable {
+        final ${SELF} result = copy();
+        result.sortInPlace(comparator);
+        return result;
+    }
+
+${COMPARATOR_SORT_HELPER}
+
+    private static boolean test(final MethodHandle callback, final ${ELEMENT_TYPE} value, final int index) throws Throwable {
+        return callback.type().parameterCount() == 2
+            ? (boolean) callback.invoke(value, index)
+            : (boolean) callback.invoke(value);
+    }

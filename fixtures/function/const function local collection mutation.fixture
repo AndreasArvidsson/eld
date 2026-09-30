@@ -1,7 +1,7 @@
 const func firstSorted() i32 {
     var values = [3, 1, 2];
     values[0] = 2;
-    values.sort();
+    values.sortInPlace();
     return values[0];
 }
 
@@ -36,10 +36,10 @@ INTEGER_LITERAL "2" (3:17-3:18)
 SEMICOLON (3:18-3:19)
 IDENTIFIER "values" (4:5-4:11)
 DOT (4:11-4:12)
-IDENTIFIER "sort" (4:12-4:16)
-LEFT_PAREN (4:16-4:17)
-RIGHT_PAREN (4:17-4:18)
-SEMICOLON (4:18-4:19)
+IDENTIFIER "sortInPlace" (4:12-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+SEMICOLON (4:25-4:26)
 RETURN (5:5-5:11)
 IDENTIFIER "values" (5:12-5:18)
 LEFT_BRACKET (5:18-5:19)
@@ -121,18 +121,18 @@ SEMICOLON (8:21-8:22)
         )
       )
       (ExpressionStatement
-        range: 4:5-4:19
+        range: 4:5-4:26
         (CallExpression
-          range: 4:5-4:18
+          range: 4:5-4:25
           (MemberExpression
-            range: 4:5-4:16
+            range: 4:5-4:23
             (IdentifierExpression
               range: 4:5-4:11
               name: "values"
             )
             (IdentifierExpression
-              range: 4:12-4:16
-              name: "sort"
+              range: 4:12-4:23
+              name: "sortInPlace"
             )
           )
         )
@@ -185,9 +185,9 @@ Expression types:
   3:12-3:13 -> i32
   3:17-3:18 -> i32
   4:5-4:11 -> [i32]
-  4:5-4:16 -> (array) => void
-  4:5-4:18 -> void
-  4:12-4:16 -> (array) => void
+  4:5-4:23 -> () => void
+  4:5-4:25 -> void
+  4:12-4:23 -> () => void
   5:12-5:18 -> [i32]
   5:12-5:21 -> i32
   5:19-5:20 -> i32
@@ -206,7 +206,7 @@ Declarations:
 References:
   3:5-3:11 -> 2:9-2:15
   4:5-4:11 -> 2:9-2:15
-  4:12-4:16 -> builtin sort
+  4:12-4:23 -> EldIntArray.sortInPlace(): void
   5:12-5:18 -> 2:9-2:15
   8:1-8:6 -> builtin print
   8:7-8:18 -> 1:12-1:23
@@ -238,7 +238,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 2
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.set(II)V
     ALOAD_0 0
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sortInPlace()V
     ALOAD_0 0
     LDC 0
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.get(I)I

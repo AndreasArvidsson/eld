@@ -65,6 +65,30 @@
         </pluginManagement>
 
         <plugins>
+            <!-- Generate primitive arrays before compilation -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.4</version>
+                <executions>
+                    <execution>
+                        <id>generate-primitive-arrays</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>
+                                    ${project.basedir}/src/main/codegen/GeneratePrimitiveArrays.java</argument>
+                                <argument>${project.basedir}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Maven Shade Plugin for creating an executable uber/fat JAR with dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -162,6 +186,17 @@
                         <includes>
                             <include>src/**/*.java</include>
                         </includes>
+                        <excludes>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldBooleanArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldByteArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldCharArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldDoubleArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldFloatArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldIntArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldLongArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldObjectArray.java</exclude>
+                            <exclude>src/main/java/com/github/andreasarvidsson/eld/runtime/EldShortArray.java</exclude>
+                        </excludes>
                         <eclipse>
                             <file>${project.basedir}/.vscode/eclipse-java-formatter.xml</file>
                         </eclipse>

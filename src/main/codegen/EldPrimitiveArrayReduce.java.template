@@ -1,0 +1,81 @@
+        final boolean indexed = reducer.type().parameterCount() == 3;
+        final Class<?> resultType = reducer.type().returnType();
+        if (resultType == byte.class) {
+            byte result = ((Number) initial).byteValue();
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (byte) reducer.invoke(result, elements[index], index)
+                    : (byte) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == short.class) {
+            short result = ((Number) initial).shortValue();
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (short) reducer.invoke(result, elements[index], index)
+                    : (short) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == int.class) {
+            int result = ((Number) initial).intValue();
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (int) reducer.invoke(result, elements[index], index)
+                    : (int) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == long.class) {
+            long result = ((Number) initial).longValue();
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (long) reducer.invoke(result, elements[index], index)
+                    : (long) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == float.class) {
+            float result = ((Number) initial).floatValue();
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (float) reducer.invoke(result, elements[index], index)
+                    : (float) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == double.class) {
+            double result = ((Number) initial).doubleValue();
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (double) reducer.invoke(result, elements[index], index)
+                    : (double) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == boolean.class) {
+            boolean result = (boolean) initial;
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (boolean) reducer.invoke(result, elements[index], index)
+                    : (boolean) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        if (resultType == char.class) {
+            char result = (char) initial;
+            for (int index = 0; index < length; index++) {
+                result = indexed
+                    ? (char) reducer.invoke(result, elements[index], index)
+                    : (char) reducer.invoke(result, elements[index]);
+            }
+            return result;
+        }
+        Object result = initial;
+        for (int index = 0; index < length; index++) {
+            result = indexed
+                ? reducer.invoke(result, elements[index], index)
+                : reducer.invoke(result, elements[index]);
+        }
+        return result;

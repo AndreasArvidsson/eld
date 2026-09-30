@@ -1,0 +1,263 @@
+package com.github.andreasarvidsson.eld.runtime;
+
+import java.lang.invoke.MethodHandle;
+import java.util.Arrays;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
+
+public final class ${CLASS} implements EldArray<${CLASS}> {
+    private static final int DEFAULT_CAPACITY = 10;
+
+    private ${PRIMITIVE}[] elements;
+    private int length;
+
+    public ${CLASS}() {
+        // Initialize the array with zero elements initially to save memory on arrays that never grow.
+        elements = new ${PRIMITIVE}[0];
+    }
+
+    // Doesn't need to copy the array; it is only used for:
+    // 1. Literal arrays, where the array is already fully constructed and won't be modified externally.
+    // 2. Internally in this class.
+    public ${CLASS}(final ${PRIMITIVE}[] elements) {
+        this.elements = elements;
+        length = elements.length;
+    }
+
+    @Override
+    public int length() {
+        return length;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return length == 0;
+    }
+
+    @Override
+    public void clear() {
+        length = 0;
+    }
+
+    public ${PRIMITIVE} get(final int index) {
+        return elements[normalizeIndex(index)];
+    }
+
+    public void set(final int index, final ${PRIMITIVE} value) {
+        elements[normalizeIndex(index)] = value;
+    }
+
+    public void add(final ${PRIMITIVE} value) {
+        ensureCapacity(length + 1);
+        elements[length++] = value;
+    }
+
+    public void add(final ${PRIMITIVE}... values) {
+        ensureCapacity(length + values.length);
+        System.arraycopy(values, 0, elements, length, values.length);
+        length += values.length;
+    }
+
+    public void addFront(final ${PRIMITIVE} value) {
+        ensureCapacity(length + 1);
+        System.arraycopy(elements, 0, elements, 1, length);
+        elements[0] = value;
+        length++;
+    }
+
+    public void addFront(final ${PRIMITIVE}... values) {
+        ensureCapacity(length + values.length);
+        System.arraycopy(elements, 0, elements, values.length, length);
+        System.arraycopy(values, 0, elements, 0, values.length);
+        length += values.length;
+    }
+
+    public void addAll(final ${CLASS} additional) {
+        ensureCapacity(length + additional.length);
+        System.arraycopy(additional.elements, 0, elements, length, additional.length);
+        length += additional.length;
+    }
+
+    public void insertAt(final ${PRIMITIVE} value, final int index) {
+        final int at = index < 0 ? length + index : index;
+        if (at < 0 || at > length) {
+            throw new IndexOutOfBoundsException(index);
+        }
+        ensureCapacity(length + 1);
+        System.arraycopy(elements, at, elements, at + 1, length - at);
+        elements[at] = value;
+        length++;
+    }
+
+    public boolean remove(final ${PRIMITIVE} value) {
+        for (int index = 0; index < length; index++) {
+            if (elements[index] == value) {
+                removeAt(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int removeAll(final ${PRIMITIVE} value) {
+        int removed = 0;
+        for (int index = 0; index < length;) {
+            if (elements[index] == value) {
+                removeAt(index);
+                removed++;
+            }
+            else {
+                index++;
+            }
+        }
+        return removed;
+    }
+
+    public void copyTo(final ${PRIMITIVE}[] destination, final int offset, final int length) {
+        System.arraycopy(elements, 0, destination, offset, length);
+    }
+
+    @Override
+    public ${CLASS} copy() {
+        return copyRange(0, length);
+    }
+
+    public ${CLASS} reverse() {
+        final ${PRIMITIVE}[] reversed = new ${PRIMITIVE}[length];
+        for (int index = 0; index < length; index++) {
+            reversed[index] = elements[length - index - 1];
+        }
+        return new ${CLASS}(reversed);
+    }
+
+    @Override
+    public ${CLASS} sliceFrom(final int start) {
+        return slice(start, length);
+    }
+
+    @Override
+    public ${CLASS} sliceTo(final int end) {
+        return slice(0, end);
+    }
+
+    @Override
+    public ${CLASS} slice(final int start, final int end) {
+        final int from = normalizeSliceIndex(start);
+        final int to = normalizeSliceIndex(end);
+        Objects.checkFromToIndex(from, to, length);
+        return copyRange(from, to);
+    }
+
+    public ${PRIMITIVE} removeAt(final int index) {
+        final int at = normalizeIndex(index);
+        final ${PRIMITIVE} value = elements[at];
+        for (int next = at + 1; next < length; next++) {
+            set(next - 1, get(next));
+        }
+        length--;
+        return value;
+    }
+
+    @Override
+    public int normalizeIndex(final int index) {
+        return Objects.checkIndex(index < 0 ? length + index : index, length);
+    }
+
+    public boolean contains(final ${PRIMITIVE} value) {
+        return index(value, 0) != null;
+    }
+
+    public @Nullable Integer index(final ${PRIMITIVE} value) {
+        return index(value, 0);
+    }
+
+    public @Nullable Integer index(final ${PRIMITIVE} value, final int from) {
+        final int start = from < 0 ? Math.max(0, length + from) : from;
+        for (int i = start; i < length; i++) {
+            if (this.elements[i] == value) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public @Nullable Integer lastIndex(final ${PRIMITIVE} value) {
+        return lastIndex(value, length - 1);
+    }
+
+    public @Nullable Integer lastIndex(final ${PRIMITIVE} value, final int from) {
+        final int start = from < 0 ? length + from : from;
+        for (int i = Math.min(start, length - 1); i >= 0; i--) {
+            if (this.elements[i] == value) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    private int normalizeSliceIndex(final int index) {
+        final int normalized = index < 0 ? length + index : index;
+        return Objects.checkFromToIndex(normalized, normalized, length);
+    }
+
+    private void ensureCapacity(final int requiredCapacity) {
+        final int currentCapacity = capacity();
+        if (requiredCapacity > currentCapacity) {
+            resize(grownCapacity(currentCapacity, requiredCapacity));
+        }
+    }
+
+    private static int grownCapacity(final int currentCapacity, final int requiredCapacity) {
+        if (requiredCapacity >= Integer.MAX_VALUE) {
+            throw new OutOfMemoryError("Array is too large");
+        }
+        final long grown =
+            Math.max(DEFAULT_CAPACITY, (long) currentCapacity * 2);
+        return (int) Math
+            .min(Integer.MAX_VALUE, Math.max(requiredCapacity, grown));
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (int i = 0; i < length; i++) {
+            if (i > 0) {
+                sb.append(", ");
+            }
+            sb.append(elements[i]);
+        }
+        sb.append(']');
+        return sb.toString();
+    }
+
+    private ${CLASS} copyRange(final int from, final int to) {
+        return new ${CLASS}(Arrays.copyOfRange(elements, from, to));
+    }
+
+    private int capacity() {
+        return elements.length;
+    }
+
+    private void resize(final int newCapacity) {
+        elements = Arrays.copyOf(elements, newCapacity);
+    }
+
+${STANDARD_METHODS}
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof ${CLASS} other && Arrays
+            .equals(elements, 0, length, other.elements, 0, other.length);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        for (int i = 0; i < length; i++) {
+            result = 31 * result + ${HASH_EXPRESSION};
+        }
+        return result;
+    }
+
+}

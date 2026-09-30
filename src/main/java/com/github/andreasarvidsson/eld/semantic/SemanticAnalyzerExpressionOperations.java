@@ -293,9 +293,8 @@ public final class SemanticAnalyzerExpressionOperations {
         if (expression instanceof SubscriptExpression subscript) {
             if (
                 LiteralType.unwrap(
-                    ConstType.unwrap(
-                        model.getExpressionType(subscript.target())
-                    )
+                    ConstType
+                        .unwrap(model.getExpressionType(subscript.target()))
                 ) == BuiltinType.STRING
             ) {
                 throw new SemanticException(

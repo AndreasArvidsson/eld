@@ -1,0 +1,1756 @@
+const objects: [any] = [1, "a", true];
+print(objects.concat([2.0, 'b', false]));
+const bytes: [i8] = [1, 2, 3];
+print(bytes.concat([4, 5, 6]));
+const shorts: [i16] = [1, 2, 3];
+print(shorts.concat([4, 5, 6]));
+const ints: [i32] = [1, 2, 3];
+print(ints.concat([4, 5, 6]));
+const longs: [i64] = [1, 2, 3];
+print(longs.concat([4, 5, 6]));
+const floats: [f32] = [1.0, 2.0, 3.0];
+print(floats.concat([4.0, 5.0, 6.0]));
+const doubles: [f64] = [1.0, 2.0, 3.0];
+print(doubles.concat([4.0, 5.0, 6.0]));
+const bools: [bool] = [false, false, true];
+print(bools.concat([false, true, false]));
+const chars: [char] = ['a', 'b', 'c'];
+print(chars.concat(['c', 'd', 'e']));
+const strings: [string] = ["a", "b", "c"];
+print(strings.concat(["c", "d", "e"]));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "objects" (1:7-1:14)
+COLON (1:14-1:15)
+LEFT_BRACKET (1:16-1:17)
+IDENTIFIER "any" (1:17-1:20)
+RIGHT_BRACKET (1:20-1:21)
+EQUAL (1:22-1:23)
+LEFT_BRACKET (1:24-1:25)
+INTEGER_LITERAL "1" (1:25-1:26)
+COMMA (1:26-1:27)
+STRING_LITERAL "\"a\"" (1:28-1:31)
+COMMA (1:31-1:32)
+BOOLEAN_LITERAL "true" (1:33-1:37)
+RIGHT_BRACKET (1:37-1:38)
+SEMICOLON (1:38-1:39)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "objects" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "concat" (2:15-2:21)
+LEFT_PAREN (2:21-2:22)
+LEFT_BRACKET (2:22-2:23)
+FLOAT_LITERAL "2.0" (2:23-2:26)
+COMMA (2:26-2:27)
+CHAR_LITERAL "'b'" (2:28-2:31)
+COMMA (2:31-2:32)
+BOOLEAN_LITERAL "false" (2:33-2:38)
+RIGHT_BRACKET (2:38-2:39)
+RIGHT_PAREN (2:39-2:40)
+RIGHT_PAREN (2:40-2:41)
+SEMICOLON (2:41-2:42)
+CONST (3:1-3:6)
+IDENTIFIER "bytes" (3:7-3:12)
+COLON (3:12-3:13)
+LEFT_BRACKET (3:14-3:15)
+IDENTIFIER "i8" (3:15-3:17)
+RIGHT_BRACKET (3:17-3:18)
+EQUAL (3:19-3:20)
+LEFT_BRACKET (3:21-3:22)
+INTEGER_LITERAL "1" (3:22-3:23)
+COMMA (3:23-3:24)
+INTEGER_LITERAL "2" (3:25-3:26)
+COMMA (3:26-3:27)
+INTEGER_LITERAL "3" (3:28-3:29)
+RIGHT_BRACKET (3:29-3:30)
+SEMICOLON (3:30-3:31)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "bytes" (4:7-4:12)
+DOT (4:12-4:13)
+IDENTIFIER "concat" (4:13-4:19)
+LEFT_PAREN (4:19-4:20)
+LEFT_BRACKET (4:20-4:21)
+INTEGER_LITERAL "4" (4:21-4:22)
+COMMA (4:22-4:23)
+INTEGER_LITERAL "5" (4:24-4:25)
+COMMA (4:25-4:26)
+INTEGER_LITERAL "6" (4:27-4:28)
+RIGHT_BRACKET (4:28-4:29)
+RIGHT_PAREN (4:29-4:30)
+RIGHT_PAREN (4:30-4:31)
+SEMICOLON (4:31-4:32)
+CONST (5:1-5:6)
+IDENTIFIER "shorts" (5:7-5:13)
+COLON (5:13-5:14)
+LEFT_BRACKET (5:15-5:16)
+IDENTIFIER "i16" (5:16-5:19)
+RIGHT_BRACKET (5:19-5:20)
+EQUAL (5:21-5:22)
+LEFT_BRACKET (5:23-5:24)
+INTEGER_LITERAL "1" (5:24-5:25)
+COMMA (5:25-5:26)
+INTEGER_LITERAL "2" (5:27-5:28)
+COMMA (5:28-5:29)
+INTEGER_LITERAL "3" (5:30-5:31)
+RIGHT_BRACKET (5:31-5:32)
+SEMICOLON (5:32-5:33)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "shorts" (6:7-6:13)
+DOT (6:13-6:14)
+IDENTIFIER "concat" (6:14-6:20)
+LEFT_PAREN (6:20-6:21)
+LEFT_BRACKET (6:21-6:22)
+INTEGER_LITERAL "4" (6:22-6:23)
+COMMA (6:23-6:24)
+INTEGER_LITERAL "5" (6:25-6:26)
+COMMA (6:26-6:27)
+INTEGER_LITERAL "6" (6:28-6:29)
+RIGHT_BRACKET (6:29-6:30)
+RIGHT_PAREN (6:30-6:31)
+RIGHT_PAREN (6:31-6:32)
+SEMICOLON (6:32-6:33)
+CONST (7:1-7:6)
+IDENTIFIER "ints" (7:7-7:11)
+COLON (7:11-7:12)
+LEFT_BRACKET (7:13-7:14)
+IDENTIFIER "i32" (7:14-7:17)
+RIGHT_BRACKET (7:17-7:18)
+EQUAL (7:19-7:20)
+LEFT_BRACKET (7:21-7:22)
+INTEGER_LITERAL "1" (7:22-7:23)
+COMMA (7:23-7:24)
+INTEGER_LITERAL "2" (7:25-7:26)
+COMMA (7:26-7:27)
+INTEGER_LITERAL "3" (7:28-7:29)
+RIGHT_BRACKET (7:29-7:30)
+SEMICOLON (7:30-7:31)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "ints" (8:7-8:11)
+DOT (8:11-8:12)
+IDENTIFIER "concat" (8:12-8:18)
+LEFT_PAREN (8:18-8:19)
+LEFT_BRACKET (8:19-8:20)
+INTEGER_LITERAL "4" (8:20-8:21)
+COMMA (8:21-8:22)
+INTEGER_LITERAL "5" (8:23-8:24)
+COMMA (8:24-8:25)
+INTEGER_LITERAL "6" (8:26-8:27)
+RIGHT_BRACKET (8:27-8:28)
+RIGHT_PAREN (8:28-8:29)
+RIGHT_PAREN (8:29-8:30)
+SEMICOLON (8:30-8:31)
+CONST (9:1-9:6)
+IDENTIFIER "longs" (9:7-9:12)
+COLON (9:12-9:13)
+LEFT_BRACKET (9:14-9:15)
+IDENTIFIER "i64" (9:15-9:18)
+RIGHT_BRACKET (9:18-9:19)
+EQUAL (9:20-9:21)
+LEFT_BRACKET (9:22-9:23)
+INTEGER_LITERAL "1" (9:23-9:24)
+COMMA (9:24-9:25)
+INTEGER_LITERAL "2" (9:26-9:27)
+COMMA (9:27-9:28)
+INTEGER_LITERAL "3" (9:29-9:30)
+RIGHT_BRACKET (9:30-9:31)
+SEMICOLON (9:31-9:32)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "longs" (10:7-10:12)
+DOT (10:12-10:13)
+IDENTIFIER "concat" (10:13-10:19)
+LEFT_PAREN (10:19-10:20)
+LEFT_BRACKET (10:20-10:21)
+INTEGER_LITERAL "4" (10:21-10:22)
+COMMA (10:22-10:23)
+INTEGER_LITERAL "5" (10:24-10:25)
+COMMA (10:25-10:26)
+INTEGER_LITERAL "6" (10:27-10:28)
+RIGHT_BRACKET (10:28-10:29)
+RIGHT_PAREN (10:29-10:30)
+RIGHT_PAREN (10:30-10:31)
+SEMICOLON (10:31-10:32)
+CONST (11:1-11:6)
+IDENTIFIER "floats" (11:7-11:13)
+COLON (11:13-11:14)
+LEFT_BRACKET (11:15-11:16)
+IDENTIFIER "f32" (11:16-11:19)
+RIGHT_BRACKET (11:19-11:20)
+EQUAL (11:21-11:22)
+LEFT_BRACKET (11:23-11:24)
+FLOAT_LITERAL "1.0" (11:24-11:27)
+COMMA (11:27-11:28)
+FLOAT_LITERAL "2.0" (11:29-11:32)
+COMMA (11:32-11:33)
+FLOAT_LITERAL "3.0" (11:34-11:37)
+RIGHT_BRACKET (11:37-11:38)
+SEMICOLON (11:38-11:39)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "floats" (12:7-12:13)
+DOT (12:13-12:14)
+IDENTIFIER "concat" (12:14-12:20)
+LEFT_PAREN (12:20-12:21)
+LEFT_BRACKET (12:21-12:22)
+FLOAT_LITERAL "4.0" (12:22-12:25)
+COMMA (12:25-12:26)
+FLOAT_LITERAL "5.0" (12:27-12:30)
+COMMA (12:30-12:31)
+FLOAT_LITERAL "6.0" (12:32-12:35)
+RIGHT_BRACKET (12:35-12:36)
+RIGHT_PAREN (12:36-12:37)
+RIGHT_PAREN (12:37-12:38)
+SEMICOLON (12:38-12:39)
+CONST (13:1-13:6)
+IDENTIFIER "doubles" (13:7-13:14)
+COLON (13:14-13:15)
+LEFT_BRACKET (13:16-13:17)
+IDENTIFIER "f64" (13:17-13:20)
+RIGHT_BRACKET (13:20-13:21)
+EQUAL (13:22-13:23)
+LEFT_BRACKET (13:24-13:25)
+FLOAT_LITERAL "1.0" (13:25-13:28)
+COMMA (13:28-13:29)
+FLOAT_LITERAL "2.0" (13:30-13:33)
+COMMA (13:33-13:34)
+FLOAT_LITERAL "3.0" (13:35-13:38)
+RIGHT_BRACKET (13:38-13:39)
+SEMICOLON (13:39-13:40)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "doubles" (14:7-14:14)
+DOT (14:14-14:15)
+IDENTIFIER "concat" (14:15-14:21)
+LEFT_PAREN (14:21-14:22)
+LEFT_BRACKET (14:22-14:23)
+FLOAT_LITERAL "4.0" (14:23-14:26)
+COMMA (14:26-14:27)
+FLOAT_LITERAL "5.0" (14:28-14:31)
+COMMA (14:31-14:32)
+FLOAT_LITERAL "6.0" (14:33-14:36)
+RIGHT_BRACKET (14:36-14:37)
+RIGHT_PAREN (14:37-14:38)
+RIGHT_PAREN (14:38-14:39)
+SEMICOLON (14:39-14:40)
+CONST (15:1-15:6)
+IDENTIFIER "bools" (15:7-15:12)
+COLON (15:12-15:13)
+LEFT_BRACKET (15:14-15:15)
+IDENTIFIER "bool" (15:15-15:19)
+RIGHT_BRACKET (15:19-15:20)
+EQUAL (15:21-15:22)
+LEFT_BRACKET (15:23-15:24)
+BOOLEAN_LITERAL "false" (15:24-15:29)
+COMMA (15:29-15:30)
+BOOLEAN_LITERAL "false" (15:31-15:36)
+COMMA (15:36-15:37)
+BOOLEAN_LITERAL "true" (15:38-15:42)
+RIGHT_BRACKET (15:42-15:43)
+SEMICOLON (15:43-15:44)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "bools" (16:7-16:12)
+DOT (16:12-16:13)
+IDENTIFIER "concat" (16:13-16:19)
+LEFT_PAREN (16:19-16:20)
+LEFT_BRACKET (16:20-16:21)
+BOOLEAN_LITERAL "false" (16:21-16:26)
+COMMA (16:26-16:27)
+BOOLEAN_LITERAL "true" (16:28-16:32)
+COMMA (16:32-16:33)
+BOOLEAN_LITERAL "false" (16:34-16:39)
+RIGHT_BRACKET (16:39-16:40)
+RIGHT_PAREN (16:40-16:41)
+RIGHT_PAREN (16:41-16:42)
+SEMICOLON (16:42-16:43)
+CONST (17:1-17:6)
+IDENTIFIER "chars" (17:7-17:12)
+COLON (17:12-17:13)
+LEFT_BRACKET (17:14-17:15)
+IDENTIFIER "char" (17:15-17:19)
+RIGHT_BRACKET (17:19-17:20)
+EQUAL (17:21-17:22)
+LEFT_BRACKET (17:23-17:24)
+CHAR_LITERAL "'a'" (17:24-17:27)
+COMMA (17:27-17:28)
+CHAR_LITERAL "'b'" (17:29-17:32)
+COMMA (17:32-17:33)
+CHAR_LITERAL "'c'" (17:34-17:37)
+RIGHT_BRACKET (17:37-17:38)
+SEMICOLON (17:38-17:39)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "chars" (18:7-18:12)
+DOT (18:12-18:13)
+IDENTIFIER "concat" (18:13-18:19)
+LEFT_PAREN (18:19-18:20)
+LEFT_BRACKET (18:20-18:21)
+CHAR_LITERAL "'c'" (18:21-18:24)
+COMMA (18:24-18:25)
+CHAR_LITERAL "'d'" (18:26-18:29)
+COMMA (18:29-18:30)
+CHAR_LITERAL "'e'" (18:31-18:34)
+RIGHT_BRACKET (18:34-18:35)
+RIGHT_PAREN (18:35-18:36)
+RIGHT_PAREN (18:36-18:37)
+SEMICOLON (18:37-18:38)
+CONST (19:1-19:6)
+IDENTIFIER "strings" (19:7-19:14)
+COLON (19:14-19:15)
+LEFT_BRACKET (19:16-19:17)
+IDENTIFIER "string" (19:17-19:23)
+RIGHT_BRACKET (19:23-19:24)
+EQUAL (19:25-19:26)
+LEFT_BRACKET (19:27-19:28)
+STRING_LITERAL "\"a\"" (19:28-19:31)
+COMMA (19:31-19:32)
+STRING_LITERAL "\"b\"" (19:33-19:36)
+COMMA (19:36-19:37)
+STRING_LITERAL "\"c\"" (19:38-19:41)
+RIGHT_BRACKET (19:41-19:42)
+SEMICOLON (19:42-19:43)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "strings" (20:7-20:14)
+DOT (20:14-20:15)
+IDENTIFIER "concat" (20:15-20:21)
+LEFT_PAREN (20:21-20:22)
+LEFT_BRACKET (20:22-20:23)
+STRING_LITERAL "\"c\"" (20:23-20:26)
+COMMA (20:26-20:27)
+STRING_LITERAL "\"d\"" (20:28-20:31)
+COMMA (20:31-20:32)
+STRING_LITERAL "\"e\"" (20:33-20:36)
+RIGHT_BRACKET (20:36-20:37)
+RIGHT_PAREN (20:37-20:38)
+RIGHT_PAREN (20:38-20:39)
+SEMICOLON (20:39-20:40)
+
+--- AST ---
+
+(Program
+  range: 1:1-20:40
+  (VariableDeclaration
+    range: 1:1-1:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "objects"
+    )
+    (ArrayTypeNode
+      range: 1:16-1:21
+      (NamedTypeNode
+        range: 1:17-1:20
+        name: "any"
+      )
+    )
+    (ArrayExpression
+      range: 1:24-1:38
+      (LiteralExpression
+        range: 1:25-1:26
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:28-1:31
+        kind: STRING
+        text: "\"a\""
+      )
+      (LiteralExpression
+        range: 1:33-1:37
+        kind: BOOL
+        text: "true"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:42
+    (CallExpression
+      range: 2:1-2:41
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:40
+        (MemberExpression
+          range: 2:7-2:21
+          (IdentifierExpression
+            range: 2:7-2:14
+            name: "objects"
+          )
+          (IdentifierExpression
+            range: 2:15-2:21
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 2:22-2:39
+          (LiteralExpression
+            range: 2:23-2:26
+            kind: FLOAT
+            text: "2.0"
+          )
+          (LiteralExpression
+            range: 2:28-2:31
+            kind: CHAR
+            text: "'b'"
+          )
+          (LiteralExpression
+            range: 2:33-2:38
+            kind: BOOL
+            text: "false"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:12
+      name: "bytes"
+    )
+    (ArrayTypeNode
+      range: 3:14-3:18
+      (NamedTypeNode
+        range: 3:15-3:17
+        name: "i8"
+      )
+    )
+    (ArrayExpression
+      range: 3:21-3:30
+      (LiteralExpression
+        range: 3:22-3:23
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 3:25-3:26
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 3:28-3:29
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:32
+    (CallExpression
+      range: 4:1-4:31
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:30
+        (MemberExpression
+          range: 4:7-4:19
+          (IdentifierExpression
+            range: 4:7-4:12
+            name: "bytes"
+          )
+          (IdentifierExpression
+            range: 4:13-4:19
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 4:20-4:29
+          (LiteralExpression
+            range: 4:21-4:22
+            kind: INT
+            text: "4"
+          )
+          (LiteralExpression
+            range: 4:24-4:25
+            kind: INT
+            text: "5"
+          )
+          (LiteralExpression
+            range: 4:27-4:28
+            kind: INT
+            text: "6"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "shorts"
+    )
+    (ArrayTypeNode
+      range: 5:15-5:20
+      (NamedTypeNode
+        range: 5:16-5:19
+        name: "i16"
+      )
+    )
+    (ArrayExpression
+      range: 5:23-5:32
+      (LiteralExpression
+        range: 5:24-5:25
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 5:27-5:28
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 5:30-5:31
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:33
+    (CallExpression
+      range: 6:1-6:32
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:31
+        (MemberExpression
+          range: 6:7-6:20
+          (IdentifierExpression
+            range: 6:7-6:13
+            name: "shorts"
+          )
+          (IdentifierExpression
+            range: 6:14-6:20
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 6:21-6:30
+          (LiteralExpression
+            range: 6:22-6:23
+            kind: INT
+            text: "4"
+          )
+          (LiteralExpression
+            range: 6:25-6:26
+            kind: INT
+            text: "5"
+          )
+          (LiteralExpression
+            range: 6:28-6:29
+            kind: INT
+            text: "6"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:11
+      name: "ints"
+    )
+    (ArrayTypeNode
+      range: 7:13-7:18
+      (NamedTypeNode
+        range: 7:14-7:17
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 7:21-7:30
+      (LiteralExpression
+        range: 7:22-7:23
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 7:25-7:26
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 7:28-7:29
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:31
+    (CallExpression
+      range: 8:1-8:30
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:29
+        (MemberExpression
+          range: 8:7-8:18
+          (IdentifierExpression
+            range: 8:7-8:11
+            name: "ints"
+          )
+          (IdentifierExpression
+            range: 8:12-8:18
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 8:19-8:28
+          (LiteralExpression
+            range: 8:20-8:21
+            kind: INT
+            text: "4"
+          )
+          (LiteralExpression
+            range: 8:23-8:24
+            kind: INT
+            text: "5"
+          )
+          (LiteralExpression
+            range: 8:26-8:27
+            kind: INT
+            text: "6"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:12
+      name: "longs"
+    )
+    (ArrayTypeNode
+      range: 9:14-9:19
+      (NamedTypeNode
+        range: 9:15-9:18
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 9:22-9:31
+      (LiteralExpression
+        range: 9:23-9:24
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 9:26-9:27
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 9:29-9:30
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:32
+    (CallExpression
+      range: 10:1-10:31
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:30
+        (MemberExpression
+          range: 10:7-10:19
+          (IdentifierExpression
+            range: 10:7-10:12
+            name: "longs"
+          )
+          (IdentifierExpression
+            range: 10:13-10:19
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 10:20-10:29
+          (LiteralExpression
+            range: 10:21-10:22
+            kind: INT
+            text: "4"
+          )
+          (LiteralExpression
+            range: 10:24-10:25
+            kind: INT
+            text: "5"
+          )
+          (LiteralExpression
+            range: 10:27-10:28
+            kind: INT
+            text: "6"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:13
+      name: "floats"
+    )
+    (ArrayTypeNode
+      range: 11:15-11:20
+      (NamedTypeNode
+        range: 11:16-11:19
+        name: "f32"
+      )
+    )
+    (ArrayExpression
+      range: 11:23-11:38
+      (LiteralExpression
+        range: 11:24-11:27
+        kind: FLOAT
+        text: "1.0"
+      )
+      (LiteralExpression
+        range: 11:29-11:32
+        kind: FLOAT
+        text: "2.0"
+      )
+      (LiteralExpression
+        range: 11:34-11:37
+        kind: FLOAT
+        text: "3.0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:39
+    (CallExpression
+      range: 12:1-12:38
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:37
+        (MemberExpression
+          range: 12:7-12:20
+          (IdentifierExpression
+            range: 12:7-12:13
+            name: "floats"
+          )
+          (IdentifierExpression
+            range: 12:14-12:20
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 12:21-12:36
+          (LiteralExpression
+            range: 12:22-12:25
+            kind: FLOAT
+            text: "4.0"
+          )
+          (LiteralExpression
+            range: 12:27-12:30
+            kind: FLOAT
+            text: "5.0"
+          )
+          (LiteralExpression
+            range: 12:32-12:35
+            kind: FLOAT
+            text: "6.0"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:14
+      name: "doubles"
+    )
+    (ArrayTypeNode
+      range: 13:16-13:21
+      (NamedTypeNode
+        range: 13:17-13:20
+        name: "f64"
+      )
+    )
+    (ArrayExpression
+      range: 13:24-13:39
+      (LiteralExpression
+        range: 13:25-13:28
+        kind: FLOAT
+        text: "1.0"
+      )
+      (LiteralExpression
+        range: 13:30-13:33
+        kind: FLOAT
+        text: "2.0"
+      )
+      (LiteralExpression
+        range: 13:35-13:38
+        kind: FLOAT
+        text: "3.0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:40
+    (CallExpression
+      range: 14:1-14:39
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:38
+        (MemberExpression
+          range: 14:7-14:21
+          (IdentifierExpression
+            range: 14:7-14:14
+            name: "doubles"
+          )
+          (IdentifierExpression
+            range: 14:15-14:21
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 14:22-14:37
+          (LiteralExpression
+            range: 14:23-14:26
+            kind: FLOAT
+            text: "4.0"
+          )
+          (LiteralExpression
+            range: 14:28-14:31
+            kind: FLOAT
+            text: "5.0"
+          )
+          (LiteralExpression
+            range: 14:33-14:36
+            kind: FLOAT
+            text: "6.0"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 15:1-15:44
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 15:7-15:12
+      name: "bools"
+    )
+    (ArrayTypeNode
+      range: 15:14-15:20
+      (NamedTypeNode
+        range: 15:15-15:19
+        name: "bool"
+      )
+    )
+    (ArrayExpression
+      range: 15:23-15:43
+      (LiteralExpression
+        range: 15:24-15:29
+        kind: BOOL
+        text: "false"
+      )
+      (LiteralExpression
+        range: 15:31-15:36
+        kind: BOOL
+        text: "false"
+      )
+      (LiteralExpression
+        range: 15:38-15:42
+        kind: BOOL
+        text: "true"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:43
+    (CallExpression
+      range: 16:1-16:42
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:41
+        (MemberExpression
+          range: 16:7-16:19
+          (IdentifierExpression
+            range: 16:7-16:12
+            name: "bools"
+          )
+          (IdentifierExpression
+            range: 16:13-16:19
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 16:20-16:40
+          (LiteralExpression
+            range: 16:21-16:26
+            kind: BOOL
+            text: "false"
+          )
+          (LiteralExpression
+            range: 16:28-16:32
+            kind: BOOL
+            text: "true"
+          )
+          (LiteralExpression
+            range: 16:34-16:39
+            kind: BOOL
+            text: "false"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 17:1-17:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 17:7-17:12
+      name: "chars"
+    )
+    (ArrayTypeNode
+      range: 17:14-17:20
+      (NamedTypeNode
+        range: 17:15-17:19
+        name: "char"
+      )
+    )
+    (ArrayExpression
+      range: 17:23-17:38
+      (LiteralExpression
+        range: 17:24-17:27
+        kind: CHAR
+        text: "'a'"
+      )
+      (LiteralExpression
+        range: 17:29-17:32
+        kind: CHAR
+        text: "'b'"
+      )
+      (LiteralExpression
+        range: 17:34-17:37
+        kind: CHAR
+        text: "'c'"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:38
+    (CallExpression
+      range: 18:1-18:37
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (CallExpression
+        range: 18:7-18:36
+        (MemberExpression
+          range: 18:7-18:19
+          (IdentifierExpression
+            range: 18:7-18:12
+            name: "chars"
+          )
+          (IdentifierExpression
+            range: 18:13-18:19
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 18:20-18:35
+          (LiteralExpression
+            range: 18:21-18:24
+            kind: CHAR
+            text: "'c'"
+          )
+          (LiteralExpression
+            range: 18:26-18:29
+            kind: CHAR
+            text: "'d'"
+          )
+          (LiteralExpression
+            range: 18:31-18:34
+            kind: CHAR
+            text: "'e'"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:14
+      name: "strings"
+    )
+    (ArrayTypeNode
+      range: 19:16-19:24
+      (NamedTypeNode
+        range: 19:17-19:23
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 19:27-19:42
+      (LiteralExpression
+        range: 19:28-19:31
+        kind: STRING
+        text: "\"a\""
+      )
+      (LiteralExpression
+        range: 19:33-19:36
+        kind: STRING
+        text: "\"b\""
+      )
+      (LiteralExpression
+        range: 19:38-19:41
+        kind: STRING
+        text: "\"c\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:40
+    (CallExpression
+      range: 20:1-20:39
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (CallExpression
+        range: 20:7-20:38
+        (MemberExpression
+          range: 20:7-20:21
+          (IdentifierExpression
+            range: 20:7-20:14
+            name: "strings"
+          )
+          (IdentifierExpression
+            range: 20:15-20:21
+            name: "concat"
+          )
+        )
+        (ArrayExpression
+          range: 20:22-20:37
+          (LiteralExpression
+            range: 20:23-20:26
+            kind: STRING
+            text: "\"c\""
+          )
+          (LiteralExpression
+            range: 20:28-20:31
+            kind: STRING
+            text: "\"d\""
+          )
+          (LiteralExpression
+            range: 20:33-20:36
+            kind: STRING
+            text: "\"e\""
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:24-1:38 -> [any]
+  1:25-1:26 -> i32
+  1:28-1:31 -> string
+  1:33-1:37 -> bool
+  2:1-2:6 -> (any) => void
+  2:1-2:41 -> void
+  2:7-2:14 -> [any]
+  2:7-2:21 -> () => [any]
+  2:7-2:40 -> [any]
+  2:15-2:21 -> () => [any]
+  2:22-2:39 -> [any]
+  2:23-2:26 -> f64
+  2:28-2:31 -> char
+  2:33-2:38 -> bool
+  3:21-3:30 -> [i8]
+  3:22-3:23 -> i32
+  3:25-3:26 -> i32
+  3:28-3:29 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:31 -> void
+  4:7-4:12 -> [i8]
+  4:7-4:19 -> () => [i8]
+  4:7-4:30 -> [i8]
+  4:13-4:19 -> () => [i8]
+  4:20-4:29 -> [i8]
+  4:21-4:22 -> i32
+  4:24-4:25 -> i32
+  4:27-4:28 -> i32
+  5:23-5:32 -> [i16]
+  5:24-5:25 -> i32
+  5:27-5:28 -> i32
+  5:30-5:31 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:32 -> void
+  6:7-6:13 -> [i16]
+  6:7-6:20 -> () => [i16]
+  6:7-6:31 -> [i16]
+  6:14-6:20 -> () => [i16]
+  6:21-6:30 -> [i16]
+  6:22-6:23 -> i32
+  6:25-6:26 -> i32
+  6:28-6:29 -> i32
+  7:21-7:30 -> [i32]
+  7:22-7:23 -> i32
+  7:25-7:26 -> i32
+  7:28-7:29 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:30 -> void
+  8:7-8:11 -> [i32]
+  8:7-8:18 -> () => [i32]
+  8:7-8:29 -> [i32]
+  8:12-8:18 -> () => [i32]
+  8:19-8:28 -> [i32]
+  8:20-8:21 -> i32
+  8:23-8:24 -> i32
+  8:26-8:27 -> i32
+  9:22-9:31 -> [i64]
+  9:23-9:24 -> i64
+  9:26-9:27 -> i64
+  9:29-9:30 -> i64
+  10:1-10:6 -> (any) => void
+  10:1-10:31 -> void
+  10:7-10:12 -> [i64]
+  10:7-10:19 -> () => [i64]
+  10:7-10:30 -> [i64]
+  10:13-10:19 -> () => [i64]
+  10:20-10:29 -> [i64]
+  10:21-10:22 -> i64
+  10:24-10:25 -> i64
+  10:27-10:28 -> i64
+  11:23-11:38 -> [f32]
+  11:24-11:27 -> f32
+  11:29-11:32 -> f32
+  11:34-11:37 -> f32
+  12:1-12:6 -> (any) => void
+  12:1-12:38 -> void
+  12:7-12:13 -> [f32]
+  12:7-12:20 -> () => [f32]
+  12:7-12:37 -> [f32]
+  12:14-12:20 -> () => [f32]
+  12:21-12:36 -> [f32]
+  12:22-12:25 -> f32
+  12:27-12:30 -> f32
+  12:32-12:35 -> f32
+  13:24-13:39 -> [f64]
+  13:25-13:28 -> f64
+  13:30-13:33 -> f64
+  13:35-13:38 -> f64
+  14:1-14:6 -> (any) => void
+  14:1-14:39 -> void
+  14:7-14:14 -> [f64]
+  14:7-14:21 -> () => [f64]
+  14:7-14:38 -> [f64]
+  14:15-14:21 -> () => [f64]
+  14:22-14:37 -> [f64]
+  14:23-14:26 -> f64
+  14:28-14:31 -> f64
+  14:33-14:36 -> f64
+  15:23-15:43 -> [bool]
+  15:24-15:29 -> bool
+  15:31-15:36 -> bool
+  15:38-15:42 -> bool
+  16:1-16:6 -> (any) => void
+  16:1-16:42 -> void
+  16:7-16:12 -> [bool]
+  16:7-16:19 -> () => [bool]
+  16:7-16:41 -> [bool]
+  16:13-16:19 -> () => [bool]
+  16:20-16:40 -> [bool]
+  16:21-16:26 -> bool
+  16:28-16:32 -> bool
+  16:34-16:39 -> bool
+  17:23-17:38 -> [char]
+  17:24-17:27 -> char
+  17:29-17:32 -> char
+  17:34-17:37 -> char
+  18:1-18:6 -> (any) => void
+  18:1-18:37 -> void
+  18:7-18:12 -> [char]
+  18:7-18:19 -> () => [char]
+  18:7-18:36 -> [char]
+  18:13-18:19 -> () => [char]
+  18:20-18:35 -> [char]
+  18:21-18:24 -> char
+  18:26-18:29 -> char
+  18:31-18:34 -> char
+  19:27-19:42 -> [string]
+  19:28-19:31 -> string
+  19:33-19:36 -> string
+  19:38-19:41 -> string
+  20:1-20:6 -> (any) => void
+  20:1-20:39 -> void
+  20:7-20:14 -> [string]
+  20:7-20:21 -> () => [string]
+  20:7-20:38 -> [string]
+  20:15-20:21 -> () => [string]
+  20:22-20:37 -> [string]
+  20:23-20:26 -> string
+  20:28-20:31 -> string
+  20:33-20:36 -> string
+
+Resolved types:
+  1:16-1:21 -> [any]
+  1:17-1:20 -> any
+  3:14-3:18 -> [i8]
+  3:15-3:17 -> i8
+  5:15-5:20 -> [i16]
+  5:16-5:19 -> i16
+  7:13-7:18 -> [i32]
+  7:14-7:17 -> i32
+  9:14-9:19 -> [i64]
+  9:15-9:18 -> i64
+  11:15-11:20 -> [f32]
+  11:16-11:19 -> f32
+  13:16-13:21 -> [f64]
+  13:17-13:20 -> f64
+  15:14-15:20 -> [bool]
+  15:15-15:19 -> bool
+  17:14-17:20 -> [char]
+  17:15-17:19 -> char
+  19:16-19:24 -> [string]
+  19:17-19:23 -> string
+
+Conversions:
+  1:25-1:26 -> i32 -> any
+  1:28-1:31 -> string -> any
+  1:33-1:37 -> bool -> any
+  2:23-2:26 -> f64 -> any
+  2:28-2:31 -> char -> any
+  2:33-2:38 -> bool -> any
+  3:22-3:23 -> i32 -> i8
+  3:25-3:26 -> i32 -> i8
+  3:28-3:29 -> i32 -> i8
+  4:21-4:22 -> i32 -> i8
+  4:24-4:25 -> i32 -> i8
+  4:27-4:28 -> i32 -> i8
+  5:24-5:25 -> i32 -> i16
+  5:27-5:28 -> i32 -> i16
+  5:30-5:31 -> i32 -> i16
+  6:22-6:23 -> i32 -> i16
+  6:25-6:26 -> i32 -> i16
+  6:28-6:29 -> i32 -> i16
+
+Declarations:
+  1:7-1:14 -> const objects: [any]
+  3:7-3:12 -> const bytes: [i8]
+  5:7-5:13 -> const shorts: [i16]
+  7:7-7:11 -> const ints: [i32]
+  9:7-9:12 -> const longs: [i64]
+  11:7-11:13 -> const floats: [f32]
+  13:7-13:14 -> const doubles: [f64]
+  15:7-15:12 -> const bools: [bool]
+  17:7-17:12 -> const chars: [char]
+  19:7-19:14 -> const strings: [string]
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:14 -> 1:7-1:14
+  2:15-2:21 -> EldObjectArray.concat(): [any]
+  4:1-4:6 -> builtin print
+  4:7-4:12 -> 3:7-3:12
+  4:13-4:19 -> EldByteArray.concat(): [i8]
+  6:1-6:6 -> builtin print
+  6:7-6:13 -> 5:7-5:13
+  6:14-6:20 -> EldShortArray.concat(): [i16]
+  8:1-8:6 -> builtin print
+  8:7-8:11 -> 7:7-7:11
+  8:12-8:18 -> EldIntArray.concat(): [i32]
+  10:1-10:6 -> builtin print
+  10:7-10:12 -> 9:7-9:12
+  10:13-10:19 -> EldLongArray.concat(): [i64]
+  12:1-12:6 -> builtin print
+  12:7-12:13 -> 11:7-11:13
+  12:14-12:20 -> EldFloatArray.concat(): [f32]
+  14:1-14:6 -> builtin print
+  14:7-14:14 -> 13:7-13:14
+  14:15-14:21 -> EldDoubleArray.concat(): [f64]
+  16:1-16:6 -> builtin print
+  16:7-16:12 -> 15:7-15:12
+  16:13-16:19 -> EldBooleanArray.concat(): [bool]
+  18:1-18:6 -> builtin print
+  18:7-18:12 -> 17:7-17:12
+  18:13-18:19 -> EldCharArray.concat(): [char]
+  20:1-20:6 -> builtin print
+  20:7-20:14 -> 19:7-19:14
+  20:15-20:21 -> EldObjectArray.concat(): [string]
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field objects Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; flags [PUBLIC, STATIC, FINAL]
+  field shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; flags [PUBLIC, STATIC, FINAL]
+  field ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; flags [PUBLIC, STATIC, FINAL]
+  field floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; flags [PUBLIC, STATIC, FINAL]
+  field doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; flags [PUBLIC, STATIC, FINAL]
+  field bools Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray; flags [PUBLIC, STATIC, FINAL]
+  field chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; flags [PUBLIC, STATIC, FINAL]
+  field strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC 1
+    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
+    AASTORE
+    DUP
+    LDC 1
+    LDC "a"
+    AASTORE
+    DUP
+    LDC 2
+    ICONST_1 1
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.objects Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.objects Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC2_W 2.0
+    INVOKESTATIC java/lang/Double.valueOf(D)Ljava/lang/Double;
+    AASTORE
+    DUP
+    LDC 1
+    LDC 98
+    INVOKESTATIC java/lang/Character.valueOf(C)Ljava/lang/Character;
+    AASTORE
+    DUP
+    LDC 2
+    ICONST_0 0
+    INVOKESTATIC java/lang/Boolean.valueOf(Z)Ljava/lang/Boolean;
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
+    DUP
+    LDC 3
+    NEWARRAY BYTE
+    DUP
+    LDC 0
+    LDC 1
+    I2B
+    BASTORE
+    DUP
+    LDC 1
+    LDC 2
+    I2B
+    BASTORE
+    DUP
+    LDC 2
+    LDC 3
+    I2B
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init>([B)V
+    PUTSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
+    DUP
+    LDC 3
+    NEWARRAY BYTE
+    DUP
+    LDC 0
+    LDC 4
+    I2B
+    BASTORE
+    DUP
+    LDC 1
+    LDC 5
+    I2B
+    BASTORE
+    DUP
+    LDC 2
+    LDC 6
+    I2B
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init>([B)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;)Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
+    DUP
+    LDC 3
+    NEWARRAY SHORT
+    DUP
+    LDC 0
+    LDC 1
+    I2S
+    SASTORE
+    DUP
+    LDC 1
+    LDC 2
+    I2S
+    SASTORE
+    DUP
+    LDC 2
+    LDC 3
+    I2S
+    SASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init>([S)V
+    PUTSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
+    DUP
+    LDC 3
+    NEWARRAY SHORT
+    DUP
+    LDC 0
+    LDC 4
+    I2S
+    SASTORE
+    DUP
+    LDC 1
+    LDC 5
+    I2S
+    SASTORE
+    DUP
+    LDC 2
+    LDC 6
+    I2S
+    SASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init>([S)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;)Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 3
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 4
+    IASTORE
+    DUP
+    LDC 1
+    LDC 5
+    IASTORE
+    DUP
+    LDC 2
+    LDC 6
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    LDC 3
+    NEWARRAY LONG
+    DUP
+    LDC 0
+    LDC2_W 1
+    LASTORE
+    DUP
+    LDC 1
+    LDC2_W 2
+    LASTORE
+    DUP
+    LDC 2
+    LDC2_W 3
+    LASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
+    PUTSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    LDC 3
+    NEWARRAY LONG
+    DUP
+    LDC 0
+    LDC2_W 4
+    LASTORE
+    DUP
+    LDC 1
+    LDC2_W 5
+    LASTORE
+    DUP
+    LDC 2
+    LDC2_W 6
+    LASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;)Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
+    DUP
+    LDC 3
+    NEWARRAY FLOAT
+    DUP
+    LDC 0
+    LDC 1.0
+    FASTORE
+    DUP
+    LDC 1
+    LDC 2.0
+    FASTORE
+    DUP
+    LDC 2
+    LDC 3.0
+    FASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
+    PUTSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
+    DUP
+    LDC 3
+    NEWARRAY FLOAT
+    DUP
+    LDC 0
+    LDC 4.0
+    FASTORE
+    DUP
+    LDC 1
+    LDC 5.0
+    FASTORE
+    DUP
+    LDC 2
+    LDC 6.0
+    FASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;)Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
+    DUP
+    LDC 3
+    NEWARRAY DOUBLE
+    DUP
+    LDC 0
+    LDC2_W 1.0
+    DASTORE
+    DUP
+    LDC 1
+    LDC2_W 2.0
+    DASTORE
+    DUP
+    LDC 2
+    LDC2_W 3.0
+    DASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init>([D)V
+    PUTSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
+    DUP
+    LDC 3
+    NEWARRAY DOUBLE
+    DUP
+    LDC 0
+    LDC2_W 4.0
+    DASTORE
+    DUP
+    LDC 1
+    LDC2_W 5.0
+    DASTORE
+    DUP
+    LDC 2
+    LDC2_W 6.0
+    DASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init>([D)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;)Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
+    DUP
+    LDC 3
+    NEWARRAY BOOLEAN
+    DUP
+    LDC 0
+    ICONST_0 0
+    BASTORE
+    DUP
+    LDC 1
+    ICONST_0 0
+    BASTORE
+    DUP
+    LDC 2
+    ICONST_1 1
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>([Z)V
+    PUTSTATIC Test.bools Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bools Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldBooleanArray
+    DUP
+    LDC 3
+    NEWARRAY BOOLEAN
+    DUP
+    LDC 0
+    ICONST_0 0
+    BASTORE
+    DUP
+    LDC 1
+    ICONST_1 1
+    BASTORE
+    DUP
+    LDC 2
+    ICONST_0 0
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>([Z)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;)Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
+    LDC 3
+    NEWARRAY CHAR
+    DUP
+    LDC 0
+    LDC 97
+    CASTORE
+    DUP
+    LDC 1
+    LDC 98
+    CASTORE
+    DUP
+    LDC 2
+    LDC 99
+    CASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
+    PUTSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
+    LDC 3
+    NEWARRAY CHAR
+    DUP
+    LDC 0
+    LDC 99
+    CASTORE
+    DUP
+    LDC 1
+    LDC 100
+    CASTORE
+    DUP
+    LDC 2
+    LDC 101
+    CASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;)Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "a"
+    AASTORE
+    DUP
+    LDC 1
+    LDC "b"
+    AASTORE
+    DUP
+    LDC 2
+    LDC "c"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "c"
+    AASTORE
+    DUP
+    LDC 1
+    LDC "d"
+    AASTORE
+    DUP
+    LDC 2
+    LDC "e"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.concat(Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 9 max locals 0
+
+--- OUTPUT ---
+
+[1, a, true, 2.0, b, false]
+[1, 2, 3, 4, 5, 6]
+[1, 2, 3, 4, 5, 6]
+[1, 2, 3, 4, 5, 6]
+[1, 2, 3, 4, 5, 6]
+[1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+[1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+[false, false, true, false, true, false]
+[a, b, c, c, d, e]
+[a, b, c, c, d, e]

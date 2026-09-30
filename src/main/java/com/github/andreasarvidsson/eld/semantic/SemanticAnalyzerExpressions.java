@@ -587,42 +587,50 @@ public final class SemanticAnalyzerExpressions {
                         model.setExpressionType(member.member(), exposed);
                         yield exposed;
                     }
-                }
-                if (
-                    memberTarget instanceof ArrayType array && member.member()
-                        .name()
-                        .equals(ArrayMethods.SORT.name())
-                ) {
-                    if (target instanceof ConstType) {
-                        throw new SemanticException(
-                            member.range(),
-                            "Cannot sort a const array"
-                        );
+                    final String arrayMethodName = member.member().name();
+                    final @Nullable JavaMethodSymbol special =
+                        ArrayMethods
+                            .special(arrayMethodName, array, member.range());
+                    if (special != null) {
+                        if (
+                            target instanceof ConstType
+                                && ArrayMethods.mutates(arrayMethodName)
+                        ) {
+                            throw new SemanticException(
+                                member.range(),
+                                (arrayMethodName.equals("sort")
+                                    || arrayMethodName.equals("sortInPlace"))
+                                        ? "Cannot sort a const array"
+                                        : "Cannot mutate a const array"
+                            );
+                        }
+                        if (!analyzingCallee) {
+                            throw new SemanticException(
+                                member.range(),
+                                "Array method '%s' must be called",
+                                arrayMethodName
+                            );
+                        }
+                        if (
+                            (arrayMethodName.equals("sort")
+                                || arrayMethodName.equals("sortInPlace"))
+                                && callArity == 0
+                                && (array.elementType() == BuiltinType.BOOL
+                                    || !model
+                                        .hasNaturalOrder(array.elementType()))
+                        ) {
+                            throw new SemanticException(
+                                member.range(),
+                                "Array sorting requires a supported naturally ordered element type, found %s",
+                                array.elementType()
+                            );
+                        }
+                        model.setMemberOwner(member, array);
+                        model.setReference(member.member(), special);
+                        model
+                            .setExpressionType(member.member(), special.type());
+                        yield special.type();
                     }
-                    final Type element = array.elementType();
-                    if (!analyzingCallee) {
-                        throw new SemanticException(
-                            member.range(),
-                            "Array sorting must be called with sort()"
-                        );
-                    }
-                    if (
-                        element == BuiltinType.BOOL
-                            || !model.hasNaturalOrder(element)
-                    ) {
-                        throw new SemanticException(
-                            member.range(),
-                            "Array sorting requires a supported naturally ordered element type, found %s",
-                            element
-                        );
-                    }
-                    model.setMemberOwner(member, array);
-                    model.setReference(member.member(), ArrayMethods.SORT);
-                    model.setExpressionType(
-                        member.member(),
-                        BuiltinFunctionType.ARRAY_SORT
-                    );
-                    yield BuiltinFunctionType.ARRAY_SORT;
                 }
                 if (
                     !(memberTarget instanceof ClassType)
@@ -1626,8 +1634,19 @@ public final class SemanticAnalyzerExpressions {
         final SemanticContext context,
         final @Nullable Type expected
     ) {
+        return analyzeLambdaExpression(lambda, context, expected, false);
+    }
+
+    private Type analyzeLambdaExpression(
+        final LambdaExpression lambda,
+        final SemanticContext context,
+        final @Nullable Type expected,
+        final boolean inferReturn
+    ) {
         final FunctionType target =
             expected instanceof FunctionType function ? function : null;
+        final Type expectedReturn =
+            target != null && !inferReturn ? target.returnType() : null;
         if (!lambda.parameters().isEmpty() && target == null) {
             throw new SemanticException(
                 lambda.range(),
@@ -1667,7 +1686,7 @@ public final class SemanticAnalyzerExpressions {
                 new IdentifierDeclaration("$lambda", lambda.range()),
                 new FunctionType(
                     parameterTypes,
-                    target != null ? target.returnType() : BuiltinType.ANY
+                    expectedReturn != null ? expectedReturn : BuiltinType.ANY
                 )
             );
         model.setLambdaFunction(lambda, symbol);
@@ -1676,12 +1695,8 @@ public final class SemanticAnalyzerExpressions {
         final Type returnType;
         if (lambda.body() instanceof Expression expression) {
             final Type actual =
-                analyzeExpression(
-                    expression,
-                    lambdaContext,
-                    target != null ? target.returnType() : null
-                );
-            returnType = target != null ? target.returnType() : actual;
+                analyzeExpression(expression, lambdaContext, expectedReturn);
+            returnType = expectedReturn != null ? expectedReturn : actual;
             if (
                 analyzer
                     .resolveAssignType(actual, returnType, expression) == null
@@ -1696,7 +1711,7 @@ public final class SemanticAnalyzerExpressions {
         }
         else {
             final List<ReturnStatement> returns = new ArrayList<>();
-            if (target == null) {
+            if (expectedReturn == null) {
                 analyzer.setLambdaReturns(symbol, returns);
             }
             try {
@@ -1720,8 +1735,8 @@ public final class SemanticAnalyzerExpressions {
                         : analyzer.commonBranchType(inferred, type, statement);
             }
             returnType =
-                target != null
-                    ? target.returnType()
+                expectedReturn != null
+                    ? expectedReturn
                     : Objects.requireNonNull(inferred);
             for (final ReturnStatement statement : returns) {
                 if (statement.value() != null) {
@@ -1759,6 +1774,368 @@ public final class SemanticAnalyzerExpressions {
         return new FunctionType(parameterTypes, returnType);
     }
 
+    private Type analyzeArrayCall(
+        final CallExpression call,
+        final SemanticContext context,
+        final String name
+    ) {
+        final MemberExpression member =
+            (MemberExpression) unwrap(call.callee());
+        final ArrayType array = (ArrayType) model.getMemberOwner(member);
+        final Type element = array.elementType();
+        final List<Expression> arguments = call.arguments();
+        if (
+            name.equals("reverse") || name.equals("copy")
+                || name.equals("reverseInPlace")
+                || name.equals("clear")
+        ) {
+            requireArrayArity(call, name, 0);
+            return name.equals("reverse") || name.equals("copy")
+                ? array
+                : BuiltinType.VOID;
+        }
+        if (name.equals("concat")) {
+            requireArrayArity(call, name, 1);
+            final Type supplied =
+                ConstType.unwrap(
+                    analyzeExpression(arguments.getFirst(), context, array)
+                );
+            if (
+                supplied instanceof ArrayType other
+                    && (other.elementType().equals(element)
+                        || model.isSubtype(other.elementType(), element))
+            ) {
+                return array;
+            }
+            throw new SemanticException(
+                arguments.getFirst().range(),
+                "Cannot concatenate %s to an array of %s",
+                supplied,
+                element
+            );
+        }
+        if (name.equals("addAll")) {
+            requireArrayArity(call, name, 1);
+            final Expression argument = arguments.getFirst();
+            final Type actual =
+                ConstType.unwrap(analyzeExpression(argument, context, array));
+            if (
+                !(actual instanceof ArrayType supplied)
+                    || (!supplied.elementType().equals(element)
+                        && !model.isSubtype(supplied.elementType(), element))
+            ) {
+                throw new SemanticException(
+                    argument.range(),
+                    "Array addAll requires an array of %s",
+                    element
+                );
+            }
+            return BuiltinType.VOID;
+        }
+        if (name.equals("insertAt")) {
+            requireArrayArity(call, name, 2);
+            analyzeArrayElement(arguments.getFirst(), context, element);
+            final Expression index = arguments.get(1);
+            final Type actual =
+                analyzeExpression(index, context, BuiltinType.I32);
+            if (
+                analyzer
+                    .resolveAssignType(actual, BuiltinType.I32, index) == null
+            ) {
+                throw new SemanticException(
+                    index.range(),
+                    "Array insertAt index must be i32"
+                );
+            }
+            return BuiltinType.VOID;
+        }
+        if (name.equals("removeAt")) {
+            requireArrayArity(call, name, 1);
+            final Expression index = arguments.getFirst();
+            final Type actual =
+                analyzeExpression(index, context, BuiltinType.I32);
+            if (
+                analyzer
+                    .resolveAssignType(actual, BuiltinType.I32, index) == null
+            ) {
+                throw new SemanticException(
+                    index.range(),
+                    "Array removeAt index must be i32"
+                );
+            }
+            return element;
+        }
+        if (name.equals("removeIf")) {
+            requireArrayArity(call, name, 1);
+            analyzeArrayCallback(
+                arguments.getFirst(),
+                context,
+                List.of(element),
+                BuiltinType.BOOL,
+                false,
+                true
+            );
+            return BuiltinType.BOOL;
+        }
+        if (
+            name.equals("add") || name.equals("addFront")
+                || name.equals("contains")
+                || name.equals("remove")
+                || name.equals("removeAll")
+                || name.equals("index")
+                || name.equals("lastIndex")
+        ) {
+            final boolean indexed =
+                name.equals("index") || name.equals("lastIndex");
+            if (
+                arguments.isEmpty()
+                    || (!(name.equals("add") || name.equals("addFront"))
+                        && arguments.size() > (indexed ? 2 : 1))
+            ) {
+                throw new SemanticException(
+                    call.range(),
+                    "Array %s expects %s argument(s)",
+                    name,
+                    indexed ? "one or two" : "one"
+                );
+            }
+            final Expression value = arguments.getFirst();
+            if (name.equals("add") || name.equals("addFront")) {
+                for (final Expression argument : arguments) {
+                    analyzeArrayElement(argument, context, element);
+                }
+                return BuiltinType.VOID;
+            }
+            if (name.equals("remove") && value instanceof LambdaExpression) {
+                analyzeArrayCallback(
+                    value,
+                    context,
+                    List.of(element),
+                    BuiltinType.BOOL,
+                    false,
+                    true
+                );
+            }
+            else {
+                analyzeArrayElement(value, context, element);
+            }
+            if (indexed && arguments.size() == 2) {
+                final Expression from = arguments.get(1);
+                final Type fromType =
+                    analyzeExpression(from, context, BuiltinType.I32);
+                if (
+                    analyzer.resolveAssignType(
+                        fromType,
+                        BuiltinType.I32,
+                        from
+                    ) == null
+                ) {
+                    throw new SemanticException(
+                        from.range(),
+                        "Array index start must be i32"
+                    );
+                }
+            }
+            if (indexed) {
+                return UnionType.of(List.of(BuiltinType.I32, BuiltinType.NULL));
+            }
+            return name.equals("contains") || name.equals("remove")
+                ? BuiltinType.BOOL
+                : name.equals("removeAll") ? BuiltinType.I32 : BuiltinType.VOID;
+        }
+        if (name.equals("join")) {
+            if (arguments.size() > 1) {
+                throw new SemanticException(
+                    call.range(),
+                    "Array join expects zero or one separator"
+                );
+            }
+            if (!arguments.isEmpty()) {
+                final Expression separator = arguments.getFirst();
+                final Type actual =
+                    analyzeExpression(separator, context, BuiltinType.STRING);
+                if (
+                    analyzer.resolveAssignType(
+                        actual,
+                        BuiltinType.STRING,
+                        separator
+                    ) == null
+                ) {
+                    throw new SemanticException(
+                        separator.range(),
+                        "Array join separator must be string"
+                    );
+                }
+            }
+            return BuiltinType.STRING;
+        }
+        if (name.equals("reduce")) {
+            requireArrayArity(call, name, 2);
+            final Expression initial = arguments.get(1);
+            final Type result =
+                LiteralType.unwrap(analyzeExpression(initial, context));
+            analyzeArrayCallback(
+                arguments.getFirst(),
+                context,
+                List.of(result, element),
+                result,
+                false,
+                true
+            );
+            return result;
+        }
+        requireArrayArity(call, name, 1);
+        final FunctionType callback =
+            analyzeArrayCallback(
+                arguments.getFirst(),
+                context,
+                List.of(element),
+                name.equals("map") ? BuiltinType.ANY : BuiltinType.BOOL,
+                name.equals("map"),
+                true
+            );
+        if (name.equals("map")) {
+            final Type resultElement =
+                LiteralType.unwrap(callback.returnType());
+            if (resultElement == BuiltinType.VOID) {
+                throw new SemanticException(
+                    arguments.getFirst().range(),
+                    "Array map callback must return a value"
+                );
+            }
+            return new ArrayType(resultElement);
+        }
+        if (name.equals("find") || name.equals("findLast")) {
+            return UnionType.of(List.of(element, BuiltinType.NULL));
+        }
+        if (name.equals("findIndex") || name.equals("findLastIndex")) {
+            return UnionType.of(List.of(BuiltinType.I32, BuiltinType.NULL));
+        }
+        return name.equals("filter") ? array : BuiltinType.BOOL;
+    }
+
+    private void requireArrayArity(
+        final CallExpression call,
+        final String name,
+        final int expected
+    ) {
+        if (call.arguments().size() != expected) {
+            throw new SemanticException(
+                call.range(),
+                "Array %s expects %s argument(s)",
+                name,
+                expected
+            );
+        }
+    }
+
+    private void analyzeArrayElement(
+        final Expression argument,
+        final SemanticContext context,
+        final Type element
+    ) {
+        if (argument instanceof NamedArgumentExpression) {
+            throw new SemanticException(
+                argument.range(),
+                "Array methods accept only positional arguments"
+            );
+        }
+        final Type actual = analyzeExpression(argument, context, element);
+        if (analyzer.resolveAssignType(actual, element, argument) == null) {
+            throw new SemanticException(
+                argument.range(),
+                "Cannot add %s to an array of %s",
+                actual,
+                element
+            );
+        }
+    }
+
+    private FunctionType analyzeArrayCallback(
+        final Expression argument,
+        final SemanticContext context,
+        final List<Type> parameters,
+        final Type returned,
+        final boolean inferReturn,
+        final boolean allowIndex
+    ) {
+        if (argument instanceof NamedArgumentExpression) {
+            throw new SemanticException(
+                argument.range(),
+                "Array callbacks must be positional"
+            );
+        }
+        final Type nonLambdaType =
+            argument instanceof LambdaExpression
+                ? BuiltinType.VOID
+                : analyzeExpression(argument, context);
+        final List<Type> acceptedParameters;
+        if (
+            allowIndex && ((argument instanceof LambdaExpression lambda
+                && lambda.parameters().size() == parameters.size() + 1)
+                || (nonLambdaType instanceof FunctionType function
+                    && function.parameterTypes().size() == parameters.size()
+                        + 1))
+        ) {
+            final List<Type> indexedParameters = new ArrayList<>(parameters);
+            indexedParameters.add(BuiltinType.I32);
+            acceptedParameters = indexedParameters;
+        }
+        else {
+            acceptedParameters = parameters;
+        }
+        final Type actual;
+        if (argument instanceof LambdaExpression lambda) {
+            actual =
+                analyzeLambdaExpression(
+                    lambda,
+                    context,
+                    new FunctionType(acceptedParameters, returned),
+                    inferReturn
+                );
+            model.setExpressionType(argument, actual);
+        }
+        else {
+            actual = nonLambdaType;
+        }
+        if (
+            !(actual instanceof FunctionType callback)
+                || callback.parameterTypes().size() != acceptedParameters.size()
+        ) {
+            throw new SemanticException(
+                argument.range(),
+                "Array callback must accept %s argument(s)",
+                acceptedParameters.size()
+            );
+        }
+        for (int index = 0; index < acceptedParameters.size(); index++) {
+            final Type supplied = acceptedParameters.get(index);
+            final Type accepted = callback.parameterTypes().get(index);
+            if (
+                !supplied.equals(accepted) && accepted != BuiltinType.ANY
+                    && !model.isSubtype(supplied, accepted)
+            ) {
+                throw new SemanticException(
+                    argument.range(),
+                    "Array callback cannot accept %s as parameter %s",
+                    supplied,
+                    index + 1
+                );
+            }
+        }
+        if (
+            !inferReturn && !callback.returnType().equals(returned)
+                && !model.isSubtype(callback.returnType(), returned)
+        ) {
+            throw new SemanticException(
+                argument.range(),
+                "Array callback must return %s",
+                returned
+            );
+        }
+        return callback;
+    }
+
     private Type analyzeCallExpression(
         final CallExpression call,
         final SemanticContext context
@@ -1787,14 +2164,36 @@ public final class SemanticAnalyzerExpressions {
         if (selectedType != null) {
             type = selectedType;
         }
-        if (type == BuiltinFunctionType.ARRAY_SORT) {
-            if (!call.arguments().isEmpty()) {
-                throw new SemanticException(
-                    call.range(),
-                    "Array sorting expects no arguments"
-                );
+        if (
+            unwrap(call.callee()) instanceof MemberExpression arrayMember
+                && model.getMemberOwner(arrayMember) instanceof ArrayType
+                && ArrayMethods.isSpecial(arrayMember.member().name())
+        ) {
+            final String name = arrayMember.member().name();
+            if (name.equals("sort") || name.equals("sortInPlace")) {
+                if (call.arguments().size() > 1) {
+                    throw new SemanticException(
+                        call.range(),
+                        "Array sorting expects zero or one comparator"
+                    );
+                }
+                if (!call.arguments().isEmpty()) {
+                    final ArrayType array =
+                        (ArrayType) model.getMemberOwner(arrayMember);
+                    analyzeArrayCallback(
+                        call.arguments().getFirst(),
+                        context,
+                        List.of(array.elementType(), array.elementType()),
+                        BuiltinType.I32,
+                        false,
+                        false
+                    );
+                }
+                return name.equals("sortInPlace")
+                    ? BuiltinType.VOID
+                    : (ArrayType) model.getMemberOwner(arrayMember);
             }
-            return BuiltinType.VOID;
+            return analyzeArrayCall(call, context, name);
         }
         if (type == BuiltinFunctionType.PRINT) {
             if (call.arguments().size() > 1) {

@@ -1,0 +1,1259 @@
+const bytes: [i8] = [3, 2, 1];
+print(bytes.sort());
+print(bytes);
+const shorts: [i16] = [3, 2, 1];
+print(shorts.sort());
+print(shorts);
+const ints: [i32] = [3, 2, 1];
+print(ints.sort());
+print(ints);
+const longs: [i64] = [3, 2, 1];
+print(longs.sort());
+print(longs);
+const floats: [f32] = [3.0, 2.0, 1.0];
+print(floats.sort());
+print(floats);
+const doubles: [f64] = [3.0, 2.0, 1.0];
+print(doubles.sort());
+print(doubles);
+const chars: [char] = ['c', 'b', 'a'];
+print(chars.sort());
+print(chars);
+const strings: [string] = ["c", "b", "a"];
+print(strings.sort());
+print(strings);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "bytes" (1:7-1:12)
+COLON (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+IDENTIFIER "i8" (1:15-1:17)
+RIGHT_BRACKET (1:17-1:18)
+EQUAL (1:19-1:20)
+LEFT_BRACKET (1:21-1:22)
+INTEGER_LITERAL "3" (1:22-1:23)
+COMMA (1:23-1:24)
+INTEGER_LITERAL "2" (1:25-1:26)
+COMMA (1:26-1:27)
+INTEGER_LITERAL "1" (1:28-1:29)
+RIGHT_BRACKET (1:29-1:30)
+SEMICOLON (1:30-1:31)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "bytes" (2:7-2:12)
+DOT (2:12-2:13)
+IDENTIFIER "sort" (2:13-2:17)
+LEFT_PAREN (2:17-2:18)
+RIGHT_PAREN (2:18-2:19)
+RIGHT_PAREN (2:19-2:20)
+SEMICOLON (2:20-2:21)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "bytes" (3:7-3:12)
+RIGHT_PAREN (3:12-3:13)
+SEMICOLON (3:13-3:14)
+CONST (4:1-4:6)
+IDENTIFIER "shorts" (4:7-4:13)
+COLON (4:13-4:14)
+LEFT_BRACKET (4:15-4:16)
+IDENTIFIER "i16" (4:16-4:19)
+RIGHT_BRACKET (4:19-4:20)
+EQUAL (4:21-4:22)
+LEFT_BRACKET (4:23-4:24)
+INTEGER_LITERAL "3" (4:24-4:25)
+COMMA (4:25-4:26)
+INTEGER_LITERAL "2" (4:27-4:28)
+COMMA (4:28-4:29)
+INTEGER_LITERAL "1" (4:30-4:31)
+RIGHT_BRACKET (4:31-4:32)
+SEMICOLON (4:32-4:33)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "shorts" (5:7-5:13)
+DOT (5:13-5:14)
+IDENTIFIER "sort" (5:14-5:18)
+LEFT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+RIGHT_PAREN (5:20-5:21)
+SEMICOLON (5:21-5:22)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "shorts" (6:7-6:13)
+RIGHT_PAREN (6:13-6:14)
+SEMICOLON (6:14-6:15)
+CONST (7:1-7:6)
+IDENTIFIER "ints" (7:7-7:11)
+COLON (7:11-7:12)
+LEFT_BRACKET (7:13-7:14)
+IDENTIFIER "i32" (7:14-7:17)
+RIGHT_BRACKET (7:17-7:18)
+EQUAL (7:19-7:20)
+LEFT_BRACKET (7:21-7:22)
+INTEGER_LITERAL "3" (7:22-7:23)
+COMMA (7:23-7:24)
+INTEGER_LITERAL "2" (7:25-7:26)
+COMMA (7:26-7:27)
+INTEGER_LITERAL "1" (7:28-7:29)
+RIGHT_BRACKET (7:29-7:30)
+SEMICOLON (7:30-7:31)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "ints" (8:7-8:11)
+DOT (8:11-8:12)
+IDENTIFIER "sort" (8:12-8:16)
+LEFT_PAREN (8:16-8:17)
+RIGHT_PAREN (8:17-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "ints" (9:7-9:11)
+RIGHT_PAREN (9:11-9:12)
+SEMICOLON (9:12-9:13)
+CONST (10:1-10:6)
+IDENTIFIER "longs" (10:7-10:12)
+COLON (10:12-10:13)
+LEFT_BRACKET (10:14-10:15)
+IDENTIFIER "i64" (10:15-10:18)
+RIGHT_BRACKET (10:18-10:19)
+EQUAL (10:20-10:21)
+LEFT_BRACKET (10:22-10:23)
+INTEGER_LITERAL "3" (10:23-10:24)
+COMMA (10:24-10:25)
+INTEGER_LITERAL "2" (10:26-10:27)
+COMMA (10:27-10:28)
+INTEGER_LITERAL "1" (10:29-10:30)
+RIGHT_BRACKET (10:30-10:31)
+SEMICOLON (10:31-10:32)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "longs" (11:7-11:12)
+DOT (11:12-11:13)
+IDENTIFIER "sort" (11:13-11:17)
+LEFT_PAREN (11:17-11:18)
+RIGHT_PAREN (11:18-11:19)
+RIGHT_PAREN (11:19-11:20)
+SEMICOLON (11:20-11:21)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "longs" (12:7-12:12)
+RIGHT_PAREN (12:12-12:13)
+SEMICOLON (12:13-12:14)
+CONST (13:1-13:6)
+IDENTIFIER "floats" (13:7-13:13)
+COLON (13:13-13:14)
+LEFT_BRACKET (13:15-13:16)
+IDENTIFIER "f32" (13:16-13:19)
+RIGHT_BRACKET (13:19-13:20)
+EQUAL (13:21-13:22)
+LEFT_BRACKET (13:23-13:24)
+FLOAT_LITERAL "3.0" (13:24-13:27)
+COMMA (13:27-13:28)
+FLOAT_LITERAL "2.0" (13:29-13:32)
+COMMA (13:32-13:33)
+FLOAT_LITERAL "1.0" (13:34-13:37)
+RIGHT_BRACKET (13:37-13:38)
+SEMICOLON (13:38-13:39)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "floats" (14:7-14:13)
+DOT (14:13-14:14)
+IDENTIFIER "sort" (14:14-14:18)
+LEFT_PAREN (14:18-14:19)
+RIGHT_PAREN (14:19-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "floats" (15:7-15:13)
+RIGHT_PAREN (15:13-15:14)
+SEMICOLON (15:14-15:15)
+CONST (16:1-16:6)
+IDENTIFIER "doubles" (16:7-16:14)
+COLON (16:14-16:15)
+LEFT_BRACKET (16:16-16:17)
+IDENTIFIER "f64" (16:17-16:20)
+RIGHT_BRACKET (16:20-16:21)
+EQUAL (16:22-16:23)
+LEFT_BRACKET (16:24-16:25)
+FLOAT_LITERAL "3.0" (16:25-16:28)
+COMMA (16:28-16:29)
+FLOAT_LITERAL "2.0" (16:30-16:33)
+COMMA (16:33-16:34)
+FLOAT_LITERAL "1.0" (16:35-16:38)
+RIGHT_BRACKET (16:38-16:39)
+SEMICOLON (16:39-16:40)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "doubles" (17:7-17:14)
+DOT (17:14-17:15)
+IDENTIFIER "sort" (17:15-17:19)
+LEFT_PAREN (17:19-17:20)
+RIGHT_PAREN (17:20-17:21)
+RIGHT_PAREN (17:21-17:22)
+SEMICOLON (17:22-17:23)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "doubles" (18:7-18:14)
+RIGHT_PAREN (18:14-18:15)
+SEMICOLON (18:15-18:16)
+CONST (19:1-19:6)
+IDENTIFIER "chars" (19:7-19:12)
+COLON (19:12-19:13)
+LEFT_BRACKET (19:14-19:15)
+IDENTIFIER "char" (19:15-19:19)
+RIGHT_BRACKET (19:19-19:20)
+EQUAL (19:21-19:22)
+LEFT_BRACKET (19:23-19:24)
+CHAR_LITERAL "'c'" (19:24-19:27)
+COMMA (19:27-19:28)
+CHAR_LITERAL "'b'" (19:29-19:32)
+COMMA (19:32-19:33)
+CHAR_LITERAL "'a'" (19:34-19:37)
+RIGHT_BRACKET (19:37-19:38)
+SEMICOLON (19:38-19:39)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "chars" (20:7-20:12)
+DOT (20:12-20:13)
+IDENTIFIER "sort" (20:13-20:17)
+LEFT_PAREN (20:17-20:18)
+RIGHT_PAREN (20:18-20:19)
+RIGHT_PAREN (20:19-20:20)
+SEMICOLON (20:20-20:21)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "chars" (21:7-21:12)
+RIGHT_PAREN (21:12-21:13)
+SEMICOLON (21:13-21:14)
+CONST (22:1-22:6)
+IDENTIFIER "strings" (22:7-22:14)
+COLON (22:14-22:15)
+LEFT_BRACKET (22:16-22:17)
+IDENTIFIER "string" (22:17-22:23)
+RIGHT_BRACKET (22:23-22:24)
+EQUAL (22:25-22:26)
+LEFT_BRACKET (22:27-22:28)
+STRING_LITERAL "\"c\"" (22:28-22:31)
+COMMA (22:31-22:32)
+STRING_LITERAL "\"b\"" (22:33-22:36)
+COMMA (22:36-22:37)
+STRING_LITERAL "\"a\"" (22:38-22:41)
+RIGHT_BRACKET (22:41-22:42)
+SEMICOLON (22:42-22:43)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "strings" (23:7-23:14)
+DOT (23:14-23:15)
+IDENTIFIER "sort" (23:15-23:19)
+LEFT_PAREN (23:19-23:20)
+RIGHT_PAREN (23:20-23:21)
+RIGHT_PAREN (23:21-23:22)
+SEMICOLON (23:22-23:23)
+IDENTIFIER "print" (24:1-24:6)
+LEFT_PAREN (24:6-24:7)
+IDENTIFIER "strings" (24:7-24:14)
+RIGHT_PAREN (24:14-24:15)
+SEMICOLON (24:15-24:16)
+
+--- AST ---
+
+(Program
+  range: 1:1-24:16
+  (VariableDeclaration
+    range: 1:1-1:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "bytes"
+    )
+    (ArrayTypeNode
+      range: 1:14-1:18
+      (NamedTypeNode
+        range: 1:15-1:17
+        name: "i8"
+      )
+    )
+    (ArrayExpression
+      range: 1:21-1:30
+      (LiteralExpression
+        range: 1:22-1:23
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 1:25-1:26
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:28-1:29
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:21
+    (CallExpression
+      range: 2:1-2:20
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:19
+        (MemberExpression
+          range: 2:7-2:17
+          (IdentifierExpression
+            range: 2:7-2:12
+            name: "bytes"
+          )
+          (IdentifierExpression
+            range: 2:13-2:17
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:14
+    (CallExpression
+      range: 3:1-3:13
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 3:7-3:12
+        name: "bytes"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:33
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:13
+      name: "shorts"
+    )
+    (ArrayTypeNode
+      range: 4:15-4:20
+      (NamedTypeNode
+        range: 4:16-4:19
+        name: "i16"
+      )
+    )
+    (ArrayExpression
+      range: 4:23-4:32
+      (LiteralExpression
+        range: 4:24-4:25
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 4:27-4:28
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 4:30-4:31
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:22
+    (CallExpression
+      range: 5:1-5:21
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:20
+        (MemberExpression
+          range: 5:7-5:18
+          (IdentifierExpression
+            range: 5:7-5:13
+            name: "shorts"
+          )
+          (IdentifierExpression
+            range: 5:14-5:18
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:15
+    (CallExpression
+      range: 6:1-6:14
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 6:7-6:13
+        name: "shorts"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:11
+      name: "ints"
+    )
+    (ArrayTypeNode
+      range: 7:13-7:18
+      (NamedTypeNode
+        range: 7:14-7:17
+        name: "i32"
+      )
+    )
+    (ArrayExpression
+      range: 7:21-7:30
+      (LiteralExpression
+        range: 7:22-7:23
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 7:25-7:26
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 7:28-7:29
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:18
+        (MemberExpression
+          range: 8:7-8:16
+          (IdentifierExpression
+            range: 8:7-8:11
+            name: "ints"
+          )
+          (IdentifierExpression
+            range: 8:12-8:16
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:13
+    (CallExpression
+      range: 9:1-9:12
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 9:7-9:11
+        name: "ints"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:32
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:12
+      name: "longs"
+    )
+    (ArrayTypeNode
+      range: 10:14-10:19
+      (NamedTypeNode
+        range: 10:15-10:18
+        name: "i64"
+      )
+    )
+    (ArrayExpression
+      range: 10:22-10:31
+      (LiteralExpression
+        range: 10:23-10:24
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 10:26-10:27
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 10:29-10:30
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:21
+    (CallExpression
+      range: 11:1-11:20
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:19
+        (MemberExpression
+          range: 11:7-11:17
+          (IdentifierExpression
+            range: 11:7-11:12
+            name: "longs"
+          )
+          (IdentifierExpression
+            range: 11:13-11:17
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:14
+    (CallExpression
+      range: 12:1-12:13
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 12:7-12:12
+        name: "longs"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:13
+      name: "floats"
+    )
+    (ArrayTypeNode
+      range: 13:15-13:20
+      (NamedTypeNode
+        range: 13:16-13:19
+        name: "f32"
+      )
+    )
+    (ArrayExpression
+      range: 13:23-13:38
+      (LiteralExpression
+        range: 13:24-13:27
+        kind: FLOAT
+        text: "3.0"
+      )
+      (LiteralExpression
+        range: 13:29-13:32
+        kind: FLOAT
+        text: "2.0"
+      )
+      (LiteralExpression
+        range: 13:34-13:37
+        kind: FLOAT
+        text: "1.0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:22
+    (CallExpression
+      range: 14:1-14:21
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:20
+        (MemberExpression
+          range: 14:7-14:18
+          (IdentifierExpression
+            range: 14:7-14:13
+            name: "floats"
+          )
+          (IdentifierExpression
+            range: 14:14-14:18
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:15
+    (CallExpression
+      range: 15:1-15:14
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 15:7-15:13
+        name: "floats"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:14
+      name: "doubles"
+    )
+    (ArrayTypeNode
+      range: 16:16-16:21
+      (NamedTypeNode
+        range: 16:17-16:20
+        name: "f64"
+      )
+    )
+    (ArrayExpression
+      range: 16:24-16:39
+      (LiteralExpression
+        range: 16:25-16:28
+        kind: FLOAT
+        text: "3.0"
+      )
+      (LiteralExpression
+        range: 16:30-16:33
+        kind: FLOAT
+        text: "2.0"
+      )
+      (LiteralExpression
+        range: 16:35-16:38
+        kind: FLOAT
+        text: "1.0"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:23
+    (CallExpression
+      range: 17:1-17:22
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:21
+        (MemberExpression
+          range: 17:7-17:19
+          (IdentifierExpression
+            range: 17:7-17:14
+            name: "doubles"
+          )
+          (IdentifierExpression
+            range: 17:15-17:19
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:16
+    (CallExpression
+      range: 18:1-18:15
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 18:7-18:14
+        name: "doubles"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 19:1-19:39
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 19:7-19:12
+      name: "chars"
+    )
+    (ArrayTypeNode
+      range: 19:14-19:20
+      (NamedTypeNode
+        range: 19:15-19:19
+        name: "char"
+      )
+    )
+    (ArrayExpression
+      range: 19:23-19:38
+      (LiteralExpression
+        range: 19:24-19:27
+        kind: CHAR
+        text: "'c'"
+      )
+      (LiteralExpression
+        range: 19:29-19:32
+        kind: CHAR
+        text: "'b'"
+      )
+      (LiteralExpression
+        range: 19:34-19:37
+        kind: CHAR
+        text: "'a'"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:21
+    (CallExpression
+      range: 20:1-20:20
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (CallExpression
+        range: 20:7-20:19
+        (MemberExpression
+          range: 20:7-20:17
+          (IdentifierExpression
+            range: 20:7-20:12
+            name: "chars"
+          )
+          (IdentifierExpression
+            range: 20:13-20:17
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:14
+    (CallExpression
+      range: 21:1-21:13
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 21:7-21:12
+        name: "chars"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 22:1-22:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 22:7-22:14
+      name: "strings"
+    )
+    (ArrayTypeNode
+      range: 22:16-22:24
+      (NamedTypeNode
+        range: 22:17-22:23
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 22:27-22:42
+      (LiteralExpression
+        range: 22:28-22:31
+        kind: STRING
+        text: "\"c\""
+      )
+      (LiteralExpression
+        range: 22:33-22:36
+        kind: STRING
+        text: "\"b\""
+      )
+      (LiteralExpression
+        range: 22:38-22:41
+        kind: STRING
+        text: "\"a\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:23
+    (CallExpression
+      range: 23:1-23:22
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (CallExpression
+        range: 23:7-23:21
+        (MemberExpression
+          range: 23:7-23:19
+          (IdentifierExpression
+            range: 23:7-23:14
+            name: "strings"
+          )
+          (IdentifierExpression
+            range: 23:15-23:19
+            name: "sort"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:16
+    (CallExpression
+      range: 24:1-24:15
+      (IdentifierExpression
+        range: 24:1-24:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 24:7-24:14
+        name: "strings"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:21-1:30 -> [i8]
+  1:22-1:23 -> i32
+  1:25-1:26 -> i32
+  1:28-1:29 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:20 -> void
+  2:7-2:12 -> [i8]
+  2:7-2:17 -> () => [i8]
+  2:7-2:19 -> [i8]
+  2:13-2:17 -> () => [i8]
+  3:1-3:6 -> (any) => void
+  3:1-3:13 -> void
+  3:7-3:12 -> [i8]
+  4:23-4:32 -> [i16]
+  4:24-4:25 -> i32
+  4:27-4:28 -> i32
+  4:30-4:31 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:21 -> void
+  5:7-5:13 -> [i16]
+  5:7-5:18 -> () => [i16]
+  5:7-5:20 -> [i16]
+  5:14-5:18 -> () => [i16]
+  6:1-6:6 -> (any) => void
+  6:1-6:14 -> void
+  6:7-6:13 -> [i16]
+  7:21-7:30 -> [i32]
+  7:22-7:23 -> i32
+  7:25-7:26 -> i32
+  7:28-7:29 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:11 -> [i32]
+  8:7-8:16 -> () => [i32]
+  8:7-8:18 -> [i32]
+  8:12-8:16 -> () => [i32]
+  9:1-9:6 -> (any) => void
+  9:1-9:12 -> void
+  9:7-9:11 -> [i32]
+  10:22-10:31 -> [i64]
+  10:23-10:24 -> i64
+  10:26-10:27 -> i64
+  10:29-10:30 -> i64
+  11:1-11:6 -> (any) => void
+  11:1-11:20 -> void
+  11:7-11:12 -> [i64]
+  11:7-11:17 -> () => [i64]
+  11:7-11:19 -> [i64]
+  11:13-11:17 -> () => [i64]
+  12:1-12:6 -> (any) => void
+  12:1-12:13 -> void
+  12:7-12:12 -> [i64]
+  13:23-13:38 -> [f32]
+  13:24-13:27 -> f32
+  13:29-13:32 -> f32
+  13:34-13:37 -> f32
+  14:1-14:6 -> (any) => void
+  14:1-14:21 -> void
+  14:7-14:13 -> [f32]
+  14:7-14:18 -> () => [f32]
+  14:7-14:20 -> [f32]
+  14:14-14:18 -> () => [f32]
+  15:1-15:6 -> (any) => void
+  15:1-15:14 -> void
+  15:7-15:13 -> [f32]
+  16:24-16:39 -> [f64]
+  16:25-16:28 -> f64
+  16:30-16:33 -> f64
+  16:35-16:38 -> f64
+  17:1-17:6 -> (any) => void
+  17:1-17:22 -> void
+  17:7-17:14 -> [f64]
+  17:7-17:19 -> () => [f64]
+  17:7-17:21 -> [f64]
+  17:15-17:19 -> () => [f64]
+  18:1-18:6 -> (any) => void
+  18:1-18:15 -> void
+  18:7-18:14 -> [f64]
+  19:23-19:38 -> [char]
+  19:24-19:27 -> char
+  19:29-19:32 -> char
+  19:34-19:37 -> char
+  20:1-20:6 -> (any) => void
+  20:1-20:20 -> void
+  20:7-20:12 -> [char]
+  20:7-20:17 -> () => [char]
+  20:7-20:19 -> [char]
+  20:13-20:17 -> () => [char]
+  21:1-21:6 -> (any) => void
+  21:1-21:13 -> void
+  21:7-21:12 -> [char]
+  22:27-22:42 -> [string]
+  22:28-22:31 -> string
+  22:33-22:36 -> string
+  22:38-22:41 -> string
+  23:1-23:6 -> (any) => void
+  23:1-23:22 -> void
+  23:7-23:14 -> [string]
+  23:7-23:19 -> () => [string]
+  23:7-23:21 -> [string]
+  23:15-23:19 -> () => [string]
+  24:1-24:6 -> (any) => void
+  24:1-24:15 -> void
+  24:7-24:14 -> [string]
+
+Resolved types:
+  1:14-1:18 -> [i8]
+  1:15-1:17 -> i8
+  4:15-4:20 -> [i16]
+  4:16-4:19 -> i16
+  7:13-7:18 -> [i32]
+  7:14-7:17 -> i32
+  10:14-10:19 -> [i64]
+  10:15-10:18 -> i64
+  13:15-13:20 -> [f32]
+  13:16-13:19 -> f32
+  16:16-16:21 -> [f64]
+  16:17-16:20 -> f64
+  19:14-19:20 -> [char]
+  19:15-19:19 -> char
+  22:16-22:24 -> [string]
+  22:17-22:23 -> string
+
+Conversions:
+  1:22-1:23 -> i32 -> i8
+  1:25-1:26 -> i32 -> i8
+  1:28-1:29 -> i32 -> i8
+  4:24-4:25 -> i32 -> i16
+  4:27-4:28 -> i32 -> i16
+  4:30-4:31 -> i32 -> i16
+
+Declarations:
+  1:7-1:12 -> const bytes: [i8]
+  4:7-4:13 -> const shorts: [i16]
+  7:7-7:11 -> const ints: [i32]
+  10:7-10:12 -> const longs: [i64]
+  13:7-13:13 -> const floats: [f32]
+  16:7-16:14 -> const doubles: [f64]
+  19:7-19:12 -> const chars: [char]
+  22:7-22:14 -> const strings: [string]
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:12 -> 1:7-1:12
+  2:13-2:17 -> EldByteArray.sort(): [i8]
+  3:1-3:6 -> builtin print
+  3:7-3:12 -> 1:7-1:12
+  5:1-5:6 -> builtin print
+  5:7-5:13 -> 4:7-4:13
+  5:14-5:18 -> EldShortArray.sort(): [i16]
+  6:1-6:6 -> builtin print
+  6:7-6:13 -> 4:7-4:13
+  8:1-8:6 -> builtin print
+  8:7-8:11 -> 7:7-7:11
+  8:12-8:16 -> EldIntArray.sort(): [i32]
+  9:1-9:6 -> builtin print
+  9:7-9:11 -> 7:7-7:11
+  11:1-11:6 -> builtin print
+  11:7-11:12 -> 10:7-10:12
+  11:13-11:17 -> EldLongArray.sort(): [i64]
+  12:1-12:6 -> builtin print
+  12:7-12:12 -> 10:7-10:12
+  14:1-14:6 -> builtin print
+  14:7-14:13 -> 13:7-13:13
+  14:14-14:18 -> EldFloatArray.sort(): [f32]
+  15:1-15:6 -> builtin print
+  15:7-15:13 -> 13:7-13:13
+  17:1-17:6 -> builtin print
+  17:7-17:14 -> 16:7-16:14
+  17:15-17:19 -> EldDoubleArray.sort(): [f64]
+  18:1-18:6 -> builtin print
+  18:7-18:14 -> 16:7-16:14
+  20:1-20:6 -> builtin print
+  20:7-20:12 -> 19:7-19:12
+  20:13-20:17 -> EldCharArray.sort(): [char]
+  21:1-21:6 -> builtin print
+  21:7-21:12 -> 19:7-19:12
+  23:1-23:6 -> builtin print
+  23:7-23:14 -> 22:7-22:14
+  23:15-23:19 -> EldObjectArray.sort(): [string]
+  24:1-24:6 -> builtin print
+  24:7-24:14 -> 22:7-22:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray; flags [PUBLIC, STATIC, FINAL]
+  field shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray; flags [PUBLIC, STATIC, FINAL]
+  field ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray; flags [PUBLIC, STATIC, FINAL]
+  field floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray; flags [PUBLIC, STATIC, FINAL]
+  field doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray; flags [PUBLIC, STATIC, FINAL]
+  field chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray; flags [PUBLIC, STATIC, FINAL]
+  field strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldByteArray
+    DUP
+    LDC 3
+    NEWARRAY BYTE
+    DUP
+    LDC 0
+    LDC 3
+    I2B
+    BASTORE
+    DUP
+    LDC 1
+    LDC 2
+    I2B
+    BASTORE
+    DUP
+    LDC 2
+    LDC 1
+    I2B
+    BASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldByteArray.<init>([B)V
+    PUTSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldShortArray
+    DUP
+    LDC 3
+    NEWARRAY SHORT
+    DUP
+    LDC 0
+    LDC 3
+    I2S
+    SASTORE
+    DUP
+    LDC 1
+    LDC 2
+    I2S
+    SASTORE
+    DUP
+    LDC 2
+    LDC 1
+    I2S
+    SASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldShortArray.<init>([S)V
+    PUTSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 3
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 1
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldLongArray
+    DUP
+    LDC 3
+    NEWARRAY LONG
+    DUP
+    LDC 0
+    LDC2_W 3
+    LASTORE
+    DUP
+    LDC 1
+    LDC2_W 2
+    LASTORE
+    DUP
+    LDC 2
+    LDC2_W 1
+    LASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldLongArray.<init>([J)V
+    PUTSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldFloatArray
+    DUP
+    LDC 3
+    NEWARRAY FLOAT
+    DUP
+    LDC 0
+    LDC 3.0
+    FASTORE
+    DUP
+    LDC 1
+    LDC 2.0
+    FASTORE
+    DUP
+    LDC 2
+    LDC 1.0
+    FASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.<init>([F)V
+    PUTSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldDoubleArray
+    DUP
+    LDC 3
+    NEWARRAY DOUBLE
+    DUP
+    LDC 0
+    LDC2_W 3.0
+    DASTORE
+    DUP
+    LDC 1
+    LDC2_W 2.0
+    DASTORE
+    DUP
+    LDC 2
+    LDC2_W 1.0
+    DASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.<init>([D)V
+    PUTSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldCharArray
+    DUP
+    LDC 3
+    NEWARRAY CHAR
+    DUP
+    LDC 0
+    LDC 99
+    CASTORE
+    DUP
+    LDC 1
+    LDC 98
+    CASTORE
+    DUP
+    LDC 2
+    LDC 97
+    CASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
+    PUTSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "c"
+    AASTORE
+    DUP
+    LDC 1
+    LDC "b"
+    AASTORE
+    DUP
+    LDC 2
+    LDC "a"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.sort()Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 7 max locals 0
+
+--- OUTPUT ---
+
+[1, 2, 3]
+[3, 2, 1]
+[1, 2, 3]
+[3, 2, 1]
+[1, 2, 3]
+[3, 2, 1]
+[1, 2, 3]
+[3, 2, 1]
+[1.0, 2.0, 3.0]
+[3.0, 2.0, 1.0]
+[1.0, 2.0, 3.0]
+[3.0, 2.0, 1.0]
+[a, b, c]
+[c, b, a]
+[a, b, c]
+[c, b, a]

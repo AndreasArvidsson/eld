@@ -3,7 +3,7 @@ const func mutate() {
     var local = [1];
     var ignored = 0;
     (local, ignored) = (shared, 0);
-    local.sort();
+    local.sortInPlace();
 }
 
 --- TOKENS ---
@@ -51,10 +51,10 @@ RIGHT_PAREN (5:34-5:35)
 SEMICOLON (5:35-5:36)
 IDENTIFIER "local" (6:5-6:10)
 DOT (6:10-6:11)
-IDENTIFIER "sort" (6:11-6:15)
-LEFT_PAREN (6:15-6:16)
-RIGHT_PAREN (6:16-6:17)
-SEMICOLON (6:17-6:18)
+IDENTIFIER "sortInPlace" (6:11-6:22)
+LEFT_PAREN (6:22-6:23)
+RIGHT_PAREN (6:23-6:24)
+SEMICOLON (6:24-6:25)
 RIGHT_BRACE (7:1-7:2)
 
 --- AST ---
@@ -164,18 +164,18 @@ RIGHT_BRACE (7:1-7:2)
         )
       )
       (ExpressionStatement
-        range: 6:5-6:18
+        range: 6:5-6:25
         (CallExpression
-          range: 6:5-6:17
+          range: 6:5-6:24
           (MemberExpression
-            range: 6:5-6:15
+            range: 6:5-6:22
             (IdentifierExpression
               range: 6:5-6:10
               name: "local"
             )
             (IdentifierExpression
-              range: 6:11-6:15
-              name: "sort"
+              range: 6:11-6:22
+              name: "sortInPlace"
             )
           )
         )
@@ -186,4 +186,4 @@ RIGHT_BRACE (7:1-7:2)
 
 --- SEMANTIC ---
 
-SemanticException: Const function 'mutate' cannot call non-const function 'sort' at 6:5-6:17
+SemanticException: Const function 'mutate' cannot call non-const function 'sortInPlace' at 6:5-6:24

@@ -136,6 +136,14 @@ final public class RuntimeAbi {
         for (final ArrayKind array : ArrayKind.values()) {
             classes.add(array.runtimeClass);
         }
+        for (int index = 0; index < classes.size(); index++) {
+            for (final Class<?> nested : classes.get(index)
+                .getDeclaredClasses()) {
+                if (!classes.contains(nested)) {
+                    classes.add(nested);
+                }
+            }
+        }
         return classes;
     }
 

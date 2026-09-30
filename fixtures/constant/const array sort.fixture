@@ -1,5 +1,5 @@
 const values: const [i32] = [2, 1];
-values.sort();
+values.sortInPlace();
 
 --- TOKENS ---
 
@@ -19,15 +19,15 @@ RIGHT_BRACKET (1:34-1:35)
 SEMICOLON (1:35-1:36)
 IDENTIFIER "values" (2:1-2:7)
 DOT (2:7-2:8)
-IDENTIFIER "sort" (2:8-2:12)
-LEFT_PAREN (2:12-2:13)
-RIGHT_PAREN (2:13-2:14)
-SEMICOLON (2:14-2:15)
+IDENTIFIER "sortInPlace" (2:8-2:19)
+LEFT_PAREN (2:19-2:20)
+RIGHT_PAREN (2:20-2:21)
+SEMICOLON (2:21-2:22)
 
 --- AST ---
 
 (Program
-  range: 1:1-2:15
+  range: 1:1-2:22
   (VariableDeclaration
     range: 1:1-1:36
     mutability: CONST
@@ -60,18 +60,18 @@ SEMICOLON (2:14-2:15)
     )
   )
   (ExpressionStatement
-    range: 2:1-2:15
+    range: 2:1-2:22
     (CallExpression
-      range: 2:1-2:14
+      range: 2:1-2:21
       (MemberExpression
-        range: 2:1-2:12
+        range: 2:1-2:19
         (IdentifierExpression
           range: 2:1-2:7
           name: "values"
         )
         (IdentifierExpression
-          range: 2:8-2:12
-          name: "sort"
+          range: 2:8-2:19
+          name: "sortInPlace"
         )
       )
     )
@@ -80,4 +80,4 @@ SEMICOLON (2:14-2:15)
 
 --- SEMANTIC ---
 
-SemanticException: Cannot sort a const array at 2:1-2:12
+SemanticException: Cannot sort a const array at 2:1-2:19

@@ -188,7 +188,6 @@ protected const bar = 0;
 - Properly support unicode strings. string[0] and string.count() only handles utf8.
 - Introduced type never. Today [] is typed as [any]. Should it be [never]?
 - Replace builtin print in fixtures with actual Java reference?
-- Collections std lib
 - create literal types from collection elements
 - Export & import
 - constant control-flow elimination

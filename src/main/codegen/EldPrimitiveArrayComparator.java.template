@@ -1,0 +1,20 @@
+    private void sortWithComparator(final ${PRIMITIVE}[] scratch, final int from, final int to, final MethodHandle comparator) throws Throwable {
+        if (to - from < 2) {
+            return;
+        }
+        final int middle = from + ((to - from) >>> 1);
+        sortWithComparator(scratch, from, middle, comparator);
+        sortWithComparator(scratch, middle, to, comparator);
+        int left = from;
+        int right = middle;
+        for (int index = from; index < to; index++) {
+            if (right == to || (left < middle
+                && (int) comparator.invoke(elements[left], elements[right]) <= 0)) {
+                scratch[index] = elements[left++];
+            }
+            else {
+                scratch[index] = elements[right++];
+            }
+        }
+        System.arraycopy(scratch, from, elements, from, to - from);
+    }

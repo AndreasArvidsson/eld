@@ -6,12 +6,12 @@ const floats: f32[] = [3.0, 1.0, 2.0];
 const doubles: f64[] = [3.0, 1.0, 2.0];
 const chars: char[] = ['c', 'a', 'b'];
 const strings: [string] = ["c", "a", "b"];
-bytes.sort(); shorts.sort(); ints.sort(); longs.sort();
-floats.sort(); doubles.sort(); chars.sort(); strings.sort();
+bytes.sortInPlace(); shorts.sortInPlace(); ints.sortInPlace(); longs.sortInPlace();
+floats.sortInPlace(); doubles.sortInPlace(); chars.sortInPlace(); strings.sortInPlace();
 print(bytes); print(shorts); print(ints); print(longs);
 print(floats); print(doubles); print(chars); print(strings);
 const empty: [i32] = [];
-empty.sort();
+empty.sortInPlace();
 print(empty);
 
 --- TOKENS ---
@@ -138,52 +138,52 @@ RIGHT_BRACKET (8:41-8:42)
 SEMICOLON (8:42-8:43)
 IDENTIFIER "bytes" (9:1-9:6)
 DOT (9:6-9:7)
-IDENTIFIER "sort" (9:7-9:11)
-LEFT_PAREN (9:11-9:12)
-RIGHT_PAREN (9:12-9:13)
-SEMICOLON (9:13-9:14)
-IDENTIFIER "shorts" (9:15-9:21)
-DOT (9:21-9:22)
-IDENTIFIER "sort" (9:22-9:26)
-LEFT_PAREN (9:26-9:27)
-RIGHT_PAREN (9:27-9:28)
-SEMICOLON (9:28-9:29)
-IDENTIFIER "ints" (9:30-9:34)
-DOT (9:34-9:35)
-IDENTIFIER "sort" (9:35-9:39)
-LEFT_PAREN (9:39-9:40)
-RIGHT_PAREN (9:40-9:41)
-SEMICOLON (9:41-9:42)
-IDENTIFIER "longs" (9:43-9:48)
+IDENTIFIER "sortInPlace" (9:7-9:18)
+LEFT_PAREN (9:18-9:19)
+RIGHT_PAREN (9:19-9:20)
+SEMICOLON (9:20-9:21)
+IDENTIFIER "shorts" (9:22-9:28)
+DOT (9:28-9:29)
+IDENTIFIER "sortInPlace" (9:29-9:40)
+LEFT_PAREN (9:40-9:41)
+RIGHT_PAREN (9:41-9:42)
+SEMICOLON (9:42-9:43)
+IDENTIFIER "ints" (9:44-9:48)
 DOT (9:48-9:49)
-IDENTIFIER "sort" (9:49-9:53)
-LEFT_PAREN (9:53-9:54)
-RIGHT_PAREN (9:54-9:55)
-SEMICOLON (9:55-9:56)
+IDENTIFIER "sortInPlace" (9:49-9:60)
+LEFT_PAREN (9:60-9:61)
+RIGHT_PAREN (9:61-9:62)
+SEMICOLON (9:62-9:63)
+IDENTIFIER "longs" (9:64-9:69)
+DOT (9:69-9:70)
+IDENTIFIER "sortInPlace" (9:70-9:81)
+LEFT_PAREN (9:81-9:82)
+RIGHT_PAREN (9:82-9:83)
+SEMICOLON (9:83-9:84)
 IDENTIFIER "floats" (10:1-10:7)
 DOT (10:7-10:8)
-IDENTIFIER "sort" (10:8-10:12)
-LEFT_PAREN (10:12-10:13)
-RIGHT_PAREN (10:13-10:14)
-SEMICOLON (10:14-10:15)
-IDENTIFIER "doubles" (10:16-10:23)
-DOT (10:23-10:24)
-IDENTIFIER "sort" (10:24-10:28)
-LEFT_PAREN (10:28-10:29)
-RIGHT_PAREN (10:29-10:30)
-SEMICOLON (10:30-10:31)
-IDENTIFIER "chars" (10:32-10:37)
-DOT (10:37-10:38)
-IDENTIFIER "sort" (10:38-10:42)
+IDENTIFIER "sortInPlace" (10:8-10:19)
+LEFT_PAREN (10:19-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+IDENTIFIER "doubles" (10:23-10:30)
+DOT (10:30-10:31)
+IDENTIFIER "sortInPlace" (10:31-10:42)
 LEFT_PAREN (10:42-10:43)
 RIGHT_PAREN (10:43-10:44)
 SEMICOLON (10:44-10:45)
-IDENTIFIER "strings" (10:46-10:53)
-DOT (10:53-10:54)
-IDENTIFIER "sort" (10:54-10:58)
-LEFT_PAREN (10:58-10:59)
-RIGHT_PAREN (10:59-10:60)
-SEMICOLON (10:60-10:61)
+IDENTIFIER "chars" (10:46-10:51)
+DOT (10:51-10:52)
+IDENTIFIER "sortInPlace" (10:52-10:63)
+LEFT_PAREN (10:63-10:64)
+RIGHT_PAREN (10:64-10:65)
+SEMICOLON (10:65-10:66)
+IDENTIFIER "strings" (10:67-10:74)
+DOT (10:74-10:75)
+IDENTIFIER "sortInPlace" (10:75-10:86)
+LEFT_PAREN (10:86-10:87)
+RIGHT_PAREN (10:87-10:88)
+SEMICOLON (10:88-10:89)
 IDENTIFIER "print" (11:1-11:6)
 LEFT_PAREN (11:6-11:7)
 IDENTIFIER "bytes" (11:7-11:12)
@@ -236,10 +236,10 @@ RIGHT_BRACKET (13:23-13:24)
 SEMICOLON (13:24-13:25)
 IDENTIFIER "empty" (14:1-14:6)
 DOT (14:6-14:7)
-IDENTIFIER "sort" (14:7-14:11)
-LEFT_PAREN (14:11-14:12)
-RIGHT_PAREN (14:12-14:13)
-SEMICOLON (14:13-14:14)
+IDENTIFIER "sortInPlace" (14:7-14:18)
+LEFT_PAREN (14:18-14:19)
+RIGHT_PAREN (14:19-14:20)
+SEMICOLON (14:20-14:21)
 IDENTIFIER "print" (15:1-15:6)
 LEFT_PAREN (15:6-15:7)
 IDENTIFIER "empty" (15:7-15:12)
@@ -515,137 +515,137 @@ SEMICOLON (15:13-15:14)
     )
   )
   (ExpressionStatement
-    range: 9:1-9:14
+    range: 9:1-9:21
     (CallExpression
-      range: 9:1-9:13
+      range: 9:1-9:20
       (MemberExpression
-        range: 9:1-9:11
+        range: 9:1-9:18
         (IdentifierExpression
           range: 9:1-9:6
           name: "bytes"
         )
         (IdentifierExpression
-          range: 9:7-9:11
-          name: "sort"
+          range: 9:7-9:18
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 9:15-9:29
+    range: 9:22-9:43
     (CallExpression
-      range: 9:15-9:28
+      range: 9:22-9:42
       (MemberExpression
-        range: 9:15-9:26
+        range: 9:22-9:40
         (IdentifierExpression
-          range: 9:15-9:21
+          range: 9:22-9:28
           name: "shorts"
         )
         (IdentifierExpression
-          range: 9:22-9:26
-          name: "sort"
+          range: 9:29-9:40
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 9:30-9:42
+    range: 9:44-9:63
     (CallExpression
-      range: 9:30-9:41
+      range: 9:44-9:62
       (MemberExpression
-        range: 9:30-9:39
+        range: 9:44-9:60
         (IdentifierExpression
-          range: 9:30-9:34
+          range: 9:44-9:48
           name: "ints"
         )
         (IdentifierExpression
-          range: 9:35-9:39
-          name: "sort"
+          range: 9:49-9:60
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 9:43-9:56
+    range: 9:64-9:84
     (CallExpression
-      range: 9:43-9:55
+      range: 9:64-9:83
       (MemberExpression
-        range: 9:43-9:53
+        range: 9:64-9:81
         (IdentifierExpression
-          range: 9:43-9:48
+          range: 9:64-9:69
           name: "longs"
         )
         (IdentifierExpression
-          range: 9:49-9:53
-          name: "sort"
+          range: 9:70-9:81
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 10:1-10:15
+    range: 10:1-10:22
     (CallExpression
-      range: 10:1-10:14
+      range: 10:1-10:21
       (MemberExpression
-        range: 10:1-10:12
+        range: 10:1-10:19
         (IdentifierExpression
           range: 10:1-10:7
           name: "floats"
         )
         (IdentifierExpression
-          range: 10:8-10:12
-          name: "sort"
+          range: 10:8-10:19
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 10:16-10:31
+    range: 10:23-10:45
     (CallExpression
-      range: 10:16-10:30
+      range: 10:23-10:44
       (MemberExpression
-        range: 10:16-10:28
+        range: 10:23-10:42
         (IdentifierExpression
-          range: 10:16-10:23
+          range: 10:23-10:30
           name: "doubles"
         )
         (IdentifierExpression
-          range: 10:24-10:28
-          name: "sort"
+          range: 10:31-10:42
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 10:32-10:45
+    range: 10:46-10:66
     (CallExpression
-      range: 10:32-10:44
+      range: 10:46-10:65
       (MemberExpression
-        range: 10:32-10:42
+        range: 10:46-10:63
         (IdentifierExpression
-          range: 10:32-10:37
+          range: 10:46-10:51
           name: "chars"
         )
         (IdentifierExpression
-          range: 10:38-10:42
-          name: "sort"
+          range: 10:52-10:63
+          name: "sortInPlace"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 10:46-10:61
+    range: 10:67-10:89
     (CallExpression
-      range: 10:46-10:60
+      range: 10:67-10:88
       (MemberExpression
-        range: 10:46-10:58
+        range: 10:67-10:86
         (IdentifierExpression
-          range: 10:46-10:53
+          range: 10:67-10:74
           name: "strings"
         )
         (IdentifierExpression
-          range: 10:54-10:58
-          name: "sort"
+          range: 10:75-10:86
+          name: "sortInPlace"
         )
       )
     )
@@ -781,18 +781,18 @@ SEMICOLON (15:13-15:14)
     )
   )
   (ExpressionStatement
-    range: 14:1-14:14
+    range: 14:1-14:21
     (CallExpression
-      range: 14:1-14:13
+      range: 14:1-14:20
       (MemberExpression
-        range: 14:1-14:11
+        range: 14:1-14:18
         (IdentifierExpression
           range: 14:1-14:6
           name: "empty"
         )
         (IdentifierExpression
-          range: 14:7-14:11
-          name: "sort"
+          range: 14:7-14:18
+          name: "sortInPlace"
         )
       )
     )
@@ -849,37 +849,37 @@ Expression types:
   8:33-8:36 -> string
   8:38-8:41 -> string
   9:1-9:6 -> [i8]
-  9:1-9:11 -> (array) => void
-  9:1-9:13 -> void
-  9:7-9:11 -> (array) => void
-  9:15-9:21 -> [i16]
-  9:15-9:26 -> (array) => void
-  9:15-9:28 -> void
-  9:22-9:26 -> (array) => void
-  9:30-9:34 -> [i32]
-  9:30-9:39 -> (array) => void
-  9:30-9:41 -> void
-  9:35-9:39 -> (array) => void
-  9:43-9:48 -> [i64]
-  9:43-9:53 -> (array) => void
-  9:43-9:55 -> void
-  9:49-9:53 -> (array) => void
+  9:1-9:18 -> () => void
+  9:1-9:20 -> void
+  9:7-9:18 -> () => void
+  9:22-9:28 -> [i16]
+  9:22-9:40 -> () => void
+  9:22-9:42 -> void
+  9:29-9:40 -> () => void
+  9:44-9:48 -> [i32]
+  9:44-9:60 -> () => void
+  9:44-9:62 -> void
+  9:49-9:60 -> () => void
+  9:64-9:69 -> [i64]
+  9:64-9:81 -> () => void
+  9:64-9:83 -> void
+  9:70-9:81 -> () => void
   10:1-10:7 -> [f32]
-  10:1-10:12 -> (array) => void
-  10:1-10:14 -> void
-  10:8-10:12 -> (array) => void
-  10:16-10:23 -> [f64]
-  10:16-10:28 -> (array) => void
-  10:16-10:30 -> void
-  10:24-10:28 -> (array) => void
-  10:32-10:37 -> [char]
-  10:32-10:42 -> (array) => void
-  10:32-10:44 -> void
-  10:38-10:42 -> (array) => void
-  10:46-10:53 -> [string]
-  10:46-10:58 -> (array) => void
-  10:46-10:60 -> void
-  10:54-10:58 -> (array) => void
+  10:1-10:19 -> () => void
+  10:1-10:21 -> void
+  10:8-10:19 -> () => void
+  10:23-10:30 -> [f64]
+  10:23-10:42 -> () => void
+  10:23-10:44 -> void
+  10:31-10:42 -> () => void
+  10:46-10:51 -> [char]
+  10:46-10:63 -> () => void
+  10:46-10:65 -> void
+  10:52-10:63 -> () => void
+  10:67-10:74 -> [string]
+  10:67-10:86 -> () => void
+  10:67-10:88 -> void
+  10:75-10:86 -> () => void
   11:1-11:6 -> (any) => void
   11:1-11:13 -> void
   11:7-11:12 -> [i8]
@@ -906,9 +906,9 @@ Expression types:
   12:52-12:59 -> [string]
   13:22-13:24 -> [i32]
   14:1-14:6 -> [i32]
-  14:1-14:11 -> (array) => void
-  14:1-14:13 -> void
-  14:7-14:11 -> (array) => void
+  14:1-14:18 -> () => void
+  14:1-14:20 -> void
+  14:7-14:18 -> () => void
   15:1-15:6 -> (any) => void
   15:1-15:13 -> void
   15:7-15:12 -> [i32]
@@ -954,21 +954,21 @@ Declarations:
 
 References:
   9:1-9:6 -> 1:7-1:12
-  9:7-9:11 -> builtin sort
-  9:15-9:21 -> 2:7-2:13
-  9:22-9:26 -> builtin sort
-  9:30-9:34 -> 3:7-3:11
-  9:35-9:39 -> builtin sort
-  9:43-9:48 -> 4:7-4:12
-  9:49-9:53 -> builtin sort
+  9:7-9:18 -> EldByteArray.sortInPlace(): void
+  9:22-9:28 -> 2:7-2:13
+  9:29-9:40 -> EldShortArray.sortInPlace(): void
+  9:44-9:48 -> 3:7-3:11
+  9:49-9:60 -> EldIntArray.sortInPlace(): void
+  9:64-9:69 -> 4:7-4:12
+  9:70-9:81 -> EldLongArray.sortInPlace(): void
   10:1-10:7 -> 5:7-5:13
-  10:8-10:12 -> builtin sort
-  10:16-10:23 -> 6:7-6:14
-  10:24-10:28 -> builtin sort
-  10:32-10:37 -> 7:7-7:12
-  10:38-10:42 -> builtin sort
-  10:46-10:53 -> 8:7-8:14
-  10:54-10:58 -> builtin sort
+  10:8-10:19 -> EldFloatArray.sortInPlace(): void
+  10:23-10:30 -> 6:7-6:14
+  10:31-10:42 -> EldDoubleArray.sortInPlace(): void
+  10:46-10:51 -> 7:7-7:12
+  10:52-10:63 -> EldCharArray.sortInPlace(): void
+  10:67-10:74 -> 8:7-8:14
+  10:75-10:86 -> EldObjectArray.sortInPlace(): void
   11:1-11:6 -> builtin print
   11:7-11:12 -> 1:7-1:12
   11:15-11:20 -> builtin print
@@ -986,7 +986,7 @@ References:
   12:46-12:51 -> builtin print
   12:52-12:59 -> 8:7-8:14
   14:1-14:6 -> 13:7-13:12
-  14:7-14:11 -> builtin sort
+  14:7-14:18 -> EldIntArray.sortInPlace(): void
   15:1-15:6 -> builtin print
   15:7-15:12 -> 13:7-13:12
 
@@ -1154,21 +1154,21 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
     PUTSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.sortInPlace()V
     GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.sortInPlace()V
     GETSTATIC Test.ints Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sortInPlace()V
     GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.sortInPlace()V
     GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.sortInPlace()V
     GETSTATIC Test.doubles Lcom/github/andreasarvidsson/eld/runtime/EldDoubleArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldDoubleArray.sortInPlace()V
     GETSTATIC Test.chars Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.sortInPlace()V
     GETSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.sortInPlace()V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
@@ -1198,7 +1198,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>()V
     PUTSTATIC Test.empty Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     GETSTATIC Test.empty Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sort()V
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.sortInPlace()V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.empty Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
