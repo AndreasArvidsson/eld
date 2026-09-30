@@ -317,7 +317,7 @@ References:
   12:17-12:23 -> 10:7-10:13
   13:1-13:6 -> builtin print
   13:7-13:13 -> 12:7-12:13
-  13:14-13:17 -> Map<Key, string>.get(any): string | null
+  13:14-13:17 -> java.util.Map.get(any): string | null
   13:18-13:24 -> 11:7-11:13
 
 --- BYTECODE ---

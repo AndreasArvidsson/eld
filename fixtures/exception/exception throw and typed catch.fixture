@@ -145,10 +145,10 @@ Declarations:
   3:10-3:11 -> const e: IllegalArgumentException
 
 References:
-  2:15-2:39 -> 2:11-2:56
+  2:15-2:39 -> java.lang.IllegalArgumentException
   4:5-4:10 -> builtin print
   4:11-4:12 -> 3:10-3:11
-  4:13-4:23 -> IllegalArgumentException.getMessage(): string | null
+  4:13-4:23 -> java.lang.Throwable.getMessage(): string | null
   6:1-6:6 -> builtin print
 
 --- BYTECODE ---

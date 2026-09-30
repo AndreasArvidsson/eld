@@ -185,13 +185,15 @@ protected const bar = 0;
 
 ### Miscellaneous
 
-- String std lib
+- Properly support unicode strings. string[0] and string.count() only handles utf8.
+- Introduced type never. Today [] is typed as [any]. Should it be [never]?
+- Replace builtin print in fixtures with actual Java reference?
 - Collections std lib
 - create literal types from collection elements
 - Export & import
 - constant control-flow elimination
-  - Optimize code and show warnings
-  - Suppress warnings with comments: // eld-disable-next-line constant-condition
+  - Instead of silently eliminated these: throw exception? Or should this be a warning?
+  - Suppress error with comments: // eld-disable-next-line constant-condition
 - Warnings in addition to errors.
   - Flag to turn warnings into errors.
   - Unused variables
@@ -203,4 +205,3 @@ protected const bar = 0;
 - Update documentation with code examples for every single syntax.
 - Operator overloading. We have already added `==`.
 - Regex literals: `const re: regex = /^\d+$`;
-- Methods like `indexOf` should return `null` instead of `-1` on failure.

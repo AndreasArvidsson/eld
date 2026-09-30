@@ -511,14 +511,14 @@ References:
   13:20-13:26 -> 8:7-8:13
   14:1-14:6 -> builtin print
   14:7-14:12 -> 7:7-7:12
-  14:13-14:21 -> Box.hashCode(): i32
+  14:13-14:21 -> java.lang.Object.hashCode(): i32
   14:27-14:32 -> 7:7-7:12
-  14:33-14:41 -> Box.hashCode(): i32
+  14:33-14:41 -> java.lang.Object.hashCode(): i32
   15:1-15:6 -> builtin print
   15:7-15:12 -> 7:7-7:12
-  15:13-15:21 -> Box.toString(): string
+  15:13-15:21 -> java.lang.Object.toString(): string
   15:27-15:32 -> 7:7-7:12
-  15:33-15:41 -> Box.toString(): string
+  15:33-15:41 -> java.lang.Object.toString(): string
 
 --- BYTECODE ---
 

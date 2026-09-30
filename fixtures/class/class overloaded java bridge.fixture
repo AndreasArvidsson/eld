@@ -1264,7 +1264,7 @@ References:
   8:14-8:23 -> 3:17-3:26
   9:1-9:6 -> builtin print
   9:7-9:21 -> 6:7-6:21
-  9:22-9:31 -> Comparable<Direct>.compareTo(Direct): i32
+  9:22-9:31 -> java.lang.Comparable.compareTo(Direct): i32
   9:36-9:42 -> 1:7-1:13
   14:23-14:27 -> 11:7-11:11
   17:21-17:28 -> 14:7-14:14
@@ -1278,7 +1278,7 @@ References:
   20:15-20:24 -> 12:17-12:26
   21:1-21:6 -> builtin print
   21:7-21:22 -> 18:7-18:22
-  21:23-21:32 -> Comparable<Derived>.compareTo(Derived): i32
+  21:23-21:32 -> java.lang.Comparable.compareTo(Derived): i32
   21:37-21:44 -> 14:7-14:14
   27:22-27:30 -> 23:7-23:15
   28:48-28:56 -> 27:7-27:15
@@ -1292,7 +1292,7 @@ References:
   30:16-30:23 -> 25:17-25:24
   31:1-31:6 -> builtin print
   31:7-31:23 -> 28:7-28:23
-  31:24-31:31 -> Comparator<Ordering>.compare(Ordering, Ordering): i32
+  31:24-31:31 -> java.util.Comparator.compare(Ordering, Ordering): i32
   31:36-31:44 -> 23:7-23:15
   31:52-31:60 -> 23:7-23:15
 

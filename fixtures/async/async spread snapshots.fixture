@@ -635,7 +635,7 @@ Declarations:
 References:
   5:5-5:11 -> 1:7-1:13
   10:5-10:15 -> 2:7-2:17
-  10:16-10:19 -> Map<string, i32>.put(string, i32): i32 | null
+  10:16-10:19 -> java.util.Map.put(string, i32): i32 | null
   16:12-16:18 -> 1:7-1:13
   17:31-17:43 -> 4:6-4:18
   20:12-20:22 -> 2:7-2:17
@@ -644,15 +644,15 @@ References:
   24:11-24:23 -> 15:11-15:23
   25:5-25:10 -> builtin print
   25:11-25:27 -> 19:11-19:27
-  25:28-25:31 -> Map<string, i32>.get(any): i32 | null
+  25:28-25:31 -> java.util.Map.get(any): i32 | null
   26:5-26:10 -> builtin print
   26:11-26:27 -> 19:11-19:27
-  26:28-26:31 -> Map<string, i32>.get(any): i32 | null
+  26:28-26:31 -> java.util.Map.get(any): i32 | null
   27:5-27:10 -> builtin print
   27:11-27:17 -> 1:7-1:13
   28:5-28:10 -> builtin print
   28:11-28:21 -> 2:7-2:17
-  28:22-28:25 -> Map<string, i32>.get(any): i32 | null
+  28:22-28:25 -> java.util.Map.get(any): i32 | null
   31:8-31:11 -> 14:12-14:15
 
 --- BYTECODE ---
@@ -794,7 +794,7 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
     ASTORE 6
     ALOAD 6
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.length()I
     ISTORE 7
     ILOAD 5
     ILOAD 7

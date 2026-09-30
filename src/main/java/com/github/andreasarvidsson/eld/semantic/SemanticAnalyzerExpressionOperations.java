@@ -53,7 +53,7 @@ public final class SemanticAnalyzerExpressionOperations {
     ) {
         final Type target =
             expressions.analyzeExpression(subscript.target(), context);
-        final Type indexed = ConstType.unwrap(target);
+        final Type indexed = LiteralType.unwrap(ConstType.unwrap(target));
         if (indexed instanceof TupleType tuple) {
             expressions.analyzeExpression(subscript.index(), context);
             final BigInteger index = integerLiteral(subscript.index());
@@ -71,10 +71,21 @@ public final class SemanticAnalyzerExpressionOperations {
             }
             return tuple.elementTypes().get(index.intValue());
         }
+        if (indexed == BuiltinType.STRING) {
+            final Type index =
+                expressions.analyzeExpression(subscript.index(), context);
+            if (!isValidSubscriptIndex(index)) {
+                throw new SemanticException(
+                    subscript.range(),
+                    "Subscript requires an i8, i16, or i32 index"
+                );
+            }
+            return BuiltinType.CHAR;
+        }
         if (!(indexed instanceof ArrayType array)) {
             throw new SemanticException(
                 subscript.range(),
-                "Subscript requires an array target"
+                "Subscript requires an array or string target"
             );
         }
         final Type index =
@@ -94,7 +105,7 @@ public final class SemanticAnalyzerExpressionOperations {
     ) {
         final Type target =
             expressions.analyzeExpression(slice.target(), context);
-        final Type sliced = ConstType.unwrap(target);
+        final Type sliced = LiteralType.unwrap(ConstType.unwrap(target));
         final Expression start = slice.startIndex();
         final Expression end = slice.endIndex();
         final Type startIndex =
@@ -103,10 +114,10 @@ public final class SemanticAnalyzerExpressionOperations {
                 : expressions.analyzeExpression(start, context);
         final Type endIndex =
             end == null ? null : expressions.analyzeExpression(end, context);
-        if (!(sliced instanceof ArrayType array)) {
+        if (!(sliced instanceof ArrayType) && sliced != BuiltinType.STRING) {
             throw new SemanticException(
                 slice.range(),
-                "Slicing requires an array target"
+                "Slicing requires an array or string target"
             );
         }
         if (startIndex != null && !isValidSubscriptIndex(startIndex)) {
@@ -121,7 +132,7 @@ public final class SemanticAnalyzerExpressionOperations {
                 "Slice end index must be an i8, i16, or i32"
             );
         }
-        return array;
+        return sliced;
     }
 
     private boolean isValidSubscriptIndex(final Type index) {
@@ -280,6 +291,18 @@ public final class SemanticAnalyzerExpressionOperations {
             return;
         }
         if (expression instanceof SubscriptExpression subscript) {
+            if (
+                LiteralType.unwrap(
+                    ConstType.unwrap(
+                        model.getExpressionType(subscript.target())
+                    )
+                ) == BuiltinType.STRING
+            ) {
+                throw new SemanticException(
+                    expression.range(),
+                    "String elements are not writable"
+                );
+            }
             if (
                 model.getExpressionType(subscript.target()) instanceof ConstType
             ) {
@@ -928,7 +951,7 @@ public final class SemanticAnalyzerExpressionOperations {
         }
         final Type elementType =
             elementTypes.isEmpty()
-                ? BuiltinType.NULL
+                ? BuiltinType.ANY
                 : analyzer.commonTypeStrict(elementTypes);
         if (elementType == null) {
             throw new SemanticException(

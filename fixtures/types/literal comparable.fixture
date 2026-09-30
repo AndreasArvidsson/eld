@@ -495,22 +495,22 @@ Declarations:
 
 References:
   2:12-2:17 -> 1:14-1:19
-  2:18-2:27 -> Comparable<string>.compareTo(string): i32
+  2:18-2:27 -> java.lang.Comparable.compareTo(string): i32
   6:46-6:50 -> 5:7-5:11
   7:1-7:6 -> builtin print
   7:7-7:23 -> 6:7-6:23
-  7:24-7:33 -> Comparable<string>.compareTo(string): i32
+  7:24-7:33 -> java.lang.Comparable.compareTo(string): i32
   8:1-8:6 -> builtin print
   8:7-8:14 -> 1:6-1:13
   8:15-8:19 -> 5:7-5:11
   10:44-10:48 -> 9:7-9:11
   11:1-11:6 -> builtin print
   11:7-11:24 -> 10:7-10:24
-  11:25-11:34 -> Comparable<i32>.compareTo(i32): i32
+  11:25-11:34 -> java.lang.Comparable.compareTo(i32): i32
   13:45-13:50 -> 12:7-12:12
   14:1-14:6 -> builtin print
   14:7-14:22 -> 13:7-13:22
-  14:23-14:32 -> Comparable<string>.compareTo(string): i32
+  14:23-14:32 -> java.lang.Comparable.compareTo(string): i32
 
 --- BYTECODE ---
 

@@ -1307,7 +1307,7 @@ References:
   33:19-33:22 -> 8:7-8:10
   34:1-34:6 -> builtin print
   34:7-34:11 -> 33:7-33:11
-  34:12-34:15 -> Map<Dog, string>.get(any): string | null
+  34:12-34:15 -> java.util.Map.get(any): string | null
   34:20-34:23 -> 8:7-8:10
 
 --- BYTECODE ---

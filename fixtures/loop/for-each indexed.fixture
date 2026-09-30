@@ -72,7 +72,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L0:
     ILOAD_1 1
     ALOAD_0 0
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.length()I
     IF_ICMPGE L1
     ALOAD_0 0
     ILOAD_1 1

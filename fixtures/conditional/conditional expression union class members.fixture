@@ -990,32 +990,32 @@ References:
   11:74-11:80 -> 1:7-1:13
   12:1-12:6 -> builtin print
   12:7-12:14 -> 5:7-5:14
-  12:15-12:23 -> Dog | Cat | Animal.getClass(): Type<Dog | Cat | Animal>
-  12:26-12:39 -> Type<Dog | Cat | Animal>.getSimpleName(): string
+  12:15-12:23 -> java.lang.Object.getClass(): Type<Dog | Cat | Animal>
+  12:26-12:39 -> java.lang.Class.getSimpleName(): string
   13:1-13:6 -> builtin print
   13:7-13:18 -> 6:7-6:18
-  13:19-13:27 -> Dog | Cat | Animal.getClass(): Type<Dog | Cat | Animal>
-  13:30-13:43 -> Type<Dog | Cat | Animal>.getSimpleName(): string
+  13:19-13:27 -> java.lang.Object.getClass(): Type<Dog | Cat | Animal>
+  13:30-13:43 -> java.lang.Class.getSimpleName(): string
   14:1-14:6 -> builtin print
   14:7-14:16 -> 7:7-7:16
-  14:17-14:25 -> Dog | Cat | Animal.getClass(): Type<Dog | Cat | Animal>
-  14:28-14:41 -> Type<Dog | Cat | Animal>.getSimpleName(): string
+  14:17-14:25 -> java.lang.Object.getClass(): Type<Dog | Cat | Animal>
+  14:28-14:41 -> java.lang.Class.getSimpleName(): string
   15:1-15:6 -> builtin print
   15:7-15:13 -> 8:7-8:13
-  15:14-15:22 -> Animal.getClass(): Type<Animal>
-  15:25-15:38 -> Type<Animal>.getSimpleName(): string
+  15:14-15:22 -> java.lang.Object.getClass(): Type<Animal>
+  15:25-15:38 -> java.lang.Class.getSimpleName(): string
   16:1-16:6 -> builtin print
   16:7-16:19 -> 9:7-9:19
-  16:20-16:28 -> Animal.getClass(): Type<Animal>
-  16:31-16:44 -> Type<Animal>.getSimpleName(): string
+  16:20-16:28 -> java.lang.Object.getClass(): Type<Animal>
+  16:31-16:44 -> java.lang.Class.getSimpleName(): string
   17:1-17:6 -> builtin print
   17:7-17:23 -> 10:7-10:23
-  17:24-17:32 -> Animal.getClass(): Type<Animal>
-  17:35-17:48 -> Type<Animal>.getSimpleName(): string
+  17:24-17:32 -> java.lang.Object.getClass(): Type<Animal>
+  17:35-17:48 -> java.lang.Class.getSimpleName(): string
   18:1-18:6 -> builtin print
   18:7-18:21 -> 11:7-11:21
-  18:22-18:30 -> Animal.getClass(): Type<Animal>
-  18:33-18:46 -> Type<Animal>.getSimpleName(): string
+  18:22-18:30 -> java.lang.Object.getClass(): Type<Animal>
+  18:33-18:46 -> java.lang.Class.getSimpleName(): string
 
 --- BYTECODE ---
 

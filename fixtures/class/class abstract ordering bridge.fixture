@@ -502,13 +502,13 @@ References:
   9:42-9:47 -> 7:7-7:12
   10:1-10:6 -> builtin print
   10:7-10:17 -> 9:7-9:17
-  10:18-10:27 -> Comparable<Base>.compareTo(Base): i32
+  10:18-10:27 -> java.lang.Comparable.compareTo(Base): i32
   10:32-10:37 -> 7:7-7:12
   18:29-18:37 -> 12:16-12:24
   20:42-20:55 -> 18:7-18:20
   21:1-21:6 -> builtin print
   21:7-21:17 -> 20:7-20:17
-  21:18-21:25 -> Comparator<Base>.compare(Base, Base): i32
+  21:18-21:25 -> java.util.Comparator.compare(Base, Base): i32
   21:30-21:35 -> 7:7-7:12
   21:43-21:48 -> 7:7-7:12
 

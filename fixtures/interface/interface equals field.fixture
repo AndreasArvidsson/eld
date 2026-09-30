@@ -425,10 +425,10 @@ References:
   8:11-8:17 -> 2:9-2:15
   9:1-9:6 -> builtin print
   9:7-9:10 -> 7:7-7:10
-  9:11-9:17 -> Box.equals(Box): bool
+  9:11-9:17 -> java.lang.Object.equals(Box): bool
   9:18-9:21 -> 7:7-7:10
   10:29-10:32 -> 7:7-7:10
-  10:33-10:39 -> Box.equals(Box): bool
+  10:33-10:39 -> java.lang.Object.equals(Box): bool
   11:1-11:6 -> builtin print
   11:7-11:11 -> 10:7-10:11
   11:12-11:15 -> 7:7-7:10

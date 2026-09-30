@@ -168,11 +168,11 @@ Declarations:
   2:7-2:12 -> const names: Map<Type<Exception>, string>
 
 References:
-  1:36-1:45 -> 1:36-1:45
-  2:46-2:55 -> 2:46-2:55
+  1:36-1:45 -> java.lang.Exception
+  2:46-2:55 -> java.lang.Exception
   3:1-3:6 -> builtin print
   3:7-3:12 -> 2:7-2:12
-  3:13-3:16 -> Map<Type<Exception>, string>.get(any): string | null
+  3:13-3:16 -> java.util.Map.get(any): string | null
   3:17-3:26 -> 1:7-1:16
 
 --- BYTECODE ---

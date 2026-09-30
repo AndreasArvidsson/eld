@@ -22,21 +22,21 @@ class ObjectArrayTest {
     void growsWithNullableReferencesAndUsesLogicalBounds() throws Exception {
         final EldObjectArray<@Nullable String> values = new EldObjectArray<>();
         assertEquals("[]", values.toString());
-        assertEquals(0, values.slice(0, 0).size());
+        assertEquals(0, values.slice(0, 0).length());
         assertThrows(IndexOutOfBoundsException.class, () -> values.get(0));
         for (int i = 0; i < 101; i++) {
             values.add(i % 2 == 0 ? "value" : null);
         }
-        assertEquals(101, values.size());
+        assertEquals(101, values.length());
         for (int i = 0; i < 101; i++) {
             assertEquals(i % 2 == 0 ? "value" : null, values.get(i - 101));
         }
         values.set(-1, null);
         assertNull(values.get(100));
         assertEquals("[null, null]", values.slice(-2, 101).toString());
-        assertEquals(0, values.sliceFrom(101).size());
-        assertEquals(0, values.sliceTo(-101).size());
-        assertEquals(100, values.sliceTo(-1).size());
+        assertEquals(0, values.sliceFrom(101).length());
+        assertEquals(0, values.sliceTo(-101).length());
+        assertEquals(100, values.sliceTo(-1).length());
         for (final int index : new int[] {-102, 102, Integer.MIN_VALUE,
                 Integer.MAX_VALUE}) {
             assertThrows(
@@ -80,7 +80,7 @@ class ObjectArrayTest {
             copy.set(0, "changed");
             copy.add("extra");
             assertEquals("value", values.get(0));
-            assertEquals(101, values.size());
+            assertEquals(101, values.length());
         }
         assertEquals(
             Object[].class,
@@ -262,7 +262,7 @@ class ObjectArrayTest {
             );
             assertEquals(
                 0,
-                ((EldObjectArray<?>) type.getField("empty").get(null)).size()
+                ((EldObjectArray<?>) type.getField("empty").get(null)).length()
             );
             assertEquals(
                 element == BuiltinType.STRING ? "a" : null,
@@ -292,7 +292,7 @@ class ObjectArrayTest {
                     "negativeHead", "negativeTail"}) {
                 assertEquals(
                     2,
-                    ((EldObjectArray<?>) type.getField(name).get(null)).size()
+                    ((EldObjectArray<?>) type.getField(name).get(null)).length()
                 );
             }
             for (final String name : new String[] {"middle",

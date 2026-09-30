@@ -905,7 +905,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     ASTORE_1 1
     ALOAD_1 1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.length()I
     ISTORE_2 2
     ILOAD_0 0
     ILOAD_2 2
@@ -914,7 +914,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
     ASTORE_3 3
     ALOAD_3 3
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.length()I
     ISTORE 4
     ILOAD_0 0
     ILOAD 4
@@ -990,7 +990,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.longs Lcom/github/andreasarvidsson/eld/runtime/EldLongArray;
     ASTORE 12
     ALOAD 12
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldLongArray.length()I
     ISTORE 13
     ILOAD 11
     ILOAD 13
@@ -1054,7 +1054,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
     ASTORE 20
     ALOAD 20
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.length()I
     ISTORE 21
     ILOAD 19
     ILOAD 21
@@ -1105,7 +1105,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldCharArray.<init>([C)V
     ASTORE 26
     ALOAD 26
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldCharArray.length()I
     ISTORE 27
     ILOAD 25
     ILOAD 27
@@ -1154,7 +1154,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.<init>([Z)V
     ASTORE 32
     ALOAD 32
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.length()I
     ISTORE 33
     ILOAD 31
     ILOAD 33
@@ -1195,7 +1195,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     ASTORE 38
     ALOAD 38
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.length()I
     ISTORE 39
     ILOAD 37
     ILOAD 39
@@ -1225,7 +1225,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.shorts Lcom/github/andreasarvidsson/eld/runtime/EldShortArray;
     ASTORE 43
     ALOAD 43
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldShortArray.length()I
     ISTORE 44
     ILOAD 42
     ILOAD 44
@@ -1255,7 +1255,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.floats Lcom/github/andreasarvidsson/eld/runtime/EldFloatArray;
     ASTORE 48
     ALOAD 48
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldFloatArray.length()I
     ISTORE 49
     ILOAD 47
     ILOAD 49
@@ -1285,7 +1285,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.bytes Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
     ASTORE 53
     ALOAD 53
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldByteArray.length()I
     ISTORE 54
     ILOAD 52
     ILOAD 54
@@ -1294,7 +1294,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.flags Lcom/github/andreasarvidsson/eld/runtime/EldBooleanArray;
     ASTORE 55
     ALOAD 55
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldBooleanArray.length()I
     ISTORE 56
     ILOAD 52
     ILOAD 56

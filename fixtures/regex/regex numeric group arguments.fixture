@@ -298,23 +298,23 @@ Declarations:
   3:7-3:12 -> const index: i8
 
 References:
-  1:17-1:22 -> 1:17-1:22
-  1:23-1:30 -> Regex.compile(string): Regex
-  1:38-1:45 -> Regex.matcher(string): Matcher
+  1:17-1:22 -> java.util.regex.Pattern
+  1:23-1:30 -> java.util.regex.Pattern.compile(string): Regex
+  1:38-1:45 -> java.util.regex.Pattern.matcher(string): Matcher
   2:1-2:6 -> builtin print
   2:7-2:14 -> 1:7-1:14
-  2:15-2:19 -> Matcher.find(): bool
+  2:15-2:19 -> java.util.regex.Matcher.find(): bool
   4:1-4:6 -> builtin print
   4:7-4:14 -> 1:7-1:14
-  4:15-4:20 -> Matcher.group(i32): string | null
+  4:15-4:20 -> java.util.regex.Matcher.group(i32): string | null
   4:21-4:26 -> 3:7-3:12
   5:1-5:6 -> builtin print
   5:7-5:14 -> 1:7-1:14
-  5:15-5:20 -> Matcher.start(i32): i32
+  5:15-5:20 -> java.util.regex.Matcher.start(i32): i32
   5:21-5:26 -> 3:7-3:12
   6:1-6:6 -> builtin print
   6:7-6:14 -> 1:7-1:14
-  6:15-6:18 -> Matcher.end(i32): i32
+  6:15-6:18 -> java.util.regex.Matcher.end(i32): i32
   6:19-6:24 -> 3:7-3:12
 
 --- BYTECODE ---

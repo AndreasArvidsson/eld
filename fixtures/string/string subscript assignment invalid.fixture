@@ -1,0 +1,62 @@
+var text = "abc";
+text[0] = 'x';
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "text" (1:5-1:9)
+EQUAL (1:10-1:11)
+STRING_LITERAL "\"abc\"" (1:12-1:17)
+SEMICOLON (1:17-1:18)
+IDENTIFIER "text" (2:1-2:5)
+LEFT_BRACKET (2:5-2:6)
+INTEGER_LITERAL "0" (2:6-2:7)
+RIGHT_BRACKET (2:7-2:8)
+EQUAL (2:9-2:10)
+CHAR_LITERAL "'x'" (2:11-2:14)
+SEMICOLON (2:14-2:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:15
+  (VariableDeclaration
+    range: 1:1-1:18
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:9
+      name: "text"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:12-1:17
+      kind: STRING
+      text: "\"abc\""
+    )
+  )
+  (AssignmentStatement
+    range: 2:1-2:15
+    (SubscriptExpression
+      range: 2:1-2:8
+      (IdentifierExpression
+        range: 2:1-2:5
+        name: "text"
+      )
+      (LiteralExpression
+        range: 2:6-2:7
+        kind: INT
+        text: "0"
+      )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 2:11-2:14
+      kind: CHAR
+      text: "'x'"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: String elements are not writable at 2:1-2:8

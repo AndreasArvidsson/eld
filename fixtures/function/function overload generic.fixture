@@ -318,8 +318,8 @@ Declarations:
   5:7-5:14 -> const strings: List<string>
 
 References:
-  4:33-4:42 -> 4:29-4:49
-  5:35-5:44 -> 5:31-5:54
+  4:33-4:42 -> java.util.ArrayList
+  5:35-5:44 -> java.util.ArrayList
   6:1-6:6 -> builtin print
   6:7-6:15 -> 1:6-1:14
   6:16-6:24 -> 4:7-4:15

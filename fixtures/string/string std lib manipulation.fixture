@@ -1,0 +1,624 @@
+print("padStart / padEnd");
+print("0.1".padStart(4, "0"));
+print("0.1".padEnd(4, "0"));
+print();
+
+print("replace / replaceAll");
+print("hello world".replace("o", "_"));
+print("hello world".replaceAll("o", "_"));
+print();
+
+print("repeat / reverse");
+print("a_".repeat(3));
+print("a_".repeat(0));
+print("hello world".reverse());
+print("a😀b".reverse());
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"padStart / padEnd\"" (1:7-1:26)
+RIGHT_PAREN (1:26-1:27)
+SEMICOLON (1:27-1:28)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"0.1\"" (2:7-2:12)
+DOT (2:12-2:13)
+IDENTIFIER "padStart" (2:13-2:21)
+LEFT_PAREN (2:21-2:22)
+INTEGER_LITERAL "4" (2:22-2:23)
+COMMA (2:23-2:24)
+STRING_LITERAL "\"0\"" (2:25-2:28)
+RIGHT_PAREN (2:28-2:29)
+RIGHT_PAREN (2:29-2:30)
+SEMICOLON (2:30-2:31)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"0.1\"" (3:7-3:12)
+DOT (3:12-3:13)
+IDENTIFIER "padEnd" (3:13-3:19)
+LEFT_PAREN (3:19-3:20)
+INTEGER_LITERAL "4" (3:20-3:21)
+COMMA (3:21-3:22)
+STRING_LITERAL "\"0\"" (3:23-3:26)
+RIGHT_PAREN (3:26-3:27)
+RIGHT_PAREN (3:27-3:28)
+SEMICOLON (3:28-3:29)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+RIGHT_PAREN (4:7-4:8)
+SEMICOLON (4:8-4:9)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"replace / replaceAll\"" (6:7-6:29)
+RIGHT_PAREN (6:29-6:30)
+SEMICOLON (6:30-6:31)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"hello world\"" (7:7-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "replace" (7:21-7:28)
+LEFT_PAREN (7:28-7:29)
+STRING_LITERAL "\"o\"" (7:29-7:32)
+COMMA (7:32-7:33)
+STRING_LITERAL "\"_\"" (7:34-7:37)
+RIGHT_PAREN (7:37-7:38)
+RIGHT_PAREN (7:38-7:39)
+SEMICOLON (7:39-7:40)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+STRING_LITERAL "\"hello world\"" (8:7-8:20)
+DOT (8:20-8:21)
+IDENTIFIER "replaceAll" (8:21-8:31)
+LEFT_PAREN (8:31-8:32)
+STRING_LITERAL "\"o\"" (8:32-8:35)
+COMMA (8:35-8:36)
+STRING_LITERAL "\"_\"" (8:37-8:40)
+RIGHT_PAREN (8:40-8:41)
+RIGHT_PAREN (8:41-8:42)
+SEMICOLON (8:42-8:43)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+RIGHT_PAREN (9:7-9:8)
+SEMICOLON (9:8-9:9)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+STRING_LITERAL "\"repeat / reverse\"" (11:7-11:25)
+RIGHT_PAREN (11:25-11:26)
+SEMICOLON (11:26-11:27)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+STRING_LITERAL "\"a_\"" (12:7-12:11)
+DOT (12:11-12:12)
+IDENTIFIER "repeat" (12:12-12:18)
+LEFT_PAREN (12:18-12:19)
+INTEGER_LITERAL "3" (12:19-12:20)
+RIGHT_PAREN (12:20-12:21)
+RIGHT_PAREN (12:21-12:22)
+SEMICOLON (12:22-12:23)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+STRING_LITERAL "\"a_\"" (13:7-13:11)
+DOT (13:11-13:12)
+IDENTIFIER "repeat" (13:12-13:18)
+LEFT_PAREN (13:18-13:19)
+INTEGER_LITERAL "0" (13:19-13:20)
+RIGHT_PAREN (13:20-13:21)
+RIGHT_PAREN (13:21-13:22)
+SEMICOLON (13:22-13:23)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+STRING_LITERAL "\"hello world\"" (14:7-14:20)
+DOT (14:20-14:21)
+IDENTIFIER "reverse" (14:21-14:28)
+LEFT_PAREN (14:28-14:29)
+RIGHT_PAREN (14:29-14:30)
+RIGHT_PAREN (14:30-14:31)
+SEMICOLON (14:31-14:32)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+STRING_LITERAL "\"a😀b\"" (15:7-15:13)
+DOT (15:13-15:14)
+IDENTIFIER "reverse" (15:14-15:21)
+LEFT_PAREN (15:21-15:22)
+RIGHT_PAREN (15:22-15:23)
+RIGHT_PAREN (15:23-15:24)
+SEMICOLON (15:24-15:25)
+
+--- AST ---
+
+(Program
+  range: 1:1-15:25
+  (ExpressionStatement
+    range: 1:1-1:28
+    (CallExpression
+      range: 1:1-1:27
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 1:7-1:26
+        kind: STRING
+        text: "\"padStart / padEnd\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:31
+    (CallExpression
+      range: 2:1-2:30
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:29
+        (MemberExpression
+          range: 2:7-2:21
+          (LiteralExpression
+            range: 2:7-2:12
+            kind: STRING
+            text: "\"0.1\""
+          )
+          (IdentifierExpression
+            range: 2:13-2:21
+            name: "padStart"
+          )
+        )
+        (LiteralExpression
+          range: 2:22-2:23
+          kind: INT
+          text: "4"
+        )
+        (LiteralExpression
+          range: 2:25-2:28
+          kind: STRING
+          text: "\"0\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:29
+    (CallExpression
+      range: 3:1-3:28
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:27
+        (MemberExpression
+          range: 3:7-3:19
+          (LiteralExpression
+            range: 3:7-3:12
+            kind: STRING
+            text: "\"0.1\""
+          )
+          (IdentifierExpression
+            range: 3:13-3:19
+            name: "padEnd"
+          )
+        )
+        (LiteralExpression
+          range: 3:20-3:21
+          kind: INT
+          text: "4"
+        )
+        (LiteralExpression
+          range: 3:23-3:26
+          kind: STRING
+          text: "\"0\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:9
+    (CallExpression
+      range: 4:1-4:8
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:31
+    (CallExpression
+      range: 6:1-6:30
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 6:7-6:29
+        kind: STRING
+        text: "\"replace / replaceAll\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:40
+    (CallExpression
+      range: 7:1-7:39
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:38
+        (MemberExpression
+          range: 7:7-7:28
+          (LiteralExpression
+            range: 7:7-7:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 7:21-7:28
+            name: "replace"
+          )
+        )
+        (LiteralExpression
+          range: 7:29-7:32
+          kind: STRING
+          text: "\"o\""
+        )
+        (LiteralExpression
+          range: 7:34-7:37
+          kind: STRING
+          text: "\"_\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:43
+    (CallExpression
+      range: 8:1-8:42
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:41
+        (MemberExpression
+          range: 8:7-8:31
+          (LiteralExpression
+            range: 8:7-8:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 8:21-8:31
+            name: "replaceAll"
+          )
+        )
+        (LiteralExpression
+          range: 8:32-8:35
+          kind: STRING
+          text: "\"o\""
+        )
+        (LiteralExpression
+          range: 8:37-8:40
+          kind: STRING
+          text: "\"_\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:9
+    (CallExpression
+      range: 9:1-9:8
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:27
+    (CallExpression
+      range: 11:1-11:26
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (LiteralExpression
+        range: 11:7-11:25
+        kind: STRING
+        text: "\"repeat / reverse\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:23
+    (CallExpression
+      range: 12:1-12:22
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:21
+        (MemberExpression
+          range: 12:7-12:18
+          (LiteralExpression
+            range: 12:7-12:11
+            kind: STRING
+            text: "\"a_\""
+          )
+          (IdentifierExpression
+            range: 12:12-12:18
+            name: "repeat"
+          )
+        )
+        (LiteralExpression
+          range: 12:19-12:20
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:23
+    (CallExpression
+      range: 13:1-13:22
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:21
+        (MemberExpression
+          range: 13:7-13:18
+          (LiteralExpression
+            range: 13:7-13:11
+            kind: STRING
+            text: "\"a_\""
+          )
+          (IdentifierExpression
+            range: 13:12-13:18
+            name: "repeat"
+          )
+        )
+        (LiteralExpression
+          range: 13:19-13:20
+          kind: INT
+          text: "0"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:32
+    (CallExpression
+      range: 14:1-14:31
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:30
+        (MemberExpression
+          range: 14:7-14:28
+          (LiteralExpression
+            range: 14:7-14:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 14:21-14:28
+            name: "reverse"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:25
+    (CallExpression
+      range: 15:1-15:24
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:23
+        (MemberExpression
+          range: 15:7-15:21
+          (LiteralExpression
+            range: 15:7-15:13
+            kind: STRING
+            text: "\"a😀b\""
+          )
+          (IdentifierExpression
+            range: 15:14-15:21
+            name: "reverse"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:27 -> void
+  1:7-1:26 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:30 -> void
+  2:7-2:12 -> string
+  2:7-2:21 -> (i32, string) => string
+  2:7-2:29 -> string
+  2:13-2:21 -> (i32, string) => string
+  2:22-2:23 -> i32
+  2:25-2:28 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:28 -> void
+  3:7-3:12 -> string
+  3:7-3:19 -> (i32, string) => string
+  3:7-3:27 -> string
+  3:13-3:19 -> (i32, string) => string
+  3:20-3:21 -> i32
+  3:23-3:26 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:8 -> void
+  6:1-6:6 -> (any) => void
+  6:1-6:30 -> void
+  6:7-6:29 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:39 -> void
+  7:7-7:20 -> string
+  7:7-7:28 -> (string, string) => string
+  7:7-7:38 -> string
+  7:21-7:28 -> (string, string) => string
+  7:29-7:32 -> string
+  7:34-7:37 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:42 -> void
+  8:7-8:20 -> string
+  8:7-8:31 -> (string, string) => string
+  8:7-8:41 -> string
+  8:21-8:31 -> (string, string) => string
+  8:32-8:35 -> string
+  8:37-8:40 -> string
+  9:1-9:6 -> (any) => void
+  9:1-9:8 -> void
+  11:1-11:6 -> (any) => void
+  11:1-11:26 -> void
+  11:7-11:25 -> string
+  12:1-12:6 -> (any) => void
+  12:1-12:22 -> void
+  12:7-12:11 -> string
+  12:7-12:18 -> (i32) => string
+  12:7-12:21 -> string
+  12:12-12:18 -> (i32) => string
+  12:19-12:20 -> i32
+  13:1-13:6 -> (any) => void
+  13:1-13:22 -> void
+  13:7-13:11 -> string
+  13:7-13:18 -> (i32) => string
+  13:7-13:21 -> string
+  13:12-13:18 -> (i32) => string
+  13:19-13:20 -> i32
+  14:1-14:6 -> (any) => void
+  14:1-14:31 -> void
+  14:7-14:20 -> string
+  14:7-14:28 -> () => string
+  14:7-14:30 -> string
+  14:21-14:28 -> () => string
+  15:1-15:6 -> (any) => void
+  15:1-15:24 -> void
+  15:7-15:13 -> string
+  15:7-15:21 -> () => string
+  15:7-15:23 -> string
+  15:14-15:21 -> () => string
+
+References:
+  1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+  2:13-2:21 -> EldString.padStart(string, i32, string): string
+  3:1-3:6 -> builtin print
+  3:13-3:19 -> EldString.padEnd(string, i32, string): string
+  4:1-4:6 -> builtin print
+  6:1-6:6 -> builtin print
+  7:1-7:6 -> builtin print
+  7:21-7:28 -> EldString.replace(string, string, string): string
+  8:1-8:6 -> builtin print
+  8:21-8:31 -> java.lang.String.replace(string, string): string
+  9:1-9:6 -> builtin print
+  11:1-11:6 -> builtin print
+  12:1-12:6 -> builtin print
+  12:12-12:18 -> java.lang.String.repeat(i32): string
+  13:1-13:6 -> builtin print
+  13:12-13:18 -> java.lang.String.repeat(i32): string
+  14:1-14:6 -> builtin print
+  14:21-14:28 -> EldString.reverse(string): string
+  15:1-15:6 -> builtin print
+  15:14-15:21 -> EldString.reverse(string): string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "padStart / padEnd"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "0.1"
+    LDC 4
+    LDC "0"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.padStart(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "0.1"
+    LDC 4
+    LDC "0"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.padEnd(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println()V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "replace / replaceAll"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "o"
+    LDC "_"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.replace(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "o"
+    LDC "_"
+    INVOKEVIRTUAL java/lang/String.replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.println()V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "repeat / reverse"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a_"
+    LDC 3
+    INVOKEVIRTUAL java/lang/String.repeat(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a_"
+    LDC 0
+    INVOKEVIRTUAL java/lang/String.repeat(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.reverse(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a😀b"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.reverse(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+padStart / padEnd
+00.1
+0.10
+
+replace / replaceAll
+hell_ world
+hell_ w_rld
+
+repeat / reverse
+a_a_a_
+
+dlrow olleh
+b😀a

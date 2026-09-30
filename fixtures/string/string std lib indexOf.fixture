@@ -1,0 +1,379 @@
+print("hello world".index("hello"));
+print("hello world".index("world", 2));
+print("hello world".index("missing"));
+print("hello world".lastIndex("world"));
+print("hello world".lastIndex("hello", 5));
+print("hello world".lastIndex("missing"));
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "index" (1:21-1:26)
+LEFT_PAREN (1:26-1:27)
+STRING_LITERAL "\"hello\"" (1:27-1:34)
+RIGHT_PAREN (1:34-1:35)
+RIGHT_PAREN (1:35-1:36)
+SEMICOLON (1:36-1:37)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"hello world\"" (2:7-2:20)
+DOT (2:20-2:21)
+IDENTIFIER "index" (2:21-2:26)
+LEFT_PAREN (2:26-2:27)
+STRING_LITERAL "\"world\"" (2:27-2:34)
+COMMA (2:34-2:35)
+INTEGER_LITERAL "2" (2:36-2:37)
+RIGHT_PAREN (2:37-2:38)
+RIGHT_PAREN (2:38-2:39)
+SEMICOLON (2:39-2:40)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"hello world\"" (3:7-3:20)
+DOT (3:20-3:21)
+IDENTIFIER "index" (3:21-3:26)
+LEFT_PAREN (3:26-3:27)
+STRING_LITERAL "\"missing\"" (3:27-3:36)
+RIGHT_PAREN (3:36-3:37)
+RIGHT_PAREN (3:37-3:38)
+SEMICOLON (3:38-3:39)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"hello world\"" (4:7-4:20)
+DOT (4:20-4:21)
+IDENTIFIER "lastIndex" (4:21-4:30)
+LEFT_PAREN (4:30-4:31)
+STRING_LITERAL "\"world\"" (4:31-4:38)
+RIGHT_PAREN (4:38-4:39)
+RIGHT_PAREN (4:39-4:40)
+SEMICOLON (4:40-4:41)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"hello world\"" (5:7-5:20)
+DOT (5:20-5:21)
+IDENTIFIER "lastIndex" (5:21-5:30)
+LEFT_PAREN (5:30-5:31)
+STRING_LITERAL "\"hello\"" (5:31-5:38)
+COMMA (5:38-5:39)
+INTEGER_LITERAL "5" (5:40-5:41)
+RIGHT_PAREN (5:41-5:42)
+RIGHT_PAREN (5:42-5:43)
+SEMICOLON (5:43-5:44)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"hello world\"" (6:7-6:20)
+DOT (6:20-6:21)
+IDENTIFIER "lastIndex" (6:21-6:30)
+LEFT_PAREN (6:30-6:31)
+STRING_LITERAL "\"missing\"" (6:31-6:40)
+RIGHT_PAREN (6:40-6:41)
+RIGHT_PAREN (6:41-6:42)
+SEMICOLON (6:42-6:43)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:43
+  (ExpressionStatement
+    range: 1:1-1:37
+    (CallExpression
+      range: 1:1-1:36
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:35
+        (MemberExpression
+          range: 1:7-1:26
+          (LiteralExpression
+            range: 1:7-1:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 1:21-1:26
+            name: "index"
+          )
+        )
+        (LiteralExpression
+          range: 1:27-1:34
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:40
+    (CallExpression
+      range: 2:1-2:39
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:38
+        (MemberExpression
+          range: 2:7-2:26
+          (LiteralExpression
+            range: 2:7-2:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 2:21-2:26
+            name: "index"
+          )
+        )
+        (LiteralExpression
+          range: 2:27-2:34
+          kind: STRING
+          text: "\"world\""
+        )
+        (LiteralExpression
+          range: 2:36-2:37
+          kind: INT
+          text: "2"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:39
+    (CallExpression
+      range: 3:1-3:38
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:37
+        (MemberExpression
+          range: 3:7-3:26
+          (LiteralExpression
+            range: 3:7-3:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 3:21-3:26
+            name: "index"
+          )
+        )
+        (LiteralExpression
+          range: 3:27-3:36
+          kind: STRING
+          text: "\"missing\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:41
+    (CallExpression
+      range: 4:1-4:40
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:39
+        (MemberExpression
+          range: 4:7-4:30
+          (LiteralExpression
+            range: 4:7-4:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 4:21-4:30
+            name: "lastIndex"
+          )
+        )
+        (LiteralExpression
+          range: 4:31-4:38
+          kind: STRING
+          text: "\"world\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:44
+    (CallExpression
+      range: 5:1-5:43
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:42
+        (MemberExpression
+          range: 5:7-5:30
+          (LiteralExpression
+            range: 5:7-5:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 5:21-5:30
+            name: "lastIndex"
+          )
+        )
+        (LiteralExpression
+          range: 5:31-5:38
+          kind: STRING
+          text: "\"hello\""
+        )
+        (LiteralExpression
+          range: 5:40-5:41
+          kind: INT
+          text: "5"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:43
+    (CallExpression
+      range: 6:1-6:42
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:41
+        (MemberExpression
+          range: 6:7-6:30
+          (LiteralExpression
+            range: 6:7-6:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 6:21-6:30
+            name: "lastIndex"
+          )
+        )
+        (LiteralExpression
+          range: 6:31-6:40
+          kind: STRING
+          text: "\"missing\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:36 -> void
+  1:7-1:20 -> string
+  1:7-1:26 -> (string) => i32 | null
+  1:7-1:35 -> i32 | null
+  1:21-1:26 -> (string) => i32 | null
+  1:27-1:34 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:39 -> void
+  2:7-2:20 -> string
+  2:7-2:26 -> (string, i32) => i32 | null
+  2:7-2:38 -> i32 | null
+  2:21-2:26 -> (string, i32) => i32 | null
+  2:27-2:34 -> string
+  2:36-2:37 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:38 -> void
+  3:7-3:20 -> string
+  3:7-3:26 -> (string) => i32 | null
+  3:7-3:37 -> i32 | null
+  3:21-3:26 -> (string) => i32 | null
+  3:27-3:36 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:40 -> void
+  4:7-4:20 -> string
+  4:7-4:30 -> (string) => i32 | null
+  4:7-4:39 -> i32 | null
+  4:21-4:30 -> (string) => i32 | null
+  4:31-4:38 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:43 -> void
+  5:7-5:20 -> string
+  5:7-5:30 -> (string, i32) => i32 | null
+  5:7-5:42 -> i32 | null
+  5:21-5:30 -> (string, i32) => i32 | null
+  5:31-5:38 -> string
+  5:40-5:41 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:42 -> void
+  6:7-6:20 -> string
+  6:7-6:30 -> (string) => i32 | null
+  6:7-6:41 -> i32 | null
+  6:21-6:30 -> (string) => i32 | null
+  6:31-6:40 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  1:21-1:26 -> EldString.index(string, string): i32 | null
+  2:1-2:6 -> builtin print
+  2:21-2:26 -> EldString.index(string, string, i32): i32 | null
+  3:1-3:6 -> builtin print
+  3:21-3:26 -> EldString.index(string, string): i32 | null
+  4:1-4:6 -> builtin print
+  4:21-4:30 -> EldString.lastIndex(string, string): i32 | null
+  5:1-5:6 -> builtin print
+  5:21-5:30 -> EldString.lastIndex(string, string, i32): i32 | null
+  6:1-6:6 -> builtin print
+  6:21-6:30 -> EldString.lastIndex(string, string): i32 | null
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "hello"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.index(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "world"
+    LDC 2
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.index(Ljava/lang/String;Ljava/lang/String;I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "missing"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.index(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lastIndex(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "hello"
+    LDC 5
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lastIndex(Ljava/lang/String;Ljava/lang/String;I)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "missing"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lastIndex(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Integer;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+0
+6
+null
+6
+0
+null

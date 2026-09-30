@@ -366,23 +366,23 @@ Declarations:
   4:7-4:12 -> const named: string | null
 
 References:
-  1:17-1:22 -> 1:17-1:22
-  1:23-1:30 -> Regex.compile(string): Regex
-  1:52-1:59 -> Regex.matcher(string): Matcher
+  1:17-1:22 -> java.util.regex.Pattern
+  1:23-1:30 -> java.util.regex.Pattern.compile(string): Regex
+  1:52-1:59 -> java.util.regex.Pattern.matcher(string): Matcher
   2:1-2:6 -> builtin print
   2:7-2:14 -> 1:7-1:14
-  2:15-2:22 -> Matcher.matches(): bool
+  2:15-2:22 -> java.util.regex.Matcher.matches(): bool
   3:33-3:40 -> 1:7-1:14
-  3:41-3:46 -> Matcher.group(i32): string | null
+  3:41-3:46 -> java.util.regex.Matcher.group(i32): string | null
   4:30-4:37 -> 1:7-1:14
-  4:38-4:43 -> Matcher.group(string): string | null
+  4:38-4:43 -> java.util.regex.Matcher.group(string): string | null
   5:1-5:6 -> builtin print
   5:7-5:15 -> 3:7-3:15
   6:1-6:6 -> builtin print
   6:7-6:12 -> 4:7-4:12
   7:1-7:6 -> builtin print
   7:7-7:14 -> 1:7-1:14
-  7:15-7:20 -> Matcher.group(): string
+  7:15-7:20 -> java.util.regex.Matcher.group(): string
 
 --- BYTECODE ---
 

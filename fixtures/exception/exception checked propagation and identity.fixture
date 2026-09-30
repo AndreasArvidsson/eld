@@ -259,7 +259,7 @@ Declarations:
   10:10-10:11 -> const e: IOException
 
 References:
-  1:35-1:46 -> 1:31-1:61
+  1:35-1:46 -> java.io.IOException
   3:11-3:19 -> 1:7-1:15
   6:5-6:9 -> 2:6-2:10
   9:5-9:12 -> 5:6-5:13
@@ -268,7 +268,7 @@ References:
   11:16-11:24 -> 1:7-1:15
   12:5-12:10 -> builtin print
   12:11-12:12 -> 10:10-10:11
-  12:13-12:23 -> IOException.getMessage(): string | null
+  12:13-12:23 -> java.lang.Throwable.getMessage(): string | null
 
 --- BYTECODE ---
 

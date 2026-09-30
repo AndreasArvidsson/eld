@@ -247,11 +247,11 @@ References:
   6:7-6:12 -> 4:7-4:12
   6:24-6:32 -> 2:7-2:15
   6:35-6:40 -> 4:7-4:12
-  6:41-6:49 -> DerivedA.getClass(): Type<DerivedA>
-  6:52-6:65 -> Type<DerivedA>.getSimpleName(): string
+  6:41-6:49 -> java.lang.Object.getClass(): Type<DerivedA>
+  6:52-6:65 -> java.lang.Class.getSimpleName(): string
   6:70-6:75 -> 4:7-4:12
-  6:76-6:84 -> Base.getClass(): Type<Base>
-  6:87-6:100 -> Type<Base>.getSimpleName(): string
+  6:76-6:84 -> java.lang.Object.getClass(): Type<Base>
+  6:87-6:100 -> java.lang.Class.getSimpleName(): string
 
 --- BYTECODE ---
 

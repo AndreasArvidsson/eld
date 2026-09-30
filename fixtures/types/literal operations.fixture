@@ -492,7 +492,7 @@ References:
   9:5-9:9 -> 8:7-8:11
   10:5-10:10 -> builtin print
   10:11-10:15 -> 6:7-6:11
-  10:16-10:24 -> string.toString(): string
+  10:16-10:24 -> java.lang.Object.toString(): string
   12:1-12:6 -> builtin print
   12:7-12:11 -> 6:7-6:11
   13:1-13:6 -> builtin print

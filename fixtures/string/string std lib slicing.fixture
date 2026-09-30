@@ -1,0 +1,621 @@
+print("hello world"[1]);
+print("hello world"[-1]);
+print("hello world"[:-1]);
+print("hello world"[0:]);
+print("hello world"[1:3]);
+print("hello world"[-5:]);
+print("hello world"[-5:-2]);
+print("hello world"[:]);
+print("hello"[100:]);
+print("hello"[:100]);
+print("hello"[-100:]);
+print("hello"[:-100]);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+LEFT_BRACKET (1:20-1:21)
+INTEGER_LITERAL "1" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+RIGHT_PAREN (1:23-1:24)
+SEMICOLON (1:24-1:25)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"hello world\"" (2:7-2:20)
+LEFT_BRACKET (2:20-2:21)
+MINUS (2:21-2:22)
+INTEGER_LITERAL "1" (2:22-2:23)
+RIGHT_BRACKET (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"hello world\"" (3:7-3:20)
+LEFT_BRACKET (3:20-3:21)
+COLON (3:21-3:22)
+MINUS (3:22-3:23)
+INTEGER_LITERAL "1" (3:23-3:24)
+RIGHT_BRACKET (3:24-3:25)
+RIGHT_PAREN (3:25-3:26)
+SEMICOLON (3:26-3:27)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"hello world\"" (4:7-4:20)
+LEFT_BRACKET (4:20-4:21)
+INTEGER_LITERAL "0" (4:21-4:22)
+COLON (4:22-4:23)
+RIGHT_BRACKET (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+SEMICOLON (4:25-4:26)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"hello world\"" (5:7-5:20)
+LEFT_BRACKET (5:20-5:21)
+INTEGER_LITERAL "1" (5:21-5:22)
+COLON (5:22-5:23)
+INTEGER_LITERAL "3" (5:23-5:24)
+RIGHT_BRACKET (5:24-5:25)
+RIGHT_PAREN (5:25-5:26)
+SEMICOLON (5:26-5:27)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"hello world\"" (6:7-6:20)
+LEFT_BRACKET (6:20-6:21)
+MINUS (6:21-6:22)
+INTEGER_LITERAL "5" (6:22-6:23)
+COLON (6:23-6:24)
+RIGHT_BRACKET (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"hello world\"" (7:7-7:20)
+LEFT_BRACKET (7:20-7:21)
+MINUS (7:21-7:22)
+INTEGER_LITERAL "5" (7:22-7:23)
+COLON (7:23-7:24)
+MINUS (7:24-7:25)
+INTEGER_LITERAL "2" (7:25-7:26)
+RIGHT_BRACKET (7:26-7:27)
+RIGHT_PAREN (7:27-7:28)
+SEMICOLON (7:28-7:29)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+STRING_LITERAL "\"hello world\"" (8:7-8:20)
+LEFT_BRACKET (8:20-8:21)
+COLON (8:21-8:22)
+RIGHT_BRACKET (8:22-8:23)
+RIGHT_PAREN (8:23-8:24)
+SEMICOLON (8:24-8:25)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+STRING_LITERAL "\"hello\"" (9:7-9:14)
+LEFT_BRACKET (9:14-9:15)
+INTEGER_LITERAL "100" (9:15-9:18)
+COLON (9:18-9:19)
+RIGHT_BRACKET (9:19-9:20)
+RIGHT_PAREN (9:20-9:21)
+SEMICOLON (9:21-9:22)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+STRING_LITERAL "\"hello\"" (10:7-10:14)
+LEFT_BRACKET (10:14-10:15)
+COLON (10:15-10:16)
+INTEGER_LITERAL "100" (10:16-10:19)
+RIGHT_BRACKET (10:19-10:20)
+RIGHT_PAREN (10:20-10:21)
+SEMICOLON (10:21-10:22)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+STRING_LITERAL "\"hello\"" (11:7-11:14)
+LEFT_BRACKET (11:14-11:15)
+MINUS (11:15-11:16)
+INTEGER_LITERAL "100" (11:16-11:19)
+COLON (11:19-11:20)
+RIGHT_BRACKET (11:20-11:21)
+RIGHT_PAREN (11:21-11:22)
+SEMICOLON (11:22-11:23)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+STRING_LITERAL "\"hello\"" (12:7-12:14)
+LEFT_BRACKET (12:14-12:15)
+COLON (12:15-12:16)
+MINUS (12:16-12:17)
+INTEGER_LITERAL "100" (12:17-12:20)
+RIGHT_BRACKET (12:20-12:21)
+RIGHT_PAREN (12:21-12:22)
+SEMICOLON (12:22-12:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-12:23
+  (ExpressionStatement
+    range: 1:1-1:25
+    (CallExpression
+      range: 1:1-1:24
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 1:7-1:23
+        (LiteralExpression
+          range: 1:7-1:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        (LiteralExpression
+          range: 1:21-1:22
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:26
+    (CallExpression
+      range: 2:1-2:25
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (SubscriptExpression
+        range: 2:7-2:24
+        (LiteralExpression
+          range: 2:7-2:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        (UnaryExpression
+          range: 2:21-2:23
+          operator: MINUS
+          (LiteralExpression
+            range: 2:22-2:23
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:27
+    (CallExpression
+      range: 3:1-3:26
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 3:7-3:25
+        (LiteralExpression
+          range: 3:7-3:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        startIndex: null
+        (UnaryExpression
+          range: 3:22-3:24
+          operator: MINUS
+          (LiteralExpression
+            range: 3:23-3:24
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:26
+    (CallExpression
+      range: 4:1-4:25
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 4:7-4:24
+        (LiteralExpression
+          range: 4:7-4:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        (LiteralExpression
+          range: 4:21-4:22
+          kind: INT
+          text: "0"
+        )
+        endIndex: null
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:27
+    (CallExpression
+      range: 5:1-5:26
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 5:7-5:25
+        (LiteralExpression
+          range: 5:7-5:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        (LiteralExpression
+          range: 5:21-5:22
+          kind: INT
+          text: "1"
+        )
+        (LiteralExpression
+          range: 5:23-5:24
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:27
+    (CallExpression
+      range: 6:1-6:26
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 6:7-6:25
+        (LiteralExpression
+          range: 6:7-6:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        (UnaryExpression
+          range: 6:21-6:23
+          operator: MINUS
+          (LiteralExpression
+            range: 6:22-6:23
+            kind: INT
+            text: "5"
+          )
+        )
+        endIndex: null
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:29
+    (CallExpression
+      range: 7:1-7:28
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 7:7-7:27
+        (LiteralExpression
+          range: 7:7-7:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        (UnaryExpression
+          range: 7:21-7:23
+          operator: MINUS
+          (LiteralExpression
+            range: 7:22-7:23
+            kind: INT
+            text: "5"
+          )
+        )
+        (UnaryExpression
+          range: 7:24-7:26
+          operator: MINUS
+          (LiteralExpression
+            range: 7:25-7:26
+            kind: INT
+            text: "2"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:25
+    (CallExpression
+      range: 8:1-8:24
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 8:7-8:23
+        (LiteralExpression
+          range: 8:7-8:20
+          kind: STRING
+          text: "\"hello world\""
+        )
+        startIndex: null
+        endIndex: null
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:22
+    (CallExpression
+      range: 9:1-9:21
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 9:7-9:20
+        (LiteralExpression
+          range: 9:7-9:14
+          kind: STRING
+          text: "\"hello\""
+        )
+        (LiteralExpression
+          range: 9:15-9:18
+          kind: INT
+          text: "100"
+        )
+        endIndex: null
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:22
+    (CallExpression
+      range: 10:1-10:21
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 10:7-10:20
+        (LiteralExpression
+          range: 10:7-10:14
+          kind: STRING
+          text: "\"hello\""
+        )
+        startIndex: null
+        (LiteralExpression
+          range: 10:16-10:19
+          kind: INT
+          text: "100"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:23
+    (CallExpression
+      range: 11:1-11:22
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 11:7-11:21
+        (LiteralExpression
+          range: 11:7-11:14
+          kind: STRING
+          text: "\"hello\""
+        )
+        (UnaryExpression
+          range: 11:15-11:19
+          operator: MINUS
+          (LiteralExpression
+            range: 11:16-11:19
+            kind: INT
+            text: "100"
+          )
+        )
+        endIndex: null
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:23
+    (CallExpression
+      range: 12:1-12:22
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (SliceExpression
+        range: 12:7-12:21
+        (LiteralExpression
+          range: 12:7-12:14
+          kind: STRING
+          text: "\"hello\""
+        )
+        startIndex: null
+        (UnaryExpression
+          range: 12:16-12:20
+          operator: MINUS
+          (LiteralExpression
+            range: 12:17-12:20
+            kind: INT
+            text: "100"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:24 -> void
+  1:7-1:20 -> string
+  1:7-1:23 -> char
+  1:21-1:22 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:25 -> void
+  2:7-2:20 -> string
+  2:7-2:24 -> char
+  2:21-2:23 -> i32
+  2:22-2:23 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:26 -> void
+  3:7-3:20 -> string
+  3:7-3:25 -> string
+  3:22-3:24 -> i32
+  3:23-3:24 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:25 -> void
+  4:7-4:20 -> string
+  4:7-4:24 -> string
+  4:21-4:22 -> i32
+  5:1-5:6 -> (any) => void
+  5:1-5:26 -> void
+  5:7-5:20 -> string
+  5:7-5:25 -> string
+  5:21-5:22 -> i32
+  5:23-5:24 -> i32
+  6:1-6:6 -> (any) => void
+  6:1-6:26 -> void
+  6:7-6:20 -> string
+  6:7-6:25 -> string
+  6:21-6:23 -> i32
+  6:22-6:23 -> i32
+  7:1-7:6 -> (any) => void
+  7:1-7:28 -> void
+  7:7-7:20 -> string
+  7:7-7:27 -> string
+  7:21-7:23 -> i32
+  7:22-7:23 -> i32
+  7:24-7:26 -> i32
+  7:25-7:26 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:24 -> void
+  8:7-8:20 -> string
+  8:7-8:23 -> string
+  9:1-9:6 -> (any) => void
+  9:1-9:21 -> void
+  9:7-9:14 -> string
+  9:7-9:20 -> string
+  9:15-9:18 -> i32
+  10:1-10:6 -> (any) => void
+  10:1-10:21 -> void
+  10:7-10:14 -> string
+  10:7-10:20 -> string
+  10:16-10:19 -> i32
+  11:1-11:6 -> (any) => void
+  11:1-11:22 -> void
+  11:7-11:14 -> string
+  11:7-11:21 -> string
+  11:15-11:19 -> i32
+  11:16-11:19 -> i32
+  12:1-12:6 -> (any) => void
+  12:1-12:22 -> void
+  12:7-12:14 -> string
+  12:7-12:21 -> string
+  12:16-12:20 -> i32
+  12:17-12:20 -> i32
+
+References:
+  1:1-1:6 -> builtin print
+  2:1-2:6 -> builtin print
+  3:1-3:6 -> builtin print
+  4:1-4:6 -> builtin print
+  5:1-5:6 -> builtin print
+  6:1-6:6 -> builtin print
+  7:1-7:6 -> builtin print
+  8:1-8:6 -> builtin print
+  9:1-9:6 -> builtin print
+  10:1-10:6 -> builtin print
+  11:1-11:6 -> builtin print
+  12:1-12:6 -> builtin print
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC 1
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.charAt(Ljava/lang/String;I)C
+    INVOKEVIRTUAL java/io/PrintStream.println(C)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC -1
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.charAt(Ljava/lang/String;I)C
+    INVOKEVIRTUAL java/io/PrintStream.println(C)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC -1
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceTo(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC 0
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceFrom(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC 1
+    LDC 3
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.slice(Ljava/lang/String;II)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC -5
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceFrom(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC -5
+    LDC -2
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.slice(Ljava/lang/String;II)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    LDC 100
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceFrom(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    LDC 100
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceTo(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    LDC -100
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceFrom(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    LDC -100
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.sliceTo(Ljava/lang/String;I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 4 max locals 0
+
+--- OUTPUT ---
+
+e
+d
+hello worl
+hello world
+el
+world
+wor
+hello world
+
+hello
+hello
+

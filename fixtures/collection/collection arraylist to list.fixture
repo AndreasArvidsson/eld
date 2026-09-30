@@ -68,7 +68,7 @@ Declarations:
   1:7-1:13 -> const values: List<i32>
 
 References:
-  1:31-1:40 -> 1:27-1:47
+  1:31-1:40 -> java.util.ArrayList
 
 --- BYTECODE ---
 

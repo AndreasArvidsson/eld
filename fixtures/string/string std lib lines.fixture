@@ -1,0 +1,326 @@
+print("".lines());
+print("hello world".lines());
+print("hello\nworld\n".lines());
+print("hello\r\nworld\r\n".lines());
+print("hello\n\nworld".lines());
+print("\n".lines().length);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"\"" (1:7-1:9)
+DOT (1:9-1:10)
+IDENTIFIER "lines" (1:10-1:15)
+LEFT_PAREN (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+RIGHT_PAREN (1:17-1:18)
+SEMICOLON (1:18-1:19)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"hello world\"" (2:7-2:20)
+DOT (2:20-2:21)
+IDENTIFIER "lines" (2:21-2:26)
+LEFT_PAREN (2:26-2:27)
+RIGHT_PAREN (2:27-2:28)
+RIGHT_PAREN (2:28-2:29)
+SEMICOLON (2:29-2:30)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"hello\\nworld\\n\"" (3:7-3:23)
+DOT (3:23-3:24)
+IDENTIFIER "lines" (3:24-3:29)
+LEFT_PAREN (3:29-3:30)
+RIGHT_PAREN (3:30-3:31)
+RIGHT_PAREN (3:31-3:32)
+SEMICOLON (3:32-3:33)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"hello\\r\\nworld\\r\\n\"" (4:7-4:27)
+DOT (4:27-4:28)
+IDENTIFIER "lines" (4:28-4:33)
+LEFT_PAREN (4:33-4:34)
+RIGHT_PAREN (4:34-4:35)
+RIGHT_PAREN (4:35-4:36)
+SEMICOLON (4:36-4:37)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"hello\\n\\nworld\"" (5:7-5:23)
+DOT (5:23-5:24)
+IDENTIFIER "lines" (5:24-5:29)
+LEFT_PAREN (5:29-5:30)
+RIGHT_PAREN (5:30-5:31)
+RIGHT_PAREN (5:31-5:32)
+SEMICOLON (5:32-5:33)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"\\n\"" (6:7-6:11)
+DOT (6:11-6:12)
+IDENTIFIER "lines" (6:12-6:17)
+LEFT_PAREN (6:17-6:18)
+RIGHT_PAREN (6:18-6:19)
+DOT (6:19-6:20)
+IDENTIFIER "length" (6:20-6:26)
+RIGHT_PAREN (6:26-6:27)
+SEMICOLON (6:27-6:28)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:28
+  (ExpressionStatement
+    range: 1:1-1:19
+    (CallExpression
+      range: 1:1-1:18
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:17
+        (MemberExpression
+          range: 1:7-1:15
+          (LiteralExpression
+            range: 1:7-1:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 1:10-1:15
+            name: "lines"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:30
+    (CallExpression
+      range: 2:1-2:29
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:28
+        (MemberExpression
+          range: 2:7-2:26
+          (LiteralExpression
+            range: 2:7-2:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 2:21-2:26
+            name: "lines"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:33
+    (CallExpression
+      range: 3:1-3:32
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:31
+        (MemberExpression
+          range: 3:7-3:29
+          (LiteralExpression
+            range: 3:7-3:23
+            kind: STRING
+            text: "\"hello\\nworld\\n\""
+          )
+          (IdentifierExpression
+            range: 3:24-3:29
+            name: "lines"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:37
+    (CallExpression
+      range: 4:1-4:36
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:35
+        (MemberExpression
+          range: 4:7-4:33
+          (LiteralExpression
+            range: 4:7-4:27
+            kind: STRING
+            text: "\"hello\\r\\nworld\\r\\n\""
+          )
+          (IdentifierExpression
+            range: 4:28-4:33
+            name: "lines"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:33
+    (CallExpression
+      range: 5:1-5:32
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:31
+        (MemberExpression
+          range: 5:7-5:29
+          (LiteralExpression
+            range: 5:7-5:23
+            kind: STRING
+            text: "\"hello\\n\\nworld\""
+          )
+          (IdentifierExpression
+            range: 5:24-5:29
+            name: "lines"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:28
+    (CallExpression
+      range: 6:1-6:27
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 6:7-6:26
+        (CallExpression
+          range: 6:7-6:19
+          (MemberExpression
+            range: 6:7-6:17
+            (LiteralExpression
+              range: 6:7-6:11
+              kind: STRING
+              text: "\"\\n\""
+            )
+            (IdentifierExpression
+              range: 6:12-6:17
+              name: "lines"
+            )
+          )
+        )
+        (IdentifierExpression
+          range: 6:20-6:26
+          name: "length"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:18 -> void
+  1:7-1:9 -> string
+  1:7-1:15 -> () => [string]
+  1:7-1:17 -> [string]
+  1:10-1:15 -> () => [string]
+  2:1-2:6 -> (any) => void
+  2:1-2:29 -> void
+  2:7-2:20 -> string
+  2:7-2:26 -> () => [string]
+  2:7-2:28 -> [string]
+  2:21-2:26 -> () => [string]
+  3:1-3:6 -> (any) => void
+  3:1-3:32 -> void
+  3:7-3:23 -> string
+  3:7-3:29 -> () => [string]
+  3:7-3:31 -> [string]
+  3:24-3:29 -> () => [string]
+  4:1-4:6 -> (any) => void
+  4:1-4:36 -> void
+  4:7-4:27 -> string
+  4:7-4:33 -> () => [string]
+  4:7-4:35 -> [string]
+  4:28-4:33 -> () => [string]
+  5:1-5:6 -> (any) => void
+  5:1-5:32 -> void
+  5:7-5:23 -> string
+  5:7-5:29 -> () => [string]
+  5:7-5:31 -> [string]
+  5:24-5:29 -> () => [string]
+  6:1-6:6 -> (any) => void
+  6:1-6:27 -> void
+  6:7-6:11 -> string
+  6:7-6:17 -> () => [string]
+  6:7-6:19 -> [string]
+  6:7-6:26 -> i32
+  6:12-6:17 -> () => [string]
+  6:20-6:26 -> i32
+
+References:
+  1:1-1:6 -> builtin print
+  1:10-1:15 -> EldString.lines(string): [string]
+  2:1-2:6 -> builtin print
+  2:21-2:26 -> EldString.lines(string): [string]
+  3:1-3:6 -> builtin print
+  3:24-3:29 -> EldString.lines(string): [string]
+  4:1-4:6 -> builtin print
+  4:28-4:33 -> EldString.lines(string): [string]
+  5:1-5:6 -> builtin print
+  5:24-5:29 -> EldString.lines(string): [string]
+  6:1-6:6 -> builtin print
+  6:12-6:17 -> EldString.lines(string): [string]
+  6:20-6:26 -> EldArray.length(): i32
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lines(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lines(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello\nworld\n"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lines(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello\r\nworld\r\n"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lines(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello\n\nworld"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lines(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "\n"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.lines(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldArray.length()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+[]
+[hello world]
+[hello, world]
+[hello, world]
+[hello, , world]
+1

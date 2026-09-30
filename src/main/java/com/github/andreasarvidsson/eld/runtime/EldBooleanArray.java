@@ -15,7 +15,7 @@ public final class EldBooleanArray extends EldArray<EldBooleanArray> {
     // 2. Internally in this class.
     public EldBooleanArray(final boolean[] elements) {
         this.elements = elements;
-        size = elements.length;
+        length = elements.length;
     }
 
     public boolean get(final int index) {
@@ -27,8 +27,8 @@ public final class EldBooleanArray extends EldArray<EldBooleanArray> {
     }
 
     public void add(final boolean value) {
-        ensureCapacity(size + 1);
-        elements[size++] = value;
+        ensureCapacity(length + 1);
+        elements[length++] = value;
     }
 
     public void copyTo(
@@ -81,14 +81,14 @@ public final class EldBooleanArray extends EldArray<EldBooleanArray> {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof EldBooleanArray other
-            && Arrays.equals(elements, 0, size, other.elements, 0, other.size);
+        return obj instanceof EldBooleanArray other && Arrays
+            .equals(elements, 0, length, other.elements, 0, other.length);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < length; i++) {
             result = 31 * result + Boolean.hashCode(elements[i]);
         }
         return result;

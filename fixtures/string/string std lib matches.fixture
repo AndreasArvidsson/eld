@@ -1,0 +1,305 @@
+print("hello world".matches(r"^hello"));
+print("hello world".matches(r"world"));
+print("hello world".matches(r"^world"));
+print("hello world".matches(r"^hello$"));
+print("hello world".matches(r"hello world"));
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "matches" (1:21-1:28)
+LEFT_PAREN (1:28-1:29)
+RAW_STRING_LITERAL "\"^hello\"" (1:29-1:38)
+RIGHT_PAREN (1:38-1:39)
+RIGHT_PAREN (1:39-1:40)
+SEMICOLON (1:40-1:41)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"hello world\"" (2:7-2:20)
+DOT (2:20-2:21)
+IDENTIFIER "matches" (2:21-2:28)
+LEFT_PAREN (2:28-2:29)
+RAW_STRING_LITERAL "\"world\"" (2:29-2:37)
+RIGHT_PAREN (2:37-2:38)
+RIGHT_PAREN (2:38-2:39)
+SEMICOLON (2:39-2:40)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"hello world\"" (3:7-3:20)
+DOT (3:20-3:21)
+IDENTIFIER "matches" (3:21-3:28)
+LEFT_PAREN (3:28-3:29)
+RAW_STRING_LITERAL "\"^world\"" (3:29-3:38)
+RIGHT_PAREN (3:38-3:39)
+RIGHT_PAREN (3:39-3:40)
+SEMICOLON (3:40-3:41)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"hello world\"" (4:7-4:20)
+DOT (4:20-4:21)
+IDENTIFIER "matches" (4:21-4:28)
+LEFT_PAREN (4:28-4:29)
+RAW_STRING_LITERAL "\"^hello$\"" (4:29-4:39)
+RIGHT_PAREN (4:39-4:40)
+RIGHT_PAREN (4:40-4:41)
+SEMICOLON (4:41-4:42)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"hello world\"" (5:7-5:20)
+DOT (5:20-5:21)
+IDENTIFIER "matches" (5:21-5:28)
+LEFT_PAREN (5:28-5:29)
+RAW_STRING_LITERAL "\"hello world\"" (5:29-5:43)
+RIGHT_PAREN (5:43-5:44)
+RIGHT_PAREN (5:44-5:45)
+SEMICOLON (5:45-5:46)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:46
+  (ExpressionStatement
+    range: 1:1-1:41
+    (CallExpression
+      range: 1:1-1:40
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:39
+        (MemberExpression
+          range: 1:7-1:28
+          (LiteralExpression
+            range: 1:7-1:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 1:21-1:28
+            name: "matches"
+          )
+        )
+        (LiteralExpression
+          range: 1:29-1:38
+          kind: RAW_STRING
+          text: "\"^hello\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:40
+    (CallExpression
+      range: 2:1-2:39
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:38
+        (MemberExpression
+          range: 2:7-2:28
+          (LiteralExpression
+            range: 2:7-2:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 2:21-2:28
+            name: "matches"
+          )
+        )
+        (LiteralExpression
+          range: 2:29-2:37
+          kind: RAW_STRING
+          text: "\"world\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:41
+    (CallExpression
+      range: 3:1-3:40
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:39
+        (MemberExpression
+          range: 3:7-3:28
+          (LiteralExpression
+            range: 3:7-3:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 3:21-3:28
+            name: "matches"
+          )
+        )
+        (LiteralExpression
+          range: 3:29-3:38
+          kind: RAW_STRING
+          text: "\"^world\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:42
+    (CallExpression
+      range: 4:1-4:41
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:40
+        (MemberExpression
+          range: 4:7-4:28
+          (LiteralExpression
+            range: 4:7-4:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 4:21-4:28
+            name: "matches"
+          )
+        )
+        (LiteralExpression
+          range: 4:29-4:39
+          kind: RAW_STRING
+          text: "\"^hello$\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:46
+    (CallExpression
+      range: 5:1-5:45
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:44
+        (MemberExpression
+          range: 5:7-5:28
+          (LiteralExpression
+            range: 5:7-5:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 5:21-5:28
+            name: "matches"
+          )
+        )
+        (LiteralExpression
+          range: 5:29-5:43
+          kind: RAW_STRING
+          text: "\"hello world\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:40 -> void
+  1:7-1:20 -> string
+  1:7-1:28 -> (string) => bool
+  1:7-1:39 -> bool
+  1:21-1:28 -> (string) => bool
+  1:29-1:38 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:39 -> void
+  2:7-2:20 -> string
+  2:7-2:28 -> (string) => bool
+  2:7-2:38 -> bool
+  2:21-2:28 -> (string) => bool
+  2:29-2:37 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:40 -> void
+  3:7-3:20 -> string
+  3:7-3:28 -> (string) => bool
+  3:7-3:39 -> bool
+  3:21-3:28 -> (string) => bool
+  3:29-3:38 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:41 -> void
+  4:7-4:20 -> string
+  4:7-4:28 -> (string) => bool
+  4:7-4:40 -> bool
+  4:21-4:28 -> (string) => bool
+  4:29-4:39 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:45 -> void
+  5:7-5:20 -> string
+  5:7-5:28 -> (string) => bool
+  5:7-5:44 -> bool
+  5:21-5:28 -> (string) => bool
+  5:29-5:43 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  1:21-1:28 -> EldString.matches(string, string): bool
+  2:1-2:6 -> builtin print
+  2:21-2:28 -> EldString.matches(string, string): bool
+  3:1-3:6 -> builtin print
+  3:21-3:28 -> EldString.matches(string, string): bool
+  4:1-4:6 -> builtin print
+  4:21-4:28 -> EldString.matches(string, string): bool
+  5:1-5:6 -> builtin print
+  5:21-5:28 -> EldString.matches(string, string): bool
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "^hello"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.matches(Ljava/lang/String;Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.matches(Ljava/lang/String;Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "^world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.matches(Ljava/lang/String;Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "^hello$"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.matches(Ljava/lang/String;Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "hello world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.matches(Ljava/lang/String;Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+false
+false
+true

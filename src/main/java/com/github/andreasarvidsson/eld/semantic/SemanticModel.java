@@ -1228,18 +1228,28 @@ public final class SemanticModel {
                 if (symbol instanceof BuiltinFunctionSymbol) {
                     return "builtin " + symbol.name();
                 }
+                if (symbol instanceof JavaClassSymbol javaClass) {
+                    final Class<?> type =
+                        Objects.requireNonNull(javaClass.type().javaClass());
+                    return formatJavaClassName(type);
+                }
                 if (
                     expression instanceof IdentifierExpression identifier
                         && symbol instanceof JavaMethodSymbol method
                 ) {
                     final Type owner = memberReferenceOwners.get(identifier);
                     if (owner != null) {
+                        final List<Type> parameters = new ArrayList<>();
+                        if (method.receiverAsFirstArgument()) {
+                            parameters.add(owner);
+                        }
+                        parameters.addAll(method.type().parameterTypes());
                         return "%s.%s(%s): %s".formatted(
-                            owner,
+                            formatJavaClassName(
+                                method.method().getDeclaringClass()
+                            ),
                             method.name(),
-                            method.type()
-                                .parameterTypes()
-                                .stream()
+                            parameters.stream()
                                 .map(Type::toString)
                                 .collect(Collectors.joining(", ")),
                             method.type().returnType()
@@ -1256,6 +1266,13 @@ public final class SemanticModel {
             (argument, parameter) -> "parameter " + parameter.range()
         );
         return Objects.requireNonNull(String.join("\n", lines).stripTrailing());
+    }
+
+    private static String formatJavaClassName(final Class<?> type) {
+        return type.getPackageName()
+            .equals("com.github.andreasarvidsson.eld.runtime")
+                ? type.getSimpleName()
+                : type.getName();
     }
 
     private String formatDeclaration(final Symbol symbol) {

@@ -2095,7 +2095,8 @@ public final class BytecodeGenerator {
                 final boolean staticMethod =
                     (memberSymbol instanceof JavaMethodSymbol javaMethod
                         && java.lang.reflect.Modifier
-                            .isStatic(javaMethod.method().getModifiers()))
+                            .isStatic(javaMethod.method().getModifiers())
+                        && !javaMethod.receiverAsFirstArgument())
                         || semanticModel.isStaticMember(memberSymbol);
                 if (!staticMethod) {
                     operands.add(member.target());
@@ -8039,7 +8040,7 @@ public final class BytecodeGenerator {
                 method.labelBinding(start);
                 loadLoopIndex(loopIndex);
                 loadFrameTemporary(statement.iterable());
-                arrayCall(value.type(), RuntimeAbi.ArrayMethod.SIZE);
+                arrayCall(value.type(), RuntimeAbi.ArrayMethod.LENGTH);
                 method.branch(IF_ICMPGE, end);
                 prepareStore(value);
                 loadFrameTemporary(statement.iterable());
@@ -8082,7 +8083,7 @@ public final class BytecodeGenerator {
             method.labelBinding(start);
             method.iload(index);
             method.aload(array);
-            arrayCall(value.type(), RuntimeAbi.ArrayMethod.SIZE);
+            arrayCall(value.type(), RuntimeAbi.ArrayMethod.LENGTH);
             method.branch(IF_ICMPGE, end);
             method.aload(array);
             method.iload(index);
@@ -8870,7 +8871,30 @@ public final class BytecodeGenerator {
                         }
                         else {
                             arrayIndex(index);
-                            arrayGet(semanticModel.getExpressionType(index));
+                            if (
+                                LiteralType.unwrap(
+                                    ConstType.unwrap(
+                                        semanticModel
+                                            .getExpressionType(index.target())
+                                    )
+                                ) == BuiltinType.STRING
+                            ) {
+                                method.invoke(
+                                    INVOKESTATIC,
+                                    classDesc(
+                                        "com/github/andreasarvidsson/eld/runtime/EldString"
+                                    ),
+                                    "charAt",
+                                    MethodTypeDesc
+                                        .ofDescriptor("(Ljava/lang/String;I)C"),
+                                    false
+                                );
+                            }
+                            else {
+                                arrayGet(
+                                    semanticModel.getExpressionType(index)
+                                );
+                            }
                         }
                     }
                     case SliceExpression slice -> slice(slice);
@@ -10386,14 +10410,20 @@ public final class BytecodeGenerator {
                 final boolean isStatic =
                     java.lang.reflect.Modifier
                         .isStatic(javaMethod.getModifiers());
-                if (!isStatic) {
+                final boolean extension = function.receiverAsFirstArgument();
+                if (!isStatic || extension) {
                     expression(member.target());
-                    box(semanticModel.getEffectiveType(member.target()));
+                    if (!extension) {
+                        box(semanticModel.getEffectiveType(member.target()));
+                    }
                 }
                 for (int i = 0; i < call.arguments().size(); i++) {
                     final Expression argument = call.arguments().get(i);
                     expression(argument);
-                    if (!javaMethod.getParameterTypes()[i].isPrimitive()) {
+                    if (
+                        !javaMethod.getParameterTypes()[i + (extension ? 1 : 0)]
+                            .isPrimitive()
+                    ) {
                         box(semanticModel.getEffectiveType(argument));
                     }
                 }
@@ -11000,7 +11030,7 @@ public final class BytecodeGenerator {
                     method.astore(value);
                     final int length = nextLocal++;
                     method.aload(value);
-                    arrayCall(sourceElement, RuntimeAbi.ArrayMethod.SIZE);
+                    arrayCall(sourceElement, RuntimeAbi.ArrayMethod.LENGTH);
                     method.istore(length);
                     lengths.add(length);
                     method.iload(total);
@@ -11301,6 +11331,27 @@ public final class BytecodeGenerator {
             if (end != null) {
                 expression(end);
             }
+            if (semanticModel.getExpressionType(slice) == BuiltinType.STRING) {
+                if (start == null && end == null) {
+                    return;
+                }
+                method.invoke(
+                    INVOKESTATIC,
+                    classDesc(
+                        "com/github/andreasarvidsson/eld/runtime/EldString"
+                    ),
+                    start == null
+                        ? "sliceTo"
+                        : end == null ? "sliceFrom" : "slice",
+                    MethodTypeDesc.ofDescriptor(
+                        start == null || end == null
+                            ? "(Ljava/lang/String;I)Ljava/lang/String;"
+                            : "(Ljava/lang/String;II)Ljava/lang/String;"
+                    ),
+                    false
+                );
+                return;
+            }
             arrayCall(
                 arrayType(semanticModel.getExpressionType(slice)).elementType(),
                 start == null
@@ -11446,6 +11497,24 @@ public final class BytecodeGenerator {
         private void member(final MemberExpression member) {
             final Symbol symbol = semanticModel.getReference(member.member());
             if (
+                symbol instanceof JavaMethodSymbol javaMethod
+                    && javaMethod.property()
+                    && !(semanticModel
+                        .getExpressionType(member) instanceof FunctionType)
+            ) {
+                expression(member.target());
+                method.invoke(
+                    javaMethod.receiverAsFirstArgument()
+                        ? INVOKESTATIC
+                        : INVOKEVIRTUAL,
+                    javaMethodOwner(member, javaMethod.method()),
+                    javaMethod.name(),
+                    javaMethodDescriptor(javaMethod.method()),
+                    false
+                );
+                return;
+            }
+            if (
                 semanticModel
                     .getMemberOwner(member) instanceof PromiseSourceType
                     && member.member().name().equals("promise")
@@ -11499,6 +11568,7 @@ public final class BytecodeGenerator {
                 if (
                     !java.lang.reflect.Modifier
                         .isStatic(javaMethod.getModifiers())
+                        || function.receiverAsFirstArgument()
                 ) {
                     expression(member.target());
                     box(semanticModel.getEffectiveType(member.target()));

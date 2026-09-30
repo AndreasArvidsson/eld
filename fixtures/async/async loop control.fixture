@@ -1150,7 +1150,7 @@ class Test$$async0 extends java/lang/Object version 65.0 flags [FINAL, SUPER, SY
     LDC "I"
     INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldArray.fromObjectArray(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
     CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.length()I
     IF_ICMPGE L36
     ALOAD_0 0
     ALOAD_0 0

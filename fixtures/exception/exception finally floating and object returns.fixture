@@ -269,13 +269,13 @@ Declarations:
 
 References:
   5:9-5:14 -> builtin print
-  10:20-10:31 -> 10:16-10:40
+  10:20-10:31 -> java.io.IOException
   12:9-12:14 -> builtin print
   15:1-15:6 -> builtin print
   15:7-15:15 -> 1:6-1:14
   16:1-16:6 -> builtin print
   16:7-16:13 -> 8:6-8:12
-  16:16-16:26 -> IOException.getMessage(): string | null
+  16:16-16:26 -> java.lang.Throwable.getMessage(): string | null
 
 --- BYTECODE ---
 

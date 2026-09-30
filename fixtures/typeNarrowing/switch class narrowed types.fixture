@@ -279,8 +279,8 @@ References:
   7:10-7:18 -> 2:7-2:15
   7:22-7:27 -> builtin print
   7:28-7:33 -> 4:7-4:12
-  7:34-7:42 -> DerivedA.getClass(): Type<DerivedA>
-  7:45-7:58 -> Type<DerivedA>.getSimpleName(): string
+  7:34-7:42 -> java.lang.Object.getClass(): Type<DerivedA>
+  7:45-7:58 -> java.lang.Class.getSimpleName(): string
   8:10-8:18 -> 3:7-3:15
   8:22-8:27 -> builtin print
   8:28-8:33 -> 4:7-4:12

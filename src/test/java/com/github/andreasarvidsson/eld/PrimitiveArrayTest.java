@@ -65,7 +65,7 @@ class PrimitiveArrayTest {
             assertEquals(type, from.getReturnType());
             assertEquals(type, to.getReturnType());
             assertEquals(type, slice.getReturnType());
-            assertEquals(0, array.size());
+            assertEquals(0, array.length());
             assertEquals("[]", array.toString());
             assertEquals("[]", slice.invoke(array, 0, 0).toString());
             assertEquals("[]", from.invoke(array, 0).toString());
@@ -75,7 +75,7 @@ class PrimitiveArrayTest {
             for (int i = 0; i < 101; i++) {
                 add.invoke(array, value);
             }
-            assertEquals(101, array.size());
+            assertEquals(101, array.length());
             for (int i = 0; i < 101; i++) {
                 assertEquals(value, get.invoke(array, i));
                 assertEquals(value, get.invoke(array, i - 101));
@@ -86,7 +86,7 @@ class PrimitiveArrayTest {
                 (EldArray<?>) type.getMethod("copy").invoke(array);
             assertEquals(type, copy.getClass());
             assertNotSame(array, copy);
-            assertEquals(101, copy.size());
+            assertEquals(101, copy.length());
             assertEquals(array.toString(), copy.toString());
             final Object zero =
                 java.lang.reflect.Array
@@ -94,8 +94,8 @@ class PrimitiveArrayTest {
             set.invoke(copy, 0, zero);
             assertEquals(value, get.invoke(array, 0));
             add.invoke(copy, value);
-            assertEquals(102, copy.size());
-            assertEquals(101, array.size());
+            assertEquals(102, copy.length());
+            assertEquals(101, array.length());
             assertEquals(
                 "[" + value + "]",
                 slice.invoke(array, -1, 101).toString()
@@ -108,7 +108,7 @@ class PrimitiveArrayTest {
                 (EldArray<?>) slice.invoke(array, -2, -1);
             set.invoke(middle, 0, zero);
             assertEquals(value, get.invoke(array, -2));
-            assertEquals(101, ((EldArray<?>) to.invoke(array, 101)).size());
+            assertEquals(101, ((EldArray<?>) to.invoke(array, 101)).length());
             rejects(get, array, 101);
             rejects(set, array, 101, value);
             for (final int index : new int[] {-102, 102, Integer.MIN_VALUE,
@@ -127,7 +127,7 @@ class PrimitiveArrayTest {
             final EldArray<?> literal =
                 (EldArray<?>) type.getConstructor(backing.getClass())
                     .newInstance(backing);
-            assertEquals(1, literal.size());
+            assertEquals(1, literal.length());
             assertEquals(value, get.invoke(literal, 0));
         }
     }
@@ -274,7 +274,7 @@ class PrimitiveArrayTest {
             assertEquals(kind.runtimeClass, type.getField("empty").getType());
             assertEquals(
                 0,
-                ((EldArray<?>) type.getField("empty").get(null)).size()
+                ((EldArray<?>) type.getField("empty").get(null)).length()
             );
             assertEquals(example.value(), type.getField("first").get(null));
             assertEquals(example.value(), type.getField("last").get(null));
@@ -286,25 +286,25 @@ class PrimitiveArrayTest {
             for (final String field : new String[] {"copy", "full"}) {
                 final EldArray<?> result =
                     (EldArray<?>) type.getField(field).get(null);
-                assertEquals(3, result.size());
+                assertEquals(3, result.length());
                 assertNotSame(values, result);
                 assertEquals(values.toString(), result.toString());
             }
             assertEquals(
                 2,
-                ((EldArray<?>) type.getField("tail").get(null)).size()
+                ((EldArray<?>) type.getField("tail").get(null)).length()
             );
             assertEquals(
                 2,
-                ((EldArray<?>) type.getField("head").get(null)).size()
+                ((EldArray<?>) type.getField("head").get(null)).length()
             );
             assertEquals(
                 1,
-                ((EldArray<?>) type.getField("middle").get(null)).size()
+                ((EldArray<?>) type.getField("middle").get(null)).length()
             );
             assertEquals(
                 0,
-                ((EldArray<?>) type.getField("endEmpty").get(null)).size()
+                ((EldArray<?>) type.getField("endEmpty").get(null)).length()
             );
             assertSame(
                 values,

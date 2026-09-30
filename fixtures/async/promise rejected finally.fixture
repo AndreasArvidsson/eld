@@ -227,7 +227,7 @@ Declarations:
   5:12-5:13 -> const e: Exception
 
 References:
-  3:34-3:43 -> 3:30-3:55
+  3:34-3:43 -> java.lang.Exception
   6:9-6:14 -> builtin print
   9:9-9:14 -> builtin print
   12:5-12:10 -> builtin print

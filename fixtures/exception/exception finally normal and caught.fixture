@@ -309,10 +309,10 @@ Declarations:
 References:
   2:5-2:10 -> builtin print
   4:5-4:10 -> builtin print
-  7:15-7:26 -> 7:11-7:36
+  7:15-7:26 -> java.io.IOException
   9:5-9:10 -> builtin print
   9:11-9:12 -> 8:10-8:11
-  9:13-9:23 -> IOException.getMessage(): string | null
+  9:13-9:23 -> java.lang.Throwable.getMessage(): string | null
   11:5-11:10 -> builtin print
   14:5-14:10 -> builtin print
   16:5-16:10 -> builtin print

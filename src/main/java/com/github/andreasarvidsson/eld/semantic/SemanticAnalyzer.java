@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
+import com.github.andreasarvidsson.eld.runtime.EldString;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
 import com.github.andreasarvidsson.eld.parser.AssignmentStatement;
 import com.github.andreasarvidsson.eld.parser.AstNode;
@@ -750,6 +751,12 @@ public final class SemanticAnalyzer {
         final var method = symbol.method();
         final Class<?> owner = method.getDeclaringClass();
         if (
+            symbol.property() || owner == String.class
+                || owner == EldString.class
+        ) {
+            return true;
+        }
+        if (
             method.getName().equals("compareTo")
                 && (owner == Byte.class || owner == Short.class
                     || owner == Integer.class
@@ -758,7 +765,6 @@ public final class SemanticAnalyzer {
                     || owner == Double.class
                     || owner == Character.class
                     || owner == Boolean.class
-                    || owner == String.class
                     || owner == BigInteger.class)
         ) {
             return true;

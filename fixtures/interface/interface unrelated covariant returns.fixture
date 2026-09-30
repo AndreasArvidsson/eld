@@ -483,11 +483,11 @@ References:
   23:28-23:34 -> 11:10-11:16
   24:1-24:6 -> builtin print
   24:7-24:17 -> 22:7-22:17
-  24:18-24:24 -> First.equals(First): bool
+  24:18-24:24 -> java.lang.Object.equals(First): bool
   24:25-24:35 -> 22:7-22:17
   25:1-25:6 -> builtin print
   25:7-25:18 -> 23:7-23:18
-  25:19-25:25 -> Second.equals(Second): bool
+  25:19-25:25 -> java.lang.Object.equals(Second): bool
   25:26-25:37 -> 23:7-23:18
 
 --- BYTECODE ---

@@ -398,6 +398,72 @@ public final class SemanticAnalyzerExpressions {
                         && model.getReference(
                             identifier
                         ) instanceof ClassDeclarationSymbol;
+                if (memberTarget == BuiltinType.STRING) {
+                    List<JavaMethodSymbol> candidates =
+                        StringMethods.methods(
+                            member.member().name(),
+                            callArity,
+                            member.range()
+                        );
+                    if (candidates.size() > 1 && analyzingCallee) {
+                        final List<Expression> supplied = javaCallArguments;
+                        final List<Type> arguments =
+                            supplied.stream()
+                                .map(
+                                    argument -> analyzeExpression(
+                                        argument,
+                                        context
+                                    )
+                                )
+                                .toList();
+                        candidates = candidates.stream().filter(candidate -> {
+                            for (int i = 0; i < arguments.size(); i++) {
+                                if (
+                                    !analyzer.canAssignJavaArgument(
+                                        arguments.get(i),
+                                        candidate.type()
+                                            .parameterTypes()
+                                            .get(i),
+                                        supplied.get(i)
+                                    )
+                                ) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }).toList();
+                    }
+                    if (candidates.size() == 1) {
+                        final JavaMethodSymbol symbol = candidates.getFirst();
+                        model.setMemberOwner(member, memberTarget);
+                        model.setReference(member.member(), symbol);
+                        final Type exposed =
+                            !analyzingCallee && symbol.property()
+                                ? symbol.type().returnType()
+                                : symbol.type();
+                        model.setExpressionType(member.member(), exposed);
+                        yield exposed;
+                    }
+                    if (!candidates.isEmpty()) {
+                        throw new SemanticException(
+                            member.range(),
+                            "Ambiguous string method '%s' with %s arguments",
+                            member.member().name(),
+                            callArity
+                        );
+                    }
+                    final Type objectMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (objectMethod != null) {
+                        yield objectMethod;
+                    }
+                    throw new SemanticException(
+                        member.range(),
+                        "Unknown string method '%s' with %s arguments",
+                        member.member().name(),
+                        callArity
+                    );
+                }
                 if (
                     !classTarget && member.member().name().equals("equals")
                         && (analyzingCallee || !hasEqualityField(memberTarget))
@@ -503,9 +569,29 @@ public final class SemanticAnalyzerExpressions {
                         "Unsupported Promise API member: " + name
                     );
                 }
+                if (memberTarget instanceof ArrayType array) {
+                    final List<JavaMethodSymbol> candidates =
+                        ArrayMethods.methods(
+                            member.member().name(),
+                            callArity,
+                            member.range()
+                        );
+                    if (!candidates.isEmpty()) {
+                        final JavaMethodSymbol symbol = candidates.getFirst();
+                        model.setMemberOwner(member, array);
+                        model.setReference(member.member(), symbol);
+                        final Type exposed =
+                            !analyzingCallee && symbol.property()
+                                ? symbol.type().returnType()
+                                : symbol.type();
+                        model.setExpressionType(member.member(), exposed);
+                        yield exposed;
+                    }
+                }
                 if (
-                    memberTarget instanceof ArrayType array
-                        && member.member().name().equals("sort")
+                    memberTarget instanceof ArrayType array && member.member()
+                        .name()
+                        .equals(ArrayMethods.SORT.name())
                 ) {
                     if (target instanceof ConstType) {
                         throw new SemanticException(
@@ -531,13 +617,7 @@ public final class SemanticAnalyzerExpressions {
                         );
                     }
                     model.setMemberOwner(member, array);
-                    model.setReference(
-                        member.member(),
-                        new BuiltinFunctionSymbol(
-                            "sort",
-                            BuiltinFunctionType.ARRAY_SORT
-                        )
-                    );
+                    model.setReference(member.member(), ArrayMethods.SORT);
                     model.setExpressionType(
                         member.member(),
                         BuiltinFunctionType.ARRAY_SORT

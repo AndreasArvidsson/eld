@@ -1,0 +1,169 @@
+print("hello world".isEmpty());
+print("".isEmpty());
+print("  ".isEmpty());
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "isEmpty" (1:21-1:28)
+LEFT_PAREN (1:28-1:29)
+RIGHT_PAREN (1:29-1:30)
+RIGHT_PAREN (1:30-1:31)
+SEMICOLON (1:31-1:32)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"\"" (2:7-2:9)
+DOT (2:9-2:10)
+IDENTIFIER "isEmpty" (2:10-2:17)
+LEFT_PAREN (2:17-2:18)
+RIGHT_PAREN (2:18-2:19)
+RIGHT_PAREN (2:19-2:20)
+SEMICOLON (2:20-2:21)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"  \"" (3:7-3:11)
+DOT (3:11-3:12)
+IDENTIFIER "isEmpty" (3:12-3:19)
+LEFT_PAREN (3:19-3:20)
+RIGHT_PAREN (3:20-3:21)
+RIGHT_PAREN (3:21-3:22)
+SEMICOLON (3:22-3:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:23
+  (ExpressionStatement
+    range: 1:1-1:32
+    (CallExpression
+      range: 1:1-1:31
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:30
+        (MemberExpression
+          range: 1:7-1:28
+          (LiteralExpression
+            range: 1:7-1:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 1:21-1:28
+            name: "isEmpty"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:21
+    (CallExpression
+      range: 2:1-2:20
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:19
+        (MemberExpression
+          range: 2:7-2:17
+          (LiteralExpression
+            range: 2:7-2:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 2:10-2:17
+            name: "isEmpty"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:23
+    (CallExpression
+      range: 3:1-3:22
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:21
+        (MemberExpression
+          range: 3:7-3:19
+          (LiteralExpression
+            range: 3:7-3:11
+            kind: STRING
+            text: "\"  \""
+          )
+          (IdentifierExpression
+            range: 3:12-3:19
+            name: "isEmpty"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:31 -> void
+  1:7-1:20 -> string
+  1:7-1:28 -> () => bool
+  1:7-1:30 -> bool
+  1:21-1:28 -> () => bool
+  2:1-2:6 -> (any) => void
+  2:1-2:20 -> void
+  2:7-2:9 -> string
+  2:7-2:17 -> () => bool
+  2:7-2:19 -> bool
+  2:10-2:17 -> () => bool
+  3:1-3:6 -> (any) => void
+  3:1-3:22 -> void
+  3:7-3:11 -> string
+  3:7-3:19 -> () => bool
+  3:7-3:21 -> bool
+  3:12-3:19 -> () => bool
+
+References:
+  1:1-1:6 -> builtin print
+  1:21-1:28 -> java.lang.String.isEmpty(): bool
+  2:1-2:6 -> builtin print
+  2:10-2:17 -> java.lang.String.isEmpty(): bool
+  3:1-3:6 -> builtin print
+  3:12-3:19 -> java.lang.String.isEmpty(): bool
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKEVIRTUAL java/lang/String.isEmpty()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKEVIRTUAL java/lang/String.isEmpty()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "  "
+    INVOKEVIRTUAL java/lang/String.isEmpty()Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+false
+true
+false

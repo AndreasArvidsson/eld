@@ -15,7 +15,7 @@ public final class EldLongArray extends EldArray<EldLongArray> {
     // 2. Internally in this class.
     public EldLongArray(final long[] elements) {
         this.elements = elements;
-        size = elements.length;
+        length = elements.length;
     }
 
     public long get(final int index) {
@@ -27,8 +27,8 @@ public final class EldLongArray extends EldArray<EldLongArray> {
     }
 
     public void add(final long value) {
-        ensureCapacity(size + 1);
-        elements[size++] = value;
+        ensureCapacity(length + 1);
+        elements[length++] = value;
     }
 
     public void copyTo(
@@ -45,7 +45,7 @@ public final class EldLongArray extends EldArray<EldLongArray> {
     }
 
     public void sort() {
-        Arrays.sort(elements, 0, size);
+        Arrays.sort(elements, 0, length);
     }
 
     @Override
@@ -85,14 +85,14 @@ public final class EldLongArray extends EldArray<EldLongArray> {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof EldLongArray other
-            && Arrays.equals(elements, 0, size, other.elements, 0, other.size);
+        return obj instanceof EldLongArray other && Arrays
+            .equals(elements, 0, length, other.elements, 0, other.length);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < length; i++) {
             result = 31 * result + Long.hashCode(elements[i]);
         }
         return result;

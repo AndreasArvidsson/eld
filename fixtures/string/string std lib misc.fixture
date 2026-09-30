@@ -1,0 +1,313 @@
+print("hello world".hashCode());
+print("hello world".bytes());
+print("å".bytes());
+print("😀".bytes());
+print("hello world".chars());
+print("a😀b".chars());
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "hashCode" (1:21-1:29)
+LEFT_PAREN (1:29-1:30)
+RIGHT_PAREN (1:30-1:31)
+RIGHT_PAREN (1:31-1:32)
+SEMICOLON (1:32-1:33)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"hello world\"" (2:7-2:20)
+DOT (2:20-2:21)
+IDENTIFIER "bytes" (2:21-2:26)
+LEFT_PAREN (2:26-2:27)
+RIGHT_PAREN (2:27-2:28)
+RIGHT_PAREN (2:28-2:29)
+SEMICOLON (2:29-2:30)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"å\"" (3:7-3:10)
+DOT (3:10-3:11)
+IDENTIFIER "bytes" (3:11-3:16)
+LEFT_PAREN (3:16-3:17)
+RIGHT_PAREN (3:17-3:18)
+RIGHT_PAREN (3:18-3:19)
+SEMICOLON (3:19-3:20)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"😀\"" (4:7-4:11)
+DOT (4:11-4:12)
+IDENTIFIER "bytes" (4:12-4:17)
+LEFT_PAREN (4:17-4:18)
+RIGHT_PAREN (4:18-4:19)
+RIGHT_PAREN (4:19-4:20)
+SEMICOLON (4:20-4:21)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"hello world\"" (5:7-5:20)
+DOT (5:20-5:21)
+IDENTIFIER "chars" (5:21-5:26)
+LEFT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+RIGHT_PAREN (5:28-5:29)
+SEMICOLON (5:29-5:30)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"a😀b\"" (6:7-6:13)
+DOT (6:13-6:14)
+IDENTIFIER "chars" (6:14-6:19)
+LEFT_PAREN (6:19-6:20)
+RIGHT_PAREN (6:20-6:21)
+RIGHT_PAREN (6:21-6:22)
+SEMICOLON (6:22-6:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:23
+  (ExpressionStatement
+    range: 1:1-1:33
+    (CallExpression
+      range: 1:1-1:32
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:31
+        (MemberExpression
+          range: 1:7-1:29
+          (LiteralExpression
+            range: 1:7-1:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 1:21-1:29
+            name: "hashCode"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:30
+    (CallExpression
+      range: 2:1-2:29
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:28
+        (MemberExpression
+          range: 2:7-2:26
+          (LiteralExpression
+            range: 2:7-2:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 2:21-2:26
+            name: "bytes"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:20
+    (CallExpression
+      range: 3:1-3:19
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:18
+        (MemberExpression
+          range: 3:7-3:16
+          (LiteralExpression
+            range: 3:7-3:10
+            kind: STRING
+            text: "\"å\""
+          )
+          (IdentifierExpression
+            range: 3:11-3:16
+            name: "bytes"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:21
+    (CallExpression
+      range: 4:1-4:20
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:19
+        (MemberExpression
+          range: 4:7-4:17
+          (LiteralExpression
+            range: 4:7-4:11
+            kind: STRING
+            text: "\"😀\""
+          )
+          (IdentifierExpression
+            range: 4:12-4:17
+            name: "bytes"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:30
+    (CallExpression
+      range: 5:1-5:29
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:28
+        (MemberExpression
+          range: 5:7-5:26
+          (LiteralExpression
+            range: 5:7-5:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 5:21-5:26
+            name: "chars"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:23
+    (CallExpression
+      range: 6:1-6:22
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:21
+        (MemberExpression
+          range: 6:7-6:19
+          (LiteralExpression
+            range: 6:7-6:13
+            kind: STRING
+            text: "\"a😀b\""
+          )
+          (IdentifierExpression
+            range: 6:14-6:19
+            name: "chars"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:32 -> void
+  1:7-1:20 -> string
+  1:7-1:29 -> () => i32
+  1:7-1:31 -> i32
+  1:21-1:29 -> () => i32
+  2:1-2:6 -> (any) => void
+  2:1-2:29 -> void
+  2:7-2:20 -> string
+  2:7-2:26 -> () => [i8]
+  2:7-2:28 -> [i8]
+  2:21-2:26 -> () => [i8]
+  3:1-3:6 -> (any) => void
+  3:1-3:19 -> void
+  3:7-3:10 -> string
+  3:7-3:16 -> () => [i8]
+  3:7-3:18 -> [i8]
+  3:11-3:16 -> () => [i8]
+  4:1-4:6 -> (any) => void
+  4:1-4:20 -> void
+  4:7-4:11 -> string
+  4:7-4:17 -> () => [i8]
+  4:7-4:19 -> [i8]
+  4:12-4:17 -> () => [i8]
+  5:1-5:6 -> (any) => void
+  5:1-5:29 -> void
+  5:7-5:20 -> string
+  5:7-5:26 -> () => [char]
+  5:7-5:28 -> [char]
+  5:21-5:26 -> () => [char]
+  6:1-6:6 -> (any) => void
+  6:1-6:22 -> void
+  6:7-6:13 -> string
+  6:7-6:19 -> () => [char]
+  6:7-6:21 -> [char]
+  6:14-6:19 -> () => [char]
+
+References:
+  1:1-1:6 -> builtin print
+  1:21-1:29 -> java.lang.String.hashCode(): i32
+  2:1-2:6 -> builtin print
+  2:21-2:26 -> EldString.bytes(string): [i8]
+  3:1-3:6 -> builtin print
+  3:11-3:16 -> EldString.bytes(string): [i8]
+  4:1-4:6 -> builtin print
+  4:12-4:17 -> EldString.bytes(string): [i8]
+  5:1-5:6 -> builtin print
+  5:21-5:26 -> EldString.chars(string): [char]
+  6:1-6:6 -> builtin print
+  6:14-6:19 -> EldString.chars(string): [char]
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKEVIRTUAL java/lang/String.hashCode()I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.bytes(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "å"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.bytes(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "😀"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.bytes(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldByteArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.chars(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a😀b"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.chars(Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldCharArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+1794106052
+[104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+[-61, -91]
+[-16, -97, -104, -128]
+[h, e, l, l, o,  , w, o, r, l, d]
+[a, ?, ?, b]

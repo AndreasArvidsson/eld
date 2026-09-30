@@ -27,8 +27,8 @@ public abstract class EldArray<T extends EldArray<T>> {
         if (component == null) {
             return objects;
         }
-        final Object values = Array.newInstance(component, objects.size());
-        for (int i = 0; i < objects.size(); i++) {
+        final Object values = Array.newInstance(component, objects.length());
+        for (int i = 0; i < objects.length(); i++) {
             Array.set(values, i, objects.get(i));
         }
         return switch (elementDescriptor) {
@@ -48,18 +48,18 @@ public abstract class EldArray<T extends EldArray<T>> {
 
     // The number of elements actually stored in the array.
     // This may be less than the length of the underlying array.
-    protected int size;
+    protected int length;
 
-    public final int size() {
-        return size;
+    public final int length() {
+        return length;
     }
 
     public T copy() {
-        return copyRange(0, size);
+        return copyRange(0, length);
     }
 
     public T sliceFrom(final int start) {
-        return slice(start, size);
+        return slice(start, length);
     }
 
     public T sliceTo(final int end) {
@@ -69,17 +69,17 @@ public abstract class EldArray<T extends EldArray<T>> {
     public T slice(final int start, final int end) {
         final int from = normalizeSliceIndex(start);
         final int to = normalizeSliceIndex(end);
-        Objects.checkFromToIndex(from, to, size);
+        Objects.checkFromToIndex(from, to, length);
         return copyRange(from, to);
     }
 
     protected final int normalizeIndex(final int index) {
-        return Objects.checkIndex(index < 0 ? size + index : index, size);
+        return Objects.checkIndex(index < 0 ? length + index : index, length);
     }
 
     protected final int normalizeSliceIndex(final int index) {
-        final int normalized = index < 0 ? size + index : index;
-        return Objects.checkFromToIndex(normalized, normalized, size);
+        final int normalized = index < 0 ? length + index : index;
+        return Objects.checkFromToIndex(normalized, normalized, length);
     }
 
     protected final void ensureCapacity(final int requiredCapacity) {
@@ -106,7 +106,7 @@ public abstract class EldArray<T extends EldArray<T>> {
     public final String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append('[');
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < length; i++) {
             if (i > 0) {
                 sb.append(", ");
             }

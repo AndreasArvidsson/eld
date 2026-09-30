@@ -1,0 +1,457 @@
+print("amina".isLower());
+print("AmIna".isLower());
+print("AMINA".isUpper());
+print("".isLower());
+print("".isUpper());
+print("abc123".isLower());
+print("ABC123".isUpper());
+print("123".isLower());
+print("123".isUpper());
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"amina\"" (1:7-1:14)
+DOT (1:14-1:15)
+IDENTIFIER "isLower" (1:15-1:22)
+LEFT_PAREN (1:22-1:23)
+RIGHT_PAREN (1:23-1:24)
+RIGHT_PAREN (1:24-1:25)
+SEMICOLON (1:25-1:26)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"AmIna\"" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "isLower" (2:15-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"AMINA\"" (3:7-3:14)
+DOT (3:14-3:15)
+IDENTIFIER "isUpper" (3:15-3:22)
+LEFT_PAREN (3:22-3:23)
+RIGHT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+SEMICOLON (3:25-3:26)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"\"" (4:7-4:9)
+DOT (4:9-4:10)
+IDENTIFIER "isLower" (4:10-4:17)
+LEFT_PAREN (4:17-4:18)
+RIGHT_PAREN (4:18-4:19)
+RIGHT_PAREN (4:19-4:20)
+SEMICOLON (4:20-4:21)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"\"" (5:7-5:9)
+DOT (5:9-5:10)
+IDENTIFIER "isUpper" (5:10-5:17)
+LEFT_PAREN (5:17-5:18)
+RIGHT_PAREN (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+SEMICOLON (5:20-5:21)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"abc123\"" (6:7-6:15)
+DOT (6:15-6:16)
+IDENTIFIER "isLower" (6:16-6:23)
+LEFT_PAREN (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"ABC123\"" (7:7-7:15)
+DOT (7:15-7:16)
+IDENTIFIER "isUpper" (7:16-7:23)
+LEFT_PAREN (7:23-7:24)
+RIGHT_PAREN (7:24-7:25)
+RIGHT_PAREN (7:25-7:26)
+SEMICOLON (7:26-7:27)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+STRING_LITERAL "\"123\"" (8:7-8:12)
+DOT (8:12-8:13)
+IDENTIFIER "isLower" (8:13-8:20)
+LEFT_PAREN (8:20-8:21)
+RIGHT_PAREN (8:21-8:22)
+RIGHT_PAREN (8:22-8:23)
+SEMICOLON (8:23-8:24)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+STRING_LITERAL "\"123\"" (9:7-9:12)
+DOT (9:12-9:13)
+IDENTIFIER "isUpper" (9:13-9:20)
+LEFT_PAREN (9:20-9:21)
+RIGHT_PAREN (9:21-9:22)
+RIGHT_PAREN (9:22-9:23)
+SEMICOLON (9:23-9:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:24
+  (ExpressionStatement
+    range: 1:1-1:26
+    (CallExpression
+      range: 1:1-1:25
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:24
+        (MemberExpression
+          range: 1:7-1:22
+          (LiteralExpression
+            range: 1:7-1:14
+            kind: STRING
+            text: "\"amina\""
+          )
+          (IdentifierExpression
+            range: 1:15-1:22
+            name: "isLower"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:26
+    (CallExpression
+      range: 2:1-2:25
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:24
+        (MemberExpression
+          range: 2:7-2:22
+          (LiteralExpression
+            range: 2:7-2:14
+            kind: STRING
+            text: "\"AmIna\""
+          )
+          (IdentifierExpression
+            range: 2:15-2:22
+            name: "isLower"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:26
+    (CallExpression
+      range: 3:1-3:25
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:24
+        (MemberExpression
+          range: 3:7-3:22
+          (LiteralExpression
+            range: 3:7-3:14
+            kind: STRING
+            text: "\"AMINA\""
+          )
+          (IdentifierExpression
+            range: 3:15-3:22
+            name: "isUpper"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:21
+    (CallExpression
+      range: 4:1-4:20
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:19
+        (MemberExpression
+          range: 4:7-4:17
+          (LiteralExpression
+            range: 4:7-4:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 4:10-4:17
+            name: "isLower"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:21
+    (CallExpression
+      range: 5:1-5:20
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:19
+        (MemberExpression
+          range: 5:7-5:17
+          (LiteralExpression
+            range: 5:7-5:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 5:10-5:17
+            name: "isUpper"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:27
+    (CallExpression
+      range: 6:1-6:26
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:25
+        (MemberExpression
+          range: 6:7-6:23
+          (LiteralExpression
+            range: 6:7-6:15
+            kind: STRING
+            text: "\"abc123\""
+          )
+          (IdentifierExpression
+            range: 6:16-6:23
+            name: "isLower"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:27
+    (CallExpression
+      range: 7:1-7:26
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:25
+        (MemberExpression
+          range: 7:7-7:23
+          (LiteralExpression
+            range: 7:7-7:15
+            kind: STRING
+            text: "\"ABC123\""
+          )
+          (IdentifierExpression
+            range: 7:16-7:23
+            name: "isUpper"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:24
+    (CallExpression
+      range: 8:1-8:23
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:22
+        (MemberExpression
+          range: 8:7-8:20
+          (LiteralExpression
+            range: 8:7-8:12
+            kind: STRING
+            text: "\"123\""
+          )
+          (IdentifierExpression
+            range: 8:13-8:20
+            name: "isLower"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:24
+    (CallExpression
+      range: 9:1-9:23
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:22
+        (MemberExpression
+          range: 9:7-9:20
+          (LiteralExpression
+            range: 9:7-9:12
+            kind: STRING
+            text: "\"123\""
+          )
+          (IdentifierExpression
+            range: 9:13-9:20
+            name: "isUpper"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:25 -> void
+  1:7-1:14 -> string
+  1:7-1:22 -> () => bool
+  1:7-1:24 -> bool
+  1:15-1:22 -> () => bool
+  2:1-2:6 -> (any) => void
+  2:1-2:25 -> void
+  2:7-2:14 -> string
+  2:7-2:22 -> () => bool
+  2:7-2:24 -> bool
+  2:15-2:22 -> () => bool
+  3:1-3:6 -> (any) => void
+  3:1-3:25 -> void
+  3:7-3:14 -> string
+  3:7-3:22 -> () => bool
+  3:7-3:24 -> bool
+  3:15-3:22 -> () => bool
+  4:1-4:6 -> (any) => void
+  4:1-4:20 -> void
+  4:7-4:9 -> string
+  4:7-4:17 -> () => bool
+  4:7-4:19 -> bool
+  4:10-4:17 -> () => bool
+  5:1-5:6 -> (any) => void
+  5:1-5:20 -> void
+  5:7-5:9 -> string
+  5:7-5:17 -> () => bool
+  5:7-5:19 -> bool
+  5:10-5:17 -> () => bool
+  6:1-6:6 -> (any) => void
+  6:1-6:26 -> void
+  6:7-6:15 -> string
+  6:7-6:23 -> () => bool
+  6:7-6:25 -> bool
+  6:16-6:23 -> () => bool
+  7:1-7:6 -> (any) => void
+  7:1-7:26 -> void
+  7:7-7:15 -> string
+  7:7-7:23 -> () => bool
+  7:7-7:25 -> bool
+  7:16-7:23 -> () => bool
+  8:1-8:6 -> (any) => void
+  8:1-8:23 -> void
+  8:7-8:12 -> string
+  8:7-8:20 -> () => bool
+  8:7-8:22 -> bool
+  8:13-8:20 -> () => bool
+  9:1-9:6 -> (any) => void
+  9:1-9:23 -> void
+  9:7-9:12 -> string
+  9:7-9:20 -> () => bool
+  9:7-9:22 -> bool
+  9:13-9:20 -> () => bool
+
+References:
+  1:1-1:6 -> builtin print
+  1:15-1:22 -> EldString.isLower(string): bool
+  2:1-2:6 -> builtin print
+  2:15-2:22 -> EldString.isLower(string): bool
+  3:1-3:6 -> builtin print
+  3:15-3:22 -> EldString.isUpper(string): bool
+  4:1-4:6 -> builtin print
+  4:10-4:17 -> EldString.isLower(string): bool
+  5:1-5:6 -> builtin print
+  5:10-5:17 -> EldString.isUpper(string): bool
+  6:1-6:6 -> builtin print
+  6:16-6:23 -> EldString.isLower(string): bool
+  7:1-7:6 -> builtin print
+  7:16-7:23 -> EldString.isUpper(string): bool
+  8:1-8:6 -> builtin print
+  8:13-8:20 -> EldString.isLower(string): bool
+  9:1-9:6 -> builtin print
+  9:13-9:20 -> EldString.isUpper(string): bool
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "amina"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isLower(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "AmIna"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isLower(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "AMINA"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isUpper(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isLower(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isUpper(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "abc123"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isLower(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "ABC123"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isUpper(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "123"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isLower(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "123"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isUpper(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+true
+false
+true
+false
+false
+true
+true
+false
+false

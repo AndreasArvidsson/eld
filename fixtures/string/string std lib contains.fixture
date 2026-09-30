@@ -1,0 +1,361 @@
+print("hello world".contains("hello"));
+print("hello world".startsWith("hello"));
+print("hello world".endsWith("world"));
+print("hello world".count("o"));
+print("aaaa".count("aa"));
+print("hello".count(""));
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "contains" (1:21-1:29)
+LEFT_PAREN (1:29-1:30)
+STRING_LITERAL "\"hello\"" (1:30-1:37)
+RIGHT_PAREN (1:37-1:38)
+RIGHT_PAREN (1:38-1:39)
+SEMICOLON (1:39-1:40)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"hello world\"" (2:7-2:20)
+DOT (2:20-2:21)
+IDENTIFIER "startsWith" (2:21-2:31)
+LEFT_PAREN (2:31-2:32)
+STRING_LITERAL "\"hello\"" (2:32-2:39)
+RIGHT_PAREN (2:39-2:40)
+RIGHT_PAREN (2:40-2:41)
+SEMICOLON (2:41-2:42)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"hello world\"" (3:7-3:20)
+DOT (3:20-3:21)
+IDENTIFIER "endsWith" (3:21-3:29)
+LEFT_PAREN (3:29-3:30)
+STRING_LITERAL "\"world\"" (3:30-3:37)
+RIGHT_PAREN (3:37-3:38)
+RIGHT_PAREN (3:38-3:39)
+SEMICOLON (3:39-3:40)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"hello world\"" (4:7-4:20)
+DOT (4:20-4:21)
+IDENTIFIER "count" (4:21-4:26)
+LEFT_PAREN (4:26-4:27)
+STRING_LITERAL "\"o\"" (4:27-4:30)
+RIGHT_PAREN (4:30-4:31)
+RIGHT_PAREN (4:31-4:32)
+SEMICOLON (4:32-4:33)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"aaaa\"" (5:7-5:13)
+DOT (5:13-5:14)
+IDENTIFIER "count" (5:14-5:19)
+LEFT_PAREN (5:19-5:20)
+STRING_LITERAL "\"aa\"" (5:20-5:24)
+RIGHT_PAREN (5:24-5:25)
+RIGHT_PAREN (5:25-5:26)
+SEMICOLON (5:26-5:27)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"hello\"" (6:7-6:14)
+DOT (6:14-6:15)
+IDENTIFIER "count" (6:15-6:20)
+LEFT_PAREN (6:20-6:21)
+STRING_LITERAL "\"\"" (6:21-6:23)
+RIGHT_PAREN (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+SEMICOLON (6:25-6:26)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:26
+  (ExpressionStatement
+    range: 1:1-1:40
+    (CallExpression
+      range: 1:1-1:39
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:38
+        (MemberExpression
+          range: 1:7-1:29
+          (LiteralExpression
+            range: 1:7-1:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 1:21-1:29
+            name: "contains"
+          )
+        )
+        (LiteralExpression
+          range: 1:30-1:37
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:42
+    (CallExpression
+      range: 2:1-2:41
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:40
+        (MemberExpression
+          range: 2:7-2:31
+          (LiteralExpression
+            range: 2:7-2:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 2:21-2:31
+            name: "startsWith"
+          )
+        )
+        (LiteralExpression
+          range: 2:32-2:39
+          kind: STRING
+          text: "\"hello\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:40
+    (CallExpression
+      range: 3:1-3:39
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:38
+        (MemberExpression
+          range: 3:7-3:29
+          (LiteralExpression
+            range: 3:7-3:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 3:21-3:29
+            name: "endsWith"
+          )
+        )
+        (LiteralExpression
+          range: 3:30-3:37
+          kind: STRING
+          text: "\"world\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:33
+    (CallExpression
+      range: 4:1-4:32
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:31
+        (MemberExpression
+          range: 4:7-4:26
+          (LiteralExpression
+            range: 4:7-4:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 4:21-4:26
+            name: "count"
+          )
+        )
+        (LiteralExpression
+          range: 4:27-4:30
+          kind: STRING
+          text: "\"o\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:27
+    (CallExpression
+      range: 5:1-5:26
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:25
+        (MemberExpression
+          range: 5:7-5:19
+          (LiteralExpression
+            range: 5:7-5:13
+            kind: STRING
+            text: "\"aaaa\""
+          )
+          (IdentifierExpression
+            range: 5:14-5:19
+            name: "count"
+          )
+        )
+        (LiteralExpression
+          range: 5:20-5:24
+          kind: STRING
+          text: "\"aa\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:26
+    (CallExpression
+      range: 6:1-6:25
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:24
+        (MemberExpression
+          range: 6:7-6:20
+          (LiteralExpression
+            range: 6:7-6:14
+            kind: STRING
+            text: "\"hello\""
+          )
+          (IdentifierExpression
+            range: 6:15-6:20
+            name: "count"
+          )
+        )
+        (LiteralExpression
+          range: 6:21-6:23
+          kind: STRING
+          text: "\"\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:39 -> void
+  1:7-1:20 -> string
+  1:7-1:29 -> (string) => bool
+  1:7-1:38 -> bool
+  1:21-1:29 -> (string) => bool
+  1:30-1:37 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:41 -> void
+  2:7-2:20 -> string
+  2:7-2:31 -> (string) => bool
+  2:7-2:40 -> bool
+  2:21-2:31 -> (string) => bool
+  2:32-2:39 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:39 -> void
+  3:7-3:20 -> string
+  3:7-3:29 -> (string) => bool
+  3:7-3:38 -> bool
+  3:21-3:29 -> (string) => bool
+  3:30-3:37 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:32 -> void
+  4:7-4:20 -> string
+  4:7-4:26 -> (string) => i32
+  4:7-4:31 -> i32
+  4:21-4:26 -> (string) => i32
+  4:27-4:30 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:26 -> void
+  5:7-5:13 -> string
+  5:7-5:19 -> (string) => i32
+  5:7-5:25 -> i32
+  5:14-5:19 -> (string) => i32
+  5:20-5:24 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:25 -> void
+  6:7-6:14 -> string
+  6:7-6:20 -> (string) => i32
+  6:7-6:24 -> i32
+  6:15-6:20 -> (string) => i32
+  6:21-6:23 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  1:21-1:29 -> java.lang.String.contains(string): bool
+  2:1-2:6 -> builtin print
+  2:21-2:31 -> java.lang.String.startsWith(string): bool
+  3:1-3:6 -> builtin print
+  3:21-3:29 -> java.lang.String.endsWith(string): bool
+  4:1-4:6 -> builtin print
+  4:21-4:26 -> EldString.count(string, string): i32
+  5:1-5:6 -> builtin print
+  5:14-5:19 -> EldString.count(string, string): i32
+  6:1-6:6 -> builtin print
+  6:15-6:20 -> EldString.count(string, string): i32
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/String.contains(Ljava/lang/CharSequence;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "hello"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "world"
+    INVOKEVIRTUAL java/lang/String.endsWith(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    LDC "o"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.count(Ljava/lang/String;Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "aaaa"
+    LDC "aa"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.count(Ljava/lang/String;Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello"
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.count(Ljava/lang/String;Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+true
+true
+true
+2
+2
+6

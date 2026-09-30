@@ -663,7 +663,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.children Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     ASTORE_1 1
     ALOAD_1 1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.length()I
     ISTORE_2 2
     ILOAD_0 0
     ILOAD_2 2
@@ -672,7 +672,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.siblings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     ASTORE_3 3
     ALOAD_3 3
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.length()I
     ISTORE 4
     ILOAD_0 0
     ILOAD 4
@@ -711,7 +711,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.children Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     ASTORE 8
     ALOAD 8
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.length()I
     ISTORE 9
     ILOAD 7
     ILOAD 9
@@ -757,7 +757,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
     ASTORE 13
     ALOAD 13
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.length()I
     ISTORE 14
     ILOAD 12
     ILOAD 14
@@ -818,7 +818,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
     ASTORE 19
     ALOAD 19
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.length()I
     ISTORE 20
     ILOAD 18
     ILOAD 20

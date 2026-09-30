@@ -420,9 +420,9 @@ References:
   1:22-1:23 -> 1:22-1:23
   3:19-3:24 -> 1:8-1:13
   4:33-4:38 -> 3:7-3:12
-  4:39-4:45 -> Point.equals(Point): bool
+  4:39-4:45 -> java.lang.Object.equals(Point): bool
   5:29-5:34 -> 3:7-3:12
-  5:35-5:43 -> Point.hashCode(): i32
+  5:35-5:43 -> java.lang.Object.hashCode(): i32
   6:32-6:37 -> 3:7-3:12
   6:38-6:46 -> 1:8-1:13
   8:1-8:6 -> builtin print
@@ -431,7 +431,7 @@ References:
   9:1-9:6 -> builtin print
   9:7-9:15 -> 5:7-5:15
   9:21-9:26 -> 3:7-3:12
-  9:27-9:35 -> Point.hashCode(): i32
+  9:27-9:35 -> java.lang.Object.hashCode(): i32
   10:1-10:6 -> builtin print
   10:7-10:15 -> 6:7-6:15
 

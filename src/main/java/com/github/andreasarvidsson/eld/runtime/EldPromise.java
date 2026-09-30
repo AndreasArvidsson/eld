@@ -54,7 +54,7 @@ public final class EldPromise<T extends @Nullable Object> {
     ) {
         final PromiseSource<EldObjectArray<@Nullable Object>> source =
             new PromiseSource<>();
-        final int size = promises.size();
+        final int size = promises.length();
         if (size == 0) {
             source.resolve(new EldObjectArray<>());
             return source.promise();

@@ -1,0 +1,351 @@
+print("hello world".upper());
+print("HELLO WORLD".lower());
+print("hellO World".capitalize());
+print("hellO World".lower().capitalize());
+print("hellO wORLD".title());
+print("hellO wORLD".lower().title());
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"hello world\"" (1:7-1:20)
+DOT (1:20-1:21)
+IDENTIFIER "upper" (1:21-1:26)
+LEFT_PAREN (1:26-1:27)
+RIGHT_PAREN (1:27-1:28)
+RIGHT_PAREN (1:28-1:29)
+SEMICOLON (1:29-1:30)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"HELLO WORLD\"" (2:7-2:20)
+DOT (2:20-2:21)
+IDENTIFIER "lower" (2:21-2:26)
+LEFT_PAREN (2:26-2:27)
+RIGHT_PAREN (2:27-2:28)
+RIGHT_PAREN (2:28-2:29)
+SEMICOLON (2:29-2:30)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"hellO World\"" (3:7-3:20)
+DOT (3:20-3:21)
+IDENTIFIER "capitalize" (3:21-3:31)
+LEFT_PAREN (3:31-3:32)
+RIGHT_PAREN (3:32-3:33)
+RIGHT_PAREN (3:33-3:34)
+SEMICOLON (3:34-3:35)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"hellO World\"" (4:7-4:20)
+DOT (4:20-4:21)
+IDENTIFIER "lower" (4:21-4:26)
+LEFT_PAREN (4:26-4:27)
+RIGHT_PAREN (4:27-4:28)
+DOT (4:28-4:29)
+IDENTIFIER "capitalize" (4:29-4:39)
+LEFT_PAREN (4:39-4:40)
+RIGHT_PAREN (4:40-4:41)
+RIGHT_PAREN (4:41-4:42)
+SEMICOLON (4:42-4:43)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"hellO wORLD\"" (5:7-5:20)
+DOT (5:20-5:21)
+IDENTIFIER "title" (5:21-5:26)
+LEFT_PAREN (5:26-5:27)
+RIGHT_PAREN (5:27-5:28)
+RIGHT_PAREN (5:28-5:29)
+SEMICOLON (5:29-5:30)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"hellO wORLD\"" (6:7-6:20)
+DOT (6:20-6:21)
+IDENTIFIER "lower" (6:21-6:26)
+LEFT_PAREN (6:26-6:27)
+RIGHT_PAREN (6:27-6:28)
+DOT (6:28-6:29)
+IDENTIFIER "title" (6:29-6:34)
+LEFT_PAREN (6:34-6:35)
+RIGHT_PAREN (6:35-6:36)
+RIGHT_PAREN (6:36-6:37)
+SEMICOLON (6:37-6:38)
+
+--- AST ---
+
+(Program
+  range: 1:1-6:38
+  (ExpressionStatement
+    range: 1:1-1:30
+    (CallExpression
+      range: 1:1-1:29
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:28
+        (MemberExpression
+          range: 1:7-1:26
+          (LiteralExpression
+            range: 1:7-1:20
+            kind: STRING
+            text: "\"hello world\""
+          )
+          (IdentifierExpression
+            range: 1:21-1:26
+            name: "upper"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:30
+    (CallExpression
+      range: 2:1-2:29
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:28
+        (MemberExpression
+          range: 2:7-2:26
+          (LiteralExpression
+            range: 2:7-2:20
+            kind: STRING
+            text: "\"HELLO WORLD\""
+          )
+          (IdentifierExpression
+            range: 2:21-2:26
+            name: "lower"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:35
+    (CallExpression
+      range: 3:1-3:34
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:33
+        (MemberExpression
+          range: 3:7-3:31
+          (LiteralExpression
+            range: 3:7-3:20
+            kind: STRING
+            text: "\"hellO World\""
+          )
+          (IdentifierExpression
+            range: 3:21-3:31
+            name: "capitalize"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:43
+    (CallExpression
+      range: 4:1-4:42
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:41
+        (MemberExpression
+          range: 4:7-4:39
+          (CallExpression
+            range: 4:7-4:28
+            (MemberExpression
+              range: 4:7-4:26
+              (LiteralExpression
+                range: 4:7-4:20
+                kind: STRING
+                text: "\"hellO World\""
+              )
+              (IdentifierExpression
+                range: 4:21-4:26
+                name: "lower"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 4:29-4:39
+            name: "capitalize"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:30
+    (CallExpression
+      range: 5:1-5:29
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:28
+        (MemberExpression
+          range: 5:7-5:26
+          (LiteralExpression
+            range: 5:7-5:20
+            kind: STRING
+            text: "\"hellO wORLD\""
+          )
+          (IdentifierExpression
+            range: 5:21-5:26
+            name: "title"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:38
+    (CallExpression
+      range: 6:1-6:37
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:36
+        (MemberExpression
+          range: 6:7-6:34
+          (CallExpression
+            range: 6:7-6:28
+            (MemberExpression
+              range: 6:7-6:26
+              (LiteralExpression
+                range: 6:7-6:20
+                kind: STRING
+                text: "\"hellO wORLD\""
+              )
+              (IdentifierExpression
+                range: 6:21-6:26
+                name: "lower"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 6:29-6:34
+            name: "title"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:29 -> void
+  1:7-1:20 -> string
+  1:7-1:26 -> () => string
+  1:7-1:28 -> string
+  1:21-1:26 -> () => string
+  2:1-2:6 -> (any) => void
+  2:1-2:29 -> void
+  2:7-2:20 -> string
+  2:7-2:26 -> () => string
+  2:7-2:28 -> string
+  2:21-2:26 -> () => string
+  3:1-3:6 -> (any) => void
+  3:1-3:34 -> void
+  3:7-3:20 -> string
+  3:7-3:31 -> () => string
+  3:7-3:33 -> string
+  3:21-3:31 -> () => string
+  4:1-4:6 -> (any) => void
+  4:1-4:42 -> void
+  4:7-4:20 -> string
+  4:7-4:26 -> () => string
+  4:7-4:28 -> string
+  4:7-4:39 -> () => string
+  4:7-4:41 -> string
+  4:21-4:26 -> () => string
+  4:29-4:39 -> () => string
+  5:1-5:6 -> (any) => void
+  5:1-5:29 -> void
+  5:7-5:20 -> string
+  5:7-5:26 -> () => string
+  5:7-5:28 -> string
+  5:21-5:26 -> () => string
+  6:1-6:6 -> (any) => void
+  6:1-6:37 -> void
+  6:7-6:20 -> string
+  6:7-6:26 -> () => string
+  6:7-6:28 -> string
+  6:7-6:34 -> () => string
+  6:7-6:36 -> string
+  6:21-6:26 -> () => string
+  6:29-6:34 -> () => string
+
+References:
+  1:1-1:6 -> builtin print
+  1:21-1:26 -> java.lang.String.toUpperCase(): string
+  2:1-2:6 -> builtin print
+  2:21-2:26 -> java.lang.String.toLowerCase(): string
+  3:1-3:6 -> builtin print
+  3:21-3:31 -> EldString.capitalize(string): string
+  4:1-4:6 -> builtin print
+  4:21-4:26 -> java.lang.String.toLowerCase(): string
+  4:29-4:39 -> EldString.capitalize(string): string
+  5:1-5:6 -> builtin print
+  5:21-5:26 -> EldString.title(string): string
+  6:1-6:6 -> builtin print
+  6:21-6:26 -> java.lang.String.toLowerCase(): string
+  6:29-6:34 -> EldString.title(string): string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hello world"
+    INVOKEVIRTUAL java/lang/String.toUpperCase()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "HELLO WORLD"
+    INVOKEVIRTUAL java/lang/String.toLowerCase()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hellO World"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.capitalize(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hellO World"
+    INVOKEVIRTUAL java/lang/String.toLowerCase()Ljava/lang/String;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.capitalize(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hellO wORLD"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.title(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "hellO wORLD"
+    INVOKEVIRTUAL java/lang/String.toLowerCase()Ljava/lang/String;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.title(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+HELLO WORLD
+hello world
+HellO World
+Hello world
+HellO WORLD
+Hello World

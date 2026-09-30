@@ -1,0 +1,457 @@
+print("12345".isDigit());
+print("Amina".isDigit());
+print("Amina23".isAlnum());
+print("Amina 123".isAlnum());
+print("Amina".isAlpha());
+print("Amina234".isAlpha());
+print("".isDigit());
+print("".isAlnum());
+print("".isAlpha());
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"12345\"" (1:7-1:14)
+DOT (1:14-1:15)
+IDENTIFIER "isDigit" (1:15-1:22)
+LEFT_PAREN (1:22-1:23)
+RIGHT_PAREN (1:23-1:24)
+RIGHT_PAREN (1:24-1:25)
+SEMICOLON (1:25-1:26)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"Amina\"" (2:7-2:14)
+DOT (2:14-2:15)
+IDENTIFIER "isDigit" (2:15-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+SEMICOLON (2:25-2:26)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"Amina23\"" (3:7-3:16)
+DOT (3:16-3:17)
+IDENTIFIER "isAlnum" (3:17-3:24)
+LEFT_PAREN (3:24-3:25)
+RIGHT_PAREN (3:25-3:26)
+RIGHT_PAREN (3:26-3:27)
+SEMICOLON (3:27-3:28)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"Amina 123\"" (4:7-4:18)
+DOT (4:18-4:19)
+IDENTIFIER "isAlnum" (4:19-4:26)
+LEFT_PAREN (4:26-4:27)
+RIGHT_PAREN (4:27-4:28)
+RIGHT_PAREN (4:28-4:29)
+SEMICOLON (4:29-4:30)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"Amina\"" (5:7-5:14)
+DOT (5:14-5:15)
+IDENTIFIER "isAlpha" (5:15-5:22)
+LEFT_PAREN (5:22-5:23)
+RIGHT_PAREN (5:23-5:24)
+RIGHT_PAREN (5:24-5:25)
+SEMICOLON (5:25-5:26)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"Amina234\"" (6:7-6:17)
+DOT (6:17-6:18)
+IDENTIFIER "isAlpha" (6:18-6:25)
+LEFT_PAREN (6:25-6:26)
+RIGHT_PAREN (6:26-6:27)
+RIGHT_PAREN (6:27-6:28)
+SEMICOLON (6:28-6:29)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"\"" (7:7-7:9)
+DOT (7:9-7:10)
+IDENTIFIER "isDigit" (7:10-7:17)
+LEFT_PAREN (7:17-7:18)
+RIGHT_PAREN (7:18-7:19)
+RIGHT_PAREN (7:19-7:20)
+SEMICOLON (7:20-7:21)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+STRING_LITERAL "\"\"" (8:7-8:9)
+DOT (8:9-8:10)
+IDENTIFIER "isAlnum" (8:10-8:17)
+LEFT_PAREN (8:17-8:18)
+RIGHT_PAREN (8:18-8:19)
+RIGHT_PAREN (8:19-8:20)
+SEMICOLON (8:20-8:21)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+STRING_LITERAL "\"\"" (9:7-9:9)
+DOT (9:9-9:10)
+IDENTIFIER "isAlpha" (9:10-9:17)
+LEFT_PAREN (9:17-9:18)
+RIGHT_PAREN (9:18-9:19)
+RIGHT_PAREN (9:19-9:20)
+SEMICOLON (9:20-9:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:21
+  (ExpressionStatement
+    range: 1:1-1:26
+    (CallExpression
+      range: 1:1-1:25
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:24
+        (MemberExpression
+          range: 1:7-1:22
+          (LiteralExpression
+            range: 1:7-1:14
+            kind: STRING
+            text: "\"12345\""
+          )
+          (IdentifierExpression
+            range: 1:15-1:22
+            name: "isDigit"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:26
+    (CallExpression
+      range: 2:1-2:25
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:24
+        (MemberExpression
+          range: 2:7-2:22
+          (LiteralExpression
+            range: 2:7-2:14
+            kind: STRING
+            text: "\"Amina\""
+          )
+          (IdentifierExpression
+            range: 2:15-2:22
+            name: "isDigit"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:28
+    (CallExpression
+      range: 3:1-3:27
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:26
+        (MemberExpression
+          range: 3:7-3:24
+          (LiteralExpression
+            range: 3:7-3:16
+            kind: STRING
+            text: "\"Amina23\""
+          )
+          (IdentifierExpression
+            range: 3:17-3:24
+            name: "isAlnum"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:30
+    (CallExpression
+      range: 4:1-4:29
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:28
+        (MemberExpression
+          range: 4:7-4:26
+          (LiteralExpression
+            range: 4:7-4:18
+            kind: STRING
+            text: "\"Amina 123\""
+          )
+          (IdentifierExpression
+            range: 4:19-4:26
+            name: "isAlnum"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:26
+    (CallExpression
+      range: 5:1-5:25
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:24
+        (MemberExpression
+          range: 5:7-5:22
+          (LiteralExpression
+            range: 5:7-5:14
+            kind: STRING
+            text: "\"Amina\""
+          )
+          (IdentifierExpression
+            range: 5:15-5:22
+            name: "isAlpha"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:29
+    (CallExpression
+      range: 6:1-6:28
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:27
+        (MemberExpression
+          range: 6:7-6:25
+          (LiteralExpression
+            range: 6:7-6:17
+            kind: STRING
+            text: "\"Amina234\""
+          )
+          (IdentifierExpression
+            range: 6:18-6:25
+            name: "isAlpha"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:21
+    (CallExpression
+      range: 7:1-7:20
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:19
+        (MemberExpression
+          range: 7:7-7:17
+          (LiteralExpression
+            range: 7:7-7:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 7:10-7:17
+            name: "isDigit"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:21
+    (CallExpression
+      range: 8:1-8:20
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:19
+        (MemberExpression
+          range: 8:7-8:17
+          (LiteralExpression
+            range: 8:7-8:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 8:10-8:17
+            name: "isAlnum"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:21
+    (CallExpression
+      range: 9:1-9:20
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:19
+        (MemberExpression
+          range: 9:7-9:17
+          (LiteralExpression
+            range: 9:7-9:9
+            kind: STRING
+            text: "\"\""
+          )
+          (IdentifierExpression
+            range: 9:10-9:17
+            name: "isAlpha"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:25 -> void
+  1:7-1:14 -> string
+  1:7-1:22 -> () => bool
+  1:7-1:24 -> bool
+  1:15-1:22 -> () => bool
+  2:1-2:6 -> (any) => void
+  2:1-2:25 -> void
+  2:7-2:14 -> string
+  2:7-2:22 -> () => bool
+  2:7-2:24 -> bool
+  2:15-2:22 -> () => bool
+  3:1-3:6 -> (any) => void
+  3:1-3:27 -> void
+  3:7-3:16 -> string
+  3:7-3:24 -> () => bool
+  3:7-3:26 -> bool
+  3:17-3:24 -> () => bool
+  4:1-4:6 -> (any) => void
+  4:1-4:29 -> void
+  4:7-4:18 -> string
+  4:7-4:26 -> () => bool
+  4:7-4:28 -> bool
+  4:19-4:26 -> () => bool
+  5:1-5:6 -> (any) => void
+  5:1-5:25 -> void
+  5:7-5:14 -> string
+  5:7-5:22 -> () => bool
+  5:7-5:24 -> bool
+  5:15-5:22 -> () => bool
+  6:1-6:6 -> (any) => void
+  6:1-6:28 -> void
+  6:7-6:17 -> string
+  6:7-6:25 -> () => bool
+  6:7-6:27 -> bool
+  6:18-6:25 -> () => bool
+  7:1-7:6 -> (any) => void
+  7:1-7:20 -> void
+  7:7-7:9 -> string
+  7:7-7:17 -> () => bool
+  7:7-7:19 -> bool
+  7:10-7:17 -> () => bool
+  8:1-8:6 -> (any) => void
+  8:1-8:20 -> void
+  8:7-8:9 -> string
+  8:7-8:17 -> () => bool
+  8:7-8:19 -> bool
+  8:10-8:17 -> () => bool
+  9:1-9:6 -> (any) => void
+  9:1-9:20 -> void
+  9:7-9:9 -> string
+  9:7-9:17 -> () => bool
+  9:7-9:19 -> bool
+  9:10-9:17 -> () => bool
+
+References:
+  1:1-1:6 -> builtin print
+  1:15-1:22 -> EldString.isDigit(string): bool
+  2:1-2:6 -> builtin print
+  2:15-2:22 -> EldString.isDigit(string): bool
+  3:1-3:6 -> builtin print
+  3:17-3:24 -> EldString.isAlnum(string): bool
+  4:1-4:6 -> builtin print
+  4:19-4:26 -> EldString.isAlnum(string): bool
+  5:1-5:6 -> builtin print
+  5:15-5:22 -> EldString.isAlpha(string): bool
+  6:1-6:6 -> builtin print
+  6:18-6:25 -> EldString.isAlpha(string): bool
+  7:1-7:6 -> builtin print
+  7:10-7:17 -> EldString.isDigit(string): bool
+  8:1-8:6 -> builtin print
+  8:10-8:17 -> EldString.isAlnum(string): bool
+  9:1-9:6 -> builtin print
+  9:10-9:17 -> EldString.isAlpha(string): bool
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "12345"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isDigit(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Amina"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isDigit(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Amina23"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isAlnum(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Amina 123"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isAlnum(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Amina"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isAlpha(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "Amina234"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isAlpha(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isDigit(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isAlnum(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.isAlpha(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+true
+false
+true
+false
+true
+false
+false
+false
+false

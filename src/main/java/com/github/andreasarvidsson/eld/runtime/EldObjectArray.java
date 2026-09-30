@@ -18,7 +18,7 @@ public final class EldObjectArray<T extends @Nullable Object>
     // 2. Internally in this class.
     public EldObjectArray(final @Nullable Object[] elements) {
         this.elements = elements;
-        size = elements.length;
+        length = elements.length;
     }
 
     // Storage erases T and its nullness. The compiler and typed writers supply values of T.
@@ -32,8 +32,8 @@ public final class EldObjectArray<T extends @Nullable Object>
     }
 
     public void add(final T value) {
-        ensureCapacity(size + 1);
-        elements[size++] = value;
+        ensureCapacity(length + 1);
+        elements[length++] = value;
     }
 
     public void copyTo(
@@ -50,7 +50,7 @@ public final class EldObjectArray<T extends @Nullable Object>
     }
 
     public void sort() {
-        Arrays.sort(elements, 0, size);
+        Arrays.sort(elements, 0, length);
     }
 
     @Override
@@ -90,14 +90,14 @@ public final class EldObjectArray<T extends @Nullable Object>
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof EldObjectArray<?> other
-            && Arrays.equals(elements, 0, size, other.elements, 0, other.size);
+        return obj instanceof EldObjectArray<?> other && Arrays
+            .equals(elements, 0, length, other.elements, 0, other.length);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < length; i++) {
             result = 31 * result + Objects.hashCode(elements[i]);
         }
         return result;

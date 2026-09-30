@@ -143,4 +143,4 @@ SEMICOLON (3:17-3:18)
 
 --- SEMANTIC ---
 
-SemanticException: Cannot pass Comparator<string> as Comparator<i32> at 3:13-3:16
+SemanticException: Unknown string method 'compareTo' with 1 arguments at 2:43-2:54

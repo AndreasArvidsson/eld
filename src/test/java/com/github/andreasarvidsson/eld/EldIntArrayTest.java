@@ -8,13 +8,13 @@ class EldIntArrayTest {
     @Test
     void growsWithoutLosingValuesAndUsesLogicalSize() {
         final EldIntArray array = new EldIntArray();
-        assertEquals(0, array.size());
+        assertEquals(0, array.length());
         assertEquals("[]", array.toString());
         assertThrows(IndexOutOfBoundsException.class, () -> array.get(-1));
         for (int i = 0; i < 101; i++) {
             array.add(i * 3);
         }
-        assertEquals(101, array.size());
+        assertEquals(101, array.length());
         for (int i = 0; i < 101; i++) {
             assertEquals(i * 3, array.get(i));
             assertEquals(i * 3, array.get(i - 101));

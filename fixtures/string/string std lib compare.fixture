@@ -1,0 +1,305 @@
+print("a".compare("A"));
+print("a".compare("a"));
+print("A".compare("a"));
+print("a".compareIgnoreCase("A"));
+print("a".equalsIgnoreCase("A"));
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"a\"" (1:7-1:10)
+DOT (1:10-1:11)
+IDENTIFIER "compare" (1:11-1:18)
+LEFT_PAREN (1:18-1:19)
+STRING_LITERAL "\"A\"" (1:19-1:22)
+RIGHT_PAREN (1:22-1:23)
+RIGHT_PAREN (1:23-1:24)
+SEMICOLON (1:24-1:25)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"a\"" (2:7-2:10)
+DOT (2:10-2:11)
+IDENTIFIER "compare" (2:11-2:18)
+LEFT_PAREN (2:18-2:19)
+STRING_LITERAL "\"a\"" (2:19-2:22)
+RIGHT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+SEMICOLON (2:24-2:25)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"A\"" (3:7-3:10)
+DOT (3:10-3:11)
+IDENTIFIER "compare" (3:11-3:18)
+LEFT_PAREN (3:18-3:19)
+STRING_LITERAL "\"a\"" (3:19-3:22)
+RIGHT_PAREN (3:22-3:23)
+RIGHT_PAREN (3:23-3:24)
+SEMICOLON (3:24-3:25)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"a\"" (4:7-4:10)
+DOT (4:10-4:11)
+IDENTIFIER "compareIgnoreCase" (4:11-4:28)
+LEFT_PAREN (4:28-4:29)
+STRING_LITERAL "\"A\"" (4:29-4:32)
+RIGHT_PAREN (4:32-4:33)
+RIGHT_PAREN (4:33-4:34)
+SEMICOLON (4:34-4:35)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"a\"" (5:7-5:10)
+DOT (5:10-5:11)
+IDENTIFIER "equalsIgnoreCase" (5:11-5:27)
+LEFT_PAREN (5:27-5:28)
+STRING_LITERAL "\"A\"" (5:28-5:31)
+RIGHT_PAREN (5:31-5:32)
+RIGHT_PAREN (5:32-5:33)
+SEMICOLON (5:33-5:34)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:34
+  (ExpressionStatement
+    range: 1:1-1:25
+    (CallExpression
+      range: 1:1-1:24
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:23
+        (MemberExpression
+          range: 1:7-1:18
+          (LiteralExpression
+            range: 1:7-1:10
+            kind: STRING
+            text: "\"a\""
+          )
+          (IdentifierExpression
+            range: 1:11-1:18
+            name: "compare"
+          )
+        )
+        (LiteralExpression
+          range: 1:19-1:22
+          kind: STRING
+          text: "\"A\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:25
+    (CallExpression
+      range: 2:1-2:24
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:23
+        (MemberExpression
+          range: 2:7-2:18
+          (LiteralExpression
+            range: 2:7-2:10
+            kind: STRING
+            text: "\"a\""
+          )
+          (IdentifierExpression
+            range: 2:11-2:18
+            name: "compare"
+          )
+        )
+        (LiteralExpression
+          range: 2:19-2:22
+          kind: STRING
+          text: "\"a\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:25
+    (CallExpression
+      range: 3:1-3:24
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:23
+        (MemberExpression
+          range: 3:7-3:18
+          (LiteralExpression
+            range: 3:7-3:10
+            kind: STRING
+            text: "\"A\""
+          )
+          (IdentifierExpression
+            range: 3:11-3:18
+            name: "compare"
+          )
+        )
+        (LiteralExpression
+          range: 3:19-3:22
+          kind: STRING
+          text: "\"a\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:35
+    (CallExpression
+      range: 4:1-4:34
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:33
+        (MemberExpression
+          range: 4:7-4:28
+          (LiteralExpression
+            range: 4:7-4:10
+            kind: STRING
+            text: "\"a\""
+          )
+          (IdentifierExpression
+            range: 4:11-4:28
+            name: "compareIgnoreCase"
+          )
+        )
+        (LiteralExpression
+          range: 4:29-4:32
+          kind: STRING
+          text: "\"A\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:34
+    (CallExpression
+      range: 5:1-5:33
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:32
+        (MemberExpression
+          range: 5:7-5:27
+          (LiteralExpression
+            range: 5:7-5:10
+            kind: STRING
+            text: "\"a\""
+          )
+          (IdentifierExpression
+            range: 5:11-5:27
+            name: "equalsIgnoreCase"
+          )
+        )
+        (LiteralExpression
+          range: 5:28-5:31
+          kind: STRING
+          text: "\"A\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:24 -> void
+  1:7-1:10 -> string
+  1:7-1:18 -> (string) => i32
+  1:7-1:23 -> i32
+  1:11-1:18 -> (string) => i32
+  1:19-1:22 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:24 -> void
+  2:7-2:10 -> string
+  2:7-2:18 -> (string) => i32
+  2:7-2:23 -> i32
+  2:11-2:18 -> (string) => i32
+  2:19-2:22 -> string
+  3:1-3:6 -> (any) => void
+  3:1-3:24 -> void
+  3:7-3:10 -> string
+  3:7-3:18 -> (string) => i32
+  3:7-3:23 -> i32
+  3:11-3:18 -> (string) => i32
+  3:19-3:22 -> string
+  4:1-4:6 -> (any) => void
+  4:1-4:34 -> void
+  4:7-4:10 -> string
+  4:7-4:28 -> (string) => i32
+  4:7-4:33 -> i32
+  4:11-4:28 -> (string) => i32
+  4:29-4:32 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:33 -> void
+  5:7-5:10 -> string
+  5:7-5:27 -> (string) => bool
+  5:7-5:32 -> bool
+  5:11-5:27 -> (string) => bool
+  5:28-5:31 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  1:11-1:18 -> java.lang.String.compareTo(string): i32
+  2:1-2:6 -> builtin print
+  2:11-2:18 -> java.lang.String.compareTo(string): i32
+  3:1-3:6 -> builtin print
+  3:11-3:18 -> java.lang.String.compareTo(string): i32
+  4:1-4:6 -> builtin print
+  4:11-4:28 -> java.lang.String.compareToIgnoreCase(string): i32
+  5:1-5:6 -> builtin print
+  5:11-5:27 -> java.lang.String.equalsIgnoreCase(string): bool
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a"
+    LDC "A"
+    INVOKEVIRTUAL java/lang/String.compareTo(Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a"
+    LDC "a"
+    INVOKEVIRTUAL java/lang/String.compareTo(Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "A"
+    LDC "a"
+    INVOKEVIRTUAL java/lang/String.compareTo(Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a"
+    LDC "A"
+    INVOKEVIRTUAL java/lang/String.compareToIgnoreCase(Ljava/lang/String;)I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "a"
+    LDC "A"
+    INVOKEVIRTUAL java/lang/String.equalsIgnoreCase(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+32
+0
+-32
+0
+true

@@ -323,7 +323,7 @@ References:
   8:19-8:22 -> 5:7-5:10
   9:1-9:6 -> builtin print
   9:7-9:11 -> 8:7-8:11
-  9:12-9:15 -> Map<Cat, string>.get(any): string | null
+  9:12-9:15 -> java.util.Map.get(any): string | null
   9:20-9:23 -> 6:7-6:10
 
 --- BYTECODE ---

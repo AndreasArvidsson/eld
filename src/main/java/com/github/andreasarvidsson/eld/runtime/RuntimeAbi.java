@@ -55,7 +55,7 @@ final public class RuntimeAbi {
 
         public String methodDescriptor(final ArrayMethod method) {
             return switch (method) {
-                case SIZE -> "()I";
+                case LENGTH -> "()I";
                 case GET -> "(I)" + elementDescriptor;
                 case SET -> "(I" + elementDescriptor + ")V";
                 case ADD -> "(" + elementDescriptor + ")V";
@@ -67,7 +67,7 @@ final public class RuntimeAbi {
     }
 
     public enum ArrayMethod {
-        SIZE("size"),
+        LENGTH("length"),
         GET("get"),
         SET("set"),
         ADD("add"),
@@ -124,6 +124,7 @@ final public class RuntimeAbi {
         classes.add(EldArray.class);
         classes.add(EldTuple.class);
         classes.add(EldEquality.class);
+        classes.add(EldString.class);
         classes.add(EldEquality.EldObject.class);
         classes.add(Introspection.class);
         classes.add(EldPromise.class);

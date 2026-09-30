@@ -15,7 +15,7 @@ public final class EldDoubleArray extends EldArray<EldDoubleArray> {
     // 2. Internally in this class.
     public EldDoubleArray(final double[] elements) {
         this.elements = elements;
-        size = elements.length;
+        length = elements.length;
     }
 
     public double get(final int index) {
@@ -27,8 +27,8 @@ public final class EldDoubleArray extends EldArray<EldDoubleArray> {
     }
 
     public void add(final double value) {
-        ensureCapacity(size + 1);
-        elements[size++] = value;
+        ensureCapacity(length + 1);
+        elements[length++] = value;
     }
 
     public void copyTo(
@@ -45,7 +45,7 @@ public final class EldDoubleArray extends EldArray<EldDoubleArray> {
     }
 
     public void sort() {
-        Arrays.sort(elements, 0, size);
+        Arrays.sort(elements, 0, length);
     }
 
     @Override
@@ -85,14 +85,14 @@ public final class EldDoubleArray extends EldArray<EldDoubleArray> {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof EldDoubleArray other
-            && Arrays.equals(elements, 0, size, other.elements, 0, other.size);
+        return obj instanceof EldDoubleArray other && Arrays
+            .equals(elements, 0, length, other.elements, 0, other.length);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < length; i++) {
             result = 31 * result + Double.hashCode(elements[i]);
         }
         return result;

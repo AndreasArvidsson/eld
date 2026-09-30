@@ -560,7 +560,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     ASTORE_2 2
     ALOAD_2 2
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.length()I
     ISTORE_3 3
     ILOAD_0 0
     ILOAD_3 3
@@ -577,7 +577,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.copy()Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
     ASTORE 5
     ALOAD 5
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.length()I
     ISTORE 6
     ILOAD_0 0
     ILOAD 6

@@ -2734,7 +2734,7 @@ class BytecodeGeneratorTest {
 
     private static int[] intValues(final Object value) {
         final EldIntArray array = assertInstanceOf(EldIntArray.class, value);
-        final int[] result = new int[array.size()];
+        final int[] result = new int[array.length()];
         for (int i = 0; i < result.length; i++) {
             result[i] = array.get(i);
         }
@@ -2769,7 +2769,7 @@ class BytecodeGeneratorTest {
         assertEquals(100, type.getMethod("last").invoke(null));
         final EldIntArray copy =
             (EldIntArray) type.getMethod("copy").invoke(null);
-        assertEquals(101, copy.size());
+        assertEquals(101, copy.length());
         assertNotSame(values, copy);
         assertEquals(values.toString(), copy.toString());
     }
@@ -2880,7 +2880,7 @@ class BytecodeGeneratorTest {
             final Object sliced = type.getField("sliced").get(null);
             assertEquals(original.getClass(), sliced.getClass());
             assertNotSame(original, sliced);
-            assertEquals(1, assertInstanceOf(EldArray.class, sliced).size());
+            assertEquals(1, assertInstanceOf(EldArray.class, sliced).length());
             assertEquals(
                 original.getClass()
                     .getMethod("get", int.class)
@@ -3015,7 +3015,7 @@ class BytecodeGeneratorTest {
         assertEquals(8000000000L, type.getField("wideAssigned").get(null));
         final EldLongArray longs =
             (EldLongArray) type.getField("longs").get(null);
-        assertEquals(1, longs.size());
+        assertEquals(1, longs.length());
         assertEquals(8000000000L, longs.get(0));
     }
 
@@ -4865,22 +4865,22 @@ class BytecodeGeneratorTest {
         );
         final EldDoubleArray floats =
             (EldDoubleArray) type.getField("floats").get(null);
-        assertEquals(2, floats.size());
+        assertEquals(2, floats.length());
         assertEquals(1.5, floats.get(0));
         assertEquals(2.5, floats.get(1));
         final EldCharArray chars =
             (EldCharArray) type.getField("chars").get(null);
-        assertEquals(2, chars.size());
+        assertEquals(2, chars.length());
         assertEquals('a', chars.get(0));
         assertEquals('b', chars.get(1));
         final EldBooleanArray flags =
             (EldBooleanArray) type.getField("flags").get(null);
-        assertEquals(2, flags.size());
+        assertEquals(2, flags.length());
         assertTrue(flags.get(0));
         assertFalse(flags.get(1));
         final EldObjectArray<?> strings =
             (EldObjectArray<?>) type.getField("strings").get(null);
-        assertEquals(2, strings.size());
+        assertEquals(2, strings.length());
         assertEquals("a", strings.get(0));
         assertEquals("b", strings.get(1));
         assertArrayEquals(
@@ -4891,7 +4891,7 @@ class BytecodeGeneratorTest {
         );
         assertEquals(
             0,
-            ((EldObjectArray<?>) type.getField("empty").get(null)).size()
+            ((EldObjectArray<?>) type.getField("empty").get(null)).length()
         );
         assertEquals(2, type.getMethod("find").invoke(null));
     }

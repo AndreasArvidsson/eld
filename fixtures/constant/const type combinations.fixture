@@ -1551,7 +1551,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC Test.fixed Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
     ASTORE_1 1
     ALOAD_1 1
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.length()I
     ISTORE_2 2
     ILOAD_0 0
     ILOAD_2 2
@@ -1646,7 +1646,7 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
    L0:
     ILOAD 6
     ALOAD 5
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.size()I
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.length()I
     IF_ICMPGE L1
     ALOAD 5
     ILOAD 6

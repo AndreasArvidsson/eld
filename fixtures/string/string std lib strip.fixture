@@ -1,0 +1,505 @@
+print("  hello world  ".strip());
+print("  hello world  ".stripStart());
+print("  hello world  ".stripEnd());
+print("---hello---".stripStart("-"));
+print("---hello---".strip("-"));
+print("---hello---".stripEnd("-"));
+print("xyxhellozyx".strip("xyz"));
+print("xyxhellozyx".stripStart("xyz"));
+print("xyxhellozyx".stripEnd("xyz"));
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+STRING_LITERAL "\"  hello world  \"" (1:7-1:24)
+DOT (1:24-1:25)
+IDENTIFIER "strip" (1:25-1:30)
+LEFT_PAREN (1:30-1:31)
+RIGHT_PAREN (1:31-1:32)
+RIGHT_PAREN (1:32-1:33)
+SEMICOLON (1:33-1:34)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+STRING_LITERAL "\"  hello world  \"" (2:7-2:24)
+DOT (2:24-2:25)
+IDENTIFIER "stripStart" (2:25-2:35)
+LEFT_PAREN (2:35-2:36)
+RIGHT_PAREN (2:36-2:37)
+RIGHT_PAREN (2:37-2:38)
+SEMICOLON (2:38-2:39)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+STRING_LITERAL "\"  hello world  \"" (3:7-3:24)
+DOT (3:24-3:25)
+IDENTIFIER "stripEnd" (3:25-3:33)
+LEFT_PAREN (3:33-3:34)
+RIGHT_PAREN (3:34-3:35)
+RIGHT_PAREN (3:35-3:36)
+SEMICOLON (3:36-3:37)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+STRING_LITERAL "\"---hello---\"" (4:7-4:20)
+DOT (4:20-4:21)
+IDENTIFIER "stripStart" (4:21-4:31)
+LEFT_PAREN (4:31-4:32)
+STRING_LITERAL "\"-\"" (4:32-4:35)
+RIGHT_PAREN (4:35-4:36)
+RIGHT_PAREN (4:36-4:37)
+SEMICOLON (4:37-4:38)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+STRING_LITERAL "\"---hello---\"" (5:7-5:20)
+DOT (5:20-5:21)
+IDENTIFIER "strip" (5:21-5:26)
+LEFT_PAREN (5:26-5:27)
+STRING_LITERAL "\"-\"" (5:27-5:30)
+RIGHT_PAREN (5:30-5:31)
+RIGHT_PAREN (5:31-5:32)
+SEMICOLON (5:32-5:33)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+STRING_LITERAL "\"---hello---\"" (6:7-6:20)
+DOT (6:20-6:21)
+IDENTIFIER "stripEnd" (6:21-6:29)
+LEFT_PAREN (6:29-6:30)
+STRING_LITERAL "\"-\"" (6:30-6:33)
+RIGHT_PAREN (6:33-6:34)
+RIGHT_PAREN (6:34-6:35)
+SEMICOLON (6:35-6:36)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+STRING_LITERAL "\"xyxhellozyx\"" (7:7-7:20)
+DOT (7:20-7:21)
+IDENTIFIER "strip" (7:21-7:26)
+LEFT_PAREN (7:26-7:27)
+STRING_LITERAL "\"xyz\"" (7:27-7:32)
+RIGHT_PAREN (7:32-7:33)
+RIGHT_PAREN (7:33-7:34)
+SEMICOLON (7:34-7:35)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+STRING_LITERAL "\"xyxhellozyx\"" (8:7-8:20)
+DOT (8:20-8:21)
+IDENTIFIER "stripStart" (8:21-8:31)
+LEFT_PAREN (8:31-8:32)
+STRING_LITERAL "\"xyz\"" (8:32-8:37)
+RIGHT_PAREN (8:37-8:38)
+RIGHT_PAREN (8:38-8:39)
+SEMICOLON (8:39-8:40)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+STRING_LITERAL "\"xyxhellozyx\"" (9:7-9:20)
+DOT (9:20-9:21)
+IDENTIFIER "stripEnd" (9:21-9:29)
+LEFT_PAREN (9:29-9:30)
+STRING_LITERAL "\"xyz\"" (9:30-9:35)
+RIGHT_PAREN (9:35-9:36)
+RIGHT_PAREN (9:36-9:37)
+SEMICOLON (9:37-9:38)
+
+--- AST ---
+
+(Program
+  range: 1:1-9:38
+  (ExpressionStatement
+    range: 1:1-1:34
+    (CallExpression
+      range: 1:1-1:33
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:32
+        (MemberExpression
+          range: 1:7-1:30
+          (LiteralExpression
+            range: 1:7-1:24
+            kind: STRING
+            text: "\"  hello world  \""
+          )
+          (IdentifierExpression
+            range: 1:25-1:30
+            name: "strip"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:39
+    (CallExpression
+      range: 2:1-2:38
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:37
+        (MemberExpression
+          range: 2:7-2:35
+          (LiteralExpression
+            range: 2:7-2:24
+            kind: STRING
+            text: "\"  hello world  \""
+          )
+          (IdentifierExpression
+            range: 2:25-2:35
+            name: "stripStart"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:37
+    (CallExpression
+      range: 3:1-3:36
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:35
+        (MemberExpression
+          range: 3:7-3:33
+          (LiteralExpression
+            range: 3:7-3:24
+            kind: STRING
+            text: "\"  hello world  \""
+          )
+          (IdentifierExpression
+            range: 3:25-3:33
+            name: "stripEnd"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:38
+    (CallExpression
+      range: 4:1-4:37
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:36
+        (MemberExpression
+          range: 4:7-4:31
+          (LiteralExpression
+            range: 4:7-4:20
+            kind: STRING
+            text: "\"---hello---\""
+          )
+          (IdentifierExpression
+            range: 4:21-4:31
+            name: "stripStart"
+          )
+        )
+        (LiteralExpression
+          range: 4:32-4:35
+          kind: STRING
+          text: "\"-\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:33
+    (CallExpression
+      range: 5:1-5:32
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (CallExpression
+        range: 5:7-5:31
+        (MemberExpression
+          range: 5:7-5:26
+          (LiteralExpression
+            range: 5:7-5:20
+            kind: STRING
+            text: "\"---hello---\""
+          )
+          (IdentifierExpression
+            range: 5:21-5:26
+            name: "strip"
+          )
+        )
+        (LiteralExpression
+          range: 5:27-5:30
+          kind: STRING
+          text: "\"-\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:36
+    (CallExpression
+      range: 6:1-6:35
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:34
+        (MemberExpression
+          range: 6:7-6:29
+          (LiteralExpression
+            range: 6:7-6:20
+            kind: STRING
+            text: "\"---hello---\""
+          )
+          (IdentifierExpression
+            range: 6:21-6:29
+            name: "stripEnd"
+          )
+        )
+        (LiteralExpression
+          range: 6:30-6:33
+          kind: STRING
+          text: "\"-\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:35
+    (CallExpression
+      range: 7:1-7:34
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:33
+        (MemberExpression
+          range: 7:7-7:26
+          (LiteralExpression
+            range: 7:7-7:20
+            kind: STRING
+            text: "\"xyxhellozyx\""
+          )
+          (IdentifierExpression
+            range: 7:21-7:26
+            name: "strip"
+          )
+        )
+        (LiteralExpression
+          range: 7:27-7:32
+          kind: STRING
+          text: "\"xyz\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:40
+    (CallExpression
+      range: 8:1-8:39
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:38
+        (MemberExpression
+          range: 8:7-8:31
+          (LiteralExpression
+            range: 8:7-8:20
+            kind: STRING
+            text: "\"xyxhellozyx\""
+          )
+          (IdentifierExpression
+            range: 8:21-8:31
+            name: "stripStart"
+          )
+        )
+        (LiteralExpression
+          range: 8:32-8:37
+          kind: STRING
+          text: "\"xyz\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:38
+    (CallExpression
+      range: 9:1-9:37
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:36
+        (MemberExpression
+          range: 9:7-9:29
+          (LiteralExpression
+            range: 9:7-9:20
+            kind: STRING
+            text: "\"xyxhellozyx\""
+          )
+          (IdentifierExpression
+            range: 9:21-9:29
+            name: "stripEnd"
+          )
+        )
+        (LiteralExpression
+          range: 9:30-9:35
+          kind: STRING
+          text: "\"xyz\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:33 -> void
+  1:7-1:24 -> string
+  1:7-1:30 -> () => string
+  1:7-1:32 -> string
+  1:25-1:30 -> () => string
+  2:1-2:6 -> (any) => void
+  2:1-2:38 -> void
+  2:7-2:24 -> string
+  2:7-2:35 -> () => string
+  2:7-2:37 -> string
+  2:25-2:35 -> () => string
+  3:1-3:6 -> (any) => void
+  3:1-3:36 -> void
+  3:7-3:24 -> string
+  3:7-3:33 -> () => string
+  3:7-3:35 -> string
+  3:25-3:33 -> () => string
+  4:1-4:6 -> (any) => void
+  4:1-4:37 -> void
+  4:7-4:20 -> string
+  4:7-4:31 -> (string) => string
+  4:7-4:36 -> string
+  4:21-4:31 -> (string) => string
+  4:32-4:35 -> string
+  5:1-5:6 -> (any) => void
+  5:1-5:32 -> void
+  5:7-5:20 -> string
+  5:7-5:26 -> (string) => string
+  5:7-5:31 -> string
+  5:21-5:26 -> (string) => string
+  5:27-5:30 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:35 -> void
+  6:7-6:20 -> string
+  6:7-6:29 -> (string) => string
+  6:7-6:34 -> string
+  6:21-6:29 -> (string) => string
+  6:30-6:33 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:34 -> void
+  7:7-7:20 -> string
+  7:7-7:26 -> (string) => string
+  7:7-7:33 -> string
+  7:21-7:26 -> (string) => string
+  7:27-7:32 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:39 -> void
+  8:7-8:20 -> string
+  8:7-8:31 -> (string) => string
+  8:7-8:38 -> string
+  8:21-8:31 -> (string) => string
+  8:32-8:37 -> string
+  9:1-9:6 -> (any) => void
+  9:1-9:37 -> void
+  9:7-9:20 -> string
+  9:7-9:29 -> (string) => string
+  9:7-9:36 -> string
+  9:21-9:29 -> (string) => string
+  9:30-9:35 -> string
+
+References:
+  1:1-1:6 -> builtin print
+  1:25-1:30 -> java.lang.String.strip(): string
+  2:1-2:6 -> builtin print
+  2:25-2:35 -> java.lang.String.stripLeading(): string
+  3:1-3:6 -> builtin print
+  3:25-3:33 -> java.lang.String.stripTrailing(): string
+  4:1-4:6 -> builtin print
+  4:21-4:31 -> EldString.stripStart(string, string): string
+  5:1-5:6 -> builtin print
+  5:21-5:26 -> EldString.strip(string, string): string
+  6:1-6:6 -> builtin print
+  6:21-6:29 -> EldString.stripEnd(string, string): string
+  7:1-7:6 -> builtin print
+  7:21-7:26 -> EldString.strip(string, string): string
+  8:1-8:6 -> builtin print
+  8:21-8:31 -> EldString.stripStart(string, string): string
+  9:1-9:6 -> builtin print
+  9:21-9:29 -> EldString.stripEnd(string, string): string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "  hello world  "
+    INVOKEVIRTUAL java/lang/String.strip()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "  hello world  "
+    INVOKEVIRTUAL java/lang/String.stripLeading()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "  hello world  "
+    INVOKEVIRTUAL java/lang/String.stripTrailing()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "---hello---"
+    LDC "-"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.stripStart(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "---hello---"
+    LDC "-"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.strip(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "---hello---"
+    LDC "-"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.stripEnd(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "xyxhellozyx"
+    LDC "xyz"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.strip(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "xyxhellozyx"
+    LDC "xyz"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.stripStart(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC "xyxhellozyx"
+    LDC "xyz"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldString.stripEnd(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+hello world
+hello world  
+  hello world
+hello---
+hello
+---hello
+hello
+hellozyx
+xyxhello

@@ -342,7 +342,7 @@ Declarations:
   18:14-18:19 -> const outer: IOException
 
 References:
-  1:22-1:33 -> 1:18-1:45
+  1:22-1:33 -> java.io.IOException
   4:15-4:23 -> 1:7-1:15
   6:9-6:14 -> builtin print
   9:5-9:10 -> builtin print

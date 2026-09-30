@@ -370,7 +370,7 @@ References:
   8:32-8:35 -> 7:7-7:10
   8:36-8:42 -> 2:17-2:23
   9:34-9:37 -> 7:7-7:10
-  9:38-9:44 -> Foo.equals(Foo): bool
+  9:38-9:44 -> java.lang.Object.equals(Foo): bool
   10:1-10:6 -> builtin print
   10:7-10:14 -> 8:7-8:14
   11:1-11:6 -> builtin print
