@@ -171,11 +171,13 @@ mvn -N -q spotless:apply
 
 ```ts
 // foo and bar are named imports
-import foo, bar from "lib"
+import foo, bar from "lib";
 // Aliasing is supported
-import foo as bar, baz from "lib"
+import foo as bar, baz from "lib";
 // Wildcard is supported
-import * as lib from "lib"
+import * as lib from "lib";
+// Java imports use public declaration as named export
+import Arrays from "java.util.Arrays";
 
 // Visible from all other modules
 public const foo = 0;
@@ -189,6 +191,13 @@ protected const bar = 0;
 - Introduced type never. Today [] is typed as [any]. Should it be [never]?
 - Replace builtin print in fixtures with actual Java reference?
 - create literal types from collection elements
+  ```
+  const list = [1, 2, 3];
+  type ListValue = valueof typeof list;
+  const obj = new Record(foo: 1, bar: 2);
+  type Key = keyof typeof obj;
+  type Value = valueof typeof obj;
+  ```
 - Export & import
 - constant control-flow elimination
   - Instead of silently eliminated these: throw exception? Or should this be a warning?
@@ -201,6 +210,7 @@ protected const bar = 0;
 - Formatter
 - LSP, linting, code completion
 - Tree sitter parser
+- Manually look through all core implementations and clean up
 - Update documentation with code examples for every single syntax.
 - Operator overloading. We have already added `==`.
 - Regex literals: `const re: regex = /^\d+$`;

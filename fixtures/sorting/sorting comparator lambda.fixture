@@ -874,21 +874,17 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
   method $lambda0(LTest$Person;LTest$Person;)I flags [PRIVATE, STATIC, SYNTHETIC]
     ALOAD_0 0
     GETFIELD Test$Person.age I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ALOAD_1 1
     GETFIELD Test$Person.age I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IRETURN
     max stack 2 max locals 2
   method $lambda1(LTest$Person;LTest$Person;)I flags [PRIVATE, STATIC, SYNTHETIC]
     ALOAD_1 1
     GETFIELD Test$Person.age I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ALOAD_0 0
     GETFIELD Test$Person.age I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IRETURN
     max stack 2 max locals 2
   method <clinit>()V flags [STATIC]

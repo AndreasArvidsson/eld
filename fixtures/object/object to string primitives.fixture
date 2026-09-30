@@ -1,0 +1,649 @@
+const byteValue: i8 = 1;
+const shortValue: i16 = 2;
+const intValue: i32 = 3;
+const longValue: i64 = 4;
+const floatValue: f32 = 1.5;
+const doubleValue: f64 = 2.5;
+const boolValue: bool = true;
+const charValue: char = 'x';
+print(byteValue.toString());
+print(shortValue.toString());
+print(intValue.toString());
+print(longValue.toString());
+print(floatValue.toString());
+print(doubleValue.toString());
+print(boolValue.toString());
+print(charValue.toString());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "byteValue" (1:7-1:16)
+COLON (1:16-1:17)
+IDENTIFIER "i8" (1:18-1:20)
+EQUAL (1:21-1:22)
+INTEGER_LITERAL "1" (1:23-1:24)
+SEMICOLON (1:24-1:25)
+CONST (2:1-2:6)
+IDENTIFIER "shortValue" (2:7-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "i16" (2:19-2:22)
+EQUAL (2:23-2:24)
+INTEGER_LITERAL "2" (2:25-2:26)
+SEMICOLON (2:26-2:27)
+CONST (3:1-3:6)
+IDENTIFIER "intValue" (3:7-3:15)
+COLON (3:15-3:16)
+IDENTIFIER "i32" (3:17-3:20)
+EQUAL (3:21-3:22)
+INTEGER_LITERAL "3" (3:23-3:24)
+SEMICOLON (3:24-3:25)
+CONST (4:1-4:6)
+IDENTIFIER "longValue" (4:7-4:16)
+COLON (4:16-4:17)
+IDENTIFIER "i64" (4:18-4:21)
+EQUAL (4:22-4:23)
+INTEGER_LITERAL "4" (4:24-4:25)
+SEMICOLON (4:25-4:26)
+CONST (5:1-5:6)
+IDENTIFIER "floatValue" (5:7-5:17)
+COLON (5:17-5:18)
+IDENTIFIER "f32" (5:19-5:22)
+EQUAL (5:23-5:24)
+FLOAT_LITERAL "1.5" (5:25-5:28)
+SEMICOLON (5:28-5:29)
+CONST (6:1-6:6)
+IDENTIFIER "doubleValue" (6:7-6:18)
+COLON (6:18-6:19)
+IDENTIFIER "f64" (6:20-6:23)
+EQUAL (6:24-6:25)
+FLOAT_LITERAL "2.5" (6:26-6:29)
+SEMICOLON (6:29-6:30)
+CONST (7:1-7:6)
+IDENTIFIER "boolValue" (7:7-7:16)
+COLON (7:16-7:17)
+IDENTIFIER "bool" (7:18-7:22)
+EQUAL (7:23-7:24)
+BOOLEAN_LITERAL "true" (7:25-7:29)
+SEMICOLON (7:29-7:30)
+CONST (8:1-8:6)
+IDENTIFIER "charValue" (8:7-8:16)
+COLON (8:16-8:17)
+IDENTIFIER "char" (8:18-8:22)
+EQUAL (8:23-8:24)
+CHAR_LITERAL "'x'" (8:25-8:28)
+SEMICOLON (8:28-8:29)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "byteValue" (9:7-9:16)
+DOT (9:16-9:17)
+IDENTIFIER "toString" (9:17-9:25)
+LEFT_PAREN (9:25-9:26)
+RIGHT_PAREN (9:26-9:27)
+RIGHT_PAREN (9:27-9:28)
+SEMICOLON (9:28-9:29)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "shortValue" (10:7-10:17)
+DOT (10:17-10:18)
+IDENTIFIER "toString" (10:18-10:26)
+LEFT_PAREN (10:26-10:27)
+RIGHT_PAREN (10:27-10:28)
+RIGHT_PAREN (10:28-10:29)
+SEMICOLON (10:29-10:30)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "intValue" (11:7-11:15)
+DOT (11:15-11:16)
+IDENTIFIER "toString" (11:16-11:24)
+LEFT_PAREN (11:24-11:25)
+RIGHT_PAREN (11:25-11:26)
+RIGHT_PAREN (11:26-11:27)
+SEMICOLON (11:27-11:28)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "longValue" (12:7-12:16)
+DOT (12:16-12:17)
+IDENTIFIER "toString" (12:17-12:25)
+LEFT_PAREN (12:25-12:26)
+RIGHT_PAREN (12:26-12:27)
+RIGHT_PAREN (12:27-12:28)
+SEMICOLON (12:28-12:29)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "floatValue" (13:7-13:17)
+DOT (13:17-13:18)
+IDENTIFIER "toString" (13:18-13:26)
+LEFT_PAREN (13:26-13:27)
+RIGHT_PAREN (13:27-13:28)
+RIGHT_PAREN (13:28-13:29)
+SEMICOLON (13:29-13:30)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "doubleValue" (14:7-14:18)
+DOT (14:18-14:19)
+IDENTIFIER "toString" (14:19-14:27)
+LEFT_PAREN (14:27-14:28)
+RIGHT_PAREN (14:28-14:29)
+RIGHT_PAREN (14:29-14:30)
+SEMICOLON (14:30-14:31)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "boolValue" (15:7-15:16)
+DOT (15:16-15:17)
+IDENTIFIER "toString" (15:17-15:25)
+LEFT_PAREN (15:25-15:26)
+RIGHT_PAREN (15:26-15:27)
+RIGHT_PAREN (15:27-15:28)
+SEMICOLON (15:28-15:29)
+IDENTIFIER "print" (16:1-16:6)
+LEFT_PAREN (16:6-16:7)
+IDENTIFIER "charValue" (16:7-16:16)
+DOT (16:16-16:17)
+IDENTIFIER "toString" (16:17-16:25)
+LEFT_PAREN (16:25-16:26)
+RIGHT_PAREN (16:26-16:27)
+RIGHT_PAREN (16:27-16:28)
+SEMICOLON (16:28-16:29)
+
+--- AST ---
+
+(Program
+  range: 1:1-16:29
+  (VariableDeclaration
+    range: 1:1-1:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:16
+      name: "byteValue"
+    )
+    (NamedTypeNode
+      range: 1:18-1:20
+      name: "i8"
+    )
+    (LiteralExpression
+      range: 1:23-1:24
+      kind: INT
+      text: "1"
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:17
+      name: "shortValue"
+    )
+    (NamedTypeNode
+      range: 2:19-2:22
+      name: "i16"
+    )
+    (LiteralExpression
+      range: 2:25-2:26
+      kind: INT
+      text: "2"
+    )
+  )
+  (VariableDeclaration
+    range: 3:1-3:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 3:7-3:15
+      name: "intValue"
+    )
+    (NamedTypeNode
+      range: 3:17-3:20
+      name: "i32"
+    )
+    (LiteralExpression
+      range: 3:23-3:24
+      kind: INT
+      text: "3"
+    )
+  )
+  (VariableDeclaration
+    range: 4:1-4:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 4:7-4:16
+      name: "longValue"
+    )
+    (NamedTypeNode
+      range: 4:18-4:21
+      name: "i64"
+    )
+    (LiteralExpression
+      range: 4:24-4:25
+      kind: INT
+      text: "4"
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:17
+      name: "floatValue"
+    )
+    (NamedTypeNode
+      range: 5:19-5:22
+      name: "f32"
+    )
+    (LiteralExpression
+      range: 5:25-5:28
+      kind: FLOAT
+      text: "1.5"
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:18
+      name: "doubleValue"
+    )
+    (NamedTypeNode
+      range: 6:20-6:23
+      name: "f64"
+    )
+    (LiteralExpression
+      range: 6:26-6:29
+      kind: FLOAT
+      text: "2.5"
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:16
+      name: "boolValue"
+    )
+    (NamedTypeNode
+      range: 7:18-7:22
+      name: "bool"
+    )
+    (LiteralExpression
+      range: 7:25-7:29
+      kind: BOOL
+      text: "true"
+    )
+  )
+  (VariableDeclaration
+    range: 8:1-8:29
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 8:7-8:16
+      name: "charValue"
+    )
+    (NamedTypeNode
+      range: 8:18-8:22
+      name: "char"
+    )
+    (LiteralExpression
+      range: 8:25-8:28
+      kind: CHAR
+      text: "'x'"
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:29
+    (CallExpression
+      range: 9:1-9:28
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:27
+        (MemberExpression
+          range: 9:7-9:25
+          (IdentifierExpression
+            range: 9:7-9:16
+            name: "byteValue"
+          )
+          (IdentifierExpression
+            range: 9:17-9:25
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:30
+    (CallExpression
+      range: 10:1-10:29
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:28
+        (MemberExpression
+          range: 10:7-10:26
+          (IdentifierExpression
+            range: 10:7-10:17
+            name: "shortValue"
+          )
+          (IdentifierExpression
+            range: 10:18-10:26
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:28
+    (CallExpression
+      range: 11:1-11:27
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:26
+        (MemberExpression
+          range: 11:7-11:24
+          (IdentifierExpression
+            range: 11:7-11:15
+            name: "intValue"
+          )
+          (IdentifierExpression
+            range: 11:16-11:24
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:29
+    (CallExpression
+      range: 12:1-12:28
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (CallExpression
+        range: 12:7-12:27
+        (MemberExpression
+          range: 12:7-12:25
+          (IdentifierExpression
+            range: 12:7-12:16
+            name: "longValue"
+          )
+          (IdentifierExpression
+            range: 12:17-12:25
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:30
+    (CallExpression
+      range: 13:1-13:29
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (CallExpression
+        range: 13:7-13:28
+        (MemberExpression
+          range: 13:7-13:26
+          (IdentifierExpression
+            range: 13:7-13:17
+            name: "floatValue"
+          )
+          (IdentifierExpression
+            range: 13:18-13:26
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:31
+    (CallExpression
+      range: 14:1-14:30
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (CallExpression
+        range: 14:7-14:29
+        (MemberExpression
+          range: 14:7-14:27
+          (IdentifierExpression
+            range: 14:7-14:18
+            name: "doubleValue"
+          )
+          (IdentifierExpression
+            range: 14:19-14:27
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:29
+    (CallExpression
+      range: 15:1-15:28
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:27
+        (MemberExpression
+          range: 15:7-15:25
+          (IdentifierExpression
+            range: 15:7-15:16
+            name: "boolValue"
+          )
+          (IdentifierExpression
+            range: 15:17-15:25
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 16:1-16:29
+    (CallExpression
+      range: 16:1-16:28
+      (IdentifierExpression
+        range: 16:1-16:6
+        name: "print"
+      )
+      (CallExpression
+        range: 16:7-16:27
+        (MemberExpression
+          range: 16:7-16:25
+          (IdentifierExpression
+            range: 16:7-16:16
+            name: "charValue"
+          )
+          (IdentifierExpression
+            range: 16:17-16:25
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:23-1:24 -> i32
+  2:25-2:26 -> i32
+  3:23-3:24 -> i32
+  4:24-4:25 -> i64
+  5:25-5:28 -> f32
+  6:26-6:29 -> f64
+  7:25-7:29 -> bool
+  8:25-8:28 -> char
+  9:1-9:6 -> (any) => void
+  9:1-9:28 -> void
+  9:7-9:16 -> i8
+  9:7-9:25 -> () => string
+  9:7-9:27 -> string
+  9:17-9:25 -> () => string
+  10:1-10:6 -> (any) => void
+  10:1-10:29 -> void
+  10:7-10:17 -> i16
+  10:7-10:26 -> () => string
+  10:7-10:28 -> string
+  10:18-10:26 -> () => string
+  11:1-11:6 -> (any) => void
+  11:1-11:27 -> void
+  11:7-11:15 -> i32
+  11:7-11:24 -> () => string
+  11:7-11:26 -> string
+  11:16-11:24 -> () => string
+  12:1-12:6 -> (any) => void
+  12:1-12:28 -> void
+  12:7-12:16 -> i64
+  12:7-12:25 -> () => string
+  12:7-12:27 -> string
+  12:17-12:25 -> () => string
+  13:1-13:6 -> (any) => void
+  13:1-13:29 -> void
+  13:7-13:17 -> f32
+  13:7-13:26 -> () => string
+  13:7-13:28 -> string
+  13:18-13:26 -> () => string
+  14:1-14:6 -> (any) => void
+  14:1-14:30 -> void
+  14:7-14:18 -> f64
+  14:7-14:27 -> () => string
+  14:7-14:29 -> string
+  14:19-14:27 -> () => string
+  15:1-15:6 -> (any) => void
+  15:1-15:28 -> void
+  15:7-15:16 -> bool
+  15:7-15:25 -> () => string
+  15:7-15:27 -> string
+  15:17-15:25 -> () => string
+  16:1-16:6 -> (any) => void
+  16:1-16:28 -> void
+  16:7-16:16 -> char
+  16:7-16:25 -> () => string
+  16:7-16:27 -> string
+  16:17-16:25 -> () => string
+
+Resolved types:
+  1:18-1:20 -> i8
+  2:19-2:22 -> i16
+  3:17-3:20 -> i32
+  4:18-4:21 -> i64
+  5:19-5:22 -> f32
+  6:20-6:23 -> f64
+  7:18-7:22 -> bool
+  8:18-8:22 -> char
+
+Conversions:
+  1:23-1:24 -> i32 -> i8
+  2:25-2:26 -> i32 -> i16
+
+Declarations:
+  1:7-1:16 -> const byteValue: i8
+  2:7-2:17 -> const shortValue: i16
+  3:7-3:15 -> const intValue: i32
+  4:7-4:16 -> const longValue: i64
+  5:7-5:17 -> const floatValue: f32
+  6:7-6:18 -> const doubleValue: f64
+  7:7-7:16 -> const boolValue: bool
+  8:7-8:16 -> const charValue: char
+
+References:
+  9:1-9:6 -> builtin print
+  9:7-9:16 -> 1:7-1:16
+  9:17-9:25 -> java.lang.Byte.toString(): string
+  10:1-10:6 -> builtin print
+  10:7-10:17 -> 2:7-2:17
+  10:18-10:26 -> java.lang.Short.toString(): string
+  11:1-11:6 -> builtin print
+  11:7-11:15 -> 3:7-3:15
+  11:16-11:24 -> java.lang.Integer.toString(): string
+  12:1-12:6 -> builtin print
+  12:7-12:16 -> 4:7-4:16
+  12:17-12:25 -> java.lang.Long.toString(): string
+  13:1-13:6 -> builtin print
+  13:7-13:17 -> 5:7-5:17
+  13:18-13:26 -> java.lang.Float.toString(): string
+  14:1-14:6 -> builtin print
+  14:7-14:18 -> 6:7-6:18
+  14:19-14:27 -> java.lang.Double.toString(): string
+  15:1-15:6 -> builtin print
+  15:7-15:16 -> 7:7-7:16
+  15:17-15:25 -> java.lang.Boolean.toString(): string
+  16:1-16:6 -> builtin print
+  16:7-16:16 -> 8:7-8:16
+  16:17-16:25 -> java.lang.Character.toString(): string
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field byteValue B flags [PUBLIC, STATIC, FINAL] = 1
+  field shortValue S flags [PUBLIC, STATIC, FINAL] = 2
+  field intValue I flags [PUBLIC, STATIC, FINAL] = 3
+  field longValue J flags [PUBLIC, STATIC, FINAL] = 4
+  field floatValue F flags [PUBLIC, STATIC, FINAL] = 1.5
+  field doubleValue D flags [PUBLIC, STATIC, FINAL] = 2.5
+  field boolValue Z flags [PUBLIC, STATIC, FINAL] = 1
+  field charValue C flags [PUBLIC, STATIC, FINAL] = 120
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.byteValue B
+    INVOKESTATIC java/lang/Byte.toString(B)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.shortValue S
+    INVOKESTATIC java/lang/Short.toString(S)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.intValue I
+    INVOKESTATIC java/lang/Integer.toString(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.longValue J
+    INVOKESTATIC java/lang/Long.toString(J)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.floatValue F
+    INVOKESTATIC java/lang/Float.toString(F)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.doubleValue D
+    INVOKESTATIC java/lang/Double.toString(D)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.boolValue Z
+    INVOKESTATIC java/lang/Boolean.toString(Z)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.charValue C
+    INVOKESTATIC java/lang/Character.toString(C)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+1
+2
+3
+4
+1.5
+2.5
+true
+x

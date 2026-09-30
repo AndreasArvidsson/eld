@@ -333,14 +333,12 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ALOAD_1 1
     LDC 0
     INVOKEINTERFACE java/util/List.get(I)Ljava/lang/Object;
     CHECKCAST java/lang/Integer
     INVOKEVIRTUAL java/lang/Integer.intValue()I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IRETURN
     max stack 3 max locals 2
   method <clinit>()V flags [STATIC]

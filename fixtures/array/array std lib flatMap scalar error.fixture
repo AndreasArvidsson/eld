@@ -1,0 +1,115 @@
+const list = [1, 2, 3];
+list.flatMap((value, index) => 2 * value);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "list" (1:7-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "1" (1:15-1:16)
+COMMA (1:16-1:17)
+INTEGER_LITERAL "2" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "3" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+SEMICOLON (1:23-1:24)
+IDENTIFIER "list" (2:1-2:5)
+DOT (2:5-2:6)
+IDENTIFIER "flatMap" (2:6-2:13)
+LEFT_PAREN (2:13-2:14)
+LEFT_PAREN (2:14-2:15)
+IDENTIFIER "value" (2:15-2:20)
+COMMA (2:20-2:21)
+IDENTIFIER "index" (2:22-2:27)
+RIGHT_PAREN (2:27-2:28)
+ARROW (2:29-2:31)
+INTEGER_LITERAL "2" (2:32-2:33)
+STAR (2:34-2:35)
+IDENTIFIER "value" (2:36-2:41)
+RIGHT_PAREN (2:41-2:42)
+SEMICOLON (2:42-2:43)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:43
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "list"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:23
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:18-1:19
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:43
+    (CallExpression
+      range: 2:1-2:42
+      (MemberExpression
+        range: 2:1-2:13
+        (IdentifierExpression
+          range: 2:1-2:5
+          name: "list"
+        )
+        (IdentifierExpression
+          range: 2:6-2:13
+          name: "flatMap"
+        )
+      )
+      (LambdaExpression
+        range: 2:14-2:41
+        (LambdaParameter
+          range: 2:15-2:20
+          (IdentifierDeclaration
+            range: 2:15-2:20
+            name: "value"
+          )
+        )
+        (LambdaParameter
+          range: 2:22-2:27
+          (IdentifierDeclaration
+            range: 2:22-2:27
+            name: "index"
+          )
+        )
+        (BinaryExpression
+          range: 2:32-2:41
+          (LiteralExpression
+            range: 2:32-2:33
+            kind: INT
+            text: "2"
+          )
+          operator: MULTIPLY
+          (IdentifierExpression
+            range: 2:36-2:41
+            name: "value"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Array flatMap callback must return an array at 2:14-2:41

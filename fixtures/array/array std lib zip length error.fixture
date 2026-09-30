@@ -1,0 +1,278 @@
+const list = [1, 2, 3];
+const another = ["a", "b"];
+try {
+    list.zip(another);
+} catch (e: IllegalArgumentException) {
+    print(e.getMessage());
+}
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "list" (1:7-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "1" (1:15-1:16)
+COMMA (1:16-1:17)
+INTEGER_LITERAL "2" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "3" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+SEMICOLON (1:23-1:24)
+CONST (2:1-2:6)
+IDENTIFIER "another" (2:7-2:14)
+EQUAL (2:15-2:16)
+LEFT_BRACKET (2:17-2:18)
+STRING_LITERAL "\"a\"" (2:18-2:21)
+COMMA (2:21-2:22)
+STRING_LITERAL "\"b\"" (2:23-2:26)
+RIGHT_BRACKET (2:26-2:27)
+SEMICOLON (2:27-2:28)
+TRY (3:1-3:4)
+LEFT_BRACE (3:5-3:6)
+IDENTIFIER "list" (4:5-4:9)
+DOT (4:9-4:10)
+IDENTIFIER "zip" (4:10-4:13)
+LEFT_PAREN (4:13-4:14)
+IDENTIFIER "another" (4:14-4:21)
+RIGHT_PAREN (4:21-4:22)
+SEMICOLON (4:22-4:23)
+RIGHT_BRACE (5:1-5:2)
+CATCH (5:3-5:8)
+LEFT_PAREN (5:9-5:10)
+IDENTIFIER "e" (5:10-5:11)
+COLON (5:11-5:12)
+IDENTIFIER "IllegalArgumentException" (5:13-5:37)
+RIGHT_PAREN (5:37-5:38)
+LEFT_BRACE (5:39-5:40)
+IDENTIFIER "print" (6:5-6:10)
+LEFT_PAREN (6:10-6:11)
+IDENTIFIER "e" (6:11-6:12)
+DOT (6:12-6:13)
+IDENTIFIER "getMessage" (6:13-6:23)
+LEFT_PAREN (6:23-6:24)
+RIGHT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "list"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:23
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:18-1:19
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:28
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "another"
+    )
+    type: null
+    (ArrayExpression
+      range: 2:17-2:27
+      (LiteralExpression
+        range: 2:18-2:21
+        kind: STRING
+        text: "\"a\""
+      )
+      (LiteralExpression
+        range: 2:23-2:26
+        kind: STRING
+        text: "\"b\""
+      )
+    )
+  )
+  (TryStatement
+    range: 3:1-7:2
+    (BlockStatement
+      range: 3:5-5:2
+      (ExpressionStatement
+        range: 4:5-4:23
+        (CallExpression
+          range: 4:5-4:22
+          (MemberExpression
+            range: 4:5-4:13
+            (IdentifierExpression
+              range: 4:5-4:9
+              name: "list"
+            )
+            (IdentifierExpression
+              range: 4:10-4:13
+              name: "zip"
+            )
+          )
+          (IdentifierExpression
+            range: 4:14-4:21
+            name: "another"
+          )
+        )
+      )
+    )
+    (CatchClause
+      range: 5:3-7:2
+      (IdentifierDeclaration
+        range: 5:10-5:11
+        name: "e"
+      )
+      (NamedTypeNode
+        range: 5:13-5:37
+        name: "IllegalArgumentException"
+      )
+      (BlockStatement
+        range: 5:39-7:2
+        (ExpressionStatement
+          range: 6:5-6:27
+          (CallExpression
+            range: 6:5-6:26
+            (IdentifierExpression
+              range: 6:5-6:10
+              name: "print"
+            )
+            (CallExpression
+              range: 6:11-6:25
+              (MemberExpression
+                range: 6:11-6:23
+                (IdentifierExpression
+                  range: 6:11-6:12
+                  name: "e"
+                )
+                (IdentifierExpression
+                  range: 6:13-6:23
+                  name: "getMessage"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    finallyBody: null
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:23 -> [i32]
+  1:15-1:16 -> i32
+  1:18-1:19 -> i32
+  1:21-1:22 -> i32
+  2:17-2:27 -> [string]
+  2:18-2:21 -> string
+  2:23-2:26 -> string
+  4:5-4:9 -> [i32]
+  4:5-4:13 -> ([string]) => [(i32, string)]
+  4:5-4:22 -> [(i32, string)]
+  4:10-4:13 -> ([string]) => [(i32, string)]
+  4:14-4:21 -> [string]
+  6:5-6:10 -> (any) => void
+  6:5-6:26 -> void
+  6:11-6:12 -> IllegalArgumentException
+  6:11-6:23 -> () => string | null
+  6:11-6:25 -> string | null
+  6:13-6:23 -> () => string | null
+
+Resolved types:
+  5:13-5:37 -> IllegalArgumentException
+
+Declarations:
+  1:7-1:11 -> const list: [i32]
+  2:7-2:14 -> const another: [string]
+  5:10-5:11 -> const e: IllegalArgumentException
+
+References:
+  4:5-4:9 -> 1:7-1:11
+  4:10-4:13 -> EldIntArray.zip([string]): [(i32, string)]
+  4:14-4:21 -> 2:7-2:14
+  6:5-6:10 -> builtin print
+  6:11-6:12 -> 5:10-5:11
+  6:13-6:23 -> java.lang.Throwable.getMessage(): string | null
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field another Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 3
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 2
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "a"
+    AASTORE
+    DUP
+    LDC 1
+    LDC "b"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.another Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+   L0:
+    NOP
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC Test.another Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.zip(Lcom/github/andreasarvidsson/eld/runtime/EldArray;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    POP
+   L1:
+    GOTO L3
+   L2:
+    ASTORE_0 0
+    NOP
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ALOAD_0 0
+    INVOKEVIRTUAL java/lang/Throwable.getMessage()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+   L3:
+    RETURN
+    catch java/lang/IllegalArgumentException from L0 to L1 handler L2
+    max stack 6 max locals 1
+
+--- OUTPUT ---
+
+Cannot zip arrays of different lengths

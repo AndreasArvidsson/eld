@@ -43,6 +43,11 @@ public final class ${CLASS} implements EldArray<${CLASS}> {
         return elements[normalizeIndex(index)];
     }
 
+    @Override
+    public Object boxedGet(final int index) {
+        return get(index);
+    }
+
     public void set(final int index, final ${PRIMITIVE} value) {
         elements[normalizeIndex(index)] = value;
     }

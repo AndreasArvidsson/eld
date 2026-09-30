@@ -43,6 +43,11 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return elements[normalizeIndex(index)];
     }
 
+    @Override
+    public Object boxedGet(final int index) {
+        return get(index);
+    }
+
     public void set(final int index, final float value) {
         elements[normalizeIndex(index)] = value;
     }
@@ -257,6 +262,21 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    public EldTuple partition(final MethodHandle predicate) throws Throwable {
+        final EldFloatArray matching = new EldFloatArray();
+        final EldFloatArray remaining = new EldFloatArray();
+        for (int index = 0; index < length; index++) {
+            final float value = get(index);
+            if (test(predicate, value, index)) {
+                matching.add(value);
+            }
+            else {
+                remaining.add(value);
+            }
+        }
+        return new EldTuple(new Object[] {matching, remaining});
+    }
+
     public EldArray<?> map(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final boolean indexed = transform.type().parameterCount() == 2;
         return switch (elementDescriptor) {
@@ -344,6 +364,102 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         };
     }
 
+    public EldArray<?> flatMap(final MethodHandle transform, final String elementDescriptor) throws Throwable {
+        final boolean indexed = transform.type().parameterCount() == 2;
+        final EldArray<?>[] parts = new EldArray<?>[length];
+        int total = 0;
+        for (int index = 0; index < length; index++) {
+            final EldArray<?> part = indexed
+                ? (EldArray<?>) transform.invoke(elements[index], index)
+                : (EldArray<?>) transform.invoke(elements[index]);
+            parts[index] = part;
+            total = Math.addExact(total, part.length());
+        }
+        return switch (elementDescriptor) {
+            case "B" -> {
+                final byte[] values = new byte[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldByteArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldByteArray(values);
+            }
+            case "S" -> {
+                final short[] values = new short[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldShortArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldShortArray(values);
+            }
+            case "I" -> {
+                final int[] values = new int[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldIntArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldIntArray(values);
+            }
+            case "J" -> {
+                final long[] values = new long[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldLongArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldLongArray(values);
+            }
+            case "F" -> {
+                final float[] values = new float[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldFloatArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldFloatArray(values);
+            }
+            case "D" -> {
+                final double[] values = new double[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldDoubleArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldDoubleArray(values);
+            }
+            case "Z" -> {
+                final boolean[] values = new boolean[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldBooleanArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldBooleanArray(values);
+            }
+            case "C" -> {
+                final char[] values = new char[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldCharArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldCharArray(values);
+            }
+            default -> {
+                final Object[] values = new Object[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldObjectArray<?>) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldObjectArray<>(values);
+            }
+        };
+    }
+
     public void reverseInPlace() {
         for (int left = 0, right = length - 1;
             left < right; left++, right--) {
@@ -361,6 +477,78 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         );
         result.length += additional.length;
         return result;
+    }
+
+    public EldFloatArray union(final EldFloatArray additional) {
+        final EldFloatArray result = new EldFloatArray();
+        for (int index = 0; index < length; index++) {
+            final float value = get(index);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        for (int index = 0; index < additional.length; index++) {
+            final float value = additional.get(index);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldFloatArray distinct() {
+        final EldFloatArray result = new EldFloatArray();
+        for (int index = 0; index < length; index++) {
+            final float value = get(index);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldFloatArray intersect(final EldFloatArray additional) {
+        final EldFloatArray result = new EldFloatArray();
+        for (int index = 0; index < length; index++) {
+            final float value = get(index);
+            if (additional.contains(value) && !result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldFloatArray subtract(final EldFloatArray additional) {
+        final EldFloatArray result = new EldFloatArray();
+        for (int index = 0; index < length; index++) {
+            final float value = get(index);
+            if (!additional.contains(value) && !result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldFloatArray difference(final EldFloatArray additional) {
+        final EldFloatArray result = subtract(additional);
+        for (int index = 0; index < additional.length; index++) {
+            final float value = additional.get(index);
+            if (!contains(value) && !result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldObjectArray<EldTuple> zip(final EldArray<?> additional) {
+        if (length != additional.length()) {
+            throw new IllegalArgumentException("Cannot zip arrays of different lengths");
+        }
+        final Object[] tuples = new Object[length];
+        for (int index = 0; index < length; index++) {
+            tuples[index] = new EldTuple(new Object[] {elements[index], additional.boxedGet(index)});
+        }
+        return new EldObjectArray<>(tuples);
     }
 
     public Object reduce(final MethodHandle reducer, final Object initial) throws Throwable {
@@ -504,6 +692,20 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
             }
         }
         return true;
+    }
+
+    public boolean none(final MethodHandle predicate) throws Throwable {
+        return !any(predicate);
+    }
+
+    public int count(final MethodHandle predicate) throws Throwable {
+        int matching = 0;
+        for (int index = 0; index < length; index++) {
+            if (test(predicate, elements[index], index)) {
+                matching++;
+            }
+        }
+        return matching;
     }
 
     public String join() {

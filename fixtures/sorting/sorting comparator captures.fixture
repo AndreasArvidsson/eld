@@ -623,10 +623,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     ICONST_0 0
     IALOAD
     ILOAD_1 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ILOAD_2 2
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IMUL
     IRETURN
     max stack 3 max locals 3
@@ -719,10 +717,8 @@ class Test$Direction extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     ALOAD_0 0
     GETFIELD Test$Direction.multiplier I
     ILOAD_1 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ILOAD_2 2
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IMUL
     IRETURN
     max stack 3 max locals 3

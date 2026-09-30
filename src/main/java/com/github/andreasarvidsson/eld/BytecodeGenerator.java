@@ -64,6 +64,7 @@ import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzer;
 import com.github.andreasarvidsson.eld.semantic.SemanticAnalyzerExpressionOperations;
 import com.github.andreasarvidsson.eld.semantic.Symbol;
 import com.github.andreasarvidsson.eld.semantic.Type;
+import com.github.andreasarvidsson.eld.semantic.TypeParameterType;
 import com.github.andreasarvidsson.eld.semantic.UnionType;
 import com.github.andreasarvidsson.eld.semantic.JavaMethodSymbol;
 import com.github.andreasarvidsson.eld.semantic.JavaClassSymbol;
@@ -3788,6 +3789,7 @@ public final class BytecodeGenerator {
             case PromiseSourceType _ ->
                 "Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;";
             case ConstType constant -> descriptor(constant.type());
+            case TypeParameterType _ -> "Ljava/lang/Object;";
         };
     }
 
@@ -10294,10 +10296,34 @@ public final class BytecodeGenerator {
             String parameters;
             String returned;
             switch (arrayMethod) {
+                case "flatten" -> {
+                    name = "flatten";
+                    parameters = array + "Ljava/lang/String;";
+                    returned = array;
+                    final ArrayType result =
+                        arrayType(semanticModel.getExpressionType(call));
+                    method.ldc(
+                        RuntimeAbi.array(result.elementType()).elementDescriptor
+                    );
+                }
                 case "addAll" -> {
                     name = "addAll";
                     parameters = array + "L" + arrayOwner + ";";
                     returned = "V";
+                    expression(call.arguments().getFirst());
+                }
+                case "zip" -> {
+                    name = "zip";
+                    parameters = array + array;
+                    returned =
+                        "Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;";
+                    expression(call.arguments().getFirst());
+                }
+                case "partition" -> {
+                    name = "partition";
+                    parameters = array + handle;
+                    returned =
+                        "Lcom/github/andreasarvidsson/eld/runtime/EldTuple;";
                     expression(call.arguments().getFirst());
                 }
                 case "add", "addFront" -> {
@@ -10427,10 +10453,10 @@ public final class BytecodeGenerator {
                     returned = indexed ? "Ljava/lang/Integer;" : object;
                     expression(call.arguments().getFirst());
                 }
-                case "any", "all" -> {
-                    name = arrayMethod.equals("any") ? "any" : "all";
+                case "any", "all", "none", "count" -> {
+                    name = arrayMethod;
                     parameters = array + handle;
-                    returned = "Z";
+                    returned = arrayMethod.equals("count") ? "I" : "Z";
                     expression(call.arguments().getFirst());
                 }
                 case "join" -> {
@@ -10457,6 +10483,13 @@ public final class BytecodeGenerator {
                 ),
                 false
             );
+            if (arrayMethod.equals("flatten")) {
+                final ArrayType result =
+                    arrayType(semanticModel.getExpressionType(call));
+                method.checkcast(
+                    classDesc(RuntimeAbi.array(result.elementType()).owner)
+                );
+            }
             if (
                 arrayMethod.equals("reduce") || arrayMethod.equals("find")
                     || arrayMethod.equals("findLast")
@@ -10565,7 +10598,10 @@ public final class BytecodeGenerator {
                 );
                 return;
             }
-            if ("reverse".equals(arrayMethod) || "copy".equals(arrayMethod)) {
+            if (
+                "reverse".equals(arrayMethod) || "copy".equals(arrayMethod)
+                    || "distinct".equals(arrayMethod)
+            ) {
                 final MemberExpression member =
                     Objects.requireNonNull(arrayMember);
                 expression(member.target());
@@ -10584,7 +10620,12 @@ public final class BytecodeGenerator {
             }
             if (
                 "filter".equals(arrayMethod) || "map".equals(arrayMethod)
+                    || "flatMap".equals(arrayMethod)
                     || "concat".equals(arrayMethod)
+                    || "union".equals(arrayMethod)
+                    || "intersect".equals(arrayMethod)
+                    || "difference".equals(arrayMethod)
+                    || "subtract".equals(arrayMethod)
             ) {
                 final MemberExpression member =
                     Objects.requireNonNull(arrayMember);
@@ -10596,8 +10637,10 @@ public final class BytecodeGenerator {
                     parameters = "Ljava/lang/invoke/MethodHandle;";
                     expression(call.arguments().getFirst());
                 }
-                else if ("map".equals(arrayMethod)) {
-                    name = "map";
+                else if (
+                    "map".equals(arrayMethod) || "flatMap".equals(arrayMethod)
+                ) {
+                    name = arrayMethod;
                     parameters =
                         "Ljava/lang/invoke/MethodHandle;Ljava/lang/String;";
                     expression(call.arguments().getFirst());
@@ -10607,7 +10650,7 @@ public final class BytecodeGenerator {
                         arrayType(
                             semanticModel.getExpressionType(member.target())
                         );
-                    name = "concat";
+                    name = arrayMethod;
                     parameters =
                         "L" + RuntimeAbi.array(sourceArray.elementType()).owner
                             + ";";
@@ -10617,8 +10660,9 @@ public final class BytecodeGenerator {
                     arrayType(semanticModel.getExpressionType(member.target()));
                 final String owner =
                     RuntimeAbi.array(source.elementType()).owner;
-                final boolean map = "map".equals(arrayMethod);
-                if (map) {
+                final boolean mapped =
+                    "map".equals(arrayMethod) || "flatMap".equals(arrayMethod);
+                if (mapped) {
                     final ArrayType result =
                         arrayType(semanticModel.getExpressionType(call));
                     method.ldc(
@@ -10630,13 +10674,13 @@ public final class BytecodeGenerator {
                     classDesc(owner),
                     name,
                     MethodTypeDesc.ofDescriptor(
-                        "(" + parameters + ")L" + (map
+                        "(" + parameters + ")L" + (mapped
                             ? "com/github/andreasarvidsson/eld/runtime/EldArray"
                             : owner) + ";"
                     ),
                     false
                 );
-                if (map) {
+                if (mapped) {
                     final ArrayType result =
                         arrayType(semanticModel.getExpressionType(call));
                     method.checkcast(
@@ -10764,6 +10808,81 @@ public final class BytecodeGenerator {
                     java.lang.reflect.Modifier
                         .isStatic(javaMethod.getModifiers());
                 final boolean extension = function.receiverAsFirstArgument();
+                if (
+                    javaMethod.getName().equals("toString") && !isStatic
+                        && !extension
+                        && call.arguments().isEmpty()
+                ) {
+                    final Type receiver =
+                        LiteralType
+                            .unwrap(
+                                ConstType.unwrap(
+                                    semanticModel
+                                        .getEffectiveType(member.target())
+                                )
+                            );
+                    final Class<?> wrapper = javaMethod.getDeclaringClass();
+                    if (
+                        receiver != BuiltinType.STRING
+                            && JavaTypes.boxedClass(receiver) == wrapper
+                    ) {
+                        expression(member.target());
+                        method.invoke(
+                            INVOKESTATIC,
+                            classDesc(wrapper.getName().replace('.', '/')),
+                            "toString",
+                            MethodTypeDesc.ofDescriptor(
+                                "(" + descriptor(receiver)
+                                    + ")Ljava/lang/String;"
+                            ),
+                            false
+                        );
+                        return;
+                    }
+                }
+                if (
+                    javaMethod.getName().equals("compareTo") && !isStatic
+                        && !extension
+                        && call.arguments().size() == 1
+                        && javaMethod.getParameterCount() == 1
+                ) {
+                    final Type receiver =
+                        LiteralType
+                            .unwrap(
+                                ConstType.unwrap(
+                                    semanticModel
+                                        .getEffectiveType(member.target())
+                                )
+                            );
+                    final Expression argument = call.arguments().getFirst();
+                    final Type compared =
+                        LiteralType.unwrap(
+                            ConstType.unwrap(
+                                semanticModel.getEffectiveType(argument)
+                            )
+                        );
+                    final Class<?> wrapper = javaMethod.getDeclaringClass();
+                    if (
+                        receiver != BuiltinType.STRING
+                            && JavaTypes.boxedClass(receiver) == wrapper
+                            && JavaTypes.boxedClass(compared) == wrapper
+                            && javaMethod.getParameterTypes()[0] == wrapper
+                    ) {
+                        expression(member.target());
+                        expression(argument);
+                        final String primitive = descriptor(receiver);
+                        method.invoke(
+                            INVOKESTATIC,
+                            classDesc(wrapper.getName().replace('.', '/')),
+                            "compare",
+                            MethodTypeDesc.ofDescriptor(
+                                "(" + primitive + primitive + ")I"
+                            ),
+                            false
+                        );
+                        return;
+                    }
+                }
                 if (!isStatic || extension) {
                     expression(member.target());
                     if (!extension) {

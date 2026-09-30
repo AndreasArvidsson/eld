@@ -1784,17 +1784,32 @@ public final class SemanticAnalyzerExpressions {
         final ArrayType array = (ArrayType) model.getMemberOwner(member);
         final Type element = array.elementType();
         final List<Expression> arguments = call.arguments();
+        if (name.equals("flatten")) {
+            requireArrayArity(call, name, 0);
+            if (ConstType.unwrap(element) instanceof ArrayType nested) {
+                return nested;
+            }
+            throw new SemanticException(
+                call.range(),
+                "Array flatten requires an array of arrays"
+            );
+        }
         if (
             name.equals("reverse") || name.equals("copy")
+                || name.equals("distinct")
                 || name.equals("reverseInPlace")
                 || name.equals("clear")
         ) {
             requireArrayArity(call, name, 0);
             return name.equals("reverse") || name.equals("copy")
-                ? array
-                : BuiltinType.VOID;
+                || name.equals("distinct") ? array : BuiltinType.VOID;
         }
-        if (name.equals("concat")) {
+        if (
+            name.equals("concat") || name.equals("union")
+                || name.equals("intersect")
+                || name.equals("difference")
+                || name.equals("subtract")
+        ) {
             requireArrayArity(call, name, 1);
             final Type supplied =
                 ConstType.unwrap(
@@ -1809,9 +1824,10 @@ public final class SemanticAnalyzerExpressions {
             }
             throw new SemanticException(
                 arguments.getFirst().range(),
-                "Cannot concatenate %s to an array of %s",
-                supplied,
-                element
+                "Array %s requires an array of %s, found %s",
+                name,
+                element,
+                supplied
             );
         }
         if (name.equals("addAll")) {
@@ -1831,6 +1847,23 @@ public final class SemanticAnalyzerExpressions {
                 );
             }
             return BuiltinType.VOID;
+        }
+        if (name.equals("zip")) {
+            requireArrayArity(call, name, 1);
+            final Type supplied =
+                ConstType
+                    .unwrap(analyzeExpression(arguments.getFirst(), context));
+            if (!(supplied instanceof ArrayType other)) {
+                throw new SemanticException(
+                    arguments.getFirst().range(),
+                    "Array zip requires an array argument"
+                );
+            }
+            final ArrayType result =
+                new ArrayType(
+                    new TupleType(List.of(element, other.elementType()))
+                );
+            return result;
         }
         if (name.equals("insertAt")) {
             requireArrayArity(call, name, 2);
@@ -1876,6 +1909,18 @@ public final class SemanticAnalyzerExpressions {
                 true
             );
             return BuiltinType.BOOL;
+        }
+        if (name.equals("partition")) {
+            requireArrayArity(call, name, 1);
+            analyzeArrayCallback(
+                arguments.getFirst(),
+                context,
+                List.of(element),
+                BuiltinType.BOOL,
+                false,
+                true
+            );
+            return new TupleType(List.of(array, array));
         }
         if (
             name.equals("add") || name.equals("addFront")
@@ -1990,13 +2035,26 @@ public final class SemanticAnalyzerExpressions {
                 arguments.getFirst(),
                 context,
                 List.of(element),
-                name.equals("map") ? BuiltinType.ANY : BuiltinType.BOOL,
-                name.equals("map"),
+                name.equals("map") || name.equals("flatMap")
+                    ? BuiltinType.ANY
+                    : BuiltinType.BOOL,
+                name.equals("map") || name.equals("flatMap"),
                 true
             );
-        if (name.equals("map")) {
+        if (name.equals("map") || name.equals("flatMap")) {
             final Type resultElement =
                 LiteralType.unwrap(callback.returnType());
+            if (name.equals("flatMap")) {
+                if (
+                    ConstType.unwrap(resultElement) instanceof ArrayType result
+                ) {
+                    return result;
+                }
+                throw new SemanticException(
+                    arguments.getFirst().range(),
+                    "Array flatMap callback must return an array"
+                );
+            }
             if (resultElement == BuiltinType.VOID) {
                 throw new SemanticException(
                     arguments.getFirst().range(),
@@ -2011,7 +2069,34 @@ public final class SemanticAnalyzerExpressions {
         if (name.equals("findIndex") || name.equals("findLastIndex")) {
             return UnionType.of(List.of(BuiltinType.I32, BuiltinType.NULL));
         }
-        return name.equals("filter") ? array : BuiltinType.BOOL;
+        return name.equals("filter")
+            ? array
+            : name.equals("count") ? BuiltinType.I32 : BuiltinType.BOOL;
+    }
+
+    private void specializeArrayMethod(
+        final CallExpression call,
+        final MemberExpression member,
+        final Type result
+    ) {
+        final JavaMethodSymbol method =
+            (JavaMethodSymbol) model.getReference(member.member());
+        final List<Type> parameters =
+            call.arguments().stream().map(model::getExpressionType).toList();
+        final FunctionType signature = new FunctionType(parameters, result);
+        model.setReference(
+            member.member(),
+            new JavaMethodSymbol(
+                method.method(),
+                signature,
+                method.range(),
+                method.receiverAsFirstArgument(),
+                method.property()
+            )
+        );
+        model.setExpressionType(member.member(), signature);
+        model.setExpressionType(member, signature);
+        model.setExpressionType(call.callee(), signature);
     }
 
     private void requireArrayArity(
@@ -2189,11 +2274,16 @@ public final class SemanticAnalyzerExpressions {
                         false
                     );
                 }
-                return name.equals("sortInPlace")
-                    ? BuiltinType.VOID
-                    : (ArrayType) model.getMemberOwner(arrayMember);
+                final Type result =
+                    name.equals("sortInPlace")
+                        ? BuiltinType.VOID
+                        : (ArrayType) model.getMemberOwner(arrayMember);
+                specializeArrayMethod(call, arrayMember, result);
+                return result;
             }
-            return analyzeArrayCall(call, context, name);
+            final Type result = analyzeArrayCall(call, context, name);
+            specializeArrayMethod(call, arrayMember, result);
+            return result;
         }
         if (type == BuiltinFunctionType.PRINT) {
             if (call.arguments().size() > 1) {

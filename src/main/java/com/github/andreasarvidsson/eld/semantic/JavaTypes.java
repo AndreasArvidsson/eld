@@ -99,6 +99,7 @@ public final class JavaTypes {
     private static final Set<String> METHODS =
         Set.of(
             "compareTo",
+            "toString",
             "compare",
             "sort",
             "add",

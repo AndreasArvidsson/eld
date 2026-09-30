@@ -792,11 +792,9 @@ class Test$Person extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
   method compareTo(LTest$Order;)I flags [PUBLIC]
     ALOAD_0 0
     GETFIELD Test$Person.age I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ALOAD_1 1
     INVOKEINTERFACE Test$Order.$get$age()I
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IRETURN
     max stack 2 max locals 2
   method compareTo(Ljava/lang/Object;)I flags [PUBLIC, BRIDGE, SYNTHETIC]

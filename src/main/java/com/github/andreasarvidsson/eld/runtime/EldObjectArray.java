@@ -1,6 +1,7 @@
 package com.github.andreasarvidsson.eld.runtime;
 
 import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.Arrays;
 import java.util.Objects;
 import org.jspecify.annotations.Nullable;
@@ -8,6 +9,8 @@ import org.jspecify.annotations.Nullable;
 public final class EldObjectArray<T extends @Nullable Object>
     implements EldArray<EldObjectArray<T>> {
     private static final int DEFAULT_CAPACITY = 10;
+    private static final MethodHandle ARRAY_IDENTITY =
+        MethodHandles.identity(EldArray.class);
 
     private @Nullable Object[] elements;
     private int length;
@@ -46,6 +49,11 @@ public final class EldObjectArray<T extends @Nullable Object>
     @SuppressWarnings({"unchecked", "NullAway"})
     public T get(final int index) {
         return (T) elements[normalizeIndex(index)];
+    }
+
+    @Override
+    public @Nullable Object boxedGet(final int index) {
+        return get(index);
     }
 
     public void set(final int index, final T value) {
@@ -262,12 +270,123 @@ public final class EldObjectArray<T extends @Nullable Object>
         return result;
     }
 
+    public EldTuple partition(final MethodHandle predicate) throws Throwable {
+        final EldObjectArray<T> matching = new EldObjectArray<T>();
+        final EldObjectArray<T> remaining = new EldObjectArray<T>();
+        for (int index = 0; index < length; index++) {
+            final T value = get(index);
+            if (test(predicate, value, index)) {
+                matching.add(value);
+            }
+            else {
+                remaining.add(value);
+            }
+        }
+        return new EldTuple(new Object[] {matching, remaining});
+    }
+
     public EldArray<?> map(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final Object[] values = new Object[length];
         for (int index = 0; index < values.length; index++) {
             values[index] = invokeIndexed(transform, elements[index], index);
         }
         return array(values, elementDescriptor);
+    }
+
+    public EldArray<?> flatMap(final MethodHandle transform, final String elementDescriptor) throws Throwable {
+        final boolean indexed = transform.type().parameterCount() == 2;
+        final EldArray<?>[] parts = new EldArray<?>[length];
+        int total = 0;
+        for (int index = 0; index < length; index++) {
+            final EldArray<?> part = indexed
+                ? (EldArray<?>) transform.invoke(elements[index], index)
+                : (EldArray<?>) transform.invoke(elements[index]);
+            parts[index] = part;
+            total = Math.addExact(total, part.length());
+        }
+        return switch (elementDescriptor) {
+            case "B" -> {
+                final byte[] values = new byte[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldByteArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldByteArray(values);
+            }
+            case "S" -> {
+                final short[] values = new short[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldShortArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldShortArray(values);
+            }
+            case "I" -> {
+                final int[] values = new int[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldIntArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldIntArray(values);
+            }
+            case "J" -> {
+                final long[] values = new long[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldLongArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldLongArray(values);
+            }
+            case "F" -> {
+                final float[] values = new float[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldFloatArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldFloatArray(values);
+            }
+            case "D" -> {
+                final double[] values = new double[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldDoubleArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldDoubleArray(values);
+            }
+            case "Z" -> {
+                final boolean[] values = new boolean[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldBooleanArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldBooleanArray(values);
+            }
+            case "C" -> {
+                final char[] values = new char[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldCharArray) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldCharArray(values);
+            }
+            default -> {
+                final Object[] values = new Object[total];
+                int offset = 0;
+                for (final EldArray<?> part : parts) {
+                    ((EldObjectArray<?>) part).copyTo(values, offset, part.length());
+                    offset += part.length();
+                }
+                yield new EldObjectArray<>(values);
+            }
+        };
     }
 
     public void reverseInPlace() {
@@ -287,6 +406,78 @@ public final class EldObjectArray<T extends @Nullable Object>
         );
         result.length += additional.length;
         return result;
+    }
+
+    public EldObjectArray<T> union(final EldObjectArray<T> additional) {
+        final EldObjectArray<T> result = new EldObjectArray<T>();
+        for (int index = 0; index < length; index++) {
+            final T value = get(index);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        for (int index = 0; index < additional.length; index++) {
+            final T value = additional.get(index);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldObjectArray<T> distinct() {
+        final EldObjectArray<T> result = new EldObjectArray<T>();
+        for (int index = 0; index < length; index++) {
+            final T value = get(index);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldObjectArray<T> intersect(final EldObjectArray<T> additional) {
+        final EldObjectArray<T> result = new EldObjectArray<T>();
+        for (int index = 0; index < length; index++) {
+            final T value = get(index);
+            if (additional.contains(value) && !result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldObjectArray<T> subtract(final EldObjectArray<T> additional) {
+        final EldObjectArray<T> result = new EldObjectArray<T>();
+        for (int index = 0; index < length; index++) {
+            final T value = get(index);
+            if (!additional.contains(value) && !result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldObjectArray<T> difference(final EldObjectArray<T> additional) {
+        final EldObjectArray<T> result = subtract(additional);
+        for (int index = 0; index < additional.length; index++) {
+            final T value = additional.get(index);
+            if (!contains(value) && !result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
+    public EldObjectArray<EldTuple> zip(final EldArray<?> additional) {
+        if (length != additional.length()) {
+            throw new IllegalArgumentException("Cannot zip arrays of different lengths");
+        }
+        final Object[] tuples = new Object[length];
+        for (int index = 0; index < length; index++) {
+            tuples[index] = new EldTuple(new Object[] {elements[index], additional.boxedGet(index)});
+        }
+        return new EldObjectArray<>(tuples);
     }
 
     public Object reduce(final MethodHandle reducer, final Object initial) throws Throwable {
@@ -356,6 +547,20 @@ public final class EldObjectArray<T extends @Nullable Object>
             }
         }
         return true;
+    }
+
+    public boolean none(final MethodHandle predicate) throws Throwable {
+        return !any(predicate);
+    }
+
+    public int count(final MethodHandle predicate) throws Throwable {
+        int matching = 0;
+        for (int index = 0; index < length; index++) {
+            if (test(predicate, elements[index], index)) {
+                matching++;
+            }
+        }
+        return matching;
     }
 
     public String join() {
@@ -447,6 +652,10 @@ public final class EldObjectArray<T extends @Nullable Object>
         return callback.type().parameterCount() == 2
             ? (boolean) callback.invoke(value, index)
             : (boolean) callback.invoke(value);
+    }
+
+    public EldArray<?> flatten(final String elementDescriptor) throws Throwable {
+        return flatMap(ARRAY_IDENTITY, elementDescriptor);
     }
 
     private static EldArray<?> array(final Object[] values, final String elementDescriptor) {

@@ -163,6 +163,7 @@ public final class GeneratePrimitiveArrays {
                     methodsTemplate,
                     "EldObjectArray<T>",
                     "@Nullable Object",
+                    "T",
                     naturalSortTemplate.replace("${SELF}", "EldObjectArray<T>")
                         .stripTrailing(),
                     "Arrays.fill(result.elements, count, result.length, null);",
@@ -193,6 +194,7 @@ public final class GeneratePrimitiveArrays {
                     methodsTemplate,
                     type.className(),
                     type.javaName(),
+                    type.javaName(),
                     type.sortable()
                         ? naturalSortTemplate
                             .replace("${SELF}", type.className())
@@ -213,6 +215,7 @@ public final class GeneratePrimitiveArrays {
         final String template,
         final String selfType,
         final String elementType,
+        final String valueType,
         final String naturalSortMethods,
         final String filterCleanup,
         final String comparatorSortBody,
@@ -222,6 +225,7 @@ public final class GeneratePrimitiveArrays {
     ) {
         return template.replace("${SELF}", selfType)
             .replace("${ELEMENT_TYPE}", elementType)
+            .replace("${VALUE_TYPE}", valueType)
             .replace("${NATURAL_SORT_METHODS}", naturalSortMethods)
             .replace(
                 "${FILTER_CLEANUP}",

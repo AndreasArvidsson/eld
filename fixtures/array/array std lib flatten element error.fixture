@@ -1,0 +1,86 @@
+const list = [1, 2, 3];
+print(list.flatten());
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "list" (1:7-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "1" (1:15-1:16)
+COMMA (1:16-1:17)
+INTEGER_LITERAL "2" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "3" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+SEMICOLON (1:23-1:24)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "list" (2:7-2:11)
+DOT (2:11-2:12)
+IDENTIFIER "flatten" (2:12-2:19)
+LEFT_PAREN (2:19-2:20)
+RIGHT_PAREN (2:20-2:21)
+RIGHT_PAREN (2:21-2:22)
+SEMICOLON (2:22-2:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:23
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "list"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:23
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:18-1:19
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:23
+    (CallExpression
+      range: 2:1-2:22
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:21
+        (MemberExpression
+          range: 2:7-2:19
+          (IdentifierExpression
+            range: 2:7-2:11
+            name: "list"
+          )
+          (IdentifierExpression
+            range: 2:12-2:19
+            name: "flatten"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Array flatten requires an array of arrays at 2:7-2:21

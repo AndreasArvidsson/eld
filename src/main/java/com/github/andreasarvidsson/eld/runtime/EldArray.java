@@ -1,6 +1,7 @@
 package com.github.andreasarvidsson.eld.runtime;
 
 import java.lang.reflect.Array;
+import org.jspecify.annotations.Nullable;
 
 public interface EldArray<T extends EldArray<T>> {
     public static EldArray<?> fromObjectArray(
@@ -44,6 +45,9 @@ public interface EldArray<T extends EldArray<T>> {
     }
 
     int length();
+
+    @Nullable
+    Object boxedGet(int index);
 
     boolean isEmpty();
 

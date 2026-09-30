@@ -1376,14 +1376,14 @@ Expression types:
   1:28-1:31 -> string
   1:33-1:37 -> bool
   2:1-2:8 -> [any]
-  2:1-2:12 -> () => void
+  2:1-2:12 -> (f64) => void
   2:1-2:17 -> void
-  2:9-2:12 -> () => void
+  2:9-2:12 -> (f64) => void
   2:13-2:16 -> f64
   3:1-3:8 -> [any]
-  3:1-3:12 -> () => void
+  3:1-3:12 -> (char, bool) => void
   3:1-3:24 -> void
-  3:9-3:12 -> () => void
+  3:9-3:12 -> (char, bool) => void
   3:13-3:16 -> char
   3:18-3:23 -> bool
   4:1-4:6 -> (any) => void
@@ -1394,14 +1394,14 @@ Expression types:
   5:25-5:26 -> i32
   5:28-5:29 -> i32
   6:1-6:6 -> [i8]
-  6:1-6:10 -> () => void
+  6:1-6:10 -> (i32) => void
   6:1-6:13 -> void
-  6:7-6:10 -> () => void
+  6:7-6:10 -> (i32) => void
   6:11-6:12 -> i32
   7:1-7:6 -> [i8]
-  7:1-7:10 -> () => void
+  7:1-7:10 -> (i32, i32) => void
   7:1-7:16 -> void
-  7:7-7:10 -> () => void
+  7:7-7:10 -> (i32, i32) => void
   7:11-7:12 -> i32
   7:14-7:15 -> i32
   8:1-8:6 -> (any) => void
@@ -1412,14 +1412,14 @@ Expression types:
   9:27-9:28 -> i32
   9:30-9:31 -> i32
   10:1-10:7 -> [i16]
-  10:1-10:11 -> () => void
+  10:1-10:11 -> (i32) => void
   10:1-10:14 -> void
-  10:8-10:11 -> () => void
+  10:8-10:11 -> (i32) => void
   10:12-10:13 -> i32
   11:1-11:7 -> [i16]
-  11:1-11:11 -> () => void
+  11:1-11:11 -> (i32, i32) => void
   11:1-11:17 -> void
-  11:8-11:11 -> () => void
+  11:8-11:11 -> (i32, i32) => void
   11:12-11:13 -> i32
   11:15-11:16 -> i32
   12:1-12:6 -> (any) => void
@@ -1430,14 +1430,14 @@ Expression types:
   13:25-13:26 -> i32
   13:28-13:29 -> i32
   14:1-14:5 -> [i32]
-  14:1-14:9 -> () => void
+  14:1-14:9 -> (i32) => void
   14:1-14:12 -> void
-  14:6-14:9 -> () => void
+  14:6-14:9 -> (i32) => void
   14:10-14:11 -> i32
   15:1-15:5 -> [i32]
-  15:1-15:9 -> () => void
+  15:1-15:9 -> (i32, i32) => void
   15:1-15:15 -> void
-  15:6-15:9 -> () => void
+  15:6-15:9 -> (i32, i32) => void
   15:10-15:11 -> i32
   15:13-15:14 -> i32
   16:1-16:6 -> (any) => void
@@ -1448,14 +1448,14 @@ Expression types:
   17:26-17:27 -> i64
   17:29-17:30 -> i64
   18:1-18:6 -> [i64]
-  18:1-18:10 -> () => void
+  18:1-18:10 -> (i64) => void
   18:1-18:13 -> void
-  18:7-18:10 -> () => void
+  18:7-18:10 -> (i64) => void
   18:11-18:12 -> i64
   19:1-19:6 -> [i64]
-  19:1-19:10 -> () => void
+  19:1-19:10 -> (i64, i64) => void
   19:1-19:16 -> void
-  19:7-19:10 -> () => void
+  19:7-19:10 -> (i64, i64) => void
   19:11-19:12 -> i64
   19:14-19:15 -> i64
   20:1-20:6 -> (any) => void
@@ -1466,14 +1466,14 @@ Expression types:
   21:29-21:32 -> f32
   21:34-21:37 -> f32
   22:1-22:7 -> [f32]
-  22:1-22:11 -> () => void
+  22:1-22:11 -> (f32) => void
   22:1-22:16 -> void
-  22:8-22:11 -> () => void
+  22:8-22:11 -> (f32) => void
   22:12-22:15 -> f32
   23:1-23:7 -> [f32]
-  23:1-23:11 -> () => void
+  23:1-23:11 -> (f32, f32) => void
   23:1-23:21 -> void
-  23:8-23:11 -> () => void
+  23:8-23:11 -> (f32, f32) => void
   23:12-23:15 -> f32
   23:17-23:20 -> f32
   24:1-24:6 -> (any) => void
@@ -1484,14 +1484,14 @@ Expression types:
   25:30-25:33 -> f64
   25:35-25:38 -> f64
   26:1-26:8 -> [f64]
-  26:1-26:12 -> () => void
+  26:1-26:12 -> (f64) => void
   26:1-26:17 -> void
-  26:9-26:12 -> () => void
+  26:9-26:12 -> (f64) => void
   26:13-26:16 -> f64
   27:1-27:8 -> [f64]
-  27:1-27:12 -> () => void
+  27:1-27:12 -> (f64, f64) => void
   27:1-27:22 -> void
-  27:9-27:12 -> () => void
+  27:9-27:12 -> (f64, f64) => void
   27:13-27:16 -> f64
   27:18-27:21 -> f64
   28:1-28:6 -> (any) => void
@@ -1502,14 +1502,14 @@ Expression types:
   29:31-29:36 -> bool
   29:38-29:42 -> bool
   30:1-30:6 -> [bool]
-  30:1-30:10 -> () => void
+  30:1-30:10 -> (bool) => void
   30:1-30:17 -> void
-  30:7-30:10 -> () => void
+  30:7-30:10 -> (bool) => void
   30:11-30:16 -> bool
   31:1-31:6 -> [bool]
-  31:1-31:10 -> () => void
+  31:1-31:10 -> (bool, bool) => void
   31:1-31:23 -> void
-  31:7-31:10 -> () => void
+  31:7-31:10 -> (bool, bool) => void
   31:11-31:15 -> bool
   31:17-31:22 -> bool
   32:1-32:6 -> (any) => void
@@ -1520,14 +1520,14 @@ Expression types:
   33:29-33:32 -> char
   33:34-33:37 -> char
   34:1-34:6 -> [char]
-  34:1-34:10 -> () => void
+  34:1-34:10 -> (char) => void
   34:1-34:15 -> void
-  34:7-34:10 -> () => void
+  34:7-34:10 -> (char) => void
   34:11-34:14 -> char
   35:1-35:6 -> [char]
-  35:1-35:10 -> () => void
+  35:1-35:10 -> (char, char) => void
   35:1-35:20 -> void
-  35:7-35:10 -> () => void
+  35:7-35:10 -> (char, char) => void
   35:11-35:14 -> char
   35:16-35:19 -> char
   36:1-36:6 -> (any) => void
@@ -1538,14 +1538,14 @@ Expression types:
   37:33-37:36 -> string
   37:38-37:41 -> string
   38:1-38:8 -> [string]
-  38:1-38:12 -> () => void
+  38:1-38:12 -> (string) => void
   38:1-38:17 -> void
-  38:9-38:12 -> () => void
+  38:9-38:12 -> (string) => void
   38:13-38:16 -> string
   39:1-39:8 -> [string]
-  39:1-39:12 -> () => void
+  39:1-39:12 -> (string, string) => void
   39:1-39:22 -> void
-  39:9-39:12 -> () => void
+  39:9-39:12 -> (string, string) => void
   39:13-39:16 -> string
   39:18-39:21 -> string
   40:1-40:6 -> (any) => void
@@ -1608,63 +1608,63 @@ Declarations:
 
 References:
   2:1-2:8 -> 1:7-1:14
-  2:9-2:12 -> EldObjectArray.add(): void
+  2:9-2:12 -> EldObjectArray.add(f64): void
   3:1-3:8 -> 1:7-1:14
-  3:9-3:12 -> EldObjectArray.add(): void
+  3:9-3:12 -> EldObjectArray.add(char, bool): void
   4:1-4:6 -> builtin print
   4:7-4:14 -> 1:7-1:14
   6:1-6:6 -> 5:7-5:12
-  6:7-6:10 -> EldByteArray.add(): void
+  6:7-6:10 -> EldByteArray.add(i32): void
   7:1-7:6 -> 5:7-5:12
-  7:7-7:10 -> EldByteArray.add(): void
+  7:7-7:10 -> EldByteArray.add(i32, i32): void
   8:1-8:6 -> builtin print
   8:7-8:12 -> 5:7-5:12
   10:1-10:7 -> 9:7-9:13
-  10:8-10:11 -> EldShortArray.add(): void
+  10:8-10:11 -> EldShortArray.add(i32): void
   11:1-11:7 -> 9:7-9:13
-  11:8-11:11 -> EldShortArray.add(): void
+  11:8-11:11 -> EldShortArray.add(i32, i32): void
   12:1-12:6 -> builtin print
   12:7-12:13 -> 9:7-9:13
   14:1-14:5 -> 13:7-13:11
-  14:6-14:9 -> EldIntArray.add(): void
+  14:6-14:9 -> EldIntArray.add(i32): void
   15:1-15:5 -> 13:7-13:11
-  15:6-15:9 -> EldIntArray.add(): void
+  15:6-15:9 -> EldIntArray.add(i32, i32): void
   16:1-16:6 -> builtin print
   16:7-16:11 -> 13:7-13:11
   18:1-18:6 -> 17:7-17:12
-  18:7-18:10 -> EldLongArray.add(): void
+  18:7-18:10 -> EldLongArray.add(i64): void
   19:1-19:6 -> 17:7-17:12
-  19:7-19:10 -> EldLongArray.add(): void
+  19:7-19:10 -> EldLongArray.add(i64, i64): void
   20:1-20:6 -> builtin print
   20:7-20:12 -> 17:7-17:12
   22:1-22:7 -> 21:7-21:13
-  22:8-22:11 -> EldFloatArray.add(): void
+  22:8-22:11 -> EldFloatArray.add(f32): void
   23:1-23:7 -> 21:7-21:13
-  23:8-23:11 -> EldFloatArray.add(): void
+  23:8-23:11 -> EldFloatArray.add(f32, f32): void
   24:1-24:6 -> builtin print
   24:7-24:13 -> 21:7-21:13
   26:1-26:8 -> 25:7-25:14
-  26:9-26:12 -> EldDoubleArray.add(): void
+  26:9-26:12 -> EldDoubleArray.add(f64): void
   27:1-27:8 -> 25:7-25:14
-  27:9-27:12 -> EldDoubleArray.add(): void
+  27:9-27:12 -> EldDoubleArray.add(f64, f64): void
   28:1-28:6 -> builtin print
   28:7-28:14 -> 25:7-25:14
   30:1-30:6 -> 29:7-29:12
-  30:7-30:10 -> EldBooleanArray.add(): void
+  30:7-30:10 -> EldBooleanArray.add(bool): void
   31:1-31:6 -> 29:7-29:12
-  31:7-31:10 -> EldBooleanArray.add(): void
+  31:7-31:10 -> EldBooleanArray.add(bool, bool): void
   32:1-32:6 -> builtin print
   32:7-32:12 -> 29:7-29:12
   34:1-34:6 -> 33:7-33:12
-  34:7-34:10 -> EldCharArray.add(): void
+  34:7-34:10 -> EldCharArray.add(char): void
   35:1-35:6 -> 33:7-33:12
-  35:7-35:10 -> EldCharArray.add(): void
+  35:7-35:10 -> EldCharArray.add(char, char): void
   36:1-36:6 -> builtin print
   36:7-36:12 -> 33:7-33:12
   38:1-38:8 -> 37:7-37:14
-  38:9-38:12 -> EldObjectArray.add(): void
+  38:9-38:12 -> EldObjectArray.add(string): void
   39:1-39:8 -> 37:7-37:14
-  39:9-39:12 -> EldObjectArray.add(): void
+  39:9-39:12 -> EldObjectArray.add(string, string): void
   40:1-40:6 -> builtin print
   40:7-40:14 -> 37:7-37:14
 

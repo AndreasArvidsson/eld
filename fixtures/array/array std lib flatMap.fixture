@@ -1,0 +1,454 @@
+const list = [1, 2, 3];
+print(list.flatMap((value, index) => [2 * value]));
+print(list.flatMap((value, index) => [value, 2 * value]));
+print(list.flatMap((value, index) => []));
+print(list);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "list" (1:7-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "1" (1:15-1:16)
+COMMA (1:16-1:17)
+INTEGER_LITERAL "2" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "3" (1:21-1:22)
+RIGHT_BRACKET (1:22-1:23)
+SEMICOLON (1:23-1:24)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "list" (2:7-2:11)
+DOT (2:11-2:12)
+IDENTIFIER "flatMap" (2:12-2:19)
+LEFT_PAREN (2:19-2:20)
+LEFT_PAREN (2:20-2:21)
+IDENTIFIER "value" (2:21-2:26)
+COMMA (2:26-2:27)
+IDENTIFIER "index" (2:28-2:33)
+RIGHT_PAREN (2:33-2:34)
+ARROW (2:35-2:37)
+LEFT_BRACKET (2:38-2:39)
+INTEGER_LITERAL "2" (2:39-2:40)
+STAR (2:41-2:42)
+IDENTIFIER "value" (2:43-2:48)
+RIGHT_BRACKET (2:48-2:49)
+RIGHT_PAREN (2:49-2:50)
+RIGHT_PAREN (2:50-2:51)
+SEMICOLON (2:51-2:52)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "list" (3:7-3:11)
+DOT (3:11-3:12)
+IDENTIFIER "flatMap" (3:12-3:19)
+LEFT_PAREN (3:19-3:20)
+LEFT_PAREN (3:20-3:21)
+IDENTIFIER "value" (3:21-3:26)
+COMMA (3:26-3:27)
+IDENTIFIER "index" (3:28-3:33)
+RIGHT_PAREN (3:33-3:34)
+ARROW (3:35-3:37)
+LEFT_BRACKET (3:38-3:39)
+IDENTIFIER "value" (3:39-3:44)
+COMMA (3:44-3:45)
+INTEGER_LITERAL "2" (3:46-3:47)
+STAR (3:48-3:49)
+IDENTIFIER "value" (3:50-3:55)
+RIGHT_BRACKET (3:55-3:56)
+RIGHT_PAREN (3:56-3:57)
+RIGHT_PAREN (3:57-3:58)
+SEMICOLON (3:58-3:59)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "list" (4:7-4:11)
+DOT (4:11-4:12)
+IDENTIFIER "flatMap" (4:12-4:19)
+LEFT_PAREN (4:19-4:20)
+LEFT_PAREN (4:20-4:21)
+IDENTIFIER "value" (4:21-4:26)
+COMMA (4:26-4:27)
+IDENTIFIER "index" (4:28-4:33)
+RIGHT_PAREN (4:33-4:34)
+ARROW (4:35-4:37)
+LEFT_BRACKET (4:38-4:39)
+RIGHT_BRACKET (4:39-4:40)
+RIGHT_PAREN (4:40-4:41)
+RIGHT_PAREN (4:41-4:42)
+SEMICOLON (4:42-4:43)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "list" (5:7-5:11)
+RIGHT_PAREN (5:11-5:12)
+SEMICOLON (5:12-5:13)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:13
+  (VariableDeclaration
+    range: 1:1-1:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "list"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:23
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:18-1:19
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:52
+    (CallExpression
+      range: 2:1-2:51
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:50
+        (MemberExpression
+          range: 2:7-2:19
+          (IdentifierExpression
+            range: 2:7-2:11
+            name: "list"
+          )
+          (IdentifierExpression
+            range: 2:12-2:19
+            name: "flatMap"
+          )
+        )
+        (LambdaExpression
+          range: 2:20-2:49
+          (LambdaParameter
+            range: 2:21-2:26
+            (IdentifierDeclaration
+              range: 2:21-2:26
+              name: "value"
+            )
+          )
+          (LambdaParameter
+            range: 2:28-2:33
+            (IdentifierDeclaration
+              range: 2:28-2:33
+              name: "index"
+            )
+          )
+          (ArrayExpression
+            range: 2:38-2:49
+            (BinaryExpression
+              range: 2:39-2:48
+              (LiteralExpression
+                range: 2:39-2:40
+                kind: INT
+                text: "2"
+              )
+              operator: MULTIPLY
+              (IdentifierExpression
+                range: 2:43-2:48
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:59
+    (CallExpression
+      range: 3:1-3:58
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:57
+        (MemberExpression
+          range: 3:7-3:19
+          (IdentifierExpression
+            range: 3:7-3:11
+            name: "list"
+          )
+          (IdentifierExpression
+            range: 3:12-3:19
+            name: "flatMap"
+          )
+        )
+        (LambdaExpression
+          range: 3:20-3:56
+          (LambdaParameter
+            range: 3:21-3:26
+            (IdentifierDeclaration
+              range: 3:21-3:26
+              name: "value"
+            )
+          )
+          (LambdaParameter
+            range: 3:28-3:33
+            (IdentifierDeclaration
+              range: 3:28-3:33
+              name: "index"
+            )
+          )
+          (ArrayExpression
+            range: 3:38-3:56
+            (IdentifierExpression
+              range: 3:39-3:44
+              name: "value"
+            )
+            (BinaryExpression
+              range: 3:46-3:55
+              (LiteralExpression
+                range: 3:46-3:47
+                kind: INT
+                text: "2"
+              )
+              operator: MULTIPLY
+              (IdentifierExpression
+                range: 3:50-3:55
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:43
+    (CallExpression
+      range: 4:1-4:42
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (CallExpression
+        range: 4:7-4:41
+        (MemberExpression
+          range: 4:7-4:19
+          (IdentifierExpression
+            range: 4:7-4:11
+            name: "list"
+          )
+          (IdentifierExpression
+            range: 4:12-4:19
+            name: "flatMap"
+          )
+        )
+        (LambdaExpression
+          range: 4:20-4:40
+          (LambdaParameter
+            range: 4:21-4:26
+            (IdentifierDeclaration
+              range: 4:21-4:26
+              name: "value"
+            )
+          )
+          (LambdaParameter
+            range: 4:28-4:33
+            (IdentifierDeclaration
+              range: 4:28-4:33
+              name: "index"
+            )
+          )
+          (ArrayExpression
+            range: 4:38-4:40
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:13
+    (CallExpression
+      range: 5:1-5:12
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:11
+        name: "list"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:23 -> [i32]
+  1:15-1:16 -> i32
+  1:18-1:19 -> i32
+  1:21-1:22 -> i32
+  2:1-2:6 -> (any) => void
+  2:1-2:51 -> void
+  2:7-2:11 -> [i32]
+  2:7-2:19 -> ((i32, i32) => [i32]) => [i32]
+  2:7-2:50 -> [i32]
+  2:12-2:19 -> ((i32, i32) => [i32]) => [i32]
+  2:20-2:49 -> (i32, i32) => [i32]
+  2:38-2:49 -> [i32]
+  2:39-2:40 -> i32
+  2:39-2:48 -> i32
+  2:43-2:48 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:58 -> void
+  3:7-3:11 -> [i32]
+  3:7-3:19 -> ((i32, i32) => [i32]) => [i32]
+  3:7-3:57 -> [i32]
+  3:12-3:19 -> ((i32, i32) => [i32]) => [i32]
+  3:20-3:56 -> (i32, i32) => [i32]
+  3:38-3:56 -> [i32]
+  3:39-3:44 -> i32
+  3:46-3:47 -> i32
+  3:46-3:55 -> i32
+  3:50-3:55 -> i32
+  4:1-4:6 -> (any) => void
+  4:1-4:42 -> void
+  4:7-4:11 -> [i32]
+  4:7-4:19 -> ((i32, i32) => [any]) => [any]
+  4:7-4:41 -> [any]
+  4:12-4:19 -> ((i32, i32) => [any]) => [any]
+  4:20-4:40 -> (i32, i32) => [any]
+  4:38-4:40 -> [any]
+  5:1-5:6 -> (any) => void
+  5:1-5:12 -> void
+  5:7-5:11 -> [i32]
+
+Declarations:
+  1:7-1:11 -> const list: [i32]
+  2:21-2:26 -> const value: i32
+  2:28-2:33 -> const index: i32
+  3:21-3:26 -> const value: i32
+  3:28-3:33 -> const index: i32
+  4:21-4:26 -> const value: i32
+  4:28-4:33 -> const index: i32
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:11 -> 1:7-1:11
+  2:12-2:19 -> EldIntArray.flatMap((i32, i32) => [i32]): [i32]
+  2:43-2:48 -> 2:21-2:26
+  3:1-3:6 -> builtin print
+  3:7-3:11 -> 1:7-1:11
+  3:12-3:19 -> EldIntArray.flatMap((i32, i32) => [i32]): [i32]
+  3:39-3:44 -> 3:21-3:26
+  3:50-3:55 -> 3:21-3:26
+  4:1-4:6 -> builtin print
+  4:7-4:11 -> 1:7-1:11
+  4:12-4:19 -> EldIntArray.flatMap((i32, i32) => [any]): [any]
+  5:1-5:6 -> builtin print
+  5:7-5:11 -> 1:7-1:11
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  method $lambda0(II)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PRIVATE, STATIC, SYNTHETIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 1
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 2
+    ILOAD_0 0
+    IMUL
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    ARETURN
+    max stack 7 max locals 2
+  method $lambda1(II)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PRIVATE, STATIC, SYNTHETIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 2
+    NEWARRAY INT
+    DUP
+    LDC 0
+    ILOAD_0 0
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    ILOAD_0 0
+    IMUL
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    ARETURN
+    max stack 7 max locals 2
+  method $lambda2(II)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PRIVATE, STATIC, SYNTHETIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>()V
+    ARETURN
+    max stack 2 max locals 2
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 3
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 3
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC MethodHandleDesc[STATIC/Test::$lambda0(int,int)EldIntArray]
+    LDC "I"
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.flatMap(Ljava/lang/invoke/MethodHandle;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC MethodHandleDesc[STATIC/Test::$lambda1(int,int)EldIntArray]
+    LDC "I"
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.flatMap(Ljava/lang/invoke/MethodHandle;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldIntArray
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    LDC MethodHandleDesc[STATIC/Test::$lambda2(int,int)EldObjectArray]
+    LDC "Ljava/lang/Object;"
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.flatMap(Ljava/lang/invoke/MethodHandle;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldArray;
+    CHECKCAST com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 6 max locals 0
+
+--- OUTPUT ---
+
+[2, 4, 6]
+[1, 2, 2, 4, 3, 6]
+[]
+[1, 2, 3]

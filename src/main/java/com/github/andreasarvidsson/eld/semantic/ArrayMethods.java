@@ -12,6 +12,8 @@ import com.github.andreasarvidsson.eld.runtime.EldObjectArray;
 
 /** The methods exposed by Eld arrays and their Java implementations. */
 public final class ArrayMethods {
+    private static final TypeParameterType ZIP_ELEMENT =
+        new TypeParameterType("U");
     private static final BuiltinMethodRegistry METHODS =
         new BuiltinMethodRegistry(BuiltinMethodRegistry::javaType);
     private static final Map<String, Method> SPECIAL = new HashMap<>();
@@ -22,11 +24,20 @@ public final class ArrayMethods {
         special("sort", MethodHandle.class);
         special("sortInPlace", MethodHandle.class);
         special("filter", MethodHandle.class);
+        special("partition", MethodHandle.class);
         special("map", MethodHandle.class, String.class);
+        special("flatMap", MethodHandle.class, String.class);
+        special("flatten", String.class);
         special("reverse");
         special("copy");
         special("reverseInPlace");
         special("concat", EldObjectArray.class);
+        special("union", EldObjectArray.class);
+        special("intersect", EldObjectArray.class);
+        special("difference", EldObjectArray.class);
+        special("subtract", EldObjectArray.class);
+        special("zip", EldArray.class);
+        special("distinct");
         special("reduce", MethodHandle.class, Object.class);
         special("contains", Object.class);
         special("index", Object.class);
@@ -37,6 +48,8 @@ public final class ArrayMethods {
         special("findLastIndex", MethodHandle.class);
         special("any", MethodHandle.class);
         special("all", MethodHandle.class);
+        special("none", MethodHandle.class);
+        special("count", MethodHandle.class);
         special("join", String.class);
         special("add", Object[].class);
         special("addAll", EldObjectArray.class);
@@ -82,25 +95,42 @@ public final class ArrayMethods {
         final Range range
     ) {
         final @Nullable Method method = SPECIAL.get(name);
-        return method == null
-            ? null
-            : new JavaMethodSymbol(
-                method,
+        if (method == null) {
+            return null;
+        }
+        if (name.equals("zip")) {
+            final FunctionType type =
                 new FunctionType(
-                    List.of(),
-                    name.equals("removeAt")
-                        ? array.elementType()
-                        : name.equals("reverse") || name.equals("copy")
-                            || name.equals("filter")
-                            || name.equals("concat")
-                            || name.equals("sort")
-                                ? array
-                                : returnType(method.getReturnType())
-                ),
-                range,
-                false,
-                false
-            );
+                    List.of(new ArrayType(ZIP_ELEMENT)),
+                    new ArrayType(
+                        new TupleType(List.of(array.elementType(), ZIP_ELEMENT))
+                    )
+                );
+            return new JavaMethodSymbol(method, type, range, false, false);
+        }
+        if (
+            name.equals("flatten") && ConstType
+                .unwrap(array.elementType()) instanceof ArrayType nested
+        ) {
+            final FunctionType type = new FunctionType(List.of(), nested);
+            return new JavaMethodSymbol(method, type, range, false, false);
+        }
+        final Type result = switch (name) {
+            case "removeAt" -> array.elementType();
+            case "reverse", "copy", "filter", "concat", "union", "intersect",
+                "difference", "subtract", "distinct", "sort" -> array;
+            case "partition" -> new TupleType(List.of(array, array));
+            case "find", "findLast" ->
+                UnionType.of(List.of(array.elementType(), BuiltinType.NULL));
+            default -> returnType(method.getReturnType());
+        };
+        final List<Type> parameters = switch (name) {
+            case "concat", "union", "intersect", "difference", "subtract" ->
+                List.of(array);
+            default -> List.of();
+        };
+        final FunctionType type = new FunctionType(parameters, result);
+        return new JavaMethodSymbol(method, type, range, false, false);
     }
 
     private static Type returnType(final Class<?> javaType) {

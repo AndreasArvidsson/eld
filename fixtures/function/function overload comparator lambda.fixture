@@ -241,10 +241,8 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     max stack 1 max locals 1
   method $lambda0(II)I flags [PRIVATE, STATIC, SYNTHETIC]
     ILOAD_0 0
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
     ILOAD_1 1
-    INVOKESTATIC java/lang/Integer.valueOf(I)Ljava/lang/Integer;
-    INVOKEVIRTUAL java/lang/Integer.compareTo(Ljava/lang/Integer;)I
+    INVOKESTATIC java/lang/Integer.compare(II)I
     IRETURN
     max stack 2 max locals 2
   method <clinit>()V flags [STATIC]

@@ -1,0 +1,499 @@
+const list = [1, 2, 2, 3];
+const another = [2, 3, 3, 4];
+print(list.subtract(another));
+print(list);
+print(another);
+const strings: [string] = ["a", "b", "b"];
+const otherStrings: [string] = ["b", "c", "c"];
+print(strings.subtract(otherStrings));
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "list" (1:7-1:11)
+EQUAL (1:12-1:13)
+LEFT_BRACKET (1:14-1:15)
+INTEGER_LITERAL "1" (1:15-1:16)
+COMMA (1:16-1:17)
+INTEGER_LITERAL "2" (1:18-1:19)
+COMMA (1:19-1:20)
+INTEGER_LITERAL "2" (1:21-1:22)
+COMMA (1:22-1:23)
+INTEGER_LITERAL "3" (1:24-1:25)
+RIGHT_BRACKET (1:25-1:26)
+SEMICOLON (1:26-1:27)
+CONST (2:1-2:6)
+IDENTIFIER "another" (2:7-2:14)
+EQUAL (2:15-2:16)
+LEFT_BRACKET (2:17-2:18)
+INTEGER_LITERAL "2" (2:18-2:19)
+COMMA (2:19-2:20)
+INTEGER_LITERAL "3" (2:21-2:22)
+COMMA (2:22-2:23)
+INTEGER_LITERAL "3" (2:24-2:25)
+COMMA (2:25-2:26)
+INTEGER_LITERAL "4" (2:27-2:28)
+RIGHT_BRACKET (2:28-2:29)
+SEMICOLON (2:29-2:30)
+IDENTIFIER "print" (3:1-3:6)
+LEFT_PAREN (3:6-3:7)
+IDENTIFIER "list" (3:7-3:11)
+DOT (3:11-3:12)
+IDENTIFIER "subtract" (3:12-3:20)
+LEFT_PAREN (3:20-3:21)
+IDENTIFIER "another" (3:21-3:28)
+RIGHT_PAREN (3:28-3:29)
+RIGHT_PAREN (3:29-3:30)
+SEMICOLON (3:30-3:31)
+IDENTIFIER "print" (4:1-4:6)
+LEFT_PAREN (4:6-4:7)
+IDENTIFIER "list" (4:7-4:11)
+RIGHT_PAREN (4:11-4:12)
+SEMICOLON (4:12-4:13)
+IDENTIFIER "print" (5:1-5:6)
+LEFT_PAREN (5:6-5:7)
+IDENTIFIER "another" (5:7-5:14)
+RIGHT_PAREN (5:14-5:15)
+SEMICOLON (5:15-5:16)
+CONST (6:1-6:6)
+IDENTIFIER "strings" (6:7-6:14)
+COLON (6:14-6:15)
+LEFT_BRACKET (6:16-6:17)
+IDENTIFIER "string" (6:17-6:23)
+RIGHT_BRACKET (6:23-6:24)
+EQUAL (6:25-6:26)
+LEFT_BRACKET (6:27-6:28)
+STRING_LITERAL "\"a\"" (6:28-6:31)
+COMMA (6:31-6:32)
+STRING_LITERAL "\"b\"" (6:33-6:36)
+COMMA (6:36-6:37)
+STRING_LITERAL "\"b\"" (6:38-6:41)
+RIGHT_BRACKET (6:41-6:42)
+SEMICOLON (6:42-6:43)
+CONST (7:1-7:6)
+IDENTIFIER "otherStrings" (7:7-7:19)
+COLON (7:19-7:20)
+LEFT_BRACKET (7:21-7:22)
+IDENTIFIER "string" (7:22-7:28)
+RIGHT_BRACKET (7:28-7:29)
+EQUAL (7:30-7:31)
+LEFT_BRACKET (7:32-7:33)
+STRING_LITERAL "\"b\"" (7:33-7:36)
+COMMA (7:36-7:37)
+STRING_LITERAL "\"c\"" (7:38-7:41)
+COMMA (7:41-7:42)
+STRING_LITERAL "\"c\"" (7:43-7:46)
+RIGHT_BRACKET (7:46-7:47)
+SEMICOLON (7:47-7:48)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "strings" (8:7-8:14)
+DOT (8:14-8:15)
+IDENTIFIER "subtract" (8:15-8:23)
+LEFT_PAREN (8:23-8:24)
+IDENTIFIER "otherStrings" (8:24-8:36)
+RIGHT_PAREN (8:36-8:37)
+RIGHT_PAREN (8:37-8:38)
+SEMICOLON (8:38-8:39)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:39
+  (VariableDeclaration
+    range: 1:1-1:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "list"
+    )
+    type: null
+    (ArrayExpression
+      range: 1:14-1:26
+      (LiteralExpression
+        range: 1:15-1:16
+        kind: INT
+        text: "1"
+      )
+      (LiteralExpression
+        range: 1:18-1:19
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:21-1:22
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 1:24-1:25
+        kind: INT
+        text: "3"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 2:1-2:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:14
+      name: "another"
+    )
+    type: null
+    (ArrayExpression
+      range: 2:17-2:29
+      (LiteralExpression
+        range: 2:18-2:19
+        kind: INT
+        text: "2"
+      )
+      (LiteralExpression
+        range: 2:21-2:22
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 2:24-2:25
+        kind: INT
+        text: "3"
+      )
+      (LiteralExpression
+        range: 2:27-2:28
+        kind: INT
+        text: "4"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:31
+    (CallExpression
+      range: 3:1-3:30
+      (IdentifierExpression
+        range: 3:1-3:6
+        name: "print"
+      )
+      (CallExpression
+        range: 3:7-3:29
+        (MemberExpression
+          range: 3:7-3:20
+          (IdentifierExpression
+            range: 3:7-3:11
+            name: "list"
+          )
+          (IdentifierExpression
+            range: 3:12-3:20
+            name: "subtract"
+          )
+        )
+        (IdentifierExpression
+          range: 3:21-3:28
+          name: "another"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 4:1-4:13
+    (CallExpression
+      range: 4:1-4:12
+      (IdentifierExpression
+        range: 4:1-4:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 4:7-4:11
+        name: "list"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:16
+    (CallExpression
+      range: 5:1-5:15
+      (IdentifierExpression
+        range: 5:1-5:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 5:7-5:14
+        name: "another"
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:14
+      name: "strings"
+    )
+    (ArrayTypeNode
+      range: 6:16-6:24
+      (NamedTypeNode
+        range: 6:17-6:23
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 6:27-6:42
+      (LiteralExpression
+        range: 6:28-6:31
+        kind: STRING
+        text: "\"a\""
+      )
+      (LiteralExpression
+        range: 6:33-6:36
+        kind: STRING
+        text: "\"b\""
+      )
+      (LiteralExpression
+        range: 6:38-6:41
+        kind: STRING
+        text: "\"b\""
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:48
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:19
+      name: "otherStrings"
+    )
+    (ArrayTypeNode
+      range: 7:21-7:29
+      (NamedTypeNode
+        range: 7:22-7:28
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 7:32-7:47
+      (LiteralExpression
+        range: 7:33-7:36
+        kind: STRING
+        text: "\"b\""
+      )
+      (LiteralExpression
+        range: 7:38-7:41
+        kind: STRING
+        text: "\"c\""
+      )
+      (LiteralExpression
+        range: 7:43-7:46
+        kind: STRING
+        text: "\"c\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:39
+    (CallExpression
+      range: 8:1-8:38
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:37
+        (MemberExpression
+          range: 8:7-8:23
+          (IdentifierExpression
+            range: 8:7-8:14
+            name: "strings"
+          )
+          (IdentifierExpression
+            range: 8:15-8:23
+            name: "subtract"
+          )
+        )
+        (IdentifierExpression
+          range: 8:24-8:36
+          name: "otherStrings"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:14-1:26 -> [i32]
+  1:15-1:16 -> i32
+  1:18-1:19 -> i32
+  1:21-1:22 -> i32
+  1:24-1:25 -> i32
+  2:17-2:29 -> [i32]
+  2:18-2:19 -> i32
+  2:21-2:22 -> i32
+  2:24-2:25 -> i32
+  2:27-2:28 -> i32
+  3:1-3:6 -> (any) => void
+  3:1-3:30 -> void
+  3:7-3:11 -> [i32]
+  3:7-3:20 -> ([i32]) => [i32]
+  3:7-3:29 -> [i32]
+  3:12-3:20 -> ([i32]) => [i32]
+  3:21-3:28 -> [i32]
+  4:1-4:6 -> (any) => void
+  4:1-4:12 -> void
+  4:7-4:11 -> [i32]
+  5:1-5:6 -> (any) => void
+  5:1-5:15 -> void
+  5:7-5:14 -> [i32]
+  6:27-6:42 -> [string]
+  6:28-6:31 -> string
+  6:33-6:36 -> string
+  6:38-6:41 -> string
+  7:32-7:47 -> [string]
+  7:33-7:36 -> string
+  7:38-7:41 -> string
+  7:43-7:46 -> string
+  8:1-8:6 -> (any) => void
+  8:1-8:38 -> void
+  8:7-8:14 -> [string]
+  8:7-8:23 -> ([string]) => [string]
+  8:7-8:37 -> [string]
+  8:15-8:23 -> ([string]) => [string]
+  8:24-8:36 -> [string]
+
+Resolved types:
+  6:16-6:24 -> [string]
+  6:17-6:23 -> string
+  7:21-7:29 -> [string]
+  7:22-7:28 -> string
+
+Declarations:
+  1:7-1:11 -> const list: [i32]
+  2:7-2:14 -> const another: [i32]
+  6:7-6:14 -> const strings: [string]
+  7:7-7:19 -> const otherStrings: [string]
+
+References:
+  3:1-3:6 -> builtin print
+  3:7-3:11 -> 1:7-1:11
+  3:12-3:20 -> EldIntArray.subtract([i32]): [i32]
+  3:21-3:28 -> 2:7-2:14
+  4:1-4:6 -> builtin print
+  4:7-4:11 -> 1:7-1:11
+  5:1-5:6 -> builtin print
+  5:7-5:14 -> 2:7-2:14
+  8:1-8:6 -> builtin print
+  8:7-8:14 -> 6:7-6:14
+  8:15-8:23 -> EldObjectArray.subtract([string]): [string]
+  8:24-8:36 -> 7:7-7:19
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field another Lcom/github/andreasarvidsson/eld/runtime/EldIntArray; flags [PUBLIC, STATIC, FINAL]
+  field strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  field otherStrings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 4
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 1
+    IASTORE
+    DUP
+    LDC 1
+    LDC 2
+    IASTORE
+    DUP
+    LDC 2
+    LDC 2
+    IASTORE
+    DUP
+    LDC 3
+    LDC 3
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldIntArray
+    DUP
+    LDC 4
+    NEWARRAY INT
+    DUP
+    LDC 0
+    LDC 2
+    IASTORE
+    DUP
+    LDC 1
+    LDC 3
+    IASTORE
+    DUP
+    LDC 2
+    LDC 3
+    IASTORE
+    DUP
+    LDC 3
+    LDC 4
+    IASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldIntArray.<init>([I)V
+    PUTSTATIC Test.another Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    GETSTATIC Test.another Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldIntArray.subtract(Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;)Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.list Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.another Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "a"
+    AASTORE
+    DUP
+    LDC 1
+    LDC "b"
+    AASTORE
+    DUP
+    LDC 2
+    LDC "b"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    LDC 3
+    ANEWARRAY java/lang/Object
+    DUP
+    LDC 0
+    LDC "b"
+    AASTORE
+    DUP
+    LDC 1
+    LDC "c"
+    AASTORE
+    DUP
+    LDC 2
+    LDC "c"
+    AASTORE
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>([Ljava/lang/Object;)V
+    PUTSTATIC Test.otherStrings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.strings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC Test.otherStrings Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.subtract(Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    RETURN
+    max stack 6 max locals 0
+
+--- OUTPUT ---
+
+[1]
+[1, 2, 2, 3]
+[2, 3, 3, 4]
+[a]
