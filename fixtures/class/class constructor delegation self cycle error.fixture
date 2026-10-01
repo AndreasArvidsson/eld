@@ -1,0 +1,57 @@
+class Foo {
+    public constructor() {
+        this();
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+RIGHT_PAREN (2:24-2:25)
+LEFT_BRACE (2:26-2:27)
+THIS (3:9-3:13)
+LEFT_PAREN (3:13-3:14)
+RIGHT_PAREN (3:14-3:15)
+SEMICOLON (3:15-3:16)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:2
+  (ClassDeclaration
+    range: 1:1-5:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 2:12-4:6
+        (BlockStatement
+          range: 2:26-4:6
+          (ThisConstructorCall
+            range: 3:9-3:16
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Constructor delegation cannot be cyclic at 3:9-3:16

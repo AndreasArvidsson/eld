@@ -59,7 +59,10 @@ public class AstPrinter {
         append(output, node.range(), depth);
 
         for (final RecordComponent component : components) {
-            if (component.getName().equals("range")) {
+            if (
+                component.getName().equals("range")
+                    || component.getName().equals("defaultText")
+            ) {
                 continue;
             }
 

@@ -5,8 +5,18 @@ import org.jspecify.annotations.Nullable;
 
 public record FunctionParameter(
     BindingDeclaration name, TypeNode type, boolean optional, boolean namedOnly,
-    @Nullable Expression defaultValue
+    @Nullable Expression defaultValue, @Nullable String defaultText
 ) implements AstNode {
+
+    public FunctionParameter(
+        final BindingDeclaration name,
+        final TypeNode type,
+        final boolean optional,
+        final boolean namedOnly,
+        final @Nullable Expression defaultValue
+    ) {
+        this(name, type, optional, namedOnly, defaultValue, null);
+    }
 
     public FunctionParameter(BindingDeclaration name, TypeNode type) {
         this(name, type, false, false, null);

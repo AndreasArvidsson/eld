@@ -25,16 +25,19 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
     }
 
     @Override
+    @EldApi(property = true)
     public int length() {
         return length;
     }
 
     @Override
+    @EldApi
     public boolean isEmpty() {
         return length == 0;
     }
 
     @Override
+    @EldApi
     public void clear() {
         length = 0;
     }
@@ -52,17 +55,20 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         elements[normalizeIndex(index)] = value;
     }
 
+    @EldApi
     public void add(final boolean value) {
         ensureCapacity(length + 1);
         elements[length++] = value;
     }
 
+    @EldApi
     public void add(final boolean... values) {
         ensureCapacity(length + values.length);
         System.arraycopy(values, 0, elements, length, values.length);
         length += values.length;
     }
 
+    @EldApi
     public void addFront(final boolean value) {
         ensureCapacity(length + 1);
         System.arraycopy(elements, 0, elements, 1, length);
@@ -70,6 +76,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         length++;
     }
 
+    @EldApi
     public void addFront(final boolean... values) {
         ensureCapacity(length + values.length);
         System.arraycopy(elements, 0, elements, values.length, length);
@@ -77,12 +84,14 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         length += values.length;
     }
 
+    @EldApi
     public void addAll(final EldBooleanArray additional) {
         ensureCapacity(length + additional.length);
         System.arraycopy(additional.elements, 0, elements, length, additional.length);
         length += additional.length;
     }
 
+    @EldApi
     public void insertAt(final boolean value, final int index) {
         final int at = index < 0 ? length + index : index;
         if (at < 0 || at > length) {
@@ -94,6 +103,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         length++;
     }
 
+    @EldApi
     public boolean remove(final boolean value) {
         for (int index = 0; index < length; index++) {
             if (elements[index] == value) {
@@ -104,6 +114,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return false;
     }
 
+    @EldApi
     public int removeAll(final boolean value) {
         int removed = 0;
         for (int index = 0; index < length;) {
@@ -123,10 +134,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
     }
 
     @Override
+    @EldApi
     public EldBooleanArray copy() {
         return copyRange(0, length);
     }
 
+    @EldApi
     public EldBooleanArray reverse() {
         final boolean[] reversed = new boolean[length];
         for (int index = 0; index < length; index++) {
@@ -153,6 +166,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return copyRange(from, to);
     }
 
+    @EldApi
     public boolean removeAt(final int index) {
         final int at = normalizeIndex(index);
         final boolean value = elements[at];
@@ -168,14 +182,17 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return Objects.checkIndex(index < 0 ? length + index : index, length);
     }
 
+    @EldApi
     public boolean contains(final boolean value) {
         return index(value, 0) != null;
     }
 
+    @EldApi
     public @Nullable Integer index(final boolean value) {
         return index(value, 0);
     }
 
+    @EldApi
     public @Nullable Integer index(final boolean value, final int from) {
         final int start = from < 0 ? Math.max(0, length + from) : from;
         for (int i = start; i < length; i++) {
@@ -186,10 +203,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return null;
     }
 
+    @EldApi
     public @Nullable Integer lastIndex(final boolean value) {
         return lastIndex(value, length - 1);
     }
 
+    @EldApi
     public @Nullable Integer lastIndex(final boolean value, final int from) {
         final int start = from < 0 ? length + from : from;
         for (int i = Math.min(start, length - 1); i >= 0; i--) {
@@ -223,6 +242,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
     }
 
     @Override
+    @EldApi
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append('[');
@@ -248,6 +268,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         elements = Arrays.copyOf(elements, newCapacity);
     }
 
+    @EldApi
     public EldBooleanArray filter(final MethodHandle predicate) throws Throwable {
         final EldBooleanArray result = copy();
         int count = 0;
@@ -262,6 +283,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldTuple partition(final MethodHandle predicate) throws Throwable {
         final EldBooleanArray matching = new EldBooleanArray();
         final EldBooleanArray remaining = new EldBooleanArray();
@@ -277,6 +299,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return new EldTuple(new Object[] {matching, remaining});
     }
 
+    @EldApi
     public EldArray<?> map(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final boolean indexed = transform.type().parameterCount() == 2;
         return switch (elementDescriptor) {
@@ -364,6 +387,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         };
     }
 
+    @EldApi
     public EldArray<?> flatMap(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final boolean indexed = transform.type().parameterCount() == 2;
         final EldArray<?>[] parts = new EldArray<?>[length];
@@ -460,6 +484,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         };
     }
 
+    @EldApi
     public void reverseInPlace() {
         for (int left = 0, right = length - 1;
             left < right; left++, right--) {
@@ -469,6 +494,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         }
     }
 
+    @EldApi
     public EldBooleanArray concat(final EldBooleanArray additional) {
         final EldBooleanArray result = copy();
         result.ensureCapacity(length + additional.length);
@@ -479,6 +505,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldBooleanArray union(final EldBooleanArray additional) {
         final EldBooleanArray result = new EldBooleanArray();
         for (int index = 0; index < length; index++) {
@@ -496,6 +523,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldBooleanArray distinct() {
         final EldBooleanArray result = new EldBooleanArray();
         for (int index = 0; index < length; index++) {
@@ -507,6 +535,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldBooleanArray intersect(final EldBooleanArray additional) {
         final EldBooleanArray result = new EldBooleanArray();
         for (int index = 0; index < length; index++) {
@@ -518,6 +547,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldBooleanArray subtract(final EldBooleanArray additional) {
         final EldBooleanArray result = new EldBooleanArray();
         for (int index = 0; index < length; index++) {
@@ -529,6 +559,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldBooleanArray difference(final EldBooleanArray additional) {
         final EldBooleanArray result = subtract(additional);
         for (int index = 0; index < additional.length; index++) {
@@ -540,6 +571,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public EldObjectArray<EldTuple> zip(final EldArray<?> additional) {
         if (length != additional.length()) {
             throw new IllegalArgumentException("Cannot zip arrays of different lengths");
@@ -551,6 +583,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return new EldObjectArray<>(tuples);
     }
 
+    @EldApi
     public Object reduce(final MethodHandle reducer, final Object initial) throws Throwable {
         final boolean indexed = reducer.type().parameterCount() == 3;
         final Class<?> resultType = reducer.type().returnType();
@@ -635,10 +668,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result;
     }
 
+    @EldApi
     public @Nullable Object find(final MethodHandle predicate) throws Throwable {
         return find(predicate, false);
     }
 
+    @EldApi
     public @Nullable Object findLast(final MethodHandle predicate) throws Throwable {
         return find(predicate, true);
     }
@@ -656,10 +691,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return null;
     }
 
+    @EldApi
     public @Nullable Integer findIndex(final MethodHandle predicate) throws Throwable {
         return findIndex(predicate, false);
     }
 
+    @EldApi
     public @Nullable Integer findLastIndex(final MethodHandle predicate) throws Throwable {
         return findIndex(predicate, true);
     }
@@ -676,6 +713,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return null;
     }
 
+    @EldApi
     public boolean any(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (test(predicate, elements[index], index)) {
@@ -685,6 +723,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return false;
     }
 
+    @EldApi
     public boolean all(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (!test(predicate, elements[index], index)) {
@@ -694,10 +733,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return true;
     }
 
+    @EldApi
     public boolean none(final MethodHandle predicate) throws Throwable {
         return !any(predicate);
     }
 
+    @EldApi
     public int count(final MethodHandle predicate) throws Throwable {
         int matching = 0;
         for (int index = 0; index < length; index++) {
@@ -708,10 +749,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return matching;
     }
 
+    @EldApi
     public String join() {
         return join(", ");
     }
 
+    @EldApi
     public String join(final String separator) {
         final StringBuilder result = new StringBuilder();
         for (int index = 0; index < length; index++) {
@@ -723,6 +766,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return result.toString();
     }
 
+    @EldApi
     public boolean remove(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (test(predicate, elements[index], index)) {
@@ -733,6 +777,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
         return false;
     }
 
+    @EldApi
     public boolean removeIf(final MethodHandle predicate) throws Throwable {
         boolean removed = false;
         for (int index = 0,
@@ -750,10 +795,12 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
 
 
 
+    @EldApi
     public void sortInPlace(final MethodHandle comparator) throws Throwable {
         sortWithComparator(Arrays.copyOf(elements, length), 0, length, comparator);
     }
 
+    @EldApi
     public EldBooleanArray sort(final MethodHandle comparator) throws Throwable {
         final EldBooleanArray result = copy();
         result.sortInPlace(comparator);
@@ -794,6 +841,7 @@ public final class EldBooleanArray implements EldArray<EldBooleanArray> {
     }
 
     @Override
+    @EldApi
     public int hashCode() {
         int result = 1;
         for (int i = 0; i < length; i++) {

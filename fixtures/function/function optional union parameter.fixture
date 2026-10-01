@@ -62,7 +62,7 @@ Resolved types:
   1:27-1:33 -> string
 
 Declarations:
-  1:6-1:12 -> func choose(value?: (i32 | string)) => void
+  1:6-1:12 -> func choose(value?: i32 | string) => void
   1:13-1:18 -> const value: i32 | string | null
 
 --- BYTECODE ---

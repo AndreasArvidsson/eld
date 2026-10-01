@@ -149,4 +149,7 @@ SEMICOLON (4:24-4:25)
 
 --- SEMANTIC ---
 
-SemanticException: Ambiguous call to overloaded function 'apply' at 4:1-4:24
+SemanticException: Ambiguous call to overloaded function 'apply' with arguments (lambda) at 4:1-4:24
+Available overloads:
+  apply(mapper: (i32) => i32)
+  apply(mapper: (string) => string)

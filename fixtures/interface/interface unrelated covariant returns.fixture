@@ -21,8 +21,8 @@ const first: FirstFactory = new Factory();
 const second: SecondFactory = new Factory();
 const firstValue = first.create();
 const secondValue = second.create();
-print(firstValue.equals(firstValue));
-print(secondValue.equals(secondValue));
+print(firstValue == firstValue);
+print(secondValue == secondValue);
 
 --- TOKENS ---
 
@@ -125,28 +125,22 @@ SEMICOLON (23:36-23:37)
 IDENTIFIER "print" (24:1-24:6)
 LEFT_PAREN (24:6-24:7)
 IDENTIFIER "firstValue" (24:7-24:17)
-DOT (24:17-24:18)
-IDENTIFIER "equals" (24:18-24:24)
-LEFT_PAREN (24:24-24:25)
-IDENTIFIER "firstValue" (24:25-24:35)
-RIGHT_PAREN (24:35-24:36)
-RIGHT_PAREN (24:36-24:37)
-SEMICOLON (24:37-24:38)
+EQUAL_EQUAL (24:18-24:20)
+IDENTIFIER "firstValue" (24:21-24:31)
+RIGHT_PAREN (24:31-24:32)
+SEMICOLON (24:32-24:33)
 IDENTIFIER "print" (25:1-25:6)
 LEFT_PAREN (25:6-25:7)
 IDENTIFIER "secondValue" (25:7-25:18)
-DOT (25:18-25:19)
-IDENTIFIER "equals" (25:19-25:25)
-LEFT_PAREN (25:25-25:26)
-IDENTIFIER "secondValue" (25:26-25:37)
-RIGHT_PAREN (25:37-25:38)
-RIGHT_PAREN (25:38-25:39)
-SEMICOLON (25:39-25:40)
+EQUAL_EQUAL (25:19-25:21)
+IDENTIFIER "secondValue" (25:22-25:33)
+RIGHT_PAREN (25:33-25:34)
+SEMICOLON (25:34-25:35)
 
 --- AST ---
 
 (Program
-  range: 1:1-25:40
+  range: 1:1-25:35
   (InterfaceDeclaration
     range: 1:1-1:19
     (IdentifierDeclaration
@@ -358,56 +352,44 @@ SEMICOLON (25:39-25:40)
     )
   )
   (ExpressionStatement
-    range: 24:1-24:38
+    range: 24:1-24:33
     (CallExpression
-      range: 24:1-24:37
+      range: 24:1-24:32
       (IdentifierExpression
         range: 24:1-24:6
         name: "print"
       )
-      (CallExpression
-        range: 24:7-24:36
-        (MemberExpression
-          range: 24:7-24:24
-          (IdentifierExpression
-            range: 24:7-24:17
-            name: "firstValue"
-          )
-          (IdentifierExpression
-            range: 24:18-24:24
-            name: "equals"
-          )
-        )
+      (BinaryExpression
+        range: 24:7-24:31
         (IdentifierExpression
-          range: 24:25-24:35
+          range: 24:7-24:17
+          name: "firstValue"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 24:21-24:31
           name: "firstValue"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 25:1-25:40
+    range: 25:1-25:35
     (CallExpression
-      range: 25:1-25:39
+      range: 25:1-25:34
       (IdentifierExpression
         range: 25:1-25:6
         name: "print"
       )
-      (CallExpression
-        range: 25:7-25:38
-        (MemberExpression
-          range: 25:7-25:25
-          (IdentifierExpression
-            range: 25:7-25:18
-            name: "secondValue"
-          )
-          (IdentifierExpression
-            range: 25:19-25:25
-            name: "equals"
-          )
-        )
+      (BinaryExpression
+        range: 25:7-25:33
         (IdentifierExpression
-          range: 25:26-25:37
+          range: 25:7-25:18
+          name: "secondValue"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 25:22-25:33
           name: "secondValue"
         )
       )
@@ -433,19 +415,15 @@ Expression types:
   23:21-23:36 -> Second
   23:28-23:34 -> () => Second
   24:1-24:6 -> (any) => void
-  24:1-24:37 -> void
+  24:1-24:32 -> void
   24:7-24:17 -> First
-  24:7-24:24 -> (First) => bool
-  24:7-24:36 -> bool
-  24:18-24:24 -> (First) => bool
-  24:25-24:35 -> First
+  24:7-24:31 -> bool
+  24:21-24:31 -> First
   25:1-25:6 -> (any) => void
-  25:1-25:39 -> void
+  25:1-25:34 -> void
   25:7-25:18 -> Second
-  25:7-25:25 -> (Second) => bool
-  25:7-25:38 -> bool
-  25:19-25:25 -> (Second) => bool
-  25:26-25:37 -> Second
+  25:7-25:33 -> bool
+  25:22-25:33 -> Second
 
 Resolved types:
   4:27-4:32 -> First
@@ -483,12 +461,10 @@ References:
   23:28-23:34 -> 11:10-11:16
   24:1-24:6 -> builtin print
   24:7-24:17 -> 22:7-22:17
-  24:18-24:24 -> java.lang.Object.equals(First): bool
-  24:25-24:35 -> 22:7-22:17
+  24:21-24:31 -> 22:7-22:17
   25:1-25:6 -> builtin print
   25:7-25:18 -> 23:7-23:18
-  25:19-25:25 -> java.lang.Object.equals(Second): bool
-  25:26-25:37 -> 23:7-23:18
+  25:22-25:33 -> 23:7-23:18
 
 --- BYTECODE ---
 

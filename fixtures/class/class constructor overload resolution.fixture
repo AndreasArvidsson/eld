@@ -1,0 +1,1202 @@
+class Value {
+    public const kind: string;
+    public constructor(value: i32) { this.kind = "i32"; }
+    public constructor(value: i64) { this.kind = "i64"; }
+    public constructor(value: string) { this.kind = "string"; }
+    public constructor(value: string | null) { this.kind = "nullable"; }
+    public constructor(value: () => i32) { this.kind = f"function: {value()}"; }
+}
+print(new Value(1).kind);
+print(new Value(2147483648).kind);
+print(new Value("text").kind);
+print(new Value(null).kind);
+print(new Value(() => 3).kind);
+class Named {
+    public const value: i32;
+    public constructor(*, first: i32) { this.value = first; }
+    public constructor(*, second: i32) { this.value = second + 1; }
+}
+print(new Named(first: 2).value);
+print(new Named(second: 2).value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "kind" (2:18-2:22)
+COLON (2:22-2:23)
+IDENTIFIER "string" (2:24-2:30)
+SEMICOLON (2:30-2:31)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "value" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+RIGHT_PAREN (3:34-3:35)
+LEFT_BRACE (3:36-3:37)
+THIS (3:38-3:42)
+DOT (3:42-3:43)
+IDENTIFIER "kind" (3:43-3:47)
+EQUAL (3:48-3:49)
+STRING_LITERAL "\"i32\"" (3:50-3:55)
+SEMICOLON (3:55-3:56)
+RIGHT_BRACE (3:57-3:58)
+PUBLIC (4:5-4:11)
+CONSTRUCTOR (4:12-4:23)
+LEFT_PAREN (4:23-4:24)
+IDENTIFIER "value" (4:24-4:29)
+COLON (4:29-4:30)
+IDENTIFIER "i64" (4:31-4:34)
+RIGHT_PAREN (4:34-4:35)
+LEFT_BRACE (4:36-4:37)
+THIS (4:38-4:42)
+DOT (4:42-4:43)
+IDENTIFIER "kind" (4:43-4:47)
+EQUAL (4:48-4:49)
+STRING_LITERAL "\"i64\"" (4:50-4:55)
+SEMICOLON (4:55-4:56)
+RIGHT_BRACE (4:57-4:58)
+PUBLIC (5:5-5:11)
+CONSTRUCTOR (5:12-5:23)
+LEFT_PAREN (5:23-5:24)
+IDENTIFIER "value" (5:24-5:29)
+COLON (5:29-5:30)
+IDENTIFIER "string" (5:31-5:37)
+RIGHT_PAREN (5:37-5:38)
+LEFT_BRACE (5:39-5:40)
+THIS (5:41-5:45)
+DOT (5:45-5:46)
+IDENTIFIER "kind" (5:46-5:50)
+EQUAL (5:51-5:52)
+STRING_LITERAL "\"string\"" (5:53-5:61)
+SEMICOLON (5:61-5:62)
+RIGHT_BRACE (5:63-5:64)
+PUBLIC (6:5-6:11)
+CONSTRUCTOR (6:12-6:23)
+LEFT_PAREN (6:23-6:24)
+IDENTIFIER "value" (6:24-6:29)
+COLON (6:29-6:30)
+IDENTIFIER "string" (6:31-6:37)
+PIPE (6:38-6:39)
+NULL (6:40-6:44)
+RIGHT_PAREN (6:44-6:45)
+LEFT_BRACE (6:46-6:47)
+THIS (6:48-6:52)
+DOT (6:52-6:53)
+IDENTIFIER "kind" (6:53-6:57)
+EQUAL (6:58-6:59)
+STRING_LITERAL "\"nullable\"" (6:60-6:70)
+SEMICOLON (6:70-6:71)
+RIGHT_BRACE (6:72-6:73)
+PUBLIC (7:5-7:11)
+CONSTRUCTOR (7:12-7:23)
+LEFT_PAREN (7:23-7:24)
+IDENTIFIER "value" (7:24-7:29)
+COLON (7:29-7:30)
+LEFT_PAREN (7:31-7:32)
+RIGHT_PAREN (7:32-7:33)
+ARROW (7:34-7:36)
+IDENTIFIER "i32" (7:37-7:40)
+RIGHT_PAREN (7:40-7:41)
+LEFT_BRACE (7:42-7:43)
+THIS (7:44-7:48)
+DOT (7:48-7:49)
+IDENTIFIER "kind" (7:49-7:53)
+EQUAL (7:54-7:55)
+FORMAT_STRING_START (7:56-7:58)
+FORMAT_STRING_TEXT "function: " (7:58-7:68)
+LEFT_BRACE (7:68-7:69)
+IDENTIFIER "value" (7:69-7:74)
+LEFT_PAREN (7:74-7:75)
+RIGHT_PAREN (7:75-7:76)
+RIGHT_BRACE (7:76-7:77)
+FORMAT_STRING_END (7:77-7:78)
+SEMICOLON (7:78-7:79)
+RIGHT_BRACE (7:80-7:81)
+RIGHT_BRACE (8:1-8:2)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+NEW (9:7-9:10)
+IDENTIFIER "Value" (9:11-9:16)
+LEFT_PAREN (9:16-9:17)
+INTEGER_LITERAL "1" (9:17-9:18)
+RIGHT_PAREN (9:18-9:19)
+DOT (9:19-9:20)
+IDENTIFIER "kind" (9:20-9:24)
+RIGHT_PAREN (9:24-9:25)
+SEMICOLON (9:25-9:26)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+NEW (10:7-10:10)
+IDENTIFIER "Value" (10:11-10:16)
+LEFT_PAREN (10:16-10:17)
+INTEGER_LITERAL "2147483648" (10:17-10:27)
+RIGHT_PAREN (10:27-10:28)
+DOT (10:28-10:29)
+IDENTIFIER "kind" (10:29-10:33)
+RIGHT_PAREN (10:33-10:34)
+SEMICOLON (10:34-10:35)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+NEW (11:7-11:10)
+IDENTIFIER "Value" (11:11-11:16)
+LEFT_PAREN (11:16-11:17)
+STRING_LITERAL "\"text\"" (11:17-11:23)
+RIGHT_PAREN (11:23-11:24)
+DOT (11:24-11:25)
+IDENTIFIER "kind" (11:25-11:29)
+RIGHT_PAREN (11:29-11:30)
+SEMICOLON (11:30-11:31)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+NEW (12:7-12:10)
+IDENTIFIER "Value" (12:11-12:16)
+LEFT_PAREN (12:16-12:17)
+NULL (12:17-12:21)
+RIGHT_PAREN (12:21-12:22)
+DOT (12:22-12:23)
+IDENTIFIER "kind" (12:23-12:27)
+RIGHT_PAREN (12:27-12:28)
+SEMICOLON (12:28-12:29)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+NEW (13:7-13:10)
+IDENTIFIER "Value" (13:11-13:16)
+LEFT_PAREN (13:16-13:17)
+LEFT_PAREN (13:17-13:18)
+RIGHT_PAREN (13:18-13:19)
+ARROW (13:20-13:22)
+INTEGER_LITERAL "3" (13:23-13:24)
+RIGHT_PAREN (13:24-13:25)
+DOT (13:25-13:26)
+IDENTIFIER "kind" (13:26-13:30)
+RIGHT_PAREN (13:30-13:31)
+SEMICOLON (13:31-13:32)
+CLASS (14:1-14:6)
+IDENTIFIER "Named" (14:7-14:12)
+LEFT_BRACE (14:13-14:14)
+PUBLIC (15:5-15:11)
+CONST (15:12-15:17)
+IDENTIFIER "value" (15:18-15:23)
+COLON (15:23-15:24)
+IDENTIFIER "i32" (15:25-15:28)
+SEMICOLON (15:28-15:29)
+PUBLIC (16:5-16:11)
+CONSTRUCTOR (16:12-16:23)
+LEFT_PAREN (16:23-16:24)
+STAR (16:24-16:25)
+COMMA (16:25-16:26)
+IDENTIFIER "first" (16:27-16:32)
+COLON (16:32-16:33)
+IDENTIFIER "i32" (16:34-16:37)
+RIGHT_PAREN (16:37-16:38)
+LEFT_BRACE (16:39-16:40)
+THIS (16:41-16:45)
+DOT (16:45-16:46)
+IDENTIFIER "value" (16:46-16:51)
+EQUAL (16:52-16:53)
+IDENTIFIER "first" (16:54-16:59)
+SEMICOLON (16:59-16:60)
+RIGHT_BRACE (16:61-16:62)
+PUBLIC (17:5-17:11)
+CONSTRUCTOR (17:12-17:23)
+LEFT_PAREN (17:23-17:24)
+STAR (17:24-17:25)
+COMMA (17:25-17:26)
+IDENTIFIER "second" (17:27-17:33)
+COLON (17:33-17:34)
+IDENTIFIER "i32" (17:35-17:38)
+RIGHT_PAREN (17:38-17:39)
+LEFT_BRACE (17:40-17:41)
+THIS (17:42-17:46)
+DOT (17:46-17:47)
+IDENTIFIER "value" (17:47-17:52)
+EQUAL (17:53-17:54)
+IDENTIFIER "second" (17:55-17:61)
+PLUS (17:62-17:63)
+INTEGER_LITERAL "1" (17:64-17:65)
+SEMICOLON (17:65-17:66)
+RIGHT_BRACE (17:67-17:68)
+RIGHT_BRACE (18:1-18:2)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+NEW (19:7-19:10)
+IDENTIFIER "Named" (19:11-19:16)
+LEFT_PAREN (19:16-19:17)
+IDENTIFIER "first" (19:17-19:22)
+COLON (19:22-19:23)
+INTEGER_LITERAL "2" (19:24-19:25)
+RIGHT_PAREN (19:25-19:26)
+DOT (19:26-19:27)
+IDENTIFIER "value" (19:27-19:32)
+RIGHT_PAREN (19:32-19:33)
+SEMICOLON (19:33-19:34)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+NEW (20:7-20:10)
+IDENTIFIER "Named" (20:11-20:16)
+LEFT_PAREN (20:16-20:17)
+IDENTIFIER "second" (20:17-20:23)
+COLON (20:23-20:24)
+INTEGER_LITERAL "2" (20:25-20:26)
+RIGHT_PAREN (20:26-20:27)
+DOT (20:27-20:28)
+IDENTIFIER "value" (20:28-20:33)
+RIGHT_PAREN (20:33-20:34)
+SEMICOLON (20:34-20:35)
+
+--- AST ---
+
+(Program
+  range: 1:1-20:35
+  (ClassDeclaration
+    range: 1:1-8:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:31
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 2:12-2:31
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:22
+          name: "kind"
+        )
+        (NamedTypeNode
+          range: 2:24-2:30
+          name: "string"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:58
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-3:58
+        (FunctionParameter
+          range: 3:24-3:34
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:31-3:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:36-3:58
+          (AssignmentStatement
+            range: 3:38-3:56
+            (MemberExpression
+              range: 3:38-3:47
+              (ThisExpression
+                range: 3:38-3:42
+              )
+              (IdentifierExpression
+                range: 3:43-3:47
+                name: "kind"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 3:50-3:55
+              kind: STRING
+              text: "\"i32\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:58
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 4:12-4:58
+        (FunctionParameter
+          range: 4:24-4:34
+          (IdentifierDeclaration
+            range: 4:24-4:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 4:31-4:34
+            name: "i64"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 4:36-4:58
+          (AssignmentStatement
+            range: 4:38-4:56
+            (MemberExpression
+              range: 4:38-4:47
+              (ThisExpression
+                range: 4:38-4:42
+              )
+              (IdentifierExpression
+                range: 4:43-4:47
+                name: "kind"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 4:50-4:55
+              kind: STRING
+              text: "\"i64\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:64
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 5:12-5:64
+        (FunctionParameter
+          range: 5:24-5:37
+          (IdentifierDeclaration
+            range: 5:24-5:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 5:31-5:37
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 5:39-5:64
+          (AssignmentStatement
+            range: 5:41-5:62
+            (MemberExpression
+              range: 5:41-5:50
+              (ThisExpression
+                range: 5:41-5:45
+              )
+              (IdentifierExpression
+                range: 5:46-5:50
+                name: "kind"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 5:53-5:61
+              kind: STRING
+              text: "\"string\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-6:73
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 6:12-6:73
+        (FunctionParameter
+          range: 6:24-6:44
+          (IdentifierDeclaration
+            range: 6:24-6:29
+            name: "value"
+          )
+          (UnionTypeNode
+            range: 6:31-6:44
+            (NamedTypeNode
+              range: 6:31-6:37
+              name: "string"
+            )
+            (NamedTypeNode
+              range: 6:40-6:44
+              name: "null"
+            )
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 6:46-6:73
+          (AssignmentStatement
+            range: 6:48-6:71
+            (MemberExpression
+              range: 6:48-6:57
+              (ThisExpression
+                range: 6:48-6:52
+              )
+              (IdentifierExpression
+                range: 6:53-6:57
+                name: "kind"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 6:60-6:70
+              kind: STRING
+              text: "\"nullable\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:81
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 7:12-7:81
+        (FunctionParameter
+          range: 7:24-7:40
+          (IdentifierDeclaration
+            range: 7:24-7:29
+            name: "value"
+          )
+          (FunctionTypeNode
+            range: 7:31-7:40
+            namedOnlyStart: null
+            (NamedTypeNode
+              range: 7:37-7:40
+              name: "i32"
+            )
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 7:42-7:81
+          (AssignmentStatement
+            range: 7:44-7:79
+            (MemberExpression
+              range: 7:44-7:53
+              (ThisExpression
+                range: 7:44-7:48
+              )
+              (IdentifierExpression
+                range: 7:49-7:53
+                name: "kind"
+              )
+            )
+            operator: ASSIGN
+            (FormatStringExpression
+              range: 7:56-7:78
+              (LiteralExpression
+                range: 7:58-7:68
+                kind: FORMAT_STRING_TEXT
+                text: "function: "
+              )
+              (CallExpression
+                range: 7:69-7:76
+                (IdentifierExpression
+                  range: 7:69-7:74
+                  name: "value"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:26
+    (CallExpression
+      range: 9:1-9:25
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 9:7-9:24
+        (NewExpression
+          range: 9:7-9:19
+          (IdentifierExpression
+            range: 9:11-9:16
+            name: "Value"
+          )
+          (LiteralExpression
+            range: 9:17-9:18
+            kind: INT
+            text: "1"
+          )
+        )
+        (IdentifierExpression
+          range: 9:20-9:24
+          name: "kind"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:35
+    (CallExpression
+      range: 10:1-10:34
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 10:7-10:33
+        (NewExpression
+          range: 10:7-10:28
+          (IdentifierExpression
+            range: 10:11-10:16
+            name: "Value"
+          )
+          (LiteralExpression
+            range: 10:17-10:27
+            kind: INT
+            text: "2147483648"
+          )
+        )
+        (IdentifierExpression
+          range: 10:29-10:33
+          name: "kind"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:31
+    (CallExpression
+      range: 11:1-11:30
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 11:7-11:29
+        (NewExpression
+          range: 11:7-11:24
+          (IdentifierExpression
+            range: 11:11-11:16
+            name: "Value"
+          )
+          (LiteralExpression
+            range: 11:17-11:23
+            kind: STRING
+            text: "\"text\""
+          )
+        )
+        (IdentifierExpression
+          range: 11:25-11:29
+          name: "kind"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:29
+    (CallExpression
+      range: 12:1-12:28
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:27
+        (NewExpression
+          range: 12:7-12:22
+          (IdentifierExpression
+            range: 12:11-12:16
+            name: "Value"
+          )
+          (LiteralExpression
+            range: 12:17-12:21
+            kind: NULL
+            text: "null"
+          )
+        )
+        (IdentifierExpression
+          range: 12:23-12:27
+          name: "kind"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:32
+    (CallExpression
+      range: 13:1-13:31
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 13:7-13:30
+        (NewExpression
+          range: 13:7-13:25
+          (IdentifierExpression
+            range: 13:11-13:16
+            name: "Value"
+          )
+          (LambdaExpression
+            range: 13:17-13:24
+            (LiteralExpression
+              range: 13:23-13:24
+              kind: INT
+              text: "3"
+            )
+          )
+        )
+        (IdentifierExpression
+          range: 13:26-13:30
+          name: "kind"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 14:1-18:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 14:7-14:12
+      name: "Named"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 15:5-15:29
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 15:12-15:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 15:18-15:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 15:25-15:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 16:5-16:62
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 16:12-16:62
+        (FunctionParameter
+          range: 16:27-16:37
+          (IdentifierDeclaration
+            range: 16:27-16:32
+            name: "first"
+          )
+          (NamedTypeNode
+            range: 16:34-16:37
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 16:39-16:62
+          (AssignmentStatement
+            range: 16:41-16:60
+            (MemberExpression
+              range: 16:41-16:51
+              (ThisExpression
+                range: 16:41-16:45
+              )
+              (IdentifierExpression
+                range: 16:46-16:51
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 16:54-16:59
+              name: "first"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 17:5-17:68
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 17:12-17:68
+        (FunctionParameter
+          range: 17:27-17:38
+          (IdentifierDeclaration
+            range: 17:27-17:33
+            name: "second"
+          )
+          (NamedTypeNode
+            range: 17:35-17:38
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 17:40-17:68
+          (AssignmentStatement
+            range: 17:42-17:66
+            (MemberExpression
+              range: 17:42-17:52
+              (ThisExpression
+                range: 17:42-17:46
+              )
+              (IdentifierExpression
+                range: 17:47-17:52
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (BinaryExpression
+              range: 17:55-17:65
+              (IdentifierExpression
+                range: 17:55-17:61
+                name: "second"
+              )
+              operator: ADD
+              (LiteralExpression
+                range: 17:64-17:65
+                kind: INT
+                text: "1"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:34
+    (CallExpression
+      range: 19:1-19:33
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 19:7-19:32
+        (NewExpression
+          range: 19:7-19:26
+          (IdentifierExpression
+            range: 19:11-19:16
+            name: "Named"
+          )
+          (NamedArgumentExpression
+            range: 19:17-19:25
+            (IdentifierDeclaration
+              range: 19:17-19:22
+              name: "first"
+            )
+            (LiteralExpression
+              range: 19:24-19:25
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+        (IdentifierExpression
+          range: 19:27-19:32
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:35
+    (CallExpression
+      range: 20:1-20:34
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 20:7-20:33
+        (NewExpression
+          range: 20:7-20:27
+          (IdentifierExpression
+            range: 20:11-20:16
+            name: "Named"
+          )
+          (NamedArgumentExpression
+            range: 20:17-20:26
+            (IdentifierDeclaration
+              range: 20:17-20:23
+              name: "second"
+            )
+            (LiteralExpression
+              range: 20:25-20:26
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+        (IdentifierExpression
+          range: 20:28-20:33
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:38-3:42 -> Value
+  3:38-3:47 -> string
+  3:43-3:47 -> string
+  3:50-3:55 -> string
+  4:38-4:42 -> Value
+  4:38-4:47 -> string
+  4:43-4:47 -> string
+  4:50-4:55 -> string
+  5:41-5:45 -> Value
+  5:41-5:50 -> string
+  5:46-5:50 -> string
+  5:53-5:61 -> string
+  6:48-6:52 -> Value
+  6:48-6:57 -> string
+  6:53-6:57 -> string
+  6:60-6:70 -> string
+  7:44-7:48 -> Value
+  7:44-7:53 -> string
+  7:49-7:53 -> string
+  7:56-7:78 -> string
+  7:58-7:68 -> string
+  7:69-7:74 -> () => i32
+  7:69-7:76 -> i32
+  9:1-9:6 -> (any) => void
+  9:1-9:25 -> void
+  9:7-9:19 -> (value: i32) => void
+  9:7-9:19 -> Value
+  9:7-9:24 -> string
+  9:11-9:16 -> Value
+  9:17-9:18 -> i32
+  9:20-9:24 -> string
+  10:1-10:6 -> (any) => void
+  10:1-10:34 -> void
+  10:7-10:28 -> (value: i64) => void
+  10:7-10:28 -> Value
+  10:7-10:33 -> string
+  10:11-10:16 -> Value
+  10:17-10:27 -> i64
+  10:29-10:33 -> string
+  11:1-11:6 -> (any) => void
+  11:1-11:30 -> void
+  11:7-11:24 -> (value: string) => void
+  11:7-11:24 -> Value
+  11:7-11:29 -> string
+  11:11-11:16 -> Value
+  11:17-11:23 -> string
+  11:25-11:29 -> string
+  12:1-12:6 -> (any) => void
+  12:1-12:28 -> void
+  12:7-12:22 -> (value: string | null) => void
+  12:7-12:22 -> Value
+  12:7-12:27 -> string
+  12:11-12:16 -> Value
+  12:17-12:21 -> null
+  12:23-12:27 -> string
+  13:1-13:6 -> (any) => void
+  13:1-13:31 -> void
+  13:7-13:25 -> (value: () => i32) => void
+  13:7-13:25 -> Value
+  13:7-13:30 -> string
+  13:11-13:16 -> Value
+  13:17-13:24 -> () => i32
+  13:23-13:24 -> i32
+  13:26-13:30 -> string
+  16:41-16:45 -> Named
+  16:41-16:51 -> i32
+  16:46-16:51 -> i32
+  16:54-16:59 -> i32
+  17:42-17:46 -> Named
+  17:42-17:52 -> i32
+  17:47-17:52 -> i32
+  17:55-17:61 -> i32
+  17:55-17:65 -> i32
+  17:64-17:65 -> i32
+  19:1-19:6 -> (any) => void
+  19:1-19:33 -> void
+  19:7-19:26 -> (*, first: i32) => void
+  19:7-19:26 -> Named
+  19:7-19:32 -> i32
+  19:11-19:16 -> Named
+  19:24-19:25 -> i32
+  19:27-19:32 -> i32
+  20:1-20:6 -> (any) => void
+  20:1-20:34 -> void
+  20:7-20:27 -> (*, second: i32) => void
+  20:7-20:27 -> Named
+  20:7-20:33 -> i32
+  20:11-20:16 -> Named
+  20:25-20:26 -> i32
+  20:28-20:33 -> i32
+
+Resolved types:
+  2:24-2:30 -> string
+  3:31-3:34 -> i32
+  4:31-4:34 -> i64
+  5:31-5:37 -> string
+  6:31-6:37 -> string
+  6:31-6:44 -> string | null
+  6:40-6:44 -> null
+  7:31-7:40 -> () => i32
+  7:37-7:40 -> i32
+  15:25-15:28 -> i32
+  16:34-16:37 -> i32
+  17:35-17:38 -> i32
+
+Conversions:
+  12:17-12:21 -> null -> string | null
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:18-2:22 -> public const kind: string
+  3:12-3:58 -> public constructor(value: i32)
+  3:24-3:29 -> const value: i32
+  4:12-4:58 -> public constructor(value: i64)
+  4:24-4:29 -> const value: i64
+  5:12-5:64 -> public constructor(value: string)
+  5:24-5:29 -> const value: string
+  6:12-6:73 -> public constructor(value: string | null)
+  6:24-6:29 -> const value: string | null
+  7:12-7:81 -> public constructor(value: () => i32)
+  7:24-7:29 -> const value: () => i32
+  14:7-14:12 -> class Named
+  15:18-15:23 -> public const value: i32
+  16:12-16:62 -> public constructor(*, first: i32)
+  16:27-16:32 -> const first: i32
+  17:12-17:68 -> public constructor(*, second: i32)
+  17:27-17:33 -> const second: i32
+
+References:
+  3:43-3:47 -> 2:18-2:22
+  4:43-4:47 -> 2:18-2:22
+  5:46-5:50 -> 2:18-2:22
+  6:53-6:57 -> 2:18-2:22
+  7:49-7:53 -> 2:18-2:22
+  7:69-7:74 -> 7:24-7:29
+  9:1-9:6 -> builtin print
+  9:7-9:19 -> 3:12-3:58
+  9:11-9:16 -> 1:7-1:12
+  9:20-9:24 -> 2:18-2:22
+  10:1-10:6 -> builtin print
+  10:7-10:28 -> 4:12-4:58
+  10:11-10:16 -> 1:7-1:12
+  10:29-10:33 -> 2:18-2:22
+  11:1-11:6 -> builtin print
+  11:7-11:24 -> 5:12-5:64
+  11:11-11:16 -> 1:7-1:12
+  11:25-11:29 -> 2:18-2:22
+  12:1-12:6 -> builtin print
+  12:7-12:22 -> 6:12-6:73
+  12:11-12:16 -> 1:7-1:12
+  12:23-12:27 -> 2:18-2:22
+  13:1-13:6 -> builtin print
+  13:7-13:25 -> 7:12-7:81
+  13:11-13:16 -> 1:7-1:12
+  13:26-13:30 -> 2:18-2:22
+  16:46-16:51 -> 15:18-15:23
+  16:54-16:59 -> 16:27-16:32
+  17:47-17:52 -> 15:18-15:23
+  17:55-17:61 -> 17:27-17:33
+  19:1-19:6 -> builtin print
+  19:7-19:26 -> 16:12-16:62
+  19:11-19:16 -> 14:7-14:12
+  19:27-19:32 -> 15:18-15:23
+  20:1-20:6 -> builtin print
+  20:7-20:27 -> 17:12-17:68
+  20:11-20:16 -> 14:7-14:12
+  20:28-20:33 -> 15:18-15:23
+
+Named arguments:
+  19:17-19:22 -> parameter 16:27-16:32
+  20:17-20:23 -> parameter 17:27-17:33
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$Named
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$Named flags [PUBLIC, STATIC]
+  method $lambda0()I flags [PRIVATE, STATIC, SYNTHETIC]
+    LDC 3
+    IRETURN
+    max stack 1 max locals 0
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    LDC 1
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Value.<init>(I[Ljava/lang/Void;)V
+    GETFIELD Test$Value.kind Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    LDC2_W 2147483648
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Value.<init>(J[[Ljava/lang/Void;)V
+    GETFIELD Test$Value.kind Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    LDC "text"
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Value.<init>(Ljava/lang/String;[[[Ljava/lang/Void;)V
+    GETFIELD Test$Value.kind Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Value.<init>(Ljava/lang/String;[[[[Ljava/lang/Void;)V
+    GETFIELD Test$Value.kind Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Value
+    DUP
+    LDC MethodHandleDesc[STATIC/Test::$lambda0()int]
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Value.<init>(Ljava/lang/invoke/MethodHandle;[[[[[Ljava/lang/Void;)V
+    GETFIELD Test$Value.kind Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Named
+    DUP
+    LDC 2
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Named.<init>(I[Ljava/lang/Void;)V
+    GETFIELD Test$Named.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Named
+    DUP
+    LDC 2
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Named.<init>(I[[Ljava/lang/Void;)V
+    GETFIELD Test$Named.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 6 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field kind Ljava/lang/String; flags [PUBLIC, FINAL]
+  method <init>(I[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "i32"
+    PUTFIELD Test$Value.kind Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 3
+  method <init>(J[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "i64"
+    PUTFIELD Test$Value.kind Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 4
+  method <init>(Ljava/lang/String;[[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "string"
+    PUTFIELD Test$Value.kind Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 3
+  method <init>(Ljava/lang/String;[[[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "nullable"
+    PUTFIELD Test$Value.kind Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 3
+  method <init>(Ljava/lang/invoke/MethodHandle;[[[[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC "function: "
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    PUTFIELD Test$Value.kind Ljava/lang/String;
+    RETURN
+    max stack 3 max locals 3
+
+class Test$Named extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Named flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, FINAL]
+  method <init>(I[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$Named.value I
+    RETURN
+    max stack 2 max locals 3
+  method <init>(I[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    LDC 1
+    IADD
+    PUTFIELD Test$Named.value I
+    RETURN
+    max stack 3 max locals 3
+
+--- OUTPUT ---
+
+i32
+i64
+string
+nullable
+function: 3
+2
+3

@@ -1,0 +1,633 @@
+class Types {
+    public var flag = true;
+    public constructor() {}
+    public constructor(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64, ok: bool, letter: char, text: string, list: [i32]) {}
+    public func values(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64, ok: bool, letter: char, text: string, list: [i32]) void {}
+}
+help(new Types());
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Types" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "flag" (2:16-2:20)
+EQUAL (2:21-2:22)
+BOOLEAN_LITERAL "true" (2:23-2:27)
+SEMICOLON (2:27-2:28)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+RIGHT_BRACE (3:27-3:28)
+PUBLIC (4:5-4:11)
+CONSTRUCTOR (4:12-4:23)
+LEFT_PAREN (4:23-4:24)
+IDENTIFIER "a" (4:24-4:25)
+COLON (4:25-4:26)
+IDENTIFIER "i8" (4:27-4:29)
+COMMA (4:29-4:30)
+IDENTIFIER "b" (4:31-4:32)
+COLON (4:32-4:33)
+IDENTIFIER "i16" (4:34-4:37)
+COMMA (4:37-4:38)
+IDENTIFIER "c" (4:39-4:40)
+COLON (4:40-4:41)
+IDENTIFIER "i32" (4:42-4:45)
+COMMA (4:45-4:46)
+IDENTIFIER "d" (4:47-4:48)
+COLON (4:48-4:49)
+IDENTIFIER "i64" (4:50-4:53)
+COMMA (4:53-4:54)
+IDENTIFIER "e" (4:55-4:56)
+COLON (4:56-4:57)
+IDENTIFIER "f32" (4:58-4:61)
+COMMA (4:61-4:62)
+IDENTIFIER "f" (4:63-4:64)
+COLON (4:64-4:65)
+IDENTIFIER "f64" (4:66-4:69)
+COMMA (4:69-4:70)
+IDENTIFIER "ok" (4:71-4:73)
+COLON (4:73-4:74)
+IDENTIFIER "bool" (4:75-4:79)
+COMMA (4:79-4:80)
+IDENTIFIER "letter" (4:81-4:87)
+COLON (4:87-4:88)
+IDENTIFIER "char" (4:89-4:93)
+COMMA (4:93-4:94)
+IDENTIFIER "text" (4:95-4:99)
+COLON (4:99-4:100)
+IDENTIFIER "string" (4:101-4:107)
+COMMA (4:107-4:108)
+IDENTIFIER "list" (4:109-4:113)
+COLON (4:113-4:114)
+LEFT_BRACKET (4:115-4:116)
+IDENTIFIER "i32" (4:116-4:119)
+RIGHT_BRACKET (4:119-4:120)
+RIGHT_PAREN (4:120-4:121)
+LEFT_BRACE (4:122-4:123)
+RIGHT_BRACE (4:123-4:124)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "values" (5:17-5:23)
+LEFT_PAREN (5:23-5:24)
+IDENTIFIER "a" (5:24-5:25)
+COLON (5:25-5:26)
+IDENTIFIER "i8" (5:27-5:29)
+COMMA (5:29-5:30)
+IDENTIFIER "b" (5:31-5:32)
+COLON (5:32-5:33)
+IDENTIFIER "i16" (5:34-5:37)
+COMMA (5:37-5:38)
+IDENTIFIER "c" (5:39-5:40)
+COLON (5:40-5:41)
+IDENTIFIER "i32" (5:42-5:45)
+COMMA (5:45-5:46)
+IDENTIFIER "d" (5:47-5:48)
+COLON (5:48-5:49)
+IDENTIFIER "i64" (5:50-5:53)
+COMMA (5:53-5:54)
+IDENTIFIER "e" (5:55-5:56)
+COLON (5:56-5:57)
+IDENTIFIER "f32" (5:58-5:61)
+COMMA (5:61-5:62)
+IDENTIFIER "f" (5:63-5:64)
+COLON (5:64-5:65)
+IDENTIFIER "f64" (5:66-5:69)
+COMMA (5:69-5:70)
+IDENTIFIER "ok" (5:71-5:73)
+COLON (5:73-5:74)
+IDENTIFIER "bool" (5:75-5:79)
+COMMA (5:79-5:80)
+IDENTIFIER "letter" (5:81-5:87)
+COLON (5:87-5:88)
+IDENTIFIER "char" (5:89-5:93)
+COMMA (5:93-5:94)
+IDENTIFIER "text" (5:95-5:99)
+COLON (5:99-5:100)
+IDENTIFIER "string" (5:101-5:107)
+COMMA (5:107-5:108)
+IDENTIFIER "list" (5:109-5:113)
+COLON (5:113-5:114)
+LEFT_BRACKET (5:115-5:116)
+IDENTIFIER "i32" (5:116-5:119)
+RIGHT_BRACKET (5:119-5:120)
+RIGHT_PAREN (5:120-5:121)
+IDENTIFIER "void" (5:122-5:126)
+LEFT_BRACE (5:127-5:128)
+RIGHT_BRACE (5:128-5:129)
+RIGHT_BRACE (6:1-6:2)
+IDENTIFIER "help" (7:1-7:5)
+LEFT_PAREN (7:5-7:6)
+NEW (7:6-7:9)
+IDENTIFIER "Types" (7:10-7:15)
+LEFT_PAREN (7:15-7:16)
+RIGHT_PAREN (7:16-7:17)
+RIGHT_PAREN (7:17-7:18)
+SEMICOLON (7:18-7:19)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:19
+  (ClassDeclaration
+    range: 1:1-6:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Types"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:28
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 2:12-2:28
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:20
+          name: "flag"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:23-2:27
+          kind: BOOL
+          text: "true"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:28
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-3:28
+        (BlockStatement
+          range: 3:26-3:28
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:124
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 4:12-4:124
+        (FunctionParameter
+          range: 4:24-4:29
+          (IdentifierDeclaration
+            range: 4:24-4:25
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 4:27-4:29
+            name: "i8"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:31-4:37
+          (IdentifierDeclaration
+            range: 4:31-4:32
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 4:34-4:37
+            name: "i16"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:39-4:45
+          (IdentifierDeclaration
+            range: 4:39-4:40
+            name: "c"
+          )
+          (NamedTypeNode
+            range: 4:42-4:45
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:47-4:53
+          (IdentifierDeclaration
+            range: 4:47-4:48
+            name: "d"
+          )
+          (NamedTypeNode
+            range: 4:50-4:53
+            name: "i64"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:55-4:61
+          (IdentifierDeclaration
+            range: 4:55-4:56
+            name: "e"
+          )
+          (NamedTypeNode
+            range: 4:58-4:61
+            name: "f32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:63-4:69
+          (IdentifierDeclaration
+            range: 4:63-4:64
+            name: "f"
+          )
+          (NamedTypeNode
+            range: 4:66-4:69
+            name: "f64"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:71-4:79
+          (IdentifierDeclaration
+            range: 4:71-4:73
+            name: "ok"
+          )
+          (NamedTypeNode
+            range: 4:75-4:79
+            name: "bool"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:81-4:93
+          (IdentifierDeclaration
+            range: 4:81-4:87
+            name: "letter"
+          )
+          (NamedTypeNode
+            range: 4:89-4:93
+            name: "char"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:95-4:107
+          (IdentifierDeclaration
+            range: 4:95-4:99
+            name: "text"
+          )
+          (NamedTypeNode
+            range: 4:101-4:107
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 4:109-4:120
+          (IdentifierDeclaration
+            range: 4:109-4:113
+            name: "list"
+          )
+          (ArrayTypeNode
+            range: 4:115-4:120
+            (NamedTypeNode
+              range: 4:116-4:119
+              name: "i32"
+            )
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 4:122-4:124
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:129
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 5:12-5:129
+        modifiers: []
+        (IdentifierDeclaration
+          range: 5:17-5:23
+          name: "values"
+        )
+        (FunctionParameter
+          range: 5:24-5:29
+          (IdentifierDeclaration
+            range: 5:24-5:25
+            name: "a"
+          )
+          (NamedTypeNode
+            range: 5:27-5:29
+            name: "i8"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:31-5:37
+          (IdentifierDeclaration
+            range: 5:31-5:32
+            name: "b"
+          )
+          (NamedTypeNode
+            range: 5:34-5:37
+            name: "i16"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:39-5:45
+          (IdentifierDeclaration
+            range: 5:39-5:40
+            name: "c"
+          )
+          (NamedTypeNode
+            range: 5:42-5:45
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:47-5:53
+          (IdentifierDeclaration
+            range: 5:47-5:48
+            name: "d"
+          )
+          (NamedTypeNode
+            range: 5:50-5:53
+            name: "i64"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:55-5:61
+          (IdentifierDeclaration
+            range: 5:55-5:56
+            name: "e"
+          )
+          (NamedTypeNode
+            range: 5:58-5:61
+            name: "f32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:63-5:69
+          (IdentifierDeclaration
+            range: 5:63-5:64
+            name: "f"
+          )
+          (NamedTypeNode
+            range: 5:66-5:69
+            name: "f64"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:71-5:79
+          (IdentifierDeclaration
+            range: 5:71-5:73
+            name: "ok"
+          )
+          (NamedTypeNode
+            range: 5:75-5:79
+            name: "bool"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:81-5:93
+          (IdentifierDeclaration
+            range: 5:81-5:87
+            name: "letter"
+          )
+          (NamedTypeNode
+            range: 5:89-5:93
+            name: "char"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:95-5:107
+          (IdentifierDeclaration
+            range: 5:95-5:99
+            name: "text"
+          )
+          (NamedTypeNode
+            range: 5:101-5:107
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 5:109-5:120
+          (IdentifierDeclaration
+            range: 5:109-5:113
+            name: "list"
+          )
+          (ArrayTypeNode
+            range: 5:115-5:120
+            (NamedTypeNode
+              range: 5:116-5:119
+              name: "i32"
+            )
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 5:122-5:126
+          name: "void"
+        )
+        (BlockStatement
+          range: 5:127-5:129
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:19
+    (CallExpression
+      range: 7:1-7:18
+      (IdentifierExpression
+        range: 7:1-7:5
+        name: "help"
+      )
+      (NewExpression
+        range: 7:6-7:17
+        (IdentifierExpression
+          range: 7:10-7:15
+          name: "Types"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:23-2:27 -> bool
+  7:1-7:5 -> (any) => void
+  7:1-7:18 -> void
+  7:6-7:17 -> () => void
+  7:6-7:17 -> Types
+  7:10-7:15 -> Types
+
+Resolved types:
+  4:27-4:29 -> i8
+  4:34-4:37 -> i16
+  4:42-4:45 -> i32
+  4:50-4:53 -> i64
+  4:58-4:61 -> f32
+  4:66-4:69 -> f64
+  4:75-4:79 -> bool
+  4:89-4:93 -> char
+  4:101-4:107 -> string
+  4:115-4:120 -> [i32]
+  4:116-4:119 -> i32
+  5:27-5:29 -> i8
+  5:34-5:37 -> i16
+  5:42-5:45 -> i32
+  5:50-5:53 -> i64
+  5:58-5:61 -> f32
+  5:66-5:69 -> f64
+  5:75-5:79 -> bool
+  5:89-5:93 -> char
+  5:101-5:107 -> string
+  5:115-5:120 -> [i32]
+  5:116-5:119 -> i32
+  5:122-5:126 -> void
+
+Declarations:
+  1:7-1:12 -> class Types
+  2:16-2:20 -> public var flag: bool
+  3:12-3:28 -> public constructor()
+  4:12-4:124 -> public constructor(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64, ok: bool, letter: char, text: string, list: [i32])
+  4:24-4:25 -> const a: i8
+  4:31-4:32 -> const b: i16
+  4:39-4:40 -> const c: i32
+  4:47-4:48 -> const d: i64
+  4:55-4:56 -> const e: f32
+  4:63-4:64 -> const f: f64
+  4:71-4:73 -> const ok: bool
+  4:81-4:87 -> const letter: char
+  4:95-4:99 -> const text: string
+  4:109-4:113 -> const list: [i32]
+  5:17-5:23 -> public func values(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64, ok: bool, letter: char, text: string, list: [i32]) => void
+  5:24-5:25 -> const a: i8
+  5:31-5:32 -> const b: i16
+  5:39-5:40 -> const c: i32
+  5:47-5:48 -> const d: i64
+  5:55-5:56 -> const e: f32
+  5:63-5:64 -> const f: f64
+  5:71-5:73 -> const ok: bool
+  5:81-5:87 -> const letter: char
+  5:95-5:99 -> const text: string
+  5:109-5:113 -> const list: [i32]
+
+References:
+  7:1-7:5 -> builtin help
+  7:6-7:17 -> 3:12-3:28
+  7:10-7:15 -> 1:7-1:12
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Types
+  inner class Test$Types flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Types
+    DUP
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Types.<init>([Ljava/lang/Void;)V
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Types extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Types flags [PUBLIC, STATIC]
+  field flag Z flags [PUBLIC]
+  method <init>([Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ICONST_1 1
+    PUTFIELD Test$Types.flag Z
+    RETURN
+    max stack 2 max locals 2
+  method <init>(BSIJFDZCLjava/lang/String;Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ICONST_1 1
+    PUTFIELD Test$Types.flag Z
+    RETURN
+    max stack 2 max locals 14
+  method values(BSIJFDZCLjava/lang/String;Lcom/github/andreasarvidsson/eld/runtime/EldIntArray;)V flags [PUBLIC]
+    RETURN
+    max stack 0 max locals 13
+
+--- OUTPUT ---
+
+Types
+ | Fields:
+ |   flag: bool
+ |
+ | Constructors:
+ |   constructor()
+ |   constructor(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64, ok: bool, letter: char, text: string, list: [i32])
+ |
+ | Methods:
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   toString() => string
+ |   values(a: i8, b: i16, c: i32, d: i64, e: f32, f: f64, ok: bool, letter: char, text: string, list: [i32]) => void

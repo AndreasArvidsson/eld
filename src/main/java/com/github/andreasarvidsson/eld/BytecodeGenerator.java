@@ -4,6 +4,9 @@ import static java.lang.classfile.ClassFile.*;
 import static java.lang.classfile.Opcode.*;
 
 import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.Annotation;
+import java.lang.classfile.AnnotationElement;
+import java.lang.classfile.AnnotationValue;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.classfile.ClassHierarchyResolver.ClassHierarchyInfo;
@@ -43,6 +46,7 @@ import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.parser.*;
 import com.github.andreasarvidsson.eld.runtime.RuntimeAbi;
 import com.github.andreasarvidsson.eld.runtime.EldArray;
+import com.github.andreasarvidsson.eld.runtime.EldApi;
 import com.github.andreasarvidsson.eld.semantic.ArrayType;
 import com.github.andreasarvidsson.eld.semantic.ArrayMethods;
 import com.github.andreasarvidsson.eld.semantic.TupleType;
@@ -52,6 +56,8 @@ import com.github.andreasarvidsson.eld.semantic.BuiltinType;
 import com.github.andreasarvidsson.eld.semantic.ClassDeclarationSymbol;
 import com.github.andreasarvidsson.eld.semantic.ClassType;
 import com.github.andreasarvidsson.eld.semantic.ConstType;
+import com.github.andreasarvidsson.eld.semantic.ConstructorSymbol;
+import com.github.andreasarvidsson.eld.semantic.ConstructorOverload;
 import com.github.andreasarvidsson.eld.semantic.InterfaceType;
 import com.github.andreasarvidsson.eld.semantic.LiteralType;
 import com.github.andreasarvidsson.eld.semantic.InterfaceContract;
@@ -1609,6 +1615,72 @@ public final class BytecodeGenerator {
                     );
             }
             writer.withSuperclass(classDesc(superclassOwner));
+            writer.with(
+                RuntimeVisibleAnnotationsAttribute.of(
+                    Annotation.of(
+                        ClassDesc.of(EldApi.class.getName()),
+                        AnnotationElement.ofArray(
+                            "methods",
+                            declaration.members()
+                                .stream()
+                                .filter(
+                                    member -> member
+                                        .visibility() == Visibility.PUBLIC
+                                )
+                                .map(MemberDeclaration::declaration)
+                                .filter(FunctionDeclaration.class::isInstance)
+                                .map(FunctionDeclaration.class::cast)
+                                .map(function -> {
+                                    final FunctionSymbol symbol =
+                                        (FunctionSymbol) semanticModel
+                                            .getSymbol(function.name());
+                                    return AnnotationValue.ofString(
+                                        methodName(symbol)
+                                            + methodDescriptor(symbol.type())
+                                            + ":"
+                                            + semanticModel
+                                                .formatFunctionApiSignature(
+                                                    symbol
+                                                )
+                                    );
+                                })
+                                .toArray(AnnotationValue[]::new)
+                        ),
+                        AnnotationElement.ofArray(
+                            "constructors",
+                            semanticModel.getConstructorOverloads(classType)
+                                .stream()
+                                .filter(
+                                    overload -> overload
+                                        .visibility() == Visibility.PUBLIC
+                                )
+                                .map(overload -> {
+                                    final @Nullable ConstructorDeclaration constructor =
+                                        overload.declaration();
+                                    final @Nullable Symbol symbol =
+                                        constructor == null
+                                            ? null
+                                            : semanticModel.findDeclaredSymbol(
+                                                constructor
+                                            );
+                                    final String signature =
+                                        symbol instanceof ConstructorSymbol constructorSymbol
+                                            ? constructorSymbol
+                                                .formatSignature(true)
+                                            : "constructor()";
+                                    return AnnotationValue.ofString(
+                                        constructorDescriptor(
+                                            overload,
+                                            false,
+                                            enumClass
+                                        ) + ":" + signature
+                                    );
+                                })
+                                .toArray(AnnotationValue[]::new)
+                        )
+                    )
+                )
+            );
             if (record != null) {
                 generateRecordAttribute(writer, record);
             }
@@ -1800,109 +1872,111 @@ public final class BytecodeGenerator {
                     }
                 );
             }
-            final ConstructorDeclaration declarationConstructor =
-                declaration.members()
-                    .stream()
-                    .map(MemberDeclaration::declaration)
-                    .filter(ConstructorDeclaration.class::isInstance)
-                    .map(ConstructorDeclaration.class::cast)
-                    .findFirst()
-                    .orElse(null);
-            final FunctionType constructorType =
-                semanticModel.getConstructor(
-                    (ClassType) semanticModel.getSymbol(declaration.name())
-                        .type()
-                );
-            generateMethod(
-                writer,
-                visibilityAccess(
-                    semanticModel.getConstructorVisibility(
-                        (ClassType) semanticModel.getSymbol(declaration.name())
-                            .type()
-                    )
-                ),
-                "<init>",
-                enumClass
-                    ? enumConstructorDescriptor(constructorType)
-                    : methodDescriptor(constructorType),
-                null,
-                constructor -> {
-                    final MethodGenerator initializer =
-                        new MethodGenerator(
-                            constructor,
-                            globals,
-                            BuiltinType.VOID,
-                            instance
-                        );
-
-                    if (enumClass) {
-                        initializer.reserveLocals(3);
-                    }
-
-                    if (declarationConstructor != null) {
-                        for (final FunctionParameter parameter : declarationConstructor
-                            .parameters()) {
-                            parameterLocal(initializer, parameter);
-                        }
-                    }
-                    initializer.constructorSuperclass = superclass;
-                    initializer.constructorSuperclassOwner = superclassOwner;
-                    initializer.constructorFields =
-                        declaration.members()
-                            .stream()
-                            .filter(member -> !member.staticMember())
-                            .map(MemberDeclaration::declaration)
-                            .filter(VariableDeclaration.class::isInstance)
-                            .map(VariableDeclaration.class::cast)
-                            .toList();
-                    final boolean explicitSuper =
-                        declarationConstructor != null
-                            && declarationConstructor.hasExplicitSuperCall();
-                    if (!explicitSuper) {
-                        initializer.initializeBase(List.of(), List.of());
-                    }
-                    final boolean reachable;
-                    if (record != null) {
-                        int slot = 1;
-                        for (final RecordParameter parameter : record
-                            .parameters()) {
-                            final Type type =
-                                semanticModel.getResolvedType(parameter.type());
-                            constructor.aload(0);
-                            constructor
-                                .with(localInstruction(loadOpcode(type), slot));
-                            constructor.fieldAccess(
-                                PUTFIELD,
-                                classDesc(name),
-                                parameter.name().name(),
-                                ClassDesc.ofDescriptor(descriptor(type))
-                            );
-                            slot += slots(type);
-                        }
-                        reachable = true;
-                    }
-                    else {
-                        reachable =
-                            declarationConstructor == null || initializer
-                                .block(declarationConstructor.body());
-                    }
-                    initializer.finish(reachable);
-                }
-            );
-            if (declarationConstructor != null && !enumClass) {
-                generateDefaultOverload(
+            for (final ConstructorOverload overload : semanticModel
+                .getConstructorOverloads(classType)) {
+                final @Nullable ConstructorDeclaration declarationConstructor =
+                    overload.declaration();
+                final FunctionType constructorType = overload.type();
+                generateMethod(
                     writer,
+                    visibilityAccess(overload.visibility()),
                     "<init>",
-                    constructorType,
-                    declarationConstructor.parameters(),
-                    globals,
-                    instance,
-                    semanticModel.getConstructorVisibility(
-                        (ClassType) semanticModel.getSymbol(declaration.name())
-                            .type()
-                    ),
-                    false
+                    constructorDescriptor(overload, false, enumClass),
+                    null,
+                    constructor -> {
+                        final MethodGenerator initializer =
+                            new MethodGenerator(
+                                constructor,
+                                globals,
+                                BuiltinType.VOID,
+                                instance
+                            );
+
+                        if (enumClass) {
+                            initializer.reserveLocals(3);
+                        }
+
+                        if (declarationConstructor != null) {
+                            for (final FunctionParameter parameter : declarationConstructor
+                                .parameters()) {
+                                parameterLocal(initializer, parameter);
+                            }
+                        }
+                        initializer.constructorSuperclass = superclass;
+                        initializer.constructorSuperclassOwner =
+                            superclassOwner;
+                        initializer.constructorFields =
+                            declaration.members()
+                                .stream()
+                                .filter(member -> !member.staticMember())
+                                .map(MemberDeclaration::declaration)
+                                .filter(VariableDeclaration.class::isInstance)
+                                .map(VariableDeclaration.class::cast)
+                                .toList();
+                        final boolean explicitSuper =
+                            declarationConstructor != null
+                                && (declarationConstructor
+                                    .hasExplicitSuperCall()
+                                    || declarationConstructor
+                                        .hasDelegatingCall());
+                        if (!explicitSuper) {
+                            initializer.initializeBase(
+                                List.of(),
+                                List.of(),
+                                superclass == null
+                                    ? null
+                                    : semanticModel.getSelectedConstructor(
+                                        declarationConstructor == null
+                                            ? declaration
+                                            : declarationConstructor
+                                    ),
+                                false
+                            );
+                        }
+                        final boolean reachable;
+                        if (record != null) {
+                            int slot = 1;
+                            for (final RecordParameter parameter : record
+                                .parameters()) {
+                                final Type type =
+                                    semanticModel
+                                        .getResolvedType(parameter.type());
+                                constructor.aload(0);
+                                constructor.with(
+                                    localInstruction(loadOpcode(type), slot)
+                                );
+                                constructor.fieldAccess(
+                                    PUTFIELD,
+                                    classDesc(name),
+                                    parameter.name().name(),
+                                    ClassDesc.ofDescriptor(descriptor(type))
+                                );
+                                slot += slots(type);
+                            }
+                            reachable = true;
+                        }
+                        else {
+                            reachable =
+                                declarationConstructor == null || initializer
+                                    .block(declarationConstructor.body());
+                        }
+                        initializer.finish(reachable);
+                    }
                 );
+                if (declarationConstructor != null) {
+                    generateDefaultOverload(
+                        writer,
+                        "<init>",
+                        constructorType,
+                        declarationConstructor.parameters(),
+                        globals,
+                        instance,
+                        overload.visibility(),
+                        false,
+                        overload,
+                        enumClass
+                    );
+                }
             }
             for (final MemberDeclaration memberDeclaration : declaration
                 .members()) {
@@ -3105,6 +3179,33 @@ public final class BytecodeGenerator {
             .replace(")", (longOmissionMask(type) ? "J" : "I") + ")");
     }
 
+    private String constructorDescriptor(
+        final ConstructorOverload constructor,
+        final boolean defaults,
+        final boolean enumConstructor
+    ) {
+        String result =
+            enumConstructor
+                ? enumConstructorDescriptor(constructor.type())
+                : methodDescriptor(constructor.type());
+        if (defaults) {
+            result =
+                result.replace(
+                    ")",
+                    (longOmissionMask(constructor.type()) ? "J" : "I") + ")"
+                );
+        }
+        if (constructor.marker() > 0) {
+            // Keep erased signatures and default-mask constructors distinct on the JVM.
+            result =
+                result.replace(
+                    ")",
+                    "[".repeat(constructor.marker()) + "Ljava/lang/Void;)"
+                );
+        }
+        return result;
+    }
+
     private static boolean longOmissionMask(final FunctionType type) {
         final int parameters = type.parameterTypes().size();
         if (parameters > Long.SIZE) {
@@ -3141,6 +3242,32 @@ public final class BytecodeGenerator {
         final Visibility visibility,
         final boolean finalMethod
     ) {
+        generateDefaultOverload(
+            writer,
+            name,
+            type,
+            parameters,
+            globals,
+            instance,
+            visibility,
+            finalMethod,
+            null,
+            false
+        );
+    }
+
+    private void generateDefaultOverload(
+        final ClassBuilder writer,
+        final String name,
+        final FunctionType type,
+        final List<FunctionParameter> parameters,
+        final IdentityHashMap<Symbol, String> globals,
+        final @Nullable InstanceContext instance,
+        final Visibility visibility,
+        final boolean finalMethod,
+        final @Nullable ConstructorOverload constructor,
+        final boolean enumConstructor
+    ) {
         if (parameters.stream().noneMatch(FunctionParameter::omittable)) {
             return;
         }
@@ -3150,7 +3277,9 @@ public final class BytecodeGenerator {
                 | (instance == null ? ACC_STATIC : 0)
                 | (finalMethod ? ACC_FINAL : 0),
             name,
-            defaultDescriptor(type),
+            constructor == null
+                ? defaultDescriptor(type)
+                : constructorDescriptor(constructor, true, enumConstructor),
             null,
             method -> {
                 final MethodGenerator generator =
@@ -3161,6 +3290,9 @@ public final class BytecodeGenerator {
                         instance
                     );
                 generator.beforeBaseInitialization = name.equals("<init>");
+                if (enumConstructor) {
+                    generator.reserveLocals(3);
+                }
 
                 final List<Integer> parameterSlots = new ArrayList<>();
                 for (final FunctionParameter parameter : parameters) {
@@ -3205,6 +3337,10 @@ public final class BytecodeGenerator {
                 if (instance != null) {
                     method.aload(0);
                 }
+                if (enumConstructor) {
+                    method.aload(1);
+                    method.iload(2);
+                }
                 for (int i = 0; i < parameters.size(); i++) {
                     final Type parameterType = type.parameterTypes().get(i);
                     method.with(
@@ -3213,6 +3349,9 @@ public final class BytecodeGenerator {
                             parameterSlots.get(i)
                         )
                     );
+                }
+                if (constructor != null && constructor.marker() > 0) {
+                    method.aconst_null();
                 }
                 method.invoke(
                     name.equals("<init>")
@@ -3226,7 +3365,15 @@ public final class BytecodeGenerator {
                         instance == null ? currentOwner : instance.owner()
                     ),
                     name,
-                    MethodTypeDesc.ofDescriptor(methodDescriptor(type)),
+                    MethodTypeDesc.ofDescriptor(
+                        constructor == null
+                            ? methodDescriptor(type)
+                            : constructorDescriptor(
+                                constructor,
+                                false,
+                                enumConstructor
+                            )
+                    ),
                     instance != null && interfaceOwnerName(instance.owner())
                 );
                 method.with(simpleInstruction(returnOpcode(type.returnType())));
@@ -4949,9 +5096,15 @@ public final class BytecodeGenerator {
 
         private void initializeBase(
             final List<Expression> arguments,
-            final List<Integer> parameters
+            final List<Integer> parameters,
+            final @Nullable ConstructorOverload constructor,
+            final boolean delegate
         ) {
-            if (constructorSuperclassOwner.equals("java/lang/Enum")) {
+            final String owner =
+                delegate
+                    ? Objects.requireNonNull(instance).owner()
+                    : constructorSuperclassOwner;
+            if (owner.equals("java/lang/Enum")) {
                 method.aload(0);
                 method.aload(1);
                 method.iload(2);
@@ -4968,10 +5121,14 @@ public final class BytecodeGenerator {
                 return;
             }
             method.aload(0);
+            final boolean enumConstructor =
+                delegate && constructorSuperclassOwner.equals("java/lang/Enum");
+            if (enumConstructor) {
+                method.aload(1);
+                method.iload(2);
+            }
             final FunctionType type =
-                constructorSuperclass == null
-                    ? null
-                    : semanticModel.getConstructor(constructorSuperclass);
+                constructor == null ? null : constructor.type();
             final boolean omitted =
                 type != null && arguments.size() < type.parameterTypes().size();
             final boolean previous = beforeBaseInitialization;
@@ -5020,19 +5177,28 @@ public final class BytecodeGenerator {
                 }
             }
             beforeBaseInitialization = previous;
+            if (constructor != null && constructor.marker() > 0) {
+                method.aconst_null();
+            }
             method.invoke(
                 INVOKESPECIAL,
-                classDesc(constructorSuperclassOwner),
+                classDesc(owner),
                 "<init>",
                 MethodTypeDesc.ofDescriptor(
-                    omitted
-                        ? defaultDescriptor(Objects.requireNonNull(type))
-                        : type == null ? "()V" : methodDescriptor(type)
+                    constructor == null
+                        ? "()V"
+                        : constructorDescriptor(
+                            constructor,
+                            omitted,
+                            enumConstructor
+                        )
                 ),
                 false
             );
-            for (final VariableDeclaration field : constructorFields) {
-                item(field);
+            if (!delegate) {
+                for (final VariableDeclaration field : constructorFields) {
+                    item(field);
+                }
             }
         }
 
@@ -5047,7 +5213,15 @@ public final class BytecodeGenerator {
                 );
                 case SuperConstructorCall call -> initializeBase(
                     call.arguments(),
-                    semanticModel.getSuperConstructorArgumentParameters(call)
+                    semanticModel.getConstructorCallArguments(call),
+                    semanticModel.getSelectedConstructor(call),
+                    false
+                );
+                case ThisConstructorCall call -> initializeBase(
+                    call.arguments(),
+                    semanticModel.getConstructorCallArguments(call),
+                    semanticModel.getSelectedConstructor(call),
+                    true
                 );
                 case VariableDeclaration variable -> {
                     if (variable.name() instanceof DiscardDeclaration) {
@@ -8830,26 +9004,28 @@ public final class BytecodeGenerator {
                             );
                             method.ldc(semanticModel.getEnumOrdinal(creation));
                         }
+                        final ConstructorOverload selectedConstructor =
+                            semanticModel.getSelectedConstructor(creation);
                         final FunctionType constructorType =
-                            semanticModel.getConstructor(
-                                (ClassType) semanticModel
-                                    .getExpressionType(creation)
-                            );
+                            selectedConstructor.type();
                         constructorArguments(creation, constructorType);
                         final boolean omitted =
                             creation.arguments().size() < constructorType
                                 .parameterTypes()
                                 .size();
+                        if (selectedConstructor.marker() > 0) {
+                            method.aconst_null();
+                        }
                         method.invoke(
                             INVOKESPECIAL,
                             classDesc(owner),
                             "<init>",
                             MethodTypeDesc.ofDescriptor(
-                                enumConstant
-                                    ? enumConstructorDescriptor(constructorType)
-                                    : omitted
-                                        ? defaultDescriptor(constructorType)
-                                        : methodDescriptor(constructorType)
+                                constructorDescriptor(
+                                    selectedConstructor,
+                                    omitted,
+                                    enumConstant
+                                )
                             ),
                             false
                         );
@@ -10748,6 +10924,18 @@ public final class BytecodeGenerator {
                 expression(argument);
                 box(semanticModel.getEffectiveType(argument));
                 final boolean dir = calleeType == BuiltinFunctionType.DIR;
+                final Type argumentType =
+                    ConstType.unwrap(semanticModel.getEffectiveType(argument));
+                final boolean arrayIntrospection =
+                    argumentType instanceof ArrayType;
+                if (argumentType instanceof ArrayType array) {
+                    if (!dir) {
+                        method.ldc(array.elementType().toString());
+                    }
+                    final @Nullable ArrayType flattened =
+                        ArrayMethods.flattenedType(array);
+                    method.ldc(flattened != null ? flattened.toString() : "");
+                }
                 method.invoke(
                     INVOKESTATIC,
                     classDesc(
@@ -10756,8 +10944,12 @@ public final class BytecodeGenerator {
                     dir ? "dir" : "help",
                     MethodTypeDesc.ofDescriptor(
                         dir
-                            ? "(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;"
-                            : "(Ljava/lang/Object;)V"
+                            ? arrayIntrospection
+                                ? "(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;"
+                                : "(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;"
+                            : arrayIntrospection
+                                ? "(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V"
+                                : "(Ljava/lang/Object;)V"
                     ),
                     false
                 );

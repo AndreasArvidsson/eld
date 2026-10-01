@@ -12,4 +12,9 @@ public record ConstructorDeclaration(
             .anyMatch(body, node -> node instanceof SuperConstructorCall);
     }
 
+    public boolean hasDelegatingCall() {
+        return AstTraversal
+            .anyMatch(body, node -> node instanceof ThisConstructorCall);
+    }
+
 }

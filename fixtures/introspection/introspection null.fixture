@@ -1,0 +1,97 @@
+print(dir(null));
+help(null);
+
+--- TOKENS ---
+
+IDENTIFIER "print" (1:1-1:6)
+LEFT_PAREN (1:6-1:7)
+IDENTIFIER "dir" (1:7-1:10)
+LEFT_PAREN (1:10-1:11)
+NULL (1:11-1:15)
+RIGHT_PAREN (1:15-1:16)
+RIGHT_PAREN (1:16-1:17)
+SEMICOLON (1:17-1:18)
+IDENTIFIER "help" (2:1-2:5)
+LEFT_PAREN (2:5-2:6)
+NULL (2:6-2:10)
+RIGHT_PAREN (2:10-2:11)
+SEMICOLON (2:11-2:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:12
+  (ExpressionStatement
+    range: 1:1-1:18
+    (CallExpression
+      range: 1:1-1:17
+      (IdentifierExpression
+        range: 1:1-1:6
+        name: "print"
+      )
+      (CallExpression
+        range: 1:7-1:16
+        (IdentifierExpression
+          range: 1:7-1:10
+          name: "dir"
+        )
+        (LiteralExpression
+          range: 1:11-1:15
+          kind: NULL
+          text: "null"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:12
+    (CallExpression
+      range: 2:1-2:11
+      (IdentifierExpression
+        range: 2:1-2:5
+        name: "help"
+      )
+      (LiteralExpression
+        range: 2:6-2:10
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-1:6 -> (any) => void
+  1:1-1:17 -> void
+  1:7-1:10 -> (any) => [string]
+  1:7-1:16 -> [string]
+  1:11-1:15 -> null
+  2:1-2:5 -> (any) => void
+  2:1-2:11 -> void
+  2:6-2:10 -> null
+
+References:
+  1:1-1:6 -> builtin print
+  1:7-1:10 -> builtin dir
+  2:1-2:5 -> builtin help
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+[]
+null
+ | No members.

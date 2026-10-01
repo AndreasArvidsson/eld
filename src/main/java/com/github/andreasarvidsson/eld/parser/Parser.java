@@ -165,6 +165,20 @@ public final class Parser extends ParserBase {
                     superCall.arguments(),
                     token.range().union(superEnd.range())
                 );
+            case THIS:
+                if (check(TokenType.LEFT_PAREN)) {
+                    final CallExpression thisCall =
+                        parserExpressions.parseCallExpression(
+                            new ThisExpression(token.range())
+                        );
+                    final Token thisEnd = expect(TokenType.SEMICOLON);
+                    return new ThisConstructorCall(
+                        thisCall.arguments(),
+                        token.range().union(thisEnd.range())
+                    );
+                }
+                goBack();
+                return parseExpressionStatement();
             case BREAK:
                 return parseBreakStatement(token);
             case CONTINUE:
@@ -1375,7 +1389,8 @@ public final class Parser extends ParserBase {
             type,
             optional,
             namedOnly,
-            defaultValue
+            defaultValue,
+            defaultValue == null ? null : name.sourceText(defaultValue.range())
         );
     }
 
@@ -1543,18 +1558,11 @@ public final class Parser extends ParserBase {
         final Token name =
             check(TokenType.NULL) ? advance() : expect(TokenType.IDENTIFIER);
         final List<TypeNode> arguments = parseTypeArguments();
-        TypeNode result =
-            new NamedTypeNode(
-                name.text(),
-                arguments,
-                name.range().union(peek(-1).range())
-            );
-        while (match(TokenType.LEFT_BRACKET)) {
-            final Token close = expect(TokenType.RIGHT_BRACKET);
-            result =
-                new ArrayTypeNode(result, result.range().union(close.range()));
-        }
-        return result;
+        return new NamedTypeNode(
+            name.text(),
+            arguments,
+            name.range().union(peek(-1).range())
+        );
     }
 
     List<TypeNode> parseTypeArguments() {

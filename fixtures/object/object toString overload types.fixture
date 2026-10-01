@@ -1,0 +1,376 @@
+class Foo {
+    public func toString(value: i32) string {
+        return f"value: {value}";
+    }
+}
+
+const foo = new Foo();
+print(foo == foo);
+print(foo.toString().startsWith("Test$Foo@"));
+print(foo.toString(value: 1));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "toString" (2:17-2:25)
+LEFT_PAREN (2:25-2:26)
+IDENTIFIER "value" (2:26-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "i32" (2:33-2:36)
+RIGHT_PAREN (2:36-2:37)
+IDENTIFIER "string" (2:38-2:44)
+LEFT_BRACE (2:45-2:46)
+RETURN (3:9-3:15)
+FORMAT_STRING_START (3:16-3:18)
+FORMAT_STRING_TEXT "value: " (3:18-3:25)
+LEFT_BRACE (3:25-3:26)
+IDENTIFIER "value" (3:26-3:31)
+RIGHT_BRACE (3:31-3:32)
+FORMAT_STRING_END (3:32-3:33)
+SEMICOLON (3:33-3:34)
+RIGHT_BRACE (4:5-4:6)
+RIGHT_BRACE (5:1-5:2)
+CONST (7:1-7:6)
+IDENTIFIER "foo" (7:7-7:10)
+EQUAL (7:11-7:12)
+NEW (7:13-7:16)
+IDENTIFIER "Foo" (7:17-7:20)
+LEFT_PAREN (7:20-7:21)
+RIGHT_PAREN (7:21-7:22)
+SEMICOLON (7:22-7:23)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "foo" (8:7-8:10)
+EQUAL_EQUAL (8:11-8:13)
+IDENTIFIER "foo" (8:14-8:17)
+RIGHT_PAREN (8:17-8:18)
+SEMICOLON (8:18-8:19)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "foo" (9:7-9:10)
+DOT (9:10-9:11)
+IDENTIFIER "toString" (9:11-9:19)
+LEFT_PAREN (9:19-9:20)
+RIGHT_PAREN (9:20-9:21)
+DOT (9:21-9:22)
+IDENTIFIER "startsWith" (9:22-9:32)
+LEFT_PAREN (9:32-9:33)
+STRING_LITERAL "\"Test$Foo@\"" (9:33-9:44)
+RIGHT_PAREN (9:44-9:45)
+RIGHT_PAREN (9:45-9:46)
+SEMICOLON (9:46-9:47)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "foo" (10:7-10:10)
+DOT (10:10-10:11)
+IDENTIFIER "toString" (10:11-10:19)
+LEFT_PAREN (10:19-10:20)
+IDENTIFIER "value" (10:20-10:25)
+COLON (10:25-10:26)
+INTEGER_LITERAL "1" (10:27-10:28)
+RIGHT_PAREN (10:28-10:29)
+RIGHT_PAREN (10:29-10:30)
+SEMICOLON (10:30-10:31)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:31
+  (ClassDeclaration
+    range: 1:1-5:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-4:6
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 2:12-4:6
+        modifiers: []
+        (IdentifierDeclaration
+          range: 2:17-2:25
+          name: "toString"
+        )
+        (FunctionParameter
+          range: 2:26-2:36
+          (IdentifierDeclaration
+            range: 2:26-2:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:33-2:36
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:38-2:44
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:45-4:6
+          (ReturnStatement
+            range: 3:9-3:34
+            (FormatStringExpression
+              range: 3:16-3:33
+              (LiteralExpression
+                range: 3:18-3:25
+                kind: FORMAT_STRING_TEXT
+                text: "value: "
+              )
+              (IdentifierExpression
+                range: 3:26-3:31
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:23
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "foo"
+    )
+    type: null
+    (NewExpression
+      range: 7:13-7:22
+      (IdentifierExpression
+        range: 7:17-7:20
+        name: "Foo"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:19
+    (CallExpression
+      range: 8:1-8:18
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 8:7-8:17
+        (IdentifierExpression
+          range: 8:7-8:10
+          name: "foo"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 8:14-8:17
+          name: "foo"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:47
+    (CallExpression
+      range: 9:1-9:46
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:45
+        (MemberExpression
+          range: 9:7-9:32
+          (CallExpression
+            range: 9:7-9:21
+            (MemberExpression
+              range: 9:7-9:19
+              (IdentifierExpression
+                range: 9:7-9:10
+                name: "foo"
+              )
+              (IdentifierExpression
+                range: 9:11-9:19
+                name: "toString"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 9:22-9:32
+            name: "startsWith"
+          )
+        )
+        (LiteralExpression
+          range: 9:33-9:44
+          kind: STRING
+          text: "\"Test$Foo@\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:31
+    (CallExpression
+      range: 10:1-10:30
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:29
+        (MemberExpression
+          range: 10:7-10:19
+          (IdentifierExpression
+            range: 10:7-10:10
+            name: "foo"
+          )
+          (IdentifierExpression
+            range: 10:11-10:19
+            name: "toString"
+          )
+        )
+        (NamedArgumentExpression
+          range: 10:20-10:28
+          (IdentifierDeclaration
+            range: 10:20-10:25
+            name: "value"
+          )
+          (LiteralExpression
+            range: 10:27-10:28
+            kind: INT
+            text: "1"
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:16-3:33 -> string
+  3:18-3:25 -> string
+  3:26-3:31 -> i32
+  7:13-7:22 -> Foo
+  7:17-7:20 -> Foo
+  8:1-8:6 -> (any) => void
+  8:1-8:18 -> void
+  8:7-8:10 -> Foo
+  8:7-8:17 -> bool
+  8:14-8:17 -> Foo
+  9:1-9:6 -> (any) => void
+  9:1-9:46 -> void
+  9:7-9:10 -> Foo
+  9:7-9:19 -> () => string
+  9:7-9:21 -> string
+  9:7-9:32 -> (string) => bool
+  9:7-9:45 -> bool
+  9:11-9:19 -> () => string
+  9:22-9:32 -> (string) => bool
+  9:33-9:44 -> string
+  10:1-10:6 -> (any) => void
+  10:1-10:30 -> void
+  10:7-10:10 -> Foo
+  10:7-10:19 -> (value: i32) => string
+  10:7-10:29 -> string
+  10:11-10:19 -> (value: i32) => string
+  10:27-10:28 -> i32
+
+Resolved types:
+  2:33-2:36 -> i32
+  2:38-2:44 -> string
+
+Declarations:
+  1:7-1:10 -> class Foo
+  2:17-2:25 -> public func toString(value: i32) => string
+  2:26-2:31 -> const value: i32
+  7:7-7:10 -> const foo: Foo
+
+References:
+  3:26-3:31 -> 2:26-2:31
+  7:17-7:20 -> 1:7-1:10
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> 7:7-7:10
+  8:14-8:17 -> 7:7-7:10
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 7:7-7:10
+  9:11-9:19 -> java.lang.Object.toString(): string
+  9:22-9:32 -> java.lang.String.startsWith(string): bool
+  10:1-10:6 -> builtin print
+  10:7-10:10 -> 7:7-7:10
+  10:11-10:19 -> 2:17-2:25
+
+Named arguments:
+  10:20-10:25 -> parameter 2:26-2:31
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Foo
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  field foo LTest$Foo; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Foo
+    DUP
+    INVOKESPECIAL Test$Foo.<init>()V
+    PUTSTATIC Test.foo LTest$Foo;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    GETSTATIC Test.foo LTest$Foo;
+    IF_ACMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    INVOKEVIRTUAL Test$Foo.toString()Ljava/lang/String;
+    LDC "Test$Foo@"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.foo LTest$Foo;
+    LDC 1
+    INVOKEVIRTUAL Test$Foo.toString(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Foo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Foo flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method toString(I)Ljava/lang/String; flags [PUBLIC]
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC "value: "
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ILOAD_1 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+true
+value: 1

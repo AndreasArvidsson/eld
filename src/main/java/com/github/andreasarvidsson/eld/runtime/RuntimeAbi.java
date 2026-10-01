@@ -127,6 +127,7 @@ final public class RuntimeAbi {
         classes.add(EldString.class);
         classes.add(EldEquality.EldObject.class);
         classes.add(Introspection.class);
+        classes.add(EldApiMethods.class);
         classes.add(EldPromise.class);
         classes.add(EldApi.class);
         classes.add(EldPromise.State.class);

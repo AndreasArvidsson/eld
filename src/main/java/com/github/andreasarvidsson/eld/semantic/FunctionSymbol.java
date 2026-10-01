@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
 import com.github.andreasarvidsson.eld.parser.FunctionModifier;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
@@ -57,11 +58,47 @@ public record FunctionSymbol(
                 .map(modifier -> modifier.value())
                 .collect(Collectors.joining(" "));
         final String prefix = modifierText.isEmpty() ? "" : modifierText + " ";
-        return "%sfunc %s(%s) => %s".formatted(
-            prefix,
-            name(),
-            type.formatLabeledParameters(parameterTypes, omittable),
-            type.returnType()
+        return prefix + "func " + formatSignature(parameterTypes, omittable);
+    }
+
+    public String formatParameterSignature(
+        final List<String> parameterTypes,
+        final List<Boolean> omittable
+    ) {
+        return formatParameterSignature(
+            parameterTypes,
+            omittable,
+            Collections.nCopies(parameterTypes.size(), null)
         );
+    }
+
+    private String formatParameterSignature(
+        final List<String> parameterTypes,
+        final List<Boolean> omittable,
+        final List<@Nullable String> defaults
+    ) {
+        return name() + "("
+            + type.formatLabeledParameters(parameterTypes, omittable, defaults)
+            + ")";
+    }
+
+    public String formatSignature(
+        final List<String> parameterTypes,
+        final List<Boolean> omittable
+    ) {
+        return formatSignature(
+            parameterTypes,
+            omittable,
+            Collections.nCopies(parameterTypes.size(), null)
+        );
+    }
+
+    public String formatSignature(
+        final List<String> parameterTypes,
+        final List<Boolean> omittable,
+        final List<@Nullable String> defaults
+    ) {
+        return formatParameterSignature(parameterTypes, omittable, defaults)
+            + " => " + type.returnType();
     }
 }

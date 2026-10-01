@@ -1,0 +1,984 @@
+class Value {
+    public var toString = "field";
+    public var hashCode = 42;
+    public override func toString() string { return "method"; }
+}
+const value = new Value();
+print(value.toString);
+class Inherited {
+    public var toString = "inherited field";
+}
+const inherited = new Inherited();
+print(inherited.toString);
+const inheritedText: () => string = inherited.toString;
+print(inherited.toString() == inheritedText());
+print(value.toString());
+const text: () => string = value.toString;
+print(text());
+print(value.hashCode);
+print(value.hashCode() == value.hashCode());
+const hash: () => i32 = value.hashCode;
+print(hash() == value.hashCode());
+value.toString = "updated";
+print(value.toString);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Value" (1:7-1:12)
+LEFT_BRACE (1:13-1:14)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "toString" (2:16-2:24)
+EQUAL (2:25-2:26)
+STRING_LITERAL "\"field\"" (2:27-2:34)
+SEMICOLON (2:34-2:35)
+PUBLIC (3:5-3:11)
+VAR (3:12-3:15)
+IDENTIFIER "hashCode" (3:16-3:24)
+EQUAL (3:25-3:26)
+INTEGER_LITERAL "42" (3:27-3:29)
+SEMICOLON (3:29-3:30)
+PUBLIC (4:5-4:11)
+OVERRIDE (4:12-4:20)
+FUNC (4:21-4:25)
+IDENTIFIER "toString" (4:26-4:34)
+LEFT_PAREN (4:34-4:35)
+RIGHT_PAREN (4:35-4:36)
+IDENTIFIER "string" (4:37-4:43)
+LEFT_BRACE (4:44-4:45)
+RETURN (4:46-4:52)
+STRING_LITERAL "\"method\"" (4:53-4:61)
+SEMICOLON (4:61-4:62)
+RIGHT_BRACE (4:63-4:64)
+RIGHT_BRACE (5:1-5:2)
+CONST (6:1-6:6)
+IDENTIFIER "value" (6:7-6:12)
+EQUAL (6:13-6:14)
+NEW (6:15-6:18)
+IDENTIFIER "Value" (6:19-6:24)
+LEFT_PAREN (6:24-6:25)
+RIGHT_PAREN (6:25-6:26)
+SEMICOLON (6:26-6:27)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "value" (7:7-7:12)
+DOT (7:12-7:13)
+IDENTIFIER "toString" (7:13-7:21)
+RIGHT_PAREN (7:21-7:22)
+SEMICOLON (7:22-7:23)
+CLASS (8:1-8:6)
+IDENTIFIER "Inherited" (8:7-8:16)
+LEFT_BRACE (8:17-8:18)
+PUBLIC (9:5-9:11)
+VAR (9:12-9:15)
+IDENTIFIER "toString" (9:16-9:24)
+EQUAL (9:25-9:26)
+STRING_LITERAL "\"inherited field\"" (9:27-9:44)
+SEMICOLON (9:44-9:45)
+RIGHT_BRACE (10:1-10:2)
+CONST (11:1-11:6)
+IDENTIFIER "inherited" (11:7-11:16)
+EQUAL (11:17-11:18)
+NEW (11:19-11:22)
+IDENTIFIER "Inherited" (11:23-11:32)
+LEFT_PAREN (11:32-11:33)
+RIGHT_PAREN (11:33-11:34)
+SEMICOLON (11:34-11:35)
+IDENTIFIER "print" (12:1-12:6)
+LEFT_PAREN (12:6-12:7)
+IDENTIFIER "inherited" (12:7-12:16)
+DOT (12:16-12:17)
+IDENTIFIER "toString" (12:17-12:25)
+RIGHT_PAREN (12:25-12:26)
+SEMICOLON (12:26-12:27)
+CONST (13:1-13:6)
+IDENTIFIER "inheritedText" (13:7-13:20)
+COLON (13:20-13:21)
+LEFT_PAREN (13:22-13:23)
+RIGHT_PAREN (13:23-13:24)
+ARROW (13:25-13:27)
+IDENTIFIER "string" (13:28-13:34)
+EQUAL (13:35-13:36)
+IDENTIFIER "inherited" (13:37-13:46)
+DOT (13:46-13:47)
+IDENTIFIER "toString" (13:47-13:55)
+SEMICOLON (13:55-13:56)
+IDENTIFIER "print" (14:1-14:6)
+LEFT_PAREN (14:6-14:7)
+IDENTIFIER "inherited" (14:7-14:16)
+DOT (14:16-14:17)
+IDENTIFIER "toString" (14:17-14:25)
+LEFT_PAREN (14:25-14:26)
+RIGHT_PAREN (14:26-14:27)
+EQUAL_EQUAL (14:28-14:30)
+IDENTIFIER "inheritedText" (14:31-14:44)
+LEFT_PAREN (14:44-14:45)
+RIGHT_PAREN (14:45-14:46)
+RIGHT_PAREN (14:46-14:47)
+SEMICOLON (14:47-14:48)
+IDENTIFIER "print" (15:1-15:6)
+LEFT_PAREN (15:6-15:7)
+IDENTIFIER "value" (15:7-15:12)
+DOT (15:12-15:13)
+IDENTIFIER "toString" (15:13-15:21)
+LEFT_PAREN (15:21-15:22)
+RIGHT_PAREN (15:22-15:23)
+RIGHT_PAREN (15:23-15:24)
+SEMICOLON (15:24-15:25)
+CONST (16:1-16:6)
+IDENTIFIER "text" (16:7-16:11)
+COLON (16:11-16:12)
+LEFT_PAREN (16:13-16:14)
+RIGHT_PAREN (16:14-16:15)
+ARROW (16:16-16:18)
+IDENTIFIER "string" (16:19-16:25)
+EQUAL (16:26-16:27)
+IDENTIFIER "value" (16:28-16:33)
+DOT (16:33-16:34)
+IDENTIFIER "toString" (16:34-16:42)
+SEMICOLON (16:42-16:43)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+IDENTIFIER "text" (17:7-17:11)
+LEFT_PAREN (17:11-17:12)
+RIGHT_PAREN (17:12-17:13)
+RIGHT_PAREN (17:13-17:14)
+SEMICOLON (17:14-17:15)
+IDENTIFIER "print" (18:1-18:6)
+LEFT_PAREN (18:6-18:7)
+IDENTIFIER "value" (18:7-18:12)
+DOT (18:12-18:13)
+IDENTIFIER "hashCode" (18:13-18:21)
+RIGHT_PAREN (18:21-18:22)
+SEMICOLON (18:22-18:23)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "value" (19:7-19:12)
+DOT (19:12-19:13)
+IDENTIFIER "hashCode" (19:13-19:21)
+LEFT_PAREN (19:21-19:22)
+RIGHT_PAREN (19:22-19:23)
+EQUAL_EQUAL (19:24-19:26)
+IDENTIFIER "value" (19:27-19:32)
+DOT (19:32-19:33)
+IDENTIFIER "hashCode" (19:33-19:41)
+LEFT_PAREN (19:41-19:42)
+RIGHT_PAREN (19:42-19:43)
+RIGHT_PAREN (19:43-19:44)
+SEMICOLON (19:44-19:45)
+CONST (20:1-20:6)
+IDENTIFIER "hash" (20:7-20:11)
+COLON (20:11-20:12)
+LEFT_PAREN (20:13-20:14)
+RIGHT_PAREN (20:14-20:15)
+ARROW (20:16-20:18)
+IDENTIFIER "i32" (20:19-20:22)
+EQUAL (20:23-20:24)
+IDENTIFIER "value" (20:25-20:30)
+DOT (20:30-20:31)
+IDENTIFIER "hashCode" (20:31-20:39)
+SEMICOLON (20:39-20:40)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "hash" (21:7-21:11)
+LEFT_PAREN (21:11-21:12)
+RIGHT_PAREN (21:12-21:13)
+EQUAL_EQUAL (21:14-21:16)
+IDENTIFIER "value" (21:17-21:22)
+DOT (21:22-21:23)
+IDENTIFIER "hashCode" (21:23-21:31)
+LEFT_PAREN (21:31-21:32)
+RIGHT_PAREN (21:32-21:33)
+RIGHT_PAREN (21:33-21:34)
+SEMICOLON (21:34-21:35)
+IDENTIFIER "value" (22:1-22:6)
+DOT (22:6-22:7)
+IDENTIFIER "toString" (22:7-22:15)
+EQUAL (22:16-22:17)
+STRING_LITERAL "\"updated\"" (22:18-22:27)
+SEMICOLON (22:27-22:28)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+IDENTIFIER "value" (23:7-23:12)
+DOT (23:12-23:13)
+IDENTIFIER "toString" (23:13-23:21)
+RIGHT_PAREN (23:21-23:22)
+SEMICOLON (23:22-23:23)
+
+--- AST ---
+
+(Program
+  range: 1:1-23:23
+  (ClassDeclaration
+    range: 1:1-5:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:12
+      name: "Value"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:35
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 2:12-2:35
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:24
+          name: "toString"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:27-2:34
+          kind: STRING
+          text: "\"field\""
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:30
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 3:12-3:30
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 3:16-3:24
+          name: "hashCode"
+        )
+        type: null
+        (LiteralExpression
+          range: 3:27-3:29
+          kind: INT
+          text: "42"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:64
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 4:12-4:64
+        modifiers: [OVERRIDE]
+        (IdentifierDeclaration
+          range: 4:26-4:34
+          name: "toString"
+        )
+        (NamedTypeNode
+          range: 4:37-4:43
+          name: "string"
+        )
+        (BlockStatement
+          range: 4:44-4:64
+          (ReturnStatement
+            range: 4:46-4:62
+            (LiteralExpression
+              range: 4:53-4:61
+              kind: STRING
+              text: "\"method\""
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 6:1-6:27
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 6:7-6:12
+      name: "value"
+    )
+    type: null
+    (NewExpression
+      range: 6:15-6:26
+      (IdentifierExpression
+        range: 6:19-6:24
+        name: "Value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:23
+    (CallExpression
+      range: 7:1-7:22
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 7:7-7:21
+        (IdentifierExpression
+          range: 7:7-7:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 7:13-7:21
+          name: "toString"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 8:1-10:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 8:7-8:16
+      name: "Inherited"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 9:5-9:45
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 9:12-9:45
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 9:16-9:24
+          name: "toString"
+        )
+        type: null
+        (LiteralExpression
+          range: 9:27-9:44
+          kind: STRING
+          text: "\"inherited field\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 11:1-11:35
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 11:7-11:16
+      name: "inherited"
+    )
+    type: null
+    (NewExpression
+      range: 11:19-11:34
+      (IdentifierExpression
+        range: 11:23-11:32
+        name: "Inherited"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:27
+    (CallExpression
+      range: 12:1-12:26
+      (IdentifierExpression
+        range: 12:1-12:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 12:7-12:25
+        (IdentifierExpression
+          range: 12:7-12:16
+          name: "inherited"
+        )
+        (IdentifierExpression
+          range: 12:17-12:25
+          name: "toString"
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 13:1-13:56
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 13:7-13:20
+      name: "inheritedText"
+    )
+    (FunctionTypeNode
+      range: 13:22-13:34
+      namedOnlyStart: null
+      (NamedTypeNode
+        range: 13:28-13:34
+        name: "string"
+      )
+    )
+    (MemberExpression
+      range: 13:37-13:55
+      (IdentifierExpression
+        range: 13:37-13:46
+        name: "inherited"
+      )
+      (IdentifierExpression
+        range: 13:47-13:55
+        name: "toString"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 14:1-14:48
+    (CallExpression
+      range: 14:1-14:47
+      (IdentifierExpression
+        range: 14:1-14:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 14:7-14:46
+        (CallExpression
+          range: 14:7-14:27
+          (MemberExpression
+            range: 14:7-14:25
+            (IdentifierExpression
+              range: 14:7-14:16
+              name: "inherited"
+            )
+            (IdentifierExpression
+              range: 14:17-14:25
+              name: "toString"
+            )
+          )
+        )
+        operator: EQUAL
+        (CallExpression
+          range: 14:31-14:46
+          (IdentifierExpression
+            range: 14:31-14:44
+            name: "inheritedText"
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 15:1-15:25
+    (CallExpression
+      range: 15:1-15:24
+      (IdentifierExpression
+        range: 15:1-15:6
+        name: "print"
+      )
+      (CallExpression
+        range: 15:7-15:23
+        (MemberExpression
+          range: 15:7-15:21
+          (IdentifierExpression
+            range: 15:7-15:12
+            name: "value"
+          )
+          (IdentifierExpression
+            range: 15:13-15:21
+            name: "toString"
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 16:1-16:43
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 16:7-16:11
+      name: "text"
+    )
+    (FunctionTypeNode
+      range: 16:13-16:25
+      namedOnlyStart: null
+      (NamedTypeNode
+        range: 16:19-16:25
+        name: "string"
+      )
+    )
+    (MemberExpression
+      range: 16:28-16:42
+      (IdentifierExpression
+        range: 16:28-16:33
+        name: "value"
+      )
+      (IdentifierExpression
+        range: 16:34-16:42
+        name: "toString"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 17:1-17:15
+    (CallExpression
+      range: 17:1-17:14
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (CallExpression
+        range: 17:7-17:13
+        (IdentifierExpression
+          range: 17:7-17:11
+          name: "text"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 18:1-18:23
+    (CallExpression
+      range: 18:1-18:22
+      (IdentifierExpression
+        range: 18:1-18:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 18:7-18:21
+        (IdentifierExpression
+          range: 18:7-18:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 18:13-18:21
+          name: "hashCode"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:45
+    (CallExpression
+      range: 19:1-19:44
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 19:7-19:43
+        (CallExpression
+          range: 19:7-19:23
+          (MemberExpression
+            range: 19:7-19:21
+            (IdentifierExpression
+              range: 19:7-19:12
+              name: "value"
+            )
+            (IdentifierExpression
+              range: 19:13-19:21
+              name: "hashCode"
+            )
+          )
+        )
+        operator: EQUAL
+        (CallExpression
+          range: 19:27-19:43
+          (MemberExpression
+            range: 19:27-19:41
+            (IdentifierExpression
+              range: 19:27-19:32
+              name: "value"
+            )
+            (IdentifierExpression
+              range: 19:33-19:41
+              name: "hashCode"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 20:1-20:40
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 20:7-20:11
+      name: "hash"
+    )
+    (FunctionTypeNode
+      range: 20:13-20:22
+      namedOnlyStart: null
+      (NamedTypeNode
+        range: 20:19-20:22
+        name: "i32"
+      )
+    )
+    (MemberExpression
+      range: 20:25-20:39
+      (IdentifierExpression
+        range: 20:25-20:30
+        name: "value"
+      )
+      (IdentifierExpression
+        range: 20:31-20:39
+        name: "hashCode"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:35
+    (CallExpression
+      range: 21:1-21:34
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (BinaryExpression
+        range: 21:7-21:33
+        (CallExpression
+          range: 21:7-21:13
+          (IdentifierExpression
+            range: 21:7-21:11
+            name: "hash"
+          )
+        )
+        operator: EQUAL
+        (CallExpression
+          range: 21:17-21:33
+          (MemberExpression
+            range: 21:17-21:31
+            (IdentifierExpression
+              range: 21:17-21:22
+              name: "value"
+            )
+            (IdentifierExpression
+              range: 21:23-21:31
+              name: "hashCode"
+            )
+          )
+        )
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 22:1-22:28
+    (MemberExpression
+      range: 22:1-22:15
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "value"
+      )
+      (IdentifierExpression
+        range: 22:7-22:15
+        name: "toString"
+      )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 22:18-22:27
+      kind: STRING
+      text: "\"updated\""
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:23
+    (CallExpression
+      range: 23:1-23:22
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 23:7-23:21
+        (IdentifierExpression
+          range: 23:7-23:12
+          name: "value"
+        )
+        (IdentifierExpression
+          range: 23:13-23:21
+          name: "toString"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:27-2:34 -> string
+  3:27-3:29 -> i32
+  4:53-4:61 -> string
+  6:15-6:26 -> Value
+  6:19-6:24 -> Value
+  7:1-7:6 -> (any) => void
+  7:1-7:22 -> void
+  7:7-7:12 -> Value
+  7:7-7:21 -> string
+  7:13-7:21 -> string
+  9:27-9:44 -> string
+  11:19-11:34 -> Inherited
+  11:23-11:32 -> Inherited
+  12:1-12:6 -> (any) => void
+  12:1-12:26 -> void
+  12:7-12:16 -> Inherited
+  12:7-12:25 -> string
+  12:17-12:25 -> string
+  13:37-13:46 -> Inherited
+  13:37-13:55 -> () => string
+  13:47-13:55 -> () => string
+  14:1-14:6 -> (any) => void
+  14:1-14:47 -> void
+  14:7-14:16 -> Inherited
+  14:7-14:25 -> () => string
+  14:7-14:27 -> string
+  14:7-14:46 -> bool
+  14:17-14:25 -> () => string
+  14:31-14:44 -> () => string
+  14:31-14:46 -> string
+  15:1-15:6 -> (any) => void
+  15:1-15:24 -> void
+  15:7-15:12 -> Value
+  15:7-15:21 -> () => string
+  15:7-15:23 -> string
+  15:13-15:21 -> () => string
+  16:28-16:33 -> Value
+  16:28-16:42 -> () => string
+  16:34-16:42 -> () => string
+  17:1-17:6 -> (any) => void
+  17:1-17:14 -> void
+  17:7-17:11 -> () => string
+  17:7-17:13 -> string
+  18:1-18:6 -> (any) => void
+  18:1-18:22 -> void
+  18:7-18:12 -> Value
+  18:7-18:21 -> i32
+  18:13-18:21 -> i32
+  19:1-19:6 -> (any) => void
+  19:1-19:44 -> void
+  19:7-19:12 -> Value
+  19:7-19:21 -> () => i32
+  19:7-19:23 -> i32
+  19:7-19:43 -> bool
+  19:13-19:21 -> () => i32
+  19:27-19:32 -> Value
+  19:27-19:41 -> () => i32
+  19:27-19:43 -> i32
+  19:33-19:41 -> () => i32
+  20:25-20:30 -> Value
+  20:25-20:39 -> () => i32
+  20:31-20:39 -> () => i32
+  21:1-21:6 -> (any) => void
+  21:1-21:34 -> void
+  21:7-21:11 -> () => i32
+  21:7-21:13 -> i32
+  21:7-21:33 -> bool
+  21:17-21:22 -> Value
+  21:17-21:31 -> () => i32
+  21:17-21:33 -> i32
+  21:23-21:31 -> () => i32
+  22:1-22:6 -> Value
+  22:1-22:15 -> string
+  22:7-22:15 -> string
+  22:18-22:27 -> string
+  23:1-23:6 -> (any) => void
+  23:1-23:22 -> void
+  23:7-23:12 -> Value
+  23:7-23:21 -> string
+  23:13-23:21 -> string
+
+Resolved types:
+  4:37-4:43 -> string
+  13:22-13:34 -> () => string
+  13:28-13:34 -> string
+  16:13-16:25 -> () => string
+  16:19-16:25 -> string
+  20:13-20:22 -> () => i32
+  20:19-20:22 -> i32
+
+Declarations:
+  1:7-1:12 -> class Value
+  2:16-2:24 -> public var toString: string
+  3:16-3:24 -> public var hashCode: i32
+  4:26-4:34 -> public override func toString() => string
+  6:7-6:12 -> const value: Value
+  8:7-8:16 -> class Inherited
+  9:16-9:24 -> public var toString: string
+  11:7-11:16 -> const inherited: Inherited
+  13:7-13:20 -> const inheritedText: () => string
+  16:7-16:11 -> const text: () => string
+  20:7-20:11 -> const hash: () => i32
+
+References:
+  6:19-6:24 -> 1:7-1:12
+  7:1-7:6 -> builtin print
+  7:7-7:12 -> 6:7-6:12
+  7:13-7:21 -> 2:16-2:24
+  11:23-11:32 -> 8:7-8:16
+  12:1-12:6 -> builtin print
+  12:7-12:16 -> 11:7-11:16
+  12:17-12:25 -> 9:16-9:24
+  13:37-13:46 -> 11:7-11:16
+  13:47-13:55 -> java.lang.Object.toString(): string
+  14:1-14:6 -> builtin print
+  14:7-14:16 -> 11:7-11:16
+  14:17-14:25 -> java.lang.Object.toString(): string
+  14:31-14:44 -> 13:7-13:20
+  15:1-15:6 -> builtin print
+  15:7-15:12 -> 6:7-6:12
+  15:13-15:21 -> 4:26-4:34
+  16:28-16:33 -> 6:7-6:12
+  16:34-16:42 -> 4:26-4:34
+  17:1-17:6 -> builtin print
+  17:7-17:11 -> 16:7-16:11
+  18:1-18:6 -> builtin print
+  18:7-18:12 -> 6:7-6:12
+  18:13-18:21 -> 3:16-3:24
+  19:1-19:6 -> builtin print
+  19:7-19:12 -> 6:7-6:12
+  19:13-19:21 -> java.lang.Object.hashCode(): i32
+  19:27-19:32 -> 6:7-6:12
+  19:33-19:41 -> java.lang.Object.hashCode(): i32
+  20:25-20:30 -> 6:7-6:12
+  20:31-20:39 -> java.lang.Object.hashCode(): i32
+  21:1-21:6 -> builtin print
+  21:7-21:11 -> 20:7-20:11
+  21:17-21:22 -> 6:7-6:12
+  21:23-21:31 -> java.lang.Object.hashCode(): i32
+  22:1-22:6 -> 6:7-6:12
+  22:7-22:15 -> 2:16-2:24
+  23:1-23:6 -> builtin print
+  23:7-23:12 -> 6:7-6:12
+  23:13-23:21 -> 2:16-2:24
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Value
+  nest member Test$Inherited
+  inner class Test$Value flags [PUBLIC, STATIC]
+  inner class Test$Inherited flags [PUBLIC, STATIC]
+  field value LTest$Value; flags [PUBLIC, STATIC, FINAL]
+  field inherited LTest$Inherited; flags [PUBLIC, STATIC, FINAL]
+  field inheritedText Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field text Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  field hash Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    PUTSTATIC Test.value LTest$Value;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    GETFIELD Test$Value.toString Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    NEW Test$Inherited
+    DUP
+    INVOKESPECIAL Test$Inherited.<init>()V
+    PUTSTATIC Test.inherited LTest$Inherited;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.inherited LTest$Inherited;
+    GETFIELD Test$Inherited.toString Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    LDC MethodHandleDesc[VIRTUAL/Test$Inherited::toString(Test$Inherited)String]
+    GETSTATIC Test.inherited LTest$Inherited;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[()String]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.inheritedText Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.inherited LTest$Inherited;
+    INVOKEVIRTUAL Test$Inherited.toString()Ljava/lang/String;
+    GETSTATIC Test.inheritedText Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    INVOKEVIRTUAL Test$Value.toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    LDC MethodHandleDesc[VIRTUAL/Test$Value::toString(Test$Value)String]
+    GETSTATIC Test.value LTest$Value;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.text Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.text Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    GETFIELD Test$Value.hashCode I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    INVOKEVIRTUAL Test$Value.hashCode()I
+    GETSTATIC Test.value LTest$Value;
+    INVOKEVIRTUAL Test$Value.hashCode()I
+    IF_ICMPEQ L0
+    ICONST_0 0
+    GOTO L1
+   L0:
+    ICONST_1 1
+   L1:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC MethodHandleDesc[VIRTUAL/Test$Value::hashCode(Test$Value)int]
+    GETSTATIC Test.value LTest$Value;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[()int]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.hash Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.hash Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()I
+    GETSTATIC Test.value LTest$Value;
+    INVOKEVIRTUAL Test$Value.hashCode()I
+    IF_ICMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.value LTest$Value;
+    LDC "updated"
+    PUTFIELD Test$Value.toString Ljava/lang/String;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.value LTest$Value;
+    GETFIELD Test$Value.toString Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field toString Ljava/lang/String; flags [PUBLIC]
+  field hashCode I flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "field"
+    PUTFIELD Test$Value.toString Ljava/lang/String;
+    ALOAD_0 0
+    LDC 42
+    PUTFIELD Test$Value.hashCode I
+    RETURN
+    max stack 2 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC]
+    LDC "method"
+    ARETURN
+    max stack 1 max locals 1
+
+class Test$Inherited extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Inherited flags [PUBLIC, STATIC]
+  field toString Ljava/lang/String; flags [PUBLIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "inherited field"
+    PUTFIELD Test$Inherited.toString Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+field
+inherited field
+true
+method
+method
+42
+true
+true
+updated

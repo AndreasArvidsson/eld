@@ -7,6 +7,9 @@ public final class PromiseSource<T extends @Nullable Object> {
     private final EldPromise<T> promise = new EldPromise<>();
 
     @EldApi
+    public PromiseSource() {}
+
+    @EldApi(property = true)
     public EldPromise<T> promise() {
         return promise;
     }

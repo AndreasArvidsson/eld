@@ -375,7 +375,8 @@ public class Lexer {
         return new Token(
             TokenType.FORMAT_STRING_TEXT,
             builder.toString(),
-            new Range(tokenStart, end)
+            new Range(tokenStart, end),
+            source
         );
     }
 
@@ -961,7 +962,7 @@ public class Lexer {
     private Token createToken(final TokenType type, final String text) {
         final Position end = new Position(line, column);
         final Range range = new Range(tokenStart, end);
-        return new Token(type, text, range);
+        return new Token(type, text, range, source);
     }
 
     private Token createToken(final TokenType type, final char c) {

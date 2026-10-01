@@ -4,26 +4,16 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
+import com.github.andreasarvidsson.eld.runtime.EldApiMethods;
 import com.github.andreasarvidsson.eld.parser.IdentifierDeclaration;
 
 /** Thin source aliases for JDK APIs. */
@@ -57,31 +47,7 @@ public final class JavaTypes {
             "java.util.regex.",
             "java.util.zip."
         );
-    private static final Map<String, Class<?>> CLASSES =
-        Map.ofEntries(
-            Map.entry("Throwable", Throwable.class),
-            Map.entry("Exception", Exception.class),
-            Map.entry("Error", Error.class),
-            Map.entry("RuntimeException", RuntimeException.class),
-            Map.entry("Regex", Pattern.class),
-            Map.entry("Matcher", Matcher.class),
-            Map.entry("Comparable", Comparable.class),
-            Map.entry("Comparator", Comparator.class),
-            Map.entry("Class", Class.class),
-            Map.entry("Type", Class.class),
-            Map.entry("Collection", Collection.class),
-            Map.entry("List", List.class),
-            Map.entry("Set", Set.class),
-            Map.entry("SortedSet", SortedSet.class),
-            Map.entry("Map", Map.class),
-            Map.entry("SortedMap", SortedMap.class),
-            Map.entry("ArrayList", ArrayList.class),
-            Map.entry("LinkedList", LinkedList.class),
-            Map.entry("HashSet", HashSet.class),
-            Map.entry("TreeSet", TreeSet.class),
-            Map.entry("HashMap", HashMap.class),
-            Map.entry("TreeMap", TreeMap.class)
-        );
+    private static final Map<String, Class<?>> CLASSES = EldApiMethods.CLASSES;
 
     public static InterfaceType classType() {
         return CLASS;
@@ -95,38 +61,6 @@ public final class JavaTypes {
         return ConstType.unwrap(type) instanceof InterfaceType contract
             && contract.javaClass() == Class.class;
     }
-
-    private static final Set<String> METHODS =
-        Set.of(
-            "compareTo",
-            "toString",
-            "compare",
-            "sort",
-            "add",
-            "get",
-            "set",
-            "size",
-            "isEmpty",
-            "clear",
-            "contains",
-            "containsKey",
-            "containsValue",
-            "put",
-            "first",
-            "last",
-            "firstKey",
-            "lastKey",
-            "comparator",
-            "subSet",
-            "headSet",
-            "tailSet",
-            "subMap",
-            "headMap",
-            "tailMap",
-            "keySet",
-            "values",
-            "getSimpleName"
-        );
 
     public static @Nullable Class<?> findClass(String name) {
         final Class<?> known = CLASSES.get(name);
@@ -199,17 +133,6 @@ public final class JavaTypes {
         final Range range,
         final boolean isStatic
     ) {
-        if (name.equals("equals")) {
-            return List.of();
-        }
-        if (
-            !METHODS.contains(name) && owner.javaClass() != Pattern.class
-                && owner.javaClass() != Matcher.class
-                && (owner.javaClass() == null
-                    || !Throwable.class.isAssignableFrom(owner.javaClass()))
-        ) {
-            return List.of();
-        }
         final Class<?> javaClass = owner.javaClass();
         if (javaClass == null) {
             return List.of();
@@ -218,7 +141,8 @@ public final class JavaTypes {
             new LinkedHashMap<>();
         for (final var method : javaClass.getMethods()) {
             if (
-                !method.getName().equals(name) || method.isBridge()
+                !method.getName().equals(name)
+                    || !EldApiMethods.javaMethodAllowed(javaClass, method)
                     || Modifier.isStatic(method.getModifiers()) != isStatic
             ) {
                 continue;
@@ -292,11 +216,7 @@ public final class JavaTypes {
         final Range range,
         final Type owner
     ) {
-        if (
-            !name.equals("toString") && !name.equals("equals")
-                && !name.equals("hashCode")
-                && !name.equals("getClass")
-        ) {
+        if (!EldApiMethods.OBJECT_METHODS.contains(name)) {
             return null;
         }
         for (final var method : Object.class.getMethods()) {
@@ -307,11 +227,9 @@ public final class JavaTypes {
                 return new JavaMethodSymbol(
                     method,
                     new FunctionType(
-                        name.equals("equals")
-                            ? List.of(owner)
-                            : Arrays.stream(method.getGenericParameterTypes())
-                                .map(parameter -> resolve(parameter, OBJECT))
-                                .toList(),
+                        Arrays.stream(method.getGenericParameterTypes())
+                            .map(parameter -> resolve(parameter, OBJECT))
+                            .toList(),
                         name.equals("getClass")
                             ? classType(owner)
                             : resolve(method.getGenericReturnType(), OBJECT)

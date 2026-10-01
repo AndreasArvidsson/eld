@@ -1,0 +1,195 @@
+const arr: [string] = [];
+print(dir(arr));
+help(arr);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "arr" (1:7-1:10)
+COLON (1:10-1:11)
+LEFT_BRACKET (1:12-1:13)
+IDENTIFIER "string" (1:13-1:19)
+RIGHT_BRACKET (1:19-1:20)
+EQUAL (1:21-1:22)
+LEFT_BRACKET (1:23-1:24)
+RIGHT_BRACKET (1:24-1:25)
+SEMICOLON (1:25-1:26)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "dir" (2:7-2:10)
+LEFT_PAREN (2:10-2:11)
+IDENTIFIER "arr" (2:11-2:14)
+RIGHT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+SEMICOLON (2:16-2:17)
+IDENTIFIER "help" (3:1-3:5)
+LEFT_PAREN (3:5-3:6)
+IDENTIFIER "arr" (3:6-3:9)
+RIGHT_PAREN (3:9-3:10)
+SEMICOLON (3:10-3:11)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:11
+  (VariableDeclaration
+    range: 1:1-1:26
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "arr"
+    )
+    (ArrayTypeNode
+      range: 1:12-1:20
+      (NamedTypeNode
+        range: 1:13-1:19
+        name: "string"
+      )
+    )
+    (ArrayExpression
+      range: 1:23-1:25
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (CallExpression
+      range: 2:1-2:16
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:15
+        (IdentifierExpression
+          range: 2:7-2:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 2:11-2:14
+          name: "arr"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:11
+    (CallExpression
+      range: 3:1-3:10
+      (IdentifierExpression
+        range: 3:1-3:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 3:6-3:9
+        name: "arr"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:23-1:25 -> [string]
+  2:1-2:6 -> (any) => void
+  2:1-2:16 -> void
+  2:7-2:10 -> (any) => [string]
+  2:7-2:15 -> [string]
+  2:11-2:14 -> [string]
+  3:1-3:5 -> (any) => void
+  3:1-3:10 -> void
+  3:6-3:9 -> [string]
+
+Resolved types:
+  1:12-1:20 -> [string]
+  1:13-1:19 -> string
+
+Declarations:
+  1:7-1:10 -> const arr: [string]
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:10 -> builtin dir
+  2:11-2:14 -> 1:7-1:10
+  3:1-3:5 -> builtin help
+  3:6-3:9 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>()V
+    PUTSTATIC Test.arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC "string"
+    LDC ""
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+[add, addAll, addFront, all, any, clear, concat, contains, copy, count, difference, distinct, filter, find, findIndex, findLast, findLastIndex, flatMap, getClass, hashCode, index, insertAt, intersect, isEmpty, join, lastIndex, length, map, none, partition, reduce, remove, removeAll, removeAt, removeIf, reverse, reverseInPlace, sort, sortInPlace, subtract, toString, union, zip]
+[string]
+ | Fields:
+ |   length: i32
+ |
+ | Methods:
+ |   add(value: string) => void
+ |   add(values: [string]) => void
+ |   addAll(additional: [string]) => void
+ |   addFront(value: string) => void
+ |   addFront(values: [string]) => void
+ |   all(predicate: (value: string, index: i32) => bool) => bool
+ |   any(predicate: (value: string, index: i32) => bool) => bool
+ |   clear() => void
+ |   concat(additional: [string]) => [string]
+ |   contains(value: string) => bool
+ |   copy() => [string]
+ |   count(predicate: (value: string, index: i32) => bool) => i32
+ |   difference(additional: [string]) => [string]
+ |   distinct() => [string]
+ |   filter(predicate: (value: string, index: i32) => bool) => [string]
+ |   find(predicate: (value: string, index: i32) => bool) => string | null
+ |   findIndex(predicate: (value: string, index: i32) => bool) => i32
+ |   findLast(predicate: (value: string, index: i32) => bool) => string | null
+ |   findLastIndex(predicate: (value: string, index: i32) => bool) => i32
+ |   flatMap(transform: (value: string, index: i32) => [any]) => [any]
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   index(value: string) => i32
+ |   index(value: string, from: i32) => i32
+ |   insertAt(value: string, index: i32) => void
+ |   intersect(additional: [string]) => [string]
+ |   isEmpty() => bool
+ |   join() => string
+ |   join(separator: string) => string
+ |   lastIndex(value: string) => i32
+ |   lastIndex(value: string, from: i32) => i32
+ |   map(transform: (value: string, index: i32) => any) => [any]
+ |   none(predicate: (value: string, index: i32) => bool) => bool
+ |   partition(predicate: (value: string, index: i32) => bool) => ([string], [string])
+ |   reduce(reducer: (acc: any, value: string, index: i32) => any, initial: any) => any
+ |   remove(predicate: (value: string, index: i32) => bool) => bool
+ |   remove(value: string) => bool
+ |   removeAll(value: string) => i32
+ |   removeAt(index: i32) => string
+ |   removeIf(predicate: (value: string, index: i32) => bool) => bool
+ |   reverse() => [string]
+ |   reverseInPlace() => void
+ |   sort() => [string]
+ |   sort(comparator: (a: string, b: string) => i32) => [string]
+ |   sortInPlace() => void
+ |   sortInPlace(comparator: (a: string, b: string) => i32) => void
+ |   subtract(additional: [string]) => [string]
+ |   toString() => string
+ |   union(additional: [string]) => [string]
+ |   zip(additional: [any]) => [(string, any)]

@@ -1,3 +1,4 @@
+    @EldApi
     public ${SELF} filter(final MethodHandle predicate) throws Throwable {
         final ${SELF} result = copy();
         int count = 0;
@@ -12,6 +13,7 @@ ${FILTER_CLEANUP}
         return result;
     }
 
+    @EldApi
     public EldTuple partition(final MethodHandle predicate) throws Throwable {
         final ${SELF} matching = new ${SELF}();
         final ${SELF} remaining = new ${SELF}();
@@ -27,10 +29,12 @@ ${FILTER_CLEANUP}
         return new EldTuple(new Object[] {matching, remaining});
     }
 
+    @EldApi
     public EldArray<?> map(final MethodHandle transform, final String elementDescriptor) throws Throwable {
 ${MAP_BODY}
     }
 
+    @EldApi
     public EldArray<?> flatMap(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final boolean indexed = transform.type().parameterCount() == 2;
         final EldArray<?>[] parts = new EldArray<?>[length];
@@ -127,6 +131,7 @@ ${MAP_BODY}
         };
     }
 
+    @EldApi
     public void reverseInPlace() {
         for (int left = 0, right = length - 1;
             left < right; left++, right--) {
@@ -136,6 +141,7 @@ ${MAP_BODY}
         }
     }
 
+    @EldApi
     public ${SELF} concat(final ${SELF} additional) {
         final ${SELF} result = copy();
         result.ensureCapacity(length + additional.length);
@@ -146,6 +152,7 @@ ${MAP_BODY}
         return result;
     }
 
+    @EldApi
     public ${SELF} union(final ${SELF} additional) {
         final ${SELF} result = new ${SELF}();
         for (int index = 0; index < length; index++) {
@@ -163,6 +170,7 @@ ${MAP_BODY}
         return result;
     }
 
+    @EldApi
     public ${SELF} distinct() {
         final ${SELF} result = new ${SELF}();
         for (int index = 0; index < length; index++) {
@@ -174,6 +182,7 @@ ${MAP_BODY}
         return result;
     }
 
+    @EldApi
     public ${SELF} intersect(final ${SELF} additional) {
         final ${SELF} result = new ${SELF}();
         for (int index = 0; index < length; index++) {
@@ -185,6 +194,7 @@ ${MAP_BODY}
         return result;
     }
 
+    @EldApi
     public ${SELF} subtract(final ${SELF} additional) {
         final ${SELF} result = new ${SELF}();
         for (int index = 0; index < length; index++) {
@@ -196,6 +206,7 @@ ${MAP_BODY}
         return result;
     }
 
+    @EldApi
     public ${SELF} difference(final ${SELF} additional) {
         final ${SELF} result = subtract(additional);
         for (int index = 0; index < additional.length; index++) {
@@ -207,6 +218,7 @@ ${MAP_BODY}
         return result;
     }
 
+    @EldApi
     public EldObjectArray<EldTuple> zip(final EldArray<?> additional) {
         if (length != additional.length()) {
             throw new IllegalArgumentException("Cannot zip arrays of different lengths");
@@ -218,14 +230,17 @@ ${MAP_BODY}
         return new EldObjectArray<>(tuples);
     }
 
+    @EldApi
     public Object reduce(final MethodHandle reducer, final Object initial) throws Throwable {
 ${REDUCE_BODY}
     }
 
+    @EldApi
     public @Nullable Object find(final MethodHandle predicate) throws Throwable {
         return find(predicate, false);
     }
 
+    @EldApi
     public @Nullable Object findLast(final MethodHandle predicate) throws Throwable {
         return find(predicate, true);
     }
@@ -243,10 +258,12 @@ ${REDUCE_BODY}
         return null;
     }
 
+    @EldApi
     public @Nullable Integer findIndex(final MethodHandle predicate) throws Throwable {
         return findIndex(predicate, false);
     }
 
+    @EldApi
     public @Nullable Integer findLastIndex(final MethodHandle predicate) throws Throwable {
         return findIndex(predicate, true);
     }
@@ -263,6 +280,7 @@ ${REDUCE_BODY}
         return null;
     }
 
+    @EldApi
     public boolean any(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (test(predicate, elements[index], index)) {
@@ -272,6 +290,7 @@ ${REDUCE_BODY}
         return false;
     }
 
+    @EldApi
     public boolean all(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (!test(predicate, elements[index], index)) {
@@ -281,10 +300,12 @@ ${REDUCE_BODY}
         return true;
     }
 
+    @EldApi
     public boolean none(final MethodHandle predicate) throws Throwable {
         return !any(predicate);
     }
 
+    @EldApi
     public int count(final MethodHandle predicate) throws Throwable {
         int matching = 0;
         for (int index = 0; index < length; index++) {
@@ -295,10 +316,12 @@ ${REDUCE_BODY}
         return matching;
     }
 
+    @EldApi
     public String join() {
         return join(", ");
     }
 
+    @EldApi
     public String join(final String separator) {
         final StringBuilder result = new StringBuilder();
         for (int index = 0; index < length; index++) {
@@ -310,6 +333,7 @@ ${REDUCE_BODY}
         return result.toString();
     }
 
+    @EldApi
     public boolean remove(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (test(predicate, elements[index], index)) {
@@ -320,6 +344,7 @@ ${REDUCE_BODY}
         return false;
     }
 
+    @EldApi
     public boolean removeIf(final MethodHandle predicate) throws Throwable {
         boolean removed = false;
         for (int index = 0,
@@ -337,10 +362,12 @@ ${REDUCE_BODY}
 
 ${NATURAL_SORT_METHODS}
 
+    @EldApi
     public void sortInPlace(final MethodHandle comparator) throws Throwable {
         ${COMPARATOR_SORT_BODY}
     }
 
+    @EldApi
     public ${SELF} sort(final MethodHandle comparator) throws Throwable {
         final ${SELF} result = copy();
         result.sortInPlace(comparator);

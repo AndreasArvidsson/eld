@@ -1,0 +1,100 @@
+class Foo {
+    public constructor(value: i32) {}
+    public constructor(other: i32) {}
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+LEFT_BRACE (2:36-2:37)
+RIGHT_BRACE (2:37-2:38)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "other" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+RIGHT_PAREN (3:34-3:35)
+LEFT_BRACE (3:36-3:37)
+RIGHT_BRACE (3:37-3:38)
+RIGHT_BRACE (4:1-4:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-4:2
+  (ClassDeclaration
+    range: 1:1-4:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:38
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 2:12-2:38
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 2:36-2:38
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:38
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-3:38
+        (FunctionParameter
+          range: 3:24-3:34
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "other"
+          )
+          (NamedTypeNode
+            range: 3:31-3:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:36-3:38
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Duplicate or overlapping constructor signature at 3:12-3:38

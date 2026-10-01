@@ -5,6 +5,7 @@ import com.github.andreasarvidsson.eld.parser.ConstructorDeclaration;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 import java.util.List;
 import java.util.stream.IntStream;
+import org.jspecify.annotations.Nullable;
 
 public record ConstructorSymbol(
     ConstructorDeclaration declaration, FunctionType type,
@@ -23,13 +24,19 @@ public record ConstructorSymbol(
 
     @Override
     public String toString() {
+        return formatSignature(false);
+    }
+
+    public String formatSignature(final boolean showDefaults) {
         final List<FunctionParameter> parameters = declaration.parameters();
         final List<String> parameterTypes =
             IntStream.range(0, parameters.size()).mapToObj(i -> {
                 final Type declared = declaredParameterTypes.get(i);
-                final String text = declared.toString();
-                return parameters.get(i).omittable()
-                    && declared instanceof UnionType ? "(" + text + ")" : text;
+                return FunctionSignatures.formatParameterType(
+                    declared,
+                    parameters.get(i),
+                    showDefaults
+                );
             }).toList();
         return "constructor(%s)".formatted(
             FunctionType
@@ -38,6 +45,13 @@ public record ConstructorSymbol(
                     parameterTypes,
                     parameters.stream()
                         .map(FunctionParameter::omittable)
+                        .toList(),
+                    parameters.stream()
+                        .<@Nullable String>map(
+                            parameter -> showDefaults
+                                ? parameter.defaultText()
+                                : null
+                        )
                         .toList()
                 )
         );

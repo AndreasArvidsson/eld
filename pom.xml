@@ -219,6 +219,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.16.0</version>
                 <configuration>
+                    <parameters>true</parameters>
                     <compilerArgs>
                         <!-- Use javac's simple compile policy, which Error Prone requires for
                         reliable analysis. -->

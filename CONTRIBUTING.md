@@ -187,9 +187,13 @@ protected const bar = 0;
 
 ### Miscellaneous
 
+- Replace getClass with getType
+- removed boxed get from array classes
+- Generic type signature? eg introspection array map/zip
+- Math library
 - Properly support unicode strings. string[0] and string.count() only handles utf8.
-- Introduced type never. Today [] is typed as [any]. Should it be [never]?
-- Replace builtin print in fixtures with actual Java reference?
+- Introduce type never. Today [] is typed as [any]. Should it be [never]?
+- Replace builtin print/dir/help in fixtures with actual Java reference?
 - create literal types from collection elements
   ```
   const list = [1, 2, 3];
@@ -210,6 +214,7 @@ protected const bar = 0;
 - Formatter
 - LSP, linting, code completion
 - Tree sitter parser
+- forbid method and property to have the same name?
 - Manually look through all core implementations and clean up
 - Update documentation with code examples for every single syntax.
 - Operator overloading. We have already added `==`.

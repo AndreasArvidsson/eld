@@ -29,16 +29,19 @@ public final class EldObjectArray<T extends @Nullable Object>
     }
 
     @Override
+    @EldApi(property = true)
     public int length() {
         return length;
     }
 
     @Override
+    @EldApi
     public boolean isEmpty() {
         return length == 0;
     }
 
     @Override
+    @EldApi
     public void clear() {
         // Clear references to allow garbage collection.
         Arrays.fill(elements, 0, length, null);
@@ -60,17 +63,20 @@ public final class EldObjectArray<T extends @Nullable Object>
         elements[normalizeIndex(index)] = value;
     }
 
+    @EldApi
     public void add(final T value) {
         ensureCapacity(length + 1);
         elements[length++] = value;
     }
 
+    @EldApi
     public void add(final Object[] values) {
         ensureCapacity(length + values.length);
         System.arraycopy(values, 0, elements, length, values.length);
         length += values.length;
     }
 
+    @EldApi
     public void addFront(final T value) {
         ensureCapacity(length + 1);
         System.arraycopy(elements, 0, elements, 1, length);
@@ -78,6 +84,7 @@ public final class EldObjectArray<T extends @Nullable Object>
         length++;
     }
 
+    @EldApi
     public void addFront(final Object[] values) {
         ensureCapacity(length + values.length);
         System.arraycopy(elements, 0, elements, values.length, length);
@@ -85,12 +92,14 @@ public final class EldObjectArray<T extends @Nullable Object>
         length += values.length;
     }
 
+    @EldApi
     public void addAll(final EldObjectArray<T> additional) {
         ensureCapacity(length + additional.length);
         System.arraycopy(additional.elements, 0, elements, length, additional.length);
         length += additional.length;
     }
 
+    @EldApi
     public void insertAt(final T value, final int index) {
         final int at = index < 0 ? length + index : index;
         if (at < 0 || at > length) {
@@ -102,6 +111,7 @@ public final class EldObjectArray<T extends @Nullable Object>
         length++;
     }
 
+    @EldApi
     public boolean remove(final Object value) {
         for (int index = 0; index < length; index++) {
             if (EldEquality.dynamicEquals(elements[index], value)) {
@@ -112,6 +122,7 @@ public final class EldObjectArray<T extends @Nullable Object>
         return false;
     }
 
+    @EldApi
     public int removeAll(final Object value) {
         int removed = 0;
         for (int index = 0; index < length;) {
@@ -126,6 +137,7 @@ public final class EldObjectArray<T extends @Nullable Object>
         return removed;
     }
 
+    @EldApi
     public T removeAt(final int index) {
         final int at = normalizeIndex(index);
         final T value = get(at);
@@ -141,10 +153,12 @@ public final class EldObjectArray<T extends @Nullable Object>
     }
 
     @Override
+    @EldApi
     public EldObjectArray<T> copy() {
         return copyRange(0, length);
     }
 
+    @EldApi
     public EldObjectArray<T> reverse() {
         final @Nullable Object[] reversed = new Object[length];
         for (int index = 0; index < length; index++) {
@@ -176,14 +190,17 @@ public final class EldObjectArray<T extends @Nullable Object>
         return Objects.checkIndex(index < 0 ? length + index : index, length);
     }
 
+    @EldApi
     public boolean contains(final @Nullable Object value) {
         return index(value, 0) != null;
     }
 
+    @EldApi
     public @Nullable Integer index(final @Nullable Object value) {
         return index(value, 0);
     }
 
+    @EldApi
     public @Nullable Integer index(final @Nullable Object value, final int from) {
         final int start = from < 0 ? Math.max(0, length + from) : from;
         for (int i = start; i < length; i++) {
@@ -194,10 +211,12 @@ public final class EldObjectArray<T extends @Nullable Object>
         return null;
     }
 
+    @EldApi
     public @Nullable Integer lastIndex(final @Nullable Object value) {
         return lastIndex(value, length - 1);
     }
 
+    @EldApi
     public @Nullable Integer lastIndex(final @Nullable Object value, final int from) {
         final int start = from < 0 ? length + from : from;
         for (int i = Math.min(start, length - 1); i >= 0; i--) {
@@ -231,6 +250,7 @@ public final class EldObjectArray<T extends @Nullable Object>
     }
 
     @Override
+    @EldApi
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append('[');
@@ -258,6 +278,7 @@ public final class EldObjectArray<T extends @Nullable Object>
 
 ${STANDARD_METHODS}
 
+    @EldApi
     public EldArray<?> flatten(final String elementDescriptor) throws Throwable {
         return flatMap(ARRAY_IDENTITY, elementDescriptor);
     }
@@ -280,6 +301,7 @@ ${STANDARD_METHODS}
     }
 
     @Override
+    @EldApi
     public int hashCode() {
         int result = 1;
         for (int i = 0; i < length; i++) {

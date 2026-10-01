@@ -25,16 +25,19 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
     }
 
     @Override
+    @EldApi(property = true)
     public int length() {
         return length;
     }
 
     @Override
+    @EldApi
     public boolean isEmpty() {
         return length == 0;
     }
 
     @Override
+    @EldApi
     public void clear() {
         length = 0;
     }
@@ -52,17 +55,20 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         elements[normalizeIndex(index)] = value;
     }
 
+    @EldApi
     public void add(final float value) {
         ensureCapacity(length + 1);
         elements[length++] = value;
     }
 
+    @EldApi
     public void add(final float... values) {
         ensureCapacity(length + values.length);
         System.arraycopy(values, 0, elements, length, values.length);
         length += values.length;
     }
 
+    @EldApi
     public void addFront(final float value) {
         ensureCapacity(length + 1);
         System.arraycopy(elements, 0, elements, 1, length);
@@ -70,6 +76,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         length++;
     }
 
+    @EldApi
     public void addFront(final float... values) {
         ensureCapacity(length + values.length);
         System.arraycopy(elements, 0, elements, values.length, length);
@@ -77,12 +84,14 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         length += values.length;
     }
 
+    @EldApi
     public void addAll(final EldFloatArray additional) {
         ensureCapacity(length + additional.length);
         System.arraycopy(additional.elements, 0, elements, length, additional.length);
         length += additional.length;
     }
 
+    @EldApi
     public void insertAt(final float value, final int index) {
         final int at = index < 0 ? length + index : index;
         if (at < 0 || at > length) {
@@ -94,6 +103,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         length++;
     }
 
+    @EldApi
     public boolean remove(final float value) {
         for (int index = 0; index < length; index++) {
             if (elements[index] == value) {
@@ -104,6 +114,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return false;
     }
 
+    @EldApi
     public int removeAll(final float value) {
         int removed = 0;
         for (int index = 0; index < length;) {
@@ -123,10 +134,12 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
     }
 
     @Override
+    @EldApi
     public EldFloatArray copy() {
         return copyRange(0, length);
     }
 
+    @EldApi
     public EldFloatArray reverse() {
         final float[] reversed = new float[length];
         for (int index = 0; index < length; index++) {
@@ -153,6 +166,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return copyRange(from, to);
     }
 
+    @EldApi
     public float removeAt(final int index) {
         final int at = normalizeIndex(index);
         final float value = elements[at];
@@ -168,14 +182,17 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return Objects.checkIndex(index < 0 ? length + index : index, length);
     }
 
+    @EldApi
     public boolean contains(final float value) {
         return index(value, 0) != null;
     }
 
+    @EldApi
     public @Nullable Integer index(final float value) {
         return index(value, 0);
     }
 
+    @EldApi
     public @Nullable Integer index(final float value, final int from) {
         final int start = from < 0 ? Math.max(0, length + from) : from;
         for (int i = start; i < length; i++) {
@@ -186,10 +203,12 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return null;
     }
 
+    @EldApi
     public @Nullable Integer lastIndex(final float value) {
         return lastIndex(value, length - 1);
     }
 
+    @EldApi
     public @Nullable Integer lastIndex(final float value, final int from) {
         final int start = from < 0 ? length + from : from;
         for (int i = Math.min(start, length - 1); i >= 0; i--) {
@@ -223,6 +242,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
     }
 
     @Override
+    @EldApi
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append('[');
@@ -248,6 +268,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         elements = Arrays.copyOf(elements, newCapacity);
     }
 
+    @EldApi
     public EldFloatArray filter(final MethodHandle predicate) throws Throwable {
         final EldFloatArray result = copy();
         int count = 0;
@@ -262,6 +283,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldTuple partition(final MethodHandle predicate) throws Throwable {
         final EldFloatArray matching = new EldFloatArray();
         final EldFloatArray remaining = new EldFloatArray();
@@ -277,6 +299,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return new EldTuple(new Object[] {matching, remaining});
     }
 
+    @EldApi
     public EldArray<?> map(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final boolean indexed = transform.type().parameterCount() == 2;
         return switch (elementDescriptor) {
@@ -364,6 +387,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         };
     }
 
+    @EldApi
     public EldArray<?> flatMap(final MethodHandle transform, final String elementDescriptor) throws Throwable {
         final boolean indexed = transform.type().parameterCount() == 2;
         final EldArray<?>[] parts = new EldArray<?>[length];
@@ -460,6 +484,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         };
     }
 
+    @EldApi
     public void reverseInPlace() {
         for (int left = 0, right = length - 1;
             left < right; left++, right--) {
@@ -469,6 +494,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         }
     }
 
+    @EldApi
     public EldFloatArray concat(final EldFloatArray additional) {
         final EldFloatArray result = copy();
         result.ensureCapacity(length + additional.length);
@@ -479,6 +505,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldFloatArray union(final EldFloatArray additional) {
         final EldFloatArray result = new EldFloatArray();
         for (int index = 0; index < length; index++) {
@@ -496,6 +523,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldFloatArray distinct() {
         final EldFloatArray result = new EldFloatArray();
         for (int index = 0; index < length; index++) {
@@ -507,6 +535,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldFloatArray intersect(final EldFloatArray additional) {
         final EldFloatArray result = new EldFloatArray();
         for (int index = 0; index < length; index++) {
@@ -518,6 +547,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldFloatArray subtract(final EldFloatArray additional) {
         final EldFloatArray result = new EldFloatArray();
         for (int index = 0; index < length; index++) {
@@ -529,6 +559,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldFloatArray difference(final EldFloatArray additional) {
         final EldFloatArray result = subtract(additional);
         for (int index = 0; index < additional.length; index++) {
@@ -540,6 +571,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public EldObjectArray<EldTuple> zip(final EldArray<?> additional) {
         if (length != additional.length()) {
             throw new IllegalArgumentException("Cannot zip arrays of different lengths");
@@ -551,6 +583,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return new EldObjectArray<>(tuples);
     }
 
+    @EldApi
     public Object reduce(final MethodHandle reducer, final Object initial) throws Throwable {
         final boolean indexed = reducer.type().parameterCount() == 3;
         final Class<?> resultType = reducer.type().returnType();
@@ -635,10 +668,12 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result;
     }
 
+    @EldApi
     public @Nullable Object find(final MethodHandle predicate) throws Throwable {
         return find(predicate, false);
     }
 
+    @EldApi
     public @Nullable Object findLast(final MethodHandle predicate) throws Throwable {
         return find(predicate, true);
     }
@@ -656,10 +691,12 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return null;
     }
 
+    @EldApi
     public @Nullable Integer findIndex(final MethodHandle predicate) throws Throwable {
         return findIndex(predicate, false);
     }
 
+    @EldApi
     public @Nullable Integer findLastIndex(final MethodHandle predicate) throws Throwable {
         return findIndex(predicate, true);
     }
@@ -676,6 +713,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return null;
     }
 
+    @EldApi
     public boolean any(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (test(predicate, elements[index], index)) {
@@ -685,6 +723,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return false;
     }
 
+    @EldApi
     public boolean all(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (!test(predicate, elements[index], index)) {
@@ -694,10 +733,12 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return true;
     }
 
+    @EldApi
     public boolean none(final MethodHandle predicate) throws Throwable {
         return !any(predicate);
     }
 
+    @EldApi
     public int count(final MethodHandle predicate) throws Throwable {
         int matching = 0;
         for (int index = 0; index < length; index++) {
@@ -708,10 +749,12 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return matching;
     }
 
+    @EldApi
     public String join() {
         return join(", ");
     }
 
+    @EldApi
     public String join(final String separator) {
         final StringBuilder result = new StringBuilder();
         for (int index = 0; index < length; index++) {
@@ -723,6 +766,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return result.toString();
     }
 
+    @EldApi
     public boolean remove(final MethodHandle predicate) throws Throwable {
         for (int index = 0; index < length; index++) {
             if (test(predicate, elements[index], index)) {
@@ -733,6 +777,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return false;
     }
 
+    @EldApi
     public boolean removeIf(final MethodHandle predicate) throws Throwable {
         boolean removed = false;
         for (int index = 0,
@@ -748,20 +793,24 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
         return removed;
     }
 
+    @EldApi
     public EldFloatArray sort() {
         final EldFloatArray result = copy();
         result.sortInPlace();
         return result;
     }
 
+    @EldApi
     public void sortInPlace() {
         Arrays.sort(elements, 0, length);
     }
 
+    @EldApi
     public void sortInPlace(final MethodHandle comparator) throws Throwable {
         sortWithComparator(Arrays.copyOf(elements, length), 0, length, comparator);
     }
 
+    @EldApi
     public EldFloatArray sort(final MethodHandle comparator) throws Throwable {
         final EldFloatArray result = copy();
         result.sortInPlace(comparator);
@@ -802,6 +851,7 @@ public final class EldFloatArray implements EldArray<EldFloatArray> {
     }
 
     @Override
+    @EldApi
     public int hashCode() {
         int result = 1;
         for (int i = 0; i < length; i++) {

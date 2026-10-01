@@ -27,11 +27,13 @@ public final class EldTuple {
     }
 
     @Override
+    @EldApi
     public int hashCode() {
         return Arrays.hashCode(elements);
     }
 
     @Override
+    @EldApi
     public String toString() {
         return Arrays.stream(elements)
             .map(String::valueOf)

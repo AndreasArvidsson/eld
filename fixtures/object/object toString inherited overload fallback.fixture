@@ -1,0 +1,456 @@
+class C {
+    public func toString(value: string) string { return f"value: {value}"; }
+    public func toString(value: i32) string { return f"value: {value}"; }
+}
+const c = new C();
+print(c.toString().startsWith("Test$C@"));
+print(c.toString(1));
+print(c.toString("x"));
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "C" (1:7-1:8)
+LEFT_BRACE (1:9-1:10)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "toString" (2:17-2:25)
+LEFT_PAREN (2:25-2:26)
+IDENTIFIER "value" (2:26-2:31)
+COLON (2:31-2:32)
+IDENTIFIER "string" (2:33-2:39)
+RIGHT_PAREN (2:39-2:40)
+IDENTIFIER "string" (2:41-2:47)
+LEFT_BRACE (2:48-2:49)
+RETURN (2:50-2:56)
+FORMAT_STRING_START (2:57-2:59)
+FORMAT_STRING_TEXT "value: " (2:59-2:66)
+LEFT_BRACE (2:66-2:67)
+IDENTIFIER "value" (2:67-2:72)
+RIGHT_BRACE (2:72-2:73)
+FORMAT_STRING_END (2:73-2:74)
+SEMICOLON (2:74-2:75)
+RIGHT_BRACE (2:76-2:77)
+PUBLIC (3:5-3:11)
+FUNC (3:12-3:16)
+IDENTIFIER "toString" (3:17-3:25)
+LEFT_PAREN (3:25-3:26)
+IDENTIFIER "value" (3:26-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "i32" (3:33-3:36)
+RIGHT_PAREN (3:36-3:37)
+IDENTIFIER "string" (3:38-3:44)
+LEFT_BRACE (3:45-3:46)
+RETURN (3:47-3:53)
+FORMAT_STRING_START (3:54-3:56)
+FORMAT_STRING_TEXT "value: " (3:56-3:63)
+LEFT_BRACE (3:63-3:64)
+IDENTIFIER "value" (3:64-3:69)
+RIGHT_BRACE (3:69-3:70)
+FORMAT_STRING_END (3:70-3:71)
+SEMICOLON (3:71-3:72)
+RIGHT_BRACE (3:73-3:74)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+IDENTIFIER "c" (5:7-5:8)
+EQUAL (5:9-5:10)
+NEW (5:11-5:14)
+IDENTIFIER "C" (5:15-5:16)
+LEFT_PAREN (5:16-5:17)
+RIGHT_PAREN (5:17-5:18)
+SEMICOLON (5:18-5:19)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "c" (6:7-6:8)
+DOT (6:8-6:9)
+IDENTIFIER "toString" (6:9-6:17)
+LEFT_PAREN (6:17-6:18)
+RIGHT_PAREN (6:18-6:19)
+DOT (6:19-6:20)
+IDENTIFIER "startsWith" (6:20-6:30)
+LEFT_PAREN (6:30-6:31)
+STRING_LITERAL "\"Test$C@\"" (6:31-6:40)
+RIGHT_PAREN (6:40-6:41)
+RIGHT_PAREN (6:41-6:42)
+SEMICOLON (6:42-6:43)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "c" (7:7-7:8)
+DOT (7:8-7:9)
+IDENTIFIER "toString" (7:9-7:17)
+LEFT_PAREN (7:17-7:18)
+INTEGER_LITERAL "1" (7:18-7:19)
+RIGHT_PAREN (7:19-7:20)
+RIGHT_PAREN (7:20-7:21)
+SEMICOLON (7:21-7:22)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "c" (8:7-8:8)
+DOT (8:8-8:9)
+IDENTIFIER "toString" (8:9-8:17)
+LEFT_PAREN (8:17-8:18)
+STRING_LITERAL "\"x\"" (8:18-8:21)
+RIGHT_PAREN (8:21-8:22)
+RIGHT_PAREN (8:22-8:23)
+SEMICOLON (8:23-8:24)
+
+--- AST ---
+
+(Program
+  range: 1:1-8:24
+  (ClassDeclaration
+    range: 1:1-4:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:8
+      name: "C"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:77
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 2:12-2:77
+        modifiers: []
+        (IdentifierDeclaration
+          range: 2:17-2:25
+          name: "toString"
+        )
+        (FunctionParameter
+          range: 2:26-2:39
+          (IdentifierDeclaration
+            range: 2:26-2:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:33-2:39
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 2:41-2:47
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:48-2:77
+          (ReturnStatement
+            range: 2:50-2:75
+            (FormatStringExpression
+              range: 2:57-2:74
+              (LiteralExpression
+                range: 2:59-2:66
+                kind: FORMAT_STRING_TEXT
+                text: "value: "
+              )
+              (IdentifierExpression
+                range: 2:67-2:72
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:74
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 3:12-3:74
+        modifiers: []
+        (IdentifierDeclaration
+          range: 3:17-3:25
+          name: "toString"
+        )
+        (FunctionParameter
+          range: 3:26-3:36
+          (IdentifierDeclaration
+            range: 3:26-3:31
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:33-3:36
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (NamedTypeNode
+          range: 3:38-3:44
+          name: "string"
+        )
+        (BlockStatement
+          range: 3:45-3:74
+          (ReturnStatement
+            range: 3:47-3:72
+            (FormatStringExpression
+              range: 3:54-3:71
+              (LiteralExpression
+                range: 3:56-3:63
+                kind: FORMAT_STRING_TEXT
+                text: "value: "
+              )
+              (IdentifierExpression
+                range: 3:64-3:69
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:19
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:8
+      name: "c"
+    )
+    type: null
+    (NewExpression
+      range: 5:11-5:18
+      (IdentifierExpression
+        range: 5:15-5:16
+        name: "C"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:43
+    (CallExpression
+      range: 6:1-6:42
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (CallExpression
+        range: 6:7-6:41
+        (MemberExpression
+          range: 6:7-6:30
+          (CallExpression
+            range: 6:7-6:19
+            (MemberExpression
+              range: 6:7-6:17
+              (IdentifierExpression
+                range: 6:7-6:8
+                name: "c"
+              )
+              (IdentifierExpression
+                range: 6:9-6:17
+                name: "toString"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 6:20-6:30
+            name: "startsWith"
+          )
+        )
+        (LiteralExpression
+          range: 6:31-6:40
+          kind: STRING
+          text: "\"Test$C@\""
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:22
+    (CallExpression
+      range: 7:1-7:21
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:20
+        (MemberExpression
+          range: 7:7-7:17
+          (IdentifierExpression
+            range: 7:7-7:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 7:9-7:17
+            name: "toString"
+          )
+        )
+        (LiteralExpression
+          range: 7:18-7:19
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:24
+    (CallExpression
+      range: 8:1-8:23
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:22
+        (MemberExpression
+          range: 8:7-8:17
+          (IdentifierExpression
+            range: 8:7-8:8
+            name: "c"
+          )
+          (IdentifierExpression
+            range: 8:9-8:17
+            name: "toString"
+          )
+        )
+        (LiteralExpression
+          range: 8:18-8:21
+          kind: STRING
+          text: "\"x\""
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:57-2:74 -> string
+  2:59-2:66 -> string
+  2:67-2:72 -> string
+  3:54-3:71 -> string
+  3:56-3:63 -> string
+  3:64-3:69 -> i32
+  5:11-5:18 -> C
+  5:15-5:16 -> C
+  6:1-6:6 -> (any) => void
+  6:1-6:42 -> void
+  6:7-6:8 -> C
+  6:7-6:17 -> () => string
+  6:7-6:19 -> string
+  6:7-6:30 -> (string) => bool
+  6:7-6:41 -> bool
+  6:9-6:17 -> () => string
+  6:20-6:30 -> (string) => bool
+  6:31-6:40 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:21 -> void
+  7:7-7:8 -> C
+  7:7-7:17 -> (value: i32) => string
+  7:7-7:20 -> string
+  7:9-7:17 -> (value: i32) => string
+  7:18-7:19 -> i32
+  8:1-8:6 -> (any) => void
+  8:1-8:23 -> void
+  8:7-8:8 -> C
+  8:7-8:17 -> (value: string) => string
+  8:7-8:22 -> string
+  8:9-8:17 -> (value: string) => string
+  8:18-8:21 -> string
+
+Resolved types:
+  2:33-2:39 -> string
+  2:41-2:47 -> string
+  3:33-3:36 -> i32
+  3:38-3:44 -> string
+
+Declarations:
+  1:7-1:8 -> class C
+  2:17-2:25 -> public func toString(value: string) => string
+  2:26-2:31 -> const value: string
+  3:17-3:25 -> public func toString(value: i32) => string
+  3:26-3:31 -> const value: i32
+  5:7-5:8 -> const c: C
+
+References:
+  2:67-2:72 -> 2:26-2:31
+  3:64-3:69 -> 3:26-3:31
+  5:15-5:16 -> 1:7-1:8
+  6:1-6:6 -> builtin print
+  6:7-6:8 -> 5:7-5:8
+  6:9-6:17 -> java.lang.Object.toString(): string
+  6:20-6:30 -> java.lang.String.startsWith(string): bool
+  7:1-7:6 -> builtin print
+  7:7-7:8 -> 5:7-5:8
+  7:9-7:17 -> 3:17-3:25
+  8:1-8:6 -> builtin print
+  8:7-8:8 -> 5:7-5:8
+  8:9-8:17 -> 2:17-2:25
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$C
+  inner class Test$C flags [PUBLIC, STATIC]
+  field c LTest$C; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$C
+    DUP
+    INVOKESPECIAL Test$C.<init>()V
+    PUTSTATIC Test.c LTest$C;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.c LTest$C;
+    INVOKEVIRTUAL Test$C.toString()Ljava/lang/String;
+    LDC "Test$C@"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.c LTest$C;
+    LDC 1
+    INVOKEVIRTUAL Test$C.toString(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.c LTest$C;
+    LDC "x"
+    INVOKEVIRTUAL Test$C.toString(Ljava/lang/String;)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$C extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$C flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    RETURN
+    max stack 1 max locals 1
+  method toString(Ljava/lang/String;)Ljava/lang/String; flags [PUBLIC]
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC "value: "
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 2
+  method toString(I)Ljava/lang/String; flags [PUBLIC]
+    NEW java/lang/StringBuilder
+    DUP
+    INVOKESPECIAL java/lang/StringBuilder.<init>()V
+    LDC "value: "
+    INVOKEVIRTUAL java/lang/StringBuilder.append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    ILOAD_1 1
+    INVOKEVIRTUAL java/lang/StringBuilder.append(I)Ljava/lang/StringBuilder;
+    INVOKEVIRTUAL java/lang/StringBuilder.toString()Ljava/lang/String;
+    ARETURN
+    max stack 2 max locals 2
+
+--- OUTPUT ---
+
+true
+value: 1
+value: x

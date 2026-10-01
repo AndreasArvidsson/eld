@@ -1,23 +1,23 @@
 class PrivateFoo {
-    func equals(value: i32) bool {
-        return true;
+    func toString(value: i32) string {
+        return "private";
     }
-    public func check() bool {
-        return this.equals(1);
+    public func check() string {
+        return this.toString(1);
     }
 }
 class StaticFoo {
-    public static func equals(value: i32) bool {
-        return true;
+    public static func toString(value: i32) string {
+        return "static";
     }
 }
 
 const privateFoo = new PrivateFoo();
 const staticFoo = new StaticFoo();
 print(privateFoo.check());
-print(privateFoo.equals(privateFoo));
-print(StaticFoo.equals(1));
-print(staticFoo.equals(staticFoo));
+print(privateFoo.toString().startsWith("Test$PrivateFoo@"));
+print(StaticFoo.toString(1));
+print(staticFoo.toString().startsWith("Test$StaticFoo@"));
 
 --- TOKENS ---
 
@@ -25,33 +25,33 @@ CLASS (1:1-1:6)
 IDENTIFIER "PrivateFoo" (1:7-1:17)
 LEFT_BRACE (1:18-1:19)
 FUNC (2:5-2:9)
-IDENTIFIER "equals" (2:10-2:16)
-LEFT_PAREN (2:16-2:17)
-IDENTIFIER "value" (2:17-2:22)
-COLON (2:22-2:23)
-IDENTIFIER "i32" (2:24-2:27)
-RIGHT_PAREN (2:27-2:28)
-IDENTIFIER "bool" (2:29-2:33)
-LEFT_BRACE (2:34-2:35)
+IDENTIFIER "toString" (2:10-2:18)
+LEFT_PAREN (2:18-2:19)
+IDENTIFIER "value" (2:19-2:24)
+COLON (2:24-2:25)
+IDENTIFIER "i32" (2:26-2:29)
+RIGHT_PAREN (2:29-2:30)
+IDENTIFIER "string" (2:31-2:37)
+LEFT_BRACE (2:38-2:39)
 RETURN (3:9-3:15)
-BOOLEAN_LITERAL "true" (3:16-3:20)
-SEMICOLON (3:20-3:21)
+STRING_LITERAL "\"private\"" (3:16-3:25)
+SEMICOLON (3:25-3:26)
 RIGHT_BRACE (4:5-4:6)
 PUBLIC (5:5-5:11)
 FUNC (5:12-5:16)
 IDENTIFIER "check" (5:17-5:22)
 LEFT_PAREN (5:22-5:23)
 RIGHT_PAREN (5:23-5:24)
-IDENTIFIER "bool" (5:25-5:29)
-LEFT_BRACE (5:30-5:31)
+IDENTIFIER "string" (5:25-5:31)
+LEFT_BRACE (5:32-5:33)
 RETURN (6:9-6:15)
 THIS (6:16-6:20)
 DOT (6:20-6:21)
-IDENTIFIER "equals" (6:21-6:27)
-LEFT_PAREN (6:27-6:28)
-INTEGER_LITERAL "1" (6:28-6:29)
-RIGHT_PAREN (6:29-6:30)
-SEMICOLON (6:30-6:31)
+IDENTIFIER "toString" (6:21-6:29)
+LEFT_PAREN (6:29-6:30)
+INTEGER_LITERAL "1" (6:30-6:31)
+RIGHT_PAREN (6:31-6:32)
+SEMICOLON (6:32-6:33)
 RIGHT_BRACE (7:5-7:6)
 RIGHT_BRACE (8:1-8:2)
 CLASS (9:1-9:6)
@@ -60,17 +60,17 @@ LEFT_BRACE (9:17-9:18)
 PUBLIC (10:5-10:11)
 STATIC (10:12-10:18)
 FUNC (10:19-10:23)
-IDENTIFIER "equals" (10:24-10:30)
-LEFT_PAREN (10:30-10:31)
-IDENTIFIER "value" (10:31-10:36)
-COLON (10:36-10:37)
-IDENTIFIER "i32" (10:38-10:41)
-RIGHT_PAREN (10:41-10:42)
-IDENTIFIER "bool" (10:43-10:47)
-LEFT_BRACE (10:48-10:49)
+IDENTIFIER "toString" (10:24-10:32)
+LEFT_PAREN (10:32-10:33)
+IDENTIFIER "value" (10:33-10:38)
+COLON (10:38-10:39)
+IDENTIFIER "i32" (10:40-10:43)
+RIGHT_PAREN (10:43-10:44)
+IDENTIFIER "string" (10:45-10:51)
+LEFT_BRACE (10:52-10:53)
 RETURN (11:9-11:15)
-BOOLEAN_LITERAL "true" (11:16-11:20)
-SEMICOLON (11:20-11:21)
+STRING_LITERAL "\"static\"" (11:16-11:24)
+SEMICOLON (11:24-11:25)
 RIGHT_BRACE (12:5-12:6)
 RIGHT_BRACE (13:1-13:2)
 CONST (15:1-15:6)
@@ -102,37 +102,45 @@ IDENTIFIER "print" (18:1-18:6)
 LEFT_PAREN (18:6-18:7)
 IDENTIFIER "privateFoo" (18:7-18:17)
 DOT (18:17-18:18)
-IDENTIFIER "equals" (18:18-18:24)
-LEFT_PAREN (18:24-18:25)
-IDENTIFIER "privateFoo" (18:25-18:35)
-RIGHT_PAREN (18:35-18:36)
-RIGHT_PAREN (18:36-18:37)
-SEMICOLON (18:37-18:38)
+IDENTIFIER "toString" (18:18-18:26)
+LEFT_PAREN (18:26-18:27)
+RIGHT_PAREN (18:27-18:28)
+DOT (18:28-18:29)
+IDENTIFIER "startsWith" (18:29-18:39)
+LEFT_PAREN (18:39-18:40)
+STRING_LITERAL "\"Test$PrivateFoo@\"" (18:40-18:58)
+RIGHT_PAREN (18:58-18:59)
+RIGHT_PAREN (18:59-18:60)
+SEMICOLON (18:60-18:61)
 IDENTIFIER "print" (19:1-19:6)
 LEFT_PAREN (19:6-19:7)
 IDENTIFIER "StaticFoo" (19:7-19:16)
 DOT (19:16-19:17)
-IDENTIFIER "equals" (19:17-19:23)
-LEFT_PAREN (19:23-19:24)
-INTEGER_LITERAL "1" (19:24-19:25)
-RIGHT_PAREN (19:25-19:26)
-RIGHT_PAREN (19:26-19:27)
-SEMICOLON (19:27-19:28)
+IDENTIFIER "toString" (19:17-19:25)
+LEFT_PAREN (19:25-19:26)
+INTEGER_LITERAL "1" (19:26-19:27)
+RIGHT_PAREN (19:27-19:28)
+RIGHT_PAREN (19:28-19:29)
+SEMICOLON (19:29-19:30)
 IDENTIFIER "print" (20:1-20:6)
 LEFT_PAREN (20:6-20:7)
 IDENTIFIER "staticFoo" (20:7-20:16)
 DOT (20:16-20:17)
-IDENTIFIER "equals" (20:17-20:23)
-LEFT_PAREN (20:23-20:24)
-IDENTIFIER "staticFoo" (20:24-20:33)
-RIGHT_PAREN (20:33-20:34)
-RIGHT_PAREN (20:34-20:35)
-SEMICOLON (20:35-20:36)
+IDENTIFIER "toString" (20:17-20:25)
+LEFT_PAREN (20:25-20:26)
+RIGHT_PAREN (20:26-20:27)
+DOT (20:27-20:28)
+IDENTIFIER "startsWith" (20:28-20:38)
+LEFT_PAREN (20:38-20:39)
+STRING_LITERAL "\"Test$StaticFoo@\"" (20:39-20:56)
+RIGHT_PAREN (20:56-20:57)
+RIGHT_PAREN (20:57-20:58)
+SEMICOLON (20:58-20:59)
 
 --- AST ---
 
 (Program
-  range: 1:1-20:36
+  range: 1:1-20:59
   (ClassDeclaration
     range: 1:1-8:2
     modifiers: []
@@ -151,17 +159,17 @@ SEMICOLON (20:35-20:36)
         range: 2:5-4:6
         modifiers: []
         (IdentifierDeclaration
-          range: 2:10-2:16
-          name: "equals"
+          range: 2:10-2:18
+          name: "toString"
         )
         (FunctionParameter
-          range: 2:17-2:27
+          range: 2:19-2:29
           (IdentifierDeclaration
-            range: 2:17-2:22
+            range: 2:19-2:24
             name: "value"
           )
           (NamedTypeNode
-            range: 2:24-2:27
+            range: 2:26-2:29
             name: "i32"
           )
           optional: false
@@ -169,17 +177,17 @@ SEMICOLON (20:35-20:36)
           defaultValue: null
         )
         (NamedTypeNode
-          range: 2:29-2:33
-          name: "bool"
+          range: 2:31-2:37
+          name: "string"
         )
         (BlockStatement
-          range: 2:34-4:6
+          range: 2:38-4:6
           (ReturnStatement
-            range: 3:9-3:21
+            range: 3:9-3:26
             (LiteralExpression
-              range: 3:16-3:20
-              kind: BOOL
-              text: "true"
+              range: 3:16-3:25
+              kind: STRING
+              text: "\"private\""
             )
           )
         )
@@ -197,27 +205,27 @@ SEMICOLON (20:35-20:36)
           name: "check"
         )
         (NamedTypeNode
-          range: 5:25-5:29
-          name: "bool"
+          range: 5:25-5:31
+          name: "string"
         )
         (BlockStatement
-          range: 5:30-7:6
+          range: 5:32-7:6
           (ReturnStatement
-            range: 6:9-6:31
+            range: 6:9-6:33
             (CallExpression
-              range: 6:16-6:30
+              range: 6:16-6:32
               (MemberExpression
-                range: 6:16-6:27
+                range: 6:16-6:29
                 (ThisExpression
                   range: 6:16-6:20
                 )
                 (IdentifierExpression
-                  range: 6:21-6:27
-                  name: "equals"
+                  range: 6:21-6:29
+                  name: "toString"
                 )
               )
               (LiteralExpression
-                range: 6:28-6:29
+                range: 6:30-6:31
                 kind: INT
                 text: "1"
               )
@@ -245,17 +253,17 @@ SEMICOLON (20:35-20:36)
         range: 10:19-12:6
         modifiers: []
         (IdentifierDeclaration
-          range: 10:24-10:30
-          name: "equals"
+          range: 10:24-10:32
+          name: "toString"
         )
         (FunctionParameter
-          range: 10:31-10:41
+          range: 10:33-10:43
           (IdentifierDeclaration
-            range: 10:31-10:36
+            range: 10:33-10:38
             name: "value"
           )
           (NamedTypeNode
-            range: 10:38-10:41
+            range: 10:40-10:43
             name: "i32"
           )
           optional: false
@@ -263,17 +271,17 @@ SEMICOLON (20:35-20:36)
           defaultValue: null
         )
         (NamedTypeNode
-          range: 10:43-10:47
-          name: "bool"
+          range: 10:45-10:51
+          name: "string"
         )
         (BlockStatement
-          range: 10:48-12:6
+          range: 10:52-12:6
           (ReturnStatement
-            range: 11:9-11:21
+            range: 11:9-11:25
             (LiteralExpression
-              range: 11:16-11:20
-              kind: BOOL
-              text: "true"
+              range: 11:16-11:24
+              kind: STRING
+              text: "\"static\""
             )
           )
         )
@@ -337,56 +345,67 @@ SEMICOLON (20:35-20:36)
     )
   )
   (ExpressionStatement
-    range: 18:1-18:38
+    range: 18:1-18:61
     (CallExpression
-      range: 18:1-18:37
+      range: 18:1-18:60
       (IdentifierExpression
         range: 18:1-18:6
         name: "print"
       )
       (CallExpression
-        range: 18:7-18:36
+        range: 18:7-18:59
         (MemberExpression
-          range: 18:7-18:24
-          (IdentifierExpression
-            range: 18:7-18:17
-            name: "privateFoo"
+          range: 18:7-18:39
+          (CallExpression
+            range: 18:7-18:28
+            (MemberExpression
+              range: 18:7-18:26
+              (IdentifierExpression
+                range: 18:7-18:17
+                name: "privateFoo"
+              )
+              (IdentifierExpression
+                range: 18:18-18:26
+                name: "toString"
+              )
+            )
           )
           (IdentifierExpression
-            range: 18:18-18:24
-            name: "equals"
+            range: 18:29-18:39
+            name: "startsWith"
           )
         )
-        (IdentifierExpression
-          range: 18:25-18:35
-          name: "privateFoo"
+        (LiteralExpression
+          range: 18:40-18:58
+          kind: STRING
+          text: "\"Test$PrivateFoo@\""
         )
       )
     )
   )
   (ExpressionStatement
-    range: 19:1-19:28
+    range: 19:1-19:30
     (CallExpression
-      range: 19:1-19:27
+      range: 19:1-19:29
       (IdentifierExpression
         range: 19:1-19:6
         name: "print"
       )
       (CallExpression
-        range: 19:7-19:26
+        range: 19:7-19:28
         (MemberExpression
-          range: 19:7-19:23
+          range: 19:7-19:25
           (IdentifierExpression
             range: 19:7-19:16
             name: "StaticFoo"
           )
           (IdentifierExpression
-            range: 19:17-19:23
-            name: "equals"
+            range: 19:17-19:25
+            name: "toString"
           )
         )
         (LiteralExpression
-          range: 19:24-19:25
+          range: 19:26-19:27
           kind: INT
           text: "1"
         )
@@ -394,29 +413,40 @@ SEMICOLON (20:35-20:36)
     )
   )
   (ExpressionStatement
-    range: 20:1-20:36
+    range: 20:1-20:59
     (CallExpression
-      range: 20:1-20:35
+      range: 20:1-20:58
       (IdentifierExpression
         range: 20:1-20:6
         name: "print"
       )
       (CallExpression
-        range: 20:7-20:34
+        range: 20:7-20:57
         (MemberExpression
-          range: 20:7-20:23
-          (IdentifierExpression
-            range: 20:7-20:16
-            name: "staticFoo"
+          range: 20:7-20:38
+          (CallExpression
+            range: 20:7-20:27
+            (MemberExpression
+              range: 20:7-20:25
+              (IdentifierExpression
+                range: 20:7-20:16
+                name: "staticFoo"
+              )
+              (IdentifierExpression
+                range: 20:17-20:25
+                name: "toString"
+              )
+            )
           )
           (IdentifierExpression
-            range: 20:17-20:23
-            name: "equals"
+            range: 20:28-20:38
+            name: "startsWith"
           )
         )
-        (IdentifierExpression
-          range: 20:24-20:33
-          name: "staticFoo"
+        (LiteralExpression
+          range: 20:39-20:56
+          kind: STRING
+          text: "\"Test$StaticFoo@\""
         )
       )
     )
@@ -426,13 +456,13 @@ SEMICOLON (20:35-20:36)
 --- SEMANTIC ---
 
 Expression types:
-  3:16-3:20 -> bool
+  3:16-3:25 -> string
   6:16-6:20 -> PrivateFoo
-  6:16-6:27 -> (value: i32) => bool
-  6:16-6:30 -> bool
-  6:21-6:27 -> (value: i32) => bool
-  6:28-6:29 -> i32
-  11:16-11:20 -> bool
+  6:16-6:29 -> (value: i32) => string
+  6:16-6:32 -> string
+  6:21-6:29 -> (value: i32) => string
+  6:30-6:31 -> i32
+  11:16-11:24 -> string
   15:20-15:36 -> PrivateFoo
   15:24-15:34 -> PrivateFoo
   16:19-16:34 -> StaticFoo
@@ -440,51 +470,57 @@ Expression types:
   17:1-17:6 -> (any) => void
   17:1-17:26 -> void
   17:7-17:17 -> PrivateFoo
-  17:7-17:23 -> () => bool
-  17:7-17:25 -> bool
-  17:18-17:23 -> () => bool
+  17:7-17:23 -> () => string
+  17:7-17:25 -> string
+  17:18-17:23 -> () => string
   18:1-18:6 -> (any) => void
-  18:1-18:37 -> void
+  18:1-18:60 -> void
   18:7-18:17 -> PrivateFoo
-  18:7-18:24 -> (PrivateFoo) => bool
-  18:7-18:36 -> bool
-  18:18-18:24 -> (PrivateFoo) => bool
-  18:25-18:35 -> PrivateFoo
+  18:7-18:26 -> () => string
+  18:7-18:28 -> string
+  18:7-18:39 -> (string) => bool
+  18:7-18:59 -> bool
+  18:18-18:26 -> () => string
+  18:29-18:39 -> (string) => bool
+  18:40-18:58 -> string
   19:1-19:6 -> (any) => void
-  19:1-19:27 -> void
+  19:1-19:29 -> void
   19:7-19:16 -> StaticFoo
-  19:7-19:23 -> (value: i32) => bool
-  19:7-19:26 -> bool
-  19:17-19:23 -> (value: i32) => bool
-  19:24-19:25 -> i32
+  19:7-19:25 -> (value: i32) => string
+  19:7-19:28 -> string
+  19:17-19:25 -> (value: i32) => string
+  19:26-19:27 -> i32
   20:1-20:6 -> (any) => void
-  20:1-20:35 -> void
+  20:1-20:58 -> void
   20:7-20:16 -> StaticFoo
-  20:7-20:23 -> (StaticFoo) => bool
-  20:7-20:34 -> bool
-  20:17-20:23 -> (StaticFoo) => bool
-  20:24-20:33 -> StaticFoo
+  20:7-20:25 -> () => string
+  20:7-20:27 -> string
+  20:7-20:38 -> (string) => bool
+  20:7-20:57 -> bool
+  20:17-20:25 -> () => string
+  20:28-20:38 -> (string) => bool
+  20:39-20:56 -> string
 
 Resolved types:
-  2:24-2:27 -> i32
-  2:29-2:33 -> bool
-  5:25-5:29 -> bool
-  10:38-10:41 -> i32
-  10:43-10:47 -> bool
+  2:26-2:29 -> i32
+  2:31-2:37 -> string
+  5:25-5:31 -> string
+  10:40-10:43 -> i32
+  10:45-10:51 -> string
 
 Declarations:
   1:7-1:17 -> class PrivateFoo
-  2:10-2:16 -> func equals(value: i32) => bool
-  2:17-2:22 -> const value: i32
-  5:17-5:22 -> public func check() => bool
+  2:10-2:18 -> func toString(value: i32) => string
+  2:19-2:24 -> const value: i32
+  5:17-5:22 -> public func check() => string
   9:7-9:16 -> class StaticFoo
-  10:24-10:30 -> public static func equals(value: i32) => bool
-  10:31-10:36 -> const value: i32
+  10:24-10:32 -> public static func toString(value: i32) => string
+  10:33-10:38 -> const value: i32
   15:7-15:17 -> const privateFoo: PrivateFoo
   16:7-16:16 -> const staticFoo: StaticFoo
 
 References:
-  6:21-6:27 -> 2:10-2:16
+  6:21-6:29 -> 2:10-2:18
   15:24-15:34 -> 1:7-1:17
   16:23-16:32 -> 9:7-9:16
   17:1-17:6 -> builtin print
@@ -492,15 +528,15 @@ References:
   17:18-17:23 -> 5:17-5:22
   18:1-18:6 -> builtin print
   18:7-18:17 -> 15:7-15:17
-  18:18-18:24 -> java.lang.Object.equals(PrivateFoo): bool
-  18:25-18:35 -> 15:7-15:17
+  18:18-18:26 -> java.lang.Object.toString(): string
+  18:29-18:39 -> java.lang.String.startsWith(string): bool
   19:1-19:6 -> builtin print
   19:7-19:16 -> 9:7-9:16
-  19:17-19:23 -> 10:24-10:30
+  19:17-19:25 -> 10:24-10:32
   20:1-20:6 -> builtin print
   20:7-20:16 -> 16:7-16:16
-  20:17-20:23 -> java.lang.Object.equals(StaticFoo): bool
-  20:24-20:33 -> 16:7-16:16
+  20:17-20:25 -> java.lang.Object.toString(): string
+  20:28-20:38 -> java.lang.String.startsWith(string): bool
 
 --- BYTECODE ---
 
@@ -522,31 +558,23 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     PUTSTATIC Test.staticFoo LTest$StaticFoo;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.privateFoo LTest$PrivateFoo;
-    INVOKEVIRTUAL Test$PrivateFoo.check()Z
-    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    INVOKEVIRTUAL Test$PrivateFoo.check()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.privateFoo LTest$PrivateFoo;
-    GETSTATIC Test.privateFoo LTest$PrivateFoo;
-    IF_ACMPEQ L0
-    ICONST_0 0
-    GOTO L1
-   L0:
-    ICONST_1 1
-   L1:
+    INVOKEVIRTUAL Test$PrivateFoo.toString()Ljava/lang/String;
+    LDC "Test$PrivateFoo@"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC 1
-    INVOKESTATIC Test$StaticFoo.equals(I)Z
-    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    INVOKESTATIC Test$StaticFoo.toString(I)Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.staticFoo LTest$StaticFoo;
-    GETSTATIC Test.staticFoo LTest$StaticFoo;
-    IF_ACMPEQ L2
-    ICONST_0 0
-    GOTO L3
-   L2:
-    ICONST_1 1
-   L3:
+    INVOKEVIRTUAL Test$StaticFoo.toString()Ljava/lang/String;
+    LDC "Test$StaticFoo@"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     RETURN
     max stack 3 max locals 0
@@ -560,15 +588,15 @@ class Test$PrivateFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER
     INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
     max stack 1 max locals 1
-  method equals(I)Z flags [PRIVATE]
-    ICONST_1 1
-    IRETURN
+  method toString(I)Ljava/lang/String; flags [PRIVATE]
+    LDC "private"
+    ARETURN
     max stack 1 max locals 2
-  method check()Z flags [PUBLIC]
+  method check()Ljava/lang/String; flags [PUBLIC]
     ALOAD_0 0
     LDC 1
-    INVOKEVIRTUAL Test$PrivateFoo.equals(I)Z
-    IRETURN
+    INVOKEVIRTUAL Test$PrivateFoo.toString(I)Ljava/lang/String;
+    ARETURN
     max stack 2 max locals 1
 
 class Test$StaticFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
@@ -580,14 +608,14 @@ class Test$StaticFoo extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
     INVOKESPECIAL java/lang/Object.<init>()V
     RETURN
     max stack 1 max locals 1
-  method equals(I)Z flags [PUBLIC, STATIC]
-    ICONST_1 1
-    IRETURN
+  method toString(I)Ljava/lang/String; flags [PUBLIC, STATIC]
+    LDC "static"
+    ARETURN
     max stack 1 max locals 1
 
 --- OUTPUT ---
 
+private
 true
-true
-true
+static
 true

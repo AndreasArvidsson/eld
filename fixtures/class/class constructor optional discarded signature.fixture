@@ -184,7 +184,7 @@ Conversions:
 
 Declarations:
   1:7-1:10 -> class Foo
-  2:12-2:66 -> public constructor(i32?, value?: i32, tail?: i32)
+  2:12-2:66 -> public constructor(_?: i32, value?: i32, tail?: i32)
   2:36-2:41 -> const value: i32 | null
   2:49-2:53 -> const tail: i32
 

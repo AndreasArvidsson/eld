@@ -30,6 +30,8 @@ import com.github.andreasarvidsson.eld.parser.TypeNode;
 import com.github.andreasarvidsson.eld.parser.UninitializedVariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.VariableDeclaration;
 import com.github.andreasarvidsson.eld.parser.Visibility;
+import com.github.andreasarvidsson.eld.parser.AstTraversal;
+import com.github.andreasarvidsson.eld.parser.ThisConstructorCall;
 
 public final class SemanticAnalyzerDeclarations {
     private final SemanticAnalyzer analyzer;
@@ -271,10 +273,12 @@ public final class SemanticAnalyzerDeclarations {
             model.setSuperclass(classType, superclass);
             recordDirectParent(classType.name(), superclass);
             if (
-                !analyzer.canAccess(
-                    superclass,
-                    model.getConstructorVisibility(superclass)
-                )
+                model.getConstructorOverloads(superclass)
+                    .stream()
+                    .noneMatch(
+                        candidate -> analyzer
+                            .canAccess(superclass, candidate.visibility())
+                    )
             ) {
                 throw new SemanticException(
                     superclassName.range(),
@@ -286,90 +290,119 @@ public final class SemanticAnalyzerDeclarations {
         final Scope members = Scope.classMembers();
         analyzer.classScopes().put(classType, members);
         analyzer.classMethods().put(classType, new LinkedHashMap<>());
-        ConstructorDeclaration constructor = null;
-        model.setConstructorVisibility(classType, Visibility.PUBLIC);
+        final List<MemberDeclaration> constructors =
+            declaration.members()
+                .stream()
+                .filter(
+                    member -> member
+                        .declaration() instanceof ConstructorDeclaration
+                )
+                .toList();
+        final List<ConstructorOverload> overloads = new ArrayList<>();
+        if (constructors.isEmpty()) {
+            overloads.add(
+                new ConstructorOverload(
+                    null,
+                    new FunctionSymbol(
+                        new IdentifierDeclaration(
+                            "constructor",
+                            declaration.range()
+                        ),
+                        new FunctionType(List.of(), BuiltinType.VOID)
+                    ),
+                    List.of(),
+                    Visibility.PUBLIC,
+                    0
+                )
+            );
+        }
         for (final MemberDeclaration memberDeclaration : declaration
             .members()) {
             final Declaration member = memberDeclaration.declaration();
             if (member instanceof ConstructorDeclaration candidate) {
                 model.setMemberDeclaration(candidate, memberDeclaration);
-                if (constructor != null) {
-                    throw new SemanticException(
-                        candidate.range(),
-                        "A class may only declare one constructor"
-                    );
-                }
-                constructor = candidate;
-                model.setConstructorVisibility(
-                    classType,
-                    memberDeclaration.visibility()
-                );
-            }
-        }
-        final boolean explicitSuper =
-            constructor != null && constructor.hasExplicitSuperCall();
-        final ClassType superclass = model.getSuperclass(classType);
-        if (explicitSuper && superclass == null) {
-            throw new SemanticException(
-                Objects.requireNonNull(constructor).range(),
-                "'super(...)' requires a superclass"
-            );
-        }
-        if (superclass != null && !explicitSuper) {
-            final List<FunctionParameter> inheritedParameters =
-                model.getConstructorParameters(superclass);
-            for (int i = 0; i < inheritedParameters.size(); i++) {
-                final FunctionParameter parameter = inheritedParameters.get(i);
-                if (!parameter.omittable()) {
-                    throw new SemanticException(
-                        Objects.requireNonNull(superclassName).range(),
-                        "Base constructor requires argument: %s",
-                        parameter.displayName(i)
-                    );
-                }
-            }
-        }
-        final List<Type> parameterTypes = new ArrayList<>();
-        if (constructor != null) {
-            for (final FunctionParameter parameter : constructor.parameters()) {
-                final Type type =
-                    analyzer.resolveParameterType(parameter, context);
-                parameterTypes.add(type);
-                if (!parameter.discarded()) {
-                    model.setSymbol(
-                        parameter.identifier(),
-                        new VariableSymbol(
+                final List<Type> parameterTypes = new ArrayList<>();
+                for (final FunctionParameter parameter : candidate
+                    .parameters()) {
+                    final Type type =
+                        analyzer.resolveParameterType(parameter, context);
+                    parameterTypes.add(type);
+                    model.setParameterDetails(parameter);
+                    if (!parameter.discarded()) {
+                        model.setSymbol(
                             parameter.identifier(),
-                            type,
-                            Mutability.CONST
-                        )
+                            new VariableSymbol(
+                                parameter.identifier(),
+                                type,
+                                Mutability.CONST
+                            )
+                        );
+                    }
+                }
+                final FunctionType constructorType =
+                    FunctionType.declared(
+                        parameterTypes,
+                        BuiltinType.VOID,
+                        candidate.parameters()
                     );
+                for (final ConstructorOverload previous : overloads) {
+                    if (
+                        FunctionSignatures.overlap(
+                            constructorType,
+                            candidate.parameters(),
+                            previous.type(),
+                            previous.parameters(),
+                            type -> type
+                        )
+                    ) {
+                        throw new SemanticException(
+                            candidate.range(),
+                            "Duplicate or overlapping constructor signature"
+                        );
+                    }
+                }
+                final FunctionSymbol function =
+                    new FunctionSymbol(
+                        new IdentifierDeclaration(
+                            "constructor",
+                            candidate.range()
+                        ),
+                        constructorType
+                    );
+                model.setFunctionParameters(
+                    function,
+                    candidate.parameters()
+                        .stream()
+                        .map(FunctionParameter::name)
+                        .toList()
+                );
+                overloads.add(
+                    new ConstructorOverload(
+                        candidate,
+                        function,
+                        candidate.parameters(),
+                        memberDeclaration.visibility(),
+                        constructors.size() > 1 ? overloads.size() + 1 : 0
+                    )
+                );
+                model.setConstructorSymbol(
+                    candidate,
+                    new ConstructorSymbol(
+                        candidate,
+                        constructorType,
+                        candidate.parameters()
+                            .stream()
+                            .map(model::getDeclaredParameterType)
+                            .toList()
+                    )
+                );
+                if (classSymbol instanceof RecordSymbol recordSymbol) {
+                    recordSymbol.setComponentTypes(parameterTypes);
                 }
             }
         }
-        final FunctionType constructorType =
-            new FunctionType(parameterTypes, BuiltinType.VOID);
-        if (classSymbol instanceof RecordSymbol recordSymbol) {
-            recordSymbol.setComponentTypes(parameterTypes);
-        }
-        model.setConstructor(classType, constructorType);
-        model.setConstructorParameters(
-            classType,
-            constructor != null ? constructor.parameters() : List.of()
-        );
-        if (constructor != null) {
-            model.setConstructorSymbol(
-                constructor,
-                new ConstructorSymbol(
-                    constructor,
-                    constructorType,
-                    constructor.parameters()
-                        .stream()
-                        .map(model::getDeclaredParameterType)
-                        .toList()
-                )
-            );
-        }
+        model.setConstructorOverloads(classType, overloads);
+        final ClassType superclass = model.getSuperclass(classType);
         for (final MemberDeclaration memberDeclaration : declaration
             .members()) {
             if (
@@ -536,8 +569,48 @@ public final class SemanticAnalyzerDeclarations {
                 }
             }
             analyzer.setCurrentInstance(classType);
-            if (constructor != null) {
+            for (final ConstructorOverload overload : overloads) {
+                final @Nullable ConstructorDeclaration constructor =
+                    overload.declaration();
                 analyzer.setCurrentConstructor(constructor);
+                final boolean explicitSuper =
+                    constructor != null && constructor.hasExplicitSuperCall();
+                final boolean delegated =
+                    constructor != null && constructor.hasDelegatingCall();
+                if (explicitSuper && superclass == null) {
+                    throw new SemanticException(
+                        Objects.requireNonNull(constructor).range(),
+                        "'super(...)' requires a superclass"
+                    );
+                }
+                if (superclass != null && !explicitSuper && !delegated) {
+                    if (model.getConstructorOverloads(superclass).size() == 1) {
+                        final List<FunctionParameter> inherited =
+                            model.getConstructorOverloads(superclass)
+                                .getFirst()
+                                .parameters();
+                        for (int i = 0; i < inherited.size(); i++) {
+                            if (!inherited.get(i).omittable()) {
+                                throw new SemanticException(
+                                    Objects.requireNonNull(superclassName)
+                                        .range(),
+                                    "Base constructor requires argument: %s",
+                                    inherited.get(i).displayName(i)
+                                );
+                            }
+                        }
+                    }
+                    analyzer.selectConstructor(
+                        superclass,
+                        constructor == null ? declaration : constructor,
+                        List.of(),
+                        Objects.requireNonNull(superclassName).range(),
+                        context
+                    );
+                }
+                if (constructor == null) {
+                    continue;
+                }
                 final Scope scope = new Scope(context.scope());
                 for (final FunctionParameter parameter : constructor
                     .parameters()) {
@@ -554,8 +627,14 @@ public final class SemanticAnalyzerDeclarations {
                     new SemanticContext(scope, null, 0)
                 );
             }
-            new FieldInitializationAnalyzer(model, declaration)
-                .analyze(constructor);
+            for (final ConstructorOverload overload : overloads) {
+                validateConstructorDelegation(
+                    overload.declaration(),
+                    new HashSet<>()
+                );
+                new FieldInitializationAnalyzer(model, declaration)
+                    .analyze(overload.declaration());
+            }
             new FieldInitializationAnalyzer(model, declaration, true)
                 .analyzeStaticInitializers();
         }
@@ -563,6 +642,30 @@ public final class SemanticAnalyzerDeclarations {
             analyzer.setCurrentInstance(previousInstance);
             analyzer.setCurrentConstructor(previousConstructor);
         }
+    }
+
+    private void validateConstructorDelegation(
+        final @Nullable ConstructorDeclaration constructor,
+        final Set<ConstructorDeclaration> visiting
+    ) {
+        if (constructor == null) {
+            return;
+        }
+        visiting.add(constructor);
+        AstTraversal.walk(constructor.body(), node -> {
+            if (node instanceof ThisConstructorCall call) {
+                final @Nullable ConstructorDeclaration target =
+                    model.getSelectedConstructor(call).declaration();
+                if (target != null && visiting.contains(target)) {
+                    throw new SemanticException(
+                        call.range(),
+                        "Constructor delegation cannot be cyclic"
+                    );
+                }
+                validateConstructorDelegation(target, visiting);
+            }
+        });
+        visiting.remove(constructor);
     }
 
     private void validateAbstractMethods(

@@ -1,0 +1,76 @@
+const promise = Promise.resolve(1);
+promise.state();
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "promise" (1:7-1:14)
+EQUAL (1:15-1:16)
+IDENTIFIER "Promise" (1:17-1:24)
+DOT (1:24-1:25)
+IDENTIFIER "resolve" (1:25-1:32)
+LEFT_PAREN (1:32-1:33)
+INTEGER_LITERAL "1" (1:33-1:34)
+RIGHT_PAREN (1:34-1:35)
+SEMICOLON (1:35-1:36)
+IDENTIFIER "promise" (2:1-2:8)
+DOT (2:8-2:9)
+IDENTIFIER "state" (2:9-2:14)
+LEFT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+SEMICOLON (2:16-2:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-2:17
+  (VariableDeclaration
+    range: 1:1-1:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "promise"
+    )
+    type: null
+    (CallExpression
+      range: 1:17-1:35
+      (MemberExpression
+        range: 1:17-1:32
+        (IdentifierExpression
+          range: 1:17-1:24
+          name: "Promise"
+        )
+        (IdentifierExpression
+          range: 1:25-1:32
+          name: "resolve"
+        )
+      )
+      (LiteralExpression
+        range: 1:33-1:34
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (CallExpression
+      range: 2:1-2:16
+      (MemberExpression
+        range: 2:1-2:14
+        (IdentifierExpression
+          range: 2:1-2:8
+          name: "promise"
+        )
+        (IdentifierExpression
+          range: 2:9-2:14
+          name: "state"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Unknown member 'state' of Promise<i32> at 2:9-2:14

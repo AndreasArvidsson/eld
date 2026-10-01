@@ -1,0 +1,100 @@
+record Foo(value: i32);
+const foo = new Foo(0);
+foo.value = 1;
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Foo" (1:8-1:11)
+LEFT_PAREN (1:11-1:12)
+IDENTIFIER "value" (1:12-1:17)
+COLON (1:17-1:18)
+IDENTIFIER "i32" (1:19-1:22)
+RIGHT_PAREN (1:22-1:23)
+SEMICOLON (1:23-1:24)
+CONST (2:1-2:6)
+IDENTIFIER "foo" (2:7-2:10)
+EQUAL (2:11-2:12)
+NEW (2:13-2:16)
+IDENTIFIER "Foo" (2:17-2:20)
+LEFT_PAREN (2:20-2:21)
+INTEGER_LITERAL "0" (2:21-2:22)
+RIGHT_PAREN (2:22-2:23)
+SEMICOLON (2:23-2:24)
+IDENTIFIER "foo" (3:1-3:4)
+DOT (3:4-3:5)
+IDENTIFIER "value" (3:5-3:10)
+EQUAL (3:11-3:12)
+INTEGER_LITERAL "1" (3:13-3:14)
+SEMICOLON (3:14-3:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:15
+  (RecordDeclaration
+    range: 1:1-1:24
+    (IdentifierDeclaration
+      range: 1:8-1:11
+      name: "Foo"
+    )
+    (RecordParameter
+      range: 1:12-1:22
+      (IdentifierDeclaration
+        range: 1:12-1:17
+        name: "value"
+      )
+      (NamedTypeNode
+        range: 1:19-1:22
+        name: "i32"
+      )
+      namedOnly: false
+    )
+    implements: null
+  )
+  (VariableDeclaration
+    range: 2:1-2:24
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 2:7-2:10
+      name: "foo"
+    )
+    type: null
+    (NewExpression
+      range: 2:13-2:23
+      (IdentifierExpression
+        range: 2:17-2:20
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 2:21-2:22
+        kind: INT
+        text: "0"
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 3:1-3:15
+    (MemberExpression
+      range: 3:1-3:10
+      (IdentifierExpression
+        range: 3:1-3:4
+        name: "foo"
+      )
+      (IdentifierExpression
+        range: 3:5-3:10
+        name: "value"
+      )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 3:13-3:14
+      kind: INT
+      text: "1"
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Cannot assign to const member 'value' at 3:1-3:10

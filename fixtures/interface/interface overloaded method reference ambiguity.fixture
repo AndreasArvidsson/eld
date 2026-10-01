@@ -160,3 +160,6 @@ RIGHT_BRACE (7:1-7:2)
 --- SEMANTIC ---
 
 SemanticException: Ambiguous reference to overloaded method 'f' at 6:32-6:33
+Available overloads:
+  f(value: i32)
+  f(value: string)

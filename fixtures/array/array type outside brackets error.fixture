@@ -1,0 +1,18 @@
+const foo: i32[] = [];
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "foo" (1:7-1:10)
+COLON (1:10-1:11)
+IDENTIFIER "i32" (1:12-1:15)
+LEFT_BRACKET (1:15-1:16)
+RIGHT_BRACKET (1:16-1:17)
+EQUAL (1:18-1:19)
+LEFT_BRACKET (1:20-1:21)
+RIGHT_BRACKET (1:21-1:22)
+SEMICOLON (1:22-1:23)
+
+--- AST ---
+
+ParserException: Expected EQUAL, but found LEFT_BRACKET at 1:15-1:16

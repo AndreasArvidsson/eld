@@ -1,0 +1,131 @@
+class Foo {
+    public var value = 1;
+    public constructor() {
+        this(this.value);
+    }
+    public constructor(value: i32) {}
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "1" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+THIS (4:9-4:13)
+LEFT_PAREN (4:13-4:14)
+THIS (4:14-4:18)
+DOT (4:18-4:19)
+IDENTIFIER "value" (4:19-4:24)
+RIGHT_PAREN (4:24-4:25)
+SEMICOLON (4:25-4:26)
+RIGHT_BRACE (5:5-5:6)
+PUBLIC (6:5-6:11)
+CONSTRUCTOR (6:12-6:23)
+LEFT_PAREN (6:23-6:24)
+IDENTIFIER "value" (6:24-6:29)
+COLON (6:29-6:30)
+IDENTIFIER "i32" (6:31-6:34)
+RIGHT_PAREN (6:34-6:35)
+LEFT_BRACE (6:36-6:37)
+RIGHT_BRACE (6:37-6:38)
+RIGHT_BRACE (7:1-7:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-7:2
+  (ClassDeclaration
+    range: 1:1-7:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-5:6
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-5:6
+        (BlockStatement
+          range: 3:26-5:6
+          (ThisConstructorCall
+            range: 4:9-4:26
+            (MemberExpression
+              range: 4:14-4:24
+              (ThisExpression
+                range: 4:14-4:18
+              )
+              (IdentifierExpression
+                range: 4:19-4:24
+                name: "value"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-6:38
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 6:12-6:38
+        (FunctionParameter
+          range: 6:24-6:34
+          (IdentifierDeclaration
+            range: 6:24-6:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 6:31-6:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 6:36-6:38
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Constructor delegation arguments cannot access 'this' before initialization at 4:14-4:18

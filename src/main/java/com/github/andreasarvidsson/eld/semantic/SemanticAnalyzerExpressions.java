@@ -16,7 +16,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
-import com.github.andreasarvidsson.eld.runtime.EldApi;
+import com.github.andreasarvidsson.eld.parser.AstNode;
+import com.github.andreasarvidsson.eld.runtime.EldApiMethods;
 import com.github.andreasarvidsson.eld.runtime.EldPromise;
 import com.github.andreasarvidsson.eld.runtime.PromiseSource;
 import com.github.andreasarvidsson.eld.parser.ArrayExpression;
@@ -27,6 +28,7 @@ import com.github.andreasarvidsson.eld.parser.AstTraversal;
 import com.github.andreasarvidsson.eld.parser.BinaryExpression;
 import com.github.andreasarvidsson.eld.parser.BlockStatement;
 import com.github.andreasarvidsson.eld.parser.CallExpression;
+import com.github.andreasarvidsson.eld.parser.ThisConstructorCall;
 import com.github.andreasarvidsson.eld.parser.Expression;
 import com.github.andreasarvidsson.eld.parser.FormatStringExpression;
 import com.github.andreasarvidsson.eld.parser.FunctionParameter;
@@ -204,8 +206,16 @@ public final class SemanticAnalyzerExpressions {
                     expected
                 );
             if (matches.isEmpty()) {
+                if (
+                    model.getReference(
+                        member.member()
+                    ) instanceof JavaMethodSymbol
+                ) {
+                    return type;
+                }
                 throw new SemanticException(
                     member.member().range(),
+                    overloadSignatures(candidates),
                     "No overload of '%s' matches %s",
                     member.member().name(),
                     expected
@@ -214,8 +224,10 @@ public final class SemanticAnalyzerExpressions {
             if (matches.size() > 1) {
                 throw new SemanticException(
                     member.member().range(),
-                    "Ambiguous reference to overloaded method '%s'",
-                    member.member().name()
+                    overloadSignatures(candidates),
+                    "Ambiguous reference to overloaded method '%s' matching %s",
+                    member.member().name(),
+                    expected
                 );
             }
             final FunctionSymbol selected = matches.getFirst();
@@ -477,9 +489,9 @@ public final class SemanticAnalyzerExpressions {
                 }
                 if (memberTarget instanceof PromiseSourceType source) {
                     final String name = member.member().name();
-                    if (
-                        eldApiMethod(PromiseSource.class, name, false) == null
-                    ) {
+                    final Method apiMethod =
+                        eldApiMethod(PromiseSource.class, name, false);
+                    if (apiMethod == null) {
                         final Type objectMethod =
                             resolveObjectMethod(member, memberTarget);
                         if (objectMethod != null) {
@@ -498,7 +510,7 @@ public final class SemanticAnalyzerExpressions {
                             member.member().range()
                         );
                     final Symbol symbol;
-                    if (name.equals("promise") && !analyzingCallee) {
+                    if (EldApiMethods.property(apiMethod) && !analyzingCallee) {
                         symbol =
                             new VariableSymbol(
                                 declaration,
@@ -551,13 +563,13 @@ public final class SemanticAnalyzerExpressions {
                     yield symbol.type();
                 }
                 if (memberTarget instanceof PromiseType promise) {
+                    final Type objectMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (objectMethod != null) {
+                        yield objectMethod;
+                    }
                     final String name = member.member().name();
                     if (eldApiMethod(EldPromise.class, name, false) == null) {
-                        final Type objectMethod =
-                            resolveObjectMethod(member, memberTarget);
-                        if (objectMethod != null) {
-                            yield objectMethod;
-                        }
                         throw new SemanticException(
                             member.member().range(),
                             "Unknown member '%s' of %s",
@@ -760,6 +772,13 @@ public final class SemanticAnalyzerExpressions {
                     if (symbol == null) {
                         symbol = members.methods().get(member.member().name());
                     }
+                    if (analyzingCallee && symbol instanceof VariableSymbol) {
+                        final Type objectMethod =
+                            resolveObjectMethod(member, memberTarget);
+                        if (objectMethod != null) {
+                            yield objectMethod;
+                        }
+                    }
                     if (
                         !analyzingCallee
                             && !Objects.equals(contextualMember, member)
@@ -769,6 +788,9 @@ public final class SemanticAnalyzerExpressions {
                     ) {
                         throw new SemanticException(
                             member.member().range(),
+                            overloadSignatures(
+                                members.methodOverloads(member.member().name())
+                            ),
                             "Ambiguous reference to overloaded method '%s'",
                             member.member().name()
                         );
@@ -785,6 +807,16 @@ public final class SemanticAnalyzerExpressions {
                             member.member().name(),
                             contract
                         );
+                    }
+                    final Type contextualObjectMethod =
+                        resolveContextualObjectMethod(
+                            member,
+                            memberTarget,
+                            symbol,
+                            false
+                        );
+                    if (contextualObjectMethod != null) {
+                        yield contextualObjectMethod;
                     }
                     model.setMemberOwner(member, contract);
                     model.setReference(member.member(), symbol);
@@ -828,6 +860,16 @@ public final class SemanticAnalyzerExpressions {
                             : scope.resolveLocal(member.member().name());
                 if (
                     analyzingCallee && !classTarget
+                        && symbol instanceof VariableSymbol
+                ) {
+                    final Type objectMethod =
+                        resolveObjectMethod(member, memberTarget);
+                    if (objectMethod != null) {
+                        yield objectMethod;
+                    }
+                }
+                if (
+                    analyzingCallee && !classTarget
                         && symbol instanceof FunctionSymbol function
                         && !acceptsArgumentCount(function, callArity)
                 ) {
@@ -861,6 +903,12 @@ public final class SemanticAnalyzerExpressions {
                 ) {
                     throw new SemanticException(
                         member.member().range(),
+                        overloadSignatures(
+                            classOverloadCandidates(
+                                classType,
+                                member.member().name()
+                            )
+                        ),
                         "Ambiguous reference to overloaded method '%s'",
                         member.member().name()
                     );
@@ -1139,21 +1187,6 @@ public final class SemanticAnalyzerExpressions {
                     );
                 }
                 model.setExpressionType(creation.className(), classType);
-                if (
-                    !analyzer.canAccess(
-                        classType,
-                        model.getConstructorVisibility(classType)
-                    )
-                ) {
-                    throw new SemanticException(
-                        creation.className().range(),
-                        "Constructor of class %s is %s",
-                        creation.className().name(),
-                        model.getConstructorVisibility(
-                            classType
-                        ) == Visibility.PROTECTED ? "protected" : "private"
-                    );
-                }
                 analyzeConstructorArguments(
                     classType,
                     creation,
@@ -1167,7 +1200,9 @@ public final class SemanticAnalyzerExpressions {
                 if (analyzer.isAnalyzingSuperArguments()) {
                     throw new SemanticException(
                         self.range(),
-                        "Super constructor arguments cannot access 'this' before base initialization"
+                        analyzer.isAnalyzingThisArguments()
+                            ? "Constructor delegation arguments cannot access 'this' before initialization"
+                            : "Super constructor arguments cannot access 'this' before base initialization"
                     );
                 }
                 if (analyzer.isAnalyzingConstructorDefault()) {
@@ -1294,17 +1329,34 @@ public final class SemanticAnalyzerExpressions {
         if (
             classTarget || !member.equals(contextualMember)
                 || contextualMemberType == null
-                || !member.member().name().equals("equals")
-                || !(symbol instanceof FunctionSymbol function)
-                || function.type().equals(contextualMemberType)
+                || !(symbol instanceof FunctionSymbol)
+        ) {
+            return null;
+        }
+        final List<FunctionSymbol> candidates =
+            target instanceof ClassType receiver
+                ? classOverloadCandidates(receiver, member.member().name())
+                : target instanceof InterfaceType contract
+                    ? model.getInterface(contract)
+                        .methodOverloads(member.member().name())
+                    : List.of();
+        if (
+            !matchingFunctionReferences(candidates, contextualMemberType)
+                .isEmpty()
         ) {
             return null;
         }
         final JavaMethodSymbol method =
-            JavaTypes.objectMethod("equals", 1, member.range(), target);
-        return method != null && method.type().equals(contextualMemberType)
-            ? resolveObjectMethod(member, target)
-            : null;
+            JavaTypes.objectMethod(
+                member.member().name(),
+                contextualMemberType.parameterTypes().size(),
+                member.range(),
+                target
+            );
+        return method != null
+            && method.type().matchesSignature(contextualMemberType)
+                ? resolveObjectMethod(member, target)
+                : null;
     }
 
     private boolean hasEqualityOverload(final Type target) {
@@ -1433,9 +1485,39 @@ public final class SemanticAnalyzerExpressions {
         final SuperConstructorCall call,
         final SemanticContext context
     ) {
-        final List<Expression> arguments = call.arguments();
-        final Range range = call.range();
-        final FunctionType constructor = model.getConstructor(classType);
+        analyzeConstructorArguments(
+            classType,
+            call,
+            call.arguments(),
+            call.range(),
+            context
+        );
+    }
+
+    public void analyzeConstructorArguments(
+        final ClassType classType,
+        final ThisConstructorCall call,
+        final SemanticContext context
+    ) {
+        analyzeConstructorArguments(
+            classType,
+            call,
+            call.arguments(),
+            call.range(),
+            context
+        );
+    }
+
+    private void analyzeConstructorArguments(
+        final ClassType classType,
+        final AstNode call,
+        final List<Expression> arguments,
+        final Range range,
+        final SemanticContext context
+    ) {
+        final ConstructorOverload selected =
+            selectConstructor(classType, call, arguments, range, context);
+        final FunctionType constructor = selected.type();
         if (arguments.size() > constructor.parameterTypes().size()) {
             throw new SemanticException(
                 range,
@@ -1444,8 +1526,7 @@ public final class SemanticAnalyzerExpressions {
                 arguments.size()
             );
         }
-        final List<FunctionParameter> parameters =
-            model.getConstructorParameters(classType);
+        final List<FunctionParameter> parameters = selected.parameters();
         final List<String> names =
             parameters.stream()
                 .map(parameter -> parameter.name().label())
@@ -1527,7 +1608,7 @@ public final class SemanticAnalyzerExpressions {
                 );
             }
         }
-        model.setSuperConstructorArgumentParameters(call, argumentParameters);
+        model.setConstructorCallArguments(call, argumentParameters);
     }
 
     private void analyzeConstructorArguments(
@@ -1537,96 +1618,67 @@ public final class SemanticAnalyzerExpressions {
         final Range range,
         final SemanticContext context
     ) {
-        final FunctionType constructor = model.getConstructor(classType);
-        final List<FunctionParameter> declarations =
-            model.getConstructorParameters(classType);
-        if (arguments.size() > constructor.parameterTypes().size()) {
+        analyzeConstructorArguments(
+            classType,
+            (AstNode) creation,
+            arguments,
+            range,
+            context
+        );
+        model.setConstructorArgumentParameters(
+            creation,
+            model.getConstructorCallArguments(creation)
+        );
+    }
+
+    public ConstructorOverload selectConstructor(
+        final ClassType classType,
+        final AstNode call,
+        final List<Expression> arguments,
+        final Range range,
+        final SemanticContext context
+    ) {
+        final List<ConstructorOverload> overloads =
+            model.getConstructorOverloads(classType);
+        final ConstructorOverload selected;
+        if (overloads.size() == 1) {
+            selected = overloads.getFirst();
+        }
+        else {
+            final IdentifierExpression name =
+                new IdentifierExpression("constructor", range);
+            final CallExpression invocation =
+                new CallExpression(name, arguments, range);
+            selectOverload(
+                invocation,
+                context,
+                name,
+                name,
+                overloads.stream().map(ConstructorOverload::function).toList()
+            );
+            final @Nullable Symbol function = model.getReference(name);
+            selected =
+                overloads.stream()
+                    .filter(overload -> overload.function().equals(function))
+                    .findFirst()
+                    .orElseThrow();
+        }
+        if (!analyzer.canAccess(classType, selected.visibility())) {
+            final Range errorRange =
+                call instanceof NewExpression creation
+                    ? creation.className().range()
+                    : range;
             throw new SemanticException(
-                range,
-                "Expected %s constructor arguments, found %s",
-                constructor.parameterTypes().size(),
-                arguments.size()
+                errorRange,
+                "Constructor of class %s is %s",
+                classType.name(),
+                selected.visibility() == Visibility.PROTECTED
+                    ? "protected"
+                    : "private"
             );
         }
-        final List<String> names =
-            declarations.stream()
-                .map(parameter -> parameter.name().label())
-                .toList();
-        final List<Integer> parameters = new ArrayList<>();
-        final boolean[] assigned =
-            new boolean[constructor.parameterTypes().size()];
-        boolean seenNamed = false;
-        for (int i = 0; i < arguments.size(); i++) {
-            final Expression supplied = arguments.get(i);
-            final Expression argument;
-            final int parameter;
-            if (supplied instanceof NamedArgumentExpression named) {
-                seenNamed = true;
-                parameter = names.indexOf(named.name().name());
-                if (parameter < 0) {
-                    throw new SemanticException(
-                        named.name().range(),
-                        "Unknown constructor parameter: %s",
-                        named.name().name()
-                    );
-                }
-                argument = named.value();
-            }
-            else {
-                if (seenNamed) {
-                    throw new SemanticException(
-                        supplied.range(),
-                        "Positional arguments must precede named arguments"
-                    );
-                }
-                parameter = i;
-                if (declarations.get(parameter).namedOnly()) {
-                    throw new SemanticException(
-                        supplied.range(),
-                        "Parameter %s must be supplied by name",
-                        names.get(parameter)
-                    );
-                }
-                argument = supplied;
-            }
-            if (assigned[parameter]) {
-                throw new SemanticException(
-                    supplied.range(),
-                    "Argument supplied more than once for constructor parameter: %s",
-                    names.get(parameter)
-                );
-            }
-            assigned[parameter] = true;
-            parameters.add(parameter);
-            if (supplied instanceof NamedArgumentExpression named) {
-                model.setNamedArgument(
-                    named.name(),
-                    declarations.get(parameter).identifier()
-                );
-            }
-            final Type expected = constructor.parameterTypes().get(parameter);
-            final Type actual = analyzeExpression(argument, context, expected);
-            if (
-                analyzer.resolveAssignType(actual, expected, argument) == null
-            ) {
-                throw new SemanticException(
-                    argument.range(),
-                    "Cannot assign %s to %s",
-                    actual,
-                    expected
-                );
-            }
-        }
-        for (int i = 0; i < assigned.length; i++) {
-            if (!assigned[i] && !declarations.get(i).omittable()) {
-                throw new SemanticException(
-                    range,
-                    "Missing required constructor argument: %s",
-                    declarations.get(i).displayName(i)
-                );
-            }
-        }
-        model.setConstructorArgumentParameters(creation, parameters);
+        model.setSelectedConstructor(call, selected);
+        return selected;
     }
 
     public Type analyzeLambdaExpression(
@@ -1786,7 +1838,9 @@ public final class SemanticAnalyzerExpressions {
         final List<Expression> arguments = call.arguments();
         if (name.equals("flatten")) {
             requireArrayArity(call, name, 0);
-            if (ConstType.unwrap(element) instanceof ArrayType nested) {
+            final @Nullable ArrayType nested =
+                ArrayMethods.flattenedType(array);
+            if (nested != null) {
                 return nested;
             }
             throw new SemanticException(
@@ -2521,6 +2575,16 @@ public final class SemanticAnalyzerExpressions {
         if (candidates.size() < 2) {
             return null;
         }
+        return selectOverload(call, context, callee, name, candidates);
+    }
+
+    private Type selectOverload(
+        final CallExpression call,
+        final SemanticContext context,
+        final Expression callee,
+        final IdentifierExpression name,
+        final List<FunctionSymbol> candidates
+    ) {
         final List<Type> argumentTypes = new ArrayList<>();
         final List<Boolean> overloadedReferences = new ArrayList<>();
         final List<Boolean> wideIntegerLiterals = new ArrayList<>();
@@ -2729,11 +2793,7 @@ public final class SemanticAnalyzerExpressions {
                     return inherited.type();
                 }
             }
-            throw new SemanticException(
-                call.range(),
-                "No overload of '%s' accepts these arguments",
-                name.name()
-            );
+            throw overloadError(call, name, candidates, argumentTypes, false);
         }
         final List<FunctionSymbol> withoutNarrowing =
             applicable.stream()
@@ -2758,11 +2818,7 @@ public final class SemanticAnalyzerExpressions {
                 )
                 .toList();
         if (mostSpecific.size() != 1) {
-            throw new SemanticException(
-                call.range(),
-                "Ambiguous call to overloaded function '%s'",
-                name.name()
-            );
+            throw overloadError(call, name, candidates, argumentTypes, true);
         }
         final FunctionSymbol best = mostSpecific.getFirst();
         if (callee instanceof MemberExpression) {
@@ -2799,6 +2855,60 @@ public final class SemanticAnalyzerExpressions {
             grouped = grouping.expression();
         }
         return best.type();
+    }
+
+    private SemanticException overloadError(
+        final CallExpression call,
+        final IdentifierExpression name,
+        final List<FunctionSymbol> candidates,
+        final List<Type> argumentTypes,
+        final boolean ambiguous
+    ) {
+        final List<String> arguments = new ArrayList<>();
+        for (int i = 0; i < call.arguments().size(); i++) {
+            final Expression supplied = call.arguments().get(i);
+            final Expression argument =
+                supplied instanceof NamedArgumentExpression named
+                    ? named.value()
+                    : supplied;
+            final String type = switch (unwrap(argument)) {
+                case LambdaExpression _ -> "lambda";
+                case ArrayExpression _ -> "array literal";
+                case MapExpression _ -> "map literal";
+                case ObjectExpression _ -> "object literal";
+                default -> argumentTypes.get(i).toString();
+            };
+            arguments.add(
+                supplied instanceof NamedArgumentExpression named
+                    ? named.name().name() + ": " + type
+                    : type
+            );
+        }
+        final List<String> signatures = overloadSignatures(candidates);
+        return ambiguous
+            ? new SemanticException(
+                call.range(),
+                signatures,
+                "Ambiguous call to overloaded %s '%s' with arguments (%s)",
+                unwrap(call.callee()) instanceof MemberExpression
+                    ? "method"
+                    : "function",
+                name.name(),
+                String.join(", ", arguments)
+            )
+            : new SemanticException(
+                call.range(),
+                signatures,
+                "No overload of '%s' accepts arguments (%s)",
+                name.name(),
+                String.join(", ", arguments)
+            );
+    }
+
+    private List<String> overloadSignatures(
+        final List<FunctionSymbol> candidates
+    ) {
+        return candidates.stream().map(model::formatFunctionSignature).toList();
     }
 
     private boolean requiresNumericNarrowing(
@@ -3089,7 +3199,7 @@ public final class SemanticAnalyzerExpressions {
         for (final Method method : owner.getDeclaredMethods()) {
             if (
                 Modifier.isStatic(method.getModifiers()) == staticMethod
-                    && method.isAnnotationPresent(EldApi.class)
+                    && EldApiMethods.runtimeVisible(method)
                     && method.getName().equals(name)
             ) {
                 return method;

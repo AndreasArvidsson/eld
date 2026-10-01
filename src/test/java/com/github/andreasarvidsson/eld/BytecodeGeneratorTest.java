@@ -1860,7 +1860,7 @@ class BytecodeGeneratorTest {
             "class Foo { public constructor() {} public var value: i32; }",
             "class Foo { public const value = 1; public constructor() { this.value = 2; } }",
             "class Foo { public constructor(value: i32) { value = 2; } }",
-            "class Foo { public constructor() {} public constructor(value: i32) {} }",
+            "class Foo { public constructor(value: i32) {} public constructor(other: i32) {} }",
             "class Foo { public constructor() {} public func replace() { this = new Foo(); } }"
         )) {
             assertThrows(
@@ -3918,9 +3918,11 @@ class BytecodeGeneratorTest {
             BytecodeUtil.verify(bytecode);
         }
         final String output = BytecodeRunner.run(classes);
-        assertTrue(output.contains("charAt"));
-        assertTrue(output.contains("substring"));
-        assertTrue(output.endsWith("[]\nnull\nNo members.\n"));
+        assertTrue(output.contains("upper"));
+        assertTrue(output.contains("index"));
+        assertFalse(output.contains("charAt"));
+        assertFalse(output.contains("substring"));
+        assertTrue(output.endsWith("[]\nnull\n | No members.\n"));
         assertThrows(SemanticException.class, () -> compile("dir();"));
         assertThrows(SemanticException.class, () -> compile("dir(1, 2);"));
         assertThrows(SemanticException.class, () -> compile("help();"));

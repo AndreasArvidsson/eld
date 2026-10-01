@@ -44,15 +44,19 @@ public interface EldArray<T extends EldArray<T>> {
         };
     }
 
+    @EldApi(property = true)
     int length();
 
     @Nullable
     Object boxedGet(int index);
 
+    @EldApi
     boolean isEmpty();
 
+    @EldApi
     void clear();
 
+    @EldApi
     T copy();
 
     T sliceFrom(int start);

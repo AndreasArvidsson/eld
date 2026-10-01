@@ -1,14 +1,12 @@
 package com.github.andreasarvidsson.eld.semantic;
 
-import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 import org.jspecify.annotations.Nullable;
 import com.github.andreasarvidsson.eld.Range;
-import com.github.andreasarvidsson.eld.runtime.EldArray;
-import com.github.andreasarvidsson.eld.runtime.EldObjectArray;
+import com.github.andreasarvidsson.eld.runtime.EldApiMethods;
 
 /** The methods exposed by Eld arrays and their Java implementations. */
 public final class ArrayMethods {
@@ -16,71 +14,30 @@ public final class ArrayMethods {
         new TypeParameterType("U");
     private static final BuiltinMethodRegistry METHODS =
         new BuiltinMethodRegistry(BuiltinMethodRegistry::javaType);
-    private static final Map<String, Method> SPECIAL = new HashMap<>();
+    private static final Map<String, Method> SPECIAL =
+        EldApiMethods.arraySpecialMethods();
 
     static {
-        METHODS.register("length", EldArray.class, "length", false, true);
-        METHODS.register("isEmpty", EldArray.class, "isEmpty", false, false);
-        special("sort", MethodHandle.class);
-        special("sortInPlace", MethodHandle.class);
-        special("filter", MethodHandle.class);
-        special("partition", MethodHandle.class);
-        special("map", MethodHandle.class, String.class);
-        special("flatMap", MethodHandle.class, String.class);
-        special("flatten", String.class);
-        special("reverse");
-        special("copy");
-        special("reverseInPlace");
-        special("concat", EldObjectArray.class);
-        special("union", EldObjectArray.class);
-        special("intersect", EldObjectArray.class);
-        special("difference", EldObjectArray.class);
-        special("subtract", EldObjectArray.class);
-        special("zip", EldArray.class);
-        special("distinct");
-        special("reduce", MethodHandle.class, Object.class);
-        special("contains", Object.class);
-        special("index", Object.class);
-        special("lastIndex", Object.class);
-        special("find", MethodHandle.class);
-        special("findLast", MethodHandle.class);
-        special("findIndex", MethodHandle.class);
-        special("findLastIndex", MethodHandle.class);
-        special("any", MethodHandle.class);
-        special("all", MethodHandle.class);
-        special("none", MethodHandle.class);
-        special("count", MethodHandle.class);
-        special("join", String.class);
-        special("add", Object[].class);
-        special("addAll", EldObjectArray.class);
-        special("addFront", Object.class);
-        special("insertAt", Object.class, int.class);
-        special("remove", Object.class);
-        special("removeIf", MethodHandle.class);
-        special("removeAll", Object.class);
-        special("removeAt", int.class);
-        try {
-            SPECIAL.put("clear", EldArray.class.getMethod("clear"));
-        }
-        catch (final NoSuchMethodException exception) {
-            throw new ExceptionInInitializerError(exception);
+        for (final EldApiMethods.Entry entry : EldApiMethods.arrayMethods()) {
+            METHODS.register(
+                entry.name(),
+                entry.method().getDeclaringClass(),
+                entry.method().getName(),
+                entry.receiverAsFirstArgument(),
+                entry.property(),
+                entry.method().getParameterTypes()
+            );
         }
     }
 
     private ArrayMethods() {}
 
-    private static void special(
-        final String name,
-        final Class<?>... parameters
-    ) {
-        try {
-            SPECIAL.put(name, EldObjectArray.class.getMethod(name, parameters));
-        }
-        catch (final NoSuchMethodException exception) {
-            throw new ExceptionInInitializerError(exception);
-        }
+    /** The result of flatten, or null when the receiver does not support it. */
+    public static @Nullable ArrayType flattenedType(final ArrayType array) {
+        return ConstType.unwrap(array.elementType()) instanceof ArrayType nested
+            ? nested
+            : null;
     }
-
     public static List<JavaMethodSymbol> methods(
         final String name,
         final int arity,
@@ -108,12 +65,12 @@ public final class ArrayMethods {
                 );
             return new JavaMethodSymbol(method, type, range, false, false);
         }
-        if (
-            name.equals("flatten") && ConstType
-                .unwrap(array.elementType()) instanceof ArrayType nested
-        ) {
-            final FunctionType type = new FunctionType(List.of(), nested);
-            return new JavaMethodSymbol(method, type, range, false, false);
+        if (name.equals("flatten")) {
+            final @Nullable ArrayType nested = flattenedType(array);
+            if (nested != null) {
+                final FunctionType type = new FunctionType(List.of(), nested);
+                return new JavaMethodSymbol(method, type, range, false, false);
+            }
         }
         final Type result = switch (name) {
             case "removeAt" -> array.elementType();

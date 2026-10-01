@@ -6,15 +6,15 @@ const promise = Promise.resolve(1);
 const source = new PromiseSource<i32>();
 const regex = Regex.compile("x");
 
-print(text.equals("text"));
+print(text == "text");
 print(array.toString());
-print(tuple.equals((1, true)));
+print(tuple == (1, true));
 print(function.hashCode() == function.hashCode());
-print(promise.equals(promise));
-print(source.equals(source));
-print(print.equals(print));
-print(dir.equals(dir));
-print(help.equals(help));
+print(promise == promise);
+print(source == source);
+print(print.hashCode() == print.hashCode());
+print(dir.hashCode() == dir.hashCode());
+print(help.hashCode() == help.hashCode());
 print(regex.toString() == "x");
 
 --- TOKENS ---
@@ -89,13 +89,10 @@ SEMICOLON (7:33-7:34)
 IDENTIFIER "print" (9:1-9:6)
 LEFT_PAREN (9:6-9:7)
 IDENTIFIER "text" (9:7-9:11)
-DOT (9:11-9:12)
-IDENTIFIER "equals" (9:12-9:18)
-LEFT_PAREN (9:18-9:19)
-STRING_LITERAL "\"text\"" (9:19-9:25)
-RIGHT_PAREN (9:25-9:26)
-RIGHT_PAREN (9:26-9:27)
-SEMICOLON (9:27-9:28)
+EQUAL_EQUAL (9:12-9:14)
+STRING_LITERAL "\"text\"" (9:15-9:21)
+RIGHT_PAREN (9:21-9:22)
+SEMICOLON (9:22-9:23)
 IDENTIFIER "print" (10:1-10:6)
 LEFT_PAREN (10:6-10:7)
 IDENTIFIER "array" (10:7-10:12)
@@ -108,17 +105,14 @@ SEMICOLON (10:24-10:25)
 IDENTIFIER "print" (11:1-11:6)
 LEFT_PAREN (11:6-11:7)
 IDENTIFIER "tuple" (11:7-11:12)
-DOT (11:12-11:13)
-IDENTIFIER "equals" (11:13-11:19)
-LEFT_PAREN (11:19-11:20)
-LEFT_PAREN (11:20-11:21)
-INTEGER_LITERAL "1" (11:21-11:22)
-COMMA (11:22-11:23)
-BOOLEAN_LITERAL "true" (11:24-11:28)
-RIGHT_PAREN (11:28-11:29)
-RIGHT_PAREN (11:29-11:30)
-RIGHT_PAREN (11:30-11:31)
-SEMICOLON (11:31-11:32)
+EQUAL_EQUAL (11:13-11:15)
+LEFT_PAREN (11:16-11:17)
+INTEGER_LITERAL "1" (11:17-11:18)
+COMMA (11:18-11:19)
+BOOLEAN_LITERAL "true" (11:20-11:24)
+RIGHT_PAREN (11:24-11:25)
+RIGHT_PAREN (11:25-11:26)
+SEMICOLON (11:26-11:27)
 IDENTIFIER "print" (12:1-12:6)
 LEFT_PAREN (12:6-12:7)
 IDENTIFIER "function" (12:7-12:15)
@@ -137,53 +131,62 @@ SEMICOLON (12:50-12:51)
 IDENTIFIER "print" (13:1-13:6)
 LEFT_PAREN (13:6-13:7)
 IDENTIFIER "promise" (13:7-13:14)
-DOT (13:14-13:15)
-IDENTIFIER "equals" (13:15-13:21)
-LEFT_PAREN (13:21-13:22)
-IDENTIFIER "promise" (13:22-13:29)
-RIGHT_PAREN (13:29-13:30)
-RIGHT_PAREN (13:30-13:31)
-SEMICOLON (13:31-13:32)
+EQUAL_EQUAL (13:15-13:17)
+IDENTIFIER "promise" (13:18-13:25)
+RIGHT_PAREN (13:25-13:26)
+SEMICOLON (13:26-13:27)
 IDENTIFIER "print" (14:1-14:6)
 LEFT_PAREN (14:6-14:7)
 IDENTIFIER "source" (14:7-14:13)
-DOT (14:13-14:14)
-IDENTIFIER "equals" (14:14-14:20)
-LEFT_PAREN (14:20-14:21)
-IDENTIFIER "source" (14:21-14:27)
-RIGHT_PAREN (14:27-14:28)
-RIGHT_PAREN (14:28-14:29)
-SEMICOLON (14:29-14:30)
+EQUAL_EQUAL (14:14-14:16)
+IDENTIFIER "source" (14:17-14:23)
+RIGHT_PAREN (14:23-14:24)
+SEMICOLON (14:24-14:25)
 IDENTIFIER "print" (15:1-15:6)
 LEFT_PAREN (15:6-15:7)
 IDENTIFIER "print" (15:7-15:12)
 DOT (15:12-15:13)
-IDENTIFIER "equals" (15:13-15:19)
-LEFT_PAREN (15:19-15:20)
-IDENTIFIER "print" (15:20-15:25)
-RIGHT_PAREN (15:25-15:26)
-RIGHT_PAREN (15:26-15:27)
-SEMICOLON (15:27-15:28)
+IDENTIFIER "hashCode" (15:13-15:21)
+LEFT_PAREN (15:21-15:22)
+RIGHT_PAREN (15:22-15:23)
+EQUAL_EQUAL (15:24-15:26)
+IDENTIFIER "print" (15:27-15:32)
+DOT (15:32-15:33)
+IDENTIFIER "hashCode" (15:33-15:41)
+LEFT_PAREN (15:41-15:42)
+RIGHT_PAREN (15:42-15:43)
+RIGHT_PAREN (15:43-15:44)
+SEMICOLON (15:44-15:45)
 IDENTIFIER "print" (16:1-16:6)
 LEFT_PAREN (16:6-16:7)
 IDENTIFIER "dir" (16:7-16:10)
 DOT (16:10-16:11)
-IDENTIFIER "equals" (16:11-16:17)
-LEFT_PAREN (16:17-16:18)
-IDENTIFIER "dir" (16:18-16:21)
-RIGHT_PAREN (16:21-16:22)
-RIGHT_PAREN (16:22-16:23)
-SEMICOLON (16:23-16:24)
+IDENTIFIER "hashCode" (16:11-16:19)
+LEFT_PAREN (16:19-16:20)
+RIGHT_PAREN (16:20-16:21)
+EQUAL_EQUAL (16:22-16:24)
+IDENTIFIER "dir" (16:25-16:28)
+DOT (16:28-16:29)
+IDENTIFIER "hashCode" (16:29-16:37)
+LEFT_PAREN (16:37-16:38)
+RIGHT_PAREN (16:38-16:39)
+RIGHT_PAREN (16:39-16:40)
+SEMICOLON (16:40-16:41)
 IDENTIFIER "print" (17:1-17:6)
 LEFT_PAREN (17:6-17:7)
 IDENTIFIER "help" (17:7-17:11)
 DOT (17:11-17:12)
-IDENTIFIER "equals" (17:12-17:18)
-LEFT_PAREN (17:18-17:19)
-IDENTIFIER "help" (17:19-17:23)
-RIGHT_PAREN (17:23-17:24)
-RIGHT_PAREN (17:24-17:25)
-SEMICOLON (17:25-17:26)
+IDENTIFIER "hashCode" (17:12-17:20)
+LEFT_PAREN (17:20-17:21)
+RIGHT_PAREN (17:21-17:22)
+EQUAL_EQUAL (17:23-17:25)
+IDENTIFIER "help" (17:26-17:30)
+DOT (17:30-17:31)
+IDENTIFIER "hashCode" (17:31-17:39)
+LEFT_PAREN (17:39-17:40)
+RIGHT_PAREN (17:40-17:41)
+RIGHT_PAREN (17:41-17:42)
+SEMICOLON (17:42-17:43)
 IDENTIFIER "print" (18:1-18:6)
 LEFT_PAREN (18:6-18:7)
 IDENTIFIER "regex" (18:7-18:12)
@@ -359,28 +362,22 @@ SEMICOLON (18:31-18:32)
     )
   )
   (ExpressionStatement
-    range: 9:1-9:28
+    range: 9:1-9:23
     (CallExpression
-      range: 9:1-9:27
+      range: 9:1-9:22
       (IdentifierExpression
         range: 9:1-9:6
         name: "print"
       )
-      (CallExpression
-        range: 9:7-9:26
-        (MemberExpression
-          range: 9:7-9:18
-          (IdentifierExpression
-            range: 9:7-9:11
-            name: "text"
-          )
-          (IdentifierExpression
-            range: 9:12-9:18
-            name: "equals"
-          )
+      (BinaryExpression
+        range: 9:7-9:21
+        (IdentifierExpression
+          range: 9:7-9:11
+          name: "text"
         )
+        operator: EQUAL
         (LiteralExpression
-          range: 9:19-9:25
+          range: 9:15-9:21
           kind: STRING
           text: "\"text\""
         )
@@ -412,35 +409,29 @@ SEMICOLON (18:31-18:32)
     )
   )
   (ExpressionStatement
-    range: 11:1-11:32
+    range: 11:1-11:27
     (CallExpression
-      range: 11:1-11:31
+      range: 11:1-11:26
       (IdentifierExpression
         range: 11:1-11:6
         name: "print"
       )
-      (CallExpression
-        range: 11:7-11:30
-        (MemberExpression
-          range: 11:7-11:19
-          (IdentifierExpression
-            range: 11:7-11:12
-            name: "tuple"
-          )
-          (IdentifierExpression
-            range: 11:13-11:19
-            name: "equals"
-          )
+      (BinaryExpression
+        range: 11:7-11:25
+        (IdentifierExpression
+          range: 11:7-11:12
+          name: "tuple"
         )
+        operator: EQUAL
         (TupleExpression
-          range: 11:20-11:29
+          range: 11:16-11:25
           (LiteralExpression
-            range: 11:21-11:22
+            range: 11:17-11:18
             kind: INT
             text: "1"
           )
           (LiteralExpression
-            range: 11:24-11:28
+            range: 11:20-11:24
             kind: BOOL
             text: "true"
           )
@@ -491,141 +482,171 @@ SEMICOLON (18:31-18:32)
     )
   )
   (ExpressionStatement
-    range: 13:1-13:32
+    range: 13:1-13:27
     (CallExpression
-      range: 13:1-13:31
+      range: 13:1-13:26
       (IdentifierExpression
         range: 13:1-13:6
         name: "print"
       )
-      (CallExpression
-        range: 13:7-13:30
-        (MemberExpression
-          range: 13:7-13:21
-          (IdentifierExpression
-            range: 13:7-13:14
-            name: "promise"
-          )
-          (IdentifierExpression
-            range: 13:15-13:21
-            name: "equals"
-          )
-        )
+      (BinaryExpression
+        range: 13:7-13:25
         (IdentifierExpression
-          range: 13:22-13:29
+          range: 13:7-13:14
+          name: "promise"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 13:18-13:25
           name: "promise"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 14:1-14:30
+    range: 14:1-14:25
     (CallExpression
-      range: 14:1-14:29
+      range: 14:1-14:24
       (IdentifierExpression
         range: 14:1-14:6
         name: "print"
       )
-      (CallExpression
-        range: 14:7-14:28
-        (MemberExpression
-          range: 14:7-14:20
-          (IdentifierExpression
-            range: 14:7-14:13
-            name: "source"
-          )
-          (IdentifierExpression
-            range: 14:14-14:20
-            name: "equals"
-          )
-        )
+      (BinaryExpression
+        range: 14:7-14:23
         (IdentifierExpression
-          range: 14:21-14:27
+          range: 14:7-14:13
+          name: "source"
+        )
+        operator: EQUAL
+        (IdentifierExpression
+          range: 14:17-14:23
           name: "source"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 15:1-15:28
+    range: 15:1-15:45
     (CallExpression
-      range: 15:1-15:27
+      range: 15:1-15:44
       (IdentifierExpression
         range: 15:1-15:6
         name: "print"
       )
-      (CallExpression
-        range: 15:7-15:26
-        (MemberExpression
-          range: 15:7-15:19
-          (IdentifierExpression
-            range: 15:7-15:12
-            name: "print"
-          )
-          (IdentifierExpression
-            range: 15:13-15:19
-            name: "equals"
+      (BinaryExpression
+        range: 15:7-15:43
+        (CallExpression
+          range: 15:7-15:23
+          (MemberExpression
+            range: 15:7-15:21
+            (IdentifierExpression
+              range: 15:7-15:12
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 15:13-15:21
+              name: "hashCode"
+            )
           )
         )
-        (IdentifierExpression
-          range: 15:20-15:25
-          name: "print"
+        operator: EQUAL
+        (CallExpression
+          range: 15:27-15:43
+          (MemberExpression
+            range: 15:27-15:41
+            (IdentifierExpression
+              range: 15:27-15:32
+              name: "print"
+            )
+            (IdentifierExpression
+              range: 15:33-15:41
+              name: "hashCode"
+            )
+          )
         )
       )
     )
   )
   (ExpressionStatement
-    range: 16:1-16:24
+    range: 16:1-16:41
     (CallExpression
-      range: 16:1-16:23
+      range: 16:1-16:40
       (IdentifierExpression
         range: 16:1-16:6
         name: "print"
       )
-      (CallExpression
-        range: 16:7-16:22
-        (MemberExpression
-          range: 16:7-16:17
-          (IdentifierExpression
-            range: 16:7-16:10
-            name: "dir"
-          )
-          (IdentifierExpression
-            range: 16:11-16:17
-            name: "equals"
+      (BinaryExpression
+        range: 16:7-16:39
+        (CallExpression
+          range: 16:7-16:21
+          (MemberExpression
+            range: 16:7-16:19
+            (IdentifierExpression
+              range: 16:7-16:10
+              name: "dir"
+            )
+            (IdentifierExpression
+              range: 16:11-16:19
+              name: "hashCode"
+            )
           )
         )
-        (IdentifierExpression
-          range: 16:18-16:21
-          name: "dir"
+        operator: EQUAL
+        (CallExpression
+          range: 16:25-16:39
+          (MemberExpression
+            range: 16:25-16:37
+            (IdentifierExpression
+              range: 16:25-16:28
+              name: "dir"
+            )
+            (IdentifierExpression
+              range: 16:29-16:37
+              name: "hashCode"
+            )
+          )
         )
       )
     )
   )
   (ExpressionStatement
-    range: 17:1-17:26
+    range: 17:1-17:43
     (CallExpression
-      range: 17:1-17:25
+      range: 17:1-17:42
       (IdentifierExpression
         range: 17:1-17:6
         name: "print"
       )
-      (CallExpression
-        range: 17:7-17:24
-        (MemberExpression
-          range: 17:7-17:18
-          (IdentifierExpression
-            range: 17:7-17:11
-            name: "help"
-          )
-          (IdentifierExpression
-            range: 17:12-17:18
-            name: "equals"
+      (BinaryExpression
+        range: 17:7-17:41
+        (CallExpression
+          range: 17:7-17:22
+          (MemberExpression
+            range: 17:7-17:20
+            (IdentifierExpression
+              range: 17:7-17:11
+              name: "help"
+            )
+            (IdentifierExpression
+              range: 17:12-17:20
+              name: "hashCode"
+            )
           )
         )
-        (IdentifierExpression
-          range: 17:19-17:23
-          name: "help"
+        operator: EQUAL
+        (CallExpression
+          range: 17:26-17:41
+          (MemberExpression
+            range: 17:26-17:39
+            (IdentifierExpression
+              range: 17:26-17:30
+              name: "help"
+            )
+            (IdentifierExpression
+              range: 17:31-17:39
+              name: "hashCode"
+            )
+          )
         )
       )
     )
@@ -686,12 +707,10 @@ Expression types:
   7:21-7:28 -> (string) => Regex
   7:29-7:32 -> string
   9:1-9:6 -> (any) => void
-  9:1-9:27 -> void
+  9:1-9:22 -> void
   9:7-9:11 -> string
-  9:7-9:18 -> (string) => bool
-  9:7-9:26 -> bool
-  9:12-9:18 -> (string) => bool
-  9:19-9:25 -> string
+  9:7-9:21 -> bool
+  9:15-9:21 -> string
   10:1-10:6 -> (any) => void
   10:1-10:24 -> void
   10:7-10:12 -> [i32]
@@ -699,14 +718,12 @@ Expression types:
   10:7-10:23 -> string
   10:13-10:21 -> () => string
   11:1-11:6 -> (any) => void
-  11:1-11:31 -> void
+  11:1-11:26 -> void
   11:7-11:12 -> (i32, bool)
-  11:7-11:19 -> ((i32, bool)) => bool
-  11:7-11:30 -> bool
-  11:13-11:19 -> ((i32, bool)) => bool
-  11:20-11:29 -> (i32, bool)
-  11:21-11:22 -> i32
-  11:24-11:28 -> bool
+  11:7-11:25 -> bool
+  11:16-11:25 -> (i32, bool)
+  11:17-11:18 -> i32
+  11:20-11:24 -> bool
   12:1-12:6 -> (any) => void
   12:1-12:50 -> void
   12:7-12:15 -> () => i32
@@ -719,40 +736,48 @@ Expression types:
   12:30-12:49 -> i32
   12:39-12:47 -> () => i32
   13:1-13:6 -> (any) => void
-  13:1-13:31 -> void
+  13:1-13:26 -> void
   13:7-13:14 -> Promise<i32>
-  13:7-13:21 -> (Promise<i32>) => bool
-  13:7-13:30 -> bool
-  13:15-13:21 -> (Promise<i32>) => bool
-  13:22-13:29 -> Promise<i32>
+  13:7-13:25 -> bool
+  13:18-13:25 -> Promise<i32>
   14:1-14:6 -> (any) => void
-  14:1-14:29 -> void
+  14:1-14:24 -> void
   14:7-14:13 -> PromiseSource<i32>
-  14:7-14:20 -> (PromiseSource<i32>) => bool
-  14:7-14:28 -> bool
-  14:14-14:20 -> (PromiseSource<i32>) => bool
-  14:21-14:27 -> PromiseSource<i32>
+  14:7-14:23 -> bool
+  14:17-14:23 -> PromiseSource<i32>
   15:1-15:6 -> (any) => void
-  15:1-15:27 -> void
+  15:1-15:44 -> void
   15:7-15:12 -> (any) => void
-  15:7-15:19 -> ((any) => void) => bool
-  15:7-15:26 -> bool
-  15:13-15:19 -> ((any) => void) => bool
-  15:20-15:25 -> (any) => void
+  15:7-15:21 -> () => i32
+  15:7-15:23 -> i32
+  15:7-15:43 -> bool
+  15:13-15:21 -> () => i32
+  15:27-15:32 -> (any) => void
+  15:27-15:41 -> () => i32
+  15:27-15:43 -> i32
+  15:33-15:41 -> () => i32
   16:1-16:6 -> (any) => void
-  16:1-16:23 -> void
+  16:1-16:40 -> void
   16:7-16:10 -> (any) => [string]
-  16:7-16:17 -> ((any) => [string]) => bool
-  16:7-16:22 -> bool
-  16:11-16:17 -> ((any) => [string]) => bool
-  16:18-16:21 -> (any) => [string]
+  16:7-16:19 -> () => i32
+  16:7-16:21 -> i32
+  16:7-16:39 -> bool
+  16:11-16:19 -> () => i32
+  16:25-16:28 -> (any) => [string]
+  16:25-16:37 -> () => i32
+  16:25-16:39 -> i32
+  16:29-16:37 -> () => i32
   17:1-17:6 -> (any) => void
-  17:1-17:25 -> void
+  17:1-17:42 -> void
   17:7-17:11 -> (any) => void
-  17:7-17:18 -> ((any) => void) => bool
-  17:7-17:24 -> bool
-  17:12-17:18 -> ((any) => void) => bool
-  17:19-17:23 -> (any) => void
+  17:7-17:20 -> () => i32
+  17:7-17:22 -> i32
+  17:7-17:41 -> bool
+  17:12-17:20 -> () => i32
+  17:26-17:30 -> (any) => void
+  17:26-17:39 -> () => i32
+  17:26-17:41 -> i32
+  17:31-17:39 -> () => i32
   18:1-18:6 -> (any) => void
   18:1-18:31 -> void
   18:7-18:12 -> Regex
@@ -781,13 +806,11 @@ References:
   7:21-7:28 -> java.util.regex.Pattern.compile(string): Regex
   9:1-9:6 -> builtin print
   9:7-9:11 -> 1:7-1:11
-  9:12-9:18 -> java.lang.Object.equals(string): bool
   10:1-10:6 -> builtin print
   10:7-10:12 -> 2:7-2:12
   10:13-10:21 -> java.lang.Object.toString(): string
   11:1-11:6 -> builtin print
   11:7-11:12 -> 3:7-3:12
-  11:13-11:19 -> java.lang.Object.equals((i32, bool)): bool
   12:1-12:6 -> builtin print
   12:7-12:15 -> 4:7-4:15
   12:16-12:24 -> java.lang.Object.hashCode(): i32
@@ -795,24 +818,25 @@ References:
   12:39-12:47 -> java.lang.Object.hashCode(): i32
   13:1-13:6 -> builtin print
   13:7-13:14 -> 5:7-5:14
-  13:15-13:21 -> java.lang.Object.equals(Promise<i32>): bool
-  13:22-13:29 -> 5:7-5:14
+  13:18-13:25 -> 5:7-5:14
   14:1-14:6 -> builtin print
   14:7-14:13 -> 6:7-6:13
-  14:14-14:20 -> java.lang.Object.equals(PromiseSource<i32>): bool
-  14:21-14:27 -> 6:7-6:13
+  14:17-14:23 -> 6:7-6:13
   15:1-15:6 -> builtin print
   15:7-15:12 -> builtin print
-  15:13-15:19 -> java.lang.Object.equals((any) => void): bool
-  15:20-15:25 -> builtin print
+  15:13-15:21 -> java.lang.Object.hashCode(): i32
+  15:27-15:32 -> builtin print
+  15:33-15:41 -> java.lang.Object.hashCode(): i32
   16:1-16:6 -> builtin print
   16:7-16:10 -> builtin dir
-  16:11-16:17 -> java.lang.Object.equals((any) => [string]): bool
-  16:18-16:21 -> builtin dir
+  16:11-16:19 -> java.lang.Object.hashCode(): i32
+  16:25-16:28 -> builtin dir
+  16:29-16:37 -> java.lang.Object.hashCode(): i32
   17:1-17:6 -> builtin print
   17:7-17:11 -> builtin help
-  17:12-17:18 -> java.lang.Object.equals((any) => void): bool
-  17:19-17:23 -> builtin help
+  17:12-17:20 -> java.lang.Object.hashCode(): i32
+  17:26-17:30 -> builtin help
+  17:31-17:39 -> java.lang.Object.hashCode(): i32
   18:1-18:6 -> builtin print
   18:7-18:12 -> 7:7-7:12
   18:13-18:21 -> java.util.regex.Pattern.toString(): string
@@ -918,27 +942,48 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.promise Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
     GETSTATIC Test.promise Lcom/github/andreasarvidsson/eld/runtime/EldPromise;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/EldPromise.equals(Ljava/lang/Object;)Z
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.referenceEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
     GETSTATIC Test.source Lcom/github/andreasarvidsson/eld/runtime/PromiseSource;
-    INVOKEVIRTUAL com/github/andreasarvidsson/eld/runtime/PromiseSource.equals(Ljava/lang/Object;)Z
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/EldEquality.referenceEquals(Ljava/lang/Object;Ljava/lang/Object;)Z
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    INVOKEVIRTUAL java/io/PrintStream.hashCode()I
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    INVOKEVIRTUAL java/io/PrintStream.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/io/PrintStream.hashCode()I
+    IF_ICMPEQ L2
+    ICONST_0 0
+    GOTO L3
+   L2:
+    ICONST_1 1
+   L3:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC MethodHandleDesc[STATIC/Introspection::dir(Object)EldObjectArray]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.hashCode()I
     LDC MethodHandleDesc[STATIC/Introspection::dir(Object)EldObjectArray]
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.hashCode()I
+    IF_ICMPEQ L4
+    ICONST_0 0
+    GOTO L5
+   L4:
+    ICONST_1 1
+   L5:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     LDC MethodHandleDesc[STATIC/Introspection::help(Object)void]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.hashCode()I
     LDC MethodHandleDesc[STATIC/Introspection::help(Object)void]
-    INVOKEVIRTUAL java/lang/invoke/MethodHandle.equals(Ljava/lang/Object;)Z
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.hashCode()I
+    IF_ICMPEQ L6
+    ICONST_0 0
+    GOTO L7
+   L6:
+    ICONST_1 1
+   L7:
     INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.regex Ljava/util/regex/Pattern;

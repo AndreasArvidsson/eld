@@ -1,0 +1,687 @@
+class Base {
+    public const value: string;
+    constructor(value: i32) { this.value = "private"; }
+    protected constructor(value: string) { this.value = value; }
+}
+class Derived extends Base {
+    public constructor() { this("protected"); }
+    public constructor(value: string) { super(value); }
+}
+print(new Derived().value);
+class OtherBase {
+    public const value: i32;
+    public constructor() { this(5); }
+    public constructor(value: i32) { this.value = value; }
+}
+class OtherDerived extends OtherBase {}
+print(new OtherDerived().value);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Base" (1:7-1:11)
+LEFT_BRACE (1:12-1:13)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "string" (2:25-2:31)
+SEMICOLON (2:31-2:32)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+IDENTIFIER "value" (3:17-3:22)
+COLON (3:22-3:23)
+IDENTIFIER "i32" (3:24-3:27)
+RIGHT_PAREN (3:27-3:28)
+LEFT_BRACE (3:29-3:30)
+THIS (3:31-3:35)
+DOT (3:35-3:36)
+IDENTIFIER "value" (3:36-3:41)
+EQUAL (3:42-3:43)
+STRING_LITERAL "\"private\"" (3:44-3:53)
+SEMICOLON (3:53-3:54)
+RIGHT_BRACE (3:55-3:56)
+PROTECTED (4:5-4:14)
+CONSTRUCTOR (4:15-4:26)
+LEFT_PAREN (4:26-4:27)
+IDENTIFIER "value" (4:27-4:32)
+COLON (4:32-4:33)
+IDENTIFIER "string" (4:34-4:40)
+RIGHT_PAREN (4:40-4:41)
+LEFT_BRACE (4:42-4:43)
+THIS (4:44-4:48)
+DOT (4:48-4:49)
+IDENTIFIER "value" (4:49-4:54)
+EQUAL (4:55-4:56)
+IDENTIFIER "value" (4:57-4:62)
+SEMICOLON (4:62-4:63)
+RIGHT_BRACE (4:64-4:65)
+RIGHT_BRACE (5:1-5:2)
+CLASS (6:1-6:6)
+IDENTIFIER "Derived" (6:7-6:14)
+EXTENDS (6:15-6:22)
+IDENTIFIER "Base" (6:23-6:27)
+LEFT_BRACE (6:28-6:29)
+PUBLIC (7:5-7:11)
+CONSTRUCTOR (7:12-7:23)
+LEFT_PAREN (7:23-7:24)
+RIGHT_PAREN (7:24-7:25)
+LEFT_BRACE (7:26-7:27)
+THIS (7:28-7:32)
+LEFT_PAREN (7:32-7:33)
+STRING_LITERAL "\"protected\"" (7:33-7:44)
+RIGHT_PAREN (7:44-7:45)
+SEMICOLON (7:45-7:46)
+RIGHT_BRACE (7:47-7:48)
+PUBLIC (8:5-8:11)
+CONSTRUCTOR (8:12-8:23)
+LEFT_PAREN (8:23-8:24)
+IDENTIFIER "value" (8:24-8:29)
+COLON (8:29-8:30)
+IDENTIFIER "string" (8:31-8:37)
+RIGHT_PAREN (8:37-8:38)
+LEFT_BRACE (8:39-8:40)
+SUPER (8:41-8:46)
+LEFT_PAREN (8:46-8:47)
+IDENTIFIER "value" (8:47-8:52)
+RIGHT_PAREN (8:52-8:53)
+SEMICOLON (8:53-8:54)
+RIGHT_BRACE (8:55-8:56)
+RIGHT_BRACE (9:1-9:2)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+NEW (10:7-10:10)
+IDENTIFIER "Derived" (10:11-10:18)
+LEFT_PAREN (10:18-10:19)
+RIGHT_PAREN (10:19-10:20)
+DOT (10:20-10:21)
+IDENTIFIER "value" (10:21-10:26)
+RIGHT_PAREN (10:26-10:27)
+SEMICOLON (10:27-10:28)
+CLASS (11:1-11:6)
+IDENTIFIER "OtherBase" (11:7-11:16)
+LEFT_BRACE (11:17-11:18)
+PUBLIC (12:5-12:11)
+CONST (12:12-12:17)
+IDENTIFIER "value" (12:18-12:23)
+COLON (12:23-12:24)
+IDENTIFIER "i32" (12:25-12:28)
+SEMICOLON (12:28-12:29)
+PUBLIC (13:5-13:11)
+CONSTRUCTOR (13:12-13:23)
+LEFT_PAREN (13:23-13:24)
+RIGHT_PAREN (13:24-13:25)
+LEFT_BRACE (13:26-13:27)
+THIS (13:28-13:32)
+LEFT_PAREN (13:32-13:33)
+INTEGER_LITERAL "5" (13:33-13:34)
+RIGHT_PAREN (13:34-13:35)
+SEMICOLON (13:35-13:36)
+RIGHT_BRACE (13:37-13:38)
+PUBLIC (14:5-14:11)
+CONSTRUCTOR (14:12-14:23)
+LEFT_PAREN (14:23-14:24)
+IDENTIFIER "value" (14:24-14:29)
+COLON (14:29-14:30)
+IDENTIFIER "i32" (14:31-14:34)
+RIGHT_PAREN (14:34-14:35)
+LEFT_BRACE (14:36-14:37)
+THIS (14:38-14:42)
+DOT (14:42-14:43)
+IDENTIFIER "value" (14:43-14:48)
+EQUAL (14:49-14:50)
+IDENTIFIER "value" (14:51-14:56)
+SEMICOLON (14:56-14:57)
+RIGHT_BRACE (14:58-14:59)
+RIGHT_BRACE (15:1-15:2)
+CLASS (16:1-16:6)
+IDENTIFIER "OtherDerived" (16:7-16:19)
+EXTENDS (16:20-16:27)
+IDENTIFIER "OtherBase" (16:28-16:37)
+LEFT_BRACE (16:38-16:39)
+RIGHT_BRACE (16:39-16:40)
+IDENTIFIER "print" (17:1-17:6)
+LEFT_PAREN (17:6-17:7)
+NEW (17:7-17:10)
+IDENTIFIER "OtherDerived" (17:11-17:23)
+LEFT_PAREN (17:23-17:24)
+RIGHT_PAREN (17:24-17:25)
+DOT (17:25-17:26)
+IDENTIFIER "value" (17:26-17:31)
+RIGHT_PAREN (17:31-17:32)
+SEMICOLON (17:32-17:33)
+
+--- AST ---
+
+(Program
+  range: 1:1-17:33
+  (ClassDeclaration
+    range: 1:1-5:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:11
+      name: "Base"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:32
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 2:12-2:32
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:31
+          name: "string"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:56
+      visibility: PRIVATE
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:5-3:56
+        (FunctionParameter
+          range: 3:17-3:27
+          (IdentifierDeclaration
+            range: 3:17-3:22
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:24-3:27
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:29-3:56
+          (AssignmentStatement
+            range: 3:31-3:54
+            (MemberExpression
+              range: 3:31-3:41
+              (ThisExpression
+                range: 3:31-3:35
+              )
+              (IdentifierExpression
+                range: 3:36-3:41
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 3:44-3:53
+              kind: STRING
+              text: "\"private\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:65
+      visibility: PROTECTED
+      staticMember: false
+      (ConstructorDeclaration
+        range: 4:15-4:65
+        (FunctionParameter
+          range: 4:27-4:40
+          (IdentifierDeclaration
+            range: 4:27-4:32
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 4:34-4:40
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 4:42-4:65
+          (AssignmentStatement
+            range: 4:44-4:63
+            (MemberExpression
+              range: 4:44-4:54
+              (ThisExpression
+                range: 4:44-4:48
+              )
+              (IdentifierExpression
+                range: 4:49-4:54
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 4:57-4:62
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 6:1-9:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 6:7-6:14
+      name: "Derived"
+    )
+    (Extends
+      range: 6:15-6:27
+      (IdentifierExpression
+        range: 6:23-6:27
+        name: "Base"
+      )
+    )
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 7:5-7:48
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 7:12-7:48
+        (BlockStatement
+          range: 7:26-7:48
+          (ThisConstructorCall
+            range: 7:28-7:46
+            (LiteralExpression
+              range: 7:33-7:44
+              kind: STRING
+              text: "\"protected\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-8:56
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 8:12-8:56
+        (FunctionParameter
+          range: 8:24-8:37
+          (IdentifierDeclaration
+            range: 8:24-8:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 8:31-8:37
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 8:39-8:56
+          (SuperConstructorCall
+            range: 8:41-8:54
+            (IdentifierExpression
+              range: 8:47-8:52
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:28
+    (CallExpression
+      range: 10:1-10:27
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 10:7-10:26
+        (NewExpression
+          range: 10:7-10:20
+          (IdentifierExpression
+            range: 10:11-10:18
+            name: "Derived"
+          )
+        )
+        (IdentifierExpression
+          range: 10:21-10:26
+          name: "value"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 11:1-15:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 11:7-11:16
+      name: "OtherBase"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 12:5-12:29
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 12:12-12:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 12:18-12:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 12:25-12:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 13:5-13:38
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 13:12-13:38
+        (BlockStatement
+          range: 13:26-13:38
+          (ThisConstructorCall
+            range: 13:28-13:36
+            (LiteralExpression
+              range: 13:33-13:34
+              kind: INT
+              text: "5"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 14:5-14:59
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 14:12-14:59
+        (FunctionParameter
+          range: 14:24-14:34
+          (IdentifierDeclaration
+            range: 14:24-14:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 14:31-14:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 14:36-14:59
+          (AssignmentStatement
+            range: 14:38-14:57
+            (MemberExpression
+              range: 14:38-14:48
+              (ThisExpression
+                range: 14:38-14:42
+              )
+              (IdentifierExpression
+                range: 14:43-14:48
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 14:51-14:56
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 16:1-16:40
+    modifiers: []
+    (IdentifierDeclaration
+      range: 16:7-16:19
+      name: "OtherDerived"
+    )
+    (Extends
+      range: 16:20-16:37
+      (IdentifierExpression
+        range: 16:28-16:37
+        name: "OtherBase"
+      )
+    )
+    implements: null
+    permits: null
+  )
+  (ExpressionStatement
+    range: 17:1-17:33
+    (CallExpression
+      range: 17:1-17:32
+      (IdentifierExpression
+        range: 17:1-17:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 17:7-17:31
+        (NewExpression
+          range: 17:7-17:25
+          (IdentifierExpression
+            range: 17:11-17:23
+            name: "OtherDerived"
+          )
+        )
+        (IdentifierExpression
+          range: 17:26-17:31
+          name: "value"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  3:31-3:35 -> Base
+  3:31-3:41 -> string
+  3:36-3:41 -> string
+  3:44-3:53 -> string
+  4:44-4:48 -> Base
+  4:44-4:54 -> string
+  4:49-4:54 -> string
+  4:57-4:62 -> string
+  6:23-6:27 -> Base
+  7:28-7:46 -> (value: string) => void
+  7:33-7:44 -> string
+  8:41-8:54 -> (value: string) => void
+  8:47-8:52 -> string
+  10:1-10:6 -> (any) => void
+  10:1-10:27 -> void
+  10:7-10:20 -> () => void
+  10:7-10:20 -> Derived
+  10:7-10:26 -> string
+  10:11-10:18 -> Derived
+  10:21-10:26 -> string
+  13:28-13:36 -> (value: i32) => void
+  13:33-13:34 -> i32
+  14:38-14:42 -> OtherBase
+  14:38-14:48 -> i32
+  14:43-14:48 -> i32
+  14:51-14:56 -> i32
+  16:28-16:37 -> () => void
+  16:28-16:37 -> OtherBase
+  17:1-17:6 -> (any) => void
+  17:1-17:32 -> void
+  17:7-17:25 -> OtherDerived
+  17:7-17:31 -> i32
+  17:11-17:23 -> OtherDerived
+  17:26-17:31 -> i32
+
+Resolved types:
+  2:25-2:31 -> string
+  3:24-3:27 -> i32
+  4:34-4:40 -> string
+  8:31-8:37 -> string
+  12:25-12:28 -> i32
+  14:31-14:34 -> i32
+
+Declarations:
+  1:7-1:11 -> class Base
+  2:18-2:23 -> public const value: string
+  3:5-3:56 -> constructor(value: i32)
+  3:17-3:22 -> const value: i32
+  4:15-4:65 -> protected constructor(value: string)
+  4:27-4:32 -> const value: string
+  6:7-6:14 -> class Derived
+  7:12-7:48 -> public constructor()
+  8:12-8:56 -> public constructor(value: string)
+  8:24-8:29 -> const value: string
+  11:7-11:16 -> class OtherBase
+  12:18-12:23 -> public const value: i32
+  13:12-13:38 -> public constructor()
+  14:12-14:59 -> public constructor(value: i32)
+  14:24-14:29 -> const value: i32
+  16:7-16:19 -> class OtherDerived
+
+References:
+  3:36-3:41 -> 2:18-2:23
+  4:49-4:54 -> 2:18-2:23
+  4:57-4:62 -> 4:27-4:32
+  6:23-6:27 -> 1:7-1:11
+  7:28-7:46 -> 8:12-8:56
+  8:41-8:54 -> 4:15-4:65
+  8:47-8:52 -> 8:24-8:29
+  10:1-10:6 -> builtin print
+  10:7-10:20 -> 7:12-7:48
+  10:11-10:18 -> 6:7-6:14
+  10:21-10:26 -> 2:18-2:23
+  13:28-13:36 -> 14:12-14:59
+  14:43-14:48 -> 12:18-12:23
+  14:51-14:56 -> 14:24-14:29
+  16:28-16:37 -> 11:7-11:16
+  16:28-16:37 -> 13:12-13:38
+  17:1-17:6 -> builtin print
+  17:11-17:23 -> 16:7-16:19
+  17:26-17:31 -> 12:18-12:23
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  nest member Test$OtherBase
+  nest member Test$OtherDerived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  inner class Test$OtherBase flags [PUBLIC, STATIC]
+  inner class Test$OtherDerived flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Derived
+    DUP
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Derived.<init>([Ljava/lang/Void;)V
+    GETFIELD Test$Base.value Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$OtherDerived
+    DUP
+    INVOKESPECIAL Test$OtherDerived.<init>()V
+    GETFIELD Test$OtherBase.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    RETURN
+    max stack 4 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  field value Ljava/lang/String; flags [PUBLIC, FINAL]
+  method <init>(I[Ljava/lang/Void;)V flags [PRIVATE]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "private"
+    PUTFIELD Test$Base.value Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 3
+  method <init>(Ljava/lang/String;[[Ljava/lang/Void;)V flags [PROTECTED]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$Base.value Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 3
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  method <init>([Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    LDC "protected"
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Derived.<init>(Ljava/lang/String;[[Ljava/lang/Void;)V
+    RETURN
+    max stack 3 max locals 2
+  method <init>(Ljava/lang/String;[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Base.<init>(Ljava/lang/String;[[Ljava/lang/Void;)V
+    RETURN
+    max stack 3 max locals 3
+
+class Test$OtherBase extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$OtherBase flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC, FINAL]
+  method <init>([Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    LDC 5
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$OtherBase.<init>(I[[Ljava/lang/Void;)V
+    RETURN
+    max stack 3 max locals 2
+  method <init>(I[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$OtherBase.value I
+    RETURN
+    max stack 2 max locals 3
+
+class Test$OtherDerived extends Test$OtherBase version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$OtherDerived flags [PUBLIC, STATIC]
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$OtherBase.<init>([Ljava/lang/Void;)V
+    RETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+protected
+5

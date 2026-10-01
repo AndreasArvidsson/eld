@@ -801,7 +801,7 @@ Expression types:
   2:12-2:16 -> i32
   4:1-4:6 -> (any) => void
   4:1-4:26 -> void
-  4:7-4:19 -> (i32, next: i32) => i32
+  4:7-4:19 -> (_: i32, next: i32) => i32
   4:7-4:25 -> i32
   4:20-4:21 -> i32
   4:23-4:24 -> i32
@@ -830,13 +830,13 @@ Expression types:
   18:12-18:16 -> i32
   20:1-20:6 -> (any) => void
   20:1-20:24 -> void
-  20:7-20:21 -> (i32, next: i32) => i32
+  20:7-20:21 -> (_: i32, next: i32) => i32
   20:7-20:23 -> i32
   22:43-22:44 -> i32
   23:12-23:16 -> i32
   25:1-25:6 -> (any) => void
   25:1-25:25 -> void
-  25:7-25:22 -> (i32 | null, next: i32) => i32
+  25:7-25:22 -> (_: i32 | null, next: i32) => i32
   25:7-25:24 -> i32
   28:19-28:46 -> i32
   28:25-28:46 -> Promise<i32>
@@ -845,7 +845,7 @@ Expression types:
   32:5-32:10 -> (any) => void
   32:5-32:36 -> void
   32:11-32:35 -> i32
-  32:17-32:29 -> (i32, next: i32) => Promise<i32>
+  32:17-32:29 -> (_: i32, next: i32) => Promise<i32>
   32:17-32:35 -> Promise<i32>
   32:30-32:31 -> i32
   32:33-32:34 -> i32
@@ -874,19 +874,19 @@ Resolved types:
   27:44-27:47 -> i32
 
 Declarations:
-  1:6-1:18 -> func discardFirst(i32, next: i32) => i32
+  1:6-1:18 -> func discardFirst(_: i32, next: i32) => i32
   1:27-1:31 -> const next: i32
   6:7-6:20 -> const discardLambda: (i32, i32) => i32
   6:46-6:50 -> const next: i32
   9:7-9:18 -> class DiscardCtor
   10:16-10:21 -> public var value: i32
-  11:12-13:6 -> public constructor(i32, next: i32)
+  11:12-13:6 -> public constructor(_: i32, next: i32)
   11:32-11:36 -> const next: i32
-  17:6-17:20 -> func discardDefault(i32?, next?: i32) => i32
+  17:6-17:20 -> func discardDefault(_?: i32, next?: i32) => i32
   17:33-17:37 -> const next: i32
-  22:6-22:21 -> func discardOptional(i32?, next?: i32) => i32
+  22:6-22:21 -> func discardOptional(_?: i32, next?: i32) => i32
   22:31-22:35 -> const next: i32
-  27:12-27:24 -> async func discardAsync(i32, next: i32) => Promise<i32>
+  27:12-27:24 -> async func discardAsync(_: i32, next: i32) => Promise<i32>
   27:33-27:37 -> const next: i32
   28:11-28:16 -> const value: i32
   31:12-31:29 -> async func printDiscardAsync() => Promise<void>

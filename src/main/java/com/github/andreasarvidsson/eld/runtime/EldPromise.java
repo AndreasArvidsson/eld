@@ -25,6 +25,8 @@ public final class EldPromise<T extends @Nullable Object> {
     private @Nullable Throwable error;
     private final List<Continuation<T>> continuations = new ArrayList<>();
 
+    public EldPromise() {}
+
     @EldApi
     public static <T extends @Nullable Object> EldPromise<T> resolve(
         final @Nullable T value
@@ -152,6 +154,7 @@ public final class EldPromise<T extends @Nullable Object> {
     }
 
     @Override
+    @EldApi
     public String toString() {
         return switch (state) {
             case PENDING -> "Promise<pending>";

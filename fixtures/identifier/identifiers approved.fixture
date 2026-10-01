@@ -1345,7 +1345,7 @@ Declarations:
   6:11-6:20 -> const constant2: i32
   7:11-7:24 -> const constantThree: i32
   8:11-8:24 -> const CONSTANT_FOUR: i32
-  9:10-9:18 -> func function(param: i32, param2: i32, paramThree: i32, i32) => void
+  9:10-9:18 -> func function(param: i32, param2: i32, paramThree: i32, _: i32) => void
   9:19-9:24 -> const param: i32
   9:31-9:37 -> const param2: i32
   9:44-9:54 -> const paramThree: i32
@@ -1361,7 +1361,7 @@ Declarations:
   19:14-19:18 -> const foo1: i32
   19:25-19:31 -> const barBaz: i32
   21:8-21:13 -> record Point(param: i32, param2: i32, paramThree: i32)
-  22:10-22:18 -> func function(param: i32, param2: i32, paramThree: i32, i32) => void
+  22:10-22:18 -> func function(param: i32, param2: i32, paramThree: i32, _: i32) => void
   22:19-22:24 -> const param: i32
   22:31-22:37 -> const param2: i32
   22:44-22:54 -> const paramThree: i32
@@ -1378,7 +1378,7 @@ Declarations:
   34:7-34:16 -> const constant2: i32
   35:7-35:20 -> const constantThree: i32
   36:7-36:20 -> const CONSTANT_FOUR: i32
-  37:6-37:14 -> func function(param: i32, param2: i32, paramThree: i32, i32) => void
+  37:6-37:14 -> func function(param: i32, param2: i32, paramThree: i32, _: i32) => void
   37:15-37:20 -> const param: i32
   37:27-37:33 -> const param2: i32
   37:40-37:50 -> const paramThree: i32

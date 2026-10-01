@@ -4,6 +4,6 @@ public sealed interface Statement extends BlockItem
     permits YieldStatement, BlockStatement, DeclarationStatement,
     ExpressionStatement, ReturnStatement, WhileStatement, DoWhileStatement,
     ForStatement, ForEachStatement, BreakStatement, ContinueStatement,
-    SuperConstructorCall, TryStatement, ThrowStatement, IgnoreStatement,
-    DestructuringAssignmentStatement, AssignmentStatement {
+    SuperConstructorCall, ThisConstructorCall, TryStatement, ThrowStatement,
+    IgnoreStatement, DestructuringAssignmentStatement, AssignmentStatement {
 }

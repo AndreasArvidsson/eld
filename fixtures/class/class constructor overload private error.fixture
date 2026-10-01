@@ -1,0 +1,121 @@
+class Foo {
+    public constructor(value: i32) {}
+    constructor(value: string) {}
+}
+new Foo("text");
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "i32" (2:31-2:34)
+RIGHT_PAREN (2:34-2:35)
+LEFT_BRACE (2:36-2:37)
+RIGHT_BRACE (2:37-2:38)
+CONSTRUCTOR (3:5-3:16)
+LEFT_PAREN (3:16-3:17)
+IDENTIFIER "value" (3:17-3:22)
+COLON (3:22-3:23)
+IDENTIFIER "string" (3:24-3:30)
+RIGHT_PAREN (3:30-3:31)
+LEFT_BRACE (3:32-3:33)
+RIGHT_BRACE (3:33-3:34)
+RIGHT_BRACE (4:1-4:2)
+NEW (5:1-5:4)
+IDENTIFIER "Foo" (5:5-5:8)
+LEFT_PAREN (5:8-5:9)
+STRING_LITERAL "\"text\"" (5:9-5:15)
+RIGHT_PAREN (5:15-5:16)
+SEMICOLON (5:16-5:17)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:17
+  (ClassDeclaration
+    range: 1:1-4:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:38
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 2:12-2:38
+        (FunctionParameter
+          range: 2:24-2:34
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 2:31-2:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 2:36-2:38
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:34
+      visibility: PRIVATE
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:5-3:34
+        (FunctionParameter
+          range: 3:17-3:30
+          (IdentifierDeclaration
+            range: 3:17-3:22
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 3:24-3:30
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:32-3:34
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:17
+    (NewExpression
+      range: 5:1-5:16
+      (IdentifierExpression
+        range: 5:5-5:8
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 5:9-5:15
+        kind: STRING
+        text: "\"text\""
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Constructor of class Foo is private at 5:5-5:8

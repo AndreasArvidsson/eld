@@ -1,0 +1,202 @@
+const arr: [[i32]] = [];
+print(dir(arr));
+help(arr);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "arr" (1:7-1:10)
+COLON (1:10-1:11)
+LEFT_BRACKET (1:12-1:13)
+LEFT_BRACKET (1:13-1:14)
+IDENTIFIER "i32" (1:14-1:17)
+RIGHT_BRACKET (1:17-1:18)
+RIGHT_BRACKET (1:18-1:19)
+EQUAL (1:20-1:21)
+LEFT_BRACKET (1:22-1:23)
+RIGHT_BRACKET (1:23-1:24)
+SEMICOLON (1:24-1:25)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "dir" (2:7-2:10)
+LEFT_PAREN (2:10-2:11)
+IDENTIFIER "arr" (2:11-2:14)
+RIGHT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+SEMICOLON (2:16-2:17)
+IDENTIFIER "help" (3:1-3:5)
+LEFT_PAREN (3:5-3:6)
+IDENTIFIER "arr" (3:6-3:9)
+RIGHT_PAREN (3:9-3:10)
+SEMICOLON (3:10-3:11)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:11
+  (VariableDeclaration
+    range: 1:1-1:25
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "arr"
+    )
+    (ArrayTypeNode
+      range: 1:12-1:19
+      (ArrayTypeNode
+        range: 1:13-1:18
+        (NamedTypeNode
+          range: 1:14-1:17
+          name: "i32"
+        )
+      )
+    )
+    (ArrayExpression
+      range: 1:22-1:24
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (CallExpression
+      range: 2:1-2:16
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:15
+        (IdentifierExpression
+          range: 2:7-2:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 2:11-2:14
+          name: "arr"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:11
+    (CallExpression
+      range: 3:1-3:10
+      (IdentifierExpression
+        range: 3:1-3:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 3:6-3:9
+        name: "arr"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:22-1:24 -> [[i32]]
+  2:1-2:6 -> (any) => void
+  2:1-2:16 -> void
+  2:7-2:10 -> (any) => [string]
+  2:7-2:15 -> [string]
+  2:11-2:14 -> [[i32]]
+  3:1-3:5 -> (any) => void
+  3:1-3:10 -> void
+  3:6-3:9 -> [[i32]]
+
+Resolved types:
+  1:12-1:19 -> [[i32]]
+  1:13-1:18 -> [i32]
+  1:14-1:17 -> i32
+
+Declarations:
+  1:7-1:10 -> const arr: [[i32]]
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:10 -> builtin dir
+  2:11-2:14 -> 1:7-1:10
+  3:1-3:5 -> builtin help
+  3:6-3:9 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW com/github/andreasarvidsson/eld/runtime/EldObjectArray
+    DUP
+    INVOKESPECIAL com/github/andreasarvidsson/eld/runtime/EldObjectArray.<init>()V
+    PUTSTATIC Test.arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC "[i32]"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;Ljava/lang/String;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.arr Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    LDC "[i32]"
+    LDC "[i32]"
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+--- OUTPUT ---
+
+[add, addAll, addFront, all, any, clear, concat, contains, copy, count, difference, distinct, filter, find, findIndex, findLast, findLastIndex, flatMap, flatten, getClass, hashCode, index, insertAt, intersect, isEmpty, join, lastIndex, length, map, none, partition, reduce, remove, removeAll, removeAt, removeIf, reverse, reverseInPlace, sort, sortInPlace, subtract, toString, union, zip]
+[[i32]]
+ | Fields:
+ |   length: i32
+ |
+ | Methods:
+ |   add(value: [i32]) => void
+ |   add(values: [[i32]]) => void
+ |   addAll(additional: [[i32]]) => void
+ |   addFront(value: [i32]) => void
+ |   addFront(values: [[i32]]) => void
+ |   all(predicate: (value: [i32], index: i32) => bool) => bool
+ |   any(predicate: (value: [i32], index: i32) => bool) => bool
+ |   clear() => void
+ |   concat(additional: [[i32]]) => [[i32]]
+ |   contains(value: [i32]) => bool
+ |   copy() => [[i32]]
+ |   count(predicate: (value: [i32], index: i32) => bool) => i32
+ |   difference(additional: [[i32]]) => [[i32]]
+ |   distinct() => [[i32]]
+ |   filter(predicate: (value: [i32], index: i32) => bool) => [[i32]]
+ |   find(predicate: (value: [i32], index: i32) => bool) => [i32] | null
+ |   findIndex(predicate: (value: [i32], index: i32) => bool) => i32
+ |   findLast(predicate: (value: [i32], index: i32) => bool) => [i32] | null
+ |   findLastIndex(predicate: (value: [i32], index: i32) => bool) => i32
+ |   flatMap(transform: (value: [i32], index: i32) => [any]) => [any]
+ |   flatten() => [i32]
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   index(value: [i32]) => i32
+ |   index(value: [i32], from: i32) => i32
+ |   insertAt(value: [i32], index: i32) => void
+ |   intersect(additional: [[i32]]) => [[i32]]
+ |   isEmpty() => bool
+ |   join() => string
+ |   join(separator: string) => string
+ |   lastIndex(value: [i32]) => i32
+ |   lastIndex(value: [i32], from: i32) => i32
+ |   map(transform: (value: [i32], index: i32) => any) => [any]
+ |   none(predicate: (value: [i32], index: i32) => bool) => bool
+ |   partition(predicate: (value: [i32], index: i32) => bool) => ([[i32]], [[i32]])
+ |   reduce(reducer: (acc: any, value: [i32], index: i32) => any, initial: any) => any
+ |   remove(predicate: (value: [i32], index: i32) => bool) => bool
+ |   remove(value: [i32]) => bool
+ |   removeAll(value: [i32]) => i32
+ |   removeAt(index: i32) => [i32]
+ |   removeIf(predicate: (value: [i32], index: i32) => bool) => bool
+ |   reverse() => [[i32]]
+ |   reverseInPlace() => void
+ |   sort() => [[i32]]
+ |   sort(comparator: (a: [i32], b: [i32]) => i32) => [[i32]]
+ |   sortInPlace() => void
+ |   sortInPlace(comparator: (a: [i32], b: [i32]) => i32) => void
+ |   subtract(additional: [[i32]]) => [[i32]]
+ |   toString() => string
+ |   union(additional: [[i32]]) => [[i32]]
+ |   zip(additional: [any]) => [([i32], any)]

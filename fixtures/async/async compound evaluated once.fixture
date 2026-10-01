@@ -5,7 +5,7 @@ func next() i32 {
     return calls;
 }
 
-func consume(values: i32[]) {
+func consume(values: [i32]) {
     print(values);
 }
 
@@ -41,8 +41,8 @@ IDENTIFIER "consume" (8:6-8:13)
 LEFT_PAREN (8:13-8:14)
 IDENTIFIER "values" (8:14-8:20)
 COLON (8:20-8:21)
-IDENTIFIER "i32" (8:22-8:25)
-LEFT_BRACKET (8:25-8:26)
+LEFT_BRACKET (8:22-8:23)
+IDENTIFIER "i32" (8:23-8:26)
 RIGHT_BRACKET (8:26-8:27)
 RIGHT_PAREN (8:27-8:28)
 LEFT_BRACE (8:29-8:30)
@@ -152,7 +152,7 @@ SEMICOLON (17:13-17:14)
       (ArrayTypeNode
         range: 8:22-8:27
         (NamedTypeNode
-          range: 8:22-8:25
+          range: 8:23-8:26
           name: "i32"
         )
       )
@@ -279,8 +279,8 @@ Expression types:
 
 Resolved types:
   3:13-3:16 -> i32
-  8:22-8:25 -> i32
   8:22-8:27 -> [i32]
+  8:23-8:26 -> i32
 
 Declarations:
   1:5-1:10 -> var calls: i32

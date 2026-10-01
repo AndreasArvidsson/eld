@@ -50,8 +50,12 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<FunctionParameter, Type> declaredParameterTypes =
         new IdentityHashMap<>();
-    private final Map<ClassType, List<FunctionParameter>> constructorParameters =
+    private final Map<ClassType, List<ConstructorOverload>> constructorOverloads =
         new HashMap<>();
+    private final IdentityHashMap<AstNode, ConstructorOverload> selectedConstructors =
+        new IdentityHashMap<>();
+    private final IdentityHashMap<AstNode, List<Integer>> constructorCallArguments =
+        new IdentityHashMap<>();
     private final IdentityHashMap<ObjectExpression, List<ObjectMember>> objectMembers =
         new IdentityHashMap<>();
     private final IdentityHashMap<ObjectExpression, List<ObjectEntry>> objectEvaluation =
@@ -116,13 +120,6 @@ public final class SemanticModel {
         new IdentityHashMap<>();
     private final IdentityHashMap<CallExpression, Method> promiseMethods =
         new IdentityHashMap<>();
-    private final IdentityHashMap<NewExpression, List<Integer>> constructorArgumentParameters =
-        new IdentityHashMap<>();
-    private final IdentityHashMap<SuperConstructorCall, List<Integer>> superConstructorArgumentParameters =
-        new IdentityHashMap<>();
-    private final Map<ClassType, FunctionType> constructors = new HashMap<>();
-    private final Map<ClassType, Visibility> constructorVisibility =
-        new HashMap<>();
     private final Map<ClassType, Map<String, VariableSymbol>> interfaceFields =
         new HashMap<>();
     private final Map<InterfaceType, InterfaceContract> interfaces =
@@ -240,6 +237,42 @@ public final class SemanticModel {
     }
 
     public String formatFunctionSignature(final FunctionSymbol function) {
+        return formatFunction(function, function::formatParameterSignature);
+    }
+
+    public String formatFunctionApiSignature(final FunctionSymbol function) {
+        final FunctionDeclaration declaration =
+            getFunctionDeclaration(function);
+        final List<@Nullable String> defaults =
+            declaration == null
+                ? Collections.<@Nullable String>nCopies(
+                    function.type().parameterTypes().size(),
+                    null
+                )
+                : declaration.parameters()
+                    .stream()
+                    .<@Nullable String>map(FunctionParameter::defaultText)
+                    .toList();
+        return formatFunction(
+            function,
+            (types, omittable) -> function
+                .formatSignature(types, omittable, defaults),
+            true
+        );
+    }
+
+    private String formatFunction(
+        final FunctionSymbol function,
+        final BiFunction<List<String>, List<Boolean>, String> formatter
+    ) {
+        return formatFunction(function, formatter, false);
+    }
+
+    private String formatFunction(
+        final FunctionSymbol function,
+        final BiFunction<List<String>, List<Boolean>, String> formatter,
+        final boolean showDefaults
+    ) {
         final FunctionDeclaration declaration =
             getFunctionDeclaration(function);
         final List<BindingDeclaration> parameters =
@@ -248,12 +281,22 @@ public final class SemanticModel {
             declaration != null
                 ? declaration.parameters()
                     .stream()
-                    .map(this::formatParameterType)
+                    .map(
+                        parameter -> formatParameterType(
+                            parameter,
+                            showDefaults
+                        )
+                    )
                     .toList()
                 : parameters != null
                     ? parameters.stream()
                         .map(this::getParameterDetails)
-                        .map(this::formatParameterType)
+                        .map(
+                            parameter -> formatParameterType(
+                                parameter,
+                                showDefaults
+                            )
+                        )
                         .toList()
                     : function.type()
                         .parameterTypes()
@@ -272,9 +315,7 @@ public final class SemanticModel {
                         .map(FunctionParameter::omittable)
                         .toList()
                     : Collections.nCopies(parameterTypes.size(), false);
-        return function.name() + "("
-            + function.type().formatLabeledParameters(parameterTypes, omittable)
-            + ")";
+        return formatter.apply(parameterTypes, omittable);
     }
 
     public boolean isOverrideCompatible(
@@ -833,7 +874,7 @@ public final class SemanticModel {
     }
 
     public Set<ClassType> getClassTypes() {
-        return Collections.unmodifiableSet(constructors.keySet());
+        return Collections.unmodifiableSet(constructorOverloads.keySet());
     }
 
     public boolean isSubclassOf(final ClassType type, final ClassType base) {
@@ -871,17 +912,6 @@ public final class SemanticModel {
 
     public Visibility getMemberVisibility(final Symbol symbol) {
         return memberVisibility.getOrDefault(symbol, Visibility.PRIVATE);
-    }
-
-    public void setConstructorVisibility(
-        final ClassType owner,
-        final Visibility visibility
-    ) {
-        constructorVisibility.put(owner, visibility);
-    }
-
-    public Visibility getConstructorVisibility(final ClassType owner) {
-        return constructorVisibility.getOrDefault(owner, Visibility.PRIVATE);
     }
 
     private final IdentityHashMap<LambdaExpression, List<Symbol>> lambdaCaptures =
@@ -930,25 +960,39 @@ public final class SemanticModel {
         return Objects.requireNonNull(parameterDetails.get(name));
     }
 
-    public void setConstructorParameters(
+    public void setConstructorOverloads(
         final ClassType owner,
-        final List<FunctionParameter> parameters
+        final List<ConstructorOverload> overloads
     ) {
-        constructorParameters.put(owner, List.copyOf(parameters));
+        constructorOverloads.put(owner, List.copyOf(overloads));
     }
 
-    public List<FunctionParameter> getConstructorParameters(
+    public List<ConstructorOverload> getConstructorOverloads(
         final ClassType owner
     ) {
-        return constructorParameters.getOrDefault(owner, List.of());
+        return Objects.requireNonNull(constructorOverloads.get(owner));
     }
 
-    public void setConstructor(final ClassType owner, final FunctionType type) {
-        constructors.put(owner, type);
+    public void setSelectedConstructor(
+        final AstNode call,
+        final ConstructorOverload constructor
+    ) {
+        selectedConstructors.put(call, constructor);
     }
 
-    public FunctionType getConstructor(final ClassType owner) {
-        return Objects.requireNonNull(constructors.get(owner));
+    public ConstructorOverload getSelectedConstructor(final AstNode call) {
+        return Objects.requireNonNull(selectedConstructors.get(call));
+    }
+
+    public void setConstructorCallArguments(
+        final AstNode call,
+        final List<Integer> parameters
+    ) {
+        constructorCallArguments.put(call, List.copyOf(parameters));
+    }
+
+    public List<Integer> getConstructorCallArguments(final AstNode call) {
+        return Objects.requireNonNull(constructorCallArguments.get(call));
     }
 
     public void setConstructorSymbol(
@@ -1159,28 +1203,26 @@ public final class SemanticModel {
         final NewExpression creation,
         final List<Integer> parameters
     ) {
-        constructorArgumentParameters.put(creation, List.copyOf(parameters));
+        setConstructorCallArguments(creation, parameters);
     }
 
     public List<Integer> getConstructorArgumentParameters(
         final NewExpression creation
     ) {
-        return Objects
-            .requireNonNull(constructorArgumentParameters.get(creation));
+        return getConstructorCallArguments(creation);
     }
 
     public void setSuperConstructorArgumentParameters(
         final SuperConstructorCall call,
         final List<Integer> parameters
     ) {
-        superConstructorArgumentParameters.put(call, List.copyOf(parameters));
+        setConstructorCallArguments(call, parameters);
     }
 
     public List<Integer> getSuperConstructorArgumentParameters(
         final SuperConstructorCall call
     ) {
-        return Objects
-            .requireNonNull(superConstructorArgumentParameters.get(call));
+        return getConstructorCallArguments(call);
     }
 
     @Override
@@ -1281,23 +1323,11 @@ public final class SemanticModel {
     }
 
     private String formatDeclaration(final Symbol symbol) {
-        if (symbol instanceof FunctionSymbol function) {
-            final FunctionDeclaration declaration =
-                getFunctionDeclaration(function);
-            if (declaration != null) {
-                final List<String> parameterTypes =
-                    declaration.parameters()
-                        .stream()
-                        .map(this::formatParameterType)
-                        .toList();
-                return function.format(
-                    parameterTypes,
-                    declaration.parameters()
-                        .stream()
-                        .map(FunctionParameter::omittable)
-                        .toList()
-                );
-            }
+        if (
+            symbol instanceof FunctionSymbol function
+                && getFunctionDeclaration(function) != null
+        ) {
+            return formatFunction(function, function::format);
         }
         if (
             symbol instanceof VariableSymbol variable
@@ -1312,15 +1342,16 @@ public final class SemanticModel {
         return symbol.toString();
     }
 
-    private String formatParameterType(final FunctionParameter parameter) {
+    private String formatParameterType(
+        final FunctionParameter parameter,
+        final boolean showDefaults
+    ) {
         final Type declared = declaredParameterTypes.get(parameter);
         if (declared == null) {
             return parameter.type().toString();
         }
-        final String text = declared.toString();
-        return parameter.omittable() && declared instanceof UnionType
-            ? "(" + text + ")"
-            : text;
+        return FunctionSignatures
+            .formatParameterType(declared, parameter, showDefaults);
     }
 
     private static void appendSection(

@@ -1,0 +1,169 @@
+const str = "hello";
+print(dir(str));
+help(str);
+
+--- TOKENS ---
+
+CONST (1:1-1:6)
+IDENTIFIER "str" (1:7-1:10)
+EQUAL (1:11-1:12)
+STRING_LITERAL "\"hello\"" (1:13-1:20)
+SEMICOLON (1:20-1:21)
+IDENTIFIER "print" (2:1-2:6)
+LEFT_PAREN (2:6-2:7)
+IDENTIFIER "dir" (2:7-2:10)
+LEFT_PAREN (2:10-2:11)
+IDENTIFIER "str" (2:11-2:14)
+RIGHT_PAREN (2:14-2:15)
+RIGHT_PAREN (2:15-2:16)
+SEMICOLON (2:16-2:17)
+IDENTIFIER "help" (3:1-3:5)
+LEFT_PAREN (3:5-3:6)
+IDENTIFIER "str" (3:6-3:9)
+RIGHT_PAREN (3:9-3:10)
+SEMICOLON (3:10-3:11)
+
+--- AST ---
+
+(Program
+  range: 1:1-3:11
+  (VariableDeclaration
+    range: 1:1-1:21
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "str"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:13-1:20
+      kind: STRING
+      text: "\"hello\""
+    )
+  )
+  (ExpressionStatement
+    range: 2:1-2:17
+    (CallExpression
+      range: 2:1-2:16
+      (IdentifierExpression
+        range: 2:1-2:6
+        name: "print"
+      )
+      (CallExpression
+        range: 2:7-2:15
+        (IdentifierExpression
+          range: 2:7-2:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 2:11-2:14
+          name: "str"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 3:1-3:11
+    (CallExpression
+      range: 3:1-3:10
+      (IdentifierExpression
+        range: 3:1-3:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 3:6-3:9
+        name: "str"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:13-1:20 -> string
+  2:1-2:6 -> (any) => void
+  2:1-2:16 -> void
+  2:7-2:10 -> (any) => [string]
+  2:7-2:15 -> [string]
+  2:11-2:14 -> string
+  3:1-3:5 -> (any) => void
+  3:1-3:10 -> void
+  3:6-3:9 -> string
+
+Declarations:
+  1:7-1:10 -> const str: string
+
+References:
+  2:1-2:6 -> builtin print
+  2:7-2:10 -> builtin dir
+  2:11-2:14 -> 1:7-1:10
+  3:1-3:5 -> builtin help
+  3:6-3:9 -> 1:7-1:10
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  field str Ljava/lang/String; flags [PUBLIC, STATIC, FINAL] = "hello"
+  method <clinit>()V flags [STATIC]
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.str Ljava/lang/String;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC Test.str Ljava/lang/String;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+--- OUTPUT ---
+
+[bytes, capitalize, chars, compare, compareIgnoreCase, contains, count, endsWith, equalsIgnoreCase, getClass, hashCode, index, isAlnum, isAlpha, isBlank, isDigit, isEmpty, isLower, isUpper, lastIndex, length, lines, lower, matches, padEnd, padStart, repeat, replace, replaceAll, reverse, split, startsWith, strip, stripEnd, stripStart, title, toString, upper]
+string
+ | Fields:
+ |   length: i32
+ |
+ | Methods:
+ |   bytes() => [i8]
+ |   capitalize() => string
+ |   chars() => [char]
+ |   compare(other: string) => i32
+ |   compareIgnoreCase(other: string) => i32
+ |   contains(part: string) => bool
+ |   count(part: string) => i32
+ |   endsWith(suffix: string) => bool
+ |   equalsIgnoreCase(other: string) => bool
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   index(part: string) => i32
+ |   index(part: string, from: i32) => i32
+ |   isAlnum() => bool
+ |   isAlpha() => bool
+ |   isBlank() => bool
+ |   isDigit() => bool
+ |   isEmpty() => bool
+ |   isLower() => bool
+ |   isUpper() => bool
+ |   lastIndex(part: string) => i32
+ |   lastIndex(part: string, from: i32) => i32
+ |   lines() => [string]
+ |   lower() => string
+ |   matches(regex: string) => bool
+ |   padEnd(length: i32, padding: string) => string
+ |   padStart(length: i32, padding: string) => string
+ |   repeat(count: i32) => string
+ |   replace(target: string, replacement: string) => string
+ |   replaceAll(regex: string, replacement: string) => string
+ |   reverse() => string
+ |   split() => [string]
+ |   split(separator: string) => [string]
+ |   split(separator: string, maxSplits: i32) => [string]
+ |   startsWith(prefix: string) => bool
+ |   strip() => string
+ |   strip(chars: string) => string
+ |   stripEnd() => string
+ |   stripEnd(chars: string) => string
+ |   stripStart() => string
+ |   stripStart(chars: string) => string
+ |   title() => string
+ |   toString() => string
+ |   upper() => string

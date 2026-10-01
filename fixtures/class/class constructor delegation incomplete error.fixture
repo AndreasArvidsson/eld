@@ -1,0 +1,187 @@
+class Foo {
+    public const value: i32;
+    public constructor(enabled: bool) {
+        if (enabled) {
+            this(1);
+        }
+    }
+    public constructor(value: i32) {
+        this.value = value;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "enabled" (3:24-3:31)
+COLON (3:31-3:32)
+IDENTIFIER "bool" (3:33-3:37)
+RIGHT_PAREN (3:37-3:38)
+LEFT_BRACE (3:39-3:40)
+IF (4:9-4:11)
+LEFT_PAREN (4:12-4:13)
+IDENTIFIER "enabled" (4:13-4:20)
+RIGHT_PAREN (4:20-4:21)
+LEFT_BRACE (4:22-4:23)
+THIS (5:13-5:17)
+LEFT_PAREN (5:17-5:18)
+INTEGER_LITERAL "1" (5:18-5:19)
+RIGHT_PAREN (5:19-5:20)
+SEMICOLON (5:20-5:21)
+RIGHT_BRACE (6:9-6:10)
+RIGHT_BRACE (7:5-7:6)
+PUBLIC (8:5-8:11)
+CONSTRUCTOR (8:12-8:23)
+LEFT_PAREN (8:23-8:24)
+IDENTIFIER "value" (8:24-8:29)
+COLON (8:29-8:30)
+IDENTIFIER "i32" (8:31-8:34)
+RIGHT_PAREN (8:34-8:35)
+LEFT_BRACE (8:36-8:37)
+THIS (9:9-9:13)
+DOT (9:13-9:14)
+IDENTIFIER "value" (9:14-9:19)
+EQUAL (9:20-9:21)
+IDENTIFIER "value" (9:22-9:27)
+SEMICOLON (9:27-9:28)
+RIGHT_BRACE (10:5-10:6)
+RIGHT_BRACE (11:1-11:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-11:2
+  (ClassDeclaration
+    range: 1:1-11:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-7:6
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-7:6
+        (FunctionParameter
+          range: 3:24-3:37
+          (IdentifierDeclaration
+            range: 3:24-3:31
+            name: "enabled"
+          )
+          (NamedTypeNode
+            range: 3:33-3:37
+            name: "bool"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:39-7:6
+          (ExpressionStatement
+            range: 4:9-6:10
+            (IfExpression
+              range: 4:9-6:10
+              (IdentifierExpression
+                range: 4:13-4:20
+                name: "enabled"
+              )
+              (BlockStatement
+                range: 4:22-6:10
+                (ThisConstructorCall
+                  range: 5:13-5:21
+                  (LiteralExpression
+                    range: 5:18-5:19
+                    kind: INT
+                    text: "1"
+                  )
+                )
+              )
+              elseBranch: null
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 8:5-10:6
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 8:12-10:6
+        (FunctionParameter
+          range: 8:24-8:34
+          (IdentifierDeclaration
+            range: 8:24-8:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 8:31-8:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 8:36-10:6
+          (AssignmentStatement
+            range: 9:9-9:28
+            (MemberExpression
+              range: 9:9-9:19
+              (ThisExpression
+                range: 9:9-9:13
+              )
+              (IdentifierExpression
+                range: 9:14-9:19
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 9:22-9:27
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: A delegating constructor must call 'this(...)' on every path before using 'this' or completing the constructor at 3:12-7:6

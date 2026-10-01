@@ -1,9 +1,11 @@
+    @EldApi
     public ${SELF} sort() {
         final ${SELF} result = copy();
         result.sortInPlace();
         return result;
     }
 
+    @EldApi
     public void sortInPlace() {
         Arrays.sort(elements, 0, length);
     }

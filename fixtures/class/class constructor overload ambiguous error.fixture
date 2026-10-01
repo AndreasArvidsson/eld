@@ -1,0 +1,143 @@
+class Foo {
+    public constructor(value: string | null) {}
+    public constructor(value: i32 | null) {}
+}
+new Foo(null);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+IDENTIFIER "value" (2:24-2:29)
+COLON (2:29-2:30)
+IDENTIFIER "string" (2:31-2:37)
+PIPE (2:38-2:39)
+NULL (2:40-2:44)
+RIGHT_PAREN (2:44-2:45)
+LEFT_BRACE (2:46-2:47)
+RIGHT_BRACE (2:47-2:48)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+IDENTIFIER "value" (3:24-3:29)
+COLON (3:29-3:30)
+IDENTIFIER "i32" (3:31-3:34)
+PIPE (3:35-3:36)
+NULL (3:37-3:41)
+RIGHT_PAREN (3:41-3:42)
+LEFT_BRACE (3:43-3:44)
+RIGHT_BRACE (3:44-3:45)
+RIGHT_BRACE (4:1-4:2)
+NEW (5:1-5:4)
+IDENTIFIER "Foo" (5:5-5:8)
+LEFT_PAREN (5:8-5:9)
+NULL (5:9-5:13)
+RIGHT_PAREN (5:13-5:14)
+SEMICOLON (5:14-5:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:15
+  (ClassDeclaration
+    range: 1:1-4:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:48
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 2:12-2:48
+        (FunctionParameter
+          range: 2:24-2:44
+          (IdentifierDeclaration
+            range: 2:24-2:29
+            name: "value"
+          )
+          (UnionTypeNode
+            range: 2:31-2:44
+            (NamedTypeNode
+              range: 2:31-2:37
+              name: "string"
+            )
+            (NamedTypeNode
+              range: 2:40-2:44
+              name: "null"
+            )
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 2:46-2:48
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:45
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-3:45
+        (FunctionParameter
+          range: 3:24-3:41
+          (IdentifierDeclaration
+            range: 3:24-3:29
+            name: "value"
+          )
+          (UnionTypeNode
+            range: 3:31-3:41
+            (NamedTypeNode
+              range: 3:31-3:34
+              name: "i32"
+            )
+            (NamedTypeNode
+              range: 3:37-3:41
+              name: "null"
+            )
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:43-3:45
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:15
+    (NewExpression
+      range: 5:1-5:14
+      (IdentifierExpression
+        range: 5:5-5:8
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 5:9-5:13
+        kind: NULL
+        text: "null"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Ambiguous call to overloaded function 'constructor' with arguments (null) at 5:1-5:14
+Available overloads:
+  constructor(value: string | null)
+  constructor(value: i32 | null)

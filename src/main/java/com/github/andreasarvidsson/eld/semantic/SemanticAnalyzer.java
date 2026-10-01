@@ -75,6 +75,7 @@ import com.github.andreasarvidsson.eld.parser.SuperConstructorCall;
 import com.github.andreasarvidsson.eld.parser.SwitchExpression;
 import com.github.andreasarvidsson.eld.parser.TernaryExpression;
 import com.github.andreasarvidsson.eld.parser.ThisExpression;
+import com.github.andreasarvidsson.eld.parser.ThisConstructorCall;
 import com.github.andreasarvidsson.eld.parser.ThrowStatement;
 import com.github.andreasarvidsson.eld.parser.TryStatement;
 import com.github.andreasarvidsson.eld.parser.TuplePattern;
@@ -111,6 +112,7 @@ public final class SemanticAnalyzer {
     private boolean analyzingStaticInitializer;
     private boolean analyzingConstructorDefault;
     private boolean analyzingSuperArguments;
+    private boolean analyzingThisArguments;
     private final IdentityHashMap<FunctionSymbol, List<ReturnStatement>> lambdaReturns =
         new IdentityHashMap<>();
     private final List<ConstMethodUse> constMethodUses = new ArrayList<>();
@@ -1761,6 +1763,34 @@ public final class SemanticAnalyzer {
                     analyzingSuperArguments = previous;
                 }
             }
+            case ThisConstructorCall call -> {
+                if (
+                    currentConstructor == null || context.function() != null
+                        || currentInstance == null
+                        || analyzingSuperArguments
+                        || analyzingConstructorDefault
+                ) {
+                    throw new SemanticException(
+                        call.range(),
+                        "'this(...)' is only allowed in a constructor"
+                    );
+                }
+                final boolean previous = analyzingSuperArguments;
+                final boolean previousThis = analyzingThisArguments;
+                analyzingSuperArguments = true;
+                analyzingThisArguments = true;
+                try {
+                    expressions.analyzeConstructorArguments(
+                        currentInstance,
+                        call,
+                        context
+                    );
+                }
+                finally {
+                    analyzingSuperArguments = previous;
+                    analyzingThisArguments = previousThis;
+                }
+            }
             case DeclarationStatement declarationStatement ->
                 analyzeDeclaration(
                     declarationStatement.declaration(),
@@ -2125,6 +2155,17 @@ public final class SemanticAnalyzer {
         return statements.resolveParameterType(parameter, context);
     }
 
+    public ConstructorOverload selectConstructor(
+        final ClassType owner,
+        final AstNode call,
+        final List<Expression> arguments,
+        final Range range,
+        final SemanticContext context
+    ) {
+        return expressions
+            .selectConstructor(owner, call, arguments, range, context);
+    }
+
     public void analyzeVariableDeclaration(
         final VariableDeclaration declaration,
         final SemanticContext context,
@@ -2295,6 +2336,10 @@ public final class SemanticAnalyzer {
 
     public boolean isAnalyzingSuperArguments() {
         return analyzingSuperArguments;
+    }
+
+    public boolean isAnalyzingThisArguments() {
+        return analyzingThisArguments;
     }
 
     @Nullable

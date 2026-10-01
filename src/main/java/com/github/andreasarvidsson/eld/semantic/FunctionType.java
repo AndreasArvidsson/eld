@@ -85,18 +85,34 @@ public record FunctionType(
         final List<String> parameters,
         final List<Boolean> omittable
     ) {
+        return formatLabeledParameters(
+            parameters,
+            omittable,
+            Collections.nCopies(parameters.size(), null)
+        );
+    }
+
+    public String formatLabeledParameters(
+        final List<String> parameters,
+        final List<Boolean> omittable,
+        final List<@Nullable String> defaults
+    ) {
         final List<String> labeled = new ArrayList<>();
         for (int i = 0; i < parameters.size(); i++) {
             final @Nullable String label =
                 parameterNames.isEmpty() ? null : parameterNames.get(i);
             final String parameter = parameters.get(i);
-            labeled
-                .add(
-                    label == null
-                        ? parameter + (omittable.get(i) ? "?" : "")
-                        : label + (omittable.get(i) ? "?" : "") + ": "
-                            + parameter
-                );
+            final @Nullable String defaultValue = defaults.get(i);
+            final String optional =
+                omittable.get(i) && defaultValue == null ? "?" : "";
+            labeled.add(
+                label == null && parameterNames.isEmpty()
+                    ? parameter + optional
+                        + (defaultValue == null ? "" : " = " + defaultValue)
+                    : (label == null ? "_" : label) + optional + ": "
+                        + parameter
+                        + (defaultValue == null ? "" : " = " + defaultValue)
+            );
         }
         return formatParameters(labeled);
     }

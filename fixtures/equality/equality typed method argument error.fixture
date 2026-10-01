@@ -2,7 +2,7 @@ class Animal {}
 class Cat extends Animal {}
 class Dog extends Animal {}
 const cat = new Cat();
-cat.equals(new Dog());
+cat == new Dog();
 
 --- TOKENS ---
 
@@ -31,20 +31,17 @@ LEFT_PAREN (4:20-4:21)
 RIGHT_PAREN (4:21-4:22)
 SEMICOLON (4:22-4:23)
 IDENTIFIER "cat" (5:1-5:4)
-DOT (5:4-5:5)
-IDENTIFIER "equals" (5:5-5:11)
-LEFT_PAREN (5:11-5:12)
-NEW (5:12-5:15)
-IDENTIFIER "Dog" (5:16-5:19)
-LEFT_PAREN (5:19-5:20)
-RIGHT_PAREN (5:20-5:21)
-RIGHT_PAREN (5:21-5:22)
-SEMICOLON (5:22-5:23)
+EQUAL_EQUAL (5:5-5:7)
+NEW (5:8-5:11)
+IDENTIFIER "Dog" (5:12-5:15)
+LEFT_PAREN (5:15-5:16)
+RIGHT_PAREN (5:16-5:17)
+SEMICOLON (5:17-5:18)
 
 --- AST ---
 
 (Program
-  range: 1:1-5:23
+  range: 1:1-5:18
   (ClassDeclaration
     range: 1:1-1:16
     modifiers: []
@@ -107,24 +104,18 @@ SEMICOLON (5:22-5:23)
     )
   )
   (ExpressionStatement
-    range: 5:1-5:23
-    (CallExpression
-      range: 5:1-5:22
-      (MemberExpression
-        range: 5:1-5:11
-        (IdentifierExpression
-          range: 5:1-5:4
-          name: "cat"
-        )
-        (IdentifierExpression
-          range: 5:5-5:11
-          name: "equals"
-        )
+    range: 5:1-5:18
+    (BinaryExpression
+      range: 5:1-5:17
+      (IdentifierExpression
+        range: 5:1-5:4
+        name: "cat"
       )
+      operator: EQUAL
       (NewExpression
-        range: 5:12-5:21
+        range: 5:8-5:17
         (IdentifierExpression
-          range: 5:16-5:19
+          range: 5:12-5:15
           name: "Dog"
         )
       )
@@ -134,4 +125,4 @@ SEMICOLON (5:22-5:23)
 
 --- SEMANTIC ---
 
-SemanticException: Cannot pass Dog as Cat at 5:12-5:21
+SemanticException: Operator EQUAL is not applicable to Cat and Dog at 5:1-5:17

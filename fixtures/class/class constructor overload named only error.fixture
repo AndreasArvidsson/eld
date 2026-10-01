@@ -1,0 +1,129 @@
+class Foo {
+    public constructor(*, first: i32) {}
+    public constructor(*, second: i32) {}
+}
+new Foo(1);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONSTRUCTOR (2:12-2:23)
+LEFT_PAREN (2:23-2:24)
+STAR (2:24-2:25)
+COMMA (2:25-2:26)
+IDENTIFIER "first" (2:27-2:32)
+COLON (2:32-2:33)
+IDENTIFIER "i32" (2:34-2:37)
+RIGHT_PAREN (2:37-2:38)
+LEFT_BRACE (2:39-2:40)
+RIGHT_BRACE (2:40-2:41)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+STAR (3:24-3:25)
+COMMA (3:25-3:26)
+IDENTIFIER "second" (3:27-3:33)
+COLON (3:33-3:34)
+IDENTIFIER "i32" (3:35-3:38)
+RIGHT_PAREN (3:38-3:39)
+LEFT_BRACE (3:40-3:41)
+RIGHT_BRACE (3:41-3:42)
+RIGHT_BRACE (4:1-4:2)
+NEW (5:1-5:4)
+IDENTIFIER "Foo" (5:5-5:8)
+LEFT_PAREN (5:8-5:9)
+INTEGER_LITERAL "1" (5:9-5:10)
+RIGHT_PAREN (5:10-5:11)
+SEMICOLON (5:11-5:12)
+
+--- AST ---
+
+(Program
+  range: 1:1-5:12
+  (ClassDeclaration
+    range: 1:1-4:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:41
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 2:12-2:41
+        (FunctionParameter
+          range: 2:27-2:37
+          (IdentifierDeclaration
+            range: 2:27-2:32
+            name: "first"
+          )
+          (NamedTypeNode
+            range: 2:34-2:37
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 2:39-2:41
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:42
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-3:42
+        (FunctionParameter
+          range: 3:27-3:38
+          (IdentifierDeclaration
+            range: 3:27-3:33
+            name: "second"
+          )
+          (NamedTypeNode
+            range: 3:35-3:38
+            name: "i32"
+          )
+          optional: false
+          namedOnly: true
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 3:40-3:42
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 5:1-5:12
+    (NewExpression
+      range: 5:1-5:11
+      (IdentifierExpression
+        range: 5:5-5:8
+        name: "Foo"
+      )
+      (LiteralExpression
+        range: 5:9-5:10
+        kind: INT
+        text: "1"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: No overload of 'constructor' accepts arguments (i32) at 5:1-5:11
+Available overloads:
+  constructor(*, first: i32)
+  constructor(*, second: i32)

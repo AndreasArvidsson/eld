@@ -1,0 +1,972 @@
+var initializations = 0;
+func initialize() i32 { initializations += 1; return 3; }
+class Base {
+    public const baseValue: i32;
+    public constructor(value: i32) { this.baseValue = value; }
+    public constructor(value: string) { this.baseValue = value.length; }
+}
+class Derived extends Base {
+    public var marker = initialize();
+    public const value: i32;
+    public constructor() { this("hello"); }
+    public constructor(value: string) { this(value.length, true); }
+    constructor(value: i32, enabled: bool) {
+        super(value);
+        this.value = value;
+    }
+}
+const derived = new Derived();
+print(derived.value);
+print(derived.baseValue);
+print(derived.marker);
+print(initializations);
+print(new Base("abc").baseValue);
+help(Derived);
+
+--- TOKENS ---
+
+VAR (1:1-1:4)
+IDENTIFIER "initializations" (1:5-1:20)
+EQUAL (1:21-1:22)
+INTEGER_LITERAL "0" (1:23-1:24)
+SEMICOLON (1:24-1:25)
+FUNC (2:1-2:5)
+IDENTIFIER "initialize" (2:6-2:16)
+LEFT_PAREN (2:16-2:17)
+RIGHT_PAREN (2:17-2:18)
+IDENTIFIER "i32" (2:19-2:22)
+LEFT_BRACE (2:23-2:24)
+IDENTIFIER "initializations" (2:25-2:40)
+PLUS_EQUAL (2:41-2:43)
+INTEGER_LITERAL "1" (2:44-2:45)
+SEMICOLON (2:45-2:46)
+RETURN (2:47-2:53)
+INTEGER_LITERAL "3" (2:54-2:55)
+SEMICOLON (2:55-2:56)
+RIGHT_BRACE (2:57-2:58)
+CLASS (3:1-3:6)
+IDENTIFIER "Base" (3:7-3:11)
+LEFT_BRACE (3:12-3:13)
+PUBLIC (4:5-4:11)
+CONST (4:12-4:17)
+IDENTIFIER "baseValue" (4:18-4:27)
+COLON (4:27-4:28)
+IDENTIFIER "i32" (4:29-4:32)
+SEMICOLON (4:32-4:33)
+PUBLIC (5:5-5:11)
+CONSTRUCTOR (5:12-5:23)
+LEFT_PAREN (5:23-5:24)
+IDENTIFIER "value" (5:24-5:29)
+COLON (5:29-5:30)
+IDENTIFIER "i32" (5:31-5:34)
+RIGHT_PAREN (5:34-5:35)
+LEFT_BRACE (5:36-5:37)
+THIS (5:38-5:42)
+DOT (5:42-5:43)
+IDENTIFIER "baseValue" (5:43-5:52)
+EQUAL (5:53-5:54)
+IDENTIFIER "value" (5:55-5:60)
+SEMICOLON (5:60-5:61)
+RIGHT_BRACE (5:62-5:63)
+PUBLIC (6:5-6:11)
+CONSTRUCTOR (6:12-6:23)
+LEFT_PAREN (6:23-6:24)
+IDENTIFIER "value" (6:24-6:29)
+COLON (6:29-6:30)
+IDENTIFIER "string" (6:31-6:37)
+RIGHT_PAREN (6:37-6:38)
+LEFT_BRACE (6:39-6:40)
+THIS (6:41-6:45)
+DOT (6:45-6:46)
+IDENTIFIER "baseValue" (6:46-6:55)
+EQUAL (6:56-6:57)
+IDENTIFIER "value" (6:58-6:63)
+DOT (6:63-6:64)
+IDENTIFIER "length" (6:64-6:70)
+SEMICOLON (6:70-6:71)
+RIGHT_BRACE (6:72-6:73)
+RIGHT_BRACE (7:1-7:2)
+CLASS (8:1-8:6)
+IDENTIFIER "Derived" (8:7-8:14)
+EXTENDS (8:15-8:22)
+IDENTIFIER "Base" (8:23-8:27)
+LEFT_BRACE (8:28-8:29)
+PUBLIC (9:5-9:11)
+VAR (9:12-9:15)
+IDENTIFIER "marker" (9:16-9:22)
+EQUAL (9:23-9:24)
+IDENTIFIER "initialize" (9:25-9:35)
+LEFT_PAREN (9:35-9:36)
+RIGHT_PAREN (9:36-9:37)
+SEMICOLON (9:37-9:38)
+PUBLIC (10:5-10:11)
+CONST (10:12-10:17)
+IDENTIFIER "value" (10:18-10:23)
+COLON (10:23-10:24)
+IDENTIFIER "i32" (10:25-10:28)
+SEMICOLON (10:28-10:29)
+PUBLIC (11:5-11:11)
+CONSTRUCTOR (11:12-11:23)
+LEFT_PAREN (11:23-11:24)
+RIGHT_PAREN (11:24-11:25)
+LEFT_BRACE (11:26-11:27)
+THIS (11:28-11:32)
+LEFT_PAREN (11:32-11:33)
+STRING_LITERAL "\"hello\"" (11:33-11:40)
+RIGHT_PAREN (11:40-11:41)
+SEMICOLON (11:41-11:42)
+RIGHT_BRACE (11:43-11:44)
+PUBLIC (12:5-12:11)
+CONSTRUCTOR (12:12-12:23)
+LEFT_PAREN (12:23-12:24)
+IDENTIFIER "value" (12:24-12:29)
+COLON (12:29-12:30)
+IDENTIFIER "string" (12:31-12:37)
+RIGHT_PAREN (12:37-12:38)
+LEFT_BRACE (12:39-12:40)
+THIS (12:41-12:45)
+LEFT_PAREN (12:45-12:46)
+IDENTIFIER "value" (12:46-12:51)
+DOT (12:51-12:52)
+IDENTIFIER "length" (12:52-12:58)
+COMMA (12:58-12:59)
+BOOLEAN_LITERAL "true" (12:60-12:64)
+RIGHT_PAREN (12:64-12:65)
+SEMICOLON (12:65-12:66)
+RIGHT_BRACE (12:67-12:68)
+CONSTRUCTOR (13:5-13:16)
+LEFT_PAREN (13:16-13:17)
+IDENTIFIER "value" (13:17-13:22)
+COLON (13:22-13:23)
+IDENTIFIER "i32" (13:24-13:27)
+COMMA (13:27-13:28)
+IDENTIFIER "enabled" (13:29-13:36)
+COLON (13:36-13:37)
+IDENTIFIER "bool" (13:38-13:42)
+RIGHT_PAREN (13:42-13:43)
+LEFT_BRACE (13:44-13:45)
+SUPER (14:9-14:14)
+LEFT_PAREN (14:14-14:15)
+IDENTIFIER "value" (14:15-14:20)
+RIGHT_PAREN (14:20-14:21)
+SEMICOLON (14:21-14:22)
+THIS (15:9-15:13)
+DOT (15:13-15:14)
+IDENTIFIER "value" (15:14-15:19)
+EQUAL (15:20-15:21)
+IDENTIFIER "value" (15:22-15:27)
+SEMICOLON (15:27-15:28)
+RIGHT_BRACE (16:5-16:6)
+RIGHT_BRACE (17:1-17:2)
+CONST (18:1-18:6)
+IDENTIFIER "derived" (18:7-18:14)
+EQUAL (18:15-18:16)
+NEW (18:17-18:20)
+IDENTIFIER "Derived" (18:21-18:28)
+LEFT_PAREN (18:28-18:29)
+RIGHT_PAREN (18:29-18:30)
+SEMICOLON (18:30-18:31)
+IDENTIFIER "print" (19:1-19:6)
+LEFT_PAREN (19:6-19:7)
+IDENTIFIER "derived" (19:7-19:14)
+DOT (19:14-19:15)
+IDENTIFIER "value" (19:15-19:20)
+RIGHT_PAREN (19:20-19:21)
+SEMICOLON (19:21-19:22)
+IDENTIFIER "print" (20:1-20:6)
+LEFT_PAREN (20:6-20:7)
+IDENTIFIER "derived" (20:7-20:14)
+DOT (20:14-20:15)
+IDENTIFIER "baseValue" (20:15-20:24)
+RIGHT_PAREN (20:24-20:25)
+SEMICOLON (20:25-20:26)
+IDENTIFIER "print" (21:1-21:6)
+LEFT_PAREN (21:6-21:7)
+IDENTIFIER "derived" (21:7-21:14)
+DOT (21:14-21:15)
+IDENTIFIER "marker" (21:15-21:21)
+RIGHT_PAREN (21:21-21:22)
+SEMICOLON (21:22-21:23)
+IDENTIFIER "print" (22:1-22:6)
+LEFT_PAREN (22:6-22:7)
+IDENTIFIER "initializations" (22:7-22:22)
+RIGHT_PAREN (22:22-22:23)
+SEMICOLON (22:23-22:24)
+IDENTIFIER "print" (23:1-23:6)
+LEFT_PAREN (23:6-23:7)
+NEW (23:7-23:10)
+IDENTIFIER "Base" (23:11-23:15)
+LEFT_PAREN (23:15-23:16)
+STRING_LITERAL "\"abc\"" (23:16-23:21)
+RIGHT_PAREN (23:21-23:22)
+DOT (23:22-23:23)
+IDENTIFIER "baseValue" (23:23-23:32)
+RIGHT_PAREN (23:32-23:33)
+SEMICOLON (23:33-23:34)
+IDENTIFIER "help" (24:1-24:5)
+LEFT_PAREN (24:5-24:6)
+IDENTIFIER "Derived" (24:6-24:13)
+RIGHT_PAREN (24:13-24:14)
+SEMICOLON (24:14-24:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-24:15
+  (VariableDeclaration
+    range: 1:1-1:25
+    mutability: VAR
+    (IdentifierDeclaration
+      range: 1:5-1:20
+      name: "initializations"
+    )
+    type: null
+    (LiteralExpression
+      range: 1:23-1:24
+      kind: INT
+      text: "0"
+    )
+  )
+  (FunctionDeclaration
+    range: 2:1-2:58
+    modifiers: []
+    (IdentifierDeclaration
+      range: 2:6-2:16
+      name: "initialize"
+    )
+    (NamedTypeNode
+      range: 2:19-2:22
+      name: "i32"
+    )
+    (BlockStatement
+      range: 2:23-2:58
+      (AssignmentStatement
+        range: 2:25-2:46
+        (IdentifierExpression
+          range: 2:25-2:40
+          name: "initializations"
+        )
+        operator: ADD
+        (LiteralExpression
+          range: 2:44-2:45
+          kind: INT
+          text: "1"
+        )
+      )
+      (ReturnStatement
+        range: 2:47-2:56
+        (LiteralExpression
+          range: 2:54-2:55
+          kind: INT
+          text: "3"
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 3:1-7:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 3:7-3:11
+      name: "Base"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 4:5-4:33
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 4:12-4:33
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 4:18-4:27
+          name: "baseValue"
+        )
+        (NamedTypeNode
+          range: 4:29-4:32
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:63
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 5:12-5:63
+        (FunctionParameter
+          range: 5:24-5:34
+          (IdentifierDeclaration
+            range: 5:24-5:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 5:31-5:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 5:36-5:63
+          (AssignmentStatement
+            range: 5:38-5:61
+            (MemberExpression
+              range: 5:38-5:52
+              (ThisExpression
+                range: 5:38-5:42
+              )
+              (IdentifierExpression
+                range: 5:43-5:52
+                name: "baseValue"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 5:55-5:60
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-6:73
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 6:12-6:73
+        (FunctionParameter
+          range: 6:24-6:37
+          (IdentifierDeclaration
+            range: 6:24-6:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 6:31-6:37
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 6:39-6:73
+          (AssignmentStatement
+            range: 6:41-6:71
+            (MemberExpression
+              range: 6:41-6:55
+              (ThisExpression
+                range: 6:41-6:45
+              )
+              (IdentifierExpression
+                range: 6:46-6:55
+                name: "baseValue"
+              )
+            )
+            operator: ASSIGN
+            (MemberExpression
+              range: 6:58-6:70
+              (IdentifierExpression
+                range: 6:58-6:63
+                name: "value"
+              )
+              (IdentifierExpression
+                range: 6:64-6:70
+                name: "length"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 8:1-17:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 8:7-8:14
+      name: "Derived"
+    )
+    (Extends
+      range: 8:15-8:27
+      (IdentifierExpression
+        range: 8:23-8:27
+        name: "Base"
+      )
+    )
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 9:5-9:38
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 9:12-9:38
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 9:16-9:22
+          name: "marker"
+        )
+        type: null
+        (CallExpression
+          range: 9:25-9:37
+          (IdentifierExpression
+            range: 9:25-9:35
+            name: "initialize"
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 10:5-10:29
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 10:12-10:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 10:18-10:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 10:25-10:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 11:5-11:44
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 11:12-11:44
+        (BlockStatement
+          range: 11:26-11:44
+          (ThisConstructorCall
+            range: 11:28-11:42
+            (LiteralExpression
+              range: 11:33-11:40
+              kind: STRING
+              text: "\"hello\""
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 12:5-12:68
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 12:12-12:68
+        (FunctionParameter
+          range: 12:24-12:37
+          (IdentifierDeclaration
+            range: 12:24-12:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 12:31-12:37
+            name: "string"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 12:39-12:68
+          (ThisConstructorCall
+            range: 12:41-12:66
+            (MemberExpression
+              range: 12:46-12:58
+              (IdentifierExpression
+                range: 12:46-12:51
+                name: "value"
+              )
+              (IdentifierExpression
+                range: 12:52-12:58
+                name: "length"
+              )
+            )
+            (LiteralExpression
+              range: 12:60-12:64
+              kind: BOOL
+              text: "true"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 13:5-16:6
+      visibility: PRIVATE
+      staticMember: false
+      (ConstructorDeclaration
+        range: 13:5-16:6
+        (FunctionParameter
+          range: 13:17-13:27
+          (IdentifierDeclaration
+            range: 13:17-13:22
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 13:24-13:27
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (FunctionParameter
+          range: 13:29-13:42
+          (IdentifierDeclaration
+            range: 13:29-13:36
+            name: "enabled"
+          )
+          (NamedTypeNode
+            range: 13:38-13:42
+            name: "bool"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 13:44-16:6
+          (SuperConstructorCall
+            range: 14:9-14:22
+            (IdentifierExpression
+              range: 14:15-14:20
+              name: "value"
+            )
+          )
+          (AssignmentStatement
+            range: 15:9-15:28
+            (MemberExpression
+              range: 15:9-15:19
+              (ThisExpression
+                range: 15:9-15:13
+              )
+              (IdentifierExpression
+                range: 15:14-15:19
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 15:22-15:27
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 18:1-18:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 18:7-18:14
+      name: "derived"
+    )
+    type: null
+    (NewExpression
+      range: 18:17-18:30
+      (IdentifierExpression
+        range: 18:21-18:28
+        name: "Derived"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 19:1-19:22
+    (CallExpression
+      range: 19:1-19:21
+      (IdentifierExpression
+        range: 19:1-19:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 19:7-19:20
+        (IdentifierExpression
+          range: 19:7-19:14
+          name: "derived"
+        )
+        (IdentifierExpression
+          range: 19:15-19:20
+          name: "value"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 20:1-20:26
+    (CallExpression
+      range: 20:1-20:25
+      (IdentifierExpression
+        range: 20:1-20:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 20:7-20:24
+        (IdentifierExpression
+          range: 20:7-20:14
+          name: "derived"
+        )
+        (IdentifierExpression
+          range: 20:15-20:24
+          name: "baseValue"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 21:1-21:23
+    (CallExpression
+      range: 21:1-21:22
+      (IdentifierExpression
+        range: 21:1-21:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 21:7-21:21
+        (IdentifierExpression
+          range: 21:7-21:14
+          name: "derived"
+        )
+        (IdentifierExpression
+          range: 21:15-21:21
+          name: "marker"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 22:1-22:24
+    (CallExpression
+      range: 22:1-22:23
+      (IdentifierExpression
+        range: 22:1-22:6
+        name: "print"
+      )
+      (IdentifierExpression
+        range: 22:7-22:22
+        name: "initializations"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 23:1-23:34
+    (CallExpression
+      range: 23:1-23:33
+      (IdentifierExpression
+        range: 23:1-23:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 23:7-23:32
+        (NewExpression
+          range: 23:7-23:22
+          (IdentifierExpression
+            range: 23:11-23:15
+            name: "Base"
+          )
+          (LiteralExpression
+            range: 23:16-23:21
+            kind: STRING
+            text: "\"abc\""
+          )
+        )
+        (IdentifierExpression
+          range: 23:23-23:32
+          name: "baseValue"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 24:1-24:15
+    (CallExpression
+      range: 24:1-24:14
+      (IdentifierExpression
+        range: 24:1-24:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 24:6-24:13
+        name: "Derived"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:23-1:24 -> i32
+  2:25-2:40 -> i32
+  2:44-2:45 -> i32
+  2:54-2:55 -> i32
+  5:38-5:42 -> Base
+  5:38-5:52 -> i32
+  5:43-5:52 -> i32
+  5:55-5:60 -> i32
+  6:41-6:45 -> Base
+  6:41-6:55 -> i32
+  6:46-6:55 -> i32
+  6:58-6:63 -> string
+  6:58-6:70 -> i32
+  6:64-6:70 -> i32
+  8:23-8:27 -> Base
+  9:25-9:35 -> () => i32
+  9:25-9:37 -> i32
+  11:28-11:42 -> (value: string) => void
+  11:33-11:40 -> string
+  12:41-12:66 -> (value: i32, enabled: bool) => void
+  12:46-12:51 -> string
+  12:46-12:58 -> i32
+  12:52-12:58 -> i32
+  12:60-12:64 -> bool
+  14:9-14:22 -> (value: i32) => void
+  14:15-14:20 -> i32
+  15:9-15:13 -> Derived
+  15:9-15:19 -> i32
+  15:14-15:19 -> i32
+  15:22-15:27 -> i32
+  18:17-18:30 -> () => void
+  18:17-18:30 -> Derived
+  18:21-18:28 -> Derived
+  19:1-19:6 -> (any) => void
+  19:1-19:21 -> void
+  19:7-19:14 -> Derived
+  19:7-19:20 -> i32
+  19:15-19:20 -> i32
+  20:1-20:6 -> (any) => void
+  20:1-20:25 -> void
+  20:7-20:14 -> Derived
+  20:7-20:24 -> i32
+  20:15-20:24 -> i32
+  21:1-21:6 -> (any) => void
+  21:1-21:22 -> void
+  21:7-21:14 -> Derived
+  21:7-21:21 -> i32
+  21:15-21:21 -> i32
+  22:1-22:6 -> (any) => void
+  22:1-22:23 -> void
+  22:7-22:22 -> i32
+  23:1-23:6 -> (any) => void
+  23:1-23:33 -> void
+  23:7-23:22 -> (value: string) => void
+  23:7-23:22 -> Base
+  23:7-23:32 -> i32
+  23:11-23:15 -> Base
+  23:16-23:21 -> string
+  23:23-23:32 -> i32
+  24:1-24:5 -> (any) => void
+  24:1-24:14 -> void
+  24:6-24:13 -> Type<Derived>
+
+Resolved types:
+  2:19-2:22 -> i32
+  4:29-4:32 -> i32
+  5:31-5:34 -> i32
+  6:31-6:37 -> string
+  10:25-10:28 -> i32
+  12:31-12:37 -> string
+  13:24-13:27 -> i32
+  13:38-13:42 -> bool
+
+Declarations:
+  1:5-1:20 -> var initializations: i32
+  2:6-2:16 -> func initialize() => i32
+  3:7-3:11 -> class Base
+  4:18-4:27 -> public const baseValue: i32
+  5:12-5:63 -> public constructor(value: i32)
+  5:24-5:29 -> const value: i32
+  6:12-6:73 -> public constructor(value: string)
+  6:24-6:29 -> const value: string
+  8:7-8:14 -> class Derived
+  9:16-9:22 -> public var marker: i32
+  10:18-10:23 -> public const value: i32
+  11:12-11:44 -> public constructor()
+  12:12-12:68 -> public constructor(value: string)
+  12:24-12:29 -> const value: string
+  13:5-16:6 -> constructor(value: i32, enabled: bool)
+  13:17-13:22 -> const value: i32
+  13:29-13:36 -> const enabled: bool
+  18:7-18:14 -> const derived: Derived
+
+References:
+  2:25-2:40 -> 1:5-1:20
+  5:43-5:52 -> 4:18-4:27
+  5:55-5:60 -> 5:24-5:29
+  6:46-6:55 -> 4:18-4:27
+  6:58-6:63 -> 6:24-6:29
+  6:64-6:70 -> java.lang.String.length(): i32
+  8:23-8:27 -> 3:7-3:11
+  9:25-9:35 -> 2:6-2:16
+  11:28-11:42 -> 12:12-12:68
+  12:41-12:66 -> 13:5-16:6
+  12:46-12:51 -> 12:24-12:29
+  12:52-12:58 -> java.lang.String.length(): i32
+  14:9-14:22 -> 5:12-5:63
+  14:15-14:20 -> 13:17-13:22
+  15:14-15:19 -> 10:18-10:23
+  15:22-15:27 -> 13:17-13:22
+  18:17-18:30 -> 11:12-11:44
+  18:21-18:28 -> 8:7-8:14
+  19:1-19:6 -> builtin print
+  19:7-19:14 -> 18:7-18:14
+  19:15-19:20 -> 10:18-10:23
+  20:1-20:6 -> builtin print
+  20:7-20:14 -> 18:7-18:14
+  20:15-20:24 -> 4:18-4:27
+  21:1-21:6 -> builtin print
+  21:7-21:14 -> 18:7-18:14
+  21:15-21:21 -> 9:16-9:22
+  22:1-22:6 -> builtin print
+  22:7-22:22 -> 1:5-1:20
+  23:1-23:6 -> builtin print
+  23:7-23:22 -> 6:12-6:73
+  23:11-23:15 -> 3:7-3:11
+  23:23-23:32 -> 4:18-4:27
+  24:1-24:5 -> builtin help
+  24:6-24:13 -> 8:7-8:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Base
+  nest member Test$Derived
+  inner class Test$Base flags [PUBLIC, STATIC]
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field initializations I flags [PUBLIC, STATIC]
+  field derived LTest$Derived; flags [PUBLIC, STATIC, FINAL]
+  method initialize()I flags [PUBLIC, STATIC]
+    GETSTATIC Test.initializations I
+    LDC 1
+    IADD
+    PUTSTATIC Test.initializations I
+    LDC 3
+    IRETURN
+    max stack 2 max locals 0
+  method <clinit>()V flags [STATIC]
+    LDC 0
+    PUTSTATIC Test.initializations I
+    NEW Test$Derived
+    DUP
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Derived.<init>([Ljava/lang/Void;)V
+    PUTSTATIC Test.derived LTest$Derived;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derived LTest$Derived;
+    GETFIELD Test$Derived.value I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derived LTest$Derived;
+    GETFIELD Test$Base.baseValue I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.derived LTest$Derived;
+    GETFIELD Test$Derived.marker I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.initializations I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    NEW Test$Base
+    DUP
+    LDC "abc"
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Base.<init>(Ljava/lang/String;[[Ljava/lang/Void;)V
+    GETFIELD Test$Base.baseValue I
+    INVOKEVIRTUAL java/io/PrintStream.println(I)V
+    LDC ClassOrInterfaceDesc[Test$Derived]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 5 max locals 0
+
+class Test$Base extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Base flags [PUBLIC, STATIC]
+  field baseValue I flags [PUBLIC, FINAL]
+  method <init>(I[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$Base.baseValue I
+    RETURN
+    max stack 2 max locals 3
+  method <init>(Ljava/lang/String;[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    PUTFIELD Test$Base.baseValue I
+    RETURN
+    max stack 2 max locals 3
+
+class Test$Derived extends Test$Base version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Derived flags [PUBLIC, STATIC]
+  field marker I flags [PUBLIC]
+  field value I flags [PUBLIC, FINAL]
+  method <init>([Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    LDC "hello"
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Derived.<init>(Ljava/lang/String;[[Ljava/lang/Void;)V
+    RETURN
+    max stack 3 max locals 2
+  method <init>(Ljava/lang/String;[[Ljava/lang/Void;)V flags [PUBLIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Derived.<init>(IZ[[[Ljava/lang/Void;)V
+    RETURN
+    max stack 4 max locals 3
+  method <init>(IZ[[[Ljava/lang/Void;)V flags [PRIVATE]
+    ALOAD_0 0
+    ILOAD_1 1
+    ACONST_NULL DynamicConstantDesc[ConstantBootstraps::nullConstant()Object]
+    INVOKESPECIAL Test$Base.<init>(I[Ljava/lang/Void;)V
+    ALOAD_0 0
+    INVOKESTATIC Test.initialize()I
+    PUTFIELD Test$Derived.marker I
+    ALOAD_0 0
+    ILOAD_1 1
+    PUTFIELD Test$Derived.value I
+    RETURN
+    max stack 3 max locals 4
+
+--- OUTPUT ---
+
+5
+5
+3
+1
+3
+Derived
+ | Fields:
+ |   baseValue: i32
+ |   marker: i32
+ |   value: i32
+ |
+ | Constructors:
+ |   constructor()
+ |   constructor(value: string)
+ |
+ | Methods:
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   toString() => string

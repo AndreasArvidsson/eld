@@ -223,4 +223,7 @@ SEMICOLON (6:49-6:50)
 
 --- SEMANTIC ---
 
-SemanticException: Ambiguous reference to overloaded method 'pick' at 6:45-6:49
+SemanticException: Ambiguous reference to overloaded method 'pick' matching (*, c: i32) => i32 at 6:45-6:49
+Available overloads:
+  pick(*, a: i32)
+  pick(*, b: i32)

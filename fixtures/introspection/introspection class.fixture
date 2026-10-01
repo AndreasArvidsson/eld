@@ -1,0 +1,540 @@
+class Counter {
+    public var value = 1;
+    public static var staticValue = 1;
+    public constructor() {}
+    public func next() i32 { return this.value++; }
+    public static func staticFunc() i32 { return Counter.staticValue++; }
+    func hidden() i32 { return 0; }
+}
+const counter = new Counter();
+print(dir(Counter));
+print(dir(counter));
+help(Counter);
+help(counter);
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Counter" (1:7-1:14)
+LEFT_BRACE (1:15-1:16)
+PUBLIC (2:5-2:11)
+VAR (2:12-2:15)
+IDENTIFIER "value" (2:16-2:21)
+EQUAL (2:22-2:23)
+INTEGER_LITERAL "1" (2:24-2:25)
+SEMICOLON (2:25-2:26)
+PUBLIC (3:5-3:11)
+STATIC (3:12-3:18)
+VAR (3:19-3:22)
+IDENTIFIER "staticValue" (3:23-3:34)
+EQUAL (3:35-3:36)
+INTEGER_LITERAL "1" (3:37-3:38)
+SEMICOLON (3:38-3:39)
+PUBLIC (4:5-4:11)
+CONSTRUCTOR (4:12-4:23)
+LEFT_PAREN (4:23-4:24)
+RIGHT_PAREN (4:24-4:25)
+LEFT_BRACE (4:26-4:27)
+RIGHT_BRACE (4:27-4:28)
+PUBLIC (5:5-5:11)
+FUNC (5:12-5:16)
+IDENTIFIER "next" (5:17-5:21)
+LEFT_PAREN (5:21-5:22)
+RIGHT_PAREN (5:22-5:23)
+IDENTIFIER "i32" (5:24-5:27)
+LEFT_BRACE (5:28-5:29)
+RETURN (5:30-5:36)
+THIS (5:37-5:41)
+DOT (5:41-5:42)
+IDENTIFIER "value" (5:42-5:47)
+PLUS_PLUS (5:47-5:49)
+SEMICOLON (5:49-5:50)
+RIGHT_BRACE (5:51-5:52)
+PUBLIC (6:5-6:11)
+STATIC (6:12-6:18)
+FUNC (6:19-6:23)
+IDENTIFIER "staticFunc" (6:24-6:34)
+LEFT_PAREN (6:34-6:35)
+RIGHT_PAREN (6:35-6:36)
+IDENTIFIER "i32" (6:37-6:40)
+LEFT_BRACE (6:41-6:42)
+RETURN (6:43-6:49)
+IDENTIFIER "Counter" (6:50-6:57)
+DOT (6:57-6:58)
+IDENTIFIER "staticValue" (6:58-6:69)
+PLUS_PLUS (6:69-6:71)
+SEMICOLON (6:71-6:72)
+RIGHT_BRACE (6:73-6:74)
+FUNC (7:5-7:9)
+IDENTIFIER "hidden" (7:10-7:16)
+LEFT_PAREN (7:16-7:17)
+RIGHT_PAREN (7:17-7:18)
+IDENTIFIER "i32" (7:19-7:22)
+LEFT_BRACE (7:23-7:24)
+RETURN (7:25-7:31)
+INTEGER_LITERAL "0" (7:32-7:33)
+SEMICOLON (7:33-7:34)
+RIGHT_BRACE (7:35-7:36)
+RIGHT_BRACE (8:1-8:2)
+CONST (9:1-9:6)
+IDENTIFIER "counter" (9:7-9:14)
+EQUAL (9:15-9:16)
+NEW (9:17-9:20)
+IDENTIFIER "Counter" (9:21-9:28)
+LEFT_PAREN (9:28-9:29)
+RIGHT_PAREN (9:29-9:30)
+SEMICOLON (9:30-9:31)
+IDENTIFIER "print" (10:1-10:6)
+LEFT_PAREN (10:6-10:7)
+IDENTIFIER "dir" (10:7-10:10)
+LEFT_PAREN (10:10-10:11)
+IDENTIFIER "Counter" (10:11-10:18)
+RIGHT_PAREN (10:18-10:19)
+RIGHT_PAREN (10:19-10:20)
+SEMICOLON (10:20-10:21)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "dir" (11:7-11:10)
+LEFT_PAREN (11:10-11:11)
+IDENTIFIER "counter" (11:11-11:18)
+RIGHT_PAREN (11:18-11:19)
+RIGHT_PAREN (11:19-11:20)
+SEMICOLON (11:20-11:21)
+IDENTIFIER "help" (12:1-12:5)
+LEFT_PAREN (12:5-12:6)
+IDENTIFIER "Counter" (12:6-12:13)
+RIGHT_PAREN (12:13-12:14)
+SEMICOLON (12:14-12:15)
+IDENTIFIER "help" (13:1-13:5)
+LEFT_PAREN (13:5-13:6)
+IDENTIFIER "counter" (13:6-13:13)
+RIGHT_PAREN (13:13-13:14)
+SEMICOLON (13:14-13:15)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:15
+  (ClassDeclaration
+    range: 1:1-8:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:14
+      name: "Counter"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:26
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 2:12-2:26
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 2:16-2:21
+          name: "value"
+        )
+        type: null
+        (LiteralExpression
+          range: 2:24-2:25
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:39
+      visibility: PUBLIC
+      staticMember: true
+      (VariableDeclaration
+        range: 3:19-3:39
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 3:23-3:34
+          name: "staticValue"
+        )
+        type: null
+        (LiteralExpression
+          range: 3:37-3:38
+          kind: INT
+          text: "1"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 4:5-4:28
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 4:12-4:28
+        (BlockStatement
+          range: 4:26-4:28
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 5:5-5:52
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 5:12-5:52
+        modifiers: []
+        (IdentifierDeclaration
+          range: 5:17-5:21
+          name: "next"
+        )
+        (NamedTypeNode
+          range: 5:24-5:27
+          name: "i32"
+        )
+        (BlockStatement
+          range: 5:28-5:52
+          (ReturnStatement
+            range: 5:30-5:50
+            (PostfixExpression
+              range: 5:37-5:49
+              (MemberExpression
+                range: 5:37-5:47
+                (ThisExpression
+                  range: 5:37-5:41
+                )
+                (IdentifierExpression
+                  range: 5:42-5:47
+                  name: "value"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 6:5-6:74
+      visibility: PUBLIC
+      staticMember: true
+      (FunctionDeclaration
+        range: 6:19-6:74
+        modifiers: []
+        (IdentifierDeclaration
+          range: 6:24-6:34
+          name: "staticFunc"
+        )
+        (NamedTypeNode
+          range: 6:37-6:40
+          name: "i32"
+        )
+        (BlockStatement
+          range: 6:41-6:74
+          (ReturnStatement
+            range: 6:43-6:72
+            (PostfixExpression
+              range: 6:50-6:71
+              (MemberExpression
+                range: 6:50-6:69
+                (IdentifierExpression
+                  range: 6:50-6:57
+                  name: "Counter"
+                )
+                (IdentifierExpression
+                  range: 6:58-6:69
+                  name: "staticValue"
+                )
+              )
+              operator: INCREMENT
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-7:36
+      visibility: PRIVATE
+      staticMember: false
+      (FunctionDeclaration
+        range: 7:5-7:36
+        modifiers: []
+        (IdentifierDeclaration
+          range: 7:10-7:16
+          name: "hidden"
+        )
+        (NamedTypeNode
+          range: 7:19-7:22
+          name: "i32"
+        )
+        (BlockStatement
+          range: 7:23-7:36
+          (ReturnStatement
+            range: 7:25-7:34
+            (LiteralExpression
+              range: 7:32-7:33
+              kind: INT
+              text: "0"
+            )
+          )
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 9:1-9:31
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 9:7-9:14
+      name: "counter"
+    )
+    type: null
+    (NewExpression
+      range: 9:17-9:30
+      (IdentifierExpression
+        range: 9:21-9:28
+        name: "Counter"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:21
+    (CallExpression
+      range: 10:1-10:20
+      (IdentifierExpression
+        range: 10:1-10:6
+        name: "print"
+      )
+      (CallExpression
+        range: 10:7-10:19
+        (IdentifierExpression
+          range: 10:7-10:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 10:11-10:18
+          name: "Counter"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:21
+    (CallExpression
+      range: 11:1-11:20
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:19
+        (IdentifierExpression
+          range: 11:7-11:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 11:11-11:18
+          name: "counter"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 12:1-12:15
+    (CallExpression
+      range: 12:1-12:14
+      (IdentifierExpression
+        range: 12:1-12:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 12:6-12:13
+        name: "Counter"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:15
+    (CallExpression
+      range: 13:1-13:14
+      (IdentifierExpression
+        range: 13:1-13:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 13:6-13:13
+        name: "counter"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  2:24-2:25 -> i32
+  3:37-3:38 -> i32
+  5:37-5:41 -> Counter
+  5:37-5:47 -> i32
+  5:37-5:49 -> i32
+  5:42-5:47 -> i32
+  6:50-6:57 -> Counter
+  6:50-6:69 -> i32
+  6:50-6:71 -> i32
+  6:58-6:69 -> i32
+  7:32-7:33 -> i32
+  9:17-9:30 -> Counter
+  9:21-9:28 -> Counter
+  10:1-10:6 -> (any) => void
+  10:1-10:20 -> void
+  10:7-10:10 -> (any) => [string]
+  10:7-10:19 -> [string]
+  10:11-10:18 -> Type<Counter>
+  11:1-11:6 -> (any) => void
+  11:1-11:20 -> void
+  11:7-11:10 -> (any) => [string]
+  11:7-11:19 -> [string]
+  11:11-11:18 -> Counter
+  12:1-12:5 -> (any) => void
+  12:1-12:14 -> void
+  12:6-12:13 -> Type<Counter>
+  13:1-13:5 -> (any) => void
+  13:1-13:14 -> void
+  13:6-13:13 -> Counter
+
+Resolved types:
+  5:24-5:27 -> i32
+  6:37-6:40 -> i32
+  7:19-7:22 -> i32
+
+Declarations:
+  1:7-1:14 -> class Counter
+  2:16-2:21 -> public var value: i32
+  3:23-3:34 -> public static var staticValue: i32
+  4:12-4:28 -> public constructor()
+  5:17-5:21 -> public func next() => i32
+  6:24-6:34 -> public static func staticFunc() => i32
+  7:10-7:16 -> func hidden() => i32
+  9:7-9:14 -> const counter: Counter
+
+References:
+  5:42-5:47 -> 2:16-2:21
+  6:50-6:57 -> 1:7-1:14
+  6:58-6:69 -> 3:23-3:34
+  9:21-9:28 -> 1:7-1:14
+  10:1-10:6 -> builtin print
+  10:7-10:10 -> builtin dir
+  10:11-10:18 -> 1:7-1:14
+  11:1-11:6 -> builtin print
+  11:7-11:10 -> builtin dir
+  11:11-11:18 -> 9:7-9:14
+  12:1-12:5 -> builtin help
+  12:6-12:13 -> 1:7-1:14
+  13:1-13:5 -> builtin help
+  13:6-13:13 -> 9:7-9:14
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Counter
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field counter LTest$Counter; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Counter
+    DUP
+    INVOKESPECIAL Test$Counter.<init>()V
+    PUTSTATIC Test.counter LTest$Counter;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ClassOrInterfaceDesc[Test$Counter]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.counter LTest$Counter;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    LDC ClassOrInterfaceDesc[Test$Counter]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    GETSTATIC Test.counter LTest$Counter;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 2 max locals 0
+
+class Test$Counter extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Counter flags [PUBLIC, STATIC]
+  field value I flags [PUBLIC]
+  field staticValue I flags [PUBLIC, STATIC]
+  method <clinit>()V flags [STATIC]
+    LDC 1
+    PUTSTATIC Test$Counter.staticValue I
+    RETURN
+    max stack 1 max locals 0
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC 1
+    PUTFIELD Test$Counter.value I
+    RETURN
+    max stack 2 max locals 1
+  method next()I flags [PUBLIC]
+    ALOAD_0 0
+    DUP
+    GETFIELD Test$Counter.value I
+    DUP_X1
+    ICONST_1 1
+    IADD
+    PUTFIELD Test$Counter.value I
+    IRETURN
+    max stack 4 max locals 1
+  method staticFunc()I flags [PUBLIC, STATIC]
+    GETSTATIC Test$Counter.staticValue I
+    DUP
+    ICONST_1 1
+    IADD
+    PUTSTATIC Test$Counter.staticValue I
+    IRETURN
+    max stack 3 max locals 0
+  method hidden()I flags [PRIVATE]
+    LDC 0
+    IRETURN
+    max stack 1 max locals 1
+
+--- OUTPUT ---
+
+[staticFunc, staticValue]
+[getClass, hashCode, next, toString, value]
+Counter
+ | Static fields:
+ |   staticValue: i32
+ |
+ | Static functions:
+ |   staticFunc() => i32
+ |
+ | Fields:
+ |   value: i32
+ |
+ | Constructors:
+ |   constructor()
+ |
+ | Methods:
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   next() => i32
+ |   toString() => string
+Counter
+ | Static fields:
+ |   staticValue: i32
+ |
+ | Static functions:
+ |   staticFunc() => i32
+ |
+ | Fields:
+ |   value: i32
+ |
+ | Constructors:
+ |   constructor()
+ |
+ | Methods:
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   next() => i32
+ |   toString() => string

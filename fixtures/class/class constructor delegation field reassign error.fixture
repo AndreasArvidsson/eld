@@ -1,0 +1,174 @@
+class Foo {
+    public const value: i32;
+    public constructor() {
+        this(1);
+        this.value = 2;
+    }
+    public constructor(value: i32) {
+        this.value = value;
+    }
+}
+
+--- TOKENS ---
+
+CLASS (1:1-1:6)
+IDENTIFIER "Foo" (1:7-1:10)
+LEFT_BRACE (1:11-1:12)
+PUBLIC (2:5-2:11)
+CONST (2:12-2:17)
+IDENTIFIER "value" (2:18-2:23)
+COLON (2:23-2:24)
+IDENTIFIER "i32" (2:25-2:28)
+SEMICOLON (2:28-2:29)
+PUBLIC (3:5-3:11)
+CONSTRUCTOR (3:12-3:23)
+LEFT_PAREN (3:23-3:24)
+RIGHT_PAREN (3:24-3:25)
+LEFT_BRACE (3:26-3:27)
+THIS (4:9-4:13)
+LEFT_PAREN (4:13-4:14)
+INTEGER_LITERAL "1" (4:14-4:15)
+RIGHT_PAREN (4:15-4:16)
+SEMICOLON (4:16-4:17)
+THIS (5:9-5:13)
+DOT (5:13-5:14)
+IDENTIFIER "value" (5:14-5:19)
+EQUAL (5:20-5:21)
+INTEGER_LITERAL "2" (5:22-5:23)
+SEMICOLON (5:23-5:24)
+RIGHT_BRACE (6:5-6:6)
+PUBLIC (7:5-7:11)
+CONSTRUCTOR (7:12-7:23)
+LEFT_PAREN (7:23-7:24)
+IDENTIFIER "value" (7:24-7:29)
+COLON (7:29-7:30)
+IDENTIFIER "i32" (7:31-7:34)
+RIGHT_PAREN (7:34-7:35)
+LEFT_BRACE (7:36-7:37)
+THIS (8:9-8:13)
+DOT (8:13-8:14)
+IDENTIFIER "value" (8:14-8:19)
+EQUAL (8:20-8:21)
+IDENTIFIER "value" (8:22-8:27)
+SEMICOLON (8:27-8:28)
+RIGHT_BRACE (9:5-9:6)
+RIGHT_BRACE (10:1-10:2)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:2
+  (ClassDeclaration
+    range: 1:1-10:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 1:7-1:10
+      name: "Foo"
+    )
+    extends: null
+    implements: null
+    permits: null
+    (MemberDeclaration
+      range: 2:5-2:29
+      visibility: PUBLIC
+      staticMember: false
+      (UninitializedVariableDeclaration
+        range: 2:12-2:29
+        mutability: CONST
+        (IdentifierDeclaration
+          range: 2:18-2:23
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:28
+          name: "i32"
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-6:6
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 3:12-6:6
+        (BlockStatement
+          range: 3:26-6:6
+          (ThisConstructorCall
+            range: 4:9-4:17
+            (LiteralExpression
+              range: 4:14-4:15
+              kind: INT
+              text: "1"
+            )
+          )
+          (AssignmentStatement
+            range: 5:9-5:24
+            (MemberExpression
+              range: 5:9-5:19
+              (ThisExpression
+                range: 5:9-5:13
+              )
+              (IdentifierExpression
+                range: 5:14-5:19
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (LiteralExpression
+              range: 5:22-5:23
+              kind: INT
+              text: "2"
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 7:5-9:6
+      visibility: PUBLIC
+      staticMember: false
+      (ConstructorDeclaration
+        range: 7:12-9:6
+        (FunctionParameter
+          range: 7:24-7:34
+          (IdentifierDeclaration
+            range: 7:24-7:29
+            name: "value"
+          )
+          (NamedTypeNode
+            range: 7:31-7:34
+            name: "i32"
+          )
+          optional: false
+          namedOnly: false
+          defaultValue: null
+        )
+        (BlockStatement
+          range: 7:36-9:6
+          (AssignmentStatement
+            range: 8:9-8:28
+            (MemberExpression
+              range: 8:9-8:19
+              (ThisExpression
+                range: 8:9-8:13
+              )
+              (IdentifierExpression
+                range: 8:14-8:19
+                name: "value"
+              )
+            )
+            operator: ASSIGN
+            (IdentifierExpression
+              range: 8:22-8:27
+              name: "value"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+SemanticException: Const field 'value' may already be initialized at 5:9-5:24

@@ -3,7 +3,6 @@ record Point(x: i32, y: i32);
 const first = new Point(1, 2);
 const second = new Point(1, 2);
 
-print(first.equals(second));
 print(first == second);
 const dynamicFirst: any = first;
 const dynamicSecond: any = second;
@@ -50,70 +49,60 @@ SEMICOLON (4:31-4:32)
 IDENTIFIER "print" (6:1-6:6)
 LEFT_PAREN (6:6-6:7)
 IDENTIFIER "first" (6:7-6:12)
-DOT (6:12-6:13)
-IDENTIFIER "equals" (6:13-6:19)
-LEFT_PAREN (6:19-6:20)
-IDENTIFIER "second" (6:20-6:26)
-RIGHT_PAREN (6:26-6:27)
-RIGHT_PAREN (6:27-6:28)
-SEMICOLON (6:28-6:29)
-IDENTIFIER "print" (7:1-7:6)
-LEFT_PAREN (7:6-7:7)
-IDENTIFIER "first" (7:7-7:12)
-EQUAL_EQUAL (7:13-7:15)
-IDENTIFIER "second" (7:16-7:22)
-RIGHT_PAREN (7:22-7:23)
-SEMICOLON (7:23-7:24)
+EQUAL_EQUAL (6:13-6:15)
+IDENTIFIER "second" (6:16-6:22)
+RIGHT_PAREN (6:22-6:23)
+SEMICOLON (6:23-6:24)
+CONST (7:1-7:6)
+IDENTIFIER "dynamicFirst" (7:7-7:19)
+COLON (7:19-7:20)
+IDENTIFIER "any" (7:21-7:24)
+EQUAL (7:25-7:26)
+IDENTIFIER "first" (7:27-7:32)
+SEMICOLON (7:32-7:33)
 CONST (8:1-8:6)
-IDENTIFIER "dynamicFirst" (8:7-8:19)
-COLON (8:19-8:20)
-IDENTIFIER "any" (8:21-8:24)
-EQUAL (8:25-8:26)
-IDENTIFIER "first" (8:27-8:32)
-SEMICOLON (8:32-8:33)
-CONST (9:1-9:6)
-IDENTIFIER "dynamicSecond" (9:7-9:20)
-COLON (9:20-9:21)
-IDENTIFIER "any" (9:22-9:25)
-EQUAL (9:26-9:27)
-IDENTIFIER "second" (9:28-9:34)
-SEMICOLON (9:34-9:35)
+IDENTIFIER "dynamicSecond" (8:7-8:20)
+COLON (8:20-8:21)
+IDENTIFIER "any" (8:22-8:25)
+EQUAL (8:26-8:27)
+IDENTIFIER "second" (8:28-8:34)
+SEMICOLON (8:34-8:35)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "dynamicFirst" (9:7-9:19)
+EQUAL_EQUAL (9:20-9:22)
+IDENTIFIER "dynamicSecond" (9:23-9:36)
+RIGHT_PAREN (9:36-9:37)
+SEMICOLON (9:37-9:38)
 IDENTIFIER "print" (10:1-10:6)
 LEFT_PAREN (10:6-10:7)
-IDENTIFIER "dynamicFirst" (10:7-10:19)
-EQUAL_EQUAL (10:20-10:22)
-IDENTIFIER "dynamicSecond" (10:23-10:36)
-RIGHT_PAREN (10:36-10:37)
-SEMICOLON (10:37-10:38)
+IDENTIFIER "first" (10:7-10:12)
+DOT (10:12-10:13)
+IDENTIFIER "hashCode" (10:13-10:21)
+LEFT_PAREN (10:21-10:22)
+RIGHT_PAREN (10:22-10:23)
+EQUAL_EQUAL (10:24-10:26)
+IDENTIFIER "second" (10:27-10:33)
+DOT (10:33-10:34)
+IDENTIFIER "hashCode" (10:34-10:42)
+LEFT_PAREN (10:42-10:43)
+RIGHT_PAREN (10:43-10:44)
+RIGHT_PAREN (10:44-10:45)
+SEMICOLON (10:45-10:46)
 IDENTIFIER "print" (11:1-11:6)
 LEFT_PAREN (11:6-11:7)
 IDENTIFIER "first" (11:7-11:12)
 DOT (11:12-11:13)
-IDENTIFIER "hashCode" (11:13-11:21)
+IDENTIFIER "toString" (11:13-11:21)
 LEFT_PAREN (11:21-11:22)
 RIGHT_PAREN (11:22-11:23)
-EQUAL_EQUAL (11:24-11:26)
-IDENTIFIER "second" (11:27-11:33)
-DOT (11:33-11:34)
-IDENTIFIER "hashCode" (11:34-11:42)
-LEFT_PAREN (11:42-11:43)
-RIGHT_PAREN (11:43-11:44)
-RIGHT_PAREN (11:44-11:45)
-SEMICOLON (11:45-11:46)
-IDENTIFIER "print" (12:1-12:6)
-LEFT_PAREN (12:6-12:7)
-IDENTIFIER "first" (12:7-12:12)
-DOT (12:12-12:13)
-IDENTIFIER "toString" (12:13-12:21)
-LEFT_PAREN (12:21-12:22)
-RIGHT_PAREN (12:22-12:23)
-RIGHT_PAREN (12:23-12:24)
-SEMICOLON (12:24-12:25)
+RIGHT_PAREN (11:23-11:24)
+SEMICOLON (11:24-11:25)
 
 --- AST ---
 
 (Program
-  range: 1:1-12:25
+  range: 1:1-11:25
   (RecordDeclaration
     range: 1:1-1:30
     (IdentifierDeclaration
@@ -199,144 +188,116 @@ SEMICOLON (12:24-12:25)
     )
   )
   (ExpressionStatement
-    range: 6:1-6:29
+    range: 6:1-6:24
     (CallExpression
-      range: 6:1-6:28
+      range: 6:1-6:23
       (IdentifierExpression
         range: 6:1-6:6
         name: "print"
       )
-      (CallExpression
-        range: 6:7-6:27
-        (MemberExpression
-          range: 6:7-6:19
-          (IdentifierExpression
-            range: 6:7-6:12
-            name: "first"
-          )
-          (IdentifierExpression
-            range: 6:13-6:19
-            name: "equals"
-          )
-        )
-        (IdentifierExpression
-          range: 6:20-6:26
-          name: "second"
-        )
-      )
-    )
-  )
-  (ExpressionStatement
-    range: 7:1-7:24
-    (CallExpression
-      range: 7:1-7:23
-      (IdentifierExpression
-        range: 7:1-7:6
-        name: "print"
-      )
       (BinaryExpression
-        range: 7:7-7:22
+        range: 6:7-6:22
         (IdentifierExpression
-          range: 7:7-7:12
+          range: 6:7-6:12
           name: "first"
         )
         operator: EQUAL
         (IdentifierExpression
-          range: 7:16-7:22
+          range: 6:16-6:22
           name: "second"
         )
       )
     )
   )
   (VariableDeclaration
-    range: 8:1-8:33
+    range: 7:1-7:33
     mutability: CONST
     (IdentifierDeclaration
-      range: 8:7-8:19
+      range: 7:7-7:19
       name: "dynamicFirst"
     )
     (NamedTypeNode
-      range: 8:21-8:24
+      range: 7:21-7:24
       name: "any"
     )
     (IdentifierExpression
-      range: 8:27-8:32
+      range: 7:27-7:32
       name: "first"
     )
   )
   (VariableDeclaration
-    range: 9:1-9:35
+    range: 8:1-8:35
     mutability: CONST
     (IdentifierDeclaration
-      range: 9:7-9:20
+      range: 8:7-8:20
       name: "dynamicSecond"
     )
     (NamedTypeNode
-      range: 9:22-9:25
+      range: 8:22-8:25
       name: "any"
     )
     (IdentifierExpression
-      range: 9:28-9:34
+      range: 8:28-8:34
       name: "second"
     )
   )
   (ExpressionStatement
-    range: 10:1-10:38
+    range: 9:1-9:38
     (CallExpression
-      range: 10:1-10:37
+      range: 9:1-9:37
       (IdentifierExpression
-        range: 10:1-10:6
+        range: 9:1-9:6
         name: "print"
       )
       (BinaryExpression
-        range: 10:7-10:36
+        range: 9:7-9:36
         (IdentifierExpression
-          range: 10:7-10:19
+          range: 9:7-9:19
           name: "dynamicFirst"
         )
         operator: EQUAL
         (IdentifierExpression
-          range: 10:23-10:36
+          range: 9:23-9:36
           name: "dynamicSecond"
         )
       )
     )
   )
   (ExpressionStatement
-    range: 11:1-11:46
+    range: 10:1-10:46
     (CallExpression
-      range: 11:1-11:45
+      range: 10:1-10:45
       (IdentifierExpression
-        range: 11:1-11:6
+        range: 10:1-10:6
         name: "print"
       )
       (BinaryExpression
-        range: 11:7-11:44
+        range: 10:7-10:44
         (CallExpression
-          range: 11:7-11:23
+          range: 10:7-10:23
           (MemberExpression
-            range: 11:7-11:21
+            range: 10:7-10:21
             (IdentifierExpression
-              range: 11:7-11:12
+              range: 10:7-10:12
               name: "first"
             )
             (IdentifierExpression
-              range: 11:13-11:21
+              range: 10:13-10:21
               name: "hashCode"
             )
           )
         )
         operator: EQUAL
         (CallExpression
-          range: 11:27-11:44
+          range: 10:27-10:44
           (MemberExpression
-            range: 11:27-11:42
+            range: 10:27-10:42
             (IdentifierExpression
-              range: 11:27-11:33
+              range: 10:27-10:33
               name: "second"
             )
             (IdentifierExpression
-              range: 11:34-11:42
+              range: 10:34-10:42
               name: "hashCode"
             )
           )
@@ -345,23 +306,23 @@ SEMICOLON (12:24-12:25)
     )
   )
   (ExpressionStatement
-    range: 12:1-12:25
+    range: 11:1-11:25
     (CallExpression
-      range: 12:1-12:24
+      range: 11:1-11:24
       (IdentifierExpression
-        range: 12:1-12:6
+        range: 11:1-11:6
         name: "print"
       )
       (CallExpression
-        range: 12:7-12:23
+        range: 11:7-11:23
         (MemberExpression
-          range: 12:7-12:21
+          range: 11:7-11:21
           (IdentifierExpression
-            range: 12:7-12:12
+            range: 11:7-11:12
             name: "first"
           )
           (IdentifierExpression
-            range: 12:13-12:21
+            range: 11:13-11:21
             name: "toString"
           )
         )
@@ -393,60 +354,53 @@ Expression types:
   4:26-4:27 -> i32
   4:29-4:30 -> i32
   6:1-6:6 -> (any) => void
-  6:1-6:28 -> void
+  6:1-6:23 -> void
   6:7-6:12 -> Point
-  6:7-6:19 -> (Point) => bool
-  6:7-6:27 -> bool
-  6:13-6:19 -> (Point) => bool
-  6:20-6:26 -> Point
-  7:1-7:6 -> (any) => void
-  7:1-7:23 -> void
-  7:7-7:12 -> Point
-  7:7-7:22 -> bool
-  7:16-7:22 -> Point
-  8:27-8:32 -> Point
-  9:28-9:34 -> Point
+  6:7-6:22 -> bool
+  6:16-6:22 -> Point
+  7:27-7:32 -> Point
+  8:28-8:34 -> Point
+  9:1-9:6 -> (any) => void
+  9:1-9:37 -> void
+  9:7-9:19 -> any
+  9:7-9:36 -> bool
+  9:23-9:36 -> any
   10:1-10:6 -> (any) => void
-  10:1-10:37 -> void
-  10:7-10:19 -> any
-  10:7-10:36 -> bool
-  10:23-10:36 -> any
+  10:1-10:45 -> void
+  10:7-10:12 -> Point
+  10:7-10:21 -> () => i32
+  10:7-10:23 -> i32
+  10:7-10:44 -> bool
+  10:13-10:21 -> () => i32
+  10:27-10:33 -> Point
+  10:27-10:42 -> () => i32
+  10:27-10:44 -> i32
+  10:34-10:42 -> () => i32
   11:1-11:6 -> (any) => void
-  11:1-11:45 -> void
+  11:1-11:24 -> void
   11:7-11:12 -> Point
-  11:7-11:21 -> () => i32
-  11:7-11:23 -> i32
-  11:7-11:44 -> bool
-  11:13-11:21 -> () => i32
-  11:27-11:33 -> Point
-  11:27-11:42 -> () => i32
-  11:27-11:44 -> i32
-  11:34-11:42 -> () => i32
-  12:1-12:6 -> (any) => void
-  12:1-12:24 -> void
-  12:7-12:12 -> Point
-  12:7-12:21 -> () => string
-  12:7-12:23 -> string
-  12:13-12:21 -> () => string
+  11:7-11:21 -> () => string
+  11:7-11:23 -> string
+  11:13-11:21 -> () => string
 
 Resolved types:
   1:8-1:13 -> Point
   1:8-1:13 -> string
   1:17-1:20 -> i32
   1:25-1:28 -> i32
-  8:21-8:24 -> any
-  9:22-9:25 -> any
+  7:21-7:24 -> any
+  8:22-8:25 -> any
 
 Conversions:
-  8:27-8:32 -> Point -> any
-  9:28-9:34 -> Point -> any
+  7:27-7:32 -> Point -> any
+  8:28-8:34 -> Point -> any
 
 Declarations:
   1:8-1:13 -> record Point(x: i32, y: i32)
   3:7-3:12 -> const first: Point
   4:7-4:13 -> const second: Point
-  8:7-8:19 -> const dynamicFirst: any
-  9:7-9:20 -> const dynamicSecond: any
+  7:7-7:19 -> const dynamicFirst: any
+  8:7-8:20 -> const dynamicSecond: any
 
 References:
   1:8-1:13 -> 1:8-1:13
@@ -456,24 +410,20 @@ References:
   4:20-4:25 -> 1:8-1:13
   6:1-6:6 -> builtin print
   6:7-6:12 -> 3:7-3:12
-  6:13-6:19 -> java.lang.Object.equals(Point): bool
-  6:20-6:26 -> 4:7-4:13
-  7:1-7:6 -> builtin print
-  7:7-7:12 -> 3:7-3:12
-  7:16-7:22 -> 4:7-4:13
-  8:27-8:32 -> 3:7-3:12
-  9:28-9:34 -> 4:7-4:13
+  6:16-6:22 -> 4:7-4:13
+  7:27-7:32 -> 3:7-3:12
+  8:28-8:34 -> 4:7-4:13
+  9:1-9:6 -> builtin print
+  9:7-9:19 -> 7:7-7:19
+  9:23-9:36 -> 8:7-8:20
   10:1-10:6 -> builtin print
-  10:7-10:19 -> 8:7-8:19
-  10:23-10:36 -> 9:7-9:20
+  10:7-10:12 -> 3:7-3:12
+  10:13-10:21 -> java.lang.Object.hashCode(): i32
+  10:27-10:33 -> 4:7-4:13
+  10:34-10:42 -> java.lang.Object.hashCode(): i32
   11:1-11:6 -> builtin print
   11:7-11:12 -> 3:7-3:12
-  11:13-11:21 -> java.lang.Object.hashCode(): i32
-  11:27-11:33 -> 4:7-4:13
-  11:34-11:42 -> java.lang.Object.hashCode(): i32
-  12:1-12:6 -> builtin print
-  12:7-12:12 -> 3:7-3:12
-  12:13-12:21 -> 1:8-1:13
+  11:13-11:21 -> 1:8-1:13
 
 --- BYTECODE ---
 
@@ -497,11 +447,6 @@ class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
     LDC 2
     INVOKESPECIAL Test$Point.<init>(II)V
     PUTSTATIC Test.second LTest$Point;
-    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
-    GETSTATIC Test.first LTest$Point;
-    GETSTATIC Test.second LTest$Point;
-    INVOKEVIRTUAL Test$Point.equals(Ljava/lang/Object;)Z
-    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
     GETSTATIC java/lang/System.out Ljava/io/PrintStream;
     GETSTATIC Test.first LTest$Point;
     GETSTATIC Test.second LTest$Point;
@@ -626,7 +571,6 @@ class Test$Point extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUP
 
 --- OUTPUT ---
 
-true
 true
 true
 true

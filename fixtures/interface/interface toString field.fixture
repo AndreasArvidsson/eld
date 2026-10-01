@@ -1,0 +1,508 @@
+interface Box {
+    var toString: string;
+}
+class Value implements Box {
+    public var toString = "box";
+}
+const box: Box = new Value();
+print(box.toString);
+print(box.toString().startsWith("Test$Value@"));
+const same: () => string = box.toString;
+print(same().startsWith("Test$Value@"));
+box.toString = "updated";
+print(box.toString);
+
+--- TOKENS ---
+
+INTERFACE (1:1-1:10)
+IDENTIFIER "Box" (1:11-1:14)
+LEFT_BRACE (1:15-1:16)
+VAR (2:5-2:8)
+IDENTIFIER "toString" (2:9-2:17)
+COLON (2:17-2:18)
+IDENTIFIER "string" (2:19-2:25)
+SEMICOLON (2:25-2:26)
+RIGHT_BRACE (3:1-3:2)
+CLASS (4:1-4:6)
+IDENTIFIER "Value" (4:7-4:12)
+IMPLEMENTS (4:13-4:23)
+IDENTIFIER "Box" (4:24-4:27)
+LEFT_BRACE (4:28-4:29)
+PUBLIC (5:5-5:11)
+VAR (5:12-5:15)
+IDENTIFIER "toString" (5:16-5:24)
+EQUAL (5:25-5:26)
+STRING_LITERAL "\"box\"" (5:27-5:32)
+SEMICOLON (5:32-5:33)
+RIGHT_BRACE (6:1-6:2)
+CONST (7:1-7:6)
+IDENTIFIER "box" (7:7-7:10)
+COLON (7:10-7:11)
+IDENTIFIER "Box" (7:12-7:15)
+EQUAL (7:16-7:17)
+NEW (7:18-7:21)
+IDENTIFIER "Value" (7:22-7:27)
+LEFT_PAREN (7:27-7:28)
+RIGHT_PAREN (7:28-7:29)
+SEMICOLON (7:29-7:30)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "box" (8:7-8:10)
+DOT (8:10-8:11)
+IDENTIFIER "toString" (8:11-8:19)
+RIGHT_PAREN (8:19-8:20)
+SEMICOLON (8:20-8:21)
+IDENTIFIER "print" (9:1-9:6)
+LEFT_PAREN (9:6-9:7)
+IDENTIFIER "box" (9:7-9:10)
+DOT (9:10-9:11)
+IDENTIFIER "toString" (9:11-9:19)
+LEFT_PAREN (9:19-9:20)
+RIGHT_PAREN (9:20-9:21)
+DOT (9:21-9:22)
+IDENTIFIER "startsWith" (9:22-9:32)
+LEFT_PAREN (9:32-9:33)
+STRING_LITERAL "\"Test$Value@\"" (9:33-9:46)
+RIGHT_PAREN (9:46-9:47)
+RIGHT_PAREN (9:47-9:48)
+SEMICOLON (9:48-9:49)
+CONST (10:1-10:6)
+IDENTIFIER "same" (10:7-10:11)
+COLON (10:11-10:12)
+LEFT_PAREN (10:13-10:14)
+RIGHT_PAREN (10:14-10:15)
+ARROW (10:16-10:18)
+IDENTIFIER "string" (10:19-10:25)
+EQUAL (10:26-10:27)
+IDENTIFIER "box" (10:28-10:31)
+DOT (10:31-10:32)
+IDENTIFIER "toString" (10:32-10:40)
+SEMICOLON (10:40-10:41)
+IDENTIFIER "print" (11:1-11:6)
+LEFT_PAREN (11:6-11:7)
+IDENTIFIER "same" (11:7-11:11)
+LEFT_PAREN (11:11-11:12)
+RIGHT_PAREN (11:12-11:13)
+DOT (11:13-11:14)
+IDENTIFIER "startsWith" (11:14-11:24)
+LEFT_PAREN (11:24-11:25)
+STRING_LITERAL "\"Test$Value@\"" (11:25-11:38)
+RIGHT_PAREN (11:38-11:39)
+RIGHT_PAREN (11:39-11:40)
+SEMICOLON (11:40-11:41)
+IDENTIFIER "box" (12:1-12:4)
+DOT (12:4-12:5)
+IDENTIFIER "toString" (12:5-12:13)
+EQUAL (12:14-12:15)
+STRING_LITERAL "\"updated\"" (12:16-12:25)
+SEMICOLON (12:25-12:26)
+IDENTIFIER "print" (13:1-13:6)
+LEFT_PAREN (13:6-13:7)
+IDENTIFIER "box" (13:7-13:10)
+DOT (13:10-13:11)
+IDENTIFIER "toString" (13:11-13:19)
+RIGHT_PAREN (13:19-13:20)
+SEMICOLON (13:20-13:21)
+
+--- AST ---
+
+(Program
+  range: 1:1-13:21
+  (InterfaceDeclaration
+    range: 1:1-3:2
+    (IdentifierDeclaration
+      range: 1:11-1:14
+      name: "Box"
+    )
+    permits: null
+    (UninitializedVariableDeclaration
+      range: 2:5-2:26
+      mutability: VAR
+      (IdentifierDeclaration
+        range: 2:9-2:17
+        name: "toString"
+      )
+      (NamedTypeNode
+        range: 2:19-2:25
+        name: "string"
+      )
+    )
+  )
+  (ClassDeclaration
+    range: 4:1-6:2
+    modifiers: []
+    (IdentifierDeclaration
+      range: 4:7-4:12
+      name: "Value"
+    )
+    extends: null
+    (Implements
+      range: 4:13-4:27
+      (NamedTypeNode
+        range: 4:24-4:27
+        name: "Box"
+      )
+    )
+    permits: null
+    (MemberDeclaration
+      range: 5:5-5:33
+      visibility: PUBLIC
+      staticMember: false
+      (VariableDeclaration
+        range: 5:12-5:33
+        mutability: VAR
+        (IdentifierDeclaration
+          range: 5:16-5:24
+          name: "toString"
+        )
+        type: null
+        (LiteralExpression
+          range: 5:27-5:32
+          kind: STRING
+          text: "\"box\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 7:1-7:30
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 7:7-7:10
+      name: "box"
+    )
+    (NamedTypeNode
+      range: 7:12-7:15
+      name: "Box"
+    )
+    (NewExpression
+      range: 7:18-7:29
+      (IdentifierExpression
+        range: 7:22-7:27
+        name: "Value"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:21
+    (CallExpression
+      range: 8:1-8:20
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 8:7-8:19
+        (IdentifierExpression
+          range: 8:7-8:10
+          name: "box"
+        )
+        (IdentifierExpression
+          range: 8:11-8:19
+          name: "toString"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:49
+    (CallExpression
+      range: 9:1-9:48
+      (IdentifierExpression
+        range: 9:1-9:6
+        name: "print"
+      )
+      (CallExpression
+        range: 9:7-9:47
+        (MemberExpression
+          range: 9:7-9:32
+          (CallExpression
+            range: 9:7-9:21
+            (MemberExpression
+              range: 9:7-9:19
+              (IdentifierExpression
+                range: 9:7-9:10
+                name: "box"
+              )
+              (IdentifierExpression
+                range: 9:11-9:19
+                name: "toString"
+              )
+            )
+          )
+          (IdentifierExpression
+            range: 9:22-9:32
+            name: "startsWith"
+          )
+        )
+        (LiteralExpression
+          range: 9:33-9:46
+          kind: STRING
+          text: "\"Test$Value@\""
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 10:1-10:41
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 10:7-10:11
+      name: "same"
+    )
+    (FunctionTypeNode
+      range: 10:13-10:25
+      namedOnlyStart: null
+      (NamedTypeNode
+        range: 10:19-10:25
+        name: "string"
+      )
+    )
+    (MemberExpression
+      range: 10:28-10:40
+      (IdentifierExpression
+        range: 10:28-10:31
+        name: "box"
+      )
+      (IdentifierExpression
+        range: 10:32-10:40
+        name: "toString"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 11:1-11:41
+    (CallExpression
+      range: 11:1-11:40
+      (IdentifierExpression
+        range: 11:1-11:6
+        name: "print"
+      )
+      (CallExpression
+        range: 11:7-11:39
+        (MemberExpression
+          range: 11:7-11:24
+          (CallExpression
+            range: 11:7-11:13
+            (IdentifierExpression
+              range: 11:7-11:11
+              name: "same"
+            )
+          )
+          (IdentifierExpression
+            range: 11:14-11:24
+            name: "startsWith"
+          )
+        )
+        (LiteralExpression
+          range: 11:25-11:38
+          kind: STRING
+          text: "\"Test$Value@\""
+        )
+      )
+    )
+  )
+  (AssignmentStatement
+    range: 12:1-12:26
+    (MemberExpression
+      range: 12:1-12:13
+      (IdentifierExpression
+        range: 12:1-12:4
+        name: "box"
+      )
+      (IdentifierExpression
+        range: 12:5-12:13
+        name: "toString"
+      )
+    )
+    operator: ASSIGN
+    (LiteralExpression
+      range: 12:16-12:25
+      kind: STRING
+      text: "\"updated\""
+    )
+  )
+  (ExpressionStatement
+    range: 13:1-13:21
+    (CallExpression
+      range: 13:1-13:20
+      (IdentifierExpression
+        range: 13:1-13:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 13:7-13:19
+        (IdentifierExpression
+          range: 13:7-13:10
+          name: "box"
+        )
+        (IdentifierExpression
+          range: 13:11-13:19
+          name: "toString"
+        )
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  5:27-5:32 -> string
+  7:18-7:29 -> Value
+  7:22-7:27 -> Value
+  8:1-8:6 -> (any) => void
+  8:1-8:20 -> void
+  8:7-8:10 -> Box
+  8:7-8:19 -> string
+  8:11-8:19 -> string
+  9:1-9:6 -> (any) => void
+  9:1-9:48 -> void
+  9:7-9:10 -> Box
+  9:7-9:19 -> () => string
+  9:7-9:21 -> string
+  9:7-9:32 -> (string) => bool
+  9:7-9:47 -> bool
+  9:11-9:19 -> () => string
+  9:22-9:32 -> (string) => bool
+  9:33-9:46 -> string
+  10:28-10:31 -> Box
+  10:28-10:40 -> () => string
+  10:32-10:40 -> () => string
+  11:1-11:6 -> (any) => void
+  11:1-11:40 -> void
+  11:7-11:11 -> () => string
+  11:7-11:13 -> string
+  11:7-11:24 -> (string) => bool
+  11:7-11:39 -> bool
+  11:14-11:24 -> (string) => bool
+  11:25-11:38 -> string
+  12:1-12:4 -> Box
+  12:1-12:13 -> string
+  12:5-12:13 -> string
+  12:16-12:25 -> string
+  13:1-13:6 -> (any) => void
+  13:1-13:20 -> void
+  13:7-13:10 -> Box
+  13:7-13:19 -> string
+  13:11-13:19 -> string
+
+Resolved types:
+  2:19-2:25 -> string
+  4:24-4:27 -> Box
+  7:12-7:15 -> Box
+  10:13-10:25 -> () => string
+  10:19-10:25 -> string
+
+Declarations:
+  1:11-1:14 -> interface Box
+  2:9-2:17 -> var toString: string
+  4:7-4:12 -> class Value
+  5:16-5:24 -> public var toString: string
+  7:7-7:10 -> const box: Box
+  10:7-10:11 -> const same: () => string
+
+References:
+  7:22-7:27 -> 4:7-4:12
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> 7:7-7:10
+  8:11-8:19 -> 2:9-2:17
+  9:1-9:6 -> builtin print
+  9:7-9:10 -> 7:7-7:10
+  9:11-9:19 -> java.lang.Object.toString(): string
+  9:22-9:32 -> java.lang.String.startsWith(string): bool
+  10:28-10:31 -> 7:7-7:10
+  10:32-10:40 -> java.lang.Object.toString(): string
+  11:1-11:6 -> builtin print
+  11:7-11:11 -> 10:7-10:11
+  11:14-11:24 -> java.lang.String.startsWith(string): bool
+  12:1-12:4 -> 7:7-7:10
+  12:5-12:13 -> 2:9-2:17
+  13:1-13:6 -> builtin print
+  13:7-13:10 -> 7:7-7:10
+  13:11-13:19 -> 2:9-2:17
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Box
+  nest member Test$Value
+  inner class Test$Box flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field box LTest$Box; flags [PUBLIC, STATIC, FINAL]
+  field same Ljava/lang/invoke/MethodHandle; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Value
+    DUP
+    INVOKESPECIAL Test$Value.<init>()V
+    PUTSTATIC Test.box LTest$Box;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEINTERFACE Test$Box.$get$toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEVIRTUAL java/lang/Object.toString()Ljava/lang/String;
+    LDC "Test$Value@"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    LDC MethodHandleDesc[VIRTUAL/Object::toString(Object)String]
+    GETSTATIC Test.box LTest$Box;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.bindTo(Ljava/lang/Object;)Ljava/lang/invoke/MethodHandle;
+    LDC MethodTypeDesc[()String]
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.asType(Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/MethodHandle;
+    PUTSTATIC Test.same Ljava/lang/invoke/MethodHandle;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.same Ljava/lang/invoke/MethodHandle;
+    INVOKEVIRTUAL java/lang/invoke/MethodHandle.invokeExact()Ljava/lang/String;
+    LDC "Test$Value@"
+    INVOKEVIRTUAL java/lang/String.startsWith(Ljava/lang/String;)Z
+    INVOKEVIRTUAL java/io/PrintStream.println(Z)V
+    GETSTATIC Test.box LTest$Box;
+    LDC "updated"
+    INVOKEINTERFACE Test$Box.$set$toString(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.box LTest$Box;
+    INVOKEINTERFACE Test$Box.$get$toString()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Box extends java/lang/Object version 65.0 flags [PUBLIC, INTERFACE, ABSTRACT]
+  nest host Test
+  inner class Test$Box flags [PUBLIC, STATIC, INTERFACE, ABSTRACT]
+  method $get$toString()Ljava/lang/String; flags [PUBLIC, ABSTRACT, SYNTHETIC]
+  method $set$toString(Ljava/lang/String;)V flags [PUBLIC, ABSTRACT, SYNTHETIC]
+
+class Test$Value extends java/lang/Object version 65.0 flags [PUBLIC, SUPER]
+  implements Test$Box
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Value flags [PUBLIC, STATIC]
+  field toString Ljava/lang/String; flags [PUBLIC]
+  method $get$toString()Ljava/lang/String; flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    GETFIELD Test$Value.toString Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method $set$toString(Ljava/lang/String;)V flags [PUBLIC, SYNTHETIC]
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$Value.toString Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 2
+  method <init>()V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Object.<init>()V
+    ALOAD_0 0
+    LDC "box"
+    PUTFIELD Test$Value.toString Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 1
+
+--- OUTPUT ---
+
+box
+true
+true
+updated

@@ -1,0 +1,479 @@
+record Person(name: string) {
+    public func value() string { return this.name; }
+    func hidden() {}
+}
+const person = new Person("hello");
+print(person.name);
+print(dir(Person));
+print(dir(person));
+help(Person);
+help(person);
+
+--- TOKENS ---
+
+RECORD (1:1-1:7)
+IDENTIFIER "Person" (1:8-1:14)
+LEFT_PAREN (1:14-1:15)
+IDENTIFIER "name" (1:15-1:19)
+COLON (1:19-1:20)
+IDENTIFIER "string" (1:21-1:27)
+RIGHT_PAREN (1:27-1:28)
+LEFT_BRACE (1:29-1:30)
+PUBLIC (2:5-2:11)
+FUNC (2:12-2:16)
+IDENTIFIER "value" (2:17-2:22)
+LEFT_PAREN (2:22-2:23)
+RIGHT_PAREN (2:23-2:24)
+IDENTIFIER "string" (2:25-2:31)
+LEFT_BRACE (2:32-2:33)
+RETURN (2:34-2:40)
+THIS (2:41-2:45)
+DOT (2:45-2:46)
+IDENTIFIER "name" (2:46-2:50)
+SEMICOLON (2:50-2:51)
+RIGHT_BRACE (2:52-2:53)
+FUNC (3:5-3:9)
+IDENTIFIER "hidden" (3:10-3:16)
+LEFT_PAREN (3:16-3:17)
+RIGHT_PAREN (3:17-3:18)
+LEFT_BRACE (3:19-3:20)
+RIGHT_BRACE (3:20-3:21)
+RIGHT_BRACE (4:1-4:2)
+CONST (5:1-5:6)
+IDENTIFIER "person" (5:7-5:13)
+EQUAL (5:14-5:15)
+NEW (5:16-5:19)
+IDENTIFIER "Person" (5:20-5:26)
+LEFT_PAREN (5:26-5:27)
+STRING_LITERAL "\"hello\"" (5:27-5:34)
+RIGHT_PAREN (5:34-5:35)
+SEMICOLON (5:35-5:36)
+IDENTIFIER "print" (6:1-6:6)
+LEFT_PAREN (6:6-6:7)
+IDENTIFIER "person" (6:7-6:13)
+DOT (6:13-6:14)
+IDENTIFIER "name" (6:14-6:18)
+RIGHT_PAREN (6:18-6:19)
+SEMICOLON (6:19-6:20)
+IDENTIFIER "print" (7:1-7:6)
+LEFT_PAREN (7:6-7:7)
+IDENTIFIER "dir" (7:7-7:10)
+LEFT_PAREN (7:10-7:11)
+IDENTIFIER "Person" (7:11-7:17)
+RIGHT_PAREN (7:17-7:18)
+RIGHT_PAREN (7:18-7:19)
+SEMICOLON (7:19-7:20)
+IDENTIFIER "print" (8:1-8:6)
+LEFT_PAREN (8:6-8:7)
+IDENTIFIER "dir" (8:7-8:10)
+LEFT_PAREN (8:10-8:11)
+IDENTIFIER "person" (8:11-8:17)
+RIGHT_PAREN (8:17-8:18)
+RIGHT_PAREN (8:18-8:19)
+SEMICOLON (8:19-8:20)
+IDENTIFIER "help" (9:1-9:5)
+LEFT_PAREN (9:5-9:6)
+IDENTIFIER "Person" (9:6-9:12)
+RIGHT_PAREN (9:12-9:13)
+SEMICOLON (9:13-9:14)
+IDENTIFIER "help" (10:1-10:5)
+LEFT_PAREN (10:5-10:6)
+IDENTIFIER "person" (10:6-10:12)
+RIGHT_PAREN (10:12-10:13)
+SEMICOLON (10:13-10:14)
+
+--- AST ---
+
+(Program
+  range: 1:1-10:14
+  (RecordDeclaration
+    range: 1:1-4:2
+    (IdentifierDeclaration
+      range: 1:8-1:14
+      name: "Person"
+    )
+    (RecordParameter
+      range: 1:15-1:27
+      (IdentifierDeclaration
+        range: 1:15-1:19
+        name: "name"
+      )
+      (NamedTypeNode
+        range: 1:21-1:27
+        name: "string"
+      )
+      namedOnly: false
+    )
+    implements: null
+    (MemberDeclaration
+      range: 2:5-2:53
+      visibility: PUBLIC
+      staticMember: false
+      (FunctionDeclaration
+        range: 2:12-2:53
+        modifiers: []
+        (IdentifierDeclaration
+          range: 2:17-2:22
+          name: "value"
+        )
+        (NamedTypeNode
+          range: 2:25-2:31
+          name: "string"
+        )
+        (BlockStatement
+          range: 2:32-2:53
+          (ReturnStatement
+            range: 2:34-2:51
+            (MemberExpression
+              range: 2:41-2:50
+              (ThisExpression
+                range: 2:41-2:45
+              )
+              (IdentifierExpression
+                range: 2:46-2:50
+                name: "name"
+              )
+            )
+          )
+        )
+      )
+    )
+    (MemberDeclaration
+      range: 3:5-3:21
+      visibility: PRIVATE
+      staticMember: false
+      (FunctionDeclaration
+        range: 3:5-3:21
+        modifiers: []
+        (IdentifierDeclaration
+          range: 3:10-3:16
+          name: "hidden"
+        )
+        returnType: null
+        (BlockStatement
+          range: 3:19-3:21
+        )
+      )
+    )
+  )
+  (VariableDeclaration
+    range: 5:1-5:36
+    mutability: CONST
+    (IdentifierDeclaration
+      range: 5:7-5:13
+      name: "person"
+    )
+    type: null
+    (NewExpression
+      range: 5:16-5:35
+      (IdentifierExpression
+        range: 5:20-5:26
+        name: "Person"
+      )
+      (LiteralExpression
+        range: 5:27-5:34
+        kind: STRING
+        text: "\"hello\""
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 6:1-6:20
+    (CallExpression
+      range: 6:1-6:19
+      (IdentifierExpression
+        range: 6:1-6:6
+        name: "print"
+      )
+      (MemberExpression
+        range: 6:7-6:18
+        (IdentifierExpression
+          range: 6:7-6:13
+          name: "person"
+        )
+        (IdentifierExpression
+          range: 6:14-6:18
+          name: "name"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 7:1-7:20
+    (CallExpression
+      range: 7:1-7:19
+      (IdentifierExpression
+        range: 7:1-7:6
+        name: "print"
+      )
+      (CallExpression
+        range: 7:7-7:18
+        (IdentifierExpression
+          range: 7:7-7:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 7:11-7:17
+          name: "Person"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 8:1-8:20
+    (CallExpression
+      range: 8:1-8:19
+      (IdentifierExpression
+        range: 8:1-8:6
+        name: "print"
+      )
+      (CallExpression
+        range: 8:7-8:18
+        (IdentifierExpression
+          range: 8:7-8:10
+          name: "dir"
+        )
+        (IdentifierExpression
+          range: 8:11-8:17
+          name: "person"
+        )
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 9:1-9:14
+    (CallExpression
+      range: 9:1-9:13
+      (IdentifierExpression
+        range: 9:1-9:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 9:6-9:12
+        name: "Person"
+      )
+    )
+  )
+  (ExpressionStatement
+    range: 10:1-10:14
+    (CallExpression
+      range: 10:1-10:13
+      (IdentifierExpression
+        range: 10:1-10:5
+        name: "help"
+      )
+      (IdentifierExpression
+        range: 10:6-10:12
+        name: "person"
+      )
+    )
+  )
+)
+
+--- SEMANTIC ---
+
+Expression types:
+  1:1-4:2 -> Person
+  1:1-4:2 -> string
+  1:8-1:14 -> Person
+  1:15-1:19 -> string
+  1:15-1:27 -> Person
+  1:15-1:27 -> string
+  2:41-2:45 -> Person
+  2:41-2:50 -> string
+  2:46-2:50 -> string
+  5:16-5:35 -> Person
+  5:20-5:26 -> Person
+  5:27-5:34 -> string
+  6:1-6:6 -> (any) => void
+  6:1-6:19 -> void
+  6:7-6:13 -> Person
+  6:7-6:18 -> string
+  6:14-6:18 -> string
+  7:1-7:6 -> (any) => void
+  7:1-7:19 -> void
+  7:7-7:10 -> (any) => [string]
+  7:7-7:18 -> [string]
+  7:11-7:17 -> Type<Person>
+  8:1-8:6 -> (any) => void
+  8:1-8:19 -> void
+  8:7-8:10 -> (any) => [string]
+  8:7-8:18 -> [string]
+  8:11-8:17 -> Person
+  9:1-9:5 -> (any) => void
+  9:1-9:13 -> void
+  9:6-9:12 -> Type<Person>
+  10:1-10:5 -> (any) => void
+  10:1-10:13 -> void
+  10:6-10:12 -> Person
+
+Resolved types:
+  1:8-1:14 -> Person
+  1:8-1:14 -> string
+  1:21-1:27 -> string
+  2:25-2:31 -> string
+
+Declarations:
+  1:8-1:14 -> record Person(name: string)
+  2:17-2:22 -> public func value() => string
+  3:10-3:16 -> func hidden() => void
+  5:7-5:13 -> const person: Person
+
+References:
+  1:8-1:14 -> 1:8-1:14
+  1:15-1:19 -> 1:15-1:19
+  2:46-2:50 -> 1:15-1:19
+  5:20-5:26 -> 1:8-1:14
+  6:1-6:6 -> builtin print
+  6:7-6:13 -> 5:7-5:13
+  6:14-6:18 -> 1:15-1:19
+  7:1-7:6 -> builtin print
+  7:7-7:10 -> builtin dir
+  7:11-7:17 -> 1:8-1:14
+  8:1-8:6 -> builtin print
+  8:7-8:10 -> builtin dir
+  8:11-8:17 -> 5:7-5:13
+  9:1-9:5 -> builtin help
+  9:6-9:12 -> 1:8-1:14
+  10:1-10:5 -> builtin help
+  10:6-10:12 -> 5:7-5:13
+
+--- BYTECODE ---
+
+class Test extends java/lang/Object version 65.0 flags [PUBLIC, FINAL, SUPER]
+  nest member Test$Person
+  inner class Test$Person flags [PUBLIC, STATIC, FINAL]
+  field person LTest$Person; flags [PUBLIC, STATIC, FINAL]
+  method <clinit>()V flags [STATIC]
+    NEW Test$Person
+    DUP
+    LDC "hello"
+    INVOKESPECIAL Test$Person.<init>(Ljava/lang/String;)V
+    PUTSTATIC Test.person LTest$Person;
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.person LTest$Person;
+    INVOKEVIRTUAL Test$Person.name()Ljava/lang/String;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/String;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    LDC ClassOrInterfaceDesc[Test$Person]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    GETSTATIC java/lang/System.out Ljava/io/PrintStream;
+    GETSTATIC Test.person LTest$Person;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.dir(Ljava/lang/Object;)Lcom/github/andreasarvidsson/eld/runtime/EldObjectArray;
+    INVOKEVIRTUAL java/io/PrintStream.println(Ljava/lang/Object;)V
+    LDC ClassOrInterfaceDesc[Test$Person]
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    GETSTATIC Test.person LTest$Person;
+    INVOKESTATIC com/github/andreasarvidsson/eld/runtime/Introspection.help(Ljava/lang/Object;)V
+    RETURN
+    max stack 3 max locals 0
+
+class Test$Person extends java/lang/Record version 65.0 flags [PUBLIC, FINAL, SUPER]
+  implements com/github/andreasarvidsson/eld/runtime/EldEquality$EldObject
+  nest host Test
+  inner class Test$Person flags [PUBLIC, STATIC, FINAL]
+  record component name Ljava/lang/String;
+  field name Ljava/lang/String; flags [PRIVATE, FINAL]
+  method name()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    GETFIELD Test$Person.name Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method toString()Ljava/lang/String; flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    ASTORE_1 1
+    LDC "Person("
+    ALOAD_1 1
+    LDC 7
+    ALOAD_1 1
+    INVOKEVIRTUAL java/lang/String.length()I
+    ICONST_1 1
+    ISUB
+    INVOKEVIRTUAL java/lang/String.substring(II)Ljava/lang/String;
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    LDC ")"
+    INVOKEVIRTUAL java/lang/String.concat(Ljava/lang/String;)Ljava/lang/String;
+    ARETURN
+    max stack 5 max locals 2
+  method hashCode()I flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 1 max locals 1
+  method equals(Ljava/lang/Object;)Z flags [PUBLIC, FINAL]
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEDYNAMIC
+    IRETURN
+    max stack 2 max locals 2
+  method <init>(Ljava/lang/String;)V flags [PUBLIC]
+    ALOAD_0 0
+    INVOKESPECIAL java/lang/Record.<init>()V
+    ALOAD_0 0
+    ALOAD_1 1
+    PUTFIELD Test$Person.name Ljava/lang/String;
+    RETURN
+    max stack 2 max locals 2
+  method copy(Ljava/lang/String;)LTest$Person; flags [PUBLIC]
+    NEW Test$Person
+    DUP
+    ALOAD_1 1
+    INVOKESPECIAL Test$Person.<init>(Ljava/lang/String;)V
+    ARETURN
+    max stack 3 max locals 2
+  method copy(Ljava/lang/String;I)LTest$Person; flags [PUBLIC, SYNTHETIC]
+    ILOAD_2 2
+    LDC 1
+    IAND
+    IFEQ L0
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Person.name()Ljava/lang/String;
+    ASTORE_1 1
+   L0:
+    ALOAD_0 0
+    ALOAD_1 1
+    INVOKEVIRTUAL Test$Person.copy(Ljava/lang/String;)LTest$Person;
+    ARETURN
+    max stack 2 max locals 3
+  method value()Ljava/lang/String; flags [PUBLIC]
+    ALOAD_0 0
+    INVOKEVIRTUAL Test$Person.name()Ljava/lang/String;
+    ARETURN
+    max stack 1 max locals 1
+  method hidden()V flags [PRIVATE]
+    RETURN
+    max stack 0 max locals 1
+
+--- OUTPUT ---
+
+hello
+[]
+[copy, getClass, hashCode, name, toString, value]
+Person
+ | Fields:
+ |   name: string
+ |
+ | Constructors:
+ |   constructor(name: string)
+ |
+ | Methods:
+ |   copy(name?: string) => Person
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   toString() => string
+ |   value() => string
+Person
+ | Fields:
+ |   name: string
+ |
+ | Constructors:
+ |   constructor(name: string)
+ |
+ | Methods:
+ |   copy(name?: string) => Person
+ |   getClass() => Type
+ |   hashCode() => i32
+ |   toString() => string
+ |   value() => string

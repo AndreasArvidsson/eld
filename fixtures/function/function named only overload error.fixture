@@ -214,4 +214,7 @@ SEMICOLON (6:10-6:11)
 
 --- SEMANTIC ---
 
-SemanticException: No overload of 'foo' accepts these arguments at 6:1-6:10
+SemanticException: No overload of 'foo' accepts arguments (i32, i32) at 6:1-6:10
+Available overloads:
+  foo(a: i32, *, b: i32)
+  foo(a: i32, b: string)

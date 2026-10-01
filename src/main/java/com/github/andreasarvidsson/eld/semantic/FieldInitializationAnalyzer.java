@@ -35,6 +35,7 @@ final class FieldInitializationAnalyzer {
     }
 
     private int pendingFinalizers;
+    private boolean delegatingConstructor;
     private final SemanticModel model;
     private final ClassDeclaration declaration;
     private final boolean staticFields;
@@ -103,8 +104,11 @@ final class FieldInitializationAnalyzer {
     }
 
     void analyze(final @Nullable ConstructorDeclaration constructor) {
+        delegatingConstructor =
+            constructor != null && constructor.hasDelegatingCall();
         final boolean initialized =
-            constructor == null || !constructor.hasExplicitSuperCall();
+            constructor == null || (!constructor.hasExplicitSuperCall()
+                && !constructor.hasDelegatingCall());
         final Path initial =
             new Path(defaults, defaults, Exit.NORMAL, initialized, initialized);
         if (constructor == null) {
@@ -148,7 +152,9 @@ final class FieldInitializationAnalyzer {
         if (!path.baseDefinite()) {
             throw new SemanticException(
                 node.range(),
-                "Base constructor must execute before using 'this' or completing the constructor"
+                delegatingConstructor
+                    ? "A delegating constructor must call 'this(...)' on every path before using 'this' or completing the constructor"
+                    : "Base constructor must execute before using 'this' or completing the constructor"
             );
         }
     }
@@ -237,6 +243,26 @@ final class FieldInitializationAnalyzer {
                                 true,
                                 true
                             )
+                            : argumentPath
+                    );
+                }
+                return result;
+            }
+            case ThisConstructorCall call: {
+                if (path.basePossible()) {
+                    throw new SemanticException(
+                        call.range(),
+                        "A constructor may only initialize the instance once"
+                    );
+                }
+                final List<Path> result = new ArrayList<>();
+                for (final Path argumentPath : sequence(
+                    call.arguments(),
+                    paths
+                )) {
+                    result.add(
+                        argumentPath.exit() == Exit.NORMAL
+                            ? new Path(fields, fields, Exit.NORMAL, true, true)
                             : argumentPath
                     );
                 }

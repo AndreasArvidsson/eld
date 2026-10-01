@@ -13,6 +13,14 @@ import com.github.andreasarvidsson.eld.parser.FunctionParameter;
 public final class FunctionSignatures {
     private FunctionSignatures() {}
 
+    public static String formatParameterType(
+        final Type type,
+        final FunctionParameter parameter,
+        final boolean showDefaults
+    ) {
+        return type.toString();
+    }
+
     public static boolean isSubtype(
         final Type source,
         final Type target,
